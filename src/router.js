@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 // Views
 import Home from './views/Home.vue';
+import SignIn from '@/views/SignIn';
 
 Vue.use(Router);
 
@@ -14,6 +15,11 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/sign-in',
+      name: 'sign-in',
+      component: SignIn,
     },
   ],
 });
