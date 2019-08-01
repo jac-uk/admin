@@ -1,0 +1,24 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "plugin:vue/recommended",
+    "eslint:recommended"
+  ],
+  "rules": {
+    "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline"}],
+    "eol-last": ["error", "always"],
+    "func-style": ["error", "expression"],
+    "prefer-arrow-callback": "error",
+    "quotes": ["error", "single", {"avoidEscape": true}],
+    "semi": "error",
+    "vue/component-name-in-template-casing": "error",
+    "vue/script-indent": ["error", 2]
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  }
+}
