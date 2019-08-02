@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import auth from '@/store/auth';
 
 Vue.use(Vuex);
 
@@ -8,7 +9,7 @@ const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
 
   modules: {
-    // Add Vuex modules here
+    auth,
   },
 
   state: {},
