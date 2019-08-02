@@ -40,6 +40,8 @@ const router = new Router({
   ],
 });
 
+// Global before guard to verify if a user can have access to other than sign-in pages.
+// It redirects unauthorized users to a sign-in page.
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const isSignedIn = store.getters.isSignedIn;
