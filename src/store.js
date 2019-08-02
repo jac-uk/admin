@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { vuexfireMutations } from 'vuexfire';
 import Vuex from 'vuex';
 import auth from '@/store/auth';
 
@@ -13,7 +14,9 @@ const store = new Vuex.Store({
   },
 
   state: {},
-  mutations: {},
+  mutations: {
+    ...vuexfireMutations,
+  },
   actions: {},
   getters: {},
 });
