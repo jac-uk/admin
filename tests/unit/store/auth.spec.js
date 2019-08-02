@@ -86,35 +86,5 @@ describe('store/auth', () => {
         });
       });
     });
-
-    describe('emailDomainIsValid', () => {
-
-      describe('if user is not signed in', () => {
-        it('returns null', () => {
-          expect(getters.emailDomainIsValid(state)).toBe(null);
-        });
-      });
-
-      describe('if user has wrong email domain', () => {
-        it('returns false', () => {
-          state.currentUser = {
-            uid: 'abc123',
-            email: 'test@test.com',
-          };
-          expect(getters.emailDomainIsValid(state)).toBe(false);
-        });
-      });
-
-      describe('if user is signed and email domain is correct', () => {
-        it('returns true', () => {
-          state.currentUser = {
-            uid: 'abc123',
-            email: 'test@judicialappointments.digital',
-          };
-
-          expect(getters.emailDomainIsValid(state)).toBe(true);
-        });
-      });
-    });
   });
 });

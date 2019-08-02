@@ -2,17 +2,14 @@
   <v-app>
     <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>JAC</span>
+        <span class="font-weight-light">Apply Admin</span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
+      <v-btn v-if="$route.name !== 'sign-in'"
+        @click="signOut"
       >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+        Sign Out
       </v-btn>
     </v-app-bar>
 
@@ -23,11 +20,18 @@
 </template>
 
 <script>
+import { auth } from '@/firebase';
 
 export default {
   name: 'App',
   data: () => ({
     //
   }),
+  methods: {
+    signOut() {
+      auth().signOut();
+      this.$router.go('/sign-in');
+    }
+  }
 };
 </script>

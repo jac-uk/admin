@@ -23,9 +23,6 @@ const module = {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
-    emailDomainIsValid(state) {
-      return state.currentUser && state.currentUser.email.split('@')[1] === 'judicialappointments.digital';
-    },
   },
 };
 
