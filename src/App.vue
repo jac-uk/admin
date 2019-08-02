@@ -6,7 +6,8 @@
         <span class="font-weight-light">Apply Admin</span>
       </v-toolbar-title>
       <v-spacer />
-      <v-btn v-if="$route.name !== 'sign-in'"
+      <v-btn
+        v-if="$route.name !== 'sign-in'"
         @click="signOut"
       >
         Sign Out
@@ -31,7 +32,7 @@ export default {
     signOut() {
       auth().signOut();
       this.$router.go('/sign-in');
-    }
-  }
+    },
+  },
 };
 </script>
