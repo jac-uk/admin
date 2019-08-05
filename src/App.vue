@@ -1,23 +1,21 @@
 <template>
-  <v-app>
-    <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>JAC</span>
-        <span class="font-weight-light">Apply Admin</span>
-      </v-toolbar-title>
-      <v-spacer />
-      <v-btn
-        v-if="$route.name !== 'sign-in'"
-        @click="signOut"
+  <div>
+    <header>
+       <img
+        src="@/assets/jac-logo.svg"
+        alt="Judicial Appointments Commission"
+        width="197"
+        height="66"
       >
-        Sign Out
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <router-view />
-    </v-content>
-  </v-app>
+      <button
+          v-if="$route.name !== 'sign-in'"
+          @click="signOut"
+        >
+          Sign Out
+        </button>
+    </header>
+    <RouterView />
+  </div>
 </template>
 
 <script>

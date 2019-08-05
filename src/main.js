@@ -3,9 +3,6 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import {auth} from '@/firebase';
-import vuetify from './plugins/vuetify';
-import 'roboto-fontface/css/roboto/roboto-fontface.css';
-import '@mdi/font/css/materialdesignicons.css';
 
 Vue.config.productionTip = false;
 
@@ -20,8 +17,7 @@ auth().onAuthStateChanged((user) => {
       el: '#app',
       render: h => h(App),
       router,
-      store,
-      vuetify,
+      store
     });
   }
 });
