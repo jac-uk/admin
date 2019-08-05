@@ -1,18 +1,18 @@
 <template>
   <div>
     <header>
-       <img
+      <img
         src="@/assets/jac-logo.svg"
         alt="Judicial Appointments Commission"
         width="197"
         height="66"
       >
       <button
-          v-if="$route.name !== 'sign-in'"
-          @click="signOut"
-        >
-          Sign Out
-        </button>
+        v-if="$route.name !== 'sign-in'"
+        @click="signOut"
+      >
+        Sign Out
+      </button>
     </header>
     <RouterView />
   </div>

@@ -17,7 +17,7 @@ auth().onAuthStateChanged((user) => {
       el: '#app',
       render: h => h(App),
       router,
-      store
+      store,
     });
   }
 });
