@@ -1,21 +1,23 @@
 <template>
-  <div class="mt-3">
-    <div class="login-container text-center">
-      <div class="mb-3 mt-5">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="text-center">
         <img
           src="@/assets/jac-logo.svg"
           alt="Judicial Appointments Commission"
           width="197"
           height="66"
+          style="text-align: center"
         >
       </div>
-      <p class="mb-4 mt-5">
-        Sign in to admin dashboard with your judicialappointments.digital Google account
+      <p class="govuk-hint govuk-body govuk-!-margin-bottom-7">
+        Sign in to admin dashboard with your judicialappointments.digital Google account.
       </p>
       <FirebaseUI @signInSuccess="loginRedirect" />
     </div>
   </div>
 </template>
+
 
 <script>
 import FirebaseUI from '@/components/FirebaseUI';

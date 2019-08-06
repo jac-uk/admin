@@ -1,20 +1,46 @@
 <template>
-  <div>
-    <header>
-      <img
-        src="@/assets/jac-logo.svg"
-        alt="Judicial Appointments Commission"
-        width="197"
-        height="66"
-      >
-      <button
-        v-if="$route.name !== 'sign-in'"
-        @click="signOut"
-      >
-        Sign Out
-      </button>
-    </header>
-    <RouterView />
+  <div class="govuk-width-container">
+    <div class="govuk-main-wrapper">
+      <a
+        href="#main-content"
+        class="govuk-skip-link"
+      >Skip to main content</a>
+      <header>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-heading-l">
+              Judicial Appointments Commission
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <button
+              v-if="$route.name !== 'sign-in'"
+              class="govuk-button"
+              @click="signOut"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </header>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <div class="govuk-phase-banner">
+            <p class="govuk-phase-banner__content">
+              <strong class="govuk-tag govuk-phase-banner__content__tag">
+                alpha
+              </strong>
+              <span class="govuk-phase-banner__text">
+                This is a new service – your feedback will help us improve it.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <main id="#main-content">
+      <RouterView />
+    </main>
   </div>
 </template>
 
@@ -34,3 +60,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  // Required to include global main.scss styles
+</style>
