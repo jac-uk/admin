@@ -8,7 +8,7 @@ const module = {
     },
   },
   actions: {
-    setCurrentUser({commit}, user) {
+    setCurrentUser({ commit }, user) {
       if (user === null) {
         commit('setCurrentUser', null);
       } else {

@@ -16,7 +16,7 @@ describe('store/auth', () => {
 
     describe('setCurrentUser', () => {
       it('sets currentUser in the state', () => {
-        const data = {uid: '12345', email: 'test@test.com'};
+        const data = { uid: '12345', email: 'test@test.com' };
         mutations.setCurrentUser(state, data);
         expect(state.currentUser).toBe(data);
       });

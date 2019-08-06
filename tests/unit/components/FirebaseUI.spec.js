@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import FirebaseUI from '@/components/FirebaseUI';
 import firebaseui from 'firebaseui';
-import {auth} from '@/firebase';
+import { auth } from '@/firebase';
 
 const mockFirebaseAuth = jest.fn();
 const mockUiInstance = {
@@ -21,7 +21,7 @@ jest.mock('@/firebase', () => {
 });
 
 jest.mock('firebaseui', () => (
-  {auth: {
+  { auth: {
     AuthUI: jest.fn(() => mockUiInstance),
     CredentialHelper: {
       NONE: 'none',
@@ -63,7 +63,7 @@ describe('FirebaseUI component', () => {
       signInOptions: [
         {
           provider: auth.GoogleAuthProvider.PROVIDER_ID,
-          customParameters: {hd: 'judicialappointments.digital'},
+          customParameters: { hd: 'judicialappointments.digital' },
         },
       ],
       callbacks: {

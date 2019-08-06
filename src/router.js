@@ -31,7 +31,7 @@ const router = new Router({
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters.isSignedIn;
         if(isSignedIn) {
-          return next({name: 'home'});
+          return next({ name: 'home' });
         }
 
         return next();
@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
   const isSignedIn = store.getters.isSignedIn;
 
   if (requiresAuth && !isSignedIn) {
-    return next({name: 'sign-in'});
+    return next({ name: 'sign-in' });
   } 
 
   return next();
