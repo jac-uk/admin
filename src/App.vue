@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <main id="#main-content">
+    <main id="main-content">
       <RouterView />
     </main>
   </div>
