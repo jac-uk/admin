@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { vuexfireMutations } from 'vuexfire';
 import Vuex from 'vuex';
 import auth from '@/store/auth';
+import vacancies from '@/store/vacancies';
 
 Vue.use(Vuex);
 
@@ -11,14 +12,22 @@ const store = new Vuex.Store({
 
   modules: {
     auth,
+    vacancies,
   },
-
   state: {},
   mutations: {
     ...vuexfireMutations,
   },
-  actions: {},
+  actions: {
+    init: async ({ dispatch }) => {
+      await Promise.all([
+        dispatch('vacancies/bindVacancies'),
+      ]);
+    },
+  },
   getters: {},
 });
+
+store.dispatch('init');
 
 export default store;
