@@ -1,7 +1,4 @@
 import vacancies from '@/store/vacancies';
-// This is required by `jest.mock('vuexfire...`, but the linter can't interpret the mock.
-// eslint-disable-next-line
-import { firestoreAction } from 'vuexfire';
 import { firestore } from '@/firebase';
 
 jest.mock('@/firebase', () => {
@@ -27,8 +24,8 @@ describe('store/vacancies', () => {
 
   describe('bindVacancies', () => {
     it('binds to the firestore vacancies collection', () => {
-      expect(actions.bindVacancies[0]).toEqual('vacancies');
-      expect(actions.bindVacancies[1]).toEqual(firestore.collection('vacancies'));
+      expect(actions.bind[0]).toEqual('vacancies');
+      expect(actions.bind[1]).toEqual(firestore.collection('vacancies'));
     });
   });
 });

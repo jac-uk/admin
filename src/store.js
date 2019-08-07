@@ -21,7 +21,7 @@ const store = new Vuex.Store({
   actions: {
     init: async ({ dispatch }) => {
       await Promise.all([
-        dispatch('vacancies/bindVacancies'),
+        dispatch('vacancies/bind'),
       ]);
     },
   },

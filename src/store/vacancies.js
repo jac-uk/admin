@@ -4,7 +4,7 @@ import { firestoreAction } from 'vuexfire';
 export default {
   namespaced: true,
   actions: {
-    bindVacancies: firestoreAction(context => {
+    bind: firestoreAction(context => {
       return context.bindFirestoreRef('vacancies', firestore.collection('vacancies'));
     }),
   },
