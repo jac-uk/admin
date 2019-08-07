@@ -23,18 +23,11 @@
 </template>
 
 <script>
-import { firestore } from '@/firebase';
+import { mapState } from 'vuex';
 
 export default {
-  data() {
-    return {
-      vacancies: [],
-    };
-  },
-  firestore() {
-    return {
-      vacancies: firestore.collection('vacancies'),
-    };
-  },
+  computed: mapState('vacancies', [
+    'vacancies',
+  ]),
 };
 </script>
