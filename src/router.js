@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import Home from './views/Home.vue';
+import Dashboard from './views/Dashboard.vue';
 import SignIn from '@/views/SignIn';
 
 Vue.use(Router);
@@ -14,12 +14,12 @@ const router = new Router({
   routes: [
    {
       path: '*',
-      redirect: '/',
+      redirect: '/dashboard',
     },
     {
-      path: '/',
-      name: 'home',
-      component: Home,
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
       meta: {
         requiresAuth: true,
       },
@@ -31,7 +31,7 @@ const router = new Router({
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters.isSignedIn;
         if(isSignedIn) {
-          return next({ name: 'home' });
+          return next({ name: 'dashboard' });
         }
 
         return next();

@@ -3,12 +3,6 @@ import App from '@/App';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
-jest.mock('@/firebase', () => ({
-  auth: jest.fn(() => ({
-    signOut: jest.fn(),
-  })),
-}));
-
 describe('Sign in journey', () => {
   let subject;
   let router;
@@ -30,7 +24,7 @@ describe('Sign in journey', () => {
   });
 
   describe('for unauthenticated user', () => {
-    describe('when they visit /', () => {
+    describe('when they visit /dashboard', () => {
       it('redirects to /sign-in', () => {
         router.push('/');
         expect(subject.vm.$route.path).toBe('/sign-in');
@@ -49,23 +43,23 @@ describe('Sign in journey', () => {
     });
 
     describe('when going to page that does not exist', () => {
-      it('redirects to home page', () => {
+      it('redirects to the dashboard page', () => {
         router.push('/whatever');
-        expect(subject.vm.$route.path).toBe('/');
+        expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    describe('when going to the home page', () => {
-      it('can access home page', () => {
-        router.push('/');
-        expect(subject.vm.$route.path).toBe('/');
+    describe('when going to the dashboard page', () => {
+      it('can access the dashboard page', () => {
+        router.push('/dashboard');
+        expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
     describe('when going to sign-in page', () => {
-      it('redirects to home page', () => {
+      it('redirects to the dashboard page', () => {
         router.push('/sign-in');
-        expect(subject.vm.$route.path).toBe('/');
+        expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
   });
