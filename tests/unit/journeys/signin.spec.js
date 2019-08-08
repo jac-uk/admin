@@ -25,9 +25,10 @@ describe('Sign in journey', () => {
 
   describe('for unauthenticated user', () => {
     describe('when they visit /dashboard', () => {
-      it('redirects to /sign-in', () => {
+      it('redirects to /sign-in and passes the title in meta', () => {
         router.push('/');
         expect(subject.vm.$route.path).toBe('/sign-in');
+        expect(subject.vm.$route.meta.title).toBe('Sign In');
       });
     });
   });
@@ -43,9 +44,10 @@ describe('Sign in journey', () => {
     });
 
     describe('when going to page that does not exist', () => {
-      it('redirects to the dashboard page', () => {
+      it('redirects to the dashboard page and passes the title in meta', () => {
         router.push('/whatever');
         expect(subject.vm.$route.path).toBe('/dashboard');
+        expect(subject.vm.$route.meta.title).toBe('Dashboard');
       });
     });
 
@@ -62,5 +64,11 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
+
+    describe("page title", () => {
+      it("always contains Judicial Appointments Commission", () => {
+        expect(document.title).toContain("Judicial Appointments Commission");
+      });
+    })
   });
 });

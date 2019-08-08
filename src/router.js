@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import Dashboard from './views/Dashboard.vue';
+import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
 Vue.use(Router);
@@ -22,12 +22,16 @@ const router = new Router({
       component: Dashboard,
       meta: {
         requiresAuth: true,
+        title: "Dashboard"
       },
     },
     {
       path: '/sign-in',
       name: 'sign-in',
       component: SignIn,
+      meta: {
+        title: "Sign In"
+      },
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters.isSignedIn;
         if(isSignedIn) {
@@ -45,6 +49,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const isSignedIn = store.getters.isSignedIn;
+
+  document.title = `${to.meta.title} | Judicial Appointments Commission`;
 
   if (requiresAuth && !isSignedIn) {
     return next({ name: 'sign-in' });
