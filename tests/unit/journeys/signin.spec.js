@@ -3,41 +3,42 @@ import App from '@/App';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
-describe('Sign in journey', () => {
-  let subject;
-  let router;
-  let store;
+let subject;
+let router;
+let store;
 
-  beforeEach(() => {
-    const localVue = createLocalVue();
-    localVue.use(Router);
-    localVue.use(Vuex);
+beforeEach(() => {
+  const localVue = createLocalVue();
+  localVue.use(Router);
+  localVue.use(Vuex);
 
-    router = require('@/router').default;
-    store = require('@/store').default;
+  router = require('@/router').default;
+  store = require('@/store').default;
 
-    subject = shallowMount(App, {
-      localVue,
-      router,
-      store,
-    });
+  subject = shallowMount(App, {
+    localVue,
+    router,
+    store,
   });
+});
+
+const user = {
+  uid: 'abc123',
+  email: 'user@judicialappointments.digital',
+};
+
+describe('Sign in journey', () => {
 
   describe('for unauthenticated user', () => {
     describe('when they visit /dashboard', () => {
       it('redirects to /sign-in and passes the title in meta', () => {
         router.push('/');
         expect(subject.vm.$route.path).toBe('/sign-in');
-        expect(subject.vm.$route.meta.title).toBe('Sign In');
       });
     });
   });
 
   describe('for authenticated user', () => {
-    const user = {
-      uid: 'abc123',
-      email: 'user@judicialappointments.digital',
-    };
 
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
@@ -47,7 +48,6 @@ describe('Sign in journey', () => {
       it('redirects to the dashboard page and passes the title in meta', () => {
         router.push('/whatever');
         expect(subject.vm.$route.path).toBe('/dashboard');
-        expect(subject.vm.$route.meta.title).toBe('Dashboard');
       });
     });
 
@@ -64,11 +64,42 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
+  });
+});
 
-    describe('page title', () => {
-      it('always contains Judicial Appointments Commission', () => {
-        expect(document.title).toContain('Judicial Appointments Commission');
-      });
+describe("Page titles", () => {
+
+  describe("Sign In page", () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', null);
+    });
+
+    it("sets title as Sign In", () => {
+      router.push('/sign-in');
+      expect(document.title).toContain('Sign In');
+    });
+
+    it("contains Judicial Appointments Commission", () => {
+      router.push('/sign-in');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
+  describe("Dashboard Page", () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    })
+
+    it("sets title as Dashboard", () => {
+      router.push('/dashboard');
+      expect(document.title).toContain('Dashboard');
+    });
+
+    it("contains Judicial Appointments Commission", () => {
+      router.push('/dashboard');
+      expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 });

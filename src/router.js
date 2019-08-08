@@ -50,13 +50,16 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
   const isSignedIn = store.getters.isSignedIn;
 
-  document.title = `${to.meta.title} | Judicial Appointments Commission`;
-
   if (requiresAuth && !isSignedIn) {
     return next({ name: 'sign-in' });
   } 
 
   return next();
 });
+
+// Global after hook to set an appropriate title for the page
+router.afterEach((to, from) => {
+  document.title = `${to.meta.title} | Judicial Appointments Commission`;
+})
 
 export default router;
