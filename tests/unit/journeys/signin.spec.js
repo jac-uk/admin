@@ -3,35 +3,34 @@ import App from '@/App';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
-let subject;
-let router;
-let store;
-
-beforeEach(() => {
-  const localVue = createLocalVue();
-  localVue.use(Router);
-  localVue.use(Vuex);
-
-  router = require('@/router').default;
-  store = require('@/store').default;
-
-  subject = shallowMount(App, {
-    localVue,
-    router,
-    store,
-  });
-});
-
-const user = {
-  uid: 'abc123',
-  email: 'user@judicialappointments.digital',
-};
-
 describe('Sign in journey', () => {
+  let subject;
+  let router;
+  let store;
+
+  beforeEach(() => {
+  const localVue = createLocalVue();
+    localVue.use(Router);
+    localVue.use(Vuex);
+
+    router = require('@/router').default;
+    store = require('@/store').default;
+
+    subject = shallowMount(App, {
+      localVue,
+      router,
+      store,
+    });
+  });
+
+  const user = {
+    uid: 'abc123',
+    email: 'user@judicialappointments.digital',
+  };
 
   describe('for unauthenticated user', () => {
     describe('when they visit /dashboard', () => {
-      it('redirects to /sign-in and passes the title in meta', () => {
+      it('redirects to /sign-in page', () => {
         router.push('/');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
@@ -45,7 +44,7 @@ describe('Sign in journey', () => {
     });
 
     describe('when going to page that does not exist', () => {
-      it('redirects to the dashboard page and passes the title in meta', () => {
+      it('redirects to the dashboard page', () => {
         router.push('/whatever');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
@@ -63,43 +62,6 @@ describe('Sign in journey', () => {
         router.push('/sign-in');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
-    });
-  });
-});
-
-describe('Page titles', () => {
-
-  describe('Sign In page', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', null);
-    });
-
-    it('sets title as Sign In', () => {
-      router.push('/sign-in');
-      expect(document.title).toContain('Sign In');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/sign-in');
-      expect(document.title).toContain('Judicial Appointments Commission');
-    });
-  });
-
-  describe('Dashboard Page', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
-    });
-
-    it('sets title as Dashboard', () => {
-      router.push('/dashboard');
-      expect(document.title).toContain('Dashboard');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/dashboard');
-      expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 });
