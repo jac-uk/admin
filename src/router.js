@@ -22,7 +22,7 @@ const router = new Router({
       component: Dashboard,
       meta: {
         requiresAuth: true,
-        title: "Dashboard"
+        title: 'Dashboard',
       },
     },
     {
@@ -30,7 +30,7 @@ const router = new Router({
       name: 'sign-in',
       component: SignIn,
       meta: {
-        title: "Sign In"
+        title: 'Sign In',
       },
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters.isSignedIn;

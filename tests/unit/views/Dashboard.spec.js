@@ -30,7 +30,7 @@ describe('Dashboard view', () => {
   });
 });
 
-describe("Accessibility:", () => {
+describe('Accessibility:', () => {
   it('page contains h1 and h2 elements', () => { 
     let wrapper = shallowMount(Dashboard, {
       store,
@@ -40,5 +40,5 @@ describe("Accessibility:", () => {
     expect(wrapper.contains('h1')).toBe(true);
     expect(wrapper.contains('h2')).toBe(true);
   });
-})
+});
  

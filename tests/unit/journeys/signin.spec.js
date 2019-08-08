@@ -65,10 +65,10 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe("page title", () => {
-      it("always contains Judicial Appointments Commission", () => {
-        expect(document.title).toContain("Judicial Appointments Commission");
+    describe('page title', () => {
+      it('always contains Judicial Appointments Commission', () => {
+        expect(document.title).toContain('Judicial Appointments Commission');
       });
-    })
+    });
   });
 });
