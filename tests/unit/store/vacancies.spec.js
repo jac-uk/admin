@@ -25,7 +25,7 @@ describe('store/vacancies', () => {
   describe('bindVacancies', () => {
     it('binds to the firestore vacancies collection', () => {
       expect(actions.bind[0]).toEqual('vacancies');
-      expect(actions.bind[1]).toEqual(firestore.collection('vacancies'));
+      expect(actions.bind[1]).toEqual(firestore.collection('vacancies').orderBy('openAt'));
     });
   });
 });

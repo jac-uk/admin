@@ -58,8 +58,8 @@ router.beforeEach((to, from, next) => {
 });
 
 // Global after hook to set an appropriate title for the page
-router.afterEach((to, from) => {
+router.afterEach((to) => {
   document.title = `${to.meta.title} | Judicial Appointments Commission`;
-})
+});
 
 export default router;

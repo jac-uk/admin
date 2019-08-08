@@ -11,13 +11,14 @@
       :key="vacancy.jac_ref"
       class="govuk-list"
     >
-      <router-link
-        tag="li"
-        to="/dashboard"
-        class="govuk-link"
-      >
-        <a>{{ vacancy.jac_ref }} {{ vacancy.title }}</a>
-      </router-link>
+      <li>
+        <router-link
+          to="/dashboard"
+          class="govuk-link"
+        >
+          {{ vacancy.jac_ref }} {{ vacancy.title }}
+        </router-link>
+      </li>
     </ul>
   </div>
 </template>

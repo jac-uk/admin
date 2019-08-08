@@ -67,37 +67,37 @@ describe('Sign in journey', () => {
   });
 });
 
-describe("Page titles", () => {
+describe('Page titles', () => {
 
-  describe("Sign In page", () => {
+  describe('Sign In page', () => {
 
     beforeEach(() => {
       store.dispatch('setCurrentUser', null);
     });
 
-    it("sets title as Sign In", () => {
+    it('sets title as Sign In', () => {
       router.push('/sign-in');
       expect(document.title).toContain('Sign In');
     });
 
-    it("contains Judicial Appointments Commission", () => {
+    it('contains Judicial Appointments Commission', () => {
       router.push('/sign-in');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 
-  describe("Dashboard Page", () => {
+  describe('Dashboard Page', () => {
 
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-    })
+    });
 
-    it("sets title as Dashboard", () => {
+    it('sets title as Dashboard', () => {
       router.push('/dashboard');
       expect(document.title).toContain('Dashboard');
     });
 
-    it("contains Judicial Appointments Commission", () => {
+    it('contains Judicial Appointments Commission', () => {
       router.push('/dashboard');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
