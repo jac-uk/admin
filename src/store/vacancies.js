@@ -5,7 +5,7 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(context => {
-      return context.bindFirestoreRef('vacancies', firestore.collection('vacancies'));
+      return context.bindFirestoreRef('vacancies', firestore.collection('vacancies').orderBy("openAt"));
     }),
   },
   state: {
