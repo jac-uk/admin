@@ -1,4 +1,6 @@
-# apply-admin
+## Apply Admin
+
+This is the Vue SPA for managing exercises and candidates. 
 
 ## Project setup
 ```
@@ -25,10 +27,15 @@ npm run test
 npm run lint
 ```
 
-### Run your unit tests
+### Run your tests
 ```
-npm run test:unit
+npm run test
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Deployment
+
+The CircleCI instance has to have a `FIREBASE_DEPLOY_TOKEN` set.  This is tied to a specific firebase user.  If that user leaves
+the organisation, the token will need to be reset.  To do so run `firebase login:ci` and follow the instructions there and then on
+CircleCI.
+
+
