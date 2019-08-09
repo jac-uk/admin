@@ -6,10 +6,11 @@ import { auth } from '@/firebase';
 Vue.config.productionTip = false;
 
 let vueInstance = false;
-auth().onAuthStateChanged((user) => {
+auth().onAuthStateChanged( (user) => {
   // Bind Firebase auth state to the vuex auth state store
   store.dispatch('setCurrentUser', user);
-
+  // Get vacancies from Firebase
+  store.dispatch('init');
   // Create the Vue instance, but only once
   if (!vueInstance) {
     vueInstance = new Vue({

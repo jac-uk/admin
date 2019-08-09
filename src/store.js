@@ -20,14 +20,14 @@ const store = new Vuex.Store({
   },
   actions: {
     init: async ({ dispatch }) => {
-      await Promise.all([
-        dispatch('vacancies/bind'),
-      ]);
+      if(store.getters.isSignedIn) {
+        await Promise.all([
+          dispatch('vacancies/bind'),
+        ]);
+      }
     },
   },
   getters: {},
 });
-
-store.dispatch('init');
 
 export default store;
