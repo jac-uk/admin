@@ -1,0 +1,81 @@
+# If you want your branch to automatically deploy to `staging`, prefix the branch name with `staging-`.
+#
+# All tests will be tested against the branch and the branch with `master` rebased onto it.
+#
+# Besides branches prefixed with `staging-`, only master will be automatically deployed (to the production environment).
+version: 2.1
+executors:
+  default:
+    docker:
+      - image: circleci/node:10.16.0-stretch
+    working_directory: ~/digital-platform
+
+jobs:
+  setup:
+    executor: default
+    steps:
+      - checkout
+      - run:
+          name: 'Setup'
+          command: npm ci
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/digital-platform
+      - run:
+          name: 'Lint'
+          command: npm run lint-ci
+      - run:
+          name: 'Test'
+          command: npm run test-ci
+
+  rebase:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/digital-platform
+      - run:
+          name: 'Rebase against master'
+          command: git rebase master
+      - run:
+          name: 'Lint'
+          command: npm run lint-ci
+      - run:
+          name: 'Test'
+          command: npm run test-ci
+
+  build-and-deploy:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/digital-platform
+      - run:
+          name: 'Deploy to production'
+          command: node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+
+workflows:
+  version: 2
+  test-build-and-deploy:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      - rebase:
+          requires:
+            - setup
+          filters:
+            branches:
+              ignore: master
+      - build-and-deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
