@@ -5,6 +5,7 @@ import store from '@/store';
 // Views
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
+import createExercise from '@/views/CreateExercise';
 
 Vue.use(Router);
 
@@ -23,6 +24,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Dashboard',
+      },
+    },
+    {
+      path: '/exercise/new',
+      name: 'createExercise',
+      component: createExercise,
+      meta: {
+        requiresAuth: true,
+        title: 'Create new exercise',
       },
     },
     {

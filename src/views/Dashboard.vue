@@ -7,11 +7,12 @@
       Your exercises
     </h2>
     <ul
-      v-for="vacancy in vacancies"
-      :key="vacancy.jac_ref"
       class="govuk-list"
     >
-      <li>
+      <li 
+        v-for="vacancy in vacancies"
+        :key="vacancy.jac_ref"
+      >
         <router-link
           to="/dashboard"
           class="govuk-link"
@@ -20,6 +21,15 @@
         </router-link>
       </li>
     </ul>
+    <div>
+      <router-link
+        ref="linkToNewExercise"
+        to="/exercise/new"
+        class="govuk-button govuk-!-margin-top-9"
+      >
+        Create an exercise
+      </router-link>
+    </div>
   </div>
 </template>
 

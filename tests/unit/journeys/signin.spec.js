@@ -63,5 +63,12 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
+
+    describe('when going to the create new exercise page', () => {
+      it('can access the create new exercise', () => {
+        router.push('/exercise/new');
+        expect(subject.vm.$route.path).toBe('/exercise/new');
+      });
+    });
   });
 });
