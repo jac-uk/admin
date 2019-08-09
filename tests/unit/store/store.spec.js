@@ -27,7 +27,7 @@ describe('Vuex store', () => {
       expect(dispatch).toHaveBeenCalled();
     });
 
-     it('not calling dispatch if user is not signed in', () => {
+     it('does not call dispatch if user is not signed in', () => {
       store.getters.isSignedIn = false;
       const dispatch = jest.fn().mockResolvedValue();
       store.actions.init({ dispatch });
