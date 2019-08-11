@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import { vuexfireMutations } from 'vuexfire';
 import Vuex from 'vuex';
+
 import auth from '@/store/auth';
 import vacancies from '@/store/vacancies';
+import createExercise from '@/store/createExercise'
 
 Vue.use(Vuex);
 
@@ -13,6 +15,7 @@ const store = new Vuex.Store({
   modules: {
     auth,
     vacancies,
+    createExercise
   },
   state: {},
   mutations: {
