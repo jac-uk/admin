@@ -55,8 +55,8 @@ describe('store/createExercise', () => {
       describe('when newExercise exists', () => {
         it('returns newExercise data', () => {
           state.newExercise = {
-            title: 'HelloTest',
-            type: 'Senior',
+            title: 'Test Vacancy',
+            anotherKey: 'value',
           };
 
           expect(getters.exerciseData(state)).toBe(state.newExercise);

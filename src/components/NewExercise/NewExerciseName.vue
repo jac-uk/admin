@@ -8,9 +8,7 @@
         >
           Exercise name
         </label>
-
-        {{ name }}
-
+        
         <input
           id="exercise-name"
           v-model="name"
@@ -20,7 +18,11 @@
         >
       </div>
 
-      <button class="govuk-button" @click="saveName">
+      <button
+        ref="submitSaveName"
+        class="govuk-button"
+        @click="saveName"
+      >
         Continue
       </button>
     </div>
@@ -29,23 +31,23 @@
 
 <script>
 import { mapActions } from 'vuex';
-import store from '@/store';
 
 export default {
   data: function () {
     return {
-      name: ""
-    }
+      name: '',
+    };
   },
   computed: {
-    ...mapActions('createExercise', [
-      'setExerciseName'
-    ])
+    ...mapActions([
+      'setExerciseTitle',
+    ]),
   },
   methods: {
-    saveName() {
-      store.dispatch('setExerciseName', this.name)
+    saveName () {
+      this.$store.dispatch('setExerciseTitle', this.name);
+      this.$emit('submitted');
     },
-  }
+  },
 };
 </script>

@@ -21,8 +21,9 @@ export default {
     'exerciseData',
   ]),
   methods: {
-    saveExercise () {
-      saveNewExercise(this.exerciseData);
+    async saveExercise () {
+      await saveNewExercise(this.exerciseData);
+      this.$router.push('dashboard');
     },
   },
 };

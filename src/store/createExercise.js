@@ -2,6 +2,7 @@ const module = {
   state: {
     newExercise: {
       title: null,
+      jac_ref: "005"
     },
   },
   mutations: {

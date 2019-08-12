@@ -5,7 +5,7 @@ import store from '@/store';
 // Views
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
-import createExercise from '@/views/CreateExercise';
+import CreateExercise from '@/views/CreateExercise';
 
 Vue.use(Router);
 
@@ -29,7 +29,7 @@ const router = new Router({
     {
       path: '/exercise/new',
       name: 'createExercise',
-      component: createExercise,
+      component: CreateExercise,
       meta: {
         requiresAuth: true,
         title: 'Create new exercise',
