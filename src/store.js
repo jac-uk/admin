@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 
 import auth from '@/store/auth';
 import vacancies from '@/store/vacancies';
-import createExercise from '@/store/createExercise'
+import createExercise from '@/store/createExercise';
 
 Vue.use(Vuex);
 
@@ -15,7 +15,7 @@ const store = new Vuex.Store({
   modules: {
     auth,
     vacancies,
-    createExercise
+    createExercise,
   },
   state: {},
   mutations: {

@@ -6,3 +6,14 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
 .text-center {
   text-align: center;
 }
+
+// JAC bespoke css can go here
+.govuk-button {
+  background-color: #753880;
+  box-shadow: 0 2px 0 #5e2d66;
+}
+
+.govuk-button:hover,
+.govuk-button:focus {
+  background-color: #5e2d66;
+}
