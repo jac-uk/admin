@@ -1,25 +1,29 @@
 <template>
   <div>
-    <NewExerciseName />
-    <NewExerciseType />
+    <NewExerciseName
+      ref="newExerciseNameComponent"
+      @submitted="saveExercise"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import saveNewExercise from '@/helpers/saveNewExercise';
 
 import NewExerciseName from '@/components/NewExercise/NewExerciseName';
-import NewExerciseType from '@/components/NewExercise/NewExerciseType';
 
 export default {
   components: {
     NewExerciseName,
-    NewExerciseType
   },
-  data: function () {
-    return {
-      name: '',
-    };
+  computed: mapGetters([
+    'exerciseData',
+  ]),
+  methods: {
+    saveExercise () {
+      saveNewExercise(this.exerciseData);
+    },
   },
 };
 </script>
