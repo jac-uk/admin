@@ -12,11 +12,11 @@ describe('CreateExercise view', () => {
 
   beforeEach(() => {
     actions = {
-      setExerciseTitle: jest.fn()
+      setExerciseTitle: jest.fn(),
     };
 
     store = new Vuex.Store({
-      actions
+      actions,
     });
 
     wrapper = shallowMount(NewExerciseName, {
@@ -38,10 +38,10 @@ describe('CreateExercise view', () => {
   });
 
   it('dispatches action to store', () => {
-    wrapper.setData({ name: "testName" });
+    wrapper.setData({ name: 'testName' });
     wrapper.vm.saveName();
     expect(actions.setExerciseTitle.mock.calls.length).toBe(1);
-    expect(actions.setExerciseTitle.mock.calls[0][1]).toBe("testName");
+    expect(actions.setExerciseTitle.mock.calls[0][1]).toBe('testName');
     expect(wrapper.emitted().submitted).toBeTruthy();
   });
 

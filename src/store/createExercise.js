@@ -1,8 +1,10 @@
+import generateRandomReference from '@/helpers/generateRef';
+
 const module = {
   state: {
     newExercise: {
       title: null,
-      jac_ref: "005"
+      jac_ref: generateRandomReference(1, 100),
     },
   },
   mutations: {

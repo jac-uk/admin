@@ -3,7 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CreateExercise from '@/views/CreateExercise';
 import NewExerciseName from '@/components/NewExercise/NewExerciseName';
 import saveNewExercise from '@/helpers/saveNewExercise';
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
 
 jest.mock('@/helpers/saveNewExercise', () => jest.fn());
 
@@ -20,14 +20,14 @@ beforeEach(() => {
     },
   }); 
 
-  router = new VueRouter()
+  router = new VueRouter();
 
   wrapper = shallowMount(CreateExercise, {
     store,
     router,
     localVue,
   });
-})
+});
 
 describe('CreateExercise', () => {
   it('renders the the component', () => {
