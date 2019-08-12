@@ -50,14 +50,23 @@ jobs:
           name: 'Test'
           command: npm run test-ci
 
-  build-and-deploy:
+  build-and-deploy-production:
     executor: default
     steps:
       - attach_workspace:
           at: ~/digital-platform
       - run:
           name: 'Deploy to production'
-          command: node_modules/.bin/firebase deploy --token=$FIREBASE_DEPLOY_TOKEN
+          command: node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --project production
+
+  build-and-deploy-staging:
+    executor: default
+    steps:
+      - attach_workspace:
+          at: ~/digital-platform
+      - run:
+          name: 'Deploy to staging'
+          command: node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --project staging
 
 workflows:
   version: 2
@@ -73,7 +82,13 @@ workflows:
           filters:
             branches:
               ignore: master
-      - build-and-deploy:
+      - build-and-deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: staging
+      - build-and-deploy-production:
           requires:
             - test
           filters:
