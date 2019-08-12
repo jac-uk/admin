@@ -1,38 +1,24 @@
 const module = {
   state: {
-    name: null,
-    type: null,
+    newExercise: {
+      title: null,
+    },
   },
   mutations: {
-    setName(state, name) {
-      state.name = name;
-    },
-    setType(state, type) {
-      state.type = type;
+    setTitle(state, name) {
+      state.newExercise.title = name;
     },
   },
   actions: {
-    setExerciseName({ commit }, name) {
+    setExerciseTitle({ commit }, name) {
       if(name) {
-        commit('setName', name);
+        commit('setTitle', name);
       }
-
-      console.log("This state: ", this.state);
     },
-    setExerciseType({ commit }, type) {
-      if(type) {
-        commit('setName', type);
-      }
-
-      console.log("This state: ", this.state);
-    }
   },
   getters: {
-    hasName(state) {
-      return (state.name !== null);
-    },
-    hasType(state) {
-      return (state.type !== null);
+    exerciseData(state) {
+      return state.newExercise.title !== null ? state.newExercise : null;
     },
   },
 };
