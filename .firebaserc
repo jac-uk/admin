@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "digital-platform-apply-admin"
+    "default": "digital-staging-apply-admin",
+    "staging": "digital-staging-apply-admin",
+    "production": "digital-platform-apply-admin"
   }
 }
