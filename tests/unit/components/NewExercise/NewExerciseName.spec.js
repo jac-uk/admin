@@ -29,7 +29,7 @@ describe('CreateExercise view', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('dispatches setExerciseTitle event on submit', () => { 
+  it('calls saveName on button click', () => { 
     const saveName = jest.fn();
     wrapper.setMethods({ saveName });
     wrapper.find({ ref: 'submitSaveName' }).trigger('click');
