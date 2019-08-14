@@ -15,7 +15,7 @@ let store, wrapper, router;
 
 beforeEach(() => {
   const getters = {
-    exerciseData: jest.fn().mockResolvedValue({ title: 'Test' }),
+    exerciseData: jest.fn(() => ({ title: 'Test' })),
   };
 
   store = new Vuex.Store({
@@ -49,7 +49,7 @@ describe('CreateExercise', () => {
     wrapper.vm.$refs.newExerciseNameComponent.$emit('submitted');
     
     setTimeout(() => {
-      expect(saveNewExercise).toHaveBeenCalled();
+      expect(saveNewExercise).toHaveBeenCalledWith({ title: 'Test' });
       expect(wrapper.vm.$route.path).toBe('/dashboard');
       done();
     }, 0);
