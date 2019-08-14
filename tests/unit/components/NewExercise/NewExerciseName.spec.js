@@ -50,13 +50,5 @@ describe('components/NewExercise/NewExerciseName', () => {
       expect(actions.setExerciseTitle.mock.calls.length).toBe(1);
       expect(actions.setExerciseTitle.mock.calls[0][1]).toBe('testName');
     });
-
-    it('emits submitted event', () => {
-      wrapper.setData({ name: 'testName' });
-      wrapper.vm.saveName();
-      
-      expect(wrapper.emitted().submitted).toBeTruthy();
-    });
-
   });
 });
