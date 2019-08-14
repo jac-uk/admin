@@ -46,7 +46,6 @@ export default {
   methods: {
     saveName () {
       this.$store.dispatch('createExercise/setExerciseTitle', this.name);
-      this.$emit('submitted');
     },
   },
 };

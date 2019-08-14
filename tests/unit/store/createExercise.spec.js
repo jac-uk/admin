@@ -16,12 +16,33 @@ describe('store/createExercise', () => {
 
   // test mutations
   describe('mutations', () => {
+
     describe('setTitle', () => {
       it('sets title in the state', () => {
         const name = 'Test Name';
         mutations.setTitle(state, name);
 
         expect(state.newExercise.title).toBe(name);
+      });
+    });
+
+    describe('setType', () => {
+      it('sets setType in the state', () => {
+        const type = 'Test Type';
+        mutations.setType(state, type);
+
+        expect(state.newExercise.type).toBe(type);
+      });
+    });
+
+     describe('resetExercise', () => {
+      it('resets exercise state to initial', () => {
+        mutations.setTitle(state, 'Test Title');
+        mutations.setType(state, 'Legal');
+        mutations.resetExercise(state);
+
+        expect(state.newExercise.type).toBe(null);
+        expect(state.newExercise.title).toBe(null);
       });
     });
   });
@@ -43,6 +64,22 @@ describe('store/createExercise', () => {
         actions.setExerciseTitle(context, 'TestName');
 
         expect(context.commit).toHaveBeenCalledWith('setTitle', 'TestName');
+      });
+    });
+
+    describe('setExerciseType', () => {
+      it('commits setType', () => {
+        actions.setExerciseType(context, 'TestTitle');
+
+        expect(context.commit).toHaveBeenCalledWith('setType', 'TestTitle');
+      });
+    });
+
+    describe('resetNewExercise', () => {
+      it('commits resetNewExercise', () => {
+        actions.resetNewExercise(context);
+
+        expect(context.commit).toHaveBeenCalledWith('resetExercise');
       });
     });
   });
@@ -73,6 +110,30 @@ describe('store/createExercise', () => {
         });
       });
 
+    });
+
+    describe('exerciseTitle', () => {
+      describe('when exercise title exists', () => {
+        it('returns exercise title', () => {
+          state.newExercise = {
+            title: 'Road User Charging Adjudicators',
+            anotherKey: 'value',
+          };
+
+          expect(getters.exerciseTitle(state)).toBe(state.newExercise.title);
+        });
+      });
+
+      describe('when exercise title does not exist', () => {
+        it('returns null', () => {
+          state.newExercise = {
+             title: null,
+             anotherKey: 'value',
+          };
+
+          expect(getters.exerciseTitle(state)).toBe(null);
+        });
+      });
     });
     
   });
