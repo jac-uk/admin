@@ -1,13 +1,12 @@
-import firebase from '@/firebase';
+import firebase, { firestore } from '@/firebase';
 
 const saveNewExercise = (data) => {
-  const firestore = firebase.firestore;
-  const collection = firestore().collection('vacancies');
+  const collection = firestore.collection('vacancies');
 
   return collection.add({
-    createdAt: firestore.FieldValue.serverTimestamp(),
-    updatedAt: firestore.FieldValue.serverTimestamp(),
-    openAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    openAt: firebase.firestore.FieldValue.serverTimestamp(),
     ...data,
   });
 };

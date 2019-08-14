@@ -17,7 +17,7 @@ export default {
   components: {
     NewExerciseName,
   },
-  computed: mapGetters([
+  computed: mapGetters('createExercise', [
     'exerciseData',
   ]),
   methods: {

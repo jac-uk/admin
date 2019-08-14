@@ -64,8 +64,8 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when going to the create new exercise page', () => {
-      it('can access the create new exercise', () => {
+    describe('when going to the new exercise page', () => {
+      it('can access the new exercise page', () => {
         router.push('/exercise/new');
         expect(subject.vm.$route.path).toBe('/exercise/new');
       });

@@ -11,13 +11,13 @@
     >
       <li 
         v-for="vacancy in vacancies"
-        :key="vacancy.jac_ref"
+        :key="vacancy.reference"
       >
         <router-link
           to="/dashboard"
           class="govuk-link"
         >
-          {{ vacancy.jac_ref }} {{ vacancy.title }}
+          {{ vacancy.reference }} {{ vacancy.title }}
         </router-link>
       </li>
     </ul>

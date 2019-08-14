@@ -5,7 +5,7 @@ import NewExerciseName from '@/components/NewExercise/NewExerciseName';
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe('CreateExercise view', () => {
+describe('components/NewExercise/NewExerciseName', () => {
   let actions;
   let store;
   let wrapper;
@@ -16,7 +16,12 @@ describe('CreateExercise view', () => {
     };
 
     store = new Vuex.Store({
-      actions,
+      modules: {
+        createExercise: {
+          namespaced: true,
+          actions,
+        },
+      },
     });
 
     wrapper = shallowMount(NewExerciseName, {
@@ -29,20 +34,29 @@ describe('CreateExercise view', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('calls saveName on button click', () => { 
-    const saveName = jest.fn();
-    wrapper.setMethods({ saveName });
-    wrapper.find({ ref: 'submitSaveName' }).trigger('click');
+  describe('onSave method', () => {
+    it('calls saveName on button click', () => { 
+      const saveName = jest.fn();
+      wrapper.setMethods({ saveName });
+      wrapper.find({ ref: 'submitSaveName' }).trigger('click');
 
-    expect(saveName).toHaveBeenCalled();
+      expect(saveName).toHaveBeenCalled();
+    });
+
+    it('dispatches action to store', () => {
+      wrapper.setData({ name: 'testName' });
+      wrapper.vm.saveName();
+
+      expect(actions.setExerciseTitle.mock.calls.length).toBe(1);
+      expect(actions.setExerciseTitle.mock.calls[0][1]).toBe('testName');
+    });
+
+    it('emits submitted event', () => {
+      wrapper.setData({ name: 'testName' });
+      wrapper.vm.saveName();
+      
+      expect(wrapper.emitted().submitted).toBeTruthy();
+    });
+
   });
-
-  it('dispatches action to store', () => {
-    wrapper.setData({ name: 'testName' });
-    wrapper.vm.saveName();
-    expect(actions.setExerciseTitle.mock.calls.length).toBe(1);
-    expect(actions.setExerciseTitle.mock.calls[0][1]).toBe('testName');
-    expect(wrapper.emitted().submitted).toBeTruthy();
-  });
-
 });

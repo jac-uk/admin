@@ -1,10 +1,11 @@
 import generateRandomReference from '@/helpers/generateRef';
 
 const module = {
+  namespaced: true,
   state: {
     newExercise: {
       title: null,
-      jac_ref: generateRandomReference(1, 100),
+      reference: generateRandomReference(1, 100),
     },
   },
   mutations: {
@@ -14,9 +15,7 @@ const module = {
   },
   actions: {
     setExerciseTitle({ commit }, name) {
-      if(name) {
-        commit('setTitle', name);
-      }
+      commit('setTitle', name);
     },
   },
   getters: {

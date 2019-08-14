@@ -5,7 +5,7 @@ import NewExerciseName from '@/components/NewExercise/NewExerciseName';
 import saveNewExercise from '@/helpers/saveNewExercise';
 import VueRouter from 'vue-router';
 
-jest.mock('@/helpers/saveNewExercise', () => jest.fn());
+jest.mock('@/helpers/saveNewExercise', () => jest.fn().mockResolvedValue());
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -14,10 +14,17 @@ localVue.use(VueRouter);
 let store, wrapper, router;
 
 beforeEach(() => {
+  const getters = {
+    exerciseData: jest.fn().mockResolvedValue({ title: 'Test' }),
+  };
+
   store = new Vuex.Store({
-    getters: {
-      exerciseData: jest.fn().mockResolvedValue({ title: 'Test' }),
-    },
+    modules: {
+        createExercise: {
+          namespaced: true,
+          getters,
+        },
+      },
   }); 
 
   router = new VueRouter();
@@ -41,11 +48,10 @@ describe('CreateExercise', () => {
   it('calls saveNewExercise and redirects to dashboard page', (done) => {
     wrapper.vm.$refs.newExerciseNameComponent.$emit('submitted');
     
-    expect(saveNewExercise).toHaveBeenCalled();
-
-    wrapper.vm.$nextTick(() => {
+    setTimeout(() => {
+      expect(saveNewExercise).toHaveBeenCalled();
       expect(wrapper.vm.$route.path).toBe('/dashboard');
       done();
-    });
+    }, 0);
   });
 });

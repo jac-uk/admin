@@ -19,7 +19,11 @@ jest.mock('@/firebase', () => {
   );
 
   mockfirestore.autoFlush();
-  return { firestore: mocksdk.firestore };
+  return { 
+    __esModule: true,
+    default: mocksdk,
+    firestore: mocksdk.firestore(),
+  };
 });
 
 describe('saveNewExercise', () => {
@@ -31,13 +35,10 @@ describe('saveNewExercise', () => {
 
     await saveNewExercise(data);
     
-    const testVacancies = await firestore().collection('vacancies').get();
+    const testVacancies = await firestore.collection('vacancies').get();
     expect(testVacancies.docs.length).toBe(1);
 
     const testVacancy = testVacancies.docs[0].data();
     expect(testVacancy).toEqual(expect.objectContaining(data));
   });
 });
-
-
-

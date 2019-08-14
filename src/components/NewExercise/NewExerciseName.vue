@@ -39,13 +39,13 @@ export default {
     };
   },
   computed: {
-    ...mapActions([
+    ...mapActions('createExercise', [
       'setExerciseTitle',
     ]),
   },
   methods: {
     saveName () {
-      this.$store.dispatch('setExerciseTitle', this.name);
+      this.$store.dispatch('createExercise/setExerciseTitle', this.name);
       this.$emit('submitted');
     },
   },
