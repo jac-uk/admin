@@ -60,4 +60,21 @@ describe('Page titles', () => {
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
+
+  describe('New Exercise Page', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    });
+
+    it('sets title as Create new exercise', () => {
+      router.push('/exercise/new');
+      expect(document.title).toContain('Create new exercise');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
 });
