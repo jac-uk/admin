@@ -71,7 +71,7 @@ describe('store/createExercise', () => {
       it('commits setType', () => {
         actions.setExerciseType(context, 'Legal');
 
-        expect(context.commit).toHaveBeenCalledWith('Legal', 'TestTitle');
+        expect(context.commit).toHaveBeenCalledWith('setType', 'Legal');
       });
     });
 
