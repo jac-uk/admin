@@ -38,19 +38,24 @@ describe('components/Form/TextField', () => {
     });
 
     describe('id', () => {
-      it('sets the label for attribute', () => {
+      it('sets label for attribute', () => {
         wrapper.setProps({ id: 'my_unique_key' });
         expect(wrapper.find('label').attributes().for).toBe('my_unique_key');
+      }); 
+
+      it('sets id for input', () => {
+        wrapper.setProps({ id: 'my_unique_key' });
+        expect(wrapper.find('input').attributes().id).toBe('my_unique_key');
       }); 
     });
 
     describe('type', () => {
-      it('sets CSS class is narrow is true', () => {
+      it('sets CSS class if type is narrow', () => {
         wrapper.setProps({ type: 'narrow' });
         expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5');
       });
 
-      it("doesn't set CSS class is narrow is not passed", () => {
+      it("does not set CSS class if type is not passed", () => {
         wrapper.setProps({});
         expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5');
       });
