@@ -85,7 +85,7 @@ describe('CreateExercise', () => {
       });
     });
 
-    it('renders the child NewExerciseName component if the title does not exist', () => {
+    it('renders NewExerciseName component', () => {
       expect(wrapper.find(NewExerciseName).exists()).toBe(true);
     });
   });
@@ -116,7 +116,7 @@ describe('CreateExercise', () => {
       });
     });
 
-    it('renders the child NewExerciseType component if the title exists', () => {
+    it('renders NewExerciseType component', () => {
       expect(wrapper.find(NewExerciseType).exists()).toBe(true);
     });
   });

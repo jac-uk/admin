@@ -29,7 +29,7 @@
               id="non-legal"
               v-model="type"
               class="govuk-radios__input"
-              name="legal"
+              name="non-legal"
               type="radio"
               value="non-legal"
             >
