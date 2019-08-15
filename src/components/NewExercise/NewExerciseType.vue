@@ -99,12 +99,10 @@ export default {
       type: '',
     };
   },
-  computed: {
+  methods: {
     ...mapActions('createExercise', [
       'setExerciseType',
     ]),
-  },
-  methods: {
     saveType () {
       this.$store.dispatch('createExercise/setExerciseType', this.type);
       this.$emit('submitted');

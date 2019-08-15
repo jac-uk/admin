@@ -8,8 +8,8 @@ describe('store/createExercise', () => {
 
   beforeEach(() => {
     state = {
-       newExercise: {
-        title: null,
+      newExercise: {
+      title: null,
       },
     };
   });
@@ -35,7 +35,7 @@ describe('store/createExercise', () => {
       });
     });
 
-     describe('resetExercise', () => {
+    describe('resetExercise', () => {
       it('resets exercise state to initial', () => {
         mutations.setTitle(state, 'Test Title');
         mutations.setType(state, 'Legal');
@@ -103,7 +103,7 @@ describe('store/createExercise', () => {
       describe('when newExercise does not exist', () => {
         it('returns null', () => {
           state.newExercise = {
-             title: null,
+            title: null,
           };
 
           expect(getters.exerciseData(state)).toBe(null);
@@ -127,14 +127,13 @@ describe('store/createExercise', () => {
       describe('when exercise title does not exist', () => {
         it('returns null', () => {
           state.newExercise = {
-             title: null,
-             anotherKey: 'value',
+            title: null,
+            anotherKey: 'value',
           };
 
           expect(getters.exerciseTitle(state)).toBe(null);
         });
       });
     });
-    
   });
 });
