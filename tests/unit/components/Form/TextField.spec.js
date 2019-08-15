@@ -12,48 +12,48 @@ describe('components/Form/TextField', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe("TextField props", () => {
+  describe('TextField props', () => {
 
-    describe("label", () => {
-      it("sets the label", () => {
+    describe('label', () => {
+      it('sets the label', () => {
         wrapper.setProps({ label: 'My Form Label' });
         expect(wrapper.find('label').text()).toBe('My Form Label');
       });
-    })
+    });
 
-    describe("hint", () => {
-      it("shows hint element if hint is true", () => {
+    describe('hint', () => {
+      it('shows hint element if hint is true', () => {
         wrapper.setProps({ hint: 'my_hint' });
-        expect(wrapper.find('.govuk-hint').exists()).toBe(true)
-      }) 
+        expect(wrapper.find('.govuk-hint').exists()).toBe(true);
+      }); 
 
-      it("sets hint element content", () => {
+      it('sets hint element content', () => {
         wrapper.setProps({ hint: 'Hint for the label!' });
          expect(wrapper.find('.govuk-hint').text()).toBe('Hint for the label!');
-      }) 
+      }); 
 
-      it("does not show hint if hint is not passed", () => {
-        expect(wrapper.find('.govuk-hint').exists()).toBe(false)
-      }) 
+      it('does not show hint if hint is not passed', () => {
+        expect(wrapper.find('.govuk-hint').exists()).toBe(false);
+      }); 
     });
 
-    describe("id", () => {
-      it("sets the label for attribute", () => {
+    describe('id', () => {
+      it('sets the label for attribute', () => {
         wrapper.setProps({ id: 'my_unique_key' });
-        expect(wrapper.find('label').attributes().for).toBe('my_unique_key')
-      }) 
+        expect(wrapper.find('label').attributes().for).toBe('my_unique_key');
+      }); 
     });
 
-    describe("narrow", () => {
-      it("sets CSS class is narrow is true", () => {
-        wrapper.setProps({ narrow: true });
-        expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5')
+    describe('type', () => {
+      it('sets CSS class is narrow is true', () => {
+        wrapper.setProps({ type: 'narrow' });
+        expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5');
       });
 
       it("doesn't set CSS class is narrow is not passed", () => {
         wrapper.setProps({});
-        expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5')
-      })
-    })
-  })
+        expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5');
+      });
+    });
+  });
 });

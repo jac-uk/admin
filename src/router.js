@@ -6,6 +6,7 @@ import store from '@/store';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 import CreateExercise from '@/views/CreateExercise';
+import InformationAboutRole from '@/components/NewExercise/InformationAboutRole';
 
 Vue.use(Router);
 
@@ -33,6 +34,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Create new exercise',
+      },
+    },
+    {
+      path: '/exercise/new/information-about-role',
+      name: 'informationAboutRole',
+      component: InformationAboutRole,
+      meta: {
+        requiresAuth: true,
+        title: 'Information about the role',
       },
     },
     {
