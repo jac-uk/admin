@@ -8,16 +8,15 @@
     </label>
     <span 
       v-if="hint"
-      id="event-name-hint" 
       class="govuk-hint"
     >
       {{ hint }}
     </span>
     <input 
-      id="key"
+      :id="id"
       v-model="textFieldValue" 
       :class="[ (type === 'narrow') ? 'govuk-input--width-5 govuk-input' : 'govuk-input' ]" 
-      name="key" 
+      :name="id" 
       type="text"
     >
   </div>
