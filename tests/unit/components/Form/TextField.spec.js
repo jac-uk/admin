@@ -55,7 +55,7 @@ describe('components/Form/TextField', () => {
         expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5');
       });
 
-      it("does not set CSS class if type is not passed", () => {
+      it('does not set CSS class if type is not passed', () => {
         wrapper.setProps({});
         expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5');
       });
