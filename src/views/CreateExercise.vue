@@ -28,10 +28,10 @@ export default {
     ...mapGetters('createExercise', [
       'exerciseData', 'exerciseTitle',
     ]),
-    ...mapActions('createExercise', [
-      'resetNewExercise']),
   },
   methods: {
+    ...mapActions('createExercise', [
+      'resetNewExercise']),
     async saveExercise () {
       await saveNewExercise(this.exerciseData);
       this.$router.push('dashboard');
