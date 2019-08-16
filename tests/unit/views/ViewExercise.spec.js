@@ -1,4 +1,4 @@
-import ViewExercise from "@/views/ViewExercise";
+import ViewExercise from '@/views/ViewExercise';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 
@@ -8,7 +8,7 @@ localVue.use(Router);
 describe('ViewExercise view', () => {
   it('renders the component', () => {
     let wrapper = shallowMount(ViewExercise, {
-      localVue
+      localVue,
     });
     
     expect(wrapper.exists()).toBe(true);

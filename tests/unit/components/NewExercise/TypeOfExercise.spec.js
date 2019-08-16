@@ -1,14 +1,17 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import NewExerciseType from '@/components/NewExercise/NewExerciseType';
+import TypeOfExercise from '@/components/NewExercise/TypeOfExercise';
+import VueRouter from 'vue-router';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+localVue.use(VueRouter);
 
-describe('components/NewExercise/NewExerciseType', () => {
+describe('components/NewExercise/TypeOfExercise', () => {
   let actions;
   let store;
   let wrapper;
+  let router;
 
   beforeEach(() => {
     actions = {
@@ -24,9 +27,12 @@ describe('components/NewExercise/NewExerciseType', () => {
       },
     });
 
-    wrapper = shallowMount(NewExerciseType, {
+    router = new VueRouter();
+
+    wrapper = shallowMount(TypeOfExercise, {
       store,
       localVue,
+      router,
     });
   });
 
@@ -50,13 +56,5 @@ describe('components/NewExercise/NewExerciseType', () => {
       expect(actions.setExerciseType.mock.calls.length).toBe(1);
       expect(actions.setExerciseType.mock.calls[0][1]).toBe('legal');
     });
-
-    it('emits submitted event', () => {
-      wrapper.setData({ name: 'legal' });
-      wrapper.vm.saveType();
-      
-      expect(wrapper.emitted().submitted).toBeTruthy();
-    });
-
   });
 });
