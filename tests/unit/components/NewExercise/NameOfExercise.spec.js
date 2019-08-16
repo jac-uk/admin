@@ -1,14 +1,17 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import NewExerciseName from '@/components/NewExercise/NewExerciseName';
+import NameOfExercise from '@/components/NewExercise/NameOfExercise';
+import VueRouter from 'vue-router';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+localVue.use(VueRouter);
 
-describe('components/NewExercise/NewExerciseName', () => {
+describe('components/NewExercise/NameOfExercise', () => {
   let actions;
   let store;
   let wrapper;
+  let router;
 
   beforeEach(() => {
     actions = {
@@ -24,9 +27,12 @@ describe('components/NewExercise/NewExerciseName', () => {
       },
     });
 
-    wrapper = shallowMount(NewExerciseName, {
+    router = new VueRouter();
+
+    wrapper = shallowMount(NameOfExercise, {
       store,
       localVue,
+      router,
     });
   });
 
