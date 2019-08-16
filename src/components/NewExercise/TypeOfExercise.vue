@@ -105,7 +105,7 @@ export default {
     ]),
     saveType () {
       this.$store.dispatch('createExercise/setExerciseType', this.type);
-      this.$emit('submitted');
+      this.$router.push({ name: 'viewExercise' });
     },
   },
 };
