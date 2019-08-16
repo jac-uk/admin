@@ -46,6 +46,7 @@ export default {
   methods: {
     saveName () {
       this.$store.dispatch('createExercise/setExerciseTitle', this.name);
+      this.$router.push({ name: 'type-of-exercise' });
     },
   },
 };
