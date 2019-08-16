@@ -14,7 +14,7 @@
         :key="vacancy.reference"
       >
         <router-link
-          to="/dashboard"
+          to="/exercise/view"
           class="govuk-link"
         >
           {{ vacancy.reference }} {{ vacancy.title }}
@@ -24,7 +24,7 @@
     <div>
       <router-link
         ref="linkToNewExercise"
-        to="/exercise/new"
+        to="/exercise/new/name-of-exercise"
         class="govuk-button govuk-!-margin-top-9"
       >
         Create an exercise
