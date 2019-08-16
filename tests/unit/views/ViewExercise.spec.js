@@ -5,7 +5,7 @@ import Router from 'vue-router';
 const localVue = createLocalVue();
 localVue.use(Router);
 
-describe('ViewExercise view', () => {
+describe('ViewExercise', () => {
   it('renders the component', () => {
     let wrapper = shallowMount(ViewExercise, {
       localVue,
