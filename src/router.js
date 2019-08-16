@@ -5,8 +5,12 @@ import store from '@/store';
 // Views
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
+import ViewExercise from '@/views/ViewExercise';
+// form
 import CreateExercise from '@/views/CreateExercise';
-import InformationAboutRole from '@/components/NewExercise/InformationAboutRole';
+import NameOfExercise from '@/components/NewExercise/NameOfExercise';
+import TypeOfExercise from '@/components/NewExercise/TypeOfExercise';
+import NumberOfVacancies from '@/components/NewExercise/NumberOfVacancies';
 
 Vue.use(Router);
 
@@ -28,21 +32,43 @@ const router = new Router({
       },
     },
     {
-      path: '/exercise/new',
-      name: 'createExercise',
+      path: '/exercise/new/',
       component: CreateExercise,
       meta: {
-        requiresAuth: true,
         title: 'Create new exercise',
       },
+      children: [
+        {
+          path: 'name-of-exercise',
+          component: NameOfExercise,
+          meta: {
+            title: 'Name Of Exercise',
+          },
+        },
+        {
+          path: 'type-of-exercise',
+          component: TypeOfExercise,
+          name: 'type-of-exercise',
+          meta: {
+            title: 'Type Of Exercise',
+          },
+        },
+        {
+          path: 'number-of-vacancies',
+          component: NumberOfVacancies,
+          name: 'number-of-vacancies',
+          meta: {
+            title: 'Number Of Vacancies',
+          },
+      }],
     },
     {
-      path: '/exercise/new/information-about-role',
-      name: 'informationAboutRole',
-      component: InformationAboutRole,
+      path: '/exercise/view',
+      name: 'viewExercise',
+      component: ViewExercise,
       meta: {
         requiresAuth: true,
-        title: 'Information about the role',
+        title: 'View exercise',
       },
     },
     {
