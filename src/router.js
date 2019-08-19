@@ -44,6 +44,7 @@ const router = new Router({
           component: Eligibility,
           name: 'eligibility',
           meta: {
+            requiresAuth: true,
             title: 'Eligibility',
           },
         },
