@@ -39,6 +39,14 @@ const router = new Router({
       },
       children: [
         {
+          path: 'eligibility',
+          component: () => import('@/views/Eligibility'),
+          name: 'eligibility',
+          meta: {
+            title: 'Eligibility',
+          },
+        },
+        {
           path: 'name-of-exercise',
           component: NameOfExercise,
           meta: {
@@ -98,7 +106,7 @@ router.beforeEach((to, from, next) => {
 
   if (requiresAuth && !isSignedIn) {
     return next({ name: 'sign-in' });
-  } 
+  }
 
   return next();
 });
