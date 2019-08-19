@@ -128,4 +128,22 @@ describe('Page titles', () => {
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
+
+  describe('Eligibility', () => {
+
+   beforeEach(() => {
+     store.dispatch('setCurrentUser', user);
+   });
+
+   it('sets title as Eligibility', () => {
+     router.push('/exercise/new/eligibility');
+     expect(document.title).toContain('Eligibility');
+   });
+
+   it('contains Judicial Appointments Commission', () => {
+     router.push('/exercise/new/eligibility');
+     expect(document.title).toContain('Judicial Appointments Commission');
+   });
+ });
+
 });
