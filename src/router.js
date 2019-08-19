@@ -4,6 +4,7 @@ import store from '@/store';
 
 // Views
 import Dashboard from '@/views/Dashboard';
+import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
 import ViewExercise from '@/views/ViewExercise';
 // form
@@ -40,7 +41,7 @@ const router = new Router({
       children: [
         {
           path: 'eligibility',
-          component: () => import('@/views/Eligibility'),
+          component: Eligibility,
           name: 'eligibility',
           meta: {
             title: 'Eligibility',
