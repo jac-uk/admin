@@ -8,9 +8,9 @@
       <div class="govuk-grid-column-two-thirds">
         <span class="govuk-caption-xl">Step 3 of 4</span>
         <!--PAGE TITLE-->
-        <h3 class="govuk-heading-xl">
+        <h1 class="govuk-heading-xl">
           Eligibility
-        </h3>
+        </h1>
 
         <!--CONDITIONAL CHECKBOX GROUP-->
         <div class="govuk-form-group">
@@ -19,9 +19,9 @@
             aria-describedby="citizenship-conditional-hint"
           >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-fieldset__heading">
+              <h2 class="govuk-fieldset__heading">
                 Professions
-              </h1>
+              </h2>
             </legend>
             <span
               id="citizenship-conditional-hint"
@@ -151,9 +151,9 @@
             aria-describedby="how-contacted-conditional-hint"
           >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-fieldset__heading">
+              <h2 class="govuk-fieldset__heading">
                 Post-qualification experience (PQE)
-              </h1>
+              </h2>
             </legend>
             <span
               id="event-name-hint"
@@ -261,9 +261,9 @@
             aria-describedby="additional-selection-conditional-hint"
           >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-fieldset__heading">
+              <h2 class="govuk-fieldset__heading">
                 Does Schedule 2 apply? (Tribunal only)
-              </h1>
+              </h2>
             </legend>
             <span
               id="event-name-hint"
@@ -318,9 +318,9 @@
             aria-describedby="additional-selection-conditional-hint"
           >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-fieldset__heading">
+              <h2 class="govuk-fieldset__heading">
                 Additional selection criteria (ASC)
-              </h1>
+              </h2>
             </legend>
             <span
               id="event-name-hint"
@@ -417,9 +417,9 @@
             aria-describedby="reasonable-length-conditional-hint"
           >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-              <h1 class="govuk-fieldset__heading">
+              <h2 class="govuk-fieldset__heading">
                 Reasonable length of service
-              </h1>
+              </h2>
             </legend>
             <span
               id="event-name-hint"
