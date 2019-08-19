@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <form
     class="form"
     action="combined-selection"
@@ -522,6 +522,3 @@
 export default {
 };
 </script>
-
-<style lang="css" scoped>
-</style>
