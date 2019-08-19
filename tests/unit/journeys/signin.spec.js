@@ -35,6 +35,13 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
+
+    describe('when they visit /exercise/new/eligibility', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/eligibility');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
   });
 
   describe('for authenticated user', () => {
@@ -61,6 +68,13 @@ describe('Sign in journey', () => {
       it('redirects to the dashboard page', () => {
         router.push('/sign-in');
         expect(subject.vm.$route.path).toBe('/dashboard');
+      });
+    });
+
+    describe('when going to the new exercise page', () => {
+      it('can access the new exercise page', () => {
+        router.push('/exercise/new');
+        expect(subject.vm.$route.path).toBe('/exercise/new');
       });
     });
 
