@@ -144,6 +144,25 @@ describe('Page titles', () => {
      router.push('/exercise/new/eligibility');
      expect(document.title).toContain('Judicial Appointments Commission');
    });
+  });
+
+  describe('AboutTheRole', () => {
+
+   beforeEach(() => {
+     store.dispatch('setCurrentUser', user);
+   });
+
+   it('sets title as About The Role', () => {
+     router.push('/exercise/new/about-the-role');
+     expect(document.title).toContain('About The Role');
+   });
+
+   it('contains Judicial Appointments Commission', () => {
+     router.push('/exercise/new/about-the-role');
+     expect(document.title).toContain('Judicial Appointments Commission');
+   });
  });
+
+
 
 });
