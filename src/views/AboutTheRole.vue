@@ -9,9 +9,9 @@
         <div class="govuk-grid-column-two-thirds">
           <!--PAGE TITLE-->
           <span class="govuk-caption-xl">Step 2 of 4</span>
-          <h3 class="govuk-heading-xl">
+          <h1 class="govuk-heading-xl">
             About the role
-          </h3>
+          </h1>
 
           <h2 class="govuk-heading-m">
             Number of vacancies
@@ -86,9 +86,9 @@
               aria-describedby="how-contacted-conditional-hint"
             >
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                <h1 class="govuk-fieldset__heading">
+                <h2 class="govuk-fieldset__heading">
                   Appointment type
-                </h1>
+                </h2>
               </legend>
               <div
                 class="govuk-radios govuk-radios--conditional"
@@ -268,9 +268,9 @@
               aria-describedby="how-contacted-conditional-hint"
             >
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                <h1 class="govuk-fieldset__heading">
+                <h2 class="govuk-fieldset__heading">
                   Is salaried part-time working (SPTW) offered?
-                </h1>
+                </h2>
               </legend>
               <div
                 class="govuk-radios govuk-radios--conditional"
@@ -347,9 +347,9 @@
               aria-describedby="waste-hint"
             >
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                <h1 class="govuk-fieldset__heading">
+                <h2 class="govuk-fieldset__heading">
                   Welsh requirement
-                </h1>
+                </h2>
               </legend>
               <span
                 id="waste-hint"
