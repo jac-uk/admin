@@ -42,13 +42,8 @@ export default {
     },
     value: {
       required: true,
-      validator: (value) => (value instanceof Array || typeof value === 'string' || value === null || value === undefined),
+      validator: () => true,
     },
-  },
-  data() {
-    return {
-      inputType: 'radio',
-    };
   },
   computed: {
     inputValue: {
