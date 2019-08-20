@@ -42,6 +42,13 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
+
+    describe('when they visit /exercise/new/about-the-role', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/about-the-role');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
   });
 
   describe('for authenticated user', () => {
@@ -82,6 +89,13 @@ describe('Sign in journey', () => {
       it('can access the new eligibility page', () => {
         router.push('/exercise/new/eligibility');
         expect(subject.vm.$route.path).toBe('/exercise/new/eligibility');
+      });
+    });
+
+    describe('when going to the about the role page', () => {
+      it('can access the new about the role page', () => {
+        router.push('/exercise/new/about-the-role');
+        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-role');
       });
     });
   });

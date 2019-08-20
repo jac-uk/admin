@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
+import AboutTheRole from '@/views/AboutTheRole';
 import Dashboard from '@/views/Dashboard';
 import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
@@ -46,6 +47,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Eligibility',
+          },
+        },
+        {
+          path: 'about-the-role',
+          component: AboutTheRole,
+          name: 'about-the-role',
+          meta: {
+            requiresAuth: true,
+            title: 'About The Role',
           },
         },
         {
