@@ -49,6 +49,20 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
+
+    describe('when they visit /exercise/new/create-an-exercise', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/create-an-exercise');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
+    describe('when they visit /exercise/new/about-the-selection-process', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/about-the-selection-process');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
   });
 
   describe('for authenticated user', () => {
@@ -100,9 +114,16 @@ describe('Sign in journey', () => {
     });
 
     describe('when going to the create an exercise page', () => {
-      it('can access the new create an exercise', () => {
+      it('can access the new create an exercise page', () => {
         router.push('/exercise/new/create-an-exercise');
         expect(subject.vm.$route.path).toBe('/exercise/new/create-an-exercise');
+      });
+    });
+
+    describe('when going to the about the selection process page', () => {
+      it('can access the new about the selection process page', () => {
+        router.push('/exercise/new/about-the-selection-process');
+        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-selection-process');
       });
     });
   });
