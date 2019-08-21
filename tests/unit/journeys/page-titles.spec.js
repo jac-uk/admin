@@ -161,7 +161,24 @@ describe('Page titles', () => {
      router.push('/exercise/new/about-the-role');
      expect(document.title).toContain('Judicial Appointments Commission');
    });
- });
+  });
+
+  describe('CreateAnExercise', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    });
+
+    it('sets title as Create An Exercise', () => {
+      router.push('/exercise/new/create-an-exercise');
+      expect(document.title).toContain('Create An Exercise');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/create-an-exercise');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
 
 
 
