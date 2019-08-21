@@ -188,7 +188,7 @@ describe('Page titles', () => {
 
     it('sets title as About The Selection Process', () => {
       router.push('/exercise/new/about-the-selection-process');
-      expect(document.title).toContain('About The Selection Process');
+      expect(document.title).toContain('About the Selection Process');
     });
 
     it('contains Judicial Appointments Commission', () => {

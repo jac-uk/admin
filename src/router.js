@@ -4,6 +4,7 @@ import store from '@/store';
 
 // Views
 import AboutTheRole from '@/views/AboutTheRole';
+import AboutTheSelectionProcess from '@/views/AboutTheSelectionProcess';
 import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
 import Eligibility from '@/views/Eligibility';
@@ -66,6 +67,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Create An Exercise',
+          },
+        },
+        {
+          path: 'about-the-selection-process',
+          component: AboutTheSelectionProcess,
+          name: 'about-the-selection-process',
+          meta: {
+            requiresAuth: true,
+            title: 'About the Selection Process',
           },
         },
         {
