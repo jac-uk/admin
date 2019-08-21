@@ -98,5 +98,12 @@ describe('Sign in journey', () => {
         expect(subject.vm.$route.path).toBe('/exercise/new/about-the-role');
       });
     });
+
+    describe('when going to the create an exercise page', () => {
+      it('can access the new create an exercise', () => {
+        router.push('/exercise/new/create-an-exercise');
+        expect(subject.vm.$route.path).toBe('/exercise/new/create-an-exercise');
+      });
+    });
   });
 });
