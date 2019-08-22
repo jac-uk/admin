@@ -1,6 +1,6 @@
 const validateHour = (value) => {
   if(value === null) {
-    return null
+    return null;
   }
 
   if(value < 0) {
@@ -11,7 +11,7 @@ const validateHour = (value) => {
     return 0; 
   }
 
-  if(value === "00") {
+  if(value === '00') {
     return 0; 
   }
 
@@ -24,6 +24,6 @@ const validateHour = (value) => {
   }
 
   return value;
-}
+};
 
 export default validateHour;

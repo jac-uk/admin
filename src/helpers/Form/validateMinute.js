@@ -1,6 +1,6 @@
 const validateMinute = (value) => {
   if(value === null) {
-    return null
+    return null;
   }
 
   if(value < 0) {
@@ -16,6 +16,6 @@ const validateMinute = (value) => {
   }
 
   return value;
-}
+};
 
 export default validateMinute;
