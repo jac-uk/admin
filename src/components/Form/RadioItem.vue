@@ -26,7 +26,6 @@
     </div>
     <div
       v-if="showConditionalContent"
-      id="conditional-how-contacted-conditional"
       class="govuk-radios__conditional"
     >
       <slot />
@@ -46,7 +45,7 @@ export default {
     },
     value: {
       required: true,
-      type: String, // Could also be boolean, number, null, undefined...
+      validator: () => true,
     },
     hint: {
       default: '',
@@ -59,9 +58,6 @@ export default {
     };
   },
   computed: {
-    inputType() {
-      return this.$parent.inputType;
-    },
     inputId() {
       return `${this.$parent.id}__${index}`;
     },
