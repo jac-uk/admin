@@ -6,7 +6,10 @@
       role="group"
     >
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1 v-if="label" class="govuk-fieldset__heading">
+        <h1
+          v-if="label"
+          class="govuk-fieldset__heading"
+        >
           {{ label }}
         </h1>
       </legend>
