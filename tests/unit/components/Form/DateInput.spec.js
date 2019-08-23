@@ -287,16 +287,13 @@ describe('components/DateInput', () => {
             expect(subject.vm.date).toBeInstanceOf(Date);
           });
 
-          it('is created as a UTC Date (not in local timezone)', () => {
-            // Choosing a date where London is in BST so we can test local time vs UTC
+          it('is created as a UTC Date', () => {
             subject.setData({ day: 1, month: 6, year: 2018 });
 
             const args = subject.vm.dateConstructor;
             const utcTime = Date.UTC(...args);
-            const local = new Date(...args);
-
+            
             expect(subject.vm.date.getTime()).toEqual(utcTime);
-            expect(subject.vm.date.getTime()).not.toEqual(local.getTime());
           });
         });
       });
