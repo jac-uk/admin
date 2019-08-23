@@ -54,6 +54,26 @@ describe('components/Form/RadioItem', () => {
     expect(RadioItem.name).toBe('RadioItem');
   });
 
+  it('throws an error if the parent component is not "Radios"', () => {
+    /* eslint-disable no-console */
+    // Mock console.error because Vue catches errors thrown by components and logs them to console.error
+    const originalConsoleError = console.error;
+    console.error = jest.fn();
+
+    const createWithBadParent = () => {
+      shallowMount(RadioItem, {
+        propsData: {
+          label: 'Example radio item',
+          value: 'example-value',
+        },
+      });
+    };
+
+    expect(createWithBadParent).toThrow('RadioItem component can only be used inside a Radios component');
+    console.error = originalConsoleError;
+    /* eslint-enable no-console */
+  });
+
   describe('properties', () => {
     let prop;
 
@@ -139,9 +159,11 @@ describe('components/Form/RadioItem', () => {
 
   describe('template', () => {
     let subject;
+    beforeEach(() => {
+      subject = createTestSubject();
+    });
 
     it('renders a `.govuk-radios__item` element', () => {
-      subject = createTestSubject();
       const item = subject.find('.govuk-radios__item');
       expect(item.exists()).toBe(true);
     });
