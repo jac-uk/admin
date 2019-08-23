@@ -6,18 +6,18 @@
     >
       {{ label }}
     </label>
-    <span 
+    <span
       v-if="hint"
       class="govuk-hint"
     >
       {{ hint }}
     </span>
-    <input 
+    <input
       :id="id"
-      v-model="textFieldValue" 
-      :class="[ (type === 'narrow') ? 'govuk-input--width-5 govuk-input' : 'govuk-input' ]" 
-      :name="id" 
-      type="text"
+      v-model="text"
+      :class="[ (type === 'narrow') ? 'govuk-input--width-5 govuk-input' : 'govuk-input' ]"
+      :name="id"
+      type="tel"
     >
   </div>
 </template>
@@ -26,6 +26,10 @@
 export default {
   props: {
     label: {
+      default: '',
+      type: String,
+    },
+    value: {
       default: '',
       type: String,
     },
@@ -44,8 +48,21 @@ export default {
   },
   data() {
     return {
-      textFieldValue: '',
+      textInput: this.value,
     };
+  },
+
+  computed: {
+    text: {
+      get() {
+        return this.textInput;
+      },
+      set(val) {
+        this.textInput = val;
+        this.$emit('input', val);
+      },
+    },
+
   },
 };
 </script>
