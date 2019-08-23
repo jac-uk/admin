@@ -7,7 +7,10 @@
       class="govuk-fieldset"
       :aria-describedby="hint ? hintId : false"
     >
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+      <legend
+        v-if="label"
+        class="govuk-fieldset__legend govuk-fieldset__legend--xl"
+      >
         {{ label }}
       </legend>
       <span
@@ -29,7 +32,7 @@ export default {
   name: 'Radios',
   props: {
     label: {
-      required: true,
+      default: '',
       type: String,
     },
     hint: {
