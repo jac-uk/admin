@@ -14,8 +14,8 @@
     </span>
     <input
       :id="id"
+      :class="klass"
       v-model="text"
-      :class="[ (type === 'narrow') ? 'govuk-input--width-5 govuk-input' : 'govuk-input' ]"
       :name="id"
       type="tel"
     >
@@ -26,6 +26,10 @@
 export default {
   props: {
     label: {
+      default: '',
+      type: String,
+    },
+    klass: {
       default: '',
       type: String,
     },
@@ -43,7 +47,7 @@ export default {
     },
     type: {
       default: '',
-      type: String,
+      // type: String,
     },
   },
   data() {
