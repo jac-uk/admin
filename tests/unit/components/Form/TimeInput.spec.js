@@ -100,7 +100,7 @@ describe('components/TimeInput', () => {
         });
 
         describe('given `hour` is 0', () => {
-          it('returns null', () => {
+          it('returns "00"', () => {
             subject.setData({ hour: 0 });
             expect(subject.vm.hourInput).toBe('00');
           });
@@ -118,7 +118,7 @@ describe('components/TimeInput', () => {
     describe('minuteInput', () => {
       describe('getter', () => {
         describe('given `minute` is 0', () => {
-          it('returns null', () => {
+          it('returns "00"', () => {
             subject.setData({ minute: 0 });
             expect(subject.vm.minuteInput).toBe('00');
           });

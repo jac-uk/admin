@@ -61,7 +61,6 @@
           </div>
         </div>
       </div>
-      VALUE: {{ value }}
     </fieldset>
   </div>
 </template>
