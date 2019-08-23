@@ -6,18 +6,22 @@
     <h2 class="govuk-heading-m">
       Number of vacancies
     </h2>
-    <TextField 
-      id="immediate_start" 
-      label="Immediate start" 
+    <TextField
+      id="immediate_start"
+      v-model="immediateStart"
+      label="Immediate start"
       hint="These are also called section 87 (S87) vacancies"
       type="narrow"
     />
-    <TextField 
-      id="future__start" 
-      label="Future start" 
+
+    <TextField
+      id="future__start"
+      v-model="futureStart"
+      label="Future start"
       hint="These are also called section 94 (S94) vacancies"
       type="narrow"
     />
+
     <button
       type="submit"
       class="govuk-button"
@@ -33,6 +37,12 @@ import TextField from '@/components/Form/TextField';
 export default {
   components: {
     TextField,
+  },
+  data() {
+    return {
+      immediateStart: '' ,
+      futureStart: '',
+    };
   },
 };
 </script>
