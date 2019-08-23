@@ -3,24 +3,12 @@ const validateHour = (value) => {
     return null;
   }
 
-  if(value < 0) {
+  if(value < 0 || value === '00' || value === 24 || isNaN(value)) {
     return 0;
-  }
-
-  if(value === 24) {
-    return 0; 
-  }
-
-  if(value === '00') {
-    return 0; 
   }
 
   if(value > 23) {
     return 23;
-  }
-
-  if(isNaN(value)) {
-    return 0;
   }
 
   return value;

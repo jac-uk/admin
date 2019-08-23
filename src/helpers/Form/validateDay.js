@@ -1,5 +1,6 @@
 const validateDay = (val) => {
   val = parseInt(val);
+  
   if (isNaN(val)) {
     return null;
   }
