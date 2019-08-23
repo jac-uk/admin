@@ -28,8 +28,9 @@ describe('components/Form/Radios', () => {
         prop = Radios.props.label;
       });
 
-      it('is required', () => {
-        expect(prop.required).toBe(true);
+      it('is optional', () => {
+        expect(prop.required).not.toBe(true);
+        expect(prop.default).toBe('');
       });
 
       it('must be a String', () => {
@@ -133,63 +134,81 @@ describe('components/Form/Radios', () => {
       expect(subject.is('#example')).toBe(true);
     });
 
-    it('displays the `label` prop in a legend element', () => {
-      subject = createTestSubject({
-        label: 'Do you want cake?',
-      });
-      const legend = subject.find('legend');
-      expect(legend.exists()).toBe(true);
-      expect(legend.text()).toBe('Do you want cake?');
-      expect(legend.is('.govuk-fieldset__legend')).toBe(true);
-    });
 
-    it('wraps the <legend> in a <fieldset>', () => {
-      subject = createTestSubject();
-      const fieldset = subject.find('fieldset');
-      expect(fieldset.exists()).toBe(true);
-      expect(fieldset.is('.govuk-fieldset')).toBe(true);
-      const legend = fieldset.find('legend');
-      expect(legend.exists()).toBe(true);
-    });
 
-    describe('when the `hint` prop is set', () => {
-      let hint;
-      beforeEach(() => {
-        subject = createTestSubject({
-          label: 'Do you want cake?',
-          hint: "It's victoria sponge",
-          id: 'wants-cake',
+    describe('<legend> element', () => {
+      describe('when the `label` prop is set', () => {
+        it('displays the label in a <legend> element', () => {
+          subject = createTestSubject({
+            label: 'Do you want cake?',
+          });
+          const legend = subject.find('legend');
+          expect(legend.exists()).toBe(true);
+          expect(legend.text()).toBe('Do you want cake?');
+          expect(legend.is('.govuk-fieldset__legend')).toBe(true);
         });
-        hint = subject.find('span.govuk-hint');
       });
 
-      it('displays the hint', () => {
-        expect(hint.exists()).toBe(true);
-        expect(hint.text()).toBe("It's victoria sponge");
+      describe('when the `label` prop is empty', () => {
+        it('does not render a <legend>', () => {
+          subject = createTestSubject({
+            label: '',
+          });
+          const legend = subject.find('legend');
+          expect(legend.exists()).toBe(false);
+        });
       });
 
-      it('gives the hint element an `id` based on the main component `id`', () => {
-        expect(hint.attributes('id')).toBe('wants-cake__hint');
-      });
-
-      it('sets attribute `aria-describedby` on the <fieldset> to reference the hint element `id`', () => {
+      it('is wrapped in a <fieldset>', () => {
+        subject = createTestSubject();
         const fieldset = subject.find('fieldset');
-        expect(fieldset.attributes('aria-describedby')).toBe('wants-cake__hint');
+        expect(fieldset.exists()).toBe(true);
+        expect(fieldset.is('.govuk-fieldset')).toBe(true);
+        const legend = fieldset.find('legend');
+        expect(legend.exists()).toBe(true);
       });
     });
 
-    describe('when the `hint` prop is not set', () => {
-      let hint;
-      beforeEach(() => {
-        subject = createTestSubject({
-          label: 'Do you want cake?',
-          hint: undefined,
+    describe('hint text', () => {
+      describe('when the `hint` prop is set', () => {
+        let hint;
+        beforeEach(() => {
+          subject = createTestSubject({
+            label: 'Do you want cake?',
+            hint: "It's victoria sponge",
+            id: 'wants-cake',
+          });
+          hint = subject.find('span.govuk-hint');
         });
-        hint = subject.find('span.govuk-hint');
+
+        it('displays the hint', () => {
+          expect(hint.exists()).toBe(true);
+          expect(hint.text()).toBe("It's victoria sponge");
+        });
+
+        it('gives the hint element an `id` based on the main component `id`', () => {
+          expect(hint.attributes('id')).toBe('wants-cake__hint');
+        });
+
+        it('sets attribute `aria-describedby` on the <fieldset> to reference the hint element `id`', () => {
+          const fieldset = subject.find('fieldset');
+          expect(fieldset.attributes('aria-describedby')).toBe('wants-cake__hint');
+        });
       });
 
-      it('does not render the hint element', () => {
-        expect(hint.exists()).toBe(false);
+      describe('when the `hint` prop is not set', () => {
+        let hint;
+        beforeEach(() => {
+          subject = createTestSubject({
+            label: 'Do you want cake?',
+            hint: undefined,
+          });
+          hint = subject.find('span.govuk-hint');
+        });
+
+        it('does not render the hint element', () => {
+          expect(hint.exists()).toBe(false);
+        });
       });
     });
 
