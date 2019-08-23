@@ -1,6 +1,5 @@
 import validateHour from '@/helpers/Form/validateHour';
 
-
 describe('helpers/validateHour', () => {
   it('returns null if value passed is null', () => {
     expect(validateHour(null)).toBe(null);

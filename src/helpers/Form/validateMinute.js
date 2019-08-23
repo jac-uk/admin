@@ -3,16 +3,12 @@ const validateMinute = (value) => {
     return null;
   }
 
-  if(value < 0) {
+  if(value < 0 || isNaN(value)) {
     return 0;
   }
 
   if(value > 59) {
     return 59;
-  }
-
-  if(isNaN(value)) {
-    return 0;
   }
 
   return value;

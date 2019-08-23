@@ -17,11 +17,11 @@ describe('helpers/Form/validateDay', () => {
     expect(validateDay(-3)).toBe(1);
   });
 
-  it('returns the value passed', () => {
-    expect(validateDay(3)).toBe(3);
+  it('returns 1 if value is 0', () => {
+    expect(validateDay(0)).toBe(1);
   });
 
-  it.only('returns 1 if value is 0', () => {
-    expect(validateDay(0)).toBe(1);
+  it('returns the value passed', () => {
+    expect(validateDay(3)).toBe(3);
   });
 });
