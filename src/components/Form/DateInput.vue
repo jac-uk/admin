@@ -2,20 +2,18 @@
   <div class="govuk-form-group">
     <fieldset
       class="govuk-fieldset"
-      aria-describedby="hint"
+      :aria-describedby="hint ? `${id}-hint` : false"
       role="group"
     >
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1
-          v-if="label"
-          class="govuk-fieldset__heading"
-        >
-          {{ label }}
-        </h1>
+      <legend
+        v-if="label"
+        class="govuk-fieldset__legend govuk-fieldset__legend--xl"
+      >
+        {{ label }}
       </legend>
       <span
         v-if="hint"
-        id="hint"
+        :id="`${id}-hint`"
         class="govuk-hint"
       >
         {{ hint }}
@@ -37,7 +35,6 @@
               ref="dayInput"
               v-model.lazy="dayInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              name="${id}-day"
               type="tel"
             >
           </div>
@@ -55,7 +52,6 @@
               ref="monthInput"
               v-model.lazy="monthInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              name="${id}-month" 
               type="tel"
             >
           </div>
@@ -73,7 +69,6 @@
               ref="yearInput"
               v-model.lazy="yearInput"
               class="govuk-input govuk-date-input__input govuk-input--width-4"
-              name="${id}-year" 
               type="tel"
             >
           </div>
@@ -101,7 +96,6 @@ export default {
     },
     id: {
       required: true,
-      default: '',
       type: String,
     },
     value: {

@@ -2,20 +2,18 @@
   <div class="govuk-form-group">
     <fieldset
       class="govuk-fieldset"
-      aria-describedby="hint"
+      :aria-describedby="hint ? `${id}-hint` : false"
       role="group"
     >
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1
-          v-if="label"
-          class="govuk-fieldset__heading"
-        >
-          {{ label }}
-        </h1>
+      <legend
+        v-if="label"
+        class="govuk-fieldset__legend govuk-fieldset__legend--xl"
+      >
+        {{ label }}
       </legend>
       <span
         v-if="hint"
-        id="hint"
+        :id="`${id}-hint`"
         class="govuk-hint"
       >
         {{ hint }}
@@ -37,7 +35,6 @@
               ref="hourInput"
               v-model.lazy="hourInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              name="${id}-hour"
               type="tel"
             >
           </div>
@@ -53,9 +50,8 @@
             <input
               :id="`${id}-minute`"
               ref="minuteInput"
-              
+              v-model.lazy="minuteInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
-              name="${id}-minute" 
               type="tel"
             >
           </div>
@@ -82,7 +78,6 @@ export default {
     },
     id: {
       required: true,
-      default: '',
       type: String,
     },
     value: {
@@ -99,9 +94,6 @@ export default {
   computed: {
     hourInput: {
       get() {
-        if(this.hour === 0) {
-          return '00';
-        }
         return zeroPad(this.hour);
       },
       set(value) {
@@ -110,9 +102,6 @@ export default {
     },
     minuteInput: {
       get() {
-        if(this.minute === 0) {
-          return '00';
-        }
         return zeroPad(this.minute);
       },
       set(value) {

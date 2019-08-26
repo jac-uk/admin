@@ -9,8 +9,8 @@ describe('helpers/validateMinute', () => {
     expect(validateMinute(-1)).toBe(0);
   });
 
-  it('returns 0 if value is not a number', () => {
-    expect(validateMinute('Five')).toBe(0);
+  it('returns null if value is not a number', () => {
+    expect(validateMinute('Five')).toBe(null);
   });
 
   it('returns 59 if value is higher than 59', () => {
