@@ -5,12 +5,12 @@ describe('helpers/validateHour', () => {
     expect(validateHour(null)).toBe(null);
   });
 
-  it('returns 0 if value passed is less than 0', () => {
-    expect(validateHour(-1)).toBe(0);
+  it('returns null if value is not a number', () => {
+    expect(validateHour('Five')).toBe(null);
   });
 
-  it('returns 0 if value is not a number', () => {
-    expect(validateHour('Five')).toBe(0);
+  it('returns 0 if value passed is less than 0', () => {
+    expect(validateHour(-1)).toBe(0);
   });
 
   it("returns 0 if value is '00'", () => {

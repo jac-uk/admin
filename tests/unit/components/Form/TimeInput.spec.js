@@ -40,32 +40,39 @@ describe('components/TimeInput', () => {
     });
 
     describe('label', () => {
-      it('sets h1', () => {
+      it('sets legend', () => {
         const label = 'Launch date and time';
         subject.setProps({ label });
-        expect(subject.find('h1').text()).toBe(label);
+        expect(subject.find('.govuk-fieldset__legend').text()).toBe(label);
       });
 
-      it('does not set h1 if label is not passed', () => {
-        expect(subject.find('h1').exists()).toBe(false);
+      it('does not set legend if label is not passed', () => {
+        expect(subject.find('.govuk-fieldset__legend').exists()).toBe(false);
       });
     });
 
     describe('hint', () => {
       it('displays span hint if provided and sets text', () => {
         const hint = 'For example, 31 05 2020 at 09:00';
-        subject.setProps({ hint });
-        expect(subject.find('span#hint').exists()).toBe(true);
-        expect(subject.find('span#hint').text()).toBe(hint);
+        subject.setProps({ hint, id: 'testid' });
+        expect(subject.find('#testid-hint').exists()).toBe(true);
+        expect(subject.find('#testid-hint').text()).toBe(hint);
+      });
+
+       it('sets aria-describedby with the value of hint id', () => {
+        const hint = 'For example, 31 05 2020 at 09:00';
+        subject.setProps({ hint, id: 'testid' });
+        expect(subject.find('.govuk-fieldset').attributes('aria-describedby')).toBe('testid-hint');
       });
 
       it('does not display hint if not not provided', () => {
-        expect(subject.find('span#hint').exists()).toBe(false);
+        subject.setProps({ id: 'testid' });
+        expect(subject.find('#testid-hint').exists()).toBe(false);
       });
     });
 
     describe('id', () => {
-      it('assignes id to govuk-date-input', () => {
+      it('assigns id to govuk-date-input', () => {
         expect(subject.find('.govuk-date-input').attributes().id).toBe('launch_time');
       });
 
@@ -93,17 +100,8 @@ describe('components/TimeInput', () => {
 
     describe('hourInput', () => {
       describe('getter', () => {
-        describe('given `hour` is null', () => {
-          it('calls zeroPad function', () => {
-            expect(zeroPad).toHaveBeenCalled();
-          });
-        });
-
-        describe('given `hour` is 0', () => {
-          it('returns "00"', () => {
-            subject.setData({ hour: 0 });
-            expect(subject.vm.hourInput).toBe('00');
-          });
+        it('calls zeroPad function', () => {
+          expect(zeroPad).toHaveBeenCalledWith(15);
         });
       });
 
@@ -117,22 +115,16 @@ describe('components/TimeInput', () => {
 
     describe('minuteInput', () => {
       describe('getter', () => {
-        describe('given `minute` is 0', () => {
-          it('returns "00"', () => {
-            subject.setData({ minute: 0 });
-            expect(subject.vm.minuteInput).toBe('00');
-          });
-
-          it('calls zeroPad function', () => {
-            expect(zeroPad).toHaveBeenCalled();
-          });
+        it('calls zeroPad function', () => {
+          expect(zeroPad).toHaveBeenCalledWith(45);
         });
+      });
 
-        describe('setter', () => {
-          it('calls validateMinute function', () => {
-            subject.vm.minuteInput = 89;
-            expect(validateMinute).toHaveBeenCalled();
-          });
+
+      describe('setter', () => {
+        it('calls validateMinute function', () => {
+          subject.vm.minuteInput = 89;
+          expect(validateMinute).toHaveBeenCalled();
         });
       });
     });

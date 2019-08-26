@@ -20,23 +20,30 @@ describe('components/DateInput', () => {
     });
 
     describe('label', () => {
-      it('sets h1', () => {
+      it('sets legend', () => {
         const label = 'Launch date and time';
         subject.setProps({ label });
-        expect(subject.find('h1').text()).toBe(label);
+        expect(subject.find('.govuk-fieldset__legend').text()).toBe(label);
       });
     });
 
     describe('hint', () => {
       it('displays span hint if provided ans sets text', () => {
         const hint = 'For example, 31 05 2020 at 09:00';
-        subject.setProps({ hint });
-        expect(subject.find('span#hint').exists()).toBe(true);
-        expect(subject.find('span#hint').text()).toBe(hint);
+        subject.setProps({ hint, id: 'testid' });
+        expect(subject.find('#testid-hint').exists()).toBe(true);
+        expect(subject.find('#testid-hint').text()).toBe(hint);
+      });
+
+      it('sets aria-describedby with the value of hint id', () => {
+        const hint = 'For example, 31 05 2020 at 09:00';
+        subject.setProps({ hint, id: 'testid' });
+        expect(subject.find('.govuk-fieldset').attributes('aria-describedby')).toBe('testid-hint');
       });
 
       it('does not display hint if not not provided', () => {
-        expect(subject.find('span#hint').exists()).toBe(false);
+        subject.setProps({ id: 'testid' });
+        expect(subject.find('#testid-hint').exists()).toBe(false);
       });
     });
 

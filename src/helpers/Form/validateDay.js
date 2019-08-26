@@ -1,3 +1,5 @@
+import clipNumber from '@/helpers/Form/clipNumber';
+
 const validateDay = (val) => {
   val = parseInt(val);
   
@@ -5,15 +7,7 @@ const validateDay = (val) => {
     return null;
   }
 
-  if(val > 31) {
-    return 31;
-  }
-
-  if(val < 1 || val === 0) {
-    return 1;
-  }
-
-  return val;
+  return clipNumber(val, 1, 31);
 };
 
 export default validateDay;

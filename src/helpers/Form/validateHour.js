@@ -1,17 +1,17 @@
-const validateHour = (value) => {
-  if(value === null) {
+import clipNumber from '@/helpers/Form/clipNumber';
+
+const validateHour = (val) => {
+  val = parseInt(val);
+
+  if (isNaN(val)) {
     return null;
   }
 
-  if(value < 0 || value === '00' || value === 24 || isNaN(value)) {
+  if(val === 24) {
     return 0;
   }
 
-  if(value > 23) {
-    return 23;
-  }
-
-  return value;
+  return clipNumber(val, 0, 23);
 };
 
 export default validateHour;
