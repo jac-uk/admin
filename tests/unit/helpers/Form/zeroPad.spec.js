@@ -9,7 +9,14 @@ describe('helpers/zeroPad', () => {
     expect(zeroPad(33)).toBe('33');
   }); 
 
-  it('returns null if value is undefined', () => {
-    expect(zeroPad('')).toBe(null);
+  it('returns null if the value passed is not a number', () => {
+    expect(zeroPad('string')).toBe(null);
+    expect(zeroPad(undefined)).toBe(null);
+    expect(zeroPad(true)).toBe(null);
+    expect(zeroPad(null)).toBe(null);
+  });
+
+  it('returns "00" if "0" string is passed', () => {
+    expect(zeroPad(0)).toBe('00');
   }); 
 });
