@@ -1,8 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import TimeInput from '@/components/Form/TimeInput';
 import zeroPad from '@/helpers/Form/zeroPad';
-import validateHour from '@/helpers/Form/validateHour';
-import validateMinute from '@/helpers/Form/validateMinute';
+import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 
 jest.mock('@/helpers/Form/zeroPad', () => {
   return jest.fn().mockImplementation(() => {
@@ -10,13 +9,7 @@ jest.mock('@/helpers/Form/zeroPad', () => {
   });
 });
 
-jest.mock('@/helpers/Form/validateHour', () => {
-  return jest.fn().mockImplementation(() => {
-    jest.fn();
-  });
-});
-
-jest.mock('@/helpers/Form/validateMinute', () => {
+jest.mock('@/helpers/Form/parseAndClipNumber', () => {
   return jest.fn().mockImplementation(() => {
     jest.fn();
   });
@@ -106,9 +99,9 @@ describe('components/TimeInput', () => {
       });
 
       describe('setter', () => {
-        it('calls validateHour function', () => {
+        it('calls parseAndClipNumber function', () => {
           subject.vm.hourInput = 4;
-          expect(validateHour).toHaveBeenCalled();
+          expect(parseAndClipNumber).toHaveBeenCalledWith(4, 0, 23);
         });
       });
     });
@@ -122,9 +115,9 @@ describe('components/TimeInput', () => {
 
 
       describe('setter', () => {
-        it('calls validateMinute function', () => {
+        it('calls parseAndClipNumber function', () => {
           subject.vm.minuteInput = 89;
-          expect(validateMinute).toHaveBeenCalled();
+          expect(parseAndClipNumber).toHaveBeenCalledWith(89, 0, 59);
         });
       });
     });
