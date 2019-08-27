@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'Radios',
+  name: 'RadioGroup',
   props: {
     label: {
       default: '',

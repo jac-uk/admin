@@ -72,8 +72,8 @@ export default {
     },
   },
   created() {
-    if (this.$parent.$options.name !== 'Radios') {
-      throw new Error('RadioItem component can only be used inside a Radios component');
+    if (this.$parent.$options.name !== 'RadioGroup') {
+      throw new Error('RadioItem component can only be used inside a RadioGroup component');
     }
     index++;
   },

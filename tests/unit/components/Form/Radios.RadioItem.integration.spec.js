@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Radios from '@/components/Form/Radios';
+import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 
 const createTestSubject = () => {
@@ -7,9 +7,9 @@ const createTestSubject = () => {
     return `<RadioItem label="Option ${number}" value="${number}" hint="Hint ${number}" />`;
   });
 
-  // RadioItem depends on the parent component being Radios
-  // So we're mocking Radios with a RadioItem inside, and will return the RadioItem
-  return shallowMount(Radios, {
+  // RadioItem depends on the parent component being RadioGroup
+  // So we're mocking RadioGroup with a RadioItem inside, and will return the RadioItem
+  return shallowMount(RadioGroup, {
     propsData: {
       label: 'Example question',
       id: 'example',
@@ -24,7 +24,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('components/Form/Radios and components/Form/RadioItem integration', () => {
+describe('components/Form/RadioGroup and components/Form/RadioItem integration', () => {
   let subject;
   let radios;
   beforeEach(() => {
@@ -87,7 +87,7 @@ describe('components/Form/Radios and components/Form/RadioItem integration', () 
       [nameOne, nameTwo] = radios.wrappers.map(radio => radio.attributes('name'));
     });
 
-    it('matches the parent Radios `id`', () => {
+    it('matches the parent RadioGroup `id`', () => {
       const radiosId = subject.attributes('id');
       expect(nameOne).toEqual(radiosId);
       expect(nameTwo).toEqual(radiosId);
