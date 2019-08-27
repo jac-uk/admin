@@ -16,7 +16,7 @@ describe('helpers/zeroPad', () => {
     expect(zeroPad(null)).toBe(null);
   });
 
-  it('returns "00" if "0" string is passed', () => {
+  it('returns "00" if 0 is passed', () => {
     expect(zeroPad(0)).toBe('00');
   }); 
 });
