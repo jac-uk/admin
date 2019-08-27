@@ -79,8 +79,7 @@
 </template>
 
 <script>
-import validateDay from '@/helpers/Form/validateDay';
-import validateMonth from '@/helpers/Form/validateMonth';
+import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 import validateYear from '@/helpers/Form/validateYear';
 import zeroPad from '@/helpers/Form/zeroPad';
 
@@ -116,7 +115,7 @@ export default {
         return zeroPad(this.day);
       },
       set(value) {
-        this.day = validateDay(value);
+        this.day = parseAndClipNumber(value, 1, 31);
       },
     },
     monthInput: {
@@ -124,7 +123,7 @@ export default {
         return zeroPad(this.month);
       },
       set(value) {
-        this.month = validateMonth(value);
+        this.month = parseAndClipNumber(value, 1, 12);
       },
     },
     yearInput: {
@@ -140,7 +139,7 @@ export default {
       const month = this.month;
       const year = this.year;
 
-      if(!day || !month|| !year) {
+      if(!day || !month || !year) {
         return null;
       }
 

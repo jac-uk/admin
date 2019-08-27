@@ -62,8 +62,7 @@
 </template>
 
 <script>
-import validateMinute from '@/helpers/Form/validateMinute';
-import validateHour from '@/helpers/Form/validateHour';
+import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 import zeroPad from '@/helpers/Form/zeroPad';
 
 export default {
@@ -97,7 +96,7 @@ export default {
         return zeroPad(this.hour);
       },
       set(value) {
-        this.hour = validateHour(value);
+        this.hour = parseAndClipNumber(value, 0, 23);
       },
     },
     minuteInput: {
@@ -105,14 +104,14 @@ export default {
         return zeroPad(this.minute);
       },
       set(value) {
-        this.minute = validateMinute(value);
+        this.minute = parseAndClipNumber(value, 0, 59);
       },
     },
     dateConstructor() {
       const hour = this.hour; 
       const minute = this.minute;
 
-      if(hour === null  || minute === null) {
+      if(hour === null || minute === null) {
         return null;
       }
 
