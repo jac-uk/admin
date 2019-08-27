@@ -134,8 +134,6 @@ describe('components/Form/RadioGroup', () => {
       expect(subject.is('#example')).toBe(true);
     });
 
-
-
     describe('<legend> element', () => {
       describe('when the `label` prop is set', () => {
         it('displays the label in a <legend> element', () => {
