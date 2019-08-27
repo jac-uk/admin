@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import Radios from '@/components/Form/Radios';
+import RadioGroup from '@/components/Form/RadioGroup';
 
 const createTestSubject = (propsData) => {
-  return shallowMount(Radios, {
+  return shallowMount(RadioGroup, {
     propsData: {
       label: 'Example question',
       id: 'example',
@@ -15,9 +15,9 @@ const createTestSubject = (propsData) => {
   });
 };
 
-describe('components/Form/Radios', () => {
-  it('component name is "Radios"', () => {
-    expect(Radios.name).toBe('Radios');
+describe('components/Form/RadioGroup', () => {
+  it('component name is "RadioGroup"', () => {
+    expect(RadioGroup.name).toBe('RadioGroup');
   });
 
   describe('properties', () => {
@@ -25,7 +25,7 @@ describe('components/Form/Radios', () => {
 
     describe('label', () => {
       beforeEach(() => {
-        prop = Radios.props.label;
+        prop = RadioGroup.props.label;
       });
 
       it('is optional', () => {
@@ -40,7 +40,7 @@ describe('components/Form/Radios', () => {
 
     describe('hint', () => {
       beforeEach(() => {
-        prop = Radios.props.hint;
+        prop = RadioGroup.props.hint;
       });
 
       it('is optional', () => {
@@ -55,7 +55,7 @@ describe('components/Form/Radios', () => {
 
     describe('id', () => {
       beforeEach(() => {
-        prop = Radios.props.id;
+        prop = RadioGroup.props.id;
       });
 
       it('is required', () => {
@@ -69,7 +69,7 @@ describe('components/Form/Radios', () => {
 
     describe('value', () => {
       beforeEach(() => {
-        prop = Radios.props.value;
+        prop = RadioGroup.props.value;
       });
 
       it('is required', () => {

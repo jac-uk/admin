@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Radios from '@/components/Form/Radios';
+import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 
 const radioItemTemplate = ({ label, value, hint, content }) => {
@@ -30,9 +30,9 @@ const createTestSubject = (options) => {
 
   const radioItem = radioItemTemplate(options);
 
-  // RadioItem depends on the parent component being Radios
-  // So we're mocking Radios with a RadioItem inside, and will return the RadioItem
-  const radios = shallowMount(Radios, {
+  // RadioItem depends on the parent component being RadioGroup
+  // So we're mocking RadioGroup with a RadioItem inside, and will return the RadioItem
+  const radios = shallowMount(RadioGroup, {
     propsData: {
       label: 'Example question',
       id: 'example',
@@ -54,7 +54,7 @@ describe('components/Form/RadioItem', () => {
     expect(RadioItem.name).toBe('RadioItem');
   });
 
-  it('throws an error if the parent component is not "Radios"', () => {
+  it('throws an error if the parent component is not "RadioGroup"', () => {
     /* eslint-disable no-console */
     // Mock console.error because Vue catches errors thrown by components and logs them to console.error
     const originalConsoleError = console.error;
@@ -69,7 +69,7 @@ describe('components/Form/RadioItem', () => {
       });
     };
 
-    expect(createWithBadParent).toThrow('RadioItem component can only be used inside a Radios component');
+    expect(createWithBadParent).toThrow('RadioItem component can only be used inside a RadioGroup component');
     console.error = originalConsoleError;
     /* eslint-enable no-console */
   });
