@@ -50,19 +50,13 @@ export default {
       // type: String,
     },
   },
-  data() {
-    return {
-      textInput: this.value,
-    };
-  },
 
   computed: {
     text: {
       get() {
-        return this.textInput;
+        return this.value;
       },
       set(val) {
-        this.textInput = val;
         this.$emit('input', val);
       },
     },
