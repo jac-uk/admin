@@ -202,6 +202,13 @@ describe('components/Form/RadioItem', () => {
       });
     });
 
+    it('label `for` and input `id` attributes match', () => {
+      subject = createTestSubject();
+      const input = subject.find('input[type=radio]');
+      const label = subject.find('label');
+      expect(label.attributes('for')).toBe(input.attributes('id'));
+    });
+
     describe('hint', () => {
       let hint;
       describe('when the `hint` prop is set', () => {
@@ -221,6 +228,11 @@ describe('components/Form/RadioItem', () => {
         it('contains the hint text', () => {
           expect(hint.text()).toBe('Label hint text');
         });
+
+        it('sets attribute `aria-describedby` on the input to reference the hint element', () => {
+          const input = subject.find('input[type=radio]');
+          expect(input.attributes('aria-describedby')).toBe(hint.attributes('id'));
+        });
       });
 
       describe('when the `hint` prop is not set', () => {
@@ -234,6 +246,11 @@ describe('components/Form/RadioItem', () => {
 
         it('does not render', () => {
           expect(hint.exists()).toBe(false);
+        });
+
+        it('does not set attribute `aria-describedby` on the input', () => {
+          const input = subject.find('input[type=radio]');
+          expect(input.attributes()).not.toContainKey('aria-describedby');
         });
       });
     });
@@ -270,36 +287,6 @@ describe('components/Form/RadioItem', () => {
           });
           const conditional = subject.find('.govuk-radios__conditional');
           expect(conditional.exists()).toBe(false);
-        });
-      });
-    });
-
-    describe('accessibility', () => {
-      it('label `for` and input `id` attributes match', () => {
-        subject = createTestSubject();
-        const input = subject.find('input[type=radio]');
-        const label = subject.find('label');
-        expect(label.attributes('for')).toBe(input.attributes('id'));
-      });
-
-      describe('when the `hint` prop is set', () => {
-        it('sets attribute `aria-describedby` on the input to reference the hint element', () => {
-          subject = createTestSubject({
-            hint: 'Hint text',
-          });
-          const hint = subject.find('.govuk-radios__hint');
-          const input = subject.find('input[type=radio]');
-          expect(input.attributes('aria-describedby')).toBe(hint.attributes('id'));
-        });
-      });
-
-      describe('when the hint prop is not set', () => {
-        it('does not set attribute `aria-describedby` on the input', () => {
-          subject = createTestSubject({
-            hint: undefined,
-          });
-          const input = subject.find('input[type=radio]');
-          expect(input.attributes()).not.toContainKey('aria-describedby');
         });
       });
     });
