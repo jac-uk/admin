@@ -49,27 +49,19 @@ describe('components/Form/TextField', () => {
       });
     });
 
-    describe('type', () => {
-      it('sets CSS class if type is narrow', () => {
-        wrapper.setProps({ type: 'narrow' });
-        expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5');
-      });
-
-      it('does not set CSS class if type is not passed', () => {
-        wrapper.setProps({});
-        expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5');
+    describe('klass', () => {
+      it('sets the class attribute', () => {
+        wrapper.setProps({ klass: 'my_styling' });
+        expect(wrapper.find('input').attributes().class).toContain('my_styling');
       });
     });
 
-    describe('Communication from Parents', () => {
-      it('sets CSS class if type is narrow', () => {
-        wrapper.setProps({ type: 'narrow' });
-        expect(wrapper.find('input').attributes().class).toContain('govuk-input--width-5');
-      });
-
-      it('does not set CSS class if type is not passed', () => {
-        wrapper.setProps({});
-        expect(wrapper.find('input').attributes().class).not.toContain('govuk-input--width-5');
+    describe('emitted data', () => {
+      it('emits the textfield data', () => {
+        wrapper.vm.$emit('input', 'VAL');
+        expect(wrapper.emitted().input).toBeTruthy();
+        expect(wrapper.emitted('input').length).toBe(1);
+        expect(wrapper.emitted().input).toEqual([['VAL']]);
       });
     });
   });
