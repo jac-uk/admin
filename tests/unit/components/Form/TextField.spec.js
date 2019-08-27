@@ -48,21 +48,29 @@ describe('components/Form/TextField', () => {
         expect(wrapper.find('input').attributes().id).toBe('my_unique_key');
       });
     });
+  });
 
-    describe('klass', () => {
-      it('sets the class attribute', () => {
-        wrapper.setProps({ klass: 'my_styling' });
-        expect(wrapper.find('input').attributes().class).toContain('my_styling');
+  describe('`v-model` interface', () => {
+    describe('when text changes', () => {
+      it('it emits an input event with the new value', () => {
+        wrapper.setData({ text: 'new-value' })
+        expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
 
-    describe('emitted data', () => {
-      it('emits the textfield data', () => {
-        wrapper.vm.$emit('input', 'VAL');
-        expect(wrapper.emitted().input).toBeTruthy();
-        expect(wrapper.emitted('input').length).toBe(1);
-        expect(wrapper.emitted().input).toEqual([['VAL']]);
+    describe('when value prop changes', () => {
+      it('updates the text computed property', () => {
+        wrapper.setProps({ value: 'my_value' });
+        expect(wrapper.vm.text).toEqual('my_value')
       });
     });
   });
+
+    // describe('klass', () => {
+    //   it('sets the class attribute', () => {
+    //     wrapper.setProps({ klass: 'my_styling' });
+    //     expect(wrapper.find('input').attributes().class).toContain('my_styling');
+    //   });
+    // });
+
 });
