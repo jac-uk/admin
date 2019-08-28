@@ -300,21 +300,21 @@ describe('components/DateInput', () => {
 
       describe('given property type="month"', () => {
         beforeEach(() => {
-          subject.setProps({type: 'month'});
+          subject.setProps({ type: 'month' });
         });
 
         describe('and `month` and `year` fields are set', () => {
           it('returns an array of Date constructor arguments', () => {
-            subject.setData({month: 4, year: 1980});
+            subject.setData({ month: 4, year: 1980 });
             expect(subject.vm.dateConstructor).toHaveLength(3);
             expect(subject.vm.dateConstructor).toEqual([1980, 3, 1]);
           });
 
           it('adjusts month to be zero-indexed, as required by Date constructor', () => {
-            subject.setData({month: 1, year: 1960});
+            subject.setData({ month: 1, year: 1960 });
             expect(subject.vm.dateConstructor).toEqual([1960, 0, 1]);
 
-            subject.setData({month: 12, year: 1960});
+            subject.setData({ month: 12, year: 1960 });
             expect(subject.vm.dateConstructor).toEqual([1960, 11, 1]);
           });
         });
@@ -495,7 +495,7 @@ describe('components/DateInput', () => {
 
     describe('given property type="month"', () => {
       beforeEach(() => {
-        subject.setProps({type: 'month'});
+        subject.setProps({ type: 'month' });
       });
 
       describe('Day input', () => {
