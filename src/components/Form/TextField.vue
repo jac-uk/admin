@@ -14,8 +14,8 @@
     </span>
     <input
       :id="id"
-      :class="klass"
       v-model="text"
+      :class="inputClass + ' govuk-input'"
       :name="id"
       type="tel"
     >
@@ -29,7 +29,7 @@ export default {
       default: '',
       type: String,
     },
-    klass: {
+    inputClass: {
       default: '',
       type: String,
     },
@@ -44,10 +44,6 @@ export default {
     id: {
       default: '',
       type: String,
-    },
-    type: {
-      default: '',
-      // type: String,
     },
   },
 
