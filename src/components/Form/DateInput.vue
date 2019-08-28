@@ -22,7 +22,9 @@
         :id="id"
         class="govuk-date-input"
       >
-        <div class="govuk-date-input__item">
+        <div 
+          v-if="type === 'date'"
+          class="govuk-date-input__item">
           <div class="govuk-form-group">
             <label
               class="govuk-label govuk-date-input__label"
@@ -97,6 +99,10 @@ export default {
       required: true,
       type: String,
     },
+    type: {
+      default: 'date',
+      validator: (value) => (['date', 'month'].indexOf(value) !== -1),
+    },
     value: {
       required: true,
       validator: (value) => (value instanceof Date || value === null || value === undefined),
@@ -135,7 +141,7 @@ export default {
       },
     },
     dateConstructor() {
-      const day = this.day;
+      const day = this.type === 'month' ? 1 : this.day;
       const month = this.month;
       const year = this.year;
 
