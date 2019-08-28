@@ -70,6 +70,42 @@ describe('components/DateInput', () => {
         expect(subject.findAll('.govuk-date-input__label').at(2).attributes().for).toBe(`${id}-year`);
       });
     });
+
+    describe('type', () => {
+      const prop = DateInput.props.type;
+
+      it('is not required', () => {
+        expect(prop.required).not.toBe(true);
+      });
+
+      it('defaults to "date"', () => {
+        expect(prop.default).toBe('date');
+      });
+
+      describe('valid values', () => {
+        const goodValues = [
+          ['date'],
+          ['month'],
+        ];
+
+        it.each(goodValues)('accepts "%s"', (value) => {
+          expect(prop.validator(value)).toBe(true);
+        });
+      });
+
+      describe('invalid values', () => {
+        const badValues = [
+          ['year'],
+          ['day'],
+          ['a bad string'],
+          [true],
+        ];
+
+        it.each(badValues)('does not accept "%s"', (value) => {
+          expect(prop.validator(value)).toBe(false);
+        });
+      });
+    });
   });
 
   describe('computed properties', () => {
@@ -262,6 +298,28 @@ describe('components/DateInput', () => {
         });
       });
 
+      describe('given property type="month"', () => {
+        beforeEach(() => {
+          subject.setProps({type: 'month'});
+        });
+
+        describe('and `month` and `year` fields are set', () => {
+          it('returns an array of Date constructor arguments', () => {
+            subject.setData({month: 4, year: 1980});
+            expect(subject.vm.dateConstructor).toHaveLength(3);
+            expect(subject.vm.dateConstructor).toEqual([1980, 3, 1]);
+          });
+
+          it('adjusts month to be zero-indexed, as required by Date constructor', () => {
+            subject.setData({month: 1, year: 1960});
+            expect(subject.vm.dateConstructor).toEqual([1960, 0, 1]);
+
+            subject.setData({month: 12, year: 1960});
+            expect(subject.vm.dateConstructor).toEqual([1960, 11, 1]);
+          });
+        });
+      });
+
       describe('given at least one field is null', () => {
         const nullValueCombinations = [
           ['`day` is null',                      { day: null, month: 4,    year: 1980 }],
@@ -409,28 +467,41 @@ describe('components/DateInput', () => {
       subject = createTestSubject(new Date('2018-01-01'));
     });
 
-    describe('Day input', () => {
-      let input;
+    describe('given property type="date"', () => {
+      describe('Day input', () => {
+        let input;
+        beforeEach(() => {
+          input = subject.find({ ref: 'dayInput' });
+        });
+
+        describe('is lazily bound to `dayInput`', () => {
+          it('displays the value of `dayInput`', () => {
+            expect(input.element.value).toBe(subject.vm.dayInput);
+          });
+          it('updates `dayInput` on change', () => {
+            input.element.value = '12';
+            input.trigger('change');
+            expect(subject.vm.dayInput).toBe('12');
+          });
+          it('does nothing on input/keypress', () => {
+            input.element.value = '12';
+            input.trigger('input');
+            expect(subject.vm.dayInput).not.toBe('12');
+            expect(subject.vm.dayInput).toBe('01');
+          });
+        });
+      });
+    });
+
+    describe('given property type="month"', () => {
       beforeEach(() => {
-        input = subject.find({ ref: 'dayInput' });
+        subject.setProps({type: 'month'});
       });
 
-      describe('is lazily bound to `dayInput`', () => {
-        it('displays the value of `dayInput`', () => {
-          expect(input.element.value).toBe(subject.vm.dayInput);
-        });
-
-        it('updates `dayInput` on change', () => {
-          input.element.value = '12';
-          input.trigger('change');
-          expect(subject.vm.dayInput).toBe('12');
-        });
-
-        it('does nothing on input/keypress', () => {
-          input.element.value = '12';
-          input.trigger('input');
-          expect(subject.vm.dayInput).not.toBe('12');
-          expect(subject.vm.dayInput).toBe('01');
+      describe('Day input', () => {
+        it('is not rendered', () => {
+          const input = subject.find({ ref: 'dayInput' });
+          expect(input.exists()).toBe(false);
         });
       });
     });
