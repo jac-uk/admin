@@ -12,7 +12,6 @@
       input-class="govuk-input--width-5"
       label="Immediate start"
       hint="These are also called section 87 (S87) vacancies"
-      type="narrow"
     />
 
     <TextField
@@ -21,7 +20,6 @@
       input-class="govuk-input--width-5"
       label="Future Start"
       hint="These are also called section 94 (S94) vacancies"
-      type="narrow"
     />
 
     <button
