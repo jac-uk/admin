@@ -24,7 +24,8 @@
       >
         <div 
           v-if="type === 'date'"
-          class="govuk-date-input__item">
+          class="govuk-date-input__item"
+        >
           <div class="govuk-form-group">
             <label
               class="govuk-label govuk-date-input__label"
