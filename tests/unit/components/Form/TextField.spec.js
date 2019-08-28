@@ -12,7 +12,7 @@ describe('components/Form/TextField', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('TextField props', () => {
+  describe('props', () => {
 
     describe('label', () => {
       it('sets the label', () => {
@@ -48,12 +48,39 @@ describe('components/Form/TextField', () => {
         expect(wrapper.find('input').attributes().id).toBe('my_unique_key');
       });
     });
+
+    describe('inputClass', () => {
+      let input;
+      beforeEach(() => {
+        input = wrapper.find('input');
+      });
+
+      describe('when the prop is set', () => {
+        beforeEach(() => {
+          wrapper.setProps({ inputClass: 'my_styling' });
+        });
+
+        it('includes the added value in the <input> class attribute', () => {
+          expect(input.is('.my_styling')).toBe(true);
+        });
+
+        it('the input has class govuk-input', () => {
+          expect(input.is('.govuk-input')).toBe(true);
+        });
+      });
+
+      describe('when the prop is not set', () => {
+        it('the input has class govuk-input', () => {
+          expect(input.is('.govuk-input')).toBe(true);
+        });
+      });
+    });
   });
 
   describe('`v-model` interface', () => {
     describe('when text changes', () => {
       it('it emits an input event with the new value', () => {
-        wrapper.setData({ text: 'new-value' })
+        wrapper.setData({ text: 'new-value' });
         expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
@@ -61,16 +88,8 @@ describe('components/Form/TextField', () => {
     describe('when value prop changes', () => {
       it('updates the text computed property', () => {
         wrapper.setProps({ value: 'my_value' });
-        expect(wrapper.vm.text).toEqual('my_value')
+        expect(wrapper.vm.text).toEqual('my_value');
       });
     });
   });
-
-    // describe('klass', () => {
-    //   it('sets the class attribute', () => {
-    //     wrapper.setProps({ klass: 'my_styling' });
-    //     expect(wrapper.find('input').attributes().class).toContain('my_styling');
-    //   });
-    // });
-
 });

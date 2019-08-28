@@ -9,7 +9,7 @@
     <TextField
       id="immediate_start"
       v-model="immediateStart"
-      klass="govuk-input--width-5 govuk-input"
+      input-class="govuk-input--width-5"
       label="Immediate start"
       hint="These are also called section 87 (S87) vacancies"
       type="narrow"
@@ -18,7 +18,7 @@
     <TextField
       id="future__start"
       v-model="futureStart"
-      klass="govuk-input--width-5 govuk-input"
+      input-class="govuk-input--width-5"
       label="Future Start"
       hint="These are also called section 94 (S94) vacancies"
       type="narrow"
