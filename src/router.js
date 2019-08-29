@@ -12,9 +12,6 @@ import SignIn from '@/views/SignIn';
 import ViewExercise from '@/views/ViewExercise';
 // form
 import CreateExercise from '@/views/CreateExercise';
-import NameOfExercise from '@/components/NewExercise/NameOfExercise';
-import TypeOfExercise from '@/components/NewExercise/TypeOfExercise';
-import NumberOfVacancies from '@/components/NewExercise/NumberOfVacancies';
 
 Vue.use(Router);
 
@@ -77,30 +74,8 @@ const router = new Router({
             requiresAuth: true,
             title: 'About the Selection Process',
           },
-        },
-        {
-          path: 'name-of-exercise',
-          component: NameOfExercise,
-          meta: {
-            title: 'Name Of Exercise',
-          },
-        },
-        {
-          path: 'type-of-exercise',
-          component: TypeOfExercise,
-          name: 'type-of-exercise',
-          meta: {
-            title: 'Type Of Exercise',
-          },
-        },
-        {
-          path: 'number-of-vacancies',
-          component: NumberOfVacancies,
-          name: 'number-of-vacancies',
-          meta: {
-            title: 'Number Of Vacancies',
-          },
-      }],
+        }
+      ]
     },
     {
       path: '/exercise/view',
