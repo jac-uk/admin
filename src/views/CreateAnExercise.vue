@@ -1,166 +1,81 @@
 <template>
   <main class="govuk-main-wrapper">
-    <form
-      class="form"
-      action="combined-role"
-      method="post"
-    >
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <span class="govuk-caption-xl">Step 1 of 4</span>
-          <h1 class="govuk-heading-xl">
-            Create an exercise
-          </h1>
-          <div class="govuk-form-group">
-            <label
-              class="govuk-heading-m"
-              for="exercise-name"
-              style="margin-bottom:10px;"
-            >
-              Exercise name
-            </label>
-            <input
-              id="exercise-name"
-              class="govuk-input"
-              name="exercise-name"
-              type="text"
-            >
-          </div>
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-                <h2 class="govuk-fieldset__heading">
-                  Type of exercise
-                </h2>
-              </legend>
-              <div class="govuk-radios govuk-radios">
-                <div class="govuk-radios__item">
-                  <input
-                    id="legal-yes"
-                    class="govuk-radios__input"
-                    name="legal"
-                    type="radio"
-                    value="true"
-                  >
-                  <label
-                    class="govuk-label govuk-radios__label"
-                    for="legal-yes"
-                  >
-                    Legal - court
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input
-                    id="legal-yes"
-                    class="govuk-radios__input"
-                    name="legal"
-                    type="radio"
-                    value="true"
-                  >
-                  <label
-                    class="govuk-label govuk-radios__label"
-                    for="legal-yes"
-                  >
-                    Legal - tribunal
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input
-                    id="legal-no"
-                    class="govuk-radios__input"
-                    name="legal"
-                    type="radio"
-                    value="false"
-                    disabled=""
-                  >
-                  <label
-                    class="govuk-label govuk-radios__label"
-                    for="legal-no"
-                  >
-                    Non legal
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input
-                    id="legal-no"
-                    class="govuk-radios__input"
-                    name="legal"
-                    type="radio"
-                    value="false"
-                    disabled=""
-                  >
-                  <label
-                    class="govuk-label govuk-radios__label"
-                    for="legal-no"
-                    disabled=""
-                  >
-                    Senior
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input
-                    id="legal-no"
-                    class="govuk-radios__input"
-                    name="legal"
-                    type="radio"
-                    value="false"
-                    disabled=""
-                  >
-                  <label
-                    class="govuk-label govuk-radios__label"
-                    for="legal-no"
-                    disabled=""
-                  >
-                    Leadership
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-          <div class="govuk-form-group">
-            <label
-              class="govuk-heading-m"
-              for="exercise-name"
-              style="margin-bottom:10px;"
-            >
-              Exercise manager
-            </label>
-            <input
-              id="exercise-name"
-              class="govuk-input"
-              name="exercise-name"
-              type="text"
-            >
-          </div>
-          <div class="govuk-form-group">
-            <label
-              class="govuk-heading-m"
-              for="exercise-name"
-              style="margin-bottom:10px;"
-            >
-              Judicial contact
-            </label>
-            <input
-              id="exercise-name"
-              class="govuk-input"
-              name="exercise-name"
-              type="text"
-            >
-          </div>
-          <button
-            type="submit"
-            class="govuk-button"
-            data-module="govuk-button"
-          >
-            Add information about the role
-          </button>
-        </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+          Create an exercise
+        </h1>
+        <TextField
+          v-model="exerciseName"
+          id="exercise-name"
+          name="exercise-name"
+          label="Exercise name"
+          hint="Reference codes are automatically created - you do not need to enter one."
+        />
+        <RadioGroup
+          id="type-of-exercise"
+          label="Type of exercise"
+          v-model="exerciseType"
+        >
+          <RadioItem
+            value="legal"
+            label="Legal"
+          />
+          <RadioItem
+            value="non-legal"
+            label="Non legal"
+          />
+          <RadioItem
+            value="senior"
+            label="Senior"
+          />
+          <RadioItem
+            value="leadership"
+            label="Leadership"
+          />
+        </RadioGroup>
+        <RadioGroup
+          id="add-information"
+          label="Do you want to add more information about this exercise now?"
+          hint="You can add exercise contacts, shortlisting methods, timeline dates, or information from HMCTS. You can also do this later"
+          v-model="isMoreInfoNeeded"
+        >
+          <RadioItem
+            value="yes"
+            label="Yes"
+          />
+          <RadioItem
+            value="no"
+            label="No - I'll do this later"
+          />
+        </RadioGroup>
+        <button
+          class="govuk-button"
+        >
+          Save and continue
+        </button>
       </div>
-    </form>
+    </div>
   </main>
 </template>
 
 <script>
-export default {
-};
+  import TextField from '@/components/Form/TextField';
+  import RadioGroup from '@/components/Form/RadioGroup';
+  import RadioItem from '@/components/Form/RadioItem';
+
+  export default {
+    components: {
+      TextField,
+      RadioGroup,
+      RadioItem,
+    },
+    data(){
+      return {
+        exerciseName: '',
+        exerciseType: '',
+        isMoreInfoNeeded: 'no'
+      }
+    },
+  };
 </script>

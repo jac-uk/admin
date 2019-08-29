@@ -9,7 +9,7 @@
     <ul
       class="govuk-list"
     >
-      <li 
+      <li
         v-for="vacancy in vacancies"
         :key="vacancy.reference"
       >
@@ -24,7 +24,7 @@
     <div>
       <router-link
         ref="linkToNewExercise"
-        to="/exercise/new/name-of-exercise"
+        to="/exercise/new/create-an-exercise"
         class="govuk-button govuk-!-margin-top-9"
       >
         Create an exercise
