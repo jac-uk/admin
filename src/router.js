@@ -74,8 +74,8 @@ const router = new Router({
             requiresAuth: true,
             title: 'About the Selection Process',
           },
-        }
-      ]
+        },
+      ],
     },
     {
       path: '/exercise/view',

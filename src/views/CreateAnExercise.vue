@@ -6,16 +6,16 @@
           Create an exercise
         </h1>
         <TextField
-          v-model="exerciseName"
           id="exercise-name"
+          v-model="exerciseName"
           name="exercise-name"
           label="Exercise name"
           hint="Reference codes are automatically created - you do not need to enter one."
         />
         <RadioGroup
           id="type-of-exercise"
-          label="Type of exercise"
           v-model="exerciseType"
+          label="Type of exercise"
         >
           <RadioItem
             value="legal"
@@ -36,9 +36,9 @@
         </RadioGroup>
         <RadioGroup
           id="add-information"
+          v-model="isMoreInfoNeeded"
           label="Do you want to add more information about this exercise now?"
           hint="You can add exercise contacts, shortlisting methods, timeline dates, or information from HMCTS. You can also do this later"
-          v-model="isMoreInfoNeeded"
         >
           <RadioItem
             value="yes"
@@ -60,22 +60,22 @@
 </template>
 
 <script>
-  import TextField from '@/components/Form/TextField';
-  import RadioGroup from '@/components/Form/RadioGroup';
-  import RadioItem from '@/components/Form/RadioItem';
+import TextField from '@/components/Form/TextField';
+import RadioGroup from '@/components/Form/RadioGroup';
+import RadioItem from '@/components/Form/RadioItem';
 
-  export default {
-    components: {
-      TextField,
-      RadioGroup,
-      RadioItem,
-    },
-    data(){
-      return {
-        exerciseName: '',
-        exerciseType: '',
-        isMoreInfoNeeded: 'no'
-      }
-    },
-  };
+export default {
+  components: {
+    TextField,
+    RadioGroup,
+    RadioItem,
+  },
+  data(){
+    return {
+      exerciseName: '',
+      exerciseType: '',
+      isMoreInfoNeeded: 'no',
+    };
+  },
+};
 </script>

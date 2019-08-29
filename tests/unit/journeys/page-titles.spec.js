@@ -78,57 +78,6 @@ describe('Page titles', () => {
     });
   });
 
-  describe('Name of Exercise', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
-    });
-
-    it('sets title as Name Of Exercise', () => {
-      router.push('/exercise/new/name-of-exercise');
-      expect(document.title).toContain('Name Of Exercise');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/new/name-of-exercise');
-      expect(document.title).toContain('Judicial Appointments Commission');
-    });
-  });
-
-  describe('Type of Exercise', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
-    });
-
-    it('sets title as Type Of Exercise', () => {
-      router.push('/exercise/new/type-of-exercise');
-      expect(document.title).toContain('Type Of Exercise');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/new/type-of-exercise');
-      expect(document.title).toContain('Judicial Appointments Commission');
-    });
-  });
-
-   describe('Number of Vacancies', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
-    });
-
-    it('sets title as Type Of Exercise', () => {
-      router.push('/exercise/new/number-of-vacancies');
-      expect(document.title).toContain('Number Of Vacancies');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/new/number-of-vacancies');
-      expect(document.title).toContain('Judicial Appointments Commission');
-    });
-  });
-
   describe('Eligibility', () => {
 
    beforeEach(() => {
@@ -196,7 +145,4 @@ describe('Page titles', () => {
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
-
-
-
 });
