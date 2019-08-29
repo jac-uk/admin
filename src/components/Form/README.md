@@ -43,7 +43,173 @@ If type is not provided, the component is rendered using the default type "text"
 </template>
 ```
 
-# Radios
+# Radios and Checkboxes
+
+[GOV.UK Radios](https://design-system.service.gov.uk/components/radios/) can be created using the `RadioGroup` and `RadioItem` 
+components.
+
+Similarly, [GOV.UK Checkboxes](https://design-system.service.gov.uk/components/checkboxes/) can be created using the
+`CheckboxGroup` and `CheckboxItem` components.
+
+Usage is the same between both pairs of components.
+
+Radios and Checkboxes support the following features:
+- Items with hints 
+([Radios](https://design-system.service.gov.uk/components/radios/#radio-items-with-hints), 
+[Checkboxes](https://design-system.service.gov.uk/components/checkboxes/#checkbox-items-with-hints))
+- Conditionally revealed content 
+([Radios](https://design-system.service.gov.uk/components/radios/#conditionally-revealing-content), 
+[Checkboxes](https://design-system.service.gov.uk/components/checkboxes/#conditionally-revealing-content))
+
+#### `RadioGroup` and `CheckboxGroup` props
+
+##### `label` (optional)
+
+This will be displayed as a `<legend>` above the radio/checkbox items.
+
+##### `hint` (optional)
+
+Hint text will be displayed as a GOV.UK-styled hint underneath the label.
+
+##### `id` (required)
+
+This must be unique on the current page. It's used to link `<input>` elements with their associated `<label>` elements.
+
+##### `value` (required)
+The `v-model` directive is used to create two-way data bindings (it's passed from parent component as v-model prop). The `value` 
+prop is supplied by the `v-model` binding, so does not need to be specified when using `v-model`.
+
+#### `RadioItem` and `CheckboxItem` props
+
+##### `label` (required)
+
+The text to display next to the radio/checkbox input.
+
+##### `value` (required)
+
+The value of this item. This will be received via the `v-model` binding when the radio/checkbox input is selected by the user.
+
+##### `hint` (optional)
+
+Hint text will be displayed as a GOV.UK-styled hint underneath the label.
+
+#### Basic usage
+
+```vue
+<template>
+  <div>
+    <RadioGroup
+      v-model="favouriteCake"
+      id="favourite-cake"
+      label="Which cake is your favourite?"
+    >
+      <RadioItem
+        value="victoria-sponge"
+        label="Victoria sponge"
+      />
+      <RadioItem
+        value="coffee-walnut"
+        label="Coffee and walnut cake"
+      />
+      <RadioItem
+        value="carrot"
+        label="Carrot cake"
+      />
+    </RadioGroup>
+  </div>
+</template>
+
+<script>
+import RadioGroup from '@/components/Form/RadioGroup';
+import RadioItem from '@/components/Form/RadioItem';
+
+export default {
+  components: {
+    RadioGroup,
+    RadioItem,
+  },
+  data() {
+    return {
+      favouriteCake: null,
+    };
+  },
+}
+</script>
+```
+
+#### Conditionally revealing content
+
+In this example, we wrap the `<RadioItem></RadioItem>` element around conditional content. This content will be displayed when the associated radio is selected.
+
+```vue
+<template>
+  <div>
+    <RadioGroup
+      v-model="contactMethod"
+      id="contact-method"
+      label="How would you prefer to be contacted?"
+    >
+      <RadioItem
+        value="email"
+        label="Email"
+      >
+        <TextField
+          id="email-address"
+          v-model="emailAddress"
+          label="Email address"
+          type="email"
+        />
+      </RadioItem>
+
+      <RadioItem
+        value="phone"
+        label="Phone"
+      >
+        <TextField
+          id="phone-number"
+          v-model="phoneNumber"
+          label="Phone number"
+          type="tel"
+        />
+      </RadioItem>
+
+      <RadioItem
+        value="sms"
+        label="Text message"
+      >
+        <TextField
+          id="mobile-number"
+          v-model="mobileNumber"
+          label="Mobile number"
+          type="tel"
+        />
+      </RadioItem>
+    </RadioGroup>
+  </div>
+</template>
+
+<script>
+import RadioGroup from '@/components/Form/RadioGroup';
+import RadioItem from '@/components/Form/RadioItem';
+import TextField from '@/components/Form/TextField';
+
+export default {
+  components: {
+    RadioGroup,
+    RadioItem,
+    TextField,
+  },
+  data() {
+    return {
+      contactMethod: null,
+      emailAddress: null,
+      phoneNumber: null,
+      mobileNumber: null,
+    };
+  },
+}
+</script>
+```
 
 # DateInput
 
