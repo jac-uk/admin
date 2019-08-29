@@ -6,7 +6,6 @@
         v-model="$parent.inputValue"
         class="govuk-checkboxes__input"
         type="checkbox"
-        :name="inputName"
         :value="value"
         :aria-describedby="hint ? hintId : false"
       >
@@ -63,9 +62,6 @@ export default {
     },
     hintId() {
       return `${this.$parent.id}__${index}__hint`;
-    },
-    inputName() {
-      return this.$parent.id;
     },
     showConditionalContent() {
       return this.hasConditionalContent && this.isChecked;
