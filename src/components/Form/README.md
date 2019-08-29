@@ -1,4 +1,47 @@
 # TextFields
+The TextField component is the implementation of the GDS Text Input component (https://design-system.service.gov.uk/components/text-input/).
+
+The TextField component is simply a govuk styled text input which has an optional label and hint attached to it.
+
+#### Props:
+
+##### label (optional)
+If label is provided, the component displays the label's value.
+
+##### inputClass (optional)
+The inputClass prop is an optional detail to change the style of the text field. It has an added value of 'govuk-input', in order to assure it's always got this base level styling attached. If an additional inputClass value is passed from the parent, the component applies the additional style value passed, along with the base level styling.
+
+##### value (optional)
+The v-model directive is used to create two-way data bindings (it's passed from parent component as v-model prop). If we pass a default value in the parent as a value of v-model, the component will parse this value and populate the text field with it.
+
+##### hint (optional)
+If a hint is passed, the component displays the value passed as <span> element which contains a hint.
+
+##### id (optional)
+Id is currently an optional prop, and it's used to assign unique ids to input elements and "for" attributes for the corresponding labels.
+
+##### type (optional)
+If type is not provided, the component is rendered using the default type "text". If a value for type is passed from the parent, the component will replace this default value with the type that has been passed. This enables the textfield to be flexible to various needs.
+
+#### Example usage:
+
+```
+<template>
+  <div>
+    <h2 class="govuk-heading-m">
+      Number of vacancies
+    </h2>
+    <TextField
+      id="immediate_start"
+      v-model="immediateStart"
+      input-class="govuk-input--width-5"
+      label="Immediate start"
+      hint="These are also called section 87 (S87) vacancies"
+      type=""
+    />
+  </div>
+</template>
+```
 
 # Radios
 
@@ -38,9 +81,9 @@ v-model directive is used to create two-way data bindings (it's passed from pare
     <h3 class="govuk-heading-xl">
       Add shortlisting dates
     </h3>
-    <DateInput 
-      id="notification__start" 
-      v-model="notificationDate" 
+    <DateInput
+      id="notification__start"
+      v-model="notificationDate"
       label="Situational judgment test notification"
       hint="For example, 01 01 2020"
     />
@@ -78,9 +121,9 @@ v-model directive is used to create two-way data bindings (it's passed from pare
     <h3 class="govuk-heading-xl">
       Add shortlisting dates
     </h3>
-    <DateInput 
-      id="scenario_test_time" 
-      v-model="scenarioTime" 
+    <DateInput
+      id="scenario_test_time"
+      v-model="scenarioTime"
       label="Scenario test time"
       hint="For example, 12 30"
     />
