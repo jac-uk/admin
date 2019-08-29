@@ -41,11 +41,11 @@
           hint="You can add exercise contacts, shortlisting methods, timeline dates, or information from HMCTS. You can also do this later"
         >
           <RadioItem
-            value="yes"
+            :value="true"
             label="Yes"
           />
           <RadioItem
-            value="no"
+            :value="false"
             label="No - I'll do this later"
           />
         </RadioGroup>
@@ -72,9 +72,9 @@ export default {
   },
   data(){
     return {
-      exerciseName: '',
-      exerciseType: '',
-      isMoreInfoNeeded: 'no',
+      exerciseName: null,
+      exerciseType: null,
+      isMoreInfoNeeded: null,
     };
   },
 };
