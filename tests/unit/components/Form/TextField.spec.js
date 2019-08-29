@@ -84,6 +84,21 @@ describe('components/Form/TextField', () => {
         });
       });
     });
+
+    describe('type', () => {
+      describe('when the prop is set', () => {
+        it('includes the added value in the <input> `type` attribute', () => {
+          wrapper.setProps({ type: 'my_type' });
+          expect(wrapper.find('input').attributes('type')).toBe('my_type');
+        });
+      });
+
+      describe('when the prop is not set', () => {
+        it('has the default <input> `type` text', () => {
+          expect(wrapper.find('input').attributes('type')).toBe('text');
+        });
+      });
+    });
   });
 
   describe('`v-model` interface', () => {

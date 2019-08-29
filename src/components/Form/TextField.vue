@@ -17,7 +17,7 @@
       v-model="text"
       :class="inputClass + ' govuk-input'"
       :name="id"
-      type="tel"
+      :type="type"
     >
   </div>
 </template>
@@ -43,6 +43,10 @@ export default {
     },
     id: {
       default: '',
+      type: String,
+    },
+    type: {
+      default: 'text',
       type: String,
     },
   },
