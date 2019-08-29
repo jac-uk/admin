@@ -55,16 +55,16 @@ describe('components/Form/RadioGroup and components/Form/RadioItem integration',
       it('it emits an `input` event with the value of the checked radio', () => {
         const [optionOne, optionTwo] = radios.wrappers;
 
-        const lastEmittedInputEvent = () => {
+        const lastEmittedInputValue = () => {
           const emitted = subject.emitted('input');
-          return emitted[emitted.length-1];
+          return emitted[emitted.length-1][0];
         };
 
         optionOne.setChecked();
-        expect(lastEmittedInputEvent()).toEqual(['one']);
+        expect(lastEmittedInputValue()).toEqual('one');
 
         optionTwo.setChecked();
-        expect(lastEmittedInputEvent()).toEqual(['two']);
+        expect(lastEmittedInputValue()).toEqual('two');
       });
     });
   });
