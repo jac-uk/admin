@@ -11,7 +11,7 @@ import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
 import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
-import ViewExercise from '@/views/ViewExercise';
+import ExerciseDetails from '@/views/ExerciseDetails';
 // form
 import CreateExercise from '@/views/CreateExercise';
 
@@ -98,12 +98,12 @@ const router = new Router({
       ],
     },
     {
-      path: '/exercise/view',
-      name: 'viewExercise',
-      component: ViewExercise,
+      path: '/exercise/details',
+      name: 'exerciseDetails',
+      component: ExerciseDetails,
       meta: {
         requiresAuth: true,
-        title: 'View exercise',
+        title: 'View exercise details',
       },
     },
     {

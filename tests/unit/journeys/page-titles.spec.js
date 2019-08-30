@@ -179,4 +179,21 @@ describe('Page titles', () => {
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
+
+  describe('Exercise Details', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    });
+
+    it('sets title as About The Selection Process', () => {
+      router.push('/exercise/details');
+      expect(document.title).toContain('View exercise details');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/details');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
 });
