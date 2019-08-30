@@ -31,11 +31,6 @@ describe('components/Page/Timeline', () => {
       it('is required', () => {
         expect(prop.required).toBe(true);
       });
-
-      it('should be array', () => {
-        const valid = prop.validator([]);
-        expect(valid).toBe(true);
-      });
     });
   });
 

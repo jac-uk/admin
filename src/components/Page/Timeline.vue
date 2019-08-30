@@ -20,7 +20,7 @@ export default {
   props: {
     data: {
       required: true,
-      validator: value => value instanceof Array,
+      type: Array,
     },
   },
 };
