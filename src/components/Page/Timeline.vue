@@ -43,8 +43,8 @@ export default {
     height: 5px;
     left: 0;
     position: absolute;
-    top: 10px;
-    width: 10px;
+    top: 0.625em;
+    width: 0.625em;
   }
 
   .dwp-timeline__date {
