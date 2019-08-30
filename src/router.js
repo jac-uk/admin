@@ -6,6 +6,7 @@ import store from '@/store';
 import AboutTheRole from '@/views/AboutTheRole';
 import AboutTheSelectionProcess from '@/views/AboutTheSelectionProcess';
 import CreateAnExercise from '@/views/CreateAnExercise';
+import AddExerciseContacts from '@/views/AddExerciseContacts';
 import Dashboard from '@/views/Dashboard';
 import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
@@ -64,6 +65,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Create An Exercise',
+          },
+        },
+        {
+          path: 'add-exercise-contacts',
+          component: AddExerciseContacts,
+          name: 'add-exercise-contacts',
+          meta: {
+            requiresAuth: true,
+            title: 'Add Exercise Contacts',
           },
         },
         {
