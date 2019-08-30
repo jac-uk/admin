@@ -129,6 +129,23 @@ describe('Page titles', () => {
     });
   });
 
+  describe('AddExerciseContacts', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    });
+
+    it('sets title as Add Exercise Contacts', () => {
+      router.push('/exercise/new/create-an-exercise');
+      expect(document.title).toContain('Create An Exercise');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-exercise-contacts');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
   describe('About The Selection Process', () => {
 
     beforeEach(() => {
