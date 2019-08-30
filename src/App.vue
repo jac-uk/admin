@@ -5,7 +5,7 @@
         href="#main-content"
         class="govuk-skip-link"
       >Skip to main content</a>
-      <header>
+      <header class="header">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <div class="govuk-heading-l">
@@ -63,4 +63,12 @@ export default {
 
 <style lang="scss">
   // Required to include global main.scss styles
+  .header {
+    background-color: #fafafa;
+    padding: 1.25em 0.625em 0 0.625em;
+  }
+
+  .govuk-main-wrapper {
+    padding-top: 0px;
+  }
 </style>
