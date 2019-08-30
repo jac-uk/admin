@@ -9,7 +9,7 @@
     >
       <legend
         v-if="label"
-        class="govuk-fieldset__legend govuk-fieldset__legend--xl"
+        class="govuk-fieldset__legend govuk-fieldset__legend--m"
       >
         {{ label }}
       </legend>
