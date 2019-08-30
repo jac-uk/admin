@@ -146,6 +146,23 @@ describe('Page titles', () => {
     });
   });
 
+  describe('AddShortlistingMethods', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+    });
+
+    it('sets title as Add Shortlisting Methods', () => {
+      router.push('/exercise/new/add-shortlisting-methods');
+      expect(document.title).toContain('Add Shortlisting Methods');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-shortlisting-methods');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
   describe('About The Selection Process', () => {
 
     beforeEach(() => {
