@@ -54,6 +54,11 @@
             </div>
           </CheckboxItem>
         </CheckboxGroup>
+        <button
+          class="govuk-button"
+        >
+          Save and continue
+        </button>
       </div>
     </div>
   </main>
