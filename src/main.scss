@@ -7,7 +7,17 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 // JAC bespoke css can go here
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* JAC buttons */
 .govuk-button {
   background-color: #753880;
   box-shadow: 0 2px 0 #5e2d66;
@@ -16,4 +26,27 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
 .govuk-button:hover,
 .govuk-button:focus {
   background-color: #5e2d66;
+}
+
+.govuk-button--secondary {
+  background-color: #f3f2f1;
+  box-shadow: 0 2px 0 #929191;
+  color: #0b0c0c;
+}
+
+.govuk-button--secondary:hover,
+.govuk-button--secondary:focus {
+  background-color: #dbdad9;
+  color: #0b0c0c;
+}
+
+.govuk-button--warning {
+  background-color: #d4351c;
+  box-shadow: 0 2px 0 #55150b;
+}
+
+.govuk-button--secondary:hover,
+.govuk-button--secondary:focus {
+  background-color: #dbdad9;
+  color: #0b0c0c;
 }
