@@ -1,67 +1,63 @@
 <template>
-  <main class="govuk-main-wrapper">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">
-          Add shortlisting methods
-        </h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Add shortlisting methods
+      </h1>
 
-        <p class="govuk-body-l">
-          You can return to this page later to add or change methods.
-        </p>
+      <p class="govuk-body-l">
+        You can return to this page later to add or change methods.
+      </p>
 
-        <CheckboxGroup
-          id="shortlisting-methods"
-          v-model="shortlistingMethods"
+      <CheckboxGroup
+        id="shortlisting-methods"
+        v-model="shortlistingMethods"
+      >
+        <CheckboxItem
+          value="situational-judgement-test"
+          label="Situational judgement test"
+        />
+        <CheckboxItem
+          value="critical-analysis-test"
+          label="Critical analysis test"
+        />
+        <CheckboxItem
+          value="scenario-test"
+          label="Scenario test"
+        />
+        <CheckboxItem
+          value="paper-sift"
+          label="Paper sift"
+        />
+        <CheckboxItem
+          value="telephone-assessment"
+          label="Telephone assessment"
+        />
+        <CheckboxItem
+          value="other"
+          label="Other"
         >
-          <CheckboxItem
-            value="situational-judgement-test"
-            label="Situational judgement test"
+          <TextField
+            id="other-text-input"
+            v-model="otherText"
+            name="other-text-input"
+            label="Add method"
           />
-          <CheckboxItem
-            value="critical-analysis-test"
-            label="Critical analysis test"
-          />
-          <CheckboxItem
-            value="scenario-test"
-            label="Scenario test"
-          />
-          <CheckboxItem
-            value="paper-sift"
-            label="Paper sift"
-          />
-          <CheckboxItem
-            value="telephone-assessment"
-            label="Telephone assessment"
-          />
-          <CheckboxItem
-            value="other"
-            label="Other"
-          >
-            <div class="govuk-form-group">
-              <TextField
-                id="other-text-input"
-                v-model="otherText"
-                name="other-text-input"
-                label="Add method"
-              />
-              <p class="govuk_body">
-                <a
-                  href="#"
-                  class="govuk-link"
-                >Add another</a>
-              </p>
-            </div>
-          </CheckboxItem>
-        </CheckboxGroup>
-        <button
-          class="govuk-button"
-        >
-          Save and continue
-        </button>
-      </div>
+          <p class="govuk_body">
+            <a
+              href="#"
+              class="govuk-link"
+            >Add another</a>
+          </p>
+        </CheckboxItem>
+      </CheckboxGroup>
+      <button
+        class="govuk-button"
+      >
+        Save and continue
+      </button>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
