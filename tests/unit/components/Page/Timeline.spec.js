@@ -31,6 +31,10 @@ describe('components/Page/Timeline', () => {
       it('is required', () => {
         expect(prop.required).toBe(true);
       });
+
+      it('should be array', () => {
+        expect(prop.type).toBe(Array);
+      });
     });
   });
 
