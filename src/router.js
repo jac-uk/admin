@@ -5,8 +5,9 @@ import store from '@/store';
 // Views
 import AboutTheRole from '@/views/AboutTheRole';
 import AboutTheSelectionProcess from '@/views/AboutTheSelectionProcess';
-import CreateAnExercise from '@/views/CreateAnExercise';
 import AddExerciseContacts from '@/views/AddExerciseContacts';
+import AddShortlistingMethods from '@/views/AddShortlistingMethods';
+import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
 import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
@@ -74,6 +75,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Contacts',
+          },
+        },
+        {
+          path: 'add-shortlisting-methods',
+          component: AddShortlistingMethods,
+          name: 'add-shortlisting-methods',
+          meta: {
+            requiresAuth: true,
+            title: 'Add Shortlisting Methods',
           },
         },
         {
