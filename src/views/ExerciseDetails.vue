@@ -3,9 +3,11 @@
     <!-- title -->
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <span class="govuk-caption-xl">118<strong class="govuk-tag__exercise-type">
-          Legal
-        </strong></span>
+        <span class="govuk-caption-xl">118
+          <span class="govuk-tag govuk-tag-dark">
+            Legal
+          </span>
+        </span>
         <h1
           class="govuk-heading-xl"
           style="margin-bottom:0px;"
@@ -147,18 +149,16 @@
 <script>
 import Timeline from '@/components/Page/Timeline';
 
-const shortTimeline = [
-  { 'entry': 'Closed for applications', 'date': '6 August 2019' },
-  { 'entry': 'Situational judgment test, Critical analysis test', 'date': '17 September 2019' },
-];
-
 export default {
   components: {
     Timeline,
   },
   data() {
     return {
-      timeline1: shortTimeline,
+      timeline1: [
+        { 'entry': 'Closed for applications', 'date': '6 August 2019' },
+        { 'entry': 'Situational judgment test, Critical analysis test', 'date': '17 September 2019' },
+      ],
     };
   },
 };
@@ -174,5 +174,9 @@ export default {
   .govuk-panel--highlight {
     color: #ffffff;
     background: #1d70b8;
+  }
+
+  .govuk-tag-dark {
+    background-color: #0b0c0c;
   }
 </style>
