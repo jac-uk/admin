@@ -41,14 +41,13 @@ describe('Dashboard view', () => {
 });
 
 describe('Accessibility:', () => {
-  it('page contains h1 and h2 elements', () => { 
+  it('page contains h1 element', () => { 
     let wrapper = shallowMount(Dashboard, {
       store,
       localVue,
     });
 
     expect(wrapper.contains('h1')).toBe(true);
-    expect(wrapper.contains('h2')).toBe(true);
   });
 });
  
