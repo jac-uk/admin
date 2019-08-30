@@ -57,6 +57,13 @@ describe('Sign in journey', () => {
       });
     });
 
+    describe('when they visit /exercise/new/add-exercise-contacts', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/add-exercise-contacts');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
     describe('when they visit /exercise/new/about-the-selection-process', () => {
       it('redirects to /sign-in page', () => {
         router.push('/exercise/new/about-the-selection-process');
@@ -117,6 +124,13 @@ describe('Sign in journey', () => {
       it('can access the new create an exercise page', () => {
         router.push('/exercise/new/create-an-exercise');
         expect(subject.vm.$route.path).toBe('/exercise/new/create-an-exercise');
+      });
+    });
+
+    describe('when going to the add exercise contacts page', () => {
+      it('can access the new add exercise contacts page', () => {
+        router.push('/exercise/new/add-exercise-contacts');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-exercise-contacts');
       });
     });
 

@@ -2,7 +2,6 @@
   <main class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-
         <h1 class="govuk-heading-xl">
           Add exercise contacts
         </h1>
@@ -51,7 +50,10 @@
         />
 
         <p class="govuk_body">
-          <a href="#">Add another</a>
+          <a
+            href="#"
+            class="govuk-link"
+          >Add another</a>
         </p>
 
         <TextField
@@ -62,7 +64,10 @@
         />
 
         <p class="govuk_body">
-          <a href="#">Add another</a>
+          <a
+            href="#"
+            class="govuk-link"
+          >Add another</a>
         </p>
 
         <h2 class="govuk-heading-l">
@@ -118,7 +123,10 @@
         />
 
         <p class="govuk_body">
-          <a href="#">Add another</a>
+          <a
+            href="#"
+            class="govuk-link"
+          >Add another</a>
         </p>
 
         <TextField
@@ -129,7 +137,10 @@
         />
 
         <p class="govuk_body">
-          <a href="#">Add another</a>
+          <a
+            href="#"
+            class="govuk-link"
+          >Add another</a>
         </p>
 
         <button
@@ -137,38 +148,37 @@
         >
           Save and continue
         </button>
-
       </div>
     </div>
   </main>
 </template>
 
 <script>
-  import TextField from '@/components/Form/TextField';
-  import CheckboxGroup from '@/components/Form/CheckboxGroup';
-  import CheckboxItem from '@/components/Form/CheckboxItem';
+import TextField from '@/components/Form/TextField';
+import CheckboxGroup from '@/components/Form/CheckboxGroup';
+import CheckboxItem from '@/components/Form/CheckboxItem';
 
-  export default {
-    components: {
-      TextField,
-      CheckboxGroup,
-      CheckboxItem,
-    },
-    data(){
-      return {
-        policyContact: null,
-        equalityDiversityContact: null,
-        seniorSelectionExerciseManager: null,
-        selectionExerciseManager: null,
-        selectionExerciseOfficer: null,
-        assignedCommissioner: null,
-        appropriateAuthority: [],
-        judicialOfficeContact: null,
-        hmctsWelshGovLead: null,
-        leadJudge: null,
-        draftingJudge: null,
-        statutoryConsultee: null,
-      };
-    },
-}
+export default {
+  components: {
+    TextField,
+    CheckboxGroup,
+    CheckboxItem,
+  },
+  data(){
+    return {
+      policyContact: null,
+      equalityDiversityContact: null,
+      seniorSelectionExerciseManager: null,
+      selectionExerciseManager: null,
+      selectionExerciseOfficer: null,
+      assignedCommissioner: null,
+      appropriateAuthority: [],
+      judicialOfficeContact: null,
+      hmctsWelshGovLead: null,
+      leadJudge: null,
+      draftingJudge: null,
+      statutoryConsultee: null,
+    };
+  },
+};
 </script>
