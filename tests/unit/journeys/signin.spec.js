@@ -36,20 +36,6 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercise/new/eligibility', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/eligibility');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercise/new/about-the-role', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/about-the-role');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
     describe('when they visit /exercise/new/create-an-exercise', () => {
       it('redirects to /sign-in page', () => {
         router.push('/exercise/new/create-an-exercise');
@@ -60,6 +46,27 @@ describe('Sign in journey', () => {
     describe('when they visit /exercise/new/add-exercise-contacts', () => {
       it('redirects to /sign-in page', () => {
         router.push('/exercise/new/add-exercise-contacts');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
+    describe('when they visit /exercise/new/add-shortlisting-methods', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/add-shortlisting-methods');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
+    describe('when they visit /exercise/new/eligibility', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/eligibility');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
+    describe('when they visit /exercise/new/about-the-role', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/about-the-role');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -106,20 +113,6 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when going to the new eligibility page', () => {
-      it('can access the new eligibility page', () => {
-        router.push('/exercise/new/eligibility');
-        expect(subject.vm.$route.path).toBe('/exercise/new/eligibility');
-      });
-    });
-
-    describe('when going to the about the role page', () => {
-      it('can access the new about the role page', () => {
-        router.push('/exercise/new/about-the-role');
-        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-role');
-      });
-    });
-
     describe('when going to the create an exercise page', () => {
       it('can access the new create an exercise page', () => {
         router.push('/exercise/new/create-an-exercise');
@@ -131,6 +124,27 @@ describe('Sign in journey', () => {
       it('can access the new add exercise contacts page', () => {
         router.push('/exercise/new/add-exercise-contacts');
         expect(subject.vm.$route.path).toBe('/exercise/new/add-exercise-contacts');
+      });
+    });
+
+    describe('when going to the add shortlisting methods page', () => {
+      it('can access the new add shortlisting methods page', () => {
+        router.push('/exercise/new/add-shortlisting-methods');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-shortlisting-methods');
+      });
+    });
+
+    describe('when going to the new eligibility page', () => {
+      it('can access the new eligibility page', () => {
+        router.push('/exercise/new/eligibility');
+        expect(subject.vm.$route.path).toBe('/exercise/new/eligibility');
+      });
+    });
+
+    describe('when going to the about the role page', () => {
+      it('can access the new about the role page', () => {
+        router.push('/exercise/new/about-the-role');
+        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-role');
       });
     });
 
