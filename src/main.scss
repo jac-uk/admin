@@ -51,3 +51,9 @@ body {
   background-color: #dbdad9;
   color: #0b0c0c;
 }
+
+// disabled inputs
+.govuk-input:disabled {
+  background-color: #ccc;
+
+}

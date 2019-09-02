@@ -5,21 +5,19 @@
         Create an exercise
       </h1>
       <div class="govuk-form-group">
-        <label class="govuk-heading-m">
+        <label for="ref-number" class="govuk-heading-m">
           Reference number
         </label>
-        <span id="hint" class="govuk-hint">
+        <span class="govuk-hint">
           This will be generated automatically when you save.
         </span>
         <input
           class="govuk-input--width-5 govuk-input"
           id="ref-number"
-          name="ref-number"
           type="text"
           placeholder="XXX"
-          disabled=""
-          style="background-color:#ccc"
-        />
+          disabled
+          />
     </div>
       <TextField
         id="exercise-name"
