@@ -7,47 +7,56 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(Router);
 
-const vacancies = {
+const exerciseCollection = {
   namespaced: true,
+  actions: {
+    bind: jest.fn(),
+  },
   state: {
-    vacancies: [],
+    records: [],
   },
 };
 
 const store = new Vuex.Store({
   modules: {
-    vacancies,
+    exerciseCollection,
   },
-});  
-
-describe('Dashboard view', () => {
-  it('renders the component', () => {
-    let wrapper = shallowMount(Dashboard, {
-      store,
-      localVue,
-    });
-    
-    expect(wrapper.exists()).toBe(true);
-  });
-
-  it('contains the link to New Exercise page', () => {
-    let wrapper = shallowMount(Dashboard, {
-      store,
-      localVue,
-    });
-    
-    expect(wrapper.find({ ref: 'linkToNewExercise' }).isVisible()).toBe(true);
-  });
 });
 
-describe('Accessibility:', () => {
-  it('page contains h1 element', () => { 
-    let wrapper = shallowMount(Dashboard, {
-      store,
-      localVue,
+const createTestSubject = () => {
+  return shallowMount(Dashboard, {
+    store,
+    localVue,
+  });
+};
+
+describe('views/Dashboard', () => {
+  describe('template', () => {
+    let wrapper;
+    beforeEach(() => {
+      wrapper = createTestSubject();
     });
 
-    expect(wrapper.contains('h1')).toBe(true);
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
+
+    it('contains the link to New Exercise page', () => {
+      expect(wrapper.find({ ref: 'linkToNewExercise' }).isVisible()).toBe(true);
+    });
+
+    it('contains a <h1> element', () => {
+      expect(wrapper.contains('h1')).toBe(true);
+    });
+  });
+
+  describe('lifecycle hooks', () => {
+    describe('created', () => {
+      it('loads the exercises collection using Vuex', () => {
+        exerciseCollection.actions.bind.mockReset();
+        createTestSubject();
+        expect(exerciseCollection.actions.bind).toHaveBeenCalledTimes(1);
+      });
+    });
   });
 });
- 
