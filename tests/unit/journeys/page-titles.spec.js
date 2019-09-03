@@ -121,6 +121,8 @@ describe('Page titles', () => {
     });
   });
 
+  describe('AboutTheVacancy', () => {
+
   describe('/exercises/:id/edit/eligibility', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
