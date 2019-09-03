@@ -52,7 +52,9 @@
         </CheckboxItem>
       </CheckboxGroup>
       <button
+        ref="linkToAddExerciseTimeline"
         class="govuk-button"
+        @click="$router.push('add-exercise-timeline')"
       >
         Save and continue
       </button>
