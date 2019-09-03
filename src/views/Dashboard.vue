@@ -26,7 +26,7 @@
       <div class="govuk-grid-column-full">
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
           <div 
-            v-for="vacancy in vacancies"
+            v-for="vacancy in records"
             :key="vacancy.reference"
             class="govuk-summary-list__row"
           >
@@ -47,10 +47,11 @@
 import { mapState } from 'vuex';
 
 export default {
-  data() {
-    return {
-      vacancies: [],
-    };
+  computed: mapState('exerciseCollection', [
+    'records',
+  ]),
+  created() {
+    this.$store.dispatch('exerciseCollection/bind');
   },
 };
 </script>

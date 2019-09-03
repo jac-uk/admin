@@ -1,16 +1,18 @@
 import Vue from 'vue';
-import { vuexfireMutations } from 'vuexfire';
 import Vuex from 'vuex';
-
-import auth from '@/store/auth';
-
+import { vuexfireMutations } from 'vuexfire';
 Vue.use(Vuex);
+
+// Vuex modules
+import auth from '@/store/auth';
+import exerciseCollection from '@/store/exercise/collection';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
     auth,
+    exerciseCollection,
   },
   state: {},
   mutations: {
