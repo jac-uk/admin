@@ -5,20 +5,23 @@
         Create an exercise
       </h1>
       <div class="govuk-form-group">
-        <label for="ref-number" class="govuk-heading-m">
+        <label
+          for="ref-number"
+          class="govuk-heading-m"
+        >
           Reference number
         </label>
         <span class="govuk-hint">
           This will be generated automatically when you save.
         </span>
         <input
-          class="govuk-input--width-5 govuk-input"
           id="ref-number"
+          class="govuk-input--width-5 govuk-input"
           type="text"
           placeholder="XXX"
           disabled
-          />
-    </div>
+        >
+      </div>
       <TextField
         id="exercise-name"
         v-model="exerciseName"

@@ -3,13 +3,10 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import AboutTheRole from '@/views/AboutTheRole';
-import AboutTheSelectionProcess from '@/views/AboutTheSelectionProcess';
 import AddExerciseContacts from '@/views/AddExerciseContacts';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
 import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
-import Eligibility from '@/views/Eligibility';
 import SignIn from '@/views/SignIn';
 import ExerciseDetails from '@/views/ExerciseDetails';
 // form
@@ -42,24 +39,6 @@ const router = new Router({
       },
       children: [
         {
-          path: 'eligibility',
-          component: Eligibility,
-          name: 'eligibility',
-          meta: {
-            requiresAuth: true,
-            title: 'Eligibility',
-          },
-        },
-        {
-          path: 'about-the-role',
-          component: AboutTheRole,
-          name: 'about-the-role',
-          meta: {
-            requiresAuth: true,
-            title: 'About The Role',
-          },
-        },
-        {
           path: 'create-an-exercise',
           component: CreateAnExercise,
           name: 'create-an-exercise',
@@ -84,15 +63,6 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Add Shortlisting Methods',
-          },
-        },
-        {
-          path: 'about-the-selection-process',
-          component: AboutTheSelectionProcess,
-          name: 'about-the-selection-process',
-          meta: {
-            requiresAuth: true,
-            title: 'About the Selection Process',
           },
         },
       ],
