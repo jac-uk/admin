@@ -143,7 +143,9 @@
       </p>
 
       <button
+        ref="linkToAddShortlistingMethods"
         class="govuk-button"
+        @click="$router.push('add-shortlisting-methods')"
       >
         Save and continue
       </button>

@@ -67,7 +67,9 @@
         />
       </RadioGroup>
       <button
+        ref="linkToAddExerciseContacts"
         class="govuk-button"
+        @click="$router.push('add-exercise-contacts')"
       >
         Save and continue
       </button>
