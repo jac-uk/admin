@@ -17,22 +17,4 @@ describe('Vuex store', () => {
   it('creates a new Vuex Store', () => {
     expect(Vuex.Store).toHaveBeenCalled();
   });
-
-  describe('init action', () => {
-    it('calls dispatch if user is signed in', () => {
-      store.getters.isSignedIn = true;
-      const dispatch = jest.fn().mockResolvedValue();
-      store.actions.init({ dispatch });
-
-      expect(dispatch).toHaveBeenCalled();
-    });
-
-     it('does not call dispatch if user is not signed in', () => {
-      store.getters.isSignedIn = false;
-      const dispatch = jest.fn().mockResolvedValue();
-      store.actions.init({ dispatch });
-
-      expect(dispatch).not.toHaveBeenCalled();
-    });
-  });
 });
