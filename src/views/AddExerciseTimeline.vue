@@ -53,6 +53,7 @@
         id="test-outcome"
         v-model="testOutcome"
         label="Test outcome"
+        type="month"
       />
 
       <h2 class="govuk-heading-l">
@@ -93,22 +94,26 @@
         id="eligibility-checks"
         v-model="eligibilityChecks"
         label="Eligibility checks"
+        type="month"
       />
       <DateInput
         id="character-checks"
         v-model="characterChecks"
         label="Character checks"
+        type="month"
       />
       <DateInput
         id="statutory-consultation"
         v-model="statutoryConsultation"
         label="Statutory consultation"
+        type="month"
       />
       <DateInput
         id="selection-process-outcome"
         v-model="selectionProcessOutcome"
         label="Selection process outcome"
         hint="This is when we expect to inform candidates."
+        type="month"
       />
 
 
