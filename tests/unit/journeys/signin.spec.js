@@ -57,6 +57,13 @@ describe('Sign in journey', () => {
       });
     });
 
+    describe('when they visit /exercise/new/add-exercise-timeline', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/new/add-exercise-timeline');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
     describe('when they visit /exercise/details', () => {
       it('redirects to /sign-in page', () => {
         router.push('/exercise/details');
@@ -117,6 +124,13 @@ describe('Sign in journey', () => {
       it('can access the new add shortlisting methods page', () => {
         router.push('/exercise/new/add-shortlisting-methods');
         expect(subject.vm.$route.path).toBe('/exercise/new/add-shortlisting-methods');
+      });
+    });
+
+    describe('when going to the add exercise timeline page', () => {
+      it('can access the new add exercise timeline page', () => {
+        router.push('/exercise/new/add-exercise-timeline');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-exercise-timeline');
       });
     });
 
