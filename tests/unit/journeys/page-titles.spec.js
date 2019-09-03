@@ -78,40 +78,6 @@ describe('Page titles', () => {
     });
   });
 
-  describe('Eligibility', () => {
-
-   beforeEach(() => {
-     store.dispatch('setCurrentUser', user);
-   });
-
-   it('sets title as Eligibility', () => {
-     router.push('/exercise/new/eligibility');
-     expect(document.title).toContain('Eligibility');
-   });
-
-   it('contains Judicial Appointments Commission', () => {
-     router.push('/exercise/new/eligibility');
-     expect(document.title).toContain('Judicial Appointments Commission');
-   });
-  });
-
-  describe('AboutTheRole', () => {
-
-   beforeEach(() => {
-     store.dispatch('setCurrentUser', user);
-   });
-
-   it('sets title as About The Role', () => {
-     router.push('/exercise/new/about-the-role');
-     expect(document.title).toContain('About The Role');
-   });
-
-   it('contains Judicial Appointments Commission', () => {
-     router.push('/exercise/new/about-the-role');
-     expect(document.title).toContain('Judicial Appointments Commission');
-   });
-  });
-
   describe('CreateAnExercise', () => {
 
     beforeEach(() => {
@@ -159,23 +125,6 @@ describe('Page titles', () => {
 
     it('contains Judicial Appointments Commission', () => {
       router.push('/exercise/new/add-shortlisting-methods');
-      expect(document.title).toContain('Judicial Appointments Commission');
-    });
-  });
-
-  describe('About The Selection Process', () => {
-
-    beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
-    });
-
-    it('sets title as About The Selection Process', () => {
-      router.push('/exercise/new/about-the-selection-process');
-      expect(document.title).toContain('About the Selection Process');
-    });
-
-    it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/new/about-the-selection-process');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });

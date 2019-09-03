@@ -57,27 +57,6 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercise/new/eligibility', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/eligibility');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercise/new/about-the-role', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/about-the-role');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercise/new/about-the-selection-process', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/about-the-selection-process');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
     describe('when they visit /exercise/details', () => {
       it('redirects to /sign-in page', () => {
         router.push('/exercise/details');
@@ -99,16 +78,16 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when going to the dashboard page', () => {
-      it('can access the dashboard page', () => {
-        router.push('/dashboard');
+    describe('when going to sign-in page', () => {
+      it('redirects to the dashboard page', () => {
+        router.push('/sign-in');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    describe('when going to sign-in page', () => {
-      it('redirects to the dashboard page', () => {
-        router.push('/sign-in');
+    describe('when going to the dashboard page', () => {
+      it('can access the dashboard page', () => {
+        router.push('/dashboard');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
@@ -138,27 +117,6 @@ describe('Sign in journey', () => {
       it('can access the new add shortlisting methods page', () => {
         router.push('/exercise/new/add-shortlisting-methods');
         expect(subject.vm.$route.path).toBe('/exercise/new/add-shortlisting-methods');
-      });
-    });
-
-    describe('when going to the new eligibility page', () => {
-      it('can access the new eligibility page', () => {
-        router.push('/exercise/new/eligibility');
-        expect(subject.vm.$route.path).toBe('/exercise/new/eligibility');
-      });
-    });
-
-    describe('when going to the about the role page', () => {
-      it('can access the new about the role page', () => {
-        router.push('/exercise/new/about-the-role');
-        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-role');
-      });
-    });
-
-    describe('when going to the about the selection process page', () => {
-      it('can access the new about the selection process page', () => {
-        router.push('/exercise/new/about-the-selection-process');
-        expect(subject.vm.$route.path).toBe('/exercise/new/about-the-selection-process');
       });
     });
 
