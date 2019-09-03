@@ -10,8 +10,14 @@ describe('CreateAnExercise', () => {
     let wrapper = shallowMount(CreateAnExercise, {
       localVue,
     });
-
     expect(wrapper.exists()).toBe(true);
+  });
+
+  it('contains the link to Add Exercise Contacts page', () => {
+    let wrapper = shallowMount(CreateAnExercise, {
+      localVue,
+    });
+    expect(wrapper.find({ ref: 'linkToAddExerciseContacts' }).isVisible()).toBe(true);
   });
 });
 
