@@ -41,6 +41,7 @@
       <DateInput
         id="test-open-date"
         v-model="testOpenDate"
+        hint="For example, 31 05 2020"
         label="Test open date"
       />
       <TimeInput
