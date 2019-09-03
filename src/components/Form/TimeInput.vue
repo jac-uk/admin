@@ -7,7 +7,7 @@
     >
       <legend
         v-if="label"
-        class="govuk-fieldset__legend govuk-fieldset__legend--xl"
+        class="govuk-fieldset__legend govuk-fieldset__legend--m"
       >
         {{ label }}
       </legend>
@@ -108,7 +108,7 @@ export default {
       },
     },
     dateConstructor() {
-      const hour = this.hour; 
+      const hour = this.hour;
       const minute = this.minute;
 
       if(hour === null || minute === null) {
