@@ -47,9 +47,11 @@
 import { mapState } from 'vuex';
 
 export default {
-  computed: mapState('vacancies', [
-    'vacancies',
-  ]),
+  data() {
+    return {
+      vacancies: [],
+    };
+  },
 };
 </script>
 
