@@ -4,6 +4,7 @@ import store from '@/store';
 
 // Views
 import AddExerciseContacts from '@/views/AddExerciseContacts';
+import AddExerciseTimeline from '@/views/AddExerciseTimeline';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
 import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
@@ -63,6 +64,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Add Shortlisting Methods',
+          },
+        },
+        {
+          path: 'add-exercise-timeline',
+          component: AddExerciseTimeline,
+          name: 'add-exercise-timeline',
+          meta: {
+            requiresAuth: true,
+            title: 'Add Exercise Timeline',
           },
         },
       ],
