@@ -1,4 +1,4 @@
-import exerciseCollection from '@/store/exercise/collection';
+import exerciseSingle from '@/store/exercise/single';
 import { firestore } from '@/firebase';
 
 jest.mock('@/firebase', () => {
@@ -19,16 +19,16 @@ jest.mock('vuexfire', () => ({
   }),
 }));
 
-describe('store/exercise/collection', () => {
+describe('store/exercise/single', () => {
   describe('actions', () => {
-    const actions = exerciseCollection.actions;
+    const actions = exerciseSingle.actions;
     describe('bind', () => {
-      it('binds state `records` to the Firestore collection `exercises` ordered by `openAt` descending', () => {
-        const callToBindFirestoreRef = actions.bind();
+      it('binds state `record` to the document with the specified ID in the Firestore `exercises` collection', () => {
+        const callToBindFirestoreRef = actions.bind('TestDocumentID');
         const keyInState = callToBindFirestoreRef[0];
         const firestoreRef = callToBindFirestoreRef[1];
-        expect(keyInState).toEqual('records');
-        expect(firestoreRef).toEqual(firestore.collection('exercises').orderBy('openAt', 'desc'));
+        expect(keyInState).toEqual('record');
+        expect(firestoreRef).toEqual(firestore.collection('exercises').doc('TestDocumentID'));
       });
     });
   });
