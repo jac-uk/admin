@@ -8,16 +8,7 @@ jest.mock('@/firebase', () => {
   return { firestore };
 });
 
-jest.mock('vuexfire', () => ({
-  firestoreAction: jest.fn(callback => {
-    const context = {
-      bindFirestoreRef: (name, firebaseRef) => {
-        return [name, firebaseRef];
-      },
-    };
-    return (payload) => callback(context, payload);
-  }),
-}));
+jest.mock('vuexfire');
 
 describe('store/exercise/collection', () => {
   describe('actions', () => {
