@@ -1,4 +1,4 @@
-import exerciseSingle from '@/store/exercise/single';
+import exerciseDocument from '@/store/exercise/document';
 import { firestore } from '@/firebase';
 
 jest.mock('@/firebase', () => {
@@ -12,7 +12,7 @@ jest.mock('vuexfire');
 
 describe('store/exercise/single', () => {
   describe('actions', () => {
-    const actions = exerciseSingle.actions;
+    const actions = exerciseDocument.actions;
 
     describe('bind', () => {
       it('binds key `record` to the document with the specified ID in the Firestore `exercises` collection', () => {
