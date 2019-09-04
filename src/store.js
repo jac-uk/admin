@@ -6,6 +6,7 @@ Vue.use(Vuex);
 // Vuex modules
 import auth from '@/store/auth';
 import exerciseCollection from '@/store/exercise/collection';
+import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
 
 const store = new Vuex.Store({
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
   modules: {
     auth,
     exerciseCollection,
+    exerciseCreateJourney,
     exerciseDocument,
   },
   state: {},
