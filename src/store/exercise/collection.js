@@ -10,6 +10,9 @@ export default {
         .orderBy('openAt', 'desc');
       return bindFirestoreRef('records', firestoreRef);
     }),
+    unbind: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('records');
+    }),
   },
   state: {
     records: [],

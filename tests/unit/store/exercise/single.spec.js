@@ -13,13 +13,21 @@ jest.mock('vuexfire');
 describe('store/exercise/single', () => {
   describe('actions', () => {
     const actions = exerciseSingle.actions;
+
     describe('bind', () => {
-      it('binds state `record` to the document with the specified ID in the Firestore `exercises` collection', () => {
+      it('binds key `record` to the document with the specified ID in the Firestore `exercises` collection', () => {
         const callToBindFirestoreRef = actions.bind('TestDocumentID');
         const keyInState = callToBindFirestoreRef[0];
         const firestoreRef = callToBindFirestoreRef[1];
         expect(keyInState).toEqual('record');
         expect(firestoreRef).toEqual(firestore.collection('exercises').doc('TestDocumentID'));
+      });
+    });
+
+    describe('unbind', () => {
+      it('unbinds key `record`', () => {
+        const callToUnbindFirestoreRef = actions.unbind();
+        expect(callToUnbindFirestoreRef[0]).toBe('record');
       });
     });
   });
