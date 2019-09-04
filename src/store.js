@@ -6,7 +6,7 @@ Vue.use(Vuex);
 // Vuex modules
 import auth from '@/store/auth';
 import exerciseCollection from '@/store/exercise/collection';
-import exerciseSingle from '@/store/exercise/single';
+import exerciseDocument from '@/store/exercise/document';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -14,7 +14,7 @@ const store = new Vuex.Store({
   modules: {
     auth,
     exerciseCollection,
-    exerciseSingle,
+    exerciseDocument,
   },
   state: {},
   mutations: {
