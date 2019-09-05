@@ -6,7 +6,7 @@ import store from '@/store';
 import AddExerciseContacts from '@/views/AddExerciseContacts';
 import AddExerciseTimeline from '@/views/AddExerciseTimeline';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
-import CreateAnExercise from '@/views/CreateAnExercise';
+import ExercisesNew from '@/views/Exercises/New';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 import ExerciseDetails from '@/views/ExerciseDetails';
@@ -33,21 +33,21 @@ const router = new Router({
       },
     },
     {
+      path: '/exercises/new',
+      name: 'exercises-new',
+      component: ExercisesNew,
+      meta: {
+        requiresAuth: true,
+        title: 'Create An Exercise',
+      },
+    },
+    {
       path: '/exercise/new/',
       component: CreateExercise,
       meta: {
         title: 'Create new exercise',
       },
       children: [
-        {
-          path: 'create-an-exercise',
-          component: CreateAnExercise,
-          name: 'create-an-exercise',
-          meta: {
-            requiresAuth: true,
-            title: 'Create An Exercise',
-          },
-        },
         {
           path: 'add-exercise-contacts',
           component: AddExerciseContacts,

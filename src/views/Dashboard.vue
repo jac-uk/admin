@@ -11,7 +11,7 @@
           </a>
           <router-link
             ref="linkToNewExercise"
-            to="/exercise/new/create-an-exercise"
+            to="/exercises/new"
             class="govuk-button govuk-!-margin-right-1"
           >
             Create an exercise
