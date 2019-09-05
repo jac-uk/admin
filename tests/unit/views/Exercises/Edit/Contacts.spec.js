@@ -1,32 +1,32 @@
-import AddExerciseContacts from '@/views/AddExerciseContacts';
+import ExercisesEditContacts from '@/views/Exercises/Edit/Contacts';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 
 const localVue = createLocalVue();
 localVue.use(Router);
 
-describe('AddExerciseContacts', () => {
+describe('ExercisesEditContacts', () => {
   it('renders the view', () => {
-    let wrapper = shallowMount(AddExerciseContacts, {
+    let wrapper = shallowMount(ExercisesEditContacts, {
       localVue,
     });
 
     expect(wrapper.exists()).toBe(true);
   });
   it('contains the link to Add Shortlisting Methods page', () => {
-    let wrapper = shallowMount(AddExerciseContacts, {
+    let wrapper = shallowMount(ExercisesEditContacts, {
       localVue,
     });
     expect(wrapper.find({ ref: 'linkToAddShortlistingMethods' }).isVisible()).toBe(true);
   });
-});
 
-describe('Accessibility:', () => {
-  it('page contains h1 element', () => {
-    let wrapper = shallowMount(AddExerciseContacts, {
-      localVue,
+  describe('Accessibility:', () => {
+    it('page contains h1 element', () => {
+      let wrapper = shallowMount(ExercisesEditContacts, {
+        localVue,
+      });
+
+      expect(wrapper.contains('h1')).toBe(true);
     });
-
-    expect(wrapper.contains('h1')).toBe(true);
   });
 });

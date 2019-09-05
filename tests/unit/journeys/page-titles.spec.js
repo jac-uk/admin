@@ -76,10 +76,10 @@ describe('Page titles', () => {
     });
   });
 
-  describe('/exercises/:id/edit/add-exercise-contacts', () => {
+  describe('/exercises/:id/edit/contacts', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/add-exercise-contacts');
+      router.push('/exercises/abc123/edit/contacts');
     });
 
     it('sets title as Add Exercise Contacts', () => {

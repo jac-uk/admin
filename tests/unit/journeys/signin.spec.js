@@ -43,9 +43,9 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/add-exercise-contacts', () => {
+    describe('when they visit /exercises/:id/edit/contacts', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/add-exercise-contacts');
+        router.push('/exercises/abc123/edit/contacts');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -106,10 +106,10 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/add-exercise-contacts', () => {
+    describe('when they visit /exercises/:id/edit/contacts', () => {
       it('loads the page', () => {
-        router.push('/exercises/abc123/edit/add-exercise-contacts');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/add-exercise-contacts');
+        router.push('/exercises/abc123/edit/contacts');
+        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/contacts');
       });
     });
 
