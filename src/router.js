@@ -3,11 +3,11 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import AddExerciseContacts from '@/views/AddExerciseContacts';
 import AddExerciseTimeline from '@/views/AddExerciseTimeline';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
 import ExercisesNew from '@/views/Exercises/New';
 import ExercisesEdit from '@/views/Exercises/Edit';
+import ExercisesEditContacts from '@/views/Exercises/Edit/Contacts';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 import ExercisesDetails from '@/views/Exercises/Details';
@@ -58,9 +58,9 @@ const router = new Router({
       },
       children: [
         {
-          path: 'add-exercise-contacts',
-          component: AddExerciseContacts,
-          name: 'add-exercise-contacts',
+          path: 'contacts',
+          component: ExercisesEditContacts,
+          name: 'exercises-edit-contacts',
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Contacts',
