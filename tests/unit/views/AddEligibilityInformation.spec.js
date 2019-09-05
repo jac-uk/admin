@@ -1,4 +1,4 @@
-import AddEligibilityInformation from '@/views/AddEl;AddEligibilityInformation';
+import AddEligibilityInformation from '@/views/AddEligibilityInformation';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 

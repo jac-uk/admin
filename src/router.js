@@ -3,14 +3,16 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import ExerciseNew from '@/views/Exercises/New';
-import ExerciseDetails from '@/views/Exercises/Details';
-import ExerciseEdit from '@/views/Exercises/Edit';
-import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
-import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
-import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
+import AddEligibilityInformation from '@/views/AddEligibilityInformation';
+import AddExerciseContacts from '@/views/AddExerciseContacts';
+import AddExerciseTimeline from '@/views/AddExerciseTimeline';
+import AddShortlistingMethods from '@/views/AddShortlistingMethods';
+import CreateAnExercise from '@/views/CreateAnExercise';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
+import ExerciseDetails from '@/views/ExerciseDetails';
+// form
+import CreateExercise from '@/views/CreateExercise';
 
 Vue.use(Router);
 
@@ -32,59 +34,67 @@ const router = new Router({
       },
     },
     {
-      path: '/exercises/new',
-      name: 'exercise-new',
-      component: ExerciseNew,
+      path: '/exercise/new/',
+      component: CreateExercise,
       meta: {
-        requiresAuth: true,
-        title: 'Create An Exercise',
-      },
-    },
-    {
-      path: '/exercises/:id',
-      name: 'exercise-details',
-      component: ExerciseDetails,
-      meta: {
-        requiresAuth: true,
-        title: 'View exercise details',
-      },
-    },
-    {
-      path: '/exercises/:id/edit',
-      component: ExerciseEdit,
-      meta: {
-        requiresAuth: true,
-        title: 'Edit An Exercise',
+        title: 'Create new exercise',
       },
       children: [
         {
-          path: 'contacts',
-          component: ExerciseEditContacts,
-          name: 'exercise-edit-contacts',
+          path: 'create-an-exercise',
+          component: CreateAnExercise,
+          name: 'create-an-exercise',
+          meta: {
+            requiresAuth: true,
+            title: 'Create An Exercise',
+          },
+        },
+        {
+          path: 'add-exercise-contacts',
+          component: AddExerciseContacts,
+          name: 'add-exercise-contacts',
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Contacts',
           },
         },
         {
-          path: 'shortlisting',
-          component: ExerciseEditShortlisting,
-          name: 'exercise-edit-shortlisting',
+          path: 'add-shortlisting-methods',
+          component: AddShortlistingMethods,
+          name: 'add-shortlisting-methods',
           meta: {
             requiresAuth: true,
             title: 'Add Shortlisting Methods',
           },
         },
         {
-          path: 'timeline',
-          component: ExerciseEditTimeline,
-          name: 'exercise-edit-timeline',
+          path: 'add-exercise-timeline',
+          component: AddExerciseTimeline,
+          name: 'add-exercise-timeline',
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Timeline',
           },
         },
+        {
+          path: 'add-eligibility-information',
+          component: AddEligibilityInformation,
+          name: 'add-eligibility-information',
+          meta: {
+            requiresAuth: true,
+            title: 'Add Eligibility Information',
+          },
+        },
       ],
+    },
+    {
+      path: '/exercise/details',
+      name: 'exerciseDetails',
+      component: ExerciseDetails,
+      meta: {
+        requiresAuth: true,
+        title: 'View exercise details',
+      },
     },
     {
       path: '/sign-in',
