@@ -186,7 +186,6 @@
       <TextField
         id="immediate-start"
         v-model="immediateStart"
-        name="immediate-start"
         label="Immediate start"
         input-class="govuk-input--width-3"
         hint="These are also called Section 87 (S87) vacancies."
@@ -195,7 +194,6 @@
       <TextField
         id="future-start"
         v-model="futureStart"
-        name="future-start"
         label="Future start"
         input-class="govuk-input--width-3"
         hint="These are also called Section 94 (S94) vacancies."
