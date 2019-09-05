@@ -7,11 +7,10 @@ import AddExerciseContacts from '@/views/AddExerciseContacts';
 import AddExerciseTimeline from '@/views/AddExerciseTimeline';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
 import ExercisesNew from '@/views/Exercises/New';
+import ExercisesEdit from '@/views/Exercises/Edit';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 import ExercisesDetails from '@/views/Exercises/Details';
-// form
-import CreateExercise from '@/views/CreateExercise';
 
 Vue.use(Router);
 
@@ -51,10 +50,11 @@ const router = new Router({
       },
     },
     {
-      path: '/exercise/new/',
-      component: CreateExercise,
+      path: '/exercises/:id/edit',
+      component: ExercisesEdit,
       meta: {
-        title: 'Create new exercise',
+        requiresAuth: true,
+        title: 'Edit An Exercise',
       },
       children: [
         {
