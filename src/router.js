@@ -9,7 +9,7 @@ import AddShortlistingMethods from '@/views/AddShortlistingMethods';
 import ExercisesNew from '@/views/Exercises/New';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
-import ExerciseDetails from '@/views/ExerciseDetails';
+import ExercisesDetails from '@/views/Exercises/Details';
 // form
 import CreateExercise from '@/views/CreateExercise';
 
@@ -39,6 +39,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Create An Exercise',
+      },
+    },
+    {
+      path: '/exercises/:id',
+      name: 'exercises-details',
+      component: ExercisesDetails,
+      meta: {
+        requiresAuth: true,
+        title: 'View exercise details',
       },
     },
     {
@@ -76,15 +85,6 @@ const router = new Router({
           },
         },
       ],
-    },
-    {
-      path: '/exercise/details',
-      name: 'exerciseDetails',
-      component: ExerciseDetails,
-      meta: {
-        requiresAuth: true,
-        title: 'View exercise details',
-      },
     },
     {
       path: '/sign-in',
