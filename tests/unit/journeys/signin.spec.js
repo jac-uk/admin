@@ -36,37 +36,44 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/new', () => {
+    describe('when they visit /exercise/new/create-an-exercise', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/new');
+        router.push('/exercise/new/create-an-exercise');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/contacts', () => {
+    describe('when they visit /exercise/new/add-exercise-contacts', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/contacts');
+        router.push('/exercise/new/add-exercise-contacts');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/shortlisting', () => {
+    describe('when they visit /exercise/new/add-shortlisting-methods', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/shortlisting');
+        router.push('/exercise/new/add-shortlisting-methods');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/timeline', () => {
+    describe('when they visit /exercise/new/add-exercise-timeline', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/timeline');
+        router.push('/exercise/new/add-exercise-timeline');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe('when they visit /exercises/:id', () => {
+    describe('when they visit /exercise/new/add-eligibility-information', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123');
+        router.push('/exercise/new/add-eligibility-information');
+        expect(subject.vm.$route.path).toBe('/sign-in');
+      });
+    });
+
+    describe('when they visit /exercise/details', () => {
+      it('redirects to /sign-in page', () => {
+        router.push('/exercise/details');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -99,38 +106,52 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/new', () => {
-      it('loads the page', () => {
-        router.push('/exercises/new');
-        expect(subject.vm.$route.path).toBe('/exercises/new');
+    describe('when going to the new exercise page', () => {
+      it('can access the new exercise page', () => {
+        router.push('/exercise/new');
+        expect(subject.vm.$route.path).toBe('/exercise/new');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/contacts', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/contacts');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/contacts');
+    describe('when going to the create an exercise page', () => {
+      it('can access the new create an exercise page', () => {
+        router.push('/exercise/new/create-an-exercise');
+        expect(subject.vm.$route.path).toBe('/exercise/new/create-an-exercise');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/shortlisting', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/shortlisting');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/shortlisting');
+    describe('when going to the add exercise contacts page', () => {
+      it('can access the new add exercise contacts page', () => {
+        router.push('/exercise/new/add-exercise-contacts');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-exercise-contacts');
       });
     });
 
-    describe('when they visit /exercises/:id/edit/timeline', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/timeline');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/timeline');
+    describe('when going to the add shortlisting methods page', () => {
+      it('can access the new add shortlisting methods page', () => {
+        router.push('/exercise/new/add-shortlisting-methods');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-shortlisting-methods');
       });
     });
 
-    describe('when they visit /exercises/:id', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123');
+    describe('when going to the add exercise timeline page', () => {
+      it('can access the new add exercise timeline page', () => {
+        router.push('/exercise/new/add-exercise-timeline');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-exercise-timeline');
+      });
+    });
+
+    describe('when going to the add eligibility information page', () => {
+      it('can access the new add eligiility information page', () => {
+        router.push('/exercise/new/add-eligibility-information');
+        expect(subject.vm.$route.path).toBe('/exercise/new/add-eligibility-information');
+      });
+    });
+
+    describe('when going to the exercise details page', () => {
+      it('can access the exercise details page', () => {
+        router.push('/exercise/details');
+        expect(subject.vm.$route.path).toBe('/exercise/details');
       });
     });
   });

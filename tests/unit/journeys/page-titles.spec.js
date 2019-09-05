@@ -61,77 +61,121 @@ describe('Page titles', () => {
     });
   });
 
-  describe('/exercises/new', () => {
+  describe('New Exercise Page', () => {
+
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/new');
+    });
+
+    it('sets title as Create new exercise', () => {
+      router.push('/exercise/new');
+      expect(document.title).toContain('Create new exercise');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
+  describe('CreateAnExercise', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
     });
 
     it('sets title as Create An Exercise', () => {
+      router.push('/exercise/new/create-an-exercise');
       expect(document.title).toContain('Create An Exercise');
     });
 
     it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/create-an-exercise');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 
-  describe('/exercises/:id/edit/contacts', () => {
+  describe('AddExerciseContacts', () => {
+
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/contacts');
     });
 
     it('sets title as Add Exercise Contacts', () => {
-      expect(document.title).toContain('Add Exercise Contacts');
+      router.push('/exercise/new/create-an-exercise');
+      expect(document.title).toContain('Create An Exercise');
     });
 
     it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-exercise-contacts');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 
-  describe('/exercises/:id/edit/shortlisting', () => {
+  describe('AddShortlistingMethods', () => {
+
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/shortlisting');
     });
 
-    it('sets title as Add Exercise Contacts', () => {
+    it('sets title as Add Shortlisting Methods', () => {
+      router.push('/exercise/new/add-shortlisting-methods');
       expect(document.title).toContain('Add Shortlisting Methods');
     });
 
     it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-shortlisting-methods');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 
-  describe('/exercises/:id/edit/timeline', () => {
+  describe('AddExerciseTimeline', () => {
+
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/timeline');
     });
 
-    it('sets title as Add Exercise Contacts', () => {
+    it('sets title as Add Exercise Timeline', () => {
+      router.push('/exercise/new/add-exercise-timeline');
       expect(document.title).toContain('Add Exercise Timeline');
     });
 
     it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-exercise-timeline');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
 
-  describe('/exercises/:id', () => {
+  describe('AddEligibilityInformation', () => {
+
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123');
+    });
+
+    it('sets title as Add Eligibility Information', () => {
+      router.push('/exercise/new/add-eligibility-information');
+      expect(document.title).toContain('Add Eligibility Information');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/new/add-eligibility-information');
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
+  describe('Exercise Details', () => {
+
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
     });
 
     it('sets title as About The Selection Process', () => {
+      router.push('/exercise/details');
       expect(document.title).toContain('View exercise details');
     });
 
     it('contains Judicial Appointments Commission', () => {
+      router.push('/exercise/details');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
