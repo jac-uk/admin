@@ -145,19 +145,17 @@ describe('Page titles', () => {
     });
   });
 
-  describe('Exercise Details', () => {
-
+  describe('/exercises/:id', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
+      router.push('/exercises/abc123');
     });
 
     it('sets title as About The Selection Process', () => {
-      router.push('/exercise/details');
       expect(document.title).toContain('View exercise details');
     });
 
     it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/details');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });
