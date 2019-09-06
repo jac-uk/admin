@@ -301,7 +301,7 @@
       <button
         ref="linkToAddEligibilityInformation"
         class="govuk-button"
-        @click="$router.push('add-eligibility-information')"
+        @click="$router.push({ name: 'exercise-edit-eligibility', params: { id: 'example' } })"
       >
         Save and continue
       </button>

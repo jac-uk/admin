@@ -121,8 +121,6 @@ describe('Page titles', () => {
     });
   });
 
-  describe('AboutTheVacancy', () => {
-
   describe('/exercises/:id/edit/eligibility', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
@@ -131,6 +129,21 @@ describe('Page titles', () => {
 
     it('sets title as Add Eligibility Information', () => {
       expect(document.title).toContain('Add Eligibility Information');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
+  describe('/exercises/:id/edit/about', () => {
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+      router.push('/exercises/abc123/edit/about');
+    });
+
+    it('sets title as About The Vacancy', () => {
+      expect(document.title).toContain('About The Vacancy');
     });
 
     it('contains Judicial Appointments Commission', () => {
