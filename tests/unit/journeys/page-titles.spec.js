@@ -97,7 +97,7 @@ describe('Page titles', () => {
       router.push('/exercises/abc123/edit/shortlisting');
     });
 
-    it('sets title as Add Exercise Contacts', () => {
+    it('sets title as Add Shortlisting Methods', () => {
       expect(document.title).toContain('Add Shortlisting Methods');
     });
 
@@ -112,8 +112,23 @@ describe('Page titles', () => {
       router.push('/exercises/abc123/edit/timeline');
     });
 
-    it('sets title as Add Exercise Contacts', () => {
+    it('sets title as Add Exercise Timeline', () => {
       expect(document.title).toContain('Add Exercise Timeline');
+    });
+
+    it('contains Judicial Appointments Commission', () => {
+      expect(document.title).toContain('Judicial Appointments Commission');
+    });
+  });
+
+  describe('/exercises/:id/edit/eligibility', () => {
+    beforeEach(() => {
+      store.dispatch('setCurrentUser', user);
+      router.push('/exercises/abc123/edit/eligibility');
+    });
+
+    it('sets title as Add Eligibility Information', () => {
+      expect(document.title).toContain('Add Eligibility Information');
     });
 
     it('contains Judicial Appointments Commission', () => {
