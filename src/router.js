@@ -3,14 +3,14 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import AddExerciseTimeline from '@/views/AddExerciseTimeline';
-import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExercisesNew from '@/views/Exercises/New';
+import ExercisesDetails from '@/views/Exercises/Details';
 import ExercisesEdit from '@/views/Exercises/Edit';
 import ExercisesEditContacts from '@/views/Exercises/Edit/Contacts';
+import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
+import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
-import ExercisesDetails from '@/views/Exercises/Details';
 
 Vue.use(Router);
 
@@ -76,9 +76,9 @@ const router = new Router({
           },
         },
         {
-          path: 'add-exercise-timeline',
-          component: AddExerciseTimeline,
-          name: 'add-exercise-timeline',
+          path: 'timeline',
+          component: ExerciseEditTimeline,
+          name: 'exercise-edit-timeline',
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Timeline',
