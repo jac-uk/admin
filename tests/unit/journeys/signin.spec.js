@@ -50,9 +50,9 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/add-shortlisting-methods', () => {
+    describe('when they visit /exercises/:id/edit/shortlisting', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/add-shortlisting-methods');
+        router.push('/exercises/abc123/edit/shortlisting');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -113,10 +113,10 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/add-shortlisting-methods', () => {
+    describe('when they visit /exercises/:id/edit/shortlisting', () => {
       it('loads the page', () => {
-        router.push('/exercises/abc123/edit/add-shortlisting-methods');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/add-shortlisting-methods');
+        router.push('/exercises/abc123/edit/shortlisting');
+        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/shortlisting');
       });
     });
 
