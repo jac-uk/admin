@@ -41,7 +41,7 @@ describe('views/Dashboard', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    it('contains the link to New Exercise page', () => {
+    it('contains the link to ExerciseNew Exercise page', () => {
       expect(wrapper.find({ ref: 'linkToNewExercise' }).isVisible()).toBe(true);
     });
 

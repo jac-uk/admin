@@ -1,4 +1,4 @@
-import ExercisesDetails from '@/views/Exercises/Details';
+import ExerciseDetails from '@/views/Exercises/Details';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 
@@ -7,7 +7,7 @@ localVue.use(Router);
 
 describe('views/Exercises/Details', () => {
   it('renders the component', () => {
-    let wrapper = shallowMount(ExercisesDetails, {
+    let wrapper = shallowMount(ExerciseDetails, {
       localVue,
     });
     
@@ -16,7 +16,7 @@ describe('views/Exercises/Details', () => {
 
   describe('Accessibility:', () => {
     it('page contains h1 element', () => {
-      let wrapper = shallowMount(ExercisesDetails, {
+      let wrapper = shallowMount(ExerciseDetails, {
         localVue,
       });
 

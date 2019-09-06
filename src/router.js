@@ -3,10 +3,10 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import ExercisesNew from '@/views/Exercises/New';
-import ExercisesDetails from '@/views/Exercises/Details';
-import ExercisesEdit from '@/views/Exercises/Edit';
-import ExercisesEditContacts from '@/views/Exercises/Edit/Contacts';
+import ExerciseNew from '@/views/Exercises/New';
+import ExerciseDetails from '@/views/Exercises/Details';
+import ExerciseEdit from '@/views/Exercises/Edit';
+import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import Dashboard from '@/views/Dashboard';
@@ -33,8 +33,8 @@ const router = new Router({
     },
     {
       path: '/exercises/new',
-      name: 'exercises-new',
-      component: ExercisesNew,
+      name: 'exercise-new',
+      component: ExerciseNew,
       meta: {
         requiresAuth: true,
         title: 'Create An Exercise',
@@ -42,8 +42,8 @@ const router = new Router({
     },
     {
       path: '/exercises/:id',
-      name: 'exercises-details',
-      component: ExercisesDetails,
+      name: 'exercise-details',
+      component: ExerciseDetails,
       meta: {
         requiresAuth: true,
         title: 'View exercise details',
@@ -51,7 +51,7 @@ const router = new Router({
     },
     {
       path: '/exercises/:id/edit',
-      component: ExercisesEdit,
+      component: ExerciseEdit,
       meta: {
         requiresAuth: true,
         title: 'Edit An Exercise',
@@ -59,8 +59,8 @@ const router = new Router({
       children: [
         {
           path: 'contacts',
-          component: ExercisesEditContacts,
-          name: 'exercises-edit-contacts',
+          component: ExerciseEditContacts,
+          name: 'exercise-edit-contacts',
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Contacts',

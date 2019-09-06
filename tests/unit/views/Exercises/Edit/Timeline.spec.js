@@ -5,7 +5,7 @@ import Router from 'vue-router';
 const localVue = createLocalVue();
 localVue.use(Router);
 
-describe('ExerciseEditTimeline', () => {
+describe('views/Exercises/Edit/Timeline', () => {
   it('renders the view', () => {
     let wrapper = shallowMount(ExerciseEditTimeline, {
       localVue,
