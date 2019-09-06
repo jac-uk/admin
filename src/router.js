@@ -9,6 +9,7 @@ import ExerciseEdit from '@/views/Exercises/Edit';
 import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
+import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -82,6 +83,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Add Exercise Timeline',
+          },
+        },
+        {
+          path: 'eligibility',
+          component: ExerciseEditEligibility,
+          name: 'exercise-edit-eligibility',
+          meta: {
+            requiresAuth: true,
+            title: 'Add Eligibility Information',
           },
         },
       ],
