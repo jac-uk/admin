@@ -64,9 +64,9 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercise/new/add-eligibility-information', () => {
+    describe('when they visit /exercises/:id/edit/eligibility', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercise/new/add-eligibility-information');
+        router.push('/exercises/abc123/edit/eligibility');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -141,10 +141,10 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when going to the add eligibility information page', () => {
-      it('can access the new add eligiility information page', () => {
-        router.push('/exercise/new/add-eligibility-information');
-        expect(subject.vm.$route.path).toBe('/exercise/new/add-eligibility-information');
+    describe('when they visit /exercises/:id/edit/eligibility', () => {
+      it('loads the page', () => {
+        router.push('/exercises/abc123/edit/eligibility');
+        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/eligibility');
       });
     });
 

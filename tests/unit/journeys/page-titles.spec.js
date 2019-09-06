@@ -146,19 +146,19 @@ describe('Page titles', () => {
     });
   });
 
-  describe('AddEligibilityInformation', () => {
+  describe('/exercises/:id/edit/eligibility', () => {
 
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
     });
 
     it('sets title as Add Eligibility Information', () => {
-      router.push('/exercise/new/add-eligibility-information');
+      router.push('/exercises/abc123/edit/eligibility');
       expect(document.title).toContain('Add Eligibility Information');
     });
 
     it('contains Judicial Appointments Commission', () => {
-      router.push('/exercise/new/add-eligibility-information');
+      router.push('/exercises/abc123/edit/eligibility');
       expect(document.title).toContain('Judicial Appointments Commission');
     });
   });

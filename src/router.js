@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import store from '@/store';
 
 // Views
-import AddEligibilityInformation from '@/views/AddEligibilityInformation';
+import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import AddExerciseContacts from '@/views/AddExerciseContacts';
 import AddExerciseTimeline from '@/views/AddExerciseTimeline';
 import AddShortlistingMethods from '@/views/AddShortlistingMethods';
@@ -77,9 +77,9 @@ const router = new Router({
           },
         },
         {
-          path: 'add-eligibility-information',
-          component: AddEligibilityInformation,
-          name: 'add-eligibility-information',
+          path: 'eligibility',
+          component: ExerciseEditEligibility,
+          name: 'exercise-edit-eligibility',
           meta: {
             requiresAuth: true,
             title: 'Add Eligibility Information',

@@ -1,20 +1,20 @@
-import AddEligibilityInformation from '@/views/AddEligibilityInformation';
+import ExerciseEligibility from '@/views/Exercises/Edit/Eligibility';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 
 const localVue = createLocalVue();
 localVue.use(Router);
 
-describe('AddEligibilityInformation', () => {
+describe('Exercise/Edit/Eligibility', () => {
   it('renders the view', () => {
-    let wrapper = shallowMount(AddEligibilityInformation, {
+    let wrapper = shallowMount(ExerciseEligibility, {
       localVue,
     });
 
     expect(wrapper.exists()).toBe(true);
   });
   it('contains the link to Details page', () => {
-    let wrapper = shallowMount(AddEligibilityInformation, {
+    let wrapper = shallowMount(ExerciseEligibility, {
       localVue,
     });
     expect(wrapper.find({ ref: 'linkToDetails' }).isVisible()).toBe(true);
@@ -23,7 +23,7 @@ describe('AddEligibilityInformation', () => {
 
 describe('Accessibility:', () => {
   it('page contains h1 element', () => {
-    let wrapper = shallowMount(AddEligibilityInformation, {
+    let wrapper = shallowMount(ExerciseEligibility, {
       localVue,
     });
 
