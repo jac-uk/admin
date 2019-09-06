@@ -10,6 +10,7 @@ import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
+import ExerciseEditAbout from '@/views/Exercises/Edit/About';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -92,6 +93,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Add Eligibility Information',
+          },
+        },
+        {
+          path: 'about',
+          component: ExerciseEditAbout,
+          name: 'exercise-edit-about',
+          meta: {
+            requiresAuth: true,
+            title: 'About The Vacancy',
           },
         },
       ],
