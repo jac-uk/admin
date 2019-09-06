@@ -54,7 +54,7 @@
       <button
         ref="linkToAddExerciseTimeline"
         class="govuk-button"
-        @click="$router.push('add-exercise-timeline')"
+        @click="$router.push({ name: 'exercise-edit-timeline', params: { id: 'example' } })"
       >
         Save and continue
       </button>

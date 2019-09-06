@@ -145,7 +145,7 @@
       <button
         ref="linkToAddShortlistingMethods"
         class="govuk-button"
-        @click="$router.push('add-shortlisting-methods')"
+        @click="$router.push({ name: 'exercise-edit-shortlisting', params: { id: 'example' } })"
       >
         Save and continue
       </button>
