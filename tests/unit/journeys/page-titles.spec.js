@@ -106,10 +106,10 @@ describe('Page titles', () => {
     });
   });
 
-  describe('/exercises/:id/edit/add-exercise-timeline', () => {
+  describe('/exercises/:id/edit/timeline', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/add-exercise-timeline');
+      router.push('/exercises/abc123/edit/timeline');
     });
 
     it('sets title as Add Exercise Contacts', () => {
