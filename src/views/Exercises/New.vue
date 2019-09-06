@@ -69,7 +69,7 @@
       <button
         ref="linkToAddExerciseContacts"
         class="govuk-button"
-        @click="$router.push('add-exercise-contacts')"
+        @click="$router.push({ name: 'exercise-edit-contacts', params: { id: 'example' } })"
       >
         Save and continue
       </button>
