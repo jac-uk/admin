@@ -91,10 +91,10 @@ describe('Page titles', () => {
     });
   });
 
-  describe('/exercises/:id/edit/add-shortlisting-methods', () => {
+  describe('/exercises/:id/edit/shortlisting', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/add-shortlisting-methods');
+      router.push('/exercises/abc123/edit/shortlisting');
     });
 
     it('sets title as Add Exercise Contacts', () => {
