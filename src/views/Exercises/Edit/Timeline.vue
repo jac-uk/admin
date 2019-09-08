@@ -68,24 +68,11 @@
       <h2 class="govuk-heading-l">
         Selection day dates
       </h2>
-      <DateInput
-        id="selection-day-start"
-        v-model="selectionDayStart"
-        label="Selection day start"
+
+      <RepeatableFields
+        v-model="selectionDays"
+        :component="repeatableFields.SelectionDay"
       />
-      <DateInput
-        id="selection-day-end"
-        v-model="selectionDayEnd"
-        label="Selection day end"
-      />
-      <p class="govuk_body">
-        <a
-          href="#"
-          class="govuk-link"
-        >
-          Add another
-        </a>
-      </p>
 
       <h2 class="govuk-heading-l">
         Final selection dates
@@ -131,11 +118,14 @@
 <script>
 import DateInput from '@/components/Form/DateInput';
 import TimeInput from '@/components/Form/TimeInput';
+import RepeatableFields from '@/components/RepeatableFields';
+import SelectionDay from '@/components/RepeatableFields/SelectionDay';
 
 export default {
   components: {
     DateInput,
     TimeInput,
+    RepeatableFields,
   },
   data(){
     return {
@@ -151,6 +141,10 @@ export default {
       characterChecks: null,
       statutoryConsultation: null,
       selectionProcessOutcome: null,
+      selectionDays: [],
+      repeatableFields: {
+        SelectionDay,
+      },
     };
   },
 };
