@@ -24,6 +24,7 @@
         id="exercise-mailbox"
         v-model="exerciseMailbox"
         label="Exercise mailbox"
+        type="email"
       />
 
       <TextField
@@ -100,7 +101,7 @@
         >
           <TextField
             id="other-text-input"
-            v-model="otherText"
+            v-model="otherAppropriateAuthority"
             label="Name of the appropriate authority"
           />
         </CheckboxItem>
@@ -180,7 +181,7 @@ export default {
       selectionExerciseOfficer: null,
       assignedCommissioner: null,
       appropriateAuthority: [],
-      otherText: null,
+      otherAppropriateAuthority: null,
       hmctsWelshGovLead: null,
       judicialOfficeContact: null,
       leadJudge: null,
