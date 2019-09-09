@@ -47,7 +47,6 @@ describe('views/Exercises/New', () => {
       beforeEach(() => {
         wrapper.setData({
           exerciseName: 'Example exercise title',
-          exerciseType: 'legal',
         });
         wrapper.vm.save();
       });
@@ -61,7 +60,6 @@ describe('views/Exercises/New', () => {
       it('with the expected save payload', () => {
         const expectedPayload = {
           name: 'Example exercise title',
-          type: 'legal',
         };
         const dispatchedPayload = mockStore.dispatch.mock.calls[0][1];
         expect(dispatchedPayload).toEqual(expectedPayload);
