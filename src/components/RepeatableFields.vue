@@ -42,6 +42,7 @@ export default {
     },
     component: {
       required: true,
+      type: Object,
     },
     max: {
       required: false,
