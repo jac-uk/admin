@@ -1,6 +1,13 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <a
+        ref="BackLinkToCreateAnExercise"
+        class="govuk-back-link"
+        @click="$router.push('exercise-new')"
+      >
+        Back
+      </a>
       <h1 class="govuk-heading-xl">
         Add exercise contacts
       </h1>
