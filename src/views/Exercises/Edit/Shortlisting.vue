@@ -1,6 +1,14 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <a
+        ref="BackLinkToAddExerciseContacts"
+        class="govuk-back-link"
+        @click="$router.push('exercise-edit-contacts')"
+      >
+        Back
+      </a>
+
       <h1 class="govuk-heading-xl">
         Add shortlisting methods
       </h1>
@@ -15,15 +23,19 @@
       >
         <CheckboxItem
           value="situational-judgement-test"
-          label="Situational judgement test"
+          label="Situational judgement qualifying test (QT)"
         />
         <CheckboxItem
           value="critical-analysis-test"
-          label="Critical analysis test"
+          label="Critical analysis qualifying test (QT)"
         />
         <CheckboxItem
           value="scenario-test"
-          label="Scenario test"
+          label="Scenario test qualifying test (QT)"
+        />
+        <CheckboxItem
+          value="name-blind-paper-sift"
+          label="Name blind paper sift"
         />
         <CheckboxItem
           value="paper-sift"
@@ -39,15 +51,15 @@
         >
           <TextField
             id="other-text-input"
-            v-model="otherText"
-            name="other-text-input"
+            v-model="otherShortlistingMethod"
             label="Add method"
           />
           <p class="govuk_body">
             <a
-              href="#"
               class="govuk-link"
-            >Add another</a>
+            >
+              Add another
+            </a>
           </p>
         </CheckboxItem>
       </CheckboxGroup>
@@ -76,7 +88,7 @@ export default {
   data(){
     return {
       shortlistingMethods: [],
-      otherText: '',
+      otherShortlistingMethod: null,
     };
   },
 };
