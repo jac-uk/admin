@@ -12,6 +12,7 @@
       >
         <template slot="removeButton">
           <button
+            type="button"
             class="govuk-link govuk-link-delete"
             @click.prevent="removeRow(index)"
           >
@@ -23,6 +24,7 @@
     <div class="text-right">
       <button
         v-if="canAddRow"
+        type="button"
         class="govuk-link"
         @click.prevent="addRow"
       >
@@ -97,6 +99,7 @@ export default {
     color: #1d70b8;
     font-size: 1em;
     text-decoration: underline;
+    cursor: pointer;
   }
 
   button.govuk-link.govuk-link-delete {
