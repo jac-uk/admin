@@ -4,16 +4,17 @@
       v-for="(row, index) in rows"
       :key="index"
       ref="repeatableField"
+      class="repeatableField"
     >
       <component
         :is="component"
         :row="row"
         :index="index"
       >
-        <template slot="removeButton">
+        <template v-slot:removeButton>
           <button
             type="button"
-            class="govuk-link govuk-link-delete"
+            class="govuk-link govuk-link-delete govuk-!-margin-bottom-4"
             @click.prevent="removeRow(index)"
           >
             Remove
@@ -21,16 +22,14 @@
         </template>
       </component>
     </div>
-    <div class="text-right">
-      <button
-        v-if="canAddRow"
-        type="button"
-        class="govuk-link"
-        @click.prevent="addRow"
-      >
-        Add another
-      </button>
-    </div>
+    <button
+      v-if="canAddRow"
+      type="button"
+      class="govuk-link govuk-!-margin-bottom-6"
+      @click.prevent="addRow"
+    >
+      Add another
+    </button>
   </div>
 </template>
 
@@ -104,5 +103,9 @@ export default {
 
   button.govuk-link.govuk-link-delete {
     color: red;
+  }
+
+  .repeatableField .govuk-form-group {
+    margin-bottom: 1em;
   }
 </style>
