@@ -7,7 +7,7 @@ const createTestSubject = (props) => {
   return shallowMount(RepeatableFields, {
     propsData: {
       value: null,
-      component: '',
+      component: TextField,
       ...props,
     },
   });
@@ -28,6 +28,10 @@ describe('components/RepeatableFields', () => {
 
       it('is required', () => {
         expect(prop.required).toBe(true);
+      });
+
+      it('has type Object', () => {
+        expect(prop.type).toBe(Object);
       });
     });
 
@@ -91,7 +95,7 @@ describe('components/RepeatableFields', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = createTestSubject({ component: TextField });
+      wrapper = createTestSubject();
     });
 
     it('renders child component', () => {
@@ -107,7 +111,7 @@ describe('components/RepeatableFields', () => {
 
       describe('when value is an instance of an array', () => {
         let array = [1, 2, 3];
-        let wrapper = createTestSubject({ component: TextField,  value: array });
+        let wrapper = createTestSubject({ value: array });
 
         it('renders number of components equal to the length of the array', () => {
           expect(wrapper.findAll(TextField)).toHaveLength(3);
