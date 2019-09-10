@@ -11,30 +11,50 @@ const repeatableTextFields = [
   ['StatutoryConsultee', StatutoryConsultee],
 ];
 
-describe('RepeatableTextFields', () => {
-  it.each(repeatableTextFields)('renders TextField component for %s', (label, component) => {
-    const wrapper = shallowMount(component, {
-      propsData: {
-        row: {},
-        index: 1,
-      },
-    });
-    expect(wrapper.find(TextField).exists()).toBe(true);
-  });
-
-  describe('props', () => {
-    it.each(repeatableTextFields)('%s: row is required and has a type object', (label, component) => {
-      let prop = component.props.row;
-    
-      expect(prop.required).toBe(true);
-      expect(prop.type).toBe(Object);
+describe('Repeatable text fields', () => {
+  describe.each(repeatableTextFields)('@/components/RepeatableFields/%s', (label, component) => {
+    it('renders TextField component', () => {
+      const wrapper = shallowMount(component, {
+        propsData: {
+          row: {},
+          index: 1,
+        },
+      });
+      expect(wrapper.find(TextField).exists()).toBe(true);
     });
 
-    it.each(repeatableTextFields)('%s: index is required and has a type number', (label, component) => {
-      let prop = component.props.index;
-    
-      expect(prop.required).toBe(true);
-      expect(prop.type).toBe(Number);
+    describe('props', () => {
+      describe('row', () => {
+        let prop;
+
+        beforeEach(() => {
+          prop = component.props.row;
+        });
+
+        it('is required', () => {
+          expect(prop.required).toBe(true);
+        });
+
+        it('has a type object', () => {
+          expect(prop.type).toBe(Object);
+        });
+      });
+      
+      describe('index', () => {
+        let prop;
+        
+        beforeEach(() => {
+          prop = component.props.index;
+        });
+
+        it('is required', () => {
+          expect(prop.required).toBe(true);
+        });
+
+        it('has a type number', () => {
+          expect(prop.type).toBe(Number);
+        });
+      });
     });
   });
 });
