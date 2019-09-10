@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import LoadingMessage from '@/components/LoadingMessage';
 
 describe('components/LoadingMessage', () => {
