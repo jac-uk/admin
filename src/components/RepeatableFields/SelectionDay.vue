@@ -10,17 +10,25 @@
       v-model="row.selectionDayEnd"
       label="Selection day end"
     />
+    <TextField
+      :id="selectionDayIdLocation"
+      v-model="row.selectionDayLocation"
+      label="Location"
+    />
+
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
 import DateInput from '@/components/Form/DateInput';
+import TextField from '@/components/Form/TextField';
 
 export default {
   name: 'SelectionDay',
   components: {
     DateInput,
+    TextField,
   },
   props: {
     row: {
@@ -38,6 +46,9 @@ export default {
     },
     selectionDayIdEnd() {
       return `selection_end_${this.index}`;
+    },
+    selectionDayIdLocation() {
+      return `selection_location_${this.index}`;
     },
   },
 };
