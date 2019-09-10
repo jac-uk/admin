@@ -13,10 +13,7 @@
           Create an exercise
         </h1>
 
-        <label
-          for="ref-number"
-          class="govuk-heading-m"
-        >
+        <label class="govuk-heading-m">
           Reference number
         </label>
         <span class="govuk-hint">
