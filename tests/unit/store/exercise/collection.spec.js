@@ -1,5 +1,6 @@
 import exerciseCollection from '@/store/exercise/collection';
 import { firestore } from '@/firebase';
+import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 
 jest.mock('@/firebase', () => {
   const firebase = require('firebase-mock');
@@ -15,12 +16,26 @@ describe('store/exercise/collection', () => {
     const actions = exerciseCollection.actions;
 
     describe('bind', () => {
-      it('binds key `records` to the Firestore collection `exercises` ordered by `openAt` descending', () => {
-        const callToBindFirestoreRef = actions.bind();
-        const keyInState = callToBindFirestoreRef[0];
-        const firestoreRef = callToBindFirestoreRef[1];
-        expect(keyInState).toEqual('records');
-        expect(firestoreRef).toEqual(firestore.collection('exercises').orderBy('openAt', 'desc'));
+      describe('binds using vuexfire bindFirestoreRef()', () => {
+        let callToBindFirestoreRef;
+        beforeEach(() => {
+          callToBindFirestoreRef = actions.bind();
+        });
+
+        it('binds to `records` key in the state', () => {
+          const keyInState = callToBindFirestoreRef[0];
+          expect(keyInState).toEqual('records');
+        });
+
+        it('binds the `/exercises` collection', () => {
+          const firestoreRef = callToBindFirestoreRef[1];
+          expect(firestoreRef).toEqual(firestore.collection('exercises'));
+        });
+
+        it('serializes document data with `vuexfireSerialize` helper', () => {
+          const options = callToBindFirestoreRef[2];
+          expect(options.serialize).toBe(vuexfireSerialize);
+        });
       });
     });
 
