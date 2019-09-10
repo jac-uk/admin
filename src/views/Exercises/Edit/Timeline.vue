@@ -46,9 +46,9 @@
         Shortlisting dates
       </h2>
 
-      <h2 class="govuk-heading-m">
+      <h3 class="govuk-heading-m">
         Situational judgement qualifying test (QT), Critical analysis qualifying test (QT)
-      </h2>
+      </h3>
       <DateInput
         id="test-date"
         v-model="sjcaTestDate"
@@ -71,9 +71,9 @@
         type="month"
       />
 
-      <h2 class="govuk-heading-m">
+      <h3 class="govuk-heading-m">
         Scenario test qualifying test (QT)
-      </h2>
+      </h3>
       <DateInput
         id="scenario-test-date"
         v-model="scenarioTestDate"
