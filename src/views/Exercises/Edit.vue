@@ -1,9 +1,40 @@
 <template>
   <div>
-    <RouterView />
+    <LoadingMessage
+      v-if="loaded === false"
+      ref="loadingMessageComponent"
+      :load-failed="loadFailed"
+    />
+    <div 
+      v-else
+    >
+      <RouterView />
+    </div>
+
   </div>
 </template>
 
 <script>
-export default {};
+import LoadingMessage from '@/components/LoadingMessage';
+export default {
+  data() {
+    return {
+      loaded: false,
+      loadFailed: false,
+    }
+  },
+  components: {
+    LoadingMessage
+  },
+  mounted() {
+    const id = this.$route.params.id;
+    
+    this.$store.dispatch('exerciseDocument/bind', id)
+    .then(() => {
+      this.loaded = true;
+    }).catch(() => {
+      this.loadFailed = true;
+    });
+  }
+};
 </script>
