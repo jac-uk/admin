@@ -4,7 +4,6 @@
       <h1 class="govuk-heading-xl">
         Add exercise timeline
       </h1>
-
       <p class="govuk-body-l">
         You can return to this page later to add or change dates.
       </p>
@@ -36,33 +35,68 @@
       />
 
       <h2 class="govuk-heading-l">
-        Situational judgment test, Critical analysis test
+        Shortlisting dates
+      </h2>
+
+      <h2 class="govuk-heading-m">
+        Situational judgement qualifying test (QT), Critical analysis qualifying test (QT)
       </h2>
       <DateInput
-        id="test-open-date"
-        v-model="testOpenDate"
-        hint="For example, 31 05 2020"
-        label="Test open date"
+        id="test-date"
+        v-model="sjcaTestDate"
+        label="Test date"
       />
       <TimeInput
-        id="test-open-time"
-        v-model="testOpenTime"
-        label="Test open time"
+        id="test-start-time"
+        v-model="sjcaTestStartTime"
+        label="Start time"
+      />
+      <TimeInput
+        id="test-end-time"
+        v-model="sjcaTestEndTime"
+        label="End time"
       />
       <DateInput
         id="test-outcome"
-        v-model="testOutcome"
-        label="Test outcome"
+        v-model="sjcaTestOutcome"
+        label="Outcome to candidates"
+        type="month"
+      />
+
+      <h2 class="govuk-heading-m">
+        Scenario test qualifying test (QT)
+      </h2>
+      <DateInput
+        id="scenario-test-date"
+        v-model="scenarioTestDate"
+        label="Test date"
+      />
+      <TimeInput
+        id="scenario-test-start-time"
+        v-model="scenarioTestStartTime"
+        label="Start time"
+      />
+      <TimeInput
+        id="test-end-time"
+        v-model="scenarioTestEndTime"
+        label="End time"
+      />
+      <DateInput
+        id="test-outcome"
+        v-model="scenarioTestOutcome"
+        label="Outcome to candidates"
         type="month"
       />
 
       <h2 class="govuk-heading-l">
-        Independent assessment dates
+        Independent assessors
       </h2>
+
       <DateInput
         id="contact-independent-assessors"
         v-model="contactIndependentAssessors"
         label="Contact independent assessors"
+        hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
       />
 
       <h2 class="govuk-heading-l">
@@ -75,14 +109,9 @@
       />
 
       <h2 class="govuk-heading-l">
-        Final selection dates
+        Candidate checks
       </h2>
-      <DateInput
-        id="eligibility-checks"
-        v-model="eligibilityChecks"
-        label="Eligibility checks"
-        type="month"
-      />
+
       <DateInput
         id="character-checks"
         v-model="characterChecks"
@@ -95,11 +124,15 @@
         label="Statutory consultation"
         type="month"
       />
+
+      <h2 class="govuk-heading-l">
+        Final outcome
+      </h2>
+
       <DateInput
-        id="selection-process-outcome"
-        v-model="selectionProcessOutcome"
-        label="Selection process outcome"
-        hint="This is when we expect to inform candidates."
+        id="final-outcome"
+        v-model="finalOutcome"
+        label="Final outcome"
         type="month"
       />
 
@@ -131,16 +164,20 @@ export default {
     return {
       applicationOpenDate: null,
       applicationCloseDate: null,
-      testOpenDate: null,
-      testOpenTime: null,
-      testOutcome: null,
+      sjcaTestDate: null,
+      sjcaTestStartTime: null,
+      sjcaTestEndTime: null,
+      sjcaTestOutcome: null,
+      scenarioTestDate: null,
+      scenarioTestStartTime: null,
+      scenarioTestEndTime: null,
+      scenarioTestOutcome: null,
       contactIndependentAssessors: null,
       selectionDayStart: null,
       selectionDayEnd: null,
-      eligibilityChecks: null,
       characterChecks: null,
       statutoryConsultation: null,
-      selectionProcessOutcome: null,
+      finalOutcome: null,
       selectionDays: [],
       repeatableFields: {
         SelectionDay,
