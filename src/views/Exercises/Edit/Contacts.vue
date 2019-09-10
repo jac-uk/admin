@@ -127,29 +127,16 @@
         label="Lead judge"
       />
 
-      <TextField
-        id="drafting-judge"
+      <RepeatableFields
         v-model="draftingJudge"
-        name="drafting-judge"
-        label="Drafting judge"
+        :component="repeatableFields.DraftingJudge"
       />
-      <p class="govuk_body">
-        <a
-          class="govuk-link"
-        >Add another</a>
-      </p>
-
-      <TextField
-        id="statutory-consultee"
+    
+      <RepeatableFields
         v-model="statutoryConsultee"
-        label="Statutory consultee"
+        :component="repeatableFields.StatutoryConsultee"
       />
 
-      <p class="govuk_body">
-        <a
-          class="govuk-link"
-        >Add another</a>
-      </p>
 
       <button
         ref="linkToAddShortlistingMethods"
@@ -166,12 +153,16 @@
 import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
+import RepeatableFields from '@/components/RepeatableFields';
+import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
+import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 
 export default {
   components: {
     TextField,
     CheckboxGroup,
     CheckboxItem,
+    RepeatableFields,
   },
   data(){
     return {
@@ -187,6 +178,10 @@ export default {
       leadJudge: null,
       draftingJudge: null,
       statutoryConsultee: null,
+      repeatableFields: {
+        DraftingJudge,
+        StatutoryConsultee,
+      },
     };
   },
 };
