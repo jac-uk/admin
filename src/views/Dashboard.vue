@@ -26,15 +26,15 @@
       <div class="govuk-grid-column-full">
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
           <div 
-            v-for="vacancy in records"
-            :key="vacancy.reference"
+            v-for="exercise in records"
+            :key="exercise.id"
             class="govuk-summary-list__row"
           >
             <dt class="govuk-summary-list__key">
-              <a href="detail">{{ vacancy.reference }}</a>
+              <a href="detail">{{ exercise.reference }}</a>
             </dt>
             <dd class="govuk-summary-list__value">
-              <a href="detail">{{ vacancy.title }}</a>
+              <a href="detail">{{ exercise.name }}</a>
             </dd>
           </div>
         </dl>
