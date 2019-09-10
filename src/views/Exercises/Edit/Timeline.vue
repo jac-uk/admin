@@ -1,6 +1,14 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      <a
+        ref="BackLinkToAddShortlistingMethods"
+        class="govuk-back-link"
+        @click="$router.push({ name: 'exercise-edit-shortlisting', params: { id: 'example' } })"
+      >
+        Back
+      </a>
+
       <h1 class="govuk-heading-xl">
         Add exercise timeline
       </h1>
@@ -140,7 +148,7 @@
       <button
         ref="linkToAboutTheVacancy"
         class="govuk-button"
-        @click="$router.push('about-the-vacancy')"
+        @click="$router.push({ name: 'exercise-edit-about', params: { id: 'example' } })"
       >
         Save and continue
       </button>
