@@ -112,21 +112,12 @@
           value="fee-paid"
           label="Fee paid"
         >
-          <div class="govuk-form-group">
-            <label
-              class="govuk-label"
-              for="fee-paid-salary-input"
-            >
-              Fee
-            </label>
-            <span class="moj-label__currency">&pound;</span>
-            <input
-              id="fee-paid-salary-input"
-              class="govuk-input moj-input__currency govuk-input--width-10"
-              type="text"
-              pattern="[0-9]*"
-            >
-          </div>
+        <Currency
+          id="fee-paid-fee"
+          v-model="feePaidFee"
+          label="Fee"
+        />
+
         </RadioItem>
         <RadioItem
           value="unpaid"
@@ -315,6 +306,7 @@ import RadioItem from '@/components/Form/RadioItem';
 import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
+import Currency from '@/components/Form/Currency';
 
 export default {
   components: {
@@ -323,12 +315,14 @@ export default {
     TextField,
     CheckboxGroup,
     CheckboxItem,
+    Currency,
   },
   data(){
     return {
       typeOfExercise: [],
       isCourtOrTribunal: [],
       appointmentType: [],
+      feePaidFee: null,
       isSPTWOffered: [],
       yesSalaryDetails: null,
       noSalaryDetails: null,
