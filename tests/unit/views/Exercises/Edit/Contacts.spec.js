@@ -57,6 +57,7 @@ describe('views/Exercises/Edit/Contacts', () => {
       };
 
       beforeEach(() => {
+        mockStore.dispatch.mockClear();
         wrapper.setData({
           exercise: exerciseData,
         });
