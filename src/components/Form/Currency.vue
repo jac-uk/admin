@@ -58,50 +58,31 @@ export default {
 };
 </script>
 <style scoped>
-.moj-label__currency {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
-  font-size: 16px;
-  font-size: 1rem;
-  line-height: 1.25;
-  background-color: #f3f2f1;
-  position: absolute;
-  margin: 2px 0 0 2px !important;
-  padding: 5.5px 12px;
-  border-right: 2px solid #0b0c0c;
-}
-
-@media (min-width: 40.0625em) {
   .moj-label__currency {
-    font-size: 19px;
-    font-size: 1.1875rem;
-    line-height: 1.31579;
+    line-height: 1.25;
+    font-style: 1rem;
+    background-color: #f3f2f1;
+    position: absolute;
+    margin: 2px 0 0 2px !important;
+    padding: 5.5px 12px;
+    border-right: 2px solid #0b0c0c;
   }
-}
 
-@media print {
-  .moj-label__currency {
-    font-size: 14pt;
-    line-height: 1.15;
+  @media (min-width: 40.0625em) {
+    .moj-label__currency {
+      font-size: 1.1875rem;
+      line-height: 1.31579;
+    }
   }
-}
 
-.moj-label__currency--error {
-  background-color: #d4351c;
-  border-right: 2px solid #d4351c;
-  color: #ffffff;
-}
-
-@media (max-width: 40.0525em) {
-  .moj-label__currency {
-    padding: 8px 12px;
+  @media (max-width: 40.0525em) {
+    .moj-label__currency {
+      padding: 0.5em 0.75em;
+    }
   }
-}
 
-.moj-input__currency {
-  margin: 0;
-  padding-left: 40px;
-}
-
+  .moj-input__currency {
+    margin: 0;
+    padding-left: 2.5em;
+  }
 </style>
