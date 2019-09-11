@@ -35,17 +35,17 @@ const createTestSubject = () => {
 
 describe('@/views/Exercises/Edit', () => {
   describe('template', () => {
-    describe('when loaded equals to false', () => {
+    describe('when loaded is false', () => {
       it('renders LoadingMessage component', () => {
         let wrapper = createTestSubject();
         expect(wrapper.find({ ref: 'loadingMessageComponent' }).exists()).toBe(true);
       });
     });
 
-     describe('when loaded is not  equals to false', () => {
+     describe('when loaded is true', () => {
       it('renders LoadingMessage component', () => {
         let wrapper = createTestSubject();
-        wrapper.setData({ loaded: 'hello' });
+        wrapper.setData({ loaded: true });
         expect(wrapper.find({ ref: 'loadingMessageComponent' }).exists()).toBe(false);
       });
     });
