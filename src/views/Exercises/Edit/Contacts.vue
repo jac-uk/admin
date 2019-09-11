@@ -1,151 +1,148 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <a
-        ref="BackLinkToCreateAnExercise"
-        class="govuk-back-link"
-        @click="$router.push('exercise-new')"
-      >
-        Back
-      </a>
-      <h1 class="govuk-heading-xl">
-        Add exercise contacts
-      </h1>
-
-      <p class="govuk-body-l">
-        You can return to this page later to add or change contacts.
-      </p>
-
-      <h2 class="govuk-heading-l">
-        JAC contacts
-      </h2>
-
-      <TextField
-        id="exercise-mailbox"
-        v-model="exerciseMailbox"
-        label="Exercise mailbox"
-        type="email"
-      />
-
-      <TextField
-        id="senior-selection-exercise-manager"
-        v-model="seniorSelectionExerciseManager"
-        label="Senior selection exercise manager"
-      />
-
-      <TextField
-        id="selection-exercise-manager"
-        v-model="selectionExerciseManager"
-        label="Selection exercise manager"
-      />
-
-      <TextField
-        id="selection-exercise-officer"
-        v-model="selectionExerciseOfficer"
-        label="Selection exercise officer"
-      />
-      <p class="govuk_body">
+    <form @submit.prevent="save">
+      <div class="govuk-grid-column-two-thirds">
         <a
-          class="govuk-link"
-        >Add another</a>
-      </p>
-
-      <TextField
-        id="assigned-commissioner"
-        v-model="assignedCommissioner"
-        label="Assigned commissioner"
-      />
-      <p class="govuk_body">
-        <a
-          class="govuk-link"
-        >Add another</a>
-      </p>
-
-      <h2 class="govuk-heading-l">
-        Other contacts
-      </h2>
-
-      <CheckboxGroup
-        id="appropriate-authority"
-        v-model="appropriateAuthority"
-        label="Appropriate authority"
-        hint="Select all that apply."
-      >
-        <CheckboxItem
-          value="lord-chancellor"
-          label="Lord Chancellor"
-        />
-        <CheckboxItem
-          value="lord-chief-justice"
-          label="Lord Chief Justice"
-        />
-        <CheckboxItem
-          value="senior-president-tribunals"
-          label="Senior President of Tribunals (SPT)"
-        />
-        <CheckboxItem
-          value="senior-presiding-judge"
-          label="Senior Presiding Judge (SPJ)"
-        />
-        <CheckboxItem
-          value="scottish-ministers"
-          label="Scottish ministers"
-        />
-        <CheckboxItem
-          value="welsh-government"
-          label="Welsh Government"
-        />
-        <CheckboxItem
-          value="other"
-          label="Other"
+          ref="BackLinkToCreateAnExercise"
+          class="govuk-back-link"
+          @click="$router.push('exercise-new')"
         >
-          <TextField
-            id="other-text-input"
-            v-model="otherAppropriateAuthority"
-            label="Name of the appropriate authority"
+          Back
+        </a>
+        <h1 class="govuk-heading-xl">
+          Add exercise contacts
+        </h1>
+
+        <p class="govuk-body-l">
+          You can return to this page later to add or change contacts.
+        </p>
+
+        <h2 class="govuk-heading-l">
+          JAC contacts
+        </h2>
+
+        <TextField
+          id="exercise-mailbox"
+          v-model="exercise.exerciseMailbox"
+          label="Exercise mailbox"
+          type="email"
+        />
+
+        <TextField
+          id="senior-selection-exercise-manager"
+          v-model="exercise.seniorSelectionExerciseManager"
+          label="Senior selection exercise manager"
+        />
+
+        <TextField
+          id="selection-exercise-manager"
+          v-model="exercise.selectionExerciseManager"
+          label="Selection exercise manager"
+        />
+
+        <TextField
+          id="selection-exercise-officer"
+          v-model="exercise.selectionExerciseOfficer"
+          label="Selection exercise officer"
+        />
+        <p class="govuk_body">
+          <a
+            class="govuk-link"
+          >Add another</a>
+        </p>
+
+        <TextField
+          id="assigned-commissioner"
+          v-model="exercise.assignedCommissioner"
+          label="Assigned commissioner"
+        />
+        <p class="govuk_body">
+          <a
+            class="govuk-link"
+          >Add another</a>
+        </p>
+
+        <h2 class="govuk-heading-l">
+          Other contacts
+        </h2>
+
+        <CheckboxGroup
+          id="appropriate-authority"
+          v-model="exercise.appropriateAuthority"
+          label="Appropriate authority"
+          hint="Select all that apply."
+        >
+          <CheckboxItem
+            value="lord-chancellor"
+            label="Lord Chancellor"
           />
-        </CheckboxItem>
-      </CheckboxGroup>
+          <CheckboxItem
+            value="lord-chief-justice"
+            label="Lord Chief Justice"
+          />
+          <CheckboxItem
+            value="senior-president-tribunals"
+            label="Senior President of Tribunals (SPT)"
+          />
+          <CheckboxItem
+            value="senior-presiding-judge"
+            label="Senior Presiding Judge (SPJ)"
+          />
+          <CheckboxItem
+            value="scottish-ministers"
+            label="Scottish ministers"
+          />
+          <CheckboxItem
+            value="welsh-government"
+            label="Welsh Government"
+          />
+          <CheckboxItem
+            value="other"
+            label="Other"
+          >
+            <TextField
+              id="other-text-input"
+              v-model="exercise.otherAppropriateAuthority"
+              label="Name of the appropriate authority"
+            />
+          </CheckboxItem>
+        </CheckboxGroup>
 
-      <TextField
-        id="hmcts-welshgov-lead"
-        v-model="hmctsWelshGovLead"
-        label="HMCTS or Welsh Government lead"
-      />
+        <TextField
+          id="hmcts-welshgov-lead"
+          v-model="exercise.hmctsWelshGovLead"
+          label="HMCTS or Welsh Government lead"
+        />
 
-      <TextField
-        id="judicial-office-contact"
-        v-model="judicialOfficeContact"
-        name="judicial-office-contact"
-        label="Judicial Office contact"
-      />
+        <TextField
+          id="judicial-office-contact"
+          v-model="exercise.judicialOfficeContact"
+          name="judicial-office-contact"
+          label="Judicial Office contact"
+        />
 
-      <TextField
-        id="lead-judge"
-        v-model="leadJudge"
-        name="lead-judge"
-        label="Lead judge"
-      />
+        <TextField
+          id="lead-judge"
+          v-model="exercise.leadJudge"
+          name="lead-judge"
+          label="Lead judge"
+        />
 
-      <RepeatableFields
-        v-model="draftingJudge"
-        :component="repeatableFields.DraftingJudge"
-      />
-    
-      <RepeatableFields
-        v-model="statutoryConsultee"
-        :component="repeatableFields.StatutoryConsultee"
-      />
+        <RepeatableFields
+          v-model="exercise.draftingJudge"
+          :component="repeatableFields.DraftingJudge"
+        />
+      
+        <RepeatableFields
+          v-model="exercise.statutoryConsultee"
+          :component="repeatableFields.StatutoryConsultee"
+        />
 
-
-      <button
-        ref="linkToAddShortlistingMethods"
-        class="govuk-button"
-        @click="$router.push({ name: 'exercise-edit-shortlisting', params: { id: 'example' } })"
-      >
-        Save and continue
-      </button>
-    </div>
+        <button class="govuk-button">
+          Save and continue
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -165,24 +162,32 @@ export default {
     RepeatableFields,
   },
   data(){
+    const exercise = this.$store.state.exerciseDocument.record;
+
     return {
-      exerciseMailbox: null,
-      seniorSelectionExerciseManager: null,
-      selectionExerciseManager: null,
-      selectionExerciseOfficer: null,
-      assignedCommissioner: null,
-      appropriateAuthority: [],
-      otherAppropriateAuthority: null,
-      hmctsWelshGovLead: null,
-      judicialOfficeContact: null,
-      leadJudge: null,
-      draftingJudge: null,
-      statutoryConsultee: null,
       repeatableFields: {
         DraftingJudge,
         StatutoryConsultee,
       },
+      exercise: {
+        exerciseMailbox: exercise.exerciseMailbox || null,
+        selectionExerciseManager: exercise.selectionExerciseManager || null,
+        selectionExerciseOfficer: exercise.selectionExerciseOfficer || null,
+        assignedCommissioner: exercise.assignedCommissioner || null,
+        appropriateAuthority: exercise.appropriateAuthority || [],
+        otherAppropriateAuthority: exercise.otherAppropriateAuthority|| null,
+        hmctsWelshGovLead: exercise.hmctsWelshGovLead || null,
+        judicialOfficeContact: exercise.judicialOfficeContact || null,
+        leadJudge: exercise.leadJudge || null,
+        draftingJudge: exercise.draftingJudge || null,
+        statutoryConsultee: exercise.statutoryConsultee || null,
+      },
     };
+  },
+  methods: {
+    async save() {
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+    },
   },
 };
 </script>
