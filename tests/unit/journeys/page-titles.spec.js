@@ -136,10 +136,10 @@ describe('Page titles', () => {
     });
   });
 
-  describe('/exercises/:id/edit/about', () => {
+  describe('/exercises/:id/edit/vacancy', () => {
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
-      router.push('/exercises/abc123/edit/about');
+      router.push('/exercises/abc123/edit/vacancy');
     });
 
     it('sets title as About The Vacancy', () => {

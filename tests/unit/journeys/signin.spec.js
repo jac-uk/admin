@@ -71,9 +71,9 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/about', () => {
+    describe('when they visit /exercises/:id/edit/vacancy', () => {
       it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/about');
+        router.push('/exercises/abc123/edit/vacancy');
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
@@ -148,10 +148,10 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when they visit /exercises/:id/edit/about', () => {
+    describe('when they visit /exercises/:id/edit/vacancy', () => {
       it('loads the page', () => {
-        router.push('/exercises/abc123/edit/about');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/about');
+        router.push('/exercises/abc123/edit/vacancy');
+        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/vacancy');
       });
     });
 
