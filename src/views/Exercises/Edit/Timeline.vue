@@ -148,7 +148,7 @@
       <button
         ref="linkToAboutTheVacancy"
         class="govuk-button"
-        @click="$router.push({ name: 'exercise-edit-about', params: { id: 'example' } })"
+        @click="$router.push({ name: 'exercise-edit-vacancy', params: { id: 'example' } })"
       >
         Save and continue
       </button>

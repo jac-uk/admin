@@ -10,7 +10,7 @@ import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
-import ExerciseEditAbout from '@/views/Exercises/Edit/About';
+import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -96,9 +96,9 @@ const router = new Router({
           },
         },
         {
-          path: 'about',
-          component: ExerciseEditAbout,
-          name: 'exercise-edit-about',
+          path: 'vacancy',
+          component: ExerciseEditVacancy,
+          name: 'exercise-edit-vacancy',
           meta: {
             requiresAuth: true,
             title: 'About The Vacancy',
