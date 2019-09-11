@@ -2,7 +2,7 @@
   <div class="govuk-form-group">
     <label
       :for="id"
-      class="govuk-heading-m"
+      class="govuk-heading-m govuk-!-margin-bottom-2"
     >
       {{ label }}
     </label>
