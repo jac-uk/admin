@@ -20,7 +20,6 @@ describe('components/Form/Currency', () => {
     });
   });
 
-
     describe('hint', () => {
       let hint;
       describe('when the prop is set', () => {
