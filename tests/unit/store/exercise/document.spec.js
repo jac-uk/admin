@@ -97,5 +97,51 @@ describe('store/exercise/single', () => {
         });
       });
     });
+
+    describe('save', () => {
+      beforeEach(async () => {
+        const doc = firestore.collection('exercises').doc('001');
+        await doc.set({
+          name: 'Example exercise',
+        });
+      });
+
+      afterEach(() => {
+        firestore.collection('exercises').data = null;
+      });
+
+      const save = () => {
+        const context = {
+          state: {
+            record: {
+              id: '001',
+            },
+          },
+        };
+        const data = {
+          exerciseMailbox: 'test@gmail.com',
+          seniorSelectionExerciseManager: 'John Smith',
+        };
+        return actions.save(context, data);
+      };
+
+      it('returns a Promise', () => {
+        expect(save()).toBeInstanceOf(Promise);
+      });
+
+      it('updates the bound Firestore document with the supplied data', async () => {
+        await save();
+
+        const docSnapshot = await firestore.collection('exercises').doc('001').get();
+        
+        const expectedData = {
+          name: 'Example exercise',
+          exerciseMailbox: 'test@gmail.com',
+          seniorSelectionExerciseManager: 'John Smith',
+        };
+
+        expect(docSnapshot.data()).toEqual(expectedData);
+      });
+    });
   });
 });
