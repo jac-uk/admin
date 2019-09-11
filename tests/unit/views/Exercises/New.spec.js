@@ -45,6 +45,7 @@ describe('views/Exercises/New', () => {
   describe('methods', () => {
     describe('save', () => {
       beforeEach(() => {
+        mockStore.dispatch.mockClear();
         wrapper.setData({
           exerciseName: 'Example exercise title',
         });
