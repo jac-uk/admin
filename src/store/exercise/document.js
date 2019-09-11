@@ -18,6 +18,11 @@ export default {
       const ref = await collection.add(data);
       return dispatch('bind', ref.id);
     },
+    save: async ({ state }, data) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      await ref.update(data);
+    },
   },
   state: {
     record: null,
