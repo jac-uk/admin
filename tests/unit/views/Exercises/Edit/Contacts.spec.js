@@ -12,7 +12,7 @@ const mockStore = {
   },
 };
 
-describe('views/Exercises/Contacts', () => {
+describe('views/Exercises/Edit/Contacts', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditContacts, {
