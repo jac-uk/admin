@@ -5,11 +5,7 @@
       ref="loadingMessageComponent"
       :load-failed="loadFailed"
     />
-    <div 
-      v-else
-    >
-      <RouterView />
-    </div>
+    <RouterView v-else />
   </div>
 </template>
 
@@ -31,8 +27,9 @@ export default {
     this.$store.dispatch('exerciseDocument/bind', id)
       .then(() => {
         this.loaded = true;
-      }).catch(() => {
+      }).catch((e) => {
         this.loadFailed = true;
+        throw e;
       });
   },
 };
