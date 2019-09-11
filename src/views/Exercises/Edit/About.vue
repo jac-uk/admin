@@ -112,12 +112,11 @@
           value="fee-paid"
           label="Fee paid"
         >
-        <Currency
-          id="fee-paid-fee"
-          v-model="feePaidFee"
-          label="Fee"
-        />
-
+          <Currency
+            id="fee-paid-fee"
+            v-model="feePaidFee"
+            label="Fee"
+          />
         </RadioItem>
         <RadioItem
           value="unpaid"

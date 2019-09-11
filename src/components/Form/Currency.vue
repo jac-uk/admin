@@ -15,7 +15,7 @@
     <span class="moj-label__currency">£</span>
     <input
       :id="id"
-      v-model="input"
+      v-model="currencyInput"
       class=" govuk-input moj-input__currency govuk-input--width-10"
       :name="id"
       type="number"
@@ -45,7 +45,7 @@ export default {
   },
 
   computed: {
-    input: {
+    currencyInput: {
       get() {
         return this.value;
       },
