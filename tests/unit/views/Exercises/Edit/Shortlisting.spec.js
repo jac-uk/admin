@@ -53,7 +53,7 @@ describe('views/Exercises/Edit/Shortlisting', () => {
     describe('save', () => {
       const exerciseData = {
         shortlistingMethods: ['method-1'],
-        otherShortlistingMethod: [{name:'additional method'}],
+        otherShortlistingMethod: [{ name:'additional method' }],
       };
 
       beforeEach(() => {
