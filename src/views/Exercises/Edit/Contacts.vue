@@ -40,16 +40,10 @@
           label="Selection exercise manager"
         />
 
-        <TextField
-          id="selection-exercise-officer"
+        <RepeatableFields
           v-model="exercise.selectionExerciseOfficer"
-          label="Selection exercise officer"
+          :component="repeatableFields.SelectionExerciseOfficer"
         />
-        <p class="govuk_body">
-          <a
-            class="govuk-link"
-          >Add another</a>
-        </p>
 
         <TextField
           id="assigned-commissioner"
@@ -132,7 +126,7 @@
           v-model="exercise.draftingJudge"
           :component="repeatableFields.DraftingJudge"
         />
-      
+
         <RepeatableFields
           v-model="exercise.statutoryConsultee"
           :component="repeatableFields.StatutoryConsultee"
@@ -153,6 +147,7 @@ import CheckboxItem from '@/components/Form/CheckboxItem';
 import RepeatableFields from '@/components/RepeatableFields';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
+import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 
 export default {
   components: {
@@ -168,6 +163,7 @@ export default {
       repeatableFields: {
         DraftingJudge,
         StatutoryConsultee,
+        SelectionExerciseOfficer,
       },
       exercise: {
         exerciseMailbox: exercise.exerciseMailbox || null,

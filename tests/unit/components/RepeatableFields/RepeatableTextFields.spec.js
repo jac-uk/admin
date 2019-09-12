@@ -4,11 +4,13 @@ import { shallowMount } from '@vue/test-utils';
 // repeatable components
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
+import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 
 // add repeatable text component to this array
 const repeatableTextFields = [
   ['DraftingJudge', DraftingJudge],
   ['StatutoryConsultee', StatutoryConsultee],
+  ['SelectionExerciseOfficer', SelectionExerciseOfficer],
 ];
 
 describe('Repeatable text fields', () => {
@@ -39,10 +41,10 @@ describe('Repeatable text fields', () => {
           expect(prop.type).toBe(Object);
         });
       });
-      
+
       describe('index', () => {
         let prop;
-        
+
         beforeEach(() => {
           prop = component.props.index;
         });
