@@ -6,6 +6,7 @@ import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
+import OtherShortlistingMethod from '@/components/RepeatableFields/OtherShortlistingMethod';
 
 // add repeatable text component to this array
 const repeatableTextFields = [
@@ -13,6 +14,7 @@ const repeatableTextFields = [
   ['StatutoryConsultee', StatutoryConsultee],
   ['SelectionExerciseOfficer', SelectionExerciseOfficer],
   ['AssignedCommissioner', AssignedCommissioner],
+  ['OtherShortlistingMethod', OtherShortlistingMethod],
 ];
 
 describe('Repeatable text fields', () => {
