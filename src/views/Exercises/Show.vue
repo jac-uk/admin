@@ -84,9 +84,6 @@ export default {
         this.loadFailed = true;
         throw e;
       });
-
-    // to display overview page
-    this.$router.push({ name: 'exercise-show-overview' })
   },
   methods: {
     isActive(name) {
