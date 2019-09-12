@@ -67,7 +67,6 @@
 <script>
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
-import TextField from '@/components/Form/TextField';
 import RepeatableFields from '@/components/RepeatableFields';
 import OtherShortlistingMethod from '@/components/RepeatableFields/OtherShortlistingMethod';
 
@@ -75,7 +74,6 @@ export default {
   components: {
     CheckboxGroup,
     CheckboxItem,
-    TextField,
     RepeatableFields,
   },
   data(){
