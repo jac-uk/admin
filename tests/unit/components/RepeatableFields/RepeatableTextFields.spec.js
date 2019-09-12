@@ -5,12 +5,14 @@ import { shallowMount } from '@vue/test-utils';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
+import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
 
 // add repeatable text component to this array
 const repeatableTextFields = [
   ['DraftingJudge', DraftingJudge],
   ['StatutoryConsultee', StatutoryConsultee],
   ['SelectionExerciseOfficer', SelectionExerciseOfficer],
+  ['AssignedCommissioner', AssignedCommissioner],
 ];
 
 describe('Repeatable text fields', () => {
