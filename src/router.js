@@ -61,6 +61,10 @@ const router = new Router({
       },
       children: [
         {
+          path: '',
+          redirect: { name: 'exercise-show-overview' }
+        },
+        {
           path: 'overview',
           component: ExerciseShowOverview,
           name: 'exercise-show-overview',
