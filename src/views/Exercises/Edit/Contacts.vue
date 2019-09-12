@@ -45,16 +45,10 @@
           :component="repeatableFields.SelectionExerciseOfficer"
         />
 
-        <TextField
-          id="assigned-commissioner"
+        <RepeatableFields
           v-model="exercise.assignedCommissioner"
-          label="Assigned commissioner"
+          :component="repeatableFields.AssignedCommissioner"
         />
-        <p class="govuk_body">
-          <a
-            class="govuk-link"
-          >Add another</a>
-        </p>
 
         <h2 class="govuk-heading-l">
           Other contacts
@@ -148,6 +142,7 @@ import RepeatableFields from '@/components/RepeatableFields';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
+import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
 
 export default {
   components: {
@@ -164,6 +159,7 @@ export default {
         DraftingJudge,
         StatutoryConsultee,
         SelectionExerciseOfficer,
+        AssignedCommissioner,
       },
       exercise: {
         exerciseMailbox: exercise.exerciseMailbox || null,
