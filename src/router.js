@@ -2,15 +2,25 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 
-// Views
+// Edit views
 import ExerciseNew from '@/views/Exercises/New';
-import ExerciseDetails from '@/views/Exercises/Details';
 import ExerciseEdit from '@/views/Exercises/Edit';
 import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
+
+// Show views
+import ExerciseShow from '@/views/Exercises/Show';
+import ExerciseShowOverview from '@/views/Exercises/Show/Overview';
+import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
+import ExerciseShowContacts from '@/views/Exercises/Show/Contacts';
+import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
+import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
+import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
+import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
+
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -44,12 +54,76 @@ const router = new Router({
     },
     {
       path: '/exercises/:id',
-      name: 'exercise-details',
-      component: ExerciseDetails,
+      component: ExerciseShow,
       meta: {
         requiresAuth: true,
-        title: 'View exercise details',
+        title: 'Show exercise details',
       },
+      children: [
+        {
+          path: 'overview',
+          component: ExerciseShowOverview,
+          name: 'exercise-show-overview',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Overview',
+          },
+        },
+        {
+          path: 'applications',
+          component: ExerciseShowApplications,
+          name: 'exercise-show-applications',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Applications',
+          },
+        },
+        {
+          path: 'contacts',
+          component: ExerciseShowContacts,
+          name: 'exercise-show-contacts',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Contacts',
+          },
+        },
+        {
+          path: 'timeline',
+          component: ExerciseShowTimeline,
+          name: 'exercise-show-timeline',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Timeline',
+          },
+        },
+        {
+          path: 'shortlisting',
+          component: ExerciseShowShortlisting,
+          name: 'exercise-show-shortlisting',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Shortlisting',
+          },
+        },
+        {
+          path: 'vacancy',
+          component: ExerciseShowVacancy,
+          name: 'exercise-show-vacancy',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Vacancy information',
+          },
+        },
+        {
+          path: 'eligibility',
+          component: ExerciseShowEligibility,
+          name: 'exercise-show-eligibility',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Eligibility information',
+          },
+        },
+      ],
     },
     {
       path: '/exercises/:id/edit',
