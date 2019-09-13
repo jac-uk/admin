@@ -90,8 +90,7 @@
         <RadioGroup
           id="additional-selection-criteria-apply"
           v-model="exercise.aSCApply"
-          label="Does additional selection criteria (ASC) apply?
-  "
+          label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
           <RadioItem
