@@ -62,8 +62,8 @@ describe('components/Form/Currency', () => {
   describe('`v-model` interface', () => {
     describe('when `currencyInput` changes', () => {
       it('emits an input event with the new value', () => {
-        wrapper.setData({ currencyInput: 25 });
-        expect(wrapper.emitted().input).toEqual([[25]]);
+        wrapper.setData({ currencyInput: '25' });
+        expect(wrapper.emitted().input).toEqual([['25']]);
       });
     });
 
