@@ -1,18 +1,77 @@
-/* eslint-disable */
+// For improved readability, this module deals with page names without their prefix
+// All route names are prefixed with this string before navigation
+const routeNamePrefix = 'exercise-edit-';
+
+// This is the complete journey available, sorted in order
+// Partial journeys should still follow this order, skipping pages which weren't selected by the user
+const completeJourneyInOrder = [
+  'contacts',
+  'shortlisting',
+  'timeline',
+  'vacancy',
+  'eligibility',
+];
+
+const routeLocation = (name, id) => {
+  return {
+    name,
+    params: { id },
+  };
+};
+
 export default {
   namespaced: true,
   state: {
-    journeyPages: [],
+    journey: [],
     currentPage: null,
   },
   mutations: {
-    setJourneyPages({ commit }, pages) {},
-    setCurrentPage({ commit }, page) {},
-    reset({ commit }) {},
+    setJourney(state, journey) {
+      state.journey = journey;
+      state.currentPage = null;
+    },
+    setCurrentPage(state, page) {
+      state.currentPage = page;
+    },
+  },
+  actions: {
+    start({ commit }, pages) {
+      // Sort the selected pages into the correct order for the journey
+      const journey = completeJourneyInOrder.filter((page) => {
+        return pages.indexOf(page) !== -1;
+      });
+      commit('setJourney', journey);
+    },
+    setCurrentRoute({ commit }, name) {
+      // Trim routeNamePrefix off the beginning of the route name
+      if (name.indexOf(routeNamePrefix) === 0) {
+        name = name.slice(routeNamePrefix.length);
+      }
+      commit('setCurrentPage', name);
+    },
   },
   getters: {
-    nextPage() {},
-    previousPage() {},
-    isInProgress() {},
+    currentPageIndex(state) {
+      return state.journey.indexOf(state.currentPage);
+    },
+    nextPageIndex(state, getters) {
+      const currentIndex = getters.currentPageIndex;
+      const journeyLength = state.journey.length;
+      if ((currentIndex + 1) < journeyLength) {
+        return (currentIndex + 1);
+      } else {
+        return null;
+      }
+    },
+    nextPage(state, getters, rootState, rootGetters) {
+      const id = rootGetters['exerciseDocument/id'];
+      if (id === null) return null;
+
+      const pageIndex = getters.nextPageIndex;
+      if (pageIndex === null) return routeLocation('exercise-show-overview', id);
+
+      const name = state.journey[pageIndex];
+      return routeLocation(routeNamePrefix + name, id);
+    },
   },
 };
