@@ -53,7 +53,7 @@ describe('views/Exercises/Edit/Eligibility', () => {
     describe('save', () => {
       const exerciseData = {
         reasonableLengthService: ['3 years'],
-        otherRetirement: [{ name:'other retirement age' }],
+        otherRetirement: 'other retirement age',
       };
 
       beforeEach(() => {
