@@ -24,22 +24,10 @@
       </div>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
-          <nav aria-label="Main Navigation">
-            <ul class="dwp-vertical-navigation">
-              <router-link 
-                v-for="navItem in navPages"
-                :key="navItem.name"
-                :to="{name: navItem.name}"
-                tag="li"
-              >
-                <a 
-                  :aria-current="isActive(navItem.name) ? 'page' : false"
-                >
-                  {{ navItem.page }} 
-                </a>
-              </router-link>
-            </ul>
-          </nav>
+          <Navigation
+            :data="navPages"
+            label="Main Navigation"
+          />
         </div>
         <div class="govuk-grid-column-three-quarters">
           <RouterView />
@@ -51,9 +39,12 @@
 
 <script>
 import LoadingMessage from '@/components/LoadingMessage';
+import Navigation from '@/components/Page/Navigation';
+
 export default {
   components: {
     LoadingMessage,
+    Navigation,
   },
   data() {
     const navPages = [
@@ -84,11 +75,6 @@ export default {
         this.loadFailed = true;
         throw e;
       });
-  },
-  methods: {
-    isActive(name) {
-      return name === this.$route.name;
-    },
   },
 };
 </script>
