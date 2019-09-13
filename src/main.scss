@@ -56,28 +56,3 @@ body {
 .govuk-input:disabled {
   background-color: #ccc;
 }
-
-// dwp-vertical-navigation
-.dwp-vertical-navigation {
-  margin: 0 0 1.25em 0;
-}
-
-.dwp-vertical-navigation li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 1em;
-}
-
-.dwp-vertical-navigation a[aria-current="page"] {
-  color: #1d70b8;
-  font-weight: bold;
-  text-decoration: none;
-  border-left: 4px solid #1d70b8;
-  background-color: #f3f2f1;
-}
-
-.dwp-vertical-navigation li a {
-  padding: 0.625em;
-  display: block;
-}
