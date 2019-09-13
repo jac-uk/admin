@@ -157,8 +157,8 @@ describe('Page titles', () => {
       router.push('/exercises/abc123');
     });
 
-    it('sets title as About The Selection Process', () => {
-      expect(document.title).toContain('View exercise details');
+    it('sets title as Exercise Details | Overview', () => {
+      expect(document.title).toContain('Exercise Details | Overview');
     });
 
     it('contains Judicial Appointments Commission', () => {

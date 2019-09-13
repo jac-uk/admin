@@ -55,17 +55,9 @@ const router = new Router({
     {
       path: '/exercises/:id',
       component: ExerciseShow,
-      meta: {
-        requiresAuth: true,
-        title: 'Show exercise details',
-      },
       children: [
         {
           path: '',
-          redirect: { name: 'exercise-show-overview' }
-        },
-        {
-          path: 'overview',
           component: ExerciseShowOverview,
           name: 'exercise-show-overview',
           meta: {
