@@ -25,7 +25,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
           <Navigation
-            :data="navPages"
+            :items="navPages"
             label="Main Navigation"
           />
         </div>
@@ -60,9 +60,13 @@ export default {
     return {
       loaded: false,
       loadFailed: false,
-      exercise: {},
       navPages,
     };
+  },
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
   },
   mounted() {
     const id = this.$route.params.id;
@@ -70,7 +74,6 @@ export default {
     this.$store.dispatch('exerciseDocument/bind', id)
       .then(() => {
         this.loaded = true;
-        this.exercise = this.$store.state.exerciseDocument.record;
       }).catch((e) => {
         this.loadFailed = true;
         throw e;

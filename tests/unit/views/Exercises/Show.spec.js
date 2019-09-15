@@ -37,10 +37,22 @@ const createTestSubject = () => {
     store,
     localVue,
     router,
+    stubs: {
+      'RouterView': true,
+    },
   });
 };
 
 describe('@/views/Exercises/Show', () => {
+  describe('computed properties', () => {
+    describe('exercise', () => {
+      it('returns record object from state', () => {
+        let wrapper = createTestSubject();
+        expect(wrapper.vm.exercise).toEqual(exercise);
+      });
+    });
+  });
+
   describe('template', () => {
     describe('when loaded is false', () => {
       it('renders LoadingMessage component', () => {
@@ -50,18 +62,24 @@ describe('@/views/Exercises/Show', () => {
     });
 
     describe('when loaded is true', () => {
-      it('renders LoadingMessage component', () => {
-        let wrapper = createTestSubject();
+      let wrapper;
+
+      beforeEach(() => {
+        wrapper = createTestSubject();
         wrapper.setData({ loaded: true });
+      });
+
+      it('does not render LoadingMessage component', () => {
         expect(wrapper.find({ ref: 'loadingMessageComponent' }).exists()).toBe(false);
       });
-    });
-  });
 
-  describe('Navigation component',() => {
-    it('renders', () => {
-      let wrapper = createTestSubject();
-      expect(wrapper.find(Navigation).exists()).toBe(false);
+      it('renders the Navigation component', () => {
+        expect(wrapper.find(Navigation).exists()).toBe(true);
+      });
+
+      it('renders the RouterView', () => {
+        expect(wrapper.find('RouterView-stub').exists()).toBe(true);
+      });
     });
   });
 });
