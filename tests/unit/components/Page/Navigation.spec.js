@@ -22,7 +22,7 @@ const createTestSubject = (propsData) => {
 
 describe('components/Page/Navigation', () => {
   it('renders the component', () => {
-    let wrapper = createTestSubject({ data: navPages });
+    let wrapper = createTestSubject({ items: navPages });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -31,7 +31,7 @@ describe('components/Page/Navigation', () => {
 
     describe('data', () => {
       beforeEach(() => {
-        prop = Navigation.props.data;
+        prop = Navigation.props.items;
       });
 
       it('is required', () => {
@@ -62,27 +62,25 @@ describe('components/Page/Navigation', () => {
     });
   });
 
-  describe('markup', () => {
-    it('renders data that is passed as prop', () => {
-      let wrapper = createTestSubject({ data: navPages });
+  describe('template', () => {
+    it('renders items that is passed as prop', () => {
+      let wrapper = createTestSubject({ items: navPages });
       expect(wrapper.findAll('li').length).toBe(2);
     });
 
-    it('does not render if data array is empty', () => {
-      let wrapper = createTestSubject({ data: [] });
+    it('does not render if items array is empty', () => {
+      let wrapper = createTestSubject({ items: [] });
       expect(wrapper.findAll('li').length).toBe(0);
     });
 
     it('sets aria-label with label prop', () => {
-      let wrapper = createTestSubject({ data: navPages, label: 'MyTestLabel' });
+      let wrapper = createTestSubject({ items: navPages, label: 'MyTestLabel' });
       expect(wrapper.find('nav').attributes('aria-label')).toBe('MyTestLabel');
     });
-  });
 
-  describe('Accessibility', () => {
     describe('aria-current attribute', () => {
       it('is set for a link which is currently active', () => {
-        let wrapper = createTestSubject({ data: navPages });
+        let wrapper = createTestSubject({ items: navPages });
         let links = wrapper.findAll('.nav-link');
         expect(links.at(0).attributes()).toHaveProperty('aria-current');
         expect(links.at(1).attributes()).not.toHaveProperty('aria-current');

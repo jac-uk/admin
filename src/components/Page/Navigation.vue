@@ -2,7 +2,7 @@
   <nav :aria-label="label">
     <ul class="dwp-vertical-navigation">
       <li 
-        v-for="navItem in data"
+        v-for="navItem in items"
         :key="navItem.name"
       >
         <router-link 
@@ -20,7 +20,7 @@
 <script>
 export default {
   props: {
-    data: {
+    items: {
       required: true,
       type: Array,
     },
