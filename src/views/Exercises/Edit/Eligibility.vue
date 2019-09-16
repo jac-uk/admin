@@ -6,9 +6,9 @@
           Add eligibility information
         </h1>
 
-        <p class="govuk-body-l">
-          You'll find this information in the eligibility statement from HMCTS.
-        </p>
+      <p class="govuk-body-l">
+        You'll find this information in the eligibility statement from HMCTS.
+      </p>
 
         <RadioGroup
           id="post-qualification-experience"
