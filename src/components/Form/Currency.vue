@@ -32,7 +32,7 @@ export default {
     },
     value: {
       default: null,
-      type: Number,
+      type: String,
     },
     hint: {
       default: '',
