@@ -2,7 +2,6 @@
   <div>
     <LoadingMessage
       v-if="loaded === false"
-      ref="loadingMessageComponent"
       :load-failed="loadFailed"
     />
     <RouterView v-else />
