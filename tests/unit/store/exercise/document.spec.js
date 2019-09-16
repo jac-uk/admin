@@ -144,4 +144,24 @@ describe('store/exercise/single', () => {
       });
     });
   });
+
+  describe('getters', () => {
+    describe('id', () => {
+      it('returns null if no document is loaded', () => {
+        const state = {
+          record: null,
+        };
+        expect(exerciseDocument.getters.id(state)).toBeNull();
+      });
+
+      it('returns the id of the currently loaded document', () => {
+        const state = {
+          record: {
+            id: 'abc123',
+          },
+        };
+        expect(exerciseDocument.getters.id(state)).toBe('abc123');
+      });
+    });
+  });
 });
