@@ -69,8 +69,8 @@ export default {
     },
     timeline() {
       return [
-        { 'entry': 'Open for applications', 'date': this.$store.state.exerciseDocument.record.applicationOpenDate },
-        { 'entry': 'Closed for applications', 'date': this.$store.state.exerciseDocument.record.applicationCloseDate },
+        { 'entry': 'Open for applications', 'date': this.exercise.applicationOpenDate },
+        { 'entry': 'Closed for applications', 'date': this.exercise.applicationCloseDate },
       ];
     },
   },
