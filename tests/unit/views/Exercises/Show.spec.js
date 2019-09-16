@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 import Navigation from '@/components/Page/Navigation';
+import LoadingMessage from '@/components/LoadingMessage';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -57,7 +58,12 @@ describe('@/views/Exercises/Show', () => {
     describe('when loaded is false', () => {
       it('renders LoadingMessage component', () => {
         let wrapper = createTestSubject();
-        expect(wrapper.find({ ref: 'loadingMessageComponent' }).exists()).toBe(true);
+        expect(wrapper.find(LoadingMessage).exists()).toBe(true);
+      });
+
+      it('does not render the RouterView', () => {
+        let wrapper = createTestSubject();
+        expect(wrapper.find('RouterView-stub').exists()).toBe(false);
       });
     });
 
