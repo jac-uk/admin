@@ -193,6 +193,13 @@ const router = new Router({
       },
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  },  
 });
 
 // Global before guard to verify if a user can have access to other than sign-in pages.

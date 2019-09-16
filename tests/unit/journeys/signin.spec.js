@@ -15,7 +15,7 @@ describe('Sign in journey', () => {
 
     router = require('@/router').default;
     store = require('@/store').default;
-
+    window.scrollTo = () => {};
     subject = shallowMount(App, {
       localVue,
       router,
