@@ -42,11 +42,11 @@
               hint="Select all that apply."
             >
               <CheckboxItem
-                value="exercise-contacts"
+                value="contacts"
                 label="Exercise contacts"
               />
               <CheckboxItem
-                value="shortlisting-methods"
+                value="shortlisting"
                 label="Shortlisting methods"
               />
               <CheckboxItem
@@ -54,11 +54,11 @@
                 label="Timeline"
               />
               <CheckboxItem
-                value="vacancy-information"
+                value="vacancy"
                 label="Vacancy information"
               />
               <CheckboxItem
-                value="eligibility-information"
+                value="eligibility"
                 label="Eligibility Information"
               />
             </CheckboxGroup>
@@ -105,6 +105,11 @@ export default {
         name: this.exerciseName,
       };
       await this.$store.dispatch('exerciseDocument/create', data);
+
+      const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
+      this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
+
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
     },
   },
 };
