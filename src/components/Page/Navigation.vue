@@ -40,7 +40,9 @@ export default {
 
 <style scoped>
   .dwp-vertical-navigation {
-    margin: 0 0 1.25em 0;
+    margin: 0;
+    padding: 0;
+
   }
 
   .dwp-vertical-navigation li {
