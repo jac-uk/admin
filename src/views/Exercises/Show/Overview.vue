@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="govuk-grid-column-one-half">
-      <div class="grey govuk-!-margin-bottom-3">
+      <div class="background-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
         <h2 class="govuk-heading-l">
           Number of vacancies
         </h2>
         <p class="govuk-body">
           Immediate start (S87) 
           <span 
-            class="block govuk-heading-l govuk-!-margin-top-1"
+            class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ exercise.immediateStart }}</span>
         </p>
       </div>
 
-      <div class="grey govuk-!-margin-bottom-3">
+      <div class="background-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
         <h2 class="govuk-heading-l">
           Number of applications
         </h2>
@@ -24,8 +24,8 @@
     </div>
 
     <div class="govuk-grid-column-one-half">
-      <div class="highlight govuk-!-margin-bottom-6">
-        <span class="block govuk-!-font-size-27">Pre launch</span>
+      <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
+        <span class="display-block govuk-!-font-size-27">Pre launch</span>
       </div>
       <Timeline :data="timeline" />
       <a
