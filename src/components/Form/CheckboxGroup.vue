@@ -45,7 +45,7 @@ export default {
     },
     value: {
       required: true,
-      validator: value => (value instanceof Array || value === null || value === undefined),
+      validator: (value) => (value instanceof Array || value === null || value === undefined),
     },
   },
   computed: {
@@ -60,6 +60,11 @@ export default {
     hintId() {
       return `${this.id}__hint`;
     },
+  },
+  created() {
+    if (this.value === null || this.value === undefined) {
+      this.$emit('input', []);
+    }
   },
 };
 </script>
