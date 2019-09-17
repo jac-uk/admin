@@ -18,6 +18,8 @@
 
 <script>
 import Timeline from '@/components/Page/Timeline';
+import formatDate from '@/helpers/formatDate';
+
 export default {
   components: {
     Timeline,
@@ -28,16 +30,16 @@ export default {
     },
     timeline() {
       return [
-        { 'entry': 'Open for applications', 'date': this.exercise.applicationOpenDate },
-        { 'entry': 'Closed for applications', 'date': this.exercise.applicationCloseDate },
-        { 'entry': 'QT', 'date': this.exercise.sjcaTestDate },
-        { 'entry': 'Scenario test', 'date': this.exercise.scenarioTestDate },
-        { 'entry': 'Scenario test outcome to candidates', 'date': this.exercise.scenarioTestOutcome },
-        { 'entry': 'Contact independent assessors', 'date': this.exercise.contactIndependentAssessors },
-        { 'entry': 'Selection day', 'date': this.exercise.selectionDays },
-        { 'entry': 'Character checks', 'date': this.exercise.characterChecks },
-        { 'entry': 'Statutory consultation', 'date': this.exercise.statutoryConsultation },
-        { 'entry': 'Selection process outcome', 'date': this.exercise.finalOutcome },
+        { 'entry': 'Open for applications', 'date': formatDate(this.exercise.applicationOpenDate) },
+        { 'entry': 'Closed for applications', 'date': formatDate(this.exercise.applicationCloseDate) },
+        { 'entry': 'QT', 'date': formatDate(this.exercise.sjcaTestDate, 'time') },
+        { 'entry': 'Scenario test', 'date': formatDate(this.exercise.scenarioTestDate) },
+        { 'entry': 'Scenario test outcome to candidates', 'date': formatDate(this.exercise.scenarioTestOutcome) },
+        { 'entry': 'Contact independent assessors', 'date': formatDate(this.exercise.contactIndependentAssessors) },
+        { 'entry': 'Selection day', 'date': formatDate(this.exercise.selectionDays) },
+        { 'entry': 'Character checks', 'date': formatDate(this.exercise.characterChecks) },
+        { 'entry': 'Statutory consultation', 'date': formatDate(this.exercise.statutoryConsultation) },
+        { 'entry': 'Selection process outcome', 'date': formatDate(this.exercise.finalOutcome) },
       ];
     },
   },
