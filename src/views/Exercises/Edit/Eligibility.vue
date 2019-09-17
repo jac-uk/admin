@@ -44,11 +44,11 @@
           hint="This lets appropriate candidates apply, even if they do not have the right legal experience."
         >
           <RadioItem
-            value="true"
+            :value="true"
             label="Yes"
           />
           <RadioItem
-            value="false"
+            :value="false"
             label="No"
           />
         </RadioGroup>
@@ -72,7 +72,7 @@
             label="CILEx fellow (this might be called Fellow ILEX)"
           />
           <CheckboxItem
-            value="solicitor"
+            value="Solicitor"
             label="Solicitor"
           />
           <CheckboxItem
@@ -94,11 +94,11 @@
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
           <RadioItem
-            value="true"
+            :value="true"
             label="Yes"
           />
           <RadioItem
-            value="false"
+            :value="false"
             label="No"
           />
         </RadioGroup>
@@ -184,13 +184,13 @@ export default {
 
     return {
       exercise: {
-        postQualificationExperience: exercise.postQualificationExperience || [],
+        postQualificationExperience: exercise.postQualificationExperience || null,
         otherYears: exercise.otherYears || null,
-        schedule2DApply: exercise.schedule2DApply || null,
+        schedule2DApply: exercise.schedule2DApply,
         qualifications: exercise.qualifications || [],
         otherQualifications: exercise.otherQualifications || null,
-        aSCApply: exercise.aSCApply || null,
-        reasonableLengthService: exercise.reasonableLengthService || [],
+        aSCApply: exercise.aSCApply,
+        reasonableLengthService: exercise.reasonableLengthService || null,
         otherLOS: exercise.otherLOS || null,
         retirementAge: exercise.retirementAge || null,
         otherRetirement: exercise.otherRetirement || null,
