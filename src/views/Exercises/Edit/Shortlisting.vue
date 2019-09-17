@@ -23,31 +23,31 @@
           v-model="exercise.shortlistingMethods"
         >
           <CheckboxItem
-            value="situational-judgement-test"
+            value="Situational judgement qualifying test (QT)"
             label="Situational judgement qualifying test (QT)"
           />
           <CheckboxItem
-            value="critical-analysis-test"
+            value="Critical analysis qualifying test (QT)"
             label="Critical analysis qualifying test (QT)"
           />
           <CheckboxItem
-            value="scenario-test"
+            value="Scenario test qualifying test (QT)"
             label="Scenario test qualifying test (QT)"
           />
           <CheckboxItem
-            value="name-blind-paper-sift"
+            value="Name blind paper sift"
             label="Name blind paper sift"
           />
           <CheckboxItem
-            value="paper-sift"
+            value="Paper sift"
             label="Paper sift"
           />
           <CheckboxItem
-            value="telephone-assessment"
+            value="Telephone assessment"
             label="Telephone assessment"
           />
           <CheckboxItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <RepeatableFields
