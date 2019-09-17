@@ -21,7 +21,7 @@
         {{ hint }}
       </span>
       <div class="govuk-checkboxes">
-        <slot />
+        <slot v-if="inputValue instanceof Array" />
       </div>
     </fieldset>
   </div>
@@ -62,7 +62,7 @@ export default {
     },
   },
   created() {
-    if (this.value === null || this.value === undefined) {
+    if (!(this.value instanceof Array)) {
       this.$emit('input', []);
     }
   },
