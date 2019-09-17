@@ -11,9 +11,23 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
   text-align: right;
 }
 
-.block {
+.display-block {
   display: block;
 }
+
+// background utility classes
+.background-grey {
+  background: govuk-colour("light-grey");
+}
+
+.background-blue {
+  background: $govuk-brand-colour;
+}
+
+.background-blue * {
+  color: #fff;
+}
+
 
 // JAC bespoke css can go here
 body {
@@ -59,19 +73,4 @@ body {
 // disabled inputs
 .govuk-input:disabled {
   background-color: #ccc;
-}
-
-// backgrounds
-.grey {
-  background: #f3f2f1;
-  padding: 1.25em;
-}
-
-.highlight {
-  background: #1d70b8;
-  padding: 1em;
-}
-
-.highlight * {
-  color: #fff;
 }
