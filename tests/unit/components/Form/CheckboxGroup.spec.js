@@ -219,24 +219,61 @@ describe('components/Form/CheckboxGroup', () => {
       });
     });
 
+    describe('created hook', () => {
+      describe('if value is an array', () => {
+        it('does not call emit', ()=> {
+          let array = [];
+          let wrapper = createTestSubject({ value: array });
+          expect(wrapper.emitted().input).not.toBeTruthy();
+        });
+      });
+      describe('if value is not an array', () => {
+        it('emits the initial empty array value', ()=> {
+          let wrapper = createTestSubject({ value: undefined });
+          expect(wrapper.emitted().input).toBeTruthy();
+        });
+      });
+    });
+
     describe('`.govuk-checkboxes` slot container', () => {
-      let slotContainer;
-      beforeEach(() => {
-        subject = createTestSubject();
-        slotContainer = subject.find('.govuk-checkboxes');
+      describe('if value is an array ', () => {
+        let slotContainer;
+        beforeEach(() => {
+          subject = createTestSubject();
+          slotContainer = subject.find('.govuk-checkboxes');
+        });
+
+        it('exists', () => {
+          expect(slotContainer.exists()).toBe(true);
+        });
+
+        it('renders default slot content', () => {
+          expect(slotContainer.text()).toBe('CheckboxItem components');
+        });
+
+        it('is inside the <fieldset>', () => {
+          const fieldset = subject.find('fieldset');
+          expect(fieldset.find('.govuk-checkboxes').exists()).toBe(true);
+        });
+
       });
 
-      it('exists', () => {
-        expect(slotContainer.exists()).toBe(true);
-      });
+      describe('if value is not an array ', () => {
+        let slotContainer;
 
-      it('renders default slot content', () => {
-        expect(slotContainer.text()).toBe('CheckboxItem components');
-      });
+        beforeEach(() => {
+          subject = createTestSubject({ value: null });
+          slotContainer = subject.find('.govuk-checkboxes');
+        });
 
-      it('is inside the <fieldset>', () => {
-        const fieldset = subject.find('fieldset');
-        expect(fieldset.find('.govuk-checkboxes').exists()).toBe(true);
+        it('exists', () => {
+          expect(slotContainer.exists()).toBe(true);
+        });
+
+        it('does not render slot content', () => {
+          expect(slotContainer.text()).toBe('');
+        });
+
       });
     });
   });
