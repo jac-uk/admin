@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="govuk-grid-column-one-half">
-      <div class="background-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
+      <div class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
         <h2 class="govuk-heading-l">
           Number of vacancies
         </h2>
@@ -13,7 +13,7 @@
         </p>
       </div>
 
-      <div class="background-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
+      <div class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
         <h2 class="govuk-heading-l">
           Number of applications
         </h2>

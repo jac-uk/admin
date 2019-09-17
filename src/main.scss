@@ -16,18 +16,17 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
 }
 
 // background utility classes
-.background-grey {
+.background-light-grey {
   background: govuk-colour("light-grey");
 }
 
 .background-blue {
-  background: $govuk-brand-colour;
+  background: govuk-colour("blue");
 }
 
 .background-blue * {
   color: #fff;
 }
-
 
 // JAC bespoke css can go here
 body {
