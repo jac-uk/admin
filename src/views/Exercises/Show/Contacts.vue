@@ -2,6 +2,7 @@
   <div>
     <div class="text-right">
       <router-link 
+        class="govuk-link"
         :to="{name: 'exercise-edit-contacts'}"
       >
         Update exercise contacts
