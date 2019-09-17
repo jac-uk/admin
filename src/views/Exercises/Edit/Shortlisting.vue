@@ -84,7 +84,7 @@ export default {
         OtherShortlistingMethod,
       },
       exercise: {
-        shortlistingMethods: exercise.shortlistingMethods || [],
+        shortlistingMethods: exercise.shortlistingMethods || null,
         otherShortlistingMethod: exercise.otherShortlistingMethod || null,
       },
     };
