@@ -3,14 +3,25 @@ import { shallowMount } from '@vue/test-utils';
 
 const mockStore = {
   dispatch: jest.fn(),
+  getters: {
+    'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+  },
+};
+
+const mockRouter = {
+  push: jest.fn(),
 };
 
 describe('views/Exercises/New', () => {
   let wrapper;
   beforeEach(() => {
+    mockStore.dispatch.mockClear();
+    mockRouter.push.mockClear();
+
     wrapper = shallowMount(ExerciseNew, {
       mocks: {
         $store: mockStore,
+        $router: mockRouter,
       },
     });
   });
@@ -45,25 +56,61 @@ describe('views/Exercises/New', () => {
   describe('methods', () => {
     describe('save', () => {
       beforeEach(() => {
-        mockStore.dispatch.mockClear();
         wrapper.setData({
           exerciseName: 'Example exercise title',
+          addMoreInfoSelection: [
+            'contacts',
+            'timeline',
+            'vacancy',
+          ],
         });
-        wrapper.vm.save();
       });
 
-      it('dispatches `exerciseDocument/create` Vuex action', () => {
-        expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
-        const dispatchedAction = mockStore.dispatch.mock.calls[0][0];
-        expect(dispatchedAction).toBe('exerciseDocument/create');
-      });
-
-      it('with the expected save payload', () => {
+      it('dispatches `exerciseDocument/create` Vuex action with the expected save payload', async () => {
+        await wrapper.vm.save();
         const expectedPayload = {
           name: 'Example exercise title',
         };
-        const dispatchedPayload = mockStore.dispatch.mock.calls[0][1];
-        expect(dispatchedPayload).toEqual(expectedPayload);
+        const [action, payload] = mockStore.dispatch.mock.calls[0];
+        expect(action).toBe('exerciseDocument/create');
+        expect(payload).toEqual(expectedPayload);
+      });
+
+      describe('when "Add more info?" is true', () => {
+        beforeEach(() => {
+          wrapper.setData({
+            addMoreInfo: true,
+            addMoreInfoSelection: ['contacts', 'timeline', 'vacancy'],
+          });
+        });
+
+        it('begins the create journey by dispatching `exerciseCreateJourney/start` with the selected pages', async () => {
+          await wrapper.vm.save();
+          const expectedPayload = ['contacts', 'timeline', 'vacancy'];
+          const [action, payload] = mockStore.dispatch.mock.calls[1];
+          expect(action).toBe('exerciseCreateJourney/start');
+          expect(payload).toEqual(expectedPayload);
+        });
+      });
+
+      describe('when "Add more info?" is false', () => {
+        beforeEach(() => {
+          wrapper.setData({
+            addMoreInfo: false,
+          });
+        });
+
+        it('clears the create journey by dispatching `exerciseCreateJourney/start` with an empty array', async () => {
+          await wrapper.vm.save();
+          const [action, payload] = mockStore.dispatch.mock.calls[1];
+          expect(action).toBe('exerciseCreateJourney/start');
+          expect(payload).toEqual([]);
+        });
+      });
+
+      it('navigates to the next page of the create journey', async () => {
+        await wrapper.vm.save();
+        expect(mockRouter.push).toHaveBeenCalledWith(mockStore.getters['exerciseCreateJourney/nextPage']);
       });
     });
   });

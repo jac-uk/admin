@@ -338,6 +338,7 @@ export default {
   methods: {
     async save() {
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
     },
   },
 };

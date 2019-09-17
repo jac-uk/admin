@@ -2,7 +2,6 @@
   <div>
     <LoadingMessage
       v-if="loaded === false"
-      ref="loadingMessageComponent"
       :load-failed="loadFailed"
     />
     <RouterView v-else />
@@ -21,6 +20,11 @@ export default {
       loadFailed: false,
     };
   },
+  watch: {
+    '$route': function (newRoute) {
+      this.$store.dispatch('exerciseCreateJourney/setCurrentRoute', newRoute.name);
+    },
+  },
   mounted() {
     const id = this.$route.params.id;
     
@@ -31,6 +35,8 @@ export default {
         this.loadFailed = true;
         throw e;
       });
+
+    this.$store.dispatch('exerciseCreateJourney/setCurrentRoute', this.$route.name);
   },
 };
 </script>

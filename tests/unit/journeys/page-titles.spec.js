@@ -14,7 +14,7 @@ describe('Page titles', () => {
 
     router = require('@/router').default;
     store = require('@/store').default;
-
+    window.scrollTo = () => {};
     shallowMount(App, {
       localVue,
       router,
