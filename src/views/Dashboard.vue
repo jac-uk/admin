@@ -30,11 +30,15 @@
             :key="exercise.id"
             class="govuk-summary-list__row"
           >
-            <dt class="govuk-summary-list__key-narrow">
-              <a href="detail">{{ exercise.reference }}</a>
+            <dt class="govuk-summary-list__key govuk-summary-list__key-narrow">
+              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+                118
+              </RouterLink>
             </dt>
             <dd class="govuk-summary-list__value">
-              <a href="detail">{{ exercise.name }}</a>
+              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+                {{ exercise.name }}
+              </RouterLink>
             </dd>
           </div>
         </dl>
