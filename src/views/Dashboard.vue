@@ -30,7 +30,7 @@
             :key="exercise.id"
             class="govuk-summary-list__row"
           >
-            <dt class="govuk-summary-list__key">
+            <dt class="govuk-summary-list__key-narrow">
               <a href="detail">{{ exercise.reference }}</a>
             </dt>
             <dd class="govuk-summary-list__value">
@@ -56,15 +56,15 @@ export default {
 };
 </script>
 
-<style>
-  .govuk-summary-list__key {
+<style scoped>
+  .govuk-summary-list__key-narrow {
     margin-bottom: 5px;
     font-weight: 700;
     width: 15%;
   }
 
   @media (min-width: 40.0625em) {
-    .govuk-summary-list__key {
+    .govuk-summary-list__key-narrow {
       width: 30px;
     }
   }
