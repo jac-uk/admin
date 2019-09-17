@@ -5,11 +5,16 @@ const mockStore = {
   dispatch: jest.fn(),
   state: {
     exerciseDocument: {
-      record: {
-        id: '001',
-      },
+      record: {},
     },
   },
+  getters: {
+    'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+  },
+};
+
+const mockRouter = {
+  push: jest.fn(),
 };
 
 describe('views/Exercises/Edit/Contacts', () => {
@@ -18,6 +23,7 @@ describe('views/Exercises/Edit/Contacts', () => {
     wrapper = shallowMount(ExerciseEditContacts, {
       mocks: {
         $store: mockStore,
+        $router: mockRouter,
       },
     });
   });
@@ -73,6 +79,10 @@ describe('views/Exercises/Edit/Contacts', () => {
       it('with the expected save payload', () => {
         const dispatchedPayload = mockStore.dispatch.mock.calls[0][1];
         expect(dispatchedPayload).toEqual(expect.objectContaining(exerciseData));
+      });
+
+      it('navigates to the next page of the create journey', () => {
+        expect(mockRouter.push).toHaveBeenCalledWith(mockStore.getters['exerciseCreateJourney/nextPage']);
       });
     });
   });
