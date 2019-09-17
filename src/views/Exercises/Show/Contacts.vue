@@ -100,7 +100,6 @@
           {{ exercise.hmctsWelshGovLead }}
         </dd>
       </div>
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Judicial Office contact
@@ -109,7 +108,6 @@
           {{ exercise.judicialOfficeContact }}
         </dd>
       </div>
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Lead judge
@@ -118,7 +116,6 @@
           {{ exercise.leadJudge }}
         </dd>
       </div>
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Drafting judges
@@ -134,8 +131,6 @@
           </ul>
         </dd>
       </div>
-
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Statutory consultees
@@ -169,7 +164,6 @@ export default {
   .govuk-summary-list__value {
     width: auto;
   }
-  
   .govuk-summary-list__key {
     width: auto;
   }
