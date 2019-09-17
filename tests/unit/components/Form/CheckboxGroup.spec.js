@@ -219,22 +219,6 @@ describe('components/Form/CheckboxGroup', () => {
       });
     });
 
-    describe('created hook', () => {
-      describe('if value is an array', () => {
-        it('does not call emit', ()=> {
-          let array = [];
-          let wrapper = createTestSubject({ value: array });
-          expect(wrapper.emitted().input).not.toBeTruthy();
-        });
-      });
-      describe('if value is not an array', () => {
-        it('emits the initial empty array value', ()=> {
-          let wrapper = createTestSubject({ value: undefined });
-          expect(wrapper.emitted().input).toBeTruthy();
-        });
-      });
-    });
-
     describe('`.govuk-checkboxes` slot container', () => {
       describe('if value is an array ', () => {
         let slotContainer;
@@ -274,6 +258,24 @@ describe('components/Form/CheckboxGroup', () => {
           expect(slotContainer.text()).toBe('');
         });
 
+      });
+    });
+  });
+
+  describe('lifecycle hooks', () => {
+    describe('created', () => {
+      describe('if value is an array', () => {
+        it('does not call emit', ()=> {
+          let array = [];
+          let wrapper = createTestSubject({ value: array });
+          expect(wrapper.emitted().input).not.toBeTruthy();
+        });
+      });
+      describe('if value is not an array', () => {
+        it('emits the initial empty array value', ()=> {
+          let wrapper = createTestSubject({ value: undefined });
+          expect(wrapper.emitted().input).toBeTruthy();
+        });
       });
     });
   });
