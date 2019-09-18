@@ -7,18 +7,23 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 const exercise = {
-  applicationOpenDate: 'TestOpen',
-  applicationCloseDate: 'TestClose',
-  sjcaTestStartTime: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
-  scenarioTestDate: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
-  scenarioTestOutcome: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  applicationOpenDate: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  applicationCloseDate: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  sjcaTestStartTime: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  sjcaTestEndTime: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  sjcaTestOutcome: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  scenarioTestDate: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  scenarioTestStartTime: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  scenarioTestEndTime: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  scenarioTestOutcome: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
   selectionDays: [{
-    selectionDayStart: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
-    selectionDayEnd: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+    selectionDayStart: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+    selectionDayEnd: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
   }],
-  characterChecks: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
-  statutoryConsultation: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
-  finalOutcome: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  contactIndependentAssessors: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  characterChecks: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  statutoryConsultation: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
+  finalOutcome: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
 };
 
 const store = new Vuex.Store({
