@@ -47,7 +47,7 @@
             label="Telephone assessment"
           />
           <CheckboxItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <RepeatableFields
