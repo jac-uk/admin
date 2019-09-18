@@ -1,14 +1,13 @@
 const formatDate = (date, type) => {
   if(!(date instanceof Date)) {
-    return;
+    throw 'Supplied date must be a Date object';
   }
 
   if(type && type === 'time') {
-    let time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-    return `${time}`;
+    return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).toLowerCase();
   }
 
-  let month = date.toLocaleString('default', { month: 'long' });
+  let month = date.toLocaleString('en-US', { month: 'long' });
 
   if(type && type === 'month') {
     return `${month} ${date.getFullYear()}`;
@@ -18,4 +17,3 @@ const formatDate = (date, type) => {
 };
 
 export default formatDate;
-

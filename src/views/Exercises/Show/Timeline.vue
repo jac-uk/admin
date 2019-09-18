@@ -31,7 +31,7 @@ export default {
     timeline() {
       return [
         { 
-          'entry': 'Open for applications', 'date': this.exercise.applicationOpenDate, 
+          'entry': 'Open for applications', 'date': formatDate(this.exercise.applicationOpenDate), 
         },
         { 
           'entry': 'Closed for applications', 
