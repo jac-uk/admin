@@ -18,10 +18,6 @@
       <span class="display-block">{{ exercise.exerciseMailbox }}</span>
     </p>
 
-    <h2 class="govuk-heading-l">
-      JAC contacts
-    </h2>
-
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
