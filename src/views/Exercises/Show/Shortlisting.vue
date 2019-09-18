@@ -12,29 +12,21 @@
       Shortlisting methods
     </h2>
     <table class="govuk-table">
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header">
-            Shortlisting methods
-          </th>
-          <td class="govuk-table__cell">
-            <ul class="govuk-list">
-              <li
-                v-for="item in exercise.shortlistingMethods"
-                :key="item"
-              >
-                {{ item }}
-              </li>
-              <li
-                v-for="item in exercise.otherShortlistingMethod"
-                :key="item.name"
-              >
-                {{ item.name }}
-              </li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Shortlisting methods
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="method in methods"
+              :key="method"
+            >
+              {{ method }}
+            </li>
+          </ul>
+        </dd>
+      </div>
     </table>
   </div>
 </template>
@@ -45,6 +37,31 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    methods() {
+      const methods = this.exercise.shortlistingMethods;
+      if (!(methods instanceof Array)) {
+        return ['Null'];
+      }
+      const list = methods.filter(value => (value !== 'other'));
+      list.sort();
+
+      if (methods.includes('other')) {
+        this.exercise.otherShortlistingMethod.forEach((method) => {
+          return list.push(`Other: ${method.name}`);
+        });
+      }
+      
+      return list;
+    },
   },
 };
 </script>
+<style lang="scss" scoped>
+  .govuk-summary-list__value,
+  .govuk-summary-list__value:last-child,
+  .govuk-summary-list__key {
+    @include govuk-media-query($from: tablet) {
+      width: auto;
+    }
+  }
+</style>
