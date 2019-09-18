@@ -9,6 +9,16 @@ localVue.use(Vuex);
 const exercise = {
   applicationOpenDate: 'TestOpen',
   applicationCloseDate: 'TestClose',
+  sjcaTestStartTime: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  scenarioTestDate: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  scenarioTestOutcome: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  selectionDays: [{
+    selectionDayStart: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+    selectionDayEnd: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  }],
+  characterChecks: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  statutoryConsultation: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
+  finalOutcome: 'Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)',
 };
 
 const store = new Vuex.Store({
