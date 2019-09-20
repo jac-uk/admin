@@ -19,6 +19,9 @@ const store = new Vuex.Store({
       state: {
         record: exercise,
       },
+      getters: {
+        data: () => () => exercise,
+      },
     },
   },
 });

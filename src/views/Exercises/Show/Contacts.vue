@@ -150,7 +150,7 @@
 export default {
   computed: {
     exercise() {
-      return this.$store.state.exerciseDocument.record;
+      return this.$store.getters['exerciseDocument/data']();
     },
   },
 };
