@@ -3,6 +3,23 @@ import App from '@/App';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
+const id = 12345;
+const routes = [
+  ['exercise-new', '/exercises/new'],
+  ['exercise-show-overview', `/exercises/${id}/`],
+  ['exercise-show-applications', `/exercises/${id}/applications`],
+  ['exercise-show-contacts', `/exercises/${id}/contacts`],
+  ['exercise-show-timeline', `/exercises/${id}/timeline`],
+  ['exercise-show-shortlisting', `/exercises/${id}/shortlisting`],
+  ['exercise-show-vacancy', `/exercises/${id}/vacancy`],
+  ['exercise-show-eligibility', `/exercises/${id}/eligibility`],
+  ['exercise-edit-contacts', `/exercises/${id}/edit/contacts`],
+  ['exercise-edit-shortlisting', `/exercises/${id}/edit/shortlisting`],
+  ['exercise-edit-timeline', `/exercises/${id}/edit/timeline`],
+  ['exercise-edit-eligibility', `/exercises/${id}/edit/eligibility`],
+  ['exercise-edit-vacancy', `/exercises/${id}/edit/vacancy`],
+];
+
 describe('Sign in journey', () => {
   let subject;
   let router;
@@ -29,65 +46,22 @@ describe('Sign in journey', () => {
   };
 
   describe('for unauthenticated user', () => {
-    describe('when they visit /dashboard', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/');
+    describe('when they visit page sign in', () => {
+      it('loads sign in page', () => {
+        router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe('when they visit /exercises/new', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/new');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/contacts', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/contacts');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/shortlisting', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/shortlisting');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/timeline', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/timeline');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/eligibility', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/eligibility');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/vacancy', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123/edit/vacancy');
-        expect(subject.vm.$route.path).toBe('/sign-in');
-      });
-    });
-
-    describe('when they visit /exercises/:id', () => {
-      it('redirects to /sign-in page', () => {
-        router.push('/exercises/abc123');
+    describe.each(routes)('when they visit page %s', (routeName) => {
+      it('loads sign in page',() => {
+        router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
   });
 
   describe('for authenticated user', () => {
-
     beforeEach(() => {
       store.dispatch('setCurrentUser', user);
     });
@@ -99,66 +73,17 @@ describe('Sign in journey', () => {
       });
     });
 
-    describe('when going to sign-in page', () => {
-      it('redirects to the dashboard page', () => {
-        router.push('/sign-in');
+    describe('when they visit page sign in', () => {
+      it("redirects to the dashboard page'", () => {
+        router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    describe('when going to the dashboard page', () => {
-      it('can access the dashboard page', () => {
-        router.push('/dashboard');
-        expect(subject.vm.$route.path).toBe('/dashboard');
-      });
-    });
-
-    describe('when they visit /exercises/new', () => {
-      it('loads the page', () => {
-        router.push('/exercises/new');
-        expect(subject.vm.$route.path).toBe('/exercises/new');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/contacts', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/contacts');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/contacts');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/shortlisting', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/shortlisting');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/shortlisting');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/timeline', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/timeline');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/timeline');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/eligibility', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/eligibility');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/eligibility');
-      });
-    });
-
-    describe('when they visit /exercises/:id/edit/vacancy', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123/edit/vacancy');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123/edit/vacancy');
-      });
-    });
-
-    describe('when they visit /exercises/:id', () => {
-      it('loads the page', () => {
-        router.push('/exercises/abc123');
-        expect(subject.vm.$route.path).toBe('/exercises/abc123');
+    describe.each(routes)('when they visit page %s', (routeName, routePath) => {
+      it(`loads ${routePath}`,() => {
+        router.push({ name: routeName, params: { id } });
+        expect(subject.vm.$route.path).toBe(routePath);
       });
     });
   });
