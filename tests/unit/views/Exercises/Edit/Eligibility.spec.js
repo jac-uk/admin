@@ -1,6 +1,10 @@
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import { shallowMount } from '@vue/test-utils';
 
+const exercise = {
+  retirementAge: '70',
+};
+
 const mockStore = {
   dispatch: jest.fn(),
   state: {
@@ -10,6 +14,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+    'exerciseDocument/data': () => exercise,
   },
 };
 
