@@ -163,5 +163,28 @@ describe('store/exercise/single', () => {
         expect(exerciseDocument.getters.id(state)).toBe('abc123');
       });
     });
+
+    describe('exerciseData', () => {
+      it('returns a function', () => {
+        const state = {
+          record: {},
+        };
+        expect(exerciseDocument.getters.exerciseData(state)).toBeFunction();
+      });
+
+      it('returns a clone of the record data (rather than a reference to the state object)', () => {
+        const state = {
+          record: {
+            futureStart: 123, 
+            hmctsWelshGovLead: 'Test Name',
+            name: 'Test Name',
+          },
+        };
+
+        const recordObject = exerciseDocument.getters.exerciseData(state)();
+        expect(recordObject).not.toBe(state.record);
+        expect(recordObject).toEqual(state.record);
+      });
+    });
   });
 });
