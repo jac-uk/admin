@@ -14,7 +14,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
-    'exerciseDocument/exerciseData': () => exercise,
+    'exerciseDocument/data': () => exercise,
   },
 };
 
