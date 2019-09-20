@@ -57,6 +57,13 @@ describe('components/Form/TextareaInput', () => {
         expect(wrapper.find('textarea').attributes().id).toBe('my_unique_key');
       });
     });
+
+    describe('rows', () => {
+      it('sets the rows to the value of the `rows` prop', () => {
+        wrapper.setProps({ rows: '5' });
+        expect(wrapper.find('textarea').attributes().rows).toBe('5');
+      });
+    });
   });
 
   describe('`v-model` interface', () => {
