@@ -16,8 +16,8 @@
       :id="id"
       v-model="text"
       class="govuk-textarea"
-    >
-    </textarea>
+      :rows="rows"
+    />
   </div>
 </template>
 
@@ -34,6 +34,10 @@ export default {
     },
     hint: {
       default: '',
+      type: String,
+    },
+    rows: {
+      default: '5',
       type: String,
     },
     id: {
