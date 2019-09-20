@@ -164,12 +164,12 @@ describe('store/exercise/single', () => {
       });
     });
 
-    describe('exerciseData', () => {
+    describe('data()', () => {
       it('returns a function', () => {
         const state = {
           record: {},
         };
-        expect(exerciseDocument.getters.exerciseData(state)).toBeFunction();
+        expect(exerciseDocument.getters.data(state)).toBeFunction();
       });
 
       it('returns a clone of the record data (rather than a reference to the state object)', () => {
@@ -181,7 +181,7 @@ describe('store/exercise/single', () => {
           },
         };
 
-        const recordObject = exerciseDocument.getters.exerciseData(state)();
+        const recordObject = exerciseDocument.getters.data(state)();
         expect(recordObject).not.toBe(state.record);
         expect(recordObject).toEqual(state.record);
       });
