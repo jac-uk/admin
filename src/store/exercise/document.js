@@ -33,7 +33,7 @@ export default {
       if (state.record === null) return null;
       return state.record.id;
     },
-    exerciseData: (state) => () => {
+    data: (state) => () => {
       return clone(state.record);
     },
   },
