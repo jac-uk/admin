@@ -12,12 +12,12 @@
     >
       {{ hint }}
     </span>
-    <input
+    <textarea
       :id="id"
       v-model="text"
-      :class="inputClass + ' govuk-input'"
-      :type="type"
+      class="govuk-textarea"
     >
+    </textarea>
   </div>
 </template>
 
@@ -25,10 +25,6 @@
 export default {
   props: {
     label: {
-      default: '',
-      type: String,
-    },
-    inputClass: {
       default: '',
       type: String,
     },
@@ -42,10 +38,6 @@ export default {
     },
     id: {
       default: '',
-      type: String,
-    },
-    type: {
-      default: 'text',
       type: String,
     },
   },
