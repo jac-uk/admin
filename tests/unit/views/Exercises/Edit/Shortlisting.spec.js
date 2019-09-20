@@ -1,6 +1,11 @@
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import { shallowMount } from '@vue/test-utils';
 
+const exercise = {
+  shortlistingMethods: null,
+  otherShortlistingMethod: null,
+};
+
 const mockStore = {
   dispatch: jest.fn(),
   state: {
@@ -10,6 +15,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+    'exerciseDocument/data': () => exercise,
   },
 };
 

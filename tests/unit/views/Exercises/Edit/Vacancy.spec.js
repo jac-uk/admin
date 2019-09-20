@@ -1,6 +1,11 @@
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
 import { shallowMount } from '@vue/test-utils';
 
+const exercise = {
+  typeOfExercise: 'legal',
+  isCourtOrTribunal: 'court',
+};
+
 const mockStore = {
   dispatch: jest.fn(),
   state: {
@@ -10,6 +15,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+    'exerciseDocument/data': () => exercise,
   },
 };
 
