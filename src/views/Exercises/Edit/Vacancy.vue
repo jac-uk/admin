@@ -134,39 +134,21 @@
             value="true"
             label="Yes"
           >
-            <div class="govuk-form-group">
-              <label
-                class="govuk-label"
-                for="yes-salary-details"
-              >
-                Detail of salaried part-time working (SPTW)
-              </label>
-              <textarea
-                id="yes-salary-details"
-                v-model="exercise.yesSalaryDetails"
-                class="govuk-textarea"
-                rows="5"
+            <TextareaInput
+              id="yes-salary-details"
+              label="Detail of salaried part-time working (SPTW)"
+              v-model="exercise.yesSalaryDetails"
               />
-            </div>
           </RadioItem>
           <RadioItem
             value="no"
             label="No"
           >
-            <div class="govuk-form-group">
-              <label
-                class="govuk-label"
-                for="no-salary-details"
-              >
-                Add why SPTW is not offered
-              </label>
-              <textarea
-                id="no-salary-details"
-                v-model="exercise.noSalaryDetails"
-                class="govuk-textarea"
-                rows="5"
+            <TextareaInput
+              id="no-salary-details"
+              label="Add why SPTW is not offered"
+              v-model="exercise.noSalaryDetails"
               />
-            </div>
           </RadioItem>
         </RadioGroup>
 
@@ -190,56 +172,26 @@
           hint="These are also called Section 94 (S94) vacancies."
         />
 
-        <div class="govuk-form-group">
-          <label
-            class="govuk-heading-m"
-            for="location"
-          >
-            Location
-          </label>
-          <textarea
-            id="location"
-            v-model="exercise.location"
-            class="govuk-textarea"
-            rows="2"
-          />
-        </div>
+        <TextareaInput
+          id="location"
+          label="Location"
+          v-model="exercise.location"
+          rows="2"
+        />
 
-        <div class="govuk-form-group">
-          <label
-            class="govuk-heading-m"
-            for="jurisdiction"
-          >
-            Jurisdiction
-          </label>
-          <p class="govuk-hint">
-            For example, Employment, Family.
-          </p>
-          <textarea
-            id="location"
-            v-model="exercise.jurisdiction"
-            class="govuk-textarea"
-            rows="5"
-          />
-        </div>
+        <TextareaInput
+          id="jurisdiction"
+          label="Jurisdiction"
+          hint="For example, Employment, Family."
+          v-model="exercise.jurisdiction"
+        />
 
-        <div class="govuk-form-group">
-          <label
-            class="govuk-heading-m"
-            for="about-the-role"
-          >
-            About the role
-          </label>
-          <p class="govuk-hint">
-            Add information about this role for the information page.
-          </p>
-          <textarea
-            id="about-the-role"
-            v-model="exercise.aboutTheRole"
-            class="govuk-textarea"
-            rows="5"
+        <TextareaInput
+          id="about-the-role"
+          label="About the role"
+          hint="Add information about this role for the information page."
+          v-model="exercise.aboutTheRole"
           />
-        </div>
 
         <CheckboxGroup
           id="welsh-requirement"
@@ -304,6 +256,7 @@ import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import Currency from '@/components/Form/Currency';
+import TextareaInput from '@/components/Form/TextareaInput';
 
 export default {
   components: {
@@ -313,6 +266,7 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     Currency,
+    TextareaInput,
   },
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
