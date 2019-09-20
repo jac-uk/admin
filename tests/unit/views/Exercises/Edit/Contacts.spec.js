@@ -1,6 +1,10 @@
 import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import { shallowMount } from '@vue/test-utils';
 
+const exercise = {
+  exerciseMailbox: 'test@jac.co.uk',
+};
+
 const mockStore = {
   dispatch: jest.fn(),
   state: {
@@ -10,6 +14,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+    'exerciseDocument/exerciseData': () => () => exercise,
   },
 };
 

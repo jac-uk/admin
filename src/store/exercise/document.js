@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import clone from 'clone';
 
 const collection = firestore.collection('exercises');
 
@@ -31,6 +32,9 @@ export default {
     id: (state) => {
       if (state.record === null) return null;
       return state.record.id;
+    },
+    exerciseData: (state) => () => {
+      return clone(state.record);
     },
   },
 };
