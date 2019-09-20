@@ -81,9 +81,7 @@
         <dt class="govuk-summary-list__key">
           Additional skills and experience
         </dt>
-        <dd class="govuk-summary-list__value">
-
-        </dd>
+        <dd class="govuk-summary-list__value" />
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">

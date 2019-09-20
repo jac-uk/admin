@@ -136,9 +136,9 @@
           >
             <TextareaInput
               id="yes-salary-details"
-              label="Detail of salaried part-time working (SPTW)"
               v-model="exercise.yesSalaryDetails"
-              />
+              label="Detail of salaried part-time working (SPTW)"
+            />
           </RadioItem>
           <RadioItem
             value="no"
@@ -146,9 +146,9 @@
           >
             <TextareaInput
               id="no-salary-details"
-              label="Add why SPTW is not offered"
               v-model="exercise.noSalaryDetails"
-              />
+              label="Add why SPTW is not offered"
+            />
           </RadioItem>
         </RadioGroup>
 
@@ -174,24 +174,24 @@
 
         <TextareaInput
           id="location"
-          label="Location"
           v-model="exercise.location"
+          label="Location"
           rows="2"
         />
 
         <TextareaInput
           id="jurisdiction"
+          v-model="exercise.jurisdiction"
           label="Jurisdiction"
           hint="For example, Employment, Family."
-          v-model="exercise.jurisdiction"
         />
 
         <TextareaInput
           id="about-the-role"
+          v-model="exercise.aboutTheRole"
           label="About the role"
           hint="Add information about this role for the information page."
-          v-model="exercise.aboutTheRole"
-          />
+        />
 
         <CheckboxGroup
           id="welsh-requirement"

@@ -47,6 +47,7 @@
             :value="true"
             label="Yes"
           />
+
           <RadioItem
             :value="false"
             label="No"
@@ -96,7 +97,14 @@
           <RadioItem
             :value="true"
             label="Yes"
-          />
+          >
+            <TextareaInput
+              id="yes-asc-apply"
+              v-model="exercise.yesASCApply"
+              label="Additional skills and experience"
+            />
+          </RadioItem>
+          
           <RadioItem
             :value="false"
             label="No"
@@ -170,6 +178,7 @@ import RadioItem from '@/components/Form/RadioItem';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import TextField from '@/components/Form/TextField';
+import TextareaInput from '@/components/Form/TextareaInput';
 
 export default {
   components: {
@@ -178,6 +187,7 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     TextField,
+    TextareaInput,
   },
   data(){
     const exercise = this.$store.state.exerciseDocument.record;
@@ -186,10 +196,11 @@ export default {
       exercise: {
         postQualificationExperience: exercise.postQualificationExperience || null,
         otherYears: exercise.otherYears || null,
-        schedule2DApply: exercise.schedule2DApply,
-        qualifications: exercise.qualifications || [],
+        schedule2DApply: exercise.schedule2DApply || null,
+        qualifications: exercise.qualifications || null,
         otherQualifications: exercise.otherQualifications || null,
-        aSCApply: exercise.aSCApply,
+        aSCApply: exercise.aSCApply || null,
+        yesASCApply: exercise.yesASCApply || null,
         reasonableLengthService: exercise.reasonableLengthService || null,
         otherLOS: exercise.otherLOS || null,
         retirementAge: exercise.retirementAge || null,
