@@ -23,4 +23,31 @@ describe('components/LoadingMessage', () => {
     expect(wrapper.find({ ref: 'errorMessage' }).isVisible()).toBe(true);
     expect(wrapper.find({ ref: 'loadingMessage' }).exists()).toBe(false);
   });
+
+  describe('slot container', () => {
+    const createWrapper = (loadFailedValue) => {
+      return shallowMount(LoadingMessage, {
+        propsData: {
+          loadFailed: loadFailedValue,
+        },
+        slots: {
+          failedLoadMessage: "<h1 class='slot'>Test error message</h1>",
+        },
+      });
+    };
+
+    describe('when loadFailed is equal to true', () => {
+      it('renders', () => {
+        let slotContainer = createWrapper(true).find('h1.slot');
+        expect(slotContainer.exists()).toBe(true);
+      });
+    });
+
+    describe('when loadFailed is equal to false', () => {
+      it('does not render', () => {
+        let slotContainer = createWrapper(false).find('h1.slot');
+        expect(slotContainer.exists()).not.toBe(true);
+      });
+    });
+  });
 });
