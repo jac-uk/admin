@@ -81,7 +81,14 @@
         <dt class="govuk-summary-list__key">
           Additional skills and experience
         </dt>
-        <dd class="govuk-summary-list__value" />
+        <dd class="govuk-summary-list__value">
+          <span v-if="exercise.aSCApply === true">
+            {{ exercise.yesASCApply }}
+          </span>
+          <span v-else>
+            Null
+          </span>
+        </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
