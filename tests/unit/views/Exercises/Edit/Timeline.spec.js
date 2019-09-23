@@ -1,6 +1,11 @@
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import { shallowMount } from '@vue/test-utils';
 
+const exercise = {
+  applicationOpenDate: new Date(2019, 1, 1),
+  applicationCloseDate: new Date(2019, 3, 3),
+};
+
 const mockStore = {
   dispatch: jest.fn(),
   state: {
@@ -10,6 +15,7 @@ const mockStore = {
   },
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
+    'exerciseDocument/data': () => exercise,
   },
 };
 

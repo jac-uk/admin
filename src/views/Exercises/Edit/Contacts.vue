@@ -152,7 +152,7 @@ export default {
     RepeatableFields,
   },
   data(){
-    const exercise = this.$store.state.exerciseDocument.record;
+    const exercise = this.$store.getters['exerciseDocument/data']();
 
     return {
       repeatableFields: {

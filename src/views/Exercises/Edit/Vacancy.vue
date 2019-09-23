@@ -269,7 +269,7 @@ export default {
     TextareaInput,
   },
   data(){
-    const exercise = this.$store.state.exerciseDocument.record;
+    const exercise = this.$store.getters['exerciseDocument/data']();
 
     return {
       exercise: {
