@@ -2,6 +2,13 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
+        <a
+          ref="BackLinkToVacancy"
+          class="govuk-back-link"
+          @click="$router.go(-1)"
+        >
+          Back
+        </a>
         <h1 class="govuk-heading-xl">
           Add eligibility information
         </h1>
@@ -104,7 +111,7 @@
               label="Additional skills and experience"
             />
           </RadioItem>
-          
+
           <RadioItem
             :value="false"
             label="No"
