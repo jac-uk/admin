@@ -3,9 +3,9 @@
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
         <a
-          ref="BackLinkToAddExerciseTimeline"
+          ref="BackLinkToTimeline"
           class="govuk-back-link"
-          @click="$router.push('add-exercise-timeline')"
+          @click="$router.go(-1)"
         >
           Back
         </a>
