@@ -3,9 +3,9 @@
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
         <a
-          ref="BackLinkToAddExerciseContacts"
+          ref="BackLinkToContacts"
           class="govuk-back-link"
-          @click="$router.push('exercise-edit-contacts')"
+          @click="$router.go(-1)"
         >
           Back
         </a>

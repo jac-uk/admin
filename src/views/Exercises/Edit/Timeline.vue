@@ -3,9 +3,9 @@
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
         <a
-          ref="BackLinkToAddShortlistingMethods"
+          ref="BackLinkToShortlisting"
           class="govuk-back-link"
-          @click="$router.push({ name: 'exercise-edit-shortlisting', params: { id: 'example' } })"
+          @click="$router.go(-1)"
         >
           Back
         </a>
