@@ -23,15 +23,19 @@ const mockRouter = {
   push: jest.fn(),
 };
 
+const createTestSubject = () => {
+  return shallowMount(ExerciseEditVacancy, {
+    mocks: {
+      $store: mockStore,
+      $router: mockRouter,
+    },
+  });
+};
+
 describe('views/Exercises/Edit/Vacancy', () => {
   let wrapper;
   beforeEach(() => {
-    wrapper = shallowMount(ExerciseEditVacancy, {
-      mocks: {
-        $store: mockStore,
-        $router: mockRouter,
-      },
-    });
+    wrapper = createTestSubject();
   });
 
   describe('template', () => {
@@ -58,6 +62,45 @@ describe('views/Exercises/Edit/Vacancy', () => {
       const button = wrapper.find('form button');
       expect(button.element.type).toBe('submit');
       expect(button.text()).toBe('Save and continue');
+    });
+  });
+
+  describe('data', () => {
+    const booleanFields = [
+      'isSPTWOffered',
+    ];
+    describe.each(booleanFields)('exercise.%s', (fieldName) => {
+      let originalValue;
+      beforeEach(() => {
+        originalValue = exercise[fieldName];
+      });
+      afterEach(() => {
+        exercise[fieldName] = originalValue;
+      });
+
+      describe(`when database value for "${fieldName}" is undefined`, () => {
+        it('defaults to `null`', () => {
+          exercise[fieldName] = undefined;
+          wrapper = createTestSubject();
+          expect(wrapper.vm.exercise[fieldName]).toBeNull();
+        });
+      });
+
+      describe(`when database value for "${fieldName}" is boolean true`, () => {
+        it('is `true`', () => {
+          exercise[fieldName] = true;
+          wrapper = createTestSubject();
+          expect(wrapper.vm.exercise[fieldName]).toBe(true);
+        });
+      });
+
+      describe(`when database value for "${fieldName}" is boolean false`, () => {
+        it('is `false`', () => {
+          exercise[fieldName] = false;
+          wrapper = createTestSubject();
+          expect(wrapper.vm.exercise[fieldName]).toBe(false);
+        });
+      });
     });
   });
 
