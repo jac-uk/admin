@@ -131,7 +131,7 @@
           label="Is salaried part-time working (SPTW) offered?"
         >
           <RadioItem
-            value="true"
+            :value="true"
             label="Yes"
           >
             <TextareaInput
@@ -141,7 +141,7 @@
             />
           </RadioItem>
           <RadioItem
-            value="no"
+            :value="false"
             label="No"
           >
             <TextareaInput
@@ -257,6 +257,7 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
+import booleanOrNull from '@/helpers/booleanOrNull';
 
 export default {
   components: {
@@ -277,7 +278,7 @@ export default {
         isCourtOrTribunal: exercise.isCourtOrTribunal || [],
         appointmentType: exercise.appointmentType || [],
         feePaidFee: exercise.feePaidFee || null,
-        isSPTWOffered: exercise.isSPTWOffered || [],
+        isSPTWOffered: booleanOrNull(exercise.isSPTWOffered),
         yesSalaryDetails: exercise.yesSalaryDetails || null,
         noSalaryDetails: exercise.noSalaryDetails || null,
         immediateStart: exercise.immediateStart || null,

@@ -179,6 +179,7 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import TextField from '@/components/Form/TextField';
 import TextareaInput from '@/components/Form/TextareaInput';
+import booleanOrNull from '@/helpers/booleanOrNull';
 
 export default {
   components: {
@@ -196,10 +197,10 @@ export default {
       exercise: {
         postQualificationExperience: exercise.postQualificationExperience || null,
         otherYears: exercise.otherYears || null,
-        schedule2DApply: exercise.schedule2DApply || null,
+        schedule2DApply: booleanOrNull(exercise.schedule2DApply),
         qualifications: exercise.qualifications || null,
         otherQualifications: exercise.otherQualifications || null,
-        aSCApply: exercise.aSCApply || null,
+        aSCApply: booleanOrNull(exercise.aSCApply),
         yesASCApply: exercise.yesASCApply || null,
         reasonableLengthService: exercise.reasonableLengthService || null,
         otherLOS: exercise.otherLOS || null,
