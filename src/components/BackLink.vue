@@ -3,7 +3,7 @@
     <a
       :id="id"
       class="govuk-back-link"
-      @click="$router.go(-1)"
+      @click="$router.back()"
     >
       Back
     </a>
