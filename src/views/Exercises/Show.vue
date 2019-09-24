@@ -99,7 +99,7 @@ export default {
           this.loadFailed = true;
         }
       }).catch((e) => {
-        
+        this.loadFailed = true;
         throw e;
       });
   },
