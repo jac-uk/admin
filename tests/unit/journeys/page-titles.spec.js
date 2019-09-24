@@ -12,11 +12,11 @@ const exerciseRoutes = [
   ['exercise-show-shortlisting', 'Exercise Details | Shortlisting'],
   ['exercise-show-vacancy', 'Exercise Details | Vacancy information'],
   ['exercise-show-eligibility', 'Exercise Details | Eligibility information'],
-  ['exercise-edit-contacts', 'Add Exercise Contacts'],
-  ['exercise-edit-shortlisting', 'Add Shortlisting Methods'],
-  ['exercise-edit-timeline', 'Add Exercise Timeline'],
-  ['exercise-edit-eligibility', 'Add Eligibility Information'],
-  ['exercise-edit-vacancy', 'About The Vacancy'],
+  ['exercise-edit-contacts', 'Contacts'],
+  ['exercise-edit-shortlisting', 'Shortlisting Methods'],
+  ['exercise-edit-timeline', 'Timeline'],
+  ['exercise-edit-eligibility', 'Eligibility Information'],
+  ['exercise-edit-vacancy', 'Vacancy Information'],
 ];
 
 describe('Page titles', () => {
