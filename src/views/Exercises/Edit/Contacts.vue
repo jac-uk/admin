@@ -2,13 +2,7 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
-        <a
-          ref="BackLinkToCreate"
-          class="govuk-back-link"
-          @click="$router.go(-1)"
-        >
-          Back
-        </a>
+        <BackLink />
         <h1 class="govuk-heading-xl">
           Add exercise contacts
         </h1>
@@ -143,6 +137,7 @@ import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
+import BackLink from '@/components/BackLink';
 
 export default {
   components: {
@@ -150,6 +145,7 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     RepeatableFields,
+    BackLink,
   },
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();

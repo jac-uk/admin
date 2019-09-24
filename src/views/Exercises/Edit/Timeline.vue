@@ -2,14 +2,7 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
-        <a
-          ref="BackLinkToShortlisting"
-          class="govuk-back-link"
-          @click="$router.go(-1)"
-        >
-          Back
-        </a>
-
+        <BackLink />
         <h1 class="govuk-heading-xl">
           Add exercise timeline
         </h1>
@@ -158,12 +151,14 @@ import DateInput from '@/components/Form/DateInput';
 import TimeInput from '@/components/Form/TimeInput';
 import RepeatableFields from '@/components/RepeatableFields';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay';
+import BackLink from '@/components/BackLink';
 
 export default {
   components: {
     DateInput,
     TimeInput,
     RepeatableFields,
+    BackLink,
   },
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
