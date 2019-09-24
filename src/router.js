@@ -135,7 +135,7 @@ const router = new Router({
           name: 'exercise-edit-contacts',
           meta: {
             requiresAuth: true,
-            title: 'Add Exercise Contacts',
+            title: 'Contacts',
           },
         },
         {
@@ -144,7 +144,7 @@ const router = new Router({
           name: 'exercise-edit-shortlisting',
           meta: {
             requiresAuth: true,
-            title: 'Add Shortlisting Methods',
+            title: 'Shortlisting Methods',
           },
         },
         {
@@ -153,7 +153,7 @@ const router = new Router({
           name: 'exercise-edit-timeline',
           meta: {
             requiresAuth: true,
-            title: 'Add Exercise Timeline',
+            title: 'Timeline',
           },
         },
         {
@@ -162,7 +162,7 @@ const router = new Router({
           name: 'exercise-edit-eligibility',
           meta: {
             requiresAuth: true,
-            title: 'Add Eligibility Information',
+            title: 'Eligibility Information',
           },
         },
         {
@@ -171,7 +171,7 @@ const router = new Router({
           name: 'exercise-edit-vacancy',
           meta: {
             requiresAuth: true,
-            title: 'About The Vacancy',
+            title: 'Vacancy Information',
           },
         },
       ],
