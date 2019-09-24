@@ -6,3 +6,8 @@
     Back
   </a>
 </template>
+<style scoped >
+ .govuk-back-link {
+   cursor: pointer;
+ }
+</style>
