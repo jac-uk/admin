@@ -10,7 +10,7 @@
           Back
         </a>
         <h1 class="govuk-heading-xl">
-          Add exercise contacts
+          Contacts
         </h1>
 
         <p class="govuk-body-l">

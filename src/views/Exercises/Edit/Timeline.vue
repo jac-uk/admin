@@ -11,7 +11,7 @@
         </a>
 
         <h1 class="govuk-heading-xl">
-          Add exercise timeline
+          Timeline
         </h1>
         <p class="govuk-body-l">
           You can return to this page later to add or change dates.

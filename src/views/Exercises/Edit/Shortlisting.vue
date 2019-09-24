@@ -11,7 +11,7 @@
         </a>
 
         <h1 class="govuk-heading-xl">
-          Add shortlisting methods
+          Shortlisting methods
         </h1>
 
         <p class="govuk-body-l">

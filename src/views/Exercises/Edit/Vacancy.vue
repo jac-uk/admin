@@ -11,7 +11,7 @@
         </a>
 
         <h1 class="govuk-heading-xl">
-          About the vacancy
+          Vacancy information
         </h1>
 
         <p class="govuk-body-l">

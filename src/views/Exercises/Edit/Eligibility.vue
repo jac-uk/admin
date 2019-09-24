@@ -3,7 +3,7 @@
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">
-          Add eligibility information
+          Eligibility information
         </h1>
 
         <p class="govuk-body-l">
