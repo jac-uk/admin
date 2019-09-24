@@ -21,12 +21,12 @@ describe('components/BackLink', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  it('has the class name govuk-back-link', () => {
+  it('renders a GOV.UK Back link', () => {
     expect(link.is('.govuk-back-link')).toBe(true);
     expect(link.text()).toBe('Back');
   });
 
-  it('calls the back function', () => {
+  it('calls $router.back() on click', () => {
     link.trigger('click');
     expect(mockRouter.back).toHaveBeenCalled();
   });
