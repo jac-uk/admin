@@ -85,8 +85,8 @@ export default {
   },
   methods: {
     redirectToErrorPage() {
-      this.$router.replace({ name: 'exercise-not-found' })
-    }
-  }
+      this.$router.replace({ name: 'exercise-not-found' });
+    },
+  },
 };
 </script>

@@ -13,11 +13,16 @@ const mockRoute = {
   },
 };
 
+const mockRouter = {
+  replace: jest.fn(),
+};
+
 const createTestSubject = () => {
   return shallowMount(Edit, {
     mocks: {
       $store: mockStore,
       $route: mockRoute,
+      $router: mockRouter,
     },
     stubs: {
       RouterView: true,
@@ -74,7 +79,7 @@ describe('@/views/Exercises/Edit', () => {
     });
   });
 
-  describe.only('watchers', () => {
+  describe('watchers', () => {
     describe('when $route changes', () => {
       it('updates `exerciseCreateJourney` with the current route name', () => {
         // Trigger the $route watcher function
@@ -91,6 +96,15 @@ describe('@/views/Exercises/Edit', () => {
         const calls = mockStore.dispatch.mock.calls;
         expect(calls[0]).toEqual(['exerciseCreateJourney/setCurrentRoute', 'page-one']);
         expect(calls[1]).toEqual(['exerciseCreateJourney/setCurrentRoute', 'page-two']);
+      });
+    });
+  });
+
+  describe('methods', () => {
+    describe('redirectToErrorPage', () => {
+      it('calls router replace method', () => {
+        wrapper.vm.redirectToErrorPage();
+        expect(mockRouter.replace).toHaveBeenCalled();
       });
     });
   });

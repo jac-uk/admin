@@ -1,17 +1,25 @@
 import Show from '@/views/Exercises/Show';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Router from 'vue-router';
 import Vuex from 'vuex';
 import Navigation from '@/components/Page/Navigation';
 import LoadingMessage from '@/components/LoadingMessage';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-localVue.use(Router);
 
-const router = new Router();
 const exercise = {
   name: 'test name',
+};
+
+const mockRoute = {
+  name: 'name-of-current-route',
+  params: {
+    id: 'abc123',
+  },
+};
+
+const mockRouter = {
+  replace: jest.fn(),
 };
 
 const store = new Vuex.Store({
@@ -37,7 +45,10 @@ const createTestSubject = () => {
   return shallowMount(Show, {
     store,
     localVue,
-    router,
+    mocks: {
+      $route: mockRoute,
+      $router: mockRouter,
+    },
     stubs: {
       'RouterView': true,
     },
@@ -85,6 +96,16 @@ describe('@/views/Exercises/Show', () => {
 
       it('renders the RouterView', () => {
         expect(wrapper.find('RouterView-stub').exists()).toBe(true);
+      });
+    });
+  });
+
+  describe('methods', () => {
+    describe('redirectToErrorPage', () => {
+      it('calls router replace method', () => {
+        let wrapper = createTestSubject();
+        wrapper.vm.redirectToErrorPage();
+        expect(mockRouter.replace).toHaveBeenCalled();
       });
     });
   });
