@@ -18,6 +18,8 @@ const routes = [
   ['exercise-edit-timeline', `/exercises/${id}/edit/timeline`],
   ['exercise-edit-eligibility', `/exercises/${id}/edit/eligibility`],
   ['exercise-edit-vacancy', `/exercises/${id}/edit/vacancy`],
+  ['exercise-not-found', '/exercise-not-found'],
+  ['page-not-found', '/page-not-found'],
 ];
 
 describe('Sign in journey', () => {

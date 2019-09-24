@@ -13,7 +13,7 @@
     >
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          <slot name="failedLoadMessage" />
+          <h1>Something went wrong</h1>
         </div>
       </div>
     </div>
