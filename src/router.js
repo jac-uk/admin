@@ -21,6 +21,10 @@ import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
 
+// Error pages
+import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
+import PageNotFound from '@/views/Errors/PageNotFound';
+
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -175,6 +179,24 @@ const router = new Router({
           },
         },
       ],
+    },
+    {
+      path: '/exercise-not-found',
+      name: 'exercise-not-found',
+      component: ExerciseNotFound,
+      meta: {
+        requiresAuth: true,
+        title: 'Exercise Not Found',
+      },
+    },
+    {
+      path: '/page-not-found',
+      name: 'page-not-found',
+      component: PageNotFound,
+      meta: {
+        requiresAuth: true,
+        title: 'Page Not found',
+      },
     },
     {
       path: '/sign-in',

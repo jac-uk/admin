@@ -20,11 +20,6 @@ describe('components/LoadingMessage', () => {
       expect(wrapper.find({ ref: 'loadingMessage' }).isVisible()).toBe(true);
       expect(wrapper.find({ ref: 'errorMessage' }).exists()).toBe(false);
     });
-
-    it('does not render the slot', () => {
-      let slotContainer = createWrapper(false).find('h1.slot');
-      expect(slotContainer.exists()).not.toBe(true);
-    });
   });
 
   describe('when loadFailed is equal to true', () => {
@@ -34,10 +29,5 @@ describe('components/LoadingMessage', () => {
       expect(wrapper.find({ ref: 'errorMessage' }).isVisible()).toBe(true);
       expect(wrapper.find({ ref: 'loadingMessage' }).exists()).toBe(false);
     });
-
-    it('renders the slot', () => {
-        let slotContainer = createWrapper(true).find('h1.slot');
-        expect(slotContainer.exists()).toBe(true);
-      });
   });
 });
