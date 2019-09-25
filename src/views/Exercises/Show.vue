@@ -72,11 +72,11 @@ export default {
     
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
-        if(!(data === null)) {
-          this.loaded = true;
+        if(data === null) {
+          this.redirectToErrorPage();
         }
         else {
-          this.redirectToErrorPage();
+          this.loaded = true;
         }
       }).catch((e) => {
         this.loadFailed = true;

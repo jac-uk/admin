@@ -14,6 +14,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <h1>Something went wrong</h1>
+          <p>Reload the page and try again</p>
         </div>
       </div>
     </div>
