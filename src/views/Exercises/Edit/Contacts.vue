@@ -4,7 +4,7 @@
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
         <h1 class="govuk-heading-xl">
-          Add exercise contacts
+          Contacts
         </h1>
 
         <p class="govuk-body-l">
