@@ -67,10 +67,6 @@
             label="Senior President of Tribunals (SPT)"
           />
           <CheckboxItem
-            value="senior-presiding-judge"
-            label="Senior Presiding Judge (SPJ)"
-          />
-          <CheckboxItem
             value="scottish-ministers"
             label="Scottish ministers"
           />
@@ -93,7 +89,7 @@
         <TextField
           id="hmcts-welshgov-lead"
           v-model="exercise.hmctsWelshGovLead"
-          label="HMCTS or Welsh Government lead"
+          label="HMCTS or Welsh Government lead contact"
         />
 
         <TextField
