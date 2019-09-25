@@ -201,7 +201,7 @@
           />
         </CheckboxGroup>
 
-        <h2 class="govuk-label-input">
+        <h2 class="govuk-heading-l">
           Additional information
         </h2>
 
