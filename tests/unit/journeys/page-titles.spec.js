@@ -3,7 +3,7 @@ import App from '@/App';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
-const exerciseRoutes = [
+const routes = [
   ['exercise-new', 'Create An Exercise'],
   ['exercise-show-overview', 'Exercise Details | Overview'],
   ['exercise-show-applications', 'Exercise Details | Applications'],
@@ -17,6 +17,8 @@ const exerciseRoutes = [
   ['exercise-edit-timeline', 'Timeline'],
   ['exercise-edit-eligibility', 'Eligibility Information'],
   ['exercise-edit-vacancy', 'Vacancy Information'],
+  ['exercise-not-found', 'Exercise Not Found'],
+  ['page-not-found', 'Page Not found'],
 ];
 
 describe('Page titles', () => {
@@ -72,7 +74,7 @@ describe('Page titles', () => {
     });
   });
 
-  describe.each(exerciseRoutes)('%s', (routeName, routeTitle) => {
+  describe.each(routes)('%s', (routeName, routeTitle) => {
      beforeEach(() => {
       store.dispatch('setCurrentUser', user);
       router.push({ name: routeName, params: { id: 123 } });
