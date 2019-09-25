@@ -58,12 +58,6 @@
           v-model="exercise.sjcaTestEndTime"
           label="End time"
         />
-        <DateInput
-          id="test-outcome"
-          v-model="exercise.sjcaTestOutcome"
-          label="Outcome to candidates"
-          type="month"
-        />
 
         <h3 class="govuk-heading-m">
           Scenario test qualifying test (QT)
@@ -83,12 +77,6 @@
           v-model="exercise.scenarioTestEndTime"
           label="End time"
         />
-        <DateInput
-          id="test-outcome"
-          v-model="exercise.scenarioTestOutcome"
-          label="Outcome to candidates"
-          type="month"
-        />
 
         <h2 class="govuk-heading-l">
           Independent assessors
@@ -102,29 +90,12 @@
         />
 
         <h2 class="govuk-heading-l">
-          Selection day dates
+          Selection day
         </h2>
 
         <RepeatableFields
           v-model="exercise.selectionDays"
           :component="repeatableFields.SelectionDay"
-        />
-
-        <h2 class="govuk-heading-l">
-          Candidate checks
-        </h2>
-
-        <DateInput
-          id="character-checks"
-          v-model="exercise.characterChecks"
-          label="Character checks"
-          type="month"
-        />
-        <DateInput
-          id="statutory-consultation"
-          v-model="exercise.statutoryConsultation"
-          label="Statutory consultation"
-          type="month"
         />
 
         <h2 class="govuk-heading-l">
@@ -134,7 +105,7 @@
         <DateInput
           id="final-outcome"
           v-model="exercise.finalOutcome"
-          label="Final outcome"
+          label="Final outcome to candidates"
           type="month"
         />
 
@@ -173,16 +144,12 @@ export default {
         sjcaTestDate: exercise.sjcaTestDate || null,
         sjcaTestStartTime: exercise.sjcaTestStartTime || null,
         sjcaTestEndTime: exercise.sjcaTestEndTime || null,
-        sjcaTestOutcome: exercise.sjcaTestOutcome || null,
         scenarioTestDate: exercise.scenarioTestDate ||null,
         scenarioTestStartTime: exercise.scenarioTestStartTime || null,
         scenarioTestEndTime: exercise.scenarioTestEndTime || null,
-        scenarioTestOutcome: exercise.scenarioTestOutcome || null,
         contactIndependentAssessors: exercise.contactIndependentAssessors || null,
         selectionDayStart: exercise.selectionDayStart || null,
         selectionDayEnd: exercise.selectionDayEnd || null,
-        characterChecks: exercise.characterChecks || null,
-        statutoryConsultation: exercise.statutoryConsultation || null,
         finalOutcome: exercise.finalOutcome || null,
         selectionDays: exercise.selectionDays || [],
       },
