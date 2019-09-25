@@ -18,7 +18,7 @@ const routes = [
   ['exercise-edit-eligibility', 'Eligibility Information'],
   ['exercise-edit-vacancy', 'Vacancy Information'],
   ['exercise-not-found', 'Exercise Not Found'],
-  ['page-not-found', 'Page Not found'],
+  ['page-not-found', 'Page Not Found'],
 ];
 
 describe('Page titles', () => {
