@@ -11,6 +11,15 @@ const exercise = {
   name: 'test name',
 };
 
+let mockStore = {
+  dispatch: jest.fn().mockResolvedValue(),
+  state: {
+    exerciseDocument: {
+      record: exercise,
+    },
+  },
+};
+
 const mockRoute = {
   name: 'name-of-current-route',
   params: {
@@ -22,32 +31,13 @@ const mockRouter = {
   replace: jest.fn(),
 };
 
-const store = new Vuex.Store({
-  dispatch: jest.fn(),
-  modules: {
-    exerciseDocument: {
-      namespaced: true,
-      actions: {
-        bind: () => {
-          new Promise((resolve) => {
-            return resolve();
-          });
-        },
-      },
-      state: {
-        record: exercise,
-      },
-    },
-  },
-});
-
 const createTestSubject = () => {
   return shallowMount(Show, {
-    store,
     localVue,
     mocks: {
       $route: mockRoute,
       $router: mockRouter,
+      $store: mockStore,
     },
     stubs: {
       'RouterView': true,
@@ -56,6 +46,11 @@ const createTestSubject = () => {
 };
 
 describe('@/views/Exercises/Show', () => {
+
+  beforeEach(() => {
+    mockStore.dispatch.mockClear();
+  });
+
   describe('computed properties', () => {
     describe('exercise', () => {
       it('returns record object from state', () => {
@@ -102,10 +97,11 @@ describe('@/views/Exercises/Show', () => {
 
   describe('methods', () => {
     describe('redirectToErrorPage', () => {
-      it('calls router replace method', () => {
+      it('calls router replace method with the name of error page', () => {
         let wrapper = createTestSubject();
         wrapper.vm.redirectToErrorPage();
         expect(mockRouter.replace).toHaveBeenCalled();
+        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ 'name': 'exercise-not-found' });
       });
     });
   });
