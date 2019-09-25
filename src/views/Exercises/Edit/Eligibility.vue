@@ -8,7 +8,7 @@
         </h1>
 
         <p class="govuk-body-l">
-          You'll find this information in the eligibility statement from HMCTS.
+          You'll find this information in the eligibility statement from HMCTS. You can return to this page later to add or change information.
         </p>
 
         <RadioGroup
@@ -41,8 +41,47 @@
         <RadioGroup
           id="schedule-2d-apply"
           v-model="exercise.schedule2DApply"
-          label="Does Schedule 2(d) apply?"
-          hint="This lets appropriate candidates apply, even if they do not have the right legal experience."
+          label="Does Schedule 2(d) or Schedule 3 apply?"
+          hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          />
+
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
+        <RadioGroup
+          id="additional-selection-criteria-apply"
+          v-model="exercise.aSCApply"
+          label="Does additional selection criteria (ASC) apply?"
+          hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          >
+            <TextareaInput
+              id="yes-asc-apply"
+              v-model="exercise.yesASCApply"
+              label="Additional skills and experience"
+            />
+          </RadioItem>
+
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
+        <RadioGroup
+          id="previous-judicial-experience-apply"
+          v-model="exercise.previousJudicialExperienceApply"
+          label="Does previous judicial experience (PJE) apply?"
         >
           <RadioItem
             :value="true"
@@ -85,32 +124,10 @@
               id="other-qualifications"
               v-model="exercise.otherQualifications"
               label="Add details of other relevant professions, qualifications or experience"
+              hint="For example, Patent attorney."
             />
           </CheckboxItem>
         </CheckboxGroup>
-
-        <RadioGroup
-          id="additional-selection-criteria-apply"
-          v-model="exercise.aSCApply"
-          label="Does additional selection criteria (ASC) apply?"
-          hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
-        >
-          <RadioItem
-            :value="true"
-            label="Yes"
-          >
-            <TextareaInput
-              id="yes-asc-apply"
-              v-model="exercise.yesASCApply"
-              label="Additional skills and experience"
-            />
-          </RadioItem>
-
-          <RadioItem
-            :value="false"
-            label="No"
-          />
-        </RadioGroup>
 
         <RadioGroup
           id="reasonable-length-service"
@@ -201,10 +218,11 @@ export default {
         postQualificationExperience: exercise.postQualificationExperience || null,
         otherYears: exercise.otherYears || null,
         schedule2DApply: booleanOrNull(exercise.schedule2DApply),
-        qualifications: exercise.qualifications || null,
-        otherQualifications: exercise.otherQualifications || null,
         aSCApply: booleanOrNull(exercise.aSCApply),
         yesASCApply: exercise.yesASCApply || null,
+        previousJudicialExperienceApply: booleanOrNull(exercise.previousJudicialExperienceApply),
+        qualifications: exercise.qualifications || null,
+        otherQualifications: exercise.otherQualifications || null,
         reasonableLengthService: exercise.reasonableLengthService || null,
         otherLOS: exercise.otherLOS || null,
         retirementAge: exercise.retirementAge || null,
