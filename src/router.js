@@ -181,7 +181,7 @@ const router = new Router({
       ],
     },
     {
-      path: '/exercise-not-found',
+      path: '/errors/exercise-not-found',
       name: 'exercise-not-found',
       component: ExerciseNotFound,
       meta: {
@@ -190,12 +190,12 @@ const router = new Router({
       },
     },
     {
-      path: '/page-not-found',
+      path: '/errors/page-not-found',
       name: 'page-not-found',
       component: PageNotFound,
       meta: {
         requiresAuth: true,
-        title: 'Page Not found',
+        title: 'Page Not Found',
       },
     },
     {
