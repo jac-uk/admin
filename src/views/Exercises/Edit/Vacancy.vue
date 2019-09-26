@@ -8,7 +8,7 @@
         </h1>
 
         <p class="govuk-body-l">
-          You'll find this information in the vacancy request (VR) from HMCTS.
+          You'll find this information in the vacancy request (VR) from HMCTS. You can return to this page later to add or change information.
         </p>
 
         <RadioGroup
@@ -60,7 +60,7 @@
           >
             <div class="govuk-form-group">
               <label
-                class="govuk-label"
+                class="govuk-heading-m govuk-!-margin-bottom-2"
                 for="salary-group"
               >
                 Salary group
@@ -69,35 +69,41 @@
                 id="salary-group"
                 class="govuk-select"
               >
+                <option value="">
+                  Select an option
+                </option>
                 <option value="group1">
-                  Group 1
+                  Group 1 - £262,264
                 </option>
                 <option value="group1.1">
-                  Group 1.1
+                  Group 1.1 - £234,184
                 </option>
                 <option value="group2">
-                  Group 2
+                  Group 2 - £226,193
                 </option>
                 <option value="group3">
-                  Group 3
+                  Group 3 - £215,094
                 </option>
                 <option value="group4">
-                  Group 4
+                  Group 4 - £188,901
                 </option>
                 <option value="group5+">
-                  Group 5+
+                  Group 5+ - £160,377
                 </option>
                 <option value="group5">
-                  Group 5
+                  Group 5 - £151,497
                 </option>
                 <option value="group6.1">
-                  Group 6.1
+                  Group 6.1 - £140,289
                 </option>
                 <option value="group6.2">
-                  Group 6.7
+                  Group 6.2 - £132,075
                 </option>
                 <option value="group7">
-                  Group 7
+                  Group 7 - £112,542
+                </option>
+                <option value="group8">
+                  Group 8 - £89,428
                 </option>
               </select>
             </div>
@@ -106,7 +112,7 @@
             value="fee-paid"
             label="Fee paid"
           >
-            <Currency
+            <TextField
               id="fee-paid-fee"
               v-model="exercise.feePaidFee"
               label="Fee"
@@ -179,13 +185,6 @@
           hint="For example, Employment, Family."
         />
 
-        <TextareaInput
-          id="about-the-role"
-          v-model="exercise.aboutTheRole"
-          label="About the role"
-          hint="Add information about this role for the information page."
-        />
-
         <CheckboxGroup
           id="welsh-requirement"
           v-model="exercise.welshRequirement"
@@ -201,6 +200,17 @@
             label="Devolution questions"
           />
         </CheckboxGroup>
+
+        <h2 class="govuk-heading-l">
+          Additional information
+        </h2>
+
+        <TextareaInput
+          id="about-the-role"
+          v-model="exercise.aboutTheRole"
+          label="About the role"
+          hint="Add information about this role for the information page."
+        />
 
         <h2 class="govuk-label-input">
           Upload HMCTS documents
@@ -248,7 +258,6 @@ import RadioItem from '@/components/Form/RadioItem';
 import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
-import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
 import booleanOrNull from '@/helpers/booleanOrNull';
 import BackLink from '@/components/BackLink';
@@ -260,7 +269,6 @@ export default {
     TextField,
     CheckboxGroup,
     CheckboxItem,
-    Currency,
     TextareaInput,
     BackLink,
   },
@@ -280,8 +288,9 @@ export default {
         futureStart: exercise.futureStart || null,
         location: exercise.location || null,
         jurisdiction: exercise.jurisdiction || null,
-        aboutTheRole: exercise.aboutTheRole || null,
         welshRequirement: exercise.welshRequirement || [],
+        aboutTheRole: exercise.aboutTheRole || null,
+
       },
     };
   },
