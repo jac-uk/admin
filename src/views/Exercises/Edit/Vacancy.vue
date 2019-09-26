@@ -97,7 +97,7 @@
                   Group 6.1 - £140,289
                 </option>
                 <option value="group6.2">
-                  Group 6.7 - £132,075
+                  Group 6.2 - £132,075
                 </option>
                 <option value="group7">
                   Group 7 - £112,542
