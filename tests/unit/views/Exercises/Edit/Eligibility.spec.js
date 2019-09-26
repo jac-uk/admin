@@ -62,6 +62,18 @@ describe('views/Exercises/Edit/Eligibility', () => {
       expect(button.element.type).toBe('submit');
       expect(button.text()).toBe('Save and continue');
     });
+
+    describe('Does Schedule 2(d) or Schedule 3 apply?', () => {
+      it('does not show the question if the role is a court role', () => {
+        wrapper.setData({ isCourtOrTribunal: 'court' });
+        expect(wrapper.find('#schedule-2d-apply').exists()).toBe(false);
+      });
+
+      it('does show the question if the role is a tribunal role', () => {
+        wrapper.setData({ isCourtOrTribunal: 'tribunal' });
+        expect(wrapper.find('#schedule-2d-apply').exists()).toBe(true);
+      });
+    });
   });
 
   describe('data', () => {
