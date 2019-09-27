@@ -14,7 +14,7 @@
         <template v-slot:removeButton>
           <button
             type="button"
-            class="govuk-link govuk-link-delete govuk-!-margin-bottom-4"
+            class="govuk-button govuk-button--warning govuk-!-margin-bottom-2"
             @click.prevent="removeRow(index)"
           >
             Remove
@@ -25,7 +25,7 @@
     <button
       v-if="canAddRow"
       type="button"
-      class="govuk-link govuk-!-margin-bottom-6"
+      class="govuk-button govuk-button--secondary govuk-!-margin-bottom-6"
       @click.prevent="addRow"
     >
       Add another
