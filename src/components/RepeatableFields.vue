@@ -88,24 +88,3 @@ export default {
   },
 };
 </script>
-
-<style>
-  button.govuk-link {
-    padding: 0;
-    margin: 0;
-    background-color: transparent;
-    border: 0;
-    color: #1d70b8;
-    font-size: 1em;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  button.govuk-link.govuk-link-delete {
-    color: red;
-  }
-
-  .repeatableField .govuk-form-group {
-    margin-bottom: 1em;
-  }
-</style>
