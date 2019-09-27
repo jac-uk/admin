@@ -71,12 +71,22 @@ export default {
     const id = this.$route.params.id;
     
     this.$store.dispatch('exerciseDocument/bind', id)
-      .then(() => {
-        this.loaded = true;
+      .then((data) => {
+        if(data === null) {
+          this.redirectToErrorPage();
+        }
+        else {
+          this.loaded = true;
+        }
       }).catch((e) => {
         this.loadFailed = true;
         throw e;
       });
+  },
+  methods: {
+    redirectToErrorPage() {
+      this.$router.replace({ name: 'exercise-not-found' });
+    },
   },
 };
 </script>

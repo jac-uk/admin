@@ -1,43 +1,44 @@
 import Show from '@/views/Exercises/Show';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Router from 'vue-router';
 import Vuex from 'vuex';
 import Navigation from '@/components/Page/Navigation';
 import LoadingMessage from '@/components/LoadingMessage';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-localVue.use(Router);
 
-const router = new Router();
 const exercise = {
   name: 'test name',
 };
 
-const store = new Vuex.Store({
-  dispatch: jest.fn(),
-  modules: {
+let mockStore = {
+  dispatch: jest.fn().mockResolvedValue(),
+  state: {
     exerciseDocument: {
-      namespaced: true,
-      actions: {
-        bind: () => {
-          new Promise((resolve) => {
-            return resolve();
-          });
-        },
-      },
-      state: {
-        record: exercise,
-      },
+      record: exercise,
     },
   },
-});
+};
+
+const mockRoute = {
+  name: 'name-of-current-route',
+  params: {
+    id: 'abc123',
+  },
+};
+
+const mockRouter = {
+  replace: jest.fn(),
+};
 
 const createTestSubject = () => {
   return shallowMount(Show, {
-    store,
     localVue,
-    router,
+    mocks: {
+      $route: mockRoute,
+      $router: mockRouter,
+      $store: mockStore,
+    },
     stubs: {
       'RouterView': true,
     },
@@ -45,6 +46,11 @@ const createTestSubject = () => {
 };
 
 describe('@/views/Exercises/Show', () => {
+
+  beforeEach(() => {
+    mockStore.dispatch.mockClear();
+  });
+
   describe('computed properties', () => {
     describe('exercise', () => {
       it('returns record object from state', () => {
@@ -85,6 +91,17 @@ describe('@/views/Exercises/Show', () => {
 
       it('renders the RouterView', () => {
         expect(wrapper.find('RouterView-stub').exists()).toBe(true);
+      });
+    });
+  });
+
+  describe('methods', () => {
+    describe('redirectToErrorPage', () => {
+      it('calls router replace method with the name of error page', () => {
+        let wrapper = createTestSubject();
+        wrapper.vm.redirectToErrorPage();
+        expect(mockRouter.replace).toHaveBeenCalled();
+        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ 'name': 'exercise-not-found' });
       });
     });
   });
