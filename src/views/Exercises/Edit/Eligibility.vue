@@ -39,6 +39,7 @@
         </RadioGroup>
 
         <RadioGroup
+          v-if="isCourtOrTribunal === 'tribunal'"
           id="schedule-2d-apply"
           v-model="exercise.schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
@@ -228,6 +229,7 @@ export default {
         retirementAge: exercise.retirementAge || null,
         otherRetirement: exercise.otherRetirement || null,
       },
+      isCourtOrTribunal: exercise.isCourtOrTribunal,
     };
   },
   methods: {
