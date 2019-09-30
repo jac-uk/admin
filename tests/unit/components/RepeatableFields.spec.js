@@ -132,7 +132,7 @@ describe('components/RepeatableFields', () => {
             component: SelectionExerciseOfficer }
           );
 
-          let buttons = wrapper.findAll({ref: 'removeFieldButton'});
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(3);
         });
       });
@@ -144,7 +144,7 @@ describe('components/RepeatableFields', () => {
             component: SelectionExerciseOfficer }
           );
 
-          let buttons = wrapper.findAll({ref: 'removeFieldButton'});
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(0);
         });
       });
