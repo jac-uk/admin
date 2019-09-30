@@ -1,10 +1,12 @@
-import { shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import RepeatableFields from '@/components/RepeatableFields';
 // import TextField to test with a component
 import TextField from '@/components/Form/TextField';
+// import SelectionExerciseOfficer to test slot
+import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 
 const createTestSubject = (props) => {
-  return shallowMount(RepeatableFields, {
+  return mount(RepeatableFields, {
     propsData: {
       value: null,
       component: TextField,
@@ -118,6 +120,32 @@ describe('components/RepeatableFields', () => {
 
         it('renders number of components equal to the length of the array', () => {
           expect(wrapper.findAll(TextField)).toHaveLength(3);
+        });
+      });
+    });
+
+    describe('Remove button slot', () => {
+      describe('when there are more then one repeatable field', () => {
+        it('render a button for every repeatable field', () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }, { name: 'second' }, { name: 'third' }],
+            component: SelectionExerciseOfficer }
+          );
+
+          let buttons = wrapper.findAll('.govuk-button--warning');
+          expect(buttons).toHaveLength(3);
+        });
+      });
+
+      describe('when there is only one field', () => {
+        it("doesn't render", () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }],
+            component: SelectionExerciseOfficer }
+          );
+
+          let buttons = wrapper.findAll('.govuk-button--warning');
+          expect(buttons).toHaveLength(0);
         });
       });
     });
