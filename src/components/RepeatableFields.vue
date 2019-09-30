@@ -13,6 +13,8 @@
       >
         <template v-slot:removeButton>
           <button
+            v-if="rows.length > 1"
+            ref="removeFieldButton"
             type="button"
             class="govuk-button govuk-button--warning govuk-!-margin-bottom-2"
             @click.prevent="removeRow(index)"
