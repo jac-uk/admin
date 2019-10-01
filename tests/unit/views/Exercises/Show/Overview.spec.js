@@ -2,6 +2,20 @@ import Overview from '@/views/Exercises/Show/Overview';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Timeline from '@/components/Page/Timeline';
+import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
+import createTimeline from '@/helpers/Timeline/createTimeline';
+
+jest.mock('@/helpers/Timeline/exerciseTimeline', () => {
+  return jest.fn().mockImplementation(() => {
+    return [];
+  });
+});
+
+jest.mock('@/helpers/Timeline/createTimeline', () => {
+  return jest.fn().mockImplementation(() => {
+    return [];
+  });
+});
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -50,15 +64,19 @@ describe('@/views/Exercises/Show', () => {
     });
 
     describe('timeline', () => {
-      it('returns an array', () => {
-        let wrapper = createTestSubject();
-        expect(wrapper.vm.timeline).toBeArray();
+      beforeEach(() => {
+        createTestSubject();
+      });
+      it('calls exerciseTimeline helper', () => {
+        expect(exerciseTimeline).toHaveBeenCalled();
       });
 
-      it('uses applicationOpenDate and applicationCloseDate values to build an array', () => {
-        let wrapper = createTestSubject();
-        expect(wrapper.vm.timeline[0].date).toBe('TestOpen');
-        expect(wrapper.vm.timeline[1].date).toBe('TestClose');
+      it('calls createTimeline helper', () => {
+        expect(createTimeline).toHaveBeenCalled();
+      });
+
+      it('calls createTimeline helper with array and passes 2 as length', () => {
+        expect(createTimeline).toHaveBeenCalledWith([], 2);
       });
     });
   });

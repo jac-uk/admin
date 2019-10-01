@@ -59,6 +59,9 @@
 
 <script>
 import Timeline from '@/components/Page/Timeline';
+import createTimeline from '@/helpers/Timeline/createTimeline';
+import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
+
 export default {
   components: {
     Timeline,
@@ -68,10 +71,8 @@ export default {
       return this.$store.getters['exerciseDocument/data']();
     },
     timeline() {
-      return [
-        { 'entry': 'Open for applications', 'date': this.exercise.applicationOpenDate },
-        { 'entry': 'Closed for applications', 'date': this.exercise.applicationCloseDate },
-      ];
+      let timeline = exerciseTimeline(this.exercise);
+      return createTimeline(timeline, 2);
     },
   },
 };
