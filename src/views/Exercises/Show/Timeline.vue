@@ -18,8 +18,8 @@
 
 <script>
 import Timeline from '@/components/Page/Timeline';
-import formatDate from '@/helpers/formatDate';
 import createTimeline from '@/helpers/Timeline/createTimeline';
+import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
 
 export default {
   components: {
@@ -30,49 +30,8 @@ export default {
       return this.$store.getters['exerciseDocument/data']();
     },
     timeline() {
-      return createTimeline(this.exercise);
-      // return [
-      //   { 
-      //     'entry': 'Open for applications', 'date': formatDate(this.exercise.applicationOpenDate), 
-      //   },
-      //   { 
-      //     'entry': 'Closed for applications', 
-      //     'date': formatDate(this.exercise.applicationCloseDate), 
-      //   },
-      //   { 
-      //     'entry': 'QT', 'date': `${formatDate(this.exercise.sjcaTestStartTime)} - ${formatDate(this.exercise.sjcaTestStartTime, 'time')} to ${formatDate(this.exercise.sjcaTestEndTime, 'time')}`, 
-      //   },
-      //   { 
-      //     'entry': 'QT outcome to candidates', 
-      //     'date': formatDate(this.exercise.sjcaTestOutcome, 'month'), 
-      //   },
-      //   {
-      //     'entry': 'Scenario test',
-      //     'date': `${formatDate(this.exercise.scenarioTestDate)} - ${formatDate(this.exercise.scenarioTestStartTime, 'time')} to ${formatDate(this.exercise.scenarioTestEndTime, 'time')}`,
-      //   },
-      //   { 'entry': 'Scenario test outcome to candidates', 
-      //     'date': formatDate(this.exercise.scenarioTestOutcome),
-      //   },
-      //   { 
-      //     'entry': 'Contact independent assessors', 
-      //     'date': formatDate(this.exercise.contactIndependentAssessors) },
-      //   { 
-      //     'entry': 'Selection day', 
-      //     'date': `${formatDate(this.exercise.selectionDays[0].selectionDayStart)} to ${formatDate(this.exercise.selectionDays[0].selectionDayEnd)}`,
-      //   },
-      //   { 
-      //     'entry': 'Character checks', 
-      //     'date': formatDate(this.exercise.characterChecks, 'month'), 
-      //   },
-      //   { 
-      //     'entry': 'Statutory consultation', 
-      //     'date': formatDate(this.exercise.statutoryConsultation, 'month'), 
-      //   },
-      //   { 
-      //     'entry': 'Selection process outcome', 
-      //     'date': formatDate(this.exercise.finalOutcome, 'month'),
-      //   },
-      // ];
+      let timeline = exerciseTimeline(this.exercise);
+      return createTimeline(timeline);
     },
   },
 };

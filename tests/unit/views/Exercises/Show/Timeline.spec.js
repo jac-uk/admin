@@ -2,6 +2,20 @@ import ShowTimeline from '@/views/Exercises/Show/Timeline';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Timeline from '@/components/Page/Timeline';
+import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
+import createTimeline from '@/helpers/Timeline/createTimeline';
+
+jest.mock('@/helpers/Timeline/exerciseTimeline', () => {
+  return jest.fn().mockImplementation(() => {
+    return [];
+  });
+});
+
+jest.mock('@/helpers/Timeline/createTimeline', () => {
+  return jest.fn().mockImplementation(() => {
+    return [];
+  });
+});
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -72,9 +86,16 @@ describe('@/views/Exercises/Show/Timeline', () => {
     });
 
     describe('timeline', () => {
-      it('returns an array', () => {
-        let wrapper = createTestSubject();
-        expect(wrapper.vm.timeline).toBeArray();
+      beforeEach(() => {
+        createTestSubject();
+      });
+
+      it('calls exerciseTimeline helper', () => {
+        expect(exerciseTimeline).toHaveBeenCalled();
+      });
+
+      it('calls createTimeline helper', () => {
+        expect(createTimeline).toHaveBeenCalled();
       });
     });
   });
