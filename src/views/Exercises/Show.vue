@@ -8,12 +8,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <div class="text-right govuk-!-margin-0">
-            <a
-              href="#"
-              class="govuk-button govuk-button--secondary govuk-!-margin-0"
-            >
-              ☆ Add to favourites
-            </a>
+            <AddToFavouritesButton />
           </div>
           <span class="govuk-caption-xl">118</span>
           <h1 class="govuk-heading-xl">
@@ -39,11 +34,13 @@
 <script>
 import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
+import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 
 export default {
   components: {
     LoadingMessage,
     Navigation,
+    AddToFavouritesButton
   },
   data() {
     const navPages = [
