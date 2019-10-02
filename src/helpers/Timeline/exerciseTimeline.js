@@ -2,24 +2,36 @@ import formatDate from '@/helpers/formatDate';
 import isDate from '@/helpers/isDate';
 
 const createQT = (data) => {
-  let date = isDate(data.sjcaTestDate) && formatDate(data.sjcaTestDate);
-  let start = isDate(data.sjcaTestStartTime) && formatDate(data.sjcaTestStartTime, 'time');
-  let end = isDate(data.sjcaTestEndTime) && formatDate(data.sjcaTestEndTime, 'time');
+  let date = isDate(data.sjcaTestDate) && formatDate(data.sjcaTestDate) || null;
+  let start = isDate(data.sjcaTestStartTime) && formatDate(data.sjcaTestStartTime, 'time') || null;
+  let end = isDate(data.sjcaTestEndTime) && formatDate(data.sjcaTestEndTime, 'time') || null;
+
+  if(!date && !start && !end) {
+    return null;
+  }
 
   return `${date} - ${start} to ${end}`;
 };
 
 const createScenariotest = (data) => {
-  let date = isDate(data.scenarioTestDate) && formatDate(data.scenarioTestDate);
-  let start = isDate(data.scenarioTestStartTime) && formatDate(data.scenarioTestStartTime, 'time');
-  let end = isDate(data.scenarioTestEndTime) && formatDate(data.scenarioTestEndTime, 'time');
+  let date = isDate(data.scenarioTestDate) && formatDate(data.scenarioTestDate) || null;
+  let start = isDate(data.scenarioTestStartTime) && formatDate(data.scenarioTestStartTime, 'time') || null;
+  let end = isDate(data.scenarioTestEndTime) && formatDate(data.scenarioTestEndTime, 'time') || null;
+
+  if(!date && !start && !end) {
+    return null;
+  }
 
   return `${date} - ${start} to ${end}`;
 };
 
 const createSelectionDay = (data) => {
-  let selectionDayStart = data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayStart) && formatDate(data.selectionDays[0].selectionDayStart);
-  let selectionDayEnd = data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayEnd) && formatDate(data.selectionDays[0].selectionDayEnd);
+  let selectionDayStart = data.selectionDays && data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayStart) && formatDate(data.selectionDays[0].selectionDayStart) || null;
+  let selectionDayEnd = data.selectionDays && data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayEnd) && formatDate(data.selectionDays[0].selectionDayEnd) || null;
+
+  if(!selectionDayStart && !selectionDayEnd) {
+    return null;
+  }
 
   return `${selectionDayStart} to ${selectionDayEnd}`;
 };
