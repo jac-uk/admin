@@ -32,7 +32,7 @@ const exerciseTimeline = (data) => {
   },
   {
     entry: 'Closed for applications', 
-    date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : '',
+    date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
   },
   {
     entry: 'QT', 
@@ -40,7 +40,7 @@ const exerciseTimeline = (data) => {
   },
   {
     entry: 'QT outcome to candidates', 
-    date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : '',
+    date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
   },
   {
     entry: 'Scenario test', 
@@ -48,11 +48,11 @@ const exerciseTimeline = (data) => {
   },
   {
     entry: 'Scenario test outcome to candidates', 
-    date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : '',
+    date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
   },
   {
     entry: 'Contact independent assessors', 
-    date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : '',
+    date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
   },
   {
     entry: 'Selection day', 
@@ -60,15 +60,15 @@ const exerciseTimeline = (data) => {
   },
   {
     entry: 'Character checks', 
-    date: isDate(data.characterChecks) ? formatDate(data.characterChecks, 'month') : '',
+    date: isDate(data.characterChecks) ? formatDate(data.characterChecks, 'month') : null,
   },
   {
     entry: 'Statutory consultation', 
-    date: isDate(data.statutoryConsultation) ? formatDate(data.statutoryConsultation, 'month') : '',
+    date: isDate(data.statutoryConsultation) ? formatDate(data.statutoryConsultation, 'month') : null,
   },
   {
     entry: 'Selection process outcome', 
-    date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : '',
+    date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
   }];
 };
 

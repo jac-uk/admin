@@ -1,8 +1,8 @@
-const createTimeline = (timeline, min) => {
+const createTimeline = (timeline, maxEntriesNum) => {
   let timelineArray = timeline.filter((item) => item.date !== null);
   
-  if(min) {
-    return timelineArray.slice(0, min);
+  if(maxEntriesNum) {
+    return timelineArray.slice(0, maxEntriesNum);
   }
 
   return timelineArray;
