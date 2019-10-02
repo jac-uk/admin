@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Navigation from '@/components/Page/Navigation';
 import LoadingMessage from '@/components/LoadingMessage';
+import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -87,6 +88,10 @@ describe('@/views/Exercises/Show', () => {
 
       it('renders the Navigation component', () => {
         expect(wrapper.find(Navigation).exists()).toBe(true);
+      });
+
+      it('renders the AddToFavouritesButton component', () => {
+        expect(wrapper.find(AddToFavouritesButton).exists()).toBe(true);
       });
 
       it('renders the RouterView', () => {
