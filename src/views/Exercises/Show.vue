@@ -11,9 +11,15 @@
             <AddToFavouritesButton />
           </div>
           <span class="govuk-caption-xl">118</span>
-          <h1 class="govuk-heading-xl">
+          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exercise.name }}
           </h1>
+          <router-link
+            class="display-block govuk-link govuk-!-margin-bottom-8"
+            :to="{name: 'exercise-edit-name'}"
+          >
+            Edit name
+          </router-link>
         </div>
       </div>
       <div class="govuk-grid-row">

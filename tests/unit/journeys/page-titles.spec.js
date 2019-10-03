@@ -17,6 +17,7 @@ const routes = [
   ['exercise-edit-timeline', 'Timeline'],
   ['exercise-edit-eligibility', 'Eligibility Information'],
   ['exercise-edit-vacancy', 'Vacancy Information'],
+  ['exercise-edit-name', 'Update exercise name'],
   ['exercise-not-found', 'Exercise Not Found'],
   ['page-not-found', 'Page Not Found'],
 ];
