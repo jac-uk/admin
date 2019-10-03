@@ -18,6 +18,7 @@ const routes = [
   ['exercise-edit-timeline', `/exercises/${id}/edit/timeline`],
   ['exercise-edit-eligibility', `/exercises/${id}/edit/eligibility`],
   ['exercise-edit-vacancy', `/exercises/${id}/edit/vacancy`],
+  ['exercise-edit-name', `/exercises/${id}/edit/name`],
   ['exercise-not-found', '/errors/exercise-not-found'],
   ['page-not-found', '/errors/page-not-found'],
 ];
