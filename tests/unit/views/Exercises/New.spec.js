@@ -1,5 +1,6 @@
 import ExerciseNew from '@/views/Exercises/New';
 import { shallowMount } from '@vue/test-utils';
+import BackLink from '@/components/BackLink';
 
 const mockStore = {
   dispatch: jest.fn(),
@@ -51,6 +52,10 @@ describe('views/Exercises/New', () => {
       expect(button.element.type).toBe('submit');
       expect(button.text()).toBe('Save and continue');
     });
+
+    it("renders BackLink component", () => {
+      expect(wrapper.find(BackLink).exists()).toBe(true);
+    })
   });
 
   describe('methods', () => {
