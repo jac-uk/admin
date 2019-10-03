@@ -53,9 +53,9 @@ describe('views/Exercises/New', () => {
       expect(button.text()).toBe('Save and continue');
     });
 
-    it("renders BackLink component", () => {
+    it('renders BackLink component', () => {
       expect(wrapper.find(BackLink).exists()).toBe(true);
-    })
+    });
   });
 
   describe('methods', () => {

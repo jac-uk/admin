@@ -86,7 +86,7 @@ export default {
     RadioItem,
     CheckboxGroup,
     CheckboxItem,
-    BackLink
+    BackLink,
   },
   data() {
     return {
