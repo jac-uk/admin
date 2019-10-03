@@ -2,8 +2,23 @@ import { shallowMount } from '@vue/test-utils';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 
 describe('@/components/Page/AddToFavouritesButton', () => {
-  it("renders", () => {
-    let wrapper = shallowMount(AddToFavouritesButton);
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallowMount(AddToFavouritesButton);
+  });
+
+  it('renders', () => {
     expect(wrapper.exists()).toBe(true);
-  })
-})
+  });
+
+  describe('methods', () => {
+    describe('updateFavoutites', () => {
+      it('updates a value of isInFavourites', () => {
+        let isInFavourites = wrapper.vm.isInFavourites;
+        wrapper.find('button').trigger('click');
+        
+        expect(wrapper.vm.isInFavourites).toBe(!isInFavourites);
+      });
+    });
+  });
+});

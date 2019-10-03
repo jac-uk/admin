@@ -1,11 +1,21 @@
 <template>
   <button
+    ref="updateFavoutitesBtn"
     class="govuk-button govuk-button--secondary govuk-!-margin-0"
+    @click="updateFavoutites"
   >
-    <svg viewBox="0 0 20 20" height="25" width="23" stroke="red" fill="grey">
-      <polygon points="9.9, 1.1, 3.3, 21.78, 19.8, 8.58, 0, 8.58, 16.5, 21.78" style="fill-rule:nonzero;"/>
+    <svg
+      id="stars-full-star"
+      viewBox="0 0 29 29"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="grey"
+      stroke-width="2px"
+    >
+      <path d="M13.996,22.501 L22.649,27.997 L20.352,17.637 L27.996,10.667 L17.930,9.768 L13.996,-0.003 L10.063,9.768 L-0.003,10.667 L7.641,17.637 L5.345,27.997 L13.996,22.501 Z" />
     </svg>
-    {{buttonText}}
+    {{ buttonText }}
   </button>
 </template>
   
@@ -13,18 +23,24 @@
 export default {
   data() {
     return {
-      isInFavourites: true
-    }
+      // TODO: create getter which gets user favourites from DB collection  
+      isInFavourites: true,
+    };
   },
   computed: {
     buttonText() {
       if(this.isInFavourites) {
-        return "Remove from favourites"
+        return 'Remove from favourites';
       }
       else {
-        return "Add to favourites";
+        return 'Add to favourites';
       }
-    }
-  }
+    },
+  },
+  methods: {
+    updateFavoutites() {
+      this.isInFavourites = !this.isInFavourites;
+    },
+  },
 };
 </script>
