@@ -40,7 +40,7 @@ export default {
   components: {
     LoadingMessage,
     Navigation,
-    AddToFavouritesButton
+    AddToFavouritesButton,
   },
   data() {
     const navPages = [
