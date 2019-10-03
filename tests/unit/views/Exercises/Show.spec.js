@@ -42,6 +42,7 @@ const createTestSubject = () => {
     },
     stubs: {
       'RouterView': true,
+      'RouterLink': true,
     },
   });
 };
@@ -96,6 +97,10 @@ describe('@/views/Exercises/Show', () => {
 
       it('renders the RouterView', () => {
         expect(wrapper.find('RouterView-stub').exists()).toBe(true);
+      });
+
+      it('renders the RouterLink', () => {
+        expect(wrapper.find('RouterLink-stub').exists()).toBe(true);
       });
     });
   });

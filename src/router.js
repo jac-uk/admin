@@ -10,6 +10,8 @@ import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
+import ExerciseEditName from '@/views/Exercises/Edit/EditName';
+
 
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
@@ -133,6 +135,15 @@ const router = new Router({
         title: 'Edit An Exercise',
       },
       children: [
+        {
+          path: 'name',
+          component: ExerciseEditName,
+          name: 'exercise-edit-name',
+          meta: {
+            requiresAuth: true,
+            title: 'Update exercise name',
+          },
+        },
         {
           path: 'contacts',
           component: ExerciseEditContacts,
