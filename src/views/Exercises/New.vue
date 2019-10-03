@@ -2,13 +2,7 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="save">
       <div class="govuk-grid-column-two-thirds">
-        <a
-          ref="BackLinkToDashboard"
-          class="govuk-back-link"
-          @click="$router.push('dashboard')"
-        >
-          Back
-        </a>
+        <BackLink />
         <h1 class="govuk-heading-xl">
           Create an exercise
         </h1>
@@ -83,6 +77,7 @@ import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
+import BackLink from '@/components/BackLink';
 
 export default {
   components: {
@@ -91,6 +86,7 @@ export default {
     RadioItem,
     CheckboxGroup,
     CheckboxItem,
+    BackLink
   },
   data() {
     return {
