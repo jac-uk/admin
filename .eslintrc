@@ -18,7 +18,8 @@
     "vue/component-name-in-template-casing": "error",
     "vue/script-indent": ["error", 2],
     "object-curly-spacing": ["error", "always"],
-    "array-bracket-spacing": ["error", "never"]
+    "array-bracket-spacing": ["error", "never"],
+    "no-multiple-empty-lines": ["error", { "max": 1}]
   },
   "parserOptions": {
     "parser": "babel-eslint"
