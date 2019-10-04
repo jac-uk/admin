@@ -12,7 +12,6 @@ import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
 import ExerciseEditName from '@/views/Exercises/Edit/EditName';
 
-
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
 import ExerciseShowOverview from '@/views/Exercises/Show/Overview';
