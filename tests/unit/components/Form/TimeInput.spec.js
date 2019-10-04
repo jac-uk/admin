@@ -113,7 +113,6 @@ describe('components/TimeInput', () => {
         });
       });
 
-
       describe('setter', () => {
         it('calls parseAndClipNumber function', () => {
           subject.vm.minuteInput = 89;
