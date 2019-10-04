@@ -18,7 +18,6 @@
   </div>
 </template>
 
-
 <script>
 import FirebaseUI from '@/components/FirebaseUI';
 
