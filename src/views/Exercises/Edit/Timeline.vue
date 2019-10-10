@@ -183,7 +183,7 @@ export default {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Scenario test qualifying test (QT)');
     },
     situationalJudgementOrCriticalAnalysisQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Situational judgement qualifying test (QT)') || this.exerciseShortlistingMethods.includes('Critical analysis qualifying test (QT)');
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Situational judgement qualifying test (QT)') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Critical analysis qualifying test (QT)');
     },
   },
   methods: {
