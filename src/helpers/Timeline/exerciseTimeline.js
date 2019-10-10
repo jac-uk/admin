@@ -51,6 +51,10 @@ const exerciseTimeline = (data) => {
     date: createQT(data),
   },
   {
+    entry: 'Paper sift', 
+    date: isDate(data.paperSiftDate) ? formatDate(data.paperSiftDate) : null,
+  },
+  {
     entry: 'QT outcome to candidates', 
     date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
   },
