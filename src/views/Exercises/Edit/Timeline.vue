@@ -126,17 +126,6 @@
         />
 
         <h2 class="govuk-heading-l">
-          Independent assessors
-        </h2>
-
-        <DateInput
-          id="contact-independent-assessors"
-          v-model="exercise.contactIndependentAssessors"
-          label="Contact independent assessors"
-          hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
-        />
-
-        <h2 class="govuk-heading-l">
           Selection day
         </h2>
 
