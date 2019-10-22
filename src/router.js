@@ -231,7 +231,7 @@ const router = new Router({
     } else {
       return { x: 0, y: 0 };
     }
-  },  
+  },
 });
 
 // Global before guard to verify if a user can have access to other than sign-in pages.

@@ -3,6 +3,13 @@ import App from '@/App';
 import router from '@/router';
 import store from '@/store';
 import { auth } from '@/firebase';
+import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
+
+Sentry.init({
+  dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
+  integrations: [new Integrations.Vue({Vue, attachProps: true})],
+});
 Vue.config.productionTip = false;
 
 let vueInstance = false;
