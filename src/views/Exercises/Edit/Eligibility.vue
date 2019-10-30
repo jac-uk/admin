@@ -12,6 +12,7 @@
         </p>
 
         <RadioGroup
+          v-if="typeOfExercise !== 'non-legal'"
           id="post-qualification-experience"
           v-model="exercise.postQualificationExperience"
           label="Post-qualification experience (PQE)"
@@ -230,6 +231,7 @@ export default {
         otherRetirement: exercise.otherRetirement || null,
       },
       isCourtOrTribunal: exercise.isCourtOrTribunal,
+      typeOfExercise: exercise.typeOfExercise,
     };
   },
   methods: {
