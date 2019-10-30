@@ -74,6 +74,28 @@ describe('views/Exercises/Edit/Eligibility', () => {
         expect(wrapper.find('#schedule-2d-apply').exists()).toBe(true);
       });
     });
+
+    describe('Post qualification experience', () => {
+      it('does not show the question if the role is a non-legal role', () => {
+        wrapper.setData({ typeOfExercise: 'non-legal' });
+        expect(wrapper.find('#post-qualification-experience').exists()).toBe(false);
+      });
+
+      it('does show the question if the role is a legal role', () => {
+        wrapper.setData({ typeOfExercise: 'legal' });
+        expect(wrapper.find('#post-qualification-experience').exists()).toBe(true);
+      });
+
+      it('does show the question if the role is a senior role', () => {
+        wrapper.setData({ typeOfExercise: 'senior' });
+        expect(wrapper.find('#post-qualification-experience').exists()).toBe(true);
+      });
+
+      it('does show the question if the role is a leadership role', () => {
+        wrapper.setData({ typeOfExercise: 'leadership' });
+        expect(wrapper.find('#post-qualification-experience').exists()).toBe(true);
+      });
+    });
   });
 
   describe('data', () => {
