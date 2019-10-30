@@ -32,6 +32,10 @@
             value="leadership"
             label="Leadership"
           />
+          <RadioItem
+            value="leadership-non-legal"
+            label="Leadership - non legal"
+          />
         </RadioGroup>
 
         <RadioGroup
