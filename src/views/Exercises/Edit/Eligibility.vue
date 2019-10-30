@@ -159,10 +159,6 @@
             label="Royal College of Psychaitrists"
           />
           <RadioItem
-            value="royal-chartered-institute-of-surveyors"
-            label="Royal Chartered Institute of Surveyors"
-          />
-          <RadioItem
             value="royal-institution-of-chartered-surveyors"
             label="Royal Institution of Chartered Surveyors"
           />
