@@ -97,6 +97,7 @@
         </RadioGroup>
 
         <CheckboxGroup
+          v-if="typeOfExercise !== 'non-legal'"
           id="qualifications"
           v-model="exercise.qualifications"
           label="Qualifications"
@@ -130,6 +131,56 @@
             />
           </CheckboxItem>
         </CheckboxGroup>
+
+        <RadioGroup
+          v-if="typeOfExercise === 'non-legal'"
+          id="memberships"
+          v-model="exercise.memberships"
+          label="Memberships"
+        >
+          <RadioItem
+            value="chartered-association-of-building-engineers"
+            label="Chartered Association of Building Engineers"
+          />
+          <RadioItem
+            value="chartered-institute-of-building"
+            label="Chartered Institute of Building"
+          />
+          <RadioItem
+            value="chartered-institute-of-environmental-health"
+            label="Chartered Institute of Environmental Health"
+          />
+          <RadioItem
+            value="general-medical-council"
+            label="General Medical Council"
+          />
+          <RadioItem
+            value="royal-college-of-psychiatrists"
+            label="Royal College of Psychaitrists"
+          />
+          <RadioItem
+            value="royal-chartered-institute-of-surveyors"
+            label="Royal Chartered Institute of Surveyors"
+          />
+          <RadioItem
+            value="royal-institution-of-chartered-surveyors"
+            label="Royal Institution of Chartered Surveyors"
+          />
+          <RadioItem
+            value="royal-institute-of-british-architects"
+            label="Royal Institute of British Architects"
+          />
+          <RadioItem
+            value="other"
+            label="Other"
+          >
+            <TextField
+              id="other-qualifications"
+              v-model="exercise.otherMemberships"
+              label="Associations or Institutes"
+            />
+          </RadioItem>
+        </RadioGroup>
 
         <RadioGroup
           id="reasonable-length-service"
@@ -225,6 +276,8 @@ export default {
         previousJudicialExperienceApply: booleanOrNull(exercise.previousJudicialExperienceApply),
         qualifications: exercise.qualifications || null,
         otherQualifications: exercise.otherQualifications || null,
+        memberships: exercise.memberships || null,
+        otherMemberships: exercise.otherMemberships || null,
         reasonableLengthService: exercise.reasonableLengthService || null,
         otherLOS: exercise.otherLOS || null,
         retirementAge: exercise.retirementAge || null,
