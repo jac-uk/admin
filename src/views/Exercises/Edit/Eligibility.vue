@@ -97,7 +97,7 @@
         </RadioGroup>
 
         <CheckboxGroup
-          v-if="typeOfExercise !== 'non-legal'"
+          v-if="typeOfExercise !== 'non-legal' "
           id="qualifications"
           v-model="exercise.qualifications"
           label="Qualifications"
@@ -133,7 +133,7 @@
         </CheckboxGroup>
 
         <RadioGroup
-          v-if="typeOfExercise === 'non-legal'"
+          v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
           v-model="exercise.memberships"
           label="Memberships"

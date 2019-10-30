@@ -108,9 +108,9 @@ describe('views/Exercises/Edit/Eligibility', () => {
         expect(wrapper.find('#memberships').exists()).toBe(false);
       });
 
-      it('does not show the question if the role is a leadership role', () => {
+      it('does show the question if the role is a leadership role', () => {
         wrapper.setData({ typeOfExercise: 'leadership' });
-        expect(wrapper.find('#memberships').exists()).toBe(false);
+        expect(wrapper.find('#memberships').exists()).toBe(true);
       });
 
       it('does show the question if the role is a non-legal role', () => {
