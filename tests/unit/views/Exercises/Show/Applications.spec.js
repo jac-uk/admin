@@ -1,5 +1,5 @@
 import Applications from '@/views/Exercises/Show/Applications';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
 const createTestSubject = () => {
   return shallowMount(Applications);
