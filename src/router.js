@@ -26,6 +26,7 @@ import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
 
+import ApplicationsFull from '@/views/Exercises/ApplicationsFull';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
@@ -125,6 +126,15 @@ const router = new Router({
           },
         },
       ],
+    },
+    {
+      path: 'applications-full',
+      component: ApplicationsFull,
+      name: 'exercise-applications-full',
+      meta: {
+        requiresAuth: true,
+        title: 'Exercise Details | Applications Full',
+      },
     },
     {
       path: '/exercises/:id/edit',
@@ -231,7 +241,7 @@ const router = new Router({
     } else {
       return { x: 0, y: 0 };
     }
-  },  
+  },
 });
 
 // Global before guard to verify if a user can have access to other than sign-in pages.
