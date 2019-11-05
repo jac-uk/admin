@@ -22,9 +22,12 @@
     </tbody>
   </table>
 
-  <button class="govuk-button">
+  <router-link
+    class="govuk-button"
+    :to="{name: 'exercise-applications-full'}"
+  >
     See further information
-  </button>
+  </router-link>
 
  </div>
 </template>
