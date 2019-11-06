@@ -21,6 +21,18 @@ import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
 import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
+import ExerciseShowReports from '@/views/Exercises/Show/Reports';
+
+// Report views
+import ExerciseReports from '@/views/Exercises/Reports';
+import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
+import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
+import ExerciseReportsDiversityReport from '@/views/Exercises/Reports/DiversityReport';
+import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
+import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/EducationAndCareerHistory';
+import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
+import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
+import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/ReasonableAdjustments';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -125,6 +137,15 @@ const router = new Router({
             title: 'Exercise Details | Eligibility information',
           },
         },
+        {
+          path: 'reports',
+          component: ExerciseShowReports,
+          name: 'exercise-show-reports',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Reports',
+          },
+        },
       ],
     },
     {
@@ -196,6 +217,88 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Vacancy Information',
+          },
+        },
+      ],
+    },
+    {
+      path: '/exercises/:id/report-directory',
+      component: ExerciseReports,
+      meta: {
+        requiresAuth: true,
+        title: 'View exercise reports ',
+      },
+      children: [
+        {
+          path: 'character-issues',
+          component: ExerciseReportsCharacterIssues,
+          name: 'exercise-reports-character-issues',
+          meta: {
+            requiresAuth: true,
+            title: 'Character Issues',
+          },
+        },
+        {
+          path: 'exercise-reports-character-checks',
+          component: ExerciseReportsCharacterChecks,
+          name: 'exercise-reports-character-checks',
+          meta: {
+            requiresAuth: true,
+            title: 'Character Checks',
+          },
+        },
+        {
+          path: 'exercise-reports-diversity-report',
+          component: ExerciseReportsDiversityReport,
+          name: 'exercise-reports-diversity-report',
+          meta: {
+            requiresAuth: true,
+            title: 'Diversity Report',
+          },
+        },
+        {
+          path: 'exercise-reports-eligibility-issues',
+          component: ExerciseReportsEligibilityIssues,
+          name: 'exercise-reports-eligibility-issues',
+          meta: {
+            requiresAuth: true,
+            title: 'Eligibility Issues',
+          },
+        },
+        {
+          path: 'exercise-reports-education-and-career-history',
+          component: ExerciseReportsEducationAndCareerHistory,
+          name: 'exercise-reports-education-and-career-history',
+          meta: {
+            requiresAuth: true,
+            title: 'Education and Career History',
+          },
+        },
+        {
+          path: 'exercise-reports-jo-handover-report',
+          component: ExerciseReportsJOHandoverReport,
+          name: 'exercise-reports-jo-handover-report',
+          meta: {
+            requiresAuth: true,
+            title: 'JO Handover Report',
+          },
+        },
+        {
+          path: 'exercise-reports-statutory-consultation-table',
+          component: ExerciseReportsStatutoryConsultationTable,
+          name: 'exercise-reports-statutory-consultation-table',
+          meta: {
+            requiresAuth: true,
+            title: 'Statutory Consultation Table',
+          },
+        },
+        {
+          path: 'exercise-reports-reasonable-adjustments',
+          component: ExerciseReportsReasonableAdjustments,
+          name: 'exercise-reports-reasonable-adjustments',
+          meta: {
+            requiresAuth: true,
+            title: 'Reasonable Adjustments',
           },
         },
       ],
