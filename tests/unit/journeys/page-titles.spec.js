@@ -20,6 +20,14 @@ const routes = [
   ['exercise-edit-name', 'Update exercise name'],
   ['exercise-not-found', 'Exercise Not Found'],
   ['page-not-found', 'Page Not Found'],
+  ['exercise-reports-character-checks', 'Character Checks'],
+  ['exercise-reports-character-issues', 'Character Issues'],
+  ['exercise-reports-diversity-report', 'Diversity Report'],
+  ['exercise-reports-eligibility-issues', 'Eligibility Issues'],
+  ['exercise-reports-education-and-career-history', 'Education and Career History'],
+  ['exercise-reports-jo-handover-report', 'JO Handover Report'],
+  ['exercise-reports-statutory-consultation-table', 'Statutory Consultation Table'],
+  ['exercise-reports-reasonable-adjustments', 'Reasonable Adjustments'],
 ];
 
 describe('Page titles', () => {

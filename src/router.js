@@ -229,7 +229,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-character-checks',
+          path: 'character-checks',
           component: ExerciseReportsCharacterChecks,
           name: 'exercise-reports-character-checks',
           meta: {
@@ -238,7 +238,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-diversity-report',
+          path: 'diversity-report',
           component: ExerciseReportsDiversityReport,
           name: 'exercise-reports-diversity-report',
           meta: {
@@ -247,7 +247,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-eligibility-issues',
+          path: 'eligibility-issues',
           component: ExerciseReportsEligibilityIssues,
           name: 'exercise-reports-eligibility-issues',
           meta: {
@@ -256,7 +256,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-education-and-career-history',
+          path: 'education-and-career-history',
           component: ExerciseReportsEducationAndCareerHistory,
           name: 'exercise-reports-education-and-career-history',
           meta: {
@@ -265,7 +265,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-jo-handover-report',
+          path: 'jo-handover-report',
           component: ExerciseReportsJOHandoverReport,
           name: 'exercise-reports-jo-handover-report',
           meta: {
@@ -274,7 +274,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-statutory-consultation-table',
+          path: 'statutory-consultation-table',
           component: ExerciseReportsStatutoryConsultationTable,
           name: 'exercise-reports-statutory-consultation-table',
           meta: {
@@ -283,7 +283,7 @@ const router = new Router({
           },
         },
         {
-          path: 'exercise-reports-reasonable-adjustments',
+          path: 'reasonable-adjustments',
           component: ExerciseReportsReasonableAdjustments,
           name: 'exercise-reports-reasonable-adjustments',
           meta: {
