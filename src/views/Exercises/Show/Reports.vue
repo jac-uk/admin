@@ -62,6 +62,15 @@
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
+          :to="{name: ''}"
+        >
+          Panel packs
+        </router-link>
+      </li>
+
+      <li class="govuk-!-margin-bottom-4">
+        <router-link
+          class="govuk-link govuk-body-l"
           :to="{name: 'exercise-reports-statutory-consultation-table'}"
         >
           Statutory Consulation table
