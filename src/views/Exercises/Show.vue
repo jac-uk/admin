@@ -57,6 +57,8 @@ export default {
       { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
       { page: 'Vacancy information', name: 'exercise-show-vacancy' },
       { page: 'Eligibility information', name: 'exercise-show-eligibility' },
+      { page: 'Independent assessments', name: 'exercise-show-independent-assessments' },
+      { page: 'Exercise reports', name: 'exercise-show-reports' },
     ];
 
     return {
@@ -72,7 +74,7 @@ export default {
   },
   mounted() {
     const id = this.$route.params.id;
-    
+
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
         if(data === null) {
