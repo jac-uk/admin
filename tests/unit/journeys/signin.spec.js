@@ -13,7 +13,7 @@ const routes = [
   ['exercise-show-shortlisting', `/exercises/${id}/shortlisting`],
   ['exercise-show-vacancy', `/exercises/${id}/vacancy`],
   ['exercise-show-eligibility', `/exercises/${id}/eligibility`],
-  ['exercise-show-independent-assessors', `/exercises/${id}/independent-assessors`],
+  ['exercise-show-independent-assessments', `/exercises/${id}/independent-assessments`],
   ['exercise-edit-contacts', `/exercises/${id}/edit/contacts`],
   ['exercise-edit-shortlisting', `/exercises/${id}/edit/shortlisting`],
   ['exercise-edit-timeline', `/exercises/${id}/edit/timeline`],
