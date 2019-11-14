@@ -26,7 +26,7 @@
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
-          :to="{name: 'exercise-reports-diversity-report'}"
+          :to="{name: 'exercise-reports-diversity-dashboard'}"
         >
           Diversity report
         </router-link>
