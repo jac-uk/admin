@@ -48,14 +48,6 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Salary group
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.feePaidFee }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
           Is salaried part-time working (SPTW) offered?
         </dt>
         <dd class="govuk-summary-list__value">

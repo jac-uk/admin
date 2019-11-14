@@ -41,6 +41,20 @@
         </h2>
 
         <div
+          v-if="paperSift"
+          ref="paperSift"
+        >
+          <h3 class="govuk-heading-m">
+            Paper sift
+          </h3>
+          <DateInput
+            id="paper-sift"
+            v-model="exercise.paperSiftDate"
+            label="Sift date"
+          />
+        </div>
+
+        <div
           v-if="situationalJudgementOrCriticalAnalysisQT"
           ref="situationalJudgementOrCriticalAnalysisQT"
         >
@@ -166,6 +180,7 @@ export default {
         applicationCloseDate: exercise.applicationCloseDate || null,
         sjcaTestDate: exercise.sjcaTestDate || null,
         sjcaTestStartTime: exercise.sjcaTestStartTime || null,
+        paperSiftDate: exercise.paperSiftDate || null,
         sjcaTestEndTime: exercise.sjcaTestEndTime || null,
         scenarioTestDate: exercise.scenarioTestDate ||null,
         scenarioTestStartTime: exercise.scenarioTestStartTime || null,
@@ -183,7 +198,10 @@ export default {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Scenario test qualifying test (QT)');
     },
     situationalJudgementOrCriticalAnalysisQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Situational judgement qualifying test (QT)') || this.exerciseShortlistingMethods.includes('Critical analysis qualifying test (QT)');
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Situational judgement qualifying test (QT)') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Critical analysis qualifying test (QT)');
+    },
+    paperSift() {
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Paper sift');
     },
   },
   methods: {

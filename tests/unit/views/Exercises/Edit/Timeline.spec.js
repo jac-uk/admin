@@ -111,6 +111,22 @@ describe('views/Exercises/Edit/Timeline', () => {
       });
     });
 
+    describe('paperSift', () => {
+      describe('when paperSift is on the list of selected shortlisting methods', () => {
+        it('displays the block with paperSift dates', () => {
+          wrapper.setData({ exerciseShortlistingMethods: ['some method', 'Paper sift', 'other'] });
+          expect(wrapper.find({ ref: 'paperSift' }).exists()).toBe(true);
+        });
+      });
+
+      describe('when paperSift is not on the list of selected shortlisting methods', () => {
+        it('does not display the block with paperSift dates', () => {
+          wrapper.setData({ exerciseShortlistingMethods: ['some method', 'Situational judgement qualifying test (QT)', 'other'] });
+          expect(wrapper.find({ ref: 'paperSift' }).exists()).toBe(false);
+        });
+      });
+    });
+
     describe('situationalJudgementOrCriticalAnalysisQT', () => {
       describe('when Situational Judgement QT is on the list of selected shortlisting methods', () => {
         it('displays the block with situationalJudgementOrCriticalAnalysisQT dates', () => {
