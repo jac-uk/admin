@@ -28,7 +28,7 @@ import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/Independe
 import ExerciseReports from '@/views/Exercises/Reports';
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
-import ExerciseReportsDiversityReport from '@/views/Exercises/Reports/DiversityReport';
+import ExerciseReportsDiversityDashboard from '@/views/Exercises/Reports/DiversityDashboard';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
 import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/EducationAndCareerHistory';
 import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
@@ -258,12 +258,12 @@ const router = new Router({
           },
         },
         {
-          path: 'diversity-report',
-          component: ExerciseReportsDiversityReport,
-          name: 'exercise-reports-diversity-report',
+          path: 'diversity-dashboard',
+          component: ExerciseReportsDiversityDashboard,
+          name: 'exercise-reports-diversity-dashboard',
           meta: {
             requiresAuth: true,
-            title: 'Diversity Report',
+            title: 'Diversity Dashboard',
           },
         },
         {
