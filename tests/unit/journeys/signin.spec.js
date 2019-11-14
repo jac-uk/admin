@@ -22,7 +22,7 @@ const routes = [
   ['exercise-edit-name', `/exercises/${id}/edit/name`],
   ['exercise-reports-character-issues', `/exercises/${id}/report-directory/character-issues`],
   ['exercise-reports-character-checks', `/exercises/${id}/report-directory/character-checks`],
-  ['exercise-reports-diversity-report', `/exercises/${id}/report-directory/diversity-report`],
+  ['exercise-reports-diversity-dashboard', `/exercises/${id}/report-directory/diversity-dashboard`],
   ['exercise-reports-eligibility-issues', `/exercises/${id}/report-directory/eligibility-issues`],
   ['exercise-reports-education-and-career-history', `/exercises/${id}/report-directory/education-and-career-history`],
   ['exercise-reports-jo-handover-report', `/exercises/${id}/report-directory/jo-handover-report`],
