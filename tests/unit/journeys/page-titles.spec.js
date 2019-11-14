@@ -12,7 +12,7 @@ const routes = [
   ['exercise-show-shortlisting', 'Exercise Details | Shortlisting'],
   ['exercise-show-vacancy', 'Exercise Details | Vacancy information'],
   ['exercise-show-eligibility', 'Exercise Details | Eligibility information'],
-  ['exercise-show-independent-assessors', 'Exercise Details | Independent Assessors'],
+  ['exercise-show-independent-assessments', 'Exercise Details | Independent Assessments'],
   ['exercise-edit-contacts', 'Contacts'],
   ['exercise-edit-shortlisting', 'Shortlisting Methods'],
   ['exercise-edit-timeline', 'Timeline'],

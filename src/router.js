@@ -22,7 +22,7 @@ import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
-import ExerciseShowIndependentAssessors from '@/views/Exercises/Show/IndependentAssessors';
+import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/IndependentAssessments';
 
 // Report views
 import ExerciseReports from '@/views/Exercises/Reports';
@@ -136,6 +136,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Eligibility information',
+          },
+        },
+        {
+          path: 'independent-assessments',
+          component: ExerciseShowIndependentAssessments,
+          name: 'exercise-show-independent-assessments',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Independent Assessments',
           },
         },
         {
