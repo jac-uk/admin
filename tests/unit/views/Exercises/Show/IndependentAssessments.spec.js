@@ -1,8 +1,8 @@
-import IndependentAssessors from '@/views/Exercises/Show/IndependentAssessors';
+import IndependentAssessments from '@/views/Exercises/Show/IndependentAssessments';
 import { shallowMount } from '@vue/test-utils';
 
 const createTestSubject = () => {
-  return shallowMount(IndependentAssessors);
+  return shallowMount(IndependentAssessments);
 };
 
 describe('@/views/Exercises/Show', () => {
