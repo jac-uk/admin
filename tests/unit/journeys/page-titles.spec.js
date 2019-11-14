@@ -12,6 +12,7 @@ const routes = [
   ['exercise-show-shortlisting', 'Exercise Details | Shortlisting'],
   ['exercise-show-vacancy', 'Exercise Details | Vacancy information'],
   ['exercise-show-eligibility', 'Exercise Details | Eligibility information'],
+  ['exercise-show-independent-assessments', 'Exercise Details | Independent Assessments'],
   ['exercise-edit-contacts', 'Contacts'],
   ['exercise-edit-shortlisting', 'Shortlisting Methods'],
   ['exercise-edit-timeline', 'Timeline'],
@@ -20,6 +21,14 @@ const routes = [
   ['exercise-edit-name', 'Update exercise name'],
   ['exercise-not-found', 'Exercise Not Found'],
   ['page-not-found', 'Page Not Found'],
+  ['exercise-reports-character-checks', 'Character Checks'],
+  ['exercise-reports-character-issues', 'Character Issues'],
+  ['exercise-reports-diversity-report', 'Diversity Report'],
+  ['exercise-reports-eligibility-issues', 'Eligibility Issues'],
+  ['exercise-reports-education-and-career-history', 'Education and Career History'],
+  ['exercise-reports-jo-handover-report', 'JO Handover Report'],
+  ['exercise-reports-statutory-consultation-table', 'Statutory Consultation Table'],
+  ['exercise-reports-reasonable-adjustments', 'Reasonable Adjustments'],
 ];
 
 describe('Page titles', () => {
