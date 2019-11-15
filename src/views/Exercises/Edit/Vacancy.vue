@@ -72,6 +72,7 @@
               <select
                 id="salary-group"
                 class="govuk-select"
+                v-model="exercise.salaryGrouping"
               >
                 <option value="">
                   Select an option
@@ -281,9 +282,10 @@ export default {
 
     return {
       exercise: {
-        typeOfExercise: exercise.typeOfExercise || [],
-        isCourtOrTribunal: exercise.isCourtOrTribunal || [],
-        appointmentType: exercise.appointmentType || [],
+        typeOfExercise: exercise.typeOfExercise || null,
+        isCourtOrTribunal: exercise.isCourtOrTribunal || null,
+        appointmentType: exercise.appointmentType || null,
+        salaryGrouping: exercise.salaryGrouping || null,
         feePaidFee: exercise.feePaidFee || null,
         isSPTWOffered: booleanOrNull(exercise.isSPTWOffered),
         yesSalaryDetails: exercise.yesSalaryDetails || null,
@@ -292,7 +294,7 @@ export default {
         futureStart: exercise.futureStart || null,
         location: exercise.location || null,
         jurisdiction: exercise.jurisdiction || null,
-        welshRequirement: exercise.welshRequirement || [],
+        welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
 
       },
