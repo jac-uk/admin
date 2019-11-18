@@ -75,6 +75,8 @@ describe('views/Exercises/New', () => {
         await wrapper.vm.save();
         const expectedPayload = {
           name: 'Example exercise title',
+          createdAt: 'Example createdAt unix timestamp',
+          exerciseMailbox: 'Example email address (current logged-in email address)',
         };
         const [action, payload] = mockStore.dispatch.mock.calls[0];
         expect(action).toBe('exerciseDocument/create');
