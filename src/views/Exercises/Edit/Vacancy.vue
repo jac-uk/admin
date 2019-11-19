@@ -71,42 +71,43 @@
               </label>
               <select
                 id="salary-group"
+                v-model="exercise.salaryGrouping"
                 class="govuk-select"
               >
                 <option value="">
                   Select an option
                 </option>
-                <option value="group1">
+                <option value="Group 1">
                   Group 1 - £262,264
                 </option>
-                <option value="group1.1">
+                <option value="Group 1.1">
                   Group 1.1 - £234,184
                 </option>
-                <option value="group2">
+                <option value="Group ">
                   Group 2 - £226,193
                 </option>
-                <option value="group3">
+                <option value="Group 3">
                   Group 3 - £215,094
                 </option>
-                <option value="group4">
+                <option value="Group 4">
                   Group 4 - £188,901
                 </option>
-                <option value="group5+">
+                <option value="Group 5+">
                   Group 5+ - £160,377
                 </option>
-                <option value="group5">
+                <option value="Group 5">
                   Group 5 - £151,497
                 </option>
-                <option value="group6.1">
+                <option value="Group 6.1">
                   Group 6.1 - £140,289
                 </option>
-                <option value="group6.2">
+                <option value="Group 6.2">
                   Group 6.2 - £132,075
                 </option>
-                <option value="group7">
+                <option value="Group 7">
                   Group 7 - £112,542
                 </option>
-                <option value="group8">
+                <option value="Group 8">
                   Group 8 - £89,428
                 </option>
               </select>
@@ -281,9 +282,10 @@ export default {
 
     return {
       exercise: {
-        typeOfExercise: exercise.typeOfExercise || [],
-        isCourtOrTribunal: exercise.isCourtOrTribunal || [],
-        appointmentType: exercise.appointmentType || [],
+        typeOfExercise: exercise.typeOfExercise || null,
+        isCourtOrTribunal: exercise.isCourtOrTribunal || null,
+        appointmentType: exercise.appointmentType || null,
+        salaryGrouping: exercise.salaryGrouping || null,
         feePaidFee: exercise.feePaidFee || null,
         isSPTWOffered: booleanOrNull(exercise.isSPTWOffered),
         yesSalaryDetails: exercise.yesSalaryDetails || null,
@@ -292,7 +294,7 @@ export default {
         futureStart: exercise.futureStart || null,
         location: exercise.location || null,
         jurisdiction: exercise.jurisdiction || null,
-        welshRequirement: exercise.welshRequirement || [],
+        welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
 
       },

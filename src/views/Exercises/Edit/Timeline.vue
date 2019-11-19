@@ -186,10 +186,8 @@ export default {
         scenarioTestStartTime: exercise.scenarioTestStartTime || null,
         scenarioTestEndTime: exercise.scenarioTestEndTime || null,
         contactIndependentAssessors: exercise.contactIndependentAssessors || null,
-        selectionDayStart: exercise.selectionDayStart || null,
-        selectionDayEnd: exercise.selectionDayEnd || null,
         finalOutcome: exercise.finalOutcome || null,
-        selectionDays: exercise.selectionDays || [],
+        selectionDays: exercise.selectionDays || null,
       },
     };
   },

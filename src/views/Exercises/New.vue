@@ -92,7 +92,7 @@ export default {
     return {
       exerciseName: null,
       addMoreInfo: null,
-      addMoreInfoSelection: [],
+      addMoreInfoSelection: null,
     };
   },
   methods: {
