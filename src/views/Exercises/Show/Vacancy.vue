@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-right">
-      <router-link 
+      <router-link
         class="govuk-link"
         :to="{name: 'exercise-edit-vacancy'}"
       >
@@ -43,7 +43,7 @@
           Salary group
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.feePaidFee }}
+          {{ exercise.salaryGrouping }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
