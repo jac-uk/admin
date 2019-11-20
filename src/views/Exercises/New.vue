@@ -99,6 +99,7 @@ export default {
     async save() {
       const data = {
         name: this.exerciseName,
+        exerciseMailbox: this.$store.state.auth.currentUser.email,
       };
       await this.$store.dispatch('exerciseDocument/create', data);
 

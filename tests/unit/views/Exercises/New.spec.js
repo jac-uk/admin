@@ -7,6 +7,13 @@ const mockStore = {
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
   },
+  state: {
+    auth: {
+      currentUser: {
+        email: 'test@test.test',
+      },
+    },
+  },  
 };
 
 const mockRouter = {
@@ -75,6 +82,7 @@ describe('views/Exercises/New', () => {
         await wrapper.vm.save();
         const expectedPayload = {
           name: 'Example exercise title',
+          exerciseMailbox: 'test@test.test',
         };
         const [action, payload] = mockStore.dispatch.mock.calls[0];
         expect(action).toBe('exerciseDocument/create');
