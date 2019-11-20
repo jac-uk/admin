@@ -45,6 +45,8 @@ import SignIn from '@/views/SignIn';
 
 Vue.use(Router);
 
+HELLOOOOOOO
+
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
