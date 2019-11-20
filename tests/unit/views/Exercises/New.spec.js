@@ -82,7 +82,6 @@ describe('views/Exercises/New', () => {
         await wrapper.vm.save();
         const expectedPayload = {
           name: 'Example exercise title',
-          createdAt: Date.now(),
           exerciseMailbox: 'test@test.test',
         };
         const [action, payload] = mockStore.dispatch.mock.calls[0];
