@@ -6,11 +6,18 @@
     />
     <div v-else>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-one-quarter">
+          <BackLink />
+        </div>
+        <div class="govuk-grid-column-three-quarters">
           <div class="text-right govuk-!-margin-0">
             <AddToFavouritesButton />
           </div>
-          <span class="govuk-caption-xl">118</span>
+        </div>
+      </div>      
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exercise.name }}
           </h1>
@@ -41,12 +48,14 @@
 import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
+import BackLink from '@/components/BackLink';
 
 export default {
   components: {
     LoadingMessage,
     Navigation,
     AddToFavouritesButton,
+    BackLink,
   },
   data() {
     const navPages = [
