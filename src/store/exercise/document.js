@@ -16,8 +16,19 @@ export default {
       return unbindFirestoreRef('record');
     }),
     create: async ({ dispatch }, data) => {
-      const ref = await collection.add(data);
-      return dispatch('bind', ref.id);
+      const metaRef = firestore.collection('meta').doc('stats');
+      return firestore.runTransaction((transaction) => {
+        return transaction.get(metaRef).then((metaDoc) => {
+          const newExercisesCount = metaDoc.data().exercisesCount + 1;
+          const exerciseRef = firestore.collection('exercises').doc();
+          transaction.update(metaRef, { exercisesCount: newExercisesCount });
+          data.referenceNumber = 'JAC' + (100000 + newExercisesCount).toString().substr(1);
+          transaction.set(exerciseRef, data);
+          return exerciseRef.id;
+        });
+      }).then((newId) => {
+        return dispatch('bind', newId);
+      }); 
     },
     save: async ({ state }, data) => {
       const id = state.record.id;
