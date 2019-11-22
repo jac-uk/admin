@@ -81,6 +81,7 @@
         </RadioGroup>
 
         <RadioGroup
+          v-if="typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
           v-model="exercise.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
