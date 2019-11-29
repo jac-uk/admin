@@ -116,14 +116,6 @@
           </ul>
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          About the role
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.aboutTheRole }}
-        </dd>
-      </div>
     </dl>
   </div>
 </template>
