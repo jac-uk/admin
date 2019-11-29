@@ -230,9 +230,15 @@
           </label>
           <input
             id="file-upload-1"
+            ref="jobDescFile"
             class="govuk-file-upload"
             type="file"
           >
+          <div>
+            <button @click="uploadFile('file-upload-1')">
+              Upload Job Description
+            </button>
+          </div>
         </div>
 
         <div class="govuk-form-group">
@@ -244,9 +250,15 @@
           </label>
           <input
             id="file-upload-2"
+            ref="tAndCFile"
             class="govuk-file-upload"
             type="file"
           >
+          <div>
+            <button @click="uploadFile('file-upload-2')">
+              Upload Terms And Conditions
+            </button>
+          </div>          
         </div>
 
         <button class="govuk-button">
@@ -258,6 +270,7 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import TextField from '@/components/Form/TextField';
@@ -296,7 +309,8 @@ export default {
         jurisdiction: exercise.jurisdiction || null,
         welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
-
+        jobDescUrl: exercise.jobDescUrl || null,
+        tAndCUrl: exercise.tAndCUrl || null,
       },
     };
   },
@@ -304,6 +318,80 @@ export default {
     async save() {
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+    },
+    async saveButDontLeavePage() {
+      // TODO: Not working! It saves, but it leaves the page
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      alert('SUCCESS: file uploaded');
+    },
+    uploadFile(elementId) {
+      //console.log('uploadFile function fired');
+      const file = document.querySelector(`#${elementId}`).files[0];
+      //console.log(file);
+
+      // These are the folder names set up in Firebase Storage
+      const folderNameMap = new Map([
+        ['file-upload-1', 'job-descriptions'],
+        ['file-upload-2', 'terms-and-conditions'],
+      ]);
+
+      const folderName = folderNameMap.get(elementId);
+
+      // set the Firebase Storage file path and name here
+      // e.g. job-descriptions/myFile.docx
+      const fileSavePath = `${folderName}/${file.name}`;
+
+      const storageRef = firebase.storage().ref();
+
+      let uploadTask = storageRef.child(fileSavePath).put(file);
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask
+        .on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              //let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              //console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED: // or 'paused'
+                //console.log('Upload is paused');
+                break;
+              case firebase.storage.TaskState.RUNNING: // or 'running'
+                //console.log('Upload is running');
+                break;
+              }
+            }, (error) => {
+
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+              case 'storage/unauthorized':
+                // User doesn't have permission to access the object
+                break;
+
+              case 'storage/canceled':
+                // User canceled the upload
+                break;
+
+              case 'storage/unknown':
+                // Unknown error occurred, inspect error.serverResponse
+                break;
+              }
+            }, () => {
+              // Upload completed successfully, now we can get the download URL
+              uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                //console.log('File available at', downloadURL);
+                //console.log(`OLD this.exercise.jobDescUrl = ${this.exercise.jobDescUrl}`);
+                if (downloadURL.includes('job-descriptions')) {
+                  this.exercise.jobDescUrl = downloadURL;
+                } else if (downloadURL.includes('terms-and-conditions')) {
+                  this.exercise.tAndCUrl = downloadURL;
+                }
+                //console.log(`NEW this.exercise.jobDescUrl = ${this.exercise.jobDescUrl}`);
+                // TODO: Fix this because it leaves the page after uploading
+                this.saveButDontLeavePage();
+              });
+            });
     },
   },
 };
