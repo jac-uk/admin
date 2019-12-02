@@ -29,7 +29,7 @@ describe('store/exercise/collection', () => {
 
         it('binds the `/exercises` collection', () => {
           const firestoreRef = callToBindFirestoreRef[1];
-          expect(firestoreRef).toEqual(firestore.collection('exercises'));
+          expect(firestoreRef).toEqual(firestore.collection('exercises').orderBy('referenceNumber', 'desc'));
         });
 
         it('serializes document data with `vuexfireSerialize` helper', () => {
