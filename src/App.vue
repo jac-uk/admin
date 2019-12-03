@@ -8,8 +8,14 @@
       <header class="header">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-heading-l">
-              Judicial Appointments Commission
+            <div class="text-left">
+              <img
+                src="@/assets/jac-logo.svg"
+                alt="Judicial Appointments Commission"
+                width="197"
+                height="66"
+                style="text-align: center"
+              >
             </div>
           </div>
           <div class="govuk-grid-column-one-third">
