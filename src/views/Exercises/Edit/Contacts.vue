@@ -55,27 +55,27 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="lord-chancellor"
+            value="Lord Chancellor"
             label="Lord Chancellor"
           />
           <CheckboxItem
-            value="lord-chief-justice"
+            value="Lord Chief Justice"
             label="Lord Chief Justice"
           />
           <CheckboxItem
-            value="senior-president-tribunals"
+            value="Senior President of Tribunals (SPT)"
             label="Senior President of Tribunals (SPT)"
           />
           <CheckboxItem
-            value="scottish-ministers"
+            value="Scottish ministers"
             label="Scottish ministers"
           />
           <CheckboxItem
-            value="welsh-government"
+            value="Welsh Government"
             label="Welsh Government"
           />
           <CheckboxItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
