@@ -17,23 +17,23 @@
           label="Type of exercise"
         >
           <RadioItem
-            value="legal"
+            value="Legal"
             label="Legal"
           />
           <RadioItem
-            value="non-legal"
+            value="Non legal"
             label="Non legal"
           />
           <RadioItem
-            value="senior"
+            value="Senior"
             label="Senior"
           />
           <RadioItem
-            value="leadership"
+            value="Leadership"
             label="Leadership"
           />
           <RadioItem
-            value="leadership-non-legal"
+            value="Leadership - non legal"
             label="Leadership - non legal"
           />
         </RadioGroup>
@@ -44,11 +44,11 @@
           label="Is the vacancy for a court or tribunal?"
         >
           <RadioItem
-            value="court"
+            value="Court"
             label="Court"
           />
           <RadioItem
-            value="tribunal"
+            value="Tribunal"
             label="Tribunal"
           />
         </RadioGroup>
@@ -59,7 +59,7 @@
           label="Appointment type"
         >
           <RadioItem
-            value="salaried"
+            value="Salaried"
             label="Salaried"
           >
             <div class="govuk-form-group">
@@ -77,44 +77,44 @@
                 <option value="">
                   Select an option
                 </option>
-                <option value="Group 1">
+                <option value="roup 1 - £262,264">
                   Group 1 - £262,264
                 </option>
-                <option value="Group 1.1">
+                <option value="Group 1.1 - £234,184">
                   Group 1.1 - £234,184
                 </option>
-                <option value="Group ">
+                <option value="Group 2 - £226,193">
                   Group 2 - £226,193
                 </option>
-                <option value="Group 3">
+                <option value="Group 3 - £215,094">
                   Group 3 - £215,094
                 </option>
-                <option value="Group 4">
+                <option value="Group 4 - £188,901">
                   Group 4 - £188,901
                 </option>
-                <option value="Group 5+">
+                <option value="Group 5+ - £160,377">
                   Group 5+ - £160,377
                 </option>
-                <option value="Group 5">
+                <option value="Group 5 - £151,497">
                   Group 5 - £151,497
                 </option>
-                <option value="Group 6.1">
+                <option value="Group 6.1 - £140,289">
                   Group 6.1 - £140,289
                 </option>
-                <option value="Group 6.2">
+                <option value="Group 6.2 - £132,075">
                   Group 6.2 - £132,075
                 </option>
-                <option value="Group 7">
+                <option value="Group 7 - £112,542">
                   Group 7 - £112,542
                 </option>
-                <option value="Group 8">
+                <option value="Group 8 - £89,428">
                   Group 8 - £89,428
                 </option>
               </select>
             </div>
           </RadioItem>
           <RadioItem
-            value="fee-paid"
+            value="Fee paid"
             label="Fee paid"
           >
             <TextField
@@ -124,7 +124,7 @@
             />
           </RadioItem>
           <RadioItem
-            value="unpaid"
+            value="Unpaid"
             label="Unpaid"
           />
         </RadioGroup>
@@ -197,11 +197,11 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="welsh-language"
+            value="Welsh language"
             label="Welsh language"
           />
           <CheckboxItem
-            value="devolution-questions"
+            value="Devolution questions"
             label="Devolution questions"
           />
         </CheckboxGroup>
