@@ -19,7 +19,7 @@
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ exercise.name }}
+            {{ exercise.name.substring(0,79)+".." }}
           </h1>
           <router-link
             class="display-block govuk-link govuk-!-margin-bottom-8"
