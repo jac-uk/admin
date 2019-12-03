@@ -339,7 +339,7 @@ const router = new Router({
         title: 'Sign In',
       },
       beforeEnter: (to, from, next) => {
-        const isSignedIn = store.getters.isSignedIn;
+        const isSignedIn = store.getters['auth/isSignedIn'];
         if(isSignedIn) {
           return next({ name: 'dashboard' });
         }
@@ -361,7 +361,7 @@ const router = new Router({
 // It redirects unauthorized users to a sign-in page.
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth);
-  const isSignedIn = store.getters.isSignedIn;
+  const isSignedIn = store.getters['auth/isSignedIn'];
 
   if (requiresAuth && !isSignedIn) {
     return next({ name: 'sign-in' });
