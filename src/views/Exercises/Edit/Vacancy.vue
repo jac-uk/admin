@@ -224,41 +224,31 @@
         <div class="govuk-form-group">
           <label
             class="govuk-heading-m"
-            for="file-upload-1"
+            for="job-description-file"
           >
             Upload job description
           </label>
           <input
-            id="file-upload-1"
-            ref="jobDescFile"
+            id="job-description-file"
             class="govuk-file-upload"
             type="file"
+            @change="fileSelected"
           >
-          <div>
-            <button @click="uploadFile('file-upload-1')">
-              Upload Job Description
-            </button>
-          </div>
         </div>
 
         <div class="govuk-form-group">
           <label
             class="govuk-heading-m"
-            for="file-upload-2"
+            for="terms-and-conditions-file"
           >
             Upload terms and conditions
           </label>
           <input
-            id="file-upload-2"
-            ref="tAndCFile"
+            id="terms-and-conditions-file"
             class="govuk-file-upload"
             type="file"
+            @change="fileSelected"
           >
-          <div>
-            <button @click="uploadFile('file-upload-2')">
-              Upload Terms And Conditions
-            </button>
-          </div>          
         </div>
 
         <button class="govuk-button">
@@ -290,7 +280,7 @@ export default {
     TextareaInput,
     BackLink,
   },
-  data(){
+  data() {
     const exercise = this.$store.getters['exerciseDocument/data']();
 
     return {
@@ -309,37 +299,71 @@ export default {
         jurisdiction: exercise.jurisdiction || null,
         welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
-        jobDescUrl: exercise.jobDescUrl || null,
-        tAndCUrl: exercise.tAndCUrl || null,
       },
+      files: {},
     };
+  },
+  computed: {
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
+    exerciseId() {
+      return this.$store.getters['exerciseDocument/id'];
+    },    
   },
   methods: {
     async save() {
+
+      // check for job description file to upload
+      if (this.files['job-description-file']) {
+        await this.upload(this.files['job-description-file']);
+      } 
+
+      // check for terms and conditions file to upload
+      if (this.files['terms-and-conditions-file']) {
+        await this.upload(this.files['terms-and-conditions-file']);
+      } 
+
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
     },
-    async saveButDontLeavePage() {
-      // TODO: Not working! It saves, but it leaves the page
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      alert('SUCCESS: file uploaded');
-    },
-    uploadFile(elementId) {
-      //console.log('uploadFile function fired');
-      const file = document.querySelector(`#${elementId}`).files[0];
-      //console.log(file);
+    fileSelected(event) {  
+      //console.log('fileSelected called');    
+      if (event.target.files.length > 0) {
+        //console.log(event.target.files.length);
+        const file = event.target.files[0];
+        //console.log(file);
 
-      // These are the folder names set up in Firebase Storage
-      const folderNameMap = new Map([
-        ['file-upload-1', 'job-descriptions'],
-        ['file-upload-2', 'terms-and-conditions'],
+        const data = {
+          name: file.name,
+          file: file,
+          type: event.target.id,
+        };
+        //console.log(data);
+
+        //console.log(`Before this.files[data.type] = ${this.files[data.type]}`);
+        this.files[data.type] = data;
+        //console.log(`After this.files[data.type] = ${this.files[data.type].name}`);
+      }
+    },
+    upload(item) {
+      //console.log('upload function called');
+      //console.log(`item.name = ${item.name}`);
+      //console.log(`item.type = ${item.type}`);
+      //console.log('item = ', item);
+
+      const file = item.file;
+      const fileExtension = file.name.split('.')[1];
+      //console.log(fileExtension);
+
+      const fileNameMap = new Map([
+        ['job-description-file', 'job-description'],
+        ['terms-and-conditions-file', 'terms-and-conditions'],
       ]);
 
-      const folderName = folderNameMap.get(elementId);
-
-      // set the Firebase Storage file path and name here
-      // e.g. job-descriptions/myFile.docx
-      const fileSavePath = `${folderName}/${file.name}`;
+      const fileName = fileNameMap.get(item.type);
+      const fileSavePath = `exercise-${this.exerciseId}/${fileName}.${fileExtension}`;
+      //console.log(`fileSavePath = ${fileSavePath}`);
 
       const storageRef = firebase.storage().ref();
 
@@ -381,18 +405,24 @@ export default {
               // Upload completed successfully, now we can get the download URL
               uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 //console.log('File available at', downloadURL);
-                //console.log(`OLD this.exercise.jobDescUrl = ${this.exercise.jobDescUrl}`);
-                if (downloadURL.includes('job-descriptions')) {
+                if (downloadURL.includes('job-description')) {
+
+                  // set job description database values
+                  this.exercise.uploadedJobDescriptionTemplate = true;
                   this.exercise.jobDescUrl = downloadURL;
                 } else if (downloadURL.includes('terms-and-conditions')) {
+
+                  // set terms and conditions database values
+                  this.exercise.uploadedTermsAndConditionsTemplate = true;
                   this.exercise.tAndCUrl = downloadURL;
                 }
-                //console.log(`NEW this.exercise.jobDescUrl = ${this.exercise.jobDescUrl}`);
-                // TODO: Fix this because it leaves the page after uploading
-                this.saveButDontLeavePage();
+
+                // don't forget to save
+                this.$store.dispatch('exerciseDocument/save', this.exercise);
+                //console.log('uploadedJobDescriptionTemplate = ', this.exercise.uploadedJobDescriptionTemplate);
               });
             });
-    },
+    },    
   },
 };
 </script>
