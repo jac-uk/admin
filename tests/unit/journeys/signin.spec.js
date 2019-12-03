@@ -75,7 +75,7 @@ describe('Sign in journey', () => {
 
   describe('for authenticated user', () => {
     beforeEach(() => {
-      store.dispatch('setCurrentUser', user);
+      store.dispatch('auth/setCurrentUser', user);
     });
 
     describe('when going to page that does not exist', () => {
