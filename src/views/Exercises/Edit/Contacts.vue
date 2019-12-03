@@ -55,7 +55,7 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="lord-chancellor"
+            value="Lord Chancellor"
             label="Lord Chancellor"
           />
           <CheckboxItem
