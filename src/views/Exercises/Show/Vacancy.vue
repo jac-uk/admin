@@ -116,6 +116,22 @@
           </ul>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Has uploaded Job Description Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a :href="exercise.jobDescUrl">{{ exercise.uploadedJobDescriptionTemplate }}</a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Has uploaded Terms and Conditions Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a :href="exercise.tAndCUrl">{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
+        </dd>
+      </div>              
     </dl>
   </div>
 </template>
