@@ -42,15 +42,15 @@ export default {
       if (!(methods instanceof Array)) {
         return ['Null'];
       }
-      const list = methods.filter(value => (value !== 'other'));
+      const list = methods.filter(value => (value !== 'Other'));
       list.sort();
 
-      if (methods.includes('other')) {
+      if (methods.includes('Other')) {
         this.exercise.otherShortlistingMethod.forEach((method) => {
           return list.push(`Other: ${method.name}`);
         });
       }
-      
+
       return list;
     },
   },

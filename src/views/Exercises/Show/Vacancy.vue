@@ -51,7 +51,7 @@
           Is salaried part-time working (SPTW) offered?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.isSPTWOffered }}
+          {{ booleanAmender(exercise.isSPTWOffered) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -125,6 +125,12 @@ export default {
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+  },
+  methods: {
+    booleanAmender (value) {
+      if (value === true) { return 'Yes'; }
+      if (value === false) { return 'No'; }
     },
   },
 };

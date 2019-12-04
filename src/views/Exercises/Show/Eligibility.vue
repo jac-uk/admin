@@ -19,14 +19,11 @@
           Post-qualification experience (PQE)
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.postQualificationExperience === 'other'">
-            {{ exercise.otherYears }}
-          </span>
-          <span v-else-if="exercise.postQualificationExperience">
+          <span>
             {{ exercise.postQualificationExperience }}
           </span>
-          <span v-else>
-            Null
+          <span v-if="exercise.postQualificationExperience === 'Other'">
+            {{ exercise.otherYears }}
           </span>
         </dd>
       </div>
@@ -35,14 +32,8 @@
           Does Schedule 2(d) apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.schedule2DApply === true">
-            Yes
-          </span>
-          <span v-else-if="exercise.schedule2DApply === false">
-            No
-          </span>
-          <span v-else>
-            Null
+          <span>
+            {{ booleanAmender(exercise.schedule2DApply) }}
           </span>
         </dd>
       </div>
@@ -51,7 +42,7 @@
           Qualifications
         </dt>
         <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
+          <ul class="govuk-list govuk-list--bullet">
             <li
               v-for="qualification in qualifications"
               :key="qualification"
@@ -66,14 +57,8 @@
           Does additional selection criteria (ASC) apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.aSCApply === true">
-            Yes
-          </span>
-          <span v-else-if="exercise.aSCApply === false">
-            No
-          </span>
-          <span v-else>
-            Null
+          <span>
+            {{ booleanAmender(exercise.aSCApply) }}
           </span>
         </dd>
       </div>
@@ -82,11 +67,8 @@
           Additional skills and experience
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.aSCApply === true">
+          <span>
             {{ exercise.yesASCApply }}
-          </span>
-          <span v-else>
-            Null
           </span>
         </dd>
       </div>
@@ -95,14 +77,11 @@
           Reasonable length of service
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.reasonableLengthService === 'other'">
-            {{ exercise.otherLOS }}
-          </span>
-          <span v-else-if="exercise.reasonableLengthService">
+          <span>
             {{ exercise.reasonableLengthService }}
           </span>
-          <span v-else>
-            Null
+          <span v-if="exercise.reasonableLengthService === 'Other'">
+            {{ exercise.otherLOS }}
           </span>
         </dd>
       </div>
@@ -111,14 +90,8 @@
           Retirement age
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.retirementAge === 'other'">
-            {{ exercise.otherRetirement }}
-          </span>
-          <span v-else-if="exercise.retirementAge">
-            {{ exercise.retirementAge }}
-          </span>
-          <span v-else>
-            Null
+          <span v-if="exercise.retirementAge === 'Other'">
+            {{ exercise.otherRetirement }} years
           </span>
         </dd>
       </div>
@@ -136,18 +109,24 @@ export default {
       const qualifications = this.exercise.qualifications;
 
       if (!(qualifications instanceof Array)) {
-        return ['Null'];
+        return [''];
       }
 
-      const list = qualifications.filter(value => (value !== 'other'));
+      const list = qualifications.filter(value => (value !== 'Other'));
       list.sort();
 
-      if (qualifications.includes('other')) {
+      if (qualifications.includes('Other')) {
         const otherLabel = this.exercise.otherQualifications;
         list.push(`Other: ${otherLabel}`);
       }
 
       return list;
+    },
+  },
+  methods: {
+    booleanAmender (value) {
+      if (value === true) { return 'Yes'; }
+      if (value === false) { return 'No'; }
     },
   },
 };

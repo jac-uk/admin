@@ -14,7 +14,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="post-qualification-experience"
-          v-model="postQualificationExperience"
+          v-model="exercise.postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
@@ -32,7 +32,7 @@
           >
             <TextField
               id="other-years"
-              v-model="otherYears"
+              v-model="exercise.otherYears"
               label="Number of years"
               class="govuk-!-width-one-quarter"
             />
@@ -42,7 +42,7 @@
         <RadioGroup
           v-if="isCourtOrTribunal === 'tribunal'"
           id="schedule-2d-apply"
-          v-model="schedule2DApply"
+          v-model="exercise.schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
@@ -59,7 +59,7 @@
 
         <RadioGroup
           id="additional-selection-criteria-apply"
-          v-model="aSCApply"
+          v-model="exercise.aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
@@ -69,7 +69,7 @@
           >
             <TextareaInput
               id="yes-asc-apply"
-              v-model="yesASCApply"
+              v-model="exercise.yesASCApply"
               label="Additional skills and experience"
             />
           </RadioItem>
@@ -83,7 +83,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
-          v-model="previousJudicialExperienceApply"
+          v-model="exercise.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
         >
           <RadioItem
@@ -100,7 +100,7 @@
         <CheckboxGroup
           v-if="typeOfExercise !== 'non-legal' "
           id="qualifications"
-          v-model="qualifications"
+          v-model="exercise.qualifications"
           label="Qualifications"
           hint="Select all that apply."
         >
@@ -126,7 +126,7 @@
           >
             <TextField
               id="other-qualifications"
-              v-model="otherQualifications"
+              v-model="exercise.otherQualifications"
               label="Add details of other relevant professions, qualifications or experience"
               hint="For example, Patent attorney."
             />
@@ -136,7 +136,7 @@
         <RadioGroup
           v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
-          v-model="memberships"
+          v-model="exercise.memberships"
           label="Memberships"
         >
           <RadioItem
@@ -173,7 +173,7 @@
           >
             <TextField
               id="other-qualifications"
-              v-model="otherMemberships"
+              v-model="exercise.otherMemberships"
               label="Associations or Institutes"
             />
           </RadioItem>
@@ -181,7 +181,7 @@
 
         <RadioGroup
           id="reasonable-length-service"
-          v-model="reasonableLengthService"
+          v-model="exercise.reasonableLengthService"
           label="Reasonable length of service"
           hint="This is the minimum number of years the candidate must work."
         >
@@ -203,7 +203,7 @@
           >
             <TextField
               id="other-LOS"
-              v-model="otherLOS"
+              v-model="exercise.otherLOS"
               label="Number of years"
               class="govuk-!-width-one-quarter"
             />
@@ -212,7 +212,7 @@
 
         <RadioGroup
           id="retirement-age"
-          v-model="retirementAge"
+          v-model="exercise.retirementAge"
           label="Retirement age"
         >
           <RadioItem
@@ -225,7 +225,7 @@
           >
             <TextField
               id="other-retirement"
-              v-model="otherRetirement"
+              v-model="exercise.otherRetirement"
               label="Retirement age"
               class="govuk-!-width-one-quarter"
             />
