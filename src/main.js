@@ -15,7 +15,10 @@ Vue.config.productionTip = false;
 let vueInstance = false;
 auth().onAuthStateChanged( (user) => {
   // Bind Firebase auth state to the vuex auth state store
-  store.dispatch('setCurrentUser', user);
+  store.dispatch('auth/setCurrentUser', user);
+  if (store.getters['auth/isSignedIn']) {
+    router.push('/');
+  }
 
   // Create the Vue instance, but only once
   if (!vueInstance) {

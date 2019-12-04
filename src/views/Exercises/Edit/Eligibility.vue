@@ -14,7 +14,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="post-qualification-experience"
-          v-model="exercise.postQualificationExperience"
+          v-model="postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
@@ -27,12 +27,12 @@
             label="7 years"
           />
           <RadioItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
               id="other-years"
-              v-model="exercise.otherYears"
+              v-model="otherYears"
               label="Number of years"
               class="govuk-!-width-one-quarter"
             />
@@ -42,7 +42,7 @@
         <RadioGroup
           v-if="isCourtOrTribunal === 'tribunal'"
           id="schedule-2d-apply"
-          v-model="exercise.schedule2DApply"
+          v-model="schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
@@ -59,7 +59,7 @@
 
         <RadioGroup
           id="additional-selection-criteria-apply"
-          v-model="exercise.aSCApply"
+          v-model="aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
@@ -69,7 +69,7 @@
           >
             <TextareaInput
               id="yes-asc-apply"
-              v-model="exercise.yesASCApply"
+              v-model="yesASCApply"
               label="Additional skills and experience"
             />
           </RadioItem>
@@ -83,7 +83,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
-          v-model="exercise.previousJudicialExperienceApply"
+          v-model="previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
         >
           <RadioItem
@@ -100,12 +100,12 @@
         <CheckboxGroup
           v-if="typeOfExercise !== 'non-legal' "
           id="qualifications"
-          v-model="exercise.qualifications"
+          v-model="qualifications"
           label="Qualifications"
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="Advocate"
+            value="Advocate – enrolled with the Scottish bar"
             label="Advocate – enrolled with the Scottish bar"
           />
           <CheckboxItem
@@ -113,7 +113,7 @@
             label="Barrister"
           />
           <CheckboxItem
-            value="CILEx"
+            value="CILEx fellow (this might be called Fellow ILEX)"
             label="CILEx fellow (this might be called Fellow ILEX)"
           />
           <CheckboxItem
@@ -121,12 +121,12 @@
             label="Solicitor"
           />
           <CheckboxItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
               id="other-qualifications"
-              v-model="exercise.otherQualifications"
+              v-model="otherQualifications"
               label="Add details of other relevant professions, qualifications or experience"
               hint="For example, Patent attorney."
             />
@@ -136,44 +136,44 @@
         <RadioGroup
           v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
-          v-model="exercise.memberships"
+          v-model="memberships"
           label="Memberships"
         >
           <RadioItem
-            value="chartered-association-of-building-engineers"
+            value="Chartered Association of Building Engineers"
             label="Chartered Association of Building Engineers"
           />
           <RadioItem
-            value="chartered-institute-of-building"
+            value="Chartered Institute of Building"
             label="Chartered Institute of Building"
           />
           <RadioItem
-            value="chartered-institute-of-environmental-health"
+            value="Chartered Institute of Environmental Health"
             label="Chartered Institute of Environmental Health"
           />
           <RadioItem
-            value="general-medical-council"
+            value="General Medical Council"
             label="General Medical Council"
           />
           <RadioItem
-            value="royal-college-of-psychiatrists"
+            value="Royal College of Psychaitrists"
             label="Royal College of Psychaitrists"
           />
           <RadioItem
-            value="royal-institution-of-chartered-surveyors"
+            value="Royal Institution of Chartered Surveyors"
             label="Royal Institution of Chartered Surveyors"
           />
           <RadioItem
-            value="royal-institute-of-british-architects"
+            value="Royal Institute of British Architects"
             label="Royal Institute of British Architects"
           />
           <RadioItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
               id="other-qualifications"
-              v-model="exercise.otherMemberships"
+              v-model="otherMemberships"
               label="Associations or Institutes"
             />
           </RadioItem>
@@ -181,7 +181,7 @@
 
         <RadioGroup
           id="reasonable-length-service"
-          v-model="exercise.reasonableLengthService"
+          v-model="reasonableLengthService"
           label="Reasonable length of service"
           hint="This is the minimum number of years the candidate must work."
         >
@@ -198,12 +198,12 @@
             label="5 years"
           />
           <RadioItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
               id="other-LOS"
-              v-model="exercise.otherLOS"
+              v-model="otherLOS"
               label="Number of years"
               class="govuk-!-width-one-quarter"
             />
@@ -212,7 +212,7 @@
 
         <RadioGroup
           id="retirement-age"
-          v-model="exercise.retirementAge"
+          v-model="retirementAge"
           label="Retirement age"
         >
           <RadioItem
@@ -220,12 +220,12 @@
             label="70 years"
           />
           <RadioItem
-            value="other"
+            value="Other"
             label="Other"
           >
             <TextField
               id="other-retirement"
-              v-model="exercise.otherRetirement"
+              v-model="otherRetirement"
               label="Retirement age"
               class="govuk-!-width-one-quarter"
             />
