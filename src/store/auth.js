@@ -1,4 +1,5 @@
 const module = {
+  namespaced: true,
   state: {
     currentUser: null,
   },
@@ -15,6 +16,7 @@ const module = {
         commit('setCurrentUser', {
           uid: user.uid,
           email: user.email,
+          emailVerified: user.emailVerified,
         });
       }
     },

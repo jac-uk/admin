@@ -17,23 +17,23 @@
           label="Type of exercise"
         >
           <RadioItem
-            value="legal"
+            value="Legal"
             label="Legal"
           />
           <RadioItem
-            value="non-legal"
+            value="Non legal"
             label="Non legal"
           />
           <RadioItem
-            value="senior"
+            value="Senior"
             label="Senior"
           />
           <RadioItem
-            value="leadership"
+            value="Leadership"
             label="Leadership"
           />
           <RadioItem
-            value="leadership-non-legal"
+            value="Leadership - non legal"
             label="Leadership - non legal"
           />
         </RadioGroup>
@@ -44,11 +44,11 @@
           label="Is the vacancy for a court or tribunal?"
         >
           <RadioItem
-            value="court"
+            value="Court"
             label="Court"
           />
           <RadioItem
-            value="tribunal"
+            value="Tribunal"
             label="Tribunal"
           />
         </RadioGroup>
@@ -59,7 +59,7 @@
           label="Appointment type"
         >
           <RadioItem
-            value="salaried"
+            value="Salaried"
             label="Salaried"
           >
             <div class="govuk-form-group">
@@ -77,44 +77,44 @@
                 <option value="">
                   Select an option
                 </option>
-                <option value="Group 1">
+                <option value="roup 1 - £262,264">
                   Group 1 - £262,264
                 </option>
-                <option value="Group 1.1">
+                <option value="Group 1.1 - £234,184">
                   Group 1.1 - £234,184
                 </option>
-                <option value="Group ">
+                <option value="Group 2 - £226,193">
                   Group 2 - £226,193
                 </option>
-                <option value="Group 3">
+                <option value="Group 3 - £215,094">
                   Group 3 - £215,094
                 </option>
-                <option value="Group 4">
+                <option value="Group 4 - £188,901">
                   Group 4 - £188,901
                 </option>
-                <option value="Group 5+">
+                <option value="Group 5+ - £160,377">
                   Group 5+ - £160,377
                 </option>
-                <option value="Group 5">
+                <option value="Group 5 - £151,497">
                   Group 5 - £151,497
                 </option>
-                <option value="Group 6.1">
+                <option value="Group 6.1 - £140,289">
                   Group 6.1 - £140,289
                 </option>
-                <option value="Group 6.2">
+                <option value="Group 6.2 - £132,075">
                   Group 6.2 - £132,075
                 </option>
-                <option value="Group 7">
+                <option value="Group 7 - £112,542">
                   Group 7 - £112,542
                 </option>
-                <option value="Group 8">
+                <option value="Group 8 - £89,428">
                   Group 8 - £89,428
                 </option>
               </select>
             </div>
           </RadioItem>
           <RadioItem
-            value="fee-paid"
+            value="Fee paid"
             label="Fee paid"
           >
             <TextField
@@ -124,7 +124,7 @@
             />
           </RadioItem>
           <RadioItem
-            value="unpaid"
+            value="Unpaid"
             label="Unpaid"
           />
         </RadioGroup>
@@ -197,11 +197,11 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="welsh-language"
+            value="Welsh language"
             label="Welsh language"
           />
           <CheckboxItem
-            value="devolution-questions"
+            value="Devolution questions"
             label="Devolution questions"
           />
         </CheckboxGroup>
@@ -224,28 +224,30 @@
         <div class="govuk-form-group">
           <label
             class="govuk-heading-m"
-            for="file-upload-1"
+            for="job-description-file"
           >
             Upload job description
           </label>
           <input
-            id="file-upload-1"
+            id="job-description-file"
             class="govuk-file-upload"
             type="file"
+            @change="fileSelected"
           >
         </div>
 
         <div class="govuk-form-group">
           <label
             class="govuk-heading-m"
-            for="file-upload-2"
+            for="terms-and-conditions-file"
           >
             Upload terms and conditions
           </label>
           <input
-            id="file-upload-2"
+            id="terms-and-conditions-file"
             class="govuk-file-upload"
             type="file"
+            @change="fileSelected"
           >
         </div>
 
@@ -258,6 +260,7 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import TextField from '@/components/Form/TextField';
@@ -277,7 +280,7 @@ export default {
     TextareaInput,
     BackLink,
   },
-  data(){
+  data() {
     const exercise = this.$store.getters['exerciseDocument/data']();
 
     return {
@@ -296,15 +299,130 @@ export default {
         jurisdiction: exercise.jurisdiction || null,
         welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
-
       },
+      files: {},
     };
+  },
+  computed: {
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
+    exerciseId() {
+      return this.$store.getters['exerciseDocument/id'];
+    },    
   },
   methods: {
     async save() {
+
+      // check for job description file to upload
+      if (this.files['job-description-file']) {
+        await this.upload(this.files['job-description-file']);
+      } 
+
+      // check for terms and conditions file to upload
+      if (this.files['terms-and-conditions-file']) {
+        await this.upload(this.files['terms-and-conditions-file']);
+      } 
+
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
     },
+    fileSelected(event) {  
+      //console.log('fileSelected called');    
+      if (event.target.files.length > 0) {
+        //console.log(event.target.files.length);
+        const file = event.target.files[0];
+        //console.log(file);
+
+        const data = {
+          name: file.name,
+          file: file,
+          type: event.target.id,
+        };
+        //console.log(data);
+
+        //console.log(`Before this.files[data.type] = ${this.files[data.type]}`);
+        this.files[data.type] = data;
+        //console.log(`After this.files[data.type] = ${this.files[data.type].name}`);
+      }
+    },
+    upload(item) {
+      //console.log('upload function called');
+      //console.log(`item.name = ${item.name}`);
+      //console.log(`item.type = ${item.type}`);
+      //console.log('item = ', item);
+
+      const file = item.file;
+      const fileExtension = file.name.split('.')[1];
+      //console.log(fileExtension);
+
+      const fileNameMap = new Map([
+        ['job-description-file', 'job-description'],
+        ['terms-and-conditions-file', 'terms-and-conditions'],
+      ]);
+
+      const fileName = fileNameMap.get(item.type);
+      const fileSavePath = `exercise-${this.exerciseId}/${fileName}.${fileExtension}`;
+      //console.log(`fileSavePath = ${fileSavePath}`);
+
+      const storageRef = firebase.storage().ref();
+
+      let uploadTask = storageRef.child(fileSavePath).put(file);
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask
+        .on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+            (snapshot) => {
+              // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+              //let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              //console.log('Upload is ' + progress + '% done');
+              switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED: // or 'paused'
+                //console.log('Upload is paused');
+                break;
+              case firebase.storage.TaskState.RUNNING: // or 'running'
+                //console.log('Upload is running');
+                break;
+              }
+            }, (error) => {
+
+              // A full list of error codes is available at
+              // https://firebase.google.com/docs/storage/web/handle-errors
+              switch (error.code) {
+              case 'storage/unauthorized':
+                // User doesn't have permission to access the object
+                break;
+
+              case 'storage/canceled':
+                // User canceled the upload
+                break;
+
+              case 'storage/unknown':
+                // Unknown error occurred, inspect error.serverResponse
+                break;
+              }
+            }, () => {
+              // Upload completed successfully, now we can get the download URL
+              uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                //console.log('File available at', downloadURL);
+                if (downloadURL.includes('job-description')) {
+
+                  // set job description database values
+                  this.exercise.uploadedJobDescriptionTemplate = true;
+                  this.exercise.jobDescUrl = downloadURL;
+                } else if (downloadURL.includes('terms-and-conditions')) {
+
+                  // set terms and conditions database values
+                  this.exercise.uploadedTermsAndConditionsTemplate = true;
+                  this.exercise.tAndCUrl = downloadURL;
+                }
+
+                // don't forget to save
+                this.$store.dispatch('exerciseDocument/save', this.exercise);
+                //console.log('uploadedJobDescriptionTemplate = ', this.exercise.uploadedJobDescriptionTemplate);
+              });
+            });
+    },    
   },
 };
 </script>
