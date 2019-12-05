@@ -46,6 +46,11 @@
                 {{ exercise.name }}
               </RouterLink>
             </dd>
+            <dd class="govuk-summary-list__value">
+              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+                {{ exercise.applicationOpenDate }}
+              </RouterLink>
+            </dd>
           </div>
         </dl>
       </div>
