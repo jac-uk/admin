@@ -17,9 +17,10 @@ auth().onAuthStateChanged( (user) => {
   // Bind Firebase auth state to the vuex auth state store
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
-    router.push('/');
+    if (window.location.pathname == '/sign-in') {
+      router.push('/');
+    }
   }
-
   // Create the Vue instance, but only once
   if (!vueInstance) {
     vueInstance = new Vue({
