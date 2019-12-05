@@ -7,7 +7,12 @@
     <div v-else>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
-          <BackLink />
+          <router-link
+            class="govuk-back-link"
+            :to="goBack"
+          >
+            Back
+          </router-link>          
         </div>
         <div class="govuk-grid-column-three-quarters">
           <div class="text-right govuk-!-margin-0">
@@ -48,14 +53,12 @@
 import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
-import BackLink from '@/components/BackLink';
 
 export default {
   components: {
     LoadingMessage,
     Navigation,
     AddToFavouritesButton,
-    BackLink,
   },
   data() {
     const navPages = [
@@ -82,6 +85,20 @@ export default {
     },
     exerciseName() {
       return this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+    },
+    goBack() {
+      if (this.$route.name === 'exercise-show-overview') {
+        return {
+          name: 'dashboard',
+        };
+      } else {
+        return {
+          name: 'exercise-show-overview',
+          params: {
+            id: this.exercise.id,
+          },
+        };
+      }
     },
   },
   mounted() {
