@@ -19,15 +19,15 @@
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
           <RadioItem
-            value="5 years"
+            value="5-years"
             label="5 years"
           />
           <RadioItem
-            value="7 years"
+            value="7-years"
             label="7 years"
           />
           <RadioItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <TextField
@@ -105,23 +105,23 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="Advocate – enrolled with the Scottish bar"
+            value="advocate-scottish-bar"
             label="Advocate – enrolled with the Scottish bar"
           />
           <CheckboxItem
-            value="Barrister"
+            value="barrister"
             label="Barrister"
           />
           <CheckboxItem
-            value="CILEx fellow (this might be called Fellow ILEX)"
+            value="cilex"
             label="CILEx fellow (this might be called Fellow ILEX)"
           />
           <CheckboxItem
-            value="Solicitor"
+            value="solicitor"
             label="Solicitor"
           />
           <CheckboxItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <TextField
@@ -140,35 +140,35 @@
           label="Memberships"
         >
           <RadioItem
-            value="Chartered Association of Building Engineers"
+            value="chartered-association-of-building-engineers"
             label="Chartered Association of Building Engineers"
           />
           <RadioItem
-            value="Chartered Institute of Building"
+            value="chartered-institute-of-building"
             label="Chartered Institute of Building"
           />
           <RadioItem
-            value="Chartered Institute of Environmental Health"
+            value="chartered-institute-of-environmental-health"
             label="Chartered Institute of Environmental Health"
           />
           <RadioItem
-            value="General Medical Council"
+            value="general-medical-council"
             label="General Medical Council"
           />
           <RadioItem
-            value="Royal College of Psychaitrists"
+            value="royal-college-of-psychaitrists"
             label="Royal College of Psychaitrists"
           />
           <RadioItem
-            value="Royal Institution of Chartered Surveyors"
+            value="royal-institution-of-chartered-surveyors"
             label="Royal Institution of Chartered Surveyors"
           />
           <RadioItem
-            value="Royal Institute of British Architects"
+            value="royal-institute-of-british-architects"
             label="Royal Institute of British Architects"
           />
           <RadioItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <TextField
@@ -186,19 +186,19 @@
           hint="This is the minimum number of years the candidate must work."
         >
           <RadioItem
-            value="3 years"
+            value="3-years"
             label="3 years"
           />
           <RadioItem
-            value="4 years"
+            value="4-years"
             label="4 years"
           />
           <RadioItem
-            value="5 years"
+            value="5-years"
             label="5 years"
           />
           <RadioItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <TextField
@@ -216,11 +216,11 @@
           label="Retirement age"
         >
           <RadioItem
-            value="70 years"
+            value="70-years"
             label="70 years"
           />
           <RadioItem
-            value="Other"
+            value="other"
             label="Other"
           >
             <TextField
