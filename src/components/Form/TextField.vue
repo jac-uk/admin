@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <label
       :for="id"
       class="govuk-heading-m govuk-!-margin-bottom-2"
@@ -12,12 +15,18 @@
     >
       {{ hint }}
     </span>
+    <span v-if="hasError" :id="`${id}-error`" class="govuk-error-message">
+      <span class="govuk-visually-hidden">Error:</span> {{ errorMessage }}
+    </span>
+    {{ errors }}
     <input
       :id="id"
       v-model="text"
-      :class="inputClass + ' govuk-input'"
+      class="govuk-input"
+      :class="{inputClass, 'govuk-input--error': hasError}"
       :type="type"
-    >
+      @input="validate"
+    />
   </div>
 </template>
 
@@ -48,8 +57,20 @@ export default {
       default: 'text',
       type: String,
     },
+    required: Boolean,
+    checkErrors: {
+      type: Boolean,
+      default: false,
+    },
+    errors: {
+      type: Object,
+    },
   },
-
+  data() {
+    return {
+      errorMessage: '',
+    };
+  },
   computed: {
     text: {
       get() {
@@ -59,7 +80,31 @@ export default {
         this.$emit('input', val);
       },
     },
-
+    hasError() {
+      return this.errorMessage ? true :  false;
+    },
   },
+  watch: {
+    checkErrors: function (newVal, oldVal) {
+      console.log('showErrors changed', oldVal, newVal);
+      this.validate();
+    },
+  }, 
+  methods: {
+    validate() {
+      console.log('validate');
+      this.setError('');
+      if (this.checkErrors) {
+        if (this.required && !this.value) {
+          this.setError(`Enter your ${this.label}`);
+        }
+      }
+    },
+    setError(message) {
+      this.errorMessage = message;
+      this.errors[this.id] = message;
+      this.$emit('update:errors', this.errors);
+    },
+  }, 
 };
 </script>
