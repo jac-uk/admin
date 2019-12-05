@@ -52,6 +52,19 @@ export default {
       default: 'text',
       type: String,
     },
+    required: Boolean,
+    checkErrors: {
+      type: Boolean,
+      default: false,
+    },
+    errors: {
+      type: Object,
+    },
+  },
+  data() {
+    return {
+      errorMessage: '',
+    };
   },
   computed: {
     text: {
@@ -72,5 +85,27 @@ export default {
       }
     },
   },
+  watch: {
+    checkErrors: function (newVal, oldVal) {
+      console.log('showErrors changed', oldVal, newVal);
+      this.validate();
+    },
+  }, 
+  methods: {
+    validate() {
+      console.log('validate');
+      this.setError('');
+      if (this.checkErrors) {
+        if (this.required && !this.value) {
+          this.setError(`Enter your ${this.label}`);
+        }
+      }
+    },
+    setError(message) {
+      this.errorMessage = message;
+      this.errors[this.id] = message;
+      this.$emit('update:errors', this.errors);
+    },
+  }, 
 };
 </script>
