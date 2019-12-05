@@ -52,6 +52,12 @@ export default {
       default: 'text',
       type: String,
     },
+    required: Boolean,
+  },
+  data() {
+    return {
+      errorMessage: '',
+    };
   },
   computed: {
     text: {
@@ -69,23 +75,6 @@ export default {
         return 'text'; // we are using custom email validation, so don't use html5 input types
       default:
         return this.type;
-      }
-    },
-  },
-  watch: {
-    checkErrors: function (newVal, oldVal) {
-      console.log('showErrors changed', oldVal, newVal);
-      this.validate();
-    },
-  }, 
-  methods: {
-    validate() {
-      console.log('validate');
-      this.setError('');
-      if (this.checkErrors) {
-        if (this.required && !this.value) {
-          this.setError(`Enter your ${this.label}`);
-        }
       }
     },
   },
