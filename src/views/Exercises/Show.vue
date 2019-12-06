@@ -19,7 +19,7 @@
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
-            {{ exercise.name.substring(0,79)+".." }}
+            {{ exerciseName }}
           </h1>
           <router-link
             class="display-block govuk-link govuk-!-margin-bottom-8"
@@ -79,6 +79,9 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    exerciseName() {
+      return this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
     },
   },
   mounted() {
