@@ -405,14 +405,17 @@ export default {
               // Upload completed successfully, now we can get the download URL
               uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 //console.log('File available at', downloadURL);
+                const file = item.file;
+                const fileExtension = file.name.split('.')[1]; 
+
                 if (downloadURL.includes('job-description')) {
 
                   // set job description database values
-                  this.exercise.uploadedJobDescriptionTemplate = 'job-desciption';
+                  this.exercise.uploadedJobDescriptionTemplate = `job-description.${fileExtension}`;
                 } else if (downloadURL.includes('terms-and-conditions')) {
 
                   // set terms and conditions database values
-                  this.exercise.uploadedTermsAndConditionsTemplate = 'terms-and-conditions';
+                  this.exercise.uploadedTermsAndConditionsTemplate = `terms-and-conditions.${fileExtension}`;
                 }
 
                 // don't forget to save
