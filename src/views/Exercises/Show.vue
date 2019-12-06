@@ -69,7 +69,6 @@ export default {
       { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
       { page: 'Vacancy information', name: 'exercise-show-vacancy' },
       { page: 'Eligibility information', name: 'exercise-show-eligibility' },
-      { page: 'Additional information', name: 'exercise-show-additional-information' },
       { page: 'Working preferences', name: 'exercise-show-working-preferences' },
       { page: 'Independent assessments', name: 'exercise-show-independent-assessments' },
       { page: 'Assessment options', name: 'exercise-show-assessment-options' },
