@@ -11,6 +11,9 @@ import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
 import ExerciseEditName from '@/views/Exercises/Edit/EditName';
+import ExerciseEditAssessmentOptions from '@/views/Exercises/Edit/AssessmentOptions';
+import ExerciseEditWorkingPreferences from '@/views/Exercises/Edit/WorkingPreferences';
+import ExerciseEditDownloads from '@/views/Exercises/Edit/Downloads';
 
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
@@ -21,8 +24,11 @@ import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
 import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
-import ExerciseShowReports from '@/views/Exercises/Show/Reports';
+import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPreferences';
 import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/IndependentAssessments';
+import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
+import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
+import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 
 // Report views
 import ExerciseReports from '@/views/Exercises/Reports';
@@ -148,6 +154,33 @@ const router = new Router({
           },
         },
         {
+          path: 'working-preferences',
+          component: ExerciseShowWorkingPreferences,
+          name: 'exercise-show-working-preferences',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Working Preferences',
+          },
+        },
+        {
+          path: 'assessment-options',
+          component: ExerciseShowAssessmentOptions,
+          name: 'exercise-show-assessment-options',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Assessment Options',
+          },
+        },
+        {
+          path: 'downloads',
+          component: ExerciseShowDownloads,
+          name: 'exercise-show-downloads',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Downloads',
+          },
+        },
+        {
           path: 'reports',
           component: ExerciseShowReports,
           name: 'exercise-show-reports',
@@ -227,6 +260,33 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Vacancy Information',
+          },
+        },
+        {
+          path: 'assessment-options',
+          component: ExerciseEditAssessmentOptions,
+          name: 'exercise-edit-assessment-options',
+          meta: {
+            requiresAuth: true,
+            title: 'Assessment Options',
+          },
+        },
+        {
+          path: 'working-preferences',
+          component: ExerciseEditWorkingPreferences,
+          name: 'exercise-edit-working-preferences',
+          meta: {
+            requiresAuth: true,
+            title: 'Working Preferences',
+          },
+        },
+        {
+          path: 'downloads',
+          component: ExerciseEditDownloads,
+          name: 'exercise-edit-downloads',
+          meta: {
+            requiresAuth: true,
+            title: 'Downloads',
           },
         },
       ],

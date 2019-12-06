@@ -206,10 +206,6 @@
           />
         </CheckboxGroup>
 
-        <h2 class="govuk-heading-l">
-          Additional information
-        </h2>
-
         <TextareaInput
           id="about-the-role"
           v-model="exercise.aboutTheRole"

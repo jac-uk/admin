@@ -4,6 +4,7 @@
       <li 
         v-for="navItem in items"
         :key="navItem.name"
+        :class="{selected: isActive(navItem.name)}"
       >
         <router-link 
           class="nav-link"
@@ -12,6 +13,11 @@
         >
           {{ navItem.page }} 
         </router-link>
+        <!-- <ul>
+          <li><a href="" class="nav-link">link</a></li>
+          <li class="current"><a href="" class="nav-link">link</a></li>
+          <li><a href="" class="nav-link">link</a></li>
+        </ul> -->
       </li>
     </ul>
   </nav>
@@ -38,7 +44,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .dwp-vertical-navigation {
     margin: 0;
     padding: 0;
@@ -53,15 +59,49 @@ export default {
   }
 
   .dwp-vertical-navigation a[aria-current="page"] {
-    color: #1d70b8;
-    font-weight: bold;
-    text-decoration: none;
+    // color: #1d70b8;
+    // font-weight: bold;
+    // text-decoration: none;
     border-left: 4px solid #1d70b8;
-    background-color: #f3f2f1;
+    // background-color: #f3f2f1;
   }
 
   .dwp-vertical-navigation li a {
     padding: 0.625em;
     display: block;
   }
+
+  .dwp-vertical-navigation {
+    > li {
+      > ul {
+        display: none;
+        > li {
+          > a {
+            padding: 0.625em 0.625em 0.625em 1.25em;
+          }
+        }
+      }
+      &.selected {
+        > ul {
+          display: block;
+          padding-inline-start: 0;
+          > li {
+            // color: #1d70b8;
+            // font-weight: bold;
+            // text-decoration: none;
+            border-left: 4px solid #1d70b8;
+            &.current {
+              background-color: #f3f2f1;
+              > a {
+                color: #1d70b8;
+                font-weight: bold;
+                text-decoration: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 </style>
