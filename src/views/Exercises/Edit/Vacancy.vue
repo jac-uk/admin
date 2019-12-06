@@ -408,13 +408,11 @@ export default {
                 if (downloadURL.includes('job-description')) {
 
                   // set job description database values
-                  this.exercise.uploadedJobDescriptionTemplate = true;
-                  this.exercise.jobDescUrl = downloadURL;
+                  this.exercise.uploadedJobDescriptionTemplate = 'job-desciption';
                 } else if (downloadURL.includes('terms-and-conditions')) {
 
                   // set terms and conditions database values
-                  this.exercise.uploadedTermsAndConditionsTemplate = true;
-                  this.exercise.tAndCUrl = downloadURL;
+                  this.exercise.uploadedTermsAndConditionsTemplate = 'terms-and-conditions';
                 }
 
                 // don't forget to save
