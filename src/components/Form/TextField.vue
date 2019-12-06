@@ -15,10 +15,17 @@
     >
       {{ hint }}
     </span>
+    <<<<<<< HEAD
     <FormFieldError
       :id="id"
       :error-message="errorMessage"
     />
+    =======
+    <span v-if="hasError"
+:id="`${id}-error`" class="govuk-error-message">
+      <span class="govuk-visually-hidden">Error:</span> {{ errorMessage }}
+    </span>
+    >>>>>>> Further tweaks
     <input
       :id="id"
       v-model="text"
