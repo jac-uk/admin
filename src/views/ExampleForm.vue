@@ -91,6 +91,7 @@ export default {
     DateInput,
     TimeInput,
   },
+  extends: Test,
   extends: Form,
   data() {
     return {
