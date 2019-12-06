@@ -121,7 +121,7 @@
           Has uploaded Job Description Template
         </dt>
         <dd class="govuk-summary-list__value">
-          <a :href="exercise.jobDescUrl">{{ exercise.uploadedJobDescriptionTemplate }}</a>
+          <a @click="download(exercise.uploadedJobDescriptionTemplate)">{{ exercise.uploadedJobDescriptionTemplate }}</a>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -129,7 +129,7 @@
           Has uploaded Terms and Conditions Template
         </dt>
         <dd class="govuk-summary-list__value">
-          <a :href="exercise.tAndCUrl">{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
+          <a @click="download(exercise.uploadedTermsAndConditionsTemplate)">{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
         </dd>
       </div>              
     </dl>
@@ -137,10 +137,60 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+
 export default {
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
+    exerciseId() {
+      return this.$store.getters['exerciseDocument/id'];
+    },
+  },
+  methods: {
+    download(fileName) {
+      // Create a reference to the file we want to download
+      const fileSavePath = `exercise-${this.exerciseId}/${fileName}`;
+
+      // Get a reference to the storage service, which is used to create references in your storage bucket
+      const storage = firebase.storage();
+
+      // Create a storage reference from our storage service
+      const storageRef = storage.ref();
+
+      // Create a reference with an initial file path and name
+      const fileNameRef = storageRef.child(fileSavePath);
+
+      // Get the download URL
+      fileNameRef.getDownloadURL().then((url) => {
+        // open url in another window
+        window.open(url);
+      }).catch((error) => {
+
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+        case 'storage/object-not-found':
+          // File doesn't exist
+          break;
+
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+
+        case 'storage/canceled':
+          // User canceled the upload
+          break;
+
+        case 'storage/unknown':
+          // Unknown error occurred, inspect the server response
+          break;
+        }
+      });
     },
   },
 };
