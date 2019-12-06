@@ -121,7 +121,11 @@
           Has uploaded Job Description Template
         </dt>
         <dd class="govuk-summary-list__value">
-          <a @click="download(exercise.uploadedJobDescriptionTemplate)">{{ exercise.uploadedJobDescriptionTemplate }}</a>
+          <a @click="download(exercise.uploadedJobDescriptionTemplate)"
+            style="
+              color: blue;
+              text-decoration: underline;
+          ">{{ exercise.uploadedJobDescriptionTemplate }}</a>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -129,7 +133,11 @@
           Has uploaded Terms and Conditions Template
         </dt>
         <dd class="govuk-summary-list__value">
-          <a @click="download(exercise.uploadedTermsAndConditionsTemplate)">{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
+          <a @click="download(exercise.uploadedTermsAndConditionsTemplate)"
+            style="
+              color: blue;
+              text-decoration: underline;
+          ">{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
         </dd>
       </div>              
     </dl>
