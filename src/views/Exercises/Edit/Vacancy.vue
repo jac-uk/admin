@@ -17,23 +17,23 @@
           label="Type of exercise"
         >
           <RadioItem
-            value="Legal"
+            value="legal"
             label="Legal"
           />
           <RadioItem
-            value="Non legal"
+            value="non-legal"
             label="Non legal"
           />
           <RadioItem
-            value="Senior"
+            value="senior"
             label="Senior"
           />
           <RadioItem
-            value="Leadership"
+            value="leadership"
             label="Leadership"
           />
           <RadioItem
-            value="Leadership - non legal"
+            value="leadership-non-legal"
             label="Leadership - non legal"
           />
         </RadioGroup>
@@ -44,11 +44,11 @@
           label="Is the vacancy for a court or tribunal?"
         >
           <RadioItem
-            value="Court"
+            value="court"
             label="Court"
           />
           <RadioItem
-            value="Tribunal"
+            value="tribunal"
             label="Tribunal"
           />
         </RadioGroup>
@@ -59,7 +59,7 @@
           label="Appointment type"
         >
           <RadioItem
-            value="Salaried"
+            value="salaried"
             label="Salaried"
           >
             <div class="govuk-form-group">
@@ -77,44 +77,44 @@
                 <option value="">
                   Select an option
                 </option>
-                <option value="roup 1 - £262,264">
+                <option value="group-1">
                   Group 1 - £262,264
                 </option>
-                <option value="Group 1.1 - £234,184">
+                <option value="group-1.1">
                   Group 1.1 - £234,184
                 </option>
-                <option value="Group 2 - £226,193">
+                <option value="group-2">
                   Group 2 - £226,193
                 </option>
-                <option value="Group 3 - £215,094">
+                <option value="group-3">
                   Group 3 - £215,094
                 </option>
-                <option value="Group 4 - £188,901">
+                <option value="group-4">
                   Group 4 - £188,901
                 </option>
-                <option value="Group 5+ - £160,377">
+                <option value="group-5+">
                   Group 5+ - £160,377
                 </option>
-                <option value="Group 5 - £151,497">
+                <option value="group-5">
                   Group 5 - £151,497
                 </option>
-                <option value="Group 6.1 - £140,289">
+                <option value="group-6.1">
                   Group 6.1 - £140,289
                 </option>
-                <option value="Group 6.2 - £132,075">
+                <option value="group-6.2">
                   Group 6.2 - £132,075
                 </option>
-                <option value="Group 7 - £112,542">
+                <option value="group-7">
                   Group 7 - £112,542
                 </option>
-                <option value="Group 8 - £89,428">
+                <option value="group-8">
                   Group 8 - £89,428
                 </option>
               </select>
             </div>
           </RadioItem>
           <RadioItem
-            value="Fee paid"
+            value="fee-paid"
             label="Fee paid"
           >
             <TextField
@@ -124,7 +124,7 @@
             />
           </RadioItem>
           <RadioItem
-            value="Unpaid"
+            value="unpaid"
             label="Unpaid"
           />
         </RadioGroup>
@@ -197,11 +197,11 @@
           hint="Select all that apply."
         >
           <CheckboxItem
-            value="Welsh language"
-            label="Welsh language"
+            value="welsh-language"
+            label="welsh-language"
           />
           <CheckboxItem
-            value="Devolution questions"
+            value="devolution-questions"
             label="Devolution questions"
           />
         </CheckboxGroup>
@@ -309,7 +309,7 @@ export default {
     },
     exerciseId() {
       return this.$store.getters['exerciseDocument/id'];
-    },    
+    },
   },
   methods: {
     async save() {
@@ -317,18 +317,18 @@ export default {
       // check for job description file to upload
       if (this.files['job-description-file']) {
         await this.upload(this.files['job-description-file']);
-      } 
+      }
 
       // check for terms and conditions file to upload
       if (this.files['terms-and-conditions-file']) {
         await this.upload(this.files['terms-and-conditions-file']);
-      } 
+      }
 
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
     },
-    fileSelected(event) {  
-      //console.log('fileSelected called');    
+    fileSelected(event) {
+      //console.log('fileSelected called');
       if (event.target.files.length > 0) {
         //console.log(event.target.files.length);
         const file = event.target.files[0];
@@ -423,7 +423,7 @@ export default {
                 //console.log('uploadedJobDescriptionTemplate = ', this.exercise.uploadedJobDescriptionTemplate);
               });
             });
-    },    
+    },
   },
 };
 </script>
