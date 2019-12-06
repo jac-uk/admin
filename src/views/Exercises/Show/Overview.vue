@@ -28,10 +28,12 @@
         <span class="display-block govuk-!-font-size-27">Pre launch</span>
       </div>
       <Timeline :data="timeline" />
-      <a
-        href="#"
+      <RouterLink
+        :to="{ name: 'exercise-show-timeline' }"
         class="govuk-link"
-      >View timeline</a>
+      >
+        View timeline
+      </RouterLink>
     </div>
 
     <div class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2">
