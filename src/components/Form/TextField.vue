@@ -18,7 +18,6 @@
     <span v-if="hasError" :id="`${id}-error`" class="govuk-error-message">
       <span class="govuk-visually-hidden">Error:</span> {{ errorMessage }}
     </span>
-    {{ errors }}
     <input
       :id="id"
       v-model="text"
@@ -62,9 +61,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    errors: {
-      type: Object,
-    },
   },
   data() {
     return {
@@ -102,8 +98,10 @@ export default {
     },
     setError(message) {
       this.errorMessage = message;
-      this.errors[this.id] = message;
-      this.$emit('update:errors', this.errors);
+      // this.errors[this.id] = message;
+      // console.log('update:errors', this.errors);
+      //this.$emit('update:errors', this.errorMessage);
+      this.$emit('handle-error', { id: this.id, message: this.errorMessage });
     },
   }, 
 };

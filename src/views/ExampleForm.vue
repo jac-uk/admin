@@ -32,58 +32,11 @@
           label="Email address"
           required
           :checkErrors="checkErrors"
-          :errors="errors"
-          @update:errors="errors = $event"
+          @handle-error="handleError"
           type="email"
           :pattern="['*@judicialappointments.digital','*@judicialappointments.gov.uk']"
         />
-
-        <!-- <RadioGroup
-          id="is-more-info-needed"
-          v-model="addMoreInfo"
-          label="Do you want to add more information about this exercise now?"
-          hint="You can add exercise contacts, shortlisting methods, timeline dates, or information from HMCTS. You can also do this later"
-        >
-          <RadioItem
-            :value="true"
-            label="Yes"
-          >
-            <CheckboxGroup
-              id="select-more-info"
-              v-model="addMoreInfoSelection"
-              label="What do you want to add?"
-              hint="Select all that apply."
-            >
-              <CheckboxItem
-                value="contacts"
-                label="Exercise contacts"
-              />
-              <CheckboxItem
-                value="shortlisting"
-                label="Shortlisting methods"
-              />
-              <CheckboxItem
-                value="timeline"
-                label="Timeline"
-              />
-              <CheckboxItem
-                value="vacancy"
-                label="Vacancy information"
-              />
-              <CheckboxItem
-                value="eligibility"
-                label="Eligibility Information"
-              />
-            </CheckboxGroup>
-          </RadioItem>
-
-          <RadioItem
-            :value="false"
-            label="No - I'll do this later"
-          />
-        </RadioGroup>
- -->
-{{ errors }}
+{{errors}}
         <button class="govuk-button">
           Save and continue
         </button>
@@ -94,8 +47,10 @@
 
 <script>
 import TextField from '@/components/Form/TextField';
+import Test from '@/views/Test';
 
 export default {
+  extends: Test,
   components: {
     TextField,
   },
@@ -103,15 +58,22 @@ export default {
     return {
       textField: '',
       emailField: '',
-      errors: {},
       errorMessage: '',
-      checkErrors: false
+      checkErrors: false,
+      errors: {},
     };
   },
   methods: {
-    save() {
+    handleError(payload) {
+      console.log('handle error', payload);
+      this.errors = payload;
+    },
+    async save() {
       console.log('save');
+      this.warren();
       this.checkErrors = true;
+      await this.$nextTick();
+      console.log('check errors', this.errors);
     },
   },
 };
