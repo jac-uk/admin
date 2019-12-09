@@ -7,7 +7,7 @@
           Create an exercise
         </h1>
 
-        <ErrorSummary :errors="errors" />
+        <ErrorSummary :errors="errors" />        
 
         <label class="govuk-heading-m">
           Reference number
