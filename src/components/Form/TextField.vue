@@ -52,16 +52,6 @@ export default {
       default: 'text',
       type: String,
     },
-    required: Boolean,
-    checkErrors: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      errorMessage: '',
-    };
   },
   computed: {
     text: {
@@ -98,13 +88,6 @@ export default {
         }
       }
     },
-    setError(message) {
-      this.errorMessage = message;
-      // this.errors[this.id] = message;
-      // console.log('update:errors', this.errors);
-      //this.$emit('update:errors', this.errorMessage);
-      this.$emit('handle-error', { id: this.id, message: this.errorMessage });
-    },
-  }, 
+  },
 };
 </script>
