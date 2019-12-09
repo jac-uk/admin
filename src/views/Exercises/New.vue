@@ -7,6 +7,8 @@
           Create an exercise
         </h1>
 
+        <ErrorSummary :errors="errors" />        
+
         <label class="govuk-heading-m">
           Reference number
         </label>
@@ -18,12 +20,17 @@
           id="exercise-name"
           v-model="exerciseName"
           label="Exercise name"
+          required
         />
         <RadioGroup
           id="is-more-info-needed"
           v-model="addMoreInfo"
           label="Do you want to add more information about this exercise now?"
           hint="You can add exercise contacts, shortlisting methods, timeline dates, or information from HMCTS. You can also do this later"
+          required
+          :messages="{
+            required: 'Please specify whether you\'d like to add more information'
+          }"          
         >
           <RadioItem
             :value="true"
@@ -72,6 +79,8 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import TextField from '@/components/Form/TextField';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
@@ -81,6 +90,7 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     TextField,
     RadioGroup,
     RadioItem,
@@ -88,6 +98,7 @@ export default {
     CheckboxItem,
     BackLink,
   },
+  extends: Form,
   data() {
     return {
       exerciseName: null,
@@ -97,16 +108,17 @@ export default {
   },
   methods: {
     async save() {
-      const data = {
-        name: this.exerciseName,
-        exerciseMailbox: this.$store.state.auth.currentUser.email,
-      };
-      await this.$store.dispatch('exerciseDocument/create', data);
-
-      const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
-      this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
-
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        const data = {
+          name: this.exerciseName,
+          exerciseMailbox: this.$store.state.auth.currentUser.email,
+        };
+        await this.$store.dispatch('exerciseDocument/create', data);
+        const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
+        this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }
     },
   },
 };
