@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <label
       :for="id"
       class="govuk-heading-m govuk-!-margin-bottom-2"
@@ -12,36 +15,36 @@
     >
       {{ hint }}
     </span>
+    <FormFieldError
+      :id="id"
+      :error-message="errorMessage"
+    />
     <textarea
       :id="id"
       v-model="text"
       class="govuk-textarea"
       :rows="rows"
+      @change="validate"
     />
   </div>
 </template>
 
 <script>
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
+
 export default {
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
     value: {
-      default: '',
-      type: String,
-    },
-    hint: {
       default: '',
       type: String,
     },
     rows: {
       default: '5',
-      type: String,
-    },
-    id: {
-      default: '',
       type: String,
     },
   },
