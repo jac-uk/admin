@@ -12,6 +12,7 @@
           id="exercise-name"
           v-model="exercise.name"
           label="Exercise name"
+          required
         />
 
         <button class="govuk-button">
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
 import TextField from '@/components/Form/TextField';
 import BackLink from '@/components/BackLink';
 
@@ -31,6 +33,7 @@ export default {
     TextField,
     BackLink,
   },
+  extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
 
@@ -42,8 +45,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push({ name: 'exercise-show-overview' });
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push({ name: 'exercise-show-overview' });
+      }
     },
   },
 };
