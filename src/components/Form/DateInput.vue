@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <fieldset
       class="govuk-fieldset"
       :aria-describedby="hint ? `${id}-hint` : false"
@@ -18,6 +21,10 @@
       >
         {{ hint }}
       </span>
+      <FormFieldError
+        :id="id"
+        :error-message="errorMessage"
+      />
       <div
         :id="id"
         class="govuk-date-input"
@@ -85,21 +92,15 @@
 import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 import validateYear from '@/helpers/Form/validateYear';
 import zeroPad from '@/helpers/Form/zeroPad';
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
 
 export default {
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
-    hint: {
-      default: '',
-      type: String,
-    },
-    id: {
-      required: true,
-      type: String,
-    },
     type: {
       default: 'date',
       validator: (value) => (['date', 'month'].indexOf(value) !== -1),

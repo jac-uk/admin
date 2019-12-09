@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <fieldset
       class="govuk-fieldset"
       :aria-describedby="hint ? `${id}-hint` : false"
@@ -18,6 +21,10 @@
       >
         {{ hint }}
       </span>
+      <FormFieldError
+        :id="id"
+        :error-message="errorMessage"
+      />
       <div
         :id="id"
         class="govuk-date-input"
@@ -64,21 +71,15 @@
 <script>
 import parseAndClipNumber from '@/helpers/Form/parseAndClipNumber';
 import zeroPad from '@/helpers/Form/zeroPad';
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
 
 export default {
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
-    hint: {
-      default: '',
-      type: String,
-    },
-    id: {
-      required: true,
-      type: String,
-    },
     value: {
       required: true,
       validator: (value) => (value instanceof Date || value === null || value === undefined),
