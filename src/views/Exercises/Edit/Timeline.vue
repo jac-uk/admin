@@ -6,6 +6,7 @@
         <h1 class="govuk-heading-xl">
           Timeline
         </h1>
+        <ErrorSummary :errors="errors" />
         <p class="govuk-body-l">
           You can return to this page later to add or change dates.
         </p>
@@ -29,11 +30,13 @@
           id="open-for-applications"
           v-model="exercise.applicationOpenDate"
           label="Open for applications"
+          required
         />
         <DateInput
           id="closed-for-applications"
           v-model="exercise.applicationCloseDate"
           label="Closed for applications"
+          required
         />
 
         <h2 class="govuk-heading-l">
@@ -51,6 +54,7 @@
             id="paper-sift"
             v-model="exercise.paperSiftDate"
             label="Sift date"
+            required
           />
         </div>
 
@@ -65,22 +69,26 @@
             id="test-date"
             v-model="exercise.sjcaTestDate"
             label="Test date"
+            required
           />
           <TimeInput
             id="test-start-time"
             v-model="exercise.sjcaTestStartTime"
             label="Start time"
+            required
           />
           <TimeInput
             id="test-end-time"
             v-model="exercise.sjcaTestEndTime"
             label="End time"
+            required
           />
           <DateInput
             id="test-outcome"
             v-model="exercise.sjcaTestOutcome"
             label="Outcome to candidates"
             type="month"
+            required
           />
         </div>
 
@@ -95,11 +103,13 @@
             id="scenario-test-date"
             v-model="exercise.scenarioTestDate"
             label="Test date"
+            required
           />
           <TimeInput
             id="scenario-test-start-time"
             v-model="exercise.scenarioTestStartTime"
             label="Start time"
+            required
           />
           <TimeInput
             id="test-end-time"
@@ -111,6 +121,7 @@
             v-model="exercise.scenarioTestOutcome"
             label="Outcome to candidates"
             type="month"
+            required
           />
         </div>
 
@@ -123,6 +134,7 @@
           v-model="exercise.contactIndependentAssessors"
           label="Contact independent assessors"
           hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
+          required
         />
 
         <h2 class="govuk-heading-l">
@@ -132,6 +144,7 @@
         <RepeatableFields
           v-model="exercise.selectionDays"
           :component="repeatableFields.SelectionDay"
+          required
         />
 
         <h2 class="govuk-heading-l">
@@ -143,6 +156,7 @@
           v-model="exercise.finalOutcome"
           label="Final outcome to candidates"
           type="month"
+          required
         />
 
         <button class="govuk-button">
@@ -154,6 +168,8 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import DateInput from '@/components/Form/DateInput';
 import TimeInput from '@/components/Form/TimeInput';
 import RepeatableFields from '@/components/RepeatableFields';
@@ -162,11 +178,13 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     DateInput,
     TimeInput,
     RepeatableFields,
     BackLink,
   },
+  extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
 
@@ -178,13 +196,15 @@ export default {
       exercise: {
         applicationOpenDate: exercise.applicationOpenDate || null,
         applicationCloseDate: exercise.applicationCloseDate || null,
+        paperSiftDate: exercise.paperSiftDate || null,
         sjcaTestDate: exercise.sjcaTestDate || null,
         sjcaTestStartTime: exercise.sjcaTestStartTime || null,
-        paperSiftDate: exercise.paperSiftDate || null,
         sjcaTestEndTime: exercise.sjcaTestEndTime || null,
+        sjcaTestOutcome: exercise.sjcaTestOutcome || null,
         scenarioTestDate: exercise.scenarioTestDate ||null,
         scenarioTestStartTime: exercise.scenarioTestStartTime || null,
         scenarioTestEndTime: exercise.scenarioTestEndTime || null,
+        scenarioTestOutcome: exercise.scenarioTestOutcome || null,
         contactIndependentAssessors: exercise.contactIndependentAssessors || null,
         finalOutcome: exercise.finalOutcome || null,
         selectionDays: exercise.selectionDays || null,
@@ -204,8 +224,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }
     },
   },
 };
