@@ -7,10 +7,6 @@
           Downloads
         </h1>
 
-        <p class="govuk-body-l">
-          [form with file uploads for independent assessor template, candidate assessment form, Ts and Cs, Job Description]
-        </p>
-
         <div class="govuk-form-group">
           <label
             class="govuk-heading-m"
