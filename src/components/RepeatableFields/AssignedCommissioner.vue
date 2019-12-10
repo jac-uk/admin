@@ -3,8 +3,9 @@
     <TextField
       :id="`assigned_comissioner_${index}`"
       v-model="row.name"
-      type="text"
+      type="email"
       label="Assigned commissioner"
+      required
     />
     <slot name="removeButton" />
   </div>
