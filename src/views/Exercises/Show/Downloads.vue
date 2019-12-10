@@ -14,15 +14,124 @@
     <p class="govuk-body-l">
       [links to files: independent assessor template, candidate assessment form, Ts and Cs, Job Description]
     </p>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Job Description Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a
+            style="
+              color: blue;
+              text-decoration: underline;
+          "
+            @click="download(exercise.uploadedJobDescriptionTemplate)"
+          >{{ exercise.uploadedJobDescriptionTemplate }}</a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Terms and Conditions Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a
+            style="
+              color: blue;
+              text-decoration: underline;
+          "
+            @click="download(exercise.uploadedTermsAndConditionsTemplate)"
+          >{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Independent Assessor Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a
+            style="
+              color: blue;
+              text-decoration: underline;
+          "
+            @click="download(exercise.uploadedIndependentAssessorTemplate)"
+          >{{ exercise.uploadedIndependentAssessorTemplate }}</a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Candidate Assessment Form Template
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a
+            style="
+              color: blue;
+              text-decoration: underline;
+          "
+            @click="download(exercise.uploadedCandidateAssessmentFormTemplate)"
+          >{{ exercise.uploadedCandidateAssessmentFormTemplate }}</a>
+        </dd>
+      </div>                       
+    </dl>
   </div>
 </template>
 
 <script>
+import firebase from 'firebase';
+
 export default {
-  // computed: {
-  //   exercise() {
-  //     return this.$store.state.exerciseDocument.record;
-  //   },
-  // },
+  computed: {
+    exercise() {
+      return this.$store.getters['exerciseDocument/data']();
+    },
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
+    exerciseId() {
+      return this.$store.getters['exerciseDocument/id'];
+    },
+  },
+  methods: {
+    download(fileName) {
+      // Create a reference to the file we want to download
+      const fileSavePath = `exercise-${this.exerciseId}/${fileName}`;
+
+      // Get a reference to the storage service, which is used to create references in your storage bucket
+      const storage = firebase.storage();
+
+      // Create a storage reference from our storage service
+      const storageRef = storage.ref();
+
+      // Create a reference with an initial file path and name
+      const fileNameRef = storageRef.child(fileSavePath);
+
+      // Get the download URL
+      fileNameRef.getDownloadURL().then((url) => {
+        // open url in another window
+        window.open(url);
+      }).catch((error) => {
+
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+        case 'storage/object-not-found':
+          // File doesn't exist
+          break;
+
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+
+        case 'storage/canceled':
+          // User canceled the upload
+          break;
+
+        case 'storage/unknown':
+          // Unknown error occurred, inspect the server response
+          break;
+        }
+      });
+    },
+  },
 };
 </script>
