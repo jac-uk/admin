@@ -7,6 +7,8 @@
           Vacancy information
         </h1>
 
+        <ErrorSummary :errors="errors" />
+
         <p class="govuk-body-l">
           You'll find this information in the vacancy request (VR) from HMCTS. You can return to this page later to add or change information.
         </p>
@@ -233,6 +235,7 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     RadioGroup,
     RadioItem,
     TextField,
@@ -241,6 +244,7 @@ export default {
     TextareaInput,
     BackLink,
   },
+  extends: Form,
   data() {
     const exercise = this.$store.getters['exerciseDocument/data']();
 
