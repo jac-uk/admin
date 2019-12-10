@@ -23,7 +23,7 @@
       :id="id"
       v-model="text"
       class="govuk-input"
-      :class="{inputClass, 'govuk-input--error': hasError}"
+      :class="[inputClass, {'govuk-input--error': hasError}]"
       :type="fieldType"
       @change="validate"
     >
