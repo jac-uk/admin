@@ -5,6 +5,7 @@
       v-model="row.name"
       type="text"
       label="Add method"
+      required
     />
     <slot name="removeButton" />
   </div>

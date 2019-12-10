@@ -76,7 +76,7 @@ export default {
         if (event && event.target) {
           value = event.target.value;
         }
-        if (this.required && !value) {
+        if (this.required && (!value || value.length === 0)) {
           if (this.messages && this.messages.required) {
             this.setError(this.messages.required);
           } else {

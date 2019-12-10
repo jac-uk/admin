@@ -7,6 +7,8 @@
           Shortlisting methods
         </h1>
 
+        <ErrorSummary :errors="errors" />
+
         <p class="govuk-body-l">
           You can return to this page later to add or change methods.
         </p>
@@ -14,6 +16,8 @@
         <CheckboxGroup
           id="shortlisting-methods"
           v-model="exercise.shortlistingMethods"
+          required
+          :messages="{required: 'Please choose at least one shortlisting method'}"
         >
           <CheckboxItem
             value="situational-judgement-qualifying-test"
@@ -58,6 +62,8 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import RepeatableFields from '@/components/RepeatableFields';
@@ -66,11 +72,13 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     CheckboxGroup,
     CheckboxItem,
     RepeatableFields,
     BackLink,
   },
+  extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
 
@@ -86,8 +94,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }
     },
   },
 };
