@@ -194,7 +194,6 @@ export default {
     async save() {
       this.validate();
       if (this.isValid()) {
-        console.log('save', this.exercise);
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
       }
