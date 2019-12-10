@@ -23,49 +23,54 @@ describe('components/Form/RadioGroup', () => {
   describe('properties', () => {
     let prop;
 
-    describe('label', () => {
-      beforeEach(() => {
-        prop = RadioGroup.props.label;
-      });
+    /* 
+    ** @todo these are now part of `FormField`, which this component extends.
+    ** Therefore we could test here that this component extends FormField
+    ** and move these prop tests to FormField.spec.js instead
+    */
+    // describe('label', () => {
+    //   beforeEach(() => {
+    //     prop = RadioGroup.props.label;
+    //   });
 
-      it('is optional', () => {
-        expect(prop.required).not.toBe(true);
-        expect(prop.default).toBe('');
-      });
+    //   it('is optional', () => {
+    //     expect(prop.required).not.toBe(true);
+    //     expect(prop.default).toBe('');
+    //   });
 
-      it('must be a String', () => {
-        expect(prop.type).toBe(String);
-      });
-    });
+    //   it('must be a String', () => {
+    //     expect(prop.type).toBe(String);
+    //   });
+    // });
 
-    describe('hint', () => {
-      beforeEach(() => {
-        prop = RadioGroup.props.hint;
-      });
+    // describe('hint', () => {
+    //   beforeEach(() => {
+    //     prop = RadioGroup.props.hint;
+    //   });
 
-      it('is optional', () => {
-        expect(prop.required).not.toBe(true);
-        expect(prop.default).toBe('');
-      });
+    //   it('is optional', () => {
+    //     expect(prop.required).not.toBe(true);
+    //     expect(prop.default).toBe('');
+    //   });
 
-      it('must be a String', () => {
-        expect(prop.type).toBe(String);
-      });
-    });
+    //   it('must be a String', () => {
+    //     expect(prop.type).toBe(String);
+    //   });
+    // });
 
-    describe('id', () => {
-      beforeEach(() => {
-        prop = RadioGroup.props.id;
-      });
+    // describe('id', () => {
+    //   beforeEach(() => {
+    //     prop = RadioGroup.props.id;
+    //   });
 
-      it('is required', () => {
-        expect(prop.required).toBe(true);
-      });
+    //   it('is required', () => {
+    //     expect(prop.required).toBe(true);
+    //   });
 
-      it('must be a String', () => {
-        expect(prop.type).toBe(String);
-      });
-    });
+    //   it('must be a String', () => {
+    //     expect(prop.type).toBe(String);
+    //   });
+    // });
 
     describe('value', () => {
       beforeEach(() => {
