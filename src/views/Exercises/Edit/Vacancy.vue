@@ -17,6 +17,7 @@
           id="type-of-exercise"
           v-model="exercise.typeOfExercise"
           label="Type of exercise"
+          required
         >
           <RadioItem
             value="legal"
@@ -59,6 +60,7 @@
           id="appointment-type"
           v-model="exercise.appointmentType"
           label="Appointment type"
+          required
         >
           <RadioItem
             value="salaried"
@@ -119,10 +121,11 @@
             value="fee-paid"
             label="Fee paid"
           >
-            <TextField
+            <Currency
               id="fee-paid-fee"
               v-model="exercise.feePaidFee"
               label="Fee"
+              :required="exercise.appointmentType == 'fee-paid'"
             />
           </RadioItem>
           <RadioItem
@@ -200,7 +203,7 @@
         >
           <CheckboxItem
             value="welsh-language"
-            label="welsh-language"
+            label="Welsh language"
           />
           <CheckboxItem
             value="devolution-questions"
@@ -213,6 +216,7 @@
           v-model="exercise.aboutTheRole"
           label="About the role"
           hint="Add information about this role for the information page."
+          required
         />
 
         <button class="govuk-button">
@@ -224,11 +228,14 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
+import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
 import booleanOrNull from '@/helpers/booleanOrNull';
 import BackLink from '@/components/BackLink';
@@ -241,6 +248,7 @@ export default {
     TextField,
     CheckboxGroup,
     CheckboxItem,
+    Currency,
     TextareaInput,
     BackLink,
   },
@@ -269,8 +277,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }
     },
   },
 };
