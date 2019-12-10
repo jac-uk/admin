@@ -3,8 +3,9 @@
     <TextField
       :id="`selection_exercise_officer_${index}`"
       v-model="row.name"
-      type="text"
       label="Selection exercise officer"
+      type="email"
+      required
     />
     <slot name="removeButton" />
   </div>
