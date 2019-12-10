@@ -57,11 +57,12 @@ export default {
     hasError() {
       return this.errorMessage ? true :  false;
     },
-  },
+  }, 
   mounted: function () {
     this.$root.$on('validate', this.handleValidate);
   },
   beforeDestroy: function() {
+    this.setError('');
     this.$root.$off('validate', this.handleValidate);
   },
   methods: {
