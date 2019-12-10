@@ -3,8 +3,9 @@
     <TextField 
       :id="`drafting_judge_${index}`"
       v-model="row.name"
-      type="text"
+      type="email"
       label="Drafting judge"
+      required
     />
     <slot name="removeButton" />
   </div>

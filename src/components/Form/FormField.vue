@@ -85,7 +85,7 @@ export default {
         }
         if (this.type && this.type === 'email' && value) {
           if (!this.regex.email.test(value)) {
-            this.setError(`Enter a valid email address ${this.label}`);
+            this.setError(`Enter a valid email address for ${this.label}`);
           }
         }
         if (this.minLength && value) {

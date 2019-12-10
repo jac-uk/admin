@@ -3,8 +3,9 @@
     <TextField 
       :id="`statutory_consultee_${index}`"
       v-model="row.name"
-      type="text"
+      type="email"
       label="Statutory Consultee"
+      required
     />
     <slot name="removeButton" />
   </div>
