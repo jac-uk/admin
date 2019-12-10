@@ -7,6 +7,8 @@
           Contacts
         </h1>
 
+        <ErrorSummary :errors="errors" />
+
         <p class="govuk-body-l">
           You can return to this page later to add or change contacts.
         </p>
@@ -20,28 +22,36 @@
           v-model="exercise.exerciseMailbox"
           label="Exercise mailbox"
           type="email"
+          required
+          :pattern="{ match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address'}"
         />
 
         <TextField
           id="senior-selection-exercise-manager"
           v-model="exercise.seniorSelectionExerciseManager"
           label="Senior selection exercise manager"
+          type="email"
+          required
         />
 
         <TextField
           id="selection-exercise-manager"
           v-model="exercise.selectionExerciseManager"
           label="Selection exercise manager"
+          type="email"
+          required
         />
 
         <RepeatableFields
           v-model="exercise.selectionExerciseOfficer"
           :component="repeatableFields.SelectionExerciseOfficer"
+          required
         />
 
         <RepeatableFields
           v-model="exercise.assignedCommissioner"
           :component="repeatableFields.AssignedCommissioner"
+          required
         />
 
         <h2 class="govuk-heading-l">
@@ -82,6 +92,7 @@
               id="other-text-input"
               v-model="exercise.otherAppropriateAuthority"
               label="Name of the appropriate authority"
+              required
             />
           </CheckboxItem>
         </CheckboxGroup>
@@ -90,6 +101,7 @@
           id="hmcts-welshgov-lead"
           v-model="exercise.hmctsWelshGovLead"
           label="HMCTS or Welsh Government lead contact"
+          type="email"
         />
 
         <TextField
@@ -97,6 +109,7 @@
           v-model="exercise.judicialOfficeContact"
           name="judicial-office-contact"
           label="Judicial Office contact"
+          type="email"
         />
 
         <TextField
@@ -104,16 +117,20 @@
           v-model="exercise.leadJudge"
           name="lead-judge"
           label="Lead judge"
+          type="email"
+          required
         />
 
         <RepeatableFields
           v-model="exercise.draftingJudge"
           :component="repeatableFields.DraftingJudge"
+          required
         />
 
         <RepeatableFields
           v-model="exercise.statutoryConsultee"
           :component="repeatableFields.StatutoryConsultee"
+          required
         />
 
         <button class="govuk-button">
@@ -125,6 +142,8 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
@@ -137,12 +156,14 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     TextField,
     CheckboxGroup,
     CheckboxItem,
     RepeatableFields,
     BackLink,
   },
+  extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
 
@@ -155,6 +176,7 @@ export default {
       },
       exercise: {
         exerciseMailbox: exercise.exerciseMailbox || null,
+        seniorSelectionExerciseManager: exercise.seniorSelectionExerciseManager || null,
         selectionExerciseManager: exercise.selectionExerciseManager || null,
         selectionExerciseOfficer: exercise.selectionExerciseOfficer || null,
         assignedCommissioner: exercise.assignedCommissioner || null,
@@ -170,8 +192,12 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        console.log('save', this.exercise);
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }
     },
   },
 };
