@@ -11,9 +11,6 @@
     <h2 class="govuk-heading-l">
       Downloads
     </h2>
-    <p class="govuk-body-l">
-      [links to files: independent assessor template, candidate assessment form, Ts and Cs, Job Description]
-    </p>
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
