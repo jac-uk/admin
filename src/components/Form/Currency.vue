@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <label
       :for="id"
       class="govuk-heading-m govuk-!-margin-bottom-2"
@@ -12,38 +15,36 @@
     >
       {{ hint }}
     </span>
+    <FormFieldError
+      :id="id"
+      :error-message="errorMessage"
+    />
     <span class="moj-label__currency">£</span>
     <input
       :id="id"
       v-model="currencyInput"
-      class=" govuk-input moj-input__currency govuk-input--width-10"
-      :name="id"
+      class="govuk-input moj-input__currency govuk-input--width-10"
       type="number"
+      @change="validate"
     >
   </div>
 </template>
 
 <script>
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
+
 export default {
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
     value: {
       default: null,
       type: String,
     },
-    hint: {
-      default: '',
-      type: String,
-    },
-    id: {
-      default: '',
-      type: String,
-    },
   },
-
   computed: {
     currencyInput: {
       get() {

@@ -2,6 +2,7 @@
   <div
     :id="id"
     class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
   >
     <fieldset
       class="govuk-fieldset"
@@ -20,6 +21,10 @@
       >
         {{ hint }}
       </span>
+      <FormFieldError
+        :id="id"
+        :error-message="errorMessage"
+      />
       <div class="govuk-radios">
         <slot />
       </div>
@@ -28,21 +33,16 @@
 </template>
 
 <script>
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
+
 export default {
   name: 'RadioGroup',
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
-    hint: {
-      default: '',
-      type: String,
-    },
-    id: {
-      required: true,
-      type: String,
-    },
     value: {
       required: true,
       validator: () => true,
