@@ -52,7 +52,7 @@ firebase deploy
 
 Merging to `master` automatically triggers a deploy to `production`.
 
-Merging to `stating` automatically triggers a deploy to `staging`.
+Merging to `staging` automatically triggers a deploy to `staging`.
 
 
 ### CircleCI configuration 
