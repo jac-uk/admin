@@ -2,22 +2,32 @@
   <nav :aria-label="label">
     <ul class="dwp-vertical-navigation">
       <li 
-        v-for="navItem in items"
-        :key="navItem.name"
-        :class="{selected: isActive(navItem.name)}"
+        v-for="page in pageItems"
+        :key="page.name"
+        :class="{open: page.open, on: page.on}"
       >
         <router-link 
           class="nav-link"
-          :to="{name: navItem.name}"
-          :aria-current="isActive(navItem.name) ? 'page' : false"
+          :to="{name: page.name}"
+          :aria-current="page.on ? 'page' : false"
         >
-          {{ navItem.page }} 
+          {{ page.page }}
         </router-link>
-        <!-- <ul>
-          <li><a href="" class="nav-link">link</a></li>
-          <li class="current"><a href="" class="nav-link">link</a></li>
-          <li><a href="" class="nav-link">link</a></li>
-        </ul> -->
+        <ul v-if="page.children">
+          <li
+            v-for="child in page.children"
+            :key="child.name"
+            :class="{on: child.on}"
+          >
+            <router-link 
+              class="nav-link"
+              :to="{name: child.name}"
+              :aria-current="child.on ? 'page' : false"
+            >
+              {{ child.page }} 
+            </router-link>
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>
@@ -36,9 +46,29 @@ export default {
       type: String,
     },
   },
-  methods: {
-    isActive(name) {
-      return name === this.$route.name;
+  computed: {
+    pageItems() {
+      const pages = [];
+      for (let i = 0, len = this.items.length; i < len; ++i) {
+        const page = {
+          page: this.items[i].page,
+          name: this.items[i].name,
+        };
+        page.open = page.on = page.name === this.$route.name;
+        if (this.items[i].children) {
+          page.children = [];
+          for (let j = 0, lenJ = this.items[i].children.length; j < lenJ; ++j) {
+            const child = this.items[i].children[j];
+            child.on = child.name === this.$route.name;
+            if (child.on) {
+              page.open = true;
+            }
+            page.children.push(child);
+          }
+        }
+        pages.push(page);
+      }
+      return pages;
     },
   },
 };
@@ -48,49 +78,42 @@ export default {
   .dwp-vertical-navigation {
     margin: 0;
     padding: 0;
-
-  }
-
-  .dwp-vertical-navigation li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 1em;
-  }
-
-  .dwp-vertical-navigation a[aria-current="page"] {
-    // color: #1d70b8;
-    // font-weight: bold;
-    // text-decoration: none;
-    border-left: 4px solid #1d70b8;
-    // background-color: #f3f2f1;
-  }
-
-  .dwp-vertical-navigation li a {
-    padding: 0.625em;
-    display: block;
-  }
-
-  .dwp-vertical-navigation {
     > li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 1em;
+      > a {
+        padding: 0.625em;
+        display: block;
+        text-decoration: none;
+      }
       > ul {
         display: none;
         > li {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          font-size: 1em;
           > a {
             padding: 0.625em 0.625em 0.625em 1.25em;
+            display: block;
+            text-decoration: none;            
           }
         }
       }
-      &.selected {
+      &.on > a {
+        color: #1d70b8;
+        font-weight: bold;
+        background-color: #f3f2f1;
+      }      
+      &.open {
+        border-left: 4px solid #1d70b8;
         > ul {
           display: block;
           padding-inline-start: 0;
           > li {
-            // color: #1d70b8;
-            // font-weight: bold;
-            // text-decoration: none;
-            border-left: 4px solid #1d70b8;
-            &.current {
+            &.on {
               background-color: #f3f2f1;
               > a {
                 color: #1d70b8;
@@ -100,7 +123,7 @@ export default {
             }
           }
         }
-      }
+      }      
     }
   }
 
