@@ -7,9 +7,15 @@
           Assessment options
         </h1>
 
+        <ErrorSummary :errors="errors" />
+
         <RadioGroup
           id="shortlisting-methods"
           v-model="exercise.assessmentOptions"
+          required
+          :messages="{
+            required: 'Please choose one of the following options'
+          }"
         >
           <RadioItem
             value="self-assessment-with-competencies"
@@ -46,16 +52,20 @@
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import BackLink from '@/components/BackLink';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    ErrorSummary,
     BackLink,
     RadioGroup,
     RadioItem,
   },
+  extends: Form,
   data(){
     const defaults = {
       assessmentOptions: null,
@@ -68,8 +78,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }      
     },
   },
 };

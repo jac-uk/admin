@@ -12,16 +12,19 @@
     <h2 class="govuk-heading-l">
       Assessment options
     </h2>
-    [view]
+
+    <p class="govuk-body">
+      <span class="display-block">{{ exercise.assessmentOptions }}</span>
+    </p>
   </div>
 </template>
 
 <script>
 export default {
-  // computed: {
-  //   exercise() {
-  //     return this.$store.state.exerciseDocument.record;
-  //   },
-  // },
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+  },
 };
 </script>
