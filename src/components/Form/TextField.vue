@@ -72,22 +72,5 @@ export default {
       }
     },
   },
-  watch: {
-    checkErrors: function (newVal, oldVal) {
-      console.log('showErrors changed', oldVal, newVal);
-      this.validate();
-    },
-  }, 
-  methods: {
-    validate() {
-      console.log('validate');
-      this.setError('');
-      if (this.checkErrors) {
-        if (this.required && !this.value) {
-          this.setError(`Enter your ${this.label}`);
-        }
-      }
-    },
-  },
 };
 </script>
