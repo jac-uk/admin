@@ -63,16 +63,20 @@ export default {
   data() {
     const navPages = [
       { page: 'Overview', name: 'exercise-show-overview' },
+      { page: 'Vacancy information',
+        name: 'exercise-show-vacancy',
+        children: [
+          { page: 'Contacts', name: 'exercise-show-contacts' },
+          { page: 'Timeline', name: 'exercise-show-timeline' },
+          { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
+          { page: 'Eligibility information', name: 'exercise-show-eligibility' },
+          { page: 'Working preferences', name: 'exercise-show-working-preferences' },
+          { page: 'Assessment options', name: 'exercise-show-assessment-options' },
+          { page: 'Exercise downloads', name: 'exercise-show-downloads' },
+        ],
+      },
       { page: 'Applications', name: 'exercise-show-applications' },
-      { page: 'Contacts', name: 'exercise-show-contacts' },
-      { page: 'Timeline', name: 'exercise-show-timeline' },
-      { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
-      { page: 'Vacancy information', name: 'exercise-show-vacancy' },
-      { page: 'Eligibility information', name: 'exercise-show-eligibility' },
-      { page: 'Working preferences', name: 'exercise-show-working-preferences' },
       { page: 'Independent assessments', name: 'exercise-show-independent-assessments' },
-      { page: 'Assessment options', name: 'exercise-show-assessment-options' },
-      { page: 'Exercise downloads', name: 'exercise-show-downloads' },
       { page: 'Exercise reports', name: 'exercise-show-reports' },
     ];
 
