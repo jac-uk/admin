@@ -1,5 +1,8 @@
 <template>
-  <div class="govuk-form-group">
+  <div
+    class="govuk-form-group"
+    :class="{'govuk-form-group--error': hasError}"
+  >
     <label
       :for="id"
       class="govuk-heading-m govuk-!-margin-bottom-2"
@@ -12,22 +15,31 @@
     >
       {{ hint }}
     </span>
+    <FormFieldError
+      :id="id"
+      :error-message="errorMessage"
+    />
     <input
       :id="id"
       v-model="text"
-      :class="inputClass + ' govuk-input'"
-      :type="type"
+      class="govuk-input"
+      :class="[inputClass, {'govuk-input--error': hasError}]"
+      :type="fieldType"
+      @change="validate"
     >
   </div>
 </template>
 
 <script>
+import FormField from '@/components/Form/FormField';
+import FormFieldError from '@/components/Form/FormFieldError';
+
 export default {
+  components: {
+    FormFieldError,
+  },
+  extends: FormField,
   props: {
-    label: {
-      default: '',
-      type: String,
-    },
     inputClass: {
       default: '',
       type: String,
@@ -36,20 +48,11 @@ export default {
       default: '',
       type: String,
     },
-    hint: {
-      default: '',
-      type: String,
-    },
-    id: {
-      default: '',
-      type: String,
-    },
     type: {
       default: 'text',
       type: String,
     },
   },
-
   computed: {
     text: {
       get() {
@@ -59,7 +62,15 @@ export default {
         this.$emit('input', val);
       },
     },
-
+    fieldType() {
+      switch(this.type) {
+      case 'text':
+      case 'email':
+        return 'text'; // we are using custom email validation, so don't use html5 input types
+      default:
+        return this.type;
+      }
+    },
   },
 };
 </script>

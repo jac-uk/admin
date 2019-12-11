@@ -49,6 +49,8 @@ import ApplicationsFull from '@/views/Exercises/ApplicationsFull';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
+import ExampleForm from '@/views/ExampleForm';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -66,6 +68,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Dashboard',
+      },
+    },
+    {
+      path: '/example-form',
+      name: 'example-form',
+      component: ExampleForm,
+      meta: {
+        requiresAuth: true,
+        title: 'Example Form',
       },
     },
     {

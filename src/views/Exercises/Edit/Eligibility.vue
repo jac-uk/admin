@@ -7,6 +7,8 @@
           Eligibility information
         </h1>
 
+        <ErrorSummary :errors="errors" />
+
         <p class="govuk-body-l">
           You'll find this information in the eligibility statement from HMCTS. You can return to this page later to add or change information.
         </p>
@@ -14,7 +16,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="post-qualification-experience"
-          v-model="postQualificationExperience"
+          v-model="exercise.postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
@@ -32,9 +34,10 @@
           >
             <TextField
               id="other-years"
-              v-model="otherYears"
+              v-model="exercise.otherYears"
               label="Number of years"
               class="govuk-!-width-one-quarter"
+              required
             />
           </RadioItem>
         </RadioGroup>
@@ -42,7 +45,7 @@
         <RadioGroup
           v-if="isCourtOrTribunal === 'tribunal'"
           id="schedule-2d-apply"
-          v-model="schedule2DApply"
+          v-model="exercise.schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
@@ -59,7 +62,7 @@
 
         <RadioGroup
           id="additional-selection-criteria-apply"
-          v-model="aSCApply"
+          v-model="exercise.aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
@@ -69,8 +72,9 @@
           >
             <TextareaInput
               id="yes-asc-apply"
-              v-model="yesASCApply"
+              v-model="exercise.yesASCApply"
               label="Additional skills and experience"
+              required
             />
           </RadioItem>
 
@@ -83,7 +87,7 @@
         <RadioGroup
           v-if="typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
-          v-model="previousJudicialExperienceApply"
+          v-model="exercise.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
         >
           <RadioItem
@@ -100,7 +104,7 @@
         <CheckboxGroup
           v-if="typeOfExercise !== 'non-legal' "
           id="qualifications"
-          v-model="qualifications"
+          v-model="exercise.qualifications"
           label="Qualifications"
           hint="Select all that apply."
         >
@@ -126,9 +130,10 @@
           >
             <TextField
               id="other-qualifications"
-              v-model="otherQualifications"
+              v-model="exercise.otherQualifications"
               label="Add details of other relevant professions, qualifications or experience"
               hint="For example, Patent attorney."
+              required
             />
           </CheckboxItem>
         </CheckboxGroup>
@@ -136,7 +141,7 @@
         <RadioGroup
           v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
-          v-model="memberships"
+          v-model="exercise.memberships"
           label="Memberships"
         >
           <RadioItem
@@ -175,13 +180,14 @@
               id="other-qualifications"
               v-model="otherMemberships"
               label="Associations or Institutes"
+              required
             />
           </RadioItem>
         </RadioGroup>
 
         <RadioGroup
           id="reasonable-length-service"
-          v-model="reasonableLengthService"
+          v-model="exercise.reasonableLengthService"
           label="Reasonable length of service"
           hint="This is the minimum number of years the candidate must work."
         >
@@ -203,16 +209,17 @@
           >
             <TextField
               id="other-LOS"
-              v-model="otherLOS"
+              v-model="exercise.otherLOS"
               label="Number of years"
               class="govuk-!-width-one-quarter"
+              required
             />
           </RadioItem>
         </RadioGroup>
 
         <RadioGroup
           id="retirement-age"
-          v-model="retirementAge"
+          v-model="exercise.retirementAge"
           label="Retirement age"
         >
           <RadioItem
@@ -225,9 +232,10 @@
           >
             <TextField
               id="other-retirement"
-              v-model="otherRetirement"
+              v-model="exercise.otherRetirement"
               label="Retirement age"
               class="govuk-!-width-one-quarter"
+              required
             />
           </RadioItem>
         </RadioGroup>
@@ -241,6 +249,8 @@
 </template>
 
  <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
@@ -252,6 +262,7 @@ import BackLink from '@/components/BackLink';
 
 export default {
   components: {
+    ErrorSummary,
     RadioGroup,
     RadioItem,
     CheckboxGroup,
@@ -260,6 +271,7 @@ export default {
     TextareaInput,
     BackLink,
   },
+  extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
 
@@ -286,8 +298,11 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.validate();
+      if (this.isValid()) {
+        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      }      
     },
   },
 };
