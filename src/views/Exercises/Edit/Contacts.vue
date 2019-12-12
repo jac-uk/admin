@@ -23,7 +23,7 @@
           label="Exercise mailbox"
           type="email"
           required
-          :pattern="{ match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address'}"
+          :pattern="patternJACEmail"
         />
 
         <TextField
@@ -32,6 +32,7 @@
           label="Senior selection exercise manager"
           type="email"
           required
+          :pattern="patternJACEmail"
         />
 
         <TextField
@@ -40,6 +41,7 @@
           label="Selection exercise manager"
           type="email"
           required
+          :pattern="patternJACEmail"
         />
 
         <RepeatableFields
@@ -168,6 +170,7 @@ export default {
     const exercise = this.$store.getters['exerciseDocument/data']();
 
     return {
+      patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
       repeatableFields: {
         DraftingJudge,
         StatutoryConsultee,
