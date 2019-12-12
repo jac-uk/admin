@@ -138,52 +138,52 @@
           </CheckboxItem>
         </CheckboxGroup>
 
-        <RadioGroup
+        <CheckboxGroup
           v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
           v-model="exercise.memberships"
           label="Memberships"
         >
-          <RadioItem
+          <CheckboxItem
             value="chartered-association-of-building-engineers"
             label="Chartered Association of Building Engineers"
           />
-          <RadioItem
+          <CheckboxItem
             value="chartered-institute-of-building"
             label="Chartered Institute of Building"
           />
-          <RadioItem
+          <CheckboxItem
             value="chartered-institute-of-environmental-health"
             label="Chartered Institute of Environmental Health"
           />
-          <RadioItem
+          <CheckboxItem
             value="general-medical-council"
             label="General Medical Council"
           />
-          <RadioItem
+          <CheckboxItem
             value="royal-college-of-psychaitrists"
             label="Royal College of Psychaitrists"
           />
-          <RadioItem
+          <CheckboxItem
             value="royal-institution-of-chartered-surveyors"
             label="Royal Institution of Chartered Surveyors"
           />
-          <RadioItem
+          <CheckboxItem
             value="royal-institute-of-british-architects"
             label="Royal Institute of British Architects"
           />
-          <RadioItem
+          <CheckboxItem
             value="other"
             label="Other"
           >
             <TextField
               id="other-qualifications"
-              v-model="otherMemberships"
+              v-model="exercise.otherMemberships"
               label="Associations or Institutes"
               required
             />
-          </RadioItem>
-        </RadioGroup>
+          </CheckboxItem>
+        </CheckboxGroup>
 
         <RadioGroup
           id="reasonable-length-service"
