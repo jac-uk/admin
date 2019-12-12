@@ -6,6 +6,7 @@
       label="Selection exercise officer"
       type="email"
       required
+      :pattern="patternJACEmail"
     />
     <slot name="removeButton" />
   </div>
@@ -27,6 +28,11 @@ export default {
       required: true,
       type: Number,
     },
+  },
+  data() {
+    return {
+      patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
+    };
   },
 };
 </script>
