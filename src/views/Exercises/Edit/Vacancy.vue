@@ -27,10 +27,10 @@
             value="non-legal"
             label="Non legal"
           />
-          <RadioItem
+          <!-- <RadioItem
             value="senior"
             label="Senior"
-          />
+          /> -->
           <RadioItem
             value="leadership"
             label="Leadership"
