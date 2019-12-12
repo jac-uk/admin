@@ -26,6 +26,9 @@
             >
               Sign Out
             </button>
+            <span class="govuk-phase-banner__text">
+              <b>You are now signed as {{ userName }}</b>
+            </span>            
           </div>
         </div>
       </header>
@@ -55,9 +58,11 @@ import { auth } from '@/firebase';
 
 export default {
   name: 'App',
-  data: () => ({
-    //
-  }),
+  computed: {
+    userName() {
+      return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+    },
+  },
   methods: {
     signOut() {
       auth().signOut();
