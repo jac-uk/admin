@@ -62,6 +62,18 @@
                 value="eligibility"
                 label="Eligibility Information"
               />
+              <CheckboxItem
+                value="working-preferences"
+                label="Working Preferences"
+              />
+              <CheckboxItem
+                value="assessment-options"
+                label="Assessment Options"
+              />
+              <CheckboxItem
+                value="downloads"
+                label="Exercise Downloads"
+              />              
             </CheckboxGroup>
           </RadioItem>
 
@@ -117,7 +129,7 @@ export default {
         await this.$store.dispatch('exerciseDocument/create', data);
         const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
         this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
-        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
       }
     },
   },
