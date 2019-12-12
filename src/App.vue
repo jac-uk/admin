@@ -62,6 +62,9 @@ import { auth } from '@/firebase';
 export default {
   name: 'App',
   computed: {
+    isSignedIn() {
+      return this.$store.getters['auth/isSignedIn'];
+    },    
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
     },
