@@ -26,9 +26,12 @@
             >
               Sign Out
             </button>
-            <span class="govuk-phase-banner__text">
-              <b>You are now signed as {{ userName }}</b>
-            </span>            
+            <span
+              v-if="isSignedIn"
+              class="govuk-phase-banner__text"
+            >
+              <b>You are now signed in as {{ userName }}</b>
+            </span>           
           </div>
         </div>
       </header>
