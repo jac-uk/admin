@@ -14,7 +14,7 @@
         </p>
 
         <RadioGroup
-          v-if="typeOfExercise !== 'non-legal'"
+          v-if="true || typeOfExercise !== 'non-legal'"
           id="post-qualification-experience"
           v-model="exercise.postQualificationExperience"
           label="Post-qualification experience (PQE)"
@@ -43,7 +43,7 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="isCourtOrTribunal === 'tribunal'"
+          v-if="true || isCourtOrTribunal === 'tribunal'"
           id="schedule-2d-apply"
           v-model="exercise.schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
@@ -85,7 +85,7 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="typeOfExercise !== 'non-legal'"
+          v-if="true || typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
           v-model="exercise.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
@@ -102,7 +102,7 @@
         </RadioGroup>
 
         <CheckboxGroup
-          v-if="typeOfExercise !== 'non-legal' "
+          v-if="true || typeOfExercise !== 'non-legal' "
           id="qualifications"
           v-model="exercise.qualifications"
           label="Qualifications"
@@ -139,7 +139,7 @@
         </CheckboxGroup>
 
         <CheckboxGroup
-          v-if="typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
+          v-if="true || typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
           id="memberships"
           v-model="exercise.memberships"
           label="Memberships"
