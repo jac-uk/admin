@@ -10,6 +10,9 @@ const completeJourneyInOrder = [
   'timeline',
   'vacancy',
   'eligibility',
+  'working-preferences',
+  'assessment-options',
+  'downloads',
 ];
 
 const routeLocation = (name, id) => {
@@ -63,13 +66,17 @@ export default {
         return null;
       }
     },
-    nextPage(state, getters, rootState, rootGetters) {
+    nextPage: (state, getters, rootState, rootGetters) => (defaultRouteName) => {
       const id = rootGetters['exerciseDocument/id'];
       if (id === null) return null;
-
       const pageIndex = getters.nextPageIndex;
-      if (pageIndex === null) return routeLocation('exercise-show-overview', id);
-
+      if (pageIndex === null) {
+        if (defaultRouteName) {
+          return routeLocation(defaultRouteName, id);
+        } else {
+          return routeLocation('exercise-show-overview', id);
+        }
+      }
       const name = state.journey[pageIndex];
       return routeLocation(routeNamePrefix + name, id);
     },

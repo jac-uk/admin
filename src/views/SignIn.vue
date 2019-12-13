@@ -5,6 +5,12 @@
         Sign in to admin dashboard with your judicialappointments.digital Google account.
       </p>
       <p>
+        <span
+          v-if="authError"
+          class="govuk-error-message"
+        >
+          <span class="govuk-visually-hidden">Error:</span> {{ authError }}
+        </span>         
         <button
           type="button"
           class="govuk-button button-image"
@@ -25,6 +31,11 @@
 import { auth } from '@/firebase';
 
 export default {
+  computed: {
+    authError() {
+      return this.$store.state.auth.authError;
+    },
+  },
   methods: {
     loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
