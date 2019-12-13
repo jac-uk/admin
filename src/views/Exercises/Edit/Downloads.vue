@@ -120,7 +120,7 @@ export default {
       }      
 
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
     },
     fileSelected(event) {
       //console.log('fileSelected called');

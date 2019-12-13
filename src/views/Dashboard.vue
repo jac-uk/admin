@@ -28,33 +28,27 @@
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">
       Your exercises
     </h1>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <div
-            v-for="exercise in records"
-            :key="exercise.id"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-                {{ exercise.referenceNumber }}
-              </RouterLink>
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-                {{ exercise.name }}
-              </RouterLink>
-            </dd>
-            <dd class="govuk-summary-list__value">
-              <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-                {{ exercise.applicationOpenDate }}
-              </RouterLink>
-            </dd>
-          </div>
-        </dl>
+    <div 
+      v-for="exercise in records"
+      :key="exercise.id"
+      class="exercise-list govuk-grid-row govuk-!-margin-0"
+    >
+      <div class="govuk-grid-column-one-quarter govuk-!-padding-2">
+        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+          {{ exercise.referenceNumber }}
+        </RouterLink>    
       </div>
-    </div>
+      <div class="govuk-grid-column-one-half govuk-!-padding-2">
+        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+          {{ exercise.name }}
+        </RouterLink>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-padding-2">
+        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
+          {{ exercise.applicationOpenDate | formatDate }}
+        </RouterLink>
+      </div>
+    </div>     
   </div>
 </template>
 
@@ -71,16 +65,8 @@ export default {
 };
 </script>
 
-<style scoped>
-  .govuk-summary-list__key-narrow {
-    margin-bottom: 5px;
-    font-weight: 700;
-    width: 15%;
-  }
-
-  @media (min-width: 40.0625em) {
-    .govuk-summary-list__key-narrow {
-      width: 30px;
-    }
+<style lang="scss" scoped>
+  .exercise-list {
+    border-bottom: 1px solid $govuk-border-colour;
   }
 </style>

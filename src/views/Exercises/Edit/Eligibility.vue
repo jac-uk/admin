@@ -301,7 +301,7 @@ export default {
       this.validate();
       if (this.isValid()) {
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
-        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-eligibility'));
       }      
     },
   },
