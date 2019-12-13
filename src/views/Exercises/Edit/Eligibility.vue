@@ -14,7 +14,7 @@
         </p>
 
         <RadioGroup
-          v-if="true || typeOfExercise !== 'non-legal'"
+          v-if="isLegal"
           id="post-qualification-experience"
           v-model="exercise.postQualificationExperience"
           label="Post-qualification experience (PQE)"
@@ -43,7 +43,7 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="true || isCourtOrTribunal === 'tribunal'"
+          v-if="isLegal && isTribunal"
           id="schedule-2d-apply"
           v-model="exercise.schedule2DApply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
@@ -85,7 +85,6 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="true || typeOfExercise !== 'non-legal'"
           id="previous-judicial-experience-apply"
           v-model="exercise.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
@@ -102,7 +101,7 @@
         </RadioGroup>
 
         <CheckboxGroup
-          v-if="true || typeOfExercise !== 'non-legal' "
+          v-if="isLegal"
           id="qualifications"
           v-model="exercise.qualifications"
           label="Qualifications"
@@ -139,7 +138,7 @@
         </CheckboxGroup>
 
         <CheckboxGroup
-          v-if="true || typeOfExercise === 'non-legal' || typeOfExercise === 'leadership'"
+          v-if="isNonLegal"
           id="memberships"
           v-model="exercise.memberships"
           label="Memberships"
@@ -295,6 +294,29 @@ export default {
       isCourtOrTribunal: exercise.isCourtOrTribunal,
       typeOfExercise: exercise.typeOfExercise,
     };
+  },
+  computed: {
+    isLegal() {
+      if (this.typeOfExercise === 'legal') {
+        return true;
+      }
+      if (this.typeOfExercise === 'leadership') {
+        return true;
+      }
+      return false;
+    },
+    isNonLegal() {
+      if (this.typeOfExercise === 'non-legal') {
+        return true;
+      }
+      if (this.typeOfExercise === 'leadership-non-legal') {
+        return true;
+      }
+      return false;
+    },
+    isTribunal() {
+      return this.isCourtOrTribunal === 'tribunal';
+    },
   },
   methods: {
     async save() {
