@@ -14,23 +14,26 @@
     </h2>
 
     <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
+      <div 
+        v-if="isLegal"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Post-qualification experience (PQE)
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.postQualificationExperience === 'other'">
-            {{ exercise.otherYears }}
+            {{ exercise.otherYears }} years
           </span>
           <span v-else-if="exercise.postQualificationExperience">
-            {{ exercise.postQualificationExperience }}
-          </span>
-          <span v-else>
-            Null
+            {{ exercise.postQualificationExperience }} years
           </span>
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
+      <div 
+        v-if="isLegal && isTribunal"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Does Schedule 2(d) apply?
         </dt>
@@ -41,24 +44,6 @@
           <span v-else-if="exercise.schedule2DApply === false">
             No
           </span>
-          <span v-else>
-            Null
-          </span>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Qualifications
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="qualification in qualifications"
-              :key="qualification"
-            >
-              {{ qualification }}
-            </li>
-          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -67,58 +52,92 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.aSCApply === true">
-            Yes
+            Yes - {{ exercise.yesASCApply }}
           </span>
           <span v-else-if="exercise.aSCApply === false">
             No
           </span>
-          <span v-else>
-            Null
-          </span>
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Additional skills and experience
+          Does previous judicial experience (PJE) apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.aSCApply === true">
-            {{ exercise.yesASCApply }}
+          <span v-if="exercise.previousJudicialExperienceApply === true">
+            Yes
           </span>
-          <span v-else>
-            Null
+          <span v-else-if="exercise.previousJudicialExperienceApply === false">
+            No
           </span>
         </dd>
       </div>
+
+      <div 
+        v-if="isLegal"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Qualifications
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="qualification in exercise.qualifications"
+              :key="qualification"
+            >
+              <span v-if="qualification == 'other'">{{ exercise.otherQualifications }}</span>
+              <span v-else>{{ qualification | lookup }}</span>
+            </li>
+          </ul>
+        </dd>
+      </div>
+
+      <div 
+        v-if="isNonLegal"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Memberships
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="membership in exercise.memberships"
+              :key="membership"
+            >
+              <span v-if="membership == 'other'">{{ exercise.otherMemberships }}</span>
+              <span v-else>{{ membership | lookup }}</span>
+            </li>
+          </ul>
+        </dd>
+      </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Reasonable length of service
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.reasonableLengthService === 'other'">
-            {{ exercise.otherLOS }}
+            {{ exercise.otherLOS }} years
           </span>
           <span v-else-if="exercise.reasonableLengthService">
-            {{ exercise.reasonableLengthService }}
-          </span>
-          <span v-else>
-            Null
+            {{ exercise.reasonableLengthService }} years
           </span>
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Retirement age
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.retirementAge === 'other'">
-            {{ exercise.otherRetirement }}
+            {{ exercise.otherRetirement }} years
           </span>
           <span v-else-if="exercise.retirementAge">
-            {{ exercise.retirementAge }}
-          </span>
-          <span v-else>
-            Null
+            {{ exercise.retirementAge }} years
           </span>
         </dd>
       </div>
@@ -132,24 +151,28 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    qualifications() {
-      const qualifications = this.exercise.qualifications;
-
-      if (!(qualifications instanceof Array)) {
-        return ['Null'];
+    isLegal() {
+      if (this.exercise.typeOfExercise === 'legal') {
+        return true;
       }
-
-      const list = qualifications.filter(value => (value !== 'other'));
-      list.sort();
-
-      if (qualifications.includes('other')) {
-        const otherLabel = this.exercise.otherQualifications;
-        list.push(`Other: ${otherLabel}`);
+      if (this.exercise.typeOfExercise === 'leadership') {
+        return true;
       }
-
-      return list;
+      return false;
     },
-  },
+    isNonLegal() {
+      if (this.exercise.typeOfExercise === 'non-legal') {
+        return true;
+      }
+      if (this.exercise.typeOfExercise === 'leadership-non-legal') {
+        return true;
+      }
+      return false;
+    },
+    isTribunal() {
+      return this.exercise.isCourtOrTribunal === 'tribunal';
+    },
+  },  
 };
 </script>
 
