@@ -21,11 +21,11 @@
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
           <RadioItem
-            value="5-years"
+            value="5"
             label="5 years"
           />
           <RadioItem
-            value="7-years"
+            value="7"
             label="7 years"
           />
           <RadioItem
@@ -161,8 +161,8 @@
             label="General Medical Council"
           />
           <CheckboxItem
-            value="royal-college-of-psychaitrists"
-            label="Royal College of Psychaitrists"
+            value="royal-college-of-psychiatrists"
+            label="Royal College of Psychiatrists"
           />
           <CheckboxItem
             value="royal-institution-of-chartered-surveyors"
@@ -177,7 +177,7 @@
             label="Other"
           >
             <TextField
-              id="other-qualifications"
+              id="other-memberships"
               v-model="exercise.otherMemberships"
               label="Associations or Institutes"
               required
@@ -192,15 +192,15 @@
           hint="This is the minimum number of years the candidate must work."
         >
           <RadioItem
-            value="3-years"
+            value="3"
             label="3 years"
           />
           <RadioItem
-            value="4-years"
+            value="4"
             label="4 years"
           />
           <RadioItem
-            value="5-years"
+            value="5"
             label="5 years"
           />
           <RadioItem
@@ -224,7 +224,7 @@
           label="Retirement age"
         >
           <RadioItem
-            value="70-years"
+            value="70"
             label="70 years"
           />
           <RadioItem
