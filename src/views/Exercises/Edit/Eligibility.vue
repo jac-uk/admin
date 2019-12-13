@@ -37,6 +37,7 @@
               v-model="exercise.otherYears"
               label="Number of years"
               class="govuk-!-width-one-quarter"
+              type="number"
               required
             />
           </RadioItem>
@@ -211,6 +212,7 @@
               v-model="exercise.otherLOS"
               label="Number of years"
               class="govuk-!-width-one-quarter"
+              type="number"
               required
             />
           </RadioItem>
@@ -234,6 +236,7 @@
               v-model="exercise.otherRetirement"
               label="Retirement age"
               class="govuk-!-width-one-quarter"
+              type="number"
               required
             />
           </RadioItem>
