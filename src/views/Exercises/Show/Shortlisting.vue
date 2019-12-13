@@ -22,7 +22,7 @@
               v-for="method in methods"
               :key="method"
             >
-              {{ method }}
+              {{ method | lookup }}
             </li>
           </ul>
         </dd>
@@ -47,7 +47,7 @@ export default {
 
       if (methods.includes('other')) {
         this.exercise.otherShortlistingMethod.forEach((method) => {
-          return list.push(`Other: ${method.name}`);
+          return list.push(method.name);
         });
       }
       
