@@ -61,5 +61,8 @@ The CircleCI instance has to have a `FIREBASE_DEPLOY_TOKEN` set.  This is tied t
 the organisation, the token will need to be reset.  To do so run `firebase login:ci` and follow the instructions there and then on
 CircleCI.
 
+CircleCI environment variables are defined here:
+https://circleci.com/gh/jac-uk/apply-admin/edit#env-vars
+
 
 
