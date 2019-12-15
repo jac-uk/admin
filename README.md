@@ -62,7 +62,12 @@ the organisation, the token will need to be reset.  To do so run `firebase login
 CircleCI.
 
 CircleCI environment variables are defined here:
+
 https://circleci.com/gh/jac-uk/apply-admin/edit#env-vars
+
+Firebase environment variables bound to the CircleCI environment variables defined here:
+
+https://console.firebase.google.com/project/platform-production-9207d/settings/general/web:YmM4YmQ2YzItYjAyNy00MTVkLWI0MmQtNmNhZDE2ZDQwMjcw
 
 
 
