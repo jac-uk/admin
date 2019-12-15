@@ -27,10 +27,10 @@
             value="non-legal"
             label="Non legal"
           />
-          <RadioItem
+          <!-- <RadioItem
             value="senior"
             label="Senior"
-          />
+          /> -->
           <RadioItem
             value="leadership"
             label="Leadership"
@@ -96,11 +96,11 @@
                 <option value="group-4">
                   Group 4 - £188,901
                 </option>
-                <option value="group-5+">
-                  Group 5+ - £160,377
-                </option>
                 <option value="group-5">
                   Group 5 - £151,497
+                </option>
+                <option value="group-5+">
+                  Group 5+ - £160,377
                 </option>
                 <option value="group-6.1">
                   Group 6.1 - £140,289
