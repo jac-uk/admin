@@ -14,7 +14,7 @@
     </h2>
 
     <p class="govuk-body">
-      <span class="display-block">{{ exercise.assessmentOptions }}</span>
+      <span class="display-block">{{ exercise.assessmentOptions | lookup }}</span>
     </p>
   </div>
 </template>

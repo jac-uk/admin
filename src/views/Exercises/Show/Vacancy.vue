@@ -19,7 +19,7 @@
           Type of exercise
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.typeOfExercise }}
+          {{ exercise.typeOfExercise | lookup }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -27,7 +27,7 @@
           Is the vacancy for a court or tribunal?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.isCourtOrTribunal }}
+          {{ exercise.isCourtOrTribunal | lookup }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -35,15 +35,9 @@
           Appointment type
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.appointmentType }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Salary group
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.salaryGrouping }}
+          <span v-if="exercise.appointmentType == 'salaried'">{{ exercise.appointmentType | lookup }}: {{ exercise.salaryGrouping | lookup }}</span>
+          <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ exercise.appointmentType | lookup }}: £{{ exercise.feePaidFee }}</span>
+          <span v-else>{{ exercise.appointmentType | lookup }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -51,15 +45,12 @@
           Is salaried part-time working (SPTW) offered?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.isSPTWOffered }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Detail of salaried part-time working (SPTW)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.yesSalaryDetails }}
+          <p v-if="exercise.isSPTWOffered === true">
+            Yes<span v-if="exercise.yesSalaryDetails"> - {{ exercise.yesSalaryDetails }}</span>
+          </p>
+          <p v-else-if="exercise.isSPTWOffered === false">
+            No<span v-if="exercise.noSalaryDetails"> - {{ exercise.noSalaryDetails }}</span>
+          </p>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -95,25 +86,29 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          About the role
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.aboutTheRole }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
           Welsh requirement
         </dt>
         <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
+          <ul
+            v-if="exercise.welshRequirement.length"
+            class="govuk-list"
+          >
             <li
               v-for="item in exercise.welshRequirement"
               :key="item"
             >
-              {{ item }}
+              {{ item | lookup }}
             </li>
           </ul>
+          <span v-else>None</span>
+        </dd>
+      </div>      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          About the role
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.aboutTheRole }}
         </dd>
       </div>
     </dl>
