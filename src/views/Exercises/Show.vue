@@ -91,7 +91,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     exerciseName() {
-      return this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
     },
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
