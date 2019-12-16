@@ -7,7 +7,7 @@
       >Skip to main content</a>
       <header class="header">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds">
+          <div class="govuk-grid-column-one-half">
             <div class="text-left">
               <img
                 src="@/assets/jac-logo.svg"
@@ -18,20 +18,20 @@
               >
             </div>
           </div>
-          <div class="govuk-grid-column-one-third">
+          <div class="govuk-grid-column-one-half text-right">
             <button
               v-if="$route.name !== 'sign-in'"
-              class="govuk-button"
+              class="govuk-button govuk-!-margin-bottom-0"
               @click="signOut"
             >
               Sign Out
             </button>
-            <span
+            <p
               v-if="isSignedIn"
-              class="govuk-phase-banner__text"
+              class="govuk-!-margin-bottom-0"
             >
               <b>You are now signed in as {{ userName }}</b>
-            </span>           
+            </p>           
           </div>
         </div>
       </header>
