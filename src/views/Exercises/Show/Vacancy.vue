@@ -90,7 +90,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul
-            v-if="exercise.welshRequirement.length"
+            v-if="exercise.welshRequirement && exercise.welshRequirement.length"
             class="govuk-list"
           >
             <li
