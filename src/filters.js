@@ -58,6 +58,11 @@ Vue.filter('lookup',
       'statement-of-suitability-with-skills-and-abilities-and-cv': 'Statement of Suitability with skills and abilities and CV',
       'statement-of-eligibility': 'Statement of eligibility',
       'none': 'None',
+      'lord-chancellor': 'Lord Chancellor',
+      'lord-chief-justice': 'Lord Chief Justice',
+      'senior-president-of-tribunals': 'Senior President of Tribunals (SPT)',
+      'scottish-ministers': 'Scottish ministers',
+      'welsh-government': 'Welsh Government',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
