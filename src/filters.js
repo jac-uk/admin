@@ -79,6 +79,9 @@ Vue.filter('lookup',
       'tax-and-chancery': 'Tax and Chancery',
       'employment-tribunal': 'Employment Tribunal',
       'employment-appeals-tribunal': 'Employment Appeals Tribunal',
+      'welsh-speaking': 'Speak Welsh',
+      'welsh-reading-writing': 'Read and/or write Welsh',
+      'welsh-administration-questions': 'Welsh administration questions',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;

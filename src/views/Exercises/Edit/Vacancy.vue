@@ -294,21 +294,41 @@
           rows="2"
         />
 
-        <CheckboxGroup
+        <RadioGroup
           id="welsh-requirement"
           v-model="exercise.welshRequirement"
-          label="Welsh requirement"
-          hint="Select all that apply."
+          label="Is there a Welsh requirement?"
+          required
         >
-          <CheckboxItem
-            value="welsh-language"
-            label="Welsh language"
+          <RadioItem
+            :value="true"
+            label="Yes"
+          >
+            <CheckboxGroup
+              id="welsh-requirement-type"
+              v-model="exercise.welshRequirementType"
+              label="Type of requirement"
+              hint="Select all that apply."
+            >
+              <CheckboxItem
+                value="welsh-speaking"
+                label="Speak Welsh"
+              />
+              <CheckboxItem
+                value="welsh-reading-writing"
+                label="Read and/or write Welsh"
+              />
+              <CheckboxItem
+                value="welsh-administration-questions"
+                label="Welsh administration questions"
+              />
+            </CheckboxGroup>          
+          </RadioItem>
+          <RadioItem
+            :value="false"
+            label="No"
           />
-          <CheckboxItem
-            value="devolution-questions"
-            label="Devolution questions"
-          />
-        </CheckboxGroup>
+        </RadioGroup>
 
         <TextareaInput
           id="about-the-role"
@@ -371,6 +391,7 @@ export default {
         jurisdiction: exercise.jurisdiction || null,
         otherJurisdiction: exercise.otherJurisdiction || null,
         welshRequirement: exercise.welshRequirement || null,
+        welshRequirementType: exercise.welshRequirementType || null,
         aboutTheRole: exercise.aboutTheRole || null,
       },
     };

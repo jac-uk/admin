@@ -102,17 +102,17 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul
-            v-if="exercise.welshRequirement && exercise.welshRequirement.length"
+            v-if="exercise.welshRequirement === true"
             class="govuk-list"
           >
             <li
-              v-for="item in exercise.welshRequirement"
+              v-for="item in exercise.welshRequirementType"
               :key="item"
             >
               {{ item | lookup }}
             </li>
           </ul>
-          <span v-else>None</span>
+          <span v-else-if="exercise.welshRequirement === false">None</span>
         </dd>
       </div>      
       <div class="govuk-summary-list__row">
