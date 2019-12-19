@@ -32,6 +32,26 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+          Jurisdiction
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li 
+              v-for="item in exercise.jurisdiction"
+              :key="item"
+            >
+              <span v-if="item === 'other'">
+                {{ exercise.otherJurisdiction }}
+              </span>
+              <span v-else>
+                {{ item | lookup }}
+              </span>
+            </li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
           Appointment type
         </dt>
         <dd class="govuk-summary-list__value">
@@ -59,10 +79,10 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
-            <li>
+            <li v-if="exercise.immediateStart > 0">
               {{ exercise.immediateStart }} Immediate start (S87)
             </li>
-            <li>
+            <li v-if="exercise.futureStart > 0">
               {{ exercise.futureStart }} Future start (S94)
             </li>
           </ul>
@@ -74,14 +94,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           {{ exercise.location }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Jurisdiction
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.jurisdiction }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
