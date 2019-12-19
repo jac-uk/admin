@@ -1,13 +1,17 @@
 <template>
   <div class="govuk-grid-row">
-    <form @submit.prevent="save">
+    <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
         <h1 class="govuk-heading-xl">
           Assessment options
         </h1>
 
-        <ErrorSummary :errors="errors" />
+        <ErrorSummary 
+          :errors="errors" 
+          :show-save-button="true" 
+          @save="save" 
+        />
 
         <RadioGroup
           id="shortlisting-methods"
@@ -78,11 +82,8 @@ export default {
   },
   methods: {
     async save() {
-      this.validate();
-      if (this.isValid()) {
-        await this.$store.dispatch('exerciseDocument/save', this.exercise);
-        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-assessment-options'));
-      }      
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-assessment-options'));
     },
   },
 };

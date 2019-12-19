@@ -1,13 +1,17 @@
 <template>
   <div class="govuk-grid-row">
-    <form @submit.prevent="save">
+    <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
         <h1 class="govuk-heading-xl">
           Create an exercise
         </h1>
 
-        <ErrorSummary :errors="errors" />
+        <ErrorSummary 
+          :errors="errors" 
+          :show-save-button="true" 
+          @save="save" 
+        />
 
         <label class="govuk-heading-m">
           Reference number

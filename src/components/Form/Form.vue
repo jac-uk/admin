@@ -32,6 +32,12 @@ export default {
     isValid() {
       return this.errors.length === 0;
     },
+    async validateAndSave() {
+      this.validate();
+      if (this.isValid()) {
+        this.save();
+      }
+    },
   },
 };
 </script>
