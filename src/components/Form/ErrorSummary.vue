@@ -23,6 +23,14 @@
         </li>
       </ul>
     </div>
+    <button
+      v-if="showSaveButton"
+      @click="saveDraft"
+      type="button"
+      class="govuk-button govuk-!-margin-top-5 govuk-!-margin-bottom-1"
+    >
+      Save and continue anyway
+    </button>
   </div>  
 </template>
 
@@ -33,7 +41,16 @@ export default {
       type: Array,
       required: true,
     },
+    showSaveButton: {
+      type: Boolean,
+      default: false,
+    }
   },
+  methods: {
+    saveDraft() {
+      this.$emit('save');
+    }
+  }
 };
 </script>
 
