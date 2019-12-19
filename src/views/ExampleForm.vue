@@ -1,12 +1,16 @@
 <template>
   <div class="govuk-grid-row">
-    <form @submit.prevent="save">
+    <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">
           Example form
         </h1>
 
-        <ErrorSummary :errors="errors" />
+        <ErrorSummary 
+          :errors="errors" 
+          :show-save-button="true" 
+          @save="save" 
+        />
 
         <TextField
           id="text-field"
@@ -105,10 +109,7 @@ export default {
   },
   methods: {
     async save() {
-      this.validate();
-      if (this.isValid()) {
-        // process form here
-      }
+      // process form here
     },
   },
 };

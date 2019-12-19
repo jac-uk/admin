@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-grid-row">
-    <form @submit.prevent="save">
+    <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
 
@@ -45,11 +45,8 @@ export default {
   },
   methods: {
     async save() {
-      this.validate();
-      if (this.isValid()) {
-        await this.$store.dispatch('exerciseDocument/save', this.exercise);
-        this.$router.push({ name: 'exercise-show-overview' });
-      }
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.$router.push({ name: 'exercise-show-overview' });
     },
   },
 };

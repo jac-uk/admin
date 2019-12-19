@@ -1,12 +1,16 @@
 <template>
   <div class="govuk-grid-row">
-    <form @submit.prevent="save">
+    <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
         <h1 class="govuk-heading-xl">
           Timeline
         </h1>
-        <ErrorSummary :errors="errors" />
+        <ErrorSummary 
+          :errors="errors" 
+          :show-save-button="true" 
+          @save="save" 
+        />
         <p class="govuk-body-l">
           You can return to this page later to add or change dates.
         </p>
@@ -224,11 +228,8 @@ export default {
   },
   methods: {
     async save() {
-      this.validate();
-      if (this.isValid()) {
-        await this.$store.dispatch('exerciseDocument/save', this.exercise);
-        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-timeline'));
-      }
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-timeline'));
     },
   },
 };

@@ -7,7 +7,11 @@
           Contacts
         </h1>
 
-        <ErrorSummary :errors="errors" :show-save-button="true" @save="save" />
+        <ErrorSummary 
+          :errors="errors" 
+          :show-save-button="true" 
+          @save="save" 
+        />
 
         <p class="govuk-body-l">
           You can return to this page later to add or change contacts.
@@ -205,12 +209,6 @@ export default {
     async save() {
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-contacts'));
-    },
-    async validateAndSave() {
-      this.validate();
-      if (this.isValid()) {
-        this.save();
-      }
     },
   },
 };
