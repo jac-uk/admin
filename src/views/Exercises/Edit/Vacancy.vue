@@ -56,6 +56,112 @@
           />
         </RadioGroup>
 
+        <CheckboxGroup
+          id="jurisdiction"
+          v-model="exercise.jurisdiction"
+          label="Jurisdiction"
+        >
+          <div
+            v-if="exercise.isCourtOrTribunal === 'court'"
+          >
+            <CheckboxItem 
+              value="crime"
+              label="Crime"
+            />
+            <CheckboxItem 
+              value="civil"
+              label="Civil"
+            />
+            <CheckboxItem 
+              value="family"
+              label="Family"
+            />
+          </div>
+
+          <div
+            v-if="exercise.isCourtOrTribunal === 'tribunal'"
+            class="govuk-!-margin-bottom-5"
+          >
+            <p class="govuk-heading-s govuk-!-margin-bottom-1">
+              First-tier tribunal
+            </p>
+            <CheckboxItem 
+              value="general-regulatory-chamber"
+              label="General Regulatory Chamber"
+            />
+            <CheckboxItem 
+              value="health-education-and-social-care-chamber"
+              label="Health, Education and Social Care Chamber"
+            />
+            <CheckboxItem 
+              value="immigration-and-asylum-chamber"
+              label="Immigration and Asylum Chamber"
+            />
+            <CheckboxItem 
+              value="property-chamber"
+              label="Property Chamber"
+            />
+            <CheckboxItem 
+              value="social-entitlement-chamber"
+              label="Social Entitlement Chamber"
+            />
+            <CheckboxItem 
+              value="tax-chamber"
+              label="Tax Chamber"
+            />
+            <CheckboxItem 
+              value="war-pension-and-armed-forces-compensation-chamber"
+              label="War Pension and Armed Forces Compensation Chamber"
+            />
+
+            <p class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-1">
+              Second-tier tribunal
+            </p>
+            <CheckboxItem 
+              value="administrative-appeals-chamber"
+              label="Administrative Appeals Chamber"
+            />
+            <CheckboxItem 
+              value="second-tier-immigration-and-asylum-chamber"
+              label="Immigration and Asylum Chamber"
+            />
+            <CheckboxItem 
+              value="lands-chamber"
+              label="Lands Chamber"
+            />
+            <CheckboxItem 
+              value="tax-and-chancery"
+              label="Tax and Chancery"
+            />
+
+            <p class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-1">
+              Employment Tribunal
+            </p>
+            <CheckboxItem 
+              value="employment-tribunal"
+              label="Employment Tribunal"
+            />
+            <CheckboxItem 
+              value="employment-appeals-tribunal"
+              label="Employment Appeals Tribunal"
+            />
+          </div>
+
+          <CheckboxItem 
+            value="other"
+            label="Other"
+          >
+            <TextField
+              id="other-jurisdiction"
+              v-model="exercise.otherJurisdiction"
+              class="govuk-!-width-one-half"
+              label="Other jurisdiction"
+              type="text"
+              required
+            />
+          </CheckboxItem>
+        </CheckboxGroup>
+
         <RadioGroup
           id="appointment-type"
           v-model="exercise.appointmentType"
@@ -188,13 +294,6 @@
           rows="2"
         />
 
-        <TextareaInput
-          id="jurisdiction"
-          v-model="exercise.jurisdiction"
-          label="Jurisdiction"
-          hint="For example, Employment, Family."
-        />
-
         <CheckboxGroup
           id="welsh-requirement"
           v-model="exercise.welshRequirement"
@@ -270,6 +369,7 @@ export default {
         futureStart: exercise.futureStart || null,
         location: exercise.location || null,
         jurisdiction: exercise.jurisdiction || null,
+        otherJurisdiction: exercise.otherJurisdiction || null,
         welshRequirement: exercise.welshRequirement || null,
         aboutTheRole: exercise.aboutTheRole || null,
       },
