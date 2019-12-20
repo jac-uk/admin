@@ -109,8 +109,8 @@ export default {
     },
   },
   mounted() {
-    const id = this.$route.params.id;
-
+    this.$store.dispatch('exerciseCreateJourney/end'); // ensures journey through forms is ended
+    const id = this.$route.params.id;    
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
         if(data === null) {
