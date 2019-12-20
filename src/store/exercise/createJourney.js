@@ -45,6 +45,9 @@ export default {
       });
       commit('setJourney', journey);
     },
+    end({ commit }) {
+      commit('setJourney', []);
+    },
     setCurrentRoute({ commit }, name) {
       // Trim routeNamePrefix off the beginning of the route name
       if (name.indexOf(routeNamePrefix) === 0) {
