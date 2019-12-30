@@ -6,10 +6,10 @@
         <h1 class="govuk-heading-xl">
           Timeline
         </h1>
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
         <p class="govuk-body-l">
           You can return to this page later to add or change dates.
@@ -44,7 +44,7 @@
         />
 
         <h2 class="govuk-heading-l">
-          Shortlisting dates
+          Shortlisting
         </h2>
 
         <div
@@ -52,12 +52,24 @@
           ref="paperSift"
         >
           <h3 class="govuk-heading-m">
-            Paper sift
+            Sifts
           </h3>
           <DateInput
-            id="paper-sift"
-            v-model="exercise.paperSiftDate"
+            id="sift-date"
+            v-model="exercise.siftDate"
             label="Sift date"
+            required
+          />
+          <DateInput
+            id="name-blind-sift-date"
+            v-model="exercise.nameBlindSiftDate"
+            label="Name-blind sift date"
+            required
+          />
+          <DateInput
+            id="telephone-assessment-date"
+            v-model="exercise.telephoneAssessmentDate"
+            label="Telephone assessment date"
             required
           />
         </div>
@@ -128,6 +140,12 @@
             required
           />
         </div>
+        <DateInput
+          id="shortlisting-outcome-date"
+          v-model="exercise.shortlistingOutcomeDate"
+          label="Shortlisting outcome date"
+          required
+        />
 
         <h2 class="govuk-heading-l">
           Independent assessors
@@ -140,6 +158,23 @@
           hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
           required
         />
+        <DateInput
+          id="independent-assessments-return-date"
+          v-model="exercise.independentAssessmentsReturnDate"
+          label="Independent assessments return date"
+          required
+        />
+
+        <h2 class="govuk-heading-l">
+          Eligibility SCC
+        </h2>
+
+        <DateInput
+          id="eligibility-scc-date"
+          v-model="exercise.eligibilitySCCDate"
+          label="Eligibility SCC date"
+          required
+        />
 
         <h2 class="govuk-heading-l">
           Selection day
@@ -148,6 +183,39 @@
         <RepeatableFields
           v-model="exercise.selectionDays"
           :component="repeatableFields.SelectionDay"
+          required
+        />
+
+        <h2 class="govuk-heading-l">
+          Character Checks
+        </h2>
+
+        <DateInput
+          id="character-checks-date"
+          v-model="exercise.characterChecksDate"
+          label="Character checks date"
+          required
+        />
+
+        <h2 class="govuk-heading-l">
+          Statutory Consultation
+        </h2>
+
+        <DateInput
+          id="statutory-consultation-date"
+          v-model="exercise.statutoryConsultationDate"
+          label="Statutory Consultation date"
+          required
+        />
+
+        <h2 class="govuk-heading-l">
+          Character and Selection SCC
+        </h2>
+
+        <DateInput
+          id="character-and-selection-scc-date"
+          v-model="exercise.characterAndSCCDate"
+          label="Final outcome to candidates"
           required
         />
 
@@ -200,7 +268,9 @@ export default {
       exercise: {
         applicationOpenDate: exercise.applicationOpenDate || null,
         applicationCloseDate: exercise.applicationCloseDate || null,
-        paperSiftDate: exercise.paperSiftDate || null,
+        siftDate: exercise.siftDate || null,
+        nameBlindSiftDate: exercise.nameBlindSiftDate || null,
+        telephoneAssessmentDate: exercise.telephoneAssessmentDate || null,
         sjcaTestDate: exercise.sjcaTestDate || null,
         sjcaTestStartTime: exercise.sjcaTestStartTime || null,
         sjcaTestEndTime: exercise.sjcaTestEndTime || null,
@@ -209,21 +279,27 @@ export default {
         scenarioTestStartTime: exercise.scenarioTestStartTime || null,
         scenarioTestEndTime: exercise.scenarioTestEndTime || null,
         scenarioTestOutcome: exercise.scenarioTestOutcome || null,
+        shortlistingOutcomeDate: exercise.shortlistingOutcomeDate || null,
         contactIndependentAssessors: exercise.contactIndependentAssessors || null,
-        finalOutcome: exercise.finalOutcome || null,
+        independentAssessmentsReturnDate: exercise.independentAssessmentsReturnDate || null,
+        eligibilitySCCDate: exercise.eligibilitySCCDate || null,
         selectionDays: exercise.selectionDays || null,
+        characterChecksDate: exercise.characterChecksDate || null,
+        statutoryConsultationDate: exercise.statutoryConsultationDate || null,
+        characterAndSCCDate: exercise.characterAndSCCDate || null,
+        finalOutcome: exercise.finalOutcome || null,
       },
     };
   },
   computed: {
     scenarioQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Scenario test qualifying test (QT)');
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('scenario-test-qualifying-test');
     },
     situationalJudgementOrCriticalAnalysisQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Situational judgement qualifying test (QT)') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Critical analysis qualifying test (QT)');
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('situational-judgement-qualifying-test') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('critical-analysis-qualifying-test');
     },
     paperSift() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('Paper sift');
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('paper-sift');
     },
   },
   methods: {
