@@ -215,7 +215,7 @@
         <DateInput
           id="character-and-selection-scc-date"
           v-model="exercise.characterAndSCCDate"
-          label="Final outcome to candidates"
+          label="Character and SCC date"
           required
         />
 
