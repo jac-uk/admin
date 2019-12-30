@@ -10,6 +10,7 @@
         :is="component"
         :row="row"
         :index="index"
+        :ident="ident"
       >
         <template v-slot:removeButton>
           <button
@@ -51,6 +52,11 @@ export default {
       required: false,
       default: false,
       type: [Number, Boolean],
+    },
+    ident: {
+      required: false,
+      type: String,
+      default: null,
     },
   },
   data() {

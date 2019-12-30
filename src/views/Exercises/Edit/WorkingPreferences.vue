@@ -3,6 +3,7 @@
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
+
         <h1 class="govuk-heading-xl">
           Working preferences
         </h1>
@@ -12,10 +13,85 @@
           :show-save-button="true" 
           @save="save" 
         />
+        <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h3 class="govuk-fieldset__heading">
+              Location question
+            </h3>
+          </legend>
+          <TextField
+            id="exercise-location-question"
+            v-model="exercise.locationQuestion"
+            label="What question would you like to ask?"
+          />
+          <RadioGroup
+            id="exercise-location-question-type"
+            v-model="exercise.locationQuestionType"
+            label="How would you like the question answered?"
+            :messages="{
+              required: 'Please choose one of the following options'
+            }"
+          >
+            <RadioItem
+              value="single-choice"
+              label="Single choice"
+            />
+            <RadioItem
+              value="multiple-choice"
+              label="Multiple choice"
+            />
+            <RadioItem
+              value="ranked-choice"
+              label="Ranked choice"
+            />
+          </RadioGroup>          
+          <RepeatableFields
+            v-model="exercise.locationQuestionAnswers"
+            :component="repeatableFields.Answer"
+            ident="location"
+            required
+          />
+        </fieldset>
 
-        <p class="govuk-body-l">
-          [form]
-        </p>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h3 class="govuk-fieldset__heading">
+              Jurisdiction question
+            </h3>
+          </legend>
+          <TextField
+            id="exercise-jurisdiction-question"
+            v-model="exercise.jurisdictionQuestion"
+            label="What question would you like to ask?"
+          />
+          <RadioGroup
+            id="exercise-jurisdiction-question-type"
+            v-model="exercise.jurisdictionQuestionType"
+            label="How would you like the question answered?"
+            :messages="{
+              required: 'Please choose one of the following options'
+            }"
+          >
+            <RadioItem
+              value="single-choice"
+              label="Single choice"
+            />
+            <RadioItem
+              value="multiple-choice"
+              label="Multiple choice"
+            />
+            <RadioItem
+              value="ranked-choice"
+              label="Ranked choice"
+            />
+          </RadioGroup>          
+          <RepeatableFields
+            v-model="exercise.jurisdictionQuestionAnswers"
+            :component="repeatableFields.Answer"
+            ident="jurisdiction"
+            required
+          />
+        </fieldset>
 
         <button class="govuk-button">
           Save and continue
@@ -28,17 +104,38 @@
 <script>
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
+import TextField from '@/components/Form/TextField';
+import RadioGroup from '@/components/Form/RadioGroup';
+import RadioItem from '@/components/Form/RadioItem';
+import RepeatableFields from '@/components/RepeatableFields';
+import Answer from '@/components/RepeatableFields/Answer';
 import BackLink from '@/components/BackLink';
 
 export default {
   components: {
     ErrorSummary,
     BackLink,
+    TextField,
+    RepeatableFields,
+    RadioGroup,
+    RadioItem,
   },
   extends: Form,
   data() {
-    const exercise = this.$store.getters['exerciseDocument/data']();
+    const defaults = {
+      locationQuestion: null,
+      locationQuestionType: 'single-choice',
+      locationQuestionAnswers: null,
+      jurisdictionQuestion: null,
+      jurisdictionQuestionType: 'single-choice',
+      jurisdictionQuestionAnswers: null,
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };    
     return {
+      repeatableFields: {
+        Answer,
+      },      
       exercise: exercise,
     };
   },
