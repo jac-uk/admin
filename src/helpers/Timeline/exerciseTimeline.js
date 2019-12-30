@@ -39,51 +39,78 @@ const createSelectionDay = (data) => {
 const exerciseTimeline = (data) => {
   return [
   {
-    entry: 'Open for applications', 
+    entry: 'Open for applications',
     date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
   },
   {
-    entry: 'Closed for applications', 
+    entry: 'Closed for applications',
     date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
   },
   {
-    entry: 'QT', 
+    entry: 'Shortlisting',
+  },
+  {
+    entry: 'Sift date',
+    date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
+  },
+  {
+    entry: 'Name-blind sift date',
+    date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
+  },
+  {
+    entry: 'Telephone assessment date',
+    date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
+  },
+  {
+    entry: 'Shortlisting outcome date',
+    date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+  },
+  {
+    entry: 'QT',
     date: createQT(data),
   },
   {
-    entry: 'Paper sift', 
-    date: isDate(data.paperSiftDate) ? formatDate(data.paperSiftDate) : null,
-  },
-  {
-    entry: 'QT outcome to candidates', 
+    entry: 'QT outcome to candidates',
     date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
   },
   {
-    entry: 'Scenario test', 
+    entry: 'Scenario test',
     date: createScenariotest(data),
   },
   {
-    entry: 'Scenario test outcome to candidates', 
+    entry: 'Scenario test outcome to candidates',
     date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
   },
   {
-    entry: 'Contact independent assessors', 
+    entry: 'Contact independent assessors',
     date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
   },
   {
-    entry: 'Selection day', 
+    entry: 'Return date for independent assessments',
+    date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
+  },
+  {
+    entry: 'Eligibility SCC',
+    date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
+  },
+  {
+    entry: 'Selection day',
     date: createSelectionDay(data),
   },
   {
-    entry: 'Character checks', 
-    date: isDate(data.characterChecks) ? formatDate(data.characterChecks, 'month') : null,
+    entry: 'Character checks',
+    date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
   },
   {
-    entry: 'Statutory consultation', 
-    date: isDate(data.statutoryConsultation) ? formatDate(data.statutoryConsultation, 'month') : null,
+    entry: 'Statutory consultation',
+    date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
   },
   {
-    entry: 'Selection process outcome', 
+    entry: 'Character and Selection SCC',
+    date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
+  },
+  {
+    entry: 'Selection process outcome',
     date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
   }];
 };
