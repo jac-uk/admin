@@ -82,6 +82,9 @@ Vue.filter('lookup',
       'welsh-speaking': 'Speak Welsh',
       'welsh-reading-writing': 'Read and/or write Welsh',
       'welsh-administration-questions': 'Welsh administration questions',
+      'single-choice': 'Single choice',
+      'multiple-choice': 'Multiple choice',
+      'ranked-choice': 'Ranked choice',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
