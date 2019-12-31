@@ -21,8 +21,9 @@
           <a
             id="job-description-template"
             class="govuk-link"
+            :class="{'download-visited': documentsDownloaded.jobDescription}"
             href="javascript:void(0)"
-            @click.prevent="download(exercise.uploadedJobDescriptionTemplate); lookVisited('job-description-template')"
+            @click.prevent="download(exercise.uploadedJobDescriptionTemplate); documentsDownloaded.jobDescription = true; "
           >
             {{ exercise.uploadedJobDescriptionTemplate }}</a>
         </dd>
@@ -35,8 +36,9 @@
           <a
             id="terms-and-conditions-template"
             class="govuk-link"
+            :class="{'download-visited': documentsDownloaded.termsAndConditions}"
             href="javascript:void(0)"
-            @click.prevent="download(exercise.uploadedTermsAndConditionsTemplate); lookVisited('terms-and-conditions-template')"
+            @click.prevent="download(exercise.uploadedTermsAndConditionsTemplate); documentsDownloaded.jobDescription = true;"
           >{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
         </dd>
       </div>
@@ -48,8 +50,9 @@
           <a
             id="independent-assessor-template"
             class="govuk-link"
+            :class="{'download-visited': documentsDownloaded.independentAssessor}"
             href="javascript:void(0)"
-            @click="download(exercise.uploadedIndependentAssessorTemplate); lookVisited('independent-assessor-template')"
+            @click="download(exercise.uploadedIndependentAssessorTemplate); documentsDownloaded.independentAssessor = true;"
           >{{ exercise.uploadedIndependentAssessorTemplate }}</a>
         </dd>
       </div>
@@ -61,8 +64,9 @@
           <a
             id="candidate-assessment-form-template"
             class="govuk-link"
+            :class="{'download-visited': documentsDownloaded.candidateAssessmentForm}"
             href="javascript:void(0)"
-            @click="download(exercise.uploadedCandidateAssessmentFormTemplate); lookVisited('candidate-assessment-form-template')"
+            @click="download(exercise.uploadedCandidateAssessmentFormTemplate); documentsDownloaded.independentAssessor = true; "
           >{{ exercise.uploadedCandidateAssessmentFormTemplate }}</a>
         </dd>
       </div>
@@ -74,6 +78,16 @@
 import firebase from 'firebase';
 
 export default {
+  data () {
+    return {
+      documentsDownloaded: {
+        jobDescription: false,
+        termsAndConditions: false,
+        independentAssessor: false,
+        candidateAssessmentForm: false,
+      },
+    };
+  },
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
@@ -136,7 +150,7 @@ export default {
 
 <style scoped>
 
-.download-visted {
+.download-visited {
   color: #4c2c92;
 }
 
