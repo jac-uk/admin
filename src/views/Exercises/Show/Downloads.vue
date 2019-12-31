@@ -19,12 +19,12 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <a
-            style="
-              color: blue;
-              text-decoration: underline;
-          "
-            @click="download(exercise.uploadedJobDescriptionTemplate)"
-          >{{ exercise.uploadedJobDescriptionTemplate }}</a>
+            id="job-description-template"
+            class="govuk-link"
+            href="javascript:void(0)"
+            @click.prevent="download(exercise.uploadedJobDescriptionTemplate); lookVisited('job-description-template')"
+          >
+            {{ exercise.uploadedJobDescriptionTemplate }}</a>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -33,11 +33,10 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <a
-            style="
-              color: blue;
-              text-decoration: underline;
-          "
-            @click="download(exercise.uploadedTermsAndConditionsTemplate)"
+            id="terms-and-conditions-template"
+            class="govuk-link"
+            href="javascript:void(0)"
+            @click.prevent="download(exercise.uploadedTermsAndConditionsTemplate); lookVisited('terms-and-conditions-template')"
           >{{ exercise.uploadedTermsAndConditionsTemplate }}</a>
         </dd>
       </div>
@@ -47,11 +46,10 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <a
-            style="
-              color: blue;
-              text-decoration: underline;
-          "
-            @click="download(exercise.uploadedIndependentAssessorTemplate)"
+            id="independent-assessor-template"
+            class="govuk-link"
+            href="javascript:void(0)"
+            @click="download(exercise.uploadedIndependentAssessorTemplate); lookVisited('independent-assessor-template')"
           >{{ exercise.uploadedIndependentAssessorTemplate }}</a>
         </dd>
       </div>
@@ -61,14 +59,13 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <a
-            style="
-              color: blue;
-              text-decoration: underline;
-          "
-            @click="download(exercise.uploadedCandidateAssessmentFormTemplate)"
+            id="candidate-assessment-form-template"
+            class="govuk-link"
+            href="javascript:void(0)"
+            @click="download(exercise.uploadedCandidateAssessmentFormTemplate); lookVisited('candidate-assessment-form-template')"
           >{{ exercise.uploadedCandidateAssessmentFormTemplate }}</a>
         </dd>
-      </div>                       
+      </div>
     </dl>
   </div>
 </template>
@@ -129,6 +126,18 @@ export default {
         }
       });
     },
+    lookVisited(id) {
+      var download = document.getElementById(id);
+      download.classList.toggle('download-visted');
+    },
   },
 };
 </script>
+
+<style scoped>
+
+.download-visted {
+  color: #4c2c92;
+}
+
+</style>
