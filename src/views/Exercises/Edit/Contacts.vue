@@ -7,10 +7,10 @@
           Contacts
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
 
         <p class="govuk-body-l">
@@ -30,20 +30,16 @@
           :pattern="patternJACEmail"
         />
 
-        <TextField
-          id="senior-selection-exercise-manager"
+        <RepeatableFields
           v-model="exercise.seniorSelectionExerciseManager"
-          label="Senior selection exercise manager"
-          type="email"
+          :component="repeatableFields.SeniorSelectionExerciseManager"
           required
           :pattern="patternJACEmail"
         />
 
-        <TextField
-          id="selection-exercise-manager"
+        <RepeatableFields
           v-model="exercise.selectionExerciseManager"
-          label="Selection exercise manager"
-          type="email"
+          :component="repeatableFields.SelectionExerciseManager"
           required
           :pattern="patternJACEmail"
         />
@@ -161,6 +157,8 @@ import TextField from '@/components/Form/TextField';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import RepeatableFields from '@/components/RepeatableFields';
+import SeniorSelectionExerciseManager from '@/components/RepeatableFields/SeniorSelectionExerciseManager';
+import SelectionExerciseManager from '@/components/RepeatableFields/SelectionExerciseManager';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
@@ -183,6 +181,8 @@ export default {
     return {
       patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
       repeatableFields: {
+        SeniorSelectionExerciseManager,
+        SelectionExerciseManager,
         DraftingJudge,
         StatutoryConsultee,
         SelectionExerciseOfficer,

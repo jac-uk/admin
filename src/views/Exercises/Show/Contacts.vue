@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-right">
-      <router-link 
+      <router-link
         class="govuk-link"
         :to="{name: 'exercise-edit-contacts'}"
       >
@@ -24,7 +24,14 @@
           Senior selection exercise manager
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.seniorSelectionExerciseManager }}
+          <ul class="govuk-list">
+            <li
+              v-for="item in exercise.seniorSelectionExerciseManager"
+              :key="item.name"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -32,7 +39,14 @@
           Selection exercise manager
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.selectionExerciseManager }}
+          <ul class="govuk-list">
+            <li
+              v-for="item in exercise.selectionExerciseManager"
+              :key="item.name"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -68,12 +82,12 @@
     </dl>
 
     <p
-      v-if="exercise.subscriberAlertsUrl" 
+      v-if="exercise.subscriberAlertsUrl"
       class="govuk-body"
     >
       <strong>Subscriber alerts url</strong>
       <span class="display-block">{{ exercise.subscriberAlertsUrl }}</span>
-    </p>   
+    </p>
 
     <h2 class="govuk-heading-l govuk-!-margin-top-9">
       Other contacts
@@ -85,7 +99,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
-            <li 
+            <li
               v-for="item in exercise.appropriateAuthority"
               :key="item"
             >
@@ -125,7 +139,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
-            <li 
+            <li
               v-for="item in exercise.draftingJudge"
               :key="item.name"
             >
@@ -140,7 +154,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
-            <li 
+            <li
               v-for="item in exercise.statutoryConsultee"
               :key="item.name"
             >
