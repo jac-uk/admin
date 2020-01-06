@@ -7,10 +7,10 @@
           Assessment options
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
 
         <RadioGroup
@@ -24,6 +24,10 @@
           <RadioItem
             value="self-assessment-with-competencies"
             label="Self Assessment with competencies"
+          />
+          <RadioItem
+            value="self-assessment-with-competencies-and-cv"
+            label="Self Assessment with competencies and CV"
           />
           <RadioItem
             value="statement-of-suitability-with-competencies"
