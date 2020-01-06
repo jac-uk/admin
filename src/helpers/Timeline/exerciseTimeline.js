@@ -50,26 +50,54 @@ const exerciseTimeline = (data) => {
     {
       entry: 'Closed for applications',
       date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
-    },
-    {
-      entry: 'Shortlisting',
-    },
-    {
-      entry: 'Sift date',
-      date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
-    },
-    {
-      entry: 'Name-blind sift date',
-      date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
-    },
-    {
-      entry: 'Telephone assessment date',
-      date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
-    },
-    {
-      entry: 'Shortlisting outcome date',
-      date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
-    },
+    }
+  );
+
+  if (data.shortlistingMethods) {
+    timeline.push(
+      {
+        entry: 'Shortlisting',
+      },
+    );
+  }
+
+  if(data.shortlistingMethods.includes('paper-sift')) {
+    timeline.push(
+      {
+        entry: 'Sift date',
+        date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
+      },
+    );
+  }
+
+  if(data.shortlistingMethods.includes('name-blind-paper-sift')) {
+    timeline.push(
+      {
+        entry: 'Name-blind sift date',
+        date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
+      },
+    );
+  }
+
+  if(data.shortlistingMethods.includes('telephone-assessment')) {
+    timeline.push(
+      {
+        entry: 'Telephone assessment date',
+        date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
+      },
+    );
+  }
+
+  if (data.shortlistingOutcomeDate) {
+    timeline.push(
+      {
+        entry: 'Shortlisting outcome date',
+        date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+      },
+    );
+  }
+
+  timeline.push(
     {
       entry: 'QT',
       date: createQT(data),
