@@ -25,94 +25,104 @@ const createScenariotest = (data) => {
   return `${date} - ${start} to ${end}`;
 };
 
-const createSelectionDay = (data) => {
-  let selectionDayStart = data.selectionDays && data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayStart) && formatDate(data.selectionDays[0].selectionDayStart) || null;
-  let selectionDayEnd = data.selectionDays && data.selectionDays[0] && isDate(data.selectionDays[0].selectionDayEnd) && formatDate(data.selectionDays[0].selectionDayEnd) || null;
+const createSelectionDay = (data, i) => {
+  let selectionDayEntry = {
+    entry: 'Selection Day',
+    date: null,
+  };
+  let selectionDayStart = data.selectionDays && data.selectionDays[i] && isDate(data.selectionDays[i].selectionDayStart) && formatDate(data.selectionDays[i].selectionDayStart) || null;
+  let selectionDayEnd = data.selectionDays && data.selectionDays[i] && isDate(data.selectionDays[i].selectionDayEnd) && formatDate(data.selectionDays[i].selectionDayEnd) || null;
 
   if(!selectionDayStart && !selectionDayEnd) {
     return null;
+  } else {
+    selectionDayEntry.date = `${selectionDayStart} to ${selectionDayEnd}`;
   }
-
-  return `${selectionDayStart} to ${selectionDayEnd}`;
+  return selectionDayEntry;
 };
 
 const exerciseTimeline = (data) => {
-  return [
-  {
-    entry: 'Open for applications',
-    date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
-  },
-  {
-    entry: 'Closed for applications',
-    date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
-  },
-  {
-    entry: 'Shortlisting',
-  },
-  {
-    entry: 'Sift date',
-    date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
-  },
-  {
-    entry: 'Name-blind sift date',
-    date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
-  },
-  {
-    entry: 'Telephone assessment date',
-    date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
-  },
-  {
-    entry: 'Shortlisting outcome date',
-    date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
-  },
-  {
-    entry: 'QT',
-    date: createQT(data),
-  },
-  {
-    entry: 'QT outcome to candidates',
-    date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
-  },
-  {
-    entry: 'Scenario test',
-    date: createScenariotest(data),
-  },
-  {
-    entry: 'Scenario test outcome to candidates',
-    date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
-  },
-  {
-    entry: 'Contact independent assessors',
-    date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
-  },
-  {
-    entry: 'Return date for independent assessments',
-    date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
-  },
-  {
-    entry: 'Eligibility SCC',
-    date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
-  },
-  {
-    entry: 'Selection day',
-    date: createSelectionDay(data),
-  },
-  {
-    entry: 'Character checks',
-    date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
-  },
-  {
-    entry: 'Statutory consultation',
-    date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
-  },
-  {
-    entry: 'Character and Selection SCC',
-    date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
-  },
-  {
-    entry: 'Selection process outcome',
-    date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
-  }];
+  let timeline = [];
+  timeline.push(
+    {
+      entry: 'Open for applications',
+      date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
+    },
+    {
+      entry: 'Closed for applications',
+      date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
+    },
+    {
+      entry: 'Shortlisting',
+    },
+    {
+      entry: 'Sift date',
+      date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
+    },
+    {
+      entry: 'Name-blind sift date',
+      date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
+    },
+    {
+      entry: 'Telephone assessment date',
+      date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
+    },
+    {
+      entry: 'Shortlisting outcome date',
+      date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+    },
+    {
+      entry: 'QT',
+      date: createQT(data),
+    },
+    {
+      entry: 'QT outcome to candidates',
+      date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
+    },
+    {
+      entry: 'Scenario test',
+      date: createScenariotest(data),
+    },
+    {
+      entry: 'Scenario test outcome to candidates',
+      date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+    },
+    {
+      entry: 'Contact independent assessors',
+      date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
+    },
+    {
+      entry: 'Return date for independent assessments',
+      date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
+    },
+    {
+      entry: 'Eligibility SCC',
+      date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
+    }
+  );
+
+   for (var i = 0; i < data.selectionDays.length; i++) {
+     timeline.push(createSelectionDay(data, i));
+   }
+  timeline.push(
+    {
+      entry: 'Character checks',
+      date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
+    },
+    {
+      entry: 'Statutory consultation',
+      date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
+    },
+    {
+      entry: 'Character and Selection SCC',
+      date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
+    },
+    {
+      entry: 'Selection process outcome',
+      date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
+    }
+  );
+    return timeline;
 };
 
 export default exerciseTimeline;
