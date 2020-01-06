@@ -47,32 +47,27 @@
           Shortlisting
         </h2>
 
-        <div
+        <DateInput
           v-if="paperSift"
-          ref="paperSift"
-        >
-          <h3 class="govuk-heading-m">
-            Sifts
-          </h3>
-          <DateInput
-            id="sift-date"
-            v-model="exercise.siftDate"
-            label="Sift date"
-            required
-          />
-          <DateInput
-            id="name-blind-sift-date"
-            v-model="exercise.nameBlindSiftDate"
-            label="Name-blind sift date"
-            required
-          />
-          <DateInput
-            id="telephone-assessment-date"
-            v-model="exercise.telephoneAssessmentDate"
-            label="Telephone assessment date"
-            required
-          />
-        </div>
+          id="sift-date"
+          v-model="exercise.siftDate"
+          label="Sift date"
+          required
+        />
+        <DateInput
+          v-if="nameBlindSift"
+          id="name-blind-sift-date"
+          v-model="exercise.nameBlindSiftDate"
+          label="Name-blind sift date"
+          required
+        />
+        <DateInput
+          v-if="telephoneAssessment"
+          id="telephone-assessment-date"
+          v-model="exercise.telephoneAssessmentDate"
+          label="Telephone assessment date"
+          required
+        />
 
         <div
           v-if="situationalJudgementOrCriticalAnalysisQT"
@@ -300,6 +295,12 @@ export default {
     },
     paperSift() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('paper-sift');
+    },
+    nameBlindSift() {
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('name-blind-paper-sift');
+    },
+    telephoneAssessment() {
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('telephone-assessment');
     },
   },
   methods: {
