@@ -25,14 +25,13 @@ const createScenariotest = (data) => {
   return `${date} - ${start} to ${end}`;
 };
 
-const createSelectionDay = (data, i) => {
+const createSelectionDay = (selectionDay) => {
   let selectionDayEntry = {
     entry: 'Selection Day',
     date: null,
   };
-  let selectionDayStart = data.selectionDays && data.selectionDays[i] && isDate(data.selectionDays[i].selectionDayStart) && formatDate(data.selectionDays[i].selectionDayStart) || null;
-  let selectionDayEnd = data.selectionDays && data.selectionDays[i] && isDate(data.selectionDays[i].selectionDayEnd) && formatDate(data.selectionDays[i].selectionDayEnd) || null;
-
+  let selectionDayStart = isDate(selectionDay.selectionDayStart) && formatDate(selectionDay.selectionDayStart) || null;
+  let selectionDayEnd = isDate(selectionDay.selectionDayEnd) && formatDate(selectionDay.selectionDayEnd) || null;
   if(!selectionDayStart && !selectionDayEnd) {
     return null;
   } else {
@@ -101,9 +100,9 @@ const exerciseTimeline = (data) => {
     }
   );
 
-   for (var i = 0; i < data.selectionDays.length; i++) {
-     timeline.push(createSelectionDay(data, i));
-   }
+  for (var i = 0; i < data.selectionDays.length; i++) {
+    timeline.push(createSelectionDay(data.selectionDays[i]));
+  }
   timeline.push(
     {
       entry: 'Character checks',
