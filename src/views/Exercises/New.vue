@@ -9,7 +9,7 @@
 
         <ErrorSummary 
           :errors="errors" 
-          :show-save-button="true" 
+          :show-save-button="false" 
           @save="save" 
         />
 
