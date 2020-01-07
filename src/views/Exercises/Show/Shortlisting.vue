@@ -2,6 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
+        v-if="canEdit"
         class="govuk-link"
         :to="{name: 'exercise-edit-shortlisting'}"
       >
@@ -37,10 +38,25 @@ export default {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
+    isApproved() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+          return false;
+        default:
+          return true;
+        }
+      }
+      return false;
+    },
+    canEdit() {
+      return !this.isApproved;
+    },    
     methods() {
       const methods = this.exercise.shortlistingMethods;
       if (!(methods instanceof Array)) {
-        return ['Null'];
+        return [];
       }
       const list = methods.filter(value => (value !== 'other'));
       list.sort();
