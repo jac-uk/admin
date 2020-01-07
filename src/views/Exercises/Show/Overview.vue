@@ -42,6 +42,7 @@
       </div>
       <Timeline :data="timeline" />
       <RouterLink
+        v-if="timeline && timeline.length"
         :to="{ name: 'exercise-show-timeline' }"
         class="govuk-link"
       >
