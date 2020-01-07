@@ -24,6 +24,7 @@ export default {
           transaction.update(metaRef, { exercisesCount: newExercisesCount });
           data.referenceNumber = 'JAC' + (100000 + newExercisesCount).toString().substr(1);
           data.progress = { started: true };
+          data.state = 'draft';
           transaction.set(exerciseRef, data);
           return exerciseRef.id;
         });
