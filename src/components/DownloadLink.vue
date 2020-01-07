@@ -17,12 +17,12 @@ export default {
     fileName: {
       required: true,
       type: String,
-      default: null,
+      default: '',
     },
     exerciseId: {
       required: true,
       type: String,
-      default: null,
+      default: '',
     },
   },
   data () {
