@@ -61,29 +61,9 @@ export default {
     AddToFavouritesButton,
   },
   data() {
-    const navPages = [
-      { page: 'Overview', name: 'exercise-show-overview' },
-      { page: 'Vacancy information',
-        name: 'exercise-show-vacancy',
-        children: [
-          { page: 'Contacts', name: 'exercise-show-contacts' },
-          { page: 'Timeline', name: 'exercise-show-timeline' },
-          { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
-          { page: 'Eligibility information', name: 'exercise-show-eligibility' },
-          { page: 'Working preferences', name: 'exercise-show-working-preferences' },
-          { page: 'Assessment options', name: 'exercise-show-assessment-options' },
-          { page: 'Exercise downloads', name: 'exercise-show-downloads' },
-        ],
-      },
-      { page: 'Applications', name: 'exercise-show-applications' },
-      { page: 'Independent assessments', name: 'exercise-show-independent-assessments' },
-      { page: 'Exercise reports', name: 'exercise-show-reports' },
-    ];
-
     return {
       loaded: false,
       loadFailed: false,
-      navPages,
     };
   },
   computed: {
@@ -92,6 +72,33 @@ export default {
     },
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+    },
+    isDraft() {
+      // returns true unless exercise has a state that other than draft
+      if (this.exercise && this.exercise.state && this.exercise.state !== 'draft') {
+        return false;
+      }
+      return true;
+    },
+    navPages() {
+      const pages = [
+        { page: 'Overview', name: 'exercise-show-overview' },
+        { page: 'Vacancy information', name: 'exercise-show-vacancy' },
+        { page: 'Contacts', name: 'exercise-show-contacts' },
+        { page: 'Timeline', name: 'exercise-show-timeline' },
+        { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
+        { page: 'Eligibility information', name: 'exercise-show-eligibility' },
+        { page: 'Working preferences', name: 'exercise-show-working-preferences' },
+        { page: 'Assessment options', name: 'exercise-show-assessment-options' },
+        { page: 'Exercise downloads', name: 'exercise-show-downloads' },
+
+      ];
+      if (!this.isDraft) {
+        pages.push({ page: 'Applications', name: 'exercise-show-applications' });
+        pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
+        pages.push({ page: 'Exercise reports', name: 'exercise-show-reports' });
+      }
+      return pages;
     },
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
