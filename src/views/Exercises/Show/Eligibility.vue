@@ -14,7 +14,7 @@
     </h2>
 
     <dl class="govuk-summary-list">
-      <div 
+      <div
         v-if="isLegal"
         class="govuk-summary-list__row"
       >
@@ -30,7 +30,7 @@
           </span>
         </dd>
       </div>
-      <div 
+      <div
         v-if="isLegal && isTribunal"
         class="govuk-summary-list__row"
       >
@@ -46,6 +46,25 @@
           </span>
         </dd>
       </div>
+
+      <div
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Authorisations
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="authorisation in exercise.authorisations"
+              :key="authorisation"
+            >
+              <span>{{ authorisation | lookup }}</span>
+            </li>
+          </ul>
+        </dd>
+      </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Does additional selection criteria (ASC) apply?
@@ -74,7 +93,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="isLegal"
         class="govuk-summary-list__row"
       >
@@ -94,7 +113,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="isNonLegal"
         class="govuk-summary-list__row"
       >
@@ -172,7 +191,7 @@ export default {
     isTribunal() {
       return this.exercise.isCourtOrTribunal === 'tribunal';
     },
-  },  
+  },
 };
 </script>
 
