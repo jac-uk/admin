@@ -78,31 +78,30 @@ const exerciseTimeline = (data) => {
         entry: 'Shortlisting',
       },
     );
-  }
+    if(data.shortlistingMethods.includes('paper-sift')) {
+      timeline.push(
+        createShortlistingMethod('Sift date', data.siftStartDate, data.siftEndDate)
+      );
+    }
 
-  if(data.shortlistingMethods.includes('paper-sift')) {
-    timeline.push(
-      createShortlistingMethod('Sift date', data.siftStartDate, data.siftEndDate)
-    );
-  }
+    if(data.shortlistingMethods.includes('name-blind-paper-sift')) {
+      timeline.push(
+        createShortlistingMethod('Name-blind sift date', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
+      );
+    }
 
-  if(data.shortlistingMethods.includes('name-blind-paper-sift')) {
-    timeline.push(
-      createShortlistingMethod('Name-blind sift date', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
-    );
-  }
+    if(data.shortlistingMethods.includes('telephone-assessment')) {
+      timeline.push(createShortlistingMethod('Telephone assessment date', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
+    }
 
-  if(data.shortlistingMethods.includes('telephone-assessment')) {
-    timeline.push(createShortlistingMethod('Telephone assessment date', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
-  }
-
-  if (data.shortlistingOutcomeDate) {
-    timeline.push(
-      {
-        entry: 'Shortlisting outcome date',
-        date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
-      },
-    );
+    if (data.shortlistingOutcomeDate) {
+      timeline.push(
+        {
+          entry: 'Shortlisting outcome date',
+          date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+        },
+      );
+    }
   }
 
   timeline.push(
@@ -136,8 +135,10 @@ const exerciseTimeline = (data) => {
     }
   );
 
-  for (var i = 0; i < data.selectionDays.length; i++) {
-    timeline.push(createSelectionDay(data.selectionDays[i]));
+  if (data.selectionDays) {
+    for (var i = 0; i < data.selectionDays.length; i++) {
+      timeline.push(createSelectionDay(data.selectionDays[i]));
+    }
   }
   timeline.push(
     {
