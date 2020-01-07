@@ -279,7 +279,7 @@ export default {
       finalOutcome: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const exercise = { ...defaults, ...data };    
     return {
       repeatableFields: {
         SelectionDay,
