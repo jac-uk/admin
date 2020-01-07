@@ -93,25 +93,25 @@
             Situational judgement qualifying test (QT), Critical analysis qualifying test (QT)
           </h3>
           <DateInput
-            id="test-date"
+            id="sjca-test-date"
             v-model="exercise.sjcaTestDate"
             label="Test date"
             required
           />
           <TimeInput
-            id="test-start-time"
+            id="sjca-test-start-time"
             v-model="exercise.sjcaTestStartTime"
             label="Start time"
             required
           />
           <TimeInput
-            id="test-end-time"
+            id="sjca-test-end-time"
             v-model="exercise.sjcaTestEndTime"
             label="End time"
             required
           />
           <DateInput
-            id="test-outcome"
+            id="sjca-test-outcome"
             v-model="exercise.sjcaTestOutcome"
             label="Outcome to candidates"
             type="month"
@@ -138,12 +138,12 @@
             required
           />
           <TimeInput
-            id="test-end-time"
+            id="scenario-test-end-time"
             v-model="exercise.scenarioTestEndTime"
             label="End time"
           />
           <DateInput
-            id="test-outcome"
+            id="scenario-test-outcome"
             v-model="exercise.scenarioTestOutcome"
             label="Outcome to candidates"
             type="month"
