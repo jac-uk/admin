@@ -304,7 +304,8 @@ export default {
     },
   },
   methods: {
-    async save() {
+    async save(isValid) {
+      this.exercise.progress.timeline = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-timeline'));
     },
