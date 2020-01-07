@@ -7,10 +7,10 @@
           Eligibility information
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
 
         <p class="govuk-body-l">
@@ -64,6 +64,26 @@
             label="No"
           />
         </RadioGroup>
+
+        <CheckboxGroup
+          id="authorisations"
+          v-model="exercise.authorisations"
+          label="Authorisations"
+          hint="Select all that apply."
+        >
+          <CheckboxItem
+            value="s9-1"
+            label="s9(1)"
+          />
+          <CheckboxItem
+            value="s9-4"
+            label="s9(4)"
+          />
+          <CheckboxItem
+            value="none"
+            label="None"
+          />
+        </CheckboxGroup>
 
         <RadioGroup
           id="additional-selection-criteria-apply"
@@ -286,6 +306,7 @@ export default {
         postQualificationExperience: exercise.postQualificationExperience || null,
         otherYears: exercise.otherYears || null,
         schedule2DApply: booleanOrNull(exercise.schedule2DApply),
+        authorisations: exercise.authorisations || null,
         aSCApply: booleanOrNull(exercise.aSCApply),
         yesASCApply: exercise.yesASCApply || null,
         previousJudicialExperienceApply: booleanOrNull(exercise.previousJudicialExperienceApply),
