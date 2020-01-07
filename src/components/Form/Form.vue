@@ -35,7 +35,7 @@ export default {
     async validateAndSave() {
       this.validate();
       if (this.isValid()) {
-        this.save();
+        this.save(true);
       }
     },
   },
