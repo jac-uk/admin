@@ -1,3 +1,5 @@
+import router from '@/router';
+
 // For improved readability, this module deals with page names without their prefix
 // All route names are prefixed with this string before navigation
 const routeNamePrefix = 'exercise-edit-';
@@ -74,7 +76,9 @@ export default {
       if (id === null) return null;
       const pageIndex = getters.nextPageIndex;
       if (pageIndex === null) {
-        if (defaultRouteName) {
+        if (router.currentRoute.params && router.currentRoute.params.referrer) {
+          return routeLocation(router.currentRoute.params.referrer, id);
+        } else if (defaultRouteName) {
           return routeLocation(defaultRouteName, id);
         } else {
           return routeLocation('exercise-show-overview', id);
