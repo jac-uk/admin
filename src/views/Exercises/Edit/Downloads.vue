@@ -98,7 +98,7 @@ export default {
     },
   },
   methods: {
-    async save() {
+    async save(isValid) {
 
       // check for job description file to upload
       if (this.files['job-description-file']) {
@@ -120,6 +120,7 @@ export default {
         await this.upload(this.files['candidate-assessment-form-file']);
       }      
 
+      this.exercise.progress.downloads = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
     },
