@@ -84,16 +84,17 @@ export default {
   },
   extends: Form,
   data(){
-    const exercise = this.$store.getters['exerciseDocument/data']();
-
+    const defaults = {
+      shortlistingMethods: null,
+      otherShortlistingMethod: null,
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };    
     return {
       repeatableFields: {
         OtherShortlistingMethod,
       },
-      exercise: {
-        shortlistingMethods: exercise.shortlistingMethods || null,
-        otherShortlistingMethod: exercise.otherShortlistingMethod || null,
-      },
+      exercise: exercise,
     };
   },
   methods: {
