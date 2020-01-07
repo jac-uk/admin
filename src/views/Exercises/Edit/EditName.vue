@@ -35,16 +35,18 @@ export default {
   },
   extends: Form,
   data(){
-    const exercise = this.$store.getters['exerciseDocument/data']();
-
+    const defaults = {
+      name: null,
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };
     return {
-      exercise: {
-        name: exercise.name || null,
-      },
+      exercise: exercise,
     };
   },
   methods: {
-    async save() {
+    async save(isValid) {
+      this.exercise.progress.exerciseName = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push({ name: 'exercise-show-overview' });
     },
