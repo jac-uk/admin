@@ -48,21 +48,21 @@
         </h2>
 
         <DateInput
-          v-if="paperSift"
+          v-if="hasPaperSift"
           id="sift-date"
           v-model="exercise.siftDate"
           label="Sift date"
           required
         />
         <DateInput
-          v-if="nameBlindSift"
+          v-if="hasNameBlindSift"
           id="name-blind-sift-date"
           v-model="exercise.nameBlindSiftDate"
           label="Name-blind sift date"
           required
         />
         <DateInput
-          v-if="telephoneAssessment"
+          v-if="hasTelephoneAssessment"
           id="telephone-assessment-date"
           v-model="exercise.telephoneAssessmentDate"
           label="Telephone assessment date"
@@ -293,13 +293,13 @@ export default {
     situationalJudgementOrCriticalAnalysisQT() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('situational-judgement-qualifying-test') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('critical-analysis-qualifying-test');
     },
-    paperSift() {
+    hasPaperSift() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('paper-sift');
     },
-    nameBlindSift() {
+    hasNameBlindSift() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('name-blind-paper-sift');
     },
-    telephoneAssessment() {
+    hasTelephoneAssessment() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('telephone-assessment');
     },
   },
