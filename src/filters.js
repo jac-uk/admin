@@ -86,6 +86,8 @@ Vue.filter('lookup',
       'single-choice': 'Single choice',
       'multiple-choice': 'Multiple choice',
       'ranked-choice': 'Ranked choice',
+      's9-1': 's9(1)',
+      's9-4': 's9(4)',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
