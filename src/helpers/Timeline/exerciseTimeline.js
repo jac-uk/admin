@@ -34,10 +34,29 @@ const createSelectionDay = (selectionDay) => {
   let selectionDayEnd = isDate(selectionDay.selectionDayEnd) && formatDate(selectionDay.selectionDayEnd) || null;
   if(!selectionDayStart && !selectionDayEnd) {
     return null;
-  } else {
+  } else if(selectionDayStart !== selectionDayEnd) {
     selectionDayEntry.date = `${selectionDayStart} to ${selectionDayEnd}`;
+  } else {
+    selectionDayEntry.date = `${selectionDayStart}`;
   }
   return selectionDayEntry;
+};
+
+const createShortlistingMethod = (method, startDate, endDate) => {
+  let shortlistingMethodEntry = {
+    entry: `${method}`,
+    date: null,
+  };
+  let formattedStartDate = isDate(startDate) && formatDate(startDate) || null;
+  let formattedEndDate = isDate(endDate) && formatDate(endDate) || null;
+  if(!formattedStartDate && !formattedEndDate) {
+    return null;
+  } else if(formattedStartDate !== formattedEndDate) {
+    shortlistingMethodEntry.date = `${formattedStartDate} to ${formattedEndDate}`;
+  } else {
+    shortlistingMethodEntry.date = `${formattedStartDate}`;
+  }
+  return shortlistingMethodEntry;
 };
 
 const exerciseTimeline = (data) => {
@@ -63,29 +82,18 @@ const exerciseTimeline = (data) => {
 
   if(data.shortlistingMethods.includes('paper-sift')) {
     timeline.push(
-      {
-        entry: 'Sift date',
-        date: isDate(data.siftDate) ? formatDate(data.siftDate) : null,
-      },
+      createShortlistingMethod('Sift date', data.siftStartDate, data.siftEndDate)
     );
   }
 
   if(data.shortlistingMethods.includes('name-blind-paper-sift')) {
     timeline.push(
-      {
-        entry: 'Name-blind sift date',
-        date: isDate(data.nameBlindSiftDate) ? formatDate(data.nameBlindSiftDate) : null,
-      },
+      createShortlistingMethod('Name-blind sift date', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
     );
   }
 
   if(data.shortlistingMethods.includes('telephone-assessment')) {
-    timeline.push(
-      {
-        entry: 'Telephone assessment date',
-        date: isDate(data.telephoneAssessmentDate) ? formatDate(data.telephoneAssessmentDate) : null,
-      },
-    );
+    timeline.push(createShortlistingMethod('Telephone assessment date', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
   }
 
   if (data.shortlistingOutcomeDate) {
