@@ -360,7 +360,6 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
-import booleanOrNull from '@/helpers/booleanOrNull';
 import BackLink from '@/components/BackLink';
 
 export default {
@@ -377,27 +376,28 @@ export default {
   },
   extends: Form,
   data() {
-    const exercise = this.$store.getters['exerciseDocument/data']();
-
+    const defaults = {
+      typeOfExercise: null,
+      isCourtOrTribunal: null,
+      appointmentType: null,
+      salaryGrouping: null,
+      feePaidFee: null,
+      isSPTWOffered: null,
+      yesSalaryDetails: null,
+      noSalaryDetails: null,
+      immediateStart: null,
+      futureStart: null,
+      location: null,
+      jurisdiction: null,
+      otherJurisdiction: null,
+      welshRequirement: null,
+      welshRequirementType: null,
+      aboutTheRole: null,
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };
     return {
-      exercise: {
-        typeOfExercise: exercise.typeOfExercise || null,
-        isCourtOrTribunal: exercise.isCourtOrTribunal || null,
-        appointmentType: exercise.appointmentType || null,
-        salaryGrouping: exercise.salaryGrouping || null,
-        feePaidFee: exercise.feePaidFee || null,
-        isSPTWOffered: booleanOrNull(exercise.isSPTWOffered),
-        yesSalaryDetails: exercise.yesSalaryDetails || null,
-        noSalaryDetails: exercise.noSalaryDetails || null,
-        immediateStart: exercise.immediateStart || null,
-        futureStart: exercise.futureStart || null,
-        location: exercise.location || null,
-        jurisdiction: exercise.jurisdiction || null,
-        otherJurisdiction: exercise.otherJurisdiction || null,
-        welshRequirement: exercise.welshRequirement || null,
-        welshRequirementType: exercise.welshRequirementType || null,
-        aboutTheRole: exercise.aboutTheRole || null,
-      },
+      exercise: exercise,
     };
   },
   methods: {

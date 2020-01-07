@@ -83,7 +83,9 @@ export default {
     BackLink,
   },
   data() {
-    const exercise = this.$store.getters['exerciseDocument/data']();
+    const defaults = {};
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };
     return {
       exercise: exercise,
       files: {},

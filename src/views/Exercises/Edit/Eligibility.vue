@@ -283,7 +283,6 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import TextField from '@/components/Form/TextField';
 import TextareaInput from '@/components/Form/TextareaInput';
-import booleanOrNull from '@/helpers/booleanOrNull';
 import BackLink from '@/components/BackLink';
 
 export default {
@@ -299,26 +298,27 @@ export default {
   },
   extends: Form,
   data(){
-    const exercise = this.$store.getters['exerciseDocument/data']();
-
+    const defaults = {
+      postQualificationExperience: null,
+      otherYears: null,
+      schedule2DApply: null,
+      authorisations: null,
+      aSCApply: null,
+      yesASCApply: null,
+      previousJudicialExperienceApply: null,
+      qualifications: null,
+      otherQualifications: null,
+      memberships: null,
+      otherMemberships: null,
+      reasonableLengthService: null,
+      otherLOS: null,
+      retirementAge: null,
+      otherRetirement: null,  
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };    
     return {
-      exercise: {
-        postQualificationExperience: exercise.postQualificationExperience || null,
-        otherYears: exercise.otherYears || null,
-        schedule2DApply: booleanOrNull(exercise.schedule2DApply),
-        authorisations: exercise.authorisations || null,
-        aSCApply: booleanOrNull(exercise.aSCApply),
-        yesASCApply: exercise.yesASCApply || null,
-        previousJudicialExperienceApply: booleanOrNull(exercise.previousJudicialExperienceApply),
-        qualifications: exercise.qualifications || null,
-        otherQualifications: exercise.otherQualifications || null,
-        memberships: exercise.memberships || null,
-        otherMemberships: exercise.otherMemberships || null,
-        reasonableLengthService: exercise.reasonableLengthService || null,
-        otherLOS: exercise.otherLOS || null,
-        retirementAge: exercise.retirementAge || null,
-        otherRetirement: exercise.otherRetirement || null,
-      },
+      exercise: exercise,
       isCourtOrTribunal: exercise.isCourtOrTribunal,
       typeOfExercise: exercise.typeOfExercise,
     };
