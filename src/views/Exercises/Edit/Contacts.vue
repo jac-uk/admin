@@ -176,9 +176,26 @@ export default {
   },
   extends: Form,
   data(){
-    const exercise = this.$store.getters['exerciseDocument/data']();
-
+    const defaults = {
+      subscriberAlertsUrl: null,
+      exerciseMailbox: null,
+      seniorSelectionExerciseManager: null,
+      selectionExerciseManager: null,
+      selectionExerciseOfficer: null,
+      assignedCommissioner: null,
+      appropriateAuthority: [],
+      otherAppropriateAuthority: null,
+      hmctsWelshGovLead: null,
+      judicialOfficeContact: null,
+      leadJudge: null,
+      draftingJudge: null,
+      statutoryConsultee: null,
+      progress: {},
+    };
+    const data = this.$store.getters['exerciseDocument/data']();
+    const exercise = { ...defaults, ...data };
     return {
+      exercise: exercise,
       patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
       repeatableFields: {
         SeniorSelectionExerciseManager,
@@ -187,26 +204,12 @@ export default {
         StatutoryConsultee,
         SelectionExerciseOfficer,
         AssignedCommissioner,
-      },
-      exercise: {
-        subscriberAlertsUrl: exercise.subscriberAlertsUrl || null,
-        exerciseMailbox: exercise.exerciseMailbox || null,
-        seniorSelectionExerciseManager: exercise.seniorSelectionExerciseManager || null,
-        selectionExerciseManager: exercise.selectionExerciseManager || null,
-        selectionExerciseOfficer: exercise.selectionExerciseOfficer || null,
-        assignedCommissioner: exercise.assignedCommissioner || null,
-        appropriateAuthority: exercise.appropriateAuthority || [],
-        otherAppropriateAuthority: exercise.otherAppropriateAuthority|| null,
-        hmctsWelshGovLead: exercise.hmctsWelshGovLead || null,
-        judicialOfficeContact: exercise.judicialOfficeContact || null,
-        leadJudge: exercise.leadJudge || null,
-        draftingJudge: exercise.draftingJudge || null,
-        statutoryConsultee: exercise.statutoryConsultee || null,
-      },
+      },      
     };
   },
   methods: {
-    async save() {
+    async save(isValid) {
+      this.exercise.progress.contacts = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-contacts'));
     },
