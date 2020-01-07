@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.exerciseName = isValid ? true : false;
+      this.exercise.progress.started = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push({ name: 'exercise-show-overview' });
     },
