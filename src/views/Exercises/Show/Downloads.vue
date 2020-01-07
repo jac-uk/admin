@@ -2,6 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
+        v-if="canEdit"
         class="govuk-link"
         :to="{name: 'exercise-edit-downloads'}"
       >
@@ -72,6 +73,21 @@ export default {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
+    isApproved() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+          return false;
+        default:
+          return true;
+        }
+      }
+      return false;
+    },
+    canEdit() {
+      return !this.isApproved;
+    },    
     userId() {
       return this.$store.state.auth.currentUser.uid;
     },
