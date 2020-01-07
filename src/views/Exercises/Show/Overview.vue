@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="govuk-grid-column-one-half">
-      <div class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
+      <div
+        v-if="exercise.immediateStart"
+        class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
+      >
         <h2 class="govuk-heading-l">
           Number of vacancies
         </h2>
@@ -14,7 +17,7 @@
       </div>
 
       <div 
-        v-if="!isDraft"
+        v-if="hasOpened"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
@@ -28,7 +31,14 @@
 
     <div class="govuk-grid-column-one-half">
       <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
-        <span class="display-block govuk-!-font-size-27">Pre launch</span>
+        <span 
+          v-if="exercise.state"
+          class="display-block govuk-!-font-size-27"
+        >{{ exercise.state | lookup }}</span>
+        <span
+          v-else
+          class="display-block govuk-!-font-size-27"
+        >Draft</span>
       </div>
       <Timeline :data="timeline" />
       <RouterLink
@@ -40,7 +50,7 @@
     </div>
 
     <div
-      v-if="taskList"
+      v-if="taskList && taskList.length"
       class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2"
     >
       <h2 class="govuk-heading-m">
@@ -56,7 +66,7 @@
             <th class="govuk-table__header">
               <router-link
                 class="govuk-link"
-                :to="{name: task.id}"
+                :to="{name: task.id, params: { referrer: 'exercise-show-overview' }}"
               >
                 {{ task.title }}
               </router-link>
@@ -76,6 +86,30 @@
         </tbody>
       </table>
     </div>
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
+      <button
+        v-if="isDraft"
+        :disabled="!isReadyToSubmit"
+        class="govuk-button"
+        @click="submitForApproval"
+      >
+        Submit for Approval
+      </button>
+      <button
+        v-if="isReadyForApproval"
+        class="govuk-button"
+        @click="approve"
+      >
+        Approve
+      </button>
+      <button
+        v-if="isApproved"
+        class="govuk-button"
+        @click="unlock"
+      >
+        Unlock
+      </button>  
+    </div>  
   </div>
 </template>
 
@@ -98,7 +132,36 @@ export default {
         return false;
       }
       return true;
-    },    
+    },
+    isReadyForApproval() {
+      return this.exercise && this.exercise.state && this.exercise.state === 'ready';
+    },
+    isApproved() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+          return false;
+        default:
+          return true;
+        }
+      }
+      return false;
+    },
+    hasOpened() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+        case 'approved':
+        case 'pre-launch':
+          return false;
+        default:
+          return true;
+        }
+      }
+      return false;
+    },
     timeline() {
       let timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline, 2);
@@ -109,22 +172,54 @@ export default {
       } else {
         return {};
       }
+    },
+    approvalProgress() {
+      if (this.exercise && this.exercise.approval) {
+        return this.exercise.approval;
+      } else {
+        return {};
+      }
     },    
     taskList() {
       let data = [];
-      if (this.exerciseProgress) {
-        data.push({ title: 'Name of exercise', id: 'exercise-edit-name', done: this.exerciseProgress.exerciseName });
-        data.push({ title: 'Vacancy information', id: 'exercise-edit-vacancy', done: this.exerciseProgress.vacancyInformation });
-        data.push({ title: 'Contacts', id: 'exercise-edit-contacts', done: this.exerciseProgress.contacts });
-        data.push({ title: 'Timeline', id: 'exercise-edit-timeline', done: this.exerciseProgress.timeline });
-        data.push({ title: 'Shortlisting', id: 'exercise-edit-shortlisting', done: this.exerciseProgress.shortlisting });
-        data.push({ title: 'Eligibility information', id: 'exercise-edit-eligibility', done: this.exerciseProgress.eligibility });
-        data.push({ title: 'Working preferences', id: 'exercise-edit-working-preferences', done: this.exerciseProgress.workingPreferences });
-        data.push({ title: 'Assessment options', id: 'exercise-edit-assessment-options', done: this.exerciseProgress.assessmentOptions });
-        data.push({ title: 'Exercise downloads', id: 'exercise-edit-downloads', done: this.exerciseProgress.downloads });
+      if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
+        if (this.exerciseProgress) {
+          data.push({ title: 'Name of exercise', id: 'exercise-edit-name', done: this.exerciseProgress.started, approved: this.approvalProgress['started'] });
+          data.push({ title: 'Vacancy information', id: 'exercise-edit-vacancy', done: this.exerciseProgress.vacancyInformation, approved: this.approvalProgress['vacancyInformation'] });
+          data.push({ title: 'Contacts', id: 'exercise-edit-contacts', done: this.exerciseProgress.contacts, approved: this.approvalProgress['contacts'] });
+          data.push({ title: 'Timeline', id: 'exercise-edit-timeline', done: this.exerciseProgress.timeline, approved: this.approvalProgress['timeline'] });
+          data.push({ title: 'Shortlisting', id: 'exercise-edit-shortlisting', done: this.exerciseProgress.shortlisting, approved: this.approvalProgress['shortlisting'] });
+          data.push({ title: 'Eligibility information', id: 'exercise-edit-eligibility', done: this.exerciseProgress.eligibility, approved: this.approvalProgress['eligibility'] });
+          data.push({ title: 'Working preferences', id: 'exercise-edit-working-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress['workingPreferences'] });
+          data.push({ title: 'Assessment options', id: 'exercise-edit-assessment-options', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress['assessmentOptions'] });
+          data.push({ title: 'Exercise downloads', id: 'exercise-edit-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress['downloads'] });
+        }
       }
       return data;
-    },    
+    },
+    isReadyToSubmit() {
+      return this.exerciseProgress
+        && this.exerciseProgress.started
+        && this.exerciseProgress.vacancyInformation
+        && this.exerciseProgress.contacts
+        && this.exerciseProgress.timeline
+        && this.exerciseProgress.shortlisting
+        && this.exerciseProgress.eligibility
+        && this.exerciseProgress.workingPreferences
+        && this.exerciseProgress.assessmentOptions
+        && this.exerciseProgress.downloads;
+    },  
+  },
+  methods: {
+    submitForApproval() {
+      this.$store.dispatch('exerciseDocument/submitForApproval');
+    },
+    approve() {
+      this.$store.dispatch('exerciseDocument/approve');
+    },
+    unlock() {
+      this.$store.dispatch('exerciseDocument/unlock');
+    },
   },
 };
 </script>
