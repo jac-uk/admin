@@ -114,6 +114,13 @@
         />
 
         <TextField
+          id="hmcts-welshgov-contact"
+          v-model="exercise.hmctsWelshGovContact"
+          label="HMCTS or Welsh Government contact"
+          type="email"
+        />
+
+        <TextField
           id="judicial-office-contact"
           v-model="exercise.judicialOfficeContact"
           name="judicial-office-contact"
@@ -186,6 +193,7 @@ export default {
       appropriateAuthority: [],
       otherAppropriateAuthority: null,
       hmctsWelshGovLead: null,
+      hmctsWelshGovContact: null,
       judicialOfficeContact: null,
       leadJudge: null,
       draftingJudge: null,
@@ -204,7 +212,7 @@ export default {
         StatutoryConsultee,
         SelectionExerciseOfficer,
         AssignedCommissioner,
-      },      
+      },
     };
   },
   methods: {
