@@ -32,8 +32,8 @@ const createSelectionDay = (selectionDay) => {
   };
   let selectionDayStart = isDate(selectionDay.selectionDayStart) && formatDate(selectionDay.selectionDayStart) || null;
   let selectionDayEnd = isDate(selectionDay.selectionDayEnd) && formatDate(selectionDay.selectionDayEnd) || null;
-  if(!selectionDayStart && !selectionDayEnd) {
-    return null;
+  if(!selectionDayStart || !selectionDayEnd) {
+    selectionDayEntry.date = '';
   } else if(selectionDayStart !== selectionDayEnd) {
     selectionDayEntry.date = `${selectionDayStart} to ${selectionDayEnd}`;
   } else {
@@ -49,8 +49,8 @@ const createShortlistingMethod = (method, startDate, endDate) => {
   };
   let formattedStartDate = isDate(startDate) && formatDate(startDate) || null;
   let formattedEndDate = isDate(endDate) && formatDate(endDate) || null;
-  if(!formattedStartDate && !formattedEndDate) {
-    return null;
+  if(!formattedStartDate || !formattedEndDate) {
+    shortlistingMethodEntry.date = '';
   } else if(formattedStartDate !== formattedEndDate) {
     shortlistingMethodEntry.date = `${formattedStartDate} to ${formattedEndDate}`;
   } else {
@@ -61,23 +61,32 @@ const createShortlistingMethod = (method, startDate, endDate) => {
 
 const exerciseTimeline = (data) => {
   let timeline = [];
-  timeline.push(
-    {
-      entry: 'Open for applications',
-      date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
-    },
-    {
-      entry: 'Closed for applications',
-      date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
-    }
-  );
 
-  if (data.shortlistingMethods) {
+  if (data.applicationOpenDate) {
     timeline.push(
       {
-        entry: 'Shortlisting',
+        entry: 'Open for applications',
+        date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
       },
     );
+  }
+
+  if (data.applicationCloseDate) {
+    timeline.push(
+      {
+        entry: 'Closed for applications',
+        date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
+      }
+    );
+  }
+
+  if (data.shortlistingMethods && data.shortlistingMethods.length > 0) {
+    // timeline.push(
+    //   {
+    //     entry: 'Shortlisting',
+    //   },
+    // );
+
     if(data.shortlistingMethods.includes('paper-sift')) {
       timeline.push(
         createShortlistingMethod('Sift date', data.siftStartDate, data.siftEndDate)
@@ -93,72 +102,124 @@ const exerciseTimeline = (data) => {
     if(data.shortlistingMethods.includes('telephone-assessment')) {
       timeline.push(createShortlistingMethod('Telephone assessment date', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
     }
+  }
 
-    if (data.shortlistingOutcomeDate) {
-      timeline.push(
-        {
-          entry: 'Shortlisting outcome date',
-          date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+  if (data.shortlistingOutcomeDate) {
+    timeline.push(
+      {
+        entry: 'Shortlisting outcome date',
+        date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
+      },
+    );
+  }
+
+  if (data.sjcaTestDate) {
+    timeline.push(
+      {
+        entry: 'QT',
+        date: createQT(data),
+      },
+    );
+  }
+
+  if (data.sjcaTestOutcome) {
+    timeline.push(
+      {
+        entry: 'QT outcome to candidates',
+        date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
+      },
+    );
+  }
+
+  if (data.scenarioTestDate) {
+    timeline.push(
+      {
+          entry: 'Scenario test',
+          date: createScenariotest(data),
         },
-      );
-    }
+    );
   }
 
-  timeline.push(
-    {
-      entry: 'QT',
-      date: createQT(data),
-    },
-    {
-      entry: 'QT outcome to candidates',
-      date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
-    },
-    {
-      entry: 'Scenario test',
-      date: createScenariotest(data),
-    },
-    {
-      entry: 'Scenario test outcome to candidates',
-      date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
-    },
-    {
-      entry: 'Contact independent assessors',
-      date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
-    },
-    {
-      entry: 'Return date for independent assessments',
-      date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
-    },
-    {
-      entry: 'Eligibility SCC',
-      date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
-    }
-  );
+  if (data.scenarioTestOutcome) {
+    timeline.push(
+      {
+        entry: 'Scenario test outcome to candidates',
+        date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+      },
+    );
+  }
 
-  if (data.selectionDays) {
+  if (data.contactIndependentAssessors) {
+    timeline.push(
+      {
+        entry: 'Contact independent assessors',
+        date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
+      },
+    );
+  }
+
+  if (data.independentAssessmentsReturnDate) {
+    timeline.push(
+      {
+        entry: 'Return date for independent assessments',
+        date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
+      },
+    );
+  }
+
+  if (data.eligibilitySCCDate) {
+    timeline.push(
+      {
+        entry: 'Eligibility SCC',
+        date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
+      },
+    );
+  }
+  if (data.selectionDays && data.selectionDays.length > 0) {
     for (var i = 0; i < data.selectionDays.length; i++) {
-      timeline.push(createSelectionDay(data.selectionDays[i]));
+      if (data.selectionDays[i].selectionDayStart) {
+        timeline.push(createSelectionDay(data.selectionDays[i]));
+      }
     }
   }
-  timeline.push(
-    {
-      entry: 'Character checks',
-      date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
-    },
-    {
-      entry: 'Statutory consultation',
-      date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
-    },
-    {
-      entry: 'Character and Selection SCC',
-      date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
-    },
-    {
-      entry: 'Selection process outcome',
-      date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
-    }
-  );
-    return timeline;
+
+  if (data.characterChecksDate) {
+    timeline.push(
+      {
+        entry: 'Character checks',
+        date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
+      },
+    );
+  }
+
+  if (data.statutoryConsultationDate) {
+    timeline.push(
+      {
+        entry: 'Statutory consultation',
+        date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
+      },
+    );
+  }
+
+  if (data.characterAndSCCDate) {
+    timeline.push(
+      {
+        entry: 'Character and Selection SCC',
+        date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
+      },
+    );
+  }
+
+  if (data.finalOutcome) {
+    timeline.push(
+      {
+        entry: 'Selection process outcome',
+        date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
+      }
+    );
+  }
+
+  return timeline;
 };
 
 export default exerciseTimeline;
