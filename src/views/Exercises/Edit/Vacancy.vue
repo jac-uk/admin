@@ -7,10 +7,10 @@
           Vacancy information
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
 
         <p class="govuk-body-l">
@@ -68,15 +68,15 @@
           <div
             v-if="exercise.isCourtOrTribunal === 'court'"
           >
-            <CheckboxItem 
+            <CheckboxItem
               value="crime"
               label="Crime"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="civil"
               label="Civil"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="family"
               label="Family"
             />
@@ -89,31 +89,31 @@
             <p class="govuk-heading-s govuk-!-margin-bottom-1">
               First-tier tribunal
             </p>
-            <CheckboxItem 
+            <CheckboxItem
               value="general-regulatory-chamber"
               label="General Regulatory Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="health-education-and-social-care-chamber"
               label="Health, Education and Social Care Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="immigration-and-asylum-chamber"
               label="Immigration and Asylum Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="property-chamber"
               label="Property Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="social-entitlement-chamber"
               label="Social Entitlement Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="tax-chamber"
               label="Tax Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="war-pension-and-armed-forces-compensation-chamber"
               label="War Pension and Armed Forces Compensation Chamber"
             />
@@ -121,19 +121,19 @@
             <p class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-1">
               Second-tier tribunal
             </p>
-            <CheckboxItem 
+            <CheckboxItem
               value="administrative-appeals-chamber"
               label="Administrative Appeals Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="second-tier-immigration-and-asylum-chamber"
               label="Immigration and Asylum Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="lands-chamber"
               label="Lands Chamber"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="tax-and-chancery"
               label="Tax and Chancery"
             />
@@ -141,17 +141,17 @@
             <p class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-1">
               Employment Tribunal
             </p>
-            <CheckboxItem 
+            <CheckboxItem
               value="employment-tribunal"
               label="Employment Tribunal"
             />
-            <CheckboxItem 
+            <CheckboxItem
               value="employment-appeals-tribunal"
               label="Employment Appeals Tribunal"
             />
           </div>
 
-          <CheckboxItem 
+          <CheckboxItem
             value="other"
             label="Other"
           >
@@ -245,6 +245,7 @@
         </RadioGroup>
 
         <RadioGroup
+          v-if="exercise.appointmentType != 'fee-paid'"
           id="is-sptw-offered"
           v-model="exercise.isSPTWOffered"
           label="Is salaried part-time working (SPTW) offered?"
@@ -326,7 +327,7 @@
                 value="welsh-administration-questions"
                 label="Welsh administration questions"
               />
-            </CheckboxGroup>          
+            </CheckboxGroup>
           </RadioItem>
           <RadioItem
             :value="false"
