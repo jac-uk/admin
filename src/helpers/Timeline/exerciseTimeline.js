@@ -89,25 +89,25 @@ const exerciseTimeline = (data) => {
 
     if(data.shortlistingMethods.includes('paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Sift date', data.siftStartDate, data.siftEndDate)
+        createShortlistingMethod('Sift', data.siftStartDate, data.siftEndDate)
       );
     }
 
     if(data.shortlistingMethods.includes('name-blind-paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Name-blind sift date', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
+        createShortlistingMethod('Name-blind sift', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
       );
     }
 
     if(data.shortlistingMethods.includes('telephone-assessment')) {
-      timeline.push(createShortlistingMethod('Telephone assessment date', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
+      timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
     }
   }
 
   if (data.shortlistingOutcomeDate) {
     timeline.push(
       {
-        entry: 'Shortlisting outcome date',
+        entry: 'Shortlisting outcome',
         date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
       },
     );
