@@ -57,7 +57,7 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
-        state: 'ready',
+        state: 'draft',
       };
       await ref.update(data);
     },
