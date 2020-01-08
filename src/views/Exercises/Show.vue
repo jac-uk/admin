@@ -21,13 +21,14 @@
         </div>
       </div>      
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-full govuk-!-margin-bottom-8">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exerciseName }}
           </h1>
           <router-link
-            class="display-block govuk-link govuk-!-margin-bottom-8"
+            v-if="canEdit"
+            class="govuk-link"
             :to="{name: 'exercise-edit-name'}"
           >
             Edit name
@@ -73,27 +74,53 @@ export default {
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
     },
-    isDraft() {
-      // returns true unless exercise has a state that other than draft
-      if (this.exercise && this.exercise.state && this.exercise.state !== 'draft') {
-        return false;
+    isApproved() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+          return false;
+        default:
+          return true;
+        }
       }
-      return true;
+      return false;
+    },
+    canEdit() {
+      return !this.isApproved;
+    },      
+    hasOpened() {
+      if (this.exercise) {
+        switch (this.exercise.state) {
+        case 'draft':
+        case 'ready':
+        case 'approved':
+        case 'pre-launch':
+          return false;
+        default:
+          return true;
+        }
+      }
+      return false;
     },
     navPages() {
       const pages = [
-        { page: 'Overview', name: 'exercise-show-overview' },
-        { page: 'Vacancy information', name: 'exercise-show-vacancy' },
-        { page: 'Contacts', name: 'exercise-show-contacts' },
-        { page: 'Timeline', name: 'exercise-show-timeline' },
-        { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
-        { page: 'Eligibility information', name: 'exercise-show-eligibility' },
-        { page: 'Working preferences', name: 'exercise-show-working-preferences' },
-        { page: 'Assessment options', name: 'exercise-show-assessment-options' },
-        { page: 'Exercise downloads', name: 'exercise-show-downloads' },
-
+        { 
+          page: 'Overview', 
+          name: 'exercise-show-overview',
+          children: [
+            { page: 'Vacancy information', name: 'exercise-show-vacancy' },
+            { page: 'Contacts', name: 'exercise-show-contacts' },
+            { page: 'Timeline', name: 'exercise-show-timeline' },
+            { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
+            { page: 'Eligibility information', name: 'exercise-show-eligibility' },
+            { page: 'Working preferences', name: 'exercise-show-working-preferences' },
+            { page: 'Assessment options', name: 'exercise-show-assessment-options' },
+            { page: 'Exercise downloads', name: 'exercise-show-downloads' },
+          ],
+        },
       ];
-      if (!this.isDraft) {
+      if (this.hasOpened) {
         pages.push({ page: 'Applications', name: 'exercise-show-applications' });
         pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
         pages.push({ page: 'Exercise reports', name: 'exercise-show-reports' });

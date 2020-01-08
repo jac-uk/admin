@@ -37,6 +37,30 @@ export default {
       const ref = collection.doc(id);
       await ref.update(data);
     },
+    submitForApproval: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: 'ready',
+      };
+      await ref.update(data);
+    },
+    approve: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: 'approved',
+      };
+      await ref.update(data);
+    },   
+    unlock: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: 'ready',
+      };
+      await ref.update(data);
+    },
   },
   state: {
     record: null,

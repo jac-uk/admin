@@ -88,6 +88,12 @@ Vue.filter('lookup',
       'ranked-choice': 'Ranked choice',
       's9-1': 's9(1)',
       's9-4': 's9(4)',
+      'draft': 'Draft',
+      'ready': 'Ready for approval',
+      'approved': 'Approved',
+      'pre-launch': 'Pre launch',
+      'open': 'Open',
+      'closed': 'Closed',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
