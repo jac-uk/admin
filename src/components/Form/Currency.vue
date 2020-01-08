@@ -25,6 +25,7 @@
       v-model="currencyInput"
       class="govuk-input moj-input__currency govuk-input--width-10"
       type="number"
+      step=".01"
       @change="validate"
     >
   </div>
