@@ -119,7 +119,7 @@
             />
 
             <p class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-1">
-              Second-tier tribunal
+              Upper tribunal
             </p>
             <CheckboxItem
               value="administrative-appeals-chamber"
