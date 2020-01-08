@@ -245,7 +245,7 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="exercise.appointmentType != 'fee-paid'"
+          v-if="exercise.appointmentType == 'salaried'"
           id="is-sptw-offered"
           v-model="exercise.isSPTWOffered"
           label="Is salaried part-time working (SPTW) offered?"
