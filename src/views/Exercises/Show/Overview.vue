@@ -31,6 +31,7 @@
 
     <div class="govuk-grid-column-one-half">
       <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
+        <span v-if="isPublished">Published</span>
         <span 
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
@@ -89,27 +90,42 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
+        v-if="!isPublished"
+        :disabled="!canPublish"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="publish"
+      >
+        Publish on website
+      </button>
+      <button
+        v-if="isPublished"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="unPublish"
+      >
+        Remove from website
+      </button>      
+      <button
         v-if="isDraft"
         :disabled="!isReadyToSubmit"
-        class="govuk-button"
+        class="govuk-button govuk-!-margin-right-3"
         @click="submitForApproval"
       >
         Submit for Approval
       </button>
       <button
         v-if="isReadyForApproval"
-        class="govuk-button"
+        class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
         Approve
       </button>
       <button
         v-if="isApproved"
-        class="govuk-button"
+        class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
         Unlock
-      </button>  
+      </button>
     </div>  
   </div>
 </template>
@@ -126,6 +142,12 @@ export default {
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    isPublished() {
+      return this.exercise.published;
+    },
+    canPublish() {
+      return this.exercise.progress && this.exercise.progress.vacancySummary;
     },
     isDraft() {
       // returns true unless exercise has a state that other than draft
@@ -185,7 +207,7 @@ export default {
       let data = [];
       if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
         if (this.exerciseProgress) {
-          data.push({ title: 'Name of exercise', id: 'exercise-edit-name', done: this.exerciseProgress.started, approved: this.approvalProgress['started'] });
+          data.push({ title: 'Website listing', id: 'exercise-edit-summary', done: this.exerciseProgress.vacancySummary, approved: this.approvalProgress['vacancySummary'] });
           data.push({ title: 'Vacancy information', id: 'exercise-edit-vacancy', done: this.exerciseProgress.vacancyInformation, approved: this.approvalProgress['vacancyInformation'] });
           data.push({ title: 'Contacts', id: 'exercise-edit-contacts', done: this.exerciseProgress.contacts, approved: this.approvalProgress['contacts'] });
           data.push({ title: 'Timeline', id: 'exercise-edit-timeline', done: this.exerciseProgress.timeline, approved: this.approvalProgress['timeline'] });
@@ -200,7 +222,7 @@ export default {
     },
     isReadyToSubmit() {
       return this.exerciseProgress
-        && this.exerciseProgress.started
+        && this.exerciseProgress.vacancySummary
         && this.exerciseProgress.vacancyInformation
         && this.exerciseProgress.contacts
         && this.exerciseProgress.timeline
@@ -220,6 +242,12 @@ export default {
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
+    },
+    publish() {
+      this.$store.dispatch('exerciseDocument/publish');
+    },
+    unPublish() {
+      this.$store.dispatch('exerciseDocument/unpublish');
     },
   },
 };
