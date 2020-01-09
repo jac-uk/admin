@@ -109,6 +109,7 @@ export default {
           page: 'Overview', 
           name: 'exercise-show-overview',
           children: [
+            { page: 'Website listing', name: 'exercise-show-summary' },
             { page: 'Vacancy information', name: 'exercise-show-vacancy' },
             { page: 'Contacts', name: 'exercise-show-contacts' },
             { page: 'Timeline', name: 'exercise-show-timeline' },
