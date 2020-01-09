@@ -16,7 +16,9 @@
         </div>
         <div class="govuk-grid-column-three-quarters">
           <div class="text-right govuk-!-margin-0">
-            <AddToFavouritesButton />
+            <AddToFavouritesButton
+              :in-favourites="false"
+            />
           </div>
         </div>
       </div>      
