@@ -39,10 +39,10 @@
           Does Schedule 2(d) or Schedule 3 apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.schedule2DApply === true">
-            Yes
+          <span v-if="exercise.schedule2DOr3Apply === true">
+            Yes: {{exercise.appliedSchedule | lookup }}
           </span>
-          <span v-else-if="exercise.schedule2DApply === false">
+          <span v-else-if="exercise.schedule2DOr3Apply === false">
             No
           </span>
         </dd>
@@ -185,7 +185,7 @@ export default {
     },
     canEdit() {
       return !this.isApproved;
-    },    
+    },
     isLegal() {
       if (this.exercise.typeOfExercise === 'legal') {
         return true;
