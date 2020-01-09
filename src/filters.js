@@ -1,10 +1,15 @@
 import Vue from 'vue';
 
 Vue.filter('formatDate',
-(value) => {
+(value, type) => {
   if (value) {
     const objDate = new Date(Date.parse(value));
-    return objDate.toLocaleDateString();
+    switch (type) {
+    case 'month':
+      return `${objDate.toLocaleString('default', { month: 'long' })} ${objDate.getUTCFullYear()}`;
+    default:
+      return objDate.toLocaleDateString();
+    }
   }
 });
 
