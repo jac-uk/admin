@@ -49,15 +49,31 @@
 
         <RadioGroup
           v-if="isLegal && isTribunal"
-          id="schedule-2d-apply"
-          v-model="exercise.schedule2DApply"
+          id="schedule-2d-or-3-apply"
+          v-model="exercise.schedule2DOr3Apply"
           label="Does Schedule 2(d) or Schedule 3 apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
           <RadioItem
             :value="true"
             label="Yes"
-          />
+          >
+            <RadioGroup
+              id="yes-schedule-2d-apply"
+              v-model="exercise.appliedSchedule"
+              label="Which Schedule applies?"
+            >
+              <RadioItem
+                value="schedule-2d"
+                label="Schedule 2(d)"
+              />
+              <RadioItem
+                value="schedule-23"
+                label="Schedule 2(3)"
+              />
+            </RadioGroup>
+
+          </RadioItem>
 
           <RadioItem
             :value="false"
@@ -301,7 +317,8 @@ export default {
     const defaults = {
       postQualificationExperience: null,
       otherYears: null,
-      schedule2DApply: null,
+      schedule2DOr3Apply: null,
+      appliedSchedule: null,
       authorisations: null,
       aSCApply: null,
       yesASCApply: null,
@@ -313,10 +330,10 @@ export default {
       reasonableLengthService: null,
       otherLOS: null,
       retirementAge: null,
-      otherRetirement: null,  
+      otherRetirement: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };    
+    const exercise = { ...defaults, ...data };
     return {
       exercise: exercise,
       isCourtOrTribunal: exercise.isCourtOrTribunal,
