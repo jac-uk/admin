@@ -63,7 +63,7 @@
             type="file"
             @change="fileSelected"
           >
-        </div>                          
+        </div>
 
         <button class="govuk-button">
           Save and continue
@@ -83,7 +83,12 @@ export default {
     BackLink,
   },
   data() {
-    const defaults = {};
+    const defaults = {
+      uploadedJobDescriptionTemplate: null,
+      uploadedTermsAndConditionsTemplate: null,
+      uploadedIndependentAssessorTemplate: null,
+      uploadedCandidateAssessmentFormTemplate: null,
+    };
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };
     return {
@@ -120,7 +125,7 @@ export default {
       // check for candidate assessment form file to upload
       if (this.files['candidate-assessment-form-file']) {
         await this.upload(this.files['candidate-assessment-form-file']);
-      }      
+      }
 
       this.exercise.progress.downloads = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
@@ -207,7 +212,7 @@ export default {
               uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                 //console.log('File available at', downloadURL);
                 const file = item.file;
-                const fileExtension = file.name.split('.')[1]; 
+                const fileExtension = file.name.split('.')[1];
 
                 if (downloadURL.includes('job-description')) {
 
@@ -225,7 +230,7 @@ export default {
 
                   // set candidate assessment form database values
                   this.exercise.uploadedCandidateAssessmentFormTemplate = `candidate-assessment-form.${fileExtension}`;
-                }                                
+                }
 
                 // don't forget to save
                 this.$store.dispatch('exerciseDocument/save', this.exercise);
