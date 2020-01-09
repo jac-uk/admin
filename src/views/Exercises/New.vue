@@ -47,6 +47,10 @@
               hint="Select all that apply."
             >
               <CheckboxItem
+                value="summary"
+                label="Website listing"
+              />
+              <CheckboxItem
                 value="contacts"
                 label="Exercise contacts"
               />

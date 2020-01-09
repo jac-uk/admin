@@ -7,6 +7,7 @@ const routeNamePrefix = 'exercise-edit-';
 // This is the complete journey available, sorted in order
 // Partial journeys should still follow this order, skipping pages which weren't selected by the user
 const completeJourneyInOrder = [
+  'summary',
   'contacts',
   'shortlisting',
   'timeline',
