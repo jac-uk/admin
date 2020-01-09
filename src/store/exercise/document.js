@@ -61,6 +61,22 @@ export default {
       };
       await ref.update(data);
     },
+    publish: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        published: true,
+      };
+      await ref.update(data);
+    },    
+    unpublish: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        published: false,
+      };
+      await ref.update(data);
+    },    
   },
   state: {
     record: null,
