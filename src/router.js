@@ -9,6 +9,7 @@ import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
 import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
 import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
 import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
+import ExerciseEditSummary from '@/views/Exercises/Edit/Summary';
 import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
 import ExerciseEditName from '@/views/Exercises/Edit/EditName';
 import ExerciseEditAssessmentOptions from '@/views/Exercises/Edit/AssessmentOptions';
@@ -22,6 +23,7 @@ import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowContacts from '@/views/Exercises/Show/Contacts';
 import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
 import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
+import ExerciseShowSummary from '@/views/Exercises/Show/Summary';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
 import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPreferences';
@@ -49,8 +51,6 @@ import ApplicationsFull from '@/views/Exercises/ApplicationsFull';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
-import ExampleForm from '@/views/ExampleForm';
-
 Vue.use(Router);
 
 const router = new Router({
@@ -68,15 +68,6 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Dashboard',
-      },
-    },
-    {
-      path: '/example-form',
-      name: 'example-form',
-      component: ExampleForm,
-      meta: {
-        requiresAuth: true,
-        title: 'Example Form',
       },
     },
     {
@@ -137,6 +128,15 @@ const router = new Router({
             title: 'Exercise Details | Shortlisting',
           },
         },
+        {
+          path: 'summary',
+          component: ExerciseShowSummary,
+          name: 'exercise-show-summary',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Vacancy summary',
+          },
+        },        
         {
           path: 'vacancy',
           component: ExerciseShowVacancy,
@@ -264,6 +264,15 @@ const router = new Router({
             title: 'Eligibility Information',
           },
         },
+        {
+          path: 'summary',
+          component: ExerciseEditSummary,
+          name: 'exercise-edit-summary',
+          meta: {
+            requiresAuth: true,
+            title: 'Vacancy Summary',
+          },
+        },        
         {
           path: 'vacancy',
           component: ExerciseEditVacancy,
