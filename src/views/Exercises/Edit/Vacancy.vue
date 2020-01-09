@@ -336,6 +336,15 @@
         </RadioGroup>
 
         <TextareaInput
+          id="role-summary"
+          v-model="exercise.roleSummary"
+          label="Role summary"
+          hint="Short summary of the role for the vacancies listing page."
+          rows="2"
+          required
+        />
+
+        <TextareaInput
           id="about-the-role"
           v-model="exercise.aboutTheRole"
           label="About the role"
@@ -393,6 +402,7 @@ export default {
       otherJurisdiction: null,
       welshRequirement: null,
       welshRequirementType: null,
+      roleSummary: null,
       aboutTheRole: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
@@ -405,7 +415,7 @@ export default {
     async save(isValid) {
       this.exercise.progress.vacancyInformation = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-vacancy'));
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-summary'));
     },
   },
 };
