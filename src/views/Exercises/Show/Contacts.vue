@@ -82,14 +82,6 @@
       </div>
     </dl>
 
-    <p
-      v-if="exercise.subscriberAlertsUrl"
-      class="govuk-body"
-    >
-      <strong>Subscriber alerts url</strong>
-      <span class="display-block">{{ exercise.subscriberAlertsUrl }}</span>
-    </p>
-
     <h2 class="govuk-heading-l govuk-!-margin-top-9">
       Other contacts
     </h2>

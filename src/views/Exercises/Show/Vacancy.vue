@@ -115,7 +115,15 @@
           </ul>
           <span v-else-if="exercise.welshRequirement === false">None</span>
         </dd>
-      </div>      
+      </div>   
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Role summary
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.roleSummary }}
+        </dd>
+      </div>         
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           About the role

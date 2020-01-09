@@ -56,13 +56,6 @@
           required
         />
 
-        <TextField
-          id="subscriber-alerts-url"
-          v-model="exercise.subscriberAlertsUrl"
-          label="Subscriber alerts url"
-          type="url"
-        />
-
         <h2 class="govuk-heading-l">
           Other contacts
         </h2>
@@ -184,7 +177,6 @@ export default {
   extends: Form,
   data(){
     const defaults = {
-      subscriberAlertsUrl: null,
       exerciseMailbox: null,
       seniorSelectionExerciseManager: null,
       selectionExerciseManager: null,
