@@ -2,7 +2,7 @@
   <button
     ref="updateFavoutitesBtn"
     class="govuk-button govuk-button--secondary govuk-!-margin-0"
-    @click="updateFavoutites"
+    @click="click"
   >
     <svg
       id="stars-full-star"
@@ -21,15 +21,16 @@
   
 <script>
 export default {
-  data() {
-    return {
-      // TODO: create getter which gets user favourites from DB collection  
-      isInFavourites: true,
-    };
+  props: {
+    inFavourites: {
+      required: true,
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     buttonText() {
-      if(this.isInFavourites) {
+      if(this.inFavourites) {
         return 'Remove from favourites';
       }
       else {
@@ -38,8 +39,8 @@ export default {
     },
   },
   methods: {
-    updateFavoutites() {
-      this.isInFavourites = !this.isInFavourites;
+    click() {
+      this.$emit('click');
     },
   },
 };
