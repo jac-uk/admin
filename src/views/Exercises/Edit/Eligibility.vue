@@ -72,7 +72,6 @@
                 label="Schedule 2(3)"
               />
             </RadioGroup>
-
           </RadioItem>
 
           <RadioItem
