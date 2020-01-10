@@ -19,7 +19,6 @@ import ExerciseEditDownloads from '@/views/Exercises/Edit/Downloads';
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
 import ExerciseShowOverview from '@/views/Exercises/Show/Overview';
-import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowContacts from '@/views/Exercises/Show/Contacts';
 import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
 import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
@@ -31,6 +30,8 @@ import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/Independe
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
+import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
+import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 
 // Report views
 import ExerciseReports from '@/views/Exercises/Reports';
@@ -99,6 +100,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Applications',
+          },
+        },
+        {
+          path: 'application/:applicationId',
+          component: ExerciseShowApplication,
+          name: 'exercise-show-application',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Application',
           },
         },
         {
