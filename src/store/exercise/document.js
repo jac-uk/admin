@@ -1,5 +1,4 @@
 import firebase from '@firebase/app';
-import '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
