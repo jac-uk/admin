@@ -50,8 +50,8 @@
         <RadioGroup
           v-if="isLegal && isTribunal"
           id="schedule-2d-or-3-apply"
-          v-model="exercise.schedule2DOr3Apply"
-          label="Does Schedule 2(d) or Schedule 3 apply?"
+          v-model="exercise.schedule2Apply"
+          label="Does Schedule 2(d) or Schedule 2(3) apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
           <RadioItem
@@ -59,16 +59,16 @@
             label="Yes"
           >
             <RadioGroup
-              id="yes-schedule-2d-apply"
+              id="yes-schedule-2-applies"
               v-model="exercise.appliedSchedule"
               label="Which Schedule applies?"
             >
               <RadioItem
-                value="schedule-2d"
+                value="schedule-2-d"
                 label="Schedule 2(d)"
               />
               <RadioItem
-                value="schedule-23"
+                value="schedule-2-3"
                 label="Schedule 2(3)"
               />
             </RadioGroup>
@@ -317,7 +317,7 @@ export default {
     const defaults = {
       postQualificationExperience: null,
       otherYears: null,
-      schedule2DOr3Apply: null,
+      schedule2Apply: null,
       appliedSchedule: null,
       authorisations: null,
       aSCApply: null,
