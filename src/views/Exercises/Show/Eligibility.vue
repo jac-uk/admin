@@ -40,7 +40,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.schedule2DOr3Apply === true">
-            Yes: {{exercise.appliedSchedule | lookup }}
+            Yes: {{ exercise.appliedSchedule | lookup }}
           </span>
           <span v-else-if="exercise.schedule2DOr3Apply === false">
             No
