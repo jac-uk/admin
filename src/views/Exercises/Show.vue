@@ -17,7 +17,8 @@
         <div class="govuk-grid-column-three-quarters">
           <div class="text-right govuk-!-margin-0">
             <AddToFavouritesButton
-              :in-favourites="false"
+              :in-favourites="isInFavourites"
+              @click="updateFavourites"
             />
           </div>
         </div>
@@ -70,11 +71,17 @@ export default {
     };
   },
   computed: {
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+    },
+    isInFavourites() {
+      return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
     },
     isApproved() {
       if (this.exercise) {
@@ -164,6 +171,13 @@ export default {
   methods: {
     redirectToErrorPage() {
       this.$router.replace({ name: 'exercise-not-found' });
+    },
+    updateFavourites() {
+      if (this.isInFavourites) {
+        this.$store.dispatch('exerciseDocument/removeFromFavourites', this.userId);
+      } else {
+        this.$store.dispatch('exerciseDocument/addToFavourites', this.userId);
+      }
     },
   },
 };
