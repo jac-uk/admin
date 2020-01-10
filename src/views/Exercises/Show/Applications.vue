@@ -40,66 +40,61 @@
       </thead>
       <tbody class="govuk-table__body">
         <tr
-          v-for="applicant in applicants"
-          :key="applicant.name"
+          v-for="application in applications"
+          :key="application.id"
           class="govuk-table__row"
         >
           <th
             scope="row"
             class="govuk-table__header"
           >
-            {{ applicant.ref }}
+            <router-link
+              class="govuk-link"
+              :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+            >
+              {{ application.id }}
+            </router-link>          
           </th>
           <td class="govuk-table__cell">
-            {{ applicant.name }}
+            {{ application.userId }}
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.email }}
+            {{ application.email }}
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.status }}
+            {{ application.status }}
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.notes }}
+            {{ application.notes }}
           </td>
         </tr>
       </tbody>
     </table>
 
-    <router-link
+    <!-- <router-link
       class="govuk-button"
       :to="{name: 'exercise-applications-full'}"
     >
       See further information
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      applicants: [
-        { ref: '001',
-          name: 'Lauren 1',
-          email: 'email@1.com',
-          status: 'pending',
-          notes: 'Has never been a judge.',
-        },
-        { ref: '002',
-          name: 'Lauren 2',
-          email: 'email@2.com',
-          status: 'pending',
-          notes: 'Had accessibility requirements.',
-        },
-        { ref: '003',
-          name: 'Lauren 3',
-          email: 'email@3.com',
-          status: 'pending',
-          notes: 'Needs to reschedule role play.',
-        },
-      ],
-    };
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    applications() {
+      return this.$store.state.applications.records;
+    },
+  },
+  created() {
+    this.$store.dispatch('applications/bind', this.exercise.id);
+  },
+  destroyed() {
+    this.$store.dispatch('applications/unbind');
   },
 };
 </script>
