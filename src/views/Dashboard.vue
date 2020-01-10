@@ -3,18 +3,20 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <div class="text-right">
-          <a
-            href="#"
+          <button
+            v-if="isFavourites"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+            @click="showAll"
           >
             View all exercises
-          </a>
-          <a
-            href="#"
+          </button>
+          <button
+            v-else
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+            @click="showMyFavourites"
           >
             Show my favourites
-          </a>
+          </button>
           <router-link
             ref="linkToNewExercise"
             to="/exercises/new"
@@ -25,8 +27,17 @@
         </div>
       </div>
     </div>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">
+    <h1
+      v-if="isFavourites"
+      class="govuk-heading-xl govuk-!-margin-bottom-6"
+    >
       Your exercises
+    </h1>
+    <h1
+      v-else
+      class="govuk-heading-xl govuk-!-margin-bottom-6"
+    >
+      All exercises
     </h1>
     <div 
       v-for="exercise in records"
@@ -58,9 +69,21 @@ import { mapState } from 'vuex';
 export default {
   computed: mapState('exerciseCollection', [
     'records',
+    'isFavourites',
   ]),
   created() {
     this.$store.dispatch('exerciseCollection/bind');
+  },
+  destroyed() {
+    this.$store.dispatch('exerciseCollection/unbind');
+  },
+  methods: {
+    showMyFavourites() {
+      this.$store.dispatch('exerciseCollection/showFavourites');
+    },
+    showAll() {
+      this.$store.dispatch('exerciseCollection/showAll');
+    },
   },
 };
 </script>
