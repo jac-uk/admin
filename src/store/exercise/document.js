@@ -1,3 +1,5 @@
+import firebase from '@firebase/app';
+import '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
@@ -15,7 +17,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    create: async ({ dispatch }, data) => {
+    create: async ({ rootState, dispatch }, data) => {
       const metaRef = firestore.collection('meta').doc('stats');
       return firestore.runTransaction((transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
@@ -25,6 +27,8 @@ export default {
           data.referenceNumber = 'JAC' + (100000 + newExercisesCount).toString().substr(1);
           data.progress = { started: true };
           data.state = 'draft';
+          data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
+          data.createdBy = rootState.auth.currentUser.uid;
           transaction.set(exerciseRef, data);
           return exerciseRef.id;
         });
@@ -74,6 +78,22 @@ export default {
       const ref = collection.doc(id);
       const data = {
         published: false,
+      };
+      await ref.update(data);
+    },
+    addToFavourites: async ({ state }, userId) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        favouriteOf: firebase.firestore.FieldValue.arrayUnion(userId),
+      };
+      await ref.update(data);
+    },    
+    removeFromFavourites: async ({ state }, userId) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        favouriteOf: firebase.firestore.FieldValue.arrayRemove(userId),
       };
       await ref.update(data);
     },    
