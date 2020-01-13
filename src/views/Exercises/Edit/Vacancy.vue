@@ -344,7 +344,7 @@
           required
         />
 
-        <TextareaInput
+        <RichTextInput
           id="about-the-role"
           v-model="exercise.aboutTheRole"
           label="About the role"
@@ -370,6 +370,7 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
+import RichTextInput from '@/components/Form/RichTextInput';
 import BackLink from '@/components/BackLink';
 
 export default {
@@ -382,6 +383,7 @@ export default {
     CheckboxItem,
     Currency,
     TextareaInput,
+    RichTextInput,
     BackLink,
   },
   extends: Form,
