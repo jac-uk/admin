@@ -129,7 +129,12 @@
           About the role
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.aboutTheRole }}
+          <!-- eslint-disable -->
+          <div 
+            class="govuk-body" 
+            v-html="exercise.aboutTheRole"
+          />
+          <!-- eslint-enable -->
         </dd>
       </div>
     </dl>
