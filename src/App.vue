@@ -57,33 +57,30 @@
               </stron <span
               class="govuk                r__tex                                               r feedback will                                     </span>
             </p>
-          </di                                                        "
-              main-conten
-              </mai </div>
-              <                          ort defa ',
+          </di                                                          "
+              main- </mai </div>
+              ort defa ',
               computed: {
-              {
               etters[' },
               {
  
-              return this.                      cu                    yName ?                  tate.aut                  displayName : this.$store.state.auth.currentUser },
-              methods:                    nOut(                      ().signOut();
-              .go('/sign-in');
-              },
-              },
-              };
-              scss">
-              // @import 'https://assets.publis                      k/static/govuk-template-c0                    98                      8b5                      css';
-              tps://assets.publishing.service.gov.uk/static                          17927ce356e5a054cb28025ec1547ec                        ss';
-              tps://assets.publishing.service.go                                                                        32da77312cf                                @impor                            hing.service.gov                             f0ad5c09cfd287444f877560d89793e621ff                                                 scss styles
-              .header {
-              back                          
-              pa                        m 0 0.                                                op: 0px;                           </style>
+              return this.                                                                         tate.aut                        layName : this.$store.state.auth.curren                         methods:                       Out(                              nOut();
+              .go('                                                                  };
+              ss">
+              // @import 'https://assets.publis                                    uk-te                               98                         b5                      css';
+              tps://assets.publishing.service.gov.uk/static                          1                    8025ec1547ec                                                      ssets.publishing.service.go                                                                          32da7731                                     @impor                                  .servi                                     f0ad5c09cfd287444f877560d89793e                                                          scss styl                           {
+                                              
+              m 0 0.                                                       px;                           </style>
             </d>
           </div>
+          div>
+          >
+                                                                                                                                                                                                                                                                                                                                                                                       
+          </d>
         </div>
       </header>
     </div>
+                        
+    </d>
   </div>
 </template>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </d></div>                </p>                                                        </div>
