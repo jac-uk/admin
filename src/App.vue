@@ -54,45 +54,36 @@
             >
               ovuk-phase-banner__content">
               trong class="govuk-tag govuk-phase-banner__content__tag">
-              </strong>
-              <span
-                class="govuk-phase-banner__tex                  This                     r feedback will help us impr                    </span>
+              </stron <span
+              class="govuk                r__tex                                               r feedback will                                     </span>
             </p>
-          </di                      </div>
-                       "
-                main-conten
-              />
-              </main>
+          </di                                                        "
+              main-conten
+              </mai </div>
+              <                          ort defa ',
+              computed: {
+              {
+              etters[' },
+              {
+ 
+              return this.                      cu                    yName ?                  tate.aut                  displayName : this.$store.state.auth.currentUser },
+              methods:                    nOut(                      ().signOut();
+              .go('/sign-in');
+              },
+              },
+              };
+              scss">
+              // @import 'https://assets.publis                      k/static/govuk-template-c0                    98                      8b5                      css';
+              tps://assets.publishing.service.gov.uk/static                          17927ce356e5a054cb28025ec1547ec                        ss';
+              tps://assets.publishing.service.go                                                                        32da77312cf                                @impor                            hing.service.gov                             f0ad5c09cfd287444f877560d89793e621ff                                                 scss styles
+              .header {
+              back                          
+              pa                        m 0 0.                                                op: 0px;                           </style>
             </d>
           </div>
-          </t mp from 
-          ort defa ',
-          computed: {
-          isSignedIn() {
-          return this.$store.getters[' },
-          userName() {
- 
-          return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser },
-          methods: {
-          signOut() {
-          auth().signOut();
-          this.$router.go('/sign-in');
-          },
-          },
-          };
-          scss">
-          // @import 'https://assets.publishing.service.gov.uk/static/govuk-template-c0b8ba8b1652aacad298d74f24752260187f538b5                      css';
-          @import 'h
-          tps://assets.publishing.service.gov.uk/static/fonts-e9ec5a5f82e5c2a17927ce356e5a054cb28025ec1547ec5d00f5c98d2ec5e481.css';
-          @import 'https://assets.publishing.service.go                  -layou                ae550061                32da77312cf8ef2ab616c0.css';
-          @import 'https://assets.publishing.service.gov.uk/col                  f0ad5c09cfd287444f877560d89793e621ff                    //                       scss styles
-          .header {
-          background-color: #fafafa;
-          padding: 1.25em 0.625em 0 0.625em                          padding-top: 0px;
-          }
-          </style>
         </div>
       </header>
     </div>
   </div>
 </template>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </d></div>                </p>                                                        </div>
