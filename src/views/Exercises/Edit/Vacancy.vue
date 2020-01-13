@@ -415,7 +415,7 @@ export default {
     async save(isValid) {
       this.exercise.progress.vacancyInformation = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-summary'));
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-vacancy'));
     },
   },
 };
