@@ -51,7 +51,10 @@ jobs:
           at: ~/digital-platform
       - run:
           name: 'Deploy to production'
-          command: node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --project production
+          command: |
+            npm run build-production
+            node_modules/.bin/firebase target:apply hosting production-admin-app jac-apply-admin-production --project production 
+            node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --only hosting:production-admin-app --project production
 
   build-and-deploy-staging:
     executor: default
@@ -60,7 +63,10 @@ jobs:
           at: ~/digital-platform
       - run:
           name: 'Deploy to staging'
-          command: node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --project staging
+          command: |
+            npm run build-staging
+            node_modules/.bin/firebase target:apply hosting staging-admin-app jac-apply-admin-staging --project staging
+            node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --only hosting:staging-admin-app --project staging
 
 workflows:
   version: 2
@@ -81,7 +87,7 @@ workflows:
             - test
           filters:
             branches:
-              only: staging
+              only: /staging.*/ 
       - build-and-deploy-production:
           requires:
             - test
