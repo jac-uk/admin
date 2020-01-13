@@ -4,6 +4,8 @@ import router from '@/router';
 import store from '@/store';
 import '@/filters';
 import { auth } from '@/firebase';
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 // import * as Sentry from '@sentry/browser';
 // import * as Integrations from '@sentry/integrations';
 //
@@ -12,6 +14,7 @@ import { auth } from '@/firebase';
 //   integrations: [new Integrations.Vue({ Vue, attachProps: true })],
 // });
 Vue.config.productionTip = false;
+Vue.use( CKEditor );
 
 let vueInstance = false;
 auth().onAuthStateChanged( (user) => {
