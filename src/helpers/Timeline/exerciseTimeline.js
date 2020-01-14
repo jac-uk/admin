@@ -152,7 +152,7 @@ const exerciseTimeline = (data) => {
   if (data.contactIndependentAssessors) {
     timeline.push(
       {
-        entry: 'Contact independent assessors',
+        entry: 'JAC Contacts IAs',
         date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
       },
     );
