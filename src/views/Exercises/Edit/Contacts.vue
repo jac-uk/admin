@@ -121,12 +121,9 @@
           type="email"
         />
 
-        <TextField
-          id="lead-judge"
+        <RepeatableFields
           v-model="exercise.leadJudge"
-          name="lead-judge"
-          label="Lead judge"
-          type="email"
+          :component="repeatableFields.LeadJudge"
           required
         />
 
@@ -160,6 +157,7 @@ import RepeatableFields from '@/components/RepeatableFields';
 import SeniorSelectionExerciseManager from '@/components/RepeatableFields/SeniorSelectionExerciseManager';
 import SelectionExerciseManager from '@/components/RepeatableFields/SelectionExerciseManager';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
+import LeadJudge from '@/components/RepeatableFields/LeadJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
@@ -201,6 +199,7 @@ export default {
         SeniorSelectionExerciseManager,
         SelectionExerciseManager,
         DraftingJudge,
+        LeadJudge,
         StatutoryConsultee,
         SelectionExerciseOfficer,
         AssignedCommissioner,
