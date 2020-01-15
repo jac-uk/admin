@@ -14,7 +14,7 @@
         />
 
         <p class="govuk-body-l">
-          You can return to this page later to add or change contacts.
+          You can return to this page later to add or change contact emails.
         </p>
 
         <h2 class="govuk-heading-l">
