@@ -105,7 +105,6 @@
           v-model="exercise.aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
-          required
         >
           <RadioItem
             :value="true"
@@ -114,7 +113,6 @@
             <RepeatableFields
               v-model="exercise.selectionCriteria"
               :component="repeatableFields.SelectionCriterion"
-              required
               :max="2"
             />
           </RadioItem>

@@ -4,12 +4,14 @@
       :id="selectionCriterionTitle"
       v-model="row.title"
       label="Provide title to be displayed to the candidate."
+      required
     />
 
     <TextareaInput
       :id="selectionCriterionText"
       v-model="row.text"
       label="Provide text to be displayed to the candidate."
+      required
     />
 
     <slot name="removeButton" />
