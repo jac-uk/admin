@@ -170,6 +170,7 @@
           id="is-statutory-consultation-waived"
           v-model="exercise.statutoryConsultationWaived"
           label="Is statutory consultation waived for this exercise?"
+          required
         >
           <RadioItem
             :value="true"
@@ -179,6 +180,7 @@
               id="statutory-consultation-waived-details"
               v-model="exercise.statutoryConsultationWaivedDetails"
               label="Explain why."
+              required
             />
           </RadioItem>
           <RadioItem
