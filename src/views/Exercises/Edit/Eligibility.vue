@@ -105,16 +105,17 @@
           v-model="exercise.aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
+          required
         >
           <RadioItem
             :value="true"
             label="Yes"
           >
-            <TextareaInput
-              id="yes-asc-apply"
-              v-model="exercise.yesASCApply"
-              label="Additional skills and experience"
+            <RepeatableFields
+              v-model="exercise.selectionCriteria"
+              :component="repeatableFields.SelectionCriterion"
               required
+              :max="2"
             />
           </RadioItem>
 
@@ -297,8 +298,9 @@ import RadioItem from '@/components/Form/RadioItem';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import TextField from '@/components/Form/TextField';
-import TextareaInput from '@/components/Form/TextareaInput';
 import BackLink from '@/components/BackLink';
+import RepeatableFields from '@/components/RepeatableFields';
+import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
 
 export default {
   components: {
@@ -308,8 +310,8 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     TextField,
-    TextareaInput,
     BackLink,
+    RepeatableFields,
   },
   extends: Form,
   data(){
@@ -320,7 +322,7 @@ export default {
       appliedSchedule: null,
       authorisations: null,
       aSCApply: null,
-      yesASCApply: null,
+      selectionCriteria: null,
       previousJudicialExperienceApply: null,
       qualifications: null,
       otherQualifications: null,
@@ -334,6 +336,9 @@ export default {
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };
     return {
+      repeatableFields: {
+        SelectionCriterion,
+      },
       exercise: exercise,
       isCourtOrTribunal: exercise.isCourtOrTribunal,
       typeOfExercise: exercise.typeOfExercise,
