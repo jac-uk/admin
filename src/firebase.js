@@ -18,6 +18,9 @@ firebase.initializeApp(config);
 
 // Initialise Firestore
 const firestore = firebase.firestore();
+firestore.settings({
+  experimentalForceLongPolling: true,
+});
 
 // Other firebase exports
 const auth = firebase.auth;
