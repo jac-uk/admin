@@ -71,11 +71,26 @@
           Does additional selection criteria (ASC) apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.aSCApply === true">
-            Yes - {{ exercise.yesASCApply }}
-          </span>
+          <ul
+            v-if="exercise.aSCApply == true"
+            class="govuk-list"
+          >
+            <li
+              v-for="criterion in exercise.selectionCriteria"
+              :key="criterion.id"
+            >
+              <p
+                class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1"
+              >
+                {{ criterion.title }}
+              </p>
+              <p>
+                {{ criterion.text }}
+              </p>
+            </li>
+          </ul>
           <span v-else-if="exercise.aSCApply === false">
-            No
+            Does not apply.
           </span>
         </dd>
       </div>
