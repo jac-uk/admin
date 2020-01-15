@@ -37,7 +37,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
-            <li 
+            <li
               v-for="item in exercise.jurisdiction"
               :key="item"
             >
@@ -49,6 +49,21 @@
               </span>
             </li>
           </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Waived statutory consultation?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span
+            v-if="exercise.statutoryConsultationWaivedDetails && exercise.statutoryConsultationWaived == true"
+          >
+            Yes: {{ exercise.statutoryConsultationWaivedDetails }}
+          </span>
+          <span v-else>
+            No
+          </span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -115,7 +130,7 @@
           </ul>
           <span v-else-if="exercise.welshRequirement === false">None</span>
         </dd>
-      </div>   
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Role summary
@@ -123,15 +138,15 @@
         <dd class="govuk-summary-list__value">
           {{ exercise.roleSummary }}
         </dd>
-      </div>         
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           About the role
         </dt>
         <dd class="govuk-summary-list__value">
           <!-- eslint-disable -->
-          <div 
-            class="govuk-body" 
+          <div
+            class="govuk-body"
             v-html="exercise.aboutTheRole"
           />
           <!-- eslint-enable -->
