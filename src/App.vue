@@ -2,6 +2,8 @@
   <div class="govuk-width-container">
     <div class="govuk-main-wrapper">
       <header class="header">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-half">
             <!-- HEADER SECTION -->
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
@@ -77,6 +79,8 @@
               </div>
             </div>
             <!-- HEADER SECTION -->
+          </div>
+        </div>
       </header>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -128,7 +132,10 @@ export default {
 @import 'https://assets.publishing.service.gov.uk/static/core-layout-535eb07d05bcae550061481a9cbefad8c4807bf8da32da77312cf8ef2ab616c0.css';
 @import 'https://assets.publishing.service.gov.uk/collections/application-1da0069f0ad5c09cfd287444f877560d89793e621ff13c1ababf63cc4eaceb8e.css';
   // Required to include global main.scss styles
-
+  .govuk-grid-column-one-half {
+    width: 100%;
+    float: left;
+}
   .header {
     background-color: #fafafa;
     padding: 1.25em 0.625em 0 0.625em;
