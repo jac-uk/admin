@@ -167,6 +167,29 @@
         </CheckboxGroup>
 
         <RadioGroup
+          id="is-statutory-consultation-waived"
+          v-model="exercise.statutoryConsultationWaived"
+          label="Is statutory consultation waived for this exercise?"
+          required
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          >
+            <TextareaInput
+              id="statutory-consultation-waived-details"
+              v-model="exercise.statutoryConsultationWaivedDetails"
+              label="Explain why."
+              required
+            />
+          </RadioItem>
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
+        <RadioGroup
           id="appointment-type"
           v-model="exercise.appointmentType"
           label="Appointment type"
@@ -344,7 +367,7 @@
           required
         />
 
-        <TextareaInput
+        <RichTextInput
           id="about-the-role"
           v-model="exercise.aboutTheRole"
           label="About the role"
@@ -370,6 +393,7 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import Currency from '@/components/Form/Currency';
 import TextareaInput from '@/components/Form/TextareaInput';
+import RichTextInput from '@/components/Form/RichTextInput';
 import BackLink from '@/components/BackLink';
 
 export default {
@@ -382,6 +406,7 @@ export default {
     CheckboxItem,
     Currency,
     TextareaInput,
+    RichTextInput,
     BackLink,
   },
   extends: Form,
@@ -400,6 +425,8 @@ export default {
       location: null,
       jurisdiction: null,
       otherJurisdiction: null,
+      statutoryConsultationWaived: null,
+      statutoryConsultationWaivedDetails: null,
       welshRequirement: null,
       welshRequirementType: null,
       roleSummary: null,
