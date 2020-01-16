@@ -219,6 +219,30 @@ const exerciseTimeline = (data) => {
     );
   }
 
+  if (data.equalMeritSecondStageStartDate) {
+    timeline.push(
+      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate)
+    );
+  }
+
+  if (data.eMPSCCDate) {
+    timeline.push(
+      {
+        entry: 'EMP SCC',
+        date: isDate(data.eMPSCCDate) ? formatDate(data.eMPSCCDate) : null,
+      }
+    );
+  }
+
+  if (data.eMPOutcomeDate) {
+    timeline.push(
+      {
+        entry: 'EMP Outcomes',
+        date: isDate(data.eMPOutcomeDate) ? formatDate(data.eMPOutcomeDate, 'month') : null,
+      }
+    );
+  }
+
   return timeline;
 };
 
