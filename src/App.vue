@@ -35,7 +35,7 @@
                         rel="alternate"
                         class="gem-c-translation-nav__link brand__color"
                         href="https://www.judicialappointments.gov.uk/cymraeg"
-                      >Cymraeg</a>
+                      >Cymraeg - </a>
                     </li>
                   </ul>
                 </nav>
