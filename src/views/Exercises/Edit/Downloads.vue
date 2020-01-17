@@ -168,7 +168,7 @@ export default {
       ]);
 
       const fileName = fileNameMap.get(item.type);
-      const fileSavePath = `exercise-${this.exerciseId}/${fileName}.${fileExtension}`;
+      const fileSavePath = `exercise/${this.exerciseId}/${fileName}.${fileExtension}`;
       //console.log(`fileSavePath = ${fileSavePath}`);
 
       const storageRef = firebase.storage().ref();
