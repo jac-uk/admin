@@ -226,6 +226,34 @@
           type="month"
           required
         />
+        <h2 class="govuk-heading-l">
+          Equal merit dates
+        </h2>
+        <DateInput
+          id="emd-second-stage-start-date"
+          v-model="exercise.equalMeritSecondStageStartDate"
+          label="Second stage start date"
+          required
+        />
+        <DateInput
+          id="emd-second-stage-end-date"
+          v-model="exercise.equalMeritSecondStageEndDate"
+          label="Second stage end date"
+          required
+        />
+        <DateInput
+          id="emp-scc-date"
+          v-model="exercise.eMPSCCDate"
+          label="EMP SCC date"
+          required
+        />
+        <DateInput
+          id="emp-outcome-date"
+          v-model="exercise.eMPOutcomeDate"
+          label="EMP Outcomes"
+          type="month"
+          required
+        />
         <button class="govuk-button">
           Save and continue
         </button>
@@ -277,9 +305,13 @@ export default {
       statutoryConsultationDate: null,
       characterAndSCCDate: null,
       finalOutcome: null,
+      equalMeritSecondStageStartDate: null,
+      equalMeritSecondStageEndDate: null,
+      eMPSCCDate: null,
+      eMPOutcomeDate: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };    
+    const exercise = { ...defaults, ...data };
     return {
       repeatableFields: {
         SelectionDay,

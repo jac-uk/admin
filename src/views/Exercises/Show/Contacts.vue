@@ -123,7 +123,14 @@
           Lead judge
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.leadJudge }}
+          <ul class="govuk-list">
+            <li
+              v-for="item in exercise.leadJudge"
+              :key="item.name"
+            >
+              {{ item.name }}
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -180,7 +187,7 @@ export default {
     },
     canEdit() {
       return !this.isApproved;
-    },    
+    },
   },
 };
 </script>
