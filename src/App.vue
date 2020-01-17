@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-width-container">
-    <div class="govuk-main-wrapper">
+    <div style="padding-top: 0px" class="govuk-main-wrapper">
       <header class="header">
             <!-- HEADER SECTION -->
             <div class="govuk-grid-row">
