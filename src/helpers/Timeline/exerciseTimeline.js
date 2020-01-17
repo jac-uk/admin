@@ -152,7 +152,7 @@ const exerciseTimeline = (data) => {
   if (data.contactIndependentAssessors) {
     timeline.push(
       {
-        entry: 'Contact independent assessors',
+        entry: 'JAC Contacts IAs',
         date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
       },
     );
@@ -215,6 +215,30 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Selection process outcome',
         date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
+      }
+    );
+  }
+
+  if (data.equalMeritSecondStageStartDate) {
+    timeline.push(
+      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate)
+    );
+  }
+
+  if (data.eMPSCCDate) {
+    timeline.push(
+      {
+        entry: 'EMP SCC',
+        date: isDate(data.eMPSCCDate) ? formatDate(data.eMPSCCDate) : null,
+      }
+    );
+  }
+
+  if (data.eMPOutcomeDate) {
+    timeline.push(
+      {
+        entry: 'EMP Outcomes',
+        date: isDate(data.eMPOutcomeDate) ? formatDate(data.eMPOutcomeDate, 'month') : null,
       }
     );
   }

@@ -167,6 +167,29 @@
         </CheckboxGroup>
 
         <RadioGroup
+          id="is-statutory-consultation-waived"
+          v-model="exercise.statutoryConsultationWaived"
+          label="Is statutory consultation waived for this exercise?"
+          required
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          >
+            <TextareaInput
+              id="statutory-consultation-waived-details"
+              v-model="exercise.statutoryConsultationWaivedDetails"
+              label="Explain why."
+              required
+            />
+          </RadioItem>
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
+        <RadioGroup
           id="appointment-type"
           v-model="exercise.appointmentType"
           label="Appointment type"
@@ -402,6 +425,8 @@ export default {
       location: null,
       jurisdiction: null,
       otherJurisdiction: null,
+      statutoryConsultationWaived: null,
+      statutoryConsultationWaivedDetails: null,
       welshRequirement: null,
       welshRequirementType: null,
       roleSummary: null,
