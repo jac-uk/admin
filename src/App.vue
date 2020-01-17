@@ -60,31 +60,28 @@
               </stron <span
               class="govuk                r__tex                                               r feedback will                                     </span>
             </p>
-          </di                                                          "
-              main- </mai </div>
+          </di                                                          "                   main- </mai </div>
               ort defa ',
-              computed: {
-              etters[' },
+              compute                       etters[' },
               {
  
-              return this.                                                                         tate.aut                        layName : this.$store.state.auth.curren                         methods:                       Out(                              nOut();
-              .go('                                                                  };
+              return this.                                                                                                                     layName : this.                    h.curren                             methods                            Out(                                  n                                                                                                        };
               ss">
-              // @import 'https://assets.publis                                    uk-te                               98                         b5                      css';
-              tps://assets.publishing.service.gov.uk/static                          1                    8025ec1547ec                                                      ssets.publishing.service.go                                                                          32da7731                                     @impor                                  .servi                                     f0ad5c09cfd287444f877560d89793e                                                          scss styl                           {
+              / @im                  assets.publis                                        uk-te                               98                         b5                      css';
+              assets.publishing.service.                c                              1                    8025ec154                                                             ssets                      e.go                                                                                  32da7731                                                                                     .servi                                                           444f877560d89793                                                               scss styl                               {
                                               
-              m 0 0.                                                       px;                           </style>
+              0.                                                                                                     </style>
             </d>
           </div>
           div>
           >
-                                                                                                                                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                                                                                                                                                                       
           </d>
         </div>
+        </d                                
+        </d>
       </header>
     </div>
-                        
-    </d>
   </div>
 </template>
-          </d>          </div>                                                                                                                                                                                       </div>
+          </d>          </div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </d>          </div>                                                                                                                                                                                       </div>
