@@ -33,7 +33,7 @@
                         rel="alternate"
                         class="gem-c-translation-nav__link brand__color"
                         href="https://www.judicialappointments.gov.uk/cymraeg"
-                      >Cymraeg - </a>
+                      >Cymraeg -----</a>
                     </li>
                   </ul>
                 </nav>
@@ -83,7 +83,7 @@
           <div class="govuk-phase-banner">
             <p class="govuk-phase-banner__content">
               <strong class="govuk-tag govuk-phase-banner__content__tag">
-                alpha -----
+                alpha
               </strong>
               <span class="govuk-phase-banner__text">
                 This is a new service – your feedback will help us improve it.
