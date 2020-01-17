@@ -42,23 +42,20 @@
                   <li class="app-c-topic-list__item">
                     <a
                       class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                      href="https://www.judicialappointments.gov.uk/business-plan"
-                      target="_blank"
+                      href="https://www.judicialappointments.gov.uk/business-plan" target="_blank"
                     >How do I apply</a>
                   </li>
                   <li class="app-c-topic-list__item">
                     <a
                       class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                      href="https://www.judicialappointments.gov.uk/jac-official-statistics"
-                      target="_blank"
+                      href="https://www.judicialappointments.gov.uk/jac-official-statistics" target="_blank"
                     >How do I qualify</a>
                   </li>
 
                   <li class="app-c-topic-list__item">
                     <a
                       class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                      href="https://apply.judicialappointments.digital/vacancies"
-                      target="_blank"
+                      href="https://apply.judicialappointments.digital/vacancies" target="_blank"
                     >Judicial vacancies</a>
                   </li>
                   <li class="app-c-topic-list__item">

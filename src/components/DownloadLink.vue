@@ -34,7 +34,7 @@ export default {
     download(fileName) {
       this.visited = true;
       // Create a reference to the file we want to download
-      const fileSavePath = `exercise-${this.exerciseId}/${fileName}`;
+      const fileSavePath = `exercise/${this.exerciseId}/${fileName}`;
 
       // Get a reference to the storage service, which is used to create references in your storage bucket
       const storage = firebase.storage();
