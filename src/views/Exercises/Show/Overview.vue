@@ -17,14 +17,14 @@
       </div>
 
       <div 
-        v-if="hasOpened"
+        v-if="exercise.applicationsCount || hasOpened"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
           Number of applications
         </h2>
         <p class="govuk-body">
-          <span class="govuk-heading-l govuk-!-margin-top-1">0</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applicationsCount }}</span>
         </p>
       </div>
     </div>
