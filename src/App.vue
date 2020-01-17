@@ -1,6 +1,9 @@
 <template>
   <div class="govuk-width-container">
-    <div style="padding-top: 0px" class="govuk-main-wrapper">
+    <div
+      style="padding-top: 0px"
+      class="govuk-main-wrapper"
+    >
       <header class="header">
         <        ECTION -->
         <        ovuk-grid-row">
