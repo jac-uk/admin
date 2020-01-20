@@ -13,18 +13,6 @@ Vue.filter('formatDate',
   }
 });
 
-Vue.filter('toHumanCase',
-(value) => {
-  if (value) {
-    return value.replace(/([A-Z0-9])/g, ' $1');
-  }
-});
-
-Vue.filter('toYesNo',
-(value) => {
-  return value ? 'Yes' : 'No';
-});
-
 Vue.filter('lookup',
 (value) => {
   if (value) {
