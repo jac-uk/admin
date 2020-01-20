@@ -86,71 +86,40 @@
           required
         />
         <div
-          v-if="hasSituationalJudgementQT"
-          ref="situationalJudgementQT"
+          v-if="situationalJudgementOrCriticalAnalysisQT"
+          ref="situationalJudgementOrCriticalAnalysisQT"
         >
           <h3 class="govuk-heading-m">
-            Situational judgement qualifying test (QT)
+            Situational judgement qualifying test (QT), Critical analysis qualifying test (QT)
           </h3>
           <DateInput
-            id="sj-test-date"
-            v-model="exercise.situationalJudgementTestDate"
+            id="sjca-test-date"
+            v-model="exercise.sjcaTestDate"
             label="Test date"
             required
           />
           <TimeInput
-            id="sj-test-start-time"
-            v-model="exercise.situationalJudgementTestStartTime"
+            id="sjca-test-start-time"
+            v-model="exercise.sjcaTestStartTime"
             label="Start time"
             required
           />
           <TimeInput
-            id="sj-test-end-time"
-            v-model="exercise.situationalJudgementTestEndTime"
+            id="sjca-test-end-time"
+            v-model="exercise.sjcaTestEndTime"
             label="End time"
             required
           />
           <DateInput
-            id="sj-test-outcome"
-            v-model="exercise.situationalJudgementTestOutcome"
+            id="sjca-test-outcome"
+            v-model="exercise.sjcaTestOutcome"
             label="Outcome to candidates"
+            type="month"
             required
           />
         </div>
         <div
-          v-if="hasCriticalAnalysisQT"
-          ref="criticalAnalysisQT"
-        >
-          <h3 class="govuk-heading-m">
-            Critical analysis qualifying test (QT)
-          </h3>
-          <DateInput
-            id="ca-test-date"
-            v-model="exercise.criticalAnalysisTestDate"
-            label="Test date"
-            required
-          />
-          <TimeInput
-            id="ca-test-start-time"
-            v-model="exercise.criticalAnalysisTestStartTime"
-            label="Start time"
-            required
-          />
-          <TimeInput
-            id="ca-test-end-time"
-            v-model="exercise.criticalAnalysisTestEndTime"
-            label="End time"
-            required
-          />
-          <DateInput
-            id="ca-test-outcome"
-            v-model="exercise.criticalAnalysisTestOutcome"
-            label="Outcome to candidates"
-            required
-          />
-        </div>
-        <div
-          v-if="hasScenarioQT"
+          v-if="scenarioQT"
           ref="scenarioQT"
         >
           <h3 class="govuk-heading-m">
@@ -177,14 +146,14 @@
             id="scenario-test-outcome"
             v-model="exercise.scenarioTestOutcome"
             label="Outcome to candidates"
+            type="month"
             required
           />
         </div>
         <DateInput
           id="shortlisting-outcome-date"
           v-model="exercise.shortlistingOutcomeDate"
-          label="Shortlisting outcome"
-          type="month"
+          label="Shortlisting outcome date"
           required
         />
         <h2 class="govuk-heading-l">
@@ -319,14 +288,10 @@ export default {
       nameBlindSiftEndDate: null,
       telephoneAssessmentStartDate: null,
       telephoneAssessmentEndDate: null,
-      criticalAnalysisTestDate: null,
-      criticalAnalysisTestStartTime: null,
-      criticalAnalysisTestEndime: null,
-      criticalAnalysisTestOutcome: null,
-      situationalJudgementTestDate: null,
-      situationalJudgementTestStartTime: null,
-      situationalJudgementTestEndTime: null,
-      situationalJudgementTestOutcome: null,
+      sjcaTestDate: null,
+      sjcaTestStartTime: null,
+      sjcaTestEndTime: null,
+      sjcaTestOutcome: null,
       scenarioTestDate: null,
       scenarioTestStartTime: null,
       scenarioTestEndTime: null,
@@ -356,14 +321,11 @@ export default {
     };
   },
   computed: {
-    hasScenarioQT() {
+    scenarioQT() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('scenario-test-qualifying-test');
     },
-    hasSituationalJudgementQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('situational-judgement-qualifying-test');
-    },
-    hasCriticalAnalysisQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('critical-analysis-qualifying-test');
+    situationalJudgementOrCriticalAnalysisQT() {
+      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('situational-judgement-qualifying-test') || this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('critical-analysis-qualifying-test');
     },
     hasPaperSift() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('paper-sift');
