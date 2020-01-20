@@ -2,7 +2,7 @@
   <div>
     <table class="govuk-table">
       <caption class="govuk-table__caption">
-        Applications
+        Applicants
       </caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -10,7 +10,7 @@
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Application Ref
+            Applicant Ref
           </th>
           <th
             scope="col"
@@ -18,24 +18,24 @@
           >
             Name
           </th>
-          <!--<th
+          <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
             Email
-          </th> -->
+          </th>
           <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
             Status
           </th>
-          <!-- <th
+          <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
             Notes
-          </th> -->
+          </th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -52,21 +52,21 @@
               class="govuk-link"
               :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
             >
-              {{ application.referenceNumber }}
+              {{ application.id }}
             </router-link>          
           </th>
           <td class="govuk-table__cell">
-            <span v-if="application.personalDetails">{{ application.personalDetails.fullName }}</span>
+            {{ application.userId }}
           </td>
-          <!--<td class="govuk-table__cell">
+          <td class="govuk-table__cell">
             {{ application.email }}
-          </td> -->
+          </td>
           <td class="govuk-table__cell">
             {{ application.status }}
           </td>
-          <!-- <td class="govuk-table__cell">
+          <td class="govuk-table__cell">
             {{ application.notes }}
-          </td> -->
+          </td>
         </tr>
       </tbody>
     </table>
