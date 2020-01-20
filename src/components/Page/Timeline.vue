@@ -9,7 +9,7 @@
         {{ item.entry }}
       </h3>
       <p class="dwp-timeline__info govuk-!-margin-top-0">
-        <span class="dwp-timeline__date">{{ item.dateString }}</span>
+        <span class="dwp-timeline__date">{{ item.date }}</span>
       </p>
     </li>
   </ol>

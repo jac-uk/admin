@@ -1,39 +1,43 @@
 import formatDate from '@/helpers/formatDate';
 import isDate from '@/helpers/isDate';
 
-const getDateAndTime = (date, startTime) => {
-  if(!isDate(date) && !isDate(startTime)) {
+const createQT = (data) => {
+  let date = isDate(data.sjcaTestDate) && formatDate(data.sjcaTestDate) || null;
+  let start = isDate(data.sjcaTestStartTime) && formatDate(data.sjcaTestStartTime, 'time') || null;
+  let end = isDate(data.sjcaTestEndTime) && formatDate(data.sjcaTestEndTime, 'time') || null;
+
+  if(!date && !start && !end) {
     return null;
   }
-  const result = date;
-  result.setHours(startTime.getHours(), startTime.getMinutes());
-  return result;
+
+  return `${date} - ${start} to ${end}`;
 };
 
-const getDateAndTimeString = (date, startTime, endTime) => {
-  let dateString = isDate(date) && formatDate(date) || null;
-  let startTimeString = isDate(startTime) && formatDate(startTime, 'time') || null;
-  let endTimeString = isDate(endTime) && formatDate(endTime, 'time') || null;
-  if(!dateString && !startTimeString && !endTimeString) {
+const createScenariotest = (data) => {
+  let date = isDate(data.scenarioTestDate) && formatDate(data.scenarioTestDate) || null;
+  let start = isDate(data.scenarioTestStartTime) && formatDate(data.scenarioTestStartTime, 'time') || null;
+  let end = isDate(data.scenarioTestEndTime) && formatDate(data.scenarioTestEndTime, 'time') || null;
+
+  if(!date && !start && !end) {
     return null;
   }
-  return `${dateString} - ${startTimeString} to ${endTimeString}`;
+
+  return `${date} - ${start} to ${end}`;
 };
 
 const createSelectionDay = (selectionDay) => {
   let selectionDayEntry = {
-    entry: 'Selection Day - ' + selectionDay.selectionDayLocation,
-    date: selectionDay.selectionDayStart,
-    dateString: null,
+    entry: 'Selection Day',
+    date: null,
   };
   let selectionDayStart = isDate(selectionDay.selectionDayStart) && formatDate(selectionDay.selectionDayStart) || null;
   let selectionDayEnd = isDate(selectionDay.selectionDayEnd) && formatDate(selectionDay.selectionDayEnd) || null;
   if(!selectionDayStart || !selectionDayEnd) {
-    selectionDayEntry.dateString = '';
+    selectionDayEntry.date = '';
   } else if(selectionDayStart !== selectionDayEnd) {
-    selectionDayEntry.dateString = `${selectionDayStart} to ${selectionDayEnd}`;
+    selectionDayEntry.date = `${selectionDayStart} to ${selectionDayEnd}`;
   } else {
-    selectionDayEntry.dateString = `${selectionDayStart}`;
+    selectionDayEntry.date = `${selectionDayStart}`;
   }
   return selectionDayEntry;
 };
@@ -41,17 +45,16 @@ const createSelectionDay = (selectionDay) => {
 const createShortlistingMethod = (method, startDate, endDate) => {
   let shortlistingMethodEntry = {
     entry: `${method}`,
-    date: startDate,
-    dateString: null,
+    date: null,
   };
   let formattedStartDate = isDate(startDate) && formatDate(startDate) || null;
   let formattedEndDate = isDate(endDate) && formatDate(endDate) || null;
   if(!formattedStartDate || !formattedEndDate) {
-    shortlistingMethodEntry.dateString = '';
+    shortlistingMethodEntry.date = '';
   } else if(formattedStartDate !== formattedEndDate) {
-    shortlistingMethodEntry.dateString = `${formattedStartDate} to ${formattedEndDate}`;
+    shortlistingMethodEntry.date = `${formattedStartDate} to ${formattedEndDate}`;
   } else {
-    shortlistingMethodEntry.dateString = `${formattedStartDate}`;
+    shortlistingMethodEntry.date = `${formattedStartDate}`;
   }
   return shortlistingMethodEntry;
 };
@@ -63,8 +66,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Open for applications',
-        date: data.applicationOpenDate,
-        dateString: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
+        date: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
       },
     );
   }
@@ -73,8 +75,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Closed for applications',
-        date: data.applicationCloseDate,
-        dateString: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
+        date: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
       }
     );
   }
@@ -107,81 +108,52 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Shortlisting outcome',
-        date: data.shortlistingOutcomeDate,
-        dateString: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate, 'month') : null,
+        date: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate) : null,
       },
     );
   }
-  
-  if (data.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
-    if (data.situationalJudgementTestDate) {
-      timeline.push(
-        {
-          entry: 'Situational judgement qualifying test (QT)',
-          date: getDateAndTime(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime),
-          dateString: getDateAndTimeString(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime, data.situationalJudgementTestEndTime),
-        },
-      );
-    }
-    if (data.situationalJudgementTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Situational judgement QT outcome to candidates',
-          date: data.situationalJudgementTestOutcome,
-          dateString: isDate(data.situationalJudgementTestOutcome) ? formatDate(data.situationalJudgementTestOutcome) : null,
-        },
-      );
-    }
+
+  if (data.sjcaTestDate) {
+    timeline.push(
+      {
+        entry: 'QT',
+        date: createQT(data),
+      },
+    );
   }
 
-  if (data.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
-    if (data.criticalAnalysisTestDate) {
-      timeline.push(
-        {
-          entry: 'Critical analysis qualifying test (QT)',
-          date: getDateAndTime(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime),
-          dateString: getDateAndTimeString(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime, data.criticalAnalysisTestEndTime),
-        },
-      );
-    }
-    if (data.criticalAnalysisTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Critical analysis QT outcome to candidates',
-          date: data.criticalAnalysisTestOutcome,
-          dateString: isDate(data.criticalAnalysisTestOutcome) ? formatDate(data.criticalAnalysisTestOutcome) : null,
-        },
-      );
-    }
-  }  
+  if (data.sjcaTestOutcome) {
+    timeline.push(
+      {
+        entry: 'QT outcome to candidates',
+        date: isDate(data.sjcaTestOutcome) ? formatDate(data.sjcaTestOutcome, 'month') : null,
+      },
+    );
+  }
 
-  if (data.shortlistingMethods.includes('scenario-test')) {
-    if (data.scenarioTestDate) {
-      timeline.push(
-        {
-            entry: 'Scenario test',
-            date: getDateAndTime(data.scenarioTestDate, data.scenarioTestStartTime),
-            dateString: getDateAndTimeString(data.scenarioTestDate, data.scenarioTestStartTime, data.scenarioTestEndTime),
-          },
-      );
-    }
-    if (data.scenarioTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Scenario test outcome to candidates',
-          date: data.scenarioTestOutcome,
-          dateString: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+  if (data.scenarioTestDate) {
+    timeline.push(
+      {
+          entry: 'Scenario test',
+          date: createScenariotest(data),
         },
-      );
-    }  
+    );
+  }
+
+  if (data.scenarioTestOutcome) {
+    timeline.push(
+      {
+        entry: 'Scenario test outcome to candidates',
+        date: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+      },
+    );
   }
 
   if (data.contactIndependentAssessors) {
     timeline.push(
       {
-        entry: 'JAC Contacts Independent Assessors',
-        date: data.contactIndependentAssessors,
-        dateString: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
+        entry: 'JAC Contacts IAs',
+        date: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
       },
     );
   }
@@ -190,8 +162,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Return date for independent assessments',
-        date: data.independentAssessmentsReturnDate,
-        dateString: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
+        date: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
       },
     );
   }
@@ -200,8 +171,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Eligibility SCC',
-        date: data.eligibilitySCCDate,
-        dateString: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
+        date: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
       },
     );
   }
@@ -217,8 +187,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Character checks',
-        date: data.characterChecksDate,
-        dateString: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
+        date: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
       },
     );
   }
@@ -227,8 +196,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Statutory consultation',
-        date: data.statutoryConsultationDate,
-        dateString: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
+        date: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
       },
     );
   }
@@ -237,8 +205,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Character and Selection SCC',
-        date: data.characterAndSCCDate,
-        dateString: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
+        date: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
       },
     );
   }
@@ -247,8 +214,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Selection process outcome',
-        date: data.finalOutcome,
-        dateString: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
+        date: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
       }
     );
   }
@@ -263,8 +229,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'EMP SCC',
-        date: data.eMPSCCDate,
-        dateString: isDate(data.eMPSCCDate) ? formatDate(data.eMPSCCDate) : null,
+        date: isDate(data.eMPSCCDate) ? formatDate(data.eMPSCCDate) : null,
       }
     );
   }
@@ -273,8 +238,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'EMP Outcomes',
-        date: data.eMPOutcomeDate,
-        dateString: isDate(data.eMPOutcomeDate) ? formatDate(data.eMPOutcomeDate, 'month') : null,
+        date: isDate(data.eMPOutcomeDate) ? formatDate(data.eMPOutcomeDate, 'month') : null,
       }
     );
   }
