@@ -11,42 +11,35 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
                 <div class="gem-c-organisation-logo brand--ministry-of-justice">
-                  <img
-                    src="@/assets/jac-logo.svg"
-                    alt="Judicial Appointments Commission"
-                    width="197"
-                    height="66"
-                    style="text-align: center"
-                  >
+                  <a href="https://judicialappointments.gov.uk/">
+                    <img
+                      src="@/assets/jac-logo.svg"
+                      alt="Judicial Appointments Commission"
+                      width="197"
+                      height="66"
+                      style="text-align: center"
+                    >
+                  </a>
                 </div>
               </div>
-
               <div class="govuk-grid-column-one-third organisation__margin-bottom">
-
-                <ol class="app-c-topic-list app-c-topic-list--small brand--ministry-of-justice ">
-
-                  <li class="app-c-topic-list__item">
-                    <a
-                      class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                      href="https://apply.judicialappointments.digital/vacancies" target="_blank"
-                    >Vacancies</a>
-                  </li>
-                  <li class="app-c-topic-list__item">
-                    <button
-                      v-if="$route.name !== 'sign-in'"
-                      class="govuk-button govuk-!-margin-bottom-0"
-                      @click="signOut"
-                    >
-                      Sign Out
-                    </button>
-                  </li>
-                  <li
-                    v-if="isSignedIn"
-                    class="app-c-topic-list__item"
-                  >
-                    <b>You are now signed in as {{ userName }}</b>
-                  </li>
-                </ol>
+                <button
+                  v-if="$route.name !== 'sign-in'"
+                  class="govuk-button govuk-!-margin-right-1"
+                  @click="signOut"
+                >
+                  Sign Out
+                </button>
+                <button style="background-color: #753880;" target="_blank" class="govuk-button" onclick="location.href='https://apply.judicialappointments.digital/vacancies';">
+                      Vacancies
+                </button>
+                <br>
+                <span
+                  v-if="isSignedIn"
+                  class="app-c-topic-list__item nostyle"
+                >
+                  <b>You are now signed in as {{ userName }}</b>
+                </span>
               </div>
             </div>
           </div>
@@ -94,10 +87,6 @@ export default {
 };
 </script>
 <style lang="scss">
-// @import 'https://assets.publishing.service.gov.uk/static/govuk-template-c0b8ba8b1652aacad298d74f24752260187f538b50c40c2484f7f333cbc3cf2b.css';
-@import 'https://assets.publishing.service.gov.uk/static/fonts-e9ec5a5f82e5c2a17927ce356e5a054cb28025ec1547ec5d00f5c98d2ec5e481.css';
-@import 'https://assets.publishing.service.gov.uk/static/core-layout-535eb07d05bcae550061481a9cbefad8c4807bf8da32da77312cf8ef2ab616c0.css';
-@import 'https://assets.publishing.service.gov.uk/collections/application-1da0069f0ad5c09cfd287444f877560d89793e621ff13c1ababf63cc4eaceb8e.css';
   // Required to include global main.scss styles
   .header {
     background-color: #fafafa;
