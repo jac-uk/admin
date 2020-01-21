@@ -5,14 +5,14 @@ import store from '@/store';
 import '@/filters';
 import { auth } from '@/firebase';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import * as Sentry from '@sentry/browser';
+import * as Integrations from '@sentry/integrations';
 
-// import * as Sentry from '@sentry/browser';
-// import * as Integrations from '@sentry/integrations';
-//
-// Sentry.init({
-//   dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-//   integrations: [new Integrations.Vue({ Vue, attachProps: true })],
-// });
+Sentry.init({
+  dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
+  integrations: [new Integrations.Vue({ Vue, attachProps: true })],
+});
+
 Vue.config.productionTip = false;
 Vue.use( CKEditor );
 

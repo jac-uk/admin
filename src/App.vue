@@ -1,8 +1,13 @@
 <template>
   <div class="govuk-width-container">
-    <div style="padding-top: 0px" class="govuk-main-wrapper">
+    <div
+      style="padding-top: 0px"
+      class="govuk-main-wrapper"
+    >
       <header class="header">
             <!-- HEADER SECTION -->
+          <div>
+            <div>
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
                 <div class="gem-c-organisation-logo brand--ministry-of-justice">
@@ -44,7 +49,9 @@
                 </ol>
               </div>
             </div>
-            <!-- HEADER SECTION -->
+          </div>
+        </div>
+        <!-- HEADER SECTION -->
       </header>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -61,16 +68,13 @@
         </div>
       </div>
     </div>
-
     <main id="main-content">
       <RouterView />
     </main>
   </div>
 </template>
-
 <script>
 import { auth } from '@/firebase';
-
 export default {
   name: 'App',
   computed: {
@@ -89,7 +93,6 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 // @import 'https://assets.publishing.service.gov.uk/static/govuk-template-c0b8ba8b1652aacad298d74f24752260187f538b50c40c2484f7f333cbc3cf2b.css';
 @import 'https://assets.publishing.service.gov.uk/static/fonts-e9ec5a5f82e5c2a17927ce356e5a054cb28025ec1547ec5d00f5c98d2ec5e481.css';
@@ -100,7 +103,6 @@ export default {
     background-color: #fafafa;
     padding: 1.25em 0.625em 0 0.625em;
   };
-
   .govuk-main-wrapper {
     padding-top: 0px;
   }
