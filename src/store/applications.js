@@ -7,7 +7,10 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, exerciseId) => {
       const firestoreRef = firestore
-        .collection('applications').where('exerciseId', '==', exerciseId);
+        .collection('applications')
+        .where('exerciseId', '==', exerciseId)
+        .orderBy('status','desc')
+        .orderBy('referenceNumber','asc');
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
