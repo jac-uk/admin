@@ -5,78 +5,50 @@
       class="govuk-main-wrapper"
     >
       <header class="header">
-        <!-- HEADER SECTION -->
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
-            <div class="gem-c-organisation-logo brand--ministry-of-justice">
-              <img
-                src="@/assets/jac-logo.svg"
-                alt="Judicial Appointments Commission"
-                width="197"
-                height="66"
-                style="text-align: center"
-              >
+            <!-- HEADER SECTION -->
+          <div>
+            <div>
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
+                <div class="gem-c-organisation-logo brand--ministry-of-justice">
+                  <img
+                    src="@/assets/jac-logo.svg"
+                    alt="Judicial Appointments Commission"
+                    width="197"
+                    height="66"
+                    style="text-align: center"
+                  >
+                </div>
+              </div>
+
+              <div class="govuk-grid-column-one-third organisation__margin-bottom">
+
+                <ol class="app-c-topic-list app-c-topic-list--small brand--ministry-of-justice ">
+
+                  <li class="app-c-topic-list__item">
+                    <a
+                      class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
+                      href="https://apply.judicialappointments.digital/vacancies" target="_blank"
+                    >Vacancies</a>
+                  </li>
+                  <li class="app-c-topic-list__item">
+                    <button
+                      v-if="$route.name !== 'sign-in'"
+                      class="govuk-button govuk-!-margin-bottom-0"
+                      @click="signOut"
+                    >
+                      Sign Out
+                    </button>
+                  </li>
+                  <li
+                    v-if="isSignedIn"
+                    class="app-c-topic-list__item"
+                  >
+                    <b>You are now signed in as {{ userName }}</b>
+                  </li>
+                </ol>
+              </div>
             </div>
-          </div>
-          <div class="govuk-grid-column-one-third organisation__margin-bottom">
-            <nav
-              role="navigation"
-              class="gem-c-translation-nav gem-c-translation-nav gem-c-translation-nav--no-margin-top brand--ministry-of-justice"
-              aria-label="Translations"
-            >
-              <ul class="gem-c-translation-nav__list">
-                <li class="gem-c-translation-nav__list-item">
-                  <span lang="en">English</span>
-                </li>
-                <li class="gem-c-translation-nav__list-item">
-                  <a
-                    hreflang="cy"
-                    lang="cy"
-                    rel="alternate"
-                    class="gem-c-translation-nav__link brand__color"
-                    href="https://www.judicialappointments.gov.uk/cymraeg"
-                  >Cymraeg</a>
-                </li>
-              </ul>
-            </nav>
-            <ol class="app-c-topic-list app-c-topic-list--small brand--ministry-of-justice ">
-              <li class="app-c-topic-list__item">
-                <a
-                  class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                  href="https://www.judicialappointments.gov.uk/business-plan"
-                  target="_blank"
-                >How do I apply</a>
-              </li>
-              <li class="app-c-topic-list__item">
-                <a
-                  class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                  href="https://www.judicialappointments.gov.uk/jac-official-statistics"
-                  target="_blank"
-                >How do I qualify</a>
-              </li>
-              <li class="app-c-topic-list__item">
-                <a
-                  class="govuk-link app-c-topic-list__link app-c-topic-list__link--no-underline brand__color"
-                  href="https://apply.judicialappointments.digital/vacancies"
-                  target="_blank"
-                >Judicial vacancies</a>
-              </li>
-              <li class="app-c-topic-list__item">
-                <button
-                  v-if="$route.name !== 'sign-in'"
-                  class="govuk-button govuk-!-margin-bottom-0"
-                  @click="signOut"
-                >
-                  Sign Out
-                </button>
-              </li>
-              <li
-                v-if="isSignedIn"
-                class="app-c-topic-list__item"
-              >
-                <b>You are now signed in as {{ userName }}</b>
-              </li>
-            </ol>
           </div>
         </div>
         <!-- HEADER SECTION -->
