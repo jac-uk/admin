@@ -55,6 +55,7 @@
           <DownloadLink
             :file-name="exercise.uploadedCandidateAssessmentFormTemplate"
             :exercise-id="exerciseId"
+            :title="downloadNameGenerator"
           />
         </dd>
       </div>
@@ -94,6 +95,22 @@ export default {
     exerciseId() {
       return this.$store.getters['exerciseDocument/id'];
     },
+    downloadNameGenerator() {
+      let outcome = null;
+      if (this.exercise.assessmentOptions == 'statement-of-suitability-with-competencies') {
+        outcome = 'statement-of-suitability-with-competencies';
+      } else if (
+        this.exercise.assessmentOptions == 'statement-of-suitability-with-skills-and-abilities' ||
+        this.exercise.assessmentOptions == 'statement-of-suitability-with-skills-and-abilities-and-cv'
+      ) {
+        outcome = 'statement-of-suitability-with-skills-and-abilities';
+      }
+      let fileName = this.exercise.uploadedCandidateAssessmentFormTemplate;
+      if (fileName) {
+        outcome = outcome + '.' + fileName.split('.').pop();
+      }
+      return outcome;
+    },    
   },
 };
 </script>
