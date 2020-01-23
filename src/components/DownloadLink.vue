@@ -1,11 +1,11 @@
 <template>
   <a
-    class="govuk-link"
+    class="govuk-link govuk-body-m"
     :class="{'download-visited' : visited }"
     href="javascript:void(0)"
     @click.prevent="download(fileName)"
   >
-    {{ fileName }}
+    {{ linkText }}
   </a>
 </template>
 
@@ -24,11 +24,21 @@ export default {
       type: String,
       default: '',
     },
+    title: {
+      required: false,
+      type: String,
+      default: '',
+    },
   },
   data () {
     return {
       visited: false,
     };
+  },
+  computed: {
+    linkText() {
+      return this.title ? this.title : this.fileName;
+    },
   },
   methods: {
     download(fileName) {
