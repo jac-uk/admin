@@ -85,6 +85,7 @@
           v-model="exercise.authorisations"
           label="Authorisations"
           hint="Select all that apply."
+          required
         >
           <CheckboxItem
             value="s9-1"
@@ -145,6 +146,7 @@
           v-model="exercise.qualifications"
           label="Qualifications"
           hint="Select all that apply."
+          required
         >
           <CheckboxItem
             value="advocate-scottish-bar"
@@ -174,6 +176,10 @@
               required
             />
           </CheckboxItem>
+          <CheckboxItem
+            value="none"
+            label="None"
+          />          
         </CheckboxGroup>
 
         <CheckboxGroup
@@ -181,6 +187,7 @@
           id="memberships"
           v-model="exercise.memberships"
           label="Memberships"
+          required
         >
           <CheckboxItem
             value="chartered-association-of-building-engineers"
@@ -221,6 +228,10 @@
               required
             />
           </CheckboxItem>
+          <CheckboxItem
+            value="none"
+            label="None"
+          />          
         </CheckboxGroup>
 
         <RadioGroup
