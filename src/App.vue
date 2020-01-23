@@ -5,9 +5,9 @@
       class="govuk-main-wrapper"
     >
       <header class="header">
-            <!-- HEADER SECTION -->
+        <!-- HEADER SECTION -->
+        <div>
           <div>
-            <div>
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
                 <div class="gem-c-organisation-logo brand--ministry-of-justice">
@@ -30,8 +30,13 @@
                 >
                   Sign Out
                 </button>
-                <button style="background-color: #753880;" target="_blank" class="govuk-button" onclick="location.href='https://apply.judicialappointments.digital/vacancies';">
-                      Vacancies
+                <button
+                  style="background-color: #753880;"
+                  target="_blank"
+                  class="govuk-button"
+                  onclick="location.href='https://apply.judicialappointments.digital/vacancies';"
+                >
+                  Vacancies
                 </button>
                 <br>
                 <span
