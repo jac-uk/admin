@@ -213,7 +213,7 @@ const router = new Router({
       ],
     },
     {
-      path: 'applications-full',
+      path: '/applications-full',
       component: ApplicationsFull,
       name: 'exercise-applications-full',
       meta: {
