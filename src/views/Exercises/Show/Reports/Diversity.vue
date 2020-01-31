@@ -119,6 +119,22 @@
                 <Stat :stat="diversity.postApplication.gender.genderNeutral" />
               </td>
             </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.gender.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.gender.other" />
+              </td>
+            </tr>            
           </tbody>
         </table>
 
@@ -159,6 +175,22 @@
                 <Stat :stat="diversity.postApplication.ethnicity.white" />
               </td>
             </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.ethnicity.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.ethnicity.other" />
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -197,6 +229,14 @@
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity.postApplication.disability.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.disability.preferNotToSay" />
               </td>
             </tr>
           </tbody>
@@ -247,6 +287,22 @@
                 <Stat :stat="diversity.postApplication.professionalBackground.solicitor" />
               </td>
             </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.professionalBackground.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity.postApplication.professionalBackground.other" />
+              </td>
+            </tr>            
           </tbody>
         </table>
 
