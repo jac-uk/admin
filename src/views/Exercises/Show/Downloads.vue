@@ -16,46 +16,45 @@
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Job Description Template
+          Job Description
         </dt>
         <dd class="govuk-summary-list__value">
           <DownloadLink
-            :file-name="exercise.uploadedJobDescriptionTemplate"
+            :file-name="exercise.jobDescription"
             :exercise-id="exerciseId"
           />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Terms and Conditions Template
+          Terms and Conditions
         </dt>
         <dd class="govuk-summary-list__value">
           <DownloadLink
-            :file-name="exercise.uploadedTermsAndConditionsTemplate"
+            :file-name="exercise.termsAndConditions"
             :exercise-id="exerciseId"
           />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Independent Assessor Template
+          Independent Assessors
         </dt>
         <dd class="govuk-summary-list__value">
           <DownloadLink
-            :file-name="exercise.uploadedIndependentAssessorTemplate"
+            :file-name="exercise.independentAssessors"
             :exercise-id="exerciseId"
           />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Candidate Assessment Form Template
+          Candidate Assessment
         </dt>
         <dd class="govuk-summary-list__value">
           <DownloadLink
-            :file-name="exercise.uploadedCandidateAssessmentFormTemplate"
+            :file-name="exercise.candidateAssessment"
             :exercise-id="exerciseId"
-            :title="downloadNameGenerator"
           />
         </dd>
       </div>
@@ -88,7 +87,7 @@ export default {
     },
     canEdit() {
       return !this.isApproved;
-    },    
+    },
     userId() {
       return this.$store.state.auth.currentUser.uid;
     },
@@ -105,12 +104,12 @@ export default {
       ) {
         outcome = 'statement-of-suitability-with-skills-and-abilities';
       }
-      let fileName = this.exercise.uploadedCandidateAssessmentFormTemplate;
+      let fileName = this.exercise.candidateAssessment;
       if (fileName) {
         outcome = outcome + '.' + fileName.split('.').pop();
       }
       return outcome;
-    },    
+    },
   },
 };
 </script>
