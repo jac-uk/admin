@@ -29,12 +29,14 @@ import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPrefer
 import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/IndependentAssessments';
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
-import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 
 // Report views
-import ExerciseReports from '@/views/Exercises/Reports';
+import ExerciseShowReports from '@/views/Exercises/Show/Reports';
+import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
+import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversity';
+
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
 import ExerciseReportsDiversityDashboard from '@/views/Exercises/Reports/DiversityDashboard';
@@ -204,11 +206,26 @@ const router = new Router({
         {
           path: 'reports',
           component: ExerciseShowReports,
-          name: 'exercise-show-reports',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Reports',
-          },
+          children: [
+            {
+              path: '',
+              component: ExerciseShowReportsIndex,
+              name: 'exercise-show-reports',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Details | Reports',
+              },
+            },
+            {
+              path: 'diversity',
+              component: ExerciseShowReportsDiversity,
+              name: 'exercise-show-report-diversity',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Details | Reports | Diversity',
+              },
+            },
+          ],                    
         },
       ],
     },
@@ -323,7 +340,7 @@ const router = new Router({
     },
     {
       path: '/exercises/:id/report-directory',
-      component: ExerciseReports,
+      component: ExerciseShowReports,
       meta: {
         requiresAuth: true,
         title: 'View exercise reports ',
