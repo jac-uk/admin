@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="percent">{{ stat.percent | formatNumber(2) }} %</span> <span class="total">({{ stat.total }})</span>
+    <span class="percent">{{ stat.percent | formatNumber(2) }}%</span> <span class="total">({{ stat.total }})</span>
   </div>
 </template>
 
