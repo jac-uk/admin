@@ -9,21 +9,22 @@
 
         <ErrorSummary :errors="errors" />
 
-        <!-- Make JD and TC Repeatable. Give them ID's in the title and refs. Include a title box in there. -->
         <FileUpload
           id="job-description"
           ref="job-description"
-          v-model="exercise.jobDescription"
+          v-model="exercise.uploadedJobDescriptionTemplate"
           name="job-description"
           :path="uploadPath"
           label="Job description"
           required
         />
 
+        <!-- Make JD and T'C Repeatable. Give them ID's in the title and refs. Include a title box in there  -->
+
         <FileUpload
           id="terms-and-conditions"
           ref="terms-and-conditions"
-          v-model="exercise.termsAndConditions"
+          v-model="exercise.uploadedTermsAndConditionsTemplate"
           name="terms-and-conditions"
           :path="uploadPath"
           label="Terms and conditions"
@@ -33,7 +34,7 @@
         <FileUpload
           id="independent-assessors"
           ref="independent-assessors"
-          v-model="exercise.independentAssessors"
+          v-model="exercise.uploadedIndependentAssessorTemplate"
           name="independent-assessors"
           :path="uploadPath"
           label="Independent assessors"
@@ -43,7 +44,7 @@
         <FileUpload
           id="candidate-assessment"
           ref="candidate-assessment"
-          v-model="exercise.candidateAssessment"
+          v-model="exercise.uploadedCandidateAssessmentFormTemplate"
           name="candidate-assessment"
           :path="uploadPath"
           label="Candidate assessment"
@@ -73,10 +74,10 @@ export default {
   extends: Form,
   data() {
     const defaults = {
-      jobDescription: null,
-      termsAndConditions: null,
-      independentAssessors: null,
-      candidateAssessment: null,
+      uploadedJobDescriptionTemplate: null,
+      uploadedTermsAndConditionsTemplate: null,
+      uploadedIndependentAssessorTemplate: null,
+      uploadedCandidateAssessmentFormTemplate: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };
@@ -92,7 +93,7 @@ export default {
       return this.$store.getters['exerciseDocument/id'];
     },
     uploadPath() {
-      return `/exercise/${this.exercise.id}/user/${this.userId}`;
+      return `/exercise/${this.exercise.id}`;
     },
   },
   methods: {
