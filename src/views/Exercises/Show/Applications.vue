@@ -71,12 +71,12 @@
       </tbody>
     </table>
 
-    <!-- <router-link
+    <button 
       class="govuk-button"
-      :to="{name: 'exercise-applications-full'}"
+      @click="downloadContacts"
     >
-      See further information
-    </router-link> -->
+      Download Contacts CSV
+    </button>
   </div>
 </template>
 
@@ -95,6 +95,31 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('applications/unbind');
+  },
+  methods: {
+    downloadContacts() {
+      const contacts = [];
+      for (let i = 0, len = this.applications.length; i < len; ++i) {
+        contacts.push({
+          Ref: this.applications[i].referenceNumber,
+          Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
+          Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
+          Status: this.applications[i].status,
+        });
+      }
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += [
+        Object.keys(contacts[0]).join(';'),
+        ...contacts.map(item => Object.values(item).join(';')),
+      ]
+        .join('\n')
+        .replace(/(^\[)|(\]$)/gm, '');
+      const data = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', data);
+      link.setAttribute('download', `${this.exercise.referenceNumber}.contacts.csv`);
+      link.click();
+    },
   },
 };
 </script>
