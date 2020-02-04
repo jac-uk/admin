@@ -74,7 +74,7 @@ const genderStats = (applications) => {
     },
   };
   for (let i = 0, len = applications.length; i < len; ++i) {
-    const application = applications[i];
+    const application = applications[i].equalityAndDiversitySurvey ? applications[i].equalityAndDiversitySurvey : applications[i];
     switch (application.gender) {
     case 'male':
       stats.male.total += 1;
@@ -120,7 +120,7 @@ const ethnicityStats = (applications) => {
     },
   };
   for (let i = 0, len = applications.length; i < len; ++i) {
-    const application = applications[i];
+    const application = applications[i].equalityAndDiversitySurvey ? applications[i].equalityAndDiversitySurvey : applications[i];
     if (application.ethnicGroup) {
       switch (application.ethnicGroup) {
       case 'uk-ethnic':
@@ -164,7 +164,7 @@ const disabilityStats = (applications) => {
     },
   };
   for (let i = 0, len = applications.length; i < len; ++i) {
-    const application = applications[i];
+    const application = applications[i].equalityAndDiversitySurvey ? applications[i].equalityAndDiversitySurvey : applications[i];
     // @todo amend how we store disability answers to be string only
     if (application.disability === true) {
       stats.yes.total += 1;
@@ -204,7 +204,7 @@ const professionalBackgroundStats = (applications) => {
     },
   };
   for (let i = 0, len = applications.length; i < len; ++i) {
-    const application = applications[i];
+    const application = applications[i].equalityAndDiversitySurvey ? applications[i].equalityAndDiversitySurvey : applications[i];
     if (application.professionalBackground && application.professionalBackground.length) {
       if (application.professionalBackground.indexOf('barrister') >= 0) {
         stats.barrister.total += 1;
@@ -241,7 +241,7 @@ const socialMobilityStats = (applications) => {
     },
   };
   for (let i = 0, len = applications.length; i < len; ++i) {
-    const application = applications[i];
+    const application = applications[i].equalityAndDiversitySurvey ? applications[i].equalityAndDiversitySurvey : applications[i];
     if (
       application.stateOrFeeSchool === 'uk-state-selective'
       || application.stateOrFeeSchool === 'uk-state-non-selective'
