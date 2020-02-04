@@ -6,10 +6,9 @@
       label="Title of file"
       required
     />
-
     <FileUpload
       :id="`job-description_file_${index}`"
-      :ref="`job-description_file_${index}`"
+      :ref="ref"
       v-model="row.file"
       :name="`job-description_file_${index}`"
       label="Job description"
@@ -42,6 +41,16 @@ export default {
       type: String,
       required: true,
       default: '',
+    },
+  },
+  computed: {
+    ref() {
+      return `job-description_file_${this.index}`;
+    },
+  },
+  methods: {
+    upload() {
+      return this.$refs[this.ref].upload();
     },
   },
 };

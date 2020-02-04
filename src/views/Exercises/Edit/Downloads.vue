@@ -10,10 +10,11 @@
         <ErrorSummary :errors="errors" />
 
         <RepeatableFields
-          v-model="exercise.uploadedJobDescriptionTemplate"
+          ref="job-description-uploads"
+          v-model="exercise.uploadedJobDescriptions"
+          ident="job-description-uploads"
           :component="repeatableFields.JobDescriptionFileUpload"
           :path="uploadPath"
-          required
         />
 
         <!-- Make JD and T'C Repeatable. Give them ID's in the title and refs. Include a title box in there  -->
@@ -74,6 +75,7 @@ export default {
   extends: Form,
   data() {
     const defaults = {
+      uploadedJobDescriptions: [],
       uploadedJobDescriptionTemplate: null,
       uploadedTermsAndConditionsTemplate: null,
       uploadedIndependentAssessorTemplate: null,
@@ -97,21 +99,25 @@ export default {
       return this.$store.getters['exerciseDocument/id'];
     },
     uploadPath() {
-      return `/exercise/${this.exercise.id}`;
+      return `/exercise/${this.exerciseId}`;
     },
   },
   methods: {
     async save() {
       this.validate();
       if (this.isValid()) {
-        const isJobDescriptionUploaded = await this.$refs['job-description'].upload();
-        const isTermsAndConditionsUploaded = await this.$refs['terms-and-conditions'].upload();
-        const isIndependentAssessorsUploaded = await this.$refs['independent-assessors'].upload();
-        const isCandidateAssessmentUploaded = await this.$refs['candidate-assessment'].upload();
-        if (!isJobDescriptionUploaded || !isTermsAndConditionsUploaded
-          || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
+        const areJobDescriptionsUploaded = await this.$refs['job-description-uploads'].callComponentMethod('upload');
+        if (!areJobDescriptionsUploaded) {
           return false;
         }
+        // const isJobDescriptionUploaded = await this.$refs['job-description'].upload();
+        // const isTermsAndConditionsUploaded = await this.$refs['terms-and-conditions'].upload();
+        // const isIndependentAssessorsUploaded = await this.$refs['independent-assessors'].upload();
+        // const isCandidateAssessmentUploaded = await this.$refs['candidate-assessment'].upload();
+        // if (!isJobDescriptionUploaded || !isTermsAndConditionsUploaded
+        //   || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
+        //   return false;
+        // }
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }

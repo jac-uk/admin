@@ -8,9 +8,11 @@
     >
       <component
         :is="component"
+        :ref="`${ident}-${index}`"
         :row="row"
         :index="index"
         :ident="ident"
+        :path="path"
       >
         <template v-slot:removeButton>
           <button
@@ -58,6 +60,11 @@ export default {
       type: String,
       default: null,
     },
+    path: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
   data() {
     return {
@@ -92,6 +99,15 @@ export default {
     },
     removeRow(index) {
       this.rows.splice(index, 1);
+    },
+    async callComponentMethod(methodName) {
+      for (let i = 0, len = this.rows.length; i < len; ++i) {
+        const isOk = await this.$refs[`${this.ident}-${i}`][0][methodName]();
+        if (!isOk) {
+          return false;
+        }
+      }
+      return true;
     },
   },
 };
