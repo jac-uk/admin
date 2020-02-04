@@ -26,7 +26,7 @@
       Your file has been received.
       <a
         href="javascript:void(0)"
-        class="govuk-link" 
+        class="govuk-link"
         @click.prevent="replaceFile"
       >Replace</a>
     </p>
@@ -65,7 +65,7 @@ export default {
     value: {
       default: '',
       type: String,
-    },    
+    },
     name: {
       type: String,
       required: true,
@@ -104,7 +104,7 @@ export default {
     replaceFile() {
       this.isReplacing = true;
     },
-    fileSelected() {  
+    fileSelected() {
       this.file = this.$refs.file.files[0];
       this.fileName = `${this.name}.${this.file.name.split('.')[1]}`;
       this.setError('');

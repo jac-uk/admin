@@ -9,13 +9,10 @@
 
         <ErrorSummary :errors="errors" />
 
-        <FileUpload
-          id="job-description"
-          ref="job-description"
+        <RepeatableFields
           v-model="exercise.uploadedJobDescriptionTemplate"
-          name="job-description"
+          :component="repeatableFields.JobDescriptionFileUpload"
           :path="uploadPath"
-          label="Job description"
           required
         />
 
@@ -64,12 +61,15 @@ import Form from '@/components/Form/Form';
 import BackLink from '@/components/BackLink';
 import FileUpload from '@/components/Form/FileUpload';
 import ErrorSummary from '@/components/Form/ErrorSummary';
+import RepeatableFields from '@/components/RepeatableFields';
+import JobDescriptionFileUpload from '@/components/RepeatableFields/JobDescriptionFileUpload';
 
 export default {
   components: {
     BackLink,
     FileUpload,
     ErrorSummary,
+    RepeatableFields,
   },
   extends: Form,
   data() {
@@ -83,6 +83,10 @@ export default {
     const exercise = { ...defaults, ...data };
     return {
       exercise: exercise,
+      repeatableFields: {
+        JobDescriptionFileUpload,
+
+      },
     };
   },
   computed: {
