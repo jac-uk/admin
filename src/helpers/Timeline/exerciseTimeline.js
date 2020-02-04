@@ -85,6 +85,15 @@ const exerciseTimeline = (data) => {
     //     entry: 'Shortlisting',
     //   },
     // );
+    if (data.shortlistingOutcomeDate) {
+      timeline.push(
+        {
+          entry: 'Shortlisting outcome',
+          date: data.shortlistingOutcomeDate,
+          dateString: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate, 'month') : null,
+        },
+      );
+    }
 
     if(data.shortlistingMethods.includes('paper-sift')) {
       timeline.push(
@@ -101,79 +110,69 @@ const exerciseTimeline = (data) => {
     if(data.shortlistingMethods.includes('telephone-assessment')) {
       timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
     }
-  }
 
-  if (data.shortlistingOutcomeDate) {
-    timeline.push(
-      {
-        entry: 'Shortlisting outcome',
-        date: data.shortlistingOutcomeDate,
-        dateString: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate, 'month') : null,
-      },
-    );
-  }
-  
-  if (data.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
-    if (data.situationalJudgementTestDate) {
-      timeline.push(
-        {
-          entry: 'Situational judgement qualifying test (QT)',
-          date: getDateAndTime(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime),
-          dateString: getDateAndTimeString(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime, data.situationalJudgementTestEndTime),
-        },
-      );
+    if (data.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
+      if (data.situationalJudgementTestDate) {
+        timeline.push(
+          {
+            entry: 'Situational judgement qualifying test (QT)',
+            date: getDateAndTime(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime),
+            dateString: getDateAndTimeString(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime, data.situationalJudgementTestEndTime),
+          },
+        );
+      }
+      if (data.situationalJudgementTestOutcome) {
+        timeline.push(
+          {
+            entry: 'Situational judgement QT outcome to candidates',
+            date: data.situationalJudgementTestOutcome,
+            dateString: isDate(data.situationalJudgementTestOutcome) ? formatDate(data.situationalJudgementTestOutcome) : null,
+          },
+        );
+      }
     }
-    if (data.situationalJudgementTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Situational judgement QT outcome to candidates',
-          date: data.situationalJudgementTestOutcome,
-          dateString: isDate(data.situationalJudgementTestOutcome) ? formatDate(data.situationalJudgementTestOutcome) : null,
-        },
-      );
-    }
-  }
 
-  if (data.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
-    if (data.criticalAnalysisTestDate) {
-      timeline.push(
-        {
-          entry: 'Critical analysis qualifying test (QT)',
-          date: getDateAndTime(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime),
-          dateString: getDateAndTimeString(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime, data.criticalAnalysisTestEndTime),
-        },
-      );
+    if (data.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
+      if (data.criticalAnalysisTestDate) {
+        timeline.push(
+          {
+            entry: 'Critical analysis qualifying test (QT)',
+            date: getDateAndTime(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime),
+            dateString: getDateAndTimeString(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime, data.criticalAnalysisTestEndTime),
+          },
+        );
+      }
+      if (data.criticalAnalysisTestOutcome) {
+        timeline.push(
+          {
+            entry: 'Critical analysis QT outcome to candidates',
+            date: data.criticalAnalysisTestOutcome,
+            dateString: isDate(data.criticalAnalysisTestOutcome) ? formatDate(data.criticalAnalysisTestOutcome) : null,
+          },
+        );
+      }
     }
-    if (data.criticalAnalysisTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Critical analysis QT outcome to candidates',
-          date: data.criticalAnalysisTestOutcome,
-          dateString: isDate(data.criticalAnalysisTestOutcome) ? formatDate(data.criticalAnalysisTestOutcome) : null,
-        },
-      );
-    }
-  }  
 
-  if (data.shortlistingMethods.includes('scenario-test')) {
-    if (data.scenarioTestDate) {
-      timeline.push(
-        {
+    if (data.shortlistingMethods.includes('scenario-test')) {
+      if (data.scenarioTestDate) {
+        timeline.push(
+          {
             entry: 'Scenario test',
             date: getDateAndTime(data.scenarioTestDate, data.scenarioTestStartTime),
             dateString: getDateAndTimeString(data.scenarioTestDate, data.scenarioTestStartTime, data.scenarioTestEndTime),
           },
-      );
-    }
-    if (data.scenarioTestOutcome) {
-      timeline.push(
-        {
-          entry: 'Scenario test outcome to candidates',
-          date: data.scenarioTestOutcome,
-          dateString: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
-        },
-      );
-    }  
+        );
+      }
+      if (data.scenarioTestOutcome) {
+        timeline.push(
+          {
+            entry: 'Scenario test outcome to candidates',
+            date: data.scenarioTestOutcome,
+            dateString: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+          },
+        );
+      }
+    }    
   }
 
   if (data.contactIndependentAssessors) {
