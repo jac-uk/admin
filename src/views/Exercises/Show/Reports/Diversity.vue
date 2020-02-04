@@ -379,7 +379,7 @@ export default {
     this.$store.dispatch('applications/bind', this.exercise.id);
   },
   destroyed() {
-    this.$store.dispatch('applications/unbind');
+    // this.$store.dispatch('applications/unbind');
   },  
 };
 </script>
