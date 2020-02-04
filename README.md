@@ -9,6 +9,10 @@ This is the Vue SPA for managing exercises and candidates. By default, it deploy
 npm install
 ```
 
+## Add environment variables to root project
+
+create .env file in root directory + credentials
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
