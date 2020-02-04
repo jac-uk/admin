@@ -94,7 +94,7 @@ export default {
     this.$store.dispatch('applications/bind', this.exercise.id);
   },
   destroyed() {
-    this.$store.dispatch('applications/unbind');
+    // this.$store.dispatch('applications/unbind');
   },
   methods: {
     downloadContacts() {
@@ -102,9 +102,15 @@ export default {
       for (let i = 0, len = this.applications.length; i < len; ++i) {
         contacts.push({
           Ref: this.applications[i].referenceNumber,
+          Status: this.applications[i].status,
           Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
           Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
-          Status: this.applications[i].status,
+          FirstAssessorName: this.applications[i].firstAssessorFullName,
+          FirstAssessorEmail: this.applications[i].firstAssessorEmail,
+          FirstAssessorPhone: this.applications[i].firstAssessorPhone,
+          SecondAssessorName: this.applications[i].secondAssessorFullName,
+          SecondAssessorEmail: this.applications[i].secondAssessorEmail,
+          SecondAssessorPhone: this.applications[i].secondAssessorPhone,
         });
       }
       let csvContent = 'data:text/csv;charset=utf-8,';
