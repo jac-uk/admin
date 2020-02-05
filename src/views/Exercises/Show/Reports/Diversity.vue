@@ -376,7 +376,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('applications/bind', this.exercise.id);
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
   },
   destroyed() {
     // this.$store.dispatch('applications/unbind');
