@@ -131,9 +131,22 @@ export default {
         },
       ];
       if (this.exercise.applicationsCount || this.hasOpened) {
-        pages.push({ page: 'Applications', name: 'exercise-show-applications' });
+        pages.push({ 
+          page: 'Applications',
+          name: 'exercise-show-applications',
+          children: [
+            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: 'draft' } },
+            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
+          ],
+        });
         // pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
-        // pages.push({ page: 'Exercise reports', name: 'exercise-show-reports' });
+        pages.push({ 
+          page: 'Exercise reports', 
+          name: 'exercise-show-reports',
+          children: [
+            { page: 'Diversity', name: 'exercise-show-report-diversity' },
+          ],
+        });
       }
       return pages;
     },

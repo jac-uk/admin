@@ -2,7 +2,7 @@
   <div>
     <table class="govuk-table">
       <caption class="govuk-table__caption">
-        Applications
+        Applications - {{ status | lookup }}
       </caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -10,7 +10,7 @@
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Application Ref
+            Reference number
           </th>
           <th
             scope="col"
@@ -62,7 +62,12 @@
             {{ application.email }}
           </td> -->
           <td class="govuk-table__cell">
-            {{ application.status }}
+            <router-link
+              class="govuk-link"
+              :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+            >
+              {{ application.status }}
+            </router-link>          
           </td>
           <!-- <td class="govuk-table__cell">
             {{ application.notes }}
@@ -71,12 +76,12 @@
       </tbody>
     </table>
 
-    <!-- <router-link
+    <button 
       class="govuk-button"
-      :to="{name: 'exercise-applications-full'}"
+      @click="downloadContacts"
     >
-      See further information
-    </router-link> -->
+      Download Contacts CSV
+    </button>
   </div>
 </template>
 
@@ -89,12 +94,50 @@ export default {
     applications() {
       return this.$store.state.applications.records;
     },
+    status() {
+      return this.$route.params.status;
+    },
   },
   created() {
-    this.$store.dispatch('applications/bind', this.exercise.id);
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: this.status });
   },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: to.params.status });
+    next();
+  },  
   destroyed() {
-    this.$store.dispatch('applications/unbind');
+    // this.$store.dispatch('applications/unbind');
+  },
+  methods: {
+    downloadContacts() {
+      const contacts = [];
+      for (let i = 0, len = this.applications.length; i < len; ++i) {
+        contacts.push({
+          Ref: this.applications[i].referenceNumber,
+          Status: this.applications[i].status,
+          Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
+          Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
+          FirstAssessorName: this.applications[i].firstAssessorFullName,
+          FirstAssessorEmail: this.applications[i].firstAssessorEmail,
+          FirstAssessorPhone: this.applications[i].firstAssessorPhone,
+          SecondAssessorName: this.applications[i].secondAssessorFullName,
+          SecondAssessorEmail: this.applications[i].secondAssessorEmail,
+          SecondAssessorPhone: this.applications[i].secondAssessorPhone,
+        });
+      }
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += [
+        Object.keys(contacts[0]).join(';'),
+        ...contacts.map(item => Object.values(item).join(';')),
+      ]
+        .join('\n')
+        .replace(/(^\[)|(\]$)/gm, '');
+      const data = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', data);
+      link.setAttribute('download', `${this.exercise.referenceNumber}.contacts.csv`);
+      link.click();
+    },
   },
 };
 </script>

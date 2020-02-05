@@ -13,6 +13,18 @@ Vue.filter('formatDate',
   }
 });
 
+Vue.filter('formatNumber',
+(value, decimalPlaces) => {
+  if (value) {
+    if (decimalPlaces > 0) {
+      return Number(value).toFixed(decimalPlaces);
+    } else {
+      return parseInt(value);
+    }  
+  }
+  return value;
+});
+
 Vue.filter('toHumanCase',
 (value) => {
   if (value) {
@@ -116,6 +128,7 @@ Vue.filter('lookup',
       'pre-launch': 'Pre launch',
       'open': 'Open',
       'closed': 'Closed',
+      'applied': 'Applied',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
