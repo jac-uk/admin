@@ -2,29 +2,29 @@
   <nav :aria-label="label">
     <ul class="dwp-vertical-navigation">
       <li 
-        v-for="page in pageItems"
-        :key="page.name"
+        v-for="(page, index) in pageItems"
+        :key="index"
         :class="{open: page.open, on: page.on}"
       >
         <router-link 
           class="nav-link"
-          :to="{name: page.name}"
+          :to="{name: page.name, params: page.params}"
           :aria-current="page.on ? 'page' : false"
         >
           {{ page.page }}
         </router-link>
         <ul v-if="page.children">
           <li
-            v-for="child in page.children"
-            :key="child.name"
+            v-for="(child, childIndex) in page.children"
+            :key="childIndex"
             :class="{on: child.on}"
           >
             <router-link 
               class="nav-link"
-              :to="{name: child.name}"
+              :to="{name: child.name, params: child.params}"
               :aria-current="child.on ? 'page' : false"
             >
-              {{ child.page }} 
+              {{ child.page }}
             </router-link>
           </li>
         </ul>
@@ -53,6 +53,7 @@ export default {
         const page = {
           page: this.items[i].page,
           name: this.items[i].name,
+          params: this.items[i].params,
         };
         page.open = page.on = page.name === this.$route.name;
         if (this.items[i].children) {
