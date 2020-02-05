@@ -1,5 +1,9 @@
 <template>
   <div>
+    <BackLink />
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+      Application
+    </h1>
     <JsonRenderer :value="application" />
     <button
       v-if="isApplied"
@@ -7,15 +11,24 @@
       @click="unlock"
     >
       Unlock
-    </button>    
+    </button>
+    <button
+      v-else
+      class="govuk-button govuk-!-margin-right-3"
+      @click="submitApplication"
+    >
+      Mark as applied
+    </button>
   </div>
 </template>
 
 <script>
+import BackLink from '@/components/BackLink';
 import JsonRenderer from '@/components/JsonRenderer';
 
 export default {
   components: {
+    BackLink,
     JsonRenderer,
   },
   computed: {
@@ -48,6 +61,9 @@ export default {
   methods: {
     unlock() {
       this.$store.dispatch('application/unlock');
+    },
+    submitApplication() {
+      this.$store.dispatch('application/submit');
     },
   }, 
 };
