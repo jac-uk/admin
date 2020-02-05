@@ -97,20 +97,16 @@ const router = new Router({
         },
         {
           path: 'applications',
-          component: ExerciseShowApplications,
           name: 'exercise-show-applications',
+          redirect: 'applications/applied',
+        },
+        {
+          path: 'applications/:status',
+          component: ExerciseShowApplications,
+          name: 'exercise-show-applications-in-status',
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Applications',
-          },
-        },
-        {
-          path: 'application/:applicationId',
-          component: ExerciseShowApplication,
-          name: 'exercise-show-application',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Application',
           },
         },
         {
@@ -228,6 +224,15 @@ const router = new Router({
           ],                    
         },
       ],
+    },
+    {
+      path: '/application/:applicationId',
+      component: ExerciseShowApplication,
+      name: 'exercise-show-application',
+      meta: {
+        requiresAuth: true,
+        title: 'Exercise Details | Application',
+      },
     },
     {
       path: '/applications-full',

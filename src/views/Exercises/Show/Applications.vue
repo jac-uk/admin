@@ -2,7 +2,7 @@
   <div>
     <table class="govuk-table">
       <caption class="govuk-table__caption">
-        Applications
+        Applications - {{ status | lookup }}
       </caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -10,7 +10,7 @@
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Application Ref
+            Reference number
           </th>
           <th
             scope="col"
@@ -62,7 +62,12 @@
             {{ application.email }}
           </td> -->
           <td class="govuk-table__cell">
-            {{ application.status }}
+            <router-link
+              class="govuk-link"
+              :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+            >
+              {{ application.status }}
+            </router-link>          
           </td>
           <!-- <td class="govuk-table__cell">
             {{ application.notes }}
@@ -89,10 +94,17 @@ export default {
     applications() {
       return this.$store.state.applications.records;
     },
+    status() {
+      return this.$route.params.status;
+    },
   },
   created() {
-    this.$store.dispatch('applications/bind', this.exercise.id);
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: this.status });
   },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: to.params.status });
+    next();
+  },  
   destroyed() {
     // this.$store.dispatch('applications/unbind');
   },

@@ -5,12 +5,13 @@ import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, exerciseId) => {
-      const firestoreRef = firestore
+    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, status }) => {
+      let firestoreRef = firestore
         .collection('applications')
-        .where('exerciseId', '==', exerciseId)
-        .orderBy('status','desc')
-        .orderBy('referenceNumber','asc');
+        .where('exerciseId', '==', exerciseId);
+      if (status) {
+        firestoreRef = firestoreRef.where('status', '==', status);
+      }
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {

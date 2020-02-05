@@ -128,6 +128,7 @@ Vue.filter('lookup',
       'pre-launch': 'Pre launch',
       'open': 'Open',
       'closed': 'Closed',
+      'applied': 'Applied',
       // 'xxx': 'xxx',
     };
     return lookup[value] || value;
