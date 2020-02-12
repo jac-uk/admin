@@ -5,16 +5,42 @@
       Application
     </h1>
     <JsonRenderer :value="application" />
+    <div class="govuk-column-full">
+      <DownloadLink 
+        v-if="application && application.uploadedCV"
+        :exercise-id="application.exerciseId"
+        :user-id="application.userId"
+        title="Uploaded CV"
+        :file-name="application.uploadedCV"
+        class="govuk-!-margin-right-3"
+      />
+      <DownloadLink 
+        v-if="application && application.uploadedSelfAssessment"
+        :exercise-id="application.exerciseId"
+        :user-id="application.userId"
+        title="Uploaded Self Assessment"
+        :file-name="application.uploadedSelfAssessment"
+        class="govuk-!-margin-right-3"
+      />
+      <DownloadLink 
+        v-if="application && application.uploadedSuitabilityStatement"
+        :exercise-id="application.exerciseId"
+        :user-id="application.userId"
+        title="Uploaded Suitability Statement"
+        :file-name="application.uploadedSuitabilityStatement"
+        class="govuk-!-margin-right-3"
+      />
+    </div>
     <button
       v-if="isApplied"
-      class="govuk-button govuk-!-margin-right-3"
+      class="govuk-button govuk-!-margin-right-3 govuk-!-margin-top-3"
       @click="unlock"
     >
       Unlock
     </button>
     <button
       v-else
-      class="govuk-button govuk-!-margin-right-3"
+      class="govuk-button govuk-!-margin-right-3 govuk-!-margin-top-3"
       @click="submitApplication"
     >
       Mark as applied
@@ -25,11 +51,13 @@
 <script>
 import BackLink from '@/components/BackLink';
 import JsonRenderer from '@/components/JsonRenderer';
+import DownloadLink from '@/components/DownloadLink';
 
 export default {
   components: {
     BackLink,
     JsonRenderer,
+    DownloadLink,
   },
   computed: {
     exercise() {
