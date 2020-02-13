@@ -35,14 +35,14 @@ jobs:
       #     name: 'Test'
       #     command: npm run test-ci
 
-  rebase:
-    executor: default
-    steps:
-      - attach_workspace:
-          at: ~/digital-platform
-      - run:
-          name: 'Rebase against master'
-          command: git rebase master
+  # rebase:
+  #   executor: default
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/digital-platform
+  #     - run:
+  #         name: 'Rebase against master'
+  #         command: git rebase master
 
   build-and-deploy-production:
     executor: default
@@ -76,18 +76,18 @@ workflows:
       - test:
           requires:
             - setup
-      - rebase:
-          requires:
-            - setup
-          filters:
-            branches:
-              ignore: master
+      # - rebase:
+      #     requires:
+      #       - setup
+      #     filters:
+      #       branches:
+      #         ignore: master
       - build-and-deploy-staging:
           requires:
             - test
           filters:
             branches:
-              only: /staging.*/ 
+              only: /release/.*/ 
       - build-and-deploy-production:
           requires:
             - test

@@ -24,6 +24,11 @@ export default {
       type: String,
       default: '',
     },
+    userId: {
+      required: false,
+      type: String,
+      default: null,
+    },
     title: {
       required: false,
       type: String,
@@ -39,23 +44,22 @@ export default {
     linkText() {
       return this.title ? this.title : this.fileName;
     },
+    savePath() {
+      let savePath = '';
+      if (this.exerciseId) {
+        savePath += `exercise/${this.exerciseId}/`;
+      }
+      if (this.userId) {
+        savePath += `user/${this.userId}/`;
+      }
+      return savePath;
+    },
   },
   methods: {
     download(fileName) {
       this.visited = true;
-      // Create a reference to the file we want to download
-      const fileSavePath = `exercise/${this.exerciseId}/${fileName}`;
-
-      // Get a reference to the storage service, which is used to create references in your storage bucket
-      const storage = firebase.storage();
-
-      // Create a storage reference from our storage service
-      const storageRef = storage.ref();
-
-      // Create a reference with an initial file path and name
-      const fileNameRef = storageRef.child(fileSavePath);
-
-      // Get the download URL
+      const storageRef = firebase.storage().ref();
+      const fileNameRef = storageRef.child(this.savePath + fileName);
       fileNameRef.getDownloadURL().then((url) => {
         // open url in another window
         window.open(url);
