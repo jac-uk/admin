@@ -31,6 +31,7 @@ import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOpti
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
+import ExerciseShowApplicationStreamlined from '@/views/Exercises/Show/ApplicationStreamlined';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -144,7 +145,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Vacancy summary',
           },
-        },        
+        },
         {
           path: 'vacancy',
           component: ExerciseShowVacancy,
@@ -221,7 +222,7 @@ const router = new Router({
                 title: 'Exercise Details | Reports | Diversity',
               },
             },
-          ],                    
+          ],
         },
       ],
     },
@@ -232,6 +233,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Exercise Details | Application',
+      },
+    },
+    {
+      path: '/application/streamlined/:applicationId',
+      component: ExerciseShowApplicationStreamlined,
+      name: 'exercise-show-application-streamlined',
+      meta: {
+        requiresAuth: true,
+        title: 'Exercise Details Streamlined | Application',
       },
     },
     {
@@ -304,7 +314,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Vacancy Summary',
           },
-        },        
+        },
         {
           path: 'vacancy',
           component: ExerciseEditVacancy,

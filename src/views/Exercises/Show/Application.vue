@@ -1,12 +1,21 @@
 <template>
   <div>
     <BackLink />
+
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
       Application
     </h1>
+
+    <router-link
+      class="govuk-link"
+      :to="{name: 'exercise-show-application-streamlined', params: { applicationId: application.id }}"
+    >
+      See limited version
+    </router-link>
+    
     <JsonRenderer :value="application" />
     <div class="govuk-column-full">
-      <DownloadLink 
+      <DownloadLink
         v-if="application && application.uploadedCV"
         :exercise-id="application.exerciseId"
         :user-id="application.userId"
@@ -14,7 +23,7 @@
         :file-name="application.uploadedCV"
         class="govuk-!-margin-right-3"
       />
-      <DownloadLink 
+      <DownloadLink
         v-if="application && application.uploadedSelfAssessment"
         :exercise-id="application.exerciseId"
         :user-id="application.userId"
@@ -22,7 +31,7 @@
         :file-name="application.uploadedSelfAssessment"
         class="govuk-!-margin-right-3"
       />
-      <DownloadLink 
+      <DownloadLink
         v-if="application && application.uploadedSuitabilityStatement"
         :exercise-id="application.exerciseId"
         :user-id="application.userId"
@@ -76,7 +85,7 @@ export default {
         }
       }
       return false;
-    },    
+    },
   },
   created() {
     if (this.$route.params.applicationId) {
@@ -93,7 +102,7 @@ export default {
     submitApplication() {
       this.$store.dispatch('application/submit');
     },
-  }, 
+  },
 };
 </script>
 

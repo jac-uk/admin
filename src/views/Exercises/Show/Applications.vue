@@ -53,7 +53,7 @@
               :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
             >
               {{ application.referenceNumber }}
-            </router-link>          
+            </router-link>
           </th>
           <td class="govuk-table__cell">
             <span v-if="application.personalDetails">{{ application.personalDetails.fullName }}</span>
@@ -67,7 +67,7 @@
               :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
             >
               {{ application.status }}
-            </router-link>          
+            </router-link>
           </td>
           <!-- <td class="govuk-table__cell">
             {{ application.notes }}
@@ -76,7 +76,7 @@
       </tbody>
     </table>
 
-    <button 
+    <button
       class="govuk-button"
       @click="downloadContacts"
     >
@@ -104,7 +104,7 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: to.params.status });
     next();
-  },  
+  },
   destroyed() {
     // this.$store.dispatch('applications/unbind');
   },
