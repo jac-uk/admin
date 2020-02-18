@@ -774,6 +774,7 @@
                   <DownloadLink
                     :file-name="application.uploadedSelfAssessment"
                     :exercise-id="exercise.id"
+                    :user-id="application.userId"
                     title="Self Assessment Competencies"
                   />
                 </div>
