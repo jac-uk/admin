@@ -710,6 +710,7 @@
                   <DownloadLink
                     :file-name="application.uploadedSuitabilityStatement"
                     :exercise-id="exercise.id"
+                    :user-id="application.userId"
                     :title="CV"
                   />
                 </div>
@@ -808,6 +809,7 @@
                   <DownloadLink
                     :file-name="application.uploadedCV"
                     :exercise-id="exercise.id"
+                    :user-id="application.userId"
                     title="CV"
                   />
                 </div>

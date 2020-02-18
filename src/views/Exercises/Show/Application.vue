@@ -10,9 +10,9 @@
       class="govuk-link"
       :to="{name: 'exercise-show-application-streamlined', params: { applicationId: application.id }}"
     >
-      See limited version
+      See Panel Pack version
     </router-link>
-    
+
     <JsonRenderer :value="application" />
     <div class="govuk-column-full">
       <DownloadLink
