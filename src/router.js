@@ -36,6 +36,7 @@ import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
 import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversity';
+import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
@@ -219,6 +220,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Details | Reports | Diversity',
+              },
+            },
+            {
+              path: 'reasonable-adjustments',
+              component: ExerciseShowReportsReasonableAdjustments,
+              name: 'exercise-show-report-reasonable-adjustments',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Details | Reports | Reasonable Adjustments',
               },
             },
           ],                    

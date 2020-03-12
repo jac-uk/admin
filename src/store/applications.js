@@ -28,7 +28,32 @@ export default {
       };
       return report;
     },
+    reasonableAdjustments(state) {
+      const report = reasonableAdjustmentsReport(state.records);
+      return report;
+    },
   },
+};
+
+const reasonableAdjustmentsReport = (applications) => {
+  const report = {
+    totalCount: applications.length,
+    candidates: [],
+  };
+  applications.forEach((application) => {
+    if (application.personalDetails.reasonableAdjustments) {
+      report.candidates.push({
+        userId: application.userId,
+        name: application.personalDetails.fullName,
+        email: application.personalDetails.email,
+        phone: application.personalDetails.phone,
+        requiresAdjustments: application.personalDetails.reasonableAdjustments,
+        adjustmentsDetails: application.personalDetails.reasonableAdjustmentsDetails,
+      });
+    }
+  });
+
+  return report;
 };
 
 const diversityReport = (applications) => {
