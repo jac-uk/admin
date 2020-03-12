@@ -1,10 +1,18 @@
 {
   "projects": {
-    "default": "digital-platform-staging",
+    "develop": "digital-platform-develop",
     "staging": "digital-platform-staging",
-    "production": "platform-production-9207d"
+    "production": "platform-production-9207d",
+    "default": "digital-platform-develop"
   },
   "targets": {
+    "digital-platform-develop": {
+      "hosting": {
+        "develop-admin-app": [
+          "jac-admin-develop"
+        ]
+      }
+    },
     "digital-platform-staging": {
       "hosting": {
         "staging-admin-app": [
