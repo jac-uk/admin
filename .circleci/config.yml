@@ -78,7 +78,7 @@ jobs:
           name: 'Deploy to develop'
           command: |
             npm run build-develop
-            node_modules/.bin/firebase target:apply hosting develop-admin-app jac-apply-admin-develop --project develop
+            node_modules/.bin/firebase target:apply hosting develop-admin-app jac-admin-develop --project develop
             node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --only hosting:develop-admin-app --project develop
 
 workflows:
