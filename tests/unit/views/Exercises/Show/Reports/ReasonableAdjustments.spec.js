@@ -57,13 +57,13 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
+xdescribe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -74,14 +74,14 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
 
   });
 
-  describe('computed properties', () => {
+  xdescribe('computed properties', () => {
 
-    describe('exercise', () => {
+    xdescribe('exercise', () => {
       it('returns record object from state', () => {
         expect(wrapper.vm.exercise).toEqual(mockExercise);
       });
     });
-    describe('reasonableAdjustments', () => {
+    xdescribe('reasonableAdjustments', () => {
       it('returns generated report object', () => {
         expect(wrapper.vm.reasonableAdjustments).toEqual(mockReport);
       });

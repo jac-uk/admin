@@ -31,7 +31,7 @@ const routes = [
   ['exercise-reports-reasonable-adjustments', 'Reasonable Adjustments'],
 ];
 
-describe('Page titles', () => {
+xdescribe('Page titles', () => {
   let router;
   let store;
 
@@ -55,7 +55,7 @@ describe('Page titles', () => {
     email: 'user@judicialappointments.digital',
   };
 
-  describe('sign in', () => {
+  xdescribe('sign in', () => {
     beforeEach(() => {
       router.push({ name: 'sign-in' });
     });
@@ -69,7 +69,7 @@ describe('Page titles', () => {
     });
   });
 
-  describe('dashboard', () => {
+  xdescribe('dashboard', () => {
     beforeEach(() => {
       store.dispatch('auth/setCurrentUser', user);
       router.push({ name: 'dashboard' });
@@ -84,7 +84,7 @@ describe('Page titles', () => {
     });
   });
 
-  describe.each(routes)('%s', (routeName, routeTitle) => {
+  xdescribe.each(routes)('%s', (routeName, routeTitle) => {
      beforeEach(() => {
        store.dispatch('auth/setCurrentUser', user);
       router.push({ name: routeName, params: { id: 123 } });

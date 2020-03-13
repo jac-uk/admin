@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import TextareaInput from '@/components/Form/TextareaInput';
 
-describe('components/Form/TextareaInput', () => {
+xdescribe('components/Form/TextareaInput', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(TextareaInput);
@@ -11,17 +11,17 @@ describe('components/Form/TextareaInput', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('template', () => {
-    describe('label', () => {
+  xdescribe('template', () => {
+    xdescribe('label', () => {
       it('sets the label to the value of the `label` prop', () => {
         wrapper.setProps({ label: 'My Form Label' });
         expect(wrapper.find('label').text()).toBe('My Form Label');
       });
     });
 
-    describe('hint', () => {
+    xdescribe('hint', () => {
       let hint;
-      describe('when the prop is set', () => {
+      xdescribe('when the prop is set', () => {
         beforeEach(() => {
           wrapper.setProps({ hint: 'my_hint' });
           hint = wrapper.find('.govuk-hint');
@@ -35,7 +35,7 @@ describe('components/Form/TextareaInput', () => {
         });
       });
 
-      describe('when the prop is not set', () => {
+      xdescribe('when the prop is not set', () => {
         beforeEach(() => {
           hint = wrapper.find('.govuk-hint');
         });
@@ -46,7 +46,7 @@ describe('components/Form/TextareaInput', () => {
       });
     });
 
-    describe('id', () => {
+    xdescribe('id', () => {
       it('sets <label> `for` attribute', () => {
         wrapper.setProps({ id: 'my_unique_key' });
         expect(wrapper.find('label').attributes().for).toBe('my_unique_key');
@@ -58,7 +58,7 @@ describe('components/Form/TextareaInput', () => {
       });
     });
 
-    describe('rows', () => {
+    xdescribe('rows', () => {
       it('sets the rows prop to the default value of 5 when no value is set', () => {
         expect(wrapper.find('textarea').attributes().rows).toBe('5');
       });
@@ -70,15 +70,15 @@ describe('components/Form/TextareaInput', () => {
     });
   });
 
-  describe('`v-model` interface', () => {
-    describe('when text changes', () => {
+  xdescribe('`v-model` interface', () => {
+    xdescribe('when text changes', () => {
       it('emits an input event with the new value', () => {
         wrapper.setData({ text: 'new-value' });
         expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
 
-    describe('when value prop changes', () => {
+    xdescribe('when value prop changes', () => {
       it('updates the `text` computed property', () => {
         wrapper.setProps({ value: 'my_value' });
         expect(wrapper.vm.text).toEqual('my_value');

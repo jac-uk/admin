@@ -1,6 +1,6 @@
 import isDate from '@/helpers/isDate';
 
-describe('@/helpers/isDate', () => {
+xdescribe('@/helpers/isDate', () => {
   it('returns true if the value passed is an instance of a date', () => {
     expect(isDate(new Date('Sun Nov 11 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'))).toBe(true);
   });

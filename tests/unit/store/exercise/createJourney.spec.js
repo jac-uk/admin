@@ -1,12 +1,12 @@
 import exerciseCreateJourney from '@/store/exercise/createJourney';
 
-describe('store/exercise/createJourney', () => {
+xdescribe('store/exercise/createJourney', () => {
   it('is namespaced', () => {
     expect(exerciseCreateJourney.namespaced).toBe(true);
   });
 
-  describe('mutations', () => {
-    describe('setJourney', () => {
+  xdescribe('mutations', () => {
+    xdescribe('setJourney', () => {
       let state;
       beforeEach(() => {
         state = {
@@ -26,7 +26,7 @@ describe('store/exercise/createJourney', () => {
       });
     });
 
-    describe('setCurrentPage', () => {
+    xdescribe('setCurrentPage', () => {
       it('sets `state.currentPage` to the supplied value', () => {
         const state = {
           currentPage: null,
@@ -37,7 +37,7 @@ describe('store/exercise/createJourney', () => {
     });
   });
 
-  describe('actions', () => {
+  xdescribe('actions', () => {
     let context;
     beforeEach(() => {
       context = {
@@ -45,7 +45,7 @@ describe('store/exercise/createJourney', () => {
       };
     });
 
-    describe('start', () => {
+    xdescribe('start', () => {
       it('calls mutation `setJourney` with the supplied journey array', () => {
         const journey = [
           'timeline',
@@ -54,7 +54,7 @@ describe('store/exercise/createJourney', () => {
         expect(context.commit).toHaveBeenCalledWith('setJourney', journey);
       });
 
-      describe('sorts the journey into the expected order', () => {
+      xdescribe('sorts the journey into the expected order', () => {
         /**
          * The expected complete linear journey is:
          *  1. contacts
@@ -103,7 +103,7 @@ describe('store/exercise/createJourney', () => {
       });
     });
 
-    describe('setCurrentRoute', () => {
+    xdescribe('setCurrentRoute', () => {
       it('calls mutation `setCurrentPage` with the journey page name', () => {
         exerciseCreateJourney.actions.setCurrentRoute(context, 'exercise-edit-timeline');
         expect(context.commit).toHaveBeenCalledWith('setCurrentPage', 'timeline');
@@ -118,8 +118,8 @@ describe('store/exercise/createJourney', () => {
     });
   });
 
-  describe('getters', () => {
-    describe('currentPageIndex', () => {
+  xdescribe('getters', () => {
+    xdescribe('currentPageIndex', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -145,7 +145,7 @@ describe('store/exercise/createJourney', () => {
       });
     });
 
-    describe('nextPageIndex', () => {
+    xdescribe('nextPageIndex', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -171,7 +171,7 @@ describe('store/exercise/createJourney', () => {
       });
     });
 
-    describe('nextPage', () => {
+    xdescribe('nextPage', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -185,14 +185,14 @@ describe('store/exercise/createJourney', () => {
       };
       const nextPage = () => (exerciseCreateJourney.getters.nextPage(state, getters, rootState, rootGetters));
 
-      describe('when no document is bound to `exerciseDocument`', () => {
+      xdescribe('when no document is bound to `exerciseDocument`', () => {
         it('returns null', () => {
           rootGetters['exerciseDocument/id'] = null;
           expect(nextPage()).toBeNull();
         });
       });
 
-      describe('when nextPageIndex is null (we are on the last page of the journey)', () => {
+      xdescribe('when nextPageIndex is null (we are on the last page of the journey)', () => {
         it('returns the location of the overview page for the current exercise', () => {
           rootGetters['exerciseDocument/id'] = 'abc123';
           getters.nextPageIndex = null;
@@ -203,7 +203,7 @@ describe('store/exercise/createJourney', () => {
         });
       });
 
-      describe('when nextPageIndex is not null', () => {
+      xdescribe('when nextPageIndex is not null', () => {
         it('returns the location of the next edit page in the journey for the current exercise', () => {
           rootGetters['exerciseDocument/id'] = 'abc123';
           getters.nextPageIndex = 1;

@@ -11,12 +11,12 @@ jest.mock('@/firebase', () => {
 
 jest.mock('vuexfire');
 
-describe('store/exercise/collection', () => {
-  describe('actions', () => {
+xdescribe('store/exercise/collection', () => {
+  xdescribe('actions', () => {
     const actions = exerciseCollection.actions;
 
-    describe('bind', () => {
-      describe('binds using vuexfire bindFirestoreRef()', () => {
+    xdescribe('bind', () => {
+      xdescribe('binds using vuexfire bindFirestoreRef()', () => {
         let callToBindFirestoreRef;
         beforeEach(() => {
           callToBindFirestoreRef = actions.bind();
@@ -39,7 +39,7 @@ describe('store/exercise/collection', () => {
       });
     });
 
-    describe('unbind', () => {
+    xdescribe('unbind', () => {
       it('unbinds key `records`', () => {
         const callToUnbindFirestoreRef = actions.unbind();
         expect(callToUnbindFirestoreRef[0]).toBe('records');

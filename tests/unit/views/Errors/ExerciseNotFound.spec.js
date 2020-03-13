@@ -1,7 +1,7 @@
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import { shallowMount } from '@vue/test-utils';
 
-describe('@/views/ExerciseNotFound', () => {
+xdescribe('@/views/ExerciseNotFound', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseNotFound);

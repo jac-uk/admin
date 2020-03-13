@@ -32,13 +32,13 @@ const createTestSubject = () => {
   });
 };
 
-describe('views/Exercises/Edit/Vacancy', () => {
+xdescribe('views/Exercises/Edit/Vacancy', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -65,11 +65,11 @@ describe('views/Exercises/Edit/Vacancy', () => {
     });
   });
 
-  describe('data', () => {
+  xdescribe('data', () => {
     const booleanFields = [
       'isSPTWOffered',
     ];
-    describe.each(booleanFields)('exercise.%s', (fieldName) => {
+    xdescribe.each(booleanFields)('exercise.%s', (fieldName) => {
       let originalValue;
       beforeEach(() => {
         originalValue = exercise[fieldName];
@@ -78,7 +78,7 @@ describe('views/Exercises/Edit/Vacancy', () => {
         exercise[fieldName] = originalValue;
       });
 
-      describe(`when database value for "${fieldName}" is undefined`, () => {
+      xdescribe(`when database value for "${fieldName}" is undefined`, () => {
         it('defaults to `null`', () => {
           exercise[fieldName] = undefined;
           wrapper = createTestSubject();
@@ -86,7 +86,7 @@ describe('views/Exercises/Edit/Vacancy', () => {
         });
       });
 
-      describe(`when database value for "${fieldName}" is boolean true`, () => {
+      xdescribe(`when database value for "${fieldName}" is boolean true`, () => {
         it('is `true`', () => {
           exercise[fieldName] = true;
           wrapper = createTestSubject();
@@ -94,7 +94,7 @@ describe('views/Exercises/Edit/Vacancy', () => {
         });
       });
 
-      describe(`when database value for "${fieldName}" is boolean false`, () => {
+      xdescribe(`when database value for "${fieldName}" is boolean false`, () => {
         it('is `false`', () => {
           exercise[fieldName] = false;
           wrapper = createTestSubject();
@@ -104,8 +104,8 @@ describe('views/Exercises/Edit/Vacancy', () => {
     });
   });
 
-  describe('methods', () => {
-    describe('save', () => {
+  xdescribe('methods', () => {
+    xdescribe('save', () => {
       const exerciseData = {
         futureStart: '20',
         location: 'Some court somewhere',
