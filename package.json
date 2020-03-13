@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode develop;",
     "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
     "build-develop": "vue-cli-service build --mode develop",
     "build-staging": "vue-cli-service build --mode staging",
