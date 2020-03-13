@@ -80,7 +80,7 @@
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
-          :to="{name: 'exercise-show-reports-reasonable-adjustments'}"
+          :to="{name: 'exercise-show-report-reasonable-adjustments'}"
         >
           Reasonable Adjustments
         </router-link>
