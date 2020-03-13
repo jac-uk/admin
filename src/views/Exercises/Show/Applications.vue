@@ -117,6 +117,7 @@ export default {
           Status: this.applications[i].status,
           Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
           Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
+          Phone: this.applications[i].personalDetails ? this.applications[i].personalDetails.phone : '',
           FirstAssessorName: this.applications[i].firstAssessorFullName,
           FirstAssessorEmail: this.applications[i].firstAssessorEmail,
           FirstAssessorPhone: this.applications[i].firstAssessorPhone,
