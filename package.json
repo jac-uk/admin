@@ -5,8 +5,11 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
+    "build-develop": "vue-cli-service build --mode develop",
     "build-staging": "vue-cli-service build --mode staging",
     "build-production": "vue-cli-service build --mode production",
+    "deploy-develop": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
     "deploy-staging": "vue-cli-service build --mode staging; firebase deploy --only hosting:staging-admin-app -P staging",
     "deploy-production": "vue-cli-service build --mode production; firebase deploy --only hosting:production-admin-app -P production",
     "lint": "vue-cli-service lint",
