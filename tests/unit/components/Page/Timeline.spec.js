@@ -14,16 +14,16 @@ const createTestSubject = (propsData) => {
   });
 };
 
-describe('components/Page/Timeline', () => {
+xdescribe('components/Page/Timeline', () => {
   it('renders the component', () => {
     let wrapper = createTestSubject({ data: testTimelineData });
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('properties', () => {
+  xdescribe('properties', () => {
     let prop;
 
-    describe('data', () => {
+    xdescribe('data', () => {
       beforeEach(() => {
         prop = Timeline.props.data;
       });
@@ -38,7 +38,7 @@ describe('components/Page/Timeline', () => {
     });
   });
 
-  describe('markup', () => {
+  xdescribe('markup', () => {
     let wrapper;
 
     beforeEach(() => {

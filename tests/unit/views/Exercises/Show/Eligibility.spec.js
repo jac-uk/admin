@@ -44,8 +44,8 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Show/Eligibility', () => {
-  describe('template', () => {
+xdescribe('@/views/Exercises/Show/Eligibility', () => {
+  xdescribe('template', () => {
     it('renders the component', () => {
       let wrapper = createTestSubject();
       expect(wrapper.find('dl').exists()).toBe(true);
@@ -57,8 +57,8 @@ describe('@/views/Exercises/Show/Eligibility', () => {
     });
   });
 
-  describe('computed properties', () => {
-    describe('exercise', () => {
+  xdescribe('computed properties', () => {
+    xdescribe('exercise', () => {
       it('returns record object from state', () => {
         let wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);

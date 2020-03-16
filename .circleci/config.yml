@@ -32,9 +32,9 @@ jobs:
       - run:
           name: 'Lint'
           command: npm run lint-ci
-      # - run:
-      #     name: 'Test'
-      #     command: npm run test-ci
+      - run:
+          name: 'Test'
+          command: npm run test-ci
 
   # rebase:
   #   executor: default

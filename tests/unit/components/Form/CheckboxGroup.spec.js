@@ -15,19 +15,19 @@ const createTestSubject = (propsData) => {
   });
 };
 
-describe('components/Form/CheckboxGroup', () => {
+xdescribe('components/Form/CheckboxGroup', () => {
   it('component name is "CheckboxGroup"', () => {
     expect(CheckboxGroup.name).toBe('CheckboxGroup');
   });
 
-  describe('properties', () => {
+  xdescribe('properties', () => {
     let prop;
     /* 
     ** @todo these are now part of `FormField`, which this component extends.
     ** Therefore we could test here that this component extends FormField
     ** and move these prop tests to FormField.spec.js instead
     */
-    // describe('label', () => {
+    // xdescribe('label', () => {
     //   beforeEach(() => {
     //     prop = CheckboxGroup.props.label;
     //   });
@@ -42,7 +42,7 @@ describe('components/Form/CheckboxGroup', () => {
     //   });
     // });
 
-    // describe('hint', () => {
+    // xdescribe('hint', () => {
     //   beforeEach(() => {
     //     prop = CheckboxGroup.props.hint;
     //   });
@@ -57,7 +57,7 @@ describe('components/Form/CheckboxGroup', () => {
     //   });
     // });
 
-    // describe('id', () => {
+    // xdescribe('id', () => {
     //   beforeEach(() => {
     //     prop = CheckboxGroup.props.id;
     //   });
@@ -71,7 +71,7 @@ describe('components/Form/CheckboxGroup', () => {
     //   });
     // });
 
-    describe('value', () => {
+    xdescribe('value', () => {
       beforeEach(() => {
         prop = CheckboxGroup.props.value;
       });
@@ -109,13 +109,13 @@ describe('components/Form/CheckboxGroup', () => {
     });
   });
 
-  describe('`v-model` interface', () => {
+  xdescribe('`v-model` interface', () => {
     let subject;
     beforeEach(() => {
       subject = createTestSubject();
     });
 
-    describe('when the `value` property changes', () => {
+    xdescribe('when the `value` property changes', () => {
       it('updates computed property `inputValue`', () => {
         expect(subject.vm.inputValue).toEqual(['selected-checkbox-value']);
         subject.setProps({
@@ -125,7 +125,7 @@ describe('components/Form/CheckboxGroup', () => {
       });
     });
 
-    describe('when computed property `inputValue` changes', () => {
+    xdescribe('when computed property `inputValue` changes', () => {
       it('emits an `input` event', () => {
         subject.setData({
           inputValue: ['some-new-value'],
@@ -139,7 +139,7 @@ describe('components/Form/CheckboxGroup', () => {
     });
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     let subject;
 
     it('the root element has the `id` attribute which was passed in as prop `id`', () => {
@@ -147,8 +147,8 @@ describe('components/Form/CheckboxGroup', () => {
       expect(subject.is('#example')).toBe(true);
     });
 
-    describe('<legend> element', () => {
-      describe('when the `label` prop is set', () => {
+    xdescribe('<legend> element', () => {
+      xdescribe('when the `label` prop is set', () => {
         it('displays the label in a <legend> element', () => {
           subject = createTestSubject({
             label: 'Which cakes do you like?',
@@ -160,7 +160,7 @@ describe('components/Form/CheckboxGroup', () => {
         });
       });
 
-      describe('when the `label` prop is empty', () => {
+      xdescribe('when the `label` prop is empty', () => {
         it('does not render a <legend>', () => {
           subject = createTestSubject({
             label: '',
@@ -180,8 +180,8 @@ describe('components/Form/CheckboxGroup', () => {
       });
     });
 
-    describe('hint text', () => {
-      describe('when the `hint` prop is set', () => {
+    xdescribe('hint text', () => {
+      xdescribe('when the `hint` prop is set', () => {
         let hint;
         beforeEach(() => {
           subject = createTestSubject({
@@ -207,7 +207,7 @@ describe('components/Form/CheckboxGroup', () => {
         });
       });
 
-      describe('when the `hint` prop is not set', () => {
+      xdescribe('when the `hint` prop is not set', () => {
         let hint;
         beforeEach(() => {
           subject = createTestSubject({
@@ -223,8 +223,8 @@ describe('components/Form/CheckboxGroup', () => {
       });
     });
 
-    describe('`.govuk-checkboxes` slot container', () => {
-      describe('if value is an array ', () => {
+    xdescribe('`.govuk-checkboxes` slot container', () => {
+      xdescribe('if value is an array ', () => {
         let slotContainer;
         beforeEach(() => {
           subject = createTestSubject();
@@ -246,7 +246,7 @@ describe('components/Form/CheckboxGroup', () => {
 
       });
 
-      describe('if value is not an array ', () => {
+      xdescribe('if value is not an array ', () => {
         let slotContainer;
 
         beforeEach(() => {
@@ -266,16 +266,16 @@ describe('components/Form/CheckboxGroup', () => {
     });
   });
 
-  describe('lifecycle hooks', () => {
-    describe('created', () => {
-      describe('if value is an array', () => {
+  xdescribe('lifecycle hooks', () => {
+    xdescribe('created', () => {
+      xdescribe('if value is an array', () => {
         it('does not call emit', ()=> {
           let array = [];
           let wrapper = createTestSubject({ value: array });
           expect(wrapper.emitted().input).not.toBeTruthy();
         });
       });
-      describe('if value is not an array', () => {
+      xdescribe('if value is not an array', () => {
         it('emits the initial empty array value', ()=> {
           let wrapper = createTestSubject({ value: undefined });
           expect(wrapper.emitted().input).toBeTruthy();

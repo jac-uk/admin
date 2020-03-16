@@ -49,7 +49,7 @@ const createTestSubject = (options) => {
   return checkboxes.find(CheckboxItem);
 };
 
-describe('components/Form/CheckboxItem', () => {
+xdescribe('components/Form/CheckboxItem', () => {
   it('component name is "CheckboxItem"', () => {
     expect(CheckboxItem.name).toBe('CheckboxItem');
   });
@@ -74,10 +74,10 @@ describe('components/Form/CheckboxItem', () => {
     /* eslint-enable no-console */
   });
 
-  describe('properties', () => {
+  xdescribe('properties', () => {
     let prop;
 
-    describe('label', () => {
+    xdescribe('label', () => {
       beforeEach(() => {
         prop = CheckboxItem.props.label;
       });
@@ -91,7 +91,7 @@ describe('components/Form/CheckboxItem', () => {
       });
     });
 
-    describe('value', () => {
+    xdescribe('value', () => {
       beforeEach(() => {
         prop = CheckboxItem.props.value;
       });
@@ -119,7 +119,7 @@ describe('components/Form/CheckboxItem', () => {
       });
     });
 
-    describe('hint', () => {
+    xdescribe('hint', () => {
       beforeEach(() => {
         prop = CheckboxItem.props.hint;
       });
@@ -134,10 +134,10 @@ describe('components/Form/CheckboxItem', () => {
     });
   });
 
-  describe('data', () => {
+  xdescribe('data', () => {
     let subject;
 
-    describe('hasConditionalContent', () => {
+    xdescribe('hasConditionalContent', () => {
       it('is true when slot content was supplied', () => {
         subject = createTestSubject({
           label: 'Example checkbox item',
@@ -157,7 +157,7 @@ describe('components/Form/CheckboxItem', () => {
     });
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     let subject;
     beforeEach(() => {
       subject = createTestSubject();
@@ -168,7 +168,7 @@ describe('components/Form/CheckboxItem', () => {
       expect(item.exists()).toBe(true);
     });
 
-    describe('checkbox input', () => {
+    xdescribe('checkbox input', () => {
       let input;
       beforeEach(() => {
         input = subject.find('input[type=checkbox]');
@@ -183,7 +183,7 @@ describe('components/Form/CheckboxItem', () => {
       });
     });
 
-    describe('label', () => {
+    xdescribe('label', () => {
       let label;
       beforeEach(() => {
         label = subject.find('label');
@@ -209,9 +209,9 @@ describe('components/Form/CheckboxItem', () => {
       expect(label.attributes('for')).toBe(input.attributes('id'));
     });
 
-    describe('hint', () => {
+    xdescribe('hint', () => {
       let hint;
-      describe('when the `hint` prop is set', () => {
+      xdescribe('when the `hint` prop is set', () => {
         beforeEach(() => {
           subject = createTestSubject({
             label: 'My label',
@@ -235,7 +235,7 @@ describe('components/Form/CheckboxItem', () => {
         });
       });
 
-      describe('when the `hint` prop is not set', () => {
+      xdescribe('when the `hint` prop is not set', () => {
         beforeEach(() => {
           subject = createTestSubject({
             label: 'My label',
@@ -255,9 +255,9 @@ describe('components/Form/CheckboxItem', () => {
       });
     });
 
-    describe('conditional content', () => {
-      describe('when the checkbox is selected', () => {
-        describe('and conditional content was given', () => {
+    xdescribe('conditional content', () => {
+      xdescribe('when the checkbox is selected', () => {
+        xdescribe('and conditional content was given', () => {
           it('renders conditional content', () => {
             subject = createTestSubject({
               value: ['selected-checkbox-value'],
@@ -268,7 +268,7 @@ describe('components/Form/CheckboxItem', () => {
           });
         });
 
-        describe('and conditional content was not given', () => {
+        xdescribe('and conditional content was not given', () => {
           it('does not render conditional content', () => {
             subject = createTestSubject({
               value: ['selected-checkbox-value'],
@@ -279,7 +279,7 @@ describe('components/Form/CheckboxItem', () => {
         });
       });
 
-      describe('when the checkbox value is not selected', () => {
+      xdescribe('when the checkbox value is not selected', () => {
         it('does not render conditional content', () => {
           subject = createTestSubject({
             value: ['not-selected-value'],

@@ -20,16 +20,16 @@ const createTestSubject = (propsData) => {
   });
 };
 
-describe('components/Page/Navigation', () => {
+xdescribe('components/Page/Navigation', () => {
   it('renders the component', () => {
     let wrapper = createTestSubject({ items: navPages });
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('properties', () => {
+  xdescribe('properties', () => {
     let prop;
 
-    describe('data', () => {
+    xdescribe('data', () => {
       beforeEach(() => {
         prop = Navigation.props.items;
       });
@@ -43,7 +43,7 @@ describe('components/Page/Navigation', () => {
       });
     });
 
-    describe('label', () => {
+    xdescribe('label', () => {
       beforeEach(() => {
         prop = Navigation.props.label;
       });
@@ -62,7 +62,7 @@ describe('components/Page/Navigation', () => {
     });
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     it('renders items that is passed as prop', () => {
       let wrapper = createTestSubject({ items: navPages });
       expect(wrapper.findAll('li').length).toBe(2);
@@ -78,7 +78,7 @@ describe('components/Page/Navigation', () => {
       expect(wrapper.find('nav').attributes('aria-label')).toBe('MyTestLabel');
     });
 
-    describe('aria-current attribute', () => {
+    xdescribe('aria-current attribute', () => {
       it('is set for a link which is currently active', () => {
         let wrapper = createTestSubject({ items: navPages });
         let links = wrapper.findAll('.nav-link');

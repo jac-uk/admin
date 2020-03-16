@@ -2,7 +2,7 @@ import convertFirestoreTimestampsToDates from '@/helpers/convertFirestoreTimesta
 import firebase from '@/firebase';
 const Timestamp = firebase.firestore.Timestamp;
 
-describe('helpers/convertFirestoreTimestampsToDates', () => {
+xdescribe('helpers/convertFirestoreTimestampsToDates', () => {
   const date = new Date('2015-12-23 22:33:44');
   const timestamp = Timestamp.fromDate(date);
 

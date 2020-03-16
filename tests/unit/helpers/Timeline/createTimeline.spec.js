@@ -6,12 +6,12 @@ const timeline = [
   { entry: 'Test3', date: 'SomeDate3' },
 ];
 
-describe('@/helpers/Timeline/createTimeline', () => {
+xdescribe('@/helpers/Timeline/createTimeline', () => {
   it('returns array', () => {
     expect(createTimeline(timeline)).toBeArray();
   });
 
-  describe('when maxEntriesNum value is passed', () => {
+  xdescribe('when maxEntriesNum value is passed', () => {
     it('returns array with a length equals to maxEntriesNum', () => {
       expect(createTimeline(timeline, 2).length).toBe(2);
     });
