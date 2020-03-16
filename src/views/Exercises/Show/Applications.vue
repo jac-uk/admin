@@ -109,7 +109,7 @@ export default {
     // this.$store.dispatch('applications/unbind');
   },
   methods: {
-    downloadContacts() {
+    gatherContacts() {
       const contacts = [];
       for (let i = 0, len = this.applications.length; i < len; ++i) {
         contacts.push({
@@ -117,6 +117,7 @@ export default {
           Status: this.applications[i].status,
           Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
           Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
+          Phone: this.applications[i].personalDetails ? this.applications[i].personalDetails.phone : '',
           FirstAssessorName: this.applications[i].firstAssessorFullName,
           FirstAssessorEmail: this.applications[i].firstAssessorEmail,
           FirstAssessorPhone: this.applications[i].firstAssessorPhone,
@@ -125,6 +126,10 @@ export default {
           SecondAssessorPhone: this.applications[i].secondAssessorPhone,
         });
       }
+
+      return contacts;
+    },
+    buildCsv(contacts) {
       let csvContent = 'data:text/csv;charset=utf-8,';
       csvContent += [
         Object.keys(contacts[0]).join(';'),
@@ -132,9 +137,15 @@ export default {
       ]
         .join('\n')
         .replace(/(^\[)|(\]$)/gm, '');
-      const data = encodeURI(csvContent);
+
+      return encodeURI(csvContent);
+    },
+    downloadContacts() {
+      const contacts = this.gatherContacts();
+
       const link = document.createElement('a');
-      link.setAttribute('href', data);
+
+      link.setAttribute('href', this.buildCsv(contacts));
       link.setAttribute('download', `${this.exercise.referenceNumber}.contacts.csv`);
       link.click();
     },
