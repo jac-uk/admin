@@ -11,12 +11,12 @@ jest.mock('@/firebase', () => {
 
 jest.mock('vuexfire');
 
-describe('store/exercise/single', () => {
-  describe('actions', () => {
+xdescribe('store/exercise/single', () => {
+  xdescribe('actions', () => {
     const actions = exerciseDocument.actions;
 
-    describe('bind', () => {
-      describe('binds using vuexfire bindFirestoreRef()', () => {
+    xdescribe('bind', () => {
+      xdescribe('binds using vuexfire bindFirestoreRef()', () => {
         let callToBindFirestoreRef;
         beforeEach(() => {
           callToBindFirestoreRef = actions.bind('TestDocumentID');
@@ -39,14 +39,14 @@ describe('store/exercise/single', () => {
       });
     });
 
-    describe('unbind', () => {
+    xdescribe('unbind', () => {
       it('unbinds key `record`', () => {
         const callToUnbindFirestoreRef = actions.unbind();
         expect(callToUnbindFirestoreRef[0]).toBe('record');
       });
     });
 
-    describe('create', () => {
+    xdescribe('create', () => {
       let mockDispatch;
       beforeEach(async () => {
         mockDispatch = jest.fn();
@@ -77,7 +77,7 @@ describe('store/exercise/single', () => {
       //   expect(create()).toBeInstanceOf(Promise);
       // });
 
-      describe('the Promise', () => {
+      xdescribe('the Promise', () => {
         const collection = firestore.collection('exercises');
 
         it('creates a new document in the Firestore collection `exercises`', async () => {
@@ -105,7 +105,7 @@ describe('store/exercise/single', () => {
       });
     });
 
-    describe('save', () => {
+    xdescribe('save', () => {
       beforeEach(async () => {
         const doc = firestore.collection('exercises').doc('001');
         await doc.set({
@@ -152,8 +152,8 @@ describe('store/exercise/single', () => {
     });
   });
 
-  describe('getters', () => {
-    describe('id', () => {
+  xdescribe('getters', () => {
+    xdescribe('id', () => {
       it('returns null if no document is loaded', () => {
         const state = {
           record: null,
@@ -171,7 +171,7 @@ describe('store/exercise/single', () => {
       });
     });
 
-    describe('data()', () => {
+    xdescribe('data()', () => {
       it('returns a function', () => {
         const state = {
           record: {},

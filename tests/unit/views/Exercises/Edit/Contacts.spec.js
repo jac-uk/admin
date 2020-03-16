@@ -22,7 +22,7 @@ const mockRouter = {
   push: jest.fn(),
 };
 
-describe('views/Exercises/Edit/Contacts', () => {
+xdescribe('views/Exercises/Edit/Contacts', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditContacts, {
@@ -33,7 +33,7 @@ describe('views/Exercises/Edit/Contacts', () => {
     });
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -60,8 +60,8 @@ describe('views/Exercises/Edit/Contacts', () => {
     });
   });
 
-  describe('methods', () => {
-    describe('save', () => {
+  xdescribe('methods', () => {
+    xdescribe('save', () => {
       const exerciseData = {
         exerciseMailbox: 'test@test',
         selectionExerciseManager: 'John Doe',

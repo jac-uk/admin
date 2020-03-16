@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import LoadingMessage from '@/components/LoadingMessage';
 
-describe('components/LoadingMessage', () => {
+xdescribe('components/LoadingMessage', () => {
   const createWrapper = (loadFailedValue) => {
     return shallowMount(LoadingMessage, {
       propsData: {
@@ -10,7 +10,7 @@ describe('components/LoadingMessage', () => {
     });
   };
 
-  describe('when `loadFailed` is equal to `false`', () => {
+  xdescribe('when `loadFailed` is equal to `false`', () => {
     it('shows the "Loading" message', () => {
       const wrapper = createWrapper(false);
 
@@ -19,7 +19,7 @@ describe('components/LoadingMessage', () => {
     });
   });
 
-  describe('when `loadFailed` is equal to `true`', () => {
+  xdescribe('when `loadFailed` is equal to `true`', () => {
     it('shows the errorMessage', () => {
       const wrapper = createWrapper(true);
 

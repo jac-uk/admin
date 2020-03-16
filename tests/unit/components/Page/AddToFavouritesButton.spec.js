@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 
-describe('@/components/Page/AddToFavouritesButton', () => {
+xdescribe('@/components/Page/AddToFavouritesButton', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(AddToFavouritesButton);
@@ -11,8 +11,8 @@ describe('@/components/Page/AddToFavouritesButton', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('methods', () => {
-    describe('updateFavoutites', () => {
+  xdescribe('methods', () => {
+    xdescribe('updateFavoutites', () => {
       it('updates a value of isInFavourites', () => {
         let isInFavourites = wrapper.vm.isInFavourites;
         wrapper.find('button').trigger('click');
