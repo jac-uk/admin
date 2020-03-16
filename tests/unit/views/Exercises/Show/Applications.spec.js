@@ -161,10 +161,6 @@ xdescribe('@/views/Exercises/Show', () => {
     });
 
     describe('buildCsv', () => {
-      //buildCsv(contacts) {
-      //        let csvContent = 'data:text/csv;charset=utf-8,';
-
-
       it('is a function', () => {
         expect(typeof wrapper.vm.buildCsv).toBe('function');
       });
