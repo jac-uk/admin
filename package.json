@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "cypress": "cypress open",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode develop;",
     "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
@@ -43,6 +44,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.0.0",
     "clone": "^2.1.2",
+    "cypress": "^4.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "firebase-mock": "^2.3.2",
