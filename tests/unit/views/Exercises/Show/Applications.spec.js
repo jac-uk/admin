@@ -17,9 +17,22 @@ const mockExercise = {
 const mockApplication = {
   referenceNumber: 'mock ref 1',
   status: 'mock status 1',
-  Name: 'mock name 1',
-  Email: 'mock@email.one',
-  Phone: '0987654321',
+  personalDetails: {
+    name: 'mock name 1',
+    email: 'mock@email.one',
+    phone: '0987654321',
+    dateOfBirth: '',
+  },
+  equalityAndDiversitySurvey: {
+    gender: 'female',
+    disability: false,
+    ethnicGroup: 'white-black-african',
+    currentLegalRole: [
+      'barrister',
+      'other-current-legal-role',
+    ],
+    otherCurrentLegalRoleDetails: 'mock role details',
+  },
   firstAssessorFullName: 'mock assessor 1 name',
   firstAssessorEmail: 'mock assessor 1 email',
   firstAssessorPhone: 'mock assessor 1 phone',
@@ -113,8 +126,8 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
-  xdescribe('template', () => {
+describe('@/views/Exercises/Show', () => {
+  describe('template', () => {
     it('renders the component', () => {
       let wrapper = createTestSubject();
       expect(wrapper.find('table').exists()).toBe(true);
@@ -127,9 +140,49 @@ xdescribe('@/views/Exercises/Show', () => {
        wrapper = createTestSubject();
     });
 
+    describe('flattenCurrentLegalRole', () => {
+      it('is a function', () => {
+        expect(typeof wrapper.vm.flattenCurrentLegalRole).toBe('function');
+      });
+
+      it('returns empty string if no argument supplied', () => {
+        const flattened = wrapper.vm.flattenCurrentLegalRole();
+
+        expect(flattened).toBe('');
+      });
+
+      it('returns empty string if argument doesn\'t contain currentLegalRole', () => {
+        const flattened = wrapper.vm.flattenCurrentLegalRole({});
+
+        expect(flattened).toBe('');
+      });
+
+      it('returns a flattened string if argument contains a valid currentLegalRole', () => {
+        const flattened = wrapper.vm.flattenCurrentLegalRole(mockApplication.equalityAndDiversitySurvey);
+
+        expect(flattened).toBeString();
+        expect(flattened).toStartWith('"');
+        expect(flattened).toEndWith('"');
+        expect(flattened).toEqual(expect.stringContaining('Barrister'));
+        expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails));
+      });
+    });
+
     describe('gatherContacts()', () => {
       it('is a function', () => {
         expect(typeof wrapper.vm.gatherContacts).toBe('function');
+      });
+
+      it('calls .flattenCurrentLegalRole() to flatten currentLegalRole', () => {
+        wrapper.vm.flattenCurrentLegalRole = jest.fn();
+
+        wrapper.vm.gatherContacts();
+
+        expect(wrapper.vm.flattenCurrentLegalRole).toHaveBeenCalledTimes(mockApplications.length);
+
+        mockApplications.forEach((mockApp) => {
+          expect(wrapper.vm.flattenCurrentLegalRole).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
+        });
       });
 
       it('returns an array with one row per application', () => {
@@ -147,6 +200,11 @@ xdescribe('@/views/Exercises/Show', () => {
           'Name',
           'Email',
           'Phone',
+          'DateOfBirth',
+          'Gender',
+          'Disability',
+          'EthnicGroup',
+          'CurrentLegalRole',
           'FirstAssessorName',
           'FirstAssessorEmail',
           'FirstAssessorPhone',
