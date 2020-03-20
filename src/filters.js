@@ -35,6 +35,17 @@ const toYesNo = (value) => {
   return value;
 };
 
+const slugify = (text) => {
+  if (!text) {
+    return '';
+  }
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, '-and-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+};
+
 const lookup = (value) => {
   if (typeof value === 'string') {
     // @TODO: extract lookup values
@@ -211,10 +222,11 @@ const lookup = (value) => {
   return value;
 };
 
-export default {
+export {
   formatDate,
   formatNumber,
   toHumanCase,
   toYesNo,
-  lookup,
+  slugify,
+  lookup
 };

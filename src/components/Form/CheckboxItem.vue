@@ -39,6 +39,7 @@ export default {
   name: 'CheckboxItem',
   props: {
     label: {
+      default: '',
       required: true,
       type: String,
     },

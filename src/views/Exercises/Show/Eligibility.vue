@@ -139,11 +139,10 @@
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
             <li
-              v-for="membership in exercise.memberships"
+              v-for="membership in memberships"
               :key="membership"
             >
-              <span v-if="membership == 'other'">{{ exercise.otherMemberships }}</span>
-              <span v-else>{{ membership | lookup }}</span>
+              {{ membership | lookup }}
             </li>
           </ul>
         </dd>
@@ -183,6 +182,30 @@
 <script>
 export default {
   computed: {
+    memberships() {
+      // @NOTE this is needed because we don't have the custom memberships in lookup
+      const memberships = [];
+
+      this.exercise.memberships.forEach(membership => {
+        let isOther = false;
+        if (membership === 'other' && !Array.isArray(this.exercise.otherMemberships)) {
+          isOther = true;
+          memberships.push(this.exercise.otherMemberships);
+        } else if (Array.isArray(this.exercise.otherMemberships)) {
+          this.exercise.otherMemberships.forEach(otherMembership => {
+            if (membership === otherMembership.value) {
+              isOther = true;
+              memberships.push(otherMembership.label);
+            }
+          });
+        }
+        if (!isOther) {
+          memberships.push(membership);
+        }
+      });
+
+      return memberships;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -222,6 +245,7 @@ export default {
     isTribunal() {
       return this.exercise.isCourtOrTribunal === 'tribunal';
     },
+
   },
 };
 </script>

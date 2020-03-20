@@ -15,15 +15,15 @@ const createTestSubject = (props) => {
   });
 };
 
-xdescribe('components/RepeatableFields', () => {
+describe('components/RepeatableFields', () => {
   it('component name is "RepeatableFields"', () => {
     expect(RepeatableFields.name).toBe('RepeatableFields');
   });
 
-  xdescribe('properties', () => {
+  describe('properties', () => {
     let prop;
 
-    xdescribe('component', () => {
+    describe('component', () => {
       beforeEach(() => {
         prop = RepeatableFields.props.component;
       });
@@ -37,7 +37,7 @@ xdescribe('components/RepeatableFields', () => {
       });
     });
 
-    xdescribe('max', () => {
+    describe('max', () => {
       beforeEach(() => {
         prop = RepeatableFields.props.max;
       });
@@ -60,7 +60,7 @@ xdescribe('components/RepeatableFields', () => {
       });
     });
 
-    xdescribe('value', () => {
+    describe('value', () => {
       beforeEach(() => {
         prop = RepeatableFields.props.value;
       });
@@ -97,7 +97,7 @@ xdescribe('components/RepeatableFields', () => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     let wrapper;
     beforeEach(() => {
       wrapper = createTestSubject();
@@ -107,14 +107,14 @@ xdescribe('components/RepeatableFields', () => {
       expect(wrapper.find(TextField).exists()).toBe(true);
     });
 
-    xdescribe('number of repeatable components', () => {
-      xdescribe('when value is not an instance of an array', () => {
+    describe('number of repeatable components', () => {
+      describe('when value is not an instance of an array', () => {
         it('renders one component', () => {
          expect(wrapper.findAll(TextField)).toHaveLength(1);
         });
       });
 
-      xdescribe('when value is an instance of an array', () => {
+      describe('when value is an instance of an array', () => {
         let array = [1, 2, 3];
         let wrapper = createTestSubject({ value: array });
 
@@ -124,8 +124,8 @@ xdescribe('components/RepeatableFields', () => {
       });
     });
 
-    xdescribe('Remove button slot', () => {
-      xdescribe('when there are more then one repeatable field', () => {
+    describe('Remove button slot', () => {
+      describe('when there are more then one repeatable field', () => {
         it('render a button for every repeatable field', () => {
           wrapper = createTestSubject(
             { value: [{ name: 'first' }, { name: 'second' }, { name: 'third' }],
@@ -137,42 +137,66 @@ xdescribe('components/RepeatableFields', () => {
         });
       });
 
-      xdescribe('when there is only one field', () => {
-        it("doesn't render", () => {
+      describe('when there is only one field', () => {
+        it('doesn\'t render if allowEmpty not set', () => {
           wrapper = createTestSubject(
             { value: [{ name: 'first' }],
-            component: SelectionExerciseOfficer }
+              component: SelectionExerciseOfficer,
+            }
           );
 
           let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(0);
         });
+        it('doesn\'t render if allowEmpty=false', () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }],
+              component: SelectionExerciseOfficer,
+              allowEmpty: false,
+            }
+          );
+
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          expect(buttons).toHaveLength(0);
+        });
+
+        it('renders if allowEmpty=true', () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }],
+              component: SelectionExerciseOfficer,
+              allowEmpty: true,
+            }
+          );
+
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          expect(buttons).toHaveLength(1);
+        });
       });
     });
   });
 
-  xdescribe('computed properties', () => {
-    xdescribe('canAddRow', () => {
-      xdescribe('when max is not set', () => {
+  describe('computed properties', () => {
+    describe('canAddRow', () => {
+      describe('when max is not set', () => {
         let wrapper = createTestSubject();
         expect(wrapper.vm.canAddRow).toBe(true);
       });
 
-      xdescribe("when max is set and it's greater than number of rows", () => {
+      describe("when max is set and it's greater than number of rows", () => {
         it('sets canAddRow value to true', () => {
           let wrapper = createTestSubject({ max: 5, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(true);
         });
       });
 
-      xdescribe("when max is set and it's less than number of rows", () => {
+      describe("when max is set and it's less than number of rows", () => {
         it('sets canAddRow value to false', () => {
           let wrapper = createTestSubject({ max: 2, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(false);
         });
       });
 
-      xdescribe("when max is set and it's equal to number of rows", () => {
+      describe("when max is set and it's equal to number of rows", () => {
         it('sets canAddRow value to true', () => {
           let wrapper = createTestSubject({ max: 3, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(false);
@@ -181,8 +205,8 @@ xdescribe('components/RepeatableFields', () => {
     });
   });
 
-  xdescribe('created hook', () => {
-    xdescribe('if value is an array', () => {
+  describe('created hook', () => {
+    describe('if value is an array', () => {
       it('updates the value of rows and does not call emit', ()=> {
         let array = [1, 2, 3];
         let wrapper = createTestSubject({ value: array });
@@ -191,23 +215,39 @@ xdescribe('components/RepeatableFields', () => {
       });
     });
 
-    xdescribe('if value is not an array', () => {
+    describe('if value is not an array', () => {
       it('emits the initial rows value', ()=> {
         let wrapper = createTestSubject({ value: undefined });
         expect(wrapper.emitted().input).toBeTruthy();
       });
     });
 
-    xdescribe('if rows array is empty', () => {
-      it('pushes an object to rows', ()=> {
+    describe('if rows array is empty', () => {
+      it('without allowEmpty pushes an object to rows', ()=> {
         let wrapper = createTestSubject({ value: undefined });
+        expect(wrapper.vm.rows).toContainEqual({});
+      });
+
+      it('with allowEmpty=true doesn\'t push to rows', ()=> {
+        let wrapper = createTestSubject({
+          value: undefined,
+          allowEmpty: true,
+        });
+        expect(wrapper.vm.rows).toEqual([]);
+      });
+
+      it('with allowEmpty=false pushes an object to rows', ()=> {
+        let wrapper = createTestSubject({
+          value: undefined,
+          allowEmpty: false,
+        });
         expect(wrapper.vm.rows).toContainEqual({});
       });
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('addRow', () => {
+  describe('methods', () => {
+    describe('addRow', () => {
       it('increases numbers of rows and renders another instance of a component', () => {
         let array = [1, 2, 3];
         let wrapper = createTestSubject({ component: TextField, value: array });
@@ -218,7 +258,7 @@ xdescribe('components/RepeatableFields', () => {
       });
     });
 
-    xdescribe('removeRow', () => {
+    describe('removeRow', () => {
       it('removes an item at the index', () => {
         let array = [1, 2, 3, 4];
         let wrapper = createTestSubject({ component: TextField, value: array });
