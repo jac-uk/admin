@@ -9,6 +9,7 @@ const createTestSubject = (props) => {
   return mount(RepeatableFields, {
     propsData: {
       value: null,
+      ident: 'mock_id',
       component: TextField,
       ...props,
     },

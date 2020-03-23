@@ -214,6 +214,7 @@
           <div class="govuk-details__text">
             <RepeatableFields
               v-model="exercise.otherMemberships"
+              ident="otherMemberships"
               :allow-empty="true"
               :component="repeatableFields.Membership"
               required
@@ -385,10 +386,13 @@ export default {
   },
   computed: {
     memberships() {
-      return [
-        ...fixedFields.memberships,
-        ...this.exercise.otherMemberships,
-      ];
+      if (Array.isArray(this.exercise.otherMemberships)) {
+        return [
+          ...fixedFields.memberships,
+          ...this.exercise.otherMemberships,
+        ];
+      }
+      return fixedFields.memberships;
     },
     isLegal() {
       if (this.typeOfExercise === 'legal') {

@@ -8,10 +8,10 @@
     >
       <component
         :is="component"
+        :id="ident"
         :ref="`${ident}-${index}`"
         :row="row"
         :index="index"
-        :ident="ident"
         :path="path"
       >
         <template v-slot:removeButton>
