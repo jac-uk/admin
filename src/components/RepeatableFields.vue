@@ -16,10 +16,10 @@
       >
         <template v-slot:removeButton>
           <button
-            v-if="rows.length > 1"
+            v-if="allowEmpty || rows.length > 1"
             ref="removeFieldButton"
             type="button"
-            class="govuk-button govuk-button--warning govuk-!-margin-bottom-2"
+            class="jac-add-another__remove-button govuk-button govuk-button--warning govuk-!-margin-bottom-2"
             @click.prevent="removeRow(index)"
           >
             Remove
@@ -33,7 +33,7 @@
       class="govuk-button govuk-button--secondary govuk-!-margin-bottom-6"
       @click.prevent="addRow"
     >
-      Add another
+      {{ addLabel }}
     </button>
   </div>
 </template>
@@ -49,6 +49,11 @@ export default {
     component: {
       required: true,
       type: Object,
+    },
+    allowEmpty: {
+      required: false,
+      default: false,
+      type: Boolean,
     },
     max: {
       required: false,
@@ -79,6 +84,12 @@ export default {
         return true;
       }
     },
+    addLabel() {
+      if (this.rows.length > 0) {
+        return 'Add another';
+      }
+      return 'Add';
+    },
   },
   created() {
     if (this.value instanceof Array) {
@@ -87,7 +98,7 @@ export default {
       this.$emit('input', this.rows);
     }
 
-    if (this.rows.length === 0) {
+    if (!this.allowEmpty && this.rows.length === 0) {
       this.addRow();
     }
   },
@@ -112,3 +123,14 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.repeatableField {
+  position: relative;
+}
+.jac-add-another__remove-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+</style>

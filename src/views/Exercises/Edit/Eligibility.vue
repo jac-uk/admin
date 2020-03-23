@@ -190,49 +190,36 @@
           required
         >
           <CheckboxItem
-            value="chartered-association-of-building-engineers"
-            label="Chartered Association of Building Engineers"
+            v-for="membership in memberships"
+            :key="membership.value"
+            :value="membership.value"
+            :label="membership.label"
           />
-          <CheckboxItem
-            value="chartered-institute-of-building"
-            label="Chartered Institute of Building"
-          />
-          <CheckboxItem
-            value="chartered-institute-of-environmental-health"
-            label="Chartered Institute of Environmental Health"
-          />
-          <CheckboxItem
-            value="general-medical-council"
-            label="General Medical Council"
-          />
-          <CheckboxItem
-            value="royal-college-of-psychiatrists"
-            label="Royal College of Psychiatrists"
-          />
-          <CheckboxItem
-            value="royal-institution-of-chartered-surveyors"
-            label="Royal Institution of Chartered Surveyors"
-          />
-          <CheckboxItem
-            value="royal-institute-of-british-architects"
-            label="Royal Institute of British Architects"
-          />
-          <CheckboxItem
-            value="other"
-            label="Other"
-          >
-            <TextField
-              id="other-memberships"
-              v-model="exercise.otherMemberships"
-              label="Associations or Institutes"
-              required
-            />
-          </CheckboxItem>
+
           <CheckboxItem
             value="none"
             label="None"
           />          
         </CheckboxGroup>
+
+        <details
+          class="govuk-details"
+          data-module="govuk-details"
+        >
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              Manage exercise-specific memberships
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <RepeatableFields
+              v-model="exercise.otherMemberships"
+              :allow-empty="true"
+              :component="repeatableFields.Membership"
+              required
+            />
+          </div>
+        </details>
 
         <RadioGroup
           id="reasonable-length-service"
@@ -310,6 +297,45 @@ import TextField from '@/components/Form/TextField';
 import BackLink from '@/components/BackLink';
 import RepeatableFields from '@/components/RepeatableFields';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
+import Membership from '@/components/RepeatableFields/Membership';
+
+const fixedFields = {
+  memberships: [
+    {
+      value: 'chartered-association-of-building-engineers',
+      label: 'Chartered Association of Building Engineers',
+    },
+    {
+      value: 'chartered-institute-of-building',
+      label: 'Chartered Institute of Building',
+    },
+    {
+      value: 'chartered-institute-of-environmental-health',
+      label: 'Chartered Institute of Environmental Health',
+    },
+    {
+      value: 'general-medical-council',
+      label: 'General Medical Council',
+    },
+    {
+      value: 'royal-college-of-psychiatrists',
+      label: 'Royal College of Psychiatrists',
+    },
+    {
+      value: 'royal-institution-of-chartered-surveyors',
+      label: 'Royal Institution of Chartered Surveyors',
+    },
+    {
+      value: 'royal-institute-of-british-architects',
+      label: 'Royal Institute of British Architects',
+    },
+  ],
+};
+
+const findRemoved = (oldArray, newArray) => {
+
+  return oldArray.filter(item => !newArray.includes(item));
+};
 
 export default {
   components: {
@@ -336,17 +362,21 @@ export default {
       qualifications: null,
       otherQualifications: null,
       memberships: null,
-      otherMemberships: null,
+      otherMemberships: [],
       reasonableLengthService: null,
       otherLOS: null,
       retirementAge: null,
       otherRetirement: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const exercise = {
+      ...defaults,
+      ...data,
+    };
     return {
       repeatableFields: {
         SelectionCriterion,
+        Membership,
       },
       exercise: exercise,
       isCourtOrTribunal: exercise.isCourtOrTribunal,
@@ -354,6 +384,12 @@ export default {
     };
   },
   computed: {
+    memberships() {
+      return [
+        ...fixedFields.memberships,
+        ...this.exercise.otherMemberships,
+      ];
+    },
     isLegal() {
       if (this.typeOfExercise === 'legal') {
         return true;
@@ -374,6 +410,18 @@ export default {
     },
     isTribunal() {
       return this.isCourtOrTribunal === 'tribunal';
+    },
+  },
+  watch: {
+    memberships(newMemberships, oldMemberships) {
+      // @NOTE remove deleted custom membership from selected
+      if (oldMemberships.length > newMemberships.length) {
+        const removedMembership = findRemoved(oldMemberships, newMemberships);
+        const selectedIndex = this.exercise.memberships.indexOf(removedMembership[0].value);
+        if (selectedIndex > -1) {
+          this.exercise.memberships.splice(selectedIndex, 1);
+        }
+      }
     },
   },
   methods: {
