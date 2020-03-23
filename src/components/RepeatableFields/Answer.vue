@@ -1,7 +1,7 @@
 <template>
   <div>
     <TextField
-      :id="`answer_${ident}_${index}`"
+      :id="`answer_${id}_${index}`"
       v-model="row.answer"
       :label="`Answer option ${1 + index}`"
     />
@@ -26,7 +26,7 @@ export default {
       required: true,
       type: Number,
     },
-    ident: {
+    id: {
       required: false,
       type: String,
       default: '',
