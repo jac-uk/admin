@@ -8,16 +8,18 @@
     >
       <component
         :is="component"
+        :id="ident"
+        :ref="`${ident}-${index}`"
         :row="row"
         :index="index"
-        :ident="ident"
+        :path="path"
       >
         <template v-slot:removeButton>
           <button
-            v-if="rows.length > 1"
+            v-if="allowEmpty || rows.length > 1"
             ref="removeFieldButton"
             type="button"
-            class="govuk-button govuk-button--warning govuk-!-margin-bottom-2"
+            class="jac-add-another__remove-button govuk-button govuk-button--warning govuk-!-margin-bottom-2"
             @click.prevent="removeRow(index)"
           >
             Remove
@@ -31,7 +33,7 @@
       class="govuk-button govuk-button--secondary govuk-!-margin-bottom-6"
       @click.prevent="addRow"
     >
-      Add another
+      {{ addLabel }}
     </button>
   </div>
 </template>
@@ -48,6 +50,11 @@ export default {
       required: true,
       type: Object,
     },
+    allowEmpty: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
     max: {
       required: false,
       default: false,
@@ -57,6 +64,11 @@ export default {
       required: false,
       type: String,
       default: null,
+    },
+    path: {
+      type: String,
+      required: false,
+      default: '',
     },
   },
   data() {
@@ -72,6 +84,12 @@ export default {
         return true;
       }
     },
+    addLabel() {
+      if (this.rows.length > 0) {
+        return 'Add another';
+      }
+      return 'Add';
+    },
   },
   created() {
     if (this.value instanceof Array) {
@@ -80,7 +98,7 @@ export default {
       this.$emit('input', this.rows);
     }
 
-    if (this.rows.length === 0) {
+    if (!this.allowEmpty && this.rows.length === 0) {
       this.addRow();
     }
   },
@@ -93,6 +111,26 @@ export default {
     removeRow(index) {
       this.rows.splice(index, 1);
     },
+    async callComponentMethod(methodName) {
+      for (let i = 0, len = this.rows.length; i < len; ++i) {
+        const isOk = await this.$refs[`${this.ident}-${i}`][0][methodName]();
+        if (!isOk) {
+          return false;
+        }
+      }
+      return true;
+    },
   },
 };
 </script>
+
+<style scoped lang="scss">
+.repeatableField {
+  position: relative;
+}
+.jac-add-another__remove-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+</style>

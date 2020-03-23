@@ -32,7 +32,7 @@ const routes = [
   ['page-not-found', '/errors/page-not-found'],
 ];
 
-describe('Sign in journey', () => {
+xdescribe('Sign in journey', () => {
   let subject;
   let router;
   let store;
@@ -57,15 +57,15 @@ describe('Sign in journey', () => {
     email: 'user@judicialappointments.digital',
   };
 
-  describe('for unauthenticated user', () => {
-    describe('when they visit page sign in', () => {
+  xdescribe('for unauthenticated user', () => {
+    xdescribe('when they visit page sign in', () => {
       it('loads sign in page', () => {
         router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    describe.each(routes)('when they visit page %s', (routeName) => {
+    xdescribe.each(routes)('when they visit page %s', (routeName) => {
       it('loads sign in page',() => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe('/sign-in');
@@ -73,26 +73,26 @@ describe('Sign in journey', () => {
     });
   });
 
-  describe('for authenticated user', () => {
+  xdescribe('for authenticated user', () => {
     beforeEach(() => {
       store.dispatch('auth/setCurrentUser', user);
     });
 
-    describe('when going to page that does not exist', () => {
+    xdescribe('when going to page that does not exist', () => {
       it('redirects to the dashboard page', () => {
         router.push('/whatever');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    describe('when they visit page sign in', () => {
+    xdescribe('when they visit page sign in', () => {
       it("redirects to the dashboard page'", () => {
         router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    describe.each(routes)('when they visit page %s', (routeName, routePath) => {
+    xdescribe.each(routes)('when they visit page %s', (routeName, routePath) => {
       it(`loads ${routePath}`,() => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe(routePath);

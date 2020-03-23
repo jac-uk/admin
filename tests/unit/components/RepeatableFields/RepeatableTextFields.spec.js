@@ -17,8 +17,8 @@ const repeatableTextFields = [
   ['OtherShortlistingMethod', OtherShortlistingMethod],
 ];
 
-describe('Repeatable text fields', () => {
-  describe.each(repeatableTextFields)('@/components/RepeatableFields/%s', (label, component) => {
+xdescribe('Repeatable text fields', () => {
+  xdescribe.each(repeatableTextFields)('@/components/RepeatableFields/%s', (label, component) => {
     it('renders TextField component', () => {
       const wrapper = shallowMount(component, {
         propsData: {
@@ -29,8 +29,8 @@ describe('Repeatable text fields', () => {
       expect(wrapper.find(TextField).exists()).toBe(true);
     });
 
-    describe('props', () => {
-      describe('row', () => {
+    xdescribe('props', () => {
+      xdescribe('row', () => {
         let prop;
 
         beforeEach(() => {
@@ -46,7 +46,7 @@ describe('Repeatable text fields', () => {
         });
       });
 
-      describe('index', () => {
+      xdescribe('index', () => {
         let prop;
 
         beforeEach(() => {

@@ -140,11 +140,12 @@ export default {
           ],
         });
         // pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
-        pages.push({ 
-          page: 'Exercise reports', 
+        pages.push({
+          page: 'Exercise reports',
           name: 'exercise-show-reports',
           children: [
             { page: 'Diversity', name: 'exercise-show-report-diversity' },
+            { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
           ],
         });
       }

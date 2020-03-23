@@ -1,5 +1,21 @@
 {
-  "hosting": [{
+  "hosting": [
+    {
+      "target": "develop-admin-app",
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "staging-admin-app",
       "public": "dist",
       "ignore": [

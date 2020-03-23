@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router';
 import store from '@/store';
-import '@/filters';
+import * as filters from '@/filters';
 import { auth } from '@/firebase';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
@@ -17,6 +17,12 @@ if (process.env.NODE_ENV !== 'development') {
 
 Vue.config.productionTip = false;
 Vue.use( CKEditor );
+
+// Register global filters
+Object.keys(filters)
+  .forEach((filterName) => {
+    Vue.filter(filterName, filters[filterName]);
+  });
 
 let vueInstance = false;
 auth().onAuthStateChanged( (user) => {

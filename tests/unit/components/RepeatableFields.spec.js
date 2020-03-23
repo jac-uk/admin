@@ -9,6 +9,7 @@ const createTestSubject = (props) => {
   return mount(RepeatableFields, {
     propsData: {
       value: null,
+      ident: 'mock_id',
       component: TextField,
       ...props,
     },
@@ -138,14 +139,38 @@ describe('components/RepeatableFields', () => {
       });
 
       describe('when there is only one field', () => {
-        it("doesn't render", () => {
+        it('doesn\'t render if allowEmpty not set', () => {
           wrapper = createTestSubject(
             { value: [{ name: 'first' }],
-            component: SelectionExerciseOfficer }
+              component: SelectionExerciseOfficer,
+            }
           );
 
           let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(0);
+        });
+        it('doesn\'t render if allowEmpty=false', () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }],
+              component: SelectionExerciseOfficer,
+              allowEmpty: false,
+            }
+          );
+
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          expect(buttons).toHaveLength(0);
+        });
+
+        it('renders if allowEmpty=true', () => {
+          wrapper = createTestSubject(
+            { value: [{ name: 'first' }],
+              component: SelectionExerciseOfficer,
+              allowEmpty: true,
+            }
+          );
+
+          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          expect(buttons).toHaveLength(1);
         });
       });
     });
@@ -199,8 +224,24 @@ describe('components/RepeatableFields', () => {
     });
 
     describe('if rows array is empty', () => {
-      it('pushes an object to rows', ()=> {
+      it('without allowEmpty pushes an object to rows', ()=> {
         let wrapper = createTestSubject({ value: undefined });
+        expect(wrapper.vm.rows).toContainEqual({});
+      });
+
+      it('with allowEmpty=true doesn\'t push to rows', ()=> {
+        let wrapper = createTestSubject({
+          value: undefined,
+          allowEmpty: true,
+        });
+        expect(wrapper.vm.rows).toEqual([]);
+      });
+
+      it('with allowEmpty=false pushes an object to rows', ()=> {
+        let wrapper = createTestSubject({
+          value: undefined,
+          allowEmpty: false,
+        });
         expect(wrapper.vm.rows).toContainEqual({});
       });
     });

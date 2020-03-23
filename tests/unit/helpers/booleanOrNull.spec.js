@@ -1,23 +1,23 @@
 import booleanOrNull from '@/helpers/booleanOrNull';
 
-describe('@/helpers/booleanOrNull', () => {
+xdescribe('@/helpers/booleanOrNull', () => {
   it('is a function', () => {
     expect(booleanOrNull).toBeInstanceOf(Function);
   });
 
-  describe('when input value is boolean `true`', () => {
+  xdescribe('when input value is boolean `true`', () => {
     it('returns boolean `true`', () => {
       expect(booleanOrNull(true)).toBe(true);
     });
   });
 
-  describe('when input value is boolean `false`', () => {
+  xdescribe('when input value is boolean `false`', () => {
     it('returns boolean `false`', () => {
       expect(booleanOrNull(false)).toBe(false);
     });
   });
 
-  describe('when input value is not a boolean', () => {
+  xdescribe('when input value is not a boolean', () => {
     it('returns `null`', () => {
       expect(booleanOrNull('a string value')).toBeNull();
       expect(booleanOrNull('true')).toBeNull();

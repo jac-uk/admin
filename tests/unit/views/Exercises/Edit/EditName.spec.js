@@ -30,13 +30,13 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Edit/EditName', () => {
+xdescribe('@/views/Exercises/Edit/EditName', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();
   });
 
-  describe('template', () => {
+  xdescribe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -63,8 +63,8 @@ describe('@/views/Exercises/Edit/EditName', () => {
     });
   });
 
-  describe('methods', () => {
-    describe('save', () => {
+  xdescribe('methods', () => {
+    xdescribe('save', () => {
       const exerciseData = {
         name: 'NewName',
       };

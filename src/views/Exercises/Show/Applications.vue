@@ -86,6 +86,8 @@
 </template>
 
 <script>
+import * as filters from '@/filters';
+
 export default {
   computed: {
     exercise() {
@@ -109,22 +111,51 @@ export default {
     // this.$store.dispatch('applications/unbind');
   },
   methods: {
-    downloadContacts() {
-      const contacts = [];
-      for (let i = 0, len = this.applications.length; i < len; ++i) {
-        contacts.push({
-          Ref: this.applications[i].referenceNumber,
-          Status: this.applications[i].status,
-          Name: this.applications[i].personalDetails ? this.applications[i].personalDetails.fullName : '',
-          Email: this.applications[i].personalDetails ? this.applications[i].personalDetails.email : '',
-          FirstAssessorName: this.applications[i].firstAssessorFullName,
-          FirstAssessorEmail: this.applications[i].firstAssessorEmail,
-          FirstAssessorPhone: this.applications[i].firstAssessorPhone,
-          SecondAssessorName: this.applications[i].secondAssessorFullName,
-          SecondAssessorEmail: this.applications[i].secondAssessorEmail,
-          SecondAssessorPhone: this.applications[i].secondAssessorPhone,
-        });
+    flattenCurrentLegalRole(equalityAndDiversitySurvey) {
+      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.currentLegalRole)) {
+        return '';
       }
+
+      const roles = [];
+      equalityAndDiversitySurvey.currentLegalRole.forEach((role) => {
+        if (role === 'other-fee-paid-judicial-office-holder') {
+          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
+        } else if (role === 'other-salaried-judicial-office-holder') {
+          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
+        } else if (role === 'other-current-legal-role') {
+          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
+        } else {
+          roles.push(`${ filters.lookup(role) }`);
+        }
+      });
+
+      return `"${ roles.join('\n')}"`;
+    },
+    gatherContacts() {
+      const contacts = this.applications.map((application) => {
+        return {
+          Ref: application.referenceNumber,
+          Status: filters.lookup(application.status),
+          Name: application.personalDetails ? application.personalDetails.fullName : '',
+          Email: application.personalDetails ? application.personalDetails.email : '',
+          Phone: application.personalDetails ? application.personalDetails.phone : '',
+          DateOfBirth: application.personalDetails ? filters.formatDate(application.personalDetails.dateOfBirth) : '',
+          Gender: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.gender) : '',
+          Disability: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)) : '',
+          EthnicGroup: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup) : '',
+          CurrentLegalRole: application.equalityAndDiversitySurvey ? this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey) : '',
+          FirstAssessorName: application.firstAssessorFullName,
+          FirstAssessorEmail: application.firstAssessorEmail,
+          FirstAssessorPhone: application.firstAssessorPhone,
+          SecondAssessorName: application.secondAssessorFullName,
+          SecondAssessorEmail: application.secondAssessorEmail,
+          SecondAssessorPhone: application.secondAssessorPhone,
+        };
+      });
+
+      return contacts;
+    },
+    buildCsv(contacts) {
       let csvContent = 'data:text/csv;charset=utf-8,';
       csvContent += [
         Object.keys(contacts[0]).join(';'),
@@ -132,9 +163,15 @@ export default {
       ]
         .join('\n')
         .replace(/(^\[)|(\]$)/gm, '');
-      const data = encodeURI(csvContent);
+
+      return encodeURI(csvContent);
+    },
+    downloadContacts() {
+      const contacts = this.gatherContacts();
+
       const link = document.createElement('a');
-      link.setAttribute('href', data);
+
+      link.setAttribute('href', this.buildCsv(contacts));
       link.setAttribute('download', `${this.exercise.referenceNumber}.contacts.csv`);
       link.click();
     },
