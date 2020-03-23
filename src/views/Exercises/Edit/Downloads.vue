@@ -118,6 +118,7 @@ export default {
         //   || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
         //   return false;
         // }
+        this.exercise.progress.downloads = true;
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }

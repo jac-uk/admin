@@ -214,6 +214,7 @@
           <div class="govuk-details__text">
             <RepeatableFields
               v-model="exercise.otherMemberships"
+              ident="otherMemberships"
               :allow-empty="true"
               :component="repeatableFields.Membership"
               required
@@ -385,10 +386,13 @@ export default {
   },
   computed: {
     memberships() {
-      return [
-        ...fixedFields.memberships,
-        ...this.exercise.otherMemberships,
-      ];
+      if (Array.isArray(this.exercise.otherMemberships)) {
+        return [
+          ...fixedFields.memberships,
+          ...this.exercise.otherMemberships,
+        ];
+      }
+      return fixedFields.memberships;
     },
     isLegal() {
       if (this.typeOfExercise === 'legal') {
@@ -415,7 +419,7 @@ export default {
   watch: {
     memberships(newMemberships, oldMemberships) {
       // @NOTE remove deleted custom membership from selected
-      if (oldMemberships.length > newMemberships.length) {
+      if (Array.isArray(this.exercise.memberships) && oldMemberships.length > newMemberships.length) {
         const removedMembership = findRemoved(oldMemberships, newMemberships);
         const selectedIndex = this.exercise.memberships.indexOf(removedMembership[0].value);
         if (selectedIndex > -1) {

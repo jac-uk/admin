@@ -2,7 +2,7 @@
   <div>
     <TextField
       v-if="editable"
-      :id="`other-memberships_${index}`"
+      :id="`${id}_${index}`"
       v-model="row.label"
       type="text"
       required
@@ -42,6 +42,11 @@ export default {
     index: {
       required: true,
       type: Number,
+    },
+    id: {
+      required: true,
+      type: String,
+      default: '',
     },
   },
   data() {
