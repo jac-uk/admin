@@ -419,7 +419,7 @@ export default {
   watch: {
     memberships(newMemberships, oldMemberships) {
       // @NOTE remove deleted custom membership from selected
-      if (oldMemberships.length > newMemberships.length) {
+      if (Array.isArray(this.exercise.memberships) && oldMemberships.length > newMemberships.length) {
         const removedMembership = findRemoved(oldMemberships, newMemberships);
         const selectedIndex = this.exercise.memberships.indexOf(removedMembership[0].value);
         if (selectedIndex > -1) {
