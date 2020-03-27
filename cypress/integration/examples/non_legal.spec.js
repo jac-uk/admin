@@ -2,7 +2,6 @@ context('Actions', () => {
 
   // in order to run these tests login manually as:user=test123@gmail.com pass=123456
 
-
   it('Tests you have logged in as requested', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/sign-in')
     cy.get('#main-content > div > div:nth-child(1) > div > div > a').click()
@@ -10,27 +9,32 @@ context('Actions', () => {
   })
 
   it('Creates an exercise', () => {
-    cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.get('#main-content > div > div:nth-child(1) > div > div > a').click()
-    cy.get('#exercise-name').type('Legal exercise test')
-    cy.get('#is-more-info-needed__1').click()
-    cy.get('#select-more-info__1').click()
-    cy.get('#select-more-info__2').click()
-    cy.get('#select-more-info__3').click()
-    cy.get('#select-more-info__4').click()
-    cy.get('#select-more-info__5').click()
-    cy.get('#select-more-info__6').click()
-    cy.get('#select-more-info__7').click()
-    cy.get('#select-more-info__8').click()
-    cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
-    cy.get('.govuk-heading-xl').should('have.text',' Website listing ')
-  })
+      cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
+      cy.get('#main-content > div > div:nth-child(1) > div > div > a').click()
+      cy.get('#exercise-name').type('Non legal exercise test')
+      cy.get('#is-more-info-needed__1').click()
+      cy.get('#select-more-info__1').click()
+      cy.get('#select-more-info__2').click()
+      cy.get('#select-more-info__3').click()
+      cy.get('#select-more-info__4').click()
+      cy.get('#select-more-info__5').click()
+      cy.get('#select-more-info__6').click()
+      cy.get('#select-more-info__7').click()
+      cy.get('#select-more-info__8').click()
+      cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
+      cy.get('#exercise-name').clear().type('Leadership non legal exercise test')
+      cy.get('#estimated-launch-date-month').clear().type('02')
+      cy.get('#estimated-launch-date-year').clear().type('2020')
+      cy.get('#role-summary').clear().type('Test role')
+      cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
+      cy.get('.govuk-heading-xl').should('have.text',' Contacts ')
+    })
 
   it('fills out website listing section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(1) > .govuk-table__header > .govuk-link').click()
-    cy.get('#exercise-name').clear().type('Legal exercise test')
+    cy.get('#exercise-name').clear().type('Non legal exercise test')
     cy.get('#estimated-launch-date-month').clear().type('02')
     cy.get('#estimated-launch-date-year').clear().type('2020')
     cy.get('#role-summary').clear().type('Test role')
@@ -40,16 +44,16 @@ context('Actions', () => {
 
   it('fills out vacancy information, submits and saves', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(2) > .govuk-table__header > .govuk-link').click()
-    cy.get('#type-of-exercise__1').click()
+    cy.get('#type-of-exercise__2').click()
     cy.get('#is-court-or-tribunal__5').click()
     cy.get('#jurisdiction__2').click()
     cy.get('#is-statutory-consultation-waived__8').click()
     cy.get('#appointment-type__11').click()
-    cy.get('#immediate-start').clear().type('1')
-    cy.get('#future-start').clear().type('1')
-    cy.get('#location').clear().type('Here')
+    cy.get('#immediate-start').type('1')
+    cy.get('#future-start').type('1')
+    cy.get('#location').type('Here')
     cy.get('#welsh-requirement__13').click()
     cy.get('#role-summary').clear().type('Something')
     cy.get("#main-content > div > div > form > div > div:nth-child(15) > div.ck.ck-reset.ck-editor.ck-rounded-corners > div.ck.ck-editor__main > div").clear().type('Please work')
@@ -60,7 +64,7 @@ context('Actions', () => {
 
   it('fills out contacts section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(3) > .govuk-table__header > .govuk-link').click()
     cy.get('#exercise-mailbox').clear().type('a@judicialappointments.digital')
     cy.get('#senior_selection_exercise_manager_0').clear().type('b@gmail.com')
@@ -79,7 +83,7 @@ context('Actions', () => {
 
   it('fills out timeline section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(4) > .govuk-table__header > .govuk-link').click()
     cy.get('#open-for-applications-day').clear().type('01')
     cy.get('#open-for-applications-month').clear().type('03')
@@ -135,7 +139,8 @@ context('Actions', () => {
     cy.get('#scenario-test-outcome-day').clear().type('1')
     cy.get('#scenario-test-outcome-month').clear().type('07')
     cy.get('#scenario-test-outcome-year').clear().type('2020')
-    cy.get('#shortlisting-outcome-date-month').clear().type('08')
+    cy.get('#shortlisting-outcome-date-month').clear().type('10')
+    cy.get('#shortlisting-outcome-date-month').clear().type('2020')
     cy.get('#shortlisting-outcome-date-year').clear().type('2020')
     cy.get('#contact-independent-assessors-day').clear().type('01')
     cy.get('#contact-independent-assessors-month').clear().type('09')
@@ -175,14 +180,14 @@ context('Actions', () => {
     cy.get('#emp-scc-date-year').clear().type('2020')
     cy.get('#emp-outcome-date-month').clear().type('03')
     cy.get('#emp-outcome-date-year').clear().type('2021')
-    cy.wait(1000)
+    cy.wait(2000)
     cy.get(':nth-child(39)').click()
-    cy.get('#exercise-edit-shortlisting-completed').should('be.visible')
+    cy.get('#exercise-edit-timeline-completed').should('be.visible')
   })
 
   it('fills out shortlisting methods section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(5) > .govuk-table__header > .govuk-link').click()
     cy.get('#shortlisting-methods__1').uncheck().click()
     cy.get('#shortlisting-methods__2').uncheck().click()
@@ -196,22 +201,21 @@ context('Actions', () => {
 
   it('fills out eligibility information section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(6) > .govuk-table__header > .govuk-link').click()
-    cy.get('#post-qualification-experience__1').click()
     cy.get('#authorisations__1').uncheck().click()
-    cy.get('#additional-selection-criteria-apply__5').click()
-    cy.get('#previous-judicial-experience-apply__6').click()
-    cy.get('#qualifications__4').uncheck().click()
-    cy.get('#reasonable-length-service__8').click()
-    cy.get('#retirement-age__12').click()
-    cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
+    cy.get('#additional-selection-criteria-apply__2').click()
+    cy.get('#previous-judicial-experience-apply__4').click()
+    cy.get('#memberships__4').uncheck().click()
+    cy.get('#reasonable-length-service__5').click()
+    cy.get('#retirement-age__9').click()
+    cy.get('.govuk-grid-column-two-thirds > :nth-child(11)').click()
     cy.get('#exercise-edit-eligibility-completed').should('be.visible')
   })
 
   it('fills out working preferences section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(7) > .govuk-table__header > .govuk-link').click()
     cy.get('#exercise-location-question').clear().type('Question 1')
     cy.get('#exercise-location-question-type__1').click()
@@ -225,7 +229,7 @@ context('Actions', () => {
 
   it('fills out assessment options section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(8) > .govuk-table__header > .govuk-link').click()
     cy.get('#shortlisting-methods__7').click()
     cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
@@ -234,18 +238,27 @@ context('Actions', () => {
 
   it('fills out exercise downloads section', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get(':nth-child(9) > .govuk-table__header > .govuk-link').click()
-    cy.get('.govuk-grid-column-two-thirds > .govuk-button').click()
+    cy.get('#job_description_title_0').clear().type('Job description x')
+    cy.get('a.govuk-link').each(function (replace) {
+      cy.get(replace).click()
+    })
+    cy.get('input[type=file]').each(function (input) {
+      cy.get(input).uploadFile('example.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+      cy.wait(200)
+    })
+    cy.wait(2000)
+    cy.get('#main-content > div > div > form > div > button').click()
+    cy.get('#main-content > div > div > form > div > button').click()
     cy.get('#exercise-edit-downloads-completed').should('be.visible')
   })
 
   it('sends application out for approval', () => {
     cy.visit('https://admin-staging.judicialappointments.digital/dashboard')
-    cy.contains('Legal exercise test').click()
+    cy.contains('Non legal exercise test').click()
     cy.get('.govuk-grid-column-three-quarters > :nth-child(1) > :nth-child(4) > :nth-child(2)').click()
     cy.get('.govuk-grid-column-three-quarters > :nth-child(1) > :nth-child(4) > :nth-child(2)').should('have.text', ' Approve ')
   })
-
 
 })
