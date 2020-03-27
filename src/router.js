@@ -31,6 +31,8 @@ import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOpti
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
+import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
+import ExerciseShowApplicationStreamlined from '@/views/Exercises/Show/ApplicationStreamlined';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -145,7 +147,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Vacancy summary',
           },
-        },        
+        },
         {
           path: 'vacancy',
           component: ExerciseShowVacancy,
@@ -238,11 +240,26 @@ const router = new Router({
     {
       path: '/application/:applicationId',
       component: ExerciseShowApplication,
-      name: 'exercise-show-application',
-      meta: {
-        requiresAuth: true,
-        title: 'Exercise Details | Application',
-      },
+      children: [
+        {
+          path: '',
+          component: ExerciseShowApplicationFull,
+          name: 'exercise-show-application',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Application',
+          },
+        },
+        {
+          path: 'streamlined',
+          component: ExerciseShowApplicationStreamlined,
+          name: 'exercise-show-application-streamlined',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Application Streamlined',
+          },
+        },
+      ],      
     },
     {
       path: '/applications-full',
@@ -314,7 +331,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Vacancy Summary',
           },
-        },        
+        },
         {
           path: 'vacancy',
           component: ExerciseEditVacancy,

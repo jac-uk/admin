@@ -1,105 +1,60 @@
 <template>
-  <div>
-    <BackLink />
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
-      Application
-    </h1>
-    <JsonRenderer :value="application" />
-    <div class="govuk-column-full">
-      <DownloadLink 
-        v-if="application && application.uploadedCV"
-        :exercise-id="application.exerciseId"
-        :user-id="application.userId"
-        title="Uploaded CV"
-        :file-name="application.uploadedCV"
-        class="govuk-!-margin-right-3"
-      />
-      <DownloadLink 
-        v-if="application && application.uploadedSelfAssessment"
-        :exercise-id="application.exerciseId"
-        :user-id="application.userId"
-        title="Uploaded Self Assessment"
-        :file-name="application.uploadedSelfAssessment"
-        class="govuk-!-margin-right-3"
-      />
-      <DownloadLink 
-        v-if="application && application.uploadedSuitabilityStatement"
-        :exercise-id="application.exerciseId"
-        :user-id="application.userId"
-        title="Uploaded Suitability Statement"
-        :file-name="application.uploadedSuitabilityStatement"
-        class="govuk-!-margin-right-3"
-      />
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <router-link
+        v-if="exerciseId"
+        class="govuk-back-link"
+        :to="{name: 'exercise-show-applications', params: { id: exerciseId }}"
+      >
+        Back
+      </router-link>
+
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+        Application {{ applicationReferenceNumber }}
+      </h1>
+
+      <router-link
+        class="govuk-link"
+        :to="{name: 'exercise-show-application'}"
+      >
+        Full details
+      </router-link>
+
+      <router-link
+        class="govuk-link"
+        :to="{name: 'exercise-show-application-streamlined'}"
+      >
+        Panel pack view
+      </router-link>
+
+      <RouterView />
     </div>
-    <button
-      v-if="isApplied"
-      class="govuk-button govuk-!-margin-right-3 govuk-!-margin-top-3"
-      @click="unlock"
-    >
-      Unlock
-    </button>
-    <button
-      v-else
-      class="govuk-button govuk-!-margin-right-3 govuk-!-margin-top-3"
-      @click="submitApplication"
-    >
-      Mark as applied
-    </button>
   </div>
 </template>
 
 <script>
-import BackLink from '@/components/BackLink';
-import JsonRenderer from '@/components/JsonRenderer';
-import DownloadLink from '@/components/DownloadLink';
-
 export default {
-  components: {
-    BackLink,
-    JsonRenderer,
-    DownloadLink,
-  },
   computed: {
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
+    applicationId() {
+      return this.$route.params.applicationId;
     },
-    application() {
-      return this.$store.state.application.record;
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
-    isApplied() {
-      if (this.application) {
-        switch (this.application.status) {
-        case 'applied':
-          return true;
-        default:
-          return false;
-        }
-      }
-      return false;
-    },    
+    applicationReferenceNumber() {
+      return this.$store.state.application.record ? this.$store.state.application.record.referenceNumber : null;
+    },
   },
   created() {
-    if (this.$route.params.applicationId) {
-      this.$store.dispatch('application/bind', this.$route.params.applicationId);
+    if (this.applicationId) {
+      this.$store.dispatch('application/bind', this.applicationId).then( (application) => {
+        this.$store.dispatch('exerciseDocument/bind', application.exerciseId);
+      });
     }
   },
   destroyed() {
     this.$store.dispatch('application/unbind');
-  },
-  methods: {
-    unlock() {
-      this.$store.dispatch('application/unlock');
-    },
-    submitApplication() {
-      this.$store.dispatch('application/submit');
-    },
-  }, 
+    this.$store.dispatch('exerciseDocument/unbind');
+  },  
 };
 </script>
-
-<style>
-  .table-header {
-    text-transform: capitalize;
-    white-space: nowrap;
-  }
-</style>
