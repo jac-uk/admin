@@ -32,7 +32,6 @@ import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
-import ExerciseShowApplicationStreamlined from '@/views/Exercises/Show/ApplicationStreamlined';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -249,14 +248,20 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Application',
           },
+          props: {
+            streamlined: false,
+          },
         },
         {
           path: 'streamlined',
-          component: ExerciseShowApplicationStreamlined,
+          component: ExerciseShowApplicationFull,
           name: 'exercise-show-application-streamlined',
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Application Streamlined',
+          },
+          props: {
+            streamlined: true,
           },
         },
       ],      
