@@ -117,8 +117,8 @@ export default {
         const isCandidateAssessmentUploaded = await this.$refs['candidate-assessment'].upload();
 
         if (!isJobDescriptionUploaded || !isTermsAndConditionsUploaded
-         || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
-         return false;
+          || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
+          return false;
         }
         this.exercise.progress.downloads = true;
 
