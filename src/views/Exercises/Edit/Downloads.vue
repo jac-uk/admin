@@ -110,15 +110,18 @@ export default {
         if (!areJobDescriptionsUploaded) {
           return false;
         }
-        // const isJobDescriptionUploaded = await this.$refs['job-description'].upload();
-        // const isTermsAndConditionsUploaded = await this.$refs['terms-and-conditions'].upload();
-        // const isIndependentAssessorsUploaded = await this.$refs['independent-assessors'].upload();
-        // const isCandidateAssessmentUploaded = await this.$refs['candidate-assessment'].upload();
-        // if (!isJobDescriptionUploaded || !isTermsAndConditionsUploaded
-        //   || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
-        //   return false;
-        // }
+
+        const isJobDescriptionUploaded = await this.$refs['job-description'].upload();
+        const isTermsAndConditionsUploaded = await this.$refs['terms-and-conditions'].upload();
+        const isIndependentAssessorsUploaded = await this.$refs['independent-assessors'].upload();
+        const isCandidateAssessmentUploaded = await this.$refs['candidate-assessment'].upload();
+
+        if (!isJobDescriptionUploaded || !isTermsAndConditionsUploaded
+          || !isIndependentAssessorsUploaded || !isCandidateAssessmentUploaded) {
+          return false;
+        }
         this.exercise.progress.downloads = true;
+
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
