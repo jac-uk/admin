@@ -1,17 +1,15 @@
 <template>
-  <div>
+  <div class="jac-multi-file-upload">
     <TextField
-      :id="`job_description_title_${index}`"
+      :id="`${uniqueId}--title`"
       v-model="row.title"
       label="Title of file"
       required
     />
     <FileUpload
-      :id="`job-description_file_${index}`"
-      :ref="ref"
+      :id="`${uniqueId}--file`"
       v-model="row.file"
-      :name="`job-description_file_${index}`"
-      label="Job description"
+      :name="uniqueId"
       :path="path"
       required
     />
@@ -24,11 +22,16 @@ import FileUpload from '@/components/Form/FileUpload';
 import TextField from '@/components/Form/TextField';
 
 export default {
+  name: 'MultiFileUpload',
   components: {
     FileUpload,
     TextField,
   },
   props: {
+    id: {
+      required: true,
+      type: String,
+    },
     row: {
       required: true,
       type: Object,
@@ -44,14 +47,16 @@ export default {
     },
   },
   computed: {
-    ref() {
-      return `job-description_file_${this.index}`;
-    },
-  },
-  methods: {
-    upload() {
-      return this.$refs[this.ref].upload();
+    uniqueId() {
+      return `${this.id}_${this.index}`;
     },
   },
 };
 </script>
+
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.jac-multi-file-upload {
+  padding-top: govuk-spacing(1);
+  position: relative;
+}
+</style>
