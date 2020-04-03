@@ -103,10 +103,25 @@ export default {
   getters: {
     id: (state) => {
       if (state.record === null) return null;
+
       return state.record.id;
     },
     data: (state) => () => {
       return clone(state.record);
+    },
+    //record: (state) => clone(state.record),
+    isEditable: (state) => {
+      if (state.record === null) return true;
+
+      if (state.record) {
+        switch (state.record.state) {
+        case 'draft':
+        case 'ready':
+          return true;
+        default:
+          return false;
+        }
+      }
     },
   },
 };
