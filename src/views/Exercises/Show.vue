@@ -30,7 +30,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="canEdit"
+            v-if="isEditable"
             class="govuk-link"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -57,6 +57,7 @@
 import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -71,9 +72,12 @@ export default {
     };
   },
   computed: {
-    userId() {
-      return this.$store.state.auth.currentUser.uid;
-    },
+    ...mapState({
+      userId: state => state.auth.currentUser.uid,
+    }),
+    ...mapGetters('exerciseDocument', {
+      isEditable: 'isEditable',
+    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -83,21 +87,6 @@ export default {
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
     },
-    isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    canEdit() {
-      return !this.isApproved;
-    },      
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
