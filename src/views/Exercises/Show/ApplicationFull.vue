@@ -2,6 +2,43 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div v-if="application && exercise">
+        <div class="jac-button-group">
+          <router-link
+            v-if="streamlined"
+            class="govuk-button govuk-button--secondary"
+            :to="{ name: 'exercise-show-application' }"
+          >
+            Full details view
+          </router-link>
+
+          <router-link
+            v-else
+            class="govuk-button govuk-button--secondary"
+            :to="{ name: 'exercise-show-application-streamlined' }"
+          >
+            Panel pack view
+          </router-link>
+          <span
+            v-if="!streamlined"
+            class=" govuk-!-margin-left-4"
+          >
+            <button
+              v-if="isApplied"
+              class="govuk-button"
+              @click="unlock"
+            >
+              Unlock
+            </button>
+            <button
+              v-else
+              class="govuk-button"
+              @click="submitApplication"
+            >
+              Mark as applied
+            </button>
+          </span>
+        </div>
+
         <dl class="govuk-summary-list">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
@@ -1509,6 +1546,17 @@ export default {
         this.application.equalityAndDiversitySurvey.ethnicGroup.startsWith('other-');
 
     },
+    isApplied() {
+      if (this.application) {
+        switch (this.application.status) {
+        case 'applied':
+          return true;
+        default:
+          return false;
+        }
+      }
+      return false;
+    },
   },
   created() {
     if (this.applicationId) {
@@ -1522,6 +1570,12 @@ export default {
     this.$store.dispatch('exerciseDocument/unbind');
   },
   methods: {
+    unlock() {
+      this.$store.dispatch('application/unlock');
+    },
+    submitApplication() {
+      this.$store.dispatch('application/submit');
+    },
     showMembershipOption(ref) {
       if (this.application && this.application.professionalMemberships) {
         return this.application.professionalMemberships.indexOf(ref) >= 0;
@@ -1542,7 +1596,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 .govuk-heading-l {
   display: inline-block;
 }
@@ -1551,6 +1605,13 @@ export default {
 .govuk-summary-list__key {
   @include govuk-media-query($from: tablet) {
     width: auto;
+  }
+}
+
+.jac-button-group {
+  margin-bottom: govuk-spacing(4);
+  .govuk-button {
+    margin-right: govuk-spacing(2);
   }
 }
 </style>
