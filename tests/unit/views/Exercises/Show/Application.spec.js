@@ -100,54 +100,5 @@ describe('@/views/Exercises/Show/Application', () => {
       expect(wrapper.find('h1').text()).toEqual(expect.stringContaining(mockApplication.referenceNumber));
     });
 
-    it('has unlock button if application completed', () => {
-      const mockApp = {
-        ...mockApplication,
-        status: 'applied',
-      };
-      wrapper.vm.$store.state.application.record = mockApp;
-      const buttons = wrapper.findAll('.jac-button-group span button');
-      expect(buttons.length).toEqual(1);
-      expect(buttons.wrappers[0].text()).toEqual(expect.stringContaining('Unlock'));
-    });
-
-    it('has "mark as applied" if draft', () => {
-      const mockApp = {
-        ...mockApplication,
-        status: 'draft',
-      };
-      wrapper.vm.$store.state.application.record = mockApp;
-      const buttons = wrapper.findAll('.jac-button-group span button');
-      expect(buttons.length).toEqual(1);
-      expect(buttons.wrappers[0].text()).toEqual(expect.stringContaining('Mark as applied'));
-    });
-  });
-
-  describe('methods', () => {
-    let wrapper;
-    beforeEach(() => {
-      wrapper = createTestSubject();
-      wrapper.vm.$store.dispatch = jest.fn();
-    });
-
-    describe('unlock()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.unlock).toBe('function');
-      });
-      it('dispatches unlock', () => {
-        wrapper.vm.unlock();
-        expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('application/unlock');
-      });
-    });
-
-    describe('submitApplication()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.submitApplication).toBe('function');
-      });
-      it('dispatches submit', () => {
-        wrapper.vm.submitApplication();
-        expect(wrapper.vm.$store.dispatch).toHaveBeenCalledWith('application/submit');
-      });
-    });
   });
 });
