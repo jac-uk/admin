@@ -100,36 +100,86 @@ export default {
       },
     },
   },
+  async mounted () {
+    if (typeof this.fileName === 'string' && this.fileName.length) {
+      const isUploaded = await this.verifyFile(this.fileName);
+
+      if (!isUploaded) {
+        this.fileName = '';
+        this.resetFile();
+      }
+    }
+  },
   methods: {
     replaceFile() {
       this.isReplacing = true;
     },
     fileSelected() {
-      this.file = this.$refs.file.files[0];
-      this.fileName = `${this.name}.${this.file.name.split('.')[1]}`;
+      const file = this.$refs.file.files[0];
       this.setError('');
+      return this.upload(file);
+    },
+    generateFileName(originalName) {
+      const parts = originalName.split('.');
+      if( parts.length === 1 || ( parts[0] === '' && parts.length === 2 )) {
+        return this.name;
+      }
+
+      return [this.name, parts.pop()].join('.');
     },
     resetFile() {
-      this.file = '';
+      this.$refs.file = null;
       this.isUploading = false;
     },
-    async upload() {
-      if (this.file) {
-        this.isUploading = true;
-        const uploadRef = firebase.storage().ref(`${this.path}/${this.fileName}`);
-        try {
-          await uploadRef.put(this.file);
+    async upload(file) {
+      // @todo return more useful error messages
+
+      if (!file) {
+        this.setError('File upload failed, please try again');
+        return false;
+      }
+
+      this.isUploading = true;
+      const fileName = this.generateFileName(file.name);
+      const uploadRef = firebase.storage().ref(`${this.path}/${fileName}`);
+
+      try {
+        const fileUploaded = await uploadRef.put(file);
+        if (fileUploaded && fileUploaded.state === 'success') {
           this.isReplacing = false;
-          this.resetFile();
+          this.fileName = fileName;
+
           return true;
-        } catch (e) {
-          // @todo return more useful error message
-          this.resetFile();
+        } else {
           this.setError('File upload failed, please try again');
+
           return false;
         }
+      } catch (e) {
+        this.setError('File upload failed, please try again');
+
+        return false;
+      } finally {
+        this.resetFile();
       }
-      return true;
+    },
+    async verifyFile(fileName) {
+      if (!fileName) {
+        return false;
+      }
+      const fileRef = firebase.storage().ref(`${this.path}/${fileName}`);
+
+      // Check if file exists in storage
+      try {
+        const downloadUrl = await fileRef.getDownloadURL();
+
+        if (typeof downloadUrl === 'string' && downloadUrl.length) {
+          return true;
+        }
+        return false;
+      } catch (e) {
+        return false;
+      }
     },
   },
 };

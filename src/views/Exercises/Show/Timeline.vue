@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link 
-        v-if="canEdit"
+        v-if="isEditable"
         class="govuk-link"
         :to="{name: 'exercise-edit-timeline'}"
       >
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Timeline from '@/components/Page/Timeline';
 import createTimeline from '@/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
@@ -27,23 +28,11 @@ export default {
     Timeline,
   },
   computed: {
+    ...mapGetters('exerciseDocument', {
+      isEditable: 'isEditable',
+    }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
-    },
-    isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    canEdit() {
-      return !this.isApproved;
     },
     timeline() {
       let timeline = exerciseTimeline(this.exercise);

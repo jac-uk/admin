@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="canEdit"
+        v-if="isEditable"
         class="govuk-link"
         :to="{name: 'exercise-edit-downloads'}"
       >
@@ -13,16 +13,36 @@
       Downloads
     </h2>
 
-    <dl class="govuk-summary-list">
+    <p
+      v-if="!exercise.downloads"
+      class="govuk-body"
+    >
+      No files uploaded.
+    </p>
+    <dl
+      v-else
+      class="govuk-summary-list"
+    >
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Job Description
         </dt>
         <dd class="govuk-summary-list__value">
-          <DownloadLink
-            :file-name="exercise.jobDescription"
-            :exercise-id="exerciseId"
-          />
+          <span v-if="!exercise.downloads.jobDescriptions.length">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.jobDescriptions"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -30,10 +50,21 @@
           Terms and Conditions
         </dt>
         <dd class="govuk-summary-list__value">
-          <DownloadLink
-            :file-name="exercise.termsAndConditions"
-            :exercise-id="exerciseId"
-          />
+          <span v-if="!exercise.downloads.termsAndConditions.length">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.termsAndConditions"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -41,10 +72,21 @@
           Independent Assessors
         </dt>
         <dd class="govuk-summary-list__value">
-          <DownloadLink
-            :file-name="exercise.independentAssessors"
-            :exercise-id="exerciseId"
-          />
+          <span v-if="!exercise.downloads.independentAssessors.length">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.independentAssessors"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -52,10 +94,21 @@
           Candidate Assessment
         </dt>
         <dd class="govuk-summary-list__value">
-          <DownloadLink
-            :file-name="exercise.candidateAssessment"
-            :exercise-id="exerciseId"
-          />
+          <span v-if="!exercise.downloads.candidateAssessementForms.length">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.candidateAssessementForms"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
         </dd>
       </div>
     </dl>
@@ -64,56 +117,24 @@
 
 <script>
 import DownloadLink from '@/components/DownloadLink';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
     DownloadLink,
   },
   computed: {
+    ...mapState({
+      userId: state => state.auth.currentUser.uid,
+    }),
+    ...mapGetters('exerciseDocument', {
+      exerciseId: 'id',
+      //exercise: 'record',
+      isEditable: 'isEditable',
+    }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
-    },
-    isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    canEdit() {
-      return !this.isApproved;
-    },
-    userId() {
-      return this.$store.state.auth.currentUser.uid;
-    },
-    exerciseId() {
-      return this.$store.getters['exerciseDocument/id'];
-    },
-    downloadNameGenerator() {
-      let outcome = null;
-      if (this.exercise.assessmentOptions == 'statement-of-suitability-with-competencies') {
-        outcome = 'statement-of-suitability-with-competencies';
-      } else if (
-        this.exercise.assessmentOptions == 'statement-of-suitability-with-skills-and-abilities' ||
-        this.exercise.assessmentOptions == 'statement-of-suitability-with-skills-and-abilities-and-cv'
-      ) {
-        outcome = 'statement-of-suitability-with-skills-and-abilities';
-      }
-      let fileName = this.exercise.candidateAssessment;
-      if (fileName) {
-        outcome = outcome + '.' + fileName.split('.').pop();
-      }
-      return outcome;
     },
   },
 };
 </script>
-
-<style scoped>
-
-</style>

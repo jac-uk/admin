@@ -19,7 +19,7 @@
             v-if="allowEmpty || rows.length > 1"
             ref="removeFieldButton"
             type="button"
-            class="jac-add-another__remove-button govuk-button govuk-button--warning govuk-!-margin-bottom-2"
+            class="jac-add-another__remove-button govuk-button govuk-button--warning govuk-!-margin-bottom-2 "
             @click.prevent="removeRow(index)"
           >
             Remove
@@ -127,10 +127,11 @@ export default {
 <style scoped lang="scss">
 .repeatableField {
   position: relative;
-}
-.jac-add-another__remove-button {
-  position: absolute;
-  right: 0;
-  top: 0;
+
+  .jac-add-another__remove-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 }
 </style>

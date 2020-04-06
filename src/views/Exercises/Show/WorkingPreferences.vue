@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="canEdit"
+        v-if="isEditable"
         class="govuk-link"
         :to="{name: 'exercise-edit-working-preferences'}"
       >
@@ -92,32 +92,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   computed: {
+    ...mapGetters('exerciseDocument', {
+      isEditable: 'isEditable',
+    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },
-    isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    canEdit() {
-      return !this.isApproved;
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 .govuk-summary-list {
   > .govuk-summary-list__row:last-child {
     > .govuk-summary-list__key,
