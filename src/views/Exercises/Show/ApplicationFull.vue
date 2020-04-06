@@ -1439,10 +1439,12 @@
 
 <script>
 import DownloadLink from '@/components/DownloadLink';
+import EventRenderer from '@/components/Page/EventRenderer';
 
 export default {
   components: {
     DownloadLink,
+    EventRenderer,
   },
   props: {
     streamlined: {
