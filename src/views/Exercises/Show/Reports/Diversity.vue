@@ -387,9 +387,6 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },    
-    applications() {
-      return this.$store.state.applications.records;
-    },    
   },
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
