@@ -3,9 +3,11 @@ const formatDate = (value, type) => {
     const objDate = new Date(Date.parse(value));
     switch (type) {
       case 'month':
-        return `${objDate.toLocaleString('default', { month: 'long' })} ${objDate.getUTCFullYear()}`;
+        return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;
+      case 'datetime':
+        return objDate.toLocaleString('en-GB');
       default:
-        return objDate.toLocaleDateString();
+        return objDate.toLocaleDateString('en-GB');
     }
   }
 };
@@ -19,6 +21,10 @@ const formatNumber = (value, decimalPlaces) => {
     }
   }
   return value;
+};
+
+const formatNIN = (value) => {
+  return value.toUpperCase();
 };
 
 const toHumanCase = (value) => {
@@ -225,6 +231,7 @@ const lookup = (value) => {
 export {
   formatDate,
   formatNumber,
+  formatNIN,
   toHumanCase,
   toYesNo,
   slugify,

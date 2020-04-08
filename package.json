@@ -1,6 +1,6 @@
 {
   "name": "apply-admin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -15,7 +15,7 @@
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci"
+    "test-ci": "vue-cli-service test:unit --ci --runInBand"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",

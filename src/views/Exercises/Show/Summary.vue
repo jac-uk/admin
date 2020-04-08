@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="canEdit"
+        v-if="isEditable"
         class="govuk-link"
         :to="{name: 'exercise-edit-summary'}"
       >
@@ -68,8 +68,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   computed: {
+    ...mapGetters('exerciseDocument', {
+      isEditable: 'isEditable',
+    }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
@@ -78,21 +83,6 @@ export default {
     }, 
     canPublish() {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
-    },  
-    isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    canEdit() {
-      return !this.isApproved;
     },
   },
   methods: {
@@ -106,12 +96,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  .govuk-summary-list__value,
-  .govuk-summary-list__value:last-child,
-  .govuk-summary-list__key {
-    @include govuk-media-query($from: tablet) {
-      width: auto;
-    }
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.govuk-summary-list__value,
+.govuk-summary-list__value:last-child,
+.govuk-summary-list__key {
+  @include govuk-media-query($from: tablet) {
+    width: auto;
   }
+}
 </style>

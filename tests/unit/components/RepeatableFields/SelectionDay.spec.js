@@ -10,15 +10,15 @@ const createTestSubject = (props) => {
   });
 };
 
-xdescribe('@/components/RepeatableFields/SelectionDay', () => {
-  xdescribe('name', () => {
+describe('@/components/RepeatableFields/SelectionDay', () => {
+  describe('name', () => {
     it('component name is "SelectionDay"', () => {
       expect(SelectionDay.name).toBe('SelectionDay');
     });
   });
 
-  xdescribe('props', () => {
-    xdescribe('row', () => {
+  describe('props', () => {
+    describe('row', () => {
       it('is required', () => {
         let prop = SelectionDay.props.row;
         expect(prop.required).toBe(true);
@@ -30,7 +30,7 @@ xdescribe('@/components/RepeatableFields/SelectionDay', () => {
       });
     });
 
-    xdescribe('index', () => {
+    describe('index', () => {
       it('is required', () => {
         let prop = SelectionDay.props.index;
         expect(prop.required).toBe(true);
@@ -43,15 +43,15 @@ xdescribe('@/components/RepeatableFields/SelectionDay', () => {
     });
   });
 
-  xdescribe('computed properties', () => {
-    xdescribe('selectionDayIdStart', () => {
+  describe('computed properties', () => {
+    describe('selectionDayIdStart', () => {
       it('returns the value that is created using index', () => {
         let wrapper = createTestSubject({ index: 4, row: {} });
         expect(wrapper.vm.selectionDayIdStart).toBe('selection_start_4');
       });
     });
 
-    xdescribe('selectionDayIdEnd', () => {
+    describe('selectionDayIdEnd', () => {
       it('returns the value that is created using index', () => {
         let wrapper = createTestSubject({ index: 5, row: {} });
         expect(wrapper.vm.selectionDayIdStart).toBe('selection_start_5');
@@ -59,7 +59,7 @@ xdescribe('@/components/RepeatableFields/SelectionDay', () => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders DateInput', () => {
       let wrapper = createTestSubject({ index: 1, row: {} });
       expect(wrapper.find(DateInput).exists()).toBe(true);

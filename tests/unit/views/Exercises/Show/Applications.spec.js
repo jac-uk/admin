@@ -126,7 +126,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Show', () => {
+describe('@/views/Exercises/Show/Applications', () => {
   describe('template', () => {
     it('renders the component', () => {
       let wrapper = createTestSubject();
