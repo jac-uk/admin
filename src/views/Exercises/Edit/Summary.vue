@@ -24,7 +24,6 @@
           id="estimated-launch-date"
           v-model="exercise.estimatedLaunchDate"
           label="Estimated launch date"
-          type="month"
           required
         />        
 
