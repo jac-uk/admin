@@ -22,11 +22,17 @@
 
         <DateInput
           id="estimated-launch-date"
-          v-model="exercise.estimatedLaunchDate"
+          v-model="launchDate"
           label="Estimated launch date"
-          type="month"
+          :type="type"
           required
-        />        
+        />
+        <button
+          class="govuk-button govuk-button--secondary govuk-!-margin-left-1"
+          @click.prevent="toggleDay"
+        >
+          {{ toggleLabel }}
+        </button>
 
         <TextareaInput
           id="role-summary"
@@ -80,13 +86,61 @@ export default {
     const exercise = { ...defaults, ...data };
     return {
       exercise: exercise,
+      setDay: false,
     };
+  },
+  computed: {
+    launchDate: {
+      get() {
+        return this.parseDate(this.exercise.estimatedLaunchDate);
+      },
+      set(val) {
+        let dateString = `${val.getUTCFullYear()}-${val.getUTCMonth() + 1}`;
+        if (this.setDay) {
+          dateString = `${dateString}-${val.getUTCDate()}`;
+        }
+
+        this.exercise.estimatedLaunchDate = dateString;
+      },
+    },
+    type() {
+      if (this.setDay) {
+        return 'date';
+      }
+      return 'month';
+    },
+    toggleLabel() {
+      if (this.setDay) {
+        return 'Remove launch day';
+      }
+      return 'Add launch day';
+    },
   },
   methods: {
     async save(isValid) {
       this.exercise.progress.vacancySummary = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-summary'));
+    },
+    toggleDay() {
+      this.setDay = !this.setDay;
+    },
+    parseDate(value) {
+      if (value instanceof Date) {
+        return value;
+      }
+
+      if (typeof value != 'string') {
+        return;
+      }
+      const parts = value.split('-');
+      if (parts.length === 3) {
+        this.setDay = true;
+      }
+      const [year, month, day] = [...parts, 1];
+      const date = new Date(Date.UTC(year, month - 1, day));
+
+      return date;
     },
   },
 };

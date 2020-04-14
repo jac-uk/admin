@@ -28,7 +28,7 @@
           Launch date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.estimatedLaunchDate | formatDate('month') }}
+          {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
         </dd>
       </div>           
       <div class="govuk-summary-list__row">
