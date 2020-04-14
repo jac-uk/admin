@@ -12,6 +12,18 @@ const formatDate = (value, type) => {
   }
 };
 
+const formatEstimatedDate = (value) => {
+  if (value instanceof Date) {
+    return formatDate(value, 'month');
+  }
+  const parts = value.split('-');
+  if (!parts[2]) {
+    return formatDate(value, 'month');
+  }
+
+  return formatDate(value);
+};
+
 const formatNumber = (value, decimalPlaces) => {
   if (value) {
     if (decimalPlaces > 0) {
@@ -230,6 +242,7 @@ const lookup = (value) => {
 
 export {
   formatDate,
+  formatEstimatedDate,
   formatNumber,
   formatNIN,
   toHumanCase,
