@@ -8,12 +8,14 @@ localVue.use(Vuex);
 localVue.filter('lookup', jest.fn());
 localVue.filter('toYesNo', jest.fn());
 localVue.filter('formatNIN', jest.fn());
+localVue.filter('formatDate', jest.fn());
 
 const mockExercise = {
   exerciseRef: 'mock exercise',
   immediateStart: '56',
   applicationOpenDate: 'TestOpen',
   applicationCloseDate: 'TestClose',
+  typeOfExercise: 'legal',
 };
 
 const mockApplication = {
@@ -38,6 +40,13 @@ const mockApplication = {
     ],
     otherCurrentLegalRoleDetails: 'mock role details',
   },
+  qualifications: [
+    {
+      date: new Date(),
+      location: 'england-wales',
+      type: 'barrister',
+    },
+  ],
   firstAssessorFullName: 'mock assessor 1 name',
   firstAssessorEmail: 'mock assessor 1 email',
   firstAssessorPhone: 'mock assessor 1 phone',
@@ -147,6 +156,7 @@ describe('@/views/Exercises/Show/ApplicationFull', () => {
       const headers = wrapper.findAll('.govuk-grid-column-full > div > div > h2');
 
       expect(headers.length).toBeGreaterThan(1);
+
       expect(headers.at(0).text()).not.toEqual(expect.stringContaining('Personal details'));
       expect(headers.at(1).text()).not.toEqual(expect.stringContaining('Character information'));
       expect(headers.at(2).text()).not.toEqual(expect.stringContaining('Equality and diversity information'));

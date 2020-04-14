@@ -1206,7 +1206,10 @@
           </dl>
         </div>
 
-        <div class="govuk-!-margin-top-9">
+        <div
+          v-if="!streamlined"
+          class="govuk-!-margin-top-9"
+        >
           <h2 class="govuk-heading-l">
             Reasonable length of service
           </h2>
