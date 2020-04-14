@@ -1,9 +1,27 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <h1 class="govuk-heading-l">
-        Diversity Report
-      </h1>
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">
+          Diversity Report        
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-third text-right">
+        <button
+          class="govuk-button govuk-button--secondary"
+          @click="refreshReport"
+        >
+          <span
+            v-if="refreshingReport"
+            class="spinner-border spinner-border-sm"
+          /> Refresh
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="diversity"
+      class="govuk-grid-row"
+    >
       <div class="govuk-grid-column-full">
         <table class="govuk-table table-with-border">
           <thead class="govuk-table__head">
@@ -24,7 +42,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Total applications
+                Total applied
               </th>
             </tr>
           </thead>
@@ -37,7 +55,7 @@
                 {{ exercise.typeOfExercise | lookup }}
               </td>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                {{ applications.length }}
+                {{ diversity.totalApplications }}
               </td>
             </tr>
           </tbody>
@@ -48,7 +66,7 @@
         <select class="govuk-select govuk-!-margin-top-6 govuk-!-margin-left-1">
           <option>Team Checks</option>
           <option value="e-and-d-post-application">
-            E&D Post Application
+            E&D Applied
           </option>
           <option value="e-and-d-post-sift-shortlisting">
             E&D Post Sift/Shortlisting
@@ -90,7 +108,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Post application
+                Applied
               </th>
             </tr>
           </thead>
@@ -100,7 +118,7 @@
                 Male
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.gender.male" />
+                <Stat :stat="diversity.applied.gender.male" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -108,7 +126,7 @@
                 Female
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.gender.female" />
+                <Stat :stat="diversity.applied.gender.female" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -116,7 +134,7 @@
                 Gender Neutral
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.gender.genderNeutral" />
+                <Stat :stat="diversity.applied.gender.genderNeutral" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -124,7 +142,7 @@
                 Prefer not to say
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.gender.preferNotToSay" />
+                <Stat :stat="diversity.applied.gender.preferNotToSay" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -132,7 +150,7 @@
                 Other
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.gender.other" />
+                <Stat :stat="diversity.applied.gender.other" />
               </td>
             </tr>            
           </tbody>
@@ -154,7 +172,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Post application
+                Applied
               </th>
             </tr>
           </thead>
@@ -164,7 +182,7 @@
                 BAME
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.ethnicity.bame" />
+                <Stat :stat="diversity.applied.ethnicity.bame" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -172,7 +190,7 @@
                 White
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.ethnicity.white" />
+                <Stat :stat="diversity.applied.ethnicity.white" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -180,7 +198,7 @@
                 Prefer not to say
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.ethnicity.preferNotToSay" />
+                <Stat :stat="diversity.applied.ethnicity.preferNotToSay" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -188,7 +206,7 @@
                 Other
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.ethnicity.other" />
+                <Stat :stat="diversity.applied.ethnicity.other" />
               </td>
             </tr>
           </tbody>
@@ -210,7 +228,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Post application
+                Applied
               </th>
             </tr>
           </thead>
@@ -220,7 +238,7 @@
                 Yes
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.disability.yes" />
+                <Stat :stat="diversity.applied.disability.yes" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -228,7 +246,7 @@
                 No
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.disability.no" />
+                <Stat :stat="diversity.applied.disability.no" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -236,7 +254,7 @@
                 Prefer not to say
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.disability.preferNotToSay" />
+                <Stat :stat="diversity.applied.disability.preferNotToSay" />
               </td>
             </tr>
           </tbody>
@@ -258,7 +276,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Post application
+                Applied
               </th>
             </tr>
           </thead>
@@ -268,7 +286,7 @@
                 Barrister
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.professionalBackground.barrister" />
+                <Stat :stat="diversity.applied.professionalBackground.barrister" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -276,7 +294,7 @@
                 CILEx
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.professionalBackground.cilex" />
+                <Stat :stat="diversity.applied.professionalBackground.cilex" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -284,7 +302,7 @@
                 Solicitor
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.professionalBackground.solicitor" />
+                <Stat :stat="diversity.applied.professionalBackground.solicitor" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -292,7 +310,7 @@
                 Prefer not to say
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.professionalBackground.preferNotToSay" />
+                <Stat :stat="diversity.applied.professionalBackground.preferNotToSay" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -300,7 +318,7 @@
                 Other
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.professionalBackground.other" />
+                <Stat :stat="diversity.applied.professionalBackground.other" />
               </td>
             </tr>            
           </tbody>
@@ -322,7 +340,7 @@
                 scope="col"
                 class="govuk-table__header govuk-table__header--numeric"
               >
-                Post application
+                Applied
               </th>
             </tr>
           </thead>
@@ -332,7 +350,7 @@
                 Attended UK state school
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.socialMobility.attendedUKStateSchool" />
+                <Stat :stat="diversity.applied.socialMobility.attendedUKStateSchool" />
               </td>
             </tr>
             <tr class="govuk-table__row">
@@ -340,18 +358,11 @@
                 First generation to attend University
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity.postApplication.socialMobility.firstGenerationUniversity" />
+                <Stat :stat="diversity.applied.socialMobility.firstGenerationUniversity" />
               </td>
             </tr>
           </tbody>
-        </table>         
-
-        <button
-          :disabled="true"
-          class="govuk-button"
-        >
-          Export Data
-        </button>
+        </table>
       </div>
     </div>
   </div>
@@ -359,28 +370,42 @@
 
 <script>
 import Stat from '@/components/Report/Stat';
+import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
     Stat,
   },
+  data() {
+    return {
+      diversity: null,
+      refreshingReport: false,
+      unsubscribe: null,
+    };
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },    
-    applications() {
-      return this.$store.state.applications.records;
-    },    
-    diversity() {
-      return this.$store.getters['applications/diversity'];
-    },
   },
   created() {
-    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
+    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
+      .onSnapshot((snap) => {
+        this.diversity = snap.data();
+      });    
   },
   destroyed() {
-    // this.$store.dispatch('applications/unbind');
-  },  
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  },
+  methods: {
+    async refreshReport() {
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
+    },
+  },
 };
 </script>
 
@@ -388,11 +413,11 @@ export default {
 
 .table-with-border {
   td, th {
-   border-style: solid;
-   border-width: 2px;
-   border-color: black;
-   padding-left: 6px;
-   padding-right: 6px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  padding-left: 6px;
+  padding-right: 6px;
   }
   .govuk-table__header--numeric,
   .govuk-table__cell--numeric {

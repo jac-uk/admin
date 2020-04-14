@@ -14,14 +14,13 @@ const config = {
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
-firebase.initializeApp(config);
+const functions = firebase.initializeApp(config).functions('europe-west2');
 
 // Initialise Firestore
 const firestore = firebase.firestore();
 
 // Other firebase exports
 const auth = firebase.auth;
-const functions = firebase.functions;
 
 export { firestore, auth, functions };
 export default firebase;
