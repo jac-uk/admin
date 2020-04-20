@@ -126,6 +126,17 @@
                 />
               </div>
               <div
+                v-else-if="issue.type == 'lateTaxReturnOrFined'"
+                class="issue"
+              >
+                <p class="govuk-body">
+                  Candidate has filed late tax returns or been fined by HMRC
+                </p>
+                <EventRenderer
+                  :events="application.characterInformation.lateTaxReturnOrFinedDetails"
+                />
+              </div>
+              <div
                 v-else-if="issue.type == 'nonMotoringFixedPenaltyNotices'"
                 class="issue"
               >
