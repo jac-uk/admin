@@ -1,6 +1,7 @@
 <template>
   <div class="govuk-width-container">
     <div
+      id="header"
       style="padding-top: 0px"
       class="govuk-main-wrapper"
     >

@@ -9,7 +9,7 @@
         Back
       </router-link>
 
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
         Application {{ applicationReferenceNumber }}
       </h1>
 

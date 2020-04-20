@@ -153,7 +153,7 @@
                 {{ application.personalDetails.reasonableAdjustments | toYesNo }}
                 <ul
                   v-if="application.personalDetails.reasonableAdjustmentsDetails"
-                  class="govuk-!-margin-top-1"
+                  class="govuk-list govuk-!-margin-top-1"
                 >
                   <li>
                     {{ application.personalDetails.reasonableAdjustmentsDetails }}
