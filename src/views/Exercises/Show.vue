@@ -133,7 +133,9 @@ export default {
           page: 'Exercise reports',
           name: 'exercise-show-reports',
           children: [
+            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Diversity', name: 'exercise-show-report-diversity' },
+            { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
             { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
           ],
         });
