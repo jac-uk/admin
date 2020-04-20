@@ -1,8 +1,14 @@
 @media print {
   #header,
   .govuk-back-link,
-  .jac-button-group {
+  .jac-button-group,
+  .govuk-button,
+  .print-none {
     display: none;
+  }
+
+  .print-full-width {
+    width: 100%;
   }
 
   .govuk-width-container {
