@@ -2,6 +2,7 @@
 $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
 @import "node_modules/govuk-frontend/govuk/all";
+@import "print";
 
 .text-center {
   text-align: center;

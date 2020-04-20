@@ -75,7 +75,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
   .dwp-vertical-navigation {
     margin: 0;
     padding: 0;
