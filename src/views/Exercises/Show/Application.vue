@@ -9,11 +9,13 @@
         Back
       </router-link>
 
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
-        Application {{ applicationReferenceNumber }}
-      </h1>
+      <div id="download-as-pdf-div">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
+          Application {{ applicationReferenceNumber }}
+        </h1>
 
-      <RouterView />
+        <RouterView />
+      </div>
     </div>
   </div>
 </template>
