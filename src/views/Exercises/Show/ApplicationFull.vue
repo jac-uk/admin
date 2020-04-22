@@ -18,6 +18,14 @@
           >
             Panel pack view
           </router-link>
+
+          <button
+            class="govuk-button govuk-button--secondary"
+            @click="downloadAsPdf"
+          >
+            Download As PDF
+          </button>
+
           <span
             v-if="!streamlined"
             class=" govuk-!-margin-left-4"
@@ -153,7 +161,7 @@
                 {{ application.personalDetails.reasonableAdjustments | toYesNo }}
                 <ul
                   v-if="application.personalDetails.reasonableAdjustmentsDetails"
-                  class="govuk-!-margin-top-1"
+                  class="govuk-list govuk-!-margin-top-1"
                 >
                   <li>
                     {{ application.personalDetails.reasonableAdjustmentsDetails }}
@@ -850,6 +858,12 @@
                     {{ application.generalMedicalCouncilConditionalStartDate | formatDate }}
                     to {{ application.generalMedicalCouncilConditionalEndDate | formatDate }}
                   </li>
+                  <li
+                    v-if="application.generalMedicalCouncilConditionalStartDate
+                      && !application.generalMedicalCouncilConditionalEndDate"
+                  >
+                    {{ application.generalMedicalCouncilConditionalStartDate | formatDate }} — current
+                  </li>
                   <li>
                     {{ application.generalMedicalCouncilConditionalDetails }}
                   </li>
@@ -963,9 +977,15 @@
                 Date qualified
               </dt>
               <dd class="govuk-summary-list__value">
-                <ul class="govuk-list">
-                  <li v-if="item.startDate && item.endDate">
+                <ul
+                  v-if="item.startDate"
+                  class="govuk-list"
+                >
+                  <li v-if="item.endDate">
                     {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+                  </li>
+                  <li v-else>
+                    {{ item.startDate | formatDate }} — current
                   </li>
                 </ul>
               </dd>
@@ -1013,9 +1033,15 @@
                 Dates worked
               </dt>
               <dd class="govuk-summary-list__value">
-                <ul class="govuk-list">
-                  <li v-if="item.startDate && item.endDate">
+                <ul
+                  v-if="item.startDate"
+                  class="govuk-list"
+                >
+                  <li v-if="item.endDate">
                     {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+                  </li>
+                  <li v-else>
+                    {{ item.startDate | formatDate }} — current
                   </li>
                 </ul>
               </dd>
@@ -1161,9 +1187,15 @@
                 Date of gap
               </dt>
               <dd class="govuk-summary-list__value">
-                <ul class="govuk-list">
-                  <li v-if="item.startDate && item.endDate">
+                <ul
+                  v-if="item.startDate"
+                  class="govuk-list"
+                >
+                  <li v-if="item.endDate">
                     {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+                  </li>
+                  <li v-else>
+                    {{ item.startDate | formatDate }} — current
                   </li>
                 </ul>
               </dd>
@@ -1443,6 +1475,7 @@
 <script>
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
+import jsPDF from 'jspdf';
 
 export default {
   components: {
@@ -1575,6 +1608,28 @@ export default {
     this.$store.dispatch('exerciseDocument/unbind');
   },
   methods: {
+    downloadAsPdf() {
+      const pdf = new jsPDF();
+
+      pdf.fromHTML(
+        document.querySelector('#download-as-pdf-div'),
+        15,
+        15,
+        {
+          width: 170,
+          elementHandlers: {
+            '.jac-button-group': () => true,
+          },
+        },
+      );
+
+      var fileName = 'judicial-appointments-application';
+      if (this.applicationReferenceNumber) {
+        fileName = this.applicationReferenceNumber;
+      }
+
+      pdf.save(`${fileName}.pdf`);
+    },
     unlock() {
       this.$store.dispatch('application/unlock');
     },
