@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="govuk-grid-row print-none">
+    <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <div class="text-right">
           <button

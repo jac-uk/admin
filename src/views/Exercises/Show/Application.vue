@@ -1,7 +1,13 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <BackLink />
+      <router-link
+        v-if="exerciseId"
+        class="govuk-back-link"
+        :to="{name: 'exercise-show-applications', params: { id: exerciseId }}"
+      >
+        Back
+      </router-link>
 
       <div id="download-as-pdf-div">
         <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
@@ -15,12 +21,7 @@
 </template>
 
 <script>
-import BackLink from '@/components/BackLink';
-
 export default {
-  components: {
-    BackLink,
-  },
   computed: {
     application() {
       return this.$store.state.application.record;
