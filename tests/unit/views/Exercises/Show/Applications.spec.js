@@ -259,6 +259,15 @@ describe('@/views/Exercises/Show/Applications', () => {
         });
       });
 
+      it('calls .attendedUKStateSchool() to parse stateOrFeeSchool', () => {
+        wrapper.vm.attendedUKStateSchool = jest.fn();
+        wrapper.vm.gatherContacts();
+        expect(wrapper.vm.attendedUKStateSchool).toHaveBeenCalledTimes(mockApplications.length);
+        mockApplications.forEach((mockApp) => {
+          expect(wrapper.vm.attendedUKStateSchool).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
+        });
+      });
+
       it('returns an array with one row per application', () => {
         const contacts = wrapper.vm.gatherContacts();
 
