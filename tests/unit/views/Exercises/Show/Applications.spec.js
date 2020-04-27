@@ -168,7 +168,7 @@ describe('@/views/Exercises/Show/Applications', () => {
         expect(flattened).toBeString();
         expect(flattened).toStartWith('"');
         expect(flattened).toEndWith('"');
-        expect(flattened).toEqual(expect.stringContaining('Barrister'));
+        expect(flattened).toEqual(expect.stringContaining('barrister'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails));
       });
 
@@ -179,7 +179,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherCurrentLegalRoleDetails: 'mock role details',
         });
-        expect(flattened).toBe('"Barrister"');
+        expect(flattened).toBe('"barrister"');
         flattened = wrapper.vm.flattenCurrentLegalRole({
           currentLegalRole: [
             'barrister',
@@ -187,7 +187,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherCurrentLegalRoleDetails: 'mock role details',
         });
-        expect(flattened).toEqual(expect.stringContaining('Barrister'));
+        expect(flattened).toEqual(expect.stringContaining('barrister'));
         expect(flattened).toEqual(expect.stringContaining('mock role details'));
       });
 
@@ -213,7 +213,7 @@ describe('@/views/Exercises/Show/Applications', () => {
         expect(flattened).toBeString();
         expect(flattened).toStartWith('"');
         expect(flattened).toEndWith('"');
-        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
+        expect(flattened).toEqual(expect.stringContaining('solicitor'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails));
       });
 
@@ -224,7 +224,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherProfessionalBackgroundDetails: 'mock background details',
         });
-        expect(flattened).toBe('"Solicitor"');
+        expect(flattened).toBe('"solicitor"');
         flattened = wrapper.vm.flattenProfessionalBackground({
           professionalBackground: [
             'solicitor',
@@ -232,7 +232,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherProfessionalBackgroundDetails: 'mock background details',
         });
-        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
+        expect(flattened).toEqual(expect.stringContaining('solicitor'));
         expect(flattened).toEqual(expect.stringContaining('mock background details'));
       });
 
