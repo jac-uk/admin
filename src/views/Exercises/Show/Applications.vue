@@ -131,6 +131,26 @@ export default {
 
       return `"${ roles.join('\n')}"`;
     },
+    flattenProfessionalBackground(equalityAndDiversitySurvey) {
+      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.professionalBackground)) {
+        return '';
+      }
+      const roles = [];
+      equalityAndDiversitySurvey.professionalBackground.forEach((role) => {
+        if (role === 'other-professional-background') {
+          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
+        } else {
+          roles.push(`${ filters.lookup(role) }`);
+        }
+      });
+      return `"${ roles.join('\n')}"`;
+    },
+    attendedUKStateSchool(equalityAndDiversitySurvey) {
+      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.stateOrFeeSchool)) {
+        return '';
+      }
+      return filters.toYesNo(['uk-state-selective', 'uk-state-non-selective'].indexOf(equalityAndDiversitySurvey.stateOrFeeSchool) >= 0);
+    },
     gatherContacts() {
       const contacts = this.applications.map((application) => {
         return {
@@ -144,6 +164,9 @@ export default {
           Disability: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)) : '',
           EthnicGroup: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup) : '',
           CurrentLegalRole: application.equalityAndDiversitySurvey ? this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey) : '',
+          ProfessionalBackground: application.equalityAndDiversitySurvey ? this.flattenProfessionalBackground(application.equalityAndDiversitySurvey) : '',
+          AttendedUKStateSchool: application.equalityAndDiversitySurvey ? this.attendedUKStateSchool(application.equalityAndDiversitySurvey) : '',
+          FirstGenerationStudent: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)) : '',
           FirstAssessorName: application.firstAssessorFullName,
           FirstAssessorEmail: application.firstAssessorEmail,
           FirstAssessorPhone: application.firstAssessorPhone,
