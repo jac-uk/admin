@@ -32,6 +32,11 @@ const mockApplication = {
       'other-current-legal-role',
     ],
     otherCurrentLegalRoleDetails: 'mock role details',
+    professionalBackground: [
+      'solicitor',
+      'other-professional-background',
+    ],
+    otherProfessionalBackgroundDetails: 'mock background details',
   },
   firstAssessorFullName: 'mock assessor 1 name',
   firstAssessorEmail: 'mock assessor 1 email',
@@ -168,6 +173,63 @@ describe('@/views/Exercises/Show/Applications', () => {
       });
     });
 
+    describe('flattenProfessionalBackground', () => {
+      it('is a function', () => {
+        expect(typeof wrapper.vm.flattenProfessionalBackground).toBe('function');
+      });
+
+      it('returns empty string if no argument supplied', () => {
+        const flattened = wrapper.vm.flattenProfessionalBackground();
+        expect(flattened).toBe('');
+      });
+
+      it('returns empty string if argument doesn\'t contain professionalBackground', () => {
+        const flattened = wrapper.vm.flattenProfessionalBackground({});
+        expect(flattened).toBe('');
+      });
+
+      it('returns a flattened string if argument contains a valid professionalBackground', () => {
+        const flattened = wrapper.vm.flattenProfessionalBackground(mockApplication.equalityAndDiversitySurvey);
+        expect(flattened).toBeString();
+        expect(flattened).toStartWith('"');
+        expect(flattened).toEndWith('"');
+        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
+        expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails));
+      });
+    });
+
+    describe('attendedUKStateSchool()', () => {
+      it('is a function', () => {
+        expect(typeof wrapper.vm.attendedUKStateSchool).toBe('function');
+      });
+
+      it('returns empty string if no argument supplied', () => {
+        const result = wrapper.vm.attendedUKStateSchool();
+        expect(result).toBe('');
+      });
+
+      it('returns empty string if argument doesn\'t contain stateOrFeeSchool', () => {
+        const result = wrapper.vm.attendedUKStateSchool({});
+        expect(result).toBe('');
+      });
+
+      it('returns \'Yes\' for \'uk-state-selective\'', () => {
+        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'uk-state-selective' });
+        expect(result).toBe('Yes');
+      });
+
+      it('returns \'Yes\' for \'uk-state-non-selective\'', () => {
+        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'uk-state-selective' });
+        expect(result).toBe('Yes');
+      });
+
+      it('returns \'No\' for anything else', () => {
+        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'mock-school' });
+        expect(result).toBe('No');
+      });
+
+    });
+
     describe('gatherContacts()', () => {
       it('is a function', () => {
         expect(typeof wrapper.vm.gatherContacts).toBe('function');
@@ -182,6 +244,18 @@ describe('@/views/Exercises/Show/Applications', () => {
 
         mockApplications.forEach((mockApp) => {
           expect(wrapper.vm.flattenCurrentLegalRole).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
+        });
+      });
+
+      it('calls .flattenProfessionalBackground() to flatten professionalBackground', () => {
+        wrapper.vm.flattenProfessionalBackground = jest.fn();
+
+        wrapper.vm.gatherContacts();
+
+        expect(wrapper.vm.flattenProfessionalBackground).toHaveBeenCalledTimes(mockApplications.length);
+
+        mockApplications.forEach((mockApp) => {
+          expect(wrapper.vm.flattenProfessionalBackground).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
         });
       });
 
@@ -205,6 +279,9 @@ describe('@/views/Exercises/Show/Applications', () => {
           'Disability',
           'EthnicGroup',
           'CurrentLegalRole',
+          'ProfessionalBackground',
+          'AttendedUKStateSchool',
+          'FirstGenerationStudent',
           'FirstAssessorName',
           'FirstAssessorEmail',
           'FirstAssessorPhone',
@@ -216,6 +293,7 @@ describe('@/views/Exercises/Show/Applications', () => {
         expect(contacts[0]).toBeObject();
         expect(Object.keys(contacts[0])).toEqual(keys);
       });
+
     });
 
     describe('buildCsv', () => {
