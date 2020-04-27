@@ -171,6 +171,26 @@ describe('@/views/Exercises/Show/Applications', () => {
         expect(flattened).toEqual(expect.stringContaining('Barrister'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails));
       });
+
+      it('only returns otherCurrentLegalRoleDetails when other has been selected', () => {
+        let flattened = wrapper.vm.flattenCurrentLegalRole({
+          currentLegalRole: [
+            'barrister',
+          ],
+          otherCurrentLegalRoleDetails: 'mock role details',
+        });
+        expect(flattened).toBe('"Barrister"');
+        flattened = wrapper.vm.flattenCurrentLegalRole({
+          currentLegalRole: [
+            'barrister',
+            'other-current-legal-role',
+          ],
+          otherCurrentLegalRoleDetails: 'mock role details',
+        });
+        expect(flattened).toEqual(expect.stringContaining('Barrister'));
+        expect(flattened).toEqual(expect.stringContaining('mock role details'));
+      });
+
     });
 
     describe('flattenProfessionalBackground', () => {
@@ -196,6 +216,26 @@ describe('@/views/Exercises/Show/Applications', () => {
         expect(flattened).toEqual(expect.stringContaining('Solicitor'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails));
       });
+
+      it('only returns otherProfessionalBackgroundDetails when other has been selected', () => {
+        let flattened = wrapper.vm.flattenProfessionalBackground({
+          professionalBackground: [
+            'solicitor',
+          ],
+          otherProfessionalBackgroundDetails: 'mock background details',
+        });
+        expect(flattened).toBe('"Solicitor"');
+        flattened = wrapper.vm.flattenProfessionalBackground({
+          professionalBackground: [
+            'solicitor',
+            'other-professional-background',
+          ],
+          otherProfessionalBackgroundDetails: 'mock background details',
+        });
+        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
+        expect(flattened).toEqual(expect.stringContaining('mock background details'));
+      });
+
     });
 
     describe('attendedUKStateSchool()', () => {
