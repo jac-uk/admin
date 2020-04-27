@@ -934,6 +934,23 @@
                 </ul>
               </dd>
             </div>
+
+            <div
+              v-for="(membership, key) in otherMemberships"
+              :key="key"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                {{ membership.label }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <ul class="govuk-list">
+                  <li>{{ membership.date | formatDate }}</li>
+                  <li>{{ membership.number }}</li>
+                  <li>{{ membership.information }}</li>
+                </ul>
+              </dd>
+            </div>
           </dl>
         </div>
 
@@ -1594,6 +1611,22 @@ export default {
         }
       }
       return false;
+    },
+    otherMemberships() {
+      // @NOTE this is a bit ugly as we can't just lookup label
+      const selected = {};
+
+      this.application.professionalMemberships.forEach(membership => {
+        if (this.application.memberships[membership]) {
+          const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
+          selected[membership] = {
+            ...this.application.memberships[membership],
+            label: otherMembership.label,
+          };
+        }
+      });
+
+      return selected;
     },
   },
   created() {
