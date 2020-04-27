@@ -119,13 +119,13 @@ export default {
       const roles = [];
       equalityAndDiversitySurvey.currentLegalRole.forEach((role) => {
         if (role === 'other-fee-paid-judicial-office-holder') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
         } else if (role === 'other-salaried-judicial-office-holder') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
         } else if (role === 'other-current-legal-role') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
         } else {
-          roles.push(`${ filters.lookup(role) }`);
+          roles.push(role);
         }
       });
 
@@ -138,9 +138,9 @@ export default {
       const roles = [];
       equalityAndDiversitySurvey.professionalBackground.forEach((role) => {
         if (role === 'other-professional-background') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
         } else {
-          roles.push(`${ filters.lookup(role) }`);
+          roles.push(role);
         }
       });
       return `"${ roles.join('\n')}"`;
