@@ -5,7 +5,7 @@
       :load-failed="loadFailed"
     />
     <div v-else>
-      <div class="govuk-grid-row">
+      <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
             class="govuk-back-link"
@@ -31,7 +31,7 @@
           </h1>
           <router-link
             v-if="isEditable"
-            class="govuk-link"
+            class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
             Edit name
@@ -39,13 +39,13 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter print-none">
           <Navigation
             :items="navPages"
             label="Main Navigation"
           />
         </div>
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
         </div>
       </div>
@@ -133,7 +133,9 @@ export default {
           page: 'Exercise reports',
           name: 'exercise-show-reports',
           children: [
+            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Diversity', name: 'exercise-show-report-diversity' },
+            { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
             { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
           ],
         });

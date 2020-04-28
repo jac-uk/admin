@@ -119,17 +119,37 @@ export default {
       const roles = [];
       equalityAndDiversitySurvey.currentLegalRole.forEach((role) => {
         if (role === 'other-fee-paid-judicial-office-holder') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
         } else if (role === 'other-salaried-judicial-office-holder') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
         } else if (role === 'other-current-legal-role') {
-          roles.push(`${ filters.lookup(role) }: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
         } else {
-          roles.push(`${ filters.lookup(role) }`);
+          roles.push(role);
         }
       });
 
       return `"${ roles.join('\n')}"`;
+    },
+    flattenProfessionalBackground(equalityAndDiversitySurvey) {
+      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.professionalBackground)) {
+        return '';
+      }
+      const roles = [];
+      equalityAndDiversitySurvey.professionalBackground.forEach((role) => {
+        if (role === 'other-professional-background') {
+          roles.push(`other: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
+        } else {
+          roles.push(role);
+        }
+      });
+      return `"${ roles.join('\n')}"`;
+    },
+    attendedUKStateSchool(equalityAndDiversitySurvey) {
+      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.stateOrFeeSchool)) {
+        return '';
+      }
+      return filters.toYesNo(['uk-state-selective', 'uk-state-non-selective'].indexOf(equalityAndDiversitySurvey.stateOrFeeSchool) >= 0);
     },
     gatherContacts() {
       const contacts = this.applications.map((application) => {
@@ -144,6 +164,9 @@ export default {
           Disability: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)) : '',
           EthnicGroup: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup) : '',
           CurrentLegalRole: application.equalityAndDiversitySurvey ? this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey) : '',
+          ProfessionalBackground: application.equalityAndDiversitySurvey ? this.flattenProfessionalBackground(application.equalityAndDiversitySurvey) : '',
+          AttendedUKStateSchool: application.equalityAndDiversitySurvey ? this.attendedUKStateSchool(application.equalityAndDiversitySurvey) : '',
+          FirstGenerationStudent: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)) : '',
           FirstAssessorName: application.firstAssessorFullName,
           FirstAssessorEmail: application.firstAssessorEmail,
           FirstAssessorPhone: application.firstAssessorPhone,

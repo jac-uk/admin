@@ -5,15 +5,7 @@
     </h2>
 
     <ul class="govuk-list">
-      <!-- <li class="govuk-!-margin-bottom-4">
-        <router-link
-          class="govuk-link govuk-body-l"
-          :to="{name: 'exercise-reports-character-issues'}"
-        >
-          Character issues
-        </router-link>
-      </li>
-
+      <!--
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
@@ -26,21 +18,31 @@
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
-          :to="{name: 'exercise-show-report-diversity'}"
+          :to="{name: 'exercise-show-report-character-issues'}"
         >
-          Diversity report
+          Character Issues
         </router-link>
       </li>
 
-      <!-- <li class="govuk-!-margin-bottom-4">
+      <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"
-          :to="{name: 'exercise-reports-eligibility-issues'}"
+          :to="{name: 'exercise-show-report-diversity'}"
         >
-          Eligibility issues
+          Diversity Report
         </router-link>
       </li>
 
+      <li class="govuk-!-margin-bottom-4">
+        <router-link
+          class="govuk-link govuk-body-l"
+          :to="{name: 'exercise-show-report-eligibility-issues'}"
+        >
+          Eligibility Issues
+        </router-link>
+      </li>
+
+      <!-- 
       <li class="govuk-!-margin-bottom-4">
         <router-link
           class="govuk-link govuk-body-l"

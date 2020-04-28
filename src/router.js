@@ -38,6 +38,8 @@ import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
 import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversity';
 import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
+import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
+import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
@@ -230,6 +232,24 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Details | Reports | Reasonable Adjustments',
+              },
+            },
+            {
+              path: 'eligibility',
+              component: ExerciseShowReportsEligibilityIssues,
+              name: 'exercise-show-report-eligibility-issues',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Details | Reports | Eligibility Issues',
+              },
+            },
+            {
+              path: 'character',
+              component: ExerciseShowReportsCharacterIssues,
+              name: 'exercise-show-report-character-issues',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Details | Reports | Character Issues',
               },
             },
           ],                    
