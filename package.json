@@ -26,7 +26,7 @@
     "core-js": "^2.6.11",
     "firebase": "^6.6.2",
     "firebaseui": "^4.4.0",
-    "govuk-frontend": "^3.4.0",
+    "govuk-frontend": "^3.6.0",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf": "^1.5.3",
     "vue": "^2.6.11",
