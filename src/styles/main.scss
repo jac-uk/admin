@@ -1,7 +1,12 @@
 // overwrite the font
 $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
-@import "node_modules/govuk-frontend/govuk/all";
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+@import "~govuk-frontend/govuk/all";
+
+$moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
+@import "~@ministryofjustice/frontend/moj/all";
+
 @import "print";
 
 .text-center {
@@ -68,6 +73,10 @@ body {
 .govuk-button--secondary:focus {
   background-color: #dbdad9;
   color: #0b0c0c;
+}
+
+.govuk-width-container {
+  max-width: 1200px;
 }
 
 // disabled inputs
