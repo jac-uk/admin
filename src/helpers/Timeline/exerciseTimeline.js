@@ -1,5 +1,4 @@
-import formatDate from '@/helpers/formatDate';
-import isDate from '@/helpers/isDate';
+import { isDate, formatDate } from '@/helpers/date';
 
 const getDateAndTime = (date, startTime) => {
   if(!isDate(date) && !isDate(startTime)) {
