@@ -128,7 +128,7 @@ export default {
             { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
           ],
         });
-        // pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
+        pages.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
         pages.push({
           page: 'Exercise reports',
           name: 'exercise-show-reports',

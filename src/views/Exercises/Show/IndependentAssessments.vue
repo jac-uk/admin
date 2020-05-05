@@ -1,32 +1,142 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      Independent Assessments - Record of returns
+      Independent Assessments
     </h1>
 
-    <div>
-      <input
-        id="search-bar"
-        class="govuk-input govuk-input--width-10 govuk-!-margin-right-2"
-      >
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Contact date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.contactIndependentAssessors | formatDate }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <strong
+            v-if="contactOverdue"
+            class="govuk-tag govuk-tag--red"
+          >
+            Overdue
+          </strong>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Due date
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.independentAssessmentsReturnDate | formatDate }}
+        </dd>
+        <dd class="govuk-summary-list__actions" />
+      </div>
+    </dl>
 
-      <h3
-        class="govuk-heading-m"
-        style="text-align: right"
+    <div
+      v-if="!assessments.length"
+    >
+      <p class="govuk-body">
+        No assessments requests sent yet.
+      </p>
+
+      <ActionButton
+        class="moj-button-menu__item"
+        @click="initialiseAssessments()"
       >
-        Due date {{ dueDate }}
-      </h3>
+        Request assessments
+      </ActionButton>
+
+      <table class="govuk-table govuk-!-margin-top-4">
+        <caption class="govuk-table__caption">
+          Assessors listed by candidates
+        </caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th
+              scope="col"
+              class="govuk-table__header app-custom-class"
+            >
+              Reference number
+            </th>
+            <th
+              scope="col"
+              class="govuk-table__header app-custom-class"
+            >
+              Candidate name
+            </th>
+            <th
+              scope="col"
+              class="govuk-table__header app-custom-class"
+            >
+              Assessors
+            </th>
+            <th
+              scope="col"
+              class="govuk-table__header app-custom-class"
+            >
+              Date submitted
+            </th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr
+            v-for="application in applications"
+            :key="application.id"
+            class="govuk-table__row"
+          >
+            <th
+              scope="row"
+              class="govuk-table__header"
+            >
+              <router-link
+                class="govuk-link"
+                :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+              >
+                {{ application.referenceNumber }}
+              </router-link>
+            </th>
+            <td class="govuk-table__cell">
+              <span v-if="application.personalDetails">{{ application.personalDetails.fullName }}</span>
+            </td>
+            <td class="govuk-table__cell">
+              <p class="govuk-body">
+                <a
+                  :href="`mailto:${application.firstAssessorEmail}`"
+                  class="govuk-link govuk-link--no-visited-state"
+                  target="_blank"
+                >
+                  {{ application.firstAssessorFullName }}
+                </a>
+              </p>
+              <p class="govuk-body">
+                <a
+                  :href="`mailto:${application.secondAssessorEmail}`"
+                  class="govuk-link govuk-link--no-visited-state"
+                  target="_blank"
+                >
+                  {{ application.secondAssessorFullName }}
+                </a>
+              </p>
+            </td>
+            <td class="govuk-table__cell">
+              {{ application.appliedAt | formatDate }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <table class="govuk-table">
-      <caption class="govuk-table__caption" />
+    <table
+      v-else
+      class="govuk-table"
+    >
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th
+          <!--<th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            <div class="govuk-checkboxes govuk-checkboxes--small">
+            <div class="govuk-checkboxes govuk-checkboxes&#45;&#45;small">
               <div class="govuk-checkboxes__item">
                 <input
                   id="checkboxes"
@@ -35,28 +145,28 @@
                 >
                 <label
                   class="govuk-label govuk-checkboxes__label"
-                  for="organisation"
+                  for="checkboxes"
                 />
               </div>
             </div>
+          </th>-->
+          <th
+            scope="col"
+            class="govuk-table__header app-custom-class"
+          >
+            Reference number
           </th>
           <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Applicant Ref
+            Candidate name
           </th>
           <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Name
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          >
-            Assessors
+            Assessor
           </th>
           <th
             scope="col"
@@ -68,31 +178,27 @@
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Date submitted
+            Uploaded
           </th>
           <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
-            Action
+            Actions
           </th>
-          <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          />
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         <tr
-          v-for="applicant in applicants"
-          :key="applicant.name"
+          v-for="assessment in assessments"
+          :key="assessment.id"
           class="govuk-table__row"
         >
-          <td class="govuk-table__cell">
-            <div class="govuk-checkboxes govuk-checkboxes--small">
+          <!--<td class="govuk-table__cell">
+            <div class="govuk-checkboxes govuk-checkboxes&#45;&#45;small">
               <div class="govuk-checkboxes__item">
                 <input
-                  id="checkbox-applicant"
+                  id="checkbox-application"
                   class="govuk-checkboxes__input"
                   type="checkbox"
                 >
@@ -101,128 +207,133 @@
                 />
               </div>
             </div>
-          </td>
+          </td>-->
           <th
             scope="row"
             class="govuk-table__header"
           >
-            {{ applicant.ref }}
+            <router-link
+              class="govuk-link"
+              :to="{name: 'exercise-show-application', params: { applicationId: assessment.application.id }}"
+            >
+              {{ assessment.application.referenceNumber }}
+            </router-link>
           </th>
           <td class="govuk-table__cell">
-            {{ applicant.name }}
+            {{ assessment.candidate.fullName }}
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.assessor1 }}
-            {{ applicant.assessor2 }}
+            <p class="govuk-body">
+              <a
+                :href="`mailto:${assessment.assessor.email}`"
+                class="govuk-link govuk-link--no-visited-state"
+                target="_blank"
+              >
+                {{ assessment.assessor.fullName }}
+              </a>
+            </p>
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.status }}
+            {{ assessment.status | lookup }}
           </td>
           <td class="govuk-table__cell">
-            {{ applicant.dateSubmitted }}
+            <span v-if="assessment.file && assessment.file.name">
+              {{ assessment.file.uploadedAt | formatDate }}
+            </span>
+            <span v-else>Not yet received</span>
           </td>
           <td class="govuk-table__cell">
-            <Button class="govuk-button govuk-!-margin-bottom-2">
-              Send reminder or resend email
-            </Button>
+            <div class="moj-button-menu">
+              <div
+                v-if="status === 'uploaded'"
+                class="moj-button-menu__wrapper"
+              >
+                <DownloadLink
+                  :file-name="`assessment/assessment.fileRef`"
+                  :exercise-id="exercise.id"
+                  :user-id="assessment.candidate.id"
+                  title="Independent Assessment"
+                />
+              </div>
+              <div
+                v-else
+                class="moj-button-menu__wrapper"
+              >
+                <ActionButton
+                  class="moj-button-menu__item"
+                  @click="resendRequest(assessment.id)"
+                >
+                  Request
+                </ActionButton>
+
+                <ActionButton
+                  class="moj-button-menu__item"
+                  @click="sendReminder(assessment.id)"
+                >
+                  Reminder
+                </ActionButton>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
-
-    <div class="govuk-grid-column-full">
-      <div
-        class="govuk-grid-column-one-half"
-        style="float:left"
-      >
-        <fieldset class="govuk-fieldset">
-          <button class="govuk-button govuk-button--secondary govuk-!-margin-right-2">
-            Apply Filter view
-          </button>
-          <button class="govuk-button govuk-button--secondary">
-            clear filters
-          </button>
-          <div class="govuk-checkboxes govuk-checkboxes--small">
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input">
-              <label class="govuk-label govuk-checkboxes__label">
-                Candidate Name
-              </label>
-            </div>
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input">
-              <label class="govuk-label govuk-checkboxes__label">
-                Assessors
-              </label>
-            </div>
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input">
-              <label class="govuk-label govuk-checkboxes__label">
-                status
-              </label>
-            </div>
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input">
-              <label class="govuk-label govuk-checkboxes__label">
-                date submitted
-              </label>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
+import { functions } from '@/firebase';
+import { isDateInFuture } from '@/helpers/date';
+import ActionButton from '@/components/ActionButton';
+
 export default {
-  data() {
+  components: {
+    ActionButton,
+  },
+  data () {
     return {
-      applicants: [
-        { ref: '001',
-          name: 'Lauren 1',
-          assessor1: 'Assessor 1',
-          assessor2: 'Assessor 2',
-          status: 'pending',
-          dateSubmitted: '06/11/2019',
-        },
-        { ref: '002',
-          name: 'Lauren 2',
-          assessor1: 'Assessor 1b',
-          assessor2: 'Assessor 2b',
-          status: 'pending',
-          dateSubmitted: '06/11/2019',
-        },
-        { ref: '003',
-          name: 'Lauren 3',
-          assessor1: 'Assessor 1c',
-          assessor2: 'Assessor 2c',
-          status: 'pending',
-          dateSubmitted: '06/11/2019',
-        },
-      ],
-      dueDate: '25/10/2020',
+      initialisingAssessments: false,
+      sendingReminder: [],
+      resendingRequest: [],
     };
+  },
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    applications() {
+      return this.$store.state.applications.records;
+    },
+    assessments() {
+      return this.$store.state.assessments.records;
+    },
+    status() {
+      return this.$route.params.status;
+    },
+    contactOverdue() {
+      return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
+    },
+  },
+  created() {
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
+    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
+    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+    next();
+  },
+  methods: {
+    async initialiseAssessments() {
+      await functions.httpsCallable('initialiseAssessmentsForExercise')({ exerciseId: this.exercise.id });
+    },
+    async resendRequest(assessmentId) {
+      await functions.httpsCallable('sendRequestForAssessment')({ assessmentId: assessmentId });
+    },
+    async sendReminder(assessmentId) {
+      await functions.httpsCallable('sendReminderForAssessment')({ assessmentId: assessmentId });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-  .govuk-summary-list__value,
-  .govuk-summary-list__value:last-child,
-  .govuk-summary-list__key {
-    @include govuk-media-query($from: tablet) {
-      width: auto;
-    }
-  }
-  .update-status {
-    border-style: solid;
-    border-width: medium;
-    border-color: black;
-  }
-  .govuk-checkboxes__input {
-    border-style: solid;
-    border-width: medium;
-    border-color: black;
-  }
-</style>

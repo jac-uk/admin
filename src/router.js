@@ -114,6 +114,15 @@ const router = new Router({
           },
         },
         {
+          path: 'independent-assessments',
+          component: ExerciseShowIndependentAssessments,
+          name: 'exercise-show-independent-assessments',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Independent Assessments',
+          },
+        },
+        {
           path: 'contacts',
           component: ExerciseShowContacts,
           name: 'exercise-show-contacts',
@@ -165,15 +174,6 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Eligibility information',
-          },
-        },
-        {
-          path: 'independent-assessments',
-          component: ExerciseShowIndependentAssessments,
-          name: 'exercise-show-independent-assessments',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Independent Assessments',
           },
         },
         {
