@@ -325,13 +325,16 @@ export default {
   },
   methods: {
     async initialiseAssessments() {
-      await functions.httpsCallable('initialiseAssessmentsForExercise')({ exerciseId: this.exercise.id });
+      await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id });
+    },
+    async sendRequests() {
+      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
     },
     async resendRequest(assessmentId) {
-      await functions.httpsCallable('sendRequestForAssessment')({ assessmentId: assessmentId });
+      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
     },
     async sendReminder(assessmentId) {
-      await functions.httpsCallable('sendReminderForAssessment')({ assessmentId: assessmentId });
+      await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
     },
   },
 };
