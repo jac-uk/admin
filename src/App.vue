@@ -92,13 +92,17 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-  // Required to include global main.scss styles
-  .header {
-    background-color: #fafafa;
-    padding: 1.25em 0.625em 0 0.625em;
-  };
-  .govuk-main-wrapper {
-    padding-top: 0px;
-  }
+
+<style type="text/css" rel="stylesheet/scss" lang="scss">
+@import "@/styles/main.scss";
+</style>
+
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.header {
+  background-color: #fafafa;
+  padding: 1.25em 0.625em 0 0.625em;
+};
+.govuk-main-wrapper {
+  padding-top: 0px;
+}
 </style>
