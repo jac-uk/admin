@@ -248,7 +248,7 @@
           <td class="govuk-table__cell">
             <div class="moj-button-menu">
               <div
-                v-if="status === 'uploaded'"
+                v-if="assessment.status === 'uploaded'"
                 class="moj-button-menu__wrapper"
               >
                 <DownloadLink
@@ -259,7 +259,6 @@
                 />
               </div>
               <div
-                v-else
                 class="moj-button-menu__wrapper"
               >
                 <ActionButton
