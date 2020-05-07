@@ -46,7 +46,10 @@
         Request assessments
       </ActionButton>
 
-      <table class="govuk-table govuk-!-margin-top-4">
+      <table
+        v-if="applications.length"
+        class="govuk-table govuk-!-margin-top-4"
+      >
         <caption class="govuk-table__caption">
           Assessors listed by candidates
         </caption>
@@ -245,7 +248,7 @@
           <td class="govuk-table__cell">
             <div class="moj-button-menu">
               <div
-                v-if="status === 'uploaded'"
+                v-if="assessment.status === 'uploaded'"
                 class="moj-button-menu__wrapper"
               >
                 <DownloadLink
@@ -256,7 +259,6 @@
                 />
               </div>
               <div
-                v-else
                 class="moj-button-menu__wrapper"
               >
                 <ActionButton
