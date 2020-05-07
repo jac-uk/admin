@@ -104,9 +104,10 @@ export default {
     navPages() {
       const pages = [
         { 
-          page: 'Overview', 
-          name: 'exercise-show-overview',
+          page: 'Exercise', 
+          name: 'exercise-overview-title',
           children: [
+            { page: 'Overview', name: 'exercise-show-overview' },
             { page: 'Website listing', name: 'exercise-show-summary' },
             { page: 'Vacancy information', name: 'exercise-show-vacancy' },
             { page: 'Contacts', name: 'exercise-show-contacts' },
@@ -128,9 +129,9 @@ export default {
             { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
           ],
         });
-        pages.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
+        pages[0].children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
         pages.push({
-          page: 'Exercise reports',
+          page: 'Reports',
           name: 'exercise-show-reports',
           children: [
             { page: 'Character Issues', name: 'exercise-show-report-character-issues' },

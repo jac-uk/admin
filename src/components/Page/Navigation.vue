@@ -4,22 +4,19 @@
     :aria-label="label"
   >
     <ul class="moj-side-navigation__list">
-      <h4 class="moj-side-navigation__title">
-        {{ label }}
-      </h4>
       <li 
         v-for="(page, index) in pageItems"
         :key="index"
         class="moj-side-navigation__item"
         :class="{open: page.open, on: page.on}"
       >
-        <router-link 
-          :to="{name: page.name, params: page.params}"
-          :aria-current="page.on ? 'page' : false"
+          <h4 class="moj-side-navigation__title">
+            {{ page.page }}
+          </h4>
+        <ul
+          v-if="page.children"
+          class="moj-side-navigation__list"
         >
-          {{ page.page }}
-        </router-link>
-        <ul v-if="page.children">
           <li
             v-for="(child, childIndex) in page.children"
             :key="childIndex"
@@ -27,6 +24,7 @@
             :class="{'moj-side-navigation__item--active': child.on}"
           >
             <router-link 
+              class="moj-side-navigation__item"
               :to="{name: child.name, params: child.params}"
               :aria-current="child.on ? 'page' : false"
             >

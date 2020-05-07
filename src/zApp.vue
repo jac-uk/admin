@@ -31,6 +31,14 @@ export default {
           { page: 'Exercise downloads', name: 'exercise-show-downloads' },
         ],
       },
+      { 
+        page: 'Applications',
+        name: 'exercise-show-applications',
+        children: [
+          { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: 'draft' } },
+          { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
+        ],
+      },
     ],
   }),
   computed: {
