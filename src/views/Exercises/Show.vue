@@ -134,8 +134,8 @@ export default {
           page: 'Reports',
           name: 'exercise-show-reports',
           children: [
-            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Diversity', name: 'exercise-show-report-diversity' },
+            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
             { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
           ],

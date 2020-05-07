@@ -10,9 +10,9 @@
         class="moj-side-navigation__item"
         :class="{open: page.open, on: page.on}"
       >
-          <h4 class="moj-side-navigation__title">
-            {{ page.page }}
-          </h4>
+        <h4 class="moj-side-navigation__title">
+          {{ page.page }}
+        </h4>
         <ul
           v-if="page.children"
           class="moj-side-navigation__list"
