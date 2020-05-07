@@ -1,7 +1,7 @@
 <template>
   <Navigation
     :items="items"
-    label="Exercise"
+    label="Exercise"  
   />
 </template>
 
@@ -30,7 +30,8 @@ export default {
           { page: 'Assessment options', name: 'exercise-show-assessment-options' },
           { page: 'Exercise downloads', name: 'exercise-show-downloads' },
         ],
-      }],
+      },
+    ],
   }),
   computed: {
     isSignInPage() {
@@ -69,6 +70,7 @@ export default {
     width: 100%;
     float: left;
 }
+
   .header {
     background-color: #fafafa;
     padding: 1.25em 0.625em 0 0.625em;
@@ -93,15 +95,13 @@ export default {
 }
 
 .header-background h1 a,
-.header-background .header-title a,
-#navigation li a  {
+.header-background .header-title a {
 	color: #753880 !important;
 	text-decoration: none;
 }
 
 .header-background h1 a:hover,
-.header-background .header-title a:hover,
-#navigation li a:hover {
+.header-background .header-title a:hover {
 	text-decoration: underline;
 }
 
