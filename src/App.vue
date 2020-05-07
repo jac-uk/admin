@@ -70,22 +70,11 @@
     </main>
   </div>
 </template>
-
 <script>
 import { auth } from '@/firebase';
-
 export default {
   name: 'App',
-  data: () => ({
-    //
-  }),
   computed: {
-    isSignInPage() {
-      return this.$route.name === 'sign-in';
-    },
-    isVacanciesPage() {
-      return this.$route.name === 'vacancies';
-    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
     },
@@ -94,39 +83,34 @@ export default {
     },
   },
   methods: {
-    signIn() {
-      this.$router.push({ name: 'sign-in' });
-    },
     signOut() {
       auth().signOut();
-      if (this.$route.name != 'vacancies') {
-        this.$router.push({ name: 'vacancies' });
-      }
-    },
-    gotoVacancies() {
-      this.$router.push({ name: 'vacancies' });
+      this.$router.go('/sign-in');
     },
   },
 };
 </script>
 
-<style lang="scss">
+<style type="text/css" rel="stylesheet/scss" lang="scss">
+@import "@/styles/main.scss";
+</style>
+
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.header {
+  background-color: #fafafa;
+  padding: 1.25em 0.625em 0 0.625em;
+};
+.govuk-main-wrapper {
+  padding-top: 0px;
+}
   .govuk-grid-column-one-half {
     width: 100%;
     float: left;
 }
-  .header {
-    background-color: #fafafa;
-    padding: 1.25em 0.625em 0 0.625em;
-  };
 
-  .govuk-main-wrapper {
-    padding-top: 0px;
-  }
-
-  .float-right {
-      float: right;
-  }
+.float-right {
+    float: right;
+}
 
 .govuk-main-wrapper {
 	padding-top: 0 !important;
@@ -154,5 +138,4 @@ export default {
 .header-background span {
 	color: #753880 !important;
 }
-
 </style>
