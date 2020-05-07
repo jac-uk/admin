@@ -10,14 +10,14 @@
       class="spinner-border spinner-border-sm"
     />
     <slot
-      name="success"
       v-else-if="isSuccess"
+      name="success"
     >
       Success!
     </slot>
     <slot
-      name="error"
       v-else-if="hasError"
+      name="error"
     >
       Error!
     </slot>
