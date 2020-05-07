@@ -109,11 +109,6 @@ export default {
   },
 };
 </script>
-
-<style type="text/css" rel="stylesheet/scss" lang="scss">
-@import "@/styles/main.scss";
-</style>
-
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 .header {
   background-color: #fafafa;
