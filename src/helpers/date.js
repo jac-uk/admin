@@ -1,7 +1,7 @@
 const isDate = (date) => date instanceof Date;
 
 const isDateInFuture = (date) => {
-  // @NOTE: this is a bit silly, we should save full date instead of hardcoding the time
+  // @TODO #388 update to full datetime instead of hardcoding time
   if(!(date instanceof Date)) {
     throw 'Supplied date must be a Date object';
   }
