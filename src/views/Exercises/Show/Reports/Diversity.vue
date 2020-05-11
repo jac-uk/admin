@@ -410,12 +410,12 @@
 </template>
 
 <script>
-// import Stat from '@/components/Report/Stat';
+import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
-    // Stat,
+    Stat,
   },
   data() {
     return {
@@ -457,6 +457,24 @@ export default {
     padding: 20px;
 }
 
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
 .govuk-table__header, .govuk-table__cell {
     vertical-align: middle;
 }
