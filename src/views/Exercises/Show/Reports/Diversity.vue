@@ -1,50 +1,59 @@
 <template>
-  <div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">
-          Diversity        
-        </h1>
-      </div>
-      <div class="govuk-grid-column-one-third text-right">
-        <button
-          class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-          data-module="govuk-button"
-          @click="refreshReport"
-        >
-          <span
-            v-if="refreshingReport"
-            class="spinner-border spinner-border-sm"
-          /> Refresh
-        </button>
-      </div>
-    </div>
-    <div
-      v-if="diversity"
-      class="govuk-grid-row"
-    >
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-9">
-          <span class="govuk-caption-m">
-            Total applications
-          </span>
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ diversity.totalApplications }}
+  <div
+    v-if="diversity"
+  >
+    <!-- diversity header -->
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Diversity
           </h2>
         </div>
+        <div
+          class="moj-page-header-actions__actions" 
+          style="float: right;"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
+                @click="refreshReport"
+              >
+                <span
+                  v-if="refreshingReport"
+                  class="spinner-border spinner-border-sm"
+                /> Refresh
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-9">
-          <span class="govuk-caption-m">Type of exercise</span>
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ exercise.typeOfExercise | lookup }}
-          </h2>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-9">
+            <span class="govuk-caption-m">
+              Total applications
+            </span>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ diversity.totalApplications }}
+            </h2>
+          </div>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <div class="panel govuk-!-margin-bottom-9">
+            <span class="govuk-caption-m">Type of exercise</span>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ exercise.typeOfExercise | lookup }}
+            </h2>
+          </div>
         </div>
       </div>
     </div>
 
-    <!--- tabs section 
-    <div class="govuk-grid-row">
+    <!-- tabs section
+    <div class="govuk-grid-column-full">
       <div
         class="govuk-tabs"
         data-module="govuk-tabs"
@@ -85,11 +94,10 @@
           </li>
         </ul>
       </div>
-    </div>
-    -->
+    </div>--->
 
     <!-- results -->
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
       <table class="govuk-table table-with-border">
         <caption class="govuk-table__caption hidden">
           Gender by exercise stage
@@ -185,7 +193,7 @@
               scope="col"
               class="govuk-table__header govuk-table__header--numeric"
             >
-              Applied
+              Applications
             </th>
           </tr>
         </thead>
@@ -402,12 +410,12 @@
 </template>
 
 <script>
-import Stat from '@/components/Report/Stat';
+// import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
-    Stat,
+    // Stat,
   },
   data() {
     return {
@@ -449,6 +457,9 @@ export default {
     padding: 20px;
 }
 
+.govuk-table__header, .govuk-table__cell {
+    vertical-align: middle;
+}
 .govuk-table__header, .govuk-table__cell {
     vertical-align: middle;
 }

@@ -23,10 +23,10 @@
           </div>
         </div>
       </div>      
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-!-margin-bottom-8">
+      <div class="govuk-grid-row clearfix">
+        <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
-          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+          <h1 class="govuk-heading-xl">
             {{ exerciseName }}
           </h1>
           <router-link
@@ -39,13 +39,14 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter print-none">
+        <div class="govuk-grid-column-one-quarter">
           <Navigation
             :items="navPages"
             label="Main Navigation"
           />
         </div>
-        <div class="govuk-grid-column-three-quarters print-full-width">
+        <div class="govuk-grid-column-three-quarters">
+          <!-- print-full-width"> -->
           <RouterView />
         </div>
       </div>

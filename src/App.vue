@@ -65,7 +65,11 @@
         </span>
       </p>
     </div>
-    <main id="main-content">
+    <main
+      id="main-content"
+      class="govuk-main-wrapper govuk-main-wrapper--auto-spacing"
+      role="main"
+    >
       <RouterView />
     </main>
   </div>
