@@ -15,9 +15,8 @@
           >
             <li class="govuk-header__navigation-item">
               <a
-                :disabled="isVacanciesPage"
+                href="https://apply.judicialappointments.digital/vacancies" 
                 class="govuk-header__link"
-                @click="gotoVacancies"
               >
                 Vacancies
               </a>
@@ -25,6 +24,7 @@
             <li class="govuk-header__navigation-item">
               <a
                 v-if="isSignedIn"
+                href="#"
                 class="govuk-header__link"
                 @click="signOut"
               >
@@ -33,6 +33,7 @@
               <a
                 v-else
                 :disabled="isSignInPage"
+                href="#"
                 class="govuk-header__link"
                 @click="signIn"
               >
@@ -87,9 +88,6 @@ export default {
     isSignInPage() {
       return this.$route.name === 'sign-in';
     },
-    isVacanciesPage() {
-      return this.$route.name === 'vacancies';
-    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
     },
@@ -107,13 +105,14 @@ export default {
         this.$router.push({ name: 'vacancies' });
       }
     },
-    gotoVacancies() {
-      this.$router.push({ name: 'vacancies' });
-    },
   },
 };
 </script>
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+// .govuk-header__link:hover{
+//   cursor:pointer;
+// }
+
 .header {
   background-color: #fafafa;
   padding: 1.25em 0.625em 0 0.625em;

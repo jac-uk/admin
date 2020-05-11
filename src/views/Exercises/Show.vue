@@ -39,14 +39,13 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
+        <div class="govuk-grid-column-one-quarter print-none">
           <Navigation
             :items="navPages"
             label="Main Navigation"
           />
         </div>
-        <div class="govuk-grid-column-three-quarters">
-          <!-- print-full-width"> -->
+        <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
         </div>
       </div>

@@ -62,7 +62,7 @@
           Contents
         </h2>
         <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+          <li class="govuk-tabs__list-item govuk-tabs__list-item-selected">
             <a
               class="govuk-tabs__tab"
               href="#applied"
@@ -94,7 +94,7 @@
           </li>
         </ul>
       </div>
-    </div>--->
+    </div>-->
 
     <!-- results -->
     <div class="govuk-grid-column-full">
