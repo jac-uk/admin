@@ -9,6 +9,10 @@ $moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
 
 @import "print";
 
+.float-right {
+  float: right;
+}
+
 .text-center {
   text-align: center;
 }

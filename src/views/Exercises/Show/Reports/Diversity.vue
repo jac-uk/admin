@@ -11,8 +11,7 @@
           </h2>
         </div>
         <div
-          class="moj-page-header-actions__actions" 
-          style="float: right;"
+          class="float-right"
         >
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
@@ -457,27 +456,6 @@ export default {
     padding: 20px;
 }
 
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
-.govuk-table__header, .govuk-table__cell {
-    vertical-align: middle;
-}
 .govuk-table__header, .govuk-table__cell {
     vertical-align: middle;
 }
