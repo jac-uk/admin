@@ -11,7 +11,11 @@
           </h2>
         </div>
         <div
+<<<<<<< Updated upstream
           class="float-right"
+=======
+          class="moj-page-header-actions__actions float-right"
+>>>>>>> Stashed changes
         >
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
