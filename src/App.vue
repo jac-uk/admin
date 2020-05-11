@@ -109,24 +109,22 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.header {
+  background-color: #fafafa;
+  padding: 1.25em 0.625em 0 0.625em;
+};
+.govuk-main-wrapper {
+  padding-top: 0px;
+}
   .govuk-grid-column-one-half {
     width: 100%;
     float: left;
 }
-  .header {
-    background-color: #fafafa;
-    padding: 1.25em 0.625em 0 0.625em;
-  };
 
-  .govuk-main-wrapper {
-    padding-top: 0px;
-  }
-
-  .float-right {
-      float: right;
-  }
+.float-right {
+    float: right;
+}
 
 .govuk-main-wrapper {
 	padding-top: 0 !important;
@@ -154,5 +152,4 @@ export default {
 .header-background span {
 	color: #753880 !important;
 }
-
 </style>
