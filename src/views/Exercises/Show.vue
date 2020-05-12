@@ -8,7 +8,7 @@
       <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
-            class="govuk-back-link"
+            class="govuk-back-link govuk-!-margin-top-4"
             :to="goBack"
           >
             Back
@@ -23,10 +23,10 @@
           </div>
         </div>
       </div>      
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-!-margin-bottom-8">
+      <div class="govuk-grid-row clearfix">
+        <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
-          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+          <h1 class="govuk-heading-xl">
             {{ exerciseName }}
           </h1>
           <router-link
