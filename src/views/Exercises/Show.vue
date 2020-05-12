@@ -8,7 +8,7 @@
       <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
-            class="govuk-back-link"
+            class="govuk-back-link govuk-!-margin-top-4"
             :to="goBack"
           >
             Back
