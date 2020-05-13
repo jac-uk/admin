@@ -8,7 +8,7 @@
       <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
-            class="govuk-back-link govuk-!-margin-top-4"
+            class="govuk-back-link"
             :to="goBack"
           >
             Back
@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>      
-      <div class="govuk-grid-row clearfix">
+      <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl">
@@ -129,7 +129,7 @@ export default {
             { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
           ],
         });
-        pages[0].children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
+        pages[1].children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
         pages.push({
           page: 'Reports',
           name: 'exercise-show-reports',
@@ -188,3 +188,10 @@ export default {
   },
 };
 </script>
+<style>
+
+  .govuk-heading-xl{
+    margin-bottom: 0;
+  }
+
+</style>
