@@ -9,6 +9,8 @@ $moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
 
 @import "print";
 
+$max-width: 1200px;
+
 .float-right {
   float: right;
 }
@@ -84,7 +86,7 @@ body {
 }
 
 .govuk-width-container {
-  max-width: 1200px;
+  max-width: $max-width;
 }
 
 // disabled inputs

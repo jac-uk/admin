@@ -92,19 +92,21 @@ export default {
 </script>
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 
-.header {
+  .header {
   background-color: #fafafa;
   padding: 1.25em 0.625em 0 0.625em;
 };
-.govuk-main-wrapper {
+
+  .govuk-main-wrapper {
   padding-top: 0px;
 }
+
   .govuk-grid-column-one-half {
     width: 100%;
     float: left;
 }
 
-.govuk-main-wrapper {
+  .govuk-main-wrapper {
 	padding-top: 0 !important;
 }
 
