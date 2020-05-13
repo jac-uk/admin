@@ -15,7 +15,7 @@
           </router-link>          
         </div>
         <div class="govuk-grid-column-three-quarters">
-          <div class="text-right govuk-!-margin-0">
+          <div class="float-right govuk-!-margin-0">
             <AddToFavouritesButton
               :in-favourites="isInFavourites"
               @click="updateFavourites"

@@ -1,6 +1,9 @@
 <template>
   <div class="govuk-width-container">
-    <div class="header-background clearfix">
+    <div
+      id="header"
+      class="header-background clearfix"
+    >
       <div class="header-title govuk-!-margin-bottom-2">
         <a
           href="/"

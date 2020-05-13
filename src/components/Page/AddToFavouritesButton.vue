@@ -1,7 +1,7 @@
 <template>
   <button
     ref="updateFavouritesBtn"
-    class="govuk-button govuk-button--secondary float-right"
+    class="govuk-button govuk-button--secondary"
     @click="click"
   >
     {{ buttonText }}
