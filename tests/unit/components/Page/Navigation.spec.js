@@ -1,6 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
+
 import Navigation from '@/components/Page/Navigation';
 
+describe('components/Page/Navigation', () => {
 const navPages = [
   { page: 'Test', name: 'nav-test-name1' },
   { page: 'Test2', name: 'nav-test-name2' },
@@ -20,7 +22,6 @@ const createTestSubject = (propsData) => {
   });
 };
 
-xdescribe('components/Page/Navigation', () => {
   it('renders the component', () => {
     let wrapper = createTestSubject({ items: navPages });
     expect(wrapper.exists()).toBe(true);

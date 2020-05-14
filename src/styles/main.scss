@@ -9,12 +9,22 @@ $moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
 
 @import "print";
 
+$max-width: 1200px;
+
+.float-right {
+  float: right;
+}
+
 .text-center {
   text-align: center;
 }
 
 .text-right {
   text-align: right;
+}
+
+.float-right {
+  float: right;
 }
 
 .display-block {
@@ -73,6 +83,10 @@ body {
 .govuk-button--secondary:focus {
   background-color: #dbdad9;
   color: #0b0c0c;
+}
+
+.govuk-width-container {
+  max-width: $max-width;
 }
 
 // disabled inputs

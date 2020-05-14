@@ -1,26 +1,30 @@
 <template>
-  <nav :aria-label="label">
-    <ul class="dwp-vertical-navigation">
+  <nav
+    class="moj-side-navigation govuk-!-padding-top-0"
+    :aria-label="label"
+  >
+    <ul class="moj-side-navigation__list">
       <li 
         v-for="(page, index) in pageItems"
         :key="index"
+        class="moj-side-navigation__item"
         :class="{open: page.open, on: page.on}"
       >
-        <router-link 
-          class="nav-link"
-          :to="{name: page.name, params: page.params}"
-          :aria-current="page.on ? 'page' : false"
-        >
+        <h4 class="moj-side-navigation__title">
           {{ page.page }}
-        </router-link>
-        <ul v-if="page.children">
+        </h4>
+        <ul
+          v-if="page.children"
+          class="moj-side-navigation__list"
+        >
           <li
             v-for="(child, childIndex) in page.children"
             :key="childIndex"
-            :class="{on: child.on}"
+            class="moj-side-navigation__item"
+            :class="{'moj-side-navigation__item--active': child.on}"
           >
             <router-link 
-              class="nav-link"
+              class="moj-side-navigation__item"
               :to="{name: child.name, params: child.params}"
               :aria-current="child.on ? 'page' : false"
             >
@@ -55,7 +59,7 @@ export default {
           name: this.items[i].name,
           params: this.items[i].params,
         };
-        page.open = page.on = page.name === this.$route.name;
+        page.open = page.on = (page.name === this.$route.name);
         if (this.items[i].children) {
           page.children = [];
           for (let j = 0, lenJ = this.items[i].children.length; j < lenJ; ++j) {
