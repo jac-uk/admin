@@ -127,9 +127,9 @@ export default {
           children: [
             { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: 'draft' } },
             { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
+            { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        pages[1].children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
         pages.push({
           page: 'Reports',
           name: 'exercise-show-reports',
