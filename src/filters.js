@@ -223,6 +223,7 @@ const lookup = (value) => {
       'uk-state-non-selective': 'UK state school - non-selective',
       'uk-state-selective': 'UK state school - selective',
       'unpaid': 'Unpaid',
+      'uploaded': 'Uploaded',
       'war-pension-and-armed-forces-compensation-chamber': 'War Pension and Armed Forces Compensation Chamber',
       'welsh-administration-questions': 'Welsh administration questions',
       'welsh-government': 'Welsh Government',

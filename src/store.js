@@ -10,6 +10,7 @@ import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
 import applications from '@/store/applications';
 import application from '@/store/application';
+import assessments from '@/store/assessments';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     exerciseDocument,
     applications,
     application,
+    assessments,
   },
   state: {},
   mutations: {
