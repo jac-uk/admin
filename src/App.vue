@@ -93,43 +93,44 @@ export default {
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 
   .header {
-  background-color: #fafafa;
-  padding: 1.25em 0.625em 0 0.625em;
-};
+    background-color: #fafafa;
+    padding: 1.25em 0.625em 0 0.625em;
+  };
 
   .govuk-main-wrapper {
-  padding-top: 0px;
-}
+    padding-top: 0 !important;
+  }
+
+  .govuk-main-wrapper {
+    padding-top: 0px;
+  }
 
   .govuk-grid-column-one-half {
     width: 100%;
     float: left;
-}
+  }
 
-  .govuk-main-wrapper {
-	padding-top: 0 !important;
-}
-
-.header-background {
+  .header-background {
     background-color: #f7f7f7;
-	padding: 20px 20px 10px 20px;
-	margin-top: 0 !important;
-}
+    padding: 20px 20px 10px 20px;
+    margin-top: 0 !important;
+  }
 
-.header-background h1 a,
-.header-background .header-title a,
-#navigation li a  {
-	color: #753880 !important;
-	text-decoration: none;
-}
+  .header-background h1 a,
+  .header-background .header-title a,
+  #navigation li a  {
+    color: #753880 !important;
+    text-decoration: none;
+  }
 
-.header-background h1 a:hover,
-.header-background .header-title a:hover,
-#navigation li a:hover {
-	text-decoration: underline;
-}
+  .header-background h1 a:hover,
+  .header-background .header-title a:hover,
+  #navigation li a:hover {
+    text-decoration: underline;
+  }
 
-.header-background span {
-	color: #753880 !important;
-}
+  .header-background span {
+    color: #753880 !important;
+  }
+  
 </style>
