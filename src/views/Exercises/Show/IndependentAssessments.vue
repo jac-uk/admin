@@ -33,7 +33,7 @@
     </dl>
 
     <div
-      v-if="!assessments.length"
+      v-if="!(exercise.assessments && exercise.assessments.initialised)"
     >
       <ActionButton
         @click="initialiseAssessments()"
@@ -234,7 +234,7 @@ export default {
       await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
     },
     async resendRequest(assessmentId) {
-      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
+      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
     },
     async sendReminder(assessmentId) {
       await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
