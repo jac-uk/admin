@@ -26,7 +26,7 @@ describe('components/Form/TextField', () => {
       });
 
       it('type is String', () => {
-        expect(prop.type).toEqual([String, Number]);
+        expect(prop.type()).toBeString();
       });
 
       it('defaults as \'\'', () => {
@@ -201,6 +201,9 @@ describe('components/Form/TextField', () => {
           wrapper.setData({ text: '6' });
           expect(wrapper.emitted().input[0][0]).toBeNumber(6);
         });
+      it('emits an input event with the new value', () => {
+        wrapper.setData({ text: 'new-value' });
+        expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
 
@@ -213,5 +216,6 @@ describe('components/Form/TextField', () => {
 
   });
 
+});
 });
 });
