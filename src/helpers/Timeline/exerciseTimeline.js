@@ -153,7 +153,7 @@ const exerciseTimeline = (data) => {
       }
     }
 
-    if (data.shortlistingMethods.includes('scenario-test')) {
+    if (data.shortlistingMethods.includes('scenario-test-qualifying-test')) {
       if (data.scenarioTestDate) {
         timeline.push(
           {
