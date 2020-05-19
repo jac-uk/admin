@@ -1,27 +1,85 @@
-import { shallowMount } from '@vue/test-utils';
+import { createTestSubject } from '../../helpers';
 import TextField from '@/components/Form/TextField';
 
-xdescribe('components/Form/TextField', () => {
+describe('components/Form/TextField', () => {
+  describe('props', () => {
+    let prop;
+
+    describe('inputClass', () => {
+      beforeEach(() => {
+        prop = TextField.props.inputClass;
+      });
+
+      it('type is String', () => {
+        expect(prop.type()).toBeString();
+      });
+
+      it('defaults as \'\'', () => {
+        expect(prop.default).toBe('');
+      });
+
+    });
+    
+    describe('value', () => {
+      beforeEach(() => {
+        prop = TextField.props.value;
+      });
+
+      it('type is String', () => {
+        expect(prop.type()).toBeString();
+      });
+
+      it('defaults as \'\'', () => {
+        expect(prop.default).toBe('');
+      });
+
+    });
+
+    describe('type', () => {
+      beforeEach(() => {
+        prop = TextField.props.type;
+      });
+
+      it('type is String', () => {
+        expect(prop.type()).toBeString();
+      });
+
+      it('defaults as \'text\'', () => {
+        expect(prop.default).toBe('text');
+      });
+
+    });
+
+  });
+  describe('component instance', () => {
+
   let wrapper;
+  const mockProps = {
+    id: 'mockId',
+  };
+
   beforeEach(() => {
-    wrapper = shallowMount(TextField);
+    wrapper = createTestSubject(TextField, {
+      stubs: [],
+      propsData: mockProps,
+    });
   });
 
   it('renders the component', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  xdescribe('template', () => {
-    xdescribe('label', () => {
+  describe('template', () => {
+    describe('label', () => {
       it('sets the label to the value of the `label` prop', () => {
         wrapper.setProps({ label: 'My Form Label' });
         expect(wrapper.find('label').text()).toBe('My Form Label');
       });
     });
 
-    xdescribe('hint', () => {
+    describe('hint', () => {
       let hint;
-      xdescribe('when the prop is set', () => {
+      describe('when the prop is set', () => {
         beforeEach(() => {
           wrapper.setProps({ hint: 'my_hint' });
           hint = wrapper.find('.govuk-hint');
@@ -35,7 +93,7 @@ xdescribe('components/Form/TextField', () => {
         });
       });
 
-      xdescribe('when the prop is not set', () => {
+      describe('when the prop is not set', () => {
         beforeEach(() => {
           hint = wrapper.find('.govuk-hint');
         });
@@ -46,7 +104,7 @@ xdescribe('components/Form/TextField', () => {
       });
     });
 
-    xdescribe('id', () => {
+    describe('id', () => {
       it('sets <label> `for` attribute', () => {
         wrapper.setProps({ id: 'my_unique_key' });
         expect(wrapper.find('label').attributes().for).toBe('my_unique_key');
@@ -58,13 +116,13 @@ xdescribe('components/Form/TextField', () => {
       });
     });
 
-    xdescribe('inputClass', () => {
+    describe('inputClass', () => {
       let input;
       beforeEach(() => {
         input = wrapper.find('input');
       });
 
-      xdescribe('when the prop is set', () => {
+      describe('when the prop is set', () => {
         beforeEach(() => {
           wrapper.setProps({ inputClass: 'my_styling' });
         });
@@ -78,42 +136,65 @@ xdescribe('components/Form/TextField', () => {
         });
       });
 
-      xdescribe('when the prop is not set', () => {
+      describe('when the prop is not set', () => {
         it('has the <input> `class` govuk-input', () => {
           expect(input.is('.govuk-input')).toBe(true);
         });
       });
     });
 
-    xdescribe('type', () => {
-      xdescribe('when the prop is set', () => {
+    describe('type', () => {
+      describe('when the prop is set', () => {
         it('includes the added value in the <input> `type` attribute', () => {
           wrapper.setProps({ type: 'my_type' });
           expect(wrapper.find('input').attributes('type')).toBe('my_type');
         });
       });
 
-      xdescribe('when the prop is not set', () => {
+      describe('when the prop is not set', () => {
         it('has the default <input> `type` text', () => {
           expect(wrapper.find('input').attributes('type')).toBe('text');
         });
       });
     });
+
+    xdescribe('autocomplete', () => {
+      it('sets autocomplete for email', () => {
+        const type = 'email';
+        wrapper.setProps({ type });
+
+        expect(wrapper.find('input').attributes('autocomplete')).toBe(type);
+      });
+
+      xit('sets autocomplete for phone number', () => {
+        const type = 'tel';
+        wrapper.setProps({ type });
+
+        expect(wrapper.find('input').attributes('autocomplete')).toBe(type);
+      });
+
+      it('doesn\'t set autocomplete for other types', () => {
+        wrapper.setProps({ type: 'text' });
+
+        expect(wrapper.find('input').attributes('autocomplete')).toBeFalsy();
+      });
+    });
   });
 
-  xdescribe('`v-model` interface', () => {
-    xdescribe('when text changes', () => {
+  describe('`v-model` interface', () => {
+    describe('when text changes', () => {
       it('emits an input event with the new value', () => {
         wrapper.setData({ text: 'new-value' });
         expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
 
-    xdescribe('when value prop changes', () => {
+    describe('when value prop changes', () => {
       it('updates the `text` computed property', () => {
         wrapper.setProps({ value: 'my_value' });
         expect(wrapper.vm.text).toEqual('my_value');
       });
     });
   });
+});
 });
