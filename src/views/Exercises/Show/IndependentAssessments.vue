@@ -157,7 +157,7 @@
                   class="moj-button-menu__wrapper"
                 >
                   <DownloadLink
-                    v-if="true || assessment.fileRef"
+                    v-if="assessment.fileRef"
                     class="moj-button-menu__item"
                     :file-name="assessment.fileRef"
                     :exercise-id="exercise.id"
