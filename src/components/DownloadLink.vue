@@ -1,17 +1,25 @@
 <template>
   <a
+    v-if="fileName && linkHref"
     class="govuk-link govuk-body-m"
-    :class="{'download-visited' : visited }"
-    href="javascript:void(0)"
-    @click.prevent="download(fileName)"
+    :class="{'download-visited' : visited, 'govuk-button govuk-button--secondary': type === 'button' }"
+    :download="fileName"
+    :href="linkHref"
   >
     {{ linkText }}
   </a>
+  <span
+    v-else
+    class="govuk-body"
+  >
+    File not available
+  </span>
 </template>
 
 <script>
 import firebase from '@firebase/app';
 import '@firebase/storage';
+
 export default {
   props: {
     fileName: {
@@ -24,20 +32,36 @@ export default {
       type: String,
       default: '',
     },
+    applicationId: {
+      required: false,
+      type: String,
+      default: '',
+    },
     userId: {
       required: false,
       type: String,
       default: null,
+    },
+    assessorId: {
+      required: false,
+      type: String,
+      default: '',
     },
     title: {
       required: false,
       type: String,
       default: '',
     },
+    type: {
+      required: false,
+      type: String,
+      default: 'link',
+    },
   },
   data () {
     return {
       visited: false,
+      linkHref: '',
     };
   },
   computed: {
@@ -45,46 +69,41 @@ export default {
       return this.title ? this.title : this.fileName;
     },
     savePath() {
-      let savePath = '';
-      if (this.exerciseId) {
-        savePath += `exercise/${this.exerciseId}/`;
+      let savePath = `exercise/${this.exerciseId}/`;
+      if (this.applicationId) {
+        savePath += `application/${this.applicationId}/`;
       }
       if (this.userId) {
         savePath += `user/${this.userId}/`;
       }
+      if (this.assessorId) {
+        savePath += `assessor/${this.assessorId}/`;
+      }
+
       return savePath;
     },
   },
+  async mounted() {
+    const downloadUrl = await this.getDownloadURL();
+
+    if (downloadUrl) {
+      this.linkHref = downloadUrl;
+    }
+  },
   methods: {
-    download(fileName) {
-      this.visited = true;
-      const storageRef = firebase.storage().ref();
-      const fileNameRef = storageRef.child(this.savePath + fileName);
-      fileNameRef.getDownloadURL().then((url) => {
-        // open url in another window
-        window.open(url);
-      }).catch((error) => {
+    async getDownloadURL() {
+      const fileRef = firebase.storage().ref(this.savePath + this.fileName);
 
-        // A full list of error codes is available at
-        // https://firebase.google.com/docs/storage/web/handle-errors
-        switch (error.code) {
-        case 'storage/object-not-found':
-          // File doesn't exist
-          break;
+      try {
+        const downloadUrl = await fileRef.getDownloadURL();
 
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
-
-        case 'storage/unknown':
-          // Unknown error occurred, inspect the server response
-          break;
+        if (typeof downloadUrl === 'string' && downloadUrl.length) {
+          return downloadUrl;
         }
-      });
+        return false;
+      } catch (e) {
+        return false;
+      }
     },
   },
 };
