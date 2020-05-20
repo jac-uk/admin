@@ -3,7 +3,7 @@
     <RadioGroup
       id="selected-status"
       v-model="newSelectedStatus"
-      label="Add status"
+      label="Update status (TBC)"
       hint=""
       required
     >
@@ -20,6 +20,9 @@
         label="Passed but not recommended"
       />
     </RadioGroup>
+    <button class="govuk-button">
+      Save and continue
+    </button>
   </div>
 </template>
 
