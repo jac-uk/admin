@@ -39,6 +39,8 @@ import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
 import ExerciseStagesReviewEdit from '@/views/Exercises/Stages/ReviewEdit';
 import ExerciseStagesSelectedList from '@/views/Exercises/Stages/SelectedList';
 import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
+import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
+import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -248,6 +250,24 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Selected edit',
+              },
+            },
+            {
+              path: 'recommended',
+              component: ExerciseStagesRecommendedList,
+              name: 'exercise-stages-recommended-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Recommended list',
+              },
+            },
+            {
+              path: 'recommended/:applicationId',
+              component: ExerciseStagesRecommendedEdit,
+              name: 'exercise-stages-recommended-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Recommended edit',
               },
             },
           ],

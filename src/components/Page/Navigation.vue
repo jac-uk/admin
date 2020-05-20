@@ -59,18 +59,18 @@ export default {
           name: this.items[i].name,
           params: this.items[i].params,
         };
-        page.open = page.on = (page.name === this.$route.name);
         if (this.items[i].children) {
           page.children = [];
           for (let j = 0, lenJ = this.items[i].children.length; j < lenJ; ++j) {
-            const child = this.items[i].children[j];
-            child.on = child.name === this.$route.name;
+            const child = this.items[i].children[j];            
+            child.on = (child.name === this.$route.name || this.$route.name.includes(child.page.toLowerCase())); //@NOTE@ hacky way of highlighting subpages
             if (child.on) {
               page.open = true;
             }
             page.children.push(child);
           }
         }
+        page.open = page.on = (page.name === this.$route.name);
         pages.push(page);
       }
       return pages;
