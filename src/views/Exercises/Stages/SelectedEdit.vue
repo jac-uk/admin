@@ -20,9 +20,11 @@
         label="Passed but not recommended"
       />
     </RadioGroup>
-    <button class="govuk-button">
-      Save and continue
-    </button>
+    <router-link :to="{name: 'exercise-stages-selected-list'}">
+      <button class="govuk-button">
+        Save and continue
+      </button>
+    </router-link>
   </div>
 </template>
 
@@ -39,6 +41,11 @@ export default {
     return {
       newSelectedStatus: null,
     };
+  },
+  methods: {
+    submitForApproval() {
+      this.$store.dispatch('exerciseDocument/submitForApproval');
+    },
   },
 };
 </script>
