@@ -137,10 +137,10 @@ export default {
           name: 'exercise-stages',
           children: [
             { page: 'Review', name: 'exercise-stages-review-list' },
+            { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
             { page: 'Selected', name: 'exercise-stages-selected-list' },
             { page: 'Recommended', name: 'exercise-stages-recommended-list' },
             { page: 'Handover', name: 'exercise-stages-handover-list' },
-            { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
           ],
         });
         pages.push({

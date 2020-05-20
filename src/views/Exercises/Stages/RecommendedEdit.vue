@@ -20,7 +20,7 @@
         label="Passed but not recommended"
       />
     </RadioGroup>
-    <router-link :to="{name: 'exercise-stages-selected-list'}">
+    <router-link :to="{name: 'exercise-stages-recommended-list'}">
       <button class="govuk-button">
         Save and continue
       </button>
