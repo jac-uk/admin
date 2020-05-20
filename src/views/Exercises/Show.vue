@@ -137,6 +137,7 @@ export default {
           name: 'exercise-stages',
           children: [
             { page: 'Review', name: 'exercise-stages-review-list' },
+            { page: 'Selected', name: 'exercise-stages-selected-list' },
           ],
         });
         pages.push({
