@@ -12,6 +12,8 @@ import applications from '@/store/applications';
 import application from '@/store/application';
 import assessments from '@/store/assessments';
 import stageReview from '@/store/stage/review';
+import stageSelected from '@/store/stage/selected';
+import stageHandover from '@/store/stage/handover';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -25,6 +27,8 @@ const store = new Vuex.Store({
     application,
     assessments,
     stageReview,
+    stageSelected,
+    stageHandover,
   },
   state: {},
   mutations: {
