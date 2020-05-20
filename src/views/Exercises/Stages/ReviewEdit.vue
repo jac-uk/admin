@@ -8,12 +8,10 @@
       required
     >
       <RadioItem
-        value="passedSift"
-        label="Passed Sift"
-      />
-      <RadioItem
-        value="failedSift"
-        label="Failed Sift"
+        v-for="item in availableStatuses"
+        :key="item.ref"
+        :value="item.ref"
+        :label="item.title"
       />
     </RadioGroup>
   </div>
@@ -32,6 +30,11 @@ export default {
     return {
       newStatus: null,
     };
+  },
+  computed: {
+    availableStatuses() {
+      return this.$store.getters['stageReview/availableStatuses'];
+    },
   },
 };
 </script>

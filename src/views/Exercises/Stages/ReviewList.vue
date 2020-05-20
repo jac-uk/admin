@@ -8,7 +8,6 @@
       >
         <RouterLink
           :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.id } }"
-          class=""
         >
           {{ item.candidate.fullName }}
         </RouterLink>
@@ -19,17 +18,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      applicationRecords: [
-        {
-          id: 'application1',
-          candidate: {
-            fullName: 'Jimmy Jones',
-          },
-        },
-      ],
-    };
+  computed: {
+    applicationRecords() {
+      return this.$store.state.stageReview.applicationRecords;
+    },
   },
 };
 </script>
