@@ -58,6 +58,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 import { mapState, mapGetters } from 'vuex';
+import { STATUS } from '@/helpers/constants';
 
 export default {
   components: {
@@ -125,8 +126,9 @@ export default {
           page: 'Applications',
           name: 'exercise-show-applications',
           children: [
-            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: 'draft' } },
-            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
+            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
+            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
+            { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
