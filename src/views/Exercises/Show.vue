@@ -139,6 +139,7 @@ export default {
             { page: 'Review', name: 'exercise-stages-review-list' },
             { page: 'Selected', name: 'exercise-stages-selected-list' },
             { page: 'Recommended', name: 'exercise-stages-recommended-list' },
+            { page: 'Handover', name: 'exercise-stages-handover-list' },
           ],
         });
         pages.push({

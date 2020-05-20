@@ -41,6 +41,7 @@ import ExerciseStagesSelectedList from '@/views/Exercises/Stages/SelectedList';
 import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
 import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
 import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
+import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -268,6 +269,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Recommended edit',
+              },
+            },
+            {
+              path: 'handover',
+              component: ExerciseStagesHandoverList,
+              name: 'exercise-stages-handover-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected list',
               },
             },
           ],
