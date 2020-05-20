@@ -19,17 +19,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      applicationRecords: [
-        {
-          id: 'application1',
-          candidate: {
-            fullName: 'Jonny James',
-          },
-        },
-      ],
-    };
+  computed: {
+    applicationRecords() {
+      return this.$store.state.stageRecommended.applicationRecords;
+    },
   },
 };
 </script>

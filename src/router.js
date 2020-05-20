@@ -285,7 +285,7 @@ const router = new Router({
             {
               path: 'shortlisted',
               component: ExerciseStagesShortlistList,
-              name: 'exercise-stages-Shortlist-edit',
+              name: 'exercise-stages-shortlist-list',
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Shortlist',
@@ -294,7 +294,7 @@ const router = new Router({
             {
               path: 'shortlisted/:applicationId',
               component: ExerciseStagesShortlistEdit,
-              name: 'exercise-stages-Shortlist-edit',
+              name: 'exercise-stages-shortlist-edit',
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Shortlist edit',

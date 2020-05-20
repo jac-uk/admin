@@ -1,21 +1,30 @@
 <template>
   <div>
     <RadioGroup
-      id="recommended-status"
-      v-model="newStatus"
-      label="Add status"
+      id="selected-status"
+      v-model="newSelectedStatus"
+      label="Update status (TBC)"
       hint=""
       required
     >
       <RadioItem
-        value="passedSift"
-        label="Passed Sift"
+        value="passedSelection"
+        label="Passed Selection"
       />
       <RadioItem
-        value="failedSift"
-        label="Failed Sift"
+        value="failedSelection"
+        label="Failed Selection"
+      />
+      <RadioItem
+        value="PassedButNotRecommended"
+        label="Passed but not recommended"
       />
     </RadioGroup>
+    <router-link :to="{name: 'exercise-stages-selected-list'}">
+      <button class="govuk-button">
+        Save and continue
+      </button>
+    </router-link>
   </div>
 </template>
 
@@ -30,8 +39,13 @@ export default {
   },
   data() {
     return {
-      newStatus: null,
+      newSelectedStatus: null,
     };
+  },
+  methods: {
+    submitForApproval() {
+      this.$store.dispatch('exerciseDocument/submitForApproval');
+    },
   },
 };
 </script>

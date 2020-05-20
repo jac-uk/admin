@@ -20,7 +20,7 @@
 export default {
   computed: {
     applicationRecords() {
-      return this.$store.state.stageReview.applicationRecords;
+      return this.$store.state.stageRecommended.applicationRecords;
     },
   },
 };
