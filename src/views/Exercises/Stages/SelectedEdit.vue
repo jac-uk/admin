@@ -1,9 +1,9 @@
 <template>
   <div>
     <RadioGroup
-      id="selected-status"
+      id="shortlisted-status"
       v-model="newSelectedStatus"
-      label="Update status (TBC)"
+      label="Shortlisted Status"
       hint=""
       required
     >
@@ -20,7 +20,7 @@
         label="Passed but not recommended"
       />
     </RadioGroup>
-    <router-link :to="{name: 'exercise-stages-selected-list'}">
+    <router-link :to="{name: 'exercise-stages-shortlisted-list'}">
       <button class="govuk-button">
         Save and continue
       </button>
