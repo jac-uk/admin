@@ -42,6 +42,8 @@ import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
 import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
 import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
 import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
+import ExerciseStagesShortlistList from '@/views/Exercises/Stages/ShortlistList';
+import ExerciseStagesShortlistEdit from '@/views/Exercises/Stages/ShortlistEdit';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -278,6 +280,24 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Selected list',
+              },
+            },
+            {
+              path: 'shortlisted',
+              component: ExerciseStagesShortlistList,
+              name: 'exercise-stages-Shortlist-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Shortlist',
+              },
+          },
+            {
+              path: 'shortlisted/:applicationId',
+              component: ExerciseStagesShortlistEdit,
+              name: 'exercise-stages-Shortlist-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Shortlist edit',
               },
             },
           ],

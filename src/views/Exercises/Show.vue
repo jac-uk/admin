@@ -140,6 +140,7 @@ export default {
             { page: 'Selected', name: 'exercise-stages-selected-list' },
             { page: 'Recommended', name: 'exercise-stages-recommended-list' },
             { page: 'Handover', name: 'exercise-stages-handover-list' },
+            { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
           ],
         });
         pages.push({
