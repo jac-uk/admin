@@ -33,6 +33,11 @@ import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
 
+// Stages
+import ExerciseStages from '@/views/Exercises/Stages';
+import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
+import ExerciseStagesReviewEdit from '@/views/Exercises/Stages/ReviewEdit';
+
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
@@ -202,6 +207,30 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Downloads',
           },
+        },
+        {
+          path: 'stages',
+          component: ExerciseStages,
+          children: [
+            {
+              path: 'review',
+              component: ExerciseStagesReviewList,
+              name: 'exercise-stages-review-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Review list',
+              },
+            },
+            {
+              path: 'review/:applicationId',
+              component: ExerciseStagesReviewEdit,
+              name: 'exercise-stages-review-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Review edit',
+              },
+            },
+          ],
         },
         {
           path: 'reports',

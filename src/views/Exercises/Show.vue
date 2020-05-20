@@ -132,6 +132,13 @@ export default {
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
+        pages.push({ 
+          page: 'Stages',
+          name: 'exercise-stages',
+          children: [
+            { page: 'Review', name: 'exercise-stages-review-list' },
+          ],
+        });
         pages.push({
           page: 'Reports',
           name: 'exercise-show-reports',
