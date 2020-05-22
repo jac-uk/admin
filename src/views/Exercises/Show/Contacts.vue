@@ -18,6 +18,16 @@
       <strong>Exercise mailbox</strong>
       <span class="display-block">{{ exercise.exerciseMailbox }}</span>
     </p>
+    
+    <p class="govuk-body">
+      <strong>Email Signature Name</strong>
+      <span class="display-block">{{ exercise.emailSignatureName }}</span>
+    </p>
+
+    <p class="govuk-body">
+      <strong>Exercise Phone Number</strong>
+      <span class="display-block">{{ exercise.exercisePhoneNumber }}</span>
+    </p>
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">

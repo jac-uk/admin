@@ -29,6 +29,21 @@
           required
           :pattern="patternJACEmail"
         />
+        
+        <TextField
+          id="exercise-email-signature-name"
+          v-model="exercise.emailSignatureName"
+          label="Email Signature Name"
+          required
+        />
+        <!-- :pattern="patternJACEmail" -->
+        <TextField
+          id="exercise-phone-number"
+          v-model="exercise.exercisePhoneNumber"
+          label="Exercise Phone Number"
+          type="tel"
+          required
+        />
 
         <RepeatableFields
           v-model="exercise.seniorSelectionExerciseManager"
@@ -204,6 +219,7 @@ export default {
         SelectionExerciseOfficer,
         AssignedCommissioner,
       },
+      //@TODO@ add pattern for mobile number
     };
   },
   methods: {
