@@ -9,13 +9,13 @@ export default {
         },
       },
       {
-        id: 'Ux8mmRuOxzTs0Rgf9BNP',
+        id: 'Ux8mmRuOxzTs0Rgf9BNQ',
         candidate: {
           fullName: 'Boba Fett',
         },
       },
       {
-        id: 'Ux8mmRuOxzTs0Rgf9BNP',
+        id: 'Ux8mmRuOxzTs0Rgf9BNR',
         candidate: {
           fullName: 'Han Solo',
         },
