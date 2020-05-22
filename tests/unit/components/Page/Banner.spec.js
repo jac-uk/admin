@@ -31,7 +31,7 @@ describe('components/Page/Banner', () => {
   
   describe('component instance', () => {
     // describe('success', () => {
-    let wrapper = createTestSubject({ message: 'mockMessage'});
+    let wrapper = createTestSubject({ message: 'mockMessage' });
 
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
