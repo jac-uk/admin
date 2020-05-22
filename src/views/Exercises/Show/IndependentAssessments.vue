@@ -186,6 +186,12 @@
                   </ActionButton>
                 </div>
               </div>
+              <br>
+              <a 
+                target="_blank"
+                :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
+                class="govuk-link"
+              >Test the assessments app</a>
             </td>
           </tr>
         </tbody>
