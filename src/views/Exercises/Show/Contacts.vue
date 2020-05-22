@@ -20,12 +20,12 @@
     </p>
     
     <p class="govuk-body">
-      <strong>Email Signature Name</strong>
+      <strong>Email signature name</strong>
       <span class="display-block">{{ exercise.emailSignatureName }}</span>
     </p>
 
     <p class="govuk-body">
-      <strong>Exercise Phone Number</strong>
+      <strong>Exercise phone number</strong>
       <span class="display-block">{{ exercise.exercisePhoneNumber }}</span>
     </p>
 

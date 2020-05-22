@@ -33,14 +33,14 @@
         <TextField
           id="exercise-email-signature-name"
           v-model="exercise.emailSignatureName"
-          label="Email Signature Name"
+          label="Email signature name"
           required
         />
-        <!-- :pattern="patternJACEmail" -->
+
         <TextField
           id="exercise-phone-number"
           v-model="exercise.exercisePhoneNumber"
-          label="Exercise Phone Number"
+          label="Exercise phone number"
           type="tel"
           required
         />
@@ -191,6 +191,8 @@ export default {
   data(){
     const defaults = {
       exerciseMailbox: null,
+      emailSignatureName: null,
+      exercisePhoneNumber: null,
       seniorSelectionExerciseManager: null,
       selectionExerciseManager: null,
       selectionExerciseOfficer: null,
