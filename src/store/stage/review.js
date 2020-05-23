@@ -30,15 +30,12 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, exerciseId ) => {
-      // eslint-disable-next-line
-      console.log('exerciseId', exerciseId);
+    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
       let firestoreRef = localCollection
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
 
-      console.log('firestoreRef', firestoreRef);
       return bindFirestoreRef('applicationRecords', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {

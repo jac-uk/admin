@@ -3,13 +3,13 @@
     <h1>Review</h1>
     <ul>
       <li 
-        v-for="item in applicationRecordsfromDB" 
+        v-for="item in applicationRecords" 
         :key="item.application.id"
       >
         <RouterLink
           :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.application.id } }"
         >
-          {{ item.candidate.fullName }} Lee
+          {{ item.candidate.fullName }}
         </RouterLink>
       </li>
     </ul>
@@ -19,16 +19,15 @@
 <script>
 export default {
   computed: {
-    applicationRecordsfromDB() {
-      // eslint-disable-next-line
-      console.log('applicationRecords', this.$store);
+    applicationRecords() {
       return this.$store.state.stageReview.applicationRecords;
     },
-    created() {
-      // eslint-disable-next-line
-      console.log('create()');
-      this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
     },
+  },
+  created() {
+    this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
   },
 };
 </script>
