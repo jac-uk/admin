@@ -25,7 +25,7 @@ export default {
         { ref: APPLICATION_STATUS.NO_TEST_SUBMITTED, title: 'No test Submitted' },
         { ref: APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME, title: 'Test submitted over time' },
         { ref: APPLICATION_STATUS.WITHDREW_APPLICATION, title: 'Withdrew application' },
-        { ref: APPLICATION_STATUS.REJECTED_AS_INELIGIBLE, title: 'Rejected asineligible' },
+        { ref: APPLICATION_STATUS.REJECTED_AS_INELIGIBLE, title: 'Rejected as ineligible' },
       ];
     },
   },

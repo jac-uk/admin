@@ -8,16 +8,10 @@
       required
     >
       <RadioItem
-        value="passedSelection"
-        label="Passed Selection"
-      />
-      <RadioItem
-        value="failedSelection"
-        label="Failed Selection"
-      />
-      <RadioItem
-        value="PassedButNotRecommended"
-        label="Passed but not recommended"
+        v-for="item in availableStatuses"
+        :key="item.ref"
+        :value="item.ref"
+        :label="item.title"
       />
     </RadioGroup>
     <router-link :to="{name: 'exercise-stages-review-list'}">
@@ -45,6 +39,11 @@ export default {
   methods: {
     submitForApproval() {
       this.$store.dispatch('exerciseDocument/submitForApproval');
+    },
+  },
+  computed: {
+    availableStatuses() {
+      return this.$store.getters['stageReview/availableStatuses'];
     },
   },
 };
