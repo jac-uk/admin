@@ -49,7 +49,7 @@ export default {
       };
       const ref = localCollection.doc(applicationId);
       await ref.update(data);
-      // @TODO store message(s) for what's been updated so it/they can be retrieved later (by list page)
+      // @TODO store message(s) for what's been updated so it/they can be retrieved later (on list page)
     },
   },
   state: {
