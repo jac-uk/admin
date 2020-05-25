@@ -41,14 +41,15 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('applicationRecords');
     }),
-    updateStatus: async (applicationId, status, stageValue) => {
-      // @TODO work out whether stage should also be updated
+    updateStatus: async ( context, { applicationId, status } ) => {
+      // @TODO based on provided status, work out whether stage should also be updated
       const data = {
         status: status,
-        stage: stageValue,
+        // stage: stageValue,
       };
       const ref = localCollection.doc(applicationId);
       await ref.update(data);
+      // @TODO store message(s) for what's been updated so it/they can be retrieved later (by list page)
     },
   },
   state: {

@@ -9,7 +9,7 @@
         <RouterLink
           :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.application.id } }"
         >
-          {{ item.candidate.fullName }}
+          {{ item.candidate.fullName }}, {{ item.status }}
         </RouterLink>
       </li>
     </ul>
