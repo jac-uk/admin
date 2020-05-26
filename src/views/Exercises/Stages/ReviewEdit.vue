@@ -12,9 +12,9 @@
     >
       <RadioItem
         v-for="item in availableStatuses"
-        :key="item.ref"
-        :value="item.ref"
-        :label="item.title"
+        :key="item"
+        :value="item"
+        :label="item | lookup"
       />
     </RadioGroup>
     <button class="govuk-button">

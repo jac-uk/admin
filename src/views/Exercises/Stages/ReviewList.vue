@@ -20,7 +20,7 @@
 export default {
   computed: {
     applicationRecords() {
-      return this.$store.state.stageReview.applicationRecords;
+      return this.$store.state.stageReview.records;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

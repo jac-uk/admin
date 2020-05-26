@@ -5,41 +5,42 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '../../helpers/constants';
 
-const localCollection = firestore.collection('applicationRecords');
+const collectionRef = firestore.collection('applicationRecords');
 
 export default {
   namespaced: true,
   getters: {
     availableStatuses() {
+      // @TODO conditional selection based on Exercise type
       return [
-        { ref: APPLICATION_STATUS.PASSED_SIFT, title: 'Passed Sift' },
-        { ref: APPLICATION_STATUS.FAILED_SIFT, title: 'Failed Sift' },
-        { ref: APPLICATION_STATUS.SUBMITTED_FIRST_TEST, title: 'Submitted first test' },
-        { ref: APPLICATION_STATUS.FAILED_FIRST_TEST, title: 'Failed First test' },
-        { ref: APPLICATION_STATUS.SUBMITTED_SCENARIO_TEST, title: 'Submitted scenario test' },
-        { ref: APPLICATION_STATUS.PASSED_FIRST_TEST, title: 'Passed first test' },
-        { ref: APPLICATION_STATUS.FAILED_SCENARIO_TEST, title: 'Failed scenario test' },
-        { ref: APPLICATION_STATUS.PASSED_SCENARIO_TEST, title: 'Passed scenario test' },
-        { ref: APPLICATION_STATUS.FAILED_TELEPHONE_ASSESSMENT, title: 'Failed telephone assessment' },
-        { ref: APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT, title: 'Passed telephone assessment' },
-        { ref: APPLICATION_STATUS.NO_TEST_SUBMITTED, title: 'No test Submitted' },
-        { ref: APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME, title: 'Test submitted over time' },
-        { ref: APPLICATION_STATUS.WITHDREW_APPLICATION, title: 'Withdrew application' },
-        { ref: APPLICATION_STATUS.REJECTED_AS_INELIGIBLE, title: 'Rejected as ineligible' },
+        APPLICATION_STATUS.PASSED_SIFT,
+        APPLICATION_STATUS.FAILED_SIFT,
+        APPLICATION_STATUS.SUBMITTED_FIRST_TEST,
+        APPLICATION_STATUS.FAILED_FIRST_TEST,
+        APPLICATION_STATUS.SUBMITTED_SCENARIO_TEST,
+        APPLICATION_STATUS.PASSED_FIRST_TEST,
+        APPLICATION_STATUS.FAILED_SCENARIO_TEST,
+        APPLICATION_STATUS.PASSED_SCENARIO_TEST,
+        APPLICATION_STATUS.FAILED_TELEPHONE_ASSESSMENT,
+        APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT,
+        APPLICATION_STATUS.NO_TEST_SUBMITTED,
+        APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
       ];
     },
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      let firestoreRef = localCollection
+      let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
 
-      return bindFirestoreRef('applicationRecords', firestoreRef, { serialize: vuexfireSerialize });
+      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
-      return unbindFirestoreRef('applicationRecords');
+      return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { applicationId, status } ) => {
       // @TODO based on provided status, work out whether stage should also be updated
@@ -47,12 +48,12 @@ export default {
         status: status,
         // stage: stageValue,
       };
-      const ref = localCollection.doc(applicationId);
+      const ref = collectionRef.doc(applicationId);
       await ref.update(data);
       // @TODO store message(s) for what's been updated so it/they can be retrieved later (on list page)
     },
   },
   state: {
-    applicationRecords: [],
+    records: [],
   },
 };
