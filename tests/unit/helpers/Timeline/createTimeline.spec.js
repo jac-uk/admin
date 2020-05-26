@@ -11,7 +11,7 @@ xdescribe('@/helpers/Timeline/createTimeline', () => {
     expect(createTimeline(timeline)).toBeArray();
   });
 
-  xdescribe('when maxEntriesNum value is passed', () => {
+  describe('when maxEntriesNum value is passed', () => {
     it('returns array with a length equals to maxEntriesNum', () => {
       expect(createTimeline(timeline, 2).length).toBe(2);
     });
