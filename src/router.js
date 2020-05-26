@@ -33,6 +33,18 @@ import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
 
+// Stages
+import ExerciseStages from '@/views/Exercises/Stages';
+import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
+import ExerciseStagesReviewEdit from '@/views/Exercises/Stages/ReviewEdit';
+import ExerciseStagesSelectedList from '@/views/Exercises/Stages/SelectedList';
+import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
+import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
+import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
+import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
+import ExerciseStagesShortlistList from '@/views/Exercises/Stages/ShortlistList';
+import ExerciseStagesShortlistEdit from '@/views/Exercises/Stages/ShortlistEdit';
+
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
@@ -214,6 +226,93 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Downloads',
           },
+        },
+        {
+          path: 'stages',
+          component: ExerciseStages,
+          children: [
+            {
+              path: 'review',
+              component: ExerciseStagesReviewList,
+              name: 'exercise-stages-review-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Review list',
+              },
+            },
+            {
+              path: 'review/:applicationId',
+              component: ExerciseStagesReviewEdit,
+              name: 'exercise-stages-review-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Review edit',
+              },
+            },
+            {
+              path: 'selected',
+              component: ExerciseStagesSelectedList,
+              name: 'exercise-stages-selected-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected list',
+              },
+            },
+            {
+              path: 'selected/:applicationId',
+              component: ExerciseStagesSelectedEdit,
+              name: 'exercise-stages-selected-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected edit',
+              },
+            },
+            {
+              path: 'recommended',
+              component: ExerciseStagesRecommendedList,
+              name: 'exercise-stages-recommended-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Recommended list',
+              },
+            },
+            {
+              path: 'recommended/:applicationId',
+              component: ExerciseStagesRecommendedEdit,
+              name: 'exercise-stages-recommended-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Recommended edit',
+              },
+            },
+            {
+              path: 'handover',
+              component: ExerciseStagesHandoverList,
+              name: 'exercise-stages-handover-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected list',
+              },
+            },
+            {
+              path: 'shortlisted',
+              component: ExerciseStagesShortlistList,
+              name: 'exercise-stages-shortlist-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Shortlist',
+              },
+          },
+            {
+              path: 'shortlisted/:applicationId',
+              component: ExerciseStagesShortlistEdit,
+              name: 'exercise-stages-shortlist-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Shortlist edit',
+              },
+            },
+          ],
         },
         {
           path: 'reports',
