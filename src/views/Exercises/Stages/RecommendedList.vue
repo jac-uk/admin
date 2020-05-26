@@ -8,7 +8,6 @@
       >
         <RouterLink
           :to="{ name: 'exercise-stages-recommended-edit', params: { applicationId: item.id } }"
-          class=""
         >
           {{ item.candidate.fullName }}
         </RouterLink>
@@ -21,7 +20,7 @@
 export default {
   computed: {
     applicationRecords() {
-      return this.$store.state.stageRecommended.applicationRecords;
+      return this.$store.state.stageRecommended.records;
     },
   },
 };

@@ -1,8 +1,8 @@
 const STATUS = {
-  DRAFT: 'draft',
-  APPLIED: 'applied',
-  WITHDRAWN: 'withdrawn',
-  SELECTED: 'selected',
+    DRAFT: 'draft',
+    APPLIED: 'applied',
+    WITHDRAWN: 'withdrawn',
+    SELECTED: 'selected',
 };
 
 const EXERCISE_STAGE = {
