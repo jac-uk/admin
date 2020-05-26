@@ -126,6 +126,13 @@
       >
         Unlock
       </button>
+      <br>
+      <ActionButton
+        v-if="isReadyForProcessing"
+        @click="startProcessing()"
+      >
+        Begin processing applications
+      </ActionButton>
     </div>  
   </div>
 </template>
@@ -134,14 +141,20 @@
 import Timeline from '@/components/Page/Timeline';
 import createTimeline from '@/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
+import ActionButton from '@/components/ActionButton';
+import { functions } from '@/firebase';
 
 export default {
   components: {
     Timeline,
+    ActionButton,
   },
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
     isPublished() {
       return this.exercise.published;
@@ -170,6 +183,11 @@ export default {
         }
       }
       return false;
+    },
+    isReadyForProcessing() {
+      return this.isApproved &&
+        !(this.exercise.applicationRecords && this.exercise.applicationRecords.initialised);
+      // @TODO perhaps also check that exercise has closed
     },
     hasOpened() {
       if (this.exercise) {
@@ -248,6 +266,9 @@ export default {
     },
     unPublish() {
       this.$store.dispatch('exerciseDocument/unpublish');
+    },
+    async startProcessing() {
+      await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
     },
   },
 };
