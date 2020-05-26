@@ -70,6 +70,8 @@ import ApplicationsFull from '@/views/Exercises/ApplicationsFull';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
 
+import Sandbox from '@/views/Sandbox';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -98,6 +100,16 @@ const router = new Router({
         title: 'Create An Exercise',
       },
     },
+    // sandbox component
+    {
+      path: '/sandbox',
+      component: Sandbox,
+      meta: {
+        requiresAuth: true,
+        title: 'sandbox',
+      },
+    },
+    // sandbox component
     {
       path: '/exercises/:id',
       component: ExerciseShow,
