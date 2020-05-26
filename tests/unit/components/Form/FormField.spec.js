@@ -110,20 +110,6 @@ describe('components/Form/FormField', () => {
           expect(prop.default).toBe(0);
       });
     });
-      
-         // @TODO fix these!!
-        describe('pattern', () => {
-          // it('is an Object', () => {
-          //   expect(props.pattern).toBeObject());
-          // });
-          // it('is a contains match', () => {
-          //   expect(props.pattern.match).toBeObject();
-          // });
-          // it('matches regex formatting', () => {
-            //   expect(props.pattern.default()).toEqual({"match": /^/, "message": ""});
-            // });
-            // //is this good enough? ^^
-    });
     
   });
 
@@ -277,15 +263,7 @@ describe('components/Form/FormField', () => {
           
         });
       });
-      describe('when checkErrors is false', () => {
-        beforeEach(() => {
-          wrapper.setData({ checkErrors: false });
-        });
-        xit('does nothing', () => {
-          // wrapper.vm.validate();
-          // expect(wrapper.vm.$data.errorMessage).toBe('');
-        });
-      });
+
     });
 
     describe('setError', () => {

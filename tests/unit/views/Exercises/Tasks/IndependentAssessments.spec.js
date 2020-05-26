@@ -5,8 +5,8 @@ const createTestSubject = () => {
   return shallowMount(IndependentAssessments);
 };
 
-xdescribe('@/views/Exercises/Tasks/IndependentAssessments', () => {
-  xdescribe('template', () => {
+xdescribe('@/views/Exercises/Show', () => {
+  describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();
       expect(wrapper.find('table').exists()).toBe(true);

@@ -32,8 +32,8 @@ xdescribe('components/Form/CheckboxGroup and components/Form/CheckboxItem integr
     checkboxes = subject.findAll('input[type=checkbox]');
   });
 
-  xdescribe('binding to `inputValue`', () => {
-    xdescribe('when `inputValue` changes', () => {
+  describe('binding to `inputValue`', () => {
+    describe('when `inputValue` changes', () => {
       it('the selected checkbox inputs change to match', () => {
         const [optionOne, optionTwo] = checkboxes.wrappers.map(wrapper => wrapper.element);
 
@@ -59,7 +59,7 @@ xdescribe('components/Form/CheckboxGroup and components/Form/CheckboxItem integr
       });
     });
 
-    xdescribe('when a checkbox input is checked', () => {
+    describe('when a checkbox input is checked', () => {
       it('it emits an `input` event with an array containing the values of the checked inputs', () => {
         subject.setProps({ value: [] });
         const [optionOne, optionTwo] = checkboxes.wrappers;
@@ -80,7 +80,7 @@ xdescribe('components/Form/CheckboxGroup and components/Form/CheckboxItem integr
     });
   });
 
-  xdescribe('CheckboxItem element IDs', () => {
+  describe('CheckboxItem element IDs', () => {
     it('checkbox input IDs are unique', () => {
       const [checkboxOne, checkboxTwo] = checkboxes.wrappers;
       expect(checkboxOne.attributes('id')).not.toEqual(checkboxTwo.attributes('id'));

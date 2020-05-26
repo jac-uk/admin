@@ -34,7 +34,7 @@ xdescribe('views/Exercises/New', () => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -65,8 +65,8 @@ xdescribe('views/Exercises/New', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       beforeEach(() => {
         wrapper.setData({
           exerciseName: 'Example exercise title',
@@ -89,7 +89,7 @@ xdescribe('views/Exercises/New', () => {
         expect(payload).toEqual(expectedPayload);
       });
 
-      xdescribe('when "Add more info?" is true', () => {
+      describe('when "Add more info?" is true', () => {
         beforeEach(() => {
           wrapper.setData({
             addMoreInfo: true,
@@ -106,7 +106,7 @@ xdescribe('views/Exercises/New', () => {
         });
       });
 
-      xdescribe('when "Add more info?" is false', () => {
+      describe('when "Add more info?" is false', () => {
         beforeEach(() => {
           wrapper.setData({
             addMoreInfo: false,
