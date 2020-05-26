@@ -57,15 +57,15 @@ xdescribe('Sign in journey', () => {
     email: 'user@judicialappointments.digital',
   };
 
-  xdescribe('for unauthenticated user', () => {
-    xdescribe('when they visit page sign in', () => {
+  describe('for unauthenticated user', () => {
+    describe('when they visit page sign in', () => {
       it('loads sign in page', () => {
         router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
     });
 
-    xdescribe.each(routes)('when they visit page %s', (routeName) => {
+    describe.each(routes)('when they visit page %s', (routeName) => {
       it('loads sign in page',() => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe('/sign-in');
@@ -73,26 +73,26 @@ xdescribe('Sign in journey', () => {
     });
   });
 
-  xdescribe('for authenticated user', () => {
+  describe('for authenticated user', () => {
     beforeEach(() => {
       store.dispatch('auth/setCurrentUser', user);
     });
 
-    xdescribe('when going to page that does not exist', () => {
+    describe('when going to page that does not exist', () => {
       it('redirects to the dashboard page', () => {
         router.push('/whatever');
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    xdescribe('when they visit page sign in', () => {
+    describe('when they visit page sign in', () => {
       it("redirects to the dashboard page'", () => {
         router.push({ name: 'sign-in' });
         expect(subject.vm.$route.path).toBe('/dashboard');
       });
     });
 
-    xdescribe.each(routes)('when they visit page %s', (routeName, routePath) => {
+    describe.each(routes)('when they visit page %s', (routeName, routePath) => {
       it(`loads ${routePath}`,() => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe(routePath);

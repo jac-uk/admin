@@ -14,7 +14,7 @@ xdescribe('views/Exercises/Details', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  xdescribe('Accessibility:', () => {
+  describe('Accessibility:', () => {
     it('page contains h1 element', () => {
       let wrapper = shallowMount(ExerciseDetails, {
         localVue,

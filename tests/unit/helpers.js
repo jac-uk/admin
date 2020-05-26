@@ -20,12 +20,10 @@ const mocks = {
           referenceNumber: null,
           welshRequirement: null,
           unknownVariable: null,
-          // shortlistingOutcomeDate: null, see confirmation.spec.js
         },
       },
       candidate: {
         record: {
-          // personalDetails: null, see personaldetails.spec
         },
       },
       application: {

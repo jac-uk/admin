@@ -24,7 +24,6 @@ describe('components/Form/Currency', () => {
   let wrapper;
   const mockProps = {
     id: 'mockId',
-    // label: 'mock label',
   };
   beforeEach(() => {
     wrapper = createTestSubject(Currency, {

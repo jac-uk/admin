@@ -34,7 +34,7 @@ xdescribe('views/Exercises/Edit/Shortlisting', () => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -61,8 +61,8 @@ xdescribe('views/Exercises/Edit/Shortlisting', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       const exerciseData = {
         shortlistingMethods: ['method-1'],
         otherShortlistingMethod: [{ name:'additional method' }],

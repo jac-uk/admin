@@ -32,8 +32,8 @@ xdescribe('components/Form/RadioGroup and components/Form/RadioItem integration'
     radios = subject.findAll('input[type=radio]');
   });
 
-  xdescribe('binding to `inputValue`', () => {
-    xdescribe('when `inputValue` changes', () => {
+  describe('binding to `inputValue`', () => {
+    describe('when `inputValue` changes', () => {
       it('the selected radio input changes to match', () => {
         const [optionOne, optionTwo] = radios.wrappers.map(wrapper => wrapper.element);
 
@@ -51,7 +51,7 @@ xdescribe('components/Form/RadioGroup and components/Form/RadioItem integration'
       });
     });
 
-    xdescribe('when a radio input is checked', () => {
+    describe('when a radio input is checked', () => {
       it('it emits an `input` event with the value of the checked radio', () => {
         const [optionOne, optionTwo] = radios.wrappers;
 
@@ -69,7 +69,7 @@ xdescribe('components/Form/RadioGroup and components/Form/RadioItem integration'
     });
   });
 
-  xdescribe('RadioItem element IDs', () => {
+  describe('RadioItem element IDs', () => {
     it('radio input IDs are unique', () => {
       const [radioOne, radioTwo] = radios.wrappers;
       expect(radioOne.attributes('id')).not.toEqual(radioTwo.attributes('id'));
@@ -81,7 +81,7 @@ xdescribe('components/Form/RadioGroup and components/Form/RadioItem integration'
     });
   });
 
-  xdescribe('radio inputs `name` attribute', () => {
+  describe('radio inputs `name` attribute', () => {
     let nameOne, nameTwo;
     beforeEach(() => {
       [nameOne, nameTwo] = radios.wrappers.map(radio => radio.attributes('name'));

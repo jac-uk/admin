@@ -20,10 +20,10 @@ xdescribe('components/Page/Timeline', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  xdescribe('properties', () => {
+  describe('properties', () => {
     let prop;
 
-    xdescribe('data', () => {
+    describe('data', () => {
       beforeEach(() => {
         prop = Timeline.props.data;
       });
@@ -38,7 +38,7 @@ xdescribe('components/Page/Timeline', () => {
     });
   });
 
-  xdescribe('markup', () => {
+  describe('markup', () => {
     let wrapper;
 
     beforeEach(() => {

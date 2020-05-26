@@ -37,7 +37,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
     wrapper = createTestSubject();
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -63,7 +63,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
       expect(button.text()).toBe('Save and continue');
     });
 
-    xdescribe('Does Schedule 2(d) or Schedule 3 apply?', () => {
+    describe('Does Schedule 2(d) or Schedule 3 apply?', () => {
       it('does not show the question if the role is a court role', () => {
         wrapper.setData({ isCourtOrTribunal: 'court' });
         expect(wrapper.find('#schedule-2d-apply').exists()).toBe(false);
@@ -75,7 +75,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
       });
     });
 
-    xdescribe('Qualifications', () => {
+    describe('Qualifications', () => {
       it('does not show the question if the role is a non-legal role', () => {
         wrapper.setData({ typeOfExercise: 'non-legal' });
         expect(wrapper.find('#qualifications').exists()).toBe(false);
@@ -97,7 +97,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
       });
     });
 
-    xdescribe('Memberships', () => {
+    describe('Memberships', () => {
       it('does not show the question if the role is a legal role', () => {
         wrapper.setData({ typeOfExercise: 'legal' });
         expect(wrapper.find('#memberships').exists()).toBe(false);
@@ -120,12 +120,12 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
     });
   });
 
-  xdescribe('data', () => {
+  describe('data', () => {
     const booleanFields = [
       'schedule2DApply',
       'aSCApply',
     ];
-    xdescribe.each(booleanFields)('exercise.%s', (fieldName) => {
+    describe.each(booleanFields)('exercise.%s', (fieldName) => {
       let originalValue;
       beforeEach(() => {
         originalValue = exercise[fieldName];
@@ -134,7 +134,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
         exercise[fieldName] = originalValue;
       });
 
-      xdescribe(`when database value for "${fieldName}" is undefined`, () => {
+      describe(`when database value for "${fieldName}" is undefined`, () => {
         it('defaults to `null`', () => {
           exercise[fieldName] = undefined;
           wrapper = createTestSubject();
@@ -142,7 +142,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
         });
       });
 
-      xdescribe(`when database value for "${fieldName}" is boolean true`, () => {
+      describe(`when database value for "${fieldName}" is boolean true`, () => {
         it('is `true`', () => {
           exercise[fieldName] = true;
           wrapper = createTestSubject();
@@ -150,7 +150,7 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
         });
       });
 
-      xdescribe(`when database value for "${fieldName}" is boolean false`, () => {
+      describe(`when database value for "${fieldName}" is boolean false`, () => {
         it('is `false`', () => {
           exercise[fieldName] = false;
           wrapper = createTestSubject();
@@ -160,8 +160,8 @@ xdescribe('views/Exercises/Edit/Eligibility', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       const exerciseData = {
         reasonableLengthService: ['3 years'],
         otherRetirement: 'other retirement age',

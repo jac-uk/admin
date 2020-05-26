@@ -5,8 +5,8 @@ xdescribe('store/exercise/createJourney', () => {
     expect(exerciseCreateJourney.namespaced).toBe(true);
   });
 
-  xdescribe('mutations', () => {
-    xdescribe('setJourney', () => {
+  describe('mutations', () => {
+    describe('setJourney', () => {
       let state;
       beforeEach(() => {
         state = {
@@ -26,7 +26,7 @@ xdescribe('store/exercise/createJourney', () => {
       });
     });
 
-    xdescribe('setCurrentPage', () => {
+    describe('setCurrentPage', () => {
       it('sets `state.currentPage` to the supplied value', () => {
         const state = {
           currentPage: null,
@@ -37,7 +37,7 @@ xdescribe('store/exercise/createJourney', () => {
     });
   });
 
-  xdescribe('actions', () => {
+  describe('actions', () => {
     let context;
     beforeEach(() => {
       context = {
@@ -45,7 +45,7 @@ xdescribe('store/exercise/createJourney', () => {
       };
     });
 
-    xdescribe('start', () => {
+    describe('start', () => {
       it('calls mutation `setJourney` with the supplied journey array', () => {
         const journey = [
           'timeline',
@@ -54,7 +54,7 @@ xdescribe('store/exercise/createJourney', () => {
         expect(context.commit).toHaveBeenCalledWith('setJourney', journey);
       });
 
-      xdescribe('sorts the journey into the expected order', () => {
+      describe('sorts the journey into the expected order', () => {
         /**
          * The expected complete linear journey is:
          *  1. contacts
@@ -103,7 +103,7 @@ xdescribe('store/exercise/createJourney', () => {
       });
     });
 
-    xdescribe('setCurrentRoute', () => {
+    describe('setCurrentRoute', () => {
       it('calls mutation `setCurrentPage` with the journey page name', () => {
         exerciseCreateJourney.actions.setCurrentRoute(context, 'exercise-edit-timeline');
         expect(context.commit).toHaveBeenCalledWith('setCurrentPage', 'timeline');
@@ -118,8 +118,8 @@ xdescribe('store/exercise/createJourney', () => {
     });
   });
 
-  xdescribe('getters', () => {
-    xdescribe('currentPageIndex', () => {
+  describe('getters', () => {
+    describe('currentPageIndex', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -145,7 +145,7 @@ xdescribe('store/exercise/createJourney', () => {
       });
     });
 
-    xdescribe('nextPageIndex', () => {
+    describe('nextPageIndex', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -171,7 +171,7 @@ xdescribe('store/exercise/createJourney', () => {
       });
     });
 
-    xdescribe('nextPage', () => {
+    describe('nextPage', () => {
       const state = {
         journey: ['contacts', 'timeline', 'vacancy'],
       };
@@ -185,14 +185,14 @@ xdescribe('store/exercise/createJourney', () => {
       };
       const nextPage = () => (exerciseCreateJourney.getters.nextPage(state, getters, rootState, rootGetters));
 
-      xdescribe('when no document is bound to `exerciseDocument`', () => {
+      describe('when no document is bound to `exerciseDocument`', () => {
         it('returns null', () => {
           rootGetters['exerciseDocument/id'] = null;
           expect(nextPage()).toBeNull();
         });
       });
 
-      xdescribe('when nextPageIndex is null (we are on the last page of the journey)', () => {
+      describe('when nextPageIndex is null (we are on the last page of the journey)', () => {
         it('returns the location of the overview page for the current exercise', () => {
           rootGetters['exerciseDocument/id'] = 'abc123';
           getters.nextPageIndex = null;
@@ -203,7 +203,7 @@ xdescribe('store/exercise/createJourney', () => {
         });
       });
 
-      xdescribe('when nextPageIndex is not null', () => {
+      describe('when nextPageIndex is not null', () => {
         it('returns the location of the next edit page in the journey for the current exercise', () => {
           rootGetters['exerciseDocument/id'] = 'abc123';
           getters.nextPageIndex = 1;

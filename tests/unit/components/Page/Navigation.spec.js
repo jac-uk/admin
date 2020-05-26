@@ -27,10 +27,10 @@ const createTestSubject = (propsData) => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  xdescribe('properties', () => {
+  describe('properties', () => {
     let prop;
 
-    xdescribe('data', () => {
+    describe('data', () => {
       beforeEach(() => {
         prop = Navigation.props.items;
       });
@@ -44,7 +44,7 @@ const createTestSubject = (propsData) => {
       });
     });
 
-    xdescribe('label', () => {
+    describe('label', () => {
       beforeEach(() => {
         prop = Navigation.props.label;
       });
@@ -63,7 +63,7 @@ const createTestSubject = (propsData) => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders items that is passed as prop', () => {
       let wrapper = createTestSubject({ items: navPages });
       expect(wrapper.findAll('li').length).toBe(2);

@@ -30,15 +30,15 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Edit', () => {
+describe('@/views/Exercises/Edit', () => {
   let wrapper;
   beforeEach(() => {
     mockStore.dispatch.mockClear();
     wrapper = createTestSubject();
   });
 
-  xdescribe('template', () => {
-    xdescribe('when loaded is false', () => {
+  describe('template', () => {
+    describe('when loaded is false', () => {
       beforeEach(() => {
         wrapper.setData({ loaded: false });
       });
@@ -52,7 +52,7 @@ xdescribe('@/views/Exercises/Edit', () => {
       });
     });
 
-    xdescribe('when loaded is true', () => {
+    describe('when loaded is true', () => {
       beforeEach(() => {
         wrapper.setData({ loaded: true });
       });
@@ -67,8 +67,8 @@ xdescribe('@/views/Exercises/Edit', () => {
     });
   });
 
-  xdescribe('lifecycle hooks', () => {
-    xdescribe('mounted', () => {
+  describe('lifecycle hooks', () => {
+    describe('mounted', () => {
       it('loads the exercise document identified by URL param `id`', () => {
         expect(mockStore.dispatch).toHaveBeenCalledWith('exerciseDocument/bind', 'abc123');
       });
@@ -79,8 +79,8 @@ xdescribe('@/views/Exercises/Edit', () => {
     });
   });
 
-  xdescribe('watchers', () => {
-    xdescribe('when $route changes', () => {
+  describe('watchers', () => {
+    describe('when $route changes', () => {
       it('updates `exerciseCreateJourney` with the current route name', () => {
         // Trigger the $route watcher function
         const watcher = wrapper.vm.$options.watch.$route;
@@ -100,8 +100,8 @@ xdescribe('@/views/Exercises/Edit', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('redirectToErrorPage', () => {
+  describe('methods', () => {
+    describe('redirectToErrorPage', () => {
       it('calls router replace method with the name of error page', () => {
         wrapper.vm.redirectToErrorPage();
         expect(mockRouter.replace).toHaveBeenCalled();

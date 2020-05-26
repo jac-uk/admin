@@ -6,7 +6,7 @@ const createTestSubject = () => {
 };
 
 xdescribe('@/views/Exercises/Show', () => {
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders the component', () => {
       let wrapper = createTestSubject();
       expect(wrapper.find('table').exists()).toBe(true);

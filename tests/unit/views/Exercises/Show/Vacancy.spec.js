@@ -36,7 +36,7 @@ const createTestSubject = () => {
 };
 
 xdescribe('@/views/Exercises/Show', () => {
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders the component', () => {
       let wrapper = createTestSubject();
       expect(wrapper.find('dl').exists()).toBe(true);
@@ -48,8 +48,8 @@ xdescribe('@/views/Exercises/Show', () => {
     });
   });
 
-  xdescribe('computed properties', () => {
-    xdescribe('exercise', () => {
+  describe('computed properties', () => {
+    describe('exercise', () => {
       it('returns record object from state', () => {
         let wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);
