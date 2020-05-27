@@ -1,18 +1,24 @@
 <template>
-  <div>
+  <div
+    class="js-enabled govuk-tabs"
+    data-module="govuk-tabs"
+  >
     <div>
       <ul
-        role="tablist"
+        class="govuk-tabs__list"
       >
         <li 
           v-for="tab in tabs"
           :key="tab.title"
+          :class="{'govuk-tabs__list-item--selected': isActive(tab) }"
+          class="govuk-tabs__list-item"
         >
           <a
             :href="`#${tab.ref}`"
             @click="showTab(tab)"
+            class="govuk-tabs__tab"
           >
-            {{ tab.title }} {{ isActive(tab) }}
+            {{ tab.title }}
           </a>
         </li>
       </ul>
