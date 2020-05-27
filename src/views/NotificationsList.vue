@@ -26,31 +26,14 @@
       </button>
     </div>
 
-    <ul
-      class="govuk-tabs__list"
-      role="tablist"
-      data-module="govuk-tabs"
-    >
-      <a 
-        class="govuk-tabs__list-item"
-        :class="{ 'govuk-tabs__list-item--selected': this.currentView === 'queue' }"
-        @click="showTab('queue')"
-      >
-        Queue
-      </a>
-      <a 
-        class="govuk-tabs__list-item"
-        :class="{ 'govuk-tabs__list-item--selected': this.currentView === 'sent' }"
-        @click="showTab('sent')"
-      >
-        Sent
-      </a>
-    </ul>
+    <TabsList
+      :tabs="tabs"
+      :active-tab.sync="activeTab"
+    />
     
     <table 
-      v-if="showingQueue"
+      v-if="activeTab === 'queue'"
       class="govuk-table"
-      @click="showTab('sent')"
     >
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -94,7 +77,7 @@
     </table>
 
     <table 
-      v-if="showingSent"
+      v-if="activeTab === 'sent'"
       class="govuk-table"
     >
       <thead class="govuk-table__head">
@@ -141,10 +124,25 @@
 </template>
 
 <script>
+import TabsList from '@/components/Page/TabsList';
+
 export default {
+  components: {
+    TabsList,
+  },
   data() {
     return {
-      currentView: 'queue',
+      tabs: [
+        {
+          ref: 'queue',
+          title: 'Queue',
+        },
+        {
+          ref: 'sent',
+          title: 'Sent',
+        },
+      ],
+      activeTab: 'queue',
       processing: false,
     };
   },
