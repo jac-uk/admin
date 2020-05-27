@@ -46,12 +46,12 @@ export default {
       return this.$route.params.applicationId;
     },
     availableStatuses() {
-      return this.$store.getters['stageShortlist/availableStatuses'];
+      return this.$store.getters['stageShortlisted/availableStatuses'];
     },
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageShortlist/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+      await this.$store.dispatch('stageShortlisted/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
       this.$router.push({ name: 'exercise-stages-shortlist-list' });
     },
   },
