@@ -1,16 +1,11 @@
 <template>
-  <TabsList
-    :tabs="[
-      {
-        name: 'one',
-        href: '#one'
-      },
-      {
-        name: 'two',
-        href: '#two'
-      },
-    ]"
-  />
+  <div>
+    <TabsList
+      :tabs="tabs"
+      :active-tab.sync="activeTab"
+    />
+    {{ activeTab }}
+  </div>
 </template>
 <script>
 import TabsList from '@/components/Page/TabsList'; 
@@ -22,10 +17,15 @@ export default {
     return {
       tabs: [
         {
-          name: 'one',
-          selected: true,
+          ref: 'one',
+          title: 'this is tab 1',
+        },
+        {
+          ref: 'two',
+          title: 'here is tab 2',
         },
       ],
+      activeTab: null,
     };
   },
 };

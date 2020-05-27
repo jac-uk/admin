@@ -6,13 +6,13 @@
       >
         <li 
           v-for="tab in tabs"
-          :key="tab.name"
+          :key="tab.title"
         >
           <a
-            :href="tab.href"
+            :href="`#${tab.ref}`"
             @click="showTab(tab)"
           >
-            {{ tab.name }}
+            {{ tab.title }} {{ isActive(tab) }}
           </a>
         </li>
       </ul>
@@ -30,15 +30,20 @@ export default {
       type: Array,
       required: true,
     },
-    isActive: {
-      type: Boolean,
-      default: false,
+    activeTab: {
+      type: String,
+      default: '',
     },
   },
 
   methods: {
     showTab(selectedTab) {
       console.log(selectedTab);
+      this.activeTab = selectedTab.ref;
+      this.$emit('update:activeTab', this.activeTab);
+    },
+    isActive(tab) {
+      return this.activeTab === tab.ref;
     },
   },
 };
