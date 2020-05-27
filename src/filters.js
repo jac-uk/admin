@@ -255,6 +255,7 @@ const lookup = (value) => {
     lookup[APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME] = 'Test submitted over time';
     lookup[APPLICATION_STATUS.WITHDREW_APPLICATION] = 'Withdrew application';
     lookup[APPLICATION_STATUS.REJECTED_AS_INELIGIBLE] = 'Rejected as ineligible';
+    lookup[APPLICATION_STATUS.INVITED_TO_SELECTION_DAY] = 'Invited To Selection Day';
     // TODO add the missing ones from CONSTANTS
 
     // RETURN - END of LOOKUP
