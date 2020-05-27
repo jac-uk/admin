@@ -1,13 +1,32 @@
 <template>
-  <Banner
-    :message="'testing the banner'"
+  <TabsList
+    :tabs="[
+      {
+        name: 'one',
+        href: '#one'
+      },
+      {
+        name: 'two',
+        href: '#two'
+      },
+    ]"
   />
 </template>
 <script>
-import Banner from '@/components/Page/Banner'; 
+import TabsList from '@/components/Page/TabsList'; 
 export default {
   components: {
-    Banner,
+    TabsList,
+  },
+  data() {
+    return {
+      tabs: [
+        {
+          name: 'one',
+          selected: true,
+        },
+      ],
+    };
   },
 };
 </script>

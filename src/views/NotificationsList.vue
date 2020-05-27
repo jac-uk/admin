@@ -1,9 +1,14 @@
 <template>
-  <div>
-    <h1
-      class="govuk-heading-xl govuk-!-margin-bottom-6"
-    >
-      Notifications
+  <div
+    class="js-enabled"
+  >
+    <div>
+      <h1
+        class="govuk-heading-xl govuk-!-margin-bottom-6"
+      >
+        Notifications
+      </h1>
+
       <button 
         v-if="isProcessing"
         class="govuk-button"
@@ -11,6 +16,7 @@
       >
         Stop
       </button>
+
       <button 
         v-else
         class="govuk-button"
@@ -18,24 +24,33 @@
       >
         Start
       </button>
-    </h1>
-    
-    <button 
-      class="govuk-button"
-      @click="showQueue()"
+    </div>
+
+    <ul
+      class="govuk-tabs__list"
+      role="tablist"
+      data-module="govuk-tabs"
     >
-      Queue
-    </button>
-    <button 
-      class="govuk-button"
-      @click="showSent()"
-    >
-      Sent
-    </button>
+      <a 
+        class="govuk-tabs__list-item"
+        :class="{ 'govuk-tabs__list-item--selected': this.currentView === 'queue' }"
+        @click="showTab('queue')"
+      >
+        Queue
+      </a>
+      <a 
+        class="govuk-tabs__list-item"
+        :class="{ 'govuk-tabs__list-item--selected': this.currentView === 'sent' }"
+        @click="showTab('sent')"
+      >
+        Sent
+      </a>
+    </ul>
     
     <table 
       v-if="showingQueue"
       class="govuk-table"
+      @click="showTab('sent')"
     >
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -130,6 +145,7 @@ export default {
   data() {
     return {
       currentView: 'queue',
+      processing: false,
     };
   },
   computed: {
@@ -146,7 +162,7 @@ export default {
       return this.currentView === 'sent';
     },
     isProcessing() {
-      return false;
+      return this.processing;
     },
   },
   created() {
@@ -154,16 +170,15 @@ export default {
     this.$store.dispatch('notifications/bindSent');
   },
   methods: {
-    showQueue() {
-      this.currentView = 'queue';
-    },
-    showSent() {
-      this.currentView = 'sent';
+    showTab(tab) {
+      this.currentView = tab;
     },
     startProcessing() {
+      this.processing = !this.processing;
       console.log('start processing');
     },
     stopProcessing() {
+      this.processing = !this.processing;
       console.log('stop processing');
     },
   },
