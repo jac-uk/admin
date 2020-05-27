@@ -30,7 +30,7 @@ const APPLICATION_STATUS = {
     WITHDREW_APPLICATION: 'withdrewApplication',
     REJECTED_AS_INELIGIBLE: 'rejectedAsIneligible',
 // ###  SHORTLISTED
-    INVITED_TO_SELECTION_DAY: '',
+    INVITED_TO_SELECTION_DAY: 'invitedToSelectionDay',
     // REJECTED_AS_INELIGIBLE: '',
     // WITHDREW_APPLICATION: '',
 // ###  SELECTED

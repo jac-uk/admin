@@ -262,8 +262,8 @@ const lookup = (value) => {
     lookup[APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT] = 'Approved for immediate appointment';
     lookup[APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT] = 'Approved for future appointment';
     lookup[APPLICATION_STATUS.SCC_TO_RECONSIDER] = 'SCC to reconsider';
+    lookup[APPLICATION_STATUS.INVITED_TO_SELECTION_DAY] = 'Invited To Selection Day';
     // TODO add the missing ones from CONSTANTS
-
     // RETURN - END of LOOKUP
     return lookup[value] || value;
   }
