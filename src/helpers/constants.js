@@ -1,8 +1,8 @@
 const STATUS = {
-  DRAFT: 'draft',
-  APPLIED: 'applied',
-  WITHDRAWN: 'withdrawn',
-  SELECTED: 'selected',
+    DRAFT: 'draft',
+    APPLIED: 'applied',
+    WITHDRAWN: 'withdrawn',
+    SELECTED: 'selected',
 };
 
 const EXERCISE_STAGE = {
@@ -37,11 +37,11 @@ const APPLICATION_STATUS = {
     FAILED_SELECTION: '',
     PASSED_BUT_NOT_RECOMMENDED: '',
 // ###  RECOMMENDED
-    REJECTED_BY_CHARACTER: '',
+    REJECTED_BY_CHARACTER: 'rejectedByCharacter',
     // REJECTED_AS_INELIGIBLE: '',
-    APPROVED_FOR_IMMEDIATE_APPOINTMENT: '',
-    APPROVED_FOR_FUTURE_APPOINTMENT: '',
-    SCC_TO_RECONSIDER: '',
+    APPROVED_FOR_IMMEDIATE_APPOINTMENT: 'approvedForImmediateAppointment',
+    APPROVED_FOR_FUTURE_APPOINTMENT: 'approvedForFutureAppointment',
+    SCC_TO_RECONSIDER: 'sccToReconsider',
 };
 
 export { STATUS, EXERCISE_STAGE, APPLICATION_STATUS };
