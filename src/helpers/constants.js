@@ -33,9 +33,9 @@ const APPLICATION_STATUS = {
     // REJECTED_AS_INELIGIBLE: '',
     // WITHDREW_APPLICATION: '',
 // ###  SELECTED
-    PASSED_SELECTION: '',
-    FAILED_SELECTION: '',
-    PASSED_BUT_NOT_RECOMMENDED: '',
+    PASSED_SELECTION: 'passedSelection',
+    FAILED_SELECTION: 'failedSelection',
+    PASSED_BUT_NOT_RECOMMENDED: 'passedButNotRecommended',
 // ###  RECOMMENDED
     REJECTED_BY_CHARACTER: 'rejectedByCharacter',
     // REJECTED_AS_INELIGIBLE: '',
