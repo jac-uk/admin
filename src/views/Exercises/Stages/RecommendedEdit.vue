@@ -52,7 +52,7 @@ export default {
   methods: {
     async save() {
       await this.$store.dispatch('stageRecommended/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-recommeneded-list' });
+      this.$router.push({ name: 'exercise-stages-recommended-list' });
     },
   },
 };

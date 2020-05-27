@@ -13,20 +13,11 @@ export default {
     availableStatuses() {
       // @TODO conditional selection based on Exercise type
       return [
-        APPLICATION_STATUS.PASSED_SIFT,
-        APPLICATION_STATUS.FAILED_SIFT,
-        APPLICATION_STATUS.SUBMITTED_FIRST_TEST,
-        APPLICATION_STATUS.FAILED_FIRST_TEST,
-        APPLICATION_STATUS.SUBMITTED_SCENARIO_TEST,
-        APPLICATION_STATUS.PASSED_FIRST_TEST,
-        APPLICATION_STATUS.FAILED_SCENARIO_TEST,
-        APPLICATION_STATUS.PASSED_SCENARIO_TEST,
-        APPLICATION_STATUS.FAILED_TELEPHONE_ASSESSMENT,
-        APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT,
-        APPLICATION_STATUS.NO_TEST_SUBMITTED,
-        APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME,
-        APPLICATION_STATUS.WITHDREW_APPLICATION,
+        APPLICATION_STATUS.REJECTED_BY_CHARACTER,
         APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+        APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT,
+        APPLICATION_STATUS.SCC_TO_RECONSIDER,
       ];
     },
   },
@@ -34,7 +25,7 @@ export default {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
-        .where('stage', '==', EXERCISE_STAGE.REVIEW)
+        .where('stage', '==', EXERCISE_STAGE.RECOMMENDED)
         .where('active', '==', true);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });

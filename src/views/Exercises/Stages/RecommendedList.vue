@@ -4,12 +4,12 @@
     <ul>
       <li 
         v-for="item in applicationRecords" 
-        :key="item.id"
+        :key="item.application.id"
       >
         <RouterLink
-          :to="{ name: 'exercise-stages-recommended-edit', params: { applicationId: item.id } }"
+          :to="{ name: 'exercise-stages-recommended-edit', params: { applicationId: item.application.id } }"
         >
-          {{ item.candidate.fullName }}
+          {{ item.candidate.fullName }}, {{ item.status }}
         </RouterLink>
       </li>
     </ul>
@@ -22,6 +22,12 @@ export default {
     applicationRecords() {
       return this.$store.state.stageRecommended.records;
     },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+  },
+  created() {
+    this.$store.dispatch('stageRecommended/bind', { exerciseId: this.exercise.id });
   },
 };
 </script>
