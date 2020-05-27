@@ -10,6 +10,7 @@ const EXERCISE_STAGE = {
 	SHORTLISTED: 'shortlisted',
 	SELECTED: 'selected',
 	RECOMMENDED: 'recommended',
+    HANDOVER: 'handover',
 };
 
 const APPLICATION_STATUS = {
