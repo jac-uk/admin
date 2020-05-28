@@ -45,4 +45,13 @@ const APPLICATION_STATUS = {
     SCC_TO_RECONSIDER: 'sccToReconsider',
 };
 
-export { STATUS, EXERCISE_STAGE, APPLICATION_STATUS };
+const SHORTLISTING = {
+    TELEPHONE_ASSESSMENT: 'telephone-assessment',
+    SITUATIONAL_JUDGEMENT_QUALIFYING_TEST: 'situational-judgement-qualifying-test',
+    CRITICAL_ANALYSIS_QUALIFYING_TEST: 'critical-analysis-qualifying-test',
+    SCENARIO_TEST_QUALIFYING_TEST: 'scenario-test-qualifying-test',
+    NAME_BLIND_PAPER_SIFT: 'name-blind-paper-sift',
+    PAPER_SIFT: 'paper-sift',
+};
+
+export { STATUS, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING };
