@@ -8,7 +8,7 @@ export default {
     bindQueue: firestoreAction(({ bindFirestoreRef }) => {
       let firestoreRef = firestore
         .collection('notifications')
-        .where('status', '==', 'ready')
+        .where('status', 'in', ['ready', 'failed'])
         .orderBy('createdAt', 'desc').limit(100);
       return bindFirestoreRef('queue', firestoreRef, { serialize: vuexfireSerialize });
     }),
