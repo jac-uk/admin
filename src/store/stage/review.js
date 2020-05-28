@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '../../helpers/constants';
+import { STATUS, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '../../helpers/constants';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -79,11 +79,22 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { applicationId, status } ) => {
-      // @TODO based on provided status, work out whether stage should also be updated
+    updateStatus: async ( context, { applicationId, status, nextStage } ) => {
+      let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
+
+      // Withdrawn
+      if (status === APPLICATION_STATUS.NO_TEST_SUBMITTED || status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
+        stageValue = STATUS.WITHDRAWN;
+      }
+
+      // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
+      if (nextStage[0]) {
+        stageValue = nextStage[0];
+      }
+
       const data = {
         status: status,
-        // stage: stageValue,
+        stage: stageValue,
       };
       const ref = collectionRef.doc(applicationId);
       await ref.update(data);
