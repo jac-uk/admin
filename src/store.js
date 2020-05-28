@@ -11,6 +11,7 @@ import exerciseDocument from '@/store/exercise/document';
 import applications from '@/store/applications';
 import application from '@/store/application';
 import assessments from '@/store/assessments';
+import notifications from '@/store/notifications';
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
     applications,
     application,
     assessments,
+    notifications,
     stageReview,
     stageSelected,
     stageHandover,

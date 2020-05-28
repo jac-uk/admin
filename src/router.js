@@ -69,6 +69,7 @@ import PageNotFound from '@/views/Errors/PageNotFound';
 import ApplicationsFull from '@/views/Exercises/ApplicationsFull';
 import Dashboard from '@/views/Dashboard';
 import SignIn from '@/views/SignIn';
+import NotificationsList from '@/views/NotificationsList';
 
 import Sandbox from '@/views/Sandbox';
 
@@ -89,6 +90,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Dashboard',
+      },
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: NotificationsList,
+      meta: {
+        requiresAuth: true,
+        title: 'Notifications',
       },
     },
     {
