@@ -11,7 +11,6 @@ export default {
   namespaced: true,
   getters: {
     availableStatuses() {
-      // @TODO conditional selection based on Exercise type
       return [
         APPLICATION_STATUS.REJECTED_BY_CHARACTER,
         APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,

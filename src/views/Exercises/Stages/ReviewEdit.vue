@@ -46,7 +46,12 @@ export default {
       return this.$route.params.applicationId;
     },
     availableStatuses() {
-      return this.$store.getters['stageReview/availableStatuses'];
+      const shortlistingMethods = this.exercise.shortlistingMethods;
+      const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
+      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod) ;
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
     },
   },
   methods: {
