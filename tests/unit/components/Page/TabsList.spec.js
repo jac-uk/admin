@@ -32,11 +32,21 @@ describe('components/TabsList', () => {
 
     describe('component instance', () => {
         let wrapper;
+        let mockTabs = [
+            {
+                title: 'Tab Ref',
+                ref: 'tabRef',
+            },
+            {
+                title: 'New Tab',
+                ref: 'newTab',
+            },
+        ];
         beforeEach(() => {
             wrapper = createTestSubject(TabsList, {
                 propsData: {
-                    tabs: [],
-                    activeTab: 'tabRef',
+                    tabs: mockTabs,
+                    activeTab: mockTabs[0].ref,
                 },
                 stubs: [],
             });
@@ -48,12 +58,22 @@ describe('components/TabsList', () => {
 
         describe('methods', () => {
             describe('showTab method', () => {
-                // beforeEach(() => {
-                    
-                // });
+                beforeEach(() => {    
+                    wrapper.vm.showTab({ ref: mockTabs[1].ref });
+                });
                 it('sets active tab as selected tab', () => {
-                    wrapper.vm.showTab({ ref: 'newTab' });
-                    expect(wrapper.props('activeTab')).toBe('newTab');
+                    expect(wrapper.props('activeTab')).toBe(mockTabs[1].ref);
+                });
+                it('emits change in tab', () => {
+                    expect(wrapper.emitted('update:activeTab')[0][0]).toBe(mockTabs[1].ref);
+                });
+            });
+            describe('isActive method', () => {
+                it('returns false when tab.ref doesn\'t match activeTab', () => {
+                    expect(wrapper.vm.isActive({ ref: mockTabs[1].ref })).toBe(false);
+                });
+                it('returns true when tab.ref matches activeTab', () => {
+                    expect(wrapper.vm.isActive({ ref: mockTabs[0].ref })).toBe(true);
                 });
             });
         });
