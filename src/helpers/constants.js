@@ -52,6 +52,7 @@ const SHORTLISTING = {
     SCENARIO_TEST_QUALIFYING_TEST: 'scenario-test-qualifying-test',
     NAME_BLIND_PAPER_SIFT: 'name-blind-paper-sift',
     PAPER_SIFT: 'paper-sift',
+    OTHER: 'other',
 };
 
 export { STATUS, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING };

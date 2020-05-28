@@ -58,9 +58,11 @@ export default {
       arrToReturn.push(APPLICATION_STATUS.WITHDREW_APPLICATION);
 
       // OTHER SHORTLISTING METHODS
-      arrOtherShortlistingMethods.map(item => {
-        arrToReturn.push(item.name);
-      });
+      if (arrShortlistingMethods.includes(SHORTLISTING.OTHER)) {
+        arrOtherShortlistingMethods.map(item => {
+          arrToReturn.push(item.name);
+        });
+      }
 
       return arrToReturn;
     },
