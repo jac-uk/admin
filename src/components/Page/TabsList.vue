@@ -15,8 +15,8 @@
         >
           <a
             :href="`#${tab.ref}`"
-            @click="showTab(tab)"
             class="govuk-tabs__tab"
+            @click="showTab(tab)"
           >
             {{ tab.title }}
           </a>
@@ -44,7 +44,6 @@ export default {
 
   methods: {
     showTab(selectedTab) {
-      console.log(selectedTab);
       this.activeTab = selectedTab.ref;
       this.$emit('update:activeTab', this.activeTab);
     },
