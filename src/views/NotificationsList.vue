@@ -55,6 +55,12 @@
           >
             To
           </th>
+          <th
+            scope="col"
+            class="govuk-table__header"
+          >
+            Status
+          </th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -71,6 +77,9 @@
           </td>
           <td class="govuk-table__cell">
             {{ notification.email }}
+          </td>
+          <td class="govuk-table__cell">
+            {{ notification.status }}
           </td>
         </tr>
       </tbody>
