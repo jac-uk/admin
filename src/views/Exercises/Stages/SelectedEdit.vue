@@ -1,50 +1,58 @@
 <template>
-  <div>
+  <form @submit.prevent="validateAndSave">
+    <ErrorSummary
+      :errors="errors"
+    />
     <RadioGroup
-      id="shortlisted-status"
+      id="selected-status"
       v-model="newSelectedStatus"
-      label="Shortlisted Status"
+      label="Update status (TBC)"
       hint=""
       required
     >
       <RadioItem
-        value="passedSelection"
-        label="Passed Selection"
-      />
-      <RadioItem
-        value="failedSelection"
-        label="Failed Selection"
-      />
-      <RadioItem
-        value="PassedButNotRecommended"
-        label="Passed but not recommended"
+        v-for="item in availableStatuses"
+        :key="item"
+        :value="item"
+        :label="item | lookup"
       />
     </RadioGroup>
-    <router-link :to="{name: 'exercise-stages-shortlisted-list'}">
-      <button class="govuk-button">
-        Save and continue
-      </button>
-    </router-link>
-  </div>
+    <button class="govuk-button">
+      Save and continue
+    </button>      
+  </form>
 </template>
 
 <script>
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    ErrorSummary,
     RadioGroup,
     RadioItem,
   },
+  extends: Form,
   data() {
     return {
       newSelectedStatus: null,
     };
   },
+  computed: {
+    applicationId() {
+      return this.$route.params.applicationId;
+    },
+    availableStatuses() {
+      return this.$store.getters['stageSelected/availableStatuses'];
+    },
+  },
   methods: {
-    submitForApproval() {
-      this.$store.dispatch('exerciseDocument/submitForApproval');
+    async save() {
+      await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+      this.$router.push({ name: 'exercise-stages-selected-list' });
     },
   },
 };

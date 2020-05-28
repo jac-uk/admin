@@ -1,8 +1,8 @@
 const STATUS = {
-  DRAFT: 'draft',
-  APPLIED: 'applied',
-  WITHDRAWN: 'withdrawn',
-  SELECTED: 'selected',
+    DRAFT: 'draft',
+    APPLIED: 'applied',
+    WITHDRAWN: 'withdrawn',
+    SELECTED: 'selected',
 };
 
 const EXERCISE_STAGE = {
@@ -10,6 +10,7 @@ const EXERCISE_STAGE = {
 	SHORTLISTED: 'shortlisted',
 	SELECTED: 'selected',
 	RECOMMENDED: 'recommended',
+    HANDOVER: 'handover',
 };
 
 const APPLICATION_STATUS = {
@@ -29,19 +30,19 @@ const APPLICATION_STATUS = {
     WITHDREW_APPLICATION: 'withdrewApplication',
     REJECTED_AS_INELIGIBLE: 'rejectedAsIneligible',
 // ###  SHORTLISTED
-    INVITED_TO_SELECTION_DAY: '',
+    INVITED_TO_SELECTION_DAY: 'invitedToSelectionDay',
     // REJECTED_AS_INELIGIBLE: '',
     // WITHDREW_APPLICATION: '',
 // ###  SELECTED
-    PASSED_SELECTION: '',
-    FAILED_SELECTION: '',
-    PASSED_BUT_NOT_RECOMMENDED: '',
+    PASSED_SELECTION: 'passedSelection',
+    FAILED_SELECTION: 'failedSelection',
+    PASSED_BUT_NOT_RECOMMENDED: 'passedButNotRecommended',
 // ###  RECOMMENDED
-    REJECTED_BY_CHARACTER: '',
+    REJECTED_BY_CHARACTER: 'rejectedByCharacter',
     // REJECTED_AS_INELIGIBLE: '',
-    APPROVED_FOR_IMMEDIATE_APPOINTMENT: '',
-    APPROVED_FOR_FUTURE_APPOINTMENT: '',
-    SCC_TO_RECONSIDER: '',
+    APPROVED_FOR_IMMEDIATE_APPOINTMENT: 'approvedForImmediateAppointment',
+    APPROVED_FOR_FUTURE_APPOINTMENT: 'approvedForFutureAppointment',
+    SCC_TO_RECONSIDER: 'sccToReconsider',
 };
 
 export { STATUS, EXERCISE_STAGE, APPLICATION_STATUS };
