@@ -62,7 +62,7 @@ describe('components/TabsList', () => {
                     wrapper.vm.showTab({ ref: mockTabs[1].ref });
                 });
                 it('sets active tab as selected tab', () => {
-                    expect(wrapper.props('activeTab')).toBe(mockTabs[1].ref);
+                    expect(wrapper.vm.currentTab).toBe(mockTabs[1].ref);
                 });
                 it('emits change in tab', () => {
                     expect(wrapper.emitted('update:activeTab')[0][0]).toBe(mockTabs[1].ref);

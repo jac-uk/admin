@@ -51,49 +51,18 @@
       </div>
     </div>
 
-    <!-- tabs section
-    <div class="govuk-grid-column-full">
-      <div
-        class="govuk-tabs"
-        data-module="govuk-tabs"
-      >
-        <h2 class="govuk-tabs__title">
-          Contents
-        </h2>
-        <ul class="govuk-tabs__list">
-          <li class="govuk-tabs__list-item govuk-tabs__list-item-selected">
-            <a
-              class="govuk-tabs__tab"
-              href="#applied"
-            >Applied</a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a
-              class="govuk-tabs__tab"
-              href="#shortlisted"
-            >Shortlisted</a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a
-              class="govuk-tabs__tab"
-              href="#selected"
-            >Selected</a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a
-              class="govuk-tabs__tab"
-              href="#recommended"
-            >Recommended</a>
-          </li>
-          <li class="govuk-tabs__list-item">
-            <a
-              class="govuk-tabs__tab"
-              href="#handover"
-            >Handover</a>
-          </li>
-        </ul>
-      </div>
-    </div>-->
+    <!-- tabs section -->
+    <!-- <div class="govuk-grid-column-full">
+      <TabsList
+        :tabs="[
+          {title:'Applied', ref: 'applied'},
+          {title: 'Shortlisted',ref:'shortlisted'},
+          {title: 'Selected',ref:'selected'},
+          {title: 'Recommended',ref:'recommended'},
+          {title: 'Handover',ref:'handover'},
+        ]"
+      />
+    </div> -->
 
     <!-- results -->
     <div class="govuk-grid-column-full">
@@ -410,11 +379,13 @@
 
 <script>
 import Stat from '@/components/Report/Stat';
+// import TabsList from '@/components/Page/TabsList';
 import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
     Stat,
+    // TabsList,
   },
   data() {
     return {
