@@ -90,6 +90,12 @@ export default {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
     },
   },
+  created() {
+    this.$store.dispatch('services/bind');
+  },
+  destroyed() {
+    this.$store.dispatch('services/unbind');
+  },
   methods: {
     signOut() {
       auth().signOut();
