@@ -1,6 +1,5 @@
 <template>
   <div 
-    v-if="message"
     class="moj-banner moj-banner--success"
   >
     <div class="moj-banner__message">
@@ -26,7 +25,7 @@ export default {
   props: {
     message: {
       type: String,
-      default: null,
+      required: true,
       // @TODO add validator?
     },
   },
