@@ -51,19 +51,6 @@
       </div>
     </div>
 
-    <!-- tabs section -->
-    <!-- <div class="govuk-grid-column-full">
-      <TabsList
-        :tabs="[
-          {title:'Applied', ref: 'applied'},
-          {title: 'Shortlisted',ref:'shortlisted'},
-          {title: 'Selected',ref:'selected'},
-          {title: 'Recommended',ref:'recommended'},
-          {title: 'Handover',ref:'handover'},
-        ]"
-      />
-    </div> -->
-
     <!-- results -->
     <div class="govuk-grid-column-full">
       <table class="govuk-table table-with-border">
