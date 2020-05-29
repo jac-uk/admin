@@ -366,13 +366,11 @@
 
 <script>
 import Stat from '@/components/Report/Stat';
-// import TabsList from '@/components/Page/TabsList';
 import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
     Stat,
-    // TabsList,
   },
   data() {
     return {
@@ -420,12 +418,6 @@ export default {
 
 .hidden {
     display: none;
-}
-
-.govuk-tabs__panel {
-    border: none !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
 }
 
 </style>
