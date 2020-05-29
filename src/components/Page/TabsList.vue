@@ -42,10 +42,16 @@ export default {
     },
   },
 
+  data() {
+    return {
+      currentTab: this.activeTab,
+    };
+  },
+
   methods: {
     showTab(selectedTab) {
-      this.activeTab = selectedTab.ref;
-      this.$emit('update:activeTab', this.activeTab);
+      this.currentTab = selectedTab.ref;
+      this.$emit('update:activeTab', this.currentTab);
     },
     isActive(tab) {
       return this.activeTab === tab.ref;
