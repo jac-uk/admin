@@ -54,9 +54,9 @@ import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
+import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
 import ExerciseReportsDiversityDashboard from '@/views/Exercises/Reports/DiversityDashboard';
-import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
 import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/EducationAndCareerHistory';
 import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
 import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
