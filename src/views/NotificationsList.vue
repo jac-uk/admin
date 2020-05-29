@@ -152,7 +152,6 @@ export default {
         },
       ],
       activeTab: 'queue',
-      processing: false,
     };
   },
   computed: {
@@ -169,7 +168,8 @@ export default {
       return this.currentView === 'sent';
     },
     isProcessing() {
-      return this.processing;
+      const services = this.$store.state.services.record;
+      return services && services.notifications && services.notifications.isProcessing;
     },
   },
   created() {
@@ -177,16 +177,11 @@ export default {
     this.$store.dispatch('notifications/bindSent');
   },
   methods: {
-    showTab(tab) {
-      this.currentView = tab;
-    },
     startProcessing() {
-      this.processing = !this.processing;
-      console.log('start processing');
+      this.$store.dispatch('services/notificationsStart');
     },
     stopProcessing() {
-      this.processing = !this.processing;
-      console.log('stop processing');
+      this.$store.dispatch('services/notificationsStop');
     },
   },
 };
