@@ -31,10 +31,15 @@ export default {
       return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { applicationId, status } ) => {
-      // @TODO based on provided status, work out whether stage should also be updated
+      let stageValue = EXERCISE_STAGE.SHORTLISTED; // initial value: 'shortlisted'
+
+      if (status === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
+        stageValue = EXERCISE_STAGE.SELECTED;
+      }
+
       const data = {
         status: status,
-        // stage: stageValue,
+        stage: stageValue,
       };
       const ref = collectionRef.doc(applicationId);
       await ref.update(data);
