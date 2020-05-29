@@ -2,76 +2,74 @@
   <div class="govuk-width-container">
     <div
       id="header"
-      style="padding-top: 0px"
-      class="govuk-main-wrapper"
+      class="header-background clearfix"
     >
-      <header class="header">
-        <!-- HEADER SECTION -->
-        <div>
-          <div>
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
-                <div class="gem-c-organisation-logo brand--ministry-of-justice">
-                  <a href="https://judicialappointments.gov.uk/">
-                    <img
-                      src="@/assets/jac-logo.svg"
-                      alt="Judicial Appointments Commission"
-                      width="197"
-                      height="66"
-                      style="text-align: center"
-                    >
-                  </a>
-                </div>
-              </div>
-              <div class="govuk-grid-column-one-third organisation__margin-bottom">
-                <button
-                  v-if="$route.name !== 'sign-in'"
-                  class="govuk-button govuk-!-margin-right-1"
-                  @click="signOut"
-                >
-                  Sign Out
-                </button>
-                <button
-                  style="background-color: #753880;"
-                  target="_blank"
-                  class="govuk-button"
-                  onclick="location.href='https://apply.judicialappointments.digital/vacancies';"
-                >
-                  Vacancies
-                </button>
-                <br>
-                <span
-                  v-if="isSignedIn"
-                  class="app-c-topic-list__item nostyle"
-                >
-                  <b>You are now signed in as {{ userName }}</b>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- HEADER SECTION -->
-      </header>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
-          <div class="govuk-phase-banner">
-            <p class="govuk-phase-banner__content">
-              <strong class="govuk-tag govuk-phase-banner__content__tag">
-                alpha
-              </strong>
-              <span class="govuk-phase-banner__text">
-                This is a new service – your feedback will help us improve it.
-              </span>
-            </p>
-          </div>
-        </div>
+      <div class="header-title govuk-!-margin-bottom-2">
+        <a
+          href="/"
+          class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
+        >
+          Internal service name
+        </a>
+        <nav class="float-right">
+          <ul
+            id="navigation"
+            class="govuk-header__navigation user-menu"
+          >
+            <li class="govuk-header__navigation-item">
+              <a
+                href="https://apply.judicialappointments.digital/vacancies" 
+                class="govuk-header__link"
+              >
+                Vacancies
+              </a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a
+                v-if="$route.name !== 'sign-in'"
+                href="#"
+                class="govuk-header__link"
+                @click="signOut"
+              >
+                Sign out
+              </a>
+              <!-- <span
+                v-if="isSignedIn"
+                class="app-c-topic-list__item nostyle"
+              >
+                <b>You are now signed in as {{ userName }}</b>
+              </span> -->
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
-    <main id="main-content">
+    <div class="govuk-phase-banner govuk-!-margin-bottom-4">
+      <p class="govuk-phase-banner__content">
+        <strong class="govuk-tag govuk-phase-banner__content__tag">beta</strong>
+        <span class="govuk-phase-banner__text">
+          This is a new service – your 
+          <a 
+            class="govuk-link govuk-link--no-visited-state"
+            target="_blank" 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSexm0qgMV0tOQTFP4QUSegOOX89VeYhWwuofV---JZTOEXGIQ/viewform"
+          >
+            feedback
+          </a>
+          will help us to improve it.
+        </span>
+      </p>
+    </div>
+    <main
+      id="main-content"
+      class="govuk-main-wrapper govuk-main-wrapper--auto-spacing"
+      role="main"
+    >
       <RouterView />
     </main>
   </div>
 </template>
+
 <script>
 import { auth } from '@/firebase';
 export default {
@@ -92,13 +90,47 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-  // Required to include global main.scss styles
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+
   .header {
     background-color: #fafafa;
     padding: 1.25em 0.625em 0 0.625em;
   };
+
+  .govuk-main-wrapper {
+    padding-top: 0 !important;
+  }
+
   .govuk-main-wrapper {
     padding-top: 0px;
   }
+
+  .govuk-grid-column-one-half {
+    width: 100%;
+    float: left;
+  }
+
+  .header-background {
+    background-color: #f7f7f7;
+    padding: 20px 20px 10px 20px;
+    margin-top: 0 !important;
+  }
+
+  .header-background h1 a,
+  .header-background .header-title a,
+  #navigation li a  {
+    color: #753880 !important;
+    text-decoration: none;
+  }
+
+  .header-background h1 a:hover,
+  .header-background .header-title a:hover,
+  #navigation li a:hover {
+    text-decoration: underline;
+  }
+
+  .header-background span {
+    color: #753880 !important;
+  }
+  
 </style>

@@ -15,7 +15,7 @@
           </router-link>          
         </div>
         <div class="govuk-grid-column-three-quarters">
-          <div class="text-right govuk-!-margin-0">
+          <div class="float-right govuk-!-margin-0">
             <AddToFavouritesButton
               :in-favourites="isInFavourites"
               @click="updateFavourites"
@@ -23,10 +23,10 @@
           </div>
         </div>
       </div>      
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-!-margin-bottom-8">
+      <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
+        <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
-          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
+          <h1 class="govuk-heading-xl">
             {{ exerciseName }}
           </h1>
           <router-link
@@ -104,9 +104,10 @@ export default {
     navPages() {
       const pages = [
         { 
-          page: 'Overview', 
-          name: 'exercise-show-overview',
+          page: 'Exercise', 
+          name: 'exercise-overview-title',
           children: [
+            { page: 'Overview', name: 'exercise-show-overview' },
             { page: 'Website listing', name: 'exercise-show-summary' },
             { page: 'Vacancy information', name: 'exercise-show-vacancy' },
             { page: 'Contacts', name: 'exercise-show-contacts' },
@@ -126,15 +127,15 @@ export default {
           children: [
             { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: 'draft' } },
             { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: 'applied' } },
+            { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        // pages.push({ page: 'Independent assessments', name: 'exercise-show-independent-assessments' });
         pages.push({
-          page: 'Exercise reports',
+          page: 'Reports',
           name: 'exercise-show-reports',
           children: [
-            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Diversity', name: 'exercise-show-report-diversity' },
+            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
             { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
             { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
           ],
@@ -187,3 +188,10 @@ export default {
   },
 };
 </script>
+<style>
+
+  .govuk-heading-xl{
+    margin-bottom: 0;
+  }
+
+</style>

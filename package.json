@@ -1,6 +1,6 @@
 {
   "name": "apply-admin",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -20,12 +20,13 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
+    "@ministryofjustice/frontend": "0.0.17-alpha",
     "@sentry/browser": "^5.10.2",
     "@sentry/integrations": "^5.10.2",
     "core-js": "^2.6.11",
     "firebase": "^6.6.2",
     "firebaseui": "^4.4.0",
-    "govuk-frontend": "^3.4.0",
+    "govuk-frontend": "^3.6.0",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf": "^1.5.3",
     "vue": "^2.6.11",

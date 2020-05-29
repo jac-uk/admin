@@ -1,8 +1,19 @@
 // overwrite the font
 $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
 
-@import "node_modules/govuk-frontend/govuk/all";
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+@import "~govuk-frontend/govuk/all";
+
+$moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
+@import "~@ministryofjustice/frontend/moj/all";
+
 @import "print";
+
+$max-width: 1200px;
+
+.float-right {
+  float: right;
+}
 
 .text-center {
   text-align: center;
@@ -10,6 +21,10 @@ $govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvet
 
 .text-right {
   text-align: right;
+}
+
+.float-right {
+  float: right;
 }
 
 .display-block {
@@ -37,37 +52,10 @@ body {
 }
 
 /* JAC buttons */
-.govuk-button {
-  background-color: #753880;
-  box-shadow: 0 2px 0 #5e2d66;
-}
+/*#944 removed the overrides*/
 
-.govuk-button:hover,
-.govuk-button:focus {
-  background-color: #5e2d66;
-}
-
-.govuk-button--secondary {
-  background-color: #f3f2f1;
-  box-shadow: 0 2px 0 #929191;
-  color: #0b0c0c;
-}
-
-.govuk-button--secondary:hover,
-.govuk-button--secondary:focus {
-  background-color: #dbdad9;
-  color: #0b0c0c;
-}
-
-.govuk-button--warning {
-  background-color: #d4351c;
-  box-shadow: 0 2px 0 #55150b;
-}
-
-.govuk-button--secondary:hover,
-.govuk-button--secondary:focus {
-  background-color: #dbdad9;
-  color: #0b0c0c;
+.govuk-width-container {
+  max-width: $max-width;
 }
 
 // disabled inputs

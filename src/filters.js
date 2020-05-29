@@ -6,6 +6,8 @@ const formatDate = (value, type) => {
         return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;
       case 'datetime':
         return objDate.toLocaleString('en-GB');
+      case 'long':
+        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
       default:
         return objDate.toLocaleDateString('en-GB');
     }
@@ -99,6 +101,7 @@ const lookup = (value) => {
       'citizenship': 'Citizenship',
       'civil': 'Civil',
       'closed': 'Closed',
+      'completed': 'Completed',
       'court': 'Court',
       'crime': 'Crime',
       'critical-analysis-qualifying-test': 'Critical analysis qualifying test (QT)',
@@ -175,6 +178,7 @@ const lookup = (value) => {
       'other-sexual-orientation': 'Other',
       'paper-sift': 'Paper sift',
       'pakistani': 'Pakistani',
+      'pending': 'Pending',
       'pqe': 'Post-qualification experience',
       'practice-or-employment-as-lawyer': 'Practice or employment as a lawyer',
       'pre-launch': 'Pre launch',
@@ -223,6 +227,7 @@ const lookup = (value) => {
       'uk-state-non-selective': 'UK state school - non-selective',
       'uk-state-selective': 'UK state school - selective',
       'unpaid': 'Unpaid',
+      'uploaded': 'Uploaded',
       'war-pension-and-armed-forces-compensation-chamber': 'War Pension and Armed Forces Compensation Chamber',
       'welsh-administration-questions': 'Welsh administration questions',
       'welsh-government': 'Welsh Government',
