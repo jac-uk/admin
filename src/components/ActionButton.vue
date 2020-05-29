@@ -1,13 +1,13 @@
 <template>
   <button
-    class="govuk-button govuk-button--secondary jac-actionbutton"
+    class="govuk-button jac-actionbutton"
     :class="computedClasses"
     :disabled="isLoading"
     v-on="listeners"
   >
     <span
       v-if="isLoading"
-      class="spinner-border spinner-border-sm"
+      class="spinner spinner-border spinner-border-sm"
     />
     <slot
       v-else-if="isSuccess"
@@ -21,7 +21,12 @@
     >
       Error!
     </slot>
-    <slot>Submit</slot>
+    <span
+      v-if="!(isSuccess || hasError)"
+      :class="{ loading: isLoading }"
+    >
+      <slot>Submit</slot>
+    </span>
   </button>
 </template>
 <script>
@@ -31,6 +36,10 @@ export default {
     timeout: {
       type: Number,
       default: 2000,
+    },
+    type: {
+      type: String,
+      default: 'secondary',
     },
   },
   data: () => ({
@@ -50,6 +59,7 @@ export default {
         'jac-actionbutton--warning': this.hasError,
         'jac-actionbutton--success': this.isSuccess,
         'jac-actionbutton--loading': this.isLoading,
+        'govuk-button--secondary': this.type === 'secondary',
       };
     },
   },
@@ -76,3 +86,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.spinner {
+  position: absolute;
+  right: 50%;
+}
+.loading {
+  visibility: hidden;
+}
+</style>

@@ -10,7 +10,7 @@
           Contact date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.contactIndependentAssessors | formatDate }}
+          {{ exercise.contactIndependentAssessors | formatDate('long') }}
         </dd>
         <dd class="govuk-summary-list__actions">
           <strong
@@ -26,16 +26,17 @@
           Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsReturnDate | formatDate }}
+          {{ exercise.independentAssessmentsReturnDate | formatDate('long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
     </dl>
 
     <div
-      v-if="!(exercise.assessments && exercise.assessments.initialised)"
+      v-if="!hasInitialisedAssessments"
     >
       <ActionButton
+        type="primary"
         @click="initialiseAssessments()"
       >
         Start Assessments
@@ -44,6 +45,7 @@
 
     <div v-else>
       <ActionButton
+        type="primary"
         @click="sendRequests()"
       >
         Send to all
@@ -137,23 +139,34 @@
               {{ assessment.candidate.fullName }}
             </td>
             <td class="govuk-table__cell">
-              <p class="govuk-body">
-                <a
-                  :href="`mailto:${assessment.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ assessment.assessor.fullName }}
-                </a>
-              </p>
+              <a
+                :href="`mailto:${assessment.assessor.email}`"
+                class="govuk-link govuk-link--no-visited-state"
+                target="_blank"
+              >
+                {{ assessment.assessor.fullName }}
+              </a>
             </td>
             <td class="govuk-table__cell">
               {{ assessment.status | lookup }}
             </td>
-            <td class="govuk-table__cell">
+            <td
+              class="govuk-table__cell govuk-!-padding-top-0"
+            >
               <div class="moj-button-menu">
                 <div
-                  v-if="assessment.status === 'completed'"
+                  v-if="!hasStartedSending"
+                  class="moj-button-menu__wrapper"
+                >
+                  <ActionButton
+                    class="moj-button-menu__item"
+                    @click="testRequest(assessment.id)"
+                  >
+                    Test Request
+                  </ActionButton>
+                </div>
+                <div
+                  v-else-if="assessment.status === 'completed'"
                   class="moj-button-menu__wrapper"
                 >
                   <DownloadLink
@@ -188,6 +201,7 @@
               </div>
               <br>
               <a 
+                v-if="onStaging"
                 target="_blank"
                 :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
                 class="govuk-link"
@@ -224,6 +238,15 @@ export default {
     contactOverdue() {
       return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
     },
+    hasInitialisedAssessments() {
+      return this.exercise.assessments && this.exercise.assessments.initialised;
+    },
+    hasStartedSending() {
+      return this.exercise.assessments && this.exercise.assessments.sent;
+    },
+    onStaging() {
+      return window.location.href.indexOf('admin-staging') > 0;
+    },
   },
   created() {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
@@ -245,7 +268,16 @@ export default {
     async sendReminder(assessmentId) {
       await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
     },
+    async testRequest(assessmentId) {
+      await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
+    },
   },
 };
 </script>
 
+<style scoped>
+.govuk-table__cell,
+.govuk-table__header {
+  vertical-align: middle;
+}
+</style>
