@@ -33,7 +33,7 @@
     </dl>
 
     <div
-      v-if="!(exercise.assessments && exercise.assessments.initialised)"
+      v-if="!hasInitialisedAssessments"
     >
       <ActionButton
         @click="initialiseAssessments()"
@@ -95,6 +95,7 @@
               Status
             </th>
             <th
+              v-if="hasStartedSending"
               scope="col"
               class="govuk-table__header app-custom-class"
             >
@@ -137,20 +138,21 @@
               {{ assessment.candidate.fullName }}
             </td>
             <td class="govuk-table__cell">
-              <p class="govuk-body">
-                <a
-                  :href="`mailto:${assessment.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ assessment.assessor.fullName }}
-                </a>
-              </p>
+              <a
+                :href="`mailto:${assessment.assessor.email}`"
+                class="govuk-link govuk-link--no-visited-state"
+                target="_blank"
+              >
+                {{ assessment.assessor.fullName }}
+              </a>
             </td>
             <td class="govuk-table__cell">
               {{ assessment.status | lookup }}
             </td>
-            <td class="govuk-table__cell">
+            <td
+              v-if="hasStartedSending"
+              class="govuk-table__cell govuk-!-padding-top-0"
+            >
               <div class="moj-button-menu">
                 <div
                   v-if="assessment.status === 'completed'"
@@ -224,6 +226,12 @@ export default {
     contactOverdue() {
       return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
     },
+    hasInitialisedAssessments() {
+      return this.exercise.assessments && this.exercise.assessments.initialised;
+    },
+    hasStartedSending() {
+      return this.exercise.assessments && this.exercise.assessments.sent;
+    },
   },
   created() {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
@@ -249,3 +257,9 @@ export default {
 };
 </script>
 
+<style scoped>
+.govuk-table__cell,
+.govuk-table__header {
+  vertical-align: middle;
+}
+</style>
