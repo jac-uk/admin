@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Banner from '../../../components/Page/Banner';
+import Banner from '@/components/Page/Banner';
 
 export default {
   components: {

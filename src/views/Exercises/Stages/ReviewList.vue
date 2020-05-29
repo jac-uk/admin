@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Banner :message="message" />
     <h1>Review</h1>
     <ul>
       <li 
@@ -17,7 +18,17 @@
 </template>
 
 <script>
+import Banner from '@/components/Page/Banner';
+
 export default {
+  components: {
+    Banner,
+  },
+  data() {
+    return {
+      message: null,
+    };
+  },
   computed: {
     applicationRecords() {
       return this.$store.state.stageReview.records;
@@ -26,8 +37,10 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
+    this.message = 'LOL';
+    this.message = await this.$store.dispatch('stageReview/getMessages');
   },
 };
 </script>
