@@ -39,7 +39,6 @@ export default {
   },
   async created() {
     this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
-    this.message = 'LOL';
     this.message = await this.$store.dispatch('stageReview/getMessages');
   },
 };
