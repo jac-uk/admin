@@ -1,6 +1,6 @@
 <template>
   <button
-    class="govuk-button govuk-button--secondary jac-actionbutton"
+    class="govuk-button jac-actionbutton"
     :class="computedClasses"
     :disabled="isLoading"
     v-on="listeners"
@@ -37,6 +37,10 @@ export default {
       type: Number,
       default: 2000,
     },
+    type: {
+      type: String,
+      default: 'secondary',
+    },
   },
   data: () => ({
     isLoading: false,
@@ -55,6 +59,7 @@ export default {
         'jac-actionbutton--warning': this.hasError,
         'jac-actionbutton--success': this.isSuccess,
         'jac-actionbutton--loading': this.isLoading,
+        'govuk-button--secondary': this.type === 'secondary',
       };
     },
   },

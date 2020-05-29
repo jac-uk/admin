@@ -36,6 +36,7 @@
       v-if="!hasInitialisedAssessments"
     >
       <ActionButton
+        type="primary"
         @click="initialiseAssessments()"
       >
         Start Assessments
@@ -44,6 +45,7 @@
 
     <div v-else>
       <ActionButton
+        type="primary"
         @click="sendRequests()"
       >
         Send to all
