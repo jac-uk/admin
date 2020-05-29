@@ -11,7 +11,6 @@ export default {
   namespaced: true,
   getters: {
     availableStatuses() {
-      // @TODO conditional selection based on Exercise type
       return [
         APPLICATION_STATUS.REJECTED_BY_CHARACTER,
         APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
@@ -34,10 +33,15 @@ export default {
       return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { applicationId, status } ) => {
-      // @TODO based on provided status, work out whether stage should also be updated
+      let stageValue = EXERCISE_STAGE.RECOMMENDED; // initial value: 'recommended'
+
+      if (status === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT) {
+        stageValue = EXERCISE_STAGE.HANDOVER;
+      }
+
       const data = {
         status: status,
-        // stage: stageValue,
+        stage: stageValue,
       };
       const ref = collectionRef.doc(applicationId);
       await ref.update(data);
