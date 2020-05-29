@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { STATUS, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '../../helpers/constants';
+import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '../../helpers/constants';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -81,11 +81,6 @@ export default {
     }),
     updateStatus: async ( context, { applicationId, status, nextStage } ) => {
       let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
-
-      // Withdrawn
-      if (status === APPLICATION_STATUS.NO_TEST_SUBMITTED || status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
-        stageValue = STATUS.WITHDRAWN;
-      }
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
       if (nextStage[0]) {
