@@ -17,12 +17,20 @@
             class="govuk-header__navigation user-menu"
           >
             <li class="govuk-header__navigation-item">
-              <a
-                href="https://apply.judicialappointments.digital/vacancies" 
+              <RouterLink
+                :to="{ name: 'notifications' }"
                 class="govuk-header__link"
               >
-                Vacancies
-              </a>
+                Notifications
+              </RouterLink>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <RouterLink
+                :to="{ name: 'dashboard' }"
+                class="govuk-header__link"
+              >
+                Exercises
+              </RouterLink>
             </li>
             <li class="govuk-header__navigation-item">
               <a
@@ -81,6 +89,12 @@ export default {
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
     },
+  },
+  created() {
+    this.$store.dispatch('services/bind');
+  },
+  destroyed() {
+    this.$store.dispatch('services/unbind');
   },
   methods: {
     signOut() {

@@ -1,3 +1,5 @@
+import { APPLICATION_STATUS } from '@/helpers/constants';
+
 const formatDate = (value, type) => {
   if (value) {
     const objDate = new Date(Date.parse(value));
@@ -240,6 +242,31 @@ const lookup = (value) => {
       'write': 'Write',
       // 'xxx': 'xxx',
     };
+    // STAGES
+    lookup[APPLICATION_STATUS.PASSED_SIFT] = 'Passed Sift';
+    lookup[APPLICATION_STATUS.FAILED_SIFT] = 'Failed Sift';
+    lookup[APPLICATION_STATUS.SUBMITTED_FIRST_TEST] = 'Submitted first test';
+    lookup[APPLICATION_STATUS.FAILED_FIRST_TEST] = 'Failed First test';
+    lookup[APPLICATION_STATUS.SUBMITTED_SCENARIO_TEST] = 'Submitted scenario test';
+    lookup[APPLICATION_STATUS.PASSED_FIRST_TEST] = 'Passed first test';
+    lookup[APPLICATION_STATUS.FAILED_SCENARIO_TEST] = 'Failed scenario test';
+    lookup[APPLICATION_STATUS.PASSED_SCENARIO_TEST] = 'Passed scenario test';
+    lookup[APPLICATION_STATUS.FAILED_TELEPHONE_ASSESSMENT] = 'Failed telephone assessment';
+    lookup[APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT] = 'Passed telephone assessment';
+    lookup[APPLICATION_STATUS.NO_TEST_SUBMITTED] = 'No test Submitted';
+    lookup[APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME] = 'Test submitted over time';
+    lookup[APPLICATION_STATUS.WITHDREW_APPLICATION] = 'Withdrew application';
+    lookup[APPLICATION_STATUS.REJECTED_AS_INELIGIBLE] = 'Rejected as ineligible';
+    lookup[APPLICATION_STATUS.PASSED_SELECTION] = 'Passed Selection';
+    lookup[APPLICATION_STATUS.FAILED_SELECTION] = 'Failed Selection';
+    lookup[APPLICATION_STATUS.PASSED_BUT_NOT_RECOMMENDED] = 'Passed but not Recommended';
+    lookup[APPLICATION_STATUS.REJECTED_BY_CHARACTER] = 'Rejected by character';
+    lookup[APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT] = 'Approved for immediate appointment';
+    lookup[APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT] = 'Approved for future appointment';
+    lookup[APPLICATION_STATUS.SCC_TO_RECONSIDER] = 'SCC to reconsider';
+    lookup[APPLICATION_STATUS.INVITED_TO_SELECTION_DAY] = 'Invited To Selection Day';
+    // TODO add the missing ones from CONSTANTS
+    // RETURN - END of LOOKUP
     return lookup[value] || value;
   }
   // Default for unanswered question
