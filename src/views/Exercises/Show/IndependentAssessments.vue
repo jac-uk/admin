@@ -97,7 +97,6 @@
               Status
             </th>
             <th
-              v-if="hasStartedSending"
               scope="col"
               class="govuk-table__header app-custom-class"
             >
@@ -152,12 +151,22 @@
               {{ assessment.status | lookup }}
             </td>
             <td
-              v-if="hasStartedSending"
               class="govuk-table__cell govuk-!-padding-top-0"
             >
               <div class="moj-button-menu">
                 <div
-                  v-if="assessment.status === 'completed'"
+                  v-if="!hasStartedSending"
+                  class="moj-button-menu__wrapper"
+                >
+                  <ActionButton
+                    class="moj-button-menu__item"
+                    @click="testRequest(assessment.id)"
+                  >
+                    Test Request
+                  </ActionButton>
+                </div>
+                <div
+                  v-else-if="assessment.status === 'completed'"
                   class="moj-button-menu__wrapper"
                 >
                   <DownloadLink
@@ -192,6 +201,7 @@
               </div>
               <br>
               <a 
+                v-if="onStaging"
                 target="_blank"
                 :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
                 class="govuk-link"
@@ -234,6 +244,9 @@ export default {
     hasStartedSending() {
       return this.exercise.assessments && this.exercise.assessments.sent;
     },
+    onStaging() {
+      return window.location.href.indexOf('admin-staging') > 0;
+    },
   },
   created() {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
@@ -254,6 +267,9 @@ export default {
     },
     async sendReminder(assessmentId) {
       await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
+    },
+    async testRequest(assessmentId) {
+      await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
     },
   },
 };
