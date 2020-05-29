@@ -10,7 +10,7 @@
           Contact date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.contactIndependentAssessors | formatDate }}
+          {{ exercise.contactIndependentAssessors | formatDate('long') }}
         </dd>
         <dd class="govuk-summary-list__actions">
           <strong
@@ -26,7 +26,7 @@
           Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsReturnDate | formatDate }}
+          {{ exercise.independentAssessmentsReturnDate | formatDate('long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
