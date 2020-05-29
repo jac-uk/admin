@@ -7,7 +7,7 @@
   >
     <span
       v-if="isLoading"
-      class="spinner-border spinner-border-sm"
+      class="spinner spinner-border spinner-border-sm"
     />
     <slot
       v-else-if="isSuccess"
@@ -21,7 +21,12 @@
     >
       Error!
     </slot>
-    <slot>Submit</slot>
+    <span
+      v-if="!(isSuccess || hasError)"
+      :class="{ loading: isLoading }"
+    >
+      <slot>Submit</slot>
+    </span>
   </button>
 </template>
 <script>
@@ -76,3 +81,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.spinner {
+  position: absolute;
+  right: 50%;
+}
+.loading {
+  visibility: hidden;
+}
+</style>
