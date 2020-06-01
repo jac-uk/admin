@@ -4,6 +4,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '../../helpers/constants';
+import { lookup } from '@/filters';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -44,11 +45,26 @@ export default {
         stage: stageValue,
       };
       const ref = collectionRef.doc(applicationId);
-      await ref.update(data);
+      await ref.update(data)
+      .then(() => {
+        const valueMessage = lookup(status); 
+        context.commit('message', `Application id #${applicationId} changed to '${valueMessage}'`);
+      });
       // @TODO store message(s) for what's been updated so it/they can be retrieved later (on list page)
+    },
+    getMessages: (context) => {
+      const localMsg = context.state.message;
+      context.commit('message', null);
+      return localMsg;
     },
   },
   state: {
     records: [],
+    message: null,
+  },
+  mutations: {
+    message(state, msg) {
+      state.message = msg;
+    },
   },
 };
