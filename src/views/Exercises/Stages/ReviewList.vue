@@ -2,31 +2,58 @@
   <div>
     <Banner :message="message" />
     <h1>Review</h1>
-    <ul>
-      <li 
-        v-for="item in applicationRecords" 
-        :key="item.application.id"
-      >
-        <RouterLink
-          :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.application.id } }"
+    <form @submit.prevent="validateAndSave">
+      <button class="govuk-button govuk-!-margin-right-2">
+        Set status
+      </button>
+      <table>
+        <tr 
+          v-for="item in applicationRecords" 
+          :key="item.application.id"
         >
-          {{ item.candidate.fullName }}, {{ item.status }}
-        </RouterLink>
-      </li>
-    </ul>
+          <td>
+            <CheckboxGroup
+              id="selectedItems"
+              v-model="selectedItems"
+              label=""
+              hint=""
+              value=""
+            >
+              <CheckboxItem
+                :value="selectedItemStatus"
+                label=""
+              />
+            </CheckboxGroup>
+          </td>
+          <td>
+            <RouterLink
+              :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.application.id } }"
+            >
+              {{ item.candidate.fullName }}, {{ item.status }}
+            </RouterLink>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </template>
 
 <script>
 import Banner from '@/components/Page/Banner';
+import CheckboxGroup from '@/components/Form/CheckboxGroup';
+import CheckboxItem from '@/components/Form/CheckboxItem';
 
 export default {
   components: {
     Banner,
+    CheckboxGroup,
+    CheckboxItem,
   },
   data() {
     return {
       message: null,
+      selectedItems: null, 
+      selectedItemStatus: null,
     };
   },
   computed: {
