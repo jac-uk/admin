@@ -26,6 +26,7 @@ export default {
     message: {
       type: String,
       required: true,
+      // @TODO add validator?
     },
   },
 };
