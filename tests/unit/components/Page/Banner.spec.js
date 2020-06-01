@@ -19,12 +19,11 @@ describe('components/Page/Banner', () => {
       beforeEach(() => {
         prop = Banner.props.message;
       });
-
-      it('is required', () => {
-        expect(prop.required).toBe(true);
-      });   
       it('is a string', () => {
-          expect(prop.type()).toBeString();
+        expect(prop.type()).toBeString();
+      });
+      it('defaults as', () => {
+        expect(prop.default).toBe(null);
       });
     });
   });
