@@ -1,32 +1,14 @@
 <template>
-  <div>
-    <TabsList
-      :tabs="tabs"
-      :active-tab.sync="activeTab"
-    />
-    {{ activeTab }}
-  </div>
+  <Banner
+    :message="'gabe'"
+    :status="'success'"
+  />
 </template>
 <script>
-import TabsList from '@/components/Page/TabsList'; 
+import Banner from '@/components/Page/Banner'; 
 export default {
   components: {
-    TabsList,
-  },
-  data() {
-    return {
-      tabs: [
-        {
-          ref: 'one',
-          title: 'this is tab 1',
-        },
-        {
-          ref: 'two',
-          title: 'here is tab 2',
-        },
-      ],
-      activeTab: null,
-    };
+    Banner,
   },
 };
 </script>
