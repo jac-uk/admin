@@ -251,7 +251,7 @@ const router = new Router({
               },
             },
             {
-              path: 'review/edit',
+              path: 'review/:applicationId',
               component: ExerciseStagesReviewEdit,
               name: 'exercise-stages-review-edit',
               meta: {

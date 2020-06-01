@@ -132,17 +132,17 @@ export default {
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        pages.push({ 
-          page: 'Stages',
-          name: 'exercise-stages',
-          children: [
-            { page: 'Review', name: 'exercise-stages-review-list' },
-            { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
-            { page: 'Selected', name: 'exercise-stages-selected-list' },
-            { page: 'Recommended', name: 'exercise-stages-recommended-list' },
-            { page: 'Handover', name: 'exercise-stages-handover-list' },
-          ],
-        });
+        // pages.push({ 
+        //   page: 'Stages',
+        //   name: 'exercise-stages',
+        //   children: [
+        //     { page: 'Review', name: 'exercise-stages-review-list' },
+        //     { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
+        //     { page: 'Selected', name: 'exercise-stages-selected-list' },
+        //     { page: 'Recommended', name: 'exercise-stages-recommended-list' },
+        //     { page: 'Handover', name: 'exercise-stages-handover-list' },
+        //   ],
+        // });
         pages.push({
           page: 'Reports',
           name: 'exercise-show-reports',
