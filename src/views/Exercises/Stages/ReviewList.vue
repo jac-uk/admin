@@ -2,8 +2,11 @@
   <div>
     <Banner :message="message" />
     <h1>Review</h1>
-    <form @submit.prevent="validateAndSave">
-      <button class="govuk-button govuk-!-margin-right-2">
+    <form @submit.prevent="checkForm">
+      <button 
+        class="govuk-button govuk-!-margin-right-2" 
+        :disabled="isButtonDisabled"
+      >
         Set status
       </button>
       <table>
@@ -13,24 +16,20 @@
         >
           <td>
             <CheckboxGroup
-              id="selectedItems"
+              :id="`item-${item.application.id}`"
               v-model="selectedItems"
               label=""
               hint=""
               value=""
             >
               <CheckboxItem
-                :value="selectedItemStatus"
+                :value="item.application.id"
                 label=""
               />
             </CheckboxGroup>
           </td>
           <td>
-            <RouterLink
-              :to="{ name: 'exercise-stages-review-edit', params: { applicationId: item.application.id } }"
-            >
-              {{ item.candidate.fullName }}, {{ item.status }}
-            </RouterLink>
+            {{ item.candidate.fullName }}, {{ item.status }}
           </td>
         </tr>
       </table>
@@ -52,8 +51,7 @@ export default {
   data() {
     return {
       message: null,
-      selectedItems: null, 
-      selectedItemStatus: null,
+      selectedItems: null,
     };
   },
   computed: {
@@ -63,10 +61,21 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    isButtonDisabled() {
+      const isDisabled = this.selectedItems && this.selectedItems.length;
+      return !isDisabled;
+    },
   },
   async created() {
     this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
     this.message = await this.$store.dispatch('stageReview/getMessages');
+    this.$store.dispatch('stageReview/storeItems', { items: [] });
+  },
+  methods: {
+    checkForm() {
+      this.$store.dispatch('stageReview/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-review-edit' });
+    },
   },
 };
 </script>
