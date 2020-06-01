@@ -61,9 +61,6 @@ export default {
     };
   },
   computed: {
-    applicationId() {
-      return this.$route.params.applicationId;
-    },
     availableStatuses() {
       const shortlistingMethods = this.exercise.shortlistingMethods;
       const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
@@ -72,10 +69,20 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    itemsToChange() {
+      const selectedItems = this.$store.state.stageReview.selectedItems;
+      return selectedItems;
+    },
+  },
+  created() {
+    // on refresh if there's no IDs to change => redirect to the list
+    if (this.itemsToChange.length === 0) {
+      this.$router.push({ name: 'exercise-stages-review-list' });
+    }
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageReview/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus, nextStage: this.nextStageStatus });
+      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus });
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },
