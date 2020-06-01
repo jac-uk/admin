@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Banner :message="message" />
     <h1>Shortlisted</h1>
     <ul>
       <li 
@@ -18,7 +19,17 @@
 </template>
 
 <script>
+import Banner from '../../../components/Page/Banner';
+
 export default {
+  components: {
+    Banner,
+  },
+  data() {
+    return {
+      message: null,
+    };
+  },
   computed: {
     applicationRecords() {
       return this.$store.state.stageShortlisted.records;
@@ -27,8 +38,9 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch('stageShortlisted/bind', { exerciseId: this.exercise.id });
+    this.message = await this.$store.dispatch('stageShortlisted/getMessages');
   },
 };
 </script>

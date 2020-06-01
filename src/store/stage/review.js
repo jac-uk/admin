@@ -79,11 +79,17 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { applicationId, status } ) => {
-      // @TODO based on provided status, work out whether stage should also be updated
+    updateStatus: async ( context, { applicationId, status, nextStage } ) => {
+      let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
+
+      // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
+      if (nextStage[0]) {
+        stageValue = nextStage[0];
+      }
+
       const data = {
         status: status,
-        // stage: stageValue,
+        stage: stageValue,
       };
       const ref = collectionRef.doc(applicationId);
       await ref.update(data);
