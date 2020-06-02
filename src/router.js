@@ -287,7 +287,7 @@ const router = new Router({
               },
             },
             {
-              path: 'recommended/:applicationId',
+              path: 'recommended/edit',
               component: ExerciseStagesRecommendedEdit,
               name: 'exercise-stages-recommended-edit',
               meta: {
