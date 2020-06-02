@@ -1,20 +1,32 @@
 <template>
   <div>
     <Banner :message="message" />
-    <h1>Review</h1>
     <form @submit.prevent="checkForm">
-      <button 
-        class="govuk-button govuk-!-margin-right-2" 
-        :disabled="isButtonDisabled"
-      >
-        Set status
-      </button>
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h1 class="govuk-heading-l">
+            Review ({{ applicationRecords.length }})
+          </h1>
+        </div>
+        <div class="moj-page-header-actions__actions">
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button 
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+                :disabled="isButtonDisabled"
+              >
+                Set status
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <Table 
         data-key="id"
         :data="applicationRecords"
         :columns="[
           { title: 'Reference number' },
-          { title: 'Candidate' },
+          { title: 'Name' },
           { title: 'Status' },
         ]"
         multi-select
