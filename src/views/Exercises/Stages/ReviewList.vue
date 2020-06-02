@@ -9,49 +9,42 @@
       >
         Set status
       </button>
-      <table>
-        <tr 
-          v-for="item in applicationRecords" 
-          :key="item.application.id"
-        >
-          <td>
-            <CheckboxGroup
-              :id="`item-${item.application.id}`"
-              v-model="selectedItems"
-              label=""
-              hint=""
-              value=""
-            >
-              <CheckboxItem
-                :value="item.application.id"
-                label=""
-              />
-            </CheckboxGroup>
-          </td>
-          <td>
-            {{ item.candidate.fullName }}, {{ item.status }}
-          </td>
-        </tr>
-      </table>
+      <Table 
+        data-key="id"
+        :data="applicationRecords"
+        :columns="[
+          { title: 'Reference number' },
+          { title: 'Candidate' },
+          { title: 'Status' },
+        ]"
+        multi-select
+        :selection.sync="selectedItems"
+      >
+        <template #row="{row}">
+          <TableCell>{{ row.application.referenceNumber }}</TableCell>
+          <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>{{ row.status | lookup }}</TableCell>
+        </template>
+      </Table>   
     </form>
   </div>
 </template>
 
 <script>
 import Banner from '@/components/Page/Banner';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
+import Table from '@/components/Page/Table/Table'; 
+import TableCell from '@/components/Page/Table/TableCell'; 
 
 export default {
   components: {
     Banner,
-    CheckboxGroup,
-    CheckboxItem,
+    Table,
+    TableCell,
   },
   data() {
     return {
       message: null,
-      selectedItems: null,
+      selectedItems: [],
     };
   },
   computed: {
@@ -65,11 +58,25 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
+    selectAll: {
+      get: function () {
+        return this.applicationRecords ? this.selectedItems.length == this.applicationRecords.length : false;
+      },
+      set: function (value) {
+        var selectedItems = [];
+        if (value) {
+          this.applicationRecords.forEach((item) => {
+            selectedItems.push(item.id);
+          });
+        }
+        this.selectedItems = selectedItems;
+      },
+    }, 
   },
   async created() {
     this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
     this.message = await this.$store.dispatch('stageReview/getMessages');
-    this.$store.dispatch('stageReview/storeItems', { items: [] });
+    this.selectedItems = this.$store.state.stageReview.selectedItems;
   },
   methods: {
     checkForm() {
