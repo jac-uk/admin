@@ -48,10 +48,20 @@ export default {
     availableStatuses() {
       return this.$store.getters['stageSelected/availableStatuses'];
     },
+    itemsToChange() {
+      const selectedItems = this.$store.state.stageSelected.selectedItems;
+      return selectedItems;
+    },
+  },
+  created() {
+    // on refresh if there's no IDs to change => redirect to the list
+    if (this.itemsToChange.length === 0) {
+      this.$router.push({ name: 'exercise-stages-selected-list' });
+    }
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+      await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
       this.$router.push({ name: 'exercise-stages-selected-list' });
     },
   },
