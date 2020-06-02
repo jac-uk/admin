@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-if="diversity"
-  >
+  <div>
     <!-- diversity header -->
     <div class="govuk-grid-column-full">
       <div class="moj-page-header-actions">
@@ -29,7 +27,10 @@
           </div>
         </div>
       </div>
-      <div class="govuk-grid-row">
+      <div
+        v-if="diversity"
+        class="govuk-grid-row"
+      >
         <div class="govuk-grid-column-one-half">
           <div class="panel govuk-!-margin-bottom-9">
             <span class="govuk-caption-m">
@@ -52,7 +53,10 @@
     </div>
 
     <!-- results -->
-    <div class="govuk-grid-column-full">
+    <div
+      v-if="diversity"
+      class="govuk-grid-column-full"
+    >
       <table class="govuk-table table-with-border">
         <caption class="govuk-table__caption hidden">
           Gender by exercise stage
