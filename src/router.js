@@ -314,7 +314,7 @@ const router = new Router({
               },
           },
             {
-              path: 'shortlisted/:applicationId',
+              path: 'shortlisted/edit',
               component: ExerciseStagesShortlistEdit,
               name: 'exercise-stages-shortlist-edit',
               meta: {
