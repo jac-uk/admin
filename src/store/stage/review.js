@@ -74,7 +74,8 @@ export default {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
-        .where('active', '==', true);
+        .where('active', '==', true)
+        .limit(50);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
