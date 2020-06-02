@@ -1,9 +1,9 @@
 <template>
   <div>
-  <Banner
-    :message="'gabe'"
-    :status="'success'"
-  />
+    <Banner
+      :message="'gabe'"
+      :status="'success'"
+    />
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
