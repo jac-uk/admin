@@ -269,7 +269,7 @@ const router = new Router({
               },
             },
             {
-              path: 'selected/:applicationId',
+              path: 'selected/edit',
               component: ExerciseStagesSelectedEdit,
               name: 'exercise-stages-selected-edit',
               meta: {

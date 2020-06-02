@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageRecommended/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+      await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
       this.$router.push({ name: 'exercise-stages-recommended-list' });
     },
   },
