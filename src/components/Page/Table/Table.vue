@@ -99,7 +99,7 @@ export default {
         return this.data ? this.selectedItems.length == this.data.length : false;
       },
       set: function (value) {
-        var selectedItems = [];
+        let selectedItems = [];
         if (value) {
           this.data.forEach((item) => {
             selectedItems.push(item.id);
