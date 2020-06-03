@@ -78,16 +78,14 @@ export default {
   methods: {
     itemsWithIssues() {
       const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
-      console.log(selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length);
       return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
     async save() {
       if (this.itemsWithIssues()) {
         this.showWarning = true;
       } else {
-        console.log('gabe');
-        // await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
-        // this.$router.push({ name: 'exercise-stages-recommended-list' });
+        await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-recommended-list' });
       }
     },
   },
