@@ -104,7 +104,7 @@ export default {
       
       let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
       if (nextStage[0]) {
-        valueMessage = `${valueMessage} and moved to '${lookup(stageValue)}'`;
+        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
       }
       context.commit('message', valueMessage);
       context.commit('changeSelectedItems', []);

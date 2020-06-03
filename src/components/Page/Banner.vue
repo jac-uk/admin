@@ -16,7 +16,8 @@
       >
         <path d="M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z" />
       </svg>
-      <span class="moj-banner__assistive">success</span>{{ message }}
+      <span class="moj-banner__assistive">success</span>
+      <span class="moj-banner__text">{{ message }}</span>
     </div>
   </div>
 </template>
@@ -32,3 +33,11 @@ export default {
   },
 };
 </script>
+
+<style>
+  .moj-banner__text {
+    display: inline-block;
+    margin-left: 12px;
+    vertical-align: text-top;
+  }
+</style>
