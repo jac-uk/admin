@@ -66,7 +66,7 @@ export default {
       return selectedItems;
     },
     warningMessage() {
-      return 'This application has issues';
+      return this.itemsHaveIssues > 1 ? `${this.itemsHaveIssues()} candidates have issues` : '1 candidate has issues'
     },
   },
   created() {
@@ -76,18 +76,16 @@ export default {
     }
   },
   methods: {
-    hasIssues(applicationId) {
-      const individualApplication = this.applicationRecords.filter(item => item.application.id === applicationId)[0];
-      return (individualApplication.flags.eligibilityIssues || individualApplication.flags.characterIssues);
+    itemsHaveIssues() {
+      const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
     async save() {
-      if (this.itemsToChange.some((item) => { 
-        this.hasIssues(item) === false; 
-      })) {
+      if (this.itemsHaveIssues()) {
+        this.showWarning = true;
+      } else {
         await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
         this.$router.push({ name: 'exercise-stages-recommended-list' });
-      } else {
-        this.showWarning = true;
       }
     },
   },
