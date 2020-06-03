@@ -66,7 +66,7 @@ export default {
       return selectedItems;
     },
     warningMessage() {
-      return this.itemsHaveIssues > 1 ? `${this.itemsHaveIssues()} candidates have issues` : '1 candidate has issues'
+      return this.itemsHaveIssues > 1 ? `${this.itemsHaveIssues()} candidates have issues` : '1 candidate has issues';
     },
   },
   created() {
