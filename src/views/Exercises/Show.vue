@@ -132,8 +132,8 @@ export default {
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        if (this.exercise.applicationRecords && this.exercise.applicationRecords.initialised) {
-          const initialised = this.exercise.applicationRecords.initialised;
+        if (this.exercise.applicationRecords) {
+          const review = this.exercise.applicationRecords.review;
           const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
           const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
           const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
@@ -142,7 +142,7 @@ export default {
             page: 'Stages',
             name: 'exercise-stages',
             children: [
-              { page: `Review (${initialised})`, name: 'exercise-stages-review-list' },
+              { page: `Review (${review})`, name: 'exercise-stages-review-list' },
               { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
               { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
               { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
