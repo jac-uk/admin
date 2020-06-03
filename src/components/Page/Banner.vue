@@ -34,7 +34,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
   .moj-banner__text {
     display: inline-block;
     margin-left: 12px;
