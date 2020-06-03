@@ -66,7 +66,7 @@ export default {
       return selectedItems;
     },
     warningMessage() {
-      return this.itemsHaveIssues > 1 ? `${this.itemsHaveIssues()} candidates have issues` : '1 candidate has issues';
+      return (this.itemsWithIssues() > 1) ? `${this.itemsWithIssues()} candidates have issues` : '1 candidate has issues';
     },
   },
   created() {
@@ -76,16 +76,18 @@ export default {
     }
   },
   methods: {
-    itemsHaveIssues() {
+    itemsWithIssues() {
       const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      console.log(selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length);
       return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
     async save() {
-      if (this.itemsHaveIssues()) {
+      if (this.itemsWithIssues()) {
         this.showWarning = true;
       } else {
-        await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
-        this.$router.push({ name: 'exercise-stages-recommended-list' });
+        console.log('gabe');
+        // await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
+        // this.$router.push({ name: 'exercise-stages-recommended-list' });
       }
     },
   },
