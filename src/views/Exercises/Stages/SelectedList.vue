@@ -59,11 +59,6 @@ export default {
       selectedItems: [],
     };
   },
-  data() {
-    return {
-      message: null,
-    };
-  },
   computed: {
     applicationRecords() {
       return this.$store.state.stageSelected.records;

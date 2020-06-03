@@ -78,15 +78,15 @@ export default {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
     },
+    warningMessage() {
+      return 'This application has issues';
+    },
   },
   created() {
     // on refresh if there's no IDs to change => redirect to the list
     if (this.itemsToChange.length === 0) {
       this.$router.push({ name: 'exercise-stages-selected-list' });
     }
-    warningMessage() {
-      return 'This application has issues';
-    },
   },
   methods: {
     hasIssues(applicationId) {
@@ -105,6 +105,7 @@ export default {
       } else {
         await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
         this.$router.push({ name: 'exercise-stages-selected-list' });
+      }
     },
   },
 };
