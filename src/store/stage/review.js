@@ -6,7 +6,6 @@ import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
 import { lookup } from '@/filters';
 
-
 const collectionRef = firestore.collection('applicationRecords');
 
 export default {
