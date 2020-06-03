@@ -74,7 +74,6 @@ export default {
     availableStatuses() {
       return this.$store.getters['stageSelected/availableStatuses'];
     },
-<<<<<<< HEAD
     itemsToChange() {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
@@ -85,25 +84,11 @@ export default {
     if (this.itemsToChange.length === 0) {
       this.$router.push({ name: 'exercise-stages-selected-list' });
     }
-  },
-  methods: {
-    async save() {
-      await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-selected-list' });
-=======
     warningMessage() {
       return 'This application has issues';
     },
   },
   methods: {
-    async save() {
-      if (!this.confirmedSave && this.hasIssues(this.applicationId)){
-        this.showWarning = true;
-      } else {
-        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
-        this.$router.push({ name: 'exercise-stages-selected-list' });
-      }
-    },
     hasIssues(applicationId) {
       const individualApplication = this.applicationRecords.filter(item => item.application.id === applicationId)[0];
       return (individualApplication.flags.eligibilityIssues || individualApplication.flags.characterIssues);
@@ -113,7 +98,13 @@ export default {
     },
     cancel(){
       this.showWarning = false;
->>>>>>> cd7deeb... Make Banner show for apps w/issues in selectedEdit
+    },
+    async save() {
+      if (!this.confirmedSave && this.hasIssues(this.applicationId)){
+        this.showWarning = true;
+      } else {
+        await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-selected-list' });
     },
   },
 };
