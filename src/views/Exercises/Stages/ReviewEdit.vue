@@ -42,7 +42,7 @@ import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
-import { EXERCISE_STAGE } from '../../../helpers/constants';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   components: {
