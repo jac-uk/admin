@@ -103,9 +103,12 @@ export default {
       });
       await batch.commit();
       
-      const valueMessage = lookup(status); 
-      context.commit('message', `Updated ${selectedItems.length} candidates to '${valueMessage}'`);
-
+      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      if (nextStage[0]) {
+        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+      }
+      context.commit('message', valueMessage);
+      context.commit('changeSelectedItems', []);
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);

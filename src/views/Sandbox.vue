@@ -1,5 +1,9 @@
 <template>
   <div>
+    <Banner
+      :message="'gabe'"
+      :status="'success'"
+    />
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
@@ -26,6 +30,7 @@
   </div>
 </template>
 <script>
+import Banner from '@/components/Page/Banner'; 
 import TabsList from '@/components/Page/TabsList'; 
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
@@ -35,6 +40,7 @@ export default {
     TabsList,
     Table,
     TableCell,
+    Banner,
   },
   data() {
     return {

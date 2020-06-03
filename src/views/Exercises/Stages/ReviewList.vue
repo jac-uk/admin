@@ -1,11 +1,14 @@
 <template>
   <div>
-    <Banner :message="message" />
+    <Banner 
+      :message="message" 
+      status="success" 
+    />
     <form @submit.prevent="checkForm">
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
-            Review ({{ applicationRecords.length }})
+            Review ({{ totalApplicationRecords }})
           </h1>
         </div>
         <div class="moj-page-header-actions__actions">
@@ -62,6 +65,9 @@ export default {
   computed: {
     applicationRecords() {
       return this.$store.state.stageReview.records;
+    },
+    totalApplicationRecords() {
+      return this.exercise.applicationRecords.review || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
