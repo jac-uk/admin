@@ -67,7 +67,7 @@ export default {
       return this.$store.state.stageReview.records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.initialised || 0;
+      return this.exercise.applicationRecords.review || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
