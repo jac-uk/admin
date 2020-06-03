@@ -8,18 +8,6 @@
             Handover ({{ applicationRecords.length }})
           </h1>
         </div>
-        <div class="moj-page-header-actions__actions">
-          <div class="moj-button-menu">
-            <div class="moj-button-menu__wrapper">
-              <button 
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
-                :disabled="isButtonDisabled"
-              >
-                Set status
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
       <Table 
         data-key="id"
@@ -29,8 +17,6 @@
           { title: 'Name' },
           { title: 'Status' },
         ]"
-        multi-select
-        :selection.sync="selectedItems"
       >
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
