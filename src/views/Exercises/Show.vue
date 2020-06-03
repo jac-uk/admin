@@ -132,7 +132,7 @@ export default {
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        if (this.exercise.applicationRecords && this.exercise.applicationRecords.initialised) {
+        if (this.exercise.applicationRecords) {
           const review = this.exercise.applicationRecords.review;
           const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
           const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
