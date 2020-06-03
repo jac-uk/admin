@@ -1,5 +1,24 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <div
+      v-if="showWarning"
+    >
+      <Banner
+        :message="warningMessage"
+      />
+      <button
+        class="govuk-button govuk-!-margin-right-1"
+        @click="confirm"
+      >
+        Proceed with change
+      </button>      
+      <button 
+        class="govuk-button govuk-button--secondary"
+        @click="cancel"
+      >
+        Cancel and amend
+      </button>
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -24,6 +43,7 @@
 </template>
 
 <script>
+import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
@@ -31,6 +51,7 @@ import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    Banner,
     ErrorSummary,
     RadioGroup,
     RadioItem,
@@ -39,9 +60,14 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
+      confirmedSave: false,
+      showWarning: false,
     };
   },
   computed: {
+    applicationRecords() {
+      return this.$store.state.stageSelected.records;
+    },
     applicationId() {
       return this.$route.params.applicationId;
     },
@@ -52,6 +78,9 @@ export default {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
     },
+    warningMessage() {
+      return 'This application has issues';
+    },
   },
   created() {
     // on refresh if there's no IDs to change => redirect to the list
@@ -60,9 +89,23 @@ export default {
     }
   },
   methods: {
+    hasIssues(applicationId) {
+      const individualApplication = this.applicationRecords.filter(item => item.application.id === applicationId)[0];
+      return (individualApplication.flags.eligibilityIssues || individualApplication.flags.characterIssues);
+    },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+    },
     async save() {
-      await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-selected-list' });
+      if (!this.confirmedSave && this.hasIssues(this.applicationId)){
+        this.showWarning = true;
+      } else {
+        await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-selected-list' });
+      }
     },
   },
 };
