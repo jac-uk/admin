@@ -48,10 +48,20 @@ export default {
     availableStatuses() {
       return this.$store.getters['stageRecommended/availableStatuses'];
     },
+    itemsToChange() {
+      const selectedItems = this.$store.state.stageRecommended.selectedItems;
+      return selectedItems;
+    },
+  },
+  created() {
+    // on refresh if there's no IDs to change => redirect to the list
+    if (this.itemsToChange.length === 0) {
+      this.$router.push({ name: 'exercise-stages-recommended-list' });
+    }
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageRecommended/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+      await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
       this.$router.push({ name: 'exercise-stages-recommended-list' });
     },
   },
