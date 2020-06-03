@@ -30,6 +30,7 @@
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
+          { title: 'Issues' },
           { title: 'Status' },
         ]"
         multi-select
@@ -38,6 +39,7 @@
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>{{ (row.flagIssues ? 'Yes' : 'No') }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
         </template>
       </Table>   
@@ -49,6 +51,7 @@
 import Banner from '@/components/Page/Banner';
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import { transformStageData } from '@/helpers/data'; 
 
 export default {
   components: {
@@ -64,7 +67,9 @@ export default {
   },
   computed: {
     applicationRecords() {
-      return this.$store.state.stageRecommended.records;
+      let records = this.$store.state.stageRecommended.records;
+      const transformedRecords = transformStageData(records);
+      return transformedRecords;
     },
     totalApplicationRecords() {
       return this.exercise.applicationRecords.recommended || 0;
@@ -75,6 +80,10 @@ export default {
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
+    },
+    candidatesIssues(myFlags) {
+      console.log('myFlags', myFlags);
+      return 'YES and NO';
     },
   },
   async created() {
