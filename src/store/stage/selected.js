@@ -34,8 +34,9 @@ export default {
     }),
     updateStatus: async ( context, { status } ) => {
       let stageValue = EXERCISE_STAGE.SELECTED; // initial value: 'selected'
+      const moveToNextStage = (status === APPLICATION_STATUS.PASSED_SELECTION);
 
-      if (status === APPLICATION_STATUS.PASSED_SELECTION) {
+      if (moveToNextStage) {
         stageValue = EXERCISE_STAGE.RECOMMENDED;
       }
 
@@ -51,8 +52,11 @@ export default {
       });
       await batch.commit();
       
-      const valueMessage = lookup(status); 
-      context.commit('message', `Updated ${selectedItems.length} candidates to '${valueMessage}'`);
+      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      if (moveToNextStage) {
+        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+      }
+      context.commit('message', valueMessage);
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);
