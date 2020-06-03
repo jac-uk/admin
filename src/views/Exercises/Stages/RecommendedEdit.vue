@@ -7,6 +7,22 @@
         :message="warningMessage"
       />
     </div>
+    <div 
+      v-if="askForConfirmation"
+    >
+      <button
+        class="govuk-button govuk-!-margin-right-1"
+        @click="confirm"
+      >
+        Proceed with change
+      </button>      
+      <button 
+        class="govuk-button govuk-button--secondary"
+        @click="cancel"
+      >
+        Cancel and amend
+      </button>
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -49,6 +65,8 @@ export default {
     return {
       newSelectedStatus: null,
       showWarning: false,
+      confirmedSave: false,
+      askForConfirmation: false,
     };
   },
   computed: {
@@ -80,8 +98,19 @@ export default {
       const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
       return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+      this.askForConfirmation = false;
+    },
     async save() {
-      if (this.itemsWithIssues()) {
+      if (this.itemsWithIssues() && this.newSelectedStatus === 'approvedForImmediateAppointment'){
+        this.askForConfirmation = false;
+        this.showWarning = true;
+      } else if (!this.confirmedSave && this.itemsWithIssues()) {
+        this.askForConfirmation = true;
         this.showWarning = true;
       } else {
         await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
