@@ -91,10 +91,14 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('services/bind');
+    if (this.isSignedIn) {
+      this.$store.dispatch('services/bind');
+    }
   },
   destroyed() {
-    this.$store.dispatch('services/unbind');
+    if (this.isSignedIn) {
+      this.$store.dispatch('services/unbind');
+    }
   },
   methods: {
     signOut() {
