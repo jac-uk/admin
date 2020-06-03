@@ -41,7 +41,6 @@ export default {
 
 <style scoped>
   .moj-banner__text {
-    display: inline-block;
     margin-left: 12px;
     vertical-align: text-top;
   }
