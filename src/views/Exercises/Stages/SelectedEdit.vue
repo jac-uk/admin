@@ -68,9 +68,6 @@ export default {
     applicationRecords() {
       return this.$store.state.stageSelected.records;
     },
-    applicationId() {
-      return this.$route.params.applicationId;
-    },
     availableStatuses() {
       return this.$store.getters['stageSelected/availableStatuses'];
     },
@@ -89,9 +86,9 @@ export default {
     }
   },
   methods: {
-    hasIssues(applicationId) {
-      const individualApplication = this.applicationRecords.filter(item => item.application.id === applicationId)[0];
-      return (individualApplication.flags.eligibilityIssues || individualApplication.flags.characterIssues);
+    itemsHaveIssues() {
+      const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
     confirm(){
       this.confirmedSave = true;
@@ -100,7 +97,7 @@ export default {
       this.showWarning = false;
     },
     async save() {
-      if (!this.confirmedSave && this.hasIssues(this.applicationId)){
+      if (!this.confirmedSave && this.itemsHaveIssues()){
         this.showWarning = true;
       } else {
         await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
