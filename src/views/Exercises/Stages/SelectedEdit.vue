@@ -1,5 +1,24 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <div
+      v-if="showWarning"
+    >
+      <Banner
+        :message="warningMessage"
+      />
+      <button
+        class="govuk-button govuk-!-margin-right-1"
+        @click="confirm"
+      >
+        Proceed with change
+      </button>      
+      <button 
+        class="govuk-button govuk-button--secondary"
+        @click="cancel"
+      >
+        Cancel and amend
+      </button>
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -24,6 +43,7 @@
 </template>
 
 <script>
+import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
@@ -31,6 +51,7 @@ import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    Banner,
     ErrorSummary,
     RadioGroup,
     RadioItem,
@@ -39,9 +60,14 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
+      confirmedSave: false,
+      showWarning: false,
     };
   },
   computed: {
+    applicationRecords() {
+      return this.$store.state.stageSelected.records;
+    },
     applicationId() {
       return this.$route.params.applicationId;
     },
