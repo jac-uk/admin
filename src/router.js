@@ -251,7 +251,7 @@ const router = new Router({
               },
             },
             {
-              path: 'review/:applicationId',
+              path: 'review/edit',
               component: ExerciseStagesReviewEdit,
               name: 'exercise-stages-review-edit',
               meta: {
@@ -269,7 +269,7 @@ const router = new Router({
               },
             },
             {
-              path: 'selected/:applicationId',
+              path: 'selected/edit',
               component: ExerciseStagesSelectedEdit,
               name: 'exercise-stages-selected-edit',
               meta: {
@@ -287,7 +287,7 @@ const router = new Router({
               },
             },
             {
-              path: 'recommended/:applicationId',
+              path: 'recommended/edit',
               component: ExerciseStagesRecommendedEdit,
               name: 'exercise-stages-recommended-edit',
               meta: {
@@ -314,7 +314,7 @@ const router = new Router({
               },
           },
             {
-              path: 'shortlisted/:applicationId',
+              path: 'shortlisted/edit',
               component: ExerciseStagesShortlistEdit,
               name: 'exercise-stages-shortlist-edit',
               meta: {

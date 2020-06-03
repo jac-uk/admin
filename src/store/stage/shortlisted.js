@@ -3,8 +3,8 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '../../helpers/constants';
-import { lookup } from '../../filters';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { lookup } from '@/filters';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -24,17 +24,19 @@ export default {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.SHORTLISTED)
-        .where('active', '==', true);
+        .where('active', '==', true)
+        .limit(50);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { applicationId, status } ) => {
+    updateStatus: async ( context, { status } ) => {
       let stageValue = EXERCISE_STAGE.SHORTLISTED; // initial value: 'shortlisted'
+      const moveToNextStage = (status === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY);
 
-      if (status === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
+      if (moveToNextStage) {
         stageValue = EXERCISE_STAGE.SELECTED;
       }
 
@@ -42,13 +44,23 @@ export default {
         status: status,
         stage: stageValue,
       };
-      const ref = collectionRef.doc(applicationId);
-      await ref.update(data)
-      .then(() => {
-        const valueMessage = lookup(status); 
-        context.commit('message', `Application id #${applicationId} changed to '${valueMessage}'`);
+      
+      const selectedItems = context.state.selectedItems;
+      const batch = firestore.batch();
+      selectedItems.map( item => {
+        const ref = collectionRef.doc(item);
+        batch.update(ref, data);
       });
-      // @TODO store message(s) for what's been updated so it/they can be retrieved later (on list page)
+      await batch.commit();
+      
+      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      if (moveToNextStage) {
+        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+      }
+      context.commit('message', valueMessage);
+    },
+    storeItems: ( context, { items }) => {
+      context.commit('changeSelectedItems', items);
     },
     getMessages: (context) => {
       const localMsg = context.state.message;
@@ -59,10 +71,14 @@ export default {
   state: {
     records: [],
     message: null,
+    selectedItems: [],
   },
   mutations: {
     message(state, msg) {
       state.message = msg;
+    },
+    changeSelectedItems(state, items) {
+      state.selectedItems = items;
     },
   },
 };

@@ -132,17 +132,24 @@ export default {
             { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
           ],
         });
-        // pages.push({ 
-        //   page: 'Stages',
-        //   name: 'exercise-stages',
-        //   children: [
-        //     { page: 'Review', name: 'exercise-stages-review-list' },
-        //     { page: 'Shortlisted', name: 'exercise-stages-shortlist-list' },
-        //     { page: 'Selected', name: 'exercise-stages-selected-list' },
-        //     { page: 'Recommended', name: 'exercise-stages-recommended-list' },
-        //     { page: 'Handover', name: 'exercise-stages-handover-list' },
-        //   ],
-        // });
+        if (this.exercise.applicationRecords) {
+          const review = this.exercise.applicationRecords.review;
+          const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
+          const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
+          const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
+          const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
+          pages.push({ 
+            page: 'Stages',
+            name: 'exercise-stages',
+            children: [
+              { page: `Review (${review})`, name: 'exercise-stages-review-list' },
+              { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+              { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
+              { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
+              { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
+            ],
+          });
+        }
         pages.push({
           page: 'Reports',
           name: 'exercise-show-reports',
