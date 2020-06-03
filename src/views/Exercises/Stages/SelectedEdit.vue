@@ -1,5 +1,24 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <div
+      v-if="showWarning"
+    >
+      <Banner
+        :message="warningMessage"
+      />
+      <button
+        class="govuk-button govuk-!-margin-right-1"
+        @click="confirm"
+      >
+        Proceed with change
+      </button>      
+      <button 
+        class="govuk-button govuk-button--secondary"
+        @click="cancel"
+      >
+        Cancel and amend
+      </button>
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -24,6 +43,7 @@
 </template>
 
 <script>
+import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
@@ -31,6 +51,7 @@ import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    Banner,
     ErrorSummary,
     RadioGroup,
     RadioItem,
@@ -39,11 +60,13 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
+      confirmedSave: false,
+      showWarning: false,
     };
   },
   computed: {
-    applicationId() {
-      return this.$route.params.applicationId;
+    applicationRecords() {
+      return this.$store.state.stageSelected.records;
     },
     availableStatuses() {
       return this.$store.getters['stageSelected/availableStatuses'];
@@ -51,6 +74,9 @@ export default {
     itemsToChange() {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
+    },
+    warningMessage() {
+      return 'This application has issues';
     },
   },
   created() {
@@ -60,9 +86,23 @@ export default {
     }
   },
   methods: {
+    itemsHaveIssues() {
+      const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
+    },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+    },
     async save() {
-      await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-selected-list' });
+      if (!this.confirmedSave && this.itemsHaveIssues()){
+        this.showWarning = true;
+      } else {
+        await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-selected-list' });
+      }
     },
   },
 };
