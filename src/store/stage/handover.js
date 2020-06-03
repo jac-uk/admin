@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE } from '../../helpers/constants';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 const collectionRef = firestore.collection('applicationRecords');
 
