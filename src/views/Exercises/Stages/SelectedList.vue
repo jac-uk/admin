@@ -1,6 +1,9 @@
 <template>
   <div>
-    <Banner :message="message" />
+    <Banner 
+      :message="message" 
+      status="success" 
+    />
     <form @submit.prevent="checkForm">
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
