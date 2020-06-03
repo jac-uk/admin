@@ -52,6 +52,9 @@ export default {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
     },
+    warningMessage() {
+      return 'This application has issues';
+    },
   },
   created() {
     // on refresh if there's no IDs to change => redirect to the list
@@ -60,9 +63,23 @@ export default {
     }
   },
   methods: {
+    hasIssues(applicationId) {
+      const individualApplication = this.applicationRecords.filter(item => item.application.id === applicationId)[0];
+      return (individualApplication.flags.eligibilityIssues || individualApplication.flags.characterIssues);
+    },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+    },
     async save() {
-      await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-selected-list' });
+      if (!this.confirmedSave && this.hasIssues(this.applicationId)){
+        this.showWarning = true;
+      } else {
+        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-selected-list' });
+      }
     },
   },
 };
