@@ -8,7 +8,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
-            Handover ({{ applicationRecords.length }})
+            Handover ({{ totalApplicationRecords }})
           </h1>
         </div>
       </div>
@@ -51,6 +51,9 @@ export default {
   computed: {
     applicationRecords() {
       return this.$store.state.stageHandover.records;
+    },
+    totalApplicationRecords() {
+      return this.exercise.applicationRecords.handover || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
