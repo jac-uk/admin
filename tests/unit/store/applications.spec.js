@@ -1,6 +1,6 @@
 import applications from '@/store/applications';
 
-describe('store/vacancies', () => {
+describe('store/applications', () => {
   const getters = applications.getters;
   let state;
 
