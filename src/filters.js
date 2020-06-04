@@ -68,6 +68,16 @@ const slugify = (text) => {
     .replace(/--+/g, '-');
 };
 
+const candidateHasIssues = row => {
+  let flag = false;
+  const flags = row.flags;
+  if (flags.characterIssues || flags.eligibilityIssues) {
+    flag = true;
+  }
+
+  return flag ? 'Yes' : 'No';
+};
+
 const lookup = (value) => {
   if (typeof value === 'string') {
     // @TODO: extract lookup values
@@ -284,5 +294,6 @@ export {
   toHumanCase,
   toYesNo,
   slugify,
+  candidateHasIssues,
   lookup
 };
