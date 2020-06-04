@@ -7,22 +7,6 @@
         :message="warningMessage"
       />
     </div>
-    <div 
-      v-if="askForConfirmation"
-    >
-      <button
-        class="govuk-button govuk-!-margin-right-1"
-        @click="confirm"
-      >
-        Proceed with change
-      </button>      
-      <button 
-        class="govuk-button govuk-button--secondary"
-        @click="cancel"
-      >
-        Cancel and amend
-      </button>
-    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -66,7 +50,6 @@ export default {
       newSelectedStatus: null,
       showWarning: false,
       confirmedSave: false,
-      askForConfirmation: false,
     };
   },
   computed: {
@@ -103,14 +86,9 @@ export default {
     },
     cancel(){
       this.showWarning = false;
-      this.askForConfirmation = false;
     },
     async save() {
       if (this.itemsWithIssues() && this.newSelectedStatus === 'approvedForImmediateAppointment'){
-        this.askForConfirmation = false;
-        this.showWarning = true;
-      } else if (!this.confirmedSave && this.itemsWithIssues()) {
-        this.askForConfirmation = true;
         this.showWarning = true;
       } else {
         await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
