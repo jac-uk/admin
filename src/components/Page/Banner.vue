@@ -14,7 +14,9 @@
         height="25"
         width="25"
       >
-        <path :d="status === 'success' ? 'M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z' : 'M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v.8C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z'" />
+        <path 
+          :d="returnSvgPath(status)">
+        </path>
       </svg>
       <span class="moj-banner__assistive">{{ status }}</span>
       <span class="moj-banner__text">{{ message }}</span>
@@ -34,6 +36,17 @@ export default {
       type: String,
       default: null,
       // @TODO add validator?
+    },
+  },
+  methods: {
+    returnSvgPath(status) {
+      if (status === 'success') {
+        return 'M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z';
+      } else if (status === 'warning') {
+        return 'M13.6,15.4h-2.3v-4.5h2.3V15.4z M13.6,19.8h-2.3v-2.2h2.3V19.8z M0,23.2h25L12.5,2L0,23.2z';
+      } else {
+        return 'M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v.8C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z';
+      }
     },
   },
 };

@@ -5,6 +5,7 @@
     >
       <Banner
         :message="warningMessage"
+        status="warning"
       />
     </div>
     <ErrorSummary
