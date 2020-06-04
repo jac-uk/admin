@@ -100,7 +100,7 @@ export default {
       if (!this.confirmedSave && this.itemsHaveIssues()){
         this.showWarning = true;
       } else {
-        await this.$store.dispatch('stageSelected/updateStatus', { status: this.newSelectedStatus });
+        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
         this.$router.push({ name: 'exercise-stages-selected-list' });
       }
     },

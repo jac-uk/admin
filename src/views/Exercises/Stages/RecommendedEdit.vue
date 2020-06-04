@@ -1,5 +1,12 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <div
+      v-if="showWarning"
+    >
+      <Banner
+        :message="warningMessage"
+      />
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -24,6 +31,8 @@
 </template>
 
 <script>
+import { APPLICATION_STATUS } from '@/helpers/constants';
+import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
@@ -31,6 +40,7 @@ import RadioItem from '@/components/Form/RadioItem';
 
 export default {
   components: {
+    Banner,
     ErrorSummary,
     RadioGroup,
     RadioItem,
@@ -39,9 +49,14 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
+      showWarning: false,
+      confirmedSave: false,
     };
   },
   computed: {
+    applicationRecords() {
+      return this.$store.state.stageRecommended.records;
+    },
     applicationId() {
       return this.$route.params.applicationId;
     },
@@ -52,6 +67,9 @@ export default {
       const selectedItems = this.$store.state.stageRecommended.selectedItems;
       return selectedItems;
     },
+    warningMessage() {
+      return (this.itemsWithIssues() > 1) ? `${this.itemsWithIssues()} candidates have issues` : '1 candidate has issues';
+    },
   },
   created() {
     // on refresh if there's no IDs to change => redirect to the list
@@ -60,9 +78,23 @@ export default {
     }
   },
   methods: {
+    itemsWithIssues() {
+      const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
+    },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+    },
     async save() {
-      await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-recommended-list' });
+      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT){
+        this.showWarning = true;
+      } else {
+        await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
+        this.$router.push({ name: 'exercise-stages-recommended-list' });
+      }
     },
   },
 };
