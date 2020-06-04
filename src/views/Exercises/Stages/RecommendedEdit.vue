@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { APPLICATION_STATUS } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
@@ -88,7 +89,7 @@ export default {
       this.showWarning = false;
     },
     async save() {
-      if (this.itemsWithIssues() && this.newSelectedStatus === 'approvedForImmediateAppointment'){
+      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT){
         this.showWarning = true;
       } else {
         await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
