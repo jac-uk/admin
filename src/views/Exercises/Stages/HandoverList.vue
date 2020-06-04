@@ -18,12 +18,14 @@
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
+          { title: 'Issues' },
           { title: 'Status' },
         ]"
       >
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
         </template>
       </Table>   

@@ -30,6 +30,7 @@
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
+          { title: 'Issues' },
           { title: 'Status' },
         ]"
         multi-select
@@ -38,6 +39,7 @@
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
         </template>
       </Table>   
@@ -64,7 +66,8 @@ export default {
   },
   computed: {
     applicationRecords() {
-      return this.$store.state.stageRecommended.records;
+      const records = this.$store.state.stageRecommended.records;
+      return records;
     },
     totalApplicationRecords() {
       return this.exercise.applicationRecords.recommended || 0;
