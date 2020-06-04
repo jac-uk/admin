@@ -15,8 +15,8 @@
         width="25"
       >
         <path 
-          :d="returnSvgPath(status)">
-        </path>
+          :d="returnSvgPath(status)"
+        />
       </svg>
       <span class="moj-banner__assistive">{{ status }}</span>
       <span class="moj-banner__text">{{ message }}</span>
