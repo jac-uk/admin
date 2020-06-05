@@ -34,7 +34,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status } ) => {
+    updateStatus: async ( context, { status, empVal } ) => {
       let stageValue = EXERCISE_STAGE.RECOMMENDED; // initial value: 'recommended'
       const moveToNextStage = (status === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT);
       
@@ -46,6 +46,10 @@ export default {
         status: status,
         stage: stageValue,
       };
+
+      if (empVal.shouldUpdate){
+        data['flags.empApplied'] = empVal.newStatus;
+      }
 
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();

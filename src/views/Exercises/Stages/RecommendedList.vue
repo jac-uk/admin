@@ -32,6 +32,7 @@
           { title: 'Name' },
           { title: 'Issues' },
           { title: 'Status' },
+          {title: 'EMP Status'}
         ]"
         multi-select
         :selection.sync="selectedItems"
@@ -41,6 +42,7 @@
           <TableCell>{{ row.candidate.fullName }}</TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
+          <TableCell>{{ row | candidateHasEMP }}</TableCell>
         </template>
       </Table>   
     </form>
