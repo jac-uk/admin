@@ -28,19 +28,42 @@
         :value="nextStageValueStatus"
         label="Shortlisted"
       />
-    </CheckboxGroup>    
-    <CheckboxGroup
-      id="emp-flag"
-      v-model="editEMPFlagStatus"
-      label="Equal Merit Provison"
-      hint=""
-      value=""
+    </CheckboxGroup> 
+    <RadioGroup
+      id="is-more-info-needed"
+      v-model="editEMPFlag"
+      label="Edit EMP Flag"
+      hint="Change candidates' Equal Merit Provision status"
+      required
+      :messages="{
+        required: 'Please specify whether you\'d like to add more information'
+      }"          
     >
-      <CheckboxItem
-        :value="editEMPFlagValueStatus"
-        label="Equal Merit Provision"
+      <RadioItem
+        :value="true"
+        label="Yes"
+      >
+        <RadioGroup
+          id="select-more-info"
+          v-model="editEMPFlagStatus"
+          label="EMP Status"
+          hint=""
+        >
+          <RadioItem
+            :value="true"
+            label="Applied"
+          />
+          <RadioItem
+            :value="false"
+            label="Not Applied"
+          />                  
+        </RadioGroup> 
+      </RadioItem>
+      <RadioItem
+        :value="false"
+        label="No"
       />
-    </CheckboxGroup>    
+    </RadioGroup>
     <button class="govuk-button">
       Save and continue
     </button>      
@@ -70,8 +93,8 @@ export default {
       newSelectedStatus: null,
       nextStageStatus: null,
       nextStageValueStatus: EXERCISE_STAGE.SHORTLISTED,
+      editEMPFlag: null,
       editEMPFlagStatus: null,
-      editEMPFlagValueStatus: 'empFlag',
     };
   },
   computed: {
@@ -96,7 +119,7 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus, empVal: this.editEMPFlagStatus });
+      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus, empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus } });
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },

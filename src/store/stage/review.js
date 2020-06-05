@@ -88,19 +88,17 @@ export default {
       if (nextStage[0]) {
         stageValue = nextStage[0];
       }
-
-      empVal;
+      
       // console.log(context.state.selectedItems);
-
+      
       const data = {
         status: status,
         stage: stageValue,
-        // flags: {
-        //   // characterIssues: false,
-        //   // eligibilityIssues: false,
-        //   empApplied: !!empVal[0],
-        // },
       };
+      
+      if (empVal.shouldUpdate){
+        data['flags.empApplied'] = empVal.newStatus;
+      }
 
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
