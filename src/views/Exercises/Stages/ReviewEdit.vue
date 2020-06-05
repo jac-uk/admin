@@ -29,6 +29,18 @@
         label="Shortlisted"
       />
     </CheckboxGroup>    
+    <CheckboxGroup
+      id="emp-flag"
+      v-model="editEMPFlagStatus"
+      label="Equal Merit Provison"
+      hint=""
+      value=""
+    >
+      <CheckboxItem
+        :value="editEMPFlagValueStatus"
+        label="Equal Merit Provision"
+      />
+    </CheckboxGroup>    
     <button class="govuk-button">
       Save and continue
     </button>      
@@ -58,6 +70,8 @@ export default {
       newSelectedStatus: null,
       nextStageStatus: null,
       nextStageValueStatus: EXERCISE_STAGE.SHORTLISTED,
+      editEMPFlagStatus: null,
+      editEMPFlagValueStatus: 'empFlag',
     };
   },
   computed: {
@@ -82,7 +96,7 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus });
+      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus, empVal: this.editEMPFlagStatus });
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },
