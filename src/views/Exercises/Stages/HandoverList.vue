@@ -20,6 +20,7 @@
           { title: 'Name' },
           { title: 'Issues' },
           { title: 'Status' },
+          { title: 'EMP Status'}
         ]"
       >
         <template #row="{row}">
@@ -27,6 +28,7 @@
           <TableCell>{{ row.candidate.fullName }}</TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
+          <TableCell>{{ row | candidateHasEMP }}</TableCell>
         </template>
       </Table>   
     </form>

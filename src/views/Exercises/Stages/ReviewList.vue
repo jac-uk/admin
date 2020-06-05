@@ -32,7 +32,7 @@
           { title: 'Name' },
           { title: 'Issues' },
           { title: 'Status' },
-          {title: 'EMP Status'}
+          { title: 'EMP Status'}
         ]"
         multi-select
         :selection.sync="selectedItems"

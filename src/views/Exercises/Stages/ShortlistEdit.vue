@@ -17,7 +17,7 @@
         :label="item | lookup"
       />
     </RadioGroup>
-        <RadioGroup
+    <RadioGroup
       id="emp-edit-toggle-info-needed"
       v-model="editEMPFlag"
       label="Edit EMP Flag"
