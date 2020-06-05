@@ -44,6 +44,7 @@ export default {
         status: status,
         stage: stageValue,
       };
+      
       if (empVal.shouldUpdate){
         data['flags.empApplied'] = empVal.newStatus;
       }

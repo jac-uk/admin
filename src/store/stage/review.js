@@ -88,9 +88,7 @@ export default {
       if (nextStage[0]) {
         stageValue = nextStage[0];
       }
-      
-      // console.log(context.state.selectedItems);
-      
+            
       const data = {
         status: status,
         stage: stageValue,

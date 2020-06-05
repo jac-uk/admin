@@ -30,7 +30,7 @@
       />
     </CheckboxGroup> 
     <RadioGroup
-      id="is-more-info-needed"
+      id="emp-edit-toggle-info-needed"
       v-model="editEMPFlag"
       label="Edit EMP Flag"
       hint="Change candidates' Equal Merit Provision status"
@@ -44,7 +44,7 @@
         label="Yes"
       >
         <RadioGroup
-          id="select-more-info"
+          id="emp-edit-input"
           v-model="editEMPFlagStatus"
           label="EMP Status"
           hint=""

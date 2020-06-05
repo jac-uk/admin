@@ -36,6 +36,41 @@
         :label="item | lookup"
       />
     </RadioGroup>
+        <RadioGroup
+      id="is-more-info-needed"
+      v-model="editEMPFlag"
+      label="Edit EMP Flag"
+      hint="Change candidates' Equal Merit Provision status"
+      required
+      :messages="{
+        required: 'Please specify whether you\'d like to add more information'
+      }"          
+    >
+      <RadioItem
+        :value="true"
+        label="Yes"
+      >
+        <RadioGroup
+          id="select-more-info"
+          v-model="editEMPFlagStatus"
+          label="EMP Status"
+          hint=""
+        >
+          <RadioItem
+            :value="true"
+            label="Applied"
+          />
+          <RadioItem
+            :value="false"
+            label="Not Applied"
+          />                  
+        </RadioGroup> 
+      </RadioItem>
+      <RadioItem
+        :value="false"
+        label="No"
+      />
+    </RadioGroup>
     <button class="govuk-button">
       Save and continue
     </button>      
@@ -62,6 +97,8 @@ export default {
       newSelectedStatus: null,
       confirmedSave: false,
       showWarning: false,
+      editEMPFlag: null,
+      editEMPFlagStatus: null,
     };
   },
   computed: {
@@ -100,7 +137,7 @@ export default {
       if (!this.confirmedSave && this.itemsHaveIssues()){
         this.showWarning = true;
       } else {
-        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus, empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus } });
         this.$router.push({ name: 'exercise-stages-selected-list' });
       }
     },
