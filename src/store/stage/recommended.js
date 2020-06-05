@@ -34,7 +34,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status, nextStage } ) => {
+    updateStatus: async ( context, { status, nextStage, empVal } ) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.RECOMMENDED;
       const data = {
         stage: nextStage,
@@ -42,6 +42,9 @@ export default {
 
       if (status) {
         data['status']= status;
+      }
+      if (empVal.shouldUpdate){
+        data['flags.empApplied'] = empVal.newStatus;
       }
 
       const selectedItems = context.state.selectedItems;

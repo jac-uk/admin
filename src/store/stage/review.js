@@ -81,19 +81,23 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status, nextStage } ) => {
+    updateStatus: async ( context, { status, nextStage, empApplied } ) => {
       let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
       if (nextStage[0]) {
         stageValue = nextStage[0];
       }
-
+            
       const data = {
         status: status,
         stage: stageValue,
       };
 
+      if (empApplied != null) {
+        data['flags.empApplied'] = empApplied;
+      }
+      
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {

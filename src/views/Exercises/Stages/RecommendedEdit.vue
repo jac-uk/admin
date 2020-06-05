@@ -24,6 +24,39 @@
         :label="item | lookup"
       />
     </RadioGroup>
+
+    <CheckboxGroup
+      id="emp-edit-toggle"
+      v-model="editEMPFlag"
+      label="Equal Merit Provision"
+      hint=""
+      required
+      :messages="{
+        required: 'Please specify whether you\'d like to add more information'
+      }"          
+    >
+      <CheckboxItem
+        :value="true"
+        label="Update EMP"
+      >
+        <RadioGroup
+          id="emp-edit-input"
+          v-model="editEMPFlagStatus"
+          label=""
+          hint=""
+        >
+          <RadioItem
+            :value="true"
+            label="Yes - EMP has been Applied"
+          />
+          <RadioItem
+            :value="false"
+            label="No - EMP has not been Applied"
+          />                  
+        </RadioGroup> 
+      </CheckboxItem>
+    </CheckboxGroup>
+
     <button class="govuk-button">
       Save and continue
     </button>
@@ -37,6 +70,8 @@ import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import CheckboxGroup from '@/components/Form/CheckboxGroup';
+import CheckboxItem from '@/components/Form/CheckboxItem';
 
 export default {
   components: {
@@ -44,6 +79,8 @@ export default {
     ErrorSummary,
     RadioGroup,
     RadioItem,
+    CheckboxGroup,
+    CheckboxItem,
   },
   extends: Form,
   data() {
@@ -51,6 +88,8 @@ export default {
       newSelectedStatus: null,
       showWarning: false,
       confirmedSave: false,
+      editEMPFlag: null,
+      editEMPFlagStatus: null,
     };
   },
   computed: {
@@ -100,6 +139,7 @@ export default {
           applicationId: this.applicationId, 
           status: this.newSelectedStatus, 
           nextStage: stageValue,
+          empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus },
         });
         this.$router.push({ name: 'exercise-stages-recommended-list' });
       }
