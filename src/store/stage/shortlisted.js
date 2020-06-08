@@ -32,17 +32,11 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status } ) => {
-      let stageValue = EXERCISE_STAGE.SHORTLISTED; // initial value: 'shortlisted'
-      const moveToNextStage = (status === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY);
-
-      if (moveToNextStage) {
-        stageValue = EXERCISE_STAGE.SELECTED;
-      }
-
+    updateStatus: async ( context, { status, nextStage } ) => {
+      const moveToNextStage = nextStage !== EXERCISE_STAGE.SHORTLISTED;
       const data = {
         status: status,
-        stage: stageValue,
+        stage: nextStage,
       };
       
       const selectedItems = context.state.selectedItems;
@@ -52,10 +46,15 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
-      
-      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+
+      let valueMessage = '';
+      if (status !== '') {
+        valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      } else {
+        valueMessage = `Updated ${selectedItems.length} candidates`; 
+      }
       if (moveToNextStage) {
-        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+        valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       }
       context.commit('message', valueMessage);
     },
@@ -72,6 +71,7 @@ export default {
     records: [],
     message: null,
     selectedItems: [],
+    action: null,
   },
   mutations: {
     message(state, msg) {
@@ -79,6 +79,9 @@ export default {
     },
     changeSelectedItems(state, items) {
       state.selectedItems = items;
+    },
+    changeAction(state, action) {
+      state.action = action;
     },
   },
 };
