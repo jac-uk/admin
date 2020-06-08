@@ -20,7 +20,7 @@
           { title: 'Name' },
           { title: 'Issues' },
           { title: 'Status' },
-          { title: 'EMP Status'}
+          { title: 'EMP' }
         ]"
       >
         <template #row="{row}">

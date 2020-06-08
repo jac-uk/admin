@@ -29,41 +29,37 @@
         label="Shortlisted"
       />
     </CheckboxGroup> 
-    <RadioGroup
-      id="emp-edit-toggle-info-needed"
+    <CheckboxGroup
+      id="emp-edit-toggle"
       v-model="editEMPFlag"
-      label="Edit EMP Flag"
-      hint="Change candidates' Equal Merit Provision status"
+      label="Equal Merit Provision"
+      hint=""
       required
       :messages="{
         required: 'Please specify whether you\'d like to add more information'
       }"          
     >
-      <RadioItem
+      <CheckboxItem
         :value="true"
-        label="Yes"
+        label="Update EMP"
       >
         <RadioGroup
           id="emp-edit-input"
           v-model="editEMPFlagStatus"
-          label="EMP Status"
+          label=""
           hint=""
         >
           <RadioItem
             :value="true"
-            label="Applied"
+            label="Yes - EMP has been Applied"
           />
           <RadioItem
             :value="false"
-            label="Not Applied"
+            label="No - EMP has not been Applied"
           />                  
         </RadioGroup> 
-      </RadioItem>
-      <RadioItem
-        :value="false"
-        label="No"
-      />
-    </RadioGroup>
+      </CheckboxItem>
+    </CheckboxGroup>
     <button class="govuk-button">
       Save and continue
     </button>      
