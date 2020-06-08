@@ -31,7 +31,7 @@
     </CheckboxGroup> 
     <CheckboxGroup
       id="emp-edit-toggle"
-      v-model="editEMPFlag"
+      v-model="editEmpApplied"
       label="Equal Merit Provision"
       hint=""
     >
@@ -41,7 +41,7 @@
       >
         <RadioGroup
           id="emp-edit-input"
-          v-model="editEMPFlagStatus"
+          v-model="empApplied"
           label=""
           hint=""
           required
@@ -89,8 +89,8 @@ export default {
       newSelectedStatus: null,
       nextStageStatus: null,
       nextStageValueStatus: EXERCISE_STAGE.SHORTLISTED,
-      editEMPFlag: null,
-      editEMPFlagStatus: null,
+      editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
@@ -115,14 +115,14 @@ export default {
   },
   methods: {
     async save() {
-      const updateEmpVAL = this.editEMPFlag[0] ? this.editEMPFlagStatus : '';
-      // console.log(updateEmpVAL, this.editEMPFlag[0], this.editEMPFlagStatus);
-      
-      await this.$store.dispatch('stageReview/updateStatus', { 
+      const data = {
         status: this.newSelectedStatus, 
-        nextStage: this.nextStageStatus, 
-        empVal: updateEmpVAL, 
-      });
+        nextStage: this.nextStageStatus,
+      };
+      if (this.editEmpApplied[0]) {  
+        data.empApplied = this.empApplied;
+      }
+      await this.$store.dispatch('stageReview/updateStatus', data);
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },
