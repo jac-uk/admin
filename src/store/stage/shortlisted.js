@@ -33,9 +33,12 @@ export default {
     updateStatus: async ( context, { status, nextStage } ) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.SHORTLISTED;
       const data = {
-        status: status,
         stage: nextStage,
       };
+
+      if (status) {
+        data['status']= status;
+      }
       
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
@@ -46,7 +49,7 @@ export default {
       await batch.commit();
 
       let valueMessage = '';
-      if (status !== '') {
+      if (status) {
         valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
       } else {
         valueMessage = `Updated ${selectedItems.length} candidates`; 

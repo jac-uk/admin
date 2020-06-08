@@ -59,12 +59,11 @@ export default {
       let stageValue = EXERCISE_STAGE.SHORTLISTED;
       if (this.newSelectedStatus === DEFAULT.YES) {
         stageValue = EXERCISE_STAGE.REVIEW;
+        await this.$store.dispatch('stageShortlisted/updateStatus', { 
+          applicationId: this.applicationId, 
+          nextStage: stageValue,
+        });
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', { 
-        applicationId: this.applicationId, 
-        status: '',
-        nextStage: stageValue,
-      });
       this.$router.push({ name: 'exercise-stages-shortlist-list' });
     },
   },
