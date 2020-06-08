@@ -332,7 +332,7 @@ const router = new Router({
               name: 'exercise-stages-handover-back',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Selected Back',
+                title: 'Exercise Stages | Selected back',
               },
             },
             {
