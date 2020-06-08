@@ -78,16 +78,6 @@ const candidateHasIssues = row => {
   return flag ? 'Yes' : 'No';
 };
 
-const candidateHasEMP = row => {
-  let flag = false;
-  const flags = row.flags;
-  if (flags.empApplied) {
-    flag = true;
-  }
-
-  return flag ? 'Yes' : 'No';
-};
-
 const lookup = (value) => {
   if (typeof value === 'string') {
     // @TODO: extract lookup values
@@ -305,6 +295,5 @@ export {
   toYesNo,
   slugify,
   candidateHasIssues,
-  candidateHasEMP,
   lookup
 };
