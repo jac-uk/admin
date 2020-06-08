@@ -4,12 +4,25 @@
       :message="message" 
       status="success" 
     />
-    <form @submit.prevent="checkForm">
+    <form>
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
             Handover ({{ totalApplicationRecords }})
           </h1>
+        </div>
+        <div class="moj-page-header-actions__actions">
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button  
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+                :disabled="isButtonDisabled"
+                @click.prevent="moveBack()"
+              >
+                Move back to ...
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <Table 
@@ -21,6 +34,8 @@
           { title: 'Issues' },
           { title: 'Status' },
         ]"
+        multi-select
+        :selection.sync="selectedItems"
       >
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
@@ -61,13 +76,19 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     isButtonDisabled() {
-      const isDisabled = false; // hardcode the button always disabled for Handover status
-      // const isDisabled = this.selectedItems && this.selectedItems.length;
+      const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch('stageHandover/bind', { exerciseId: this.exercise.id });
+    this.message = await this.$store.dispatch('stageHandover/getMessages');
+  },
+  methods: {
+    moveBack() {
+      this.$store.dispatch('stageHandover/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-handover-back' });
+    },
   },
 };
 </script>

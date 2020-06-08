@@ -21,8 +21,43 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    updateStatus: async ( context, { nextStage } ) => {
+      const data = {
+        stage: nextStage,
+      };
+      
+      const selectedItems = context.state.selectedItems;
+      const batch = firestore.batch();
+      selectedItems.map( item => {
+        const ref = collectionRef.doc(item);
+        batch.update(ref, data);
+      });
+      await batch.commit();
+
+      let valueMessage = `Updated ${selectedItems.length} candidates`; 
+      valueMessage = `${valueMessage} and moved to '${nextStage}'`;
+      context.commit('message', valueMessage);
+    },
+    storeItems: ( context, { items }) => {
+      context.commit('changeSelectedItems', items);
+    },
+    getMessages: (context) => {
+      const localMsg = context.state.message;
+      context.commit('message', null);
+      return localMsg;
+    },
   },
   state: {
     records: [],
+    message: null,
+    selectedItems: [],
+  },
+  mutations: {
+    message(state, msg) {
+      state.message = msg;
+    },
+    changeSelectedItems(state, items) {
+      state.selectedItems = items;
+    },
   },
 };
