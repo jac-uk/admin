@@ -48,6 +48,7 @@ import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   components: {
@@ -100,7 +101,15 @@ export default {
       if (!this.confirmedSave && this.itemsHaveIssues()){
         this.showWarning = true;
       } else {
-        await this.$store.dispatch('stageSelected/updateStatus', { applicationId: this.applicationId, status: this.newSelectedStatus });
+        let stageValue = EXERCISE_STAGE.SELECTED;
+        if (this.newSelectedStatus === APPLICATION_STATUS.PASSED_SELECTION) {
+          stageValue = EXERCISE_STAGE.RECOMMENDED;
+        }
+        await this.$store.dispatch('stageSelected/updateStatus', { 
+          applicationId: this.applicationId, 
+          status: this.newSelectedStatus,
+          nextStage: stageValue,
+        });
         this.$router.push({ name: 'exercise-stages-selected-list' });
       }
     },
