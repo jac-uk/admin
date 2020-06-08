@@ -34,10 +34,6 @@
       v-model="editEMPFlag"
       label="Equal Merit Provision"
       hint=""
-      required
-      :messages="{
-        required: 'Please specify whether you\'d like to add more information'
-      }"          
     >
       <CheckboxItem
         :value="true"
@@ -48,6 +44,10 @@
           v-model="editEMPFlagStatus"
           label=""
           hint=""
+          required
+          :messages="{
+            required: 'Please specify a value'
+          }"          
         >
           <RadioItem
             :value="true"
@@ -115,7 +115,14 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus, empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus } });
+      const updateEmpVAL = this.editEMPFlag[0] ? this.editEMPFlagStatus : '';
+      // console.log(updateEmpVAL, this.editEMPFlag[0], this.editEMPFlagStatus);
+      
+      await this.$store.dispatch('stageReview/updateStatus', { 
+        status: this.newSelectedStatus, 
+        nextStage: this.nextStageStatus, 
+        empVal: updateEmpVAL, 
+      });
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },

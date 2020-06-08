@@ -93,11 +93,11 @@ export default {
         status: status,
         stage: stageValue,
       };
-      
-      if (empVal.shouldUpdate){
-        data['flags.empApplied'] = empVal.newStatus;
-      }
 
+      if (empVal !== '') {
+        data['flags.empApplied'] = empVal;
+      }
+      
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {

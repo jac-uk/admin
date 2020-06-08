@@ -28,7 +28,7 @@
           <TableCell>{{ row.candidate.fullName }}</TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
-          <TableCell>{{ row | toYesNo }}</TableCell>
+          <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>   
     </form>
