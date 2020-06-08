@@ -6,7 +6,7 @@
     <RadioGroup
       id="selected-status"
       v-model="newSelectedStatus"
-      label="Update status (TBC)"
+      label="Move back to the review stage?"
       hint=""
       required
     >
@@ -28,7 +28,7 @@ import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { DEFAULT, EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   components: {
@@ -47,20 +47,23 @@ export default {
       return this.$route.params.applicationId;
     },
     availableStatuses() {
-      return this.$store.getters['stageShortlisted/availableStatuses'];
+      const myStatus = [
+        DEFAULT.YES,
+        DEFAULT.NO,
+      ];
+      return myStatus;
     },
   },
   methods: {
     async save() {
       let stageValue = EXERCISE_STAGE.SHORTLISTED;
-      if (this.newSelectedStatus === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
-        stageValue = EXERCISE_STAGE.SELECTED;
+      if (this.newSelectedStatus === DEFAULT.YES) {
+        stageValue = EXERCISE_STAGE.REVIEW;
+        await this.$store.dispatch('stageShortlisted/updateStatus', { 
+          applicationId: this.applicationId, 
+          nextStage: stageValue,
+        });
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', { 
-        applicationId: this.applicationId, 
-        status: this.newSelectedStatus, 
-        nextStage: stageValue,
-      });
       this.$router.push({ name: 'exercise-stages-shortlist-list' });
     },
   },

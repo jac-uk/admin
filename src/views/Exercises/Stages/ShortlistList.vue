@@ -4,7 +4,7 @@
       :message="message" 
       status="success" 
     />
-    <form @submit.prevent="checkForm">
+    <form>
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
@@ -14,9 +14,17 @@
         <div class="moj-page-header-actions__actions">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
+              <button  
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+                :disabled="isButtonDisabled"
+                @click.prevent="moveBack()"
+              >
+                Move back to ...
+              </button>
               <button 
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
                 :disabled="isButtonDisabled"
+                @click.prevent="setStatus()"
               >
                 Set status
               </button>
@@ -84,7 +92,11 @@ export default {
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
   },
   methods: {
-    checkForm() {
+    moveBack() {
+      this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-shortlist-back' });
+    },
+    setStatus() {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-shortlist-edit' });
     },
