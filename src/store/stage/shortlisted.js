@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
@@ -71,7 +69,6 @@ export default {
     records: [],
     message: null,
     selectedItems: [],
-    action: null,
   },
   mutations: {
     message(state, msg) {
@@ -79,9 +76,6 @@ export default {
     },
     changeSelectedItems(state, items) {
       state.selectedItems = items;
-    },
-    changeAction(state, action) {
-      state.action = action;
     },
   },
 };
