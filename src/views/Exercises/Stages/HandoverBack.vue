@@ -6,7 +6,7 @@
     <RadioGroup
       id="selected-status"
       v-model="newSelectedStatus"
-      label="Move back to the 'review' stage?"
+      label="Move back to the 'recommended' stage?"
       hint=""
       required
     >
@@ -56,15 +56,15 @@ export default {
   },
   methods: {
     async save() {
-      let stageValue = EXERCISE_STAGE.SHORTLISTED;
+      let stageValue = EXERCISE_STAGE.HANDOVER;
       if (this.newSelectedStatus === DEFAULT.YES) {
-        stageValue = EXERCISE_STAGE.REVIEW;
-        await this.$store.dispatch('stageShortlisted/updateStatus', { 
+        stageValue = EXERCISE_STAGE.RECOMMENDED;
+        await this.$store.dispatch('stageHandover/updateStatus', { 
           applicationId: this.applicationId, 
           nextStage: stageValue,
         });
       }
-      this.$router.push({ name: 'exercise-stages-shortlist-list' });
+      this.$router.push({ name: 'exercise-stages-handover-list' });
     },
   },
 };
