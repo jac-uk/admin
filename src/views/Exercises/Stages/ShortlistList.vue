@@ -17,14 +17,14 @@
               <button  
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
                 :disabled="isButtonDisabled"
-                @click.prevent="btnAction('back')"
+                @click.prevent="moveBack()"
               >
                 Move back to ...
               </button>
               <button 
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
                 :disabled="isButtonDisabled"
-                @click.prevent="btnAction('status')"
+                @click.prevent="setStatus()"
               >
                 Set status
               </button>
@@ -92,20 +92,13 @@ export default {
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
   },
   methods: {
-    checkForm() {
+    moveBack() {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
-      // this.$router.push({ name: 'exercise-stages-shortlist-edit' });
+      this.$router.push({ name: 'exercise-stages-shortlist-back' });
     },
-    btnAction(action) {
+    setStatus() {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
-      switch (action) {
-      case 'back': // Go back
-        this.$router.push({ name: 'exercise-stages-shortlist-back' });
-        break;
-      case 'status': // change status
-        this.$router.push({ name: 'exercise-stages-shortlist-edit' });
-        break;
-      }
+      this.$router.push({ name: 'exercise-stages-shortlist-edit' });
     },
   },
 };
