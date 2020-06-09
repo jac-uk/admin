@@ -32,16 +32,22 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status, nextStage } ) => {
+    updateStatus: async ( context, { status, nextStage, empVal } ) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.SELECTED;
-      const data = {
-        stage: nextStage,
-      };
-
+      
       if (status) {
         data['status']= status;
       }
+      
+      const data = {
+        status: status,
+        stage: nextStage,
+      };
 
+      if (empVal.shouldUpdate){
+        data['flags.empApplied'] = empVal.newStatus;
+      }
+      
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {

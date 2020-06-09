@@ -28,7 +28,38 @@
         :value="nextStageValueStatus"
         label="Shortlisted"
       />
-    </CheckboxGroup>    
+    </CheckboxGroup> 
+    <CheckboxGroup
+      id="emp-edit-toggle"
+      v-model="editEmpApplied"
+      label="Equal Merit Provision"
+      hint=""
+    >
+      <CheckboxItem
+        :value="true"
+        label="Update EMP"
+      >
+        <RadioGroup
+          id="emp-edit-input"
+          v-model="empApplied"
+          label=""
+          hint=""
+          required
+          :messages="{
+            required: 'Please specify a value'
+          }"          
+        >
+          <RadioItem
+            :value="true"
+            label="Yes - EMP has been Applied"
+          />
+          <RadioItem
+            :value="false"
+            label="No - EMP has not been Applied"
+          />                  
+        </RadioGroup> 
+      </CheckboxItem>
+    </CheckboxGroup>
     <button class="govuk-button">
       Save and continue
     </button>      
@@ -58,6 +89,8 @@ export default {
       newSelectedStatus: null,
       nextStageStatus: null,
       nextStageValueStatus: EXERCISE_STAGE.SHORTLISTED,
+      editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
@@ -82,7 +115,14 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('stageReview/updateStatus', { status: this.newSelectedStatus, nextStage: this.nextStageStatus });
+      const data = {
+        status: this.newSelectedStatus, 
+        nextStage: this.nextStageStatus,
+      };
+      if (this.editEmpApplied[0]) {  
+        data.empApplied = this.empApplied;
+      }
+      await this.$store.dispatch('stageReview/updateStatus', data);
       this.$router.push({ name: 'exercise-stages-review-list' });
     },
   },
