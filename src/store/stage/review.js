@@ -85,13 +85,18 @@ export default {
       let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
-      if (nextStage[0]) {
-        stageValue = nextStage[0];
-      }
-            
+      
       const data = {
         stage: stageValue,
       };
+      
+      if (status) {
+        data['status']= status;
+      }
+
+      if (nextStage[0]) {
+        data.stage = nextStage[0];
+      }
 
       if (empApplied != null) {
         data['flags.empApplied'] = empApplied;
@@ -107,7 +112,7 @@ export default {
       
       let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
       if (nextStage[0]) {
-        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+        valueMessage = `${valueMessage} and moved to '${data.stage}'`;
       }
       context.commit('message', valueMessage);
       context.commit('changeSelectedItems', []);

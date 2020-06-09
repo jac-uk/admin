@@ -35,7 +35,7 @@ export default {
     updateStatus: async ( context, { status, nextStage, empApplied } ) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.SELECTED;
       
-const data = {
+      const data = {
         stage: nextStage,
       };
 
