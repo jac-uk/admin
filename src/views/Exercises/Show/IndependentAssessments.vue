@@ -35,8 +35,28 @@
     <div
       v-if="!hasInitialisedAssessments"
     >
+      <select
+        id="exercise-stage"
+        v-model="exerciseStage"
+        class="govuk-select govuk-!-margin-right-3"
+      >
+        <option value="">
+          Choose applications
+        </option>
+        <option value="review">
+          Review ({{ exercise.applicationRecords.review }})
+        </option>
+        <option value="shortlisted">
+          Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+        </option>
+        <option value="selected">
+          Selected ({{ exercise.applicationRecords.selected }})
+        </option>
+      </select>
+
       <ActionButton
         type="primary"
+        :disabled="!exerciseStage"
         @click="initialiseAssessments()"
       >
         Start Assessments
@@ -45,10 +65,25 @@
 
     <div v-else>
       <ActionButton
+        v-if="canCancelAssessments"
+        class="govuk-!-margin-right-3"
+        @click="cancelAssessments()"
+      >
+        Cancel Assessments
+      </ActionButton>
+      <ActionButton
+        v-if="canSendRequestsToAll"
         type="primary"
-        @click="sendRequests()"
+        @click="sendRequestsToAll()"
       >
         Send to all
+      </ActionButton>
+      <ActionButton
+        v-if="canSendRemindersToAll"
+        type="primary"
+        @click="sendRemindersToAll()"
+      >
+        Send reminders
       </ActionButton>
 
       <table class="govuk-table">
@@ -225,6 +260,11 @@ export default {
     ActionButton,
     DownloadLink,
   },
+  data() {
+    return {
+      exerciseStage: '',
+    };
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -247,6 +287,15 @@ export default {
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
     },
+    canCancelAssessments() {
+      return this.hasInitialisedAssessments; // && !(this.exercise.assessments && this.exercise.assessments.sent);
+    },
+    canSendRequestsToAll() {
+      return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
+    },
+    canSendRemindersToAll() {
+      return this.hasInitialisedAssessments && (this.exercise.assessments && this.exercise.assessments.sent);
+    },
   },
   created() {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
@@ -257,13 +306,22 @@ export default {
   },
   methods: {
     async initialiseAssessments() {
-      await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id });
+      if (!this.exerciseStage) {
+        return false;
+      }
+      await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
     },
-    async sendRequests() {
+    async cancelAssessments() {
+      await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id });
+    },
+    async sendRequestsToAll() {
       await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
     },
+    async sendRemindersToAll() {
+      await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id });
+    },
     async resendRequest(assessmentId) {
-      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
+      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
     },
     async sendReminder(assessmentId) {
       await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
