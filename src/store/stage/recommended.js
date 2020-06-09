@@ -35,8 +35,10 @@ export default {
       return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { status, nextStage, empApplied } ) => {
-      const moveToNextStage = nextStage !== EXERCISE_STAGE.RECOMMENDED;
+      const moveToNextStage = nextStage !== EXERCISE_STAGE.RECOMMENDED
+
       const data = {
+        status: status,
         stage: nextStage,
       };
 
