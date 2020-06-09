@@ -2,7 +2,7 @@
   <button
     class="govuk-button jac-actionbutton"
     :class="computedClasses"
-    :disabled="isLoading"
+    :disabled="isLoading || disabled"
     v-on="listeners"
   >
     <span
@@ -40,6 +40,10 @@ export default {
     type: {
       type: String,
       default: 'secondary',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({
