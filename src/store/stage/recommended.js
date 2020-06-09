@@ -38,7 +38,6 @@ export default {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.RECOMMENDED;
 
       const data = {
-        status: status,
         stage: nextStage,
       };
 

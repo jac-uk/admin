@@ -90,7 +90,6 @@ export default {
       }
             
       const data = {
-        status: status,
         stage: stageValue,
       };
 

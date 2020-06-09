@@ -34,7 +34,6 @@ export default {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.SHORTLISTED;
 
       const data = {
-        status: status,
         stage: nextStage,
       };
       
