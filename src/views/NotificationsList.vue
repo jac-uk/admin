@@ -143,16 +143,72 @@
         </tr>
       </tbody>
     </table>
+
+    <div 
+      v-if="activeTab === 'settings'"
+      class="govuk-grid-row"
+    >
+      <form @submit.prevent="validateAndSave">
+        <div class="govuk-grid-column-two-thirds">
+          <ErrorSummary 
+            :errors="errors" 
+          />
+
+          <TextField
+            id="default-mailbox"
+            v-model="formData.defaultMailbox"
+            label="Default mailbox"
+            hint="If no other mailbox has been provided the default mailbox will be used"
+            type="email"
+            required
+            :pattern="{ match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address'}"
+          />
+
+          <TextField
+            id="delay-in-minutes"
+            v-model="formData.delayInMinutes"
+            type="number"
+            label="Delay in minutes"
+            hint="e.g. A delay of 5 minutes will mean there's a 5 minute lag between notifications being created and actually sent. So a 5 minute window to check for problems and stop the send!"
+            required
+          />
+
+          <Checkbox
+            id="send-to-recipient"
+            v-model="formData.sendToRecipient"
+            label="Send to recipient"
+            hint="When this is un-checked, emails will be sent to the provided mailbox (or default mailbox). This allows basic 'safe' testing of emails."
+          >
+            Yes - send emails to the intended recipient
+          </Checkbox>
+
+          <button 
+            class="govuk-button"
+            :disabled="!hasChanges"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>      
   </div>  
 </template>
 
 <script>
 import TabsList from '@/components/Page/TabsList';
+import Form from '@/components/Form/Form';
+import ErrorSummary from '@/components/Form/ErrorSummary';
+import TextField from '@/components/Form/TextField';
+import Checkbox from '@/components/Form/Checkbox';
 
 export default {
   components: {
     TabsList,
+    ErrorSummary,
+    TextField,
+    Checkbox,
   },
+  extends: Form,
   data() {
     return {
       tabs: [
@@ -164,8 +220,17 @@ export default {
           ref: 'sent',
           title: 'Sent',
         },
+        {
+          ref: 'settings',
+          title: 'Settings',
+        },
       ],
-      activeTab: 'queue',
+      activeTab: 'settings',
+      formData: {
+        delayInMinutes: 5,
+        defaultMailbox: '',
+        sendToRecipient: false,
+      },
     };
   },
   computed: {
@@ -181,14 +246,28 @@ export default {
     showingSent() {
       return this.currentView === 'sent';
     },
+    notificationsSettings() {
+      return this.$store.getters['services/getNotificationSettings'];
+    },
     isProcessing() {
-      const services = this.$store.state.services.record;
-      return services && services.notifications && services.notifications.isProcessing;
+      return this.notificationsSettings && this.notificationsSettings.isProcessing;
+    },
+    hasChanges() {
+      return this.notificationsSettings && (
+        this.formData.delayInMinutes !== this.notificationsSettings.delayInMinutes ||
+        this.formData.defaultMailbox !== this.notificationsSettings.defaultMailbox ||
+        this.formData.sendToRecipient !== this.notificationsSettings.sendToRecipient
+      );
     },
   },
   created() {
     this.$store.dispatch('notifications/bindQueue');
     this.$store.dispatch('notifications/bindSent');
+    if (this.notificationsSettings) {
+      this.formData.delayInMinutes = this.notificationsSettings.delayInMinutes;
+      this.formData.defaultMailbox = this.notificationsSettings.defaultMailbox;
+      this.formData.sendToRecipient = this.notificationsSettings.sendToRecipient;
+    }
   },
   methods: {
     startProcessing() {
@@ -196,6 +275,9 @@ export default {
     },
     stopProcessing() {
       this.$store.dispatch('services/notificationsStop');
+    },
+    async save() {
+      await this.$store.dispatch('services/saveNotificationsSettings', this.formData);
     },
   },
 };
