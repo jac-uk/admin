@@ -45,7 +45,7 @@ export default {
         data['status']= status;
       }
       
-      if (empApplied){
+      if (empApplied != null){
         data['flags.empApplied'] = empApplied;
       }
 
