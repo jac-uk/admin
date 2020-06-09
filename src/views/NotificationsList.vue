@@ -225,7 +225,7 @@ export default {
           title: 'Settings',
         },
       ],
-      activeTab: 'settings',
+      activeTab: 'queue',
       formData: {
         delayInMinutes: 5,
         defaultMailbox: '',
