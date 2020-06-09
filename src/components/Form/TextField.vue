@@ -46,7 +46,7 @@ export default {
     },
     value: {
       default: '',
-      type: String,
+      type: [String, Number],
     },
     type: {
       default: 'text',
@@ -59,7 +59,13 @@ export default {
         return this.value;
       },
       set(val) {
-        this.$emit('input', val);
+        switch(this.type) {
+        case 'number':
+          this.$emit('input', val ? parseFloat(val) : '');
+          break;
+        default:
+          this.$emit('input', val);
+        }
       },
     },
     fieldType() {
