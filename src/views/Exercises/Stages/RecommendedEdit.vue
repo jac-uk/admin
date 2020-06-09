@@ -88,8 +88,8 @@ export default {
       newSelectedStatus: null,
       showWarning: false,
       confirmedSave: false,
-      editEMPFlag: null,
-      editEMPFlagStatus: null,
+      editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
