@@ -94,12 +94,12 @@ export default {
       if (this.newSelectedStatus === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
         stageValue = EXERCISE_STAGE.SELECTED;
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', { 
-        applicationId: this.applicationId, 
+      const data = {
         status: this.newSelectedStatus, 
         nextStage: stageValue,
-        empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus },
-      });
+      };
+      // empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus },
+      await this.$store.dispatch('stageShortlisted/updateStatus', data );
       this.$router.push({ name: 'exercise-stages-shortlist-list' });
     },
   },
