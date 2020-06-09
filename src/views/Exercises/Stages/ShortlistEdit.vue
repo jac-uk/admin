@@ -19,13 +19,9 @@
     </RadioGroup>
     <CheckboxGroup
       id="emp-edit-toggle"
-      v-model="editEMPFlag"
+      v-model="editEmpApplied"
       label="Equal Merit Provision"
-      hint=""
-      required
-      :messages="{
-        required: 'Please specify whether you\'d like to add more information'
-      }"          
+      hint=""       
     >
       <CheckboxItem
         :value="true"
@@ -33,9 +29,13 @@
       >
         <RadioGroup
           id="emp-edit-input"
-          v-model="editEMPFlagStatus"
+          v-model="empApplied"
           label=""
           hint=""
+          required
+          :messages="{
+            required: 'Please specify a value'
+          }" 
         >
           <RadioItem
             :value="true"
@@ -76,8 +76,8 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
-      editEMPFlag: null,
-      editEMPFlagStatus: null,
+      empApplied: null,
+      editEmpApplied: null,
     };
   },
   computed: {
@@ -94,12 +94,14 @@ export default {
       if (this.newSelectedStatus === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
         stageValue = EXERCISE_STAGE.SELECTED;
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', { 
-        applicationId: this.applicationId, 
+      const data = {
         status: this.newSelectedStatus, 
         nextStage: stageValue,
-        empVal: { shouldUpdate: this.editEMPFlag, newStatus: this.editEMPFlagStatus },
-      });
+      };
+      if (this.editEmpApplied[0]) {  
+        data.empApplied = this.empApplied;
+      }
+      await this.$store.dispatch('stageShortlisted/updateStatus', data );
       this.$router.push({ name: 'exercise-stages-shortlist-list' });
     },
   },
