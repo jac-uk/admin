@@ -88,8 +88,8 @@ export default {
       newSelectedStatus: null,
       showWarning: false,
       confirmedSave: false,
-      editEMPFlag: null,
-      editEMPFlagStatus: null,
+      editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
@@ -139,7 +139,8 @@ export default {
           status: this.newSelectedStatus, 
           nextStage: stageValue,
         };
-        if (this.editEmpApplied[0]) {  
+        
+        if (this.editEmpApplied[0]) {
           data.empApplied = this.empApplied;
         }
         await this.$store.dispatch('stageRecommended/updateStatus', data );
