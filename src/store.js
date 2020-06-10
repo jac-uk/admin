@@ -18,6 +18,7 @@ import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
 import stageRecommended from '@/store/stage/recommended';
 import stageShortlisted from '@/store/stage/shortlisted';
+import candidates from '@/store/candidates';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -37,6 +38,7 @@ const store = new Vuex.Store({
     stageHandover,
     stageRecommended,
     stageShortlisted,
+    candidates,
   },
   state: {},
   mutations: {
