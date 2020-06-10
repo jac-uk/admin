@@ -26,7 +26,6 @@ import ExerciseShowSummary from '@/views/Exercises/Show/Summary';
 import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
 import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
 import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPreferences';
-import ExerciseShowIndependentAssessments from '@/views/Exercises/Show/IndependentAssessments';
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
@@ -53,6 +52,12 @@ import ExerciseStagesShortlistBack from '@/views/Exercises/Stages/ShortlistBack'
 import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
+
+// Tasks
+import ExerciseTasks from '@/views/Exercises/Tasks';
+import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
+import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
+import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -154,15 +159,6 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Applications',
-          },
-        },
-        {
-          path: 'independent-assessments',
-          component: ExerciseShowIndependentAssessments,
-          name: 'exercise-show-independent-assessments',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Independent Assessments',
           },
         },
         {
@@ -370,6 +366,39 @@ const router = new Router({
           ],
         },
         {
+          path: 'tasks',
+          component: ExerciseTasks,
+          children: [
+            {
+              path: 'independent-assessments',
+              component: ExerciseTasksIndependentAssessments,
+              name: 'exercise-tasks-independent-assessments',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Tasks | Independent Assessments',
+              },
+            },
+            {
+              path: 'character-checks',
+              component: ExerciseTasksCharacterChecks,
+              name: 'exercise-tasks-character-checks',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Tasks | Character Checks edit',
+              },
+            },
+            {
+              path: 'character-checks/edit',
+              component: ExerciseTasksCharacterChecksEdit,
+              name: 'exercise-tasks-character-checks-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Tasks | Character Checks',
+              },
+            },
+          ],
+        },
+        {
           path: 'reports',
           component: ExerciseShowReports,
           children: [
@@ -379,7 +408,7 @@ const router = new Router({
               name: 'exercise-show-reports',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Details | Reports',
+                title: 'Exercise Reports',
               },
             },
             {
@@ -388,7 +417,7 @@ const router = new Router({
               name: 'exercise-show-report-diversity',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Details | Reports | Diversity',
+                title: 'Exercise Reports | Diversity',
               },
             },
             {
@@ -397,7 +426,7 @@ const router = new Router({
               name: 'exercise-show-report-reasonable-adjustments',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Details | Reports | Reasonable Adjustments',
+                title: 'Exercise Reports | Reasonable Adjustments',
               },
             },
             {
@@ -406,7 +435,7 @@ const router = new Router({
               name: 'exercise-show-report-eligibility-issues',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Details | Reports | Eligibility Issues',
+                title: 'Exercise Reports | Eligibility Issues',
               },
             },
             {
@@ -415,7 +444,7 @@ const router = new Router({
               name: 'exercise-show-report-character-issues',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Details | Reports | Character Issues',
+                title: 'Exercise Reports | Character Issues',
               },
             },
           ],                    

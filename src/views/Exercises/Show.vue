@@ -135,6 +135,16 @@ export default {
           name: 'exercise-show-applications',
           children: children,
         });
+
+        pages.push({
+          page: 'Tasks',
+          name: 'exercise-tasks',
+          children: [
+            { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
+            { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
+          ],
+        });
+
         if (this.exercise.applicationRecords) {
           const review = this.exercise.applicationRecords.review;
           const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
