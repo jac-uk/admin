@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
@@ -32,19 +30,21 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status } ) => {
-      let stageValue = EXERCISE_STAGE.SHORTLISTED; // initial value: 'shortlisted'
-      const moveToNextStage = (status === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY);
-
-      if (moveToNextStage) {
-        stageValue = EXERCISE_STAGE.SELECTED;
-      }
+    updateStatus: async ( context, { status, nextStage, empApplied } ) => {
+      const moveToNextStage = nextStage !== EXERCISE_STAGE.SHORTLISTED;
 
       const data = {
-        status: status,
-        stage: stageValue,
+        stage: nextStage,
       };
       
+      if (status) {
+        data['status']= status;
+      }
+
+      if (empApplied != null){
+        data['flags.empApplied'] = empApplied;
+      }
+
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {
@@ -52,10 +52,15 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
-      
-      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+
+      let valueMessage = '';
+      if (status) {
+        valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      } else {
+        valueMessage = `Updated ${selectedItems.length} candidates`; 
+      }
       if (moveToNextStage) {
-        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+        valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       }
       context.commit('message', valueMessage);
     },

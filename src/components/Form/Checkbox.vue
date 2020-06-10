@@ -19,14 +19,23 @@
       :id="id"
       :error-message="errorMessage"
     />
-    <input
-      :id="id"
-      v-model="text"
-      class="govuk-input"
-      :class="[inputClass, {'govuk-input--error': hasError}]"
-      :type="fieldType"
-      @change="validate"
-    >
+    <div class="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input
+          :id="id"
+          v-model="localValue"
+          class="govuk-checkboxes__input"
+          :class="[inputClass, {'govuk-input--error': hasError}]"
+          type="checkbox"
+        >
+        <label
+          class="govuk-label govuk-checkboxes__label"
+          :for="id"
+        >
+          <slot />
+        </label>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,36 +55,17 @@ export default {
     },
     value: {
       default: '',
-      type: [String, Number],
-    },
-    type: {
-      default: 'text',
-      type: String,
+      type: [String, Number, Boolean],
     },
   },
   computed: {
-    text: {
+    localValue: {
       get() {
         return this.value;
       },
       set(val) {
-        switch(this.type) {
-        case 'number':
-          this.$emit('input', val ? parseFloat(val) : '');
-          break;
-        default:
-          this.$emit('input', val);
-        }
+        this.$emit('input', val);
       },
-    },
-    fieldType() {
-      switch(this.type) {
-      case 'text':
-      case 'email':
-        return 'text'; // we are using custom email validation, so don't use html5 input types
-      default:
-        return this.type;
-      }
     },
   },
 };

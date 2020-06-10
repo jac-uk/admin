@@ -32,18 +32,21 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status } ) => {
-      let stageValue = EXERCISE_STAGE.SELECTED; // initial value: 'selected'
-      const moveToNextStage = (status === APPLICATION_STATUS.PASSED_SELECTION);
+    updateStatus: async ( context, { status, nextStage, empApplied } ) => {
+      const moveToNextStage = nextStage !== EXERCISE_STAGE.SELECTED;
+      
+      const data = {
+        stage: nextStage,
+      };
 
-      if (moveToNextStage) {
-        stageValue = EXERCISE_STAGE.RECOMMENDED;
+      if (status) {
+        data['status']= status;
       }
 
-      const data = {
-        status: status,
-        stage: stageValue,
-      };
+      if (empApplied != null){
+        data['flags.empApplied'] = empApplied;
+      }
+      
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {
@@ -52,9 +55,14 @@ export default {
       });
       await batch.commit();
       
-      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      let valueMessage = '';
+      if (status) {
+        valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+      } else {
+        valueMessage = `Updated ${selectedItems.length} candidates`; 
+      }
       if (moveToNextStage) {
-        valueMessage = `${valueMessage} and moved to '${stageValue}'`;
+        valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       }
       context.commit('message', valueMessage);
     },

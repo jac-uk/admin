@@ -1,5 +1,12 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <div
+      v-if="showWarning"
+    >
+      <Banner
+        :message="warningMessage"
+      />
+    </div>
     <ErrorSummary
       :errors="errors"
     />
@@ -17,6 +24,39 @@
         :label="item | lookup"
       />
     </RadioGroup>
+
+    <CheckboxGroup
+      id="emp-edit-toggle"
+      v-model="editEmpApplied"
+      label="Equal Merit Provision"
+      hint=""
+    >
+      <CheckboxItem
+        :value="true"
+        label="Update EMP"
+      >
+        <RadioGroup
+          id="emp-edit-input"
+          v-model="empApplied"
+          label=""
+          required
+          hint=""
+          :messages="{
+            required: 'Please specify a value'
+          }"          
+        >
+          <RadioItem
+            :value="true"
+            label="Yes - EMP has been Applied"
+          />
+          <RadioItem
+            :value="false"
+            label="No - EMP has not been Applied"
+          />                  
+        </RadioGroup> 
+      </CheckboxItem>
+    </CheckboxGroup>
+
     <button class="govuk-button">
       Save and continue
     </button>
@@ -24,24 +64,38 @@
 </template>
 
 <script>
+import Banner from '@/components/Page/Banner';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import CheckboxGroup from '@/components/Form/CheckboxGroup';
+import CheckboxItem from '@/components/Form/CheckboxItem';
 
 export default {
   components: {
+    Banner,
     ErrorSummary,
     RadioGroup,
     RadioItem,
+    CheckboxGroup,
+    CheckboxItem,
   },
   extends: Form,
   data() {
     return {
       newSelectedStatus: null,
+      showWarning: false,
+      confirmedSave: false,
+      editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
+    applicationRecords() {
+      return this.$store.state.stageRecommended.records;
+    },
     applicationId() {
       return this.$route.params.applicationId;
     },
@@ -52,6 +106,9 @@ export default {
       const selectedItems = this.$store.state.stageRecommended.selectedItems;
       return selectedItems;
     },
+    warningMessage() {
+      return (this.itemsWithIssues() > 1) ? `${this.itemsWithIssues()} candidates have issues` : '1 candidate has issues';
+    },
   },
   created() {
     // on refresh if there's no IDs to change => redirect to the list
@@ -60,9 +117,35 @@ export default {
     }
   },
   methods: {
+    itemsWithIssues() {
+      const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
+      return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
+    },
+    confirm(){
+      this.confirmedSave = true;
+    },
+    cancel(){
+      this.showWarning = false;
+    },
     async save() {
-      await this.$store.dispatch('stageRecommended/updateStatus', { status: this.newSelectedStatus });
-      this.$router.push({ name: 'exercise-stages-recommended-list' });
+      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT){
+        this.showWarning = true;
+      } else {
+        let stageValue = EXERCISE_STAGE.RECOMMENDED;
+        if (this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT) {
+          stageValue = EXERCISE_STAGE.HANDOVER;
+        }
+        const data = {
+          status: this.newSelectedStatus, 
+          nextStage: stageValue,
+        };
+        
+        if (this.editEmpApplied[0]) {
+          data.empApplied = this.empApplied;
+        }
+        await this.$store.dispatch('stageRecommended/updateStatus', data );
+        this.$router.push({ name: 'exercise-stages-recommended-list' });
+      }
     },
   },
 };

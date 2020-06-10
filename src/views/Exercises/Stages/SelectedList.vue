@@ -14,9 +14,17 @@
         <div class="moj-page-header-actions__actions">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
+              <button  
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+                :disabled="isButtonDisabled"
+                @click.prevent="moveBack()"
+              >
+                Move back to ...
+              </button>
               <button 
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
                 :disabled="isButtonDisabled"
+                @click.prevent="setStatus()"
               >
                 Set status
               </button>
@@ -30,7 +38,9 @@
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
+          { title: 'Issues' },
           { title: 'Status' },
+          { title: 'EMP' },
         ]"
         multi-select
         :selection.sync="selectedItems"
@@ -38,7 +48,9 @@
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
+          <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>   
     </form>
@@ -82,7 +94,11 @@ export default {
     this.message = await this.$store.dispatch('stageSelected/getMessages');
   },
   methods: {
-    checkForm() {
+    moveBack() {
+      this.$store.dispatch('stageSelected/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-selected-back' });
+    },
+    setStatus() {
       this.$store.dispatch('stageSelected/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-selected-edit' });
     },

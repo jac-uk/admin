@@ -39,11 +39,15 @@ import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
 import ExerciseStagesReviewEdit from '@/views/Exercises/Stages/ReviewEdit';
 import ExerciseStagesSelectedList from '@/views/Exercises/Stages/SelectedList';
 import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
+import ExerciseStagesSelectedBack from '@/views/Exercises/Stages/SelectedBack';
 import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
 import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
+import ExerciseStagesRecommendedBack from '@/views/Exercises/Stages/RecommendedBack';
 import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
+import ExerciseStagesHandoverBack from '@/views/Exercises/Stages/HandoverBack';
 import ExerciseStagesShortlistList from '@/views/Exercises/Stages/ShortlistList';
 import ExerciseStagesShortlistEdit from '@/views/Exercises/Stages/ShortlistEdit';
+import ExerciseStagesShortlistBack from '@/views/Exercises/Stages/ShortlistBack';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -278,6 +282,15 @@ const router = new Router({
               },
             },
             {
+              path: 'selected/back',
+              component: ExerciseStagesSelectedBack,
+              name: 'exercise-stages-selected-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected back',
+              },
+            },
+            {
               path: 'recommended',
               component: ExerciseStagesRecommendedList,
               name: 'exercise-stages-recommended-list',
@@ -296,12 +309,30 @@ const router = new Router({
               },
             },
             {
+              path: 'recommended/back',
+              component: ExerciseStagesRecommendedBack,
+              name: 'exercise-stages-recommended-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Recommended back',
+              },
+            },
+            {
               path: 'handover',
               component: ExerciseStagesHandoverList,
               name: 'exercise-stages-handover-list',
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Selected list',
+              },
+            },
+            {
+              path: 'handover/back',
+              component: ExerciseStagesHandoverBack,
+              name: 'exercise-stages-handover-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Selected back',
               },
             },
             {
@@ -312,7 +343,7 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Exercise Stages | Shortlist',
               },
-          },
+            },
             {
               path: 'shortlisted/edit',
               component: ExerciseStagesShortlistEdit,
@@ -320,6 +351,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Stages | Shortlist edit',
+              },
+            },
+            {
+              path: 'shortlisted/back',
+              component: ExerciseStagesShortlistBack,
+              name: 'exercise-stages-shortlist-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Stages | Shortlist back',
               },
             },
           ],
