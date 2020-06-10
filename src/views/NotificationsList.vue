@@ -32,7 +32,7 @@
     />
     
     <table 
-      v-if="activeTab === 'queue'"
+      v-if="activeTab === 'queue' && notificationsQueue.length"
       class="govuk-table"
     >
       <thead class="govuk-table__head">
@@ -85,6 +85,10 @@
       </tbody>
     </table>
 
+    <p v-if="activeTab === 'queue' && !notificationsQueue.length">
+      No notifications in queue
+    </p>
+
     <table 
       v-if="activeTab === 'sent'"
       class="govuk-table"
@@ -96,6 +100,12 @@
             class="govuk-table__header"
           >
             Created
+          </th>
+          <th
+            scope="col"
+            class="govuk-table__header"
+          >
+            Sent
           </th>
           <th
             scope="col"
@@ -121,10 +131,14 @@
             {{ notification.createdAt | formatDate('datetime') }}
           </td>
           <td class="govuk-table__cell">
+            {{ notification.sentAt | formatDate('datetime') }}
+          </td>
+          <td class="govuk-table__cell">
             {{ notification.template.name }}
           </td>
           <td class="govuk-table__cell">
             {{ notification.email }}
+            <span v-if="notification.email != notification.sentTo">({{ notification.sentTo }})</span>            
           </td>
         </tr>
       </tbody>
