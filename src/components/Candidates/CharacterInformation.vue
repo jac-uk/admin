@@ -139,6 +139,7 @@
 </template>
 
 <script>
+import EventRenderer from '@/components/Page/EventRenderer';
 
 export default {
   props: {
@@ -147,6 +148,9 @@ export default {
       default: null,
       required: true,
     },
+  },
+  components: {
+    EventRenderer,
   },
   computed: {
     hasData() {
