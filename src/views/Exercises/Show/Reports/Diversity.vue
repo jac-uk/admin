@@ -57,6 +57,17 @@
       v-if="diversity"
       class="govuk-grid-column-full"
     >
+      <TabsList
+        v-if="showTabs"
+        class="print-none"
+        :tabs="tabs"
+        :active-tab.sync="activeTab"
+      />
+
+      <h3 class="govuk-heading-m">
+        {{ activeTabTitle }}
+      </h3>
+
       <table class="govuk-table table-with-border">
         <caption class="govuk-table__caption hidden">
           Gender by exercise stage
@@ -86,7 +97,7 @@
               Male
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.gender.male" />
+              <Stat :stat="diversity[activeTab].gender.male" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -97,7 +108,7 @@
               Female
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.gender.female" />
+              <Stat :stat="diversity[activeTab].gender.female" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -108,7 +119,7 @@
               Gender Neutral
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.gender.genderNeutral" />
+              <Stat :stat="diversity[activeTab].gender.genderNeutral" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -119,7 +130,7 @@
               Prefer not to say
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.gender.preferNotToSay" />
+              <Stat :stat="diversity[activeTab].gender.preferNotToSay" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -130,7 +141,7 @@
               Other
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.gender.other" />
+              <Stat :stat="diversity[activeTab].gender.other" />
             </td>
           </tr>            
         </tbody>
@@ -165,7 +176,7 @@
               BAME
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.ethnicity.bame" />
+              <Stat :stat="diversity[activeTab].ethnicity.bame" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -176,7 +187,7 @@
               White
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.ethnicity.white" />
+              <Stat :stat="diversity[activeTab].ethnicity.white" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -187,7 +198,7 @@
               Prefer not to say
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.ethnicity.preferNotToSay" />
+              <Stat :stat="diversity[activeTab].ethnicity.preferNotToSay" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -198,7 +209,7 @@
               Other
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.ethnicity.other" />
+              <Stat :stat="diversity[activeTab].ethnicity.other" />
             </td>
           </tr>
         </tbody>
@@ -230,7 +241,7 @@
               Yes
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.disability.yes" />
+              <Stat :stat="diversity[activeTab].disability.yes" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -238,7 +249,7 @@
               No
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.disability.no" />
+              <Stat :stat="diversity[activeTab].disability.no" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -246,7 +257,7 @@
               Prefer not to say
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.disability.preferNotToSay" />
+              <Stat :stat="diversity[activeTab].disability.preferNotToSay" />
             </td>
           </tr>
         </tbody>
@@ -281,7 +292,7 @@
               Barrister
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.professionalBackground.barrister" />
+              <Stat :stat="diversity[activeTab].professionalBackground.barrister" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -289,7 +300,7 @@
               CILEx
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.professionalBackground.cilex" />
+              <Stat :stat="diversity[activeTab].professionalBackground.cilex" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -297,7 +308,7 @@
               Solicitor
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.professionalBackground.solicitor" />
+              <Stat :stat="diversity[activeTab].professionalBackground.solicitor" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -305,7 +316,7 @@
               Prefer not to say
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.professionalBackground.preferNotToSay" />
+              <Stat :stat="diversity[activeTab].professionalBackground.preferNotToSay" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -313,7 +324,7 @@
               Other
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.professionalBackground.other" />
+              <Stat :stat="diversity[activeTab].professionalBackground.other" />
             </td>
           </tr>            
         </tbody>
@@ -348,7 +359,7 @@
               Attended UK state school
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.socialMobility.attendedUKStateSchool" />
+              <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -359,7 +370,7 @@
               First generation to attend University
             </th>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity.applied.socialMobility.firstGenerationUniversity" />
+              <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
             </td>
           </tr>
         </tbody>
@@ -369,11 +380,13 @@
 </template>
 
 <script>
+import TabsList from '@/components/Page/TabsList';
 import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
 
 export default {
   components: {
+    TabsList,
     Stat,
   },
   data() {
@@ -381,12 +394,46 @@ export default {
       diversity: null,
       refreshingReport: false,
       unsubscribe: null,
+      tabs: [
+        {
+          ref: 'applied',
+          title: 'Applied',
+        },
+        {
+          ref: 'shortlisted',
+          title: 'Shortlisted',
+        },
+        {
+          ref: 'selected',
+          title: 'Selected',
+        },
+        {
+          ref: 'recommended',
+          title: 'Recommended',
+        },
+        {
+          ref: 'handover',
+          title: 'Handover',
+        },
+      ],
+      activeTab: 'applied',      
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },    
+    },
+    showTabs() {
+      return this.diversity && this.diversity.shortlisted;  // .shortlisted indicates we have stages reports
+    },
+    activeTabTitle() {
+      for (let i = 0, len = this.tabs.length; i < len; ++i) {
+        if (this.tabs[i].ref === this.activeTab) {
+          return this.tabs[i].title;
+        }
+      }
+      return '';
+    },
   },
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
