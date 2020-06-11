@@ -68,313 +68,319 @@
         {{ activeTabTitle }}
       </h3>
 
-      <table class="govuk-table table-with-border">
-        <caption class="govuk-table__caption hidden">
-          Gender by exercise stage
-        </caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Gender
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Applications
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Male
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].gender.male" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Female
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].gender.female" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Gender Neutral
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].gender.genderNeutral" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Prefer not to say
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].gender.preferNotToSay" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Other
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].gender.other" />
-            </td>
-          </tr>            
-        </tbody>
-      </table>
+      <p v-if="activeTab == 'summary'">
+        Summary report coming soon
+      </p>
 
-      <table class="govuk-table">
-        <caption class="govuk-table__caption hidden">
-          Ethnicity by exercise stage
-        </caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Ethnicity
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Applications
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              BAME
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].ethnicity.bame" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="row" 
-              class="govuk-table__header"
-            >
-              White
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].ethnicity.white" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="row" 
-              class="govuk-table__header"
-            >
-              Prefer not to say
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].ethnicity.preferNotToSay" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              Other
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].ethnicity.other" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-else>
+        <table class="govuk-table table-with-border">
+          <caption class="govuk-table__caption hidden">
+            Gender by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Gender
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Male
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].gender.male" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Female
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].gender.female" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Gender Neutral
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].gender.genderNeutral" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].gender.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].gender.other" />
+              </td>
+            </tr>            
+          </tbody>
+        </table>
 
-      <table class="govuk-table">
-        <caption class="govuk-table__caption hidden">
-          Disability by exercise stage
-        </caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Disability
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Applications
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              Yes
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].disability.yes" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              No
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].disability.no" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              Prefer not to say
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].disability.preferNotToSay" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Ethnicity by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Ethnicity
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                BAME
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].ethnicity.bame" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="row" 
+                class="govuk-table__header"
+              >
+                White
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].ethnicity.white" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="row" 
+                class="govuk-table__header"
+              >
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].ethnicity.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].ethnicity.other" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <table class="govuk-table">
-        <caption class="govuk-table__caption hidden">
-          Professional background by exercise stage
-        </caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Professional background
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Applications
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th
-              scope="row" 
-              class="govuk-table__header"
-            >
-              Barrister
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].professionalBackground.barrister" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              CILEx
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].professionalBackground.cilex" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              Solicitor
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].professionalBackground.solicitor" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              Prefer not to say
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].professionalBackground.preferNotToSay" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header">
-              Other
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].professionalBackground.other" />
-            </td>
-          </tr>            
-        </tbody>
-      </table> 
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Disability by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Disability
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].disability.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].disability.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].disability.preferNotToSay" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <table class="govuk-table">
-        <caption class="govuk-table__caption hidden">
-          Social mobility by selected stage
-        </caption>
-        <thead class="govuk-table__header">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Social mobility
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Applications
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th 
-              scope="row"
-              class="govuk-table__header"
-            >
-              Attended UK state school
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th 
-              scope="row" 
-              class="govuk-table__header"
-            >
-              First generation to attend University
-            </th>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Professional background by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Professional background
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th
+                scope="row" 
+                class="govuk-table__header"
+              >
+                Barrister
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.barrister" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                CILEx
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.cilex" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Solicitor
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.solicitor" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Prefer not to say
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.preferNotToSay" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.other" />
+              </td>
+            </tr>            
+          </tbody>
+        </table> 
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Social mobility by selected stage
+          </caption>
+          <thead class="govuk-table__header">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Social mobility
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th 
+                scope="row"
+                class="govuk-table__header"
+              >
+                Attended UK state school
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th 
+                scope="row" 
+                class="govuk-table__header"
+              >
+                First generation to attend University
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
+              </td>
+            </tr>
+          </tbody>
+        </table>        
+      </div>
     </div>
   </div>
 </template>
@@ -414,6 +420,10 @@ export default {
         {
           ref: 'handover',
           title: 'Handover',
+        },
+        {
+          ref: 'summary',
+          title: 'Summary',
         },
       ],
       activeTab: 'applied',      
