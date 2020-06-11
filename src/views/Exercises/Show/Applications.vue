@@ -56,18 +56,19 @@
             </router-link>
           </th>
           <td class="govuk-table__cell">
-            <span v-if="application.personalDetails">{{ application.personalDetails.fullName }}</span>
+            <span v-if="application.personalDetails">
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: application.userId } }"
+              >
+                {{ application.personalDetails.fullName }}
+              </RouterLink>
+            </span>
           </td>
           <!--<td class="govuk-table__cell">
             {{ application.email }}
           </td> -->
           <td class="govuk-table__cell">
-            <router-link
-              class="govuk-link"
-              :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
-            >
-              {{ application.status }}
-            </router-link>
+            {{ application.status }}
           </td>
           <!-- <td class="govuk-table__cell">
             {{ application.notes }}

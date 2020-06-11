@@ -122,15 +122,18 @@ export default {
         },
       ];
       if (this.exercise.applicationsCount || this.hasOpened) {
+        const children = [
+          { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
+          { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
+          { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
+        ];
+        if (this.exercise.applicationRecords) {
+          children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
+        }
         pages.push({ 
           page: 'Applications',
           name: 'exercise-show-applications',
-          children: [
-            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
-            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
-            { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
-            { page: 'Independent Assessments', name: 'exercise-show-independent-assessments' },
-          ],
+          children: children,
         });
         if (this.exercise.applicationRecords) {
           const review = this.exercise.applicationRecords.review;
@@ -149,17 +152,17 @@ export default {
               { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
             ],
           });
+          pages.push({
+            page: 'Reports',
+            name: 'exercise-show-reports',
+            children: [
+              { page: 'Diversity', name: 'exercise-show-report-diversity' },
+              { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
+              { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
+              { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
+            ],
+          });
         }
-        pages.push({
-          page: 'Reports',
-          name: 'exercise-show-reports',
-          children: [
-            { page: 'Diversity', name: 'exercise-show-report-diversity' },
-            { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
-            { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
-            { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
-          ],
-        });
       }
       return pages;
     },

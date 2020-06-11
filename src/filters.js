@@ -10,6 +10,8 @@ const formatDate = (value, type) => {
         return objDate.toLocaleString('en-GB');
       case 'long':
         return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+      case 'longdatetime':
+        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
       default:
         return objDate.toLocaleDateString('en-GB');
     }
@@ -40,7 +42,7 @@ const formatNumber = (value, decimalPlaces) => {
 };
 
 const formatNIN = (value) => {
-  return value.toUpperCase();
+  return value ? value.toUpperCase() : '';
 };
 
 const toHumanCase = (value) => {
@@ -77,6 +79,8 @@ const candidateHasIssues = row => {
 
   return flag ? 'Yes' : 'No';
 };
+
+const showAlternative = (value, optional) => value || optional;
 
 const lookup = (value) => {
   if (typeof value === 'string') {
@@ -295,5 +299,6 @@ export {
   toYesNo,
   slugify,
   candidateHasIssues,
+  showAlternative,
   lookup
 };
