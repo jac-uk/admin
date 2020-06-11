@@ -60,7 +60,7 @@
         </nav>
       </div>
     </div>
-    <div class="govuk-phase-banner govuk-!-margin-bottom-4">
+    <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none">
       <p class="govuk-phase-banner__content">
         <strong class="govuk-tag govuk-phase-banner__content__tag">beta</strong>
         <span class="govuk-phase-banner__text">
