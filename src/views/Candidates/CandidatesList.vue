@@ -17,7 +17,7 @@
       <template #row="{row}">
         <TableCell>
           <RouterLink
-            :to="{ name: 'candidates-list' }"
+            :to="{ name: 'candidates-view', params: { id: row.id } }"
           >
             {{ row.fullName | showAlternative(row.id) }}
           </RouterLink>

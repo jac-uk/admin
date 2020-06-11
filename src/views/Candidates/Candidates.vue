@@ -1,5 +1,5 @@
 <template>
-  <div class="candidates">
+  <div class="candidates govuk-!-margin-top-9">
     <Router-view />
   </div>
 </template>
