@@ -139,8 +139,12 @@
 </template>
 
 <script>
+import EventRenderer from '@/components/Page/EventRenderer';
 
 export default {
+  components: {
+    EventRenderer,
+  },
   props: {
     data: {
       type: Object,
