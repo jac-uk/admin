@@ -33,6 +33,14 @@
               </RouterLink>
             </li>
             <li class="govuk-header__navigation-item">
+              <RouterLink
+                :to="{ name: 'candidates-list' }"
+                class="govuk-header__link"
+              >
+                Candidates
+              </RouterLink>
+            </li>
+            <li class="govuk-header__navigation-item">
               <a
                 v-if="$route.name !== 'sign-in'"
                 href="#"

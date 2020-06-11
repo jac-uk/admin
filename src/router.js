@@ -49,6 +49,10 @@ import ExerciseStagesShortlistList from '@/views/Exercises/Stages/ShortlistList'
 import ExerciseStagesShortlistEdit from '@/views/Exercises/Stages/ShortlistEdit';
 import ExerciseStagesShortlistBack from '@/views/Exercises/Stages/ShortlistBack';
 
+// Candidates
+import Candidates from '@/views/Candidates/Candidates';
+import CandidatesList from '@/views/Candidates/CandidatesList';
+
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
@@ -83,7 +87,7 @@ const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-   {
+    {
       path: '*',
       redirect: '/dashboard',
     },
@@ -414,6 +418,21 @@ const router = new Router({
               },
             },
           ],                    
+        },
+      ],
+    },
+    {
+      path: '/candidates',
+      component: Candidates,
+      children: [
+        {
+          path: '',
+          component: CandidatesList,
+          name: 'candidates-list',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidate | List',
+          },
         },
       ],
     },
