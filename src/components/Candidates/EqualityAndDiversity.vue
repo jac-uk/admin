@@ -1,7 +1,7 @@
 <template>
-<div
+  <div
+    v-if="hasData"
     class="govuk-!-margin-top-9"
-    v-if="Object.keys(data).length > 0"
   >
     <h2
       class="govuk-heading-l"
@@ -300,7 +300,9 @@ export default {
     hasEthnicGroupDetails() {
       return this.data.ethnicGroup &&
         this.data.ethnicGroup.startsWith('other-');
-
+    },
+    hasData() {
+      return Object.keys(this.data).length > 0;
     },
   },
   methods: {

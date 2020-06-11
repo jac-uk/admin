@@ -1,7 +1,7 @@
 <template>
   <div
+    v-if="hasData"
     class="govuk-!-margin-top-9 "
-    v-if="Object.keys(data).length > 0"
   >
     <h2 class="govuk-heading-l">
       Personal details
@@ -100,6 +100,11 @@ export default {
       type: Object,
       default: null,
       required: true,
+    },
+  },
+  computed: {
+    hasData() {
+      return Object.keys(this.data).length > 0;
     },
   },
 };

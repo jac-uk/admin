@@ -47,5 +47,8 @@ export default {
   async created() {
     this.$store.dispatch('candidates/bind');
   },
+  destroyed() {
+    this.$store.dispatch('candidates/unbind');
+  },
 };
 </script>

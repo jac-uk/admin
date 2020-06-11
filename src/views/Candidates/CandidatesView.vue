@@ -3,7 +3,7 @@
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
-      Candidate: {{ fullName() }}
+      Candidate: {{ fullName }}
     </h1>
 
     <TabsList
@@ -72,29 +72,24 @@ export default {
     },
     characterInformation() {
       const localDocs = this.$store.state.candidates.characterInformation;
-      // // eslint-disable-next-line
-      // console.log('CharacterInformation', localDocs);
       return localDocs || {};
     },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
-      // eslint-disable-next-line
-      console.log('CharacterInformation', localDocs);
       return localDocs || {};
+    },
+    fullName() {
+      return this.personalDetails.fullName ? this.personalDetails.fullName : this.candidateRecords.fullName;
     },
   },
   created() {
     const id = this.$route.params.id || '';
-    // eslint-disable-next-line
-    // console.log('created id', id);
     this.$store.dispatch('candidates/bind', id);
     this.$store.dispatch('candidates/bindDocs', id);
   },
-  methods: {
-    fullName () {
-      console.log('fullName', this.personalDetails);
-      return this.personalDetails.fullName ? this.personalDetails.fullName : this.candidateRecords.fullName;
-    },
+  destroyed() {
+    this.$store.dispatch('candidates/bind');
+    this.$store.dispatch('candidates/bindDocs');
   },
 };
 </script>
