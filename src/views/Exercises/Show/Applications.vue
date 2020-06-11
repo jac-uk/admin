@@ -58,7 +58,7 @@
           <td class="govuk-table__cell">
             <span v-if="application.personalDetails">
               <RouterLink
-                :to="{ name: 'candidates-view', params: { id: application.id } }"
+                :to="{ name: 'candidates-view', params: { id: application.userId } }"
               >
                 {{ application.personalDetails.fullName }}
               </RouterLink>
