@@ -87,9 +87,5 @@ export default {
     this.$store.dispatch('candidates/bind', id);
     this.$store.dispatch('candidates/bindDocs', id);
   },
-  destroyed() {
-    this.$store.dispatch('candidates/bind');
-    this.$store.dispatch('candidates/bindDocs');
-  },
 };
 </script>
