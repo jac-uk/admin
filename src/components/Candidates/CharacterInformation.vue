@@ -142,15 +142,15 @@
 import EventRenderer from '@/components/Page/EventRenderer';
 
 export default {
+  components: {
+    EventRenderer,
+  },
   props: {
     data: {
       type: Object,
       default: null,
       required: true,
     },
-  },
-  components: {
-    EventRenderer,
   },
   computed: {
     hasData() {
