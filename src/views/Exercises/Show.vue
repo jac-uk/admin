@@ -129,7 +129,6 @@ export default {
         ];
         if (this.exercise.applicationRecords) {
           children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
-          // children.push({ page: 'Consent Forms', name: 'exercise-show-independent-assessments' });
         }
         pages.push({ 
           page: 'Applications',
