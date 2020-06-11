@@ -304,6 +304,20 @@ export default {
     hasData() {
       return Object.keys(this.data).length > 0;
     },
+    ethnicGroupDetails() {
+      switch(this.data.ethnicGroup) {
+      case 'other-asian':
+        return this.data.otherEthnicGroupAsianDetails;
+      case 'other-white':
+        return this.data.otherEthnicGroupWhiteDetails;
+      case 'other-black':
+        return this.data.otherEthnicGroupBlackDetails;
+      case 'other-mixed':
+        return this.data.otherEthnicGroupMixedDetails;
+      default:
+        return this.data.otherEthnicGroupDetails;
+      }
+    },
   },
   methods: {
     preferNotToSay(field) {
