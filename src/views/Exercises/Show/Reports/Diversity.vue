@@ -7,6 +7,12 @@
           <h2 class="govuk-heading-l">
             Diversity
           </h2>
+          <span 
+            v-if="diversity"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ diversity.createdAt | formatDate('longdatetime') }}
+          </span>          
         </div>
         <div
           class="moj-page-header-actions__actions float-right"
@@ -32,8 +38,10 @@
               </button>
             </div>
           </div>
+          1
         </div>
       </div>
+
       <div
         v-if="diversity"
         class="govuk-grid-row"
@@ -403,6 +411,7 @@
 import TabsList from '@/components/Page/TabsList';
 import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
+import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 
 export default {
   components: {
@@ -462,7 +471,7 @@ export default {
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
       .onSnapshot((snap) => {
-        this.diversity = snap.data();
+        this.diversity = vuexfireSerialize(snap);
       });    
   },
   destroyed() {
