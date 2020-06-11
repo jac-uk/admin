@@ -94,7 +94,11 @@
                 Full Name
               </dt>
               <dd class="govuk-summary-list__value">
-                {{ application.personalDetails.fullName }}
+                <RouterLink
+                  :to="{ name: 'candidates-view', params: { id: application.id } }"
+                >
+                  {{ application.personalDetails.fullName }}
+                </RouterLink>
               </dd>
             </div>
 

@@ -47,7 +47,13 @@
       >
         <template #row="{row}">
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
-          <TableCell>{{ row.candidate.fullName }}</TableCell>
+          <TableCell>
+            <RouterLink
+              :to="{ name: 'candidates-view', params: { id: row.id } }"
+            >
+              {{ row.candidate.fullName }}
+            </RouterLink>
+          </TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>

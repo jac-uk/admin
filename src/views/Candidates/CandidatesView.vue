@@ -3,7 +3,7 @@
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
-      Candidate: {{ fullName }}
+      Candidate: {{ myFullName }}
     </h1>
 
     <TabsList
@@ -78,8 +78,8 @@ export default {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
     },
-    fullName() {
-      return this.personalDetails.fullName ? this.personalDetails.fullName : this.candidateRecords.fullName;
+    myFullName() {
+      return this.personalDetails ? this.personalDetails.fullName : this.candidateRecords.fullName;
     },
   },
   created() {
