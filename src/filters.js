@@ -10,6 +10,8 @@ const formatDate = (value, type) => {
         return objDate.toLocaleString('en-GB');
       case 'long':
         return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+      case 'longdatetime':
+        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
       default:
         return objDate.toLocaleDateString('en-GB');
     }
