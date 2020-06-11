@@ -40,7 +40,7 @@ const formatNumber = (value, decimalPlaces) => {
 };
 
 const formatNIN = (value) => {
-  return value.toUpperCase();
+  return value ? value.toUpperCase() : '';
 };
 
 const toHumanCase = (value) => {

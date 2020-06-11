@@ -52,6 +52,7 @@ import ExerciseStagesShortlistBack from '@/views/Exercises/Stages/ShortlistBack'
 // Candidates
 import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
+import CandidatesView from '@/views/Candidates/CandidatesView';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -432,6 +433,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Candidate | List',
+          },
+        },
+        {
+          path: ':id',
+          component: CandidatesView,
+          name: 'candidates-view',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidate | View',
           },
         },
       ],

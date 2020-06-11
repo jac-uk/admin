@@ -2,20 +2,40 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 
+const collection = firestore.collection('candidates');
+
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }) => {
-      const firestoreRef = firestore
-      .collection('candidates')
-      .orderBy('fullName', 'asc');
+    bind: firestoreAction(({ bindFirestoreRef }, id) => {
+      let firestoreRef = collection
+        .orderBy('createdAt', 'desc');
+      if (id) {
+        firestoreRef = firestore
+        .collection('candidates').doc(id);
+      } 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    bindDocs: firestoreAction(async ({ bindFirestoreRef }, id) => {
+      await bindFirestoreRef('personalDetails', collection.doc(id).collection('documents').doc('personalDetails'), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('characterInformation', collection.doc(id).collection('documents').doc('characterInformation'), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('equalityAndDiversitySurvey', collection.doc(id).collection('documents').doc('equalityAndDiversitySurvey'), { serialize: vuexfireSerialize });
+      return;
+    }),
+    unbindDocs: firestoreAction(async ({ unbindFirestoreRef }) => {
+      await unbindFirestoreRef('personalDetails');
+      await unbindFirestoreRef('characterInformation');
+      await unbindFirestoreRef('equalityAndDiversitySurvey');
+      return;
+    }),
   },
   state: {
     records: [],
+    characterInformation: null,
+    equalityAndDiversitySurvey: null,
+    personalDetails: null,
   },
 };
