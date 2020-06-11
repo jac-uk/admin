@@ -14,6 +14,13 @@
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
+                @click="exportData()"
+              >
+                Export all data
+              </button>
+              <button
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
                 @click="refreshReport"
@@ -379,7 +386,14 @@
               </td>
             </tr>
           </tbody>
-        </table>        
+        </table>
+        <button
+          class="govuk-button govuk-button--secondary"
+          data-module="govuk-button"
+          @click="exportData(activeTab)"
+        >
+          Export data
+        </button>
       </div>
     </div>
   </div>
@@ -461,6 +475,55 @@ export default {
       this.refreshingReport = true;
       await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
+    },
+    gatherReportData(stage) {
+      const data = [];
+      let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      if (stage) {
+        stages = [stage];
+      }
+      data.push(['Statistic'].concat(stages));
+      Object.keys(this.diversity.applied).forEach((report) => {
+        Object.keys(this.diversity.applied[report]).forEach((stat) => {
+          const columns = [];
+          columns.push(`${report}:${stat}`);
+          stages.forEach((stage) => {
+            if (stat === 'total') {
+              columns.push(this.diversity[stage][report][stat]);
+            } else {
+              columns.push(this.diversity[stage][report][stat].total);
+            }
+          });          
+          data.push(columns);
+        });
+      });
+      return data;
+    },
+    buildCsvFromDataTable(data) {
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      for (let row = 0, totalRows = data.length; row < totalRows; ++row) {
+        for (let column = 0, totalColumns = data[row].length; column < totalColumns; ++column) {
+          if (row === 0 || column === 0) {  // first row and first column are strings
+            csvContent += `"${data[row][column]}"`;
+          } else {
+            csvContent += `${data[row][column]}`;
+          }
+          if (column < totalColumns - 1) {
+            csvContent += ';';
+          }
+        }
+        csvContent += '\n';
+      }
+      csvContent = csvContent.replace(/(^\[)|(\]$)/gm, '');
+      return encodeURI(csvContent);
+    },
+    exportData(stage) {
+      const data = this.gatherReportData(stage);
+      const csvData = this.buildCsvFromDataTable(data);
+      const link = document.createElement('a');
+      link.setAttribute('href', csvData);
+      link.setAttribute('download', `${this.exercise.referenceNumber}.diversity.csv`);
+      link.click();
     },
   },
 };
