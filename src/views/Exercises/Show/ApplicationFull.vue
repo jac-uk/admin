@@ -95,7 +95,7 @@
               </dt>
               <dd class="govuk-summary-list__value">
                 <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: application.id } }"
+                  :to="{ name: 'candidates-view', params: { id: application.userId } }"
                 >
                   {{ application.personalDetails.fullName }}
                 </RouterLink>

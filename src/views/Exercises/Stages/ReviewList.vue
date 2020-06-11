@@ -41,7 +41,7 @@
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>
             <RouterLink
-              :to="{ name: 'candidates-view', params: { id: row.id } }"
+              :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
             >
               {{ row.candidate.fullName }}
             </RouterLink> 
