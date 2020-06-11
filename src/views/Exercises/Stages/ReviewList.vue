@@ -43,7 +43,7 @@
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.id } }"
             >
-              {{ row.candidate.fullName  }}
+              {{ row.candidate.fullName }}
             </RouterLink> 
           </TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>

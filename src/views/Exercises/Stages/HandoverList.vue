@@ -42,10 +42,10 @@
           <TableCell>{{ row.application.referenceNumber }}</TableCell>
           <TableCell>
             <RouterLink
-            :to="{ name: 'candidates-view', params: { id: row.id } }"
-          >
-            {{ row.candidate.fullName }}
-          </RouterLink>
+              :to="{ name: 'candidates-view', params: { id: row.id } }"
+            >
+              {{ row.candidate.fullName }}
+            </RouterLink>
           </TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
