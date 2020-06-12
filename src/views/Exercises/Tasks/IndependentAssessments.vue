@@ -49,9 +49,6 @@
         <option value="shortlisted">
           Shortlisted ({{ exercise.applicationRecords.shortlisted }})
         </option>
-        <option value="selected">
-          Selected ({{ exercise.applicationRecords.selected }})
-        </option>
       </select>
 
       <ActionButton
