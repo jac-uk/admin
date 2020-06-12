@@ -49,9 +49,6 @@
         <option value="shortlisted">
           Shortlisted ({{ exercise.applicationRecords.shortlisted }})
         </option>
-        <option value="selected">
-          Selected ({{ exercise.applicationRecords.selected }})
-        </option>
       </select>
 
       <ActionButton
@@ -89,24 +86,6 @@
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <!--<th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              <div class="govuk-checkboxes govuk-checkboxes&#45;&#45;small">
-                <div class="govuk-checkboxes__item">
-                  <input
-                    id="checkboxes"
-                    class="govuk-checkboxes__input"
-                    type="checkbox"
-                  >
-                  <label
-                    class="govuk-label govuk-checkboxes__label"
-                    for="checkboxes"
-                  />
-                </div>
-              </div>
-            </th>-->
             <th
               scope="col"
               class="govuk-table__header app-custom-class"
@@ -145,20 +124,6 @@
             :key="assessment.id"
             class="govuk-table__row"
           >
-            <!--<td class="govuk-table__cell">
-              <div class="govuk-checkboxes govuk-checkboxes&#45;&#45;small">
-                <div class="govuk-checkboxes__item">
-                  <input
-                    id="checkbox-application"
-                    class="govuk-checkboxes__input"
-                    type="checkbox"
-                  >
-                  <label
-                    class="govuk-label govuk-checkboxes__label"
-                  />
-                </div>
-              </div>
-            </td>-->
             <th
               scope="row"
               class="govuk-table__header"
@@ -288,7 +253,7 @@ export default {
       return window.location.href.indexOf('admin-staging') > 0;
     },
     canCancelAssessments() {
-      return this.hasInitialisedAssessments; // && !(this.exercise.assessments && this.exercise.assessments.sent);
+      return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
     },
     canSendRequestsToAll() {
       return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
