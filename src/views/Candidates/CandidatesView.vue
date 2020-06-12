@@ -15,7 +15,8 @@
       v-if="activeTab === 'details'"
     >
       <PersonalDetails 
-        :data="personalDetails" 
+        :candidate="personalDetails" 
+        @changedetails="updateCandidate"
       />
       <CharacterInformation 
         :data="characterInformation" 
@@ -86,6 +87,12 @@ export default {
     const id = this.$route.params.id || '';
     this.$store.dispatch('candidates/bind', id);
     this.$store.dispatch('candidates/bindDocs', id);
+  },
+  methods: {
+    updateCandidate(obj) {
+      const id = this.$route.params.id;
+      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: id });
+    },
   },
 };
 </script>
