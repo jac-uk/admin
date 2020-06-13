@@ -122,19 +122,27 @@ export default {
         },
       ];
       if (this.exercise.applicationsCount || this.hasOpened) {
-        const children = [
-          { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
-          { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
-          { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
-        ];
-        if (this.exercise.applicationRecords) {
-          children.push({ page: 'Independent Assessments', name: 'exercise-show-independent-assessments' });
-        }
-        pages.push({ 
+        pages.push({
           page: 'Applications',
           name: 'exercise-show-applications',
-          children: children,
+          children: [
+            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
+            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
+            { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
+          ],
         });
+
+        if (this.exercise.applicationRecords) {
+          pages.push({
+            page: 'Tasks',
+            name: 'exercise-tasks',
+            children: [
+              { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
+              { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
+            ],
+          });
+        }
+
         if (this.exercise.applicationRecords) {
           const review = this.exercise.applicationRecords.review;
           const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
