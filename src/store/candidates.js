@@ -20,7 +20,7 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindDocs: firestoreAction(async ({ bindFirestoreRef }, id) => {
-      await bindFirestoreRef('personalDetails', collection.doc(id).collection('documents').doc('personalDetails'), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('personalDetails', collection.doc(`${id}/documents/personalDetails`), { serialize: vuexfireSerialize });
       await bindFirestoreRef('characterInformation', collection.doc(id).collection('documents').doc('characterInformation'), { serialize: vuexfireSerialize });
       await bindFirestoreRef('equalityAndDiversitySurvey', collection.doc(id).collection('documents').doc('equalityAndDiversitySurvey'), { serialize: vuexfireSerialize });
       return;
@@ -31,6 +31,10 @@ export default {
       await unbindFirestoreRef('equalityAndDiversitySurvey');
       return;
     }),
+    savePersonalDetails: async (context, { data, id }) => {
+      const ref = collection.doc(`${id}/documents/personalDetails`);
+      await ref.update(data);
+    },
   },
   state: {
     records: [],
