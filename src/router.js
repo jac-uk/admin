@@ -29,11 +29,9 @@ import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPrefer
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
-import ExerciseShowApplication from '@/views/Exercises/Show/Application';
-import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
 
 // Application
-import ExerciseApplication from '@/views/Exercises/Application/Application';
+import ExerciseApplication from '@/views/Exercises/Applications/Application';
 
 // Stages
 import ExerciseStages from '@/views/Exercises/Stages';
@@ -236,6 +234,7 @@ const router = new Router({
           name: 'exercise-show-applications',
           redirect: 'applications/applied',
         },
+        // @TODO move this to Applications folder, not Show
         {
           path: 'applications/:status',
           component: ExerciseShowApplications,
@@ -486,37 +485,6 @@ const router = new Router({
           },
         },
       ],
-    },
-    // @TODO remove these application views
-    {
-      path: '/application/:applicationId',
-      component: ExerciseShowApplication,
-      children: [
-        {
-          path: '',
-          component: ExerciseShowApplicationFull,
-          name: 'exercise-show-application',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Application',
-          },
-          props: {
-            streamlined: false,
-          },
-        },
-        {
-          path: 'streamlined',
-          component: ExerciseShowApplicationFull,
-          name: 'exercise-show-application-streamlined',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Application Streamlined',
-          },
-          props: {
-            streamlined: true,
-          },
-        },
-      ],      
     },
     {
       path: '/applications-full',
