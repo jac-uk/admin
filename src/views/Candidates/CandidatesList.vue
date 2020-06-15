@@ -22,8 +22,8 @@
             {{ row.fullName | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
-        <TableCell>{{ new Date(row.createdAt) | formatDate('long') }}</TableCell>
-        <TableCell>{{ 1 }}</TableCell>
+        <TableCell>{{ new Date(row.created) | formatDate('long') }}</TableCell>
+        <TableCell>{{ row.applications.applied }}</TableCell>
       </template>
     </Table>
   </div>
