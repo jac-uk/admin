@@ -183,7 +183,7 @@ export default {
         return {
           name: 'exercise-show-overview',
           params: {
-            id: this.exercise.id,
+            id: this.exercise? this.exercise.id : this.$route.params.id,
           },
         };
       }

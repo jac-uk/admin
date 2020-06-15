@@ -32,6 +32,9 @@ import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
 import ExerciseShowApplication from '@/views/Exercises/Show/Application';
 import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
 
+// Application
+import ExerciseApplication from '@/views/Exercises/Application/Application';
+
 // Stages
 import ExerciseStages from '@/views/Exercises/Stages';
 import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
@@ -148,20 +151,6 @@ const router = new Router({
           },
         },
         {
-          path: 'applications',
-          name: 'exercise-show-applications',
-          redirect: 'applications/applied',
-        },
-        {
-          path: 'applications/:status',
-          component: ExerciseShowApplications,
-          name: 'exercise-show-applications-in-status',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Applications',
-          },
-        },
-        {
           path: 'contacts',
           component: ExerciseShowContacts,
           name: 'exercise-show-contacts',
@@ -242,6 +231,29 @@ const router = new Router({
             title: 'Exercise Details | Downloads',
           },
         },
+        {
+          path: 'applications',
+          name: 'exercise-show-applications',
+          redirect: 'applications/applied',
+        },
+        {
+          path: 'applications/:status',
+          component: ExerciseShowApplications,
+          name: 'exercise-show-applications-in-status',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Applications',
+          },
+        },        
+        {
+          path: 'application/:applicationId',
+          component: ExerciseApplication,
+          name: 'exercise-application',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Application',
+          },
+        },        
         {
           path: 'stages',
           component: ExerciseStages,
@@ -475,6 +487,7 @@ const router = new Router({
         },
       ],
     },
+    // @TODO remove these application views
     {
       path: '/application/:applicationId',
       component: ExerciseShowApplication,
