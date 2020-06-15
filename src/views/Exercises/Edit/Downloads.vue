@@ -75,6 +75,17 @@
           :path="uploadPath"
         />
 
+        <h2 class="govuk-heading-l">
+          Welsh Translation
+        </h2>
+
+        <RepeatableFields
+          v-model="exercise.downloads.welshTranslation"
+          ident="candidate-assessement-forms"
+          :component="repeatableFields.MultiFileUpload"
+          :path="uploadPath"
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>

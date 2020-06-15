@@ -155,6 +155,28 @@
           </ul>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Welsh Translation
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!exercise.downloads.welshTranslation.length">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.welshTranslation"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
     </dl>
   </div>
 </template>
