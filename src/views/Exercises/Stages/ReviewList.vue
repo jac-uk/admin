@@ -38,7 +38,13 @@
         :selection.sync="selectedItems"
       >
         <template #row="{row}">
-          <TableCell>{{ row.application.referenceNumber }}</TableCell>
+          <TableCell>
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink> 
+          </TableCell>
           <TableCell>
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
