@@ -39,7 +39,7 @@
             </div>
             <div class="govuk-grid-column-one-third text-right">
               <RouterLink
-                :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+                :to="{name: 'exercise-application', params: { applicationId: application.id, tab: 'issues' } }"
                 class="govuk-link print-none"
               >
                 View application
