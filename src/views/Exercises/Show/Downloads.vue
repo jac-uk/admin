@@ -116,7 +116,7 @@
           Pensions Information
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="!exercise.downloads.pensionsInformation.length">
+          <span v-if="!showPensionsInformation">
             No files uploaded
           </span>
           <ul class="govuk-list">
@@ -138,7 +138,7 @@
           Competency Framework
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="!exercise.downloads.competencyFramework.length">
+          <span v-if="!showCompetencyFramework">
             No files uploaded
           </span>
           <ul class="govuk-list">
@@ -160,7 +160,7 @@
           Welsh Translation
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="!exercise.downloads.welshTranslation.length">
+          <span v-if="!showWelshTranslation">
             No files uploaded
           </span>
           <ul class="govuk-list">
@@ -200,6 +200,42 @@ export default {
     }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    showPensionsInformation() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.pensionsInformation && 
+        this.exercise.downloads.pensionsInformation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCompetencyFramework() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.competencyFramework && 
+        this.exercise.downloads.competencyFramework.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showWelshTranslation() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.welshTranslation && 
+        this.exercise.downloads.welshTranslation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };
