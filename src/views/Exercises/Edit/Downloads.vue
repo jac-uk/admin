@@ -64,6 +64,17 @@
           :path="uploadPath"
         />
 
+        <h2 class="govuk-heading-l">
+          Competency framework
+        </h2>
+
+        <RepeatableFields
+          v-model="exercise.downloads.competencyFramework"
+          ident="candidate-assessement-forms"
+          :component="repeatableFields.MultiFileUpload"
+          :path="uploadPath"
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -95,6 +106,7 @@ export default {
         independentAssessors: [],
         candidateAssessementForms: [],
         pensionsInformation: [],
+        competencyFramework: [],
       },
     };
     const data = this.$store.getters['exerciseDocument/data']();
