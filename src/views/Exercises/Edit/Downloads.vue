@@ -53,6 +53,17 @@
           :path="uploadPath"
         />
 
+        <h2 class="govuk-heading-l">
+          Pensions Information
+        </h2>
+
+        <RepeatableFields
+          v-model="exercise.downloads.pensionsInformation"
+          ident="candidate-assessement-forms"
+          :component="repeatableFields.MultiFileUpload"
+          :path="uploadPath"
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -83,6 +94,7 @@ export default {
         termsAndConditions: [],
         independentAssessors: [],
         candidateAssessementForms: [],
+        pensionsInformation: [],
       },
     };
     const data = this.$store.getters['exerciseDocument/data']();
