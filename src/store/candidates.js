@@ -9,10 +9,10 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
       let firestoreRef = collection
-        .orderBy('createdAt', 'desc');
+        .orderBy('created', 'desc')
+        .limit(100);
       if (id) {
-        firestoreRef = firestore
-        .collection('candidates').doc(id);
+        firestoreRef = collection.doc(id);
       } 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
