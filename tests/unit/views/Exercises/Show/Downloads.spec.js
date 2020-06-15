@@ -85,6 +85,9 @@ describe('@/views/Exercises/Show/Downloads', () => {
           termsAndConditions: [],
           independentAssessors: [],
           candidateAssessementForms: [],
+          pensionsInformation: [],
+          competencyFramework: [],
+          welshTranslation: [],
         },
       };
 
@@ -100,15 +103,14 @@ describe('@/views/Exercises/Show/Downloads', () => {
         let wrapper = createTestSubject();
         const lists = wrapper.findAll('dt');
 
-        expect(lists.length).toEqual(4);
+        expect(lists.length).toEqual(7);
       });
 
-      it('renders message if list is empty', () => {
+      it('renders message for each item with no downloads available', () => {
         mockData.mockReturnValue(exercise);
         let wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > span');
-
-        expect(lists.length).toEqual(4);
+        expect(lists.length).toEqual(7);
       });
 
       it('renders download links for every non-empty list', () => {
@@ -126,7 +128,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
         let wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > ul');
 
-        expect(lists.length).toEqual(4);
+        expect(lists.length).toEqual(7);
         expect(lists.at(0).findAll(DownloadLink).length).toEqual(1);
       });
     });
