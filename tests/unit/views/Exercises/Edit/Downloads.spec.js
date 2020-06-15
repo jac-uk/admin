@@ -105,8 +105,8 @@ describe('@/views/Exercises/Show/Downloads', () => {
       });
     });
 
-    it('contains 4 multi uploads', () => {
-      expect(wrapper.findAll(RepeatableFields)).toHaveLength(4);
+    it('contains 7 multi uploads', () => {
+      expect(wrapper.findAll(RepeatableFields)).toHaveLength(7);
     });
   });
 
