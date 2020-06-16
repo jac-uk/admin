@@ -28,8 +28,6 @@ const formatEstimatedDate = (value) => {
       return formatDate(value, 'month');
     }
     return formatDate(value);
-  } else {
-    return 'TBC';
   }
 };
 
