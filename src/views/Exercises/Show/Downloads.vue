@@ -111,6 +111,72 @@
           </ul>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Pensions Information
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!showPensionsInformation">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.pensionsInformation"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Competency Framework
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!showCompetencyFramework">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.competencyFramework"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Welsh Translation
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!showWelshTranslation">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.welshTranslation"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
     </dl>
   </div>
 </template>
@@ -134,6 +200,42 @@ export default {
     }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    showPensionsInformation() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.pensionsInformation && 
+        this.exercise.downloads.pensionsInformation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCompetencyFramework() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.competencyFramework && 
+        this.exercise.downloads.competencyFramework.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showWelshTranslation() {
+      if (
+        this.exercise && 
+        this.exercise.downloads && 
+        this.exercise.downloads.welshTranslation && 
+        this.exercise.downloads.welshTranslation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };

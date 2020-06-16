@@ -29,8 +29,9 @@ import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPrefer
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
-import ExerciseShowApplication from '@/views/Exercises/Show/Application';
-import ExerciseShowApplicationFull from '@/views/Exercises/Show/ApplicationFull';
+
+// Application
+import ExerciseApplication from '@/views/Exercises/Applications/Application';
 
 // Stages
 import ExerciseStages from '@/views/Exercises/Stages';
@@ -148,20 +149,6 @@ const router = new Router({
           },
         },
         {
-          path: 'applications',
-          name: 'exercise-show-applications',
-          redirect: 'applications/applied',
-        },
-        {
-          path: 'applications/:status',
-          component: ExerciseShowApplications,
-          name: 'exercise-show-applications-in-status',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Applications',
-          },
-        },
-        {
           path: 'contacts',
           component: ExerciseShowContacts,
           name: 'exercise-show-contacts',
@@ -242,6 +229,30 @@ const router = new Router({
             title: 'Exercise Details | Downloads',
           },
         },
+        {
+          path: 'applications',
+          name: 'exercise-show-applications',
+          redirect: 'applications/applied',
+        },
+        // @TODO move this to Applications folder, not Show
+        {
+          path: 'applications/:status',
+          component: ExerciseShowApplications,
+          name: 'exercise-show-applications-in-status',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Applications',
+          },
+        },        
+        {
+          path: 'application/:applicationId',
+          component: ExerciseApplication,
+          name: 'exercise-application',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Application',
+          },
+        },        
         {
           path: 'stages',
           component: ExerciseStages,
@@ -474,36 +485,6 @@ const router = new Router({
           },
         },
       ],
-    },
-    {
-      path: '/application/:applicationId',
-      component: ExerciseShowApplication,
-      children: [
-        {
-          path: '',
-          component: ExerciseShowApplicationFull,
-          name: 'exercise-show-application',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Application',
-          },
-          props: {
-            streamlined: false,
-          },
-        },
-        {
-          path: 'streamlined',
-          component: ExerciseShowApplicationFull,
-          name: 'exercise-show-application-streamlined',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Application Streamlined',
-          },
-          props: {
-            streamlined: true,
-          },
-        },
-      ],      
     },
     {
       path: '/applications-full',
