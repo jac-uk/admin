@@ -23,7 +23,12 @@
           </RouterLink>
         </TableCell>
         <TableCell>{{ new Date(row.created) | formatDate('long') }}</TableCell>
-        <TableCell>{{ row.applications.applied }}</TableCell>
+        <TableCell>
+          <span v-if="row.applications && row.applications.applied">
+            {{ row.applications.applied }}
+          </span>
+          <span v-else>0</span>
+        </TableCell>
       </template>
     </Table>
   </div>
