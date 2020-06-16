@@ -28,7 +28,12 @@
           Launch date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
+          <span v-if="exercise.estimatedLaunchDate">
+            {{ (exercise.estimatedLaunchDate | formatEstimatedDate) }}
+          </span>
+          <span v-else>
+            TBC
+          </span>
         </dd>
       </div>           
       <div class="govuk-summary-list__row">
