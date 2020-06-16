@@ -19,15 +19,18 @@ const formatDate = (value, type) => {
 };
 
 const formatEstimatedDate = (value) => {
-  if (value instanceof Date) {
-    return formatDate(value, 'month');
+  if(value){
+    if (value instanceof Date) {
+      return formatDate(value, 'month');
+    }
+    const parts = value.split('-');
+    if (!parts[2]) {
+      return formatDate(value, 'month');
+    }
+    return formatDate(value);
+  } else {
+    return 'TBC';
   }
-  const parts = value.split('-');
-  if (!parts[2]) {
-    return formatDate(value, 'month');
-  }
-
-  return formatDate(value);
 };
 
 const formatNumber = (value, decimalPlaces) => {
