@@ -4,7 +4,7 @@
   > 
     <NotesNew
       v-if="notesNew"
-      :noteId="notesId"
+      :note-id="notesId"
       @createdNote="createdNote"
     />
     <div v-if="!notesNew">

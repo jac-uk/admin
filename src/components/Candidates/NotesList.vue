@@ -9,11 +9,7 @@
   >
     <template #row="{row}">
       <TableCell>
-        <RouterLink
-          :to="{ name: 'candidates-view', params: { id: row.id } }"
-        >
-          {{ new Date(row.created) | formatDate('long') }}
-        </RouterLink>
+        {{ new Date(row.created) | formatDate('long') }}
       </TableCell>
       <TableCell>
         <span>
