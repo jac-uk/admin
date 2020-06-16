@@ -19,7 +19,7 @@
         <span>
           {{ row.body }}
         </span>
-        <span>
+        <span v-if="false">
           <button
             @click="editNote(row.id)"
           >
