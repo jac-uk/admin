@@ -27,6 +27,12 @@
     </div>
 
     <div 
+      v-if="activeTab === 'notes'"
+    >
+      <Notes />
+    </div>
+
+    <div 
       v-if="activeTab === 'applications'"
     >
       This functionality is not available yet
@@ -39,6 +45,7 @@ import TabsList from '@/components/Page/TabsList';
 import PersonalDetails from '@/components/Candidates/PersonalDetails';
 import CharacterInformation from '@/components/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
+import Notes from '@/components/Candidates/Notes';
 
 export default {
   components: {
@@ -46,6 +53,7 @@ export default {
     PersonalDetails,
     CharacterInformation,
     EqualityAndDiversity,
+    Notes,
   },
   data() {
     return {
@@ -53,6 +61,10 @@ export default {
         {
           ref: 'details',
           title: 'Details',
+        },
+        {
+          ref: 'notes',
+          title: 'Notes',
         },
         {
           ref: 'applications',
