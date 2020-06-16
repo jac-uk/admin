@@ -128,15 +128,19 @@
               scope="row"
               class="govuk-table__header"
             >
-              <router-link
+              <RouterLink
                 class="govuk-link"
-                :to="{name: 'exercise-show-application', params: { applicationId: assessment.application.id }}"
+                :to="{name: 'exercise-application', params: { applicationId: assessment.application.id }}"
               >
                 {{ assessment.application.referenceNumber }}
-              </router-link>
+              </RouterLink>
             </th>
             <td class="govuk-table__cell">
-              {{ assessment.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: assessment.candidate.id } }"
+              >
+                {{ assessment.candidate.fullName }}
+              </RouterLink>
             </td>
             <td class="govuk-table__cell">
               <a

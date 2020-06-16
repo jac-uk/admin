@@ -48,12 +48,12 @@
             scope="row"
             class="govuk-table__header"
           >
-            <router-link
+            <RouterLink
               class="govuk-link"
-              :to="{name: 'exercise-show-application', params: { applicationId: application.id }}"
+              :to="{name: 'exercise-application', params: { applicationId: application.id }}"
             >
               {{ application.referenceNumber }}
-            </router-link>
+            </RouterLink>
           </th>
           <td class="govuk-table__cell">
             <span v-if="application.personalDetails">
