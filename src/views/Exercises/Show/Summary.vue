@@ -29,7 +29,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.estimatedLaunchDate">
-            {{ (exercise.estimatedLaunchDate | formatEstimatedDate) }}
+            {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
           </span>
           <span v-else>
             TBC
