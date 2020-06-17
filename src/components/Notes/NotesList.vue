@@ -15,7 +15,7 @@
         <span>
           {{ row.body }}
         </span>
-        <span v-if="false">
+        <span>
           <button
             @click="editNote(row.id)"
           >
@@ -51,13 +51,13 @@ export default {
       return this.$route.params.id || '';
     },
     notesList() {
-      const localNotes = this.$store.state.candidates.notes;
+      const localNotes = this.$store.state.notes.records;
       return localNotes || {};
     },
   },
   created() {
     this.userId = this.getUserId;
-    this.$store.dispatch('candidates/bindNotes', { candidateId: this.userId });
+    this.$store.dispatch('notes/bind', { candidateId: this.userId });
   },
   methods: {
     editNote(id) {

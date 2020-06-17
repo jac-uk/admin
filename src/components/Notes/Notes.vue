@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import NotesNew from '@/components/Candidates/NotesNew';
-import NotesList from '@/components/Candidates/NotesList';
+import NotesNew from '@/components/Notes/NotesNew';
+import NotesList from '@/components/Notes/NotesList';
 
 export default {
   components: {
@@ -50,13 +50,14 @@ export default {
     },
     createdNote() {
       this.notesNew = false;
+      this.notesId = null;
     },
     deleteNoteAction(item) {
-      this.$store.dispatch('candidates/deletePersonalNotes', { id: item });
+      this.$store.dispatch('notes/deletePersonalNotes', { id: item.id });
     },
     editNoteAction(item) {
-      this.notesNew = true;
       this.notesId = item.id;
+      this.notesNew = true;
     },
   },
 };
