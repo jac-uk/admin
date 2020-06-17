@@ -41,7 +41,7 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter print-none">
           <Navigation
-            :pages="navPages"
+            :pages="mainNavigation"
             title="Main Navigation"
           />
         </div>
@@ -102,7 +102,7 @@ export default {
       }
       return false;
     },
-    navPages() {
+    mainNavigation() {
       const pages = [
         { title: 'Overview', name: 'exercise-show-overview' },
         { title: 'Website listing', name: 'exercise-show-summary' },
@@ -168,6 +168,7 @@ export default {
       // }
       return pages;
     },
+    
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
         return {
