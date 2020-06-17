@@ -40,13 +40,12 @@
 <script>
 export default {
   props: {
-    items: {
+    pages: {
       required: true,
       type: Array,
     },
-    label: {
+    title: {
       required: false,
-      default: 'navigation',
       type: String,
     },
   },
