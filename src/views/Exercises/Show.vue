@@ -49,6 +49,11 @@
             :pages="applicationStatusNavigation"
             title="Application"
           />
+          <Navigation
+            :v-if="exercise.applicationsCount || hasOpened"
+            :pages="exerciseTasksNavigation"
+            title="Tasks"
+          />
         </div>
         <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
@@ -127,20 +132,12 @@ export default {
         { title: 'Withdrawn', name: 'exercise-show-applications-in-status' },
       ];
     },
-
-    // if (this.exercise.applicationsCount || this.hasOpened) {
-    //   pages.push();
-
-    //   if (this.exercise.applicationRecords) {
-    //     pages.push({
-    //       page: 'Tasks',
-    //       name: 'exercise-tasks',
-    //       children: [
-    //         { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
-    //         { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
-    //       ],
-    //     });
-    //   }
+    exerciseTasksNavigation(){
+      return [
+        { title: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
+        { title: 'Character Checks', name: 'exercise-tasks-character-checks' },
+      ];
+    },
 
     //   if (this.exercise.applicationRecords) {
     //     const review = this.exercise.applicationRecords.review;
