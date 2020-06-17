@@ -12,7 +12,7 @@
             :to="goBack"
           >
             Back
-          </router-link>          
+          </router-link>
         </div>
         <div class="govuk-grid-column-three-quarters">
           <div class="float-right govuk-!-margin-0">
@@ -22,7 +22,7 @@
             />
           </div>
         </div>
-      </div>      
+      </div>
       <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
@@ -45,7 +45,7 @@
             title="Main Navigation"
           />
           <Navigation
-            :v-if="exerciseHasApplications || hasOpened"
+            :v-if="exercise.HasApplications || hasOpened"
             :pages="applicationStatusNavigation"
             title="Application"
           />
@@ -53,14 +53,17 @@
             :v-if="exercise.applicationsCount || hasOpened"
             :pages="exerciseTasksNavigation"
             title="Tasks"
-          />
+          /> 
           <Navigation
-            :v-if="exercise.applicationRecords"
+            :v-if="exercise.applicationRecords || hasOpened"
             :pages="applicationStageNavigation"
             title="Stages"
-          >
-            />
-          </navigation>
+          />
+          <Navigation
+            :v-if="exercise.applicationRecords || hasOpened"
+            :pages="applicationReportNavigation"
+            title="Reports"
+          />
         </div>
         <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
@@ -75,6 +78,7 @@ import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 import { mapState, mapGetters } from 'vuex';
+import { STATUS } from '@/helpers/constants';
 
 export default {
   components: {
@@ -134,9 +138,9 @@ export default {
     },
     applicationStatusNavigation(){
       return [
-        { title: 'Draft', name: 'exercise-show-applications-in-status' },
-        { title: 'Applied', name: 'exercise-show-applications-in-status' }, 
-        { title: 'Withdrawn', name: 'exercise-show-applications-in-status' },
+        { title: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
+        { title: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
+        { title: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
       ];
     },
     exerciseTasksNavigation(){
@@ -146,52 +150,35 @@ export default {
       ];
     },
     applicationStageNavigation(){
-      const review = this.exercise.applicationRecords.review;
-      const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
-      const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
-      const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
-      const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
-      return [
-        { title: `Review (${review})`, name: 'exercise-stages-review-list' },
-        { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
-        { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
-        { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
-        { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
-      ];
+      if(this.exercise.applicationRecords){
+        const review = this.exercise.applicationRecords.review;
+        const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
+        const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
+        const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
+        const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
+        return [
+          { title: `Review (${review})`, name: 'exercise-stages-review-list' },
+          { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+          { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
+          { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
+          { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
+        ];
+      } else {
+        return [];
+      }
     },
-
-    //   if (this.exercise.applicationRecords) {
-    //     const review = this.exercise.applicationRecords.review;
-    //     const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
-    //     const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
-    //     const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
-    //     const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
-    //     pages.push({ 
-    //       page: 'Stages',
-    //       name: 'exercise-stages',
-    //       children: [
-    //         { page: `Review (${review})`, name: 'exercise-stages-review-list' },
-    //         { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
-    //         { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
-    //         { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
-    //         { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
-    //       ],
-    //     });
-    //     pages.push({
-    //       page: 'Reports',
-    //       name: 'exercise-show-reports',
-    //       children: [
-    //         { page: 'Diversity', name: 'exercise-show-report-diversity' },
-    //         { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
-    //         { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
-    //         { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
-    //       ],
-    //     });
-    //   }
-    // }
-    //   return pages;
-    // },
-    
+    applicationReportNavigation(){
+      if(this.exercise.applicationRecords){
+        return [
+          { title: 'Diversity', name: 'exercise-show-report-diversity' },
+          { title: 'Character Issues', name: 'exercise-show-report-character-issues' },
+          { title: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
+          { title: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
+        ];
+      } else {
+        return [];
+      }
+    },
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
         return {
@@ -238,9 +225,7 @@ export default {
 };
 </script>
 <style>
-
-  .govuk-heading-xl{
-    margin-bottom: 0;
-  }
-
+.govuk-heading-xl {
+  margin-bottom: 0;
+}
 </style>
