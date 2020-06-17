@@ -44,6 +44,11 @@
             :pages="mainNavigation"
             title="Main Navigation"
           />
+          <Navigation
+            :v-if="exerciseHasApplications || hasOpened"
+            :pages="applicationStatusNavigation"
+            title="Application"
+          />
         </div>
         <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
@@ -58,7 +63,6 @@ import LoadingMessage from '@/components/LoadingMessage';
 import Navigation from '@/components/Page/Navigation';
 import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
 import { mapState, mapGetters } from 'vuex';
-// import { STATUS } from '@/helpers/constants';
 
 export default {
   components: {
@@ -103,7 +107,7 @@ export default {
       return false;
     },
     mainNavigation() {
-      const pages = [
+      return [
         { title: 'Overview', name: 'exercise-show-overview' },
         { title: 'Website listing', name: 'exercise-show-summary' },
         { title: 'Vacancy information', name: 'exercise-show-vacancy' },
@@ -115,59 +119,60 @@ export default {
         { title: 'Assessment options', name: 'exercise-show-assessment-options' },
         { title: 'Exercise downloads', name: 'exercise-show-downloads' },
       ];
-      // if (this.exercise.applicationsCount || this.hasOpened) {
-      //   pages.push({
-      //     page: 'Applications',
-      //     name: 'exercise-show-applications',
-      //     children: [
-      //       { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
-      //       { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
-      //       { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
-      //     ],
-      //   });
-
-      //   if (this.exercise.applicationRecords) {
-      //     pages.push({
-      //       page: 'Tasks',
-      //       name: 'exercise-tasks',
-      //       children: [
-      //         { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
-      //         { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
-      //       ],
-      //     });
-      //   }
-
-      //   if (this.exercise.applicationRecords) {
-      //     const review = this.exercise.applicationRecords.review;
-      //     const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
-      //     const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
-      //     const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
-      //     const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
-      //     pages.push({ 
-      //       page: 'Stages',
-      //       name: 'exercise-stages',
-      //       children: [
-      //         { page: `Review (${review})`, name: 'exercise-stages-review-list' },
-      //         { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
-      //         { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
-      //         { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
-      //         { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
-      //       ],
-      //     });
-      //     pages.push({
-      //       page: 'Reports',
-      //       name: 'exercise-show-reports',
-      //       children: [
-      //         { page: 'Diversity', name: 'exercise-show-report-diversity' },
-      //         { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
-      //         { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
-      //         { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
-      //       ],
-      //     });
-      //   }
-      // }
-      return pages;
     },
+    applicationStatusNavigation(){
+      return [
+        { title: 'Draft', name: 'exercise-show-applications-in-status' },
+        { title: 'Applied', name: 'exercise-show-applications-in-status' }, 
+        { title: 'Withdrawn', name: 'exercise-show-applications-in-status' },
+      ];
+    },
+
+    // if (this.exercise.applicationsCount || this.hasOpened) {
+    //   pages.push();
+
+    //   if (this.exercise.applicationRecords) {
+    //     pages.push({
+    //       page: 'Tasks',
+    //       name: 'exercise-tasks',
+    //       children: [
+    //         { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
+    //         { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
+    //       ],
+    //     });
+    //   }
+
+    //   if (this.exercise.applicationRecords) {
+    //     const review = this.exercise.applicationRecords.review;
+    //     const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
+    //     const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
+    //     const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
+    //     const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
+    //     pages.push({ 
+    //       page: 'Stages',
+    //       name: 'exercise-stages',
+    //       children: [
+    //         { page: `Review (${review})`, name: 'exercise-stages-review-list' },
+    //         { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+    //         { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
+    //         { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
+    //         { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
+    //       ],
+    //     });
+    //     pages.push({
+    //       page: 'Reports',
+    //       name: 'exercise-show-reports',
+    //       children: [
+    //         { page: 'Diversity', name: 'exercise-show-report-diversity' },
+    //         { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
+    //         { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
+    //         { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
+    //       ],
+    //     });
+    //   }
+    // }
+    //   return pages;
+    // },
     
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
