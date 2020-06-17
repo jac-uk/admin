@@ -45,22 +45,22 @@
             title="Main Navigation"
           />
           <Navigation
-            :v-if="exercise.HasApplications || hasOpened"
+            v-if="exercise.HasApplications || hasOpened"
             :pages="applicationStatusNavigation"
             title="Application"
           />
           <Navigation
-            :v-if="exercise.applicationsCount || hasOpened"
+            v-if="exercise.applicationsCount || hasOpened"
             :pages="exerciseTasksNavigation"
             title="Tasks"
-          /> 
+          />
           <Navigation
-            :v-if="exercise.applicationRecords || hasOpened"
+            v-if="exercise.applicationRecords"
             :pages="applicationStageNavigation"
             title="Stages"
           />
           <Navigation
-            :v-if="exercise.applicationRecords || hasOpened"
+            v-if="exercise.applicationRecords || hasOpened"
             :pages="applicationReportNavigation"
             title="Reports"
           />
