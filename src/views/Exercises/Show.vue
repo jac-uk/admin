@@ -1,7 +1,7 @@
 <template>
   <div>
     <LoadingMessage
-      v-if="loaded === false"
+      v-if="!loaded"
       :load-failed="loadFailed"
     />
     <div v-else>
@@ -50,7 +50,7 @@
             title="Application"
           />
           <Navigation
-            v-if="exercise.applicationsCount || hasOpened"
+            v-if="exercise.applicationsCount"
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />
@@ -60,7 +60,7 @@
             title="Stages"
           />
           <Navigation
-            v-if="exercise.applicationRecords || hasOpened"
+            v-if="exercise.applicationRecords"
             :pages="applicationReportNavigation"
             title="Reports"
           />
