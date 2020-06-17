@@ -1,38 +1,34 @@
 <template>
   <nav
     class="moj-side-navigation govuk-!-padding-top-0"
-    :aria-label="label"
+    :aria-label="title || 'side-navigation'"
   >
     <ul class="moj-side-navigation__list">
-      <li 
-        v-for="(page, index) in pageItems"
-        :key="index"
-        class="moj-side-navigation__item"
-        :class="{open: page.open, on: page.on}"
+      <h4
+        v-if="title" 
+        class="moj-side-navigation__title"
       >
-        <h4 class="moj-side-navigation__title">
-          {{ page.page }}
-        </h4>
-        <ul
-          v-if="page.children"
-          class="moj-side-navigation__list"
+        {{ title }}
+      </h4>
+      <ul
+        v-if="pages"
+        class="moj-side-navigation__list"
+      >
+        <li
+          v-for="(page, pageIndex) in pages"
+          :key="pageIndex"
+          class="moj-side-navigation__item"
+          :class="{'moj-side-navigation__item--active': page.on}"
         >
-          <li
-            v-for="(child, childIndex) in page.children"
-            :key="childIndex"
+          <router-link 
             class="moj-side-navigation__item"
-            :class="{'moj-side-navigation__item--active': child.on}"
+            :to="{name: page.name, params: page.params}"
+            :aria-current="page.on ? 'page' : false"
           >
-            <router-link 
-              class="moj-side-navigation__item"
-              :to="{name: child.name, params: child.params}"
-              :aria-current="child.on ? 'page' : false"
-            >
-              {{ child.page }}
-            </router-link>
-          </li>
-        </ul>
-      </li>
+            {{ page.title }}
+          </router-link>
+        </li>
+      </ul>
     </ul>
   </nav>
 </template>
@@ -45,7 +41,7 @@ export default {
       type: Array,
     },
     title: {
-      required: false,
+      default: '',
       type: String,
     },
   },
