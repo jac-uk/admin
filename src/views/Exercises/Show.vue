@@ -54,6 +54,13 @@
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />
+          <Navigation
+            :v-if="exercise.applicationRecords"
+            :pages="applicationStageNavigation"
+            title="Stages"
+          >
+            />
+          </navigation>
         </div>
         <div class="govuk-grid-column-three-quarters print-full-width">
           <RouterView />
@@ -136,6 +143,20 @@ export default {
       return [
         { title: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
         { title: 'Character Checks', name: 'exercise-tasks-character-checks' },
+      ];
+    },
+    applicationStageNavigation(){
+      const review = this.exercise.applicationRecords.review;
+      const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
+      const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
+      const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
+      const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
+      return [
+        { title: `Review (${review})`, name: 'exercise-stages-review-list' },
+        { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+        { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
+        { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
+        { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
       ];
     },
 
