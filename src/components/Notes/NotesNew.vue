@@ -9,7 +9,7 @@
     >
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
         <h2 class="govuk-fieldset__heading">
-          Add note
+          {{ isUpdate ? `Update note` : `Add note` }}
         </h2>
       </legend>
       <ErrorSummary :errors="errors" />
@@ -17,7 +17,6 @@
         id="date"
         v-model="date"
         label="Date"
-        :value="date"
         hint="For example, 12 11 2007"
         required
       />
@@ -63,6 +62,8 @@ export default {
       date: null,
       body: null,
       userId: null,
+      isUpdate: false,
+      dateNow: null,
     };
   },
   computed: {
@@ -70,25 +71,24 @@ export default {
       return this.$route.params.id || '';
     },
     oneNote() {
-      // const localNote = this.$store.state.candidates.notes ;
-      // eslint-disable-next-line
-      // console.log('oneNote() localNote: ', localNote);
-      // return localNote;
-      return true;
+      const localNote = this.$store.state.notes.records ;
+      return localNote;
     },
   },
-  created() {
+  async created() {
     this.userId = this.getUserId;
-    if (this.noteId) {
-      // this.$store.dispatch('candidates/bindNotes', { id: this.noteId });
-      // const localNote = this.$store.state.candidates.notes ;
-      // this.date = this.oneNote.date;
-      // this.body = this.oneNote.body;
+    this.isUpdate = this.noteId ? true : false;
+    this.dateNow = Date.now();
+    let localNote;
+    if (this.isUpdate) {
+      // this.$store.dispatch('notes/bind', { id: this.noteId });
+      localNote = this.$store.state.notes.records ;
+      localNote = localNote.filter(item => {
+        return item.id === this.noteId;
+      });
+      this.date = localNote[0].date;
+      this.body = localNote[0].body;
     }
-  },
-  destroyed() {
-    // eslint-disable-next-line
-    // console.log('/NotesNew destroyed');
   },
   methods: {
     async save() {
@@ -98,14 +98,14 @@ export default {
           id: this.userId,
         },
       };
-      if (this.noteId) {
+      if (this.isUpdate) {
         data.lastUpdated = this.date;
       } else {
         data.created = this.date;
       }
       this.validate();
       if (this.isValid()) {
-        await this.$store.dispatch('candidates/savePersonalNotes', { data, id: this.noteId });
+        await this.$store.dispatch('notes/savePersonalNotes', { data, id: this.noteId });
         this.$emit('createdNote');
       }
     },

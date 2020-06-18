@@ -45,7 +45,7 @@ import TabsList from '@/components/Page/TabsList';
 import PersonalDetails from '@/components/Candidates/PersonalDetails';
 import CharacterInformation from '@/components/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
-import Notes from '@/components/Candidates/Notes';
+import Notes from '@/components/Notes/Notes';
 
 export default {
   components: {
