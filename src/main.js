@@ -8,12 +8,14 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
 
-Sentry.init({
-  dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-  environment: process.env.NODE_ENV,
-  release: process.env.npm_package_version,
-  integrations: [new Integrations.Vue({ Vue, attachProps: true })],
-});
+if (process.env.NODE_ENV !== 'development') {
+  Sentry.init({
+    dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
+    environment: process.env.NODE_ENV,
+    release: process.env.npm_package_version,
+    integrations: [new Integrations.Vue({ Vue, attachProps: true })],
+  });
+}
 
 Vue.config.productionTip = false;
 Vue.use( CKEditor );
