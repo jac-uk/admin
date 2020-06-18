@@ -42,7 +42,6 @@ import TextArea from '@/components/Form/TextareaInput';
 import DateInput from '@/components/Form/DateInput';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
-// import { formatDate } from '@/filters';
 
 export default {
   components: {
@@ -52,61 +51,36 @@ export default {
   },
   extends: Form,
   props: {
-    noteId: {
-      type: String,
-      default: '',
+    note: {
+      type: Object,
+      default: null,
     },
   },
   data() {
     return {
       date: null,
       body: null,
-      userId: null,
       isUpdate: false,
-      dateNow: null,
     };
   },
-  computed: {
-    getUserId() {
-      return this.$route.params.id || '';
-    },
-    oneNote() {
-      const localNote = this.$store.state.notes.records ;
-      return localNote;
-    },
-  },
   async created() {
-    this.userId = this.getUserId;
-    this.isUpdate = this.noteId ? true : false;
-    this.dateNow = Date.now();
-    let localNote;
-    if (this.isUpdate) {
-      // this.$store.dispatch('notes/bind', { id: this.noteId });
-      localNote = this.$store.state.notes.records ;
-      localNote = localNote.filter(item => {
-        return item.id === this.noteId;
-      });
-      this.date = localNote[0].date;
-      this.body = localNote[0].body;
-    }
+    // this.date = this.note.date || null; // THE 'DateInput' COMPONENT is ONE WAY BINDING
+    this.body = this.note.body;
+    this.isUpdate =  this.note.body ? true : false;
   },
   methods: {
     async save() {
-      const data = {
-        body: this.body,
-        candidate: {
-          id: this.userId,
-        },
-      };
-      if (this.isUpdate) {
+      let data = this.note;
+      data.body = this.body;
+      if (this.note.created) {
         data.lastUpdated = this.date;
       } else {
         data.created = this.date;
       }
       this.validate();
       if (this.isValid()) {
-        await this.$store.dispatch('notes/savePersonalNotes', { data, id: this.noteId });
-        this.$emit('createdNote');
+        await this.$store.dispatch('notes/save', { data, id: data.id });
+        this.$emit('changeAction', null);
       }
     },
   },
