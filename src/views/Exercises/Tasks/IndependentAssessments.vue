@@ -260,10 +260,18 @@ export default {
       return this.exercise.assessments && this.exercise.assessments.sent;
     },
     hasApplicationRecordsReview(){
-      return this.exercise.applicationRecords.review ? true:false;
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+        return false;
+      } else {
+        return false;
+      }
     },
     hasApplicationsRecordsShortlisted(){
-      return this.exercise.applicationRecords.shortlisted ? true:false;
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
+        return true;
+      } else {
+        return false;
+      }
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
