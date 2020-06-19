@@ -11,6 +11,8 @@ import * as Integrations from '@sentry/integrations';
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
+    environment: process.env.NODE_ENV,
+    release: process.env.npm_package_version,
     integrations: [new Integrations.Vue({ Vue, attachProps: true })],
   });
 }
