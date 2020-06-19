@@ -1576,11 +1576,11 @@ export default {
     isPanelView() {
       return this.activeTab === 'panel';
     },
-    isNonLegal () {
-      return this.exercise.typeOfExercise === 'non-legal';
+    isLegal() {
+      return this.exercise.typeOfExercise ==='legal' || this.exercise.typeOfExercise ==='leadership';
     },
-    isLegal () {
-      return this.exercise.typeOfExercise === 'legal';
+    isNonLegal() {
+      return this.exercise.typeOfExercise ==='non-legal' || this.exercise.typeOfExercise ==='leadership-non-legal';
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
