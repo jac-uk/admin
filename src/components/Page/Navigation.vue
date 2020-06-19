@@ -18,7 +18,7 @@
           v-for="(page, pageIndex) in pages"
           :key="pageIndex"
           class="moj-side-navigation__item"
-          :class="{'moj-side-navigation__item--active': page.on}"
+          :class="{'moj-side-navigation__item--active': isActive(page)}"
         >
           <router-link 
             class="moj-side-navigation__item"
@@ -45,8 +45,28 @@ export default {
       type: String,
     },
   },
-  computed: {
-    
+  data() {
+    return {
+      currentPage: '',
+    };
   },
+  methods: {
+    isActive(page){     
+      // if an application 
+      if(page.params){ 
+        // check the last word in the route path matches the page title (to lowercase)
+        return this.$route.path.split('/')[this.$route.path.split('/').length-1] == page.title.toLowerCase();
+      } 
+      // if the route is an edit or list page        
+      else if (this.$route.name.split('-').some(i=>['edit','list'].indexOf(i) !== -1)) { 
+        // check the names match
+        return page.name.split('-')[2] == this.$route.name.split('-')[2]; 
+      } 
+      else {
+        return this.$route.name == page.name;
+      }
+    },
+  },
+
 };
 </script>
