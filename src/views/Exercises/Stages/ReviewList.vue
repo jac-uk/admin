@@ -83,7 +83,7 @@ export default {
       return this.$store.state.stageReview.records;
     },
     totalApplicationRecords() {
-      if(this.exercise.applicationRecords.review){
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
         return this.exercise.applicationRecords.review;
       } else {
         return 0;
