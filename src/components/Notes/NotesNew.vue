@@ -13,13 +13,6 @@
         </h2>
       </legend>
       <ErrorSummary :errors="errors" />
-      <DateInput 
-        id="date"
-        v-model="date"
-        label="Date"
-        hint="For example, 12 11 2007"
-        required
-      />
       <TextArea 
         id="body" 
         v-model="body"
@@ -39,14 +32,12 @@
 
 <script>
 import TextArea from '@/components/Form/TextareaInput';
-import DateInput from '@/components/Form/DateInput';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 
 export default {
   components: {
     TextArea,
-    DateInput,
     ErrorSummary,
   },
   extends: Form,
@@ -64,18 +55,18 @@ export default {
     };
   },
   async created() {
-    // this.date = this.note.date || null; // THE 'DateInput' COMPONENT is ONE WAY BINDING
     this.body = this.note.body;
     this.isUpdate =  this.note.body ? true : false;
   },
   methods: {
     async save() {
       let data = this.note;
+      const date = Date.now();
       data.body = this.body;
       if (this.note.created) {
-        data.lastUpdated = this.date;
+        data.lastUpdated = date;
       } else {
-        data.created = this.date;
+        data.created = date;
       }
       this.validate();
       if (this.isValid()) {
