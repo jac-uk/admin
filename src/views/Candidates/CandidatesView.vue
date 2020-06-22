@@ -29,7 +29,10 @@
     <div 
       v-if="activeTab === 'notes'"
     >
-      <Notes />
+      <Notes 
+        title="Notes about the Candidate"
+        :candidate-id="getUserId"
+      />
     </div>
 
     <div 
@@ -94,15 +97,18 @@ export default {
     myFullName() {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecords.fullName;
     },
+    getUserId() {
+      return this.$route.params.id || '';
+    },
   },
   created() {
-    const id = this.$route.params.id || '';
+    const id = this.getUserId;
     this.$store.dispatch('candidates/bind', id);
     this.$store.dispatch('candidates/bindDocs', id);
   },
   methods: {
     updateCandidate(obj) {
-      const id = this.$route.params.id;
+      const id = this.getUserId;
       this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: id });
     },
   },
