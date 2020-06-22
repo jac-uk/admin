@@ -63,14 +63,14 @@ export default {
       let data = { ...this.note };
       const date = Date.now();
       data.body = this.body;
-      if (this.note.created) {
+      if (this.note.id) {
         data.lastUpdated = date;
       } else {
         data.created = date;
       }
       this.validate();
       if (this.isValid()) {
-        await this.$store.dispatch('notes/save', { data, id: data.id });
+        await this.$store.dispatch('notes/save', { data, id: this.note.id });
         this.$emit('changeAction', null);
       }
     },

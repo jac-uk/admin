@@ -13,7 +13,7 @@
         </h2>
       </legend>
       <div class="govuk-inset-text">
-        <span class="notes__delete__date">{{ note.created | formatDate('long') }}</span>
+        <span class="notes__delete__date">{{ Date(note.created) | formatDate('long') }}</span>
         <span class="notes__delete__body">{{ note.body }}</span>
       </div>
       <ErrorSummary :errors="errors" />
