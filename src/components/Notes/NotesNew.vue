@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     async save() {
-      let data = this.note;
+      let data = { ...this.note };
       const date = Date.now();
       data.body = this.body;
       if (this.note.created) {
