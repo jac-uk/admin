@@ -38,7 +38,7 @@
     <div 
       v-if="activeTab === 'applications'"
     >
-      This functionality is not available yet
+      <ExercisesList :candidate-id="candidateId" />
     </div>
   </div>
 </template>
@@ -49,6 +49,7 @@ import PersonalDetails from '@/components/Candidates/PersonalDetails';
 import CharacterInformation from '@/components/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
+import ExercisesList from '@/components/ExercisesList';
 
 export default {
   components: {
@@ -57,6 +58,7 @@ export default {
     CharacterInformation,
     EqualityAndDiversity,
     Notes,
+    ExercisesList,
   },
   data() {
     return {
@@ -75,6 +77,7 @@ export default {
         },
       ],
       activeTab: 'details',
+      candidateId: '',
     };
   },
   computed: {
@@ -102,14 +105,13 @@ export default {
     },
   },
   created() {
-    const id = this.getUserId;
-    this.$store.dispatch('candidates/bind', id);
-    this.$store.dispatch('candidates/bindDocs', id);
+    this.candidateId = this.getUserId;
+    this.$store.dispatch('candidates/bind', this.candidateId);
+    this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
   methods: {
     updateCandidate(obj) {
-      const id = this.getUserId;
-      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: id });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
   },
 };
