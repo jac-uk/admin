@@ -243,6 +243,16 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Details | Applications',
           },
+        },
+        // this route enables side navigation to show active state for :status
+        {
+          path: 'applications/:status/application/:applicationId',
+          component: ExerciseApplication,
+          name: 'exercise-applications-application',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Application',
+          },
         },        
         {
           path: 'application/:applicationId',
