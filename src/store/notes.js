@@ -7,23 +7,22 @@ const collection = firestore.collection('notes');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId, id }) => {
+    bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId }) => {
       let firestoreRef;
-      if (id) {
-        firestoreRef = collection.doc(id);
-      } else {
+      if (candidateId) {
         firestoreRef = collection
           .where('candidate.id', '==', candidateId)
           .orderBy('created', 'desc');
       }
-      
-      await bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      if (firestoreRef) {
+        await bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      }
       return;
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    savePersonalNotes: async (context, { data, id }) => {
+    save: async (context, { data, id }) => {
       const isUpdate = id ? true : false;
       if (isUpdate) {
         data.lastUpdatedBy = {
@@ -43,7 +42,7 @@ export default {
         await collection.add(data);
       }      
     },
-    deletePersonalNotes: async (context, { id }) => {
+    delete: async (context, { id }) => {
       const ref = firestore
         .collection('notes').doc(id);
       await ref.delete();

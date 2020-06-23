@@ -29,13 +29,16 @@
     <div 
       v-if="activeTab === 'notes'"
     >
-      <Notes />
+      <Notes 
+        title="Notes about the Candidate"
+        :candidate-id="getUserId"
+      />
     </div>
 
     <div 
       v-if="activeTab === 'applications'"
     >
-      This functionality is not available yet
+      <Applications :candidate-id="candidateId" />
     </div>
   </div>
 </template>
@@ -46,6 +49,7 @@ import PersonalDetails from '@/components/Candidates/PersonalDetails';
 import CharacterInformation from '@/components/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
+import Applications from '@/components/Candidates/Applications';
 
 export default {
   components: {
@@ -54,6 +58,7 @@ export default {
     CharacterInformation,
     EqualityAndDiversity,
     Notes,
+    Applications,
   },
   data() {
     return {
@@ -72,6 +77,7 @@ export default {
         },
       ],
       activeTab: 'details',
+      candidateId: '',
     };
   },
   computed: {
@@ -94,16 +100,18 @@ export default {
     myFullName() {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecords.fullName;
     },
+    getUserId() {
+      return this.$route.params.id || '';
+    },
   },
   created() {
-    const id = this.$route.params.id || '';
-    this.$store.dispatch('candidates/bind', id);
-    this.$store.dispatch('candidates/bindDocs', id);
+    this.candidateId = this.getUserId;
+    this.$store.dispatch('candidates/bind', this.candidateId);
+    this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
   methods: {
     updateCandidate(obj) {
-      const id = this.$route.params.id;
-      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: id });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
   },
 };
