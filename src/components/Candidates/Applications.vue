@@ -22,7 +22,7 @@
           {{ row.exercise.name }}
         </TableCell>
         <TableCell>
-          {{ row.status }}{{ row.status && row.stage ? ' / ' : '' }}{{ row.stage }} 
+          {{ row.status | lookup }}{{ row.status && row.stage ? ' / ' : '' }}{{ row.stage }} 
         </TableCell>
         <TableCell>
           <RouterLink :to="{ name: 'exercise-application', params: { id: row.exercise.id, applicationId: row.id } }">
