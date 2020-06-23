@@ -1,7 +1,7 @@
 <template>  
   <Table 
-    data-key="id"
-    :data="notesList"
+    data-key="notes"
+    :data="notes"
     :columns="[
       { title: 'Date' },
       { title: 'Note' },
@@ -12,21 +12,27 @@
         {{ new Date(row.created) | formatDate('long') }}
       </TableCell>
       <TableCell>
-        <span>
-          {{ row.body }}
-        </span>
-        <span>
-          <button
-            @click="editNote(row.id)"
-          >
-            Edit
-          </button>
-          <button
-            @click="deleteNote(row.id)"
-          >
-            Delete
-          </button>
-        </span>
+        <div class="notes__editable">
+          <span>
+            {{ row.body }}
+          </span>
+          <span class="edit-links">
+            <a 
+              href="#"
+              class="govuk-link"
+              @click.prevent="editNote(row.id)" 
+            >
+              Edit
+            </a>
+            <a 
+              href="#"
+              class="govuk-link"
+              @click.prevent="deleteNote(row.id)" 
+            >
+              Delete
+            </a>
+          </span>
+        </div>
       </TableCell>
     </template>
   </Table>
@@ -41,23 +47,11 @@ export default {
     Table,
     TableCell,
   },
-  data() {
-    return {
-      userId: null,
-    };
-  },
-  computed: {
-    getUserId() {
-      return this.$route.params.id || '';
+  props: {
+    notes: {
+      type: Array,
+      default: null,
     },
-    notesList() {
-      const localNotes = this.$store.state.notes.records;
-      return localNotes || {};
-    },
-  },
-  created() {
-    this.userId = this.getUserId;
-    this.$store.dispatch('notes/bind', { candidateId: this.userId });
   },
   methods: {
     editNote(id) {
@@ -69,3 +63,18 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .notes__editable {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .notes__editable .edit-links {
+    margin-left: auto;
+  }
+
+  .notes__editable .edit-links a {
+    margin-left: 5px;
+  }
+</style>

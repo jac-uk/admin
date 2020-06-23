@@ -83,7 +83,11 @@ export default {
       return this.$store.state.stageReview.records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.review || 0;
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+        return this.exercise.applicationRecords.review;
+      } else {
+        return 0;
+      }
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
