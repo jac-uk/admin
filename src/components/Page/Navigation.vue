@@ -57,8 +57,8 @@ export default {
         // check the last word in the route path matches the page title (to lowercase)
         return this.$route.path.split('/')[this.$route.path.split('/').length-1] == page.title.toLowerCase();
       } 
-      // if the route is an edit or list page        
-      else if (this.$route.name.split('-').some(i=>['edit','list'].indexOf(i) !== -1)) { 
+      // if the route is an edit, list or back page        
+      else if (this.$route.name.split('-').some(i=>['edit','list','back'].indexOf(i) !== -1)) { 
         // check the names match
         return page.name.split('-')[2] == this.$route.name.split('-')[2]; 
       } 
