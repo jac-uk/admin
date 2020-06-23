@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="moj-page-header-actions">
+    <!-- <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h2 class="govuk-heading-l">
           Open
         </h2>
       </div>
-    </div>
-    <Table 
+    </div> -->
+    <Table
+      v-if="!noApplications" 
       data-key="id"
       :data="applicationRecords"
       :columns="[
@@ -21,7 +22,7 @@
           {{ row.exercise.name }}
         </TableCell>
         <TableCell>
-          {{ row.stage }}
+          {{ row.status }}{{ row.status && row.stage ? ' / ' : '' }}{{ row.stage }} 
         </TableCell>
         <TableCell>
           <RouterLink :to="{ name: 'exercise-application', params: { id: row.exercise.id, applicationId: row.id } }">
@@ -29,7 +30,10 @@
           </RouterLink>
         </TableCell>
       </template>
-    </Table>   
+    </Table>
+    <p v-if="noApplications">
+      There are no applications
+    </p>   
   </div>
 </template>
 
@@ -50,16 +54,23 @@ export default {
   },
   computed: {
     applicationRecords() {
-      const records = this.$store.state.applicationRecords.records;
-      // eslint-disable-next-line no-console
-      console.log('applicationRecords', records);
+      const records = this.$store.state.candidateApplications.records;
       return records;
+    },
+    noApplications() {
+      return this.applicationRecords.length === 0;
     },
   },
   async created() {
-    this.$store.dispatch('applicationRecords/bind', { candidateId: this.candidateId });
+    this.$store.dispatch('candidateApplications/bind', { candidateId: this.candidateId });
   },
   methods: {
   },
 };
 </script>
+
+<style scoped>
+  td {
+    text-transform: capitalize;
+  }
+</style>

@@ -38,7 +38,7 @@
     <div 
       v-if="activeTab === 'applications'"
     >
-      <ExercisesList :candidate-id="candidateId" />
+      <Applications :candidate-id="candidateId" />
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ import PersonalDetails from '@/components/Candidates/PersonalDetails';
 import CharacterInformation from '@/components/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
-import ExercisesList from '@/components/ExercisesList';
+import Applications from '@/components/Candidates/Applications';
 
 export default {
   components: {
@@ -58,7 +58,7 @@ export default {
     CharacterInformation,
     EqualityAndDiversity,
     Notes,
-    ExercisesList,
+    Applications,
   },
   data() {
     return {
