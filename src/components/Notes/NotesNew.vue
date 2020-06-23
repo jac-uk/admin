@@ -13,13 +13,6 @@
         </h2>
       </legend>
       <ErrorSummary :errors="errors" />
-      <DateInput 
-        id="date"
-        v-model="date"
-        label="Date"
-        hint="For example, 12 11 2007"
-        required
-      />
       <TextArea 
         id="body" 
         v-model="body"
@@ -39,74 +32,46 @@
 
 <script>
 import TextArea from '@/components/Form/TextareaInput';
-import DateInput from '@/components/Form/DateInput';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
-// import { formatDate } from '@/filters';
 
 export default {
   components: {
     TextArea,
-    DateInput,
     ErrorSummary,
   },
   extends: Form,
   props: {
-    noteId: {
-      type: String,
-      default: '',
+    note: {
+      type: Object,
+      default: null,
     },
   },
   data() {
     return {
       date: null,
       body: null,
-      userId: null,
       isUpdate: false,
-      dateNow: null,
     };
   },
-  computed: {
-    getUserId() {
-      return this.$route.params.id || '';
-    },
-    oneNote() {
-      const localNote = this.$store.state.notes.records ;
-      return localNote;
-    },
-  },
   async created() {
-    this.userId = this.getUserId;
-    this.isUpdate = this.noteId ? true : false;
-    this.dateNow = Date.now();
-    let localNote;
-    if (this.isUpdate) {
-      // this.$store.dispatch('notes/bind', { id: this.noteId });
-      localNote = this.$store.state.notes.records ;
-      localNote = localNote.filter(item => {
-        return item.id === this.noteId;
-      });
-      this.date = localNote[0].date;
-      this.body = localNote[0].body;
-    }
+    this.body = this.note.body;
+    this.isUpdate =  this.note.body ? true : false;
   },
   methods: {
     async save() {
-      const data = {
-        body: this.body,
-        candidate: {
-          id: this.userId,
-        },
-      };
-      if (this.isUpdate) {
-        data.lastUpdated = this.date;
+      let data = { ...this.note };
+      const date = Date.now();
+      data.body = this.body;
+      if (this.note.id) {
+        data.lastUpdated = date;
       } else {
-        data.created = this.date;
+        data.created = date;
       }
       this.validate();
       if (this.isValid()) {
-        await this.$store.dispatch('notes/savePersonalNotes', { data, id: this.noteId });
-        this.$emit('createdNote');
+        await this.$store.dispatch('notes/save', { data, id: this.note.id });
+        this.$emit('changeAction', null);
       }
     },
   },
