@@ -261,7 +261,7 @@ export default {
     },
     hasApplicationRecordsReview(){
       if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
-        return false;
+        return true;
       } else {
         return false;
       }
