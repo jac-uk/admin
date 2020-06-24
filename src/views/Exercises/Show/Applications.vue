@@ -50,7 +50,7 @@
           >
             <RouterLink
               class="govuk-link"
-              :to="{name: 'exercise-application', params: { applicationId: application.id }}"
+              :to="{name: 'exercise-applications-application', params: { applicationId: application.id, status: status }}"
             >
               {{ application.referenceNumber }}
             </RouterLink>

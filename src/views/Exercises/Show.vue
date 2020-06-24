@@ -45,9 +45,9 @@
             title="Exercise"
           />
           <Navigation
-            v-if="exercise.applicationsCount"
+            v-if="exercise.applicationsCount || hasOpened"
             :pages="applicationStatusNavigation"
-            title="Application"
+            title="Applications"
           />
           <Navigation
             v-if="exercise.applicationsCount"
