@@ -43,10 +43,16 @@
         <option value="">
           Choose applications
         </option>
-        <option value="review">
+        <option
+          v-if="hasApplicationRecordsReview"
+          value="review" 
+        >
           Review ({{ exercise.applicationRecords.review }})
         </option>
-        <option value="shortlisted">
+        <option
+          v-if="hasApplicationsRecordsShortlisted"
+          value="shortlisted" 
+        >
           Shortlisted ({{ exercise.applicationRecords.shortlisted }})
         </option>
       </select>
@@ -252,6 +258,20 @@ export default {
     },
     hasStartedSending() {
       return this.exercise.assessments && this.exercise.assessments.sent;
+    },
+    hasApplicationRecordsReview(){
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+        return true;
+      } else {
+        return false;
+      }
+    },
+    hasApplicationsRecordsShortlisted(){
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
+        return true;
+      } else {
+        return false;
+      }
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;

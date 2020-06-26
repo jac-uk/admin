@@ -1315,7 +1315,11 @@
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorFullName }}
+                    <EditableField 
+                      :value="application.firstAssessorFullName"
+                      field="firstAssessorFullName"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
 
@@ -1324,7 +1328,11 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorTitle }}
+                    <EditableField 
+                      :value="application.firstAssessorTitle"
+                      field="firstAssessorTitle"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
 
@@ -1333,13 +1341,12 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <a
-                      :href="`mailto:${application.firstAssessorEmail}`"
-                      class="govuk-link govuk-link--no-visited-state"
-                      target="_blank"
-                    >
-                      {{ application.firstAssessorEmail }}
-                    </a>
+                    <EditableField 
+                      :value="application.firstAssessorEmail"
+                      field="firstAssessorEmail"
+                      type="email"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
 
@@ -1350,7 +1357,11 @@
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.secondAssessorFullName }}
+                    <EditableField 
+                      :value="application.secondAssessorFullName"
+                      field="secondAssessorFullName"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
 
@@ -1359,7 +1370,11 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.secondAssessorTitle }}
+                    <EditableField 
+                      :value="application.secondAssessorTitle"
+                      field="secondAssessorTitle"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
 
@@ -1368,13 +1383,12 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <a
-                      :href="`mailto:${application.secondAssessorEmail}`"
-                      class="govuk-link govuk-link--no-visited-state"
-                      target="_blank"
-                    >
-                      {{ application.secondAssessorEmail }}
-                    </a>
+                    <EditableField 
+                      :value="application.secondAssessorEmail"
+                      field="secondAssessorEmail"
+                      type="email"
+                      @changefield="changeAssesorDetails"
+                    />
                   </dd>
                 </div>
               </dl>
@@ -1527,6 +1541,7 @@
 import TabsList from '@/components/Page/TabsList';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
+import EditableField from '@/components/EditableField';
 import jsPDF from 'jspdf';
 
 export default {
@@ -1534,6 +1549,7 @@ export default {
     TabsList,
     DownloadLink,
     EventRenderer,
+    EditableField,
   },
   data() {
     return {
@@ -1780,7 +1796,10 @@ export default {
         return true;
       }
       return false;
-    },    
+    },
+    changeAssesorDetails(objChanged) {
+      this.$store.dispatch('application/update', { data: objChanged, id: this.applicationId });
+    },
   },
 };
 </script>
