@@ -27,6 +27,10 @@ export default {
       const ref = collection.doc(state.record.id);
       await ref.set(data, { merge: true });
     },
+    update: async (context, { data, id }) => {
+      const ref = collection.doc(id);
+      await ref.update(data);
+    },
     // NOTE: this is copied across from Candidate app. @todo work out a better way to share code (or use an api)
     submit: async ({ state, dispatch }) => {
       if (state.record) {
