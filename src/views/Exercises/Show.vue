@@ -1,7 +1,7 @@
 <template>
   <div>
     <LoadingMessage
-      v-if="loaded === false"
+      v-if="!loaded"
       :load-failed="loadFailed"
     />
     <div v-else>
@@ -12,7 +12,7 @@
             :to="goBack"
           >
             Back
-          </router-link>          
+          </router-link>
         </div>
         <div class="govuk-grid-column-three-quarters">
           <div class="float-right govuk-!-margin-0">
@@ -22,7 +22,7 @@
             />
           </div>
         </div>
-      </div>      
+      </div>
       <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
@@ -41,8 +41,28 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter print-none">
           <Navigation
-            :items="navPages"
-            label="Main Navigation"
+            :pages="mainNavigation"
+            title="Exercise"
+          />
+          <Navigation
+            v-if="exercise.applicationsCount || hasOpened"
+            :pages="applicationStatusNavigation"
+            title="Applications"
+          />
+          <Navigation
+            v-if="exercise.applicationsCount"
+            :pages="exerciseTasksNavigation"
+            title="Tasks"
+          />
+          <Navigation
+            v-if="exercise.applicationRecords"
+            :pages="applicationStageNavigation"
+            title="Stages"
+          />
+          <Navigation
+            v-if="exercise.applicationRecords"
+            :pages="applicationReportNavigation"
+            title="Reports"
           />
         </div>
         <div class="govuk-grid-column-three-quarters print-full-width">
@@ -102,77 +122,62 @@ export default {
       }
       return false;
     },
-    navPages() {
-      const pages = [
-        { 
-          page: 'Exercise', 
-          name: 'exercise-overview-title',
-          children: [
-            { page: 'Overview', name: 'exercise-show-overview' },
-            { page: 'Website listing', name: 'exercise-show-summary' },
-            { page: 'Vacancy information', name: 'exercise-show-vacancy' },
-            { page: 'Contacts', name: 'exercise-show-contacts' },
-            { page: 'Timeline', name: 'exercise-show-timeline' },
-            { page: 'Shortlisting', name: 'exercise-show-shortlisting' },
-            { page: 'Eligibility information', name: 'exercise-show-eligibility' },
-            { page: 'Working preferences', name: 'exercise-show-working-preferences' },
-            { page: 'Assessment options', name: 'exercise-show-assessment-options' },
-            { page: 'Exercise downloads', name: 'exercise-show-downloads' },
-          ],
-        },
+    mainNavigation() {
+      return [
+        { title: 'Overview', name: 'exercise-show-overview' },
+        { title: 'Website listing', name: 'exercise-show-summary' },
+        { title: 'Vacancy information', name: 'exercise-show-vacancy' },
+        { title: 'Contacts', name: 'exercise-show-contacts' },
+        { title: 'Timeline', name: 'exercise-show-timeline' },
+        { title: 'Shortlisting', name: 'exercise-show-shortlisting' },
+        { title: 'Eligibility information', name: 'exercise-show-eligibility' },
+        { title: 'Working preferences', name: 'exercise-show-working-preferences' },
+        { title: 'Assessment options', name: 'exercise-show-assessment-options' },
+        { title: 'Exercise downloads', name: 'exercise-show-downloads' },
       ];
-      if (this.exercise.applicationsCount || this.hasOpened) {
-        pages.push({
-          page: 'Applications',
-          name: 'exercise-show-applications',
-          children: [
-            { page: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
-            { page: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
-            { page: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
-          ],
-        });
-
-        if (this.exercise.applicationRecords) {
-          pages.push({
-            page: 'Tasks',
-            name: 'exercise-tasks',
-            children: [
-              { page: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
-              { page: 'Character Checks', name: 'exercise-tasks-character-checks' },
-            ],
-          });
-        }
-
-        if (this.exercise.applicationRecords) {
-          const review = this.exercise.applicationRecords.review;
-          const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
-          const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
-          const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
-          const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
-          pages.push({ 
-            page: 'Stages',
-            name: 'exercise-stages',
-            children: [
-              { page: `Review (${review})`, name: 'exercise-stages-review-list' },
-              { page: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
-              { page: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
-              { page: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
-              { page: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
-            ],
-          });
-          pages.push({
-            page: 'Reports',
-            name: 'exercise-show-reports',
-            children: [
-              { page: 'Diversity', name: 'exercise-show-report-diversity' },
-              { page: 'Character Issues', name: 'exercise-show-report-character-issues' },
-              { page: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
-              { page: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
-            ],
-          });
-        }
+    },
+    applicationStatusNavigation(){
+      return [
+        { title: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
+        { title: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
+        { title: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
+      ];
+    },
+    exerciseTasksNavigation(){
+      return [
+        { title: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
+        { title: 'Character Checks', name: 'exercise-tasks-character-checks' },
+      ];
+    },
+    applicationStageNavigation(){
+      if(this.exercise.applicationRecords){
+        const review = this.exercise.applicationRecords.review;
+        const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
+        const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
+        const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
+        const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
+        return [
+          { title: `Review (${review})`, name: 'exercise-stages-review-list' },
+          { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+          { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
+          { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
+          { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
+        ];
+      } else {
+        return [];
       }
-      return pages;
+    },
+    applicationReportNavigation(){
+      if(this.exercise.applicationRecords){
+        return [
+          { title: 'Diversity', name: 'exercise-show-report-diversity' },
+          { title: 'Character Issues', name: 'exercise-show-report-character-issues' },
+          { title: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
+          { title: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
+        ];
+      } else {
+        return [];
+      }
     },
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
@@ -220,9 +225,7 @@ export default {
 };
 </script>
 <style>
-
-  .govuk-heading-xl{
-    margin-bottom: 0;
-  }
-
+.govuk-heading-xl {
+  margin-bottom: 0;
+}
 </style>

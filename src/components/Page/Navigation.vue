@@ -1,38 +1,34 @@
 <template>
   <nav
     class="moj-side-navigation govuk-!-padding-top-0"
-    :aria-label="label"
+    :aria-label="title || 'side-navigation'"
   >
     <ul class="moj-side-navigation__list">
-      <li 
-        v-for="(page, index) in pageItems"
-        :key="index"
-        class="moj-side-navigation__item"
-        :class="{open: page.open, on: page.on}"
+      <h4
+        v-if="title" 
+        class="moj-side-navigation__title"
       >
-        <h4 class="moj-side-navigation__title">
-          {{ page.page }}
-        </h4>
-        <ul
-          v-if="page.children"
-          class="moj-side-navigation__list"
+        {{ title }}
+      </h4>
+      <ul
+        v-if="pages"
+        class="moj-side-navigation__list"
+      >
+        <li
+          v-for="(page, pageIndex) in pages"
+          :key="pageIndex"
+          class="moj-side-navigation__item"
+          :class="{'moj-side-navigation__item--active': isActive(page)}"
         >
-          <li
-            v-for="(child, childIndex) in page.children"
-            :key="childIndex"
+          <router-link 
             class="moj-side-navigation__item"
-            :class="{'moj-side-navigation__item--active': child.on}"
+            :to="{name: page.name, params: page.params}"
+            :aria-current="page.on ? 'page' : false"
           >
-            <router-link 
-              class="moj-side-navigation__item"
-              :to="{name: child.name, params: child.params}"
-              :aria-current="child.on ? 'page' : false"
-            >
-              {{ child.page }}
-            </router-link>
-          </li>
-        </ul>
-      </li>
+            {{ page.title }}
+          </router-link>
+        </li>
+      </ul>
     </ul>
   </nav>
 </template>
@@ -40,96 +36,41 @@
 <script>
 export default {
   props: {
-    items: {
+    pages: {
       required: true,
       type: Array,
     },
-    label: {
-      required: false,
-      default: 'navigation',
+    title: {
+      default: '',
       type: String,
     },
   },
-  computed: {
-    pageItems() {
-      const pages = [];
-      for (let i = 0, len = this.items.length; i < len; ++i) {
-        const page = {
-          page: this.items[i].page,
-          name: this.items[i].name,
-          params: this.items[i].params,
-        };
-        if (this.items[i].children) {
-          page.children = [];
-          for (let j = 0, lenJ = this.items[i].children.length; j < lenJ; ++j) {
-            const child = this.items[i].children[j];            
-            child.on = (child.name === this.$route.name || this.$route.name.includes(child.page.toLowerCase())); //@NOTE@ hacky way of highlighting subpages
-            if (child.on) {
-              page.open = true;
-            }
-            page.children.push(child);
-          }
+  data() {
+    return {
+      currentPage: '',
+    };
+  },
+  methods: {
+    isActive(page){     
+      // if an application    
+      if(page.params){ 
+        if(page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length-3]){ 
+          // check if the status param matches route path 3rd from last item (draft/applied/withdrawn)
+          return page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length-3];
+        } else {
+          // else check the last word in the route path matches the page title (to lowercase)
+          return this.$route.path.split('/')[this.$route.path.split('/').length-1] == page.title.toLowerCase();
         }
-        page.open = page.on = (page.name === this.$route.name);
-        pages.push(page);
+      } 
+      // if the route is an edit, list or back page        
+      else if (this.$route.name.split('-').some(i=>['edit','list','back'].indexOf(i) !== -1)) { 
+        // check the names match
+        return page.name.split('-')[2] == this.$route.name.split('-')[2]; 
+      } else {
+        return this.$route.name == page.name;
       }
-      return pages;
     },
   },
+
 };
 </script>
-
-<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
-  .dwp-vertical-navigation {
-    margin: 0;
-    padding: 0;
-    > li {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-size: 1em;
-      > a {
-        padding: 0.625em;
-        display: block;
-        text-decoration: none;
-      }
-      > ul {
-        display: none;
-        > li {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          font-size: 1em;
-          > a {
-            padding: 0.625em 0.625em 0.625em 1.25em;
-            display: block;
-            text-decoration: none;            
-          }
-        }
-      }
-      &.on > a {
-        color: #1d70b8;
-        font-weight: bold;
-        background-color: #f3f2f1;
-      }      
-      &.open {
-        border-left: 4px solid #1d70b8;
-        > ul {
-          display: block;
-          padding-inline-start: 0;
-          > li {
-            &.on {
-              background-color: #f3f2f1;
-              > a {
-                color: #1d70b8;
-                font-weight: bold;
-                text-decoration: none;
-              }
-            }
-          }
-        }
-      }      
-    }
-  }
-
-</style>
