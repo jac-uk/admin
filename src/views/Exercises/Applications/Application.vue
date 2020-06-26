@@ -1350,6 +1350,19 @@
                   </dd>
                 </div>
 
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Telephone
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField 
+                      :value="application.firstAssessorPhone"
+                      field="firstAssessorPhone"
+                      @changefield="changeAssesorDetails"
+                    />
+                  </dd>
+                </div>
+
                 <hr class="govuk-section-break govuk-section-break--l">
 
                 <div class="govuk-summary-list__row">
@@ -1387,6 +1400,19 @@
                       :value="application.secondAssessorEmail"
                       field="secondAssessorEmail"
                       type="email"
+                      @changefield="changeAssesorDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Telephone
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField 
+                      :value="application.secondAssessorPhone"
+                      field="secondAssessorPhone"
                       @changefield="changeAssesorDetails"
                     />
                   </dd>
