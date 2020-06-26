@@ -52,7 +52,7 @@
               class="govuk-link"
               :to="{name: 'exercise-applications-application', params: { applicationId: application.id, status: status }}"
             >
-              {{ application.referenceNumber }}
+              {{ application.referenceNumber | showAlternative(application.id) }}
             </RouterLink>
           </th>
           <td class="govuk-table__cell">
