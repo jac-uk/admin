@@ -42,12 +42,12 @@
         <div class="govuk-grid-column-one-quarter print-none">
           <Navigation
             :pages="mainNavigation"
-            title="Main Navigation"
+            title="Exercise"
           />
           <Navigation
-            v-if="exercise.HasApplications || hasOpened"
+            v-if="exercise.applicationsCount || hasOpened"
             :pages="applicationStatusNavigation"
-            title="Application"
+            title="Applications"
           />
           <Navigation
             v-if="exercise.applicationsCount"

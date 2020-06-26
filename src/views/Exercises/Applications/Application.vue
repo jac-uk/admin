@@ -1729,8 +1729,8 @@ export default {
           if (this.applications[i].id === this.applicationId) {
             if (i < len) {
               this.$router.replace({ 
-                name: 'exercise-application', 
-                params: { applicationId: this.applications[i+1].id },
+                name: 'exercise-applications-application', 
+                params: { applicationId: this.applications[i+1].id, status: this.applications[i+1].status },
               });
             }
             break;
@@ -1744,8 +1744,8 @@ export default {
           if (this.applications[i].id === this.applicationId) {
             if (i > 0) {
               this.$router.replace({ 
-                name: 'exercise-application', 
-                params: { applicationId: this.applications[i-1].id },
+                name: 'exercise-applications-application', 
+                params: { applicationId: this.applications[i-1].id, status: this.applications[i+1].status },
               });
             }
             break;
