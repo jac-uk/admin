@@ -39,7 +39,7 @@
         class="govuk-button"
         @click="btnClickSubmit()"
       >
-        Submit
+        Save
       </button>
     </div>
   </div>
