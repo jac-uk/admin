@@ -80,34 +80,28 @@
         <li class="moj-pagination__item  moj-pagination__item--prev">
           <a
             class="moj-pagination__link"
-            href=""
+            @click.prevent="changePage('previous')"
           >Previous<span class="govuk-visually-hidden"> set of pages</span></a>
         </li> 
-        <li class="moj-pagination__item">
+        
+        <li
+          v-for="number in calculatePages"
+          :key="number"
+          scope="col"
+          class="moj-pagination__item"
+        >
           <a
             class="moj-pagination__link"
-            href="#"
-          >9</a>
+          >{{ number }}</a>
         </li> 
-        <li class="moj-pagination__item moj-pagination__item--active">
-          10
-        </li> 
-        <li class="moj-pagination__item">
-          <a
-            class="moj-pagination__link"
-            href="#"
-          >11</a>
-        </li> 
+
         <li class="moj-pagination__item  moj-pagination__item--next">
           <a
             class="moj-pagination__link"
-            href=""
+            @click.prevent="changePage('next')"
           >Next<span class="govuk-visually-hidden"> set of pages</span></a>
         </li>
       </ul>
-      <p class="moj-pagination__results">
-        Showing <b>10</b> to <b>20</b> of <b>30</b> results
-      </p>
     </nav>
   </div>
 </template>
@@ -140,13 +134,13 @@ export default {
     pageSize: {
       type: Number, 
       required: false, 
-      default: 2,
+      default: 25,
     },
-    pageNumber: {
-      type: Number,
-      required: false, 
-      default: 1,
-    },
+  },
+  data(){
+    return {
+      pageNumber: 1,
+    };
   },
   computed: {
     selectAll: {
@@ -183,21 +177,39 @@ export default {
     },
     getPaginatedItems(){
       const numberOfPages = this.calculatePages;
+      if(numberOfPages){
+        if(this.pageNumber > numberOfPages) throw `Page ${this.pageNumber} exceeds page size of ${this.numberOfPages}`;
 
-      if(this.pageNumber > numberOfPages) throw 'Page {0} exceeds page size of {1}'.format(this.pageNumber, numberOfPages);
+        const sliceFrom = (this.pageNumber * this.pageSize -1);
+        const sliceTo = sliceFrom + this.pageSize; 
 
-      const sliceFrom = (this.pageNumber * this.pageSize) - 1;
-      const sliceTo = sliceFrom + this.pageSize; 
+        const sliced = this.data.slice(sliceFrom, sliceTo);
+        
+        return sliced;
+      } else {
+        return {};
+      }
+    },
+  },
+  methods: {
+    changePage(direction){
+      const numberOfPages = this.calculatePages;
+      var newPageNumber = this.pageNumber;
 
-      const sliced = this.data.slice(sliceFrom, sliceTo);
+      if(direction == 'next'){
+        newPageNumber++;
+      } else if (direction == 'previous'){
+        newPageNumber--;
+      } else {
+        throw `Invalid direction: '${direction}'`;
+      }
 
-      console.log(this.pageSize);
-      console.log(numberOfPages);
-      console.log(sliceFrom);
-      console.log(sliceTo);
-      console.log(sliced);
-
-      return sliced;
+      if(newPageNumber <= 0 || newPageNumber >= numberOfPages){
+        return false;
+      } else {
+        this.pageNumber = newPageNumber;
+        return true;
+      }
     },
   },
 };
