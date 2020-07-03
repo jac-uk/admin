@@ -85,12 +85,14 @@
         </li> 
         
         <li
-          v-for="number in calculatePages"
+          v-for="number in (calculatePages)"
           :key="number"
           scope="col"
           class="moj-pagination__item"
+          v-bind:class="{ 'moj-pagination__item--active': number == pageNumber }" 
         >
           <a
+            @click.prevent="changePage(number)"
             class="moj-pagination__link"
           >{{ number }}</a>
         </li> 
@@ -169,22 +171,21 @@ export default {
       return true; 
     },
     calculatePages(){
-      if(this.data.length > this.pageSize){
-        return Math.round(this.data.length / this.pageSize);
-      } else {
-        return this.data.length;
-      }
+      return Math.ceil(this.data.length / this.pageSize);
     },
     getPaginatedItems(){
       const numberOfPages = this.calculatePages;
-      if(numberOfPages){
-        if(this.pageNumber > numberOfPages) throw `Page ${this.pageNumber} exceeds page size of ${this.numberOfPages}`;
+      // Zero-index
+      const pageNumber = this.pageNumber - 1;
 
-        const sliceFrom = (this.pageNumber * this.pageSize -1);
+      if(numberOfPages){
+        if(pageNumber > numberOfPages) throw `Page ${pageNumber} exceeds page size of ${this.numberOfPages}`;
+
+        const sliceFrom = (pageNumber * this.pageSize);
         const sliceTo = sliceFrom + this.pageSize; 
 
         const sliced = this.data.slice(sliceFrom, sliceTo);
-        
+
         return sliced;
       } else {
         return {};
@@ -193,6 +194,7 @@ export default {
   },
   methods: {
     changePage(direction){
+      // Direction can either be: next, previous, {{jump page number}}
       const numberOfPages = this.calculatePages;
       var newPageNumber = this.pageNumber;
 
@@ -200,11 +202,13 @@ export default {
         newPageNumber++;
       } else if (direction == 'previous'){
         newPageNumber--;
+      } else if (Number.isInteger(direction)){
+        newPageNumber = direction;
       } else {
         throw `Invalid direction: '${direction}'`;
       }
-
-      if(newPageNumber <= 0 || newPageNumber >= numberOfPages){
+      // + 1 as we're zero indexed 
+      if(newPageNumber <= 0 || newPageNumber >= numberOfPages + 1){
         return false;
       } else {
         this.pageNumber = newPageNumber;
