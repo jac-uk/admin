@@ -17,11 +17,11 @@
           Contact date
         </dt>
         <dd class="govuk-summary-list__value">
-          <span
+          <template
             v-if="exercise.characterChecks"
           >
-            {{ exercise.characterChecks.requestDate | formatDate('long') }}
-          </span>
+            {{ exercise.characterChecksDate | formatDate('long') }}
+          </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -30,11 +30,11 @@
           Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          <span
+          <template
             v-if="exercise.characterChecks"
           >
-            {{ exercise.characterChecks.returnDate | formatDate('long') }}
-          </span>
+            {{ exercise.characterChecksReturnDate | formatDate('long') }}
+          </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
