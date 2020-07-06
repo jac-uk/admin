@@ -69,12 +69,12 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
+    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, limit } ) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
-        .where('active', '==', true);
-        // .limit(50);
+        .where('active', '==', true)
+        .limit(limit);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),

@@ -10,11 +10,12 @@ const collectionRef = firestore.collection('applicationRecords');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
+    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, limit } ) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.HANDOVER)
-        .where('active', '==', true);
+        .where('active', '==', true)
+        .limit(limit);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),

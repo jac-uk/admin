@@ -84,6 +84,7 @@ export default {
     return {
       message: null,
       selectedItems: [],
+      limit: 500,
     };
   },
   computed: {
@@ -102,7 +103,7 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('stageShortlisted/bind', { exerciseId: this.exercise.id, limit: 2 });
+    this.$store.dispatch('stageShortlisted/bind', { exerciseId: this.exercise.id, limit: this.limit });
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
   },
   methods: {

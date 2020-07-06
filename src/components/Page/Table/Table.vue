@@ -89,11 +89,11 @@
           :key="number"
           scope="col"
           class="moj-pagination__item"
-          v-bind:class="{ 'moj-pagination__item--active': number == pageNumber }" 
+          :class="{ 'moj-pagination__item--active': number == pageNumber }" 
         >
           <a
-            @click.prevent="changePage(number)"
             class="moj-pagination__link"
+            @click.prevent="changePage(number)"
           >{{ number }}</a>
         </li> 
 

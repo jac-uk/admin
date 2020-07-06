@@ -84,6 +84,7 @@ export default {
     return {
       message: null,
       selectedItems: [],
+      limit: 500,
     };
   },
   computed: {
@@ -103,7 +104,7 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('stageRecommended/bind', { exerciseId: this.exercise.id });
+    this.$store.dispatch('stageRecommended/bind', { exerciseId: this.exercise.id, limit: this.limit });
     this.message = await this.$store.dispatch('stageRecommended/getMessages');
   },
   methods: {
