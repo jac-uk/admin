@@ -82,13 +82,12 @@ export default {
         throw `Invalid direction: '${direction}'`;
       }
 
-      if(newPageNumber < this.lowIndex || newPageNumber > this.highIndex){
-        return false;
-      } else {
+      if (!(newPageNumber < this.lowIndex || newPageNumber > this.highIndex)) {
         this.pageNumber = newPageNumber;
-        this.$emit('paged', this.pageNumber);
-        return true;
+        this.$emit('pageChanged', this.pageNumber);
+        return;
       }
+      return;
     },
   },
 };
