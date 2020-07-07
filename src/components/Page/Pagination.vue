@@ -86,6 +86,7 @@ export default {
         return false;
       } else {
         this.pageNumber = newPageNumber;
+        this.$emit('paged', this.pageNumber);
         return true;
       }
     },

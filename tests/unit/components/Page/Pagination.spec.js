@@ -17,7 +17,7 @@ describe('components/Page/Pagination', () => {
     let next = numberOfPages + 1;
     let previous = 0;
     let lowIndex = 1;
-    
+
     beforeEach(() => {
         wrapper = createTestSubject({ highIndex: numberOfPages });
     });  
@@ -120,6 +120,14 @@ describe('components/Page/Pagination', () => {
             expect(wrapper.findAll('a').at(next).attributes('class')).toContain('pointer');
             // Previous is enabled
             expect(wrapper.findAll('a').at(previous).attributes('class')).toContain('pointer');
+        });
+
+        it('event emitted', async () => {
+            await wrapper.findAll('a').at(Math.round(numberOfPages / 4)).trigger('click');
+            // Event emitted
+            expect(wrapper.emitted().paged).toBeTruthy();
+            // Correct event emitted with correct value
+            expect(wrapper.emitted('paged')[0][0]).toEqual(Math.round(numberOfPages / 4));
         });
     });
 });
