@@ -9,7 +9,7 @@ export default {
       let firestoreRef = firestore
         .collection('notifications')
         .where('status', 'in', ['ready', 'failed'])
-        .orderBy('createdAt', 'desc').limit(100);
+        .orderBy('createdAt', 'desc');
       return bindFirestoreRef('queue', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindQueue: firestoreAction(({ unbindFirestoreRef }) => {
@@ -19,7 +19,7 @@ export default {
       let firestoreRef = firestore
         .collection('notifications')
         .where('status', '==', 'sent')
-        .orderBy('createdAt', 'desc').limit(100);
+        .orderBy('createdAt', 'desc');
       return bindFirestoreRef('sent', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindSent: firestoreAction(({ unbindFirestoreRef }) => {
