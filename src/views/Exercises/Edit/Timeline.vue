@@ -6,14 +6,17 @@
         <h1 class="govuk-heading-xl">
           Timeline
         </h1>
+
         <ErrorSummary
           :errors="errors"
           :show-save-button="true"
           @save="save"
         />
+
         <p class="govuk-body-l">
           You can return to this page later to add or change dates.
         </p>
+
         <p class="govuk_body">
           <a
             href="#"
@@ -25,6 +28,7 @@
             This can help you plan your own key dates (opens in a new tab).
           </span>
         </p>
+
         <h2 class="govuk-heading-l">
           Application dates
         </h2>
@@ -40,6 +44,7 @@
           label="Closed for applications"
           required
         />
+
         <h2 class="govuk-heading-l">
           Shortlisting
         </h2>
@@ -85,6 +90,7 @@
           label="Telephone assessment end date"
           required
         />
+
         <div
           v-if="hasSituationalJudgementQT"
           ref="situationalJudgementQT"
@@ -117,6 +123,7 @@
             required
           />
         </div>
+
         <div
           v-if="hasCriticalAnalysisQT"
           ref="criticalAnalysisQT"
@@ -149,6 +156,7 @@
             required
           />
         </div>
+
         <div
           v-if="hasScenarioQT"
           ref="scenarioQT"
@@ -180,6 +188,7 @@
             required
           />
         </div>
+
         <DateInput
           id="shortlisting-outcome-date"
           v-model="exercise.shortlistingOutcomeDate"
@@ -187,8 +196,9 @@
           type="month"
           required
         />
+
         <h2 class="govuk-heading-l">
-          Independent assessors
+          Independent Assessors
         </h2>
         <DateInput
           id="contact-independent-assessors"
@@ -200,9 +210,10 @@
         <DateInput
           id="independent-assessments-return-date"
           v-model="exercise.independentAssessmentsReturnDate"
-          label="Independent assessments return date"
+          label="Independent Assessments return date"
           required
         />
+
         <h2 class="govuk-heading-l">
           Eligibility SCC
         </h2>
@@ -212,23 +223,33 @@
           label="Eligibility SCC date"
           required
         />
+
         <h2 class="govuk-heading-l">
-          Selection day
+          Selection Day
         </h2>
         <RepeatableFields
           v-model="exercise.selectionDays"
           :component="repeatableFields.SelectionDay"
           required
         />
+
         <h2 class="govuk-heading-l">
           Character Checks
         </h2>
         <DateInput
           id="character-checks-date"
           v-model="exercise.characterChecksDate"
-          label="Character checks date"
+          label="Character Checks request date"
           required
         />
+
+        <DateInput
+          id="character-checks-date"
+          v-model="exercise.characterChecksReturnDate"
+          label="Character Checks return date"
+          required
+        />
+
         <h2 class="govuk-heading-l">
           Statutory Consultation
         </h2>
@@ -238,6 +259,7 @@
           label="Statutory Consultation date"
           required
         />
+
         <h2 class="govuk-heading-l">
           Character and Selection SCC
         </h2>
@@ -247,6 +269,7 @@
           label="Character and SCC date"
           required
         />
+
         <h2 class="govuk-heading-l">
           Final outcome
         </h2>
@@ -257,6 +280,7 @@
           type="month"
           required
         />
+
         <h2 class="govuk-heading-l">
           Equal merit dates
         </h2>
@@ -285,6 +309,7 @@
           type="month"
           required
         />
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -337,6 +362,7 @@ export default {
       eligibilitySCCDate: null,
       selectionDays: null,
       characterChecksDate: null,
+      characterChecksReturnDate: null,
       statutoryConsultationDate: null,
       characterAndSCCDate: null,
       finalOutcome: null,
