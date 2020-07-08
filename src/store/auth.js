@@ -38,7 +38,7 @@ const module = {
           });  
         } else {
           auth().signOut();
-          commit('setAuthError', 'This site is restricted to employees of Judicial Appointments Commission');
+          commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
         }
       }
     },
