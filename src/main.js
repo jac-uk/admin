@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'development') {
 
   Sentry.init({
     dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-    environment: parts[0] == "admin" ? "production" : "staging",
+    environment: parts[0] == 'admin' ? 'production' : 'staging',
     release: process.env.npm_package_version,
     integrations: [new Integrations.Vue({ Vue, attachProps: true })],
   });
