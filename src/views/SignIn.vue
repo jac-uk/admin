@@ -31,15 +31,22 @@
 import { auth } from '@/firebase';
 
 export default {
+  data: function() {
+    return {
+      signInError: null,
+    };
+  },
   computed: {
     authError() {
-      return this.$store.state.auth.authError;
+      return this.$store.state.auth.authError || this.signInError;
     },
   },
   methods: {
     loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
-      auth().signInWithPopup(provider);
+      auth().signInWithPopup(provider).catch(err => {
+        this.signInError = err.message;
+      });
     },
   },
 };
