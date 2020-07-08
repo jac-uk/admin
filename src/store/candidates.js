@@ -9,8 +9,7 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
       let firestoreRef = collection
-        .orderBy('created', 'desc')
-        .limit(100);
+        .orderBy('created', 'desc');
       if (id) {
         firestoreRef = collection.doc(id);
       } 
