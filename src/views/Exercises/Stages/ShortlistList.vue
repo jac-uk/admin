@@ -91,7 +91,11 @@ export default {
       return this.$store.state.stageShortlisted.records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.shortlisted || 0;
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.shortlisted){
+        return this.exercise.applicationRecords.shortlisted 
+      } else {
+        return 0;
+      }
     },
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
