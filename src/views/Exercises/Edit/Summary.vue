@@ -95,6 +95,10 @@ export default {
         return this.parseDate(this.exercise.estimatedLaunchDate);
       },
       set(val) {
+        if(!val && val instanceof Date){
+          return;
+        }
+
         let dateString = `${val.getUTCFullYear()}-${val.getUTCMonth() + 1}`;
         if (this.setDay) {
           dateString = `${dateString}-${val.getUTCDate()}`;
