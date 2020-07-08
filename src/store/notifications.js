@@ -19,7 +19,8 @@ export default {
       let firestoreRef = firestore
         .collection('notifications')
         .where('status', '==', 'sent')
-        .orderBy('createdAt', 'desc');
+        .orderBy('createdAt', 'desc')
+        .limit('200');
       return bindFirestoreRef('sent', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindSent: firestoreAction(({ unbindFirestoreRef }) => {
