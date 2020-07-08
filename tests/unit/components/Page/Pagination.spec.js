@@ -129,5 +129,11 @@ describe('components/Page/Pagination', () => {
             // Correct event emitted with correct value
             expect(wrapper.emitted('pageChanged')[0][0]).toEqual(Math.round(numberOfPages / 4));
         });
+
+        it('event not emitted', async () => {
+            await wrapper.findAll('a').at(previous).trigger('click');
+            // Event not emitted (as we don't go backwards)
+            expect(wrapper.emitted().pageChanged).toBeFalsy();
+        });
     });
 });
