@@ -92,7 +92,7 @@ export default {
     },
     totalApplicationRecords() {
       if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
-        return this.exercise.applicationRecords.shortlisted 
+        return this.exercise.applicationRecords.shortlisted; 
       } else {
         return 0;
       }
