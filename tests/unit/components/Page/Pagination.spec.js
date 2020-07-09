@@ -1,7 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 
 import Pagination from '@/components/Page/Pagination';
-import { number } from 'yargs';
 
 const createTestSubject = (propsData) => {
     return shallowMount(Pagination, {
@@ -31,12 +30,13 @@ describe('components/Page/Pagination', () => {
         // From: https://stackoverflow.com/a/59163372
         // To prevent noisy console output
         // store a reference to the original function
+        /* eslint no-console: ["error", { allow: ["error"] }] */
         const originalConsoleError = console.error;
         // reassign to a no-op
         console.error = () => {};
         
         expect(() => {
-            createTestSubject({ highIndex: 4.5 })
+            createTestSubject({ highIndex: 4.5 });
         }).toThrow(RangeError);
 
         // restore to aid in debugging further tests
@@ -193,7 +193,7 @@ describe('components/Page/Pagination', () => {
 
         it('float input does not change page', () => {
             expect(() => {
-                wrapper.vm.changePage(lowIndex + 0.5)
+                wrapper.vm.changePage(lowIndex + 0.5);
             }).toThrow('Invalid direction');
 
             expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
@@ -202,7 +202,7 @@ describe('components/Page/Pagination', () => {
 
         it('null input does not change page', () => {
             expect(() => {
-                wrapper.vm.changePage(null)
+                wrapper.vm.changePage(null);
             }).toThrow('Invalid direction');
 
             expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
@@ -211,7 +211,7 @@ describe('components/Page/Pagination', () => {
 
         it('invalid string input does not change page', () => {
             expect(() => {
-                wrapper.vm.changePage("test")
+                wrapper.vm.changePage('test');
             }).toThrow('Invalid direction');
 
             expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
