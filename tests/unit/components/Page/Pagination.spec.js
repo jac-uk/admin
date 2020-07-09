@@ -83,12 +83,10 @@ describe('components/Page/Pagination', () => {
 
     });
 
-
     describe('does not start at 1', () => {
         const numberOfPages =  6;
         const lowIndexNew = 5;
         const highIndexNew = 10;
-        
 
         beforeEach(() => {
             wrapper = createTestSubject({ highIndex: highIndexNew, lowIndex: lowIndexNew });
