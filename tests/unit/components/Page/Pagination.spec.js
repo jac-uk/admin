@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 
 import Pagination from '@/components/Page/Pagination';
+import { number } from 'yargs';
 
 const createTestSubject = (propsData) => {
     return shallowMount(Pagination, {
@@ -19,11 +20,27 @@ describe('components/Page/Pagination', () => {
     let lowIndex = 1;
 
     beforeEach(() => {
-        wrapper = createTestSubject({ highIndex: numberOfPages });
+        wrapper = createTestSubject({ highIndex: numberOfPages, lowIndex: lowIndex });
     });  
 
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
+    });
+
+    it('invalid prop', () => {
+        // From: https://stackoverflow.com/a/59163372
+        // To prevent noisy console output
+        // store a reference to the original function
+        const originalConsoleError = console.error;
+        // reassign to a no-op
+        console.error = () => {};
+        
+        expect(() => {
+            createTestSubject({ highIndex: 4.5 })
+        }).toThrow(RangeError);
+
+        // restore to aid in debugging further tests
+        console.error = originalConsoleError;
     });
 
     describe('properties', () => {
@@ -67,6 +84,10 @@ describe('components/Page/Pagination', () => {
 
         it('first page active', () => {
             expect(wrapper.findAll('li').at(1).attributes('class')).toContain('moj-pagination__item--active');
+        });
+
+        it('no other page active', () => {
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
         });
 
         it('previous button', () => {
@@ -134,6 +155,67 @@ describe('components/Page/Pagination', () => {
             await wrapper.findAll('a').at(previous).trigger('click');
             // Event not emitted (as we don't go backwards)
             expect(wrapper.emitted().pageChanged).toBeFalsy();
+        });
+
+    });
+
+    describe('unexpected inputs', () => {
+        it('cannot go off the start of the array', async () => {
+            await wrapper.findAll('a').at(previous).trigger('click');
+            // Still on the first page 
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            // No other page active 
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('cannot go off the end of the array', async () => {
+            await wrapper.findAll('a').at(Math.round(numberOfPages)).trigger('click');
+            await wrapper.findAll('a').at(next).trigger('click');
+            // Still on the last page 
+            expect(wrapper.findAll('li').at(numberOfPages).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            // No other page active 
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('cannot change page exceeding array', async () => {
+            await wrapper.vm.changePage(numberOfPages * 5);
+
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('cannot change page inversely exceeding array', async () => {
+            await wrapper.vm.changePage(numberOfPages * -5);
+
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('float input does not change page', () => {
+            expect(() => {
+                wrapper.vm.changePage(lowIndex + 0.5)
+            }).toThrow('Invalid direction');
+
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('null input does not change page', () => {
+            expect(() => {
+                wrapper.vm.changePage(null)
+            }).toThrow('Invalid direction');
+
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+
+        it('invalid string input does not change page', () => {
+            expect(() => {
+                wrapper.vm.changePage("test")
+            }).toThrow('Invalid direction');
+
+            expect(wrapper.findAll('li').at(lowIndex).attributes('class')).toContain('moj-pagination__item--active', 'disable');
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
         });
     });
 });
