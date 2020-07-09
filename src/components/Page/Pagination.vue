@@ -18,7 +18,7 @@
       </li> 
         
       <li
-        v-for="number in (highIndex)"
+        v-for="number in range"
         :key="number"
         scope="col"
         class="moj-pagination__item"
@@ -60,6 +60,13 @@ export default {
     };
   },
   computed: {
+    range(){
+      var numbers = [];
+      for(var i = this.lowIndex; i <= this.highIndex; i++){
+        numbers.push(i);
+      }
+      return numbers;
+    },
     atBeginning(){
       return this.pageNumber == this.lowIndex;
     },

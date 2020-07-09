@@ -26,23 +26,6 @@ describe('components/Page/Pagination', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    it('invalid prop', () => {
-        // From: https://stackoverflow.com/a/59163372
-        // To prevent noisy console output
-        // store a reference to the original function
-        /* eslint no-console: ["error", { allow: ["error"] }] */
-        const originalConsoleError = console.error;
-        // reassign to a no-op
-        console.error = () => {};
-        
-        expect(() => {
-            createTestSubject({ highIndex: 4.5 });
-        }).toThrow(RangeError);
-
-        // restore to aid in debugging further tests
-        console.error = originalConsoleError;
-    });
-
     describe('properties', () => {
         let prop;
     
@@ -98,6 +81,30 @@ describe('components/Page/Pagination', () => {
             expect(wrapper.findAll('li').at(next).html()).toContain('Next');
         });
 
+    });
+
+
+    describe('does not start at 1', () => {
+        const numberOfPages =  6;
+        const lowIndexNew = 5;
+        const highIndexNew = 10;
+        
+
+        beforeEach(() => {
+            wrapper = createTestSubject({ highIndex: highIndexNew, lowIndex: lowIndexNew });
+        }); 
+        it('renders correct number of elements', () => {
+            // Pages + Next and Previous buttons
+            expect(wrapper.findAll('li')).toHaveLength(numberOfPages + 2);
+        });
+
+        it('first page active', () => {
+            expect(wrapper.findAll('li').at(1).attributes('class')).toContain('moj-pagination__item--active');
+        });
+
+        it('no other page active', () => {
+            expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
     });
 
     describe('change page', () => {
