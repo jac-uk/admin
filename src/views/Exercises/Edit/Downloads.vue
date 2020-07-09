@@ -40,6 +40,7 @@
           ident="independent-assessors"
           :component="repeatableFields.MultiFileUpload"
           :path="uploadPath"
+          :max="1"
         />
 
         <h2 class="govuk-heading-l">
