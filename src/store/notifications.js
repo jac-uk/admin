@@ -20,7 +20,7 @@ export default {
         .collection('notifications')
         .where('status', '==', 'sent')
         .orderBy('createdAt', 'desc')
-        .limit('200');
+        .limit(200);
       return bindFirestoreRef('sent', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindSent: firestoreAction(({ unbindFirestoreRef }) => {
