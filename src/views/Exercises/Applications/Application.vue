@@ -783,7 +783,7 @@
                 </div>
 
                 <div 
-                  v-if="item.completedPupillage[0] === false"
+                  v-if="item.completedPupillage && item.completedPupillage[0] === false"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
