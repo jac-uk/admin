@@ -221,23 +221,24 @@ export default {
   },
   computed: {
     tabs(){
-      var tabs = [{
-                    ref: 'queue',
-                    title: 'Queue',
-                  },
-                  {
-                    ref: 'sent',
-                    title: 'Sent',
-                  },
-                  {
-                    ref: 'settings',
-                    title: 'Settings',
-                  }];
+      let queueTitle = 'Queue';
       if(this.notificationsQueue.length){
-        tabs[0]['title'] = `Queue (${this.notificationsQueue.length})`;
+        queueTitle += ` (${this.notificationsQueue.length})`;
       }
-
-      return tabs;
+      return [
+        {
+          ref: 'queue',
+          title: queueTitle,
+        },
+        {
+          ref: 'sent',
+          title: 'Sent',
+        },
+        {
+          ref: 'settings',
+          title: 'Settings',
+        },
+      ];
     },
     notificationsQueue() {
       return this.$store.state.notifications.queue;
