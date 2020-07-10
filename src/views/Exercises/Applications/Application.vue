@@ -783,7 +783,7 @@
                 </div>
 
                 <div 
-                  v-if="item.completedPupillage === false"
+                  v-if="item.completedPupillage[0] === false"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -791,15 +791,15 @@
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.completedPupillage | toYesNo }}
+                      <li>
+                        {{ item.completedPupillage[0] | toYesNo }}
                       </li>
                     </ul>
                   </dd>
                 </div>
 
                 <div 
-                  v-if="item.completedPupillage === false && item.details"
+                  v-if="item.completedPupillage && item.completedPupillage[0] === false && item.details"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -807,7 +807,7 @@
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
+                      <li>
                         {{ item.details }}
                       </li>
                     </ul>
@@ -815,7 +815,7 @@
                 </div>
 
                 <div 
-                  v-if="item.type === 'barrister' && item.completedPupillage"
+                  v-if="item.type === 'barrister' && item.date && (!item.completedPupillage || item.completedPupillage[0] !== false)"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
