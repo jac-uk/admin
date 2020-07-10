@@ -1,21 +1,28 @@
 import { isDate, formatDate } from '@/helpers/date';
 
+const getDateString = (date, format) => {
+  return isDate(date) ? formatDate(date, format) : null;
+};
+
 const getDateAndTime = (date, startTime) => {
-  if(!isDate(date) && !isDate(startTime)) {
+  if (!isDate(date) && !isDate(startTime)) {
     return null;
   }
   const result = date;
   result.setHours(startTime.getHours(), startTime.getMinutes());
+
   return result;
 };
 
 const getDateAndTimeString = (date, startTime, endTime) => {
-  let dateString = isDate(date) && formatDate(date) || null;
-  let startTimeString = isDate(startTime) && formatDate(startTime, 'time') || null;
-  let endTimeString = isDate(endTime) && formatDate(endTime, 'time') || null;
-  if(!dateString && !startTimeString && !endTimeString) {
+  let dateString = getDateString(date);
+  let startTimeString = getDateString(startTime, 'time');
+  let endTimeString = getDateString(endTime, 'time');
+
+  if (!dateString && !startTimeString && !endTimeString) {
     return null;
   }
+
   return `${dateString} - ${startTimeString} to ${endTimeString}`;
 };
 
@@ -25,8 +32,10 @@ const createSelectionDay = (selectionDay) => {
     date: selectionDay.selectionDayStart,
     dateString: null,
   };
-  let selectionDayStart = isDate(selectionDay.selectionDayStart) && formatDate(selectionDay.selectionDayStart) || null;
-  let selectionDayEnd = isDate(selectionDay.selectionDayEnd) && formatDate(selectionDay.selectionDayEnd) || null;
+  
+  let selectionDayStart = getDateString(selectionDay.selectionDayStart);
+  let selectionDayEnd = getDateString(selectionDay.selectionDayEnd);
+
   if(!selectionDayStart || !selectionDayEnd) {
     selectionDayEntry.dateString = '';
   } else if(selectionDayStart !== selectionDayEnd) {
@@ -43,8 +52,10 @@ const createShortlistingMethod = (method, startDate, endDate) => {
     date: startDate,
     dateString: null,
   };
-  let formattedStartDate = isDate(startDate) && formatDate(startDate) || null;
-  let formattedEndDate = isDate(endDate) && formatDate(endDate) || null;
+
+  let formattedStartDate = getDateString(startDate);
+  let formattedEndDate = getDateString(endDate);
+
   if(!formattedStartDate || !formattedEndDate) {
     shortlistingMethodEntry.dateString = '';
   } else if(formattedStartDate !== formattedEndDate) {
@@ -52,6 +63,7 @@ const createShortlistingMethod = (method, startDate, endDate) => {
   } else {
     shortlistingMethodEntry.dateString = `${formattedStartDate}`;
   }
+
   return shortlistingMethodEntry;
 };
 
@@ -63,7 +75,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Open for applications',
         date: data.applicationOpenDate,
-        dateString: isDate(data.applicationOpenDate) ? formatDate(data.applicationOpenDate) : null,
+        dateString: getDateString(data.applicationOpenDate),
       },
     );
   }
@@ -73,23 +85,18 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Closed for applications',
         date: data.applicationCloseDate,
-        dateString: isDate(data.applicationCloseDate) ? formatDate(data.applicationCloseDate) : null,
+        dateString: getDateString(data.applicationCloseDate),
       }
     );
   }
 
   if (data.shortlistingMethods && data.shortlistingMethods.length > 0) {
-    // timeline.push(
-    //   {
-    //     entry: 'Shortlisting',
-    //   },
-    // );
     if (data.shortlistingOutcomeDate) {
       timeline.push(
         {
           entry: 'Shortlisting outcome',
           date: data.shortlistingOutcomeDate,
-          dateString: isDate(data.shortlistingOutcomeDate) ? formatDate(data.shortlistingOutcomeDate, 'month') : null,
+          dateString: getDateString(data.shortlistingOutcomeDate, 'month'),
         },
       );
     }
@@ -125,7 +132,7 @@ const exerciseTimeline = (data) => {
           {
             entry: 'Situational judgement QT outcome to candidates',
             date: data.situationalJudgementTestOutcome,
-            dateString: isDate(data.situationalJudgementTestOutcome) ? formatDate(data.situationalJudgementTestOutcome) : null,
+            dateString: getDateString(data.situationalJudgementTestOutcome),
           },
         );
       }
@@ -146,7 +153,7 @@ const exerciseTimeline = (data) => {
           {
             entry: 'Critical analysis QT outcome to candidates',
             date: data.criticalAnalysisTestOutcome,
-            dateString: isDate(data.criticalAnalysisTestOutcome) ? formatDate(data.criticalAnalysisTestOutcome) : null,
+            dateString: getDateString(data.criticalAnalysisTestOutcome),
           },
         );
       }
@@ -167,7 +174,7 @@ const exerciseTimeline = (data) => {
           {
             entry: 'Scenario test outcome to candidates',
             date: data.scenarioTestOutcome,
-            dateString: isDate(data.scenarioTestOutcome) ? formatDate(data.scenarioTestOutcome) : null,
+            dateString: getDateString(data.scenarioTestOutcome),
           },
         );
       }
@@ -179,7 +186,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'JAC Contacts Independent Assessors',
         date: data.contactIndependentAssessors,
-        dateString: isDate(data.contactIndependentAssessors) ? formatDate(data.contactIndependentAssessors) : null,
+        dateString: getDateString(data.contactIndependentAssessors),
       },
     );
   }
@@ -189,7 +196,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Return date for independent assessments',
         date: data.independentAssessmentsReturnDate,
-        dateString: isDate(data.independentAssessmentsReturnDate) ? formatDate(data.independentAssessmentsReturnDate) : null,
+        dateString: getDateString(data.independentAssessmentsReturnDate),
       },
     );
   }
@@ -199,7 +206,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Eligibility SCC',
         date: data.eligibilitySCCDate,
-        dateString: isDate(data.eligibilitySCCDate) ? formatDate(data.eligibilitySCCDate) : null,
+        dateString: getDateString(data.eligibilitySCCDate),
       },
     );
   }
@@ -214,9 +221,19 @@ const exerciseTimeline = (data) => {
   if (data.characterChecksDate) {
     timeline.push(
       {
-        entry: 'Character checks',
+        entry: 'Character Checks',
         date: data.characterChecksDate,
-        dateString: isDate(data.characterChecksDate) ? formatDate(data.characterChecksDate) : null,
+        dateString: getDateString(data.characterChecksDate),
+      },
+    );
+  }
+
+  if (data.characterChecksReturnDate) {
+    timeline.push(
+      {
+        entry: 'Character Checks return',
+        date: data.characterChecksReturnDate,
+        dateString: getDateString(data.characterChecksReturnDate),
       },
     );
   }
@@ -226,7 +243,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Statutory consultation',
         date: data.statutoryConsultationDate,
-        dateString: isDate(data.statutoryConsultationDate) ? formatDate(data.statutoryConsultationDate) : null,
+        dateString: getDateString(data.statutoryConsultationDate),
       },
     );
   }
@@ -236,7 +253,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Character and Selection SCC',
         date: data.characterAndSCCDate,
-        dateString: isDate(data.characterAndSCCDate) ? formatDate(data.characterAndSCCDate) : null,
+        dateString: getDateString(data.characterAndSCCDate),
       },
     );
   }
@@ -246,7 +263,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
-        dateString: isDate(data.finalOutcome) ? formatDate(data.finalOutcome, 'month') : null,
+        dateString: getDateString(data.finalOutcome),
       }
     );
   }
@@ -262,7 +279,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'EMP SCC',
         date: data.eMPSCCDate,
-        dateString: isDate(data.eMPSCCDate) ? formatDate(data.eMPSCCDate) : null,
+        dateString: getDateString(data.eMPSCCDate),
       }
     );
   }
@@ -272,7 +289,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'EMP Outcomes',
         date: data.eMPOutcomeDate,
-        dateString: isDate(data.eMPOutcomeDate) ? formatDate(data.eMPOutcomeDate, 'month') : null,
+        dateString: getDateString(data.eMPOutcomeDate),
       }
     );
   }
