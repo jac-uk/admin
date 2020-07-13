@@ -50,7 +50,7 @@
             title="Applications"
           />
           <Navigation
-            v-if="exercise.applicationsCount"
+            v-if="exercise.applicationRecords"
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />

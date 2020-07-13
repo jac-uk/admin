@@ -211,20 +211,6 @@ export default {
   extends: Form,
   data() {
     return {
-      tabs: [
-        {
-          ref: 'queue',
-          title: 'Queue',
-        },
-        {
-          ref: 'sent',
-          title: 'Sent',
-        },
-        {
-          ref: 'settings',
-          title: 'Settings',
-        },
-      ],
       activeTab: 'queue',
       formData: {
         delayInMinutes: 5,
@@ -234,6 +220,26 @@ export default {
     };
   },
   computed: {
+    tabs(){
+      let queueTitle = 'Queue';
+      if(this.notificationsQueue.length){
+        queueTitle += ` (${this.notificationsQueue.length})`;
+      }
+      return [
+        {
+          ref: 'queue',
+          title: queueTitle,
+        },
+        {
+          ref: 'sent',
+          title: 'Sent',
+        },
+        {
+          ref: 'settings',
+          title: 'Settings',
+        },
+      ];
+    },
     notificationsQueue() {
       return this.$store.state.notifications.queue;
     },
