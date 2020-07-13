@@ -95,7 +95,7 @@ export default {
         return this.parseDate(this.exercise.estimatedLaunchDate);
       },
       set(val) {
-        if(!val && val instanceof Date){
+        if(!val || !(val instanceof Date)){
           return;
         }
 
