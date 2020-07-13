@@ -1421,11 +1421,11 @@
             </div>
 
             <div
-              v-if="showStatementOfSuitability"
+              v-if="application.selectionCriteriaAnswers"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
-                Statement of suitability
+                Additional Selection Criteria
               </h2>
 
               <dl class="govuk-summary-list">
@@ -1444,6 +1444,18 @@
                     <span v-else>Does not meet this requirement</span>
                   </dd>
                 </div>
+              </dl>
+            </div>
+
+            <div
+              v-if="showStatementOfSuitability"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Statement of suitability
+              </h2>
+
+              <dl class="govuk-summary-list">
                 <div
                   class="govuk-summary-list__row"
                 >
@@ -1475,18 +1487,21 @@
 
               <dl class="govuk-summary-list">
                 <div
-                  v-for="(item, index) in application.selectionCriteriaAnswers"
-                  :key="index"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
-                    {{ item.title }}
+                    Uploaded statement of eligibility
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <span v-if="item.answer">
-                      {{ item.answerDetails }}
-                    </span>
-                    <span v-else>Does not meet this requirement</span>
+                    <div v-if="application.uploadedEligibilityStatement">
+                      <DownloadLink
+                        :file-name="application.uploadedEligibilityStatement"
+                        :exercise-id="exercise.id"
+                        :user-id="application.userId"
+                        :title="application.uploadedEligibilityStatement"
+                      />
+                    </div>
+                    <span v-else>Not yet received</span>
                   </dd>
                 </div>
               </dl>
