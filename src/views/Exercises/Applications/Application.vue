@@ -1478,36 +1478,6 @@
             </div>
 
             <div
-              v-if="showStatementOfEligibility"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Statement of eligibility
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Uploaded statement of eligibility
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <div v-if="application.uploadedEligibilityStatement">
-                      <DownloadLink
-                        :file-name="application.uploadedEligibilityStatement"
-                        :exercise-id="exercise.id"
-                        :user-id="application.userId"
-                        :title="application.uploadedEligibilityStatement"
-                      />
-                    </div>
-                    <span v-else>Not yet received</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
               v-if="showSelfAssessment"
               class="govuk-!-margin-top-9"
             >
