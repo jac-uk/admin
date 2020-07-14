@@ -29,7 +29,7 @@ const mocks = {
       application: {
         record: { 
           progress: { started: true },
-          qualifications: { completedPupillage: [false] },
+          qualifications: { qualificationNotComplete: [false] },
         },
       },
       applications: {
