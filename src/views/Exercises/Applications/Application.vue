@@ -71,6 +71,7 @@
               </h2>
             </div>
           </div>
+
           <div class="govuk-grid-column-one-half">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Submitted on</span>
@@ -96,8 +97,6 @@
           :active-tab.sync="activeTab"
         />
 
-        <!-- <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full"> -->
         <div v-if="application && exercise">
           <div 
             v-if="activeTab == 'full' || activeTab == 'panel'"
@@ -783,7 +782,58 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div 
+                  v-if="item.completedPupillage && item.completedPupillage[0] === false"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Completed pupillage
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li>
+                        {{ item.completedPupillage[0] | toYesNo }}
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div 
+                  v-if="item.completedPupillage && item.completedPupillage[0] === false && item.details"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Did not compelte pupillage notes
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li>
+                        {{ item.details }}
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div 
+                  v-if="item.type === 'barrister' && item.date && (!item.completedPupillage || item.completedPupillage[0] !== false)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Date completed pupillage
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li v-if="item.date">
+                        {{ item.date | formatDate }}
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div 
+                  v-else-if="item.type !== 'barrister' && item.date"
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Date qualified
                   </dt>
@@ -1536,13 +1586,12 @@
                 </div>
               </dl>
             </div>
-          </div>
+          </div> 
+
           <div v-if="activeTab == 'issues'">
             No issues found
           </div>
         </div>
-        <!-- </div>
-        </div> -->
       </div>
     </div>
   </div>
