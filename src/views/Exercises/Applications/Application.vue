@@ -805,37 +805,39 @@
                   </dd>
                 </div>
 
-                <div 
-                  v-if="item.qualificationNotComplete"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Completed pupillage
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ !item.qualificationNotComplete | toYesNo }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-                
-                <div
+                <template
                   v-if="item.qualificationNotComplete && item.details"
-                  class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
-                    Did not complete pupillage notes
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.details }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
+                  <div 
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Completed pupillage
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          No
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Did not complete pupillage notes
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          {{ item.details }}
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </template>
               </dl>
             </div>
 
