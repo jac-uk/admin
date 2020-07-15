@@ -105,6 +105,20 @@ describe('components/Page/Pagination', () => {
         });
     });
 
+    describe('single page', () => {
+        const numberOfPages =  1;
+        const lowIndexNew = 1;
+        const highIndexNew = 1;
+
+        beforeEach(() => {
+            wrapper = createTestSubject({ highIndex: highIndexNew, lowIndex: lowIndexNew });
+        }); 
+
+        it('does not render any elements', () => {
+            expect(wrapper.findAll('li')).toHaveLength(0);
+        });
+    });
+
     describe('change page', () => {
 
         it('page forward', async () => {
