@@ -58,7 +58,7 @@
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>   
-    <Pagination 
+      <Pagination 
         :high-index="numberOfPages"
         @pageChanged="updatePage($event)"
       />
