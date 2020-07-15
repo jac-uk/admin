@@ -27,7 +27,7 @@
       </div>
       <Table 
         data-key="id"
-        :data="applicationRecords"
+        :data="getPaginated"
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
@@ -58,6 +58,10 @@
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>   
+      <Pagination 
+        :high-index="numberOfPages"
+        @pageChanged="updatePage($event)"
+      />
     </form>
   </div>
 </template>
@@ -66,17 +70,21 @@
 import Banner from '@/components/Page/Banner';
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import Pagination from '@/components/Page/Pagination';
 
 export default {
   components: {
     Banner,
     Table,
     TableCell,
+    Pagination,
   },
   data() {
     return {
       message: null,
       selectedItems: [],
+      page: 1,
+      pageSize: 25,
     };
   },
   computed: {
@@ -93,6 +101,22 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
+    numberOfPages() {
+      return Math.ceil(this.totalApplicationRecords / this.pageSize);
+    },
+    getPaginated() {
+      if(this.numberOfPages){
+        if(this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
+
+        const sliceFrom = ((this.page - 1) * this.pageSize);
+        const sliceTo = sliceFrom + this.pageSize; 
+        const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
+
+        return sliced;
+      } else {
+        return this.applicationRecords;
+      }
+    },
   },
   async created() {
     this.$store.dispatch('stageHandover/bind', { exerciseId: this.exercise.id });
@@ -102,6 +126,9 @@ export default {
     moveBack() {
       this.$store.dispatch('stageHandover/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-handover-back' });
+    },
+    updatePage(pageChanged){
+      this.page = pageChanged;
     },
   },
 };
