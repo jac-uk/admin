@@ -782,69 +782,62 @@
                   </dd>
                 </div>
 
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false"
+                <div
+                  v-if="item.date"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
-                    Completed pupillage
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.completedPupillage[0] | toYesNo }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false && item.details"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Did not compelte pupillage notes
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.details }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.type === 'barrister' && item.date && (!item.completedPupillage || item.completedPupillage[0] !== false)"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-if="item.type === 'barrister'"
+                    class="govuk-summary-list__key"
+                  >
                     Date completed pupillage
                   </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-else-if="item.type !== 'barrister' && item.date"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-else
+                    class="govuk-summary-list__key"
+                  >
                     Date qualified
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
+                      <li> {{ item.date | formatDate }}</li>
                     </ul>
                   </dd>
                 </div>
+
+                <template
+                  v-if="item.qualificationNotComplete && item.details"
+                >
+                  <div 
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Completed pupillage
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          No
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Did not complete pupillage notes
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          {{ item.details }}
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </template>
               </dl>
             </div>
 
@@ -1471,11 +1464,11 @@
             </div>
 
             <div
-              v-if="showStatementOfSuitability"
+              v-if="application.selectionCriteriaAnswers"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
-                Statement of suitability
+                Additional Selection Criteria
               </h2>
 
               <dl class="govuk-summary-list">
@@ -1494,6 +1487,18 @@
                     <span v-else>Does not meet this requirement</span>
                   </dd>
                 </div>
+              </dl>
+            </div>
+
+            <div
+              v-if="showStatementOfSuitability"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Statement of suitability
+              </h2>
+
+              <dl class="govuk-summary-list">
                 <div
                   class="govuk-summary-list__row"
                 >
@@ -1510,33 +1515,6 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
-              v-if="showStatementOfEligibility"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Statement of eligibility
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  v-for="(item, index) in application.selectionCriteriaAnswers"
-                  :key="index"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    {{ item.title }}
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <span v-if="item.answer">
-                      {{ item.answerDetails }}
-                    </span>
-                    <span v-else>Does not meet this requirement</span>
                   </dd>
                 </div>
               </dl>
