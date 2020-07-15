@@ -324,6 +324,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           'Email',
           'Phone',
           'DateOfBirth',
+          'NationalInsuranceNumber',
           'Gender',
           'Disability',
           'EthnicGroup',

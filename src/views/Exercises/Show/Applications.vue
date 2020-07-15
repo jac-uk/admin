@@ -161,6 +161,7 @@ export default {
           Email: application.personalDetails ? application.personalDetails.email : '',
           Phone: application.personalDetails ? application.personalDetails.phone : '',
           DateOfBirth: application.personalDetails ? filters.formatDate(application.personalDetails.dateOfBirth) : '',
+          NationalInsuranceNumber: application.personalDetails ? application.personalDetails.nationalInsuranceNumber : '',
           Gender: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.gender) : '',
           Disability: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)) : '',
           EthnicGroup: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup) : '',
