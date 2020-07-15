@@ -113,7 +113,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     numberOfPages() {
-      return Math.ceil(this.applicationRecords.length / this.pageSize);
+      return Math.ceil(this.totalApplicationRecords / this.pageSize);
     },
     getPaginated() {
       if(this.numberOfPages){
