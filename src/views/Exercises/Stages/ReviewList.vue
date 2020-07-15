@@ -125,7 +125,7 @@ export default {
       if(this.numberOfPages){
         if(this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
 
-        const sliceFrom = (this.page * this.pageSize);
+        const sliceFrom = ((this.page - 1) * this.pageSize);
         const sliceTo = sliceFrom + this.pageSize; 
         const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
 
