@@ -782,69 +782,62 @@
                   </dd>
                 </div>
 
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false"
+                <div
+                  v-if="item.date"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
-                    Completed pupillage
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.completedPupillage[0] | toYesNo }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false && item.details"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Did not compelte pupillage notes
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.details }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.type === 'barrister' && item.date && (!item.completedPupillage || item.completedPupillage[0] !== false)"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-if="item.type === 'barrister'"
+                    class="govuk-summary-list__key"
+                  >
                     Date completed pupillage
                   </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-else-if="item.type !== 'barrister' && item.date"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-else
+                    class="govuk-summary-list__key"
+                  >
                     Date qualified
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
+                      <li> {{ item.date | formatDate }}</li>
                     </ul>
                   </dd>
                 </div>
+
+                <template
+                  v-if="item.qualificationNotComplete && item.details"
+                >
+                  <div 
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Completed pupillage
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          No
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Did not complete pupillage notes
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          {{ item.details }}
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </template>
               </dl>
             </div>
 
