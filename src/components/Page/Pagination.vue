@@ -1,5 +1,6 @@
 <template>
   <nav
+    v-if="lowIndex != highIndex"
     class="moj-pagination"
   >
     <p
