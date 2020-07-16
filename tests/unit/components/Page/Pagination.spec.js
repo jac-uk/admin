@@ -106,7 +106,6 @@ describe('components/Page/Pagination', () => {
     });
 
     describe('single page', () => {
-        const numberOfPages =  1;
         const lowIndexNew = 1;
         const highIndexNew = 1;
 
