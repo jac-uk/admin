@@ -158,7 +158,7 @@ export default {
         const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
         return [
           { title: `Review (${review})`, name: 'exercise-stages-review-list' },
-          { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
+          { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlisted-list' },
           { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
           { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
           { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
