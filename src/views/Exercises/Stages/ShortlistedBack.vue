@@ -64,7 +64,7 @@ export default {
           nextStage: stageValue,
         });
       }
-      this.$router.push({ name: 'exercise-stages-shortlist-list' });
+      this.$router.push({ name: 'exercise-stages-shortlisted-list' });
     },
   },
 };

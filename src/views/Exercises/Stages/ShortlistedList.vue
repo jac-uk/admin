@@ -136,11 +136,11 @@ export default {
   methods: {
     moveBack() {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
-      this.$router.push({ name: 'exercise-stages-shortlist-back' });
+      this.$router.push({ name: 'exercise-stages-shortlisted-back' });
     },
     setStatus() {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
-      this.$router.push({ name: 'exercise-stages-shortlist-edit' });
+      this.$router.push({ name: 'exercise-stages-shortlisted-edit' });
     },
     updatePage(pageChanged){
       this.page = pageChanged;
