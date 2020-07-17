@@ -13,11 +13,24 @@
           {{ value }}
         </a>
       </span>
+      <span v-if="isRoute">
+        <RouterLink
+          :to="{ ...routeTo }"
+        >
+          {{ value }}
+        </RouterLink>
+      </span>
       <span 
         v-if="isText" 
         class="wrap"
       >
         {{ value }}
+      </span>
+      <span 
+        v-if="isDate" 
+        class="wrap"
+      >
+        {{ value | formatDate }}
       </span>
       <a 
         href="#"
@@ -32,8 +45,15 @@
       class="edit-field"
     >
       <TextField 
+        v-if="!isDate"
         :id="`editable-field-${id}`"
         v-model="localField"
+      />
+      <DateInput 
+        v-if="isDate" 
+        :id="`data-of-birth$-{id}`"
+        v-model="localField"
+        :value="localField" 
       />
       <button 
         class="govuk-button"
@@ -47,10 +67,12 @@
 
 <script>
 import TextField from '@/components/Form/TextField';
+import DateInput from '@/components/Form/DateInput';
 
 export default {
   components: {
     TextField,
+    DateInput,
   },
   props: {
     field: {
@@ -58,7 +80,7 @@ export default {
       default: 'value',
     },
     value: {
-      type: String,
+      type: [String, Date],
       default: '',
     },
     type: {
@@ -68,6 +90,10 @@ export default {
     link: {
       type: String,
       default: 'Change',
+    },
+    routeTo: {
+      type: Object,
+      default: null,
     },
   },
   data() {
@@ -83,6 +109,16 @@ export default {
     },
     isText() {
       return this.type === 'text';
+    },
+    isRoute() {
+      return this.type === 'route' && this.routeTo !== null;
+    },
+    isDate() {
+      return this.type === 'date';
+    },
+    valueToDate() {
+      var newDate = this.isDate ? new Date(this.value) : null;
+      return newDate;
     },
   },
   mounted () {
