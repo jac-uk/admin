@@ -31,7 +31,6 @@
         <dd class="govuk-summary-list__actions" />
       </div>
     </dl>
-
     <div
       v-if="!hasInitialisedAssessments"
     >
@@ -54,6 +53,13 @@
           value="shortlisted" 
         >
           Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+        </option>
+
+        <option
+          v-if="hasApplicationsRecordsSelected"
+          value="selected" 
+        >
+          Selected ({{ exercise.applicationRecords.selected }})
         </option>
       </select>
 
@@ -268,6 +274,13 @@ export default {
     },
     hasApplicationsRecordsShortlisted(){
       if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
+        return true;
+      } else {
+        return false;
+      }
+    },
+    hasApplicationsRecordsSelected(){
+      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.selected){
         return true;
       } else {
         return false;
