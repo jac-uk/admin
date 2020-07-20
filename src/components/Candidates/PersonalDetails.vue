@@ -5,6 +5,10 @@
   >
     <h2 class="govuk-heading-l">
       Personal details
+      <span class="govuk-hint">
+        Any changes made here will not update the details on the most recent application. 
+        Please go to the Personal Details section to make the change.
+      </span>
     </h2>
 
     <dl class="govuk-summary-list">
