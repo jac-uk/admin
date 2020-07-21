@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import search from '@/helpers/search';
 
 const collection = firestore.collection('candidates');
 
@@ -34,6 +35,18 @@ export default {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.update(data);
     },
+    search: firestoreAction(({ bindFirestoreRef }, searchTerm) => {
+      var returnSearch = search(searchTerm);
+      let firestoreRef = collection
+        .orderBy('created', 'desc');
+      if (returnSearch) {
+        firestoreRef = collection
+        .where('fullName', '>=', returnSearch.value1)
+        .where('fullName', '<', returnSearch.value2)
+        .orderBy('fullName', 'asc');
+      }
+      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+    }),
   },
   state: {
     records: [],
