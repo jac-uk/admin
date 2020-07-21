@@ -71,6 +71,7 @@
               </h2>
             </div>
           </div>
+
           <div class="govuk-grid-column-one-half">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Submitted on</span>
@@ -96,8 +97,6 @@
           :active-tab.sync="activeTab"
         />
 
-        <!-- <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full"> -->
         <div v-if="application && exercise">
           <div 
             v-if="activeTab == 'full' || activeTab == 'panel'"
@@ -109,6 +108,9 @@
             >
               <h2 class="govuk-heading-l">
                 Personal details
+                <span class="govuk-hint">
+                  Any changes made here will also update the candidate information.
+                </span>
               </h2>
 
               <dl class="govuk-summary-list">
@@ -117,11 +119,13 @@
                     Full Name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <RouterLink
-                      :to="{ name: 'candidates-view', params: { id: application.userId } }"
-                    >
-                      {{ application.personalDetails.fullName }}
-                    </RouterLink>
+                    <EditableField 
+                      :value="application.personalDetails.fullName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="fullName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -130,13 +134,12 @@
                     Email address
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <a
-                      :href="`mailto:${application.personalDetails.email}`"
-                      class="govuk-link govuk-link--no-visited-state"
-                      target="_blank"
-                    >
-                      {{ application.personalDetails.email }}
-                    </a>
+                    <EditableField 
+                      :value="application.personalDetails.email"
+                      field="email"
+                      type="email"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -145,7 +148,11 @@
                     Phone number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.personalDetails.phone }}
+                    <EditableField 
+                      :value="application.personalDetails.phone"
+                      field="phone"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -154,9 +161,12 @@
                     Date of birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <p v-if="application.personalDetails.dateOfBirth">
-                      {{ application.personalDetails.dateOfBirth | formatDate }}
-                    </p>
+                    <EditableField 
+                      :value="application.personalDetails.dateOfBirth"
+                      field="dateOfBirth"
+                      type="date"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -165,7 +175,11 @@
                     NI Number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.personalDetails.nationalInsuranceNumber | formatNIN }}
+                    <EditableField 
+                      :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
+                      field="nationalInsuranceNumber"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -783,18 +797,62 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
+                <div
+                  v-if="item.date"
+                  class="govuk-summary-list__row"
+                >
+                  <dt
+                    v-if="item.type === 'barrister'"
+                    class="govuk-summary-list__key"
+                  >
+                    Date completed pupillage
+                  </dt>
+                  <dt
+                    v-else
+                    class="govuk-summary-list__key"
+                  >
                     Date qualified
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
+                      <li> {{ item.date | formatDate }}</li>
                     </ul>
                   </dd>
                 </div>
+
+                <template
+                  v-if="item.qualificationNotComplete && item.details"
+                >
+                  <div 
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Completed pupillage
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          No
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Did not complete pupillage notes
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          {{ item.details }}
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </template>
               </dl>
             </div>
 
@@ -1421,11 +1479,11 @@
             </div>
 
             <div
-              v-if="showStatementOfSuitability"
+              v-if="application.selectionCriteriaAnswers"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
-                Statement of suitability
+                Additional Selection Criteria
               </h2>
 
               <dl class="govuk-summary-list">
@@ -1444,6 +1502,18 @@
                     <span v-else>Does not meet this requirement</span>
                   </dd>
                 </div>
+              </dl>
+            </div>
+
+            <div
+              v-if="showStatementOfSuitability"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Statement of suitability
+              </h2>
+
+              <dl class="govuk-summary-list">
                 <div
                   class="govuk-summary-list__row"
                 >
@@ -1460,33 +1530,6 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
-              v-if="showStatementOfEligibility"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Statement of eligibility
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  v-for="(item, index) in application.selectionCriteriaAnswers"
-                  :key="index"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    {{ item.title }}
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <span v-if="item.answer">
-                      {{ item.answerDetails }}
-                    </span>
-                    <span v-else>Does not meet this requirement</span>
                   </dd>
                 </div>
               </dl>
@@ -1551,13 +1594,12 @@
                 </div>
               </dl>
             </div>
-          </div>
+          </div> 
+
           <div v-if="activeTab == 'issues'">
             No issues found
           </div>
         </div>
-        <!-- </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -1825,6 +1867,11 @@ export default {
     },
     changeAssesorDetails(objChanged) {
       this.$store.dispatch('application/update', { data: objChanged, id: this.applicationId });
+    },
+    changeUserDetails(objChanged) {
+      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
+      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
   },
 };
