@@ -5,6 +5,7 @@
     >
       Candidates
     </h1>
+    <Search @search="useSearch" />
     <Table 
       data-key="id"
       :data="candidateRecords"
@@ -37,11 +38,13 @@
 <script>
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import Search from '@/components/Search'; 
 
 export default {
   components: {
     Table,
     TableCell,
+    Search,
   },
   computed: {
     candidateRecords() {
@@ -50,7 +53,12 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('candidates/bind');
+    this.$store.dispatch('candidates/search', '');
+  },
+  methods: {
+    useSearch(searchTem) {
+      this.$store.dispatch('candidates/search', searchTem);
+    },
   },
 };
 </script>
