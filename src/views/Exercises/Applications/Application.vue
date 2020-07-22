@@ -109,7 +109,7 @@
               <h2 class="govuk-heading-l">
                 Personal details
                 <span class="govuk-hint">
-                  Change details updates the candidate information
+                  Any changes made here will also update the candidate information.
                 </span>
               </h2>
 
