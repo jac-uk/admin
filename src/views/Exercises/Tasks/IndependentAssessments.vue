@@ -3,7 +3,6 @@
     <h1 class="govuk-heading-l">
       Independent Assessments
     </h1>
-
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -31,201 +30,208 @@
         <dd class="govuk-summary-list__actions" />
       </div>
     </dl>
-    <div
-      v-if="!hasInitialisedAssessments"
-    >
-      <select
-        id="exercise-stage"
-        v-model="exerciseStage"
-        class="govuk-select govuk-!-margin-right-3"
+    <div v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName">
+      <div
+        v-if="hasInitialisedAssessments"
       >
-        <option value="">
-          Choose applications
-        </option>
-        <option
-          v-if="hasApplicationRecordsReview"
-          value="review" 
+        <select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-select govuk-!-margin-right-3"
         >
-          Review ({{ exercise.applicationRecords.review }})
-        </option>
-        <option
-          v-if="hasApplicationsRecordsShortlisted"
-          value="shortlisted" 
-        >
-          Shortlisted ({{ exercise.applicationRecords.shortlisted }})
-        </option>
-
-        <option
-          v-if="hasApplicationsRecordsSelected"
-          value="selected" 
-        >
-          Selected ({{ exercise.applicationRecords.selected }})
-        </option>
-      </select>
-
-      <ActionButton
-        type="primary"
-        :disabled="!exerciseStage"
-        @click="initialiseAssessments()"
-      >
-        Start Assessments
-      </ActionButton>
-    </div>
-
-    <div v-else>
-      <ActionButton
-        v-if="canCancelAssessments"
-        class="govuk-!-margin-right-3"
-        @click="cancelAssessments()"
-      >
-        Cancel Assessments
-      </ActionButton>
-      <ActionButton
-        v-if="canSendRequestsToAll"
-        type="primary"
-        @click="sendRequestsToAll()"
-      >
-        Send to all
-      </ActionButton>
-      <ActionButton
-        v-if="canSendRemindersToAll"
-        type="primary"
-        @click="sendRemindersToAll()"
-      >
-        Send reminders
-      </ActionButton>
-
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              Reference number
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              Candidate name
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              Assessor
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              Status
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header app-custom-class"
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr
-            v-for="assessment in assessments"
-            :key="assessment.id"
-            class="govuk-table__row"
+          <option value="">
+            Choose applications
+          </option>
+          <option
+            v-if="hasApplicationRecordsReview"
+            value="review" 
           >
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              <RouterLink
-                class="govuk-link"
-                :to="{name: 'exercise-application', params: { applicationId: assessment.application.id }}"
-              >
-                {{ assessment.application.referenceNumber }}
-              </RouterLink>
-            </th>
-            <td class="govuk-table__cell">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: assessment.candidate.id } }"
-              >
-                {{ assessment.candidate.fullName }}
-              </RouterLink>
-            </td>
-            <td class="govuk-table__cell">
-              <a
-                :href="`mailto:${assessment.assessor.email}`"
-                class="govuk-link govuk-link--no-visited-state"
-                target="_blank"
-              >
-                {{ assessment.assessor.fullName }}
-              </a>
-            </td>
-            <td class="govuk-table__cell">
-              {{ assessment.status | lookup }}
-            </td>
-            <td
-              class="govuk-table__cell govuk-!-padding-top-0"
-            >
-              <div class="moj-button-menu">
-                <div
-                  v-if="!hasStartedSending"
-                  class="moj-button-menu__wrapper"
-                >
-                  <ActionButton
-                    class="moj-button-menu__item"
-                    @click="testRequest(assessment.id)"
-                  >
-                    Test Request
-                  </ActionButton>
-                </div>
-                <div
-                  v-else-if="assessment.status === 'completed'"
-                  class="moj-button-menu__wrapper"
-                >
-                  <DownloadLink
-                    v-if="assessment.fileRef"
-                    class="moj-button-menu__item"
-                    :file-name="assessment.fileRef"
-                    :exercise-id="exercise.id"
-                    :application-id="assessment.application.id"
-                    :assessor-id="assessment.assessor.id"
-                    title="Download assessment"
-                    type="button"
-                  />
-                </div>
-                <div
-                  v-else
-                  class="moj-button-menu__wrapper"
-                >
-                  <ActionButton
-                    class="moj-button-menu__item"
-                    @click="resendRequest(assessment.id)"
-                  >
-                    Request
-                  </ActionButton>
+            Review ({{ exercise.applicationRecords.review }})
+          </option>
+          <option
+            v-if="hasApplicationsRecordsShortlisted"
+            value="shortlisted" 
+          >
+            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+          </option>
 
-                  <ActionButton
-                    class="moj-button-menu__item"
-                    @click="sendReminder(assessment.id)"
+          <option
+            v-if="hasApplicationsRecordsSelected"
+            value="selected" 
+          >
+            Selected ({{ exercise.applicationRecords.selected }})
+          </option>
+        </select>
+
+        <ActionButton
+          type="primary"
+          :disabled="!exerciseStage"
+          @click="initialiseAssessments()"
+        >
+          Start Assessments
+        </ActionButton>
+      </div>
+      <div v-else>
+        <ActionButton
+          v-if="canCancelAssessments"
+          class="govuk-!-margin-right-3"
+          @click="cancelAssessments()"
+        >
+          Cancel Assessments
+        </ActionButton>
+        <ActionButton
+          v-if="canSendRequestsToAll"
+          type="primary"
+          @click="sendRequestsToAll()"
+        >
+          Send to all
+        </ActionButton>
+        <ActionButton
+          v-if="canSendRemindersToAll"
+          type="primary"
+          @click="sendRemindersToAll()"
+        >
+          Send reminders
+        </ActionButton>
+
+        <table class="govuk-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header app-custom-class"
+              >
+                Reference number
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header app-custom-class"
+              >
+                Candidate name
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header app-custom-class"
+              >
+                Assessor
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header app-custom-class"
+              >
+                Status
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header app-custom-class"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr
+              v-for="assessment in assessments"
+              :key="assessment.id"
+              class="govuk-table__row"
+            >
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                <RouterLink
+                  class="govuk-link"
+                  :to="{name: 'exercise-application', params: { applicationId: assessment.application.id }}"
+                >
+                  {{ assessment.application.referenceNumber }}
+                </RouterLink>
+              </th>
+              <td class="govuk-table__cell">
+                <RouterLink
+                  :to="{ name: 'candidates-view', params: { id: assessment.candidate.id } }"
+                >
+                  {{ assessment.candidate.fullName }}
+                </RouterLink>
+              </td>
+              <td class="govuk-table__cell">
+                <a
+                  :href="`mailto:${assessment.assessor.email}`"
+                  class="govuk-link govuk-link--no-visited-state"
+                  target="_blank"
+                >
+                  {{ assessment.assessor.fullName }}
+                </a>
+              </td>
+              <td class="govuk-table__cell">
+                {{ assessment.status | lookup }}
+              </td>
+              <td
+                class="govuk-table__cell govuk-!-padding-top-0"
+              >
+                <div class="moj-button-menu">
+                  <div
+                    v-if="!hasStartedSending"
+                    class="moj-button-menu__wrapper"
                   >
-                    Reminder
-                  </ActionButton>
+                    <ActionButton
+                      class="moj-button-menu__item"
+                      @click="testRequest(assessment.id)"
+                    >
+                      Test Request
+                    </ActionButton>
+                  </div>
+                  <div
+                    v-else-if="assessment.status === 'completed'"
+                    class="moj-button-menu__wrapper"
+                  >
+                    <DownloadLink
+                      v-if="assessment.fileRef"
+                      class="moj-button-menu__item"
+                      :file-name="assessment.fileRef"
+                      :exercise-id="exercise.id"
+                      :application-id="assessment.application.id"
+                      :assessor-id="assessment.assessor.id"
+                      title="Download assessment"
+                      type="button"
+                    />
+                  </div>
+                  <div
+                    v-else
+                    class="moj-button-menu__wrapper"
+                  >
+                    <ActionButton
+                      class="moj-button-menu__item"
+                      @click="resendRequest(assessment.id)"
+                    >
+                      Request
+                    </ActionButton>
+
+                    <ActionButton
+                      class="moj-button-menu__item"
+                      @click="sendReminder(assessment.id)"
+                    >
+                      Reminder
+                    </ActionButton>
+                  </div>
                 </div>
-              </div>
-              <br>
-              <a 
-                v-if="onStaging"
-                target="_blank"
-                :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
-                class="govuk-link"
-              >Test the assessments app</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <br>
+                <a 
+                  v-if="onStaging"
+                  target="_blank"
+                  :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
+                  class="govuk-link"
+                >Test the assessments app</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div v-else>
+      <Banner 
+        :message="warningMessage"
+        status="warning"
+      />
     </div>
   </div>
 </template>
@@ -235,10 +241,12 @@ import { functions } from '@/firebase';
 import { isDateInFuture } from '@/helpers/date';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
+import Banner from '@/components/Page/Banner';
 
 export default {
   components: {
     ActionButton,
+    Banner,
     DownloadLink,
   },
   data() {
@@ -249,6 +257,20 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    warningMessage() {
+      let msg = 'Please add';
+      if (!this.exercise.exercisePhoneNumber) {
+        msg = `${msg} an exercise phone number`;
+      }
+      if (!this.exercise.exercisePhoneNumber && !this.exercise.emailSignatureName) {
+        msg = `${msg} and`;
+      }
+      if (!this.exercise.emailSignatureName) {
+        msg = `${msg} an email signature name`;
+      }
+      msg = `${msg} before sending IA requests`;
+      return msg;
     },
     assessments() {
       return this.$store.state.assessments.records;
