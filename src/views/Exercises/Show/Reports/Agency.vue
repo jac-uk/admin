@@ -381,12 +381,12 @@ export default {
         {
           ref: 'sra',
           title: 'SRA',
-          header: 'Solicitor Regulation Authority',
+          header: 'Solicitors Regulation Authority',
         },
         {
           ref: 'bsb',
           title: 'BSB',
-          header: 'Bar Standard Board',
+          header: 'Bar Standards Board',
         },
         {
           ref: 'jcio',
