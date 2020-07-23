@@ -67,6 +67,7 @@ import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversi
 import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
 import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
+import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
@@ -253,7 +254,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Application',
           },
-        },        
+        },
         {
           path: 'application/:applicationId',
           component: ExerciseApplication,
@@ -262,7 +263,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Application',
           },
-        },        
+        },
         {
           path: 'stages',
           component: ExerciseStages,
@@ -468,7 +469,16 @@ const router = new Router({
                 title: 'Exercise Reports | Character Issues',
               },
             },
-          ],                    
+            {
+              path: 'agency',
+              component: ExerciseShowReportsAgency,
+              name: 'exercise-show-report-agency',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Reports | Agency',
+              },
+            },
+          ],
         },
       ],
     },
