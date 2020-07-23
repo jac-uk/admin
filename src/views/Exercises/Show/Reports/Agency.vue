@@ -25,7 +25,17 @@
           <template
             v-if="activeTab === 'acro'"
           >
-            <table class="govuk-table">
+            <p
+              v-if="!agencyReport.acro.count"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+
+            <table
+              v-else
+              class="govuk-table"
+            >
               <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                   <th
@@ -70,7 +80,7 @@
                     {{ candidate.placeOfBirth }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.nationalInsuranceNumber }}
+                    {{ candidate.nationalInsuranceNumber | formatNIN }}
                   </td>
                 </tr>
               </tbody>
@@ -80,8 +90,15 @@
           <template
             v-if="activeTab === 'sra'"
           >
+            <p
+              v-if="!agencyReport.sra.count"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+
             <table
-              v-if="agencyReport.sra.count"
+              v-else
               class="govuk-table"
             >
               <thead class="govuk-table__head">
@@ -129,8 +146,15 @@
           <template
             v-if="activeTab === 'bsb'"
           >
+            <p
+              v-if="!agencyReport.bsb.count"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+
             <table
-              v-if="agencyReport.bsb.count"
+              v-else
               class="govuk-table"
             >
               <thead class="govuk-table__head">
@@ -178,8 +202,15 @@
           <template
             v-if="activeTab === 'jcio'"
           >
+            <p
+              v-if="!agencyReport.jcio.count"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+
             <table
-              v-if="agencyReport.jcio.count"
+              v-else
               class="govuk-table"
             >
               <thead class="govuk-table__head">
@@ -234,8 +265,15 @@
           <template
             v-if="activeTab === 'hmrc'"
           >
+            <p
+              v-if="!agencyReport.hmrc.count"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+
             <table
-              v-if="agencyReport.hmrc.count"
+              v-else
               class="govuk-table"
             >
               <thead class="govuk-table__head">
@@ -296,59 +334,61 @@
               v-for="agency in agencyReport.other"
               :key="agency.name"
             >
-              <template
-                v-if="agency.count"
-              >
-                <h3 class="govuk-heading-s govuk-!-margin-top-4">
-                  {{ agency.name }}
-                </h3>
+              <h3 class="govuk-heading-s govuk-!-margin-top-4">
+                {{ agency.name }}
+              </h3>
 
-                <table class="govuk-table">
-                  <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                      <th
-                        scope="col"
-                        class="govuk-table__header"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header"
-                      >
-                        Date of membership
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header"
-                      >
-                        Membership number
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="govuk-table__body">
-                    <template
-                      v-if="agencyReport.hmrc.count"
+              <p
+                v-if="!agency.count"
+                class="govuk-body"
+              >
+                No candidates require this check.
+              </p>
+
+              <table
+                v-else
+                class="govuk-table"
+              >
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
                     >
-                      <tr
-                        v-for="candidate in agency.candidates"
-                        :key="candidate.id"
-                        class="govuk-table__row"
-                      >
-                        <td class="govuk-table__cell">
-                          {{ candidate.fullName }}
-                        </td>
-                        <td class="govuk-table__cell">
-                          {{ candidate.date | formatDate('long') }}
-                        </td>
-                        <td class="govuk-table__cell">
-                          {{ candidate.membershipNumber }}
-                        </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </template>
+                      Name
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Date of membership
+                    </th>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                    >
+                      Membership number
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  <tr
+                    v-for="candidate in agency.candidates"
+                    :key="candidate.id"
+                    class="govuk-table__row"
+                  >
+                    <td class="govuk-table__cell">
+                      {{ candidate.fullName }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.date | formatDate('long') }}
+                    </td>
+                    <td class="govuk-table__cell">
+                      {{ candidate.membershipNumber }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </template>
           <button
