@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="page-container">
     <header
       class="govuk-width-container"
     >
       <div
-        id="header"
         class="header-background clearfix"
       >
         <div class="header-title govuk-!-margin-bottom-2">
@@ -63,9 +62,13 @@
           </nav>
         </div>
       </div>
-      <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none">
+      <div
+        class="govuk-phase-banner govuk-!-margin-bottom-4 print-none"
+      >
         <p class="govuk-phase-banner__content">
-          <strong class="govuk-tag govuk-phase-banner__content__tag">beta</strong>
+          <strong class="govuk-tag govuk-phase-banner__content__tag">
+            beta
+          </strong>
           <span class="govuk-phase-banner__text">
             This is a new service – your 
             <a 
@@ -80,6 +83,7 @@
         </p>
       </div>
     </header>
+
     <main
       id="main-content"
       class="govuk-width-container govuk-main-wrapper govuk-main-wrapper--auto-spacing"
@@ -87,6 +91,7 @@
     >
       <RouterView />
     </main>
+
     <footer
       class="govuk-footer"
       role="contentinfo"
@@ -153,7 +158,8 @@ export default {
   },
 };
 </script>
-<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+
+<style lang="scss">
 
   .header {
     background-color: #fafafa;
@@ -194,6 +200,18 @@ export default {
 
   .header-background span {
     color: #753880 !important;
+  }
+
+  .govuk-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  };
+
+  .page-container {
+    // background-color: pink;
+    position: relative;
+    min-height: 100vh;
   }
   
 </style>
