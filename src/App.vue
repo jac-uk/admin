@@ -209,7 +209,6 @@ export default {
   };
 
   .page-container {
-    // background-color: pink;
     position: relative;
     min-height: 100vh;
   }
