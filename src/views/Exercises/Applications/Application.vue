@@ -1599,6 +1599,10 @@
           <div v-if="activeTab == 'issues'">
             No issues found
           </div>
+
+          <div v-if="activeTab == 'agency'">
+            <AgencyReport />
+          </div>
         </div>
       </div>
     </div>
@@ -1607,6 +1611,7 @@
 
 <script>
 import TabsList from '@/components/Page/TabsList';
+import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
@@ -1615,6 +1620,7 @@ import jsPDF from 'jspdf';
 export default {
   components: {
     TabsList,
+    AgencyReport,
     DownloadLink,
     EventRenderer,
     EditableField,
@@ -1633,6 +1639,10 @@ export default {
         {
           ref: 'issues',
           title: 'Issues',
+        },
+        {
+          ref: 'agency',
+          title: 'Agency report',
         },
       ],
       activeTab: 'full',
