@@ -19,7 +19,7 @@ export default {
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      let firestoreRef = collectionRef
+      const firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.SHORTLISTED)
         .where('active', '==', true);
@@ -37,7 +37,7 @@ export default {
       };
       
       if (status) {
-        data['status']= status;
+        data['status'] = status;
       }
 
       if (empApplied != null){

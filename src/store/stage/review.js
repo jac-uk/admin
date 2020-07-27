@@ -12,7 +12,7 @@ export default {
   namespaced: true,
   getters: {
     availableStatuses: () => (arrShortlistingMethods, arrOtherShortlistingMethods)  => {
-      let arrToReturn = [];
+      const arrToReturn = [];
 
       // telephone-assessment
       if (arrShortlistingMethods.includes(SHORTLISTING.TELEPHONE_ASSESSMENT)) {
@@ -70,7 +70,7 @@ export default {
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      let firestoreRef = collectionRef
+      const firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
@@ -81,7 +81,7 @@ export default {
       return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { status, nextStage, empApplied } ) => {
-      let stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
+      const stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
       
@@ -90,7 +90,7 @@ export default {
       };
       
       if (status) {
-        data['status']= status;
+        data['status'] = status;
       }
 
       if (nextStage[0]) {

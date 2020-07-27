@@ -1,13 +1,13 @@
 const searchString = (searchValue) => {
     let returnValue = null;
-    let searchArr = [...searchValue];
+    const searchArr = [...searchValue];
     let searchStr, searchStrNext;
-    let searchLenght = searchArr.length;
+    const searchLenght = searchArr.length;
     
     if (searchValue) {
         // searchArr[0] = searchArr[0].toUpperCase(); // First letter Uppercase
         searchStr = searchArr.join('');
-        let nextLastCharacter = nextChar(searchArr[searchLenght - 1]);
+        const nextLastCharacter = nextChar(searchArr[searchLenght - 1]);
         searchArr[searchLenght - 1] = nextLastCharacter;
         searchStrNext = searchArr.join('');
         returnValue = { 'value1': searchStr, 'value2': searchStrNext };

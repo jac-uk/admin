@@ -12,7 +12,7 @@ const exercise = {
   name: 'test name',
 };
 
-let mockStore = {
+const mockStore = {
   dispatch: jest.fn().mockResolvedValue(),
   state: {
     exerciseDocument: {
@@ -56,7 +56,7 @@ xdescribe('@/views/Exercises/Show', () => {
   xdescribe('computed properties', () => {
     xdescribe('exercise', () => {
       it('returns record object from state', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);
       });
     });
@@ -65,12 +65,12 @@ xdescribe('@/views/Exercises/Show', () => {
   xdescribe('template', () => {
     xdescribe('when loaded is false', () => {
       it('renders LoadingMessage component', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.find(LoadingMessage).exists()).toBe(true);
       });
 
       it('does not render the RouterView', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.find('RouterView-stub').exists()).toBe(false);
       });
     });
@@ -108,7 +108,7 @@ xdescribe('@/views/Exercises/Show', () => {
   xdescribe('methods', () => {
     xdescribe('redirectToErrorPage', () => {
       it('calls router replace method with the name of error page', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         wrapper.vm.redirectToErrorPage();
         expect(mockRouter.replace).toHaveBeenCalled();
         expect(mockRouter.replace.mock.calls[0][0]).toEqual({ 'name': 'exercise-not-found' });

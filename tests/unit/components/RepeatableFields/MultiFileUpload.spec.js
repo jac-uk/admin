@@ -46,24 +46,24 @@ describe('@/components/RepeatableFields/MultiFileUpload', () => {
   describe('props', () => {
     describe('row', () => {
       it('is required', () => {
-        let prop = MultiFileUpload.props.row;
+        const prop = MultiFileUpload.props.row;
         expect(prop.required).toBe(true);
       });
 
       it('has type object', () => {
-        let prop = MultiFileUpload.props.row;
+        const prop = MultiFileUpload.props.row;
         expect(prop.type).toBe(Object);
       });
     });
 
     describe('index', () => {
       it('is required', () => {
-        let prop = MultiFileUpload.props.index;
+        const prop = MultiFileUpload.props.index;
         expect(prop.required).toBe(true);
       });
 
       it('has type number', () => {
-        let prop = MultiFileUpload.props.index;
+        const prop = MultiFileUpload.props.index;
         expect(prop.type).toBe(Number);
       });
     });
@@ -74,7 +74,7 @@ describe('@/components/RepeatableFields/MultiFileUpload', () => {
       it('is generated from provided id and component index', () => {
         const id = 'test-id';
         const index = 2;
-        let wrapper = createTestSubject({
+        const wrapper = createTestSubject({
           id,
           index,
           row: {},

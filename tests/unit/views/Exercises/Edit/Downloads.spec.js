@@ -114,7 +114,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
     describe('uploadPath', () => {
       it('returns upload path including exercise id', () => {
         mockData.mockReturnValue(mockExercise);
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.vm.uploadPath).toEqual(`/exercise/${mockExercise.id}`);
       });
     });

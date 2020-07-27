@@ -204,7 +204,7 @@ export default {
       return false;
     },
     timeline() {
-      let timeline = exerciseTimeline(this.exercise);
+      const timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline, 2);
     },
     exerciseProgress() {
@@ -222,7 +222,7 @@ export default {
       }
     },    
     taskList() {
-      let data = [];
+      const data = [];
       if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
         if (this.exerciseProgress) {
           data.push({ title: 'Website listing', id: 'exercise-edit-summary', done: this.exerciseProgress.vacancySummary, approved: this.approvalProgress['vacancySummary'] });

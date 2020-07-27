@@ -16,7 +16,7 @@ const createTestSubject = (propsData) => {
 
 xdescribe('components/Page/Timeline', () => {
   it('renders the component', () => {
-    let wrapper = createTestSubject({ data: testTimelineData });
+    const wrapper = createTestSubject({ data: testTimelineData });
     expect(wrapper.exists()).toBe(true);
   });
 

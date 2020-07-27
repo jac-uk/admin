@@ -2,7 +2,7 @@ const isDate = (date) => date instanceof Date;
 
 const isDateInFuture = (date) => {
   // @TODO #388 update to full datetime instead of hardcoding time
-  if(!(date instanceof Date)) {
+  if (!(date instanceof Date)) {
     throw 'Supplied date must be a Date object';
   }
 
@@ -21,17 +21,17 @@ const isDateInFuture = (date) => {
 };
 
 const formatDate = (date, type) => {
-  if(!(date instanceof Date)) {
+  if (!(date instanceof Date)) {
     throw 'Supplied date must be a Date object';
   }
 
-  if(type && type === 'time') {
+  if (type && type === 'time') {
     return date.toLocaleString('en-GB', { hour: 'numeric', minute: 'numeric', hour12: true }).toLowerCase();
   }
 
-  let month = date.toLocaleString('en-GB', { month: 'long' });
+  const month = date.toLocaleString('en-GB', { month: 'long' });
 
-  if(type && type === 'month') {
+  if (type && type === 'month') {
     return `${month} ${date.getFullYear()}`;
   }
 
@@ -57,7 +57,7 @@ const parseEstimatedDate = (value) => {
 const validateYear = (val) => {
   val = parseInt(val);
 
-  if(isNaN(val) || val.toString().length !== 4) {
+  if (isNaN(val) || val.toString().length !== 4) {
     return null;
   }
 

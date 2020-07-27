@@ -1678,16 +1678,16 @@ export default {
       return this.activeTab === 'panel';
     },
     isLegal() {
-      return this.exercise.typeOfExercise ==='legal' || this.exercise.typeOfExercise ==='leadership';
+      return this.exercise.typeOfExercise === 'legal' || this.exercise.typeOfExercise === 'leadership';
     },
     isNonLegal() {
-      return this.exercise.typeOfExercise ==='non-legal' || this.exercise.typeOfExercise ==='leadership-non-legal';
+      return this.exercise.typeOfExercise === 'non-legal' || this.exercise.typeOfExercise === 'leadership-non-legal';
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
     },
     ethnicGroupDetails() {
-      switch(this.application.equalityAndDiversitySurvey.ethnicGroup) {
+      switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
       case 'other-asian':
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupAsianDetails;
       case 'other-white':
@@ -1815,7 +1815,7 @@ export default {
             if (i < len) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i+1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i + 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1830,7 +1830,7 @@ export default {
             if (i > 0) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i-1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i - 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1853,7 +1853,7 @@ export default {
         },
       );
 
-      var fileName = 'judicial-appointments-application';
+      let fileName = 'judicial-appointments-application';
       if (this.applicationReferenceNumber) {
         fileName = this.applicationReferenceNumber;
       }
@@ -1861,11 +1861,11 @@ export default {
       pdf.save(`${fileName}.pdf`);
     },
     downloadAsDoc() {
-      var sourceHTML = document.querySelector('#panel-pack-div').innerHTML;
+      const sourceHTML = document.querySelector('#panel-pack-div').innerHTML;
       
-      var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+      const source = `data:application/vnd.ms-word;charset=utf-8,${  encodeURIComponent(sourceHTML)}`;
 
-      var fileDownload = document.createElement('a');
+      const fileDownload = document.createElement('a');
       document.body.appendChild(fileDownload);
       fileDownload.href = source;
       fileDownload.download = 'document.doc';

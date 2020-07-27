@@ -99,7 +99,7 @@ export default {
       return this.$store.state.stageShortlisted.records;
     },
     totalApplicationRecords() {
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
         return this.exercise.applicationRecords.shortlisted; 
       } else {
         return 0;
@@ -116,8 +116,8 @@ export default {
       return Math.ceil(this.totalApplicationRecords / this.pageSize);
     },
     getPaginated() {
-      if(this.numberOfPages){
-        if(this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
+      if (this.numberOfPages){
+        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
 
         const sliceFrom = ((this.page - 1) * this.pageSize);
         const sliceTo = sliceFrom + this.pageSize; 

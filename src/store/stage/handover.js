@@ -11,7 +11,7 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      let firestoreRef = collectionRef
+      const firestoreRef = collectionRef
         .where('exercise.id', '==', exerciseId)
         .where('stage', '==', EXERCISE_STAGE.HANDOVER)
         .where('active', '==', true);

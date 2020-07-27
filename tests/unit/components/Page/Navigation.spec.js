@@ -23,7 +23,7 @@ const createTestSubject = (propsData) => {
 };
 
   it('renders the component', () => {
-    let wrapper = createTestSubject({ items: navPages });
+    const wrapper = createTestSubject({ items: navPages });
     expect(wrapper.exists()).toBe(true);
   });
 
@@ -65,24 +65,24 @@ const createTestSubject = (propsData) => {
 
   xdescribe('template', () => {
     it('renders items that is passed as prop', () => {
-      let wrapper = createTestSubject({ items: navPages });
+      const wrapper = createTestSubject({ items: navPages });
       expect(wrapper.findAll('li').length).toBe(2);
     });
 
     it('does not render if items array is empty', () => {
-      let wrapper = createTestSubject({ items: [] });
+      const wrapper = createTestSubject({ items: [] });
       expect(wrapper.findAll('li').length).toBe(0);
     });
 
     it('sets aria-label with label prop', () => {
-      let wrapper = createTestSubject({ items: navPages, label: 'MyTestLabel' });
+      const wrapper = createTestSubject({ items: navPages, label: 'MyTestLabel' });
       expect(wrapper.find('nav').attributes('aria-label')).toBe('MyTestLabel');
     });
 
     xdescribe('aria-current attribute', () => {
       it('is set for a link which is currently active', () => {
-        let wrapper = createTestSubject({ items: navPages });
-        let links = wrapper.findAll('.nav-link');
+        const wrapper = createTestSubject({ items: navPages });
+        const links = wrapper.findAll('.nav-link');
         expect(links.at(0).attributes()).toHaveProperty('aria-current');
         expect(links.at(1).attributes()).not.toHaveProperty('aria-current');
       });

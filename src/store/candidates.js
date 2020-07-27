@@ -36,7 +36,7 @@ export default {
       await ref.update(data);
     },
     search: firestoreAction(({ bindFirestoreRef }, searchTerm) => {
-      var returnSearch = search(searchTerm);
+      const returnSearch = search(searchTerm);
       let firestoreRef = collection
         .orderBy('created', 'desc');
       if (returnSearch) {
