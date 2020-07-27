@@ -24,7 +24,7 @@
         </ul>
       </div>
 
-      <div id="download-as-pdf-div">
+      <div id="panel-pack-div">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
             <span class="govuk-caption-l">Application</span>
@@ -34,10 +34,17 @@
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
             <button
-              class="govuk-button govuk-button--secondary"
+              class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
               @click="downloadAsPdf"
             >
               Download As PDF
+            </button>
+            <button
+              id="docDownloadButton"
+              class="govuk-button govuk-button--secondary"
+              @click="downloadAsDoc"
+            >
+              Download As Doc
             </button>
 
             <span
@@ -1835,7 +1842,7 @@ export default {
       const pdf = new jsPDF();
 
       pdf.fromHTML(
-        document.querySelector('#download-as-pdf-div'),
+        document.querySelector('#panel-pack-div'),
         15,
         15,
         {
@@ -1852,6 +1859,18 @@ export default {
       }
 
       pdf.save(`${fileName}.pdf`);
+    },
+    downloadAsDoc() {
+      var sourceHTML = document.querySelector('#panel-pack-div').innerHTML;
+      
+      var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+
+      var fileDownload = document.createElement('a');
+      document.body.appendChild(fileDownload);
+      fileDownload.href = source;
+      fileDownload.download = 'document.doc';
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
