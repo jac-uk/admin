@@ -8,7 +8,7 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { candidateId }) => {
-      let firestoreRef = collection
+      const firestoreRef = collection
         .where('candidate.id', '==', candidateId);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),

@@ -288,21 +288,21 @@ export default {
       return this.exercise.assessments && this.exercise.assessments.sent;
     },
     hasApplicationRecordsReview(){
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
         return true;
       } else {
         return false;
       }
     },
     hasApplicationsRecordsShortlisted(){
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
         return true;
       } else {
         return false;
       }
     },
     hasApplicationsRecordsSelected(){
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.selected){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.selected){
         return true;
       } else {
         return false;

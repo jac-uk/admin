@@ -147,11 +147,11 @@ export default {
       const month = this.month;
       const year = this.year;
 
-      if(!day || !month || !year) {
+      if (!day || !month || !year) {
         return null;
       }
 
-      return [year, month-1, day];
+      return [year, month - 1, day];
     },
     date: {
       get() {

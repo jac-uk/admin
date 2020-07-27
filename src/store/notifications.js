@@ -6,7 +6,7 @@ export default {
   namespaced: true,
   actions: {
     bindQueue: firestoreAction(({ bindFirestoreRef }) => {
-      let firestoreRef = firestore
+      const firestoreRef = firestore
         .collection('notifications')
         .where('status', 'in', ['ready', 'failed'])
         .orderBy('createdAt', 'desc');
@@ -16,7 +16,7 @@ export default {
       return unbindFirestoreRef('queue');
     }),
     bindSent: firestoreAction(({ bindFirestoreRef }) => {
-      let firestoreRef = firestore
+      const firestoreRef = firestore
         .collection('notifications')
         .where('status', '==', 'sent')
         .orderBy('createdAt', 'desc')

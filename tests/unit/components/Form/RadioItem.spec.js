@@ -24,7 +24,7 @@ const createTestSubject = (options) => {
       label: 'Example radio item',
       value: 'example-value',
       hint: 'Something',
-      content:  'Conditional content',
+      content: 'Conditional content',
     };
   }
 
@@ -142,7 +142,7 @@ xdescribe('components/Form/RadioItem', () => {
         subject = createTestSubject({
           label: 'Example radio item',
           value: 'example-value',
-          content:  'Conditional content',
+          content: 'Conditional content',
         });
         expect(subject.vm.hasConditionalContent).toBe(true);
       });

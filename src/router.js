@@ -724,7 +724,7 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters['auth/isSignedIn'];
-        if(isSignedIn) {
+        if (isSignedIn) {
           return next({ name: 'dashboard' });
         }
 

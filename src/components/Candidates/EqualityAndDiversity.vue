@@ -305,7 +305,7 @@ export default {
       return Object.keys(this.data).length > 0;
     },
     ethnicGroupDetails() {
-      switch(this.data.ethnicGroup) {
+      switch (this.data.ethnicGroup) {
       case 'other-asian':
         return this.data.otherEthnicGroupAsianDetails;
       case 'other-white':

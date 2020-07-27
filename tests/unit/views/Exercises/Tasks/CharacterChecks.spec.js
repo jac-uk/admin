@@ -8,7 +8,7 @@ const createTestSubject = () => {
 xdescribe('@/views/Exercises/Tasks/CharacterChecks', () => {
   xdescribe('template', () => {
     it('renders the component', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
       expect(wrapper.find('h1').exists()).toBe(true);
     });
   });

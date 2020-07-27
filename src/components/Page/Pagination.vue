@@ -62,8 +62,8 @@ export default {
   },
   computed: {
     range(){
-      var numbers = [];
-      for(var i = this.lowIndex; i <= this.highIndex; i++){
+      const numbers = [];
+      for (let i = this.lowIndex; i <= this.highIndex; i++){
         numbers.push(i);
       }
       return numbers;
@@ -78,9 +78,9 @@ export default {
   methods: {
     changePage(direction){
       // Direction can either be: next, previous, {{jump page number}}
-      var newPageNumber = this.pageNumber;
+      let newPageNumber = this.pageNumber;
 
-      if(direction == 'next'){
+      if (direction == 'next'){
         newPageNumber++;
       } else if (direction == 'previous'){
         newPageNumber--;

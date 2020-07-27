@@ -134,7 +134,7 @@ const createTestSubject = () => {
 describe('@/views/Exercises/Show/Applications', () => {
   describe('template', () => {
     it('renders the component', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
       expect(wrapper.find('table').exists()).toBe(true);
     });
   });

@@ -14,7 +14,7 @@ xdescribe('@/components/Page/AddToFavouritesButton', () => {
   xdescribe('methods', () => {
     xdescribe('updateFavoutites', () => {
       it('updates a value of isInFavourites', () => {
-        let isInFavourites = wrapper.vm.isInFavourites;
+        const isInFavourites = wrapper.vm.isInFavourites;
         wrapper.find('button').trigger('click');
         
         expect(wrapper.vm.isInFavourites).toBe(!isInFavourites);

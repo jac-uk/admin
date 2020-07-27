@@ -23,7 +23,7 @@ export default {
           const newExercisesCount = metaDoc.data().exercisesCount + 1;
           const exerciseRef = firestore.collection('exercises').doc();
           transaction.update(metaRef, { exercisesCount: newExercisesCount });
-          data.referenceNumber = 'JAC' + (100000 + newExercisesCount).toString().substr(1);
+          data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
           data.progress = { started: true };
           data.state = 'draft';
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);

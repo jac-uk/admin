@@ -1,7 +1,7 @@
 const createTimeline = (timeline, maxEntriesNum) => {
-  let timelineArray = timeline.filter((item) => item.date !== null).sort(ascendingDate);
+  const timelineArray = timeline.filter((item) => item.date !== null).sort(ascendingDate);
 
-  if(maxEntriesNum) {
+  if (maxEntriesNum) {
     return timelineArray.slice(0, maxEntriesNum);
   }
 
