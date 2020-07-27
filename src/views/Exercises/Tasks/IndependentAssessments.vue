@@ -34,44 +34,6 @@
       <div
         v-if="hasInitialisedAssessments"
       >
-        <select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-select govuk-!-margin-right-3"
-        >
-          <option value="">
-            Choose applications
-          </option>
-          <option
-            v-if="hasApplicationRecordsReview"
-            value="review" 
-          >
-            Review ({{ exercise.applicationRecords.review }})
-          </option>
-          <option
-            v-if="hasApplicationsRecordsShortlisted"
-            value="shortlisted" 
-          >
-            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
-          </option>
-
-          <option
-            v-if="hasApplicationsRecordsSelected"
-            value="selected" 
-          >
-            Selected ({{ exercise.applicationRecords.selected }})
-          </option>
-        </select>
-
-        <ActionButton
-          type="primary"
-          :disabled="!exerciseStage"
-          @click="initialiseAssessments()"
-        >
-          Start Assessments
-        </ActionButton>
-      </div>
-      <div v-else>
         <ActionButton
           v-if="canCancelAssessments"
           class="govuk-!-margin-right-3"
@@ -224,7 +186,45 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table>      
+      </div>
+      <div v-else>
+        <select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-select govuk-!-margin-right-3"
+        >
+          <option value="">
+            Choose applications
+          </option>
+          <option
+            v-if="hasApplicationRecordsReview"
+            value="review" 
+          >
+            Review ({{ exercise.applicationRecords.review }})
+          </option>
+          <option
+            v-if="hasApplicationsRecordsShortlisted"
+            value="shortlisted" 
+          >
+            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+          </option>
+
+          <option
+            v-if="hasApplicationsRecordsSelected"
+            value="selected" 
+          >
+            Selected ({{ exercise.applicationRecords.selected }})
+          </option>
+        </select>
+
+        <ActionButton
+          type="primary"
+          :disabled="!exerciseStage"
+          @click="initialiseAssessments()"
+        >
+          Start Assessments
+        </ActionButton>
       </div>
     </div>
     <div v-else>
