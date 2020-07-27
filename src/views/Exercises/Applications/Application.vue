@@ -113,12 +113,25 @@
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
             >
-              <h2 class="govuk-heading-l">
-                Personal details
-                <span class="govuk-hint">
-                  Any changes made here will also update the candidate information.
-                </span>
-              </h2>
+              <div class="govuk-grid-column-two-thirds">
+                <h2 class="govuk-heading-l">
+                  Personal details
+                  <span class="govuk-hint">
+                    Any changes made here will also update the candidate information.
+                  </span>
+                </h2>
+              </div>
+              <div class="govuk-grid-column-one-third text-right">
+                <!-- <a> -->
+                <button
+                  id="clipboard-button"
+                  class="govuk-button govuk-button--secondary" 
+                  @click="copyToClipboard"
+                >
+                  Copy to clipboard
+                </button>
+                <!-- </a> -->
+              </div>
 
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
@@ -1862,6 +1875,19 @@ export default {
 
       pdf.save(`${fileName}.pdf`);
     },
+    copyToClipboard() {
+      let content = document.querySelector('#panel-pack-div').innerText;
+      const el = document.createElement('textarea');
+      el.value = content;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      document.querySelector('#clipboard-button').innerText = 'Copied';
+      setTimeout(() => {
+        document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
+      },3000);
+    },
     downloadAsDoc() {
       const fileName = this.generateFilename;
       const content = document.querySelector('#panel-pack-div').outerHTML;
@@ -1910,4 +1936,5 @@ export default {
       width: auto;
     }
   }
+
 </style>
