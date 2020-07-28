@@ -113,14 +113,12 @@
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
             >
-              <div class="govuk-grid-column-two-thirds">
-                <h2 class="govuk-heading-l">
-                  Personal details
-                  <span class="govuk-hint">
-                    Any changes made here will also update the candidate information.
-                  </span>
-                </h2>
-              </div>
+              <h2 class="govuk-heading-l govuk-grid-column-two-thirds">
+                Personal details
+                <span class="govuk-hint">
+                  Any changes made here will also update the candidate information.
+                </span>
+              </h2>
               <div class="govuk-grid-column-one-third text-right">
                 <!-- <a> -->
                 <button
