@@ -26,7 +26,7 @@
           v-for="(column, index) in columns"
           :key="index"
           scope="col"
-          class="govuk-table__header"          
+          :class="[ 'govuk-table__header', ...column.class ]"
         >
           {{ column.title }}
         </th>

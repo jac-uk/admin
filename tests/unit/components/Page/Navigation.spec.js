@@ -23,16 +23,16 @@ const createTestSubject = (propsData) => {
 };
 
   it('renders the component', () => {
-    const wrapper = createTestSubject({ items: navPages });
+    const wrapper = createTestSubject({ pages: navPages });
     expect(wrapper.exists()).toBe(true);
   });
 
-  xdescribe('properties', () => {
+  describe('properties', () => {
     let prop;
 
-    xdescribe('data', () => {
+    describe('pages', () => {
       beforeEach(() => {
-        prop = Navigation.props.items;
+        prop = Navigation.props.pages;
       });
 
       it('is required', () => {
@@ -44,9 +44,9 @@ const createTestSubject = (propsData) => {
       });
     });
 
-    xdescribe('label', () => {
+    describe('title', () => {
       beforeEach(() => {
-        prop = Navigation.props.label;
+        prop = Navigation.props.title;
       });
 
       it('is optional', () => {
@@ -54,7 +54,7 @@ const createTestSubject = (propsData) => {
       });
 
       it('has default value', () => {
-        expect(prop.default).toBe('navigation');
+        expect(prop.default).toBe('');
       });
 
       it('should be string', () => {
@@ -63,19 +63,19 @@ const createTestSubject = (propsData) => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders items that is passed as prop', () => {
-      const wrapper = createTestSubject({ items: navPages });
+      const wrapper = createTestSubject({ pages: navPages });
       expect(wrapper.findAll('li').length).toBe(2);
     });
 
     it('does not render if items array is empty', () => {
-      const wrapper = createTestSubject({ items: [] });
+      const wrapper = createTestSubject({ pages: [] });
       expect(wrapper.findAll('li').length).toBe(0);
     });
 
     it('sets aria-label with label prop', () => {
-      const wrapper = createTestSubject({ items: navPages, label: 'MyTestLabel' });
+      const wrapper = createTestSubject({ pages: navPages, title: 'MyTestLabel' });
       expect(wrapper.find('nav').attributes('aria-label')).toBe('MyTestLabel');
     });
 

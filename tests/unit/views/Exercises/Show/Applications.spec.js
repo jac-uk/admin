@@ -6,6 +6,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 localVue.filter('lookup', jest.fn());
+localVue.filter('showAlternative', jest.fn());
 
 const mockExercise = {
   exerciseRef: 'mock exercise',

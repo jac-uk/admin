@@ -259,6 +259,10 @@ export default {
             title: 'Agency',
             name: 'exercise-show-report-agency',
           },
+          {
+            title: 'Handover',
+            name: 'exercise-show-report-handover',
+          },
         ];
       } else {
         return [];
