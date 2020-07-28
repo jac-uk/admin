@@ -211,6 +211,7 @@ export default {
   .page-container {
     position: relative;
     min-height: 100vh;
+    padding-bottom: 10vh;
   }
   
 </style>
