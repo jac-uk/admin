@@ -109,11 +109,11 @@
           <!-- </a> -->
         </div>
 
-          <TabsList
-            class="print-none"
-            :tabs="tabs"
-            :active-tab.sync="activeTab"
-          />
+        <TabsList
+          class="print-none"
+          :tabs="tabs"
+          :active-tab.sync="activeTab"
+        />
 
         <div v-if="application && exercise">
           <div 
