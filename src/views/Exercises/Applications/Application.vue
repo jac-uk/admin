@@ -97,12 +97,23 @@
             </div>
           </div>
         </div>        
+        <div class="text-right">
+          <!-- <a> -->
+          <button
+            id="clipboard-button"
+            class="govuk-button govuk-button--secondary" 
+            @click="copyToClipboard"
+          >
+            Copy to clipboard
+          </button>
+          <!-- </a> -->
+        </div>
 
-        <TabsList
-          class="print-none"
-          :tabs="tabs"
-          :active-tab.sync="activeTab"
-        />
+          <TabsList
+            class="print-none"
+            :tabs="tabs"
+            :active-tab.sync="activeTab"
+          />
 
         <div v-if="application && exercise">
           <div 
@@ -113,23 +124,12 @@
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
             >
-              <h2 class="govuk-heading-l govuk-grid-column-two-thirds">
+              <h2 class="govuk-heading-l">
                 Personal details
                 <span class="govuk-hint">
                   Any changes made here will also update the candidate information.
                 </span>
               </h2>
-              <div class="govuk-grid-column-one-third text-right">
-                <!-- <a> -->
-                <button
-                  id="clipboard-button"
-                  class="govuk-button govuk-button--secondary" 
-                  @click="copyToClipboard"
-                >
-                  Copy to clipboard
-                </button>
-                <!-- </a> -->
-              </div>
 
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
