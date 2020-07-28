@@ -1623,6 +1623,8 @@ import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
 import jsPDF from 'jspdf';
+import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
@@ -1685,6 +1687,9 @@ export default {
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
+    },
+    generateFilename(){
+      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
       switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
@@ -1853,24 +1858,15 @@ export default {
         },
       );
 
-      let fileName = 'judicial-appointments-application';
-      if (this.applicationReferenceNumber) {
-        fileName = this.applicationReferenceNumber;
-      }
+      let fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
     },
     downloadAsDoc() {
-      const sourceHTML = document.querySelector('#panel-pack-div').innerHTML;
-      
-      const source = `data:application/vnd.ms-word;charset=utf-8,${  encodeURIComponent(sourceHTML)}`;
-
-      const fileDownload = document.createElement('a');
-      document.body.appendChild(fileDownload);
-      fileDownload.href = source;
-      fileDownload.download = 'document.doc';
-      fileDownload.click();
-      document.body.removeChild(fileDownload);
+      let fileName = this.generateFilename;
+      let content = document.querySelector('#panel-pack-div').outerHTML;
+      const converted = htmlDocx.asBlob(content);
+      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
