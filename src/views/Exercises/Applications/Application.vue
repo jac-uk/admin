@@ -97,6 +97,17 @@
             </div>
           </div>
         </div>        
+        <div class="text-right">
+          <!-- <a> -->
+          <button
+            id="clipboard-button"
+            class="govuk-button govuk-button--secondary" 
+            @click="copyToClipboard"
+          >
+            Copy to clipboard
+          </button>
+          <!-- </a> -->
+        </div>
 
         <TabsList
           class="print-none"
@@ -1623,6 +1634,8 @@ import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
 import jsPDF from 'jspdf';
+import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
@@ -1685,6 +1698,9 @@ export default {
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
+    },
+    generateFilename(){
+      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
       switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
@@ -1853,24 +1869,28 @@ export default {
         },
       );
 
-      let fileName = 'judicial-appointments-application';
-      if (this.applicationReferenceNumber) {
-        fileName = this.applicationReferenceNumber;
-      }
+      const fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
     },
+    copyToClipboard() {
+      const content = document.querySelector('#panel-pack-div').innerText;
+      const el = document.createElement('textarea');
+      el.value = content;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      document.querySelector('#clipboard-button').innerText = 'Copied';
+      setTimeout(() => {
+        document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
+      },3000);
+    },
     downloadAsDoc() {
-      const sourceHTML = document.querySelector('#panel-pack-div').innerHTML;
-      
-      const source = `data:application/vnd.ms-word;charset=utf-8,${  encodeURIComponent(sourceHTML)}`;
-
-      const fileDownload = document.createElement('a');
-      document.body.appendChild(fileDownload);
-      fileDownload.href = source;
-      fileDownload.download = 'document.doc';
-      fileDownload.click();
-      document.body.removeChild(fileDownload);
+      const fileName = this.generateFilename;
+      const content = document.querySelector('#panel-pack-div').outerHTML;
+      const converted = htmlDocx.asBlob(content);
+      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
@@ -1914,4 +1934,5 @@ export default {
       width: auto;
     }
   }
+
 </style>
