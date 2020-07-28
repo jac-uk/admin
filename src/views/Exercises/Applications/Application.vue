@@ -24,7 +24,7 @@
         </ul>
       </div>
 
-      <div id="download-as-pdf-div">
+      <div id="panel-pack-div">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
             <span class="govuk-caption-l">Application</span>
@@ -34,10 +34,17 @@
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
             <button
-              class="govuk-button govuk-button--secondary"
+              class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
               @click="downloadAsPdf"
             >
               Download As PDF
+            </button>
+            <button
+              id="docDownloadButton"
+              class="govuk-button govuk-button--secondary"
+              @click="downloadAsDoc"
+            >
+              Download As Doc
             </button>
 
             <span
@@ -1599,6 +1606,10 @@
           <div v-if="activeTab == 'issues'">
             No issues found
           </div>
+
+          <div v-if="activeTab == 'agency'">
+            <AgencyReport />
+          </div>
         </div>
       </div>
     </div>
@@ -1607,14 +1618,18 @@
 
 <script>
 import TabsList from '@/components/Page/TabsList';
+import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
 import jsPDF from 'jspdf';
+import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
     TabsList,
+    AgencyReport,
     DownloadLink,
     EventRenderer,
     EditableField,
@@ -1633,6 +1648,10 @@ export default {
         {
           ref: 'issues',
           title: 'Issues',
+        },
+        {
+          ref: 'agency',
+          title: 'Agency report',
         },
       ],
       activeTab: 'full',
@@ -1668,6 +1687,9 @@ export default {
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
+    },
+    generateFilename(){
+      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
       switch(this.application.equalityAndDiversitySurvey.ethnicGroup) {
@@ -1825,7 +1847,7 @@ export default {
       const pdf = new jsPDF();
 
       pdf.fromHTML(
-        document.querySelector('#download-as-pdf-div'),
+        document.querySelector('#panel-pack-div'),
         15,
         15,
         {
@@ -1836,12 +1858,15 @@ export default {
         },
       );
 
-      var fileName = 'judicial-appointments-application';
-      if (this.applicationReferenceNumber) {
-        fileName = this.applicationReferenceNumber;
-      }
+      let fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
+    },
+    downloadAsDoc() {
+      let fileName = this.generateFilename;
+      let content = document.querySelector('#panel-pack-div').outerHTML;
+      const converted = htmlDocx.asBlob(content);
+      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
