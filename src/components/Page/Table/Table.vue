@@ -26,7 +26,7 @@
           v-for="(column, index) in columns"
           :key="index"
           scope="col"
-          class="govuk-table__header"          
+          :class="[ 'govuk-table__header', ...column.class ]"
         >
           {{ column.title }}
         </th>
@@ -99,7 +99,7 @@ export default {
         return this.data ? this.selectedItems.length == this.data.length : false;
       },
       set: function (value) {
-        let selectedItems = [];
+        const selectedItems = [];
         if (value) {
           this.data.forEach((item) => {
             selectedItems.push(item.id);

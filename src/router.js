@@ -45,9 +45,9 @@ import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedE
 import ExerciseStagesRecommendedBack from '@/views/Exercises/Stages/RecommendedBack';
 import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
 import ExerciseStagesHandoverBack from '@/views/Exercises/Stages/HandoverBack';
-import ExerciseStagesShortlistList from '@/views/Exercises/Stages/ShortlistList';
-import ExerciseStagesShortlistEdit from '@/views/Exercises/Stages/ShortlistEdit';
-import ExerciseStagesShortlistBack from '@/views/Exercises/Stages/ShortlistBack';
+import ExerciseStagesShortlistedList from '@/views/Exercises/Stages/ShortlistedList';
+import ExerciseStagesShortlistedEdit from '@/views/Exercises/Stages/ShortlistedEdit';
+import ExerciseStagesShortlistedBack from '@/views/Exercises/Stages/ShortlistedBack';
 
 // Candidates
 import Candidates from '@/views/Candidates/Candidates';
@@ -67,6 +67,8 @@ import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversi
 import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
 import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
+import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
+import ExerciseShowReportsHandover from '@/views/Exercises/Show/Reports/Handover';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
@@ -253,7 +255,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Application',
           },
-        },        
+        },
         {
           path: 'application/:applicationId',
           component: ExerciseApplication,
@@ -262,7 +264,7 @@ const router = new Router({
             requiresAuth: true,
             title: 'Exercise Application',
           },
-        },        
+        },
         {
           path: 'stages',
           component: ExerciseStages,
@@ -359,29 +361,29 @@ const router = new Router({
             },
             {
               path: 'shortlisted',
-              component: ExerciseStagesShortlistList,
-              name: 'exercise-stages-shortlist-list',
+              component: ExerciseStagesShortlistedList,
+              name: 'exercise-stages-shortlisted-list',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Shortlist',
+                title: 'Exercise Stages | Shortlisted',
               },
             },
             {
               path: 'shortlisted/edit',
-              component: ExerciseStagesShortlistEdit,
-              name: 'exercise-stages-shortlist-edit',
+              component: ExerciseStagesShortlistedEdit,
+              name: 'exercise-stages-shortlisted-edit',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Shortlist edit',
+                title: 'Exercise Stages | Shortlisted edit',
               },
             },
             {
               path: 'shortlisted/back',
-              component: ExerciseStagesShortlistBack,
-              name: 'exercise-stages-shortlist-back',
+              component: ExerciseStagesShortlistedBack,
+              name: 'exercise-stages-shortlisted-back',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Shortlist back',
+                title: 'Exercise Stages | Shortlisted back',
               },
             },
           ],
@@ -468,7 +470,25 @@ const router = new Router({
                 title: 'Exercise Reports | Character Issues',
               },
             },
-          ],                    
+            {
+              path: 'agency',
+              component: ExerciseShowReportsAgency,
+              name: 'exercise-show-report-agency',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Reports | Agency',
+              },
+            },
+            {
+              path: 'handover',
+              component: ExerciseShowReportsHandover,
+              name: 'exercise-show-report-handover',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Reports | Handover',
+              },
+            },
+          ],
         },
       ],
     },
@@ -714,7 +734,7 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters['auth/isSignedIn'];
-        if(isSignedIn) {
+        if (isSignedIn) {
           return next({ name: 'dashboard' });
         }
 

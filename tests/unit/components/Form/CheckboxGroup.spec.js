@@ -270,14 +270,14 @@ xdescribe('components/Form/CheckboxGroup', () => {
     xdescribe('created', () => {
       xdescribe('if value is an array', () => {
         it('does not call emit', ()=> {
-          let array = [];
-          let wrapper = createTestSubject({ value: array });
+          const array = [];
+          const wrapper = createTestSubject({ value: array });
           expect(wrapper.emitted().input).not.toBeTruthy();
         });
       });
       xdescribe('if value is not an array', () => {
         it('emits the initial empty array value', ()=> {
-          let wrapper = createTestSubject({ value: undefined });
+          const wrapper = createTestSubject({ value: undefined });
           expect(wrapper.emitted().input).toBeTruthy();
         });
       });

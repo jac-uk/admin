@@ -19,7 +19,7 @@ const formatDate = (value, type) => {
 };
 
 const formatEstimatedDate = (value) => {
-  if(value){
+  if (value){
     if (value instanceof Date) {
       return formatDate(value, 'month');
     }

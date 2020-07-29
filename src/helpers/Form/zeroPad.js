@@ -1,5 +1,5 @@
 const zeroPad = (val) => {
-  if(typeof val !== 'number') {
+  if (typeof val !== 'number') {
     return null;
   }
   

@@ -41,7 +41,7 @@ describe('components/Page/Banner', () => {
   
   describe('component instance', () => {
     describe('when status = success', () => {
-    let wrapper = createTestSubject({ message: 'mockMessage', status: 'success' });
+    const wrapper = createTestSubject({ message: 'mockMessage', status: 'success' });
 
       it('renders the component', () => {
         expect(wrapper.exists()).toBe(true);
@@ -104,7 +104,7 @@ describe('components/Page/Banner', () => {
     });
 
     describe('when status is empty', () => {
-      let wrapper = createTestSubject({ message: 'mockMessage', status: '' });
+      const wrapper = createTestSubject({ message: 'mockMessage', status: '' });
   
       it('renders the component', () => {
         expect(wrapper.exists()).toBe(true);

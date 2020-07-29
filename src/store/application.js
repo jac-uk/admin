@@ -57,7 +57,7 @@ export default {
               for (let i = 0, len = 3; i < len; i++) {
                 randomCharacters += characters.charAt(Math.floor(Math.random() * characters.length));
               }
-              const applicationReferenceNumber = vacancyReferenceNumber + '-' + randomCharacters + (10000 + newApplicationsCount).toString().substr(1);
+              const applicationReferenceNumber = `${vacancyReferenceNumber  }-${  randomCharacters  }${(10000 + newApplicationsCount).toString().substr(1)}`;
               transaction.set(vacancyMetaRef, {
                 applicationsCount: newApplicationsCount,
               }, { merge: true });

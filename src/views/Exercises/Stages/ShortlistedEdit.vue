@@ -102,7 +102,7 @@ export default {
         data.empApplied = this.empApplied;
       }
       await this.$store.dispatch('stageShortlisted/updateStatus', data );
-      this.$router.push({ name: 'exercise-stages-shortlist-list' });
+      this.$router.push({ name: 'exercise-stages-shortlisted-list' });
     },
   },
 };

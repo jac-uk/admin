@@ -1,7 +1,7 @@
 const validateYear = (val) => {
   val = parseInt(val);
 
-  if(isNaN(val) || val.toString().length !== 4) {
+  if (isNaN(val) || val.toString().length !== 4) {
     return null;
   }
 

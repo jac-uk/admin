@@ -537,19 +537,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
-.panel {
-    background: govuk-colour("light-grey");
-    padding: 20px;
-}
-
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
 .govuk-table__header, .govuk-table__cell {
     vertical-align: middle;
 }
-
-.hidden {
-    display: none;
-}
-
 </style>

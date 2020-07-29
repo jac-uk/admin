@@ -31,6 +31,10 @@ $max-width: 1200px;
   display: block;
 }
 
+.hidden {
+  display: none;
+}
+
 // background utility classes
 .background-light-grey {
   background: govuk-colour("light-grey");
@@ -51,7 +55,6 @@ body {
   font-family: $govuk-font-family;
 }
 
-/* JAC buttons */
 /*#944 removed the overrides*/
 
 .govuk-width-container {
@@ -91,4 +94,9 @@ body {
   width: .6rem;
   height: .6rem;
   border-width: 0.2em;
+}
+
+.panel {
+  background: govuk-colour("light-grey");
+  padding: 20px;
 }

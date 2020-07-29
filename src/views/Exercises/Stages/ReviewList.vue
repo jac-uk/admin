@@ -26,7 +26,7 @@
       </div>
       <Table 
         data-key="id"
-        :data="applicationRecords"
+        :data="getPaginated"
         :columns="[
           { title: 'Reference number' },
           { title: 'Name' },
@@ -57,6 +57,10 @@
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>   
+      <Pagination 
+        :high-index="numberOfPages"
+        @pageChanged="updatePage($event)"
+      />
     </form>
   </div>
 </template>
@@ -65,17 +69,21 @@
 import Banner from '@/components/Page/Banner';
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import Pagination from '@/components/Page/Pagination';
 
 export default {
   components: {
     Banner,
     Table,
     TableCell,
+    Pagination,
   },
   data() {
     return {
       message: null,
       selectedItems: [],
+      page: 1,
+      pageSize: 25,
     };
   },
   computed: {
@@ -83,7 +91,7 @@ export default {
       return this.$store.state.stageReview.records;
     },
     totalApplicationRecords() {
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
         return this.exercise.applicationRecords.review;
       } else {
         return 0;
@@ -101,7 +109,7 @@ export default {
         return this.applicationRecords ? this.selectedItems.length == this.applicationRecords.length : false;
       },
       set: function (value) {
-        var selectedItems = [];
+        const selectedItems = [];
         if (value) {
           this.applicationRecords.forEach((item) => {
             selectedItems.push(item.id);
@@ -109,7 +117,23 @@ export default {
         }
         this.selectedItems = selectedItems;
       },
-    }, 
+    },
+    numberOfPages() {
+      return Math.ceil(this.totalApplicationRecords / this.pageSize);
+    },
+    getPaginated() {
+      if (this.numberOfPages){
+        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
+
+        const sliceFrom = ((this.page - 1) * this.pageSize);
+        const sliceTo = sliceFrom + this.pageSize; 
+        const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
+
+        return sliced;
+      } else {
+        return this.applicationRecords;
+      }
+    },
   },
   async created() {
     this.$store.dispatch('stageReview/bind', { exerciseId: this.exercise.id });
@@ -120,6 +144,9 @@ export default {
     checkForm() {
       this.$store.dispatch('stageReview/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-review-edit' });
+    },
+    updatePage(pageChanged){
+      this.page = pageChanged;
     },
   },
 };

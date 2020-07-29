@@ -121,7 +121,7 @@ export default {
     },
     generateFileName(originalName) {
       const parts = originalName.split('.');
-      if( parts.length === 1 || ( parts[0] === '' && parts.length === 2 )) {
+      if ( parts.length === 1 || ( parts[0] === '' && parts.length === 2 )) {
         return this.name;
       }
 
