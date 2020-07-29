@@ -76,7 +76,7 @@
               <h2 
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.createdAt | showAlternative("Unknown") | formatDate }}
+                {{ application.createdAt | formatDate | showAlternative("Unknown")}}
               </h2>
             </div>
           </div>
@@ -88,7 +88,7 @@
                 v-if="isApplied"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.createdAt | showAlternative("Unknown") | formatDate }}
+                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
               </h2>
               <h2
                 v-else
