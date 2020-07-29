@@ -1860,13 +1860,13 @@ export default {
         },
       );
 
-      let fileName = this.generateFilename;
+      const fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
     },
     downloadAsDoc() {
-      let fileName = this.generateFilename;
-      let content = document.querySelector('#panel-pack-div').outerHTML;
+      const fileName = this.generateFilename;
+      const content = document.querySelector('#panel-pack-div').outerHTML;
       const converted = htmlDocx.asBlob(content);
       saveAs(converted, `${fileName}.docx`);
     },
