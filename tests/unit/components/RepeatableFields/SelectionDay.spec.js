@@ -20,24 +20,24 @@ describe('@/components/RepeatableFields/SelectionDay', () => {
   describe('props', () => {
     describe('row', () => {
       it('is required', () => {
-        let prop = SelectionDay.props.row;
+        const prop = SelectionDay.props.row;
         expect(prop.required).toBe(true);
       });
 
       it('has type object', () => {
-        let prop = SelectionDay.props.row;
+        const prop = SelectionDay.props.row;
         expect(prop.type).toBe(Object);
       });
     });
 
     describe('index', () => {
       it('is required', () => {
-        let prop = SelectionDay.props.index;
+        const prop = SelectionDay.props.index;
         expect(prop.required).toBe(true);
       });
 
       it('has type number', () => {
-        let prop = SelectionDay.props.index;
+        const prop = SelectionDay.props.index;
         expect(prop.type).toBe(Number);
       });
     });
@@ -46,14 +46,14 @@ describe('@/components/RepeatableFields/SelectionDay', () => {
   describe('computed properties', () => {
     describe('selectionDayIdStart', () => {
       it('returns the value that is created using index', () => {
-        let wrapper = createTestSubject({ index: 4, row: {} });
+        const wrapper = createTestSubject({ index: 4, row: {} });
         expect(wrapper.vm.selectionDayIdStart).toBe('selection_start_4');
       });
     });
 
     describe('selectionDayIdEnd', () => {
       it('returns the value that is created using index', () => {
-        let wrapper = createTestSubject({ index: 5, row: {} });
+        const wrapper = createTestSubject({ index: 5, row: {} });
         expect(wrapper.vm.selectionDayIdStart).toBe('selection_start_5');
       });
     });
@@ -61,7 +61,7 @@ describe('@/components/RepeatableFields/SelectionDay', () => {
 
   describe('template', () => {
     it('renders DateInput', () => {
-      let wrapper = createTestSubject({ index: 1, row: {} });
+      const wrapper = createTestSubject({ index: 1, row: {} });
       expect(wrapper.find(DateInput).exists()).toBe(true);
     });
   });

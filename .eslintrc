@@ -2,25 +2,33 @@
   "root": true,
   "env": {
     "node": true,
+    "es6": true,
     "jest": true
   },
   "extends": [
-    "plugin:vue/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:vue/recommended"
   ],
   "rules": {
-    "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline"}],
-    "eol-last": ["error", "always"],
     "func-style": ["error", "expression"],
     "prefer-arrow-callback": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-spread": "error",
+    "prefer-template": "error",
     "quotes": ["error", "single", {"avoidEscape": true}],
+    "comma-dangle": ["error", {"arrays": "always-multiline", "objects": "always-multiline"}],
     "semi": "error",
-    "vue/component-name-in-template-casing": "error",
-    "vue/script-indent": ["error", 2],
-    "object-curly-spacing": ["error", "always"],
+    "space-infix-ops": "error",
+    "keyword-spacing": "error",
     "array-bracket-spacing": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "key-spacing": "error",
     "no-multiple-empty-lines": ["error", { "max": 1}],
-    "no-console": 1
+    "eol-last": ["error", "always"],
+    "no-console": 1,
+    "vue/component-name-in-template-casing": "error",
+    "vue/script-indent": ["error", 2]
   },
   "parserOptions": {
     "parser": "babel-eslint"

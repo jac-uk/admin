@@ -1,17 +1,17 @@
 const clipNumber = (val, min, max) => {
-  if(typeof val !== 'number') {
+  if (typeof val !== 'number') {
     return null;
   }
 
-  if(isNaN(min) || isNaN(max)) {
+  if (isNaN(min) || isNaN(max)) {
     return null;
   }
 
-  if(val < min) {
+  if (val < min) {
     return min;
   }
 
-  if(val > max) {
+  if (val > max) {
     return max;
   }
 

@@ -4,7 +4,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
   xdescribe('QT entry', () => {
     xdescribe('when all three dates are available', () => {
       it('contains all dates', () => {
-        let data = {
+        const data = {
           sjcaTestDate: new Date('Sun Nov 11 2012 08:00:00 GMT+0000 (Greenwich Mean Time)'),
           sjcaTestStartTime: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
           sjcaTestEndTime: new Date('Sun Nov 11 2012 21:00:00 GMT+0000 (Greenwich Mean Time)'),
@@ -18,7 +18,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when one of the dates is missing', () => {
       it('contains available dates and null where data is missing', () => {
-        let data = {
+        const data = {
           sjcaTestDate: new Date('Sun Nov 11 2012 08:00:00 GMT+0000 (Greenwich Mean Time)'),
           sjcaTestStartTime: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
           sjcaTestEndTime: null,
@@ -32,7 +32,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when all dates are missing', () => {
       it('is equal to null', () => {
-        let data = {};
+        const data = {};
         expect(exerciseTimeline(data)).toContainEqual({
           date: null,
           entry: 'QT',
@@ -44,7 +44,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
   xdescribe('Scenario test entry', () => {
     xdescribe('when all three dates are available', () => {
       it('contains all dates', () => {
-        let data = {
+        const data = {
           scenarioTestDate: new Date('Sun Nov 11 2012 08:00:00 GMT+0000 (Greenwich Mean Time)'),
           scenarioTestStartTime: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
           scenarioTestEndTime: new Date('Sun Nov 11 2012 21:00:00 GMT+0000 (Greenwich Mean Time)'),
@@ -58,7 +58,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when one of the dates is missing', () => {
       it('contains available dates and null where data is missing', () => {
-        let data = {
+        const data = {
           scenarioTestDate: new Date('Sun Nov 11 2012 08:00:00 GMT+0000 (Greenwich Mean Time)'),
           scenarioTestStartTime: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
           scenarioTestEndTime: null,
@@ -72,7 +72,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when all dates are missing', () => {
       it('is equal to null', () => {
-        let data = {};
+        const data = {};
         expect(exerciseTimeline(data)).toContainEqual({
           date: null,
           entry: 'Scenario test',
@@ -84,7 +84,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
   xdescribe('Selection day entry', () => {
     xdescribe('when all dates are available', () => {
       it('contains all dates', () => {
-        let data = {
+        const data = {
           selectionDays: [{
             selectionDayStart: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
             selectionDayEnd: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
@@ -99,7 +99,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when one of the dates is not available', () => {
       it('contains null where date is missing', () => {
-        let data = {
+        const data = {
           selectionDays: [{
             selectionDayStart: new Date('Sun Nov 11 2012 09:05:00 GMT+0000 (Greenwich Mean Time)'),
           }],
@@ -113,7 +113,7 @@ xdescribe('@/helpers/Timeline/exerciseTimeline', () => {
 
     xdescribe('when all dates are not available', () => {
       it('is equal to null', () => {
-        let data = {};
+        const data = {};
         expect(exerciseTimeline(data)).toContainEqual({
           date: null,
           entry: 'Selection day',

@@ -14,9 +14,9 @@ const numberOfPages = 10;
 
 describe('components/Page/Pagination', () => {
     let wrapper;
-    let next = numberOfPages + 1;
-    let previous = 0;
-    let lowIndex = 1;
+    const next = numberOfPages + 1;
+    const previous = 0;
+    const lowIndex = 1;
 
     beforeEach(() => {
         wrapper = createTestSubject({ highIndex: numberOfPages, lowIndex: lowIndex });

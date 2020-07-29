@@ -103,7 +103,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     exerciseName() {
-      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
@@ -204,7 +204,7 @@ export default {
       ];
     },
     applicationStageNavigation(){
-      if(this.exercise.applicationRecords){
+      if (this.exercise.applicationRecords){
         const review = this.exercise.applicationRecords.review;
         const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
         const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
@@ -237,7 +237,7 @@ export default {
       }
     },
     applicationReportNavigation(){
-      if(this.exercise.applicationRecords){
+      if (this.exercise.applicationRecords){
         return [
           {
             title: 'Diversity',
@@ -258,6 +258,10 @@ export default {
           {
             title: 'Agency',
             name: 'exercise-show-report-agency',
+          },
+          {
+            title: 'Handover',
+            name: 'exercise-show-report-handover',
           },
         ];
       } else {
@@ -284,7 +288,7 @@ export default {
     const id = this.$route.params.id;    
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
-        if(data === null) {
+        if (data === null) {
           this.redirectToErrorPage();
         }
         else {

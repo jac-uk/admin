@@ -1680,10 +1680,10 @@ export default {
       return this.activeTab === 'panel';
     },
     isLegal() {
-      return this.exercise.typeOfExercise ==='legal' || this.exercise.typeOfExercise ==='leadership';
+      return this.exercise.typeOfExercise === 'legal' || this.exercise.typeOfExercise === 'leadership';
     },
     isNonLegal() {
-      return this.exercise.typeOfExercise ==='non-legal' || this.exercise.typeOfExercise ==='leadership-non-legal';
+      return this.exercise.typeOfExercise === 'non-legal' || this.exercise.typeOfExercise === 'leadership-non-legal';
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
@@ -1692,7 +1692,7 @@ export default {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
-      switch(this.application.equalityAndDiversitySurvey.ethnicGroup) {
+      switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
       case 'other-asian':
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupAsianDetails;
       case 'other-white':
@@ -1820,7 +1820,7 @@ export default {
             if (i < len) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i+1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i + 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1835,7 +1835,7 @@ export default {
             if (i > 0) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i-1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i - 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1858,13 +1858,13 @@ export default {
         },
       );
 
-      let fileName = this.generateFilename;
+      const fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
     },
     downloadAsDoc() {
-      let fileName = this.generateFilename;
-      let content = document.querySelector('#panel-pack-div').outerHTML;
+      const fileName = this.generateFilename;
+      const content = document.querySelector('#panel-pack-div').outerHTML;
       const converted = htmlDocx.asBlob(content);
       saveAs(converted, `${fileName}.docx`);
     },

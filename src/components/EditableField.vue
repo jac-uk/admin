@@ -117,7 +117,7 @@ export default {
       return this.type === 'date';
     },
     valueToDate() {
-      var newDate = this.isDate ? new Date(this.value) : null;
+      const newDate = this.isDate ? new Date(this.value) : null;
       return newDate;
     },
   },

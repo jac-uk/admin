@@ -68,6 +68,7 @@ import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Rep
 import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
 import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
+import ExerciseShowReportsHandover from '@/views/Exercises/Show/Reports/Handover';
 
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
@@ -478,6 +479,15 @@ const router = new Router({
                 title: 'Exercise Reports | Agency',
               },
             },
+            {
+              path: 'handover',
+              component: ExerciseShowReportsHandover,
+              name: 'exercise-show-report-handover',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Reports | Handover',
+              },
+            },
           ],
         },
       ],
@@ -724,7 +734,7 @@ const router = new Router({
       },
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters['auth/isSignedIn'];
-        if(isSignedIn) {
+        if (isSignedIn) {
           return next({ name: 'dashboard' });
         }
 

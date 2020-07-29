@@ -67,12 +67,12 @@ const createTestSubject = () => {
 xdescribe('@/views/Exercises/Show/Timeline', () => {
   xdescribe('template', () => {
     it('renders Timeline component', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
       expect(wrapper.find(Timeline).exists()).toBe(true);
     });
 
     it('renders the router-link', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
       expect(wrapper.find('RouterLink-stub').exists()).toBe(true);
     });
   });
@@ -80,7 +80,7 @@ xdescribe('@/views/Exercises/Show/Timeline', () => {
   xdescribe('computed properties', () => {
     xdescribe('exercise', () => {
       it('returns record object from state', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);
       });
     });

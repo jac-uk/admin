@@ -30,7 +30,7 @@ export default {
     
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
-        if(data === null) {
+        if (data === null) {
           this.redirectToErrorPage();
         }
         else {

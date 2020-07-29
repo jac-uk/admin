@@ -91,7 +91,7 @@ export default {
       return this.$store.state.stageReview.records;
     },
     totalApplicationRecords() {
-      if(this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
+      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
         return this.exercise.applicationRecords.review;
       } else {
         return 0;
@@ -109,7 +109,7 @@ export default {
         return this.applicationRecords ? this.selectedItems.length == this.applicationRecords.length : false;
       },
       set: function (value) {
-        var selectedItems = [];
+        const selectedItems = [];
         if (value) {
           this.applicationRecords.forEach((item) => {
             selectedItems.push(item.id);
@@ -122,8 +122,8 @@ export default {
       return Math.ceil(this.totalApplicationRecords / this.pageSize);
     },
     getPaginated() {
-      if(this.numberOfPages){
-        if(this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
+      if (this.numberOfPages){
+        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
 
         const sliceFrom = ((this.page - 1) * this.pageSize);
         const sliceTo = sliceFrom + this.pageSize; 
