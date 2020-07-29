@@ -112,7 +112,7 @@ export default {
       const hour = this.hour;
       const minute = this.minute;
 
-      if(hour === null || minute === null) {
+      if (hour === null || minute === null) {
         return null;
       }
 

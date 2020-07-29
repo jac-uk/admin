@@ -14,9 +14,9 @@ const numberOfPages = 10;
 
 describe('components/Page/Pagination', () => {
     let wrapper;
-    let next = numberOfPages + 1;
-    let previous = 0;
-    let lowIndex = 1;
+    const next = numberOfPages + 1;
+    const previous = 0;
+    const lowIndex = 1;
 
     beforeEach(() => {
         wrapper = createTestSubject({ highIndex: numberOfPages, lowIndex: lowIndex });
@@ -102,6 +102,19 @@ describe('components/Page/Pagination', () => {
 
         it('no other page active', () => {
             expect(wrapper.findAll('li.moj-pagination__item--active')).toHaveLength(1);
+        });
+    });
+
+    describe('single page', () => {
+        const lowIndexNew = 1;
+        const highIndexNew = 1;
+
+        beforeEach(() => {
+            wrapper = createTestSubject({ highIndex: highIndexNew, lowIndex: lowIndexNew });
+        }); 
+
+        it('does not render any elements', () => {
+            expect(wrapper.findAll('li')).toHaveLength(0);
         });
     });
 

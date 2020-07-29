@@ -65,13 +65,13 @@ const createTestSubject = () => {
 describe('@/views/Exercises/Show/Downloads', () => {
   describe('template', () => {
     it('renders the component', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
 
       expect(wrapper.exists()).toBe(true);
     });
 
     it('without downloads renders a message', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
 
       const message = wrapper.find('p');
       expect(message.exists()).toBeTrue();
@@ -93,14 +93,14 @@ describe('@/views/Exercises/Show/Downloads', () => {
 
       it('doesn\'t render message', () => {
         mockData.mockReturnValue(exercise);
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         const message = wrapper.find('p');
         expect(message.exists()).toBeFalse();
       });
 
       it('renders lists of uploaded files', () => {
         mockData.mockReturnValue(exercise);
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         const lists = wrapper.findAll('dt');
 
         expect(lists.length).toEqual(7);
@@ -108,7 +108,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
 
       it('renders message for each item with no downloads available', () => {
         mockData.mockReturnValue(exercise);
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > span');
         expect(lists.length).toEqual(7);
       });
@@ -125,7 +125,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
             ],
           },
         });
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > ul');
 
         expect(lists.length).toEqual(7);
@@ -138,7 +138,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
     describe('exercise', () => {
       it('returns record object from state', () => {
         mockData.mockReturnValue(mockExercise);
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(mockExercise);
       });
     });

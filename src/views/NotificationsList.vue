@@ -222,7 +222,7 @@ export default {
   computed: {
     tabs(){
       let queueTitle = 'Queue';
-      if(this.notificationsQueue.length){
+      if (this.notificationsQueue.length){
         queueTitle += ` (${this.notificationsQueue.length})`;
       }
       return [

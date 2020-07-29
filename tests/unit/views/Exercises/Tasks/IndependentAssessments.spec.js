@@ -8,7 +8,7 @@ const createTestSubject = () => {
 xdescribe('@/views/Exercises/Tasks/IndependentAssessments', () => {
   xdescribe('template', () => {
     it('renders the component', () => {
-      let wrapper = createTestSubject();
+      const wrapper = createTestSubject();
       expect(wrapper.find('table').exists()).toBe(true);
     });
   });

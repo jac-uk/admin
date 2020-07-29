@@ -17,7 +17,7 @@ xdescribe('@/helpers/Timeline/createTimeline', () => {
     });
 
     it('returns objects starting from the beginning of array', () => {
-      let expectedArray = [
+      const expectedArray = [
         { entry: 'Test1', date: 'SomeDate1' },
         { entry: 'Test2', date: 'SomeDate2' },
       ];

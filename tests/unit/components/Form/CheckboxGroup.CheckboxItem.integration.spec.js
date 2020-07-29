@@ -66,7 +66,7 @@ xdescribe('components/Form/CheckboxGroup and components/Form/CheckboxItem integr
 
         const lastEmittedInputValue = () => {
           const emitted = subject.emitted('input');
-          return emitted[emitted.length-1][0];
+          return emitted[emitted.length - 1][0];
         };
 
         optionOne.setChecked(true);

@@ -32,7 +32,7 @@ describe('components/TabsList', () => {
 
     describe('component instance', () => {
         let wrapper;
-        let mockTabs = [
+        const mockTabs = [
             {
                 title: 'Tab Ref',
                 ref: 'tabRef',

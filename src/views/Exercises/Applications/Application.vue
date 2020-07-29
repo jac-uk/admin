@@ -24,7 +24,7 @@
         </ul>
       </div>
 
-      <div id="download-as-pdf-div">
+      <div id="panel-pack-div">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
             <span class="govuk-caption-l">Application</span>
@@ -34,10 +34,17 @@
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
             <button
-              class="govuk-button govuk-button--secondary"
+              class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
               @click="downloadAsPdf"
             >
               Download As PDF
+            </button>
+            <button
+              id="docDownloadButton"
+              class="govuk-button govuk-button--secondary"
+              @click="downloadAsDoc"
+            >
+              Download As Doc
             </button>
 
             <span
@@ -110,6 +117,9 @@
             >
               <h2 class="govuk-heading-l">
                 Personal details
+                <span class="govuk-hint">
+                  Any changes made here will also update the candidate information.
+                </span>
               </h2>
 
               <dl class="govuk-summary-list">
@@ -118,11 +128,13 @@
                     Full Name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <RouterLink
-                      :to="{ name: 'candidates-view', params: { id: application.userId } }"
-                    >
-                      {{ application.personalDetails.fullName }}
-                    </RouterLink>
+                    <EditableField 
+                      :value="application.personalDetails.fullName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="fullName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -131,13 +143,12 @@
                     Email address
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <a
-                      :href="`mailto:${application.personalDetails.email}`"
-                      class="govuk-link govuk-link--no-visited-state"
-                      target="_blank"
-                    >
-                      {{ application.personalDetails.email }}
-                    </a>
+                    <EditableField 
+                      :value="application.personalDetails.email"
+                      field="email"
+                      type="email"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -146,7 +157,11 @@
                     Phone number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.personalDetails.phone }}
+                    <EditableField 
+                      :value="application.personalDetails.phone"
+                      field="phone"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -155,9 +170,12 @@
                     Date of birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <p v-if="application.personalDetails.dateOfBirth">
-                      {{ application.personalDetails.dateOfBirth | formatDate }}
-                    </p>
+                    <EditableField 
+                      :value="application.personalDetails.dateOfBirth"
+                      field="dateOfBirth"
+                      type="date"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -166,7 +184,11 @@
                     NI Number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.personalDetails.nationalInsuranceNumber | formatNIN }}
+                    <EditableField 
+                      :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
+                      field="nationalInsuranceNumber"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
@@ -784,69 +806,62 @@
                   </dd>
                 </div>
 
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false"
+                <div
+                  v-if="item.date"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
-                    Completed pupillage
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.completedPupillage[0] | toYesNo }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.completedPupillage && item.completedPupillage[0] === false && item.details"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Did not compelte pupillage notes
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>
-                        {{ item.details }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-if="item.type === 'barrister' && item.date && (!item.completedPupillage || item.completedPupillage[0] !== false)"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-if="item.type === 'barrister'"
+                    class="govuk-summary-list__key"
+                  >
                     Date completed pupillage
                   </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div 
-                  v-else-if="item.type !== 'barrister' && item.date"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-else
+                    class="govuk-summary-list__key"
+                  >
                     Date qualified
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <ul class="govuk-list">
-                      <li v-if="item.date">
-                        {{ item.date | formatDate }}
-                      </li>
+                      <li> {{ item.date | formatDate }}</li>
                     </ul>
                   </dd>
                 </div>
+
+                <template
+                  v-if="item.qualificationNotComplete && item.details"
+                >
+                  <div 
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Completed pupillage
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          No
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Did not complete pupillage notes
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>
+                          {{ item.details }}
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </template>
               </dl>
             </div>
 
@@ -1593,6 +1608,10 @@
           <div v-if="activeTab == 'issues'">
             No issues found
           </div>
+
+          <div v-if="activeTab == 'agency'">
+            <AgencyReport />
+          </div>
         </div>
       </div>
     </div>
@@ -1601,14 +1620,18 @@
 
 <script>
 import TabsList from '@/components/Page/TabsList';
+import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
 import jsPDF from 'jspdf';
+import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
+import { saveAs } from 'file-saver';
 
 export default {
   components: {
     TabsList,
+    AgencyReport,
     DownloadLink,
     EventRenderer,
     EditableField,
@@ -1627,6 +1650,10 @@ export default {
         {
           ref: 'issues',
           title: 'Issues',
+        },
+        {
+          ref: 'agency',
+          title: 'Agency report',
         },
       ],
       activeTab: 'full',
@@ -1655,16 +1682,19 @@ export default {
       return this.activeTab === 'panel';
     },
     isLegal() {
-      return this.exercise.typeOfExercise ==='legal' || this.exercise.typeOfExercise ==='leadership';
+      return this.exercise.typeOfExercise === 'legal' || this.exercise.typeOfExercise === 'leadership';
     },
     isNonLegal() {
-      return this.exercise.typeOfExercise ==='non-legal' || this.exercise.typeOfExercise ==='leadership-non-legal';
+      return this.exercise.typeOfExercise === 'non-legal' || this.exercise.typeOfExercise === 'leadership-non-legal';
     },
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
     },
+    generateFilename(){
+      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
+    },
     ethnicGroupDetails() {
-      switch(this.application.equalityAndDiversitySurvey.ethnicGroup) {
+      switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
       case 'other-asian':
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupAsianDetails;
       case 'other-white':
@@ -1792,7 +1822,7 @@ export default {
             if (i < len) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i+1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i + 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1807,7 +1837,7 @@ export default {
             if (i > 0) {
               this.$router.replace({ 
                 name: 'exercise-applications-application', 
-                params: { applicationId: this.applications[i-1].id, status: this.applications[i+1].status },
+                params: { applicationId: this.applications[i - 1].id, status: this.applications[i + 1].status },
               });
             }
             break;
@@ -1819,7 +1849,7 @@ export default {
       const pdf = new jsPDF();
 
       pdf.fromHTML(
-        document.querySelector('#download-as-pdf-div'),
+        document.querySelector('#panel-pack-div'),
         15,
         15,
         {
@@ -1830,12 +1860,15 @@ export default {
         },
       );
 
-      var fileName = 'judicial-appointments-application';
-      if (this.applicationReferenceNumber) {
-        fileName = this.applicationReferenceNumber;
-      }
+      let fileName = this.generateFilename;
 
       pdf.save(`${fileName}.pdf`);
+    },
+    downloadAsDoc() {
+      let fileName = this.generateFilename;
+      let content = document.querySelector('#panel-pack-div').outerHTML;
+      const converted = htmlDocx.asBlob(content);
+      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
@@ -1861,6 +1894,11 @@ export default {
     },
     changeAssesorDetails(objChanged) {
       this.$store.dispatch('application/update', { data: objChanged, id: this.applicationId });
+    },
+    changeUserDetails(objChanged) {
+      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
+      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
   },
 };

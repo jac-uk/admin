@@ -116,8 +116,8 @@ describe('components/RepeatableFields', () => {
       });
 
       describe('when value is an instance of an array', () => {
-        let array = [1, 2, 3];
-        let wrapper = createTestSubject({ value: array });
+        const array = [1, 2, 3];
+        const wrapper = createTestSubject({ value: array });
 
         it('renders number of components equal to the length of the array', () => {
           expect(wrapper.findAll(TextField)).toHaveLength(3);
@@ -133,7 +133,7 @@ describe('components/RepeatableFields', () => {
             component: SelectionExerciseOfficer }
           );
 
-          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          const buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(3);
         });
       });
@@ -146,7 +146,7 @@ describe('components/RepeatableFields', () => {
             }
           );
 
-          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          const buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(0);
         });
         it('doesn\'t render if allowEmpty=false', () => {
@@ -157,7 +157,7 @@ describe('components/RepeatableFields', () => {
             }
           );
 
-          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          const buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(0);
         });
 
@@ -169,7 +169,7 @@ describe('components/RepeatableFields', () => {
             }
           );
 
-          let buttons = wrapper.findAll({ ref: 'removeFieldButton' });
+          const buttons = wrapper.findAll({ ref: 'removeFieldButton' });
           expect(buttons).toHaveLength(1);
         });
       });
@@ -179,27 +179,27 @@ describe('components/RepeatableFields', () => {
   describe('computed properties', () => {
     describe('canAddRow', () => {
       describe('when max is not set', () => {
-        let wrapper = createTestSubject();
+        const wrapper = createTestSubject();
         expect(wrapper.vm.canAddRow).toBe(true);
       });
 
       describe("when max is set and it's greater than number of rows", () => {
         it('sets canAddRow value to true', () => {
-          let wrapper = createTestSubject({ max: 5, value: [1, 2, 3] });
+          const wrapper = createTestSubject({ max: 5, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(true);
         });
       });
 
       describe("when max is set and it's less than number of rows", () => {
         it('sets canAddRow value to false', () => {
-          let wrapper = createTestSubject({ max: 2, value: [1, 2, 3] });
+          const wrapper = createTestSubject({ max: 2, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(false);
         });
       });
 
       describe("when max is set and it's equal to number of rows", () => {
         it('sets canAddRow value to true', () => {
-          let wrapper = createTestSubject({ max: 3, value: [1, 2, 3] });
+          const wrapper = createTestSubject({ max: 3, value: [1, 2, 3] });
           expect(wrapper.vm.canAddRow).toBe(false);
         });
       });
@@ -209,8 +209,8 @@ describe('components/RepeatableFields', () => {
   describe('created hook', () => {
     describe('if value is an array', () => {
       it('updates the value of rows and does not call emit', ()=> {
-        let array = [1, 2, 3];
-        let wrapper = createTestSubject({ value: array });
+        const array = [1, 2, 3];
+        const wrapper = createTestSubject({ value: array });
         expect(wrapper.vm.rows).toBe(array);
         expect(wrapper.emitted().input).not.toBeTruthy();
       });
@@ -218,19 +218,19 @@ describe('components/RepeatableFields', () => {
 
     describe('if value is not an array', () => {
       it('emits the initial rows value', ()=> {
-        let wrapper = createTestSubject({ value: undefined });
+        const wrapper = createTestSubject({ value: undefined });
         expect(wrapper.emitted().input).toBeTruthy();
       });
     });
 
     describe('if rows array is empty', () => {
       it('without allowEmpty pushes an object to rows', ()=> {
-        let wrapper = createTestSubject({ value: undefined });
+        const wrapper = createTestSubject({ value: undefined });
         expect(wrapper.vm.rows).toContainEqual({});
       });
 
       it('with allowEmpty=true doesn\'t push to rows', ()=> {
-        let wrapper = createTestSubject({
+        const wrapper = createTestSubject({
           value: undefined,
           allowEmpty: true,
         });
@@ -238,7 +238,7 @@ describe('components/RepeatableFields', () => {
       });
 
       it('with allowEmpty=false pushes an object to rows', ()=> {
-        let wrapper = createTestSubject({
+        const wrapper = createTestSubject({
           value: undefined,
           allowEmpty: false,
         });
@@ -250,8 +250,8 @@ describe('components/RepeatableFields', () => {
   describe('methods', () => {
     describe('addRow', () => {
       it('increases numbers of rows and renders another instance of a component', () => {
-        let array = [1, 2, 3];
-        let wrapper = createTestSubject({ component: TextField, value: array });
+        const array = [1, 2, 3];
+        const wrapper = createTestSubject({ component: TextField, value: array });
         expect(wrapper.vm.rows.length).toBe(3);
 
         wrapper.vm.addRow();
@@ -261,8 +261,8 @@ describe('components/RepeatableFields', () => {
 
     describe('removeRow', () => {
       it('removes an item at the index', () => {
-        let array = [1, 2, 3, 4];
-        let wrapper = createTestSubject({ component: TextField, value: array });
+        const array = [1, 2, 3, 4];
+        const wrapper = createTestSubject({ component: TextField, value: array });
 
         wrapper.vm.removeRow(2);
         expect(wrapper.vm.rows[0]).toBe(1);

@@ -103,7 +103,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     exerciseName() {
-      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : this.exercise.name.substring(0,79)+'..';
+      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
@@ -124,56 +124,145 @@ export default {
     },
     mainNavigation() {
       return [
-        { title: 'Overview', name: 'exercise-show-overview' },
-        { title: 'Website listing', name: 'exercise-show-summary' },
-        { title: 'Vacancy information', name: 'exercise-show-vacancy' },
-        { title: 'Contacts', name: 'exercise-show-contacts' },
-        { title: 'Timeline', name: 'exercise-show-timeline' },
-        { title: 'Shortlisting', name: 'exercise-show-shortlisting' },
-        { title: 'Eligibility information', name: 'exercise-show-eligibility' },
-        { title: 'Working preferences', name: 'exercise-show-working-preferences' },
-        { title: 'Assessment options', name: 'exercise-show-assessment-options' },
-        { title: 'Exercise downloads', name: 'exercise-show-downloads' },
+        {
+          title: 'Overview',
+          name: 'exercise-show-overview',
+        },
+        {
+          title: 'Website listing',
+          name: 'exercise-show-summary',
+        },
+        {
+          title: 'Vacancy information',
+          name: 'exercise-show-vacancy',
+        },
+        {
+          title: 'Contacts',
+          name: 'exercise-show-contacts',
+        },
+        {
+          title: 'Timeline',
+          name: 'exercise-show-timeline',
+        },
+        {
+          title: 'Shortlisting',
+          name: 'exercise-show-shortlisting',
+        },
+        {
+          title: 'Eligibility information',
+          name: 'exercise-show-eligibility',
+        },
+        {
+          title: 'Working preferences',
+          name: 'exercise-show-working-preferences',
+        },
+        {
+          title: 'Assessment options',
+          name: 'exercise-show-assessment-options',
+        },
+        {
+          title: 'Exercise downloads',
+          name: 'exercise-show-downloads',
+        },
       ];
     },
     applicationStatusNavigation(){
       return [
-        { title: 'Draft', name: 'exercise-show-applications-in-status', params: { status: STATUS.DRAFT } },
-        { title: 'Applied', name: 'exercise-show-applications-in-status', params: { status: STATUS.APPLIED } },
-        { title: 'Withdrawn', name: 'exercise-show-applications-in-status', params: { status: STATUS.WITHDRAWN } },
+        {
+          title: 'Draft',
+          name: 'exercise-show-applications-in-status',
+          params: {
+            status: STATUS.DRAFT,
+          },
+        },
+        {
+          title: 'Applied',
+          name: 'exercise-show-applications-in-status',
+          params: {
+            status: STATUS.APPLIED,
+          },
+        },
+        {
+          title: 'Withdrawn',
+          name: 'exercise-show-applications-in-status',
+          params: {
+            status: STATUS.WITHDRAWN,
+          },
+        },
       ];
     },
     exerciseTasksNavigation(){
       return [
-        { title: 'Independent Assessments', name: 'exercise-tasks-independent-assessments' },
-        { title: 'Character Checks', name: 'exercise-tasks-character-checks' },
+        {
+          title: 'Independent Assessments',
+          name: 'exercise-tasks-independent-assessments',
+        },
+        {
+          title: 'Character Checks',
+          name: 'exercise-tasks-character-checks',
+        },
       ];
     },
     applicationStageNavigation(){
-      if(this.exercise.applicationRecords){
+      if (this.exercise.applicationRecords){
         const review = this.exercise.applicationRecords.review;
         const shortlisted = this.exercise.applicationRecords.shortlisted ? this.exercise.applicationRecords.shortlisted : 0;
         const selected = this.exercise.applicationRecords.selected ? this.exercise.applicationRecords.selected : 0;
         const recommended = this.exercise.applicationRecords.recommended ? this.exercise.applicationRecords.recommended : 0;
         const handover = this.exercise.applicationRecords.handover ? this.exercise.applicationRecords.handover : 0;
         return [
-          { title: `Review (${review})`, name: 'exercise-stages-review-list' },
-          { title: `Shortlisted (${shortlisted})`, name: 'exercise-stages-shortlist-list' },
-          { title: `Selected (${selected})`, name: 'exercise-stages-selected-list' },
-          { title: `Recommended (${recommended})`, name: 'exercise-stages-recommended-list' },
-          { title: `Handover (${handover})`, name: 'exercise-stages-handover-list' },
+          {
+            title: `Review (${review})`,
+            name: 'exercise-stages-review-list',
+          },
+          {
+            title: `Shortlisted (${shortlisted})`,
+            name: 'exercise-stages-shortlisted-list',
+          },
+          {
+            title: `Selected (${selected})`,
+            name: 'exercise-stages-selected-list',
+          },
+          {
+            title: `Recommended (${recommended})`,
+            name: 'exercise-stages-recommended-list',
+          },
+          {
+            title: `Handover (${handover})`,
+            name: 'exercise-stages-handover-list',
+          },
         ];
       } else {
         return [];
       }
     },
     applicationReportNavigation(){
-      if(this.exercise.applicationRecords){
+      if (this.exercise.applicationRecords){
         return [
-          { title: 'Diversity', name: 'exercise-show-report-diversity' },
-          { title: 'Character Issues', name: 'exercise-show-report-character-issues' },
-          { title: 'Eligibility Issues', name: 'exercise-show-report-eligibility-issues' },
-          { title: 'Reasonable Adjustments', name: 'exercise-show-report-reasonable-adjustments' },
+          {
+            title: 'Diversity',
+            name: 'exercise-show-report-diversity',
+          },
+          {
+            title: 'Character Issues',
+            name: 'exercise-show-report-character-issues',
+          },
+          {
+            title: 'Eligibility Issues',
+            name: 'exercise-show-report-eligibility-issues',
+          },
+          {
+            title: 'Reasonable Adjustments',
+            name: 'exercise-show-report-reasonable-adjustments',
+          },
+          {
+            title: 'Agency',
+            name: 'exercise-show-report-agency',
+          },
+          {
+            title: 'Handover',
+            name: 'exercise-show-report-handover',
+          },
         ];
       } else {
         return [];
@@ -199,7 +288,7 @@ export default {
     const id = this.$route.params.id;    
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
-        if(data === null) {
+        if (data === null) {
           this.redirectToErrorPage();
         }
         else {

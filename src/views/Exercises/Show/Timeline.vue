@@ -35,7 +35,7 @@ export default {
       return this.$store.getters['exerciseDocument/data']();
     },
     timeline() {
-      let timeline = exerciseTimeline(this.exercise);
+      const timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline);
     },
   },

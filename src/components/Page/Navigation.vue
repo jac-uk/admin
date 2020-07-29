@@ -53,13 +53,13 @@ export default {
   methods: {
     isActive(page){     
       // if an application    
-      if(page.params){ 
-        if(page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length-3]){ 
+      if (page.params){ 
+        if (page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length - 3]){ 
           // check if the status param matches route path 3rd from last item (draft/applied/withdrawn)
-          return page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length-3];
+          return page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length - 3];
         } else {
           // else check the last word in the route path matches the page title (to lowercase)
-          return this.$route.path.split('/')[this.$route.path.split('/').length-1] == page.title.toLowerCase();
+          return this.$route.path.split('/')[this.$route.path.split('/').length - 1] == page.title.toLowerCase();
         }
       } 
       // if the route is an edit, list or back page        

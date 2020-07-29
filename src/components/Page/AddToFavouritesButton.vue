@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     buttonText() {
-      if(this.inFavourites) {
+      if (this.inFavourites) {
         return 'Remove from favourites';
       }
       else {
