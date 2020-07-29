@@ -201,7 +201,12 @@ describe('components/Form/FileUpload', () => {
     const mockFile = {
       name: `mock file.${  mockFileExtension}`,
     };
+    const invalidMockFileExtension = 'png';
+    const invalidMockFile = {
+      name: `mock file.${  invalidMockFileExtension}`,
+    };
     const errorMessage = 'File upload failed, please try again';
+    const invalidExtensionErrorMessage = 'Invalid file type. Choose from: pdf,docx,doc,odf,pages';
 
     describe('replaceFile()', () => {
       it('sets `isReplacing` property', () => {
@@ -257,6 +262,78 @@ describe('components/Form/FileUpload', () => {
       });
     });
 
+    describe('validFileExtension()', () => {
+      it('accepts .docx files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.docx')).toBeTruthy();
+      });
+
+      it('accepts .pdf files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.pdf')).toBeTruthy();
+      });
+
+      it('accepts .odf files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.pdf')).toBeTruthy();
+      });
+
+      it('accepts .doc files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.doc')).toBeTruthy();
+      });
+
+      it('accepts .odf files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.odf')).toBeTruthy();
+      });
+
+      it('accepts .pages files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.pages')).toBeTruthy();
+      });
+
+      it('accepts layers.of.indirection.docx files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.layers.of.indirection.pdf')).toBeTruthy();
+      });
+      
+      it('rejects .png files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.png')).toBeFalsy();
+      });
+
+      it('rejects .invalid files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.invalid')).toBeFalsy();
+      });
+
+      it('rejects no extension files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name')).toBeFalsy();
+      });
+    });
+
     describe('resetFile()', () => {
       it('clears reference to file', () => {
         wrapper.vm.resetFile();
@@ -281,6 +358,14 @@ describe('components/Form/FileUpload', () => {
 
         const result = await wrapper.vm.upload(mockFile);
         expect(wrapper.vm.setError).toHaveBeenCalledWith(errorMessage);
+        expect(result).toBeFalsy();
+      });
+
+      it('sets error and returns false if called with invalid file extension', async () => {
+        expect.assertions(2);
+
+        const result = await wrapper.vm.upload(invalidMockFile);
+        expect(wrapper.vm.setError).toHaveBeenCalledWith(invalidExtensionErrorMessage);
         expect(result).toBeFalsy();
       });
 
