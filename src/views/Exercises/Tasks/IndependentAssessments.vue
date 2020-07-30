@@ -29,6 +29,18 @@
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
+      <div 
+        v-if="exercise.independentAssessmentsHardLimit"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Hard Limit
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.independentAssessmentsHardLimit | formatDate('long') }}
+        </dd>
+        <dd class="govuk-summary-list__actions" />
+      </div>
     </dl>
     <div v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName">
       <div
