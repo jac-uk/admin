@@ -1886,7 +1886,6 @@ export default {
       virtualDiv.innerHTML = htmlCollection.innerHTML;
       const printNoneEls = virtualDiv.querySelectorAll('.print-none');
       printNoneEls.forEach(e => e.remove());
-      console.log(virtualDiv.textContent === virtualDiv.innerText);
       const el = document.createElement('textarea');
       el.value = virtualDiv.textContent.split('  ').join('\n');
       document.body.appendChild(el);
