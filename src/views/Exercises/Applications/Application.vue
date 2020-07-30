@@ -76,7 +76,7 @@
               <h2 
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.createdAt | formatDate | showAlternative("Unknown")}}
+                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
               </h2>
             </div>
           </div>
