@@ -30,14 +30,14 @@
         <dd class="govuk-summary-list__actions" />
       </div>
       <div 
-        v-if="exercise.independentAssessmentsHardLimit"
+        v-if="exercise.independentAssessmentsHardLimitDate"
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
           Hard Limit
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsHardLimit | formatDate('long') }}
+          {{ exercise.independentAssessmentsHardLimitDate | formatDate('long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
