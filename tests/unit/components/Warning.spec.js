@@ -11,7 +11,7 @@ const createTestSubject = (propsData) => {
 
 describe('components/Warning', () => {
   let wrapper;
-  const testMessage = "This is a test message";
+  const testMessage = 'This is a test message';
 
   beforeEach(() => {
     wrapper = createTestSubject({ message: testMessage });
