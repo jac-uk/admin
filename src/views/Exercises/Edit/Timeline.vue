@@ -216,7 +216,7 @@
         />
         <DateInput
           id="independent-assessments-hard-limit"
-          v-model="exercise.independentAssessmentsHardLimit"
+          v-model="exercise.independentAssessmentsHardLimitDate"
           label="Independent Assessments hard limit"
           hint="An assessor cannot submit late after 23:59 on this date."
         />
@@ -366,7 +366,7 @@ export default {
       shortlistingOutcomeDate: null,
       contactIndependentAssessors: null,
       independentAssessmentsReturnDate: null,
-      independentAssessmentsHardLimit: null,
+      independentAssessmentsHardLimitDate: null,
       eligibilitySCCDate: null,
       selectionDays: null,
       characterChecksDate: null,
