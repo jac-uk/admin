@@ -3,6 +3,12 @@ import { APPLICATION_STATUS } from '@/helpers/constants';
 const formatDate = (value, type) => {
   if (value) {
     const objDate = new Date(Date.parse(value));
+
+    // If not a valid date
+    if (!(objDate instanceof Date)){
+      return null;
+    }
+
     switch (type) {
       case 'month':
         return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;

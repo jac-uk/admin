@@ -79,8 +79,10 @@
           <div class="govuk-grid-column-one-half">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
-              <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ new Date(application.createdAt) | formatDate('longdatetime') }}
+              <h2 
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
               </h2>
             </div>
           </div>
@@ -92,7 +94,7 @@
                 v-if="isApplied"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.appliedAt | formatDate('longdatetime') }}
+                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
               </h2>
               <h2
                 v-else

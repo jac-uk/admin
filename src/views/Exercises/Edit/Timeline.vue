@@ -211,7 +211,14 @@
           id="independent-assessments-return-date"
           v-model="exercise.independentAssessmentsReturnDate"
           label="Independent Assessments return date"
+          hint="An asessor can submit late after this date, up until the (optional) hard limit below."
           required
+        />
+        <DateInput
+          id="independent-assessments-hard-limit"
+          v-model="exercise.independentAssessmentsHardLimitDate"
+          label="Independent Assessments hard limit"
+          hint="An assessor cannot submit late after 23:59 on this date."
         />
 
         <h2 class="govuk-heading-l">
@@ -359,6 +366,7 @@ export default {
       shortlistingOutcomeDate: null,
       contactIndependentAssessors: null,
       independentAssessmentsReturnDate: null,
+      independentAssessmentsHardLimitDate: null,
       eligibilitySCCDate: null,
       selectionDays: null,
       characterChecksDate: null,
