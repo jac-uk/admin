@@ -281,7 +281,7 @@ describe('components/Form/FileUpload', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
 
-        expect(wrapper.vm.validFileExtension('original name.pdf')).toBeTruthy();
+        expect(wrapper.vm.validFileExtension('original name.odf')).toBeTruthy();
       });
 
       it('accepts .doc files', () => {
@@ -291,13 +291,6 @@ describe('components/Form/FileUpload', () => {
         expect(wrapper.vm.validFileExtension('original name.doc')).toBeTruthy();
       });
 
-      it('accepts .odf files', () => {
-        const setName = 'filename';
-        wrapper.setProps({ name: setName });
-
-        expect(wrapper.vm.validFileExtension('original name.odf')).toBeTruthy();
-      });
-
       it('accepts .pages files', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
@@ -305,14 +298,14 @@ describe('components/Form/FileUpload', () => {
         expect(wrapper.vm.validFileExtension('original name.pages')).toBeTruthy();
       });
 
-      it('accepts layers.of.indirection.docx files', () => {
+      it('accepts files with multiple extensions if last one is valid', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
 
         expect(wrapper.vm.validFileExtension('original name.layers.of.indirection.pdf')).toBeTruthy();
       });
       
-      it('rejects .png files', () => {
+      it('rejects file with unrecognised extension', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
 

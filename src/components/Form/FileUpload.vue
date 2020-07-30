@@ -131,11 +131,15 @@ export default {
     validFileExtension(originalName){
       const parts = originalName.split('.');
 
-      if (parts.length < 2 || !this.acceptableExtensions.includes(parts[parts.length - 1])){
+      if (parts.length < 2){
         return false;
       }
 
-      return true;
+      if (this.acceptableExtensions.includes(parts.pop())){
+        return true;
+      }
+
+      return false;
     },
     resetFile() {
       this.$refs.file = null;
@@ -146,7 +150,8 @@ export default {
       if (!file) {
         this.setError('File upload failed, please try again');
         return false;
-      } else if (!this.validFileExtension(file.name)) {
+      } 
+      if (!this.validFileExtension(file.name)) {
         this.setError(`Invalid file type. Choose from: ${this.acceptableExtensions}`);
         return false;
       }
