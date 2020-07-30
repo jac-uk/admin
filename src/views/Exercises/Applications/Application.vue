@@ -46,7 +46,13 @@
             >
               Download As Doc
             </button>
-
+            <button
+              id="clipboard-button"
+              class="govuk-button govuk-button--secondary" 
+              @click="copyToClipboard"
+            >
+              Copy to clipboard
+            </button>
             <span
               v-if="activeTab == 'full'"
               class=" govuk-!-margin-left-4"
@@ -96,17 +102,6 @@
               </h2>
             </div>
           </div>
-        </div>        
-        <div class="text-right">
-          <!-- <a> -->
-          <button
-            id="clipboard-button"
-            class="govuk-button govuk-button--secondary" 
-            @click="copyToClipboard"
-          >
-            Copy to clipboard
-          </button>
-          <!-- </a> -->
         </div>
 
         <TabsList
@@ -126,7 +121,7 @@
             >
               <h2 class="govuk-heading-l">
                 Personal details
-                <span class="govuk-hint">
+                <span class="govuk-hint print-none">
                   Any changes made here will also update the candidate information.
                 </span>
               </h2>
@@ -1873,10 +1868,27 @@ export default {
 
       pdf.save(`${fileName}.pdf`);
     },
+    removePrintNone(htmlCollection) {
+      const result = [];
+      if (!htmlCollection.classList.contains('print-none')) {
+        if (htmlCollection.children.length){
+          Array.from(htmlCollection.children).forEach(element => {
+            result.push(this.removePrintNone(element));
+          });
+        } 
+        result.push(htmlCollection.innerText);
+      }
+      return result;
+    },
     copyToClipboard() {
-      let content = document.querySelector('#panel-pack-div').innerText;
+      const htmlCollection = (document.querySelector('#panel-pack-div'));
+      const virtualDiv = document.createElement('div');
+      virtualDiv.innerHTML = htmlCollection.innerHTML;
+      const printNoneEls = virtualDiv.querySelectorAll('.print-none');
+      printNoneEls.forEach(e => e.remove());
+      console.log(virtualDiv.textContent === virtualDiv.innerText);
       const el = document.createElement('textarea');
-      el.value = content;
+      el.value = virtualDiv.textContent.split('  ').join('\n');
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
