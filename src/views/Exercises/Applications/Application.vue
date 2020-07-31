@@ -36,7 +36,7 @@
             <div class="moj-button-menu">
               <button
                 ref="dropDownRef"
-                class="govuk-button govuk-button govuk-button--secondary moj-button-menu__toggle-button"
+                class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
                 type="button"
                 aria-haspopup="true"
                 :aria-expanded="dropDownExpanded.toString()"
