@@ -206,7 +206,7 @@ describe('components/Form/FileUpload', () => {
       name: `mock file.${  invalidMockFileExtension}`,
     };
     const errorMessage = 'File upload failed, please try again';
-    const invalidExtensionErrorMessage = 'Invalid file type. Choose from: pdf,docx,doc,odf,pages';
+    const invalidExtensionErrorMessage = 'Invalid file type. Choose from: pdf,docx,doc,odt,txt,fodt';
 
     describe('replaceFile()', () => {
       it('sets `isReplacing` property', () => {
@@ -277,11 +277,11 @@ describe('components/Form/FileUpload', () => {
         expect(wrapper.vm.validFileExtension('original name.pdf')).toBeTruthy();
       });
 
-      it('accepts .odf files', () => {
+      it('accepts .odt files', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
 
-        expect(wrapper.vm.validFileExtension('original name.odf')).toBeTruthy();
+        expect(wrapper.vm.validFileExtension('original name.odt')).toBeTruthy();
       });
 
       it('accepts .doc files', () => {
@@ -291,11 +291,18 @@ describe('components/Form/FileUpload', () => {
         expect(wrapper.vm.validFileExtension('original name.doc')).toBeTruthy();
       });
 
-      it('accepts .pages files', () => {
+      it('accepts .fodt files', () => {
         const setName = 'filename';
         wrapper.setProps({ name: setName });
 
-        expect(wrapper.vm.validFileExtension('original name.pages')).toBeTruthy();
+        expect(wrapper.vm.validFileExtension('original name.fodt')).toBeTruthy();
+      });
+
+      it('accepts .txt files', () => {
+        const setName = 'filename';
+        wrapper.setProps({ name: setName });
+
+        expect(wrapper.vm.validFileExtension('original name.txt')).toBeTruthy();
       });
 
       it('accepts files with multiple extensions if last one is valid', () => {
