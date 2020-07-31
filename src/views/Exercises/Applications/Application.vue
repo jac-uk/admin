@@ -33,26 +33,37 @@
             </h1>
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
-            <button
-              class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
-              @click="downloadAsPdf"
-            >
-              Download As PDF
-            </button>
-            <button
-              id="docDownloadButton"
-              class="govuk-button govuk-button--secondary"
-              @click="downloadAsDoc"
-            >
-              Download As Doc
-            </button>
-            <button
-              id="clipboard-button"
-              class="govuk-button govuk-button--secondary" 
-              @click="copyToClipboard"
-            >
-              Copy to clipboard
-            </button>
+            <!--  -->
+            <div class="dropdown">
+              <button 
+                class="govuk-button govuk-button--secondary govuk-!-margin-right-4 drop-down-button"
+              >
+                Export ▼
+              </button>
+              <div class="dropdown-content">
+                <button
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsPdf"
+                >
+                  Download As PDF
+                </button>
+                <button
+                  id="docDownloadButton"
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsDoc"
+                >
+                  Download As Doc
+                </button>
+                <button
+                  id="clipboard-button"
+                  class="govuk-button govuk-button--secondary drop-down-button" 
+                  @click="copyToClipboard"
+                >
+                  Copy to clipboard
+                </button>
+              </div>
+            </div>
+            <!--  -->
             <span
               v-if="activeTab == 'full'"
               class=" govuk-!-margin-left-4"
@@ -80,7 +91,7 @@
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ new Date(application.createdAt) | formatDate('longdatetime') }}
+                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
               </h2>
             </div>
           </div>
@@ -92,7 +103,7 @@
                 v-if="isApplied"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.appliedAt | formatDate('longdatetime') }}
+                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
               </h2>
               <h2
                 v-else
@@ -1933,5 +1944,44 @@ export default {
       width: auto;
     }
   }
+
+.dropbtn {
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 50px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  display: block;
+}
+
+.dropdown-content a:hover {
+  filter: brightness(0.4);
+}
+
+.dropdown:hover .dropdown-content {
+  display: grid;
+}
+
+.dropdown:hover .dropbtn {
+  filter: brightness(0.4);
+}
+
+.drop-down-button{
+  margin-bottom: 1px;
+  min-width:150px;
+  max-width:150px;
+  width:150px;
+}
 
 </style>
