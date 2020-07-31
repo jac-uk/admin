@@ -34,7 +34,7 @@
       </span>
       <a 
         href="#"
-        class="govuk-link change-link"
+        class="govuk-link change-link print-none"
         @click.prevent="btnClickEdit()" 
       >
         {{ link }}
