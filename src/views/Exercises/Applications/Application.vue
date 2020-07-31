@@ -33,14 +33,21 @@
             </h1>
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
-            <!--  -->
-            <div class="dropdown">
-              <button 
-                class="govuk-button govuk-button--secondary govuk-!-margin-right-4 drop-down-button"
+            <div class="moj-button-menu">
+              <button
+                ref="dropDownRef"
+                class="govuk-button govuk-button govuk-button--secondary moj-button-menu__toggle-button"
+                type="button"
+                aria-haspopup="true"
+                :aria-expanded="dropDownExpanded.toString()"
+                @click="toggleExpand"
               >
-                Export ▼
+                Actions
               </button>
-              <div class="dropdown-content">
+              <div
+                class="moj-button-menu__wrapper moj-button-menu__wrapper--right"
+                role="menu"
+              >
                 <button
                   class="govuk-button govuk-button--secondary drop-down-button"
                   @click="downloadAsPdf"
@@ -56,7 +63,7 @@
                 </button>
                 <button
                   id="clipboard-button"
-                  class="govuk-button govuk-button--secondary drop-down-button" 
+                  class="govuk-button govuk-button--secondary drop-down-button"
                   @click="copyToClipboard"
                 >
                   Copy to clipboard
@@ -91,7 +98,7 @@
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
+                {{ new Date(application.createdAt) | formatDate('longdatetime') }}
               </h2>
             </div>
           </div>
@@ -103,7 +110,7 @@
                 v-if="isApplied"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
+                {{ application.appliedAt | formatDate('longdatetime') }}
               </h2>
               <h2
                 v-else
@@ -1672,6 +1679,7 @@ export default {
         },
       ],
       activeTab: 'full',
+      dropDownExpanded: false,
     };
   },
   computed: {
@@ -1860,6 +1868,9 @@ export default {
         }
       }
     },
+    toggleExpand(){
+      this.dropDownExpanded = !this.dropDownExpanded;
+    },
     downloadAsPdf() {
       const pdf = new jsPDF();
 
@@ -1944,38 +1955,6 @@ export default {
       width: auto;
     }
   }
-
-.dropbtn {
-  border: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  min-width: 50px;
-  z-index: 1;
-}
-
-.dropdown-content a {
-  display: block;
-}
-
-.dropdown-content a:hover {
-  filter: brightness(0.4);
-}
-
-.dropdown:hover .dropdown-content {
-  display: grid;
-}
-
-.dropdown:hover .dropbtn {
-  filter: brightness(0.4);
-}
 
 .drop-down-button{
   margin-bottom: 1px;
