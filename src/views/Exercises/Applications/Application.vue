@@ -1875,7 +1875,7 @@ export default {
       const pdf = new jsPDF();
 
       pdf.fromHTML(
-        document.querySelector('#panel-pack-div'),
+        this.returnPrintReadyPanelPack(),
         15,
         15,
         {
@@ -1890,14 +1890,18 @@ export default {
 
       pdf.save(`${fileName}.pdf`);
     },
-    copyToClipboard() {
+    returnPrintReadyPanelPack(){
       const htmlCollection = (document.querySelector('#panel-pack-div'));
       const virtualDiv = document.createElement('div');
       virtualDiv.innerHTML = htmlCollection.innerHTML;
       const printNoneEls = virtualDiv.querySelectorAll('.print-none');
       printNoneEls.forEach(e => e.remove());
+      return virtualDiv;
+    },
+    copyToClipboard() {
+      const panelPack = this.returnPrintReadyPanelPack();
       const el = document.createElement('textarea');
-      el.value = virtualDiv.textContent.split('  ').join('\n');
+      el.value = panelPack.textContent.split('  ').join('\n');
       document.body.appendChild(el);
       el.select();
       document.execCommand('copy');
@@ -1909,7 +1913,7 @@ export default {
     },
     downloadAsDoc() {
       const fileName = this.generateFilename;
-      const content = document.querySelector('#panel-pack-div').outerHTML;
+      const content = this.returnPrintReadyPanelPack().outerHTML;
       const converted = htmlDocx.asBlob(content);
       saveAs(converted, `${fileName}.docx`);
     },
