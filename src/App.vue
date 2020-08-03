@@ -1,23 +1,17 @@
 <template>
   <div class="page-container">
-    <header
-      class="govuk-width-container"
-    >
-      <div
-        class="header-background clearfix"
-      >
-        <div class="header-title govuk-!-margin-bottom-2">
+    <header class="govuk-width-container">
+      <div class="jac-header clearfix">
+        <div class="header-title">
           <a
             href="/"
             class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
           >
             Internal service name
           </a>
+
           <nav class="float-right">
-            <ul
-              id="navigation"
-              class="govuk-header__navigation user-menu"
-            >
+            <ul class="govuk-header__navigation user-menu">
               <li class="govuk-header__navigation-item">
                 <RouterLink
                   :to="{ name: 'notifications' }"
@@ -62,9 +56,8 @@
           </nav>
         </div>
       </div>
-      <div
-        class="govuk-phase-banner govuk-!-margin-bottom-4 print-none"
-      >
+
+      <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none">
         <p class="govuk-phase-banner__content">
           <strong class="govuk-tag govuk-phase-banner__content__tag">
             beta
@@ -130,6 +123,7 @@
 
 <script>
 import { auth } from '@/firebase';
+
 export default {
   name: 'App',
   computed: {
@@ -159,58 +153,50 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style type="text/css" rel="stylesheet/scss" lang="scss">
+$jac-link-colour: #753880;
 
-  .header {
-    background-color: #fafafa;
-    padding: 1.25em 0.625em 0 0.625em;
-  };
+.page-container {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 10vh;
+  background: #fff;
+}
 
-  .govuk-main-wrapper {
-    padding-top: 0 !important;
+.jac-header {
+  margin-top: 0 !important;
+  padding: 20px;
+
+  span {
+    color: $jac-link-colour !important;
+    font-weight: bold !important;
   }
 
-  .govuk-main-wrapper {
-    padding-top: 0px;
-  }
-
-  .govuk-grid-column-one-half {
-    width: 100%;
-    float: left;
-  }
-
-  .header-background {
-    background-color: #f7f7f7;
-    padding: 20px 20px 10px 20px;
-    margin-top: 0 !important;
-  }
-
-  .header-background h1 a,
-  .header-background .header-title a,
-  #navigation li a  {
-    color: #753880 !important;
+  h1 a,
+  .header-title a,
+  .govuk-header__navigation li a {
+    color: $jac-link-colour !important;
     text-decoration: none;
-  }
 
-  .header-background h1 a:hover,
-  .header-background .header-title a:hover,
-  #navigation li a:hover {
-    text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+    }
   }
+}
 
-  .header-background span {
-    color: #753880 !important;
-  }
+.govuk-main-wrapper {
+  padding-top: 0 !important;
+}
 
-  .govuk-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  };
+.govuk-grid-column-one-half {
+  width: 100%;
+  float: left;
+}
 
-  .page-container {
-    position: relative;
-    min-height: 100vh;
-  }
-  
+.govuk-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+};
+
 </style>
