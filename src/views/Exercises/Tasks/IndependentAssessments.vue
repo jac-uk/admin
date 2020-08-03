@@ -138,6 +138,12 @@
               </td>
               <td class="govuk-table__cell">
                 {{ assessment.status | lookup }}
+                <strong
+                  v-if="lateIASubmission(assessment)"
+                  class="govuk-tag govuk-tag--red"
+                >
+                  Late
+                </strong>
               </td>
               <td
                 class="govuk-table__cell govuk-!-padding-top-0"
@@ -159,7 +165,7 @@
                     class="moj-button-menu__wrapper"
                   >
                     <DownloadLink
-                      v-if="assessment.fileRef"
+                      v-if="assessment.fileRef && !unapprovedLateSubmission(assessment)"
                       class="moj-button-menu__item"
                       :file-name="assessment.fileRef"
                       :exercise-id="exercise.id"
@@ -168,6 +174,14 @@
                       title="Download assessment"
                       type="button"
                     />
+                    <ActionButton
+                      v-if="unapprovedLateSubmission(assessment)"
+                      class="moj-button-menu__item"
+                      type="primary"
+                      @click="approveLateSubmission(assessment)"
+                    >
+                      Approve late submission
+                    </ActionButton>
                   </div>
                   <div
                     v-else
@@ -250,7 +264,7 @@
 
 <script>
 import { functions } from '@/firebase';
-import { isDateInFuture } from '@/helpers/date';
+import { isDateInFuture, isDateGreaterThan } from '@/helpers/date';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
 import Banner from '@/components/Page/Banner';
@@ -364,6 +378,33 @@ export default {
     },
     async testRequest(assessmentId) {
       await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
+    },
+    lateIASubmission(assessment){
+      // Not submitted and late
+      if (assessment.status != 'completed' && !isDateInFuture(assessment.dueDate)){
+        return true;
+      }
+
+      // Has timestamp, submitted and submitted late 
+      if (assessment.submittedDate && assessment.status == 'completed' && isDateGreaterThan(assessment.submittedDate, assessment.dueDate)){
+        return true;
+      }
+      return false;
+    },
+    unapprovedLateSubmission(assessment){
+      if (!this.lateIASubmission(assessment)){
+        return false;
+      }
+
+      return assessment.approved == true ? false : true;
+    },
+    async approveLateSubmission(assessment){
+      if (!this.unapprovedLateSubmission(assessment)){
+        return false;
+      }
+      assessment.approved = true;
+
+      await this.$store.dispatch('assessment/save', assessment);
     },
   },
 };
