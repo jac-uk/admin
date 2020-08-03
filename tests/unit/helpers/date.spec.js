@@ -28,12 +28,12 @@ describe('@/helpers/date/isDateGreaterThan', () => {
   });
 
   it('returns false if one is not a date', () => {
-    expect(helpers.isDateGreaterThan("random", Date.now())).toBeFalsy();
-    expect(helpers.isDateGreaterThan(Date.now(), "random")).toBeFalsy();
+    expect(helpers.isDateGreaterThan('random', Date.now())).toBeFalsy();
+    expect(helpers.isDateGreaterThan(Date.now(), 'random')).toBeFalsy();
   });
 
   it('returns false if neither is a date', () => {
-    expect(helpers.isDateGreaterThan("random", "random")).toBeFalsy();
+    expect(helpers.isDateGreaterThan('random', 'random')).toBeFalsy();
   });
 });
 
