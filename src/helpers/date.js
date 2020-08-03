@@ -20,6 +20,10 @@ const isDateInFuture = (date) => {
   return date > today;
 };
 
+const isDateGreaterThan = (dateOne, dateTwo) => {
+  return dateOne > dateTwo;
+};
+
 const formatDate = (date, type) => {
   if (!(date instanceof Date)) {
     throw 'Supplied date must be a Date object';
@@ -67,6 +71,7 @@ const validateYear = (val) => {
 export {
   isDate,
   isDateInFuture,
+  isDateGreaterThan,
   formatDate,
   parseEstimatedDate,
   validateYear
