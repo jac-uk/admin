@@ -334,6 +334,37 @@ describe('components/Form/FileUpload', () => {
       });
     });
 
+    describe('validFileSize()', () => {
+      it('accepts sub-2MB files', () =>  {
+        const setName = 'filename';
+        const setSize = 900 * 1024; // 900 Kb
+        wrapper.setProps({ name: setName, size: setSize });
+
+        expect(wrapper.vm.validFileSize(setSize)).toBeTruthy();
+      });
+      it('accepts 2MB files', () =>  {
+        const setName = 'filename';
+        const setSize = 2 * 1024 * 1024; // 2MB
+        wrapper.setProps({ name: setName, size: setSize });
+
+        expect(wrapper.vm.validFileSize(setSize)).toBeTruthy();
+      });
+      it('does not accept touch over 2MB files', () =>  {
+        const setName = 'filename';
+        const setSize = (2 * 1024 * 1024) + 1; // 2MB + 1 bit
+        wrapper.setProps({ name: setName, size: setSize });
+
+        expect(wrapper.vm.validFileSize(setSize)).toBeFalsy();
+      });
+      it('does not accept very over 2MB files', () =>  {
+        const setName = 'filename';
+        const setSize = (20 * 1024 * 1024); // 20MB
+        wrapper.setProps({ name: setName, size: setSize });
+
+        expect(wrapper.vm.validFileSize(setSize)).toBeFalsy();
+      });
+    });
+
     describe('resetFile()', () => {
       it('clears reference to file', () => {
         wrapper.vm.resetFile();
