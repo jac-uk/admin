@@ -1425,7 +1425,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
@@ -1480,7 +1480,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
