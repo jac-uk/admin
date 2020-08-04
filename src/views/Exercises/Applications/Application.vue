@@ -1429,7 +1429,7 @@
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
-                  <dd class="govuk-summary-list__value">
+                  <dd class="govuk-summary-list__value print-none">
                     <EditableField 
                       :value="application.firstAssessorEmail"
                       field="firstAssessorEmail"
@@ -1484,7 +1484,7 @@
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
-                  <dd class="govuk-summary-list__value">
+                  <dd class="govuk-summary-list__value print-none">
                     <EditableField 
                       :value="application.secondAssessorEmail"
                       field="secondAssessorEmail"
