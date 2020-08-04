@@ -33,20 +33,44 @@
             </h1>
           </div>
           <div class="govuk-grid-column-one-half text-right print-none">
-            <button
-              class="govuk-button govuk-button--secondary govuk-!-margin-right-4"
-              @click="downloadAsPdf"
-            >
-              Download As PDF
-            </button>
-            <button
-              id="docDownloadButton"
-              class="govuk-button govuk-button--secondary"
-              @click="downloadAsDoc"
-            >
-              Download As Doc
-            </button>
-
+            <div class="moj-button-menu">
+              <button
+                ref="dropDownRef"
+                class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
+                type="button"
+                aria-haspopup="true"
+                :aria-expanded="dropDownExpanded.toString()"
+                @click="toggleExpand"
+              >
+                Actions
+              </button>
+              <div
+                class="moj-button-menu__wrapper moj-button-menu__wrapper--right"
+                role="menu"
+              >
+                <button
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsPdf"
+                >
+                  Download As PDF
+                </button>
+                <button
+                  id="docDownloadButton"
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsDoc"
+                >
+                  Download As Doc
+                </button>
+                <button
+                  id="clipboard-button"
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="copyToClipboard"
+                >
+                  Copy to clipboard
+                </button>
+              </div>
+            </div>
+            <!--  -->
             <span
               v-if="activeTab == 'full'"
               class=" govuk-!-margin-left-4"
@@ -73,10 +97,8 @@
           <div class="govuk-grid-column-one-half">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
-              <h2 
-                class="govuk-heading-m govuk-!-margin-bottom-0"
-              >
-                {{ application.createdAt | formatDate | showAlternative("Unknown")}}
+              <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
               </h2>
             </div>
           </div>
@@ -98,7 +120,7 @@
               </h2>
             </div>
           </div>
-        </div>        
+        </div>
 
         <TabsList
           class="print-none"
@@ -117,7 +139,7 @@
             >
               <h2 class="govuk-heading-l">
                 Personal details
-                <span class="govuk-hint">
+                <span class="govuk-hint print-none">
                   Any changes made here will also update the candidate information.
                 </span>
               </h2>
@@ -1403,7 +1425,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
@@ -1458,7 +1480,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
@@ -1657,6 +1679,7 @@ export default {
         },
       ],
       activeTab: 'full',
+      dropDownExpanded: false,
     };
   },
   computed: {
@@ -1845,11 +1868,14 @@ export default {
         }
       }
     },
+    toggleExpand(){
+      this.dropDownExpanded = !this.dropDownExpanded;
+    },
     downloadAsPdf() {
       const pdf = new jsPDF();
 
       pdf.fromHTML(
-        document.querySelector('#panel-pack-div'),
+        this.returnPrintReadyPanelPack(),
         15,
         15,
         {
@@ -1864,9 +1890,30 @@ export default {
 
       pdf.save(`${fileName}.pdf`);
     },
+    returnPrintReadyPanelPack(){
+      const htmlCollection = (document.querySelector('#panel-pack-div'));
+      const virtualDiv = document.createElement('div');
+      virtualDiv.innerHTML = htmlCollection.innerHTML;
+      const printNoneEls = virtualDiv.querySelectorAll('.print-none');
+      printNoneEls.forEach(e => e.remove());
+      return virtualDiv;
+    },
+    copyToClipboard() {
+      const panelPack = this.returnPrintReadyPanelPack();
+      const el = document.createElement('textarea');
+      el.value = panelPack.textContent.split('  ').join('\n');
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      document.querySelector('#clipboard-button').innerText = 'Copied';
+      setTimeout(() => {
+        document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
+      },3000);
+    },
     downloadAsDoc() {
       const fileName = this.generateFilename;
-      const content = document.querySelector('#panel-pack-div').outerHTML;
+      const content = this.returnPrintReadyPanelPack().outerHTML;
       const converted = htmlDocx.asBlob(content);
       saveAs(converted, `${fileName}.docx`);
     },
@@ -1912,4 +1959,12 @@ export default {
       width: auto;
     }
   }
+
+.drop-down-button{
+  margin-bottom: 1px;
+  min-width:150px;
+  max-width:150px;
+  width:150px;
+}
+
 </style>
