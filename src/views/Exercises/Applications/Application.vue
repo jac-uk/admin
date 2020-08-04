@@ -1425,11 +1425,11 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
-                  <dd class="govuk-summary-list__value print-none">
+                  <dd class="govuk-summary-list__value">
                     <EditableField 
                       :value="application.firstAssessorEmail"
                       field="firstAssessorEmail"
@@ -1480,11 +1480,11 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Email
                   </dt>
-                  <dd class="govuk-summary-list__value print-none">
+                  <dd class="govuk-summary-list__value">
                     <EditableField 
                       :value="application.secondAssessorEmail"
                       field="secondAssessorEmail"
