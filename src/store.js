@@ -11,6 +11,7 @@ import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
 import applications from '@/store/applications';
 import application from '@/store/application';
+import assessment from '@/store/assessment';
 import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
 import stageReview from '@/store/stage/review';
@@ -33,6 +34,7 @@ const store = new Vuex.Store({
     exerciseDocument,
     applications,
     application,
+    assessment,
     assessments,
     notifications,
     stageReview,

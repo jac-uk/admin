@@ -18,6 +18,25 @@ describe('@/helpers/date/formatDate', () => {
   });
 });
 
+describe('@/helpers/date/isDateGreaterThan', () => {
+  it('returns true if dateOne is greater than dateTwo', () => {
+    expect(helpers.isDateGreaterThan(Date.now(), new Date('Sun Nov 11 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'))).toBeTruthy();
+  });
+
+  it('returns false if dateTwo is greater than dateOne', () => {
+    expect(helpers.isDateGreaterThan(new Date('Sun Nov 11 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'), Date.now())).toBeFalsy();
+  });
+
+  it('returns false if one is not a date', () => {
+    expect(helpers.isDateGreaterThan('random', Date.now())).toBeFalsy();
+    expect(helpers.isDateGreaterThan(Date.now(), 'random')).toBeFalsy();
+  });
+
+  it('returns false if neither is a date', () => {
+    expect(helpers.isDateGreaterThan('random', 'random')).toBeFalsy();
+  });
+});
+
 describe('@/helpers/date/isDate', () => {
   it('returns true if the value passed is an instance of a date', () => {
     expect(helpers.isDate(new Date('Sun Nov 11 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'))).toBe(true);
