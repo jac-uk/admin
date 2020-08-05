@@ -3,6 +3,29 @@
     <h1 class="govuk-heading-l">
       Independent Assessments
     </h1>
+    <div 
+      v-if="hasInitialisedAssessments"
+      class="govuk-grid-row"
+    >
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-9">
+          <span class="govuk-caption-m">
+            Sent
+          </span>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+            {{ assessmentsSent }}
+          </h2>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-9">
+          <span class="govuk-caption-m">Completed</span>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+            {{ assessmentsCompleted }}
+          </h2>
+        </div>
+      </div>
+    </div>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -300,6 +323,20 @@ export default {
     },
     assessments() {
       return this.$store.state.assessments.records;
+    },
+    assessmentsSent() {
+      if (this.exercise.assessments && this.exercise.assessments.sent){
+        return this.exercise.assessments.sent;
+      } 
+
+      return 0;
+    },
+    assessmentsCompleted() {
+      if (this.exercise.assessments && this.exercise.assessments.completed){
+        return this.exercise.assessments.completed;
+      } 
+
+      return 0;
     },
     status() {
       return this.$route.params.status;
