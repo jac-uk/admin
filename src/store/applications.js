@@ -26,6 +26,9 @@ export default {
     records: [],
   },
   getters: {
+    getById: (state) => (applicationId) => {
+      return getById(state.records, applicationId);
+    },
     reasonableAdjustments(state) {
       return reasonableAdjustmentsReport(state.records);
     },
@@ -33,6 +36,10 @@ export default {
       return agencyReport(state.records);
     },
   },
+};
+
+const getById = (applications, applicationId) => {
+  return applications.find(application => application.id === applicationId);
 };
 
 const reasonableAdjustmentsReport = (applications) => {
