@@ -9,6 +9,7 @@ localVue.filter('lookup', jest.fn());
 localVue.filter('toYesNo', jest.fn());
 localVue.filter('formatNIN', jest.fn());
 localVue.filter('formatDate', jest.fn());
+localVue.filter('showAlternative', jest.fn());
 
 const mockExercise = {
   exerciseRef: 'mock exercise',

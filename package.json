@@ -25,7 +25,6 @@
     "@sentry/integrations": "^5.20.1",
     "canvas": "^2.6.1",
     "core-js": "^2.6.11",
-    "downloadjs": "^1.4.7",
     "file-saver": "^2.0.2",
     "firebaseui": "^4.6.1",
     "govuk-frontend": "^3.8.0",

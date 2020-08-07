@@ -22,6 +22,13 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
+                @click="exportData(activeTab)"
+              >
+                Export stage data
+              </button>
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
                 @click="exportData()"
               >
                 Export all data
@@ -394,23 +401,17 @@
             </tr>
           </tbody>
         </table>
-        <button
-          class="govuk-button govuk-button--secondary"
-          data-module="govuk-button"
-          @click="exportData(activeTab)"
-        >
-          Export data
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TabsList from '@/components/Page/TabsList';
-import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import { downloadXLSX } from '@/helpers/export';
+import TabsList from '@/components/Page/TabsList';
+import Stat from '@/components/Report/Stat';
 
 export default {
   components: {
@@ -526,12 +527,14 @@ export default {
       return encodeURI(csvContent);
     },
     exportData(stage) {
+      let title = `${this.exercise.referenceNumber} Diversity Report`;
+      if (stage) {
+        title = `${title} - ${stage}`;
+      }
+
       const data = this.gatherReportData(stage);
-      const csvData = this.buildCsvFromDataTable(data);
-      const link = document.createElement('a');
-      link.setAttribute('href', csvData);
-      link.setAttribute('download', `${this.exercise.referenceNumber}.diversity.csv`);
-      link.click();
+
+      downloadXLSX(data, title, `${title}.xlsx`);
     },
   },
 };
