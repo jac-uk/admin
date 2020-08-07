@@ -148,10 +148,17 @@ export default {
       ];
     },
     exportData() {
-      const title = `${this.exercise.referenceNumber} Reasonable Adjustments Report`;
-      const report = this.gatherReportData();
+      const title = 'Reasonable Adjustments Report';
+      const data = this.gatherReportData();
 
-      downloadXLSX(report, title, `${title}.xlsx`);
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };

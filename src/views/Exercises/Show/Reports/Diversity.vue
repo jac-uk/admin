@@ -508,33 +508,22 @@ export default {
       });
       return data;
     },
-    buildCsvFromDataTable(data) {
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      for (let row = 0, totalRows = data.length; row < totalRows; ++row) {
-        for (let column = 0, totalColumns = data[row].length; column < totalColumns; ++column) {
-          if (row === 0 || column === 0) {  // first row and first column are strings
-            csvContent += `"${data[row][column]}"`;
-          } else {
-            csvContent += `${data[row][column]}`;
-          }
-          if (column < totalColumns - 1) {
-            csvContent += ';';
-          }
-        }
-        csvContent += '\n';
-      }
-      csvContent = csvContent.replace(/(^\[)|(\]$)/gm, '');
-      return encodeURI(csvContent);
-    },
     exportData(stage) {
-      let title = `${this.exercise.referenceNumber} Diversity Report`;
+      let title = 'Diversity Report';
       if (stage) {
         title = `${title} - ${stage}`;
       }
 
       const data = this.gatherReportData(stage);
 
-      downloadXLSX(data, title, `${title}.xlsx`);
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };

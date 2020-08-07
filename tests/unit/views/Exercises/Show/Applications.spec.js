@@ -350,11 +350,17 @@ describe('@/views/Exercises/Show/Applications', () => {
 
       it('calls downloadXLSX', () => {
         const mockReport = 'mock report';
-        const mockTitle = `${mockExercise.referenceNumber} Contacts`;
+        const mockTitle = 'Contacts';
 
         wrapper.vm.gatherContacts = jest.fn().mockReturnValue(mockReport);
+
         wrapper.vm.exportContacts();
-        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, mockTitle, `${mockTitle}.xlsx`);
+
+        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, {
+          title: `${mockExercise.referenceNumber} ${mockTitle}`,
+          sheetName: mockTitle,
+          fileName: `${mockExercise.referenceNumber} - ${mockTitle}.xlsx`,
+        });
       });
     });
   });
