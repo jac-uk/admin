@@ -215,10 +215,17 @@ export default {
       ];
     },
     exportContacts() {
-      const title = `${this.exercise.referenceNumber} Contacts`;
-      const contacts = this.gatherContacts();
+      const title = 'Contacts';
+      const data = this.gatherContacts();
 
-      downloadXLSX(contacts, title, `${title}.xlsx`);
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };

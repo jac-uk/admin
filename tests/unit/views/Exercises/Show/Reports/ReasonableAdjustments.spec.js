@@ -136,11 +136,17 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
 
       it('calls downloadXLSX', () => {
         const mockReport = 'mock report';
-        const mockTitle = `${mockExercise.referenceNumber} Reasonable Adjustments Report`;
+        const mockTitle = 'Reasonable Adjustments Report';
 
         wrapper.vm.gatherReportData = jest.fn().mockReturnValue(mockReport);
+
         wrapper.vm.exportData();
-        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, mockTitle, `${mockTitle}.xlsx`);
+
+        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, {
+          title: `${mockExercise.referenceNumber} ${mockTitle}`,
+          sheetName: mockTitle,
+          fileName: `${mockExercise.referenceNumber} - ${mockTitle}.xlsx`,
+        });
       });
     });
   });
