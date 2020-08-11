@@ -1,9 +1,34 @@
 <template>
   <div>
-    <table class="govuk-table">
-      <caption class="govuk-table__caption">
-        Applications - {{ status | lookup }}
-      </caption>
+    <div class="moj-page-header-actions">
+      <div class="moj-page-header-actions__title">
+        <h2 class="govuk-heading-l">
+          Applications - {{ status | lookup }}
+        </h2>
+      </div>
+
+      <div
+        v-if="status === 'applied'"
+        class="moj-page-header-actions__actions float-right"
+      >
+        <div class="moj-button-menu">
+          <div class="moj-button-menu__wrapper">
+            <button
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="exportContacts()"
+            >
+              Export contacts
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table
+      v-if="applications.length"
+      class="govuk-table"
+    >
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th
@@ -18,24 +43,12 @@
           >
             Name
           </th>
-          <!--<th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          >
-            Email
-          </th> -->
           <th
             scope="col"
             class="govuk-table__header app-custom-class"
           >
             Status
           </th>
-          <!-- <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          >
-            Notes
-          </th> -->
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -64,30 +77,25 @@
               </RouterLink>
             </span>
           </td>
-          <!--<td class="govuk-table__cell">
-            {{ application.email }}
-          </td> -->
           <td class="govuk-table__cell">
             {{ application.status }}
           </td>
-          <!-- <td class="govuk-table__cell">
-            {{ application.notes }}
-          </td> -->
         </tr>
       </tbody>
     </table>
 
-    <button
-      class="govuk-button"
-      @click="downloadContacts"
+    <p
+      v-else
+      class="govuk-body"
     >
-      Download Contacts CSV
-    </button>
+      No applications found.
+    </p>
   </div>
 </template>
 
 <script>
 import * as filters from '@/filters';
+import { downloadXLSX } from '@/helpers/export';
 
 export default {
   computed: {
@@ -124,13 +132,13 @@ export default {
         } else if (role === 'other-salaried-judicial-office-holder') {
           roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
         } else if (role === 'other-current-legal-role') {
-          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
+          roles.push(`Other: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
         } else {
-          roles.push(role);
+          roles.push(filters.lookup(role));
         }
       });
 
-      return `"${ roles.join('\n')}"`;
+      return roles.join('\n');
     },
     flattenProfessionalBackground(equalityAndDiversitySurvey) {
       if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.professionalBackground)) {
@@ -139,12 +147,12 @@ export default {
       const roles = [];
       equalityAndDiversitySurvey.professionalBackground.forEach((role) => {
         if (role === 'other-professional-background') {
-          roles.push(`other: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
+          roles.push(`Other: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
         } else {
-          roles.push(role);
+          roles.push(filters.lookup(role));
         }
       });
-      return `"${ roles.join('\n')}"`;
+      return roles.join('\n');
     },
     attendedUKStateSchool(equalityAndDiversitySurvey) {
       if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.stateOrFeeSchool)) {
@@ -153,58 +161,77 @@ export default {
       return filters.toYesNo(['uk-state-selective', 'uk-state-non-selective'].indexOf(equalityAndDiversitySurvey.stateOrFeeSchool) >= 0);
     },
     gatherContacts() {
+      const headers = [
+        'Reference number',
+        'Status',
+        'Name',
+        'Email',
+        'Phone number',
+        'Date of Birth',
+        'National Insurance Number',
+        'Gender',
+        'Disability',
+        'Ethnic Group',
+        'Current Legal Role',
+        'Professional Background',
+        'Attended UK State School',
+        'First Generation Student',
+        'First Assessor Name',
+        'First Assessor Email',
+        'First Assessor Phone',
+        'Second Assessor Name',
+        'Second Assessor Email',
+        'Second Assessor Phone',
+      ];
+
       const contacts = this.applications.map((application) => {
-        return {
-          Ref: application.referenceNumber,
-          Status: filters.lookup(application.status),
-          Name: application.personalDetails ? application.personalDetails.fullName : '',
-          Email: application.personalDetails ? application.personalDetails.email : '',
-          Phone: application.personalDetails ? application.personalDetails.phone : '',
-          DateOfBirth: application.personalDetails ? filters.formatDate(application.personalDetails.dateOfBirth) : '',
-          NationalInsuranceNumber: application.personalDetails ? application.personalDetails.nationalInsuranceNumber : '',
-          Gender: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.gender) : '',
-          Disability: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)) : '',
-          EthnicGroup: application.equalityAndDiversitySurvey ? filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup) : '',
-          CurrentLegalRole: application.equalityAndDiversitySurvey ? this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey) : '',
-          ProfessionalBackground: application.equalityAndDiversitySurvey ? this.flattenProfessionalBackground(application.equalityAndDiversitySurvey) : '',
-          AttendedUKStateSchool: application.equalityAndDiversitySurvey ? this.attendedUKStateSchool(application.equalityAndDiversitySurvey) : '',
-          FirstGenerationStudent: application.equalityAndDiversitySurvey ? filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)) : '',
-          FirstAssessorName: application.firstAssessorFullName,
-          FirstAssessorEmail: application.firstAssessorEmail,
-          FirstAssessorPhone: application.firstAssessorPhone,
-          SecondAssessorName: application.secondAssessorFullName,
-          SecondAssessorEmail: application.secondAssessorEmail,
-          SecondAssessorPhone: application.secondAssessorPhone,
-        };
+        return [
+          application.referenceNumber,
+          filters.lookup(application.status),
+          application.personalDetails.fullName,
+          application.personalDetails.email,
+          application.personalDetails.phone,
+          filters.formatDate(application.personalDetails.dateOfBirth),
+          filters.formatNIN(application.personalDetails.nationalInsuranceNumber),
+          filters.lookup(application.equalityAndDiversitySurvey.gender),
+          filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)),
+          filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup),
+          this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey),
+          this.flattenProfessionalBackground(application.equalityAndDiversitySurvey),
+          filters.toYesNo(this.attendedUKStateSchool(application.equalityAndDiversitySurvey)),
+          filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)),
+          application.firstAssessorFullName,
+          application.firstAssessorEmail,
+          application.firstAssessorPhone,
+          application.secondAssessorFullName,
+          application.secondAssessorEmail,
+          application.secondAssessorPhone,
+        ];
       });
 
-      return contacts;
+      return [
+        headers,
+        ...contacts,
+      ];
     },
-    buildCsv(contacts) {
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += [
-        Object.keys(contacts[0]).join(';'),
-        ...contacts.map(item => Object.values(item).join(';')),
-      ]
-        .join('\n')
-        .replace(/(^\[)|(\]$)/gm, '');
+    exportContacts() {
+      const title = 'Contacts';
+      const data = this.gatherContacts();
 
-      return encodeURI(csvContent);
-    },
-    downloadContacts() {
-      const contacts = this.gatherContacts();
-
-      const link = document.createElement('a');
-
-      link.setAttribute('href', this.buildCsv(contacts));
-      link.setAttribute('download', `${this.exercise.referenceNumber}.contacts.csv`);
-      link.click();
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
   .govuk-summary-list__value,
   .govuk-summary-list__value:last-child,
   .govuk-summary-list__key {

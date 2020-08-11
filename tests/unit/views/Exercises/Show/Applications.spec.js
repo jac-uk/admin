@@ -1,5 +1,6 @@
 import Applications from '@/views/Exercises/Show/Applications';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { downloadXLSX } from '@/helpers/export';
 import Vuex from 'vuex';
 
 const localVue = createLocalVue();
@@ -8,8 +9,14 @@ localVue.use(Vuex);
 localVue.filter('lookup', jest.fn());
 localVue.filter('showAlternative', jest.fn());
 
+jest.mock('@/helpers/export', () => {
+  return {
+    downloadXLSX: jest.fn(),
+  };
+});
+
 const mockExercise = {
-  exerciseRef: 'mock exercise',
+  referenceNumber: 'mock exercise',
   immediateStart: '56',
   applicationOpenDate: 'TestOpen',
   applicationCloseDate: 'TestClose',
@@ -57,20 +64,6 @@ const mockApplications = [
     ...mockApplication,
   },
 ];
-
-const mockContacts  = [{
-  Ref: 'mock ref 1',
-  Status: 'mock status 1',
-  Name: 'mock name 1',
-  Email: 'mock@email.one',
-  Phone: '0987654321',
-  FirstAssessorName: 'mock assessor 1 name',
-  FirstAssessorEmail: 'mock assessor 1 email',
-  FirstAssessorPhone: 'mock assessor 1 phone',
-  SecondAssessorName: 'mock assessor 2 name',
-  SecondAssessorEmail: 'mock@email.two',
-  SecondAssessorPhone: '0123456789',
-}];
 
 const store = new Vuex.Store({
   modules: {
@@ -167,9 +160,7 @@ describe('@/views/Exercises/Show/Applications', () => {
         const flattened = wrapper.vm.flattenCurrentLegalRole(mockApplication.equalityAndDiversitySurvey);
 
         expect(flattened).toBeString();
-        expect(flattened).toStartWith('"');
-        expect(flattened).toEndWith('"');
-        expect(flattened).toEqual(expect.stringContaining('barrister'));
+        expect(flattened).toEqual(expect.stringContaining('Barrister'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails));
       });
 
@@ -180,7 +171,8 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherCurrentLegalRoleDetails: 'mock role details',
         });
-        expect(flattened).toBe('"barrister"');
+        expect(flattened).toBe('Barrister');
+
         flattened = wrapper.vm.flattenCurrentLegalRole({
           currentLegalRole: [
             'barrister',
@@ -188,7 +180,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherCurrentLegalRoleDetails: 'mock role details',
         });
-        expect(flattened).toEqual(expect.stringContaining('barrister'));
+        expect(flattened).toEqual(expect.stringContaining('Barrister'));
         expect(flattened).toEqual(expect.stringContaining('mock role details'));
       });
 
@@ -212,9 +204,7 @@ describe('@/views/Exercises/Show/Applications', () => {
       it('returns a flattened string if argument contains a valid professionalBackground', () => {
         const flattened = wrapper.vm.flattenProfessionalBackground(mockApplication.equalityAndDiversitySurvey);
         expect(flattened).toBeString();
-        expect(flattened).toStartWith('"');
-        expect(flattened).toEndWith('"');
-        expect(flattened).toEqual(expect.stringContaining('solicitor'));
+        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
         expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails));
       });
 
@@ -225,7 +215,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherProfessionalBackgroundDetails: 'mock background details',
         });
-        expect(flattened).toBe('"solicitor"');
+        expect(flattened).toBe('Solicitor');
         flattened = wrapper.vm.flattenProfessionalBackground({
           professionalBackground: [
             'solicitor',
@@ -233,7 +223,7 @@ describe('@/views/Exercises/Show/Applications', () => {
           ],
           otherProfessionalBackgroundDetails: 'mock background details',
         });
-        expect(flattened).toEqual(expect.stringContaining('solicitor'));
+        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
         expect(flattened).toEqual(expect.stringContaining('mock background details'));
       });
 
@@ -309,82 +299,68 @@ describe('@/views/Exercises/Show/Applications', () => {
         });
       });
 
-      it('returns an array with one row per application', () => {
+      it('returns an array with header row and one row per application', () => {
         const contacts = wrapper.vm.gatherContacts();
 
-        expect(contacts).toBeArrayOfSize(mockApplications.length);
+        expect(contacts).toBeArrayOfSize(mockApplications.length + 1);
       });
 
-      it('returns array rows containing objects with selected fields', () => {
+      it('returns an array starting with header row', () => {
         const contacts = wrapper.vm.gatherContacts();
 
-        const keys = [
-          'Ref',
+        const headers = [
+          'Reference number',
           'Status',
           'Name',
           'Email',
-          'Phone',
-          'DateOfBirth',
-          'NationalInsuranceNumber',
+          'Phone number',
+          'Date of Birth',
+          'National Insurance Number',
           'Gender',
           'Disability',
-          'EthnicGroup',
-          'CurrentLegalRole',
-          'ProfessionalBackground',
-          'AttendedUKStateSchool',
-          'FirstGenerationStudent',
-          'FirstAssessorName',
-          'FirstAssessorEmail',
-          'FirstAssessorPhone',
-          'SecondAssessorName',
-          'SecondAssessorEmail',
-          'SecondAssessorPhone',
+          'Ethnic Group',
+          'Current Legal Role',
+          'Professional Background',
+          'Attended UK State School',
+          'First Generation Student',
+          'First Assessor Name',
+          'First Assessor Email',
+          'First Assessor Phone',
+          'Second Assessor Name',
+          'Second Assessor Email',
+          'Second Assessor Phone',
         ];
 
-        expect(contacts[0]).toBeObject();
-        expect(Object.keys(contacts[0])).toEqual(keys);
-      });
-
-    });
-
-    describe('buildCsv', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.buildCsv).toBe('function');
-      });
-
-      it('returns a string with CSV header', () => {
-        const csv = wrapper.vm.buildCsv(mockContacts);
-
-        expect(csv).toBeString();
-        expect(csv).toStartWith('data:text/csv;charset=utf-8,');
-      });
-
-      it('returns a string containing header row with expected keys', () => {
-        const csv = wrapper.vm.buildCsv(mockContacts);
-
-        expect(csv).toEqual(expect.stringContaining(Object.keys(mockContacts).join(',')));
-      });
-
-      it('returns a string containing row width data', () => {
-        const csv = wrapper.vm.buildCsv(mockContacts);
-
-        const encodedData = encodeURI(Object.values(mockContacts[0]).join(';'));
-
-        expect(csv).toEqual(expect.stringContaining(encodedData));
+        expect(contacts[0]).toBeArray();
+        expect(contacts[0]).toEqual(headers);
       });
     });
 
-    describe('downloadContacts()', () => {
-      jest.spyOn(document, 'createElement');
+    describe('exportContacts()', () => {
 
       it('is a function', () => {
-        expect(typeof wrapper.vm.downloadContacts).toBe('function');
+        expect(typeof wrapper.vm.exportContacts).toBe('function');
       });
 
-      it('creates a download link', () => {
-        jest.spyOn(document, 'createElement');
-        wrapper.vm.downloadContacts();
-        expect(document.createElement).toHaveBeenCalled();
+      it('calls gatherReportData', () => {
+        wrapper.vm.gatherContacts = jest.fn();
+        wrapper.vm.exportContacts();
+        expect(wrapper.vm.gatherContacts).toHaveBeenCalled();
+      });
+
+      it('calls downloadXLSX', () => {
+        const mockReport = 'mock report';
+        const mockTitle = 'Contacts';
+
+        wrapper.vm.gatherContacts = jest.fn().mockReturnValue(mockReport);
+
+        wrapper.vm.exportContacts();
+
+        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, {
+          title: `${mockExercise.referenceNumber} ${mockTitle}`,
+          sheetName: mockTitle,
+          fileName: `${mockExercise.referenceNumber} - ${mockTitle}.xlsx`,
+        });
       });
     });
   });
