@@ -358,10 +358,17 @@ export default {
       ];
     },
     exportData() {
-      const title = `${this.exercise.referenceNumber} Handover Report`;
-      const report = this.gatherReportData();
+      const title = 'Handover Report';
+      const data = this.gatherReportData();
 
-      downloadXLSX(report, title, `${title}.xlsx`);
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };
