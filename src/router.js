@@ -60,6 +60,7 @@ import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/Indepen
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
+import QualifyingTestsTestBuilder from '@/views/Exercises/Tasks/QualifyingTests/TestBuilder';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -426,6 +427,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Tests | Cover Page',
+              },
+            },
+            {
+              path: 'qualifying-tests/build',
+              component: QualifyingTestsTestBuilder,
+              name: 'qualifying-tests',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Tests | Test Builder',
               },
             },
           ],
