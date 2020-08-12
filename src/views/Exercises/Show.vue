@@ -198,6 +198,10 @@ export default {
           name: 'exercise-tasks-independent-assessments',
         },
         {
+          title: 'Qualifying Tests',
+          name: 'qualifying-tests',
+        },
+        {
           title: 'Character Checks',
           name: 'exercise-tasks-character-checks',
         },

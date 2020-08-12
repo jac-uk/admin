@@ -59,7 +59,7 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
-import QualifyingTests from '@/views/Exercises/Tasks/QualifyingTests';
+import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -421,7 +421,7 @@ const router = new Router({
             },
             {
               path: 'qualifying-tests',
-              component: QualifyingTests,
+              component: QualifyingTestsCover,
               name: 'qualifying-tests',
               meta: {
                 requiresAuth: true,
