@@ -30,7 +30,7 @@
     "govuk-frontend": "^3.8.0",
     "html-docx-js": "^0.3.1",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.0.0",
     "save-file": "^2.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
