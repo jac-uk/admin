@@ -63,7 +63,6 @@ import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterC
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
 import QualifyingTestsTestBuilder from '@/views/Exercises/Tasks/QualifyingTests/TestBuilder';
 // QTs
-import QualifyingTests from '@/views/Exercises/Tasks/QualifyingTests';
 import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestsCreate from '@/views/Exercises/Tasks/QualifyingTests/Create';
 import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
@@ -433,20 +432,14 @@ const router = new Router({
             },
             {
               path: 'qualifying-tests',
-<<<<<<< HEAD
               component: QualifyingTestsCover,
-              name: 'qualifying-tests',
-=======
-              component: QualifyingTests,
               name: 'exercise-tasks-qualifying-tests',
->>>>>>> origin/feature/404-qts-mvp
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Tests | Cover Page',
               },
             },
             {
-<<<<<<< HEAD
               path: 'qualifying-tests/build',
               component: QualifyingTestsTestBuilder,
               name: 'qualifying-tests',
@@ -455,7 +448,7 @@ const router = new Router({
                 title: 'Qualifying Tests | Test Builder',
               },
             },
-=======
+            {
               path: 'qualifying-tests/create',
               component: QualifyingTestsCreate,
               name: 'exercise-tasks-qualifying-tests-create',
@@ -521,7 +514,6 @@ const router = new Router({
                 },
               ],
             },
->>>>>>> origin/feature/404-qts-mvp
           ],
         },
         {
