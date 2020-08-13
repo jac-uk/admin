@@ -11,13 +11,6 @@
       </span>
     </h2>
 
-    <Countdown 
-      :duration="1" 
-      :warning="0.5"
-      :alert="0.25"
-      @change="countChange"
-    />
-
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -119,12 +112,10 @@
 
 <script>
 import EditableField from '@/components/EditableField';
-import Countdown from '@/components/Countdown';
 
 export default {
   components: {
     EditableField,
-    Countdown,
   },
   props: {
     candidate: {
@@ -141,10 +132,6 @@ export default {
   methods: {
     changeUserDetails(personalDetails) {
       this.$emit('changedetails', { ...personalDetails });
-    },
-    countChange(obj) {
-      // eslint-disable-next-line no-console
-      console.log('countChange', obj);
     },
   },
 };

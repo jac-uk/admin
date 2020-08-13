@@ -1,10 +1,26 @@
 <template>
   <div :class="`countdown ${bckClass}`">
-    countdown  {{ formattedTimeLeft }}
+    Time remaining:  <span>{{ formattedTimeLeft }}</span>
   </div>
 </template>
 
 <script>
+/* ****************************
+   COUNTDOWN COMPONENT
+
+    <Countdown 
+      :duration="1" 
+      :warning="0.5"
+      :alert="0.25"
+      @change="countChange"
+    />
+
+    countChange(obj) {
+      // eslint-disable-next-line no-console
+      console.log('countChange', obj);
+    }
+***************************** */
+
 import { firestore } from '@/firebase';
 
 export default {
@@ -65,8 +81,6 @@ export default {
   },
   mounted() {
     this.timestampStart = firestore.timestamp;
-    // eslint-disable-next-line no-console
-    console.log('mounted timestamp', this.timestampStart, firestore.timestamp);
     this.startTimer();
   },
   beforeDestroy() {
@@ -75,8 +89,6 @@ export default {
   },
   methods: {
     startTimer() {
-      // eslint-disable-next-line no-console
-      console.log('timer started', this.duration);
       if (this.duration > 0) {
         this.timerInterval = setInterval(this.doSetInterval, 1000);
       }
@@ -86,8 +98,6 @@ export default {
     },
     doSetInterval() {
       this.timestampNow = firestore.Timestamp;
-      // eslint-disable-next-line no-console
-      console.log('doSetInterval', this.timePassed, this.startTimestamp, this.timestampNow);
       this.timePassed += 1;
       this.doTimeLeft();
       
@@ -124,6 +134,12 @@ export default {
     color: white;
     text-align: center;
     font-weight: bold;
+    padding: 10px;
+  }
+
+  .countdown span {
+    font-weight: bold;
+    display: inline-block;
   }
   .warning {
     background-color: yellow;
