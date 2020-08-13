@@ -59,8 +59,19 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
+// Temp
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
 import QualifyingTestsTestBuilder from '@/views/Exercises/Tasks/QualifyingTests/TestBuilder';
+// QTs
+import QualifyingTests from '@/views/Exercises/Tasks/QualifyingTests';
+import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
+import QualifyingTestsCreate from '@/views/Exercises/Tasks/QualifyingTests/Create';
+import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -422,14 +433,20 @@ const router = new Router({
             },
             {
               path: 'qualifying-tests',
+<<<<<<< HEAD
               component: QualifyingTestsCover,
               name: 'qualifying-tests',
+=======
+              component: QualifyingTests,
+              name: 'exercise-tasks-qualifying-tests',
+>>>>>>> origin/feature/404-qts-mvp
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Tests | Cover Page',
               },
             },
             {
+<<<<<<< HEAD
               path: 'qualifying-tests/build',
               component: QualifyingTestsTestBuilder,
               name: 'qualifying-tests',
@@ -438,6 +455,73 @@ const router = new Router({
                 title: 'Qualifying Tests | Test Builder',
               },
             },
+=======
+              path: 'qualifying-tests/create',
+              component: QualifyingTestsCreate,
+              name: 'exercise-tasks-qualifying-tests-create',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Tests | Create',
+              },
+            },
+            {
+              path: 'qualifying-tests/:qualifyingTestId',
+              component: QualifyingTest,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestView,
+                  name: 'qualifying-test-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | View',
+                  },
+                },
+                {
+                  path: 'edit',
+                  component: QualifyingTestEdit,
+                  name: 'qualifying-test-edit',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Edit',
+                  },
+                },
+                {
+                  path: 'review',
+                  component: QualifyingTestReview,
+                  name: 'qualifying-test-review',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Review',
+                  },
+                },
+                {
+                  path: 'responses/:status',
+                  component: QualifyingTestResponses,
+                  name: 'qualifying-test-responses',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Responses',
+                  },
+                },
+                {
+                  path: 'responses/:responseId',
+                  component: QualifyingTestResponse,
+                  children: [
+                    {
+                      path: '',
+                      component: QualifyingTestResponseView,
+                      name: 'qualifying-test-response-view',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Qualifying Test | Response View',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+>>>>>>> origin/feature/404-qts-mvp
           ],
         },
         {
