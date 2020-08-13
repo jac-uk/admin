@@ -32,10 +32,10 @@ export default {
     isValid() {
       return this.errors.length === 0;
     },
-    async validateAndSave() {
+    async validateAndSave(event) {
       this.validate();
       if (this.isValid()) {
-        this.save(true);
+        this.save(true, event);
       }
     },
   },
