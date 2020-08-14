@@ -22,6 +22,7 @@ import stageShortlisted from '@/store/stage/shortlisted';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
+import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -45,6 +46,7 @@ const store = new Vuex.Store({
     candidates,
     notes,
     candidateApplications,
+    qualifyingTestResponses,
   },
   state: {},
   mutations: {
