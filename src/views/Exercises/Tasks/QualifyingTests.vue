@@ -11,7 +11,7 @@
       </li>
       <li>
         <RouterLink
-          :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: '12345' } }"
+          :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: 'l0w8PeHoi06IpAXjFdEC' } }"
         >
           QT Dash
         </RouterLink>
