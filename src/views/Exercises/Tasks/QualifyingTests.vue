@@ -1,6 +1,6 @@
 <template>
   <div>
-    QTs Cover Page [{{exerciseId}}]
+    QTs Cover Page [{{ exerciseId }}]
     <ul>
       <li>
         <RouterLink
