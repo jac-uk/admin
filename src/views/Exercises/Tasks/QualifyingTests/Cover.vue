@@ -1,6 +1,6 @@
 <template>
   <div>
-    QTs Cover Page
+    QTs Cover Page [{{exerciseId}}]
     <ul>
       <li>
         <RouterLink
@@ -11,7 +11,7 @@
       </li>
       <li>
         <RouterLink
-          :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: '12345' } }"
+          :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: 'l0w8PeHoi06IpAXjFdEC' } }"
         >
           QT Dash
         </RouterLink>
@@ -68,3 +68,13 @@
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
+  },
+};
+</script>
