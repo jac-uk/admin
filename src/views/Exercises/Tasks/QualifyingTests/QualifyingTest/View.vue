@@ -72,6 +72,14 @@
       >
         Initialize
       </ActionButton>
+      <ActionButton
+        v-if="true"
+        :disabled="false"
+        class="govuk-!-margin-right-3"
+        @click="btnActivate"
+      >
+        Activate
+      </ActionButton>
 
       <button
         v-if="true"
@@ -109,6 +117,9 @@ export default {
     async btnInitialize() {
       // @TODO allow user to select stage (maybe status too) they want to include in the test
       await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: 'review' });
+    },
+    async btnActivate() {
+      await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     btnPause() {
       // eslint-disable-next-line no-console
