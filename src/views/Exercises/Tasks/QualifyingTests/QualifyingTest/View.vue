@@ -52,14 +52,14 @@
         v-if="true"
         :disabled="false"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="edit"
+        @click="btnEdit"
       >
         Edit
       </button>
       <button
         v-if="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="sendInvites"
+        @click="btnSendInvites"
       >
         Send invites
       </button>
@@ -67,7 +67,7 @@
         v-if="true"
         :disabled="false"
         class="govuk-button govuk-!-margin-right-3"
-        @click="initialize"
+        @click="btnInitialize"
       >
         Initialize
       </button>
@@ -75,7 +75,7 @@
         v-if="true"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="pause"
+        @click="btnPause"
       >
         Pause
       </button>
@@ -87,25 +87,22 @@
 
 export default {
   methods: {
-    edit() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: EDIT');
+    btnEdit() {
+      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.$route.params.qualifyingTestId } });
     },
-    sendInvites() {
+    btnSendInvites() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: SEND INVITES');
     },
-    initialize() {
+    btnInitialize() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: INITIALIZE');
     },
-    pause() {
+    btnPause() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: PAUSE');
     },
     btnAllCandidates() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: PAUSE');
       this.$router.push({ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all' } });
     },
   },  
