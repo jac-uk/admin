@@ -34,7 +34,7 @@
       >
         Qualifying Test
       </h3>
-      <div>{{ $route.params.qualifyingTestId }}</div>
+      <div>{{ qualifyingTestId }}</div>
       <div>
         <button
           v-if="true"
@@ -63,14 +63,16 @@
       >
         Send invites
       </button>
-      <button
+      <ActionButton
         v-if="true"
+        type="primary"
         :disabled="false"
-        class="govuk-button govuk-!-margin-right-3"
+        class="govuk-!-margin-right-3"
         @click="btnInitialize"
       >
         Initialize
-      </button>
+      </ActionButton>
+
       <button
         v-if="true"
         :disabled="true"
@@ -84,26 +86,36 @@
 </template>
 
 <script>
+import { functions } from '@/firebase';
+import ActionButton from '@/components/ActionButton';
 
 export default {
+  components: {
+    ActionButton,
+  },
+  computed: {
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
+    },
+  },
   methods: {
     btnEdit() {
-      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.$route.params.qualifyingTestId } });
+      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnSendInvites() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: SEND INVITES');
     },
-    btnInitialize() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: INITIALIZE');
+    async btnInitialize() {
+      // @TODO allow user to select stage (maybe status too) they want to include in the test
+      await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: 'review' });
     },
     btnPause() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: PAUSE');
     },
     btnAllCandidates() {
-      this.$router.push({ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all' } });
+      this.$router.push({ name: 'qualifying-test-responses', params: { qualifyingTestId: this.qualifyingTestId, status: 'all' } });
     },
   },  
 };
