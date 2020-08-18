@@ -109,30 +109,32 @@
         v-if="true"
         :disabled="false"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="edit"
+        @click="btnEdit"
       >
         Edit
       </button>
       <button
         v-if="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="sendInvites"
+        @click="btnSendInvites"
       >
         Send invites
       </button>
-      <button
+      <ActionButton
         v-if="true"
+        type="primary"
         :disabled="false"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="initialize"
+        class="govuk-!-margin-right-3"
+        @click="btnInitialize"
       >
         Initialize
-      </button>
+      </ActionButton>
+
       <button
         v-if="true"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="pause"
+        @click="btnPause"
       >
         Pause
       </button>
@@ -166,22 +168,31 @@
 </template>
 
 <script>
+import { functions } from '@/firebase';
+import ActionButton from '@/components/ActionButton';
 
 export default {
-  methods: {
-    edit() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: EDIT');
+  components: {
+    ActionButton,
+  },
+  computed: {
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
     },
-    sendInvites() {
+  },
+  methods: {
+    btnEdit() {
+      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    btnSendInvites() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: SEND INVITES');
     },
-    initialize() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: INITIALIZE');
+    async btnInitialize() {
+      // @TODO allow user to select stage (maybe status too) they want to include in the test
+      await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: 'review' });
     },
-    pause() {
+    btnPause() {
       // eslint-disable-next-line no-console
       console.log('Button clicked: PAUSE');
     },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    QTs Cover Page
+    QTs Cover Page [{{ exerciseId }}]
     <ul>
       <li>
         <RouterLink
@@ -68,3 +68,13 @@
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
+  },
+};
+</script>
