@@ -1,49 +1,106 @@
 <template>
   <div>
+    <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
+      <h3 
+        class="govuk-heading-m"
+      >
+        Qualifying Test: Recorder 2020 Qualifying Test [{{ $route.params.qualifyingTestId }}]
+      </h3>
+
+      <table class="govuk-table">
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">
+              Type
+            </th>
+            <td class="govuk-table__cell">
+              scenario
+            </td>
+            <th class="govuk-table__header">
+              State
+            </th>
+            <td class="govuk-table__cell">
+              activated
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">
+              Start Date
+            </th>
+            <td class="govuk-table__cell">
+              August 31, 2020 at 6:00:00 PM UTC+1
+            </td>
+            <th class="govuk-table__header">
+              End Date
+            </th>
+            <td class="govuk-table__cell">
+              August 31, 2020 at 6:00:00 PM UTC+1
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
+
     <div class="govuk-grid-column-one-half">
       <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
-          Number of candidates
+          Number of Participants
         </h2>
         <p class="govuk-body">
-          Overall List
+          <RouterLink
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
+          >
+            Initialized
+          </RouterLink>
+          / 
+          <RouterLink
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'activated', }}"
+          >
+            Activated
+          </RouterLink>
           <span 
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >345</span>
+          >345 / 345</span>
         </p>
-      </div>
-
-      <div 
-        v-if="true"
-        class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
-      >
-        <h2 class="govuk-heading-l">
-          Number of applications
-        </h2>
         <p class="govuk-body">
-          <span class="govuk-heading-l govuk-!-margin-top-1">20</span>
+          <RouterLink
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'completed', }}"
+          >
+            Completed
+          </RouterLink>
+          <span 
+            class="display-block govuk-heading-l govuk-!-margin-top-1"
+          >100</span>
         </p>
       </div>
     </div>
 
     <div class="govuk-grid-column-one-half">
-      <h3 
-        class="govuk-heading-m"
+      <div 
+        v-if="true"
+        class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
-        Qualifying Test
-      </h3>
-      <div>{{ qualifyingTestId }}</div>
-      <div>
-        <button
-          v-if="true"
-          :disabled="false"
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="btnAllCandidates"
-        >
-          All Candidates
-        </button>
+        <h2 class="govuk-heading-l">
+          Progress
+        </h2>
+        <p class="govuk-body">
+          <RouterLink
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'started', }}"
+          >
+            Started
+          </RouterLink>
+          <span class="govuk-heading-l govuk-!-margin-top-1">39</span>
+        </p>
+        <p class="govuk-body">
+          <RouterLink
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'started', }}"
+          >
+            In Progress
+          </RouterLink>
+          <span class="govuk-heading-l govuk-!-margin-top-1">78</span>
+        </p>
       </div>
     </div>
 
@@ -89,6 +146,31 @@
       >
         Pause
       </button>
+      <button
+        v-if="true"
+        :disabled="false"
+        class="govuk-button govuk-!-margin-right-3"
+        @click="btnResponses('all')"
+      >
+        Responses
+      </button>
+      <button
+        v-if="true"
+        :disabled="false"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnResponses('all')"
+      >
+        All Candidates
+      </button>
+
+      <button
+        v-if="true"
+        :disabled="false"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnResponses('all')"
+      >
+        Reasonable Adjustments
+      </button>
     </div>
   </div>
 </template>
@@ -125,8 +207,18 @@ export default {
       // eslint-disable-next-line no-console
       console.log('Button clicked: PAUSE');
     },
-    btnAllCandidates() {
-      this.$router.push({ name: 'qualifying-test-responses', params: { qualifyingTestId: this.qualifyingTestId, status: 'all' } });
+    btnResponses(status) {
+      const route = { 
+        name: 'qualifying-test-responses', 
+        params: { 
+          qualifyingTestId: this.$route.params.qualifyingTestId, 
+          status: status, 
+        },
+      };
+      // eslint-disable-next-line no-console
+      console.log('Button clicked: PAUSE');
+      
+      this.$router.push(route);
     },
   },  
 };
