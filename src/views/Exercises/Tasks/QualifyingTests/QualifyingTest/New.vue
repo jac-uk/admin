@@ -1,8 +1,6 @@
 <template>
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
-      <BackLink />
-
       <h2 class="govuk-heading-l">
         Create a qualifying test
       </h2>
@@ -37,14 +35,12 @@
 <script>
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
-import BackLink from '@/components/BackLink';
 import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
-    BackLink,
     ErrorSummary,
     RadioGroup,
     RadioItem,

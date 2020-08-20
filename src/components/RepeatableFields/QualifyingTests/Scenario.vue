@@ -2,24 +2,25 @@
   <div>
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
       <h3 class="govuk-fieldset__heading">
-        Scenario
+        Scenarios
       </h3>
     </legend>
-    <TextareaInput
+
+    <RichTextInput
       id="scenario-question-input"
       v-model="text"
-      ident="scenario-question-input"
-      label="Scenario Text"
-    />      
+      label="Scenario text"
+      required
+    />
   </div>
 </template>
 
 <script>
-import TextareaInput from '@/components/Form/TextareaInput';
+import RichTextInput from '@/components/Form/RichTextInput';
 
 export default {
   components: {
-    TextareaInput,
+    RichTextInput,
   },
   props: {
     value: {

@@ -1,8 +1,6 @@
 <template>
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
-      <BackLink />
-
       <h2 class="govuk-heading-l">
         Edit qualifying test details
       </h2>
@@ -68,7 +66,6 @@
 <script>
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
-import BackLink from '@/components/BackLink';
 import TextField from '@/components/Form/TextField';
 import DateInput from '@/components/Form/DateInput';
 import RepeatableFields from '@/components/RepeatableFields';
@@ -81,7 +78,6 @@ export default {
     TextField,
     DateInput,
     RepeatableFields,
-    BackLink,
   },
   extends: Form,
   data(){

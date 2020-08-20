@@ -1,6 +1,8 @@
 <template>
   <div class="govuk-grid-column-full">
-    <BackLink />
+    <h2 class="govuk-heading-l">
+      Review qualifying test
+    </h2>
 
     <div class="text-right">
       <router-link
@@ -11,8 +13,8 @@
       </router-link>
     </div>
 
-    <h2 class="govuk-heading-l">
-      Review qualifying test
+    <h2 class="govuk-heading-m">
+      Test details
     </h2>
 
     <dl class="govuk-summary-list">
@@ -81,6 +83,62 @@
       </div>
     </dl>
 
+    <div class="text-right">
+      <router-link
+        class="govuk-link"
+        :to="{name: 'qualifying-test-question-builder'}"
+      >
+        Update questions
+      </router-link>
+    </div>
+
+    <h2 class="govuk-heading-m">
+      Questions
+    </h2>
+
+    <dl class="govuk-summary-list">
+      <div
+        v-if="qualifyingTest.testQuestions.introduction"
+        class="govuk-summary-list__row"
+      >
+        <dt
+          class="govuk-summary-list__key"
+        >
+          Introduction
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ qualifyingTest.testQuestions.introduction }}
+        </dd>
+      </div>
+
+      <div
+        v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
+        :key="index"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          {{ questionLabel }} {{ index + 1 }}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <!-- eslint-disable -->
+          <div
+            v-html="testQuestion.details"
+          />
+          <!-- eslint-enable -->
+
+          <hr class="govuk-section-break govuk-section-break--visible">
+          <ol>
+            <li
+              v-for="(option, i) in testQuestion.options"
+              :key="i"
+            >
+              {{ option.answer }}
+            </li>
+          </ol>
+        </dd>
+      </div>
+    </dl>
+
     <button
       v-if="isDraft"
       class="govuk-button govuk-!-margin-right-3"
@@ -99,23 +157,27 @@
 </template>
 
 <script>
-import BackLink from '@/components/BackLink';
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
-  components: {
-    BackLink,
-  },
   computed: {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,
     }),
     isDraft() {
-      return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status !== QUALIFYING_TEST.STATUS.CREATED;
+      return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
     },
     isReadyForApproval() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
+    },
+    questionLabel() {
+      let label = 'Question';
+
+      if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
+        label = 'Scenario';
+      }
+      return label;
     },
   },
   methods: {

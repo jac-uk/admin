@@ -1,6 +1,17 @@
 <template>
   <div class="govuk-grid-row">  
-    <form @submit.prevent="validateAndSave">
+    <form
+      class="govuk-grid-column-three-quarters"
+      @submit.prevent="validateAndSave"
+    >
+      <TextareaInput
+        id="testQuestions-introduction"
+        v-model="qualifyingTest.testQuestions.introduction"
+        label="Introduction"
+        hint="Short introductory instruction text."
+        rows="2"
+      />
+
       <fieldset
         class="govuk-fieldset"
       >         
@@ -20,17 +31,20 @@
 </template>
 <script>
 import Form from '@/components/Form/Form';
+import TextareaInput from '@/components/Form/TextareaInput';
 import RepeatableFields from '@/components/RepeatableFields';
 import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion';
 
 export default {
   components: {
+    TextareaInput,
     RepeatableFields,
   },
   extends: Form,
   data() {
     const defaults = {
       testQuestions: {
+        introduction: null,
         questions: [
         ],
       },
