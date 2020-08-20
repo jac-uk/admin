@@ -9,7 +9,7 @@
       id="critical-analysis-question-input"
       v-model="text"
       ident="critical-analysis-question-input"
-      label="Question X"
+      label="Question Text"
     />      
   </div>
 </template>

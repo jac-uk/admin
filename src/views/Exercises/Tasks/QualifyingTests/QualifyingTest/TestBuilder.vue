@@ -7,8 +7,8 @@
         <RepeatableFields
           v-model="qualifyingTest.testQuestions.questions"
           :component="repeatableFields.QualifyingTestQuestion"
-          ident="critical-analysis"
-          type="critical-analysis"
+          :ident="qualifyingTest.type"
+          :type="qualifyingTest.type"
           required
         />
         <button class="govuk-button">
@@ -21,7 +21,7 @@
 <script>
 import Form from '@/components/Form/Form';
 import RepeatableFields from '@/components/RepeatableFields';
-import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTestQuestion';
+import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion';
 
 export default {
   components: {

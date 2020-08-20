@@ -8,11 +8,11 @@
         />
         <Scenario 
           v-if="isScenario"
-          :model="row.details" 
+          v-model="row.details"
         />
         <SituationalJudgement 
           v-if="isSituationalJudgement"
-          :model="row.details" 
+          v-model="row.details"
         />
       </div>
       <div class="govuk-grid-column-three-quarters">      
