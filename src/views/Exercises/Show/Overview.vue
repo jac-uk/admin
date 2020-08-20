@@ -133,6 +133,12 @@
       >
         Begin processing applications
       </ActionButton>
+      <ActionButton
+        v-if="isProcessing"
+        @click="updateProcessing()"
+      >
+        Process late applications
+      </ActionButton>
     </div>  
   </div>
 </template>
@@ -188,6 +194,10 @@ export default {
       return this.isApproved &&
         !(this.exercise.applicationRecords && this.exercise.applicationRecords.initialised);
       // @TODO perhaps also check that exercise has closed
+    },
+    isProcessing() {
+      return this.isApproved &&
+        (this.exercise.applicationRecords && this.exercise.applicationRecords.initialised);
     },
     hasOpened() {
       if (this.exercise) {
@@ -269,6 +279,10 @@ export default {
     },
     async startProcessing() {
       await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
+    },
+    async updateProcessing() {
+      // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
+      await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
     },
   },
 };
