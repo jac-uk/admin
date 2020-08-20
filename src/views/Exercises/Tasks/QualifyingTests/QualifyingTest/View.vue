@@ -146,6 +146,7 @@
       >
         Pause
       </button>
+
       <button
         v-if="true"
         :disabled="false"

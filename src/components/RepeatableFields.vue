@@ -13,6 +13,7 @@
         :row="row"
         :index="index"
         :path="path"
+        :type="type"
       >
         <template v-slot:removeButton>
           <button
@@ -66,6 +67,11 @@ export default {
       default: null,
     },
     path: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    type: {
       type: String,
       required: false,
       default: '',
