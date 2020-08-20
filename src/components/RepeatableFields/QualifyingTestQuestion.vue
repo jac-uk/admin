@@ -2,14 +2,25 @@
   <div class="govuk-grid-row">
     <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
       <div class="govuk-grid-column-full">
-        <CriticalAnalysis v-if="isCriticalAnalysis" />
-        <Scenario v-if="isScenario" />
-        <SituationalJudgement v-if="isSituationalJudgement" />
+        <CriticalAnalysis 
+          v-if="isCriticalAnalysis"
+          v-model="row.details"
+        />
+        <Scenario 
+          v-if="isScenario"
+          :model="row.details" 
+        />
+        <SituationalJudgement 
+          v-if="isSituationalJudgement"
+          :model="row.details" 
+        />
       </div>
       <div class="govuk-grid-column-three-quarters">      
         <RepeatableFields
+          v-model="row.options"
           :component="repeatableFields.Answer"
-          ident="questions-input"
+          :ident="`questions-input-${id}`"
+          :allow-empty="true"
           required
         />
       </div>
@@ -52,10 +63,18 @@ export default {
     },        
   },
   data() {
+    const defaults = {
+      question: {
+        details: '',
+        options: [],
+      },
+    };
+    const question = { ...defaults, ...this.row };
     return {
       repeatableFields: {
         Answer,
-      },      
+      },
+      question: question,
     };
   },
   computed: {
