@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <LoadingMessage
       v-if="loaded === false"
       :load-failed="loadFailed"
@@ -21,7 +21,7 @@ export default {
     };
   },
   mounted() {
-    const id = this.$route.params.id;
+    const id = this.$route.params.qualifyingTestId;
 
     this.$store.dispatch('qualifyingTest/bind', id)
       .then((data) => {
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     redirectToErrorPage() {
-      this.$router.replace({ name: 'exercise-not-found' });
+      this.$router.replace({ name: 'page-not-found' });
     },
   },
 };
