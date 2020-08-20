@@ -199,15 +199,11 @@ export default {
         },
         {
           title: 'Qualifying Tests',
-          name: 'qualifying-tests',
+          name: 'exercise-tasks-qualifying-tests',
         },
         {
           title: 'Character Checks',
           name: 'exercise-tasks-character-checks',
-        },
-        {
-          title: 'Qualifying Tests',
-          name: 'exercise-tasks-qualifying-tests',
         },
       ];
     },

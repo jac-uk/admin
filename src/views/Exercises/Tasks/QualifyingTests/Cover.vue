@@ -1,19 +1,19 @@
 <template>
   <div>
-    QTs Cover Page [{{exerciseId}}]
+    QTs Cover Page [{{ exerciseId }}]
     <ul>
-      <li>
-        <RouterLink
-          :to="{ name: 'exercise-tasks-qualifying-tests-create' }"
-        >
-          Create QT
-        </RouterLink>
-      </li>
       <li>
         <RouterLink
           :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: 'l0w8PeHoi06IpAXjFdEC' } }"
         >
           QT Dash
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
+          :to="{ name: 'qualifying-test-new' }"
+        >
+          Create QT
         </RouterLink>
       </li>
       <li>

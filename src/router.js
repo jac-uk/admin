@@ -59,15 +59,18 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
+
 // Temp
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
-import QualifyingTestsTestBuilder from '@/views/Exercises/Tasks/QualifyingTests/TestBuilder';
+
 // QTs
 import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
-import QualifyingTestsCreate from '@/views/Exercises/Tasks/QualifyingTests/Create';
+import QualifyingTestNew from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/New';
 import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
 import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/TestBuilder';
 import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
+
 import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
 import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
@@ -436,25 +439,16 @@ const router = new Router({
               name: 'exercise-tasks-qualifying-tests',
               meta: {
                 requiresAuth: true,
-                title: 'Qualifying Tests | Cover Page',
+                title: 'Qualifying Tests',
               },
             },
             {
-              path: 'qualifying-tests/build',
-              component: QualifyingTestsTestBuilder,
-              name: 'qualifying-tests',
+              path: 'qualifying-tests/new',
+              component: QualifyingTestNew,
+              name: 'qualifying-test-new',
               meta: {
                 requiresAuth: true,
-                title: 'Qualifying Tests | Test Builder',
-              },
-            },
-            {
-              path: 'qualifying-tests/create',
-              component: QualifyingTestsCreate,
-              name: 'exercise-tasks-qualifying-tests-create',
-              meta: {
-                requiresAuth: true,
-                title: 'Qualifying Tests | Create',
+                title: 'Qualifying Tests | New',
               },
             },
             {
@@ -477,6 +471,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Qualifying Test | Edit',
+                  },
+                },
+                {
+                  path: 'build',
+                  component: QualifyingTestQuestionBuilder,
+                  name: 'qualifying-test-question-builder',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Tests | Question Builder',
                   },
                 },
                 {
