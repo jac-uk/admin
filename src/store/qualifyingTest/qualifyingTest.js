@@ -1,9 +1,11 @@
+import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import clone from 'clone';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
-const collection = firestore.collection('qualifyingTest');
+const collection = firestore.collection('qualifyingTests');
 
 export default {
   namespaced: true,
@@ -16,14 +18,32 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
+    create: async (state, data) => {
+      data.created = firebase.firestore.FieldValue.serverTimestamp();
+      data.status = QUALIFYING_TEST.STATUS.CREATED;
+
+      const doc = await collection.add(data);
+
+      return doc.id;
+    },
     save: async ({ state }, data) => {
-      if (data.id == null && state.record == null){
-        throw 'State null and no ID passed';
-      }
-      let docId;
-      state.record == null ? docId = data.id : docId = state.record.id;
-      const ref = collection.doc(docId);
-      return await ref.set(data, { merge: true });
+      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+
+      return await collection.doc(state.record.id).update(data);
+    },
+    submitForApproval: async ({ state }) => {
+      const data = {
+        status: QUALIFYING_TEST.STATUS.SUBMITTED,
+      };
+
+      await collection.doc(state.record.id).update(data);
+    },
+    approve: async ({ state }) => {
+      const data = {
+        status: QUALIFYING_TEST.STATUS.APPROVED,
+      };
+
+      await collection.doc(state.record.id).update(data);
     },
   },
   state: {
