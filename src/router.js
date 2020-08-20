@@ -70,7 +70,6 @@ import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/Qualifyi
 import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
 import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
 import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
-
 import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
 import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';

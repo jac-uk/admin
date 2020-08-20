@@ -26,7 +26,7 @@ export default {
     this.$store.dispatch('qualifyingTest/bind', id)
       .then((data) => {
         if (data === null) {
-          this.redirectToErrorPage();
+          this.redirectToPage();
         }
         else {
           this.loaded = true;
@@ -37,8 +37,9 @@ export default {
       });
   },
   methods: {
-    redirectToErrorPage() {
-      this.$router.replace({ name: 'page-not-found' });
+    redirectToPage() {
+      // this.$router.replace({ name: 'page-not-found' });
+      this.$router.replace({ name: 'exercise-tasks-qualifying-tests' });
     },
   },
 };

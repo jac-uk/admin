@@ -18,6 +18,15 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
+    bindQTs: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = collection
+        .where('vacancy.id', '==', id);
+
+      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindQTs: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('records');
+    }),
     create: async (state, data) => {
       data.created = firebase.firestore.FieldValue.serverTimestamp();
       data.status = QUALIFYING_TEST.STATUS.CREATED;
@@ -48,6 +57,7 @@ export default {
   },
   state: {
     record: null,
+    records: [],
   },
   getters: {
     id: (state) => {
