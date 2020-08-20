@@ -30,7 +30,7 @@
             {{ row.candidate.id }}
           </RouterLink> 
         </TableCell>
-        <TableCell>{{ row.status}}</TableCell>
+        <TableCell>{{ row.status }}</TableCell>
       </template>
     </Table>
   </div>    
