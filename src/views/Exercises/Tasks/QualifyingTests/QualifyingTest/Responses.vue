@@ -1,39 +1,39 @@
 <template>
-  <div>
-    [ Qualifying Test | Responses | {{ $route.params.status }} ]
-    <h2 class="govuk-heading-m">
-      Qualifying Test Responses: {{ $route.params.id }}
-    </h2>
-    <div>
-      <Table 
-        data-key="id"
-        :data="getPaginated"
-        :columns="[
-          { title: 'Reference number' },
-          { title: 'Name' },
-          { title: 'Status' },
-        ]"
-      >
-        <template #row="{row}">
-          <TableCell>
-            <RouterLink
-              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
-            >
-              {{ row.application.referenceNumber }}
-            </RouterLink> 
-          </TableCell>
-          <TableCell>
-            <RouterLink
-              :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-            >
-              {{ row.candidate.fullName }}
-            </RouterLink> 
-          </TableCell>
-          <TableCell>{{ row.status | lookup }}</TableCell>
-        </template>
-      </Table>   
-    </div>
-  </div>
+  <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
+    <h3 
+      class="govuk-heading-m"
+    >
+      Qualifying Test: Recorder 2020 Qualifying Test [{{ qualifyingTestId }} / {{ searchStatus }}] 
+    </h3>
+
+    <Table 
+      data-key="id"
+      :data="applications"
+      :columns="[
+        { title: 'Reference number' },
+        { title: 'Name' },
+        { title: 'Status' },
+      ]"
+    >
+      <template #row="{row}">
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+          >
+            {{ row.id }}
+          </RouterLink> 
+        </TableCell>
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+          >
+            {{ row.candidate.id }}
+          </RouterLink> 
+        </TableCell>
+        <TableCell>{{ row.status}}</TableCell>
+      </template>
+    </Table>
+  </div>    
 </template>
 
 <script>
@@ -46,9 +46,21 @@ export default {
     TableCell,
   },
   computed: {
-    getPaginated() {
-      return [];
+    applications() {
+      const responsesList = this.$store.state.qualifyingTestResponses.records;
+      // eslint-disable-next-line no-console
+      console.log('responsesList', responsesList);
+      return responsesList;
     },
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
+    },
+    searchStatus() {
+      return this.$route.params.status;
+    },
+  },
+  async created() {
+    this.$store.dispatch('qualifyingTestResponses/bind', { qualifyingTestId: this.qualifyingTestId, searchStatus: this.searchStatus });
   },
 };
 </script>

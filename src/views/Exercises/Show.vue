@@ -205,6 +205,10 @@ export default {
           title: 'Character Checks',
           name: 'exercise-tasks-character-checks',
         },
+        {
+          title: 'Qualifying Tests',
+          name: 'exercise-tasks-qualifying-tests',
+        },
       ];
     },
     applicationStageNavigation(){

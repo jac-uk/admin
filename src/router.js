@@ -59,6 +59,15 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
+import QualifyingTests from '@/views/Exercises/Tasks/QualifyingTests';
+import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
+import QualifyingTestsCreate from '@/views/Exercises/Tasks/QualifyingTests/Create';
+import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
 
 // Temp
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
