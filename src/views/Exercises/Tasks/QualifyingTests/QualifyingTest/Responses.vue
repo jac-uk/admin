@@ -10,7 +10,7 @@
       data-key="id"
       :data="applications"
       :columns="[
-        { title: 'Reference number' },
+        { title: 'Reference' },
         { title: 'Name' },
         { title: 'Status' },
       ]"
@@ -27,10 +27,10 @@
           <RouterLink
             :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
           >
-            {{ row.candidate.id }}
+            {{ row.candidate.fullName | showAlternative(row.candidate.id) }}
           </RouterLink> 
         </TableCell>
-        <TableCell>{{ row.status }}</TableCell>
+        <TableCell>{{ row.status | lookup }}</TableCell>
       </template>
     </Table>
   </div>    

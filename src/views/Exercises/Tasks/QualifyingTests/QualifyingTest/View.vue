@@ -60,7 +60,7 @@
           </RouterLink>
           / 
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'activated', }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
@@ -70,7 +70,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'completed', }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
           </RouterLink>
@@ -94,7 +94,7 @@
         </h2>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'started', }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED'), }}"
           >
             Started
           </RouterLink>
@@ -102,7 +102,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'started', }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
           >
             In Progress
           </RouterLink>
@@ -202,7 +202,7 @@ export default {
       return this.qualifyingTest.counts;
     },
     isActive() {
-      return this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED || this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED.APPROVED;
+      return this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED || this.qualifyingTest.status === QUALIFYING_TEST.APPROVED;
     },
   },
   methods: {
@@ -235,6 +235,9 @@ export default {
       console.log('Button clicked: PAUSE');
       
       this.$router.push(route);
+    },
+    qtStatus(status) {
+      return QUALIFYING_TEST.STATUS[status];
     },
   },  
 };

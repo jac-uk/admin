@@ -66,6 +66,9 @@ const QUALIFYING_TEST = {
     SUBMITTED: 'submitted-for-approval',
     INITIALISED: 'initialised',
     APPROVED: 'approved',
+    ACTIVATED: 'activated',
+    COMPLETED: 'completed',
+    STARTED: 'started',
   },
 };
 
