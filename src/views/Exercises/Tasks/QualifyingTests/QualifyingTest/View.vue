@@ -166,14 +166,15 @@
         Reasonable Adjustments
       </button>
 
-      <button
+      <ActionButton
         v-if="true"
-        :disabled="true"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        type="secondary"
+        :disabled="false"
+        class="govuk-!-margin-right-3"
         @click="btnSendInvites"
       >
         Send invites
-      </button>
+      </ActionButton>
     </div>
   </div>
 </template>
@@ -208,9 +209,8 @@ export default {
     btnEdit() {
       this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    btnSendInvites() {
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: SEND INVITES');
+    async btnSendInvites() {
+      await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
     },
     async btnInitialize() {
       // @TODO allow user to select stage (maybe status too) they want to include in the test
