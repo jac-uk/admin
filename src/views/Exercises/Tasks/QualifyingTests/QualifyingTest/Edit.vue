@@ -82,6 +82,7 @@ export default {
   extends: Form,
   data(){
     const exercise = this.$store.getters['exerciseDocument/data']();
+    const data = this.$store.getters['qualifyingTest/data']();
 
     const defaults = {
       title: null,
@@ -90,8 +91,6 @@ export default {
       testDuration: null,
       additionalInstructions: [],
     };
-
-    const data = this.$store.getters['qualifyingTest/data']();
 
     const qualifyingTest = { ...defaults, ...data };
 

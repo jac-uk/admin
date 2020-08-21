@@ -36,6 +36,9 @@ export default {
         throw e;
       });
   },
+  destroyed() {
+    this.$store.dispatch('qualifyingTest/unbind');
+  },
   methods: {
     redirectToPage() {
       // this.$router.replace({ name: 'page-not-found' });
