@@ -81,13 +81,16 @@ export default {
   },
   extends: Form,
   data(){
+    const exercise = this.$store.getters['exerciseDocument/data']();
+
     const defaults = {
       title: null,
-      startDate: null,
-      endDate: null,
+      startDate: this.getTimelineDate(exercise, data.type, 'start') || null,
+      endDate: this.getTimelineDate(exercise, data.type, 'end') || null,
       testDuration: null,
       additionalInstructions: [],
     };
+
     const data = this.$store.getters['qualifyingTest/data']();
 
     const qualifyingTest = { ...defaults, ...data };
@@ -103,11 +106,42 @@ export default {
     testTypes() {
       return QUALIFYING_TEST.TYPE;
     },
+
   },
   methods: {
     async save() {
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: 'qualifying-test-question-builder' });
+    },
+    getTimelineDate(exercise, qtType, dateType) {
+      if (!exercise.shortlistingMethods) {
+        return;
+      }
+
+      let fieldName;
+      if (qtType === QUALIFYING_TEST.TYPE.SCENARIO && exercise.shortlistingMethods.includes('scenario-test-qualifying-test')) {
+        fieldName = 'scenarioTest';
+      }
+      if (qtType === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT && exercise.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
+        fieldName = 'situationalJudgementTest';
+      }
+      if (qtType === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS && exercise.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
+        fieldName = 'criticalAnalysisTest';
+      }
+
+      const date = exercise[`${fieldName}Date`];
+      const time = exercise[`${fieldName}${dateType[0].toUpperCase()}${dateType.slice(1)}Time`];
+
+      let datetime;
+      if (date instanceof Date) {
+        datetime = new Date(date.getTime());
+      }
+      if (time instanceof Date) {
+        datetime.setHours(time.getHours());
+        datetime.setMinutes(time.getMinutes());
+      }
+
+      return datetime;
     },
   },
 };

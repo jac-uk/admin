@@ -48,6 +48,7 @@ export default {
   extends: Form,
   data(){
     const exercise = this.$store.state.exerciseDocument.record;
+
     const defaults = {
       type: null,
       vacancy: {
