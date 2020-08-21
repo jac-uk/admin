@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
-      <h3 
-        class="govuk-heading-m"
-      >
-        Qualifying Test: Recorder 2020 Qualifying Test [{{ $route.params.qualifyingTestId }}]
+      <h2 class="govuk-heading-m">
+        Qualifying Test
+      </h2>
+      <h3 class="govuk-heading-l">
+        {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
       </h3>
 
       <table class="govuk-table">
@@ -14,13 +15,13 @@
               Type
             </th>
             <td class="govuk-table__cell">
-              scenario
+              {{ qualifyingTest.type | lookup }}
             </td>
             <th class="govuk-table__header">
               State
             </th>
             <td class="govuk-table__cell">
-              activated
+              {{ qualifyingTest.status | lookup }}
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -28,20 +29,23 @@
               Start Date
             </th>
             <td class="govuk-table__cell">
-              August 31, 2020 at 6:00:00 PM UTC+1
+              {{ qualifyingTest.startDate | formatDate('longdatetime') }}
             </td>
             <th class="govuk-table__header">
               End Date
             </th>
             <td class="govuk-table__cell">
-              August 31, 2020 at 6:00:00 PM UTC+1
+              {{ qualifyingTest.endDate | formatDate('longdatetime') }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>    
 
-    <div class="govuk-grid-column-one-half">
+    <div 
+      v-if="hasCounts"
+      class="govuk-grid-column-one-half" 
+    >
       <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
@@ -62,7 +66,7 @@
           </RouterLink>
           <span 
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >345 / 345</span>
+          >{{ qualifyingTest.counts.initialised }} / {{ qualifyingTest.counts.activated }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -72,12 +76,15 @@
           </RouterLink>
           <span 
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >100</span>
+          >{{ qualifyingTest.counts.completed }}</span>
         </p>
       </div>
     </div>
 
-    <div class="govuk-grid-column-one-half">
+    <div 
+      v-if="hasCounts"
+      class="govuk-grid-column-one-half"
+    >
       <div 
         v-if="true"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
@@ -91,7 +98,7 @@
           >
             Started
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">39</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.started }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -99,7 +106,7 @@
           >
             In Progress
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">78</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.inProgress }}</span>
         </p>
       </div>
     </div>
@@ -113,13 +120,7 @@
       >
         Edit
       </button>
-      <button
-        v-if="true"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnSendInvites"
-      >
-        Send invites
-      </button>
+      
       <ActionButton
         v-if="true"
         type="primary"
@@ -155,14 +156,6 @@
       >
         Responses
       </button>
-      <button
-        v-if="true"
-        :disabled="false"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnResponses('all')"
-      >
-        All Candidates
-      </button>
 
       <button
         v-if="true"
@@ -171,6 +164,15 @@
         @click="btnResponses('all')"
       >
         Reasonable Adjustments
+      </button>
+
+      <button
+        v-if="true"
+        :disabled="true"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnSendInvites"
+      >
+        Send invites
       </button>
     </div>
   </div>
@@ -187,6 +189,16 @@ export default {
   computed: {
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
+    },
+    qualifyingTest() {
+      const qtList = this.$store.state.qualifyingTest.record;
+      return qtList;
+    },
+    hasCounts() {
+      return this.qualifyingTest.counts;
+    },
+    isActive() {
+      return this.qualifyingTest.
     },
   },
   methods: {
