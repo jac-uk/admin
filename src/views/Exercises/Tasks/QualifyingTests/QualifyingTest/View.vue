@@ -161,7 +161,7 @@
         v-if="true"
         :disabled="false"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnResponses('all')"
+        @click="btnResponses('reasonable-adjustments')"
       >
         Reasonable Adjustments
       </button>
