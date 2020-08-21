@@ -181,6 +181,7 @@
 <script>
 import { functions } from '@/firebase';
 import ActionButton from '@/components/ActionButton';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
@@ -192,13 +193,15 @@ export default {
     },
     qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
+      // eslint-disable-next-line no-console
+      // console.log('qtList', qtList);
       return qtList;
     },
     hasCounts() {
       return this.qualifyingTest.counts;
     },
     isActive() {
-      return this.qualifyingTest.
+      return this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED || this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED.APPROVED;
     },
   },
   methods: {
