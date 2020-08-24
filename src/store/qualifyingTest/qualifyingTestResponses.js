@@ -10,7 +10,7 @@ export default {
     bind: firestoreAction(({ bindFirestoreRef }, { qualifyingTestId, searchStatus } ) => {
 
       // eslint-disable-next-line no-console
-      console.log('bind Qualifying test responseS', qualifyingTestId, searchStatus);
+      // console.log('bind Qualifying test responseS', qualifyingTestId, searchStatus);
       
       const isSeachAdjustment = searchStatus === 'reasonable-adjustments';
       const isSearchStatus = searchStatus !== 'all' && !isSeachAdjustment && searchStatus !== '';
@@ -37,7 +37,7 @@ export default {
     bindRecord: firestoreAction(({ bindFirestoreRef }, { id } ) => {
 
       // eslint-disable-next-line no-console
-      console.log('bind Qualifying test response', id);
+      // console.log('bind Qualifying test response', id);
 
       const firestoreRef = collectionRef
         .where('application.id', '==', id);
@@ -50,7 +50,7 @@ export default {
   },
   state: {
     records: [],
-    record: [],
+    record: null,
   },
 };
 
