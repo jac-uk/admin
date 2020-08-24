@@ -5,15 +5,17 @@
     >
       Candidates
     </h1>
-    <Search @search="useSearch" />
     <Table 
       data-key="id"
-      :data="candidateRecords"
+      :data="tableData"
+      :page-size="50"
       :columns="[
-        { title: 'Name' },
-        { title: 'Account created on' },
-        { title: 'Number of Applications' },
+        { title: 'Name', sort: 'fullName' },
+        { title: 'Account created on', sort: 'created', direction: 'desc', default: true },
+        { title: 'Number of Applications', sort: 'applications.applied', direction: 'desc' },
       ]"
+      :search="['fullName']"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -38,26 +40,20 @@
 <script>
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
-import Search from '@/components/Search'; 
 
 export default {
   components: {
     Table,
     TableCell,
-    Search,
   },
   computed: {
-    candidateRecords() {
-      const localRecords = this.$store.state.candidates.records;
-      return localRecords;
+    tableData() {
+      return this.$store.state.candidates.records;
     },
   },
-  async created() {
-    this.$store.dispatch('candidates/search', '');
-  },
   methods: {
-    useSearch(searchTem) {
-      this.$store.dispatch('candidates/search', searchTem);
+    getTableData(params) {
+      this.$store.dispatch('candidates/bind', params);      
     },
   },
 };
