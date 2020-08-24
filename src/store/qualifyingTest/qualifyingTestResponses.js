@@ -9,6 +9,9 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { qualifyingTestId, searchStatus } ) => {
 
+      // eslint-disable-next-line no-console
+      console.log('bind Qualifying test responseS', qualifyingTestId, searchStatus);
+      
       const isSeachAdjustment = searchStatus === 'reasonable-adjustments';
       const isSearchStatus = searchStatus !== 'all' && !isSeachAdjustment && searchStatus !== '';
 
@@ -31,9 +34,23 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    bindRecord: firestoreAction(({ bindFirestoreRef }, { id } ) => {
+
+      // eslint-disable-next-line no-console
+      console.log('bind Qualifying test response', id);
+
+      const firestoreRef = collectionRef
+        .where('application.id', '==', id);
+
+      return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('record');
+    }),
   },
   state: {
     records: [],
+    record: [],
   },
 };
 

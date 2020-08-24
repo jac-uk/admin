@@ -1,7 +1,7 @@
 <template>
   <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
     <h2 class="govuk-heading-m">
-      Qualifying Test  / {{ searchStatus | lookup }}
+      Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
     <h3 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}

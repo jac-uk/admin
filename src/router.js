@@ -500,7 +500,7 @@ const router = new Router({
                   },
                 },
                 {
-                  path: 'responses/:responseId',
+                  path: 'response/:responseId',
                   component: QualifyingTestResponse,
                   children: [
                     {
