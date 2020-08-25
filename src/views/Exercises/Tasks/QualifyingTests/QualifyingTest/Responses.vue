@@ -15,7 +15,7 @@
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Status', sort: 'status' },
         { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
-        { title: 'Action' },
+        { title: '' },
       ]"
       :search="['candidate.fullName']"
       @change="getTableData"
