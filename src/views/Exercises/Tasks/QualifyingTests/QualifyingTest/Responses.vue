@@ -3,7 +3,10 @@
     <h2 class="govuk-heading-m">
       Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
-    <h3 class="govuk-heading-l">
+    <h3 
+      class="govuk-heading-l"
+      @click="goToQualifyingTest"
+    >
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
     </h3>
 
@@ -107,6 +110,9 @@ export default {
           ...params,
         }
       );
+    },
+    goToQualifyingTest() {
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
   },
 };
