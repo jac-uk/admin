@@ -50,14 +50,6 @@
         </div>
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            Duration
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.testDuration }} minutes
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
             Additional instructions
           </dt>
           <dd class="govuk-summary-list__value">
@@ -69,6 +61,31 @@
                 {{ item.text }}
               </li>
             </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Duration
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ qualifyingTest.testDuration }} minutes
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Reasonable Adjustments
+          </dt>
+          <dd 
+            v-if="response"
+            class="govuk-summary-list__value" 
+          >
+            <EditableField 
+              :value="response.duration.reasonableAdjustment"
+              field="reasonableAdjustment"
+              @changefield="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
+            />
+            {{ response.duration.testDurationAdjusted }} minutes: 
+            {{ response.candidate.reasonableAdjustmentsDetails }}
           </dd>
         </div>
       </dl>
@@ -125,8 +142,12 @@
 
 <script>
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import EditableField from '@/components/EditableField';
 
 export default {
+  components: {
+    EditableField,
+  },
   computed: {
     responseId() {
       const id = this.$route.params.responseId;
@@ -138,7 +159,7 @@ export default {
       const qtList = this.$store.state.qualifyingTestResponses.record;
       // eslint-disable-next-line no-console
       // console.log('qtList response', qtList);
-      return qtList.length > 0 ? qtList[0] : null;
+      return qtList;
     },
     qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
@@ -162,6 +183,8 @@ export default {
     },
   },
   async created() {
+    // eslint-disable-next-line no-console
+    // console.log('created');
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
   },
 };
