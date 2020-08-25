@@ -22,11 +22,7 @@
     >
       <template #row="{row}">
         <TableCell>
-          <RouterLink
-            :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-          >
-            {{ row.candidate.fullName | showAlternative(row.candidate.id) }}
-          </RouterLink> 
+          {{ row.candidate.fullName | showAlternative(row.candidate.id) }}
         </TableCell>
         <TableCell>{{ row.status | lookup }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
@@ -42,7 +38,7 @@
           <RouterLink
             :to="{ name: 'qualifying-test-response-view', params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
           >
-            Response
+            View
           </RouterLink>
         </TableCell>
       </template>

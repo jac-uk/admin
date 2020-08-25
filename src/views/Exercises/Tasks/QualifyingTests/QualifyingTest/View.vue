@@ -231,8 +231,6 @@ export default {
           status: status, 
         },
       };
-      // eslint-disable-next-line no-console
-      console.log('Button clicked: PAUSE');
       
       this.$router.push(route);
     },
