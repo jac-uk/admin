@@ -7,16 +7,18 @@
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
     </h3>
 
-    <Table 
-      v-if="!isEmptyResults"
+    <Table
       data-key="id"
-      :data="applications"
+      :data="responses"
+      :page-size="50"
       :columns="[
-        { title: 'Name' },
-        { title: 'Status' },
-        { title: 'Time Limit' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Status', sort: 'status' },
+        { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
         { title: 'Action' },
       ]"
+      :search="['candidate.fullName']"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -51,16 +53,12 @@ export default {
     TableCell,
   },
   computed: {
-    applications() {
+    responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
-      // eslint-disable-next-line no-console
-      // console.log('responsesList', responsesList);
       return responsesList;
     },
     qualifyingTest() {
       const record = this.$store.state.qualifyingTest.record;
-      // eslint-disable-next-line no-console
-      // console.log('record', record);
       return record;
     },
     qualifyingTestId() {
@@ -69,12 +67,6 @@ export default {
     searchStatus() {
       return this.$route.params.status;
     },
-    isEmptyResults() {
-      return this.applications.length === 0;
-    },
-  },
-  async created() {
-    this.$store.dispatch('qualifyingTestResponses/bind', { qualifyingTestId: this.qualifyingTestId, searchStatus: this.searchStatus });
   },
   methods: {
     isReasonableAdjustment(needAdjustment) {
@@ -90,6 +82,16 @@ export default {
     actionReasonableAdjustment() {
       // TODO Action do when reasonable adjustment is clickec:
       // - choose the afjustment to be made in terms of minutes
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'qualifyingTestResponses/bind',
+        { 
+          qualifyingTestId: this.qualifyingTestId, 
+          searchStatus: this.searchStatus,
+          ...params,
+        }
+      );
     },
   },
 };

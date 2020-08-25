@@ -1,33 +1,32 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import tableQuery from '@/helpers/tableQuery';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { qualifyingTestId, searchStatus } ) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
 
-      // eslint-disable-next-line no-console
-      // console.log('bind Qualifying test responseS', qualifyingTestId, searchStatus);
-      
-      const isSeachAdjustment = searchStatus === 'reasonable-adjustments';
-      const isSearchStatus = searchStatus !== 'all' && !isSeachAdjustment && searchStatus !== '';
+      const isSeachAdjustment = params.searchStatus === 'reasonable-adjustments';
+      const isSearchStatus = params.searchStatus !== 'all' && !isSeachAdjustment && params.searchStatus !== '';
 
-      // eslint-disable-next-line prefer-const
       let firestoreRef = collectionRef
-        .where('qualifyingTest.id', '==', qualifyingTestId);
+        .where('qualifyingTest.id', '==', params.qualifyingTestId);
 
       if (isSearchStatus) {
         firestoreRef = firestoreRef
-          .where('status', '==', searchStatus);
+          .where('status', '==', params.searchStatus);
       }
 
       if (isSeachAdjustment) {
         firestoreRef = firestoreRef
           .where('candidate.reasonableAdjustments', '==', true);
       }
+
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
