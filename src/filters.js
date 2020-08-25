@@ -293,7 +293,7 @@ const lookup = (value) => {
     lookup[QUALIFYING_TEST.STATUS.INITIALISED] = 'Initialised';
     lookup[QUALIFYING_TEST.STATUS.ACTIVATED] = 'Activated';
     lookup[QUALIFYING_TEST.STATUS.COMPLETED] = 'Completed';
-    lookup[QUALIFYING_TEST.STATUS.STARTED] = 'Started';
+    lookup[QUALIFYING_TEST.STATUS.PAUSED] = 'Paused';
 
     lookup[QUALIFYING_TEST.TYPE.SCENARIO] = 'Scenario';
     lookup[QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS] = 'Critical analysis';

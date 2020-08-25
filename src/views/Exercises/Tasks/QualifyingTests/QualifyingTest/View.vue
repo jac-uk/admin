@@ -56,7 +56,7 @@
           <RouterLink
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
           >
-            Initialized
+            Initialised
           </RouterLink>
           / 
           <RouterLink
@@ -94,7 +94,7 @@
         </h2>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED'), }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
           >
             Started
           </RouterLink>
@@ -113,25 +113,54 @@
 
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="true"
+        v-if="isCreated || isSubmitted || isApproved"
         :disabled="false"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnEdit"
       >
         Edit
       </button>
-      
+
+      <div v-if="isApproved">
+        <select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-select govuk-!-margin-right-3"
+        >
+          <option value="">
+            Choose applications
+          </option>
+          <option
+            v-if="exercise.applicationRecords.review"
+            value="review" 
+          >
+            Review ({{ exercise.applicationRecords.review }})
+          </option>
+          <option
+            v-if="exercise.applicationRecords.shortlisted"
+            value="shortlisted" 
+          >
+            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+          </option>
+          <option
+            v-if="exercise.applicationRecords.selected"
+            value="selected" 
+          >
+            Selected ({{ exercise.applicationRecords.selected }})
+          </option>
+        </select>
+        <ActionButton
+          type="primary"
+          :disabled="!exerciseStage"
+          class="govuk-!-margin-right-3"
+          @click="btnInitialise"
+        >
+          Initialise
+        </ActionButton>
+      </div>
+
       <ActionButton
-        v-if="true"
-        type="primary"
-        :disabled="false"
-        class="govuk-!-margin-right-3"
-        @click="btnInitialize"
-      >
-        Initialize
-      </ActionButton>
-      <ActionButton
-        v-if="true"
+        v-if="isInitialised"
         :disabled="false"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
@@ -140,7 +169,7 @@
       </ActionButton>
 
       <button
-        v-if="true"
+        v-if="isActivated"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnPause"
@@ -149,8 +178,7 @@
       </button>
 
       <button
-        v-if="true"
-        :disabled="false"
+        v-if="isInitialised || isActivated || isPaused || isCompleted"
         class="govuk-button govuk-!-margin-right-3"
         @click="btnResponses('all')"
       >
@@ -158,8 +186,7 @@
       </button>
 
       <button
-        v-if="true"
-        :disabled="false"
+        v-if="isInitialised || isActivated || isPaused"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnResponses('reasonable-adjustments')"
       >
@@ -167,7 +194,7 @@
       </button>
 
       <ActionButton
-        v-if="true"
+        v-if="isInitialised"
         type="secondary"
         :disabled="false"
         class="govuk-!-margin-right-3"
@@ -188,21 +215,47 @@ export default {
   components: {
     ActionButton,
   },
+  data() {
+    return {
+      exerciseStage: '',
+    };
+  },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
     qualifyingTest() {
-      const qtList = this.$store.state.qualifyingTest.record;
+      const record = this.$store.state.qualifyingTest.record;
       // eslint-disable-next-line no-console
-      // console.log('qtList', qtList);
-      return qtList;
+      // console.log('QT record', record);
+      return record;
     },
     hasCounts() {
       return this.qualifyingTest.counts;
     },
-    isActive() {
-      return this.qualifyingTest.status === QUALIFYING_TEST.INITIALISED || this.qualifyingTest.status === QUALIFYING_TEST.APPROVED;
+    isCreated() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
+    },
+    isSubmitted() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
+    },
+    isApproved() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.APPROVED;
+    },
+    isInitialised() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
+    },
+    isActivated() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
+    },
+    isPaused() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.PAUSED;
+    },
+    isCompleted() {
+      return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
   },
   methods: {
@@ -212,9 +265,9 @@ export default {
     async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
     },
-    async btnInitialize() {
+    async btnInitialise() {
       // @TODO allow user to select stage (maybe status too) they want to include in the test
-      await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: 'review' });
+      await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: this.exerciseStage });
     },
     async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });

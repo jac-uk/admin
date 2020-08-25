@@ -64,11 +64,11 @@ const QUALIFYING_TEST = {
   STATUS: {
     CREATED: 'created',
     SUBMITTED: 'submitted-for-approval',
-    INITIALISED: 'initialised',
     APPROVED: 'approved',
+    INITIALISED: 'initialised',
     ACTIVATED: 'activated',
+    PAUSED: 'paused',
     COMPLETED: 'completed',
-    STARTED: 'started',
   },
 };
 
