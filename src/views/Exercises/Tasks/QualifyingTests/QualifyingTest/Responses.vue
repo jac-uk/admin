@@ -29,7 +29,14 @@
         <TableCell>{{ row.status | lookup }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
         <TableCell>
-          <span v-if="isReasonableAdjustment(row.candidate.reasonableAdjustments)">Reasonable Adjustment</span> 
+          <span v-if="isReasonableAdjustment(row.candidate.reasonableAdjustments)">
+            Reasonable Adjustment
+            <EditableField 
+              :value="row.duration.reasonableAdjustment"
+              field="reasonableAdjustment"
+              @changefield="(obj) => actionReasonableAdjustment(obj, row.duration, row.id)"
+            />
+          </span> 
           <RouterLink
             :to="{ name: 'qualifying-test-response-view', params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
           >
@@ -44,11 +51,13 @@
 <script>
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import EditableField from '@/components/EditableField';
 
 export default {
   components: {
     Table,
     TableCell,
+    EditableField,
   },
   computed: {
     applications() {
@@ -87,9 +96,19 @@ export default {
       // If completed
       return `${timeLimit} min`;
     },
-    actionReasonableAdjustment() {
-      // TODO Action do when reasonable adjustment is clickec:
-      // - choose the afjustment to be made in terms of minutes
+    actionReasonableAdjustment(obj, duration, id) {
+      const reasonableAdjustment = Number(obj.reasonableAdjustment);
+      const calculation = reasonableAdjustment + Number(duration.testDuration);
+      const returnObj = { 
+        duration: {
+          testDuration: duration.testDuration,
+          testDurationAdjusted: calculation,
+          reasonableAdjustment: reasonableAdjustment,
+        },
+      };
+      // eslint-disable-next-line no-console
+      // console.log('changeReasonableAdjustment', id, obj, duration, returnObj);
+      this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
   },
 };

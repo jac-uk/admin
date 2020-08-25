@@ -80,7 +80,7 @@ export default {
       default: 'value',
     },
     value: {
-      type: [String, Date],
+      type: [String, Date, Number],
       default: '',
     },
     type: {

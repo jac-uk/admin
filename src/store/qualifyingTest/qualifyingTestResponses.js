@@ -46,7 +46,12 @@ export default {
     }),
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
-    }),
+    }), 
+    updateRA: async (context, { data, id }) => {
+      // Update Reasonable Adjustments
+      const ref = collectionRef.doc(`${id}`);
+      await ref.update(data);
+    },
   },
   state: {
     records: [],
