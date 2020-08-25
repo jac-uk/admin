@@ -187,6 +187,22 @@ export default {
     // console.log('created');
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
   },
+  methods: {
+    actionReasonableAdjustment(obj, duration, id) {
+      const reasonableAdjustment = Number(obj.reasonableAdjustment);
+      const calculation = reasonableAdjustment + Number(duration.testDuration);
+      const returnObj = { 
+        duration: {
+          testDuration: duration.testDuration,
+          testDurationAdjusted: calculation,
+          reasonableAdjustment: reasonableAdjustment,
+        },
+      };
+      // eslint-disable-next-line no-console
+      // console.log('changeReasonableAdjustment', id, obj, duration, returnObj);
+      this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
+    },
+  },
 };
 </script>
 
