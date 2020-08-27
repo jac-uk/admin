@@ -54,6 +54,10 @@ export default {
     isActive(page){     
       // if an application    
       if (page.params){ 
+        if (page.params.nav) {
+          const routePath = this.$route.path;
+          return routePath.includes(page.params.nav);
+        }
         if (page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length - 3]){ 
           // check if the status param matches route path 3rd from last item (draft/applied/withdrawn)
           return page.params.status == this.$route.path.split('/')[this.$route.path.split('/').length - 3];
