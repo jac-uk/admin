@@ -200,6 +200,9 @@ export default {
         {
           title: 'Qualifying Tests',
           name: 'exercise-tasks-qualifying-tests',
+          params: {
+            nav: '/tasks/qualifying-tests',
+          },
         },
         {
           title: 'Character Checks',
