@@ -156,12 +156,20 @@
         Approve
       </button>
     </span>
-    
+
     <button
+      v-if="!isApproved"
       class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
       @click="btnGoBack"
     >
       Save & Go back
+    </button>
+    <button
+      v-if="isApproved"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="btnGoBack"
+    >
+      Go back
     </button>
   </div>
 </template>
@@ -181,6 +189,9 @@ export default {
     isReadyForApproval() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
     },
+    isApproved() {
+      return !this.isDraft && !this.isReadyForApproval;
+    },
     questionLabel() {
       let label = 'Question';
 
@@ -196,6 +207,7 @@ export default {
   methods: {
     submitForApproval() {
       this.$store.dispatch('qualifyingTest/submitForApproval');
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnGoBack() {
       // this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
@@ -203,6 +215,8 @@ export default {
     },
     approve() {
       this.$store.dispatch('qualifyingTest/approve');
+      // #799 On Approval of the QT send back to the dashboard
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
   },
 };
