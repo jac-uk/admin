@@ -24,6 +24,7 @@
       :allow-empty="true"
       required
     />
+    <slot name="removeButton" />
   </fieldset>
 </template>
 
