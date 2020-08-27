@@ -112,14 +112,22 @@
     </div>
 
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
-      <button
-        v-if="isCreated || isSubmitted || isApproved"
-        :disabled="false"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnEdit"
-      >
-        Edit
-      </button>
+      <span v-if="isCreated || isSubmitted || isApproved">
+        <button
+          :disabled="false"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnEdit"
+        >
+          Edit
+        </button>
+        <button
+          :disabled="false"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnReview"
+        >
+          Review
+        </button>
+      </span>
 
       <div v-if="isApproved">
         <select
@@ -261,6 +269,9 @@ export default {
   methods: {
     btnEdit() {
       this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    btnReview() {
+      this.$router.push({ name: 'qualifying-test-review', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });

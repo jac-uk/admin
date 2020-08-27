@@ -139,19 +139,37 @@
       </div>
     </dl>
 
+    <span v-if="isDraft">
+      <button
+        class="govuk-button govuk-!-margin-right-3"
+        @click="submitForApproval"
+      >
+        Submit for Approval
+      </button>
+    </span>
+    
+    <span v-if="isReadyForApproval">
+      <button
+        class="govuk-button govuk-!-margin-right-3"
+        @click="approve"
+      >
+        Approve
+      </button>
+    </span>
+
     <button
-      v-if="isDraft"
-      class="govuk-button govuk-!-margin-right-3"
-      @click="submitForApproval"
+      v-if="!isApproved"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="btnGoBack"
     >
-      Submit for Approval
+      Save & Go back
     </button>
     <button
-      v-if="isReadyForApproval"
-      class="govuk-button govuk-!-margin-right-3"
-      @click="approve"
+      v-if="isApproved"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="btnGoBack"
     >
-      Approve
+      Go back
     </button>
   </div>
 </template>
@@ -171,6 +189,9 @@ export default {
     isReadyForApproval() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
     },
+    isApproved() {
+      return !this.isDraft && !this.isReadyForApproval;
+    },
     questionLabel() {
       let label = 'Question';
 
@@ -179,13 +200,23 @@ export default {
       }
       return label;
     },
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
+    },
   },
   methods: {
     submitForApproval() {
       this.$store.dispatch('qualifyingTest/submitForApproval');
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    btnGoBack() {
+      // this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     approve() {
       this.$store.dispatch('qualifyingTest/approve');
+      // #799 On Approval of the QT send back to the dashboard
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
   },
 };
