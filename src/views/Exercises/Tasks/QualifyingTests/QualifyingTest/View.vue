@@ -237,8 +237,6 @@ export default {
     },
     qualifyingTest() {
       const record = this.$store.state.qualifyingTest.record;
-      // eslint-disable-next-line no-console
-      // console.log('QT record', record);
       return record;
     },
     hasCounts() {

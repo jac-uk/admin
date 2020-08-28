@@ -34,12 +34,7 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindRecord: firestoreAction(({ bindFirestoreRef }, { id } ) => {
-
-      // eslint-disable-next-line no-console
-      // console.log('bind Qualifying test response', id);
-
       const firestoreRef = collectionRef.doc(id);
-
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
