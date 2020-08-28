@@ -9,7 +9,12 @@
     >
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
     </h3>
-
+    <button
+      class="govuk-button govuk-!-margin-left-3 float-right"
+      @click="downloadResponses"
+    >
+      Download responses
+    </button>
     <Table
       data-key="id"
       :data="responses"
@@ -44,6 +49,8 @@
 <script>
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
+import { downloadXLSX } from '@/helpers/export';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
@@ -67,10 +74,106 @@ export default {
     },
   },
   methods: {
+    downloadResponses() {
+
+      // const contacts = this.applications.map((application) => {
+      //   return [
+      //     application.referenceNumber,
+      //     filters.lookup(application.status),
+      //     application.personalDetails.fullName,
+      //     application.personalDetails.email,
+      //     application.personalDetails.phone,
+      //     filters.formatDate(application.personalDetails.dateOfBirth),
+      //     filters.formatNIN(application.personalDetails.nationalInsuranceNumber),
+      //     filters.lookup(application.equalityAndDiversitySurvey.gender),
+      //     filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)),
+      //     filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup),
+      //     this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey),
+      //     this.flattenProfessionalBackground(application.equalityAndDiversitySurvey),
+      //     filters.toYesNo(this.attendedUKStateSchool(application.equalityAndDiversitySurvey)),
+      //     filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)),
+      //     application.firstAssessorFullName,
+      //     application.firstAssessorEmail,
+      //     application.firstAssessorPhone,
+      //     application.secondAssessorFullName,
+      //     application.secondAssessorEmail,
+      //     application.secondAssessorPhone,
+      //   ];
+      // });
+
+      const headers = [
+        'ID',
+        'Reference number',
+        'Full Name',
+        'Total Duration',
+        'Adjust applied',
+        'Status',
+        'Started',
+        'Completed',
+      ];
+
+      this.qualifyingTest.testQuestions.questions.forEach(element => {
+        headers.push(element.details);
+      });
+
+      const data = this.responses.map(element => {
+        const row = [
+          element.id,
+          element.application.referenceNumber,
+          element.candidate.fullName,
+          element.duration.testDurationAdjusted,
+          element.duration.reasonableAdjustment,
+          element.status,
+          element.statusLog.started,
+          element.statusLog.completed,
+        ];
+        switch (this.qualifyingTest.type){
+        case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
+          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+            if (element.testQuestions.questions[index].selection) {
+              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].selection.mostAppropriate].answer);
+            // row.push(element.testQuestions.questions[index].selection.leastAppropriate);
+            } else {
+              row.push('---');
+            }
+          });
+          break;
+        // case QUALIFYING_TEST.TYPE.SCENARIO:
+        //   this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+        //     // 
+        //   });
+        //   break;
+        // case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
+        //   this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+        //     // 
+        //   });
+        //   break;
+        }
+        return row;
+      });
+
+      const xlsxData = [
+        headers,
+        ...data,
+      ];
+
+      console.table(xlsxData);
+      
+      // });
+      // downloadXLSX(
+      //   [this.responses],
+      //   {
+      //     title: `${this.qualifyingTestId} - responses`,
+      //     sheetName: `${this.qualifyingTestId} - responses`,
+      //     fileName: `${this.qualifyingTestId} - responses.xlsx`,
+      //   }
+      // );
+    },
     isReasonableAdjustment(needAdjustment) {
       return needAdjustment;
     },
-    formatTimeLimit(timeLimit) { // TODO
+    formatTimeLimit(timeLimit) { 
+      // TODO
       // Function to format the time limit
       // If activated ...
       // If Started ...
