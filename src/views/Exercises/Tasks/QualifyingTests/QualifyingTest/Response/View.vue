@@ -182,20 +182,14 @@ export default {
   computed: {
     responseId() {
       const id = this.$route.params.responseId;
-      // eslint-disable-next-line no-console
-      // console.log('id', id);
       return id;
     },
     response() {
       const qtList = this.$store.state.qualifyingTestResponses.record;
-      // eslint-disable-next-line no-console
-      // console.log('qtList response', qtList);
       return qtList;
     },
     qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
-      // eslint-disable-next-line no-console
-      // console.log('qtList qualifyingTest', qtList);
       return qtList;
     },
     candidate() {
@@ -214,8 +208,6 @@ export default {
     },
   },
   async created() {
-    // eslint-disable-next-line no-console
-    // console.log('created');
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
   },
   methods: {
@@ -230,8 +222,6 @@ export default {
           reasonableAdjustment: reasonableAdjustment,
         },
       };
-      // eslint-disable-next-line no-console
-      // console.log('changeReasonableAdjustment', id, obj, duration, returnObj);
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
     actionReasonableAdjustmentJustification(obj, id) {
@@ -241,8 +231,6 @@ export default {
           reasonableAdjustmentsJustification: obj.reasonableAdjustmentsJustification,
         },
       };
-      // eslint-disable-next-line no-console
-      // console.log('changeReasonableAdjustment', id, obj, duration, returnObj);
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
   },
