@@ -63,12 +63,15 @@
             </ul>
           </dd>
         </div>
-        <div class="govuk-summary-list__row">
+        <div 
+          v-if="response"
+          class="govuk-summary-list__row" 
+        >
           <dt class="govuk-summary-list__key">
             Duration
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.testDuration }} minutes
+            {{ response.duration.testDurationAdjusted }} minutes
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -79,13 +82,41 @@
             v-if="response"
             class="govuk-summary-list__value" 
           >
-            <EditableField 
-              :value="response.duration.reasonableAdjustment"
-              field="reasonableAdjustment"
-              @changefield="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
-            />
-            {{ response.duration.testDurationAdjusted }} minutes: 
-            {{ response.candidate.reasonableAdjustmentsDetails }}
+            <table class="govuk-table">
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  Duration
+                </td>
+                <td class="govuk-table__cell">
+                  {{ response.duration.testDuration }} minutes
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  Adjustment
+                </td>
+                <td class="govuk-table__cell">
+                  <EditableField 
+                    :value="response.duration.reasonableAdjustment"
+                    field="reasonableAdjustment"
+                    @changefield="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
+                  />
+                  {{ response.candidate.reasonableAdjustmentsDetails }}
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  Justification
+                </td>
+                <td class="govuk-table__cell">
+                  <EditableField 
+                    :value="response.duration.reasonableAdjustmentsJustification"
+                    field="reasonableAdjustmentsJustification"
+                    @changefield="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
+                  />
+                </td>
+              </tr>
+            </table>
           </dd>
         </div>
       </dl>
@@ -193,9 +224,21 @@ export default {
       const calculation = reasonableAdjustment + Number(duration.testDuration);
       const returnObj = { 
         duration: {
+          ...this.response.duration,
           testDuration: duration.testDuration,
           testDurationAdjusted: calculation,
           reasonableAdjustment: reasonableAdjustment,
+        },
+      };
+      // eslint-disable-next-line no-console
+      // console.log('changeReasonableAdjustment', id, obj, duration, returnObj);
+      this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
+    },
+    actionReasonableAdjustmentJustification(obj, id) {
+      const returnObj = { 
+        duration: {
+          ...this.response.duration,
+          reasonableAdjustmentsJustification: obj.reasonableAdjustmentsJustification,
         },
       };
       // eslint-disable-next-line no-console
