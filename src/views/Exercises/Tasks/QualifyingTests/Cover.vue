@@ -16,7 +16,8 @@
       <template #row="{row}">
         <TableCell>
           <RouterLink
-            :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: row.id } }"
+            class="govuk-link"
+            :to="{ name: getViewName(row), params: { qualifyingTestId: row.id } }"
           >
             {{ row.title | showAlternative(row.id) }}
           </RouterLink>
@@ -37,7 +38,8 @@
 
 <script>
 import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import TableCell from '@/components/Page/Table/TableCell';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
@@ -62,6 +64,18 @@ export default {
   methods: {
     btnCreate() {
       this.$router.push({ name: 'qualifying-test-new' });
+    },
+    getViewName(qualifyingTest) {
+      if (
+        qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED
+        || qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED
+        || qualifyingTest.status === QUALIFYING_TEST.STATUS.APPROVED
+      ) {
+        return 'qualifying-test-review';
+      } else {
+        return 'qualifying-test-view';
+      }
+      // 
     },
   },
 };

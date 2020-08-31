@@ -12,20 +12,18 @@
         rows="2"
       />
 
-      <fieldset
-        class="govuk-fieldset"
-      >         
-        <RepeatableFields
-          v-model="qualifyingTest.testQuestions.questions"
-          :component="repeatableFields.QualifyingTestQuestion"
-          :ident="qualifyingTest.type"
-          :type="qualifyingTest.type"
-          required
-        />
-        <button class="govuk-button">
-          Save and continue
-        </button>
-      </fieldset>
+      <RepeatableFields
+        v-model="qualifyingTest.testQuestions.questions"
+        :component="repeatableFields.QualifyingTestQuestion"
+        :ident="qualifyingTest.type"
+        :type="qualifyingTest.type"
+        :type-name="typeName"
+        required
+      />
+
+      <button class="govuk-button">
+        Save and continue
+      </button>
     </form>
   </div>
 </template>
@@ -34,6 +32,7 @@ import Form from '@/components/Form/Form';
 import TextareaInput from '@/components/Form/TextareaInput';
 import RepeatableFields from '@/components/RepeatableFields';
 import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
@@ -57,6 +56,14 @@ export default {
       },
       qualifyingTest: qualifyingTest,
     };
+  },
+  computed: {
+    isScenario() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO ? true : false;
+    },
+    typeName() {
+      return this.isScenario ? 'scenario' : 'question';
+    },
   },
   methods: {
     async save(isValid) {
