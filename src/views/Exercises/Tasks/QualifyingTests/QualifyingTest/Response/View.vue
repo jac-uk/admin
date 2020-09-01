@@ -18,18 +18,10 @@
       <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            Type
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.type | lookup }}
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.status | lookup }}
+            {{ response.status | lookup }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -37,7 +29,7 @@
             Start date
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.startDate | formatDate('datetime') }}
+            {{ response.statusLog.started | formatDate('datetime') }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -45,22 +37,7 @@
             End date
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.endDate | formatDate('datetime') }}
-          </dd>
-        </div>
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Additional instructions
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <ul class="govuk-list">
-              <li
-                v-for="(item, index) in qualifyingTest.additionalInstructions"
-                :key="index"
-              >
-                {{ item.text }}
-              </li>
-            </ul>
+            {{ response.statusLog.completed | formatDate('datetime') }}
           </dd>
         </div>
         <div 
