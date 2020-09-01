@@ -163,8 +163,6 @@ export default {
     },
     response() {
       const qtList = this.$store.state.qualifyingTestResponses.record;
-      // eslint-disable-next-line no-console
-      console.log('response', qtList);
       return qtList;
     },
     qualifyingTest() {
