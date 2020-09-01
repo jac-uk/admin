@@ -1,11 +1,5 @@
 <template>
   <div>
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h3 class="govuk-fieldset__heading">
-        Scenarios
-      </h3>
-    </legend>
-
     <RichTextInput
       id="scenario-question-input"
       v-model="text"
