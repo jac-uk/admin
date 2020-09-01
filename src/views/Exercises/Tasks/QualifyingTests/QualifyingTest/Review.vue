@@ -1,8 +1,11 @@
 <template>
   <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-l">
-      Review qualifying test
+    <h2 class="govuk-heading-m">
+      Qualifying Test
     </h2>
+    <h3 class="govuk-heading-l">
+      {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+    </h3>
 
     <div class="text-right">
       <router-link
@@ -135,6 +138,21 @@
               {{ option.answer }}
             </li>
           </ol>
+          <hr 
+            v-if="isSituationalJudgement || isCriticalAnalysis"
+            class="govuk-section-break govuk-section-break--visible"
+          >
+          <div
+            v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
+          >
+            Most appropriate: {{ testQuestion.options[testQuestion.mostAppropriate].answer }} <br>
+            Least appropriate: {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
+          </div>
+          <div
+            v-if="isCriticalAnalysis && testQuestion.correct >= 0"
+          >
+            Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+          </div>
         </dd>
       </div>
     </dl>
@@ -157,13 +175,6 @@
       </button>
     </span>
 
-    <button
-      v-if="!isApproved"
-      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-      @click="btnGoBack"
-    >
-      Save & Go back
-    </button>
     <button
       v-if="isApproved"
       class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -203,14 +214,19 @@ export default {
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
+    isCriticalAnalysis() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS ? true : false;
+    },
+    isScenario() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO ? true : false;
+    },
+    isSituationalJudgement() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? true : false;
+    },
   },
   methods: {
     submitForApproval() {
       this.$store.dispatch('qualifyingTest/submitForApproval');
-      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
-    },
-    btnGoBack() {
-      // this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     approve() {

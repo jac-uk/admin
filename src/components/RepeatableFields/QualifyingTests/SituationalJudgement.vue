@@ -1,10 +1,5 @@
 <template>
   <div>
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h3 class="govuk-fieldset__heading">
-        Situational Judgement
-      </h3>
-    </legend>
     <TextField
       id="situational-judgement-question-input"
       v-model="text"
