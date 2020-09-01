@@ -49,8 +49,8 @@
 <script>
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell'; 
-import { downloadXLSX } from '@/helpers/export';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { downloadXLSX } from '@/helpers/export';
 
 export default {
   components: {
@@ -76,31 +76,6 @@ export default {
   methods: {
     downloadResponses() {
 
-      // const contacts = this.applications.map((application) => {
-      //   return [
-      //     application.referenceNumber,
-      //     filters.lookup(application.status),
-      //     application.personalDetails.fullName,
-      //     application.personalDetails.email,
-      //     application.personalDetails.phone,
-      //     filters.formatDate(application.personalDetails.dateOfBirth),
-      //     filters.formatNIN(application.personalDetails.nationalInsuranceNumber),
-      //     filters.lookup(application.equalityAndDiversitySurvey.gender),
-      //     filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)),
-      //     filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup),
-      //     this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey),
-      //     this.flattenProfessionalBackground(application.equalityAndDiversitySurvey),
-      //     filters.toYesNo(this.attendedUKStateSchool(application.equalityAndDiversitySurvey)),
-      //     filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)),
-      //     application.firstAssessorFullName,
-      //     application.firstAssessorEmail,
-      //     application.firstAssessorPhone,
-      //     application.secondAssessorFullName,
-      //     application.secondAssessorEmail,
-      //     application.secondAssessorPhone,
-      //   ];
-      // });
-
       const headers = [
         'ID',
         'Reference number',
@@ -112,8 +87,16 @@ export default {
         'Completed',
       ];
 
-      this.qualifyingTest.testQuestions.questions.forEach(element => {
-        headers.push(element.details);
+      this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT) {
+          headers.push(`Q ${ index + 1 }. Most Appropriate`, `Q ${ index + 1 }. Least Appropriate`);
+        }
+        // if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
+        //   headers.push('scenario');
+        // }
+        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
+          headers.push(`Q ${ index + 1 }. Answer`);
+        }
       });
 
       const data = this.responses.map(element => {
@@ -130,11 +113,11 @@ export default {
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].selection) {
-              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].selection.mostAppropriate].answer);
-            // row.push(element.testQuestions.questions[index].selection.leastAppropriate);
+            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
+              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer);
+              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer);
             } else {
-              row.push('---');
+              row.push('---','---');
             }
           });
           break;
@@ -143,11 +126,15 @@ export default {
         //     // 
         //   });
         //   break;
-        // case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
-        //   this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-        //     // 
-        //   });
-        //   break;
+        case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
+          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
+              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer);
+            } else {
+              row.push('---');
+            }
+          });
+          break;
         }
         return row;
       });
@@ -157,17 +144,14 @@ export default {
         ...data,
       ];
 
-      console.table(xlsxData);
-      
-      // });
-      // downloadXLSX(
-      //   [this.responses],
-      //   {
-      //     title: `${this.qualifyingTestId} - responses`,
-      //     sheetName: `${this.qualifyingTestId} - responses`,
-      //     fileName: `${this.qualifyingTestId} - responses.xlsx`,
-      //   }
-      // );
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.qualifyingTestId} - responses`,
+          sheetName: `${this.qualifyingTestId} - responses`,
+          fileName: `${this.qualifyingTestId} - responses.xlsx`,
+        }
+      );
     },
     isReasonableAdjustment(needAdjustment) {
       return needAdjustment;
