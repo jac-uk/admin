@@ -69,7 +69,6 @@ export default {
       if (
         qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED
         || qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED
-        || qualifyingTest.status === QUALIFYING_TEST.STATUS.APPROVED
       ) {
         return 'qualifying-test-review';
       } else {
