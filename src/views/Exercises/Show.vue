@@ -55,6 +55,11 @@
             title="Tasks"
           />
           <Navigation
+            v-else
+            :pages="exerciseQtNavigation"
+            title="Tasks"
+          />
+          <Navigation
             v-if="exercise.applicationRecords"
             :pages="applicationStageNavigation"
             title="Stages"
@@ -207,6 +212,17 @@ export default {
         {
           title: 'Character Checks',
           name: 'exercise-tasks-character-checks',
+        },
+      ];
+    },
+    exerciseQtNavigation(){
+      return [
+        {
+          title: 'Qualifying Tests',
+          name: 'exercise-tasks-qualifying-tests',
+          params: {
+            nav: '/tasks/qualifying-tests',
+          },
         },
       ];
     },
