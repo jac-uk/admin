@@ -220,17 +220,16 @@ export default {
         if (this.dateConstructor === null) {
           return null;
         } else {
-          return new Date(Date.UTC(...this.dateConstructor));
+          return new Date(...this.dateConstructor);
         }
       },
       set(value) {
         if (value instanceof Date) {
-          // TODO: local time not UTC
-          this.day = value.getUTCDate();
-          this.month = value.getUTCMonth() + 1;
-          this.year = value.getUTCFullYear();
-          this.hour = value.getUTCHours();
-          this.minute = value.getUTCMinutes();
+          this.day = value.getDate();
+          this.month = value.getMonth() + 1;
+          this.year = value.getFullYear();
+          this.hour = value.getHours();
+          this.minute = value.getMinutes();
         }
       },
     },
