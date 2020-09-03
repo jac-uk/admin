@@ -15,7 +15,10 @@
         Test details
       </h2>
 
-      <dl class="govuk-summary-list">
+      <dl
+        v-if="response" 
+        class="govuk-summary-list"
+      >
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Status
@@ -45,10 +48,10 @@
           class="govuk-summary-list__row" 
         >
           <dt class="govuk-summary-list__key">
-            Duration
+            Time taken
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.duration.testDurationAdjusted }} minutes
+            {{ timeTaken }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -62,10 +65,10 @@
             <table class="govuk-table">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  Duration
+                  Duration / Adjusted
                 </td>
                 <td class="govuk-table__cell">
-                  {{ response.duration.testDuration }} minutes
+                  {{ response.duration.testDuration }} min. / {{ response.duration.testDurationAdjusted }} min.
                 </td>
               </tr>
               <tr class="govuk-table__row">
@@ -182,6 +185,18 @@ export default {
         label = 'Scenario';
       }
       return label;
+    },
+    timeTaken() {
+      let diff = 0;
+      if (this.response.statusLog.completed && this.response.statusLog.started) {
+        diff = this.response.statusLog.completed - this.response.statusLog.started;
+      }
+      const newDate = new Date(diff);
+      const hh = `0${newDate.getUTCHours()}`.slice(-2);
+      const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
+      const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
+      const returnTimeTaken = `${hh}:${mm}:${ss}`;
+      return returnTimeTaken;
     },
   },
   async created() {
