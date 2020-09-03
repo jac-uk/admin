@@ -102,7 +102,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
           >
             In Progress
           </RouterLink>
@@ -210,6 +210,16 @@
       >
         Send invites
       </ActionButton>
+
+      <ActionButton
+        v-if="isEndDatePassed || isActivated || isCompleted"
+        type="primary"
+        :disabled="isEndDatePassed"
+        class="govuk-!-margin-right-3"
+        @click="btnGetScores"
+      >
+        Close & Score
+      </ActionButton>
     </div>
   </div>
 </template>
@@ -218,6 +228,7 @@
 import { functions } from '@/firebase';
 import ActionButton from '@/components/ActionButton';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { isDateGreaterThan } from '@/helpers/date';
 
 export default {
   components: {
@@ -263,6 +274,11 @@ export default {
     isCompleted() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
+    isEndDatePassed() {
+      const today = new Date();
+      const endDate = new Date(this.qualifyingTest.endDate);
+      return isDateGreaterThan(endDate, today);
+    },
   },
   methods: {
     btnEdit() {
@@ -280,6 +296,9 @@ export default {
     },
     async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+    },
+    async btnGetScores() {
+      await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     btnPause() {
       // eslint-disable-next-line no-console
