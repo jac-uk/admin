@@ -53,12 +53,6 @@
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />
-          <!-- v-if="exercise.applicationRecords" -->
-          <!-- <Navigation
-            v-else
-            :pages="exerciseQtNavigation"
-            title="QT-only"
-          /> -->
           <Navigation
             v-if="exercise.applicationRecords"
             :pages="applicationStageNavigation"
@@ -219,17 +213,6 @@ export default {
         );
       }
       return tasks;
-    },
-    exerciseQtNavigation(){
-      return [
-        {
-          title: 'Qualifying Tests',
-          name: 'exercise-tasks-qualifying-tests',
-          params: {
-            nav: '/tasks/qualifying-tests',
-          },
-        },
-      ];
     },
     applicationStageNavigation(){
       if (this.exercise.applicationRecords){
