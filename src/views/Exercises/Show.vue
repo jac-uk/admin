@@ -50,15 +50,15 @@
             title="Applications"
           />
           <Navigation
-            v-if="exercise.applicationRecords"
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />
-          <Navigation
+          <!-- v-if="exercise.applicationRecords" -->
+          <!-- <Navigation
             v-else
             :pages="exerciseQtNavigation"
-            title="Tasks"
-          />
+            title="QT-only"
+          /> -->
           <Navigation
             v-if="exercise.applicationRecords"
             :pages="applicationStageNavigation"
@@ -197,11 +197,7 @@ export default {
       ];
     },
     exerciseTasksNavigation(){
-      return [
-        {
-          title: 'Independent Assessments',
-          name: 'exercise-tasks-independent-assessments',
-        },
+      const tasks = [
         {
           title: 'Qualifying Tests',
           name: 'exercise-tasks-qualifying-tests',
@@ -209,11 +205,20 @@ export default {
             nav: '/tasks/qualifying-tests',
           },
         },
-        {
-          title: 'Character Checks',
-          name: 'exercise-tasks-character-checks',
-        },
       ];
+      if (this.exercise.applicationRecords) {
+        tasks.push(
+          {
+            title: 'Independent Assessments',
+            name: 'exercise-tasks-independent-assessments',
+          },
+          {
+            title: 'Character Checks',
+            name: 'exercise-tasks-character-checks',
+          },
+        );
+      }
+      return tasks;
     },
     exerciseQtNavigation(){
       return [
