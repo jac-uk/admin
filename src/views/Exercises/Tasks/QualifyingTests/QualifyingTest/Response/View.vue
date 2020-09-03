@@ -107,7 +107,7 @@
       
       <dl class="govuk-summary-list">
         <div
-          v-if="qualifyingTest.testQuestions.introduction"
+          v-if="response.testQuestions.introduction"
           class="govuk-summary-list__row"
         >
           <dt
@@ -116,12 +116,12 @@
             Introduction
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.testQuestions.introduction }}
+            {{ response.testQuestions.introduction }}
           </dd>
         </div>
 
         <div
-          v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
+          v-for="(testQuestion, index) in response.testQuestions.questions"
           :key="index"
           class="govuk-summary-list__row"
         >
@@ -138,10 +138,10 @@
             <hr class="govuk-section-break govuk-section-break--visible">
             <ol>
               <li
-                v-for="(res, i) in responses"
+                v-for="(res, i) in testQuestion.options"
                 :key="i"
               >
-                {{ res.text }}
+                {{ res.answer }}
               </li>
             </ol>
           </dd>
