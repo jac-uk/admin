@@ -68,6 +68,8 @@ const QUALIFYING_TEST = {
     INITIALISED: 'initialised',
     ACTIVATED: 'activated',
     PAUSED: 'paused',
+    STARTED: 'started',
+    PROGRESS: 'in-progress',
     COMPLETED: 'completed',
   },
 };
