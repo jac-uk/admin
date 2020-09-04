@@ -88,6 +88,35 @@
         </dd>
       </div>
     </dl>
+    <dl 
+      v-for="(additionalWorkingPreference, index) in exercise.additionalWorkingPreferences"
+      :key="index"
+      class="govuk-summary-list"
+    >
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {{ additionalWorkingPreference.topic }}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ additionalWorkingPreference.question }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {{ additionalWorkingPreference.questionType | lookup }}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="(answer, answerIndex) in additionalWorkingPreference.answers"
+              :key="answerIndex"
+            >
+              {{ answer.answer }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 
