@@ -81,8 +81,8 @@ export default {
     };
   },
   computed: {
-    candidateRecords() {
-      const localRecords = this.$store.state.candidates.records;
+    candidateRecord() {
+      const localRecords = this.$store.state.candidates.record;
       return localRecords;
     },
     personalDetails() {
@@ -98,7 +98,7 @@ export default {
       return localDocs || {};
     },
     myFullName() {
-      return this.personalDetails ? this.personalDetails.fullName : this.candidateRecords.fullName;
+      return this.personalDetails ? this.personalDetails.fullName : this.candidateRecord.fullName;
     },
     getUserId() {
       return this.$route.params.id || '';
@@ -106,8 +106,12 @@ export default {
   },
   created() {
     this.candidateId = this.getUserId;
-    this.$store.dispatch('candidates/bind', this.candidateId);
+    this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
+  },
+  destroyed() {
+    this.$store.dispatch('candidates/unbindDoc');
+    this.$store.dispatch('candidates/unbindDocs');
   },
   methods: {
     updateCandidate(obj) {

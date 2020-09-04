@@ -1,21 +1,20 @@
 <template>
   <div>
-    <TextField
-      :id="`answer_${id}_${index}`"
-      v-model="row.answer"
-      :label="`${label} ${1 + index}`"
+    <TextareaInput
+      :id="`${uniqueId}--additional-information`"
+      v-model="row.text"
     />
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
+import TextareaInput from '@/components/Form/TextareaInput';
 
 export default {
-  name: 'Answer',
+  name: 'QTAdditionalInstruction',
   components: {
-    TextField,
+    TextareaInput,
   },
   props: {
     row: {
@@ -31,10 +30,10 @@ export default {
       type: String,
       default: '',
     },
-    label: {
-      required: false,
-      type: String,
-      default: 'Answer option',
+  },
+  computed: {
+    uniqueId() {
+      return `${this.id}_${this.index}`;
     },
   },
 };

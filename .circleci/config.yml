@@ -85,8 +85,10 @@ workflows:
   version: 2
   test-build-and-deploy:
     jobs:
-      - setup
+      - setup:
+          context: JAC Context
       - test:
+          context: JAC Context
           requires:
             - setup
       # - rebase:
@@ -96,18 +98,21 @@ workflows:
       #       branches:
       #         ignore: master
       - build-and-deploy-develop:
+          context: JAC Context
           requires:
             - test
           filters:
             branches:
               only: /develop/
       - build-and-deploy-staging:
+          context: JAC Context
           requires:
             - test
           filters:
             branches:
               only: /release/.*/
       - build-and-deploy-production:
+          context: JAC Context
           requires:
             - test
           filters:

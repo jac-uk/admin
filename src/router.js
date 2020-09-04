@@ -60,6 +60,20 @@ import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/Indepen
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
 
+// Temp
+import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
+
+// QTs
+import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
+import QualifyingTestNew from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/New';
+import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
+import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
+
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
@@ -417,6 +431,90 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Exercise Tasks | Character Checks',
               },
+            },
+            {
+              path: 'qualifying-tests',
+              component: QualifyingTestsCover,
+              name: 'exercise-tasks-qualifying-tests',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Tests',
+              },
+            },
+            {
+              path: 'qualifying-tests/new',
+              component: QualifyingTestNew,
+              name: 'qualifying-test-new',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Tests | New',
+              },
+            },
+            {
+              path: 'qualifying-tests/:qualifyingTestId',
+              component: QualifyingTest,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestView,
+                  name: 'qualifying-test-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | View',
+                  },
+                },
+                {
+                  path: 'edit',
+                  component: QualifyingTestEdit,
+                  name: 'qualifying-test-edit',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Edit',
+                  },
+                },
+                {
+                  path: 'build',
+                  component: QualifyingTestQuestionBuilder,
+                  name: 'qualifying-test-question-builder',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Tests | Question Builder',
+                  },
+                },
+                {
+                  path: 'review',
+                  component: QualifyingTestReview,
+                  name: 'qualifying-test-review',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Review',
+                  },
+                },
+                {
+                  path: 'responses/:status',
+                  component: QualifyingTestResponses,
+                  name: 'qualifying-test-responses',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test | Responses',
+                  },
+                },
+                {
+                  path: 'response/:responseId',
+                  component: QualifyingTestResponse,
+                  children: [
+                    {
+                      path: '',
+                      component: QualifyingTestResponseView,
+                      name: 'qualifying-test-response-view',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Qualifying Test | Response View',
+                      },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

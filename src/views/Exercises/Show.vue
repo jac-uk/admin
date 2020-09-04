@@ -50,7 +50,6 @@
             title="Applications"
           />
           <Navigation
-            v-if="exercise.applicationRecords"
             :pages="exerciseTasksNavigation"
             title="Tasks"
           />
@@ -192,16 +191,28 @@ export default {
       ];
     },
     exerciseTasksNavigation(){
-      return [
+      const tasks = [
         {
-          title: 'Independent Assessments',
-          name: 'exercise-tasks-independent-assessments',
-        },
-        {
-          title: 'Character Checks',
-          name: 'exercise-tasks-character-checks',
+          title: 'Qualifying Tests',
+          name: 'exercise-tasks-qualifying-tests',
+          params: {
+            nav: '/tasks/qualifying-tests',
+          },
         },
       ];
+      if (this.exercise.applicationRecords) {
+        tasks.push(
+          {
+            title: 'Independent Assessments',
+            name: 'exercise-tasks-independent-assessments',
+          },
+          {
+            title: 'Character Checks',
+            name: 'exercise-tasks-character-checks',
+          },
+        );
+      }
+      return tasks;
     },
     applicationStageNavigation(){
       if (this.exercise.applicationRecords){
