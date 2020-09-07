@@ -147,13 +147,38 @@
               <!-- eslint-enable -->
 
               <hr class="govuk-section-break govuk-section-break--visible">
-              <ol>
+              <ol 
+                v-if="isCriticalAnalysis"
+              >
                 <li
                   v-for="(res, i) in testQuestion.options"
                   :key="i"
                   :class="checkSelected(i, testQuestion.correct, testQuestion.response.selection)"
                 >
                   {{ res.answer }}
+                </li>
+              </ol>
+
+              <ol 
+                v-if="isSituationalJudgment"
+              >
+                <li
+                  v-for="(res, i) in testQuestion.options"
+                  :key="i"
+                  :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...testQuestion.response.selection })"
+                >
+                  {{ res.answer }}
+                </li>
+              </ol>
+
+              <ol 
+                v-if="isScenario"
+              >
+                <li
+                  v-for="(res, i) in testQuestion.options"
+                  :key="i"
+                >
+                  {{ res.text }}
                 </li>
               </ol>
             </dd>
@@ -197,10 +222,13 @@ export default {
       return label;
     },
     questions() {
+      let returnQuestions = [];
       // merge the two objects;
-      const returnQuestions = this.response.testQuestions.questions.map((item, index) => {
-        return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
-      });
+      if (this.response.testQuestions.questions) {
+        returnQuestions = this.response.testQuestions.questions.map((item, index) => {
+          return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
+        });
+      }
       return returnQuestions;
     },
     timeTaken() {
@@ -214,6 +242,15 @@ export default {
       const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
+    },
+    isCriticalAnalysis () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
+    },
+    isSituationalJudgment() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+    },
+    isScenario() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
   },
   async created() {
@@ -246,7 +283,7 @@ export default {
       let returnClass = '';
       const isSelectedAnswer = index === selectedAnswer;
       const isRightAnswer = index === rightAnswer;
-      const isRightAndSelectedAnswer = index === selectedAnswer && index === rightAnswer;
+      const isRightAndSelectedAnswer = isSelectedAnswer && isRightAnswer;
 
       // eslint-disable-next-line no-console
       // console.log('checkResponse', index, rightAnswer, selectedAnswer);
@@ -257,6 +294,32 @@ export default {
         returnClass += ' answer--selected--wrong';
       }
       if (isRightAndSelectedAnswer) {
+        returnClass += ' answer--selected--correct';
+      }
+
+      return returnClass;
+    },
+    checkSelectedSituationalJudgement(index, rightAnswer, selectedAnswer) {
+      // eslint-disable-next-line no-console
+      // console.log('checkSelectedSituationalJudgement', index, rightAnswer, selectedAnswer);
+      let returnClass = '';
+      
+      const isSelectedAnswerMost = index === selectedAnswer.mostAppropriate ;
+      const isSelectedAnswerLeast = index === selectedAnswer.leastAppropriate;
+
+      const isRightAnswerMost = index === rightAnswer.mostAppropriate;
+      const isRightAnswerLeast = index === rightAnswer.leastAppropriate;
+
+      const isRightAndSelectedAnswerMost = isRightAnswerMost && isSelectedAnswerMost;
+      const isRightAndSelectedAnswerLeast = isRightAnswerLeast && isSelectedAnswerLeast;
+      
+      if (isRightAnswerMost || isRightAnswerLeast) {
+        returnClass += ' answer--right';
+      }
+      if (isSelectedAnswerMost && !isRightAnswerMost || isSelectedAnswerLeast && !isRightAnswerLeast) {
+        returnClass += ' answer--selected--wrong';
+      }
+      if (isRightAndSelectedAnswerMost || isRightAndSelectedAnswerLeast) {
         returnClass += ' answer--selected--correct';
       }
 
