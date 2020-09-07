@@ -54,6 +54,17 @@
             {{ timeTaken }}
           </dd>
         </div>
+        <div 
+          v-if="response.score"
+          class="govuk-summary-list__row" 
+        >
+          <dt class="govuk-summary-list__key">
+            Score
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ response.score }}
+          </dd>
+        </div>
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Reasonable Adjustments
