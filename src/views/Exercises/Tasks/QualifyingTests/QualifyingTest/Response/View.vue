@@ -148,7 +148,7 @@
 
               <hr class="govuk-section-break govuk-section-break--visible">
               <ol 
-                v-if="isCriticalAnalysis"
+                v-if="isCriticalAnalysis && testQuestion.response"
               >
                 <li
                   v-for="(res, i) in testQuestion.options"
@@ -160,7 +160,7 @@
               </ol>
 
               <ol 
-                v-if="isSituationalJudgment"
+                v-if="isSituationalJudgment && testQuestion.response"
               >
                 <li
                   v-for="(res, i) in testQuestion.options"
