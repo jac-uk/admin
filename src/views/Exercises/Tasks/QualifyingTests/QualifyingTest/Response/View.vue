@@ -15,7 +15,10 @@
         Test details
       </h2>
 
-      <dl class="govuk-summary-list">
+      <dl
+        v-if="response" 
+        class="govuk-summary-list"
+      >
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Status
@@ -45,10 +48,21 @@
           class="govuk-summary-list__row" 
         >
           <dt class="govuk-summary-list__key">
-            Duration
+            Time taken
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.duration.testDurationAdjusted }} minutes
+            {{ timeTaken }}
+          </dd>
+        </div>
+        <div 
+          v-if="response.score"
+          class="govuk-summary-list__row" 
+        >
+          <dt class="govuk-summary-list__key">
+            Score
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ response.score }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -62,10 +76,10 @@
             <table class="govuk-table">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  Duration
+                  Duration / Adjusted
                 </td>
                 <td class="govuk-table__cell">
-                  {{ response.duration.testDuration }} minutes
+                  {{ response.duration.testDuration }} min. / {{ response.duration.testDurationAdjusted }} min.
                 </td>
               </tr>
               <tr class="govuk-table__row">
@@ -101,49 +115,76 @@
       <h2 class="govuk-heading-m">
         Questions
       </h2>
-      
-      <dl class="govuk-summary-list">
-        <div
-          v-if="qualifyingTest.testQuestions.introduction"
-          class="govuk-summary-list__row"
-        >
-          <dt
-            class="govuk-summary-list__key"
+      <div v-if="response">
+        <dl class="govuk-summary-list">
+          <div
+            v-if="response.testQuestions.introduction"
+            class="govuk-summary-list__row"
           >
-            Introduction
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.testQuestions.introduction }}
-          </dd>
-        </div>
+            <dt
+              class="govuk-summary-list__key"
+            >
+              Introduction
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ response.testQuestions.introduction }}
+            </dd>
+          </div>
+        
+          <div
+            v-for="(testQuestion, index) in questions"
+            :key="index"
+            class="govuk-summary-list__row"
+          >
+            <dt class="govuk-summary-list__key">
+              {{ questionLabel }} {{ index + 1 }}
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <!-- eslint-disable -->
+              <div
+                v-html="testQuestion.details"
+              />
+              <!-- eslint-enable -->
 
-        <div
-          v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
-          :key="index"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            {{ questionLabel }} {{ index + 1 }}
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <!-- eslint-disable -->
-            <div
-              v-html="testQuestion.details"
-            />
-            <!-- eslint-enable -->
-
-            <hr class="govuk-section-break govuk-section-break--visible">
-            <ol>
-              <li
-                v-for="(res, i) in responses"
-                :key="i"
+              <hr class="govuk-section-break govuk-section-break--visible">
+              <ol 
+                v-if="isCriticalAnalysis && testQuestion.response"
               >
-                {{ res.text }}
-              </li>
-            </ol>
-          </dd>
-        </div>
-      </dl>
+                <li
+                  v-for="(res, i) in testQuestion.options"
+                  :key="i"
+                  :class="checkSelected(i, testQuestion.correct, testQuestion.response.selection)"
+                >
+                  {{ res.answer }}
+                </li>
+              </ol>
+
+              <ol 
+                v-if="isSituationalJudgment && testQuestion.response"
+              >
+                <li
+                  v-for="(res, i) in testQuestion.options"
+                  :key="i"
+                  :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...testQuestion.response.selection })"
+                >
+                  {{ res.answer }}
+                </li>
+              </ol>
+
+              <ol 
+                v-if="isScenario"
+              >
+                <li
+                  v-for="(res, i) in testQuestion.options"
+                  :key="i"
+                >
+                  {{ res.text }}
+                </li>
+              </ol>
+            </dd>
+          </div>
+        </dl>
+      </div>
     </div>
   </div>
 </template>
@@ -172,9 +213,6 @@ export default {
     candidate() {
       return this.response ? this.response.candidate : null;
     },
-    responses() {
-      return this.response ? this.response.responses : null;
-    },
     questionLabel() {
       let label = 'Question';
 
@@ -182,6 +220,37 @@ export default {
         label = 'Scenario';
       }
       return label;
+    },
+    questions() {
+      let returnQuestions = [];
+      // merge the two objects;
+      if (this.response.testQuestions.questions) {
+        returnQuestions = this.response.testQuestions.questions.map((item, index) => {
+          return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
+        });
+      }
+      return returnQuestions;
+    },
+    timeTaken() {
+      let diff = 0;
+      if (this.response.statusLog.completed && this.response.statusLog.started) {
+        diff = this.response.statusLog.completed - this.response.statusLog.started;
+      }
+      const newDate = new Date(diff);
+      const hh = `0${newDate.getUTCHours()}`.slice(-2);
+      const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
+      const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
+      const returnTimeTaken = `${hh}:${mm}:${ss}`;
+      return returnTimeTaken;
+    },
+    isCriticalAnalysis () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
+    },
+    isSituationalJudgment() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
+    },
+    isScenario() {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
   },
   async created() {
@@ -210,7 +279,66 @@ export default {
       };
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
+    checkSelected(index, rightAnswer, selectedAnswer) {
+      let returnClass = '';
+      const isSelectedAnswer = index === selectedAnswer;
+      const isRightAnswer = index === rightAnswer;
+      const isRightAndSelectedAnswer = isSelectedAnswer && isRightAnswer;
+
+      // eslint-disable-next-line no-console
+      // console.log('checkResponse', index, rightAnswer, selectedAnswer);
+      if (isRightAnswer) {
+        returnClass += ' answer--right';
+      }
+      if (isSelectedAnswer && !isRightAnswer) {
+        returnClass += ' answer--selected--wrong';
+      }
+      if (isRightAndSelectedAnswer) {
+        returnClass += ' answer--selected--correct';
+      }
+
+      return returnClass;
+    },
+    checkSelectedSituationalJudgement(index, rightAnswer, selectedAnswer) {
+      // eslint-disable-next-line no-console
+      // console.log('checkSelectedSituationalJudgement', index, rightAnswer, selectedAnswer);
+      let returnClass = '';
+      
+      const isSelectedAnswerMost = index === selectedAnswer.mostAppropriate ;
+      const isSelectedAnswerLeast = index === selectedAnswer.leastAppropriate;
+
+      const isRightAnswerMost = index === rightAnswer.mostAppropriate;
+      const isRightAnswerLeast = index === rightAnswer.leastAppropriate;
+
+      const isRightAndSelectedAnswerMost = isRightAnswerMost && isSelectedAnswerMost;
+      const isRightAndSelectedAnswerLeast = isRightAnswerLeast && isSelectedAnswerLeast;
+      
+      if (isRightAnswerMost || isRightAnswerLeast) {
+        returnClass += ' answer--right';
+      }
+      if (isSelectedAnswerMost && !isRightAnswerMost || isSelectedAnswerLeast && !isRightAnswerLeast) {
+        returnClass += ' answer--selected--wrong';
+      }
+      if (isRightAndSelectedAnswerMost || isRightAndSelectedAnswerLeast) {
+        returnClass += ' answer--selected--correct';
+      }
+
+      return returnClass;
+    },
   },
 };
 </script>
+
+<style scoped>
+  .answer--right {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  .answer--selected--wrong {
+    background-color: #FFCCCC;
+  }
+  .answer--selected--correct {
+    background-color: #00FFCC;
+  }
+</style>
 
