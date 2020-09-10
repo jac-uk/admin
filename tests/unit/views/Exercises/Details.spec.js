@@ -5,22 +5,22 @@
 // const localVue = createLocalVue();
 // localVue.use(Router);
 
-xdescribe('views/Exercises/Details', () => {
-  it('renders the component', () => {
-    const wrapper = shallowMount(ExerciseDetails, {
-      localVue,
-    });
+// xdescribe('views/Exercises/Details', () => {
+//   it('renders the component', () => {
+//     const wrapper = shallowMount(ExerciseDetails, {
+//       localVue,
+//     });
     
-    expect(wrapper.exists()).toBe(true);
-  });
+//     expect(wrapper.exists()).toBe(true);
+//   });
 
-  describe('Accessibility:', () => {
-    it('page contains h1 element', () => {
-      const wrapper = shallowMount(ExerciseDetails, {
-        localVue,
-      });
+//   describe('Accessibility:', () => {
+//     it('page contains h1 element', () => {
+//       const wrapper = shallowMount(ExerciseDetails, {
+//         localVue,
+//       });
 
-      expect(wrapper.contains('h1')).toBe(true);
-    });
-  });
-});
+//       expect(wrapper.contains('h1')).toBe(true);
+//     });
+//   });
+// });
