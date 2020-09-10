@@ -1,23 +1,27 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import search from '@/helpers/search';
+import tableQuery from '@/helpers/tableQuery';
 
 const collection = firestore.collection('candidates');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      let firestoreRef = collection
-        .orderBy('created', 'desc');
-      if (id) {
-        firestoreRef = collection.doc(id);
-      } 
+    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      const firestoreRef = tableQuery(state.records, collection, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
+    }),
+    // @TODO tidy up these binds
+    bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = collection.doc(id);
+      return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('record');
     }),
     bindDocs: firestoreAction(async ({ bindFirestoreRef }, id) => {
       await bindFirestoreRef('personalDetails', collection.doc(`${id}/documents/personalDetails`), { serialize: vuexfireSerialize });
@@ -35,21 +39,10 @@ export default {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.update(data);
     },
-    search: firestoreAction(({ bindFirestoreRef }, searchTerm) => {
-      const returnSearch = search(searchTerm);
-      let firestoreRef = collection
-        .orderBy('created', 'desc');
-      if (returnSearch) {
-        firestoreRef = collection
-        .where('fullName', '>=', returnSearch.value1)
-        .where('fullName', '<', returnSearch.value2)
-        .orderBy('fullName', 'asc');
-      }
-      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
-    }),
   },
   state: {
     records: [],
+    record: null,
     characterInformation: null,
     equalityAndDiversitySurvey: null,
     personalDetails: null,

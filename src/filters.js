@@ -1,4 +1,4 @@
-import { APPLICATION_STATUS } from '@/helpers/constants';
+import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
   if (value) {
@@ -286,10 +286,26 @@ const lookup = (value) => {
     lookup[APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT] = 'Approved for future appointment';
     lookup[APPLICATION_STATUS.SCC_TO_RECONSIDER] = 'SCC to reconsider';
     lookup[APPLICATION_STATUS.INVITED_TO_SELECTION_DAY] = 'Invited To Selection Day';
+
+    lookup[QUALIFYING_TEST.STATUS.CREATED] = 'Created';
+    lookup[QUALIFYING_TEST.STATUS.SUBMITTED] = 'Submitted for approval';
+    lookup[QUALIFYING_TEST.STATUS.APPROVED] = 'Approved';
+    lookup[QUALIFYING_TEST.STATUS.INITIALISED] = 'Initialised';
+    lookup[QUALIFYING_TEST.STATUS.ACTIVATED] = 'Activated';
+    lookup[QUALIFYING_TEST.STATUS.COMPLETED] = 'Completed';
+    lookup[QUALIFYING_TEST.STATUS.PAUSED] = 'Paused';
+    lookup[QUALIFYING_TEST.STATUS.STARTED] = 'Started';
+    lookup[QUALIFYING_TEST.STATUS.PROGRESS] = 'In Progess';
+
+    lookup[QUALIFYING_TEST.TYPE.SCENARIO] = 'Scenario';
+    lookup[QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS] = 'Critical analysis';
+    lookup[QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT] = 'Situational judgement';
     // TODO add the missing ones from CONSTANTS
+
     // RETURN - END of LOOKUP
     return lookup[value] || value;
   }
+
   // Default for unanswered question
   if (typeof value === 'undefined' || value === null) {
     return 'Answer not supplied';

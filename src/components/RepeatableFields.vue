@@ -13,6 +13,8 @@
         :row="row"
         :index="index"
         :path="path"
+        :type="type"
+        :label="typeName"
       >
         <template v-slot:removeButton>
           <button
@@ -33,7 +35,7 @@
       class="govuk-button govuk-button--secondary govuk-!-margin-bottom-6"
       @click.prevent="addRow"
     >
-      {{ addLabel }}
+      {{ addLabel }} {{ typeName }}
     </button>
   </div>
 </template>
@@ -66,6 +68,16 @@ export default {
       default: null,
     },
     path: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    type: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    typeName: {
       type: String,
       required: false,
       default: '',

@@ -3,7 +3,7 @@
     <TextField
       :id="`answer_${id}_${index}`"
       v-model="row.answer"
-      :label="`Answer option ${1 + index}`"
+      :label="`${label} ${1 + index}`"
     />
     <slot name="removeButton" />
   </div>
@@ -30,7 +30,12 @@ export default {
       required: false,
       type: String,
       default: '',
-    },    
+    },
+    label: {
+      required: false,
+      type: String,
+      default: 'Answer option',
+    },
   },
 };
 </script>

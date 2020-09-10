@@ -11,6 +11,7 @@ import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
 import applications from '@/store/applications';
 import application from '@/store/application';
+import assessment from '@/store/assessment';
 import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
 import stageReview from '@/store/stage/review';
@@ -21,6 +22,8 @@ import stageShortlisted from '@/store/stage/shortlisted';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
+import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
+import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -33,6 +36,7 @@ const store = new Vuex.Store({
     exerciseDocument,
     applications,
     application,
+    assessment,
     assessments,
     notifications,
     stageReview,
@@ -43,6 +47,8 @@ const store = new Vuex.Store({
     candidates,
     notes,
     candidateApplications,
+    qualifyingTest,
+    qualifyingTestResponses,
   },
   state: {},
   mutations: {

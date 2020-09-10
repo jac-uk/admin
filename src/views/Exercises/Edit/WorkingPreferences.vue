@@ -49,6 +49,7 @@
             v-model="exercise.locationQuestionAnswers"
             :component="repeatableFields.Answer"
             ident="location"
+            type-name="answer"
             required
           />
         </fieldset>
@@ -89,9 +90,20 @@
             v-model="exercise.jurisdictionQuestionAnswers"
             :component="repeatableFields.Answer"
             ident="jurisdiction"
+            type-name="answer"
             required
           />
         </fieldset>
+
+        <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-5">
+
+        <RepeatableFields
+          v-model="exercise.additionalWorkingPreferences"
+          :component="repeatableFields.WorkingPreferenceQuestion"
+          ident="additional-working-preferences"
+          type-name="question"
+          :allow-empty="true"
+        />
 
         <button class="govuk-button">
           Save and continue
@@ -109,6 +121,7 @@ import RadioGroup from '@/components/Form/RadioGroup';
 import RadioItem from '@/components/Form/RadioItem';
 import RepeatableFields from '@/components/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
+import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion';
 import BackLink from '@/components/BackLink';
 
 export default {
@@ -129,12 +142,14 @@ export default {
       jurisdictionQuestion: null,
       jurisdictionQuestionType: 'single-choice',
       jurisdictionQuestionAnswers: null,
+      additionalWorkingPreferences: [],
     };
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };    
     return {
       repeatableFields: {
         Answer,
+        WorkingPreferenceQuestion,
       },      
       exercise: exercise,
     };

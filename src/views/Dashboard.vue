@@ -39,34 +39,70 @@
     >
       All exercises
     </h1>
-    <div 
-      v-for="exercise in records"
-      :key="exercise.id"
-      class="exercise-list govuk-grid-row govuk-!-margin-0"
+
+    <Table
+      data-key="id"
+      :data="records"
+      :columns="[
+        { title: 'Reference number' },
+        { title: 'Name' },
+        { title: 'Open date' },
+        { title: 'Close date' },
+        {
+          title: 'Applications count',
+          class: 'govuk-table__header--numeric'
+        },
+      ]"
     >
-      <div class="govuk-grid-column-one-quarter govuk-!-padding-2">
-        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-          {{ exercise.referenceNumber }}
-        </RouterLink>    
-      </div>
-      <div class="govuk-grid-column-one-half govuk-!-padding-2">
-        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-          {{ exercise.name }}
-        </RouterLink>
-      </div>
-      <div class="govuk-grid-column-one-quarter govuk-!-padding-2">
-        <RouterLink :to="{ name: 'exercise-show-overview', params: { id: exercise.id } }">
-          {{ exercise.applicationOpenDate | formatDate }}
-        </RouterLink>
-      </div>
-    </div>     
+      <template #row="{row}">
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+          >
+            {{ row.referenceNumber }}
+          </RouterLink>
+        </TableCell>
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+          >
+            {{ row.name }}
+          </RouterLink>
+        </TableCell>
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+          >
+            {{ row.applicationOpenDate | formatDate }}
+          </RouterLink>
+        </TableCell>
+        <TableCell>
+          <RouterLink
+            :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+          >
+            {{ row.applicationCloseDate | formatDate }}
+          </RouterLink>
+        </TableCell>
+        <TableCell
+          class="govuk-table__cell--numeric"
+        >
+          {{ row.applicationsCount }}
+        </TableCell>
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 
 export default {
+  components: {
+    Table,
+    TableCell,
+  },
   computed: mapState('exerciseCollection', [
     'records',
     'isFavourites',
@@ -87,9 +123,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-  .exercise-list {
-    border-bottom: 1px solid $govuk-border-colour;
-  }
-</style>

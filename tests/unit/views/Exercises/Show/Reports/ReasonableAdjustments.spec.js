@@ -1,11 +1,19 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
+import { downloadXLSX } from '@/helpers/export';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
+jest.mock('@/helpers/export', () => {
+  return {
+    downloadXLSX: jest.fn(),
+  };
+});
+
 const mockExercise = {
+  referenceNumber: 'MockRef',
   immediateStart: '56',
   applicationOpenDate: 'TestOpen',
   applicationCloseDate: 'TestClose',
@@ -68,8 +76,8 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    it('contains a <h1>', () => {
-      expect(wrapper.contains('h1')).toBe(true);
+    it('contains a <h2>', () => {
+      expect(wrapper.contains('h2')).toBe(true);
     });
 
   });
@@ -84,6 +92,61 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
     describe('reasonableAdjustments', () => {
       it('returns generated report object', () => {
         expect(wrapper.vm.reasonableAdjustments).toEqual(mockReport);
+      });
+    });
+  });
+  describe('methods', () => {
+    describe('gatherReportData()', () => {
+      it('is a function', () => {
+        expect(typeof wrapper.vm.gatherReportData).toBe('function');
+      });
+
+      it('returns an array with header row and one row per application', () => {
+        const report = wrapper.vm.gatherReportData();
+
+        expect(report).toBeArrayOfSize(mockReport.candidates.length + 1);
+      });
+
+      it('returns an array starting with header row', () => {
+        const report = wrapper.vm.gatherReportData();
+
+        const headers = [
+          'Name',
+          'Email',
+          'Phone number',
+          'Details',
+        ];
+
+        expect(report[0]).toBeArray();
+        expect(report[0]).toEqual(headers);
+      });
+    });
+
+    describe('exportData()', () => {
+
+      it('is a function', () => {
+        expect(typeof wrapper.vm.exportData).toBe('function');
+      });
+
+      it('calls gatherReportData', () => {
+        wrapper.vm.gatherReportData = jest.fn();
+        wrapper.vm.exportData();
+        expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
+      });
+
+      it('calls downloadXLSX', () => {
+        const mockReport = 'mock report';
+        const mockTitle = 'Reasonable Adjustments Report';
+
+        wrapper.vm.gatherReportData = jest.fn().mockReturnValue(mockReport);
+
+        wrapper.vm.exportData();
+
+        expect(downloadXLSX).toHaveBeenCalledWith(mockReport, {
+          title: `${mockExercise.referenceNumber} ${mockTitle}`,
+          sheetName: mockTitle,
+          fileName: `${mockExercise.referenceNumber} - ${mockTitle}.xlsx`,
+        });
       });
     });
   });

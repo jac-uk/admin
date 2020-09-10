@@ -1,6 +1,6 @@
 {
   "name": "apply-admin",
-  "version": "0.23.0",
+  "version": "0.27.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -31,10 +31,12 @@
     "html-docx-js": "^0.3.1",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf": "^1.5.3",
+    "save-file": "^2.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
     "vuex": "^3.5.1",
-    "vuexfire": "^3.2.3"
+    "vuexfire": "^3.2.3",
+    "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",

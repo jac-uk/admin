@@ -3,6 +3,29 @@
     <h1 class="govuk-heading-l">
       Independent Assessments
     </h1>
+    <div 
+      v-if="hasInitialisedAssessments"
+      class="govuk-grid-row"
+    >
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-9">
+          <span class="govuk-caption-m">
+            Sent
+          </span>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+            {{ assessmentsSent }}
+          </h2>
+        </div>
+      </div>
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-9">
+          <span class="govuk-caption-m">Completed</span>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+            {{ assessmentsCompleted }}
+          </h2>
+        </div>
+      </div>
+    </div>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -138,6 +161,12 @@
               </td>
               <td class="govuk-table__cell">
                 {{ assessment.status | lookup }}
+                <strong
+                  v-if="lateIASubmission(assessment)"
+                  class="govuk-tag govuk-tag--red"
+                >
+                  Late
+                </strong>
               </td>
               <td
                 class="govuk-table__cell govuk-!-padding-top-0"
@@ -159,7 +188,7 @@
                     class="moj-button-menu__wrapper"
                   >
                     <DownloadLink
-                      v-if="assessment.fileRef"
+                      v-if="assessment.fileRef && !unapprovedLateSubmission(assessment)"
                       class="moj-button-menu__item"
                       :file-name="assessment.fileRef"
                       :exercise-id="exercise.id"
@@ -168,6 +197,14 @@
                       title="Download assessment"
                       type="button"
                     />
+                    <ActionButton
+                      v-if="unapprovedLateSubmission(assessment)"
+                      class="moj-button-menu__item"
+                      type="primary"
+                      @click="approveLateSubmission(assessment)"
+                    >
+                      Approve late submission
+                    </ActionButton>
                   </div>
                   <div
                     v-else
@@ -250,7 +287,7 @@
 
 <script>
 import { functions } from '@/firebase';
-import { isDateInFuture } from '@/helpers/date';
+import { isDateInFuture, isDateGreaterThan } from '@/helpers/date';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
 import Banner from '@/components/Page/Banner';
@@ -286,6 +323,20 @@ export default {
     },
     assessments() {
       return this.$store.state.assessments.records;
+    },
+    assessmentsSent() {
+      if (this.exercise.assessments && this.exercise.assessments.sent){
+        return this.exercise.assessments.sent;
+      } 
+
+      return 0;
+    },
+    assessmentsCompleted() {
+      if (this.exercise.assessments && this.exercise.assessments.completed){
+        return this.exercise.assessments.completed;
+      } 
+
+      return 0;
     },
     status() {
       return this.$route.params.status;
@@ -364,6 +415,33 @@ export default {
     },
     async testRequest(assessmentId) {
       await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
+    },
+    lateIASubmission(assessment){
+      // Not submitted and late
+      if (assessment.status != 'completed' && !isDateInFuture(assessment.dueDate)){
+        return true;
+      }
+
+      // Has timestamp, submitted and submitted late 
+      if (assessment.submittedDate && assessment.status == 'completed' && isDateGreaterThan(assessment.submittedDate, assessment.dueDate)){
+        return true;
+      }
+      return false;
+    },
+    unapprovedLateSubmission(assessment){
+      if (!this.lateIASubmission(assessment)){
+        return false;
+      }
+
+      return assessment.approved == true ? false : true;
+    },
+    async approveLateSubmission(assessment){
+      if (!this.unapprovedLateSubmission(assessment)){
+        return false;
+      }
+      assessment.approved = true;
+
+      await this.$store.dispatch('assessment/save', assessment);
     },
   },
 };

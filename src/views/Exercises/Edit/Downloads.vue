@@ -60,7 +60,7 @@
 
         <RepeatableFields
           v-model="exercise.downloads.pensionsInformation"
-          ident="candidate-assessement-forms"
+          ident="pensions-information"
           :component="repeatableFields.MultiFileUpload"
           :path="uploadPath"
         />
@@ -71,7 +71,7 @@
 
         <RepeatableFields
           v-model="exercise.downloads.competencyFramework"
-          ident="candidate-assessement-forms"
+          ident="competency-framework"
           :component="repeatableFields.MultiFileUpload"
           :path="uploadPath"
         />
@@ -82,7 +82,7 @@
 
         <RepeatableFields
           v-model="exercise.downloads.welshTranslation"
-          ident="candidate-assessement-forms"
+          ident="welsh-translation"
           :component="repeatableFields.MultiFileUpload"
           :path="uploadPath"
         />
@@ -119,6 +119,7 @@ export default {
         candidateAssessementForms: [],
         pensionsInformation: [],
         competencyFramework: [],
+        welshTranslation: [],
       },
     };
     const data = this.$store.getters['exerciseDocument/data']();

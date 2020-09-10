@@ -22,6 +22,13 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
+                @click="exportData(activeTab)"
+              >
+                Export stage data
+              </button>
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
                 @click="exportData()"
               >
                 Export all data
@@ -394,23 +401,17 @@
             </tr>
           </tbody>
         </table>
-        <button
-          class="govuk-button govuk-button--secondary"
-          data-module="govuk-button"
-          @click="exportData(activeTab)"
-        >
-          Export data
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TabsList from '@/components/Page/TabsList';
-import Stat from '@/components/Report/Stat';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import { downloadXLSX } from '@/helpers/export';
+import TabsList from '@/components/Page/TabsList';
+import Stat from '@/components/Report/Stat';
 
 export default {
   components: {
@@ -507,31 +508,22 @@ export default {
       });
       return data;
     },
-    buildCsvFromDataTable(data) {
-      let csvContent = 'data:text/csv;charset=utf-8,';
-      for (let row = 0, totalRows = data.length; row < totalRows; ++row) {
-        for (let column = 0, totalColumns = data[row].length; column < totalColumns; ++column) {
-          if (row === 0 || column === 0) {  // first row and first column are strings
-            csvContent += `"${data[row][column]}"`;
-          } else {
-            csvContent += `${data[row][column]}`;
-          }
-          if (column < totalColumns - 1) {
-            csvContent += ';';
-          }
-        }
-        csvContent += '\n';
-      }
-      csvContent = csvContent.replace(/(^\[)|(\]$)/gm, '');
-      return encodeURI(csvContent);
-    },
     exportData(stage) {
+      let title = 'Diversity Report';
+      if (stage) {
+        title = `${title} - ${stage}`;
+      }
+
       const data = this.gatherReportData(stage);
-      const csvData = this.buildCsvFromDataTable(data);
-      const link = document.createElement('a');
-      link.setAttribute('href', csvData);
-      link.setAttribute('download', `${this.exercise.referenceNumber}.diversity.csv`);
-      link.click();
+
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };
