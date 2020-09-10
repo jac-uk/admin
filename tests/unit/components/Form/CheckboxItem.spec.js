@@ -88,7 +88,7 @@ describe('components/Form/CheckboxItem', () => {
         propsData: { 
           label: 'Example checkbox item',
           value: ['example-value'],
-          content:  'Conditional content',
+          content: 'Conditional content',
       },
       stubs: [],
       });

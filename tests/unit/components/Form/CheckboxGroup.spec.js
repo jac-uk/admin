@@ -50,7 +50,7 @@ describe('components/Form/CheckboxGroup', () => {
 
   describe('component functions', () => {
     let wrapper;
-    let inputMock = jest.fn();
+    const inputMock = jest.fn();
     beforeEach(() => {
       wrapper = createTestSubject(CheckboxGroup, {
         mocks: {
@@ -111,22 +111,6 @@ describe('components/Form/CheckboxGroup', () => {
     });
   });
 
-  xdescribe('lifecycle hooks', () => {
-    xdescribe('created', () => {
-      xdescribe('if value is an array', () => {
-        it('does not call emit', ()=> {
-          const array = [];
-          const wrapper = createTestSubject({ value: array });
-          expect(wrapper.emitted().input).not.toBeTruthy();
-        });
-      });
-      xdescribe('if value is not an array', () => {
-        it('emits the initial empty array value', ()=> {
-          const wrapper = createTestSubject({ value: undefined });
-          expect(wrapper.emitted().input).toBeTruthy();
-        });
-      });
-    });
   });
 
 });
