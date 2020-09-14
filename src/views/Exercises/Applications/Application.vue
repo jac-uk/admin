@@ -1439,7 +1439,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Telephone
                   </dt>
@@ -1494,7 +1494,7 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row print-none">
                   <dt class="govuk-summary-list__key">
                     Telephone
                   </dt>
