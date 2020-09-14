@@ -99,7 +99,10 @@
       Questions
     </h2>
 
-    <dl class="govuk-summary-list">
+    <dl
+      v-if="qualifyingTest.testQuestions"
+      class="govuk-summary-list"
+    >
       <div
         v-if="qualifyingTest.testQuestions.introduction"
         class="govuk-summary-list__row"
