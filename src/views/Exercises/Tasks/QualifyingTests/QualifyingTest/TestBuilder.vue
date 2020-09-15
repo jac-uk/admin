@@ -1,6 +1,27 @@
 <template>
   <div class="govuk-grid-row">  
+    <TabsList
+      :tabs="tabs"
+      :active-tab.sync="activeTab"
+    />
     <form
+      v-if="activeTab == 'source'"
+      class="govuk-grid-column-three-quarters"
+      @submit.prevent="validateAndSave"
+    >
+      <TextareaInput
+        id="testQuestions"
+        v-model="testQuestionsJson"
+        label="Questions"
+        hint="Provide questions in JSON format"
+        required
+      />
+      <button class="govuk-button">
+        Save and continue
+      </button>
+    </form>
+    <form
+      v-else
       class="govuk-grid-column-three-quarters"
       @submit.prevent="validateAndSave"
     >
@@ -11,7 +32,6 @@
         hint="Short introductory instruction text."
         rows="2"
       />
-
       <RepeatableFields
         v-model="qualifyingTest.testQuestions.questions"
         :component="repeatableFields.QualifyingTestQuestion"
@@ -20,7 +40,6 @@
         :type-name="typeName"
         required
       />
-
       <button class="govuk-button">
         Save and continue
       </button>
@@ -28,6 +47,7 @@
   </div>
 </template>
 <script>
+import TabsList from '@/components/Page/TabsList';
 import Form from '@/components/Form/Form';
 import TextareaInput from '@/components/Form/TextareaInput';
 import RepeatableFields from '@/components/RepeatableFields';
@@ -36,6 +56,7 @@ import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
+    TabsList,
     TextareaInput,
     RepeatableFields,
   },
@@ -55,6 +76,18 @@ export default {
         QualifyingTestQuestion,
       },
       qualifyingTest: qualifyingTest,
+      testQuestionsJson: JSON.stringify(qualifyingTest.testQuestions),
+      activeTab: 'form',
+      tabs: [
+        {
+          ref: 'form',
+          title: 'Form',
+        },
+        {
+          ref: 'source',
+          title: 'Source',
+        },
+      ],
     };
   },
   computed: {
@@ -68,6 +101,7 @@ export default {
   methods: {
     async save(isValid) {
       if (isValid){
+        if (this.activeTab === 'source') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
         this.$router.push({ name: 'qualifying-test-review' });
       }
