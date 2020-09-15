@@ -212,7 +212,6 @@ export default {
       if (!day || !month || !year) {
         return null;
       }
-
       return [year, month - 1, day, hour, minute];
     },
     date: {
@@ -220,7 +219,7 @@ export default {
         if (this.dateConstructor === null) {
           return null;
         } else {
-          return new Date(...this.dateConstructor);
+          return new Date(Date.UTC(...this.dateConstructor));
         }
       },
       set(value) {
