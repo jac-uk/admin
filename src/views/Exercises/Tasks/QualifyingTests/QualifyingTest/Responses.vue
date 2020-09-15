@@ -30,7 +30,7 @@
     >
       <template #row="{row}">
         <TableCell>
-          {{ row.candidate.fullName | showAlternative(row.candidate.id) }}
+          {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
         <TableCell>{{ row.status | lookup }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>

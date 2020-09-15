@@ -58,6 +58,13 @@ const toHumanCase = (value) => {
   }
 };
 
+const toCSV = (value) => {
+  if (value) {
+    return value.join(', ');
+  }
+  return value;
+};
+
 const toYesNo = (value) => {
   // Only convert booleans, not all falsy values mean "no"
   if (typeof value === 'boolean') {
@@ -319,6 +326,7 @@ export {
   formatNumber,
   formatNIN,
   toHumanCase,
+  toCSV,
   toYesNo,
   slugify,
   candidateHasIssues,
