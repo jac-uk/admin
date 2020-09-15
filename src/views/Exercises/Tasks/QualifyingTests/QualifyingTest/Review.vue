@@ -160,6 +160,36 @@
       </div>
     </dl>
 
+    <div v-if="isDryRun">
+      <div class="text-right">
+        <router-link
+          class="govuk-link"
+          :to="{name: 'qualifying-test-dry-run'}"
+        >
+          Update dry run details 
+        </router-link>
+      </div>
+
+      <h2 class="govuk-heading-m">
+        Dry run details
+      </h2>
+
+      <dl class="govuk-summary-list">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt
+            class="govuk-summary-list__key"
+          >
+            Invited emails
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ qualifyingTest.invitedEmails | toCSV }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+
     <span v-if="isDraft">
       <button
         class="govuk-button govuk-!-margin-right-3"
@@ -200,6 +230,9 @@ export default {
     isDraft() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
     },
+    isDryRun() {
+      return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
+    },
     isReadyForApproval() {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
     },
@@ -236,6 +269,9 @@ export default {
       this.$store.dispatch('qualifyingTest/approve');
       // #799 On Approval of the QT send back to the dashboard
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    btnGoBack() {
+      // TODO check we need go back button
     },
   },
 };

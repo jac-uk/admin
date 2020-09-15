@@ -69,6 +69,7 @@ import QualifyingTestNew from '@/views/Exercises/Tasks/QualifyingTests/Qualifyin
 import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
 import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
 import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
+import QualifyingTestDryRun from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/DryRun';
 import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
 import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
 import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
@@ -479,6 +480,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Qualifying Tests | Question Builder',
+                  },
+                },
+                {
+                  path: 'dry-run',
+                  component: QualifyingTestDryRun,
+                  name: 'qualifying-test-dry-run',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Tests | Dry Run',
                   },
                 },
                 {
