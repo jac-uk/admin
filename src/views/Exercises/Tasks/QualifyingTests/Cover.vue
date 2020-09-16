@@ -28,11 +28,18 @@
     </Table>
 
     <button
+      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >
       Create New
     </button>
+    <div v-else>
+      <Banner 
+        :message="warningMessage"
+        status="warning"
+      />
+    </div>
   </div>
 </template>
 
@@ -40,13 +47,32 @@
 import Table from '@/components/Page/Table/Table'; 
 import TableCell from '@/components/Page/Table/TableCell';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import Banner from '@/components/Page/Banner';
 
 export default {
   components: {
     Table,
+    Banner,
     TableCell,
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    warningMessage() {
+      let msg = 'Please add';
+      if (!this.exercise.exercisePhoneNumber) {
+        msg = `${msg} an exercise phone number`;
+      }
+      if (!this.exercise.exercisePhoneNumber && !this.exercise.emailSignatureName) {
+        msg = `${msg} and`;
+      }
+      if (!this.exercise.emailSignatureName) {
+        msg = `${msg} an email signature name`;
+      }
+      msg = `${msg} before creating a qualifying test`;
+      return msg;
+    },
     qualifyingTests() {
       const qtList = this.$store.state.qualifyingTest.records;
       return qtList;

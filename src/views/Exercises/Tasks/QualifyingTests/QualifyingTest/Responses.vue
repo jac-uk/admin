@@ -85,6 +85,7 @@ export default {
         'Status',
         'Started',
         'Completed',
+        'Score',
       ];
 
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
@@ -109,6 +110,7 @@ export default {
           element.status,
           element.statusLog.started,
           element.statusLog.completed,
+          element.score,
         ];
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
