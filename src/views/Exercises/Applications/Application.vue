@@ -669,6 +669,26 @@
             </div>
 
             <div
+              v-if="!isPanelView && exercise.yesSalaryDetails"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Part Time Working Preferences
+              </h2>
+
+              <dl class="govuk-summary-list">
+                <dt class="govuk-summary-list__key">
+                  {{ exercise.yesSalaryDetails }}
+                </dt>
+                <dd
+                  class="govuk-summary-list__value"
+                >
+                  {{ application.partTimeWorkingPreferencesDetails }}
+                </dd>
+              </dl>
+            </div>
+
+            <div
               v-if="!isPanelView && exercise.locationQuestion"
               class="govuk-!-margin-top-9"
             >
