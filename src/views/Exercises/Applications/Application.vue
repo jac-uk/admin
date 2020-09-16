@@ -814,6 +814,81 @@
             </div>
 
             <div
+              v-if="application.additionalWorkingPreferences"
+              class="govuk-!-margin-top-9"
+            >
+              <h2
+                class="govuk-heading-l"
+                style="display:inline-block;"
+              >
+                Additional Preferences
+              </h2>
+
+              <dl
+                v-for="(item, index) in application.additionalWorkingPreferences"
+                :key="index"
+                class="govuk-summary-list"
+              >
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ exercise.additionalWorkingPreferences[index].question }}
+                    <span class="govuk-body govuk-!-font-size-19">
+                      ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
+                    </span>
+                  </dt>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>{{ item.selection }}</li>
+                    </ul>
+                  </dd>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>
+                        <span
+                          v-for="(option, count) in exercise.additionalWorkingPreferences[index].answers"
+                          :key="count"
+                        >
+                          <strong
+                            v-if="item.selection.includes(option.answer)"
+                          > {{ option.answer }} </strong>
+                          <span
+                            v-else
+                          >
+                            {{ option.answer }}
+                          </span>
+                          <span
+                            v-if="count+1!==exercise.additionalWorkingPreferences[index].answers.length"
+                          >,</span>
+                        </span>
+                      </li>
+                    </ul>
+                  </dd>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>
+                        <span
+                          v-for="(choice, count) in item.selection"
+                          :key="count"
+                        >
+                          <strong>{{ count+1 }}.</strong> {{ choice }}
+                        </span>
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+              </dl> 
+            </div>
+
+            <div
               v-if="isLegal"
               class="govuk-!-margin-top-9"
             >
