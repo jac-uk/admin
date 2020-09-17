@@ -14,13 +14,4 @@ describe('views/Exercises/Reports', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  describe('Accessibility:', () => {
-    it('page contains h1 element', () => {
-      const wrapper = shallowMount(ExerciseReports, {
-        localVue,
-      });
-
-      expect(wrapper.contains('h1')).toBe(true);
-    });
-  });
 });
