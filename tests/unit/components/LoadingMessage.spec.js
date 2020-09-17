@@ -10,7 +10,7 @@ xdescribe('components/LoadingMessage', () => {
     });
   };
 
-  xdescribe('when `loadFailed` is equal to `false`', () => {
+  describe('when `loadFailed` is equal to `false`', () => {
     it('shows the "Loading" message', () => {
       const wrapper = createWrapper(false);
 
@@ -19,7 +19,7 @@ xdescribe('components/LoadingMessage', () => {
     });
   });
 
-  xdescribe('when `loadFailed` is equal to `true`', () => {
+  describe('when `loadFailed` is equal to `true`', () => {
     it('shows the errorMessage', () => {
       const wrapper = createWrapper(true);
 

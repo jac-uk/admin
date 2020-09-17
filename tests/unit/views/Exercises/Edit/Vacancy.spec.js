@@ -38,7 +38,7 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
     wrapper = createTestSubject();
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -65,11 +65,11 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
     });
   });
 
-  xdescribe('data', () => {
+  describe('data', () => {
     const booleanFields = [
       'isSPTWOffered',
     ];
-    xdescribe.each(booleanFields)('exercise.%s', (fieldName) => {
+    describe.each(booleanFields)('exercise.%s', (fieldName) => {
       let originalValue;
       beforeEach(() => {
         originalValue = exercise[fieldName];
@@ -78,7 +78,7 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
         exercise[fieldName] = originalValue;
       });
 
-      xdescribe(`when database value for "${fieldName}" is undefined`, () => {
+      describe(`when database value for "${fieldName}" is undefined`, () => {
         it('defaults to `null`', () => {
           exercise[fieldName] = undefined;
           wrapper = createTestSubject();
@@ -86,7 +86,7 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
         });
       });
 
-      xdescribe(`when database value for "${fieldName}" is boolean true`, () => {
+      describe(`when database value for "${fieldName}" is boolean true`, () => {
         it('is `true`', () => {
           exercise[fieldName] = true;
           wrapper = createTestSubject();
@@ -94,7 +94,7 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
         });
       });
 
-      xdescribe(`when database value for "${fieldName}" is boolean false`, () => {
+      describe(`when database value for "${fieldName}" is boolean false`, () => {
         it('is `false`', () => {
           exercise[fieldName] = false;
           wrapper = createTestSubject();
@@ -104,8 +104,8 @@ xdescribe('views/Exercises/Edit/Vacancy', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       const exerciseData = {
         futureStart: '20',
         location: 'Some court somewhere',

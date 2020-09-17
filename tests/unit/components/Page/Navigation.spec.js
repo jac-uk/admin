@@ -30,7 +30,7 @@ const createTestSubject = (propsData) => {
   describe('properties', () => {
     let prop;
 
-    describe('pages', () => {
+    describe('data', () => {
       beforeEach(() => {
         prop = Navigation.props.pages;
       });
@@ -44,7 +44,7 @@ const createTestSubject = (propsData) => {
       });
     });
 
-    describe('title', () => {
+    describe('label', () => {
       beforeEach(() => {
         prop = Navigation.props.title;
       });
