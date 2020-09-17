@@ -285,7 +285,7 @@ describe('components/Form/FileUpload', () => {
     const invalidMockFile = {
       name: `mock file.${  invalidMockFileExtension}`,
     };
-    const errorMessage1 = 'File upload failed, please try again [1]';
+    // const errorMessage1 = 'File upload failed, please try again [1]';
     const errorMessage2 = 'File upload failed, please try again [2]';
     const errorMessage3 = 'File upload failed, please try again [3]';
     const invalidExtensionErrorMessage = 'Invalid file type. Choose from: pdf,docx,doc,odt,txt,fodt';
