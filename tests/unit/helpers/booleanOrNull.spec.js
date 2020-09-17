@@ -5,19 +5,19 @@ xdescribe('@/helpers/booleanOrNull', () => {
     expect(booleanOrNull).toBeInstanceOf(Function);
   });
 
-  xdescribe('when input value is boolean `true`', () => {
+  describe('when input value is boolean `true`', () => {
     it('returns boolean `true`', () => {
       expect(booleanOrNull(true)).toBe(true);
     });
   });
 
-  xdescribe('when input value is boolean `false`', () => {
+  describe('when input value is boolean `false`', () => {
     it('returns boolean `false`', () => {
       expect(booleanOrNull(false)).toBe(false);
     });
   });
 
-  xdescribe('when input value is not a boolean', () => {
+  describe('when input value is not a boolean', () => {
     it('returns `null`', () => {
       expect(booleanOrNull('a string value')).toBeNull();
       expect(booleanOrNull('true')).toBeNull();
