@@ -8,7 +8,7 @@
         </routerLink>
       </h2>
       <h3 class="govuk-heading-l">
-        {{ candidate && candidate.fullName | showAlternative(candidate && candidate.id) }}
+        {{ candidate && candidate.fullName | showAlternative(candidate && candidate.email) | showAlternative(candidate && candidate.id) }}
       </h3>
 
       <h2 class="govuk-heading-m">

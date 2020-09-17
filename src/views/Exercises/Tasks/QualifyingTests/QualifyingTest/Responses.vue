@@ -30,7 +30,7 @@
     >
       <template #row="{row}">
         <TableCell>
-          {{ row.candidate.fullName | showAlternative(row.candidate.id) }}
+          {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
         <TableCell>{{ row.status | lookup }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
@@ -85,6 +85,7 @@ export default {
         'Status',
         'Started',
         'Completed',
+        'Score',
       ];
 
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
@@ -109,13 +110,22 @@ export default {
           element.status,
           element.statusLog.started,
           element.statusLog.completed,
+          element.score,
         ];
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
-              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer);
-              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer);
+            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
+              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined) {
+                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer);
+              } else {
+                row.push('---','---');  
+              }
+              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
+                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer);
+              } else {
+                row.push('---','---');  
+              }
             } else {
               row.push('---','---');
             }
@@ -129,7 +139,11 @@ export default {
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
-              row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer);
+              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
+                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer);
+              } else {
+                row.push('---');  
+              }
             } else {
               row.push('---');
             }
