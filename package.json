@@ -1,11 +1,13 @@
 {
   "name": "apply-admin",
-  "version": "0.28.2",
+  "version": "0.29.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
     "build": "vue-cli-service build --mode develop;",
     "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
+    "staging:serve": "vue-cli-service serve --mode staging",
+    "production:serve": "vue-cli-service serve --mode production",
     "build-develop": "vue-cli-service build --mode develop",
     "build-staging": "vue-cli-service build --mode staging",
     "build-production": "vue-cli-service build --mode production",
