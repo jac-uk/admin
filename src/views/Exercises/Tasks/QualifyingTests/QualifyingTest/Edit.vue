@@ -56,6 +56,12 @@
         required
       />
 
+      <TextField
+        id="qualifyingTest-testDuration"
+        v-model="qualifyingTest.feedbackSurvey"
+        label="Feedback Survey URL"
+      />
+
       <button class="govuk-button">
         Save and continue
       </button>
