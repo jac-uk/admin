@@ -1663,8 +1663,8 @@
                         v-model="application.uploadedSuitabilityStatement"
                         name="suitability-statement"
                         :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                        @input="fileUpload"
                         required
+                        @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
                       />
                     </div>
                   </dd>
@@ -1697,6 +1697,17 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
+                    <div>
+                      <FileUpload
+                        id="self-assessment-upload"
+                        ref="self-assessment"
+                        v-model="application.uploadedSelfAssessment"
+                        name="self-assessment"
+                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                        required
+                        @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                      />
+                    </div>
                   </dd>
                 </div>
               </dl>
@@ -2055,11 +2066,11 @@ export default {
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
-    fileUpload(val) {
+    doFileUpload(val, field) {
       // eslint-disable-next-line no-console
       console.log('fileUpload val:', val);
       if (val) {
-        this.$store.dispatch('application/update', { data: { uploadedSuitabilityStatement: val }, id: this.applicationId });
+        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
       }
     },
   },
