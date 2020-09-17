@@ -2,6 +2,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import tableQuery from '@/helpers/tableQuery';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -10,8 +11,10 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
 
-      const isSeachAdjustment = params.searchStatus === 'reasonable-adjustments';
-      const isSearchStatus = params.searchStatus !== 'all' && !isSeachAdjustment && params.searchStatus !== '';
+      const isSearchAdjustment = params.searchStatus === 'reasonable-adjustments';
+      const isSearchStarted = params.searchStatus === QUALIFYING_TEST.STATUS.STARTED;
+      const isSearchInProgress = params.searchStatus === QUALIFYING_TEST.STATUS.PROGRESS;
+      const isSearchStatus = params.searchStatus !== 'all' && !isSearchAdjustment && params.searchStatus !== '' && !isSearchStarted && !isSearchInProgress;
 
       let firestoreRef = collectionRef
         .where('qualifyingTest.id', '==', params.qualifyingTestId);
@@ -21,9 +24,20 @@ export default {
           .where('status', '==', params.searchStatus);
       }
 
-      if (isSeachAdjustment) {
+      if (isSearchAdjustment) {
         firestoreRef = firestoreRef
           .where('candidate.reasonableAdjustments', '==', true);
+      }
+
+      if (isSearchStarted) {
+        firestoreRef = firestoreRef
+          .where('statusLog.started', '>', new Date('1900-01-01')) // INCLUDE all items with a valid date - not null and not ''
+          .orderBy('statusLog.started');
+      }
+
+      if (isSearchInProgress) {
+        firestoreRef = firestoreRef
+          .where('status', '==', QUALIFYING_TEST.STATUS.STARTED);
       }
 
       firestoreRef = tableQuery(state.records, firestoreRef, params);

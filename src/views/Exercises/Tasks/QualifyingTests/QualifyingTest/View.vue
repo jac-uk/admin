@@ -102,7 +102,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
           >
             In Progress
           </RouterLink>
@@ -130,41 +130,52 @@
       </span>
 
       <div v-if="isApproved">
-        <select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-select govuk-!-margin-right-3"
-        >
-          <option value="">
-            Choose applications
-          </option>
-          <option
-            v-if="exercise.applicationRecords.review"
-            value="review" 
+        <div v-if="isDryRun">
+          <ActionButton
+            type="primary"
+            class="govuk-!-margin-right-3"
+            @click="btnInitialise"
           >
-            Review ({{ exercise.applicationRecords.review }})
-          </option>
-          <option
-            v-if="exercise.applicationRecords.shortlisted"
-            value="shortlisted" 
+            Initialise dry run
+          </ActionButton>
+        </div>
+        <div v-else>
+          <select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-select govuk-!-margin-right-3"
           >
-            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
-          </option>
-          <option
-            v-if="exercise.applicationRecords.selected"
-            value="selected" 
+            <option value="">
+              Choose applications
+            </option>
+            <option
+              v-if="exercise.applicationRecords.review"
+              value="review" 
+            >
+              Review ({{ exercise.applicationRecords.review }})
+            </option>
+            <option
+              v-if="exercise.applicationRecords.shortlisted"
+              value="shortlisted" 
+            >
+              Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+            </option>
+            <option
+              v-if="exercise.applicationRecords.selected"
+              value="selected" 
+            >
+              Selected ({{ exercise.applicationRecords.selected }})
+            </option>
+          </select>
+          <ActionButton
+            type="primary"
+            :disabled="!exerciseStage"
+            class="govuk-!-margin-right-3"
+            @click="btnInitialise"
           >
-            Selected ({{ exercise.applicationRecords.selected }})
-          </option>
-        </select>
-        <ActionButton
-          type="primary"
-          :disabled="!exerciseStage"
-          class="govuk-!-margin-right-3"
-          @click="btnInitialise"
-        >
-          Initialise
-        </ActionButton>
+            Initialise
+          </ActionButton>
+        </div>
       </div>
 
       <ActionButton
@@ -210,6 +221,16 @@
       >
         Send invites
       </ActionButton>
+
+      <ActionButton
+        v-if="isActivated || isCompleted"
+        type="primary"
+        :disabled="isEndDatePassed"
+        class="govuk-!-margin-right-3"
+        @click="btnGetScores"
+      >
+        Close & Score
+      </ActionButton>
     </div>
   </div>
 </template>
@@ -218,6 +239,7 @@
 import { functions } from '@/firebase';
 import ActionButton from '@/components/ActionButton';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import { isDateGreaterThan } from '@/helpers/date';
 
 export default {
   components: {
@@ -251,6 +273,9 @@ export default {
     isApproved() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.APPROVED;
     },
+    isDryRun() {
+      return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
+    },
     isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
     },
@@ -262,6 +287,11 @@ export default {
     },
     isCompleted() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED;
+    },
+    isEndDatePassed() {
+      const today = new Date();
+      const endDate = new Date(this.qualifyingTest.endDate);
+      return isDateGreaterThan(endDate, today);
     },
   },
   methods: {
@@ -275,11 +305,17 @@ export default {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
     },
     async btnInitialise() {
-      // @TODO allow user to select stage (maybe status too) they want to include in the test
-      await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: this.exerciseStage });
+      if (this.isDryRun) {
+        await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      } else {
+        await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: this.exerciseStage });
+      }
     },
     async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+    },
+    async btnGetScores() {
+      await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     btnPause() {
       // eslint-disable-next-line no-console

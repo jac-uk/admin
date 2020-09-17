@@ -39,9 +39,6 @@ export default {
     },
   },
   computed: {
-    selectionCriterionTitle() {
-      return `selection_criterion_title_${this.index}`;
-    },
     selectionCriterionText() {
       return `selection_criterion_text_${this.index}`;
     },

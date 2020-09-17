@@ -58,6 +58,13 @@ const toHumanCase = (value) => {
   }
 };
 
+const toCSV = (value) => {
+  if (value) {
+    return value.join(', ');
+  }
+  return value;
+};
+
 const toYesNo = (value) => {
   // Only convert booleans, not all falsy values mean "no"
   if (typeof value === 'boolean') {
@@ -294,6 +301,8 @@ const lookup = (value) => {
     lookup[QUALIFYING_TEST.STATUS.ACTIVATED] = 'Activated';
     lookup[QUALIFYING_TEST.STATUS.COMPLETED] = 'Completed';
     lookup[QUALIFYING_TEST.STATUS.PAUSED] = 'Paused';
+    lookup[QUALIFYING_TEST.STATUS.STARTED] = 'Started';
+    lookup[QUALIFYING_TEST.STATUS.PROGRESS] = 'In Progess';
 
     lookup[QUALIFYING_TEST.TYPE.SCENARIO] = 'Scenario';
     lookup[QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS] = 'Critical analysis';
@@ -317,6 +326,7 @@ export {
   formatNumber,
   formatNIN,
   toHumanCase,
+  toCSV,
   toYesNo,
   slugify,
   candidateHasIssues,

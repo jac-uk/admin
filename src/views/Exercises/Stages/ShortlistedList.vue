@@ -105,17 +105,48 @@ export default {
         return 0;
       }
     },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
+    selectAll: {
+      get: function () {
+        return this.applicationRecords ? this.selectedItems.length == this.applicationRecords.length : false;
+      },
+      set: function (value) {
+        const selectedItems = [];
+        if (value) {
+          this.applicationRecords.forEach((item) => {
+            selectedItems.push(item.id);
+          });
+        }
+        this.selectedItems = selectedItems;
+      },
+    },
+    numberOfPages() {
+      return Math.ceil(this.totalApplicationRecords / this.pageSize);
+    },
+    getPaginated() {
+      if (this.numberOfPages){
+        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
+
+        const sliceFrom = ((this.page - 1) * this.pageSize);
+        const sliceTo = sliceFrom + this.pageSize; 
+        const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
+
+        return sliced;
+      } else {
+        return this.applicationRecords;
+      }
     },
   },
   async created() {
     this.$store.dispatch('stageShortlisted/bind', { exerciseId: this.exercise.id });
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
+    this.selectedItems = this.$store.state.stageShortlisted.selectedItems;
   },
   methods: {
     moveBack() {
