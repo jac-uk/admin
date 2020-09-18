@@ -132,7 +132,16 @@
           <RadioItem
             :value="true"
             label="Yes"
-          />
+          >
+            <TextField
+              id="pje-days"
+              v-model="exercise.pjeDays"
+              label="Number of days"
+              class="govuk-!-width-one-quarter"
+              type="number"
+              required
+            />
+          </RadioItem>
 
           <RadioItem
             :value="false"
@@ -368,6 +377,7 @@ export default {
       otherLOS: null,
       retirementAge: null,
       otherRetirement: null,
+      pjeDays: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = {
