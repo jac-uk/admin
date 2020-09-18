@@ -57,7 +57,7 @@
       />
 
       <TextField
-        id="qualifyingTest-testDuration"
+        id="qualifyingTest-feedback-survey"
         v-model="qualifyingTest.feedbackSurvey"
         label="Feedback Survey URL"
       />
@@ -96,6 +96,7 @@ export default {
       endDate: this.getTimelineDate(exercise, data.type, 'end') || null,
       testDuration: null,
       additionalInstructions: [],
+      feedbackSurvey: null,
     };
 
     const qualifyingTest = { ...defaults, ...data };
