@@ -107,7 +107,7 @@
       </div>
 
       <div 
-        v-if="exercise.pjeDays"
+        v-if="exercise.previousJudicialExperienceApply && exercise.pjeDays"
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
