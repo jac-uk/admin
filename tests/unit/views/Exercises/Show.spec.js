@@ -53,8 +53,8 @@ xdescribe('@/views/Exercises/Show', () => {
     mockStore.dispatch.mockClear();
   });
 
-  xdescribe('computed properties', () => {
-    xdescribe('exercise', () => {
+  describe('computed properties', () => {
+    describe('exercise', () => {
       it('returns record object from state', () => {
         const wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);
@@ -62,8 +62,8 @@ xdescribe('@/views/Exercises/Show', () => {
     });
   });
 
-  xdescribe('template', () => {
-    xdescribe('when loaded is false', () => {
+  describe('template', () => {
+    describe('when loaded is false', () => {
       it('renders LoadingMessage component', () => {
         const wrapper = createTestSubject();
         expect(wrapper.find(LoadingMessage).exists()).toBe(true);
@@ -75,7 +75,7 @@ xdescribe('@/views/Exercises/Show', () => {
       });
     });
 
-    xdescribe('when loaded is true', () => {
+    describe('when loaded is true', () => {
       let wrapper;
 
       beforeEach(() => {
@@ -105,8 +105,8 @@ xdescribe('@/views/Exercises/Show', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('redirectToErrorPage', () => {
+  describe('methods', () => {
+    describe('redirectToErrorPage', () => {
       it('calls router replace method with the name of error page', () => {
         const wrapper = createTestSubject();
         wrapper.vm.redirectToErrorPage();

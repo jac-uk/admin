@@ -33,7 +33,7 @@ xdescribe('views/Exercises/Edit/Contacts', () => {
     });
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -60,8 +60,8 @@ xdescribe('views/Exercises/Edit/Contacts', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       const exerciseData = {
         exerciseMailbox: 'test@test',
         selectionExerciseManager: 'John Doe',

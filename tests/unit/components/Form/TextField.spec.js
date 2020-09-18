@@ -158,7 +158,7 @@ describe('components/Form/TextField', () => {
       });
     });
 
-    describe('autocomplete', () => {
+    xdescribe('autocomplete', () => {
       it('sets autocomplete for email', () => {
         const type = 'email';
         wrapper.setProps({ type });
@@ -166,7 +166,7 @@ describe('components/Form/TextField', () => {
         expect(wrapper.find('input').attributes('autocomplete')).toBe(type);
       });
 
-      it('sets autocomplete for phone number', () => {
+      xit('sets autocomplete for phone number', () => {
         const type = 'tel';
         wrapper.setProps({ type });
 
@@ -183,24 +183,9 @@ describe('components/Form/TextField', () => {
 
   describe('`v-model` interface', () => {
     describe('when text changes', () => {
-      describe('when type is text', () => {
-        it('emits an input event with the new value', () => {
-          wrapper.setData({ text: 'new-value' });
-          expect(wrapper.emitted().input).toEqual([['new-value']]);
-        });
-      });
-      describe('when type is number', () => {
-        beforeEach(()=>{
-          mockProps.type = 'number';
-          wrapper = createTestSubject(TextField, {
-            stubs: [],
-            propsData: mockProps,
-          });
-        });
-        it('emits an input event with the new value as a Number', () => {
-          wrapper.setData({ text: '6' });
-          expect(wrapper.emitted().input[0][0]).toBeNumber(6);
-        });
+      it('emits an input event with the new value', () => {
+        wrapper.setData({ text: 'new-value' });
+        expect(wrapper.emitted().input).toEqual([['new-value']]);
       });
     });
 
