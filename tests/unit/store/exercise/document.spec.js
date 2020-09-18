@@ -12,11 +12,11 @@ jest.mock('@/firebase', () => {
 jest.mock('vuexfire');
 
 xdescribe('store/exercise/single', () => {
-  xdescribe('actions', () => {
+  describe('actions', () => {
     const actions = exerciseDocument.actions;
 
-    xdescribe('bind', () => {
-      xdescribe('binds using vuexfire bindFirestoreRef()', () => {
+    describe('bind', () => {
+      describe('binds using vuexfire bindFirestoreRef()', () => {
         let callToBindFirestoreRef;
         beforeEach(() => {
           callToBindFirestoreRef = actions.bind('TestDocumentID');
@@ -39,14 +39,14 @@ xdescribe('store/exercise/single', () => {
       });
     });
 
-    xdescribe('unbind', () => {
+    describe('unbind', () => {
       it('unbinds key `record`', () => {
         const callToUnbindFirestoreRef = actions.unbind();
         expect(callToUnbindFirestoreRef[0]).toBe('record');
       });
     });
 
-    xdescribe('create', () => {
+    describe('create', () => {
       let mockDispatch;
       beforeEach(async () => {
         mockDispatch = jest.fn();
@@ -73,11 +73,11 @@ xdescribe('store/exercise/single', () => {
         return actions.create(context, data);
       };
 
-      // it('returns a Promise', () => {
-      //   expect(create()).toBeInstanceOf(Promise);
-      // });
+      it('returns a Promise', () => {
+        expect(create()).toBeInstanceOf(Promise);
+      });
 
-      xdescribe('the Promise', () => {
+      describe('the Promise', () => {
         const collection = firestore.collection('exercises');
 
         it('creates a new document in the Firestore collection `exercises`', async () => {
@@ -105,7 +105,7 @@ xdescribe('store/exercise/single', () => {
       });
     });
 
-    xdescribe('save', () => {
+    describe('save', () => {
       beforeEach(async () => {
         const doc = firestore.collection('exercises').doc('001');
         await doc.set({
@@ -152,8 +152,8 @@ xdescribe('store/exercise/single', () => {
     });
   });
 
-  xdescribe('getters', () => {
-    xdescribe('id', () => {
+  describe('getters', () => {
+    describe('id', () => {
       it('returns null if no document is loaded', () => {
         const state = {
           record: null,
@@ -171,7 +171,7 @@ xdescribe('store/exercise/single', () => {
       });
     });
 
-    xdescribe('data()', () => {
+    describe('data()', () => {
       it('returns a function', () => {
         const state = {
           record: {},

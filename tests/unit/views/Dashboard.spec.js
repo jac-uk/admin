@@ -31,7 +31,7 @@ const createTestSubject = () => {
 };
 
 xdescribe('views/Dashboard', () => {
-  xdescribe('template', () => {
+  describe('template', () => {
     let wrapper;
     beforeEach(() => {
       wrapper = createTestSubject();
@@ -50,8 +50,8 @@ xdescribe('views/Dashboard', () => {
     });
   });
 
-  xdescribe('lifecycle hooks', () => {
-    xdescribe('created', () => {
+  describe('lifecycle hooks', () => {
+    describe('created', () => {
       it('loads the exercises collection using Vuex', () => {
         exerciseCollection.actions.bind.mockReset();
         createTestSubject();

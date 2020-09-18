@@ -55,7 +55,7 @@ xdescribe('Page titles', () => {
     email: 'user@judicialappointments.digital',
   };
 
-  xdescribe('sign in', () => {
+  describe('sign in', () => {
     beforeEach(() => {
       router.push({ name: 'sign-in' });
     });
@@ -69,7 +69,7 @@ xdescribe('Page titles', () => {
     });
   });
 
-  xdescribe('dashboard', () => {
+  describe('dashboard', () => {
     beforeEach(() => {
       store.dispatch('auth/setCurrentUser', user);
       router.push({ name: 'dashboard' });
@@ -84,7 +84,7 @@ xdescribe('Page titles', () => {
     });
   });
 
-  xdescribe.each(routes)('%s', (routeName, routeTitle) => {
+  describe.each(routes)('%s', (routeName, routeTitle) => {
      beforeEach(() => {
        store.dispatch('auth/setCurrentUser', user);
       router.push({ name: routeName, params: { id: 123 } });

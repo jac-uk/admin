@@ -1,78 +1,16 @@
-import { shallowMount } from '@vue/test-utils';
+import { createTestSubject } from '../../helpers';
+
 import RadioGroup from '@/components/Form/RadioGroup';
 
-const createTestSubject = (propsData) => {
-  return shallowMount(RadioGroup, {
-    propsData: {
-      label: 'Example question',
-      id: 'example',
-      value: 'selected-radio-value',
-      ...propsData,
-    },
-    slots: {
-      default: ['RadioItem components'],
-    },
-  });
-};
-
-xdescribe('components/Form/RadioGroup', () => {
+describe('components/Form/RadioGroup', () => {
   it('component name is "RadioGroup"', () => {
     expect(RadioGroup.name).toBe('RadioGroup');
   });
 
-  xdescribe('properties', () => {
+  describe('props', () => {
     let prop;
 
-    /* 
-    ** @todo these are now part of `FormField`, which this component extends.
-    ** Therefore we could test here that this component extends FormField
-    ** and move these prop tests to FormField.spec.js instead
-    */
-    // xdescribe('label', () => {
-    //   beforeEach(() => {
-    //     prop = RadioGroup.props.label;
-    //   });
-
-    //   it('is optional', () => {
-    //     expect(prop.required).not.toBe(true);
-    //     expect(prop.default).toBe('');
-    //   });
-
-    //   it('must be a String', () => {
-    //     expect(prop.type).toBe(String);
-    //   });
-    // });
-
-    // xdescribe('hint', () => {
-    //   beforeEach(() => {
-    //     prop = RadioGroup.props.hint;
-    //   });
-
-    //   it('is optional', () => {
-    //     expect(prop.required).not.toBe(true);
-    //     expect(prop.default).toBe('');
-    //   });
-
-    //   it('must be a String', () => {
-    //     expect(prop.type).toBe(String);
-    //   });
-    // });
-
-    // xdescribe('id', () => {
-    //   beforeEach(() => {
-    //     prop = RadioGroup.props.id;
-    //   });
-
-    //   it('is required', () => {
-    //     expect(prop.required).toBe(true);
-    //   });
-
-    //   it('must be a String', () => {
-    //     expect(prop.type).toBe(String);
-    //   });
-    // });
-
-    xdescribe('value', () => {
+    describe('value', () => {
       beforeEach(() => {
         prop = RadioGroup.props.value;
       });
@@ -100,30 +38,41 @@ xdescribe('components/Form/RadioGroup', () => {
       });
     });
   });
-
-  xdescribe('`v-model` interface', () => {
-    let subject;
-    beforeEach(() => {
-      subject = createTestSubject();
-    });
-
-    xdescribe('when the `value` property changes', () => {
+  
+  describe('component instance', () => {
+    let wrapper;
+  beforeEach(() => {
+    wrapper = createTestSubject(RadioGroup, {
+      mocks: {},
+      stubs: [],
+      propsData: {
+      label: 'Example question',
+      id: 'example',
+      value: 'selected-radio-value',
+    },
+    slots: {
+      default: ['RadioItem components'],
+    },
+  });
+});
+    describe('`v-model` interface', () => {
+    describe('when the `value` property changes', () => {
       it('updates computed property `inputValue`', () => {
-        expect(subject.vm.inputValue).toBe('selected-radio-value');
-        subject.setProps({
+        expect(wrapper.vm.inputValue).toBe('selected-radio-value');
+        wrapper.setProps({
           value: 'some-other-value',
         });
-        expect(subject.vm.inputValue).toBe('some-other-value');
+        expect(wrapper.vm.inputValue).toBe('some-other-value');
       });
     });
 
-    xdescribe('when computed property `inputValue` changes', () => {
+    describe('when computed property `inputValue` changes', () => {
       it('emits an `input` event', () => {
-        subject.setData({
+        wrapper.setData({
           inputValue: 'some-new-value',
         });
 
-        const emitted = subject.emitted().input;
+        const emitted = wrapper.emitted().input;
 
         expect(emitted).toBeArrayOfSize(1);
         expect(emitted[0][0]).toBe('some-new-value');
@@ -131,40 +80,32 @@ xdescribe('components/Form/RadioGroup', () => {
     });
   });
 
-  xdescribe('template', () => {
-    let subject;
-
+  describe('template', () => {
     it('the root element has the `id` attribute which was passed in as prop `id`', () => {
-      subject = createTestSubject();
-      expect(subject.is('#example')).toBe(true);
+      expect(wrapper.is('#example')).toBe(true);
     });
 
-    xdescribe('<legend> element', () => {
-      xdescribe('when the `label` prop is set', () => {
+    describe('<legend> element', () => {
+      describe('when the `label` prop is set', () => {
         it('displays the label in a <legend> element', () => {
-          subject = createTestSubject({
-            label: 'Do you want cake?',
-          });
-          const legend = subject.find('legend');
+          wrapper.setProps({ label: 'Do you want cake?' });
+          const legend = wrapper.find('legend');
           expect(legend.exists()).toBe(true);
           expect(legend.text()).toBe('Do you want cake?');
           expect(legend.is('.govuk-fieldset__legend')).toBe(true);
         });
       });
 
-      xdescribe('when the `label` prop is empty', () => {
+      describe('when the `label` prop is empty', () => {
         it('does not render a <legend>', () => {
-          subject = createTestSubject({
-            label: '',
-          });
-          const legend = subject.find('legend');
+          wrapper.setProps({ label: '' });
+          const legend = wrapper.find('legend');
           expect(legend.exists()).toBe(false);
         });
       });
 
       it('is wrapped in a <fieldset>', () => {
-        subject = createTestSubject();
-        const fieldset = subject.find('fieldset');
+        const fieldset = wrapper.find('fieldset');
         expect(fieldset.exists()).toBe(true);
         expect(fieldset.is('.govuk-fieldset')).toBe(true);
         const legend = fieldset.find('legend');
@@ -172,16 +113,16 @@ xdescribe('components/Form/RadioGroup', () => {
       });
     });
 
-    xdescribe('hint text', () => {
-      xdescribe('when the `hint` prop is set', () => {
+    describe('hint text', () => {
+      describe('when the `hint` prop is set', () => {
         let hint;
         beforeEach(() => {
-          subject = createTestSubject({
+          wrapper.setProps({
             label: 'Do you want cake?',
             hint: "It's victoria sponge",
             id: 'wants-cake',
           });
-          hint = subject.find('span.govuk-hint');
+          hint = wrapper.find('span.govuk-hint');
         });
 
         it('displays the hint', () => {
@@ -194,19 +135,24 @@ xdescribe('components/Form/RadioGroup', () => {
         });
 
         it('sets attribute `aria-describedby` on the <fieldset> to reference the hint element `id`', () => {
-          const fieldset = subject.find('fieldset');
+          const fieldset = wrapper.find('fieldset');
           expect(fieldset.attributes('aria-describedby')).toBe('wants-cake__hint');
         });
       });
 
-      xdescribe('when the `hint` prop is not set', () => {
+      describe('when the `hint` prop is not set', () => {
         let hint;
         beforeEach(() => {
-          subject = createTestSubject({
-            label: 'Do you want cake?',
-            hint: undefined,
+          wrapper = createTestSubject(RadioGroup,{
+            propsData: {
+              id: 'my_unique_id',
+              value: 'my_value',
+              label: 'Do you want cake?',
+              hint: undefined,
+            },
+            stubs: [],
           });
-          hint = subject.find('span.govuk-hint');
+          hint = wrapper.find('span.govuk-hint');
         });
 
         it('does not render the hint element', () => {
@@ -215,25 +161,26 @@ xdescribe('components/Form/RadioGroup', () => {
       });
     });
 
-    xdescribe('`.govuk-radios` slot container', () => {
+    describe('`.govuk-radios` slot container', () => {
       let slotContainer;
       beforeEach(() => {
-        subject = createTestSubject();
-        slotContainer = subject.find('.govuk-radios');
+        slotContainer = wrapper.find('.govuk-radios');
       });
 
       it('exists', () => {
         expect(slotContainer.exists()).toBe(true);
       });
 
-      it('renders default slot content', () => {
+      xit('renders default slot content', () => {
         expect(slotContainer.text()).toBe('RadioItem components');
       });
 
       it('is inside the <fieldset>', () => {
-        const fieldset = subject.find('fieldset');
+        const fieldset = wrapper.find('fieldset');
         expect(fieldset.find('.govuk-radios').exists()).toBe(true);
       });
     });
   });
+  });
+  
 });
