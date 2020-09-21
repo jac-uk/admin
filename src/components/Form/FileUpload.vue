@@ -97,7 +97,9 @@ export default {
         return this.value;
       },
       set(val) {
-        this.$emit('input', val);
+        if (val) {
+          this.$emit('input', val);
+        }
       },
     },
   },
@@ -152,7 +154,7 @@ export default {
     async upload(file) {
       // @todo return more useful error messages
       if (!file) {
-        this.setError('File upload failed, please try again');
+        this.setError('File upload failed, please try again [1]');
         return false;
       } 
       if (!this.validFileExtension(file.name)) {
@@ -176,12 +178,12 @@ export default {
 
           return true;
         } else {
-          this.setError('File upload failed, please try again');
+          this.setError('File upload failed, please try again [2]');
 
           return false;
         }
       } catch (e) {
-        this.setError('File upload failed, please try again');
+        this.setError('File upload failed, please try again [3]');
 
         return false;
       } finally {
