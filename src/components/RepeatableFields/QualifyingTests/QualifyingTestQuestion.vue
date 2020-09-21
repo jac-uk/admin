@@ -18,10 +18,26 @@
       v-if="isCriticalAnalysis"
       v-model="row.details"
     />
+    <TextField
+      v-if="isScenario"
+      :id="`title_${id}_${index}`"
+      v-model="row.title"
+      label="Scenario title"
+    />
     <Scenario
       v-if="isScenario"
       v-model="row.details"
     />
+    <RepeatableFields
+      v-if="isScenario"
+      v-model="row.additional"
+      :component="repeatableFields.AdditionalDocument"
+      :ident="`additional-${id}`"
+      allow-empty
+      type-name="Supporting document"
+      required
+    />
+
     <SituationalJudgement
       v-if="isSituationalJudgement"
       v-model="row.details"
@@ -35,6 +51,15 @@
     </h3>
 
     <RepeatableFields
+      v-if="isScenario"
+      v-model="row.options"
+      :component="repeatableFields.ScenarioQuestion"
+      :ident="`questions-input-${id}`"
+      :type-name="typeName"
+      required
+    />
+    <RepeatableFields
+      v-else
       v-model="row.options"
       :component="repeatableFields.Answer"
       :ident="`questions-input-${id}`"
@@ -107,7 +132,10 @@
 <script>
 import Select from '@/components/Form/Select';
 import RepeatableFields from '@/components/RepeatableFields';
+import TextField from '@/components/Form/TextField';
 import Answer from '@/components/RepeatableFields/Answer';
+import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument';
+import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
 import Scenario from '@/components/RepeatableFields/QualifyingTests/Scenario';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
@@ -117,6 +145,7 @@ export default {
   name: 'QualifyingTestQuestion',
   components: {
     Select,
+    TextField,
     CriticalAnalysis,
     Scenario,
     RepeatableFields,
@@ -152,6 +181,8 @@ export default {
     return {
       repeatableFields: {
         Answer,
+        ScenarioQuestion,
+        AdditionalDocument,
       },
       question: question,
     };
