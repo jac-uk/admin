@@ -100,11 +100,22 @@
           Does previous judicial experience (PJE) apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.previousJudicialExperienceApply === true">
-            Yes
+          <span>
+            {{ exercise.previousJudicialExperienceApply | toYesNo }}
           </span>
-          <span v-else-if="exercise.previousJudicialExperienceApply === false">
-            No
+        </dd>
+      </div>
+
+      <div 
+        v-if="exercise.previousJudicialExperienceApply && exercise.pjeDays"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Number of days required experience
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span>
+            {{ exercise.pjeDays }}
           </span>
         </dd>
       </div>
