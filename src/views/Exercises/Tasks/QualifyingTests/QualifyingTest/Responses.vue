@@ -1,5 +1,7 @@
 <template>
   <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
+    <!-- {{ responses[0].candidate.id }} -->
+    <!-- {{ equalityAndDiversity }} -->
     <h2 class="govuk-heading-m">
       Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
@@ -51,6 +53,7 @@ import Table from '@/components/Page/Table/Table';
 import TableCell from '@/components/Page/Table/TableCell'; 
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { downloadXLSX } from '@/helpers/export';
+import * as filters from '@/filters';
 
 export default {
   components: {
@@ -58,6 +61,10 @@ export default {
     TableCell,
   },
   computed: {
+    equalityAndDiversity() {
+      const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
+      return localDocs || {};
+    },
     responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
       return responsesList;
@@ -80,12 +87,17 @@ export default {
         'ID',
         'Reference number',
         'Full Name',
+        // 'Ethnicity',
+        // 'Gender',
+        // 'Disabled',
+        // 'Professional Background',
         'Total Duration',
         'Adjust applied',
+        'Time Taken',
         'Status',
         'Started',
         'Completed',
-        'Score',
+        `${this.strToInitials(this.qualifyingTest.type)} Score`,
       ];
 
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
@@ -100,13 +112,15 @@ export default {
         }
       });
 
-      const data = this.responses.map(element => {
+      const data = this.responses.slice().sort((a, b) => {return a.score - b.score;}).reverse().map(element => {
         const row = [
           element.id,
           element.application.referenceNumber,
           element.candidate.fullName,
+          // element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
+          this.timeTaken(element),
           element.status,
           element.statusLog.started,
           element.statusLog.completed,
@@ -163,7 +177,7 @@ export default {
         {
           title: `${this.qualifyingTestId} - responses`,
           sheetName: `${this.qualifyingTestId} - responses`,
-          fileName: `${this.qualifyingTestId} - responses.xlsx`,
+          fileName: `${this.strToInitials(this.qualifyingTest.type)} ${filters.formatDate(this.qualifyingTest.endDate)} responses.xlsx`,
         }
       );
     },
@@ -190,6 +204,28 @@ export default {
     },
     goToQualifyingTest() {
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    strToInitials(string) {
+      let result;
+      const strArray = string.split('-');
+      if (strArray.length === 1) {
+        result =  `${strArray[0].charAt(0)}`;
+      } else {
+        result = `${strArray[0].charAt(0)}${strArray[strArray.length - 1].charAt(0)}`;
+      }
+      return result.toUpperCase();
+    },
+    timeTaken(response) {
+      let diff = 0;
+      if (response.statusLog.completed && response.statusLog.started) {
+        diff = response.statusLog.completed - response.statusLog.started;
+      }
+      const newDate = new Date(diff);
+      const hh = `0${newDate.getUTCHours()}`.slice(-2);
+      const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
+      const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
+      const returnTimeTaken = `${hh}:${mm}:${ss}`;
+      return returnTimeTaken;
     },
   },
 };
