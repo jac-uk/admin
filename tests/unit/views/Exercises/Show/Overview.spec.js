@@ -48,22 +48,22 @@ const createTestSubject = () => {
 };
 
 xdescribe('@/views/Exercises/Show', () => {
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders Timeline component', () => {
       const wrapper = createTestSubject();
       expect(wrapper.find(Timeline).exists()).toBe(true);
     });
   });
 
-  xdescribe('computed properties', () => {
-    xdescribe('exercise', () => {
+  describe('computed properties', () => {
+    describe('exercise', () => {
       it('returns record object from state', () => {
         const wrapper = createTestSubject();
         expect(wrapper.vm.exercise).toEqual(exercise);
       });
     });
 
-    xdescribe('timeline', () => {
+    describe('timeline', () => {
       beforeEach(() => {
         createTestSubject();
       });

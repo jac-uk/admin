@@ -1656,6 +1656,17 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
+                    <div>
+                      <FileUpload
+                        id="suitability-statement-file"
+                        ref="suitability-statement"
+                        v-model="application.uploadedSuitabilityStatement"
+                        name="suitability-statement"
+                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                        required
+                        @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+                      />
+                    </div>
                   </dd>
                 </div>
               </dl>
@@ -1686,6 +1697,17 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
+                    <div>
+                      <FileUpload
+                        id="self-assessment-upload"
+                        ref="self-assessment"
+                        v-model="application.uploadedSelfAssessment"
+                        name="self-assessment"
+                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                        required
+                        @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                      />
+                    </div>
                   </dd>
                 </div>
               </dl>
@@ -1741,6 +1763,7 @@ import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
+import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
@@ -1752,6 +1775,7 @@ export default {
     DownloadLink,
     EventRenderer,
     EditableField,
+    FileUpload,
   },
   data() {
     return {
@@ -1908,7 +1932,7 @@ export default {
       });
 
       return selected;
-    },    
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -2041,6 +2065,13 @@ export default {
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+    },
+    doFileUpload(val, field) {
+      // eslint-disable-next-line no-console
+      console.log('fileUpload val:', val);
+      if (val) {
+        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
+      }
     },
   },
 };

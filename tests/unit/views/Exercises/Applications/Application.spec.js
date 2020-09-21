@@ -115,7 +115,7 @@ describe('@/views/Exercises/Applications/Application', () => {
       wrapper = createTestSubject();
     });
 
-    it('renders the component', () => {
+    it.only('renders the component', () => {
       expect(wrapper.find('.govuk-grid-row').exists()).toBe(true);
     });
 

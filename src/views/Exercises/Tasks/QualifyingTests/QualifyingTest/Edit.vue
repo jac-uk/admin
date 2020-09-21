@@ -56,6 +56,12 @@
         required
       />
 
+      <TextField
+        id="qualifyingTest-feedback-survey"
+        v-model="qualifyingTest.feedbackSurvey"
+        label="Feedback Survey URL"
+      />
+
       <button class="govuk-button">
         Save and continue
       </button>
@@ -90,6 +96,7 @@ export default {
       endDate: this.getTimelineDate(exercise, data.type, 'end') || null,
       testDuration: null,
       additionalInstructions: [],
+      feedbackSurvey: null,
     };
 
     const qualifyingTest = { ...defaults, ...data };
