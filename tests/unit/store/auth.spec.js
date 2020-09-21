@@ -12,9 +12,9 @@ xdescribe('store/auth', () => {
   });
 
   // test mutations
-  xdescribe('mutations', () => {
+  describe('mutations', () => {
 
-    xdescribe('setCurrentUser', () => {
+    describe('setCurrentUser', () => {
       it('sets currentUser in the state', () => {
         const data = { uid: '12345', email: 'test@test.com' };
         mutations.setCurrentUser(state, data);
@@ -25,7 +25,7 @@ xdescribe('store/auth', () => {
   });
 
   // test actions
-  xdescribe('actions', () => {
+  describe('actions', () => {
     let context;
 
     beforeEach(() => {
@@ -36,16 +36,16 @@ xdescribe('store/auth', () => {
       };
     });
 
-    xdescribe('setCurrentUser', () => {
+    describe('setCurrentUser', () => {
 
-      xdescribe('when user is not signed in', () => {
+      describe('when user is not signed in', () => {
         it('runs setCurrentUser mutation with null', () => {
           actions.setCurrentUser(context, null);
           expect(context.commit).toHaveBeenCalledWith('setCurrentUser', null);
         });
       });
 
-      xdescribe('when user is signed in', () => {
+      describe('when user is signed in', () => {
         it('runs setCurrentUser mutation with data from the user object', () => {
           const user = {
             uid: 'abc123',
@@ -66,17 +66,17 @@ xdescribe('store/auth', () => {
   });
 
   // test getters
-  xdescribe('getters', () => {
+  describe('getters', () => {
 
-    xdescribe('isSignedIn', () => {
+    describe('isSignedIn', () => {
 
-      xdescribe('when user is not signed in', () => {
+      describe('when user is not signed in', () => {
         it('returns false', () => {
           expect(getters.isSignedIn(state)).toBe(false);
         });
       });
 
-      xdescribe('when user is signed in', () => {
+      describe('when user is signed in', () => {
         it('returns true', () => {
           state.currentUser = {
             uid: 'abc123',

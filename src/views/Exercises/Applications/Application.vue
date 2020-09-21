@@ -669,6 +669,26 @@
             </div>
 
             <div
+              v-if="!isPanelView && exercise.yesSalaryDetails"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Part Time Working Preferences
+              </h2>
+
+              <dl class="govuk-summary-list">
+                <dt class="govuk-summary-list__key">
+                  {{ exercise.yesSalaryDetails }}
+                </dt>
+                <dd
+                  class="govuk-summary-list__value"
+                >
+                  {{ application.partTimeWorkingPreferencesDetails }}
+                </dd>
+              </dl>
+            </div>
+
+            <div
               v-if="!isPanelView && exercise.locationQuestion"
               class="govuk-!-margin-top-9"
             >
@@ -791,6 +811,81 @@
                   </dd>
                 </div>
               </dl>
+            </div>
+
+            <div
+              v-if="application.additionalWorkingPreferences"
+              class="govuk-!-margin-top-9"
+            >
+              <h2
+                class="govuk-heading-l"
+                style="display:inline-block;"
+              >
+                Additional Preferences
+              </h2>
+
+              <dl
+                v-for="(item, index) in application.additionalWorkingPreferences"
+                :key="index"
+                class="govuk-summary-list"
+              >
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    {{ exercise.additionalWorkingPreferences[index].question }}
+                    <span class="govuk-body govuk-!-font-size-19">
+                      ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
+                    </span>
+                  </dt>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>{{ item.selection }}</li>
+                    </ul>
+                  </dd>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>
+                        <span
+                          v-for="(option, count) in exercise.additionalWorkingPreferences[index].answers"
+                          :key="count"
+                        >
+                          <strong
+                            v-if="item.selection.includes(option.answer)"
+                          > {{ option.answer }} </strong>
+                          <span
+                            v-else
+                          >
+                            {{ option.answer }}
+                          </span>
+                          <span
+                            v-if="count+1!==exercise.additionalWorkingPreferences[index].answers.length"
+                          >,</span>
+                        </span>
+                      </li>
+                    </ul>
+                  </dd>
+                  <dd 
+                    v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
+                    class="govuk-summary-list__value"
+                  >
+                    <ul class="govuk-list">
+                      <li>
+                        <span
+                          v-for="(choice, count) in item.selection"
+                          :key="count"
+                        >
+                          <strong>{{ count+1 }}.</strong> {{ choice }}
+                        </span>
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+              </dl> 
             </div>
 
             <div
@@ -1561,6 +1656,17 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
+                    <div>
+                      <FileUpload
+                        id="suitability-statement-file"
+                        ref="suitability-statement"
+                        v-model="application.uploadedSuitabilityStatement"
+                        name="suitability-statement"
+                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                        required
+                        @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+                      />
+                    </div>
                   </dd>
                 </div>
               </dl>
@@ -1591,6 +1697,17 @@
                       />
                     </div>
                     <span v-else>Not yet received</span>
+                    <div>
+                      <FileUpload
+                        id="self-assessment-upload"
+                        ref="self-assessment"
+                        v-model="application.uploadedSelfAssessment"
+                        name="self-assessment"
+                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                        required
+                        @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                      />
+                    </div>
                   </dd>
                 </div>
               </dl>
@@ -1646,6 +1763,7 @@ import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@/components/DownloadLink';
 import EventRenderer from '@/components/Page/EventRenderer';
 import EditableField from '@/components/EditableField';
+import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
@@ -1657,6 +1775,7 @@ export default {
     DownloadLink,
     EventRenderer,
     EditableField,
+    FileUpload,
   },
   data() {
     return {
@@ -1813,7 +1932,7 @@ export default {
       });
 
       return selected;
-    },    
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -1946,6 +2065,13 @@ export default {
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+    },
+    doFileUpload(val, field) {
+      // eslint-disable-next-line no-console
+      console.log('fileUpload val:', val);
+      if (val) {
+        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
+      }
     },
   },
 };

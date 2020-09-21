@@ -36,7 +36,7 @@ xdescribe('@/views/Exercises/Edit/EditName', () => {
     wrapper = createTestSubject();
   });
 
-  xdescribe('template', () => {
+  describe('template', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
@@ -63,8 +63,8 @@ xdescribe('@/views/Exercises/Edit/EditName', () => {
     });
   });
 
-  xdescribe('methods', () => {
-    xdescribe('save', () => {
+  describe('methods', () => {
+    describe('save', () => {
       const exerciseData = {
         name: 'NewName',
       };

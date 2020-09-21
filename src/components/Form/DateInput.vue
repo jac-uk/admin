@@ -206,13 +206,11 @@ export default {
       const day = this.type === 'month' ? 1 : this.day;
       const month = this.month;
       const year = this.year;
-      const hour = this.type === 'datetime' ? this.hour : 0;
+      const hour = this.type === 'datetime' ? this.hour : 13; // default time to 1pm. this avoids BST issue we would have if we defaulted to 0
       const minute = this.type === 'datetime' ? this.minute : 0;
-
       if (!day || !month || !year) {
         return null;
       }
-
       return [year, month - 1, day, hour, minute];
     },
     date: {
