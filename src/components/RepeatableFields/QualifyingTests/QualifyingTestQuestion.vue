@@ -18,22 +18,11 @@
       v-if="isCriticalAnalysis"
       v-model="row.details"
     />
-    <TextField
-      v-if="isScenario"
-      :id="`title_${id}_${index}`"
-      v-model="row.title"
-      label="Scenario title"
-    />
-    <Scenario
-      v-if="isScenario"
-      v-model="row.details"
-    />
     <RepeatableFields
       v-if="isScenario"
-      v-model="row.additional"
+      v-model="row.documents"
       :component="repeatableFields.AdditionalDocument"
-      :ident="`additional-${id}`"
-      allow-empty
+      :ident="`document-${id}`"
       type-name="Supporting document"
       required
     />
@@ -132,12 +121,10 @@
 <script>
 import Select from '@/components/Form/Select';
 import RepeatableFields from '@/components/RepeatableFields';
-import TextField from '@/components/Form/TextField';
 import Answer from '@/components/RepeatableFields/Answer';
 import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument';
 import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
-import Scenario from '@/components/RepeatableFields/QualifyingTests/Scenario';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
@@ -145,9 +132,7 @@ export default {
   name: 'QualifyingTestQuestion',
   components: {
     Select,
-    TextField,
     CriticalAnalysis,
-    Scenario,
     RepeatableFields,
     SituationalJudgement,
   },

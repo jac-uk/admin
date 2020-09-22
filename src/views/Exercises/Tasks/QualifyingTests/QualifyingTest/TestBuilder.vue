@@ -101,7 +101,7 @@ export default {
   methods: {
     async save(isValid) {
       if (isValid){
-        if (this.activeTab === 'source') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
+        if (this.activeTab === 'code') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
         this.$router.push({ name: 'qualifying-test-review' });
       }
