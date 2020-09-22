@@ -166,17 +166,18 @@
             v-if="isScenario"
           >
             <div
-              v-for="(document, index) in testQuestion.documents"
-              :key="index"
+              v-for="(document, docNum) in testQuestion.documents"
+              :key="docNum"
             >
               <strong>
                 {{ document.title }}
               </strong>
+              <!-- eslint-disable -->
               <p 
                 v-html="document.content"
               />
+              <!-- eslint-enable -->
               <hr>
-              <!-- {{ testQuestion.documents }} -->
             </div>
           </div>
         </dd>

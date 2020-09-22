@@ -175,10 +175,19 @@
                 v-if="isScenario"
               >
                 <li
-                  v-for="(response, i) in testQuestion.responses"
+                  v-for="(res, i) in testQuestion.responses"
                   :key="i"
                 >
-                  {{ response.text }}
+                  <strong
+                    v-if="res.text === null"
+                  >
+                    Question skipped
+                  </strong>
+                  <span
+                    v-else
+                  >
+                    {{ res.text }}
+                  </span>
                 </li>
               </ol>
             </dd>
