@@ -93,8 +93,8 @@ export default {
           headers.push(`Q ${ index + 1 }. Most Appropriate`, `Q ${ index + 1 }. Least Appropriate`);
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-          question.options.forEach((response, decimal) => {
-            headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ response.answer }`);
+          question.options.forEach((option, decimal) => {
+            headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.text }`);
           });
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
