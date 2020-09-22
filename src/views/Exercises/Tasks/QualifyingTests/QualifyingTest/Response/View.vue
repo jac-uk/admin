@@ -175,10 +175,10 @@
                 v-if="isScenario"
               >
                 <li
-                  v-for="(res, i) in testQuestion.options"
+                  v-for="(response, i) in testQuestion.responses"
                   :key="i"
                 >
-                  {{ res.text }}
+                  {{ response.text }}
                 </li>
               </ol>
             </dd>

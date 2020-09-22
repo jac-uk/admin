@@ -165,7 +165,19 @@
           <div
             v-if="isScenario"
           >
-            Scenario
+            <div
+              v-for="(document, index) in testQuestion.documents"
+              :key="index"
+            >
+              <strong>
+                {{ document.title }}
+              </strong>
+              <p 
+                v-html="document.content"
+              />
+              <hr>
+              <!-- {{ testQuestion.documents }} -->
+            </div>
           </div>
         </dd>
       </div>
