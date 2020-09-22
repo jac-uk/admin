@@ -105,7 +105,7 @@ export default {
       const data = this.responses.map(element => {
         const row = [
           element.id,
-          element.id,
+          element.application.referenceNumber,
           element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
