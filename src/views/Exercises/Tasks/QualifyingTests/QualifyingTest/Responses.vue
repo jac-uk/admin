@@ -55,6 +55,7 @@ import Table from '@/components/Page/Table/Table';
 import TableCell from '@/components/Page/Table/TableCell'; 
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { downloadXLSX } from '@/helpers/export';
+import * as filters from '@/filters';
 
 export default {
   components: {
@@ -62,6 +63,13 @@ export default {
     TableCell,
   },
   computed: {
+    sortedByScoresArr() {
+      return this.responses.slice().sort((a, b) => {return a.score - b.score;}).reverse();
+    },
+    equalityAndDiversity() {
+      const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
+      return localDocs || {};
+    },
     responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
       return responsesList;
@@ -86,15 +94,20 @@ export default {
         'Full Name',
         'Total Duration',
         'Adjust applied',
+        'Time Taken',
         'Status',
         'Started',
         'Completed',
-        'Score',
+        `${this.typeInitials(this.qualifyingTest.type)} Score`,
       ];
 
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT) {
-          headers.push(`Q ${ index + 1 }. Most Appropriate`, `Q ${ index + 1 }. Least Appropriate`);
+          headers.push(
+            `Q ${ index + 1 }. Most Appropriate`,
+            `Q ${ index + 1 }. Least Appropriate`,
+            `Q ${ index + 1 }. Score`
+          );
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
           question.options.forEach((option, decimal) => {
@@ -102,17 +115,21 @@ export default {
           });
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
-          headers.push(`Q ${ index + 1 }. Answer`);
+          headers.push(
+            `Q ${ index + 1 }. Answer`,
+            `Q ${ index + 1 }. Score`
+          );
         }
       });
 
-      const data = this.responses.map(element => {
+      const data = this.sortedByScoresArr.map(element => {
         const row = [
           element.id,
-          element.application.referenceNumber,
+          'element.application.referenceNumber',
           element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
+          this.timeTaken(element),
           element.status,
           element.statusLog.started,
           element.statusLog.completed,
@@ -122,18 +139,25 @@ export default {
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer);
+              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined && this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
+                row.push(
+                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer,
+                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer,
+                  element.testQuestions.questions[index].response.score
+                );
               } else {
-                row.push('---','---');  
-              }
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer);
-              } else {
-                row.push('---','---');  
+                row.push(
+                  '---',
+                  '---',
+                  '---'
+                );  
               }
             } else {
-              row.push('---','---');
+              row.push(
+                '---',
+                '---',
+                '---'
+              );
             }
           });
           break;
@@ -150,18 +174,23 @@ export default {
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
               if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer);
+                row.push(
+                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer,
+                  element.testQuestions.questions[index].response.score
+                );
               } else {
-                row.push('---');  
+                row.push('---','---');  
               }
             } else {
-              row.push('---');
+              row.push('---','---');
             }
           });
           break;
         }
         return row;
       });
+
+      data;
 
       const xlsxData = [
         headers,
@@ -171,9 +200,9 @@ export default {
       downloadXLSX(
         xlsxData,
         {
-          title: `${this.qualifyingTestId} - responses`,
-          sheetName: `${this.qualifyingTestId} - responses`,
-          fileName: `${this.qualifyingTestId} - responses.xlsx`,
+          title: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          sheetName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          fileName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
         }
       );
     },
@@ -200,6 +229,28 @@ export default {
     },
     goToQualifyingTest() {
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    typeInitials(string) {
+      let result;
+      const strArray = string.split('-');
+      if (strArray.length === 1) {
+        result =  'SC';
+      } else {
+        result = `${strArray[0].charAt(0)}${strArray[strArray.length - 1].charAt(0)}`;
+      }
+      return result.toUpperCase();
+    },
+    timeTaken(response) {
+      let diff = 0;
+      if (response.statusLog.completed && response.statusLog.started) {
+        diff = response.statusLog.completed - response.statusLog.started;
+      }
+      const newDate = new Date(diff);
+      const hh = `0${newDate.getUTCHours()}`.slice(-2);
+      const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
+      const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
+      const returnTimeTaken = `${hh}:${mm}:${ss}`;
+      return returnTimeTaken;
     },
   },
 };
