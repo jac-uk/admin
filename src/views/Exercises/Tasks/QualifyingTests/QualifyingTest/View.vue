@@ -6,6 +6,10 @@
       </h2>
       <h3 class="govuk-heading-l">
         {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+        <span
+          v-if="qualifyingTest.mode"
+          class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+        >{{ qualifyingTest.mode | lookup }}</span>
       </h3>
 
       <table class="govuk-table">
@@ -137,6 +141,15 @@
             @click="btnInitialise"
           >
             Initialise dry run
+          </ActionButton>
+        </div>
+        <div v-else-if="isMopUp">
+          <ActionButton
+            type="primary"
+            class="govuk-!-margin-right-3"
+            @click="btnInitialise"
+          >
+            Initialise mop up
           </ActionButton>
         </div>
         <div v-else>
@@ -275,6 +288,9 @@ export default {
     },
     isDryRun() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
+    },
+    isMopUp() {
+      return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'mop-up';
     },
     isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;

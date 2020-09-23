@@ -21,8 +21,14 @@
           >
             {{ row.title | showAlternative(row.id) }}
           </RouterLink>
+          <span
+            v-if="row.mode"
+            class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+          >{{ row.mode | lookup }}</span>
         </TableCell>
-        <TableCell>{{ row.type | lookup }}</TableCell>
+        <TableCell>
+          {{ row.type | lookup }}
+        </TableCell>
         <TableCell>{{ row.status | lookup }}</TableCell>
       </template>
     </Table>

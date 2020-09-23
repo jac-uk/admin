@@ -8,6 +8,10 @@
       @click="goToQualifyingTest"
     >
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      <span
+        v-if="qualifyingTest.mode"
+        class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+      >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
     <button
       class="govuk-button govuk-!-margin-left-3 float-right"
@@ -119,7 +123,7 @@ export default {
       const data = this.sortedByScoresArr.map(element => {
         const row = [
           element.id,
-          element.application.referenceNumber,
+          'element.application.referenceNumber',
           element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
