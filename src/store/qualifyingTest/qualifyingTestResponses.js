@@ -65,7 +65,7 @@ export default {
     },
     updateRA: async (context, { data, id }) => {
       // Update Reasonable Adjustments
-      await context.dispatch('update', data, id);
+      await context.dispatch('update', { data: data, id: id });
     },
     moveTest: async (context, { qualifyingTest, qualifyingTestResponse }) => {
       const qtData = {
