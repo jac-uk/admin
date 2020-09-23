@@ -5,6 +5,10 @@
     </h2>
     <h3 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      <span
+        v-if="qualifyingTest.mode"
+        class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+      >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
 
     <div class="text-right">
@@ -116,7 +120,6 @@
           {{ qualifyingTest.testQuestions.introduction }}
         </dd>
       </div>
-
       <div
         v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
         :key="index"
@@ -133,7 +136,9 @@
           <!-- eslint-enable -->
 
           <hr class="govuk-section-break govuk-section-break--visible">
-          <ol>
+          <ol
+            v-if="isSituationalJudgement || isCriticalAnalysis"
+          >
             <li
               v-for="(option, i) in testQuestion.options"
               :key="i"
@@ -155,6 +160,29 @@
             v-if="isCriticalAnalysis && testQuestion.correct >= 0"
           >
             Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+          </div>
+          <div
+            v-if="isCriticalAnalysis && testQuestion.correct >= 0"
+          >
+            Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+          </div>
+          <div
+            v-if="isScenario"
+          >
+            <div
+              v-for="(document, docNum) in testQuestion.documents"
+              :key="docNum"
+            >
+              <strong>
+                {{ document.title }}
+              </strong>
+              <!-- eslint-disable -->
+              <p 
+                v-html="document.content"
+              />
+              <!-- eslint-enable -->
+              <hr>
+            </div>
           </div>
         </dd>
       </div>
