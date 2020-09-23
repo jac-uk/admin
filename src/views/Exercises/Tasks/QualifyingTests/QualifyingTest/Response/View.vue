@@ -32,10 +32,28 @@
             Start date
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.statusLog.started | formatDate('datetime') }}
+            <span v-if="response.statusLog.started">{{ response.statusLog.started | formatDate('datetime') }}</span>
+            <span v-else>{{ qualifyingTest.startDate | formatDate('datetime') }}</span>
+            <button
+              v-if="hasMopUp && mopUp"
+              class="govuk-button govuk-button--secondary float-right"
+              @click="btnMoveToMopUp"
+            >
+              Move to mop up test
+            </button>
+            <button
+              v-if="isMopUp"
+              class="govuk-button govuk-button--secondary float-right"
+              @click="btnMoveToMainTest"
+            >
+              Move back to main test
+            </button>
           </dd>
         </div>
-        <div class="govuk-summary-list__row">
+        <div 
+          v-if="hasCompleted"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             End date
           </dt>
@@ -44,7 +62,7 @@
           </dd>
         </div>
         <div 
-          v-if="response"
+          v-if="hasCompleted"
           class="govuk-summary-list__row" 
         >
           <dt class="govuk-summary-list__key">
@@ -112,10 +130,13 @@
         </div>
       </dl>
 
-      <h2 class="govuk-heading-m">
+      <h2 
+        v-if="hasStarted"
+        class="govuk-heading-m"
+      >
         Questions
       </h2>
-      <div v-if="response">
+      <div v-if="hasStarted">
         <dl class="govuk-summary-list">
           <div
             v-if="response.testQuestions.introduction"
@@ -200,7 +221,7 @@
 </template>
 
 <script>
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 import EditableField from '@/components/EditableField';
 
 export default {
@@ -253,7 +274,7 @@ export default {
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
     },
-    isCriticalAnalysis () {
+    isCriticalAnalysis() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
     },
     isSituationalJudgment() {
@@ -261,6 +282,37 @@ export default {
     },
     isScenario() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
+    },
+    hasMopUp() {
+      return this.response.status !== QUALIFYING_TEST_RESPONSE.STATUS.CANCELLED 
+        && this.qualifyingTest.relationship
+        && this.qualifyingTest.relationship.mopUpID;
+    },
+    isMopUp() {
+      return this.qualifyingTest.mode === 'mop-up'
+        && this.qualifyingTest.relationship
+        && this.qualifyingTest.relationship.mopUpFor;
+    },
+    mopUp() {
+      if (this.hasMopUp) {
+        return this.$store.getters['qualifyingTest/getById'](this.qualifyingTest.relationship.mopUpID);
+      }
+      return null;
+    },
+    mainTest() {
+      if (this.isMopUp) {
+        return this.$store.getters['qualifyingTest/getById'](this.qualifyingTest.relationship.mopUpFor);
+      }
+      return null;
+    },
+    hasStarted() {
+      return this.response && (
+        this.response.status === QUALIFYING_TEST.STATUS.STARTED
+        || this.response.status === QUALIFYING_TEST.STATUS.COMPLETED
+      );
+    },
+    hasCompleted() {
+      return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
   },
   async created() {
@@ -334,6 +386,30 @@ export default {
       }
 
       return returnClass;
+    },
+    async btnMoveToMopUp() {
+      if (this.mopUp) {
+        await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: this.mopUp, qualifyingTestResponse: this.response });
+        this.$router.push({
+          name: 'qualifying-test-responses',
+          params: {
+            qualifyingTestId: this.qualifyingTest.id,
+            status: 'all',  // TODO go to same list status as before
+          },
+        });
+      }
+    },
+    async btnMoveToMainTest() {
+      if (this.mainTest) {
+        await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: this.mainTest, qualifyingTestResponse: this.response });
+        this.$router.push({
+          name: 'qualifying-test-responses',
+          params: {
+            qualifyingTestId: this.qualifyingTest.id,
+            status: 'all',  // TODO go to same list status as before
+          },
+        });
+      }
     },
   },
 };

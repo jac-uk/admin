@@ -5,6 +5,10 @@
     </h2>
     <h3 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      <span
+        v-if="qualifyingTest.mode"
+        class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+      >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
 
     <div class="text-right">
