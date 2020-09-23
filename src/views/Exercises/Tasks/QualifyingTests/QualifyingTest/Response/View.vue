@@ -186,7 +186,8 @@
                   <span
                     v-else
                   >
-                    {{ res.text }}
+                    <p><strong>{{ testQuestion.options[i].question }} </strong></p>
+                    <p>{{ res.text }}</p>
                   </span>
                 </li>
               </ol>
