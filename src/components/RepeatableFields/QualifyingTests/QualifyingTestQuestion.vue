@@ -18,10 +18,15 @@
       v-if="isCriticalAnalysis"
       v-model="row.details"
     />
-    <Scenario
+    <RepeatableFields
       v-if="isScenario"
-      v-model="row.details"
+      v-model="row.documents"
+      :component="repeatableFields.AdditionalDocument"
+      :ident="`document-${id}`"
+      type-name="Supporting document"
+      required
     />
+
     <SituationalJudgement
       v-if="isSituationalJudgement"
       v-model="row.details"
@@ -35,6 +40,15 @@
     </h3>
 
     <RepeatableFields
+      v-if="isScenario"
+      v-model="row.options"
+      :component="repeatableFields.ScenarioQuestion"
+      :ident="`questions-input-${id}`"
+      :type-name="typeName"
+      required
+    />
+    <RepeatableFields
+      v-else
       v-model="row.options"
       :component="repeatableFields.Answer"
       :ident="`questions-input-${id}`"
@@ -108,8 +122,9 @@
 import Select from '@/components/Form/Select';
 import RepeatableFields from '@/components/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
+import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument';
+import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
-import Scenario from '@/components/RepeatableFields/QualifyingTests/Scenario';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 
@@ -118,7 +133,6 @@ export default {
   components: {
     Select,
     CriticalAnalysis,
-    Scenario,
     RepeatableFields,
     SituationalJudgement,
   },
@@ -152,6 +166,8 @@ export default {
     return {
       repeatableFields: {
         Answer,
+        ScenarioQuestion,
+        AdditionalDocument,
       },
       question: question,
     };
