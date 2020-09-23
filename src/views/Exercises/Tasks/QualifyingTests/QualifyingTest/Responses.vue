@@ -109,9 +109,11 @@ export default {
             `Q ${ index + 1 }. Score`
           );
         }
-        // if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-        //   headers.push('scenario');
-        // }
+        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
+          question.options.forEach((option, decimal) => {
+            headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.question }`);
+          });
+        }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
           headers.push(
             `Q ${ index + 1 }. Answer`,
@@ -159,11 +161,15 @@ export default {
             }
           });
           break;
-        // case QUALIFYING_TEST.TYPE.SCENARIO:
-        //   this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-        //     // 
-        //   });
-        //   break;
+        case QUALIFYING_TEST.TYPE.SCENARIO:
+          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+            if (element.testQuestions.questions[index].responses) { 
+              element.testQuestions.questions[index].responses.forEach((response) => {
+                row.push(response.text === null ? 'Question skipped' : response.text);
+              });
+            }
+          });
+          break;
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
