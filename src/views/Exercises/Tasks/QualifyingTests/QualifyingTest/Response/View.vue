@@ -196,10 +196,20 @@
                 v-if="isScenario"
               >
                 <li
-                  v-for="(res, i) in testQuestion.options"
+                  v-for="(res, i) in testQuestion.responses"
                   :key="i"
                 >
-                  {{ res.text }}
+                  <strong
+                    v-if="res.text === null"
+                  >
+                    Question skipped
+                  </strong>
+                  <span
+                    v-else
+                  >
+                    <p><strong>{{ testQuestion.options[i].question }} </strong></p>
+                    <p>{{ res.text }}</p>
+                  </span>
                 </li>
               </ol>
             </dd>
