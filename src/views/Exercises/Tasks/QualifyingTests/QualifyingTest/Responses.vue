@@ -119,7 +119,7 @@ export default {
       const data = this.sortedByScoresArr.map(element => {
         const row = [
           element.id,
-          'element.application.referenceNumber',
+          element.application.referenceNumber,
           element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
@@ -164,13 +164,13 @@ export default {
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
               if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
-              row.push(
-                this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer,
-                element.testQuestions.questions[index].response.score
-              );
+                row.push(
+                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer,
+                  element.testQuestions.questions[index].response.score
+                );
               } else {
-               row.push('---','---');  
-               }
+                row.push('---','---');  
+              }
             } else {
               row.push('---','---');
             }
@@ -190,9 +190,9 @@ export default {
       downloadXLSX(
         xlsxData,
         {
-          title: `${this.qualifyingTestId} - responses`,
-          sheetName: `${this.qualifyingTestId} - responses`,
-          fileName: `${this.typeInitials(this.qualifyingTest.type)} ${filters.formatDate(this.qualifyingTest.endDate)} responses.xlsx`,
+          title: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          sheetName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          fileName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
         }
       );
     },
