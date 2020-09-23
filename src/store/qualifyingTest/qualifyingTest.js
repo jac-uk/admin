@@ -68,5 +68,9 @@ export default {
     data: (state) => () => {
       return clone(state.record);
     },
+    getById: (state) => (id) => {
+      // TODO if we don't have document then get it from firestore
+      return state.records.find(item => item.id === id);
+    },
   },
 };
