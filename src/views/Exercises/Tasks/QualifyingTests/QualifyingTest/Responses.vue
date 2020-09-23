@@ -1,7 +1,5 @@
 <template>
   <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
-    <!-- {{ responses[0].candidate.id }} -->
-    <!-- {{ equalityAndDiversity }} -->
     <h2 class="govuk-heading-m">
       Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
