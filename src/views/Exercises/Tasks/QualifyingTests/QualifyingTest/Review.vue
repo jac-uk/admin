@@ -183,6 +183,14 @@
               <!-- eslint-enable -->
               <hr>
             </div>
+            <ol>
+              <li
+                v-for="(option, i) in testQuestion.options"
+                :key="i"
+              >
+                {{ option.question }}
+              </li>
+            </ol>
           </div>
         </dd>
       </div>
