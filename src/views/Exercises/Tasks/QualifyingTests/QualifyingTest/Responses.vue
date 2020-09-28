@@ -126,7 +126,7 @@ export default {
         const row = [
           element.id,
           element.application.referenceNumber || '',
-          element.candidate.fullName,
+          element.candidate.fullName || element.candidate.email,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
           this.timeTaken(element),
