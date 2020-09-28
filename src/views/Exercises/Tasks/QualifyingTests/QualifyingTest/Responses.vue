@@ -125,7 +125,7 @@ export default {
       const data = this.sortedByScoresArr.map(element => {
         const row = [
           element.id,
-          'element.application.referenceNumber',
+          element.application.referenceNumber || '',
           element.candidate.fullName,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
