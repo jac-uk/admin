@@ -30,11 +30,23 @@ const module = {
           }  
         }
         if (allOk) {
+          let role = 'staff';
+          if (
+            [ // TODO User roles!
+              'warren.searle@judicialappointments.digital',
+              'tom.russell@judicialappointments.digital',
+              'lisias.loback@judicialappointments.digital',
+              'rebecca.mcknight@judicialappointments.digital',
+            ].indexOf(user.email)
+          ) {
+            role = 'superadmin';
+          }
           commit('setCurrentUser', {
             uid: user.uid,
             email: user.email,
             emailVerified: user.emailVerified,
             displayName: user.displayName,
+            role: role,
           });  
         } else {
           auth().signOut();
