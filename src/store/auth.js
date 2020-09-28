@@ -37,7 +37,7 @@ const module = {
               'tom.russell@judicialappointments.digital',
               'lisias.loback@judicialappointments.digital',
               'rebecca.mcknight@judicialappointments.digital',
-            ].indexOf(user.email)
+            ].indexOf(user.email) >= 0
           ) {
             role = 'superadmin';
           }
