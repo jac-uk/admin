@@ -20,26 +20,38 @@ export default {
       loadFailed: false,
     };
   },
+  computed: {
+    qualifyingTestId() {
+      return this.$route.params.qualifyingTestId;
+    },
+  },
+  watch: {
+    '$route.params.qualifyingTestId'() {
+      this.loadPage();
+    },
+  },
   mounted() {
-    const id = this.$route.params.qualifyingTestId;
-
-    this.$store.dispatch('qualifyingTest/bind', id)
-      .then((data) => {
-        if (data === null) {
-          this.redirectToPage();
-        }
-        else {
-          this.loaded = true;
-        }
-      }).catch((e) => {
-        this.loadFailed = true;
-        throw e;
-      });
+    this.loadPage();
   },
   destroyed() {
     this.$store.dispatch('qualifyingTest/unbind');
   },
   methods: {
+    loadPage() {
+      this.loaded = false;
+      this.$store.dispatch('qualifyingTest/bind', this.qualifyingTestId)
+        .then((data) => {
+          if (data === null) {
+            this.redirectToPage();
+          }
+          else {
+            this.loaded = true;
+          }
+        }).catch((e) => {
+          this.loadFailed = true;
+          throw e;
+        });
+    },
     redirectToPage() {
       // this.$router.replace({ name: 'page-not-found' });
       this.$router.replace({ name: 'exercise-tasks-qualifying-tests' });

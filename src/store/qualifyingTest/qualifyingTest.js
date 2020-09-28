@@ -12,7 +12,6 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
       const firestoreRef = collection.doc(id);
-
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -20,8 +19,9 @@ export default {
     }),
     bindQTs: firestoreAction(({ bindFirestoreRef }, id) => {
       const firestoreRef = collection
-        .where('vacancy.id', '==', id);
-
+        .where('vacancy.id', '==', id)
+        .orderBy('title')
+        .orderBy('startDate');
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindQTs: firestoreAction(({ unbindFirestoreRef }) => {
@@ -30,29 +30,42 @@ export default {
     create: async (state, data) => {
       data.created = firebase.firestore.FieldValue.serverTimestamp();
       data.status = QUALIFYING_TEST.STATUS.CREATED;
-
+      data.lastUpdated = null;
+      data.counts = {};
       const doc = await collection.add(data);
-
       return doc.id;
     },
     save: async ({ state }, data) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-
       return await collection.doc(state.record.id).update(data);
     },
     submitForApproval: async ({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.SUBMITTED,
       };
-
       await collection.doc(state.record.id).update(data);
     },
     approve: async ({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.APPROVED,
       };
-
       await collection.doc(state.record.id).update(data);
+    },
+    copy: async (context) => {
+      const qualifyingTest = context.state.record;
+      const data = context.getters.data();
+      data.title += ' copy';
+      data.mode = 'mop-up';
+      data.relationship = {
+        copiedFrom: qualifyingTest.id,
+      };
+      data.startDate = null;
+      data.endDate = null;
+      const newId = await context.dispatch('create', data);
+      return newId;
+    },
+    delete: async ({ state }) => {
+      await collection.doc(state.record.id).delete();
     },
   },
   state: {
@@ -62,7 +75,6 @@ export default {
   getters: {
     id: (state) => {
       if (state.record === null) return null;
-
       return state.record.id;
     },
     data: (state) => () => {

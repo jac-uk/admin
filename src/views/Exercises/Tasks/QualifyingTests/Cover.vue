@@ -23,8 +23,10 @@
           </RouterLink>
           <span
             v-if="row.mode"
-            class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+            class="govuk-tag govuk-tag--grey govuk-!-margin-left-1"
           >{{ row.mode | lookup }}</span>
+          <br>
+          <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
         </TableCell>
         <TableCell>
           {{ row.type | lookup }}
