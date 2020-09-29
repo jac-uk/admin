@@ -77,31 +77,15 @@ export default {
         additionalInstructions: qualifyingTest.additionalInstructions,
         feedbackSurvey: qualifyingTest.feedbackSurvey,
       };
-      // if response has started then cancel this one and create a new response
-      // otherwise move this response to QT
-      if (
-        qualifyingTestResponse.status === QUALIFYING_TEST_RESPONSE.STATUS.STARTED
-        || qualifyingTestResponse.status === QUALIFYING_TEST_RESPONSE.STATUS.COMPLETED
-      ) {
-        await context.dispatch('update', { data: { status: QUALIFYING_TEST_RESPONSE.STATUS.CANCELLED }, id: qualifyingTestResponse.id });
-        const data = qualifyingTestResponse;
-        data.qualifyingTest = qtData;
-        data.status = QUALIFYING_TEST_RESPONSE.STATUS.CREATED;
-        data.testQuestions = {};
-        await context.dispatch('create', { data: data });
-      } else {
-        const data = {
-          qualifyingTest: qtData,
-        };
-        if (qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED) {
-          data.status = QUALIFYING_TEST_RESPONSE.STATUS.ACTIVATED;
-          data.testQuestions = qualifyingTest.testQuestions;
-        } else {
-          data.status = QUALIFYING_TEST_RESPONSE.STATUS.CREATED;
-          data.testQuestions = {};
-        }
-        await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
-      }
+      // update qt data, empty questions and mark response as not having started yet
+      const data = {
+        qualifyingTest: qtData,
+        testQuestions: [],
+        status: QUALIFYING_TEST_RESPONSE.STATUS.CREATED,
+        'statusLog.started': null,
+        'statusLog.completed': null,
+      };
+      await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
   },
   state: {
