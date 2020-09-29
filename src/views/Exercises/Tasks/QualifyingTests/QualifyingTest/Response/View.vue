@@ -34,20 +34,41 @@
           <dd class="govuk-summary-list__value">
             <span v-if="response.statusLog.started">{{ response.statusLog.started | formatDate('datetime') }}</span>
             <span v-else>{{ qualifyingTest.startDate | formatDate('datetime') }}</span>
-            <button
-              v-if="hasMopUp && mopUp"
-              class="govuk-button govuk-button--secondary float-right"
-              @click="btnMoveToMopUp"
+            <div v-if="hasRelatedTests && isEditingTestDate">
+              <Select
+                id="moveToTest"
+                v-model="moveToTest"
+                required
+              >
+                <option value="">
+                  Choose new test date
+                </option>
+                <option 
+                  v-for="test in relatedTests" 
+                  :key="test.id" 
+                  :value="test.id"
+                >
+                  {{ test.title }} - {{ test.startDate | formatDate('datetime') }}
+                </option>
+              </Select>
+              <button 
+                class="govuk-button"
+                :disabled="!moveToTest"
+                @click="btnMoveTest"
+              >
+                Save
+              </button>
+            </div>
+            <span 
+              v-if="hasRelatedTests && !isEditingTestDate"
+              class="float-right"
             >
-              Move to mop up test
-            </button>
-            <button
-              v-if="isMopUp"
-              class="govuk-button govuk-button--secondary float-right"
-              @click="btnMoveToMainTest"
-            >
-              Move back to main test
-            </button>
+              <a 
+                href="#"
+                class="govuk-link print-none"
+                @click.prevent="btnEditTestDate" 
+              >Change</a>
+            </span>
           </dd>
         </div>
         <div 
@@ -169,7 +190,9 @@
                   :key="docIndex"
                 >
                   <dt>{{ document.title }}</dt> 
+                  <!-- eslint-disable -->
                   <dd v-html="document.content" />
+                  <!-- eslint-enable -->
                 </dl>
               </div>
               <!-- eslint-disable -->
@@ -232,12 +255,20 @@
 </template>
 
 <script>
-import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@/helpers/constants';
 import EditableField from '@/components/EditableField';
+import Select from '@/components/Form/Select';
 
 export default {
   components: {
     EditableField,
+    Select,
+  },
+  data() {
+    return {
+      moveToTest: '',
+      isEditingTestDate: false,
+    };
   },
   computed: {
     responseId() {
@@ -255,6 +286,28 @@ export default {
     qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
       return qtList;
+    },
+    qualifyingTests() {
+      return this.$store.state.qualifyingTest.records;
+    },
+    relatedTests() {
+      if (this.qualifyingTests) {
+        if (this.qualifyingTest && this.qualifyingTest.relationship && this.qualifyingTest.relationship.copiedFrom) {
+          return this.qualifyingTests.filter(item => {
+            return item.id === this.qualifyingTest.relationship.copiedFrom ||
+              (item.relationship && item.relationship.copiedFrom === this.qualifyingTest.relationship.copiedFrom);
+          });
+        } else {
+          return this.qualifyingTests.filter(item => {
+            return item.relationship && item.relationship.copiedFrom === this.qualifyingTest.id;
+          });
+        }
+      } else {
+        return [];
+      }
+    },
+    hasRelatedTests() {
+      return this.relatedTests && this.relatedTests.length;
     },
     candidate() {
       return this.response ? this.response.candidate : null;
@@ -297,28 +350,6 @@ export default {
     },
     isScenario() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
-    },
-    hasMopUp() {
-      return this.response.status !== QUALIFYING_TEST_RESPONSE.STATUS.CANCELLED 
-        && this.qualifyingTest.relationship
-        && this.qualifyingTest.relationship.mopUpID;
-    },
-    isMopUp() {
-      return this.qualifyingTest.mode === 'mop-up'
-        && this.qualifyingTest.relationship
-        && this.qualifyingTest.relationship.mopUpFor;
-    },
-    mopUp() {
-      if (this.hasMopUp) {
-        return this.$store.getters['qualifyingTest/getById'](this.qualifyingTest.relationship.mopUpID);
-      }
-      return null;
-    },
-    mainTest() {
-      if (this.isMopUp) {
-        return this.$store.getters['qualifyingTest/getById'](this.qualifyingTest.relationship.mopUpFor);
-      }
-      return null;
     },
     hasStarted() {
       return this.response && (
@@ -402,9 +433,11 @@ export default {
 
       return returnClass;
     },
-    async btnMoveToMopUp() {
-      if (this.mopUp) {
-        await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: this.mopUp, qualifyingTestResponse: this.response });
+    async btnMoveTest() {
+      if (this.moveToTest) {
+        const destinationTest = this.qualifyingTests.find(item => item.id === this.moveToTest);
+        await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: destinationTest, qualifyingTestResponse: this.response });
+        this.isEditingTestDate = false;
         this.$router.push({
           name: 'qualifying-test-responses',
           params: {
@@ -414,17 +447,8 @@ export default {
         });
       }
     },
-    async btnMoveToMainTest() {
-      if (this.mainTest) {
-        await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: this.mainTest, qualifyingTestResponse: this.response });
-        this.$router.push({
-          name: 'qualifying-test-responses',
-          params: {
-            qualifyingTestId: this.qualifyingTest.id,
-            status: 'all',  // TODO go to same list status as before
-          },
-        });
-      }
+    btnEditTestDate() {
+      this.isEditingTestDate = true;
     },
   },
 };
