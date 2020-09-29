@@ -178,15 +178,14 @@
                 v-html="testQuestion.details"
               />
               <!-- eslint-enable -->
-
               <hr class="govuk-section-break govuk-section-break--visible">
               <ol 
-                v-if="isCriticalAnalysis && testQuestion.response"
+                v-if="isCriticalAnalysis && responses[index]"
               >
                 <li
                   v-for="(res, i) in testQuestion.options"
                   :key="i"
-                  :class="checkSelected(i, testQuestion.correct, testQuestion.response.selection)"
+                  :class="checkSelected(i, testQuestion.correct, responses[index].selection)"
                 >
                   {{ res.answer }}
                 </li>
