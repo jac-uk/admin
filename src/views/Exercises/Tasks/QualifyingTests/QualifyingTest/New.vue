@@ -61,7 +61,6 @@ export default {
 
     const defaults = {
       type: null,
-      isDryRun: false,
       vacancy: {
         mailbox: exercise.exerciseMailbox,
         contactPhone: exercise.exercisePhoneNumber,
@@ -76,6 +75,7 @@ export default {
 
     return {
       qualifyingTest: qualifyingTest,
+      isDryRun: false,
     };
   },
   computed: {
