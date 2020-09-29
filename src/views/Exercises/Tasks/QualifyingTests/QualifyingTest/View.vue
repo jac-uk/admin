@@ -90,7 +90,6 @@
       class="govuk-grid-column-one-half"
     >
       <div 
-        v-if="true"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
@@ -225,10 +224,18 @@
         Reasonable Adjustments
       </button>
 
+      <button
+        v-if="canCreateCopy"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnCreateCopy"
+      >
+        Create Mop Up Test
+      </button>
+
       <ActionButton
         v-if="isInitialised"
         type="secondary"
-        :disabled="false"
+        :disabled="true"
         class="govuk-!-margin-right-3"
         @click="btnSendInvites"
       >
@@ -275,7 +282,7 @@ export default {
       return record;
     },
     hasCounts() {
-      return this.qualifyingTest.counts;
+      return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
     },
     isCreated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
@@ -308,6 +315,14 @@ export default {
       const today = new Date();
       const endDate = new Date(this.qualifyingTest.endDate);
       return isDateGreaterThan(endDate, today);
+    },
+    canCreateCopy() {
+      return !this.isMopUp && (
+        this.isInitialised ||
+        this.isActivated ||
+        this.isPaused ||
+        this.isCompleted
+      );
     },
   },
   methods: {
@@ -350,6 +365,16 @@ export default {
     },
     qtStatus(status) {
       return QUALIFYING_TEST.STATUS[status];
+    },
+    async btnCreateCopy() {
+      const newTestId = await this.$store.dispatch('qualifyingTest/copy');
+      this.$router.push({
+        name: 'qualifying-test-edit', 
+        params: { 
+          qualifyingTestId: newTestId,
+        },
+      });
+
     },
   },  
 };
