@@ -161,8 +161,20 @@
               {{ questionLabel }} {{ index + 1 }}
             </dt>
             <dd class="govuk-summary-list__value">
+              <div 
+                v-if="isScenario"
+              >
+                <dl 
+                  v-for="(document, docIndex) in testQuestion.documents"
+                  :key="docIndex"
+                >
+                  <dt>{{ document.title }}</dt> 
+                  <dd v-html="document.content" />
+                </dl>
+              </div>
               <!-- eslint-disable -->
               <div
+                v-else
                 v-html="testQuestion.details"
               />
               <!-- eslint-enable -->
@@ -196,19 +208,19 @@
                 v-if="isScenario"
               >
                 <li
-                  v-for="(res, i) in testQuestion.responses"
+                  v-for="(res, i) in responses[index].responsesForScenario"
                   :key="i"
                 >
-                  <strong
+                  <p><strong>{{ testQuestion.options[i].question }}</strong></p>
+                  <span
                     v-if="res.text === null"
                   >
-                    Question skipped
-                  </strong>
+                    [Answer skipped]
+                  </span>
                   <span
                     v-else
                   >
-                    <p><strong>{{ testQuestion.options[i].question }} </strong></p>
-                    <p>{{ res.text }}</p>
+                    <p>{{ res.text }} </p>
                   </span>
                 </li>
               </ol>
@@ -235,6 +247,10 @@ export default {
     },
     response() {
       const qtList = this.$store.state.qualifyingTestResponses.record;
+      return qtList;
+    },
+    responses() {
+      const qtList = this.response.responses;
       return qtList;
     },
     qualifyingTest() {
