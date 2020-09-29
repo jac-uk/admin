@@ -193,12 +193,12 @@
               </ol>
 
               <ol 
-                v-if="isSituationalJudgment && testQuestion.response"
+                v-if="isSituationalJudgment && responses[index]"
               >
                 <li
                   v-for="(res, i) in testQuestion.options"
                   :key="i"
-                  :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...testQuestion.response.selection })"
+                  :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...responses[index].selection })"
                 >
                   {{ res.answer }}
                 </li>
