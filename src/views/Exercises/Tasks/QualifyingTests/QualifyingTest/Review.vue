@@ -244,6 +244,15 @@
       </button>
     </span>
 
+    <span v-if="canDelete">
+      <button
+        class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+        @click="btnDelete"
+      >
+        Delete
+      </button>
+    </span>
+
     <button
       v-if="isApproved"
       class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -274,6 +283,9 @@ export default {
     },
     isApproved() {
       return !this.isDraft && !this.isReadyForApproval;
+    },
+    canDelete() {
+      return this.$store.state.auth.currentUser.role === 'superadmin';
     },
     questionLabel() {
       let label = 'Question';
@@ -308,6 +320,10 @@ export default {
     },
     btnGoBack() {
       // TODO check we need go back button
+    },
+    btnDelete() {
+      this.$store.dispatch('qualifyingTest/delete');
+      this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
     },
   },
 };
