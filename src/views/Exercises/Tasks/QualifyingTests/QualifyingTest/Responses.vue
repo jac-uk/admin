@@ -72,6 +72,7 @@ export default {
     },
     responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
+      console.log('responses', this.responses);
       return responsesList;
     },
     qualifyingTest() {
@@ -135,6 +136,15 @@ export default {
           element.statusLog.completed,
           element.score,
         ];
+      
+        // eslint-disable-next-line no-console
+        console.log('data', data);
+        // eslint-disable-next-line no-console
+        console.log('qualifyingTest', this.qualifyingTest);
+        
+        return true;
+        /* eslint-disable no-unreachable */
+
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
