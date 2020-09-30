@@ -181,7 +181,7 @@ export default {
               if (responseSelection !== undefined) {
                 row.push(
                   question.options[response.selection].answer,
-                  element.testQuestions.questions[index].response.score
+                  response.score
                 );
               } else {
                 row.push('---','---');
