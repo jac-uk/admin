@@ -123,7 +123,7 @@ export default {
       });
 
       const data = this.sortedByScoresArr.map(element => {
-        console.log('element', element);
+
         const row = [
           element.id,
           element.application ? element.application.referenceNumber : '',
@@ -140,13 +140,23 @@ export default {
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
-              if (question.options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined && question.options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
-                row.push(
-                  question.options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer,
-                  question.options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer,
-                  element.testQuestions.questions[index].response.score
-                );
+            const response = element.responses[index];
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection) {
+                if (responseSelection.mostAppropriate !== undefined && responseSelection.leastAppropriate !== undefined) {
+                  row.push(
+                    question.options[responseSelection.mostAppropriate].answer,
+                    question.options[responseSelection.leastAppropriate].answer,
+                    response.score
+                  );
+                } else {
+                  row.push(
+                    '---',
+                    '---',
+                    '---'
+                  );  
+                }
               } else {
                 row.push(
                   '---',
@@ -165,8 +175,9 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.SCENARIO:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].responses) { 
-              element.testQuestions.questions[index].responses.forEach((response) => {
+            const response = element.responses[index].responsesForScenario;
+            if (response) { 
+              response.forEach((response) => {
                 row.push(response.text === null ? 'Question skipped' : response.text);
               });
             }
@@ -175,7 +186,6 @@ export default {
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             const response = element.responses[index];
-            console.log('response', response);
             if (response) {
               const responseSelection = response.selection;
               if (responseSelection !== undefined) {
