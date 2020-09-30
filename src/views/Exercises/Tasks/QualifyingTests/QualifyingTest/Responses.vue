@@ -72,7 +72,6 @@ export default {
     },
     responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
-      console.log('responses', this.responses);
       return responsesList;
     },
     qualifyingTest() {
@@ -124,9 +123,10 @@ export default {
       });
 
       const data = this.sortedByScoresArr.map(element => {
+        console.log('element', element);
         const row = [
           element.id,
-          element.application.referenceNumber || '',
+          element.application ? element.application.referenceNumber : '',
           element.candidate.fullName || element.candidate.email,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
@@ -136,23 +136,15 @@ export default {
           element.statusLog.completed,
           element.score,
         ];
-      
-        // eslint-disable-next-line no-console
-        console.log('data', data);
-        // eslint-disable-next-line no-console
-        console.log('qualifyingTest', this.qualifyingTest);
-        
-        return true;
-        /* eslint-disable no-unreachable */
 
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
             if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined && this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
+              if (question.options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined && question.options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
                 row.push(
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer,
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer,
+                  question.options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer,
+                  question.options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer,
                   element.testQuestions.questions[index].response.score
                 );
               } else {
@@ -182,14 +174,17 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
+            const response = element.responses[index];
+            console.log('response', response);
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection !== undefined) {
                 row.push(
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer,
+                  question.options[response.selection].answer,
                   element.testQuestions.questions[index].response.score
                 );
               } else {
-                row.push('---','---');  
+                row.push('---','---');
               }
             } else {
               row.push('---','---');
