@@ -123,9 +123,10 @@ export default {
       });
 
       const data = this.sortedByScoresArr.map(element => {
+
         const row = [
           element.id,
-          element.application.referenceNumber || '',
+          element.application ? element.application.referenceNumber : '',
           element.candidate.fullName || element.candidate.email,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
@@ -135,16 +136,27 @@ export default {
           element.statusLog.completed,
           element.score,
         ];
+
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined && this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
-                row.push(
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer,
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer,
-                  element.testQuestions.questions[index].response.score
-                );
+            const response = element.responses[index];
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection) {
+                if (responseSelection.mostAppropriate !== undefined && responseSelection.leastAppropriate !== undefined) {
+                  row.push(
+                    question.options[responseSelection.mostAppropriate].answer,
+                    question.options[responseSelection.leastAppropriate].answer,
+                    response.score
+                  );
+                } else {
+                  row.push(
+                    '---',
+                    '---',
+                    '---'
+                  );  
+                }
               } else {
                 row.push(
                   '---',
@@ -163,8 +175,9 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.SCENARIO:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].responses) { 
-              element.testQuestions.questions[index].responses.forEach((response) => {
+            const response = element.responses[index].responsesForScenario;
+            if (response) { 
+              response.forEach((response) => {
                 row.push(response.text === null ? 'Question skipped' : response.text);
               });
             }
@@ -172,14 +185,16 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
+            const response = element.responses[index];
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection !== undefined) {
                 row.push(
-                  this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer,
-                  element.testQuestions.questions[index].response.score
+                  question.options[response.selection].answer,
+                  response.score
                 );
               } else {
-                row.push('---','---');  
+                row.push('---','---');
               }
             } else {
               row.push('---','---');
