@@ -185,7 +185,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Create
+            Initialise
           </ActionButton>
         </div>
       </div>
@@ -196,7 +196,7 @@
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
-        Activate
+        Open
       </ActionButton>
 
       <button
