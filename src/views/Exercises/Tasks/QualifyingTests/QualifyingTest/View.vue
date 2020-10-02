@@ -139,7 +139,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise dry run
+            Create dry run tests
           </ActionButton>
         </div>
         <div v-else-if="isMopUp">
@@ -148,7 +148,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise mop up
+            Create mop up tests
           </ActionButton>
         </div>
         <div v-else>
