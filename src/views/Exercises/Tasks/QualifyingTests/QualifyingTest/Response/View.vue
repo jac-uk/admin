@@ -142,6 +142,7 @@
                   <EditableField 
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
+                    type="textarea"
                     @changefield="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
@@ -264,8 +265,12 @@
           >
             <table>
               <tr class="log_row">
-                <td class="log_row_time">{{ timeDifference(log) }} </td>
-                <td class="log_row_date">{{ log.on }}<br> {{ log.off }}</td>
+                <td class="log_row_time">
+                  {{ timeDifference(log) }}
+                </td>
+                <td class="log_row_date">
+                  {{ log.on }}<br> {{ log.off }}
+                </td>
               </tr>
             </table>
           </div>
