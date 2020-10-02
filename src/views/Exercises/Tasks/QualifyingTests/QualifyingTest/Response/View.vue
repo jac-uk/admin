@@ -134,7 +134,10 @@
                   {{ response.candidate.reasonableAdjustmentsDetails }}
                 </td>
               </tr>
-              <tr class="govuk-table__row">
+              <tr
+                v-if="response.duration.reasonableAdjustment"
+                class="govuk-table__row"
+              >
                 <td class="govuk-table__cell">
                   Justification
                 </td>
