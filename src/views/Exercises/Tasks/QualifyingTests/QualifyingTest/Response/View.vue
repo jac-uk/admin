@@ -262,7 +262,12 @@
             v-for="(log, i) in logs"
             :key="i"
           >
-            {{ timeDifference(log) }} {{ log.on }} {{ log.off }}
+            <table>
+              <tr class="log_row">
+                <td class="log_row_time">{{ timeDifference(log) }} </td>
+                <td class="log_row_date">{{ log.on }}<br> {{ log.off }}</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div><!-- hasStarted -->
@@ -517,6 +522,18 @@ export default {
   }
   .answer--selected--correct {
     background-color: #00FFCC;
+  }
+  .log_row_time {
+    font-weight: bold;
+    border-bottom: 1px solid silver;
+    padding: 5px;
+  }
+  .log_row_date {
+    font-size: 12px;;
+    color: grey;
+    border-bottom: 1px solid silver;
+    line-height: 1;
+    padding: 5px;
   }
 </style>
 
