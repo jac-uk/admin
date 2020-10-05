@@ -134,7 +134,10 @@
                   {{ response.candidate.reasonableAdjustmentsDetails }}
                 </td>
               </tr>
-              <tr class="govuk-table__row">
+              <tr
+                v-if="response.duration.reasonableAdjustment"
+                class="govuk-table__row"
+              >
                 <td class="govuk-table__cell">
                   Justification
                 </td>
@@ -142,6 +145,7 @@
                   <EditableField 
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
+                    type="textarea"
                     @changefield="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
@@ -264,8 +268,12 @@
           >
             <table>
               <tr class="log_row">
-                <td class="log_row_time">{{ timeDifference(log) }} </td>
-                <td class="log_row_date">{{ log.on }}<br> {{ log.off }}</td>
+                <td class="log_row_time">
+                  {{ timeDifference(log) }}
+                </td>
+                <td class="log_row_date">
+                  {{ log.on }}<br> {{ log.off }}
+                </td>
               </tr>
             </table>
           </div>
