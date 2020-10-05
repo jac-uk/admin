@@ -185,7 +185,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Create
+            Create tests
           </ActionButton>
         </div>
       </div>
