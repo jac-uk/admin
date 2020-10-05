@@ -264,8 +264,12 @@
           >
             <table>
               <tr class="log_row">
-                <td class="log_row_time">{{ timeDifference(log) }} </td>
-                <td class="log_row_date">{{ log.on }}<br> {{ log.off }}</td>
+                <td class="log_row_time">
+                  {{ timeDifference(log) }}
+                </td>
+                <td class="log_row_date">
+                  {{ log.on }}<br> {{ log.off }}
+                </td>
               </tr>
             </table>
           </div>
