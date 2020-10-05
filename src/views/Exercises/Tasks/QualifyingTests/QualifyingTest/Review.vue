@@ -143,7 +143,7 @@
               v-for="(option, i) in testQuestion.options"
               :key="i"
             >
-              {{ option.answer }}
+              {{ option.answer }} 
             </li>
           </ol>
           <hr 
@@ -152,21 +152,19 @@
           >
           <div
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
+            class="govuk-!-padding-1"
           >
             Most appropriate: {{ testQuestion.options[testQuestion.mostAppropriate].answer }} <br>
             Least appropriate: {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
             v-if="isCriticalAnalysis && testQuestion.correct >= 0"
+            class="govuk-!-padding-1"
           >
             Correct: {{ testQuestion.options[testQuestion.correct].answer }}
           </div>
           <div
-            v-if="isCriticalAnalysis && testQuestion.correct >= 0"
-          >
-            Correct: {{ testQuestion.options[testQuestion.correct].answer }}
-          </div>
-          <div
+            class="govuk-!-padding-1"
             v-if="isScenario"
           >
             <div
@@ -177,10 +175,10 @@
                 {{ document.title }}
               </strong>
               <!-- eslint-disable -->
-              <p 
-                v-html="document.content"
-              />
-              <!-- eslint-enable -->
+                <p 
+                  v-html="document.content"
+                />
+                <!-- eslint-enable -->
               <hr>
             </div>
             <ol>
