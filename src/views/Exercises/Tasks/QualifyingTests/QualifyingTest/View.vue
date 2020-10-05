@@ -44,11 +44,11 @@
           </tr>
         </tbody>
       </table>
-    </div>    
+    </div>
 
-    <div 
+    <div
       v-if="hasCounts"
-      class="govuk-grid-column-one-half" 
+      class="govuk-grid-column-one-half"
     >
       <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
@@ -62,13 +62,13 @@
           >
             Initialised
           </RouterLink>
-          / 
+          /
           <RouterLink
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
-          <span 
+          <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.initialised }} / {{ qualifyingTest.counts.activated }}</span>
         </p>
@@ -78,18 +78,18 @@
           >
             Completed
           </RouterLink>
-          <span 
+          <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.completed }}</span>
         </p>
       </div>
     </div>
 
-    <div 
+    <div
       v-if="hasCounts"
       class="govuk-grid-column-one-half"
     >
-      <div 
+      <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
@@ -139,7 +139,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise dry run
+            Create dry run tests
           </ActionButton>
         </div>
         <div v-else-if="isMopUp">
@@ -148,7 +148,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise mop up
+            Create mop up tests
           </ActionButton>
         </div>
         <div v-else>
@@ -162,19 +162,19 @@
             </option>
             <option
               v-if="exercise.applicationRecords.review"
-              value="review" 
+              value="review"
             >
               Review ({{ exercise.applicationRecords.review }})
             </option>
             <option
               v-if="exercise.applicationRecords.shortlisted"
-              value="shortlisted" 
+              value="shortlisted"
             >
               Shortlisted ({{ exercise.applicationRecords.shortlisted }})
             </option>
             <option
               v-if="exercise.applicationRecords.selected"
-              value="selected" 
+              value="selected"
             >
               Selected ({{ exercise.applicationRecords.selected }})
             </option>
@@ -185,7 +185,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise
+            Create tests
           </ActionButton>
         </div>
       </div>
@@ -353,14 +353,14 @@ export default {
       console.log('Button clicked: PAUSE');
     },
     btnResponses(status) {
-      const route = { 
-        name: 'qualifying-test-responses', 
-        params: { 
-          qualifyingTestId: this.$route.params.qualifyingTestId, 
-          status: status, 
+      const route = {
+        name: 'qualifying-test-responses',
+        params: {
+          qualifyingTestId: this.$route.params.qualifyingTestId,
+          status: status,
         },
       };
-      
+
       this.$router.push(route);
     },
     qtStatus(status) {
@@ -369,13 +369,13 @@ export default {
     async btnCreateCopy() {
       const newTestId = await this.$store.dispatch('qualifyingTest/copy');
       this.$router.push({
-        name: 'qualifying-test-edit', 
-        params: { 
+        name: 'qualifying-test-edit',
+        params: {
           qualifyingTestId: newTestId,
         },
       });
 
     },
-  },  
+  },
 };
 </script>
