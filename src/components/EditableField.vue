@@ -26,6 +26,12 @@
       >
         {{ value }}
       </span>
+      <p 
+        v-if="isTextarea" 
+        class="wrap"
+      >
+        {{ value }}
+      </p>
       <span 
         v-if="isDate" 
         class="wrap"
@@ -45,7 +51,12 @@
       class="edit-field"
     >
       <TextField 
-        v-if="!isDate"
+        v-if="isText"
+        :id="`editable-field-${id}`"
+        v-model="localField"
+      />
+      <TextareaInput 
+        v-if="isTextarea"
         :id="`editable-field-${id}`"
         v-model="localField"
       />
@@ -67,11 +78,13 @@
 
 <script>
 import TextField from '@/components/Form/TextField';
+import TextareaInput from '@/components/Form/TextareaInput';
 import DateInput from '@/components/Form/DateInput';
 
 export default {
   components: {
     TextField,
+    TextareaInput,
     DateInput,
   },
   props: {
@@ -109,6 +122,9 @@ export default {
     },
     isText() {
       return this.type === 'text';
+    },
+    isTextarea() {
+      return this.type === 'textarea';
     },
     isRoute() {
       return this.type === 'route' && this.routeTo !== null;

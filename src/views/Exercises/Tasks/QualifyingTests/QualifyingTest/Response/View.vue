@@ -134,7 +134,10 @@
                   {{ response.candidate.reasonableAdjustmentsDetails }}
                 </td>
               </tr>
-              <tr class="govuk-table__row">
+              <tr
+                v-if="response.duration.reasonableAdjustment"
+                class="govuk-table__row"
+              >
                 <td class="govuk-table__cell">
                   Justification
                 </td>
@@ -142,6 +145,7 @@
                   <EditableField 
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
+                    type="textarea"
                     @changefield="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
@@ -151,105 +155,138 @@
         </div>
       </dl>
 
-      <h2 
-        v-if="hasStarted"
-        class="govuk-heading-m"
-      >
-        Questions
-      </h2>
       <div v-if="hasStarted">
-        <dl class="govuk-summary-list">
-          <div
-            v-if="response.testQuestions.introduction"
-            class="govuk-summary-list__row"
-          >
-            <dt
-              class="govuk-summary-list__key"
+        <TabsList
+          :tabs="tabs"
+          :active-tab.sync="activeTab"
+        />
+
+        <div v-if="activeTab === 'questions'">
+          <h2 class="govuk-heading-m">
+            Questions
+          </h2>
+
+          <dl class="govuk-summary-list">
+            <div
+              v-if="response.testQuestions.introduction"
+              class="govuk-summary-list__row"
             >
-              Introduction
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{ response.testQuestions.introduction }}
-            </dd>
-          </div>
-        
+              <dt
+                class="govuk-summary-list__key"
+              >
+                Introduction
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.testQuestions.introduction }}
+              </dd>
+            </div>
+          
+            <div
+              v-for="(testQuestion, index) in questions"
+              :key="index"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                {{ questionLabel }} {{ index + 1 }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <div 
+                  v-if="isScenario"
+                >
+                  <dl 
+                    v-for="(document, docIndex) in testQuestion.documents"
+                    :key="docIndex"
+                  >
+                    <dt>{{ document.title }}</dt> 
+                    <!-- eslint-disable -->
+                    <dd v-html="document.content" />
+                    <!-- eslint-enable -->
+                  </dl>
+                </div>
+                <!-- eslint-disable -->
+                <div
+                  v-else
+                  v-html="testQuestion.details"
+                />
+                <!-- eslint-enable -->
+                <hr class="govuk-section-break govuk-section-break--visible">
+                <ol 
+                  v-if="isCriticalAnalysis && responses[index]"
+                >
+                  <li
+                    v-for="(res, i) in testQuestion.options"
+                    :key="i"
+                    :class="checkSelected(i, testQuestion.correct, responses[index].selection)"
+                  >
+                    {{ res.answer }}
+                  </li>
+                </ol>
+
+                <ol 
+                  v-if="isSituationalJudgment && responses[index]"
+                >
+                  <li
+                    v-for="(res, i) in testQuestion.options"
+                    :key="i"
+                    :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...responses[index].selection })"
+                  >
+                    {{ res.answer }}
+                  </li>
+                </ol>
+
+                <ol 
+                  v-if="isScenario"
+                >
+                  <li
+                    v-for="(res, i) in responses[index].responsesForScenario"
+                    :key="i"
+                  >
+                    <p><strong>{{ testQuestion.options[i].question }}</strong></p>
+                    <span
+                      v-if="res.text === null"
+                    >
+                      [Answer skipped]
+                    </span>
+                    <span
+                      v-else
+                    >
+                      <p>{{ res.text }} </p>
+                    </span>
+                  </li>
+                </ol>
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <div v-if="activeTab === 'logs'">
+          <h2 class="govuk-heading-m">
+            Logs
+          </h2>
           <div
-            v-for="(testQuestion, index) in questions"
-            :key="index"
-            class="govuk-summary-list__row"
+            v-for="(log, i) in logs"
+            :key="i"
           >
-            <dt class="govuk-summary-list__key">
-              {{ questionLabel }} {{ index + 1 }}
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <div 
-                v-if="isScenario"
-              >
-                <dl 
-                  v-for="(document, docIndex) in testQuestion.documents"
-                  :key="docIndex"
-                >
-                  <dt>{{ document.title }}</dt> 
-                  <!-- eslint-disable -->
-                  <dd v-html="document.content" />
-                  <!-- eslint-enable -->
-                </dl>
-              </div>
-              <!-- eslint-disable -->
-              <div
-                v-else
-                v-html="testQuestion.details"
-              />
-              <!-- eslint-enable -->
-              <hr class="govuk-section-break govuk-section-break--visible">
-              <ol 
-                v-if="isCriticalAnalysis && responses[index]"
-              >
-                <li
-                  v-for="(res, i) in testQuestion.options"
-                  :key="i"
-                  :class="checkSelected(i, testQuestion.correct, responses[index].selection)"
-                >
-                  {{ res.answer }}
-                </li>
-              </ol>
-
-              <ol 
-                v-if="isSituationalJudgment && responses[index]"
-              >
-                <li
-                  v-for="(res, i) in testQuestion.options"
-                  :key="i"
-                  :class="checkSelectedSituationalJudgement(i, {leastAppropriate: testQuestion.leastAppropriate, mostAppropriate: testQuestion.mostAppropriate}, { ...responses[index].selection })"
-                >
-                  {{ res.answer }}
-                </li>
-              </ol>
-
-              <ol 
-                v-if="isScenario"
-              >
-                <li
-                  v-for="(res, i) in responses[index].responsesForScenario"
-                  :key="i"
-                >
-                  <p><strong>{{ testQuestion.options[i].question }}</strong></p>
-                  <span
-                    v-if="res.text === null"
-                  >
-                    [Answer skipped]
-                  </span>
-                  <span
-                    v-else
-                  >
-                    <p>{{ res.text }} </p>
-                  </span>
-                </li>
-              </ol>
-            </dd>
+            <table>
+              <tr class="log_row">
+                <td class="log_row_time">
+                  {{ timeDifference(log) }}
+                </td>
+                <td class="log_row_date">
+                  {{ log.on }}<br> {{ log.off }}
+                </td>
+              </tr>
+              <tr>
+                <td class="log_row_time">
+                  {{ timeOffline(i) }}
+                </td>
+                <td class="log_row_date">
+                  {{ timeOffline(i) ? 'OFFLINE' : '' }}
+                </td>
+              </tr>
+            </table>
           </div>
-        </dl>
-      </div>
+        </div>
+      </div><!-- hasStarted -->
     </div>
   </div>
 </template>
@@ -258,19 +295,34 @@
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import EditableField from '@/components/EditableField';
 import Select from '@/components/Form/Select';
+import TabsList from '@/components/Page/TabsList';
 
 export default {
   components: {
     EditableField,
     Select,
+    TabsList,
   },
   data() {
     return {
       moveToTest: '',
       isEditingTestDate: false,
+      activeTab: 'questions',
     };
   },
   computed: {
+    tabs(){
+      return [
+        {
+          ref: 'questions',
+          title: 'Questions',
+        },
+        {
+          ref: 'logs',
+          title: 'Logs',
+        },
+      ];
+    },
     responseId() {
       const id = this.$route.params.responseId;
       return id;
@@ -359,6 +411,21 @@ export default {
     },
     hasCompleted() {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
+    },
+    logs() {
+      const qtList = this.$store.state.connectionMonitor.records;
+      return qtList;
+    },
+  },
+  watch: {
+    activeTab: async function (newActiveTab) {
+      if (newActiveTab === 'logs') {
+        const candidateId = this.candidate.id;
+        const qualifyingTestId = this.$route.params.qualifyingTestId;
+        // eslint-disable-next-line no-console
+        // console.log('mounted', candidateId, qualifyingTestId, this);
+        await this.$store.dispatch('connectionMonitor/bind', { qualifyingTestId, candidateId });
+      }
     },
   },
   async created() {
@@ -450,6 +517,25 @@ export default {
     btnEditTestDate() {
       this.isEditingTestDate = true;
     },
+    timeDifference(log) {
+      if (log.offline === undefined) {
+        return 'ONLINE';
+      } else {
+        const minDate = (log.offline - log.online);
+        return new Date(minDate).toISOString().substr(11, 8);
+      }
+    },
+    timeOffline(index) {
+      const thisTimeOffline = this.logs[index] && this.logs[index].offline;
+      const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
+      const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
+      const timeOffline = nextTimeOnline - thisTimeOffline;
+      if (nextTimeOnline === undefined) {
+        return;
+      } else {
+        return new Date(timeOffline).toISOString().substr(11, 8);
+      }
+    },
   },
 };
 </script>
@@ -464,6 +550,18 @@ export default {
   }
   .answer--selected--correct {
     background-color: #00FFCC;
+  }
+  .log_row_time {
+    font-weight: bold;
+    border-bottom: 1px solid silver;
+    padding: 5px;
+  }
+  .log_row_date {
+    font-size: 12px;;
+    color: grey;
+    border-bottom: 1px solid silver;
+    line-height: 1;
+    padding: 5px;
   }
 </style>
 
