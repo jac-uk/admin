@@ -196,7 +196,7 @@
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
-        Activate
+        Open tests
       </ActionButton>
 
       <button
