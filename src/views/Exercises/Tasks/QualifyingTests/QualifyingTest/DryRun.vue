@@ -51,9 +51,6 @@ export default {
       invitedEmailsText: qualifyingTest.invitedEmails.join('\n'),
     };
   },
-  ///mounted () {
-  //console.log(this.$store.getters);
-  //},
   methods: {
     async save() {
       this.formatEmails();
