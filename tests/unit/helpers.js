@@ -17,7 +17,7 @@ const mocks = {
       auth: {
         currentUser: {
           role: 'superadmin',
-        }
+        },
       },
       vacancy: {
         record: { 
@@ -41,6 +41,10 @@ const mocks = {
       qualifyingTest: {
         record: {
           title: null,
+        },
+      },
+      qualifyingTestResponses: {
+        record: {
         },
       },
     },

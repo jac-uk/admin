@@ -164,8 +164,8 @@
             Correct: {{ testQuestion.options[testQuestion.correct].answer }}
           </div>
           <div
-            class="govuk-!-padding-1"
             v-if="isScenario"
+            class="govuk-!-padding-1"
           >
             <div
               v-for="(document, docNum) in testQuestion.documents"
