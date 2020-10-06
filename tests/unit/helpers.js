@@ -15,7 +15,7 @@ const mocks = {
     dispatch: jest.fn(),
     state: {
       vacancy: {
-        record: { 
+        record: {
           typeOfExercise: null,
           referenceNumber: null,
           welshRequirement: null,
