@@ -275,6 +275,14 @@
                   {{ log.on }}<br> {{ log.off }}
                 </td>
               </tr>
+              <tr>
+                <td class="log_row_time">
+                  {{ timeOffline(i) }}
+                </td>
+                <td class="log_row_date">
+                  {{ timeOffline(i) ? 'OFFLINE' : '' }}
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -510,11 +518,23 @@ export default {
       this.isEditingTestDate = true;
     },
     timeDifference(log) {
-      // const online = new Date(log.online);
-      // const offline = new Date(log.offline);
-      // const minDate = (offline - online);
-      const minDate = (log.offline - log.online);
-      return new Date(minDate).toISOString().substr(11, 8);
+      if (log.offline === undefined) {
+        return 'ONLINE';
+      } else {
+        const minDate = (log.offline - log.online);
+        return new Date(minDate).toISOString().substr(11, 8);
+      }
+    },
+    timeOffline(index) {
+      const thisTimeOffline = this.logs[index] && this.logs[index].offline;
+      const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
+      const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
+      const timeOffline = nextTimeOnline - thisTimeOffline;
+      if (nextTimeOnline === undefined) {
+        return;
+      } else {
+        return new Date(timeOffline).toISOString().substr(11, 8);
+      }
     },
   },
 };
