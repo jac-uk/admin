@@ -317,7 +317,7 @@ export default {
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnGoBack() {
-      // TODO check we need go back button
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnDelete() {
       this.$store.dispatch('qualifyingTest/delete');
