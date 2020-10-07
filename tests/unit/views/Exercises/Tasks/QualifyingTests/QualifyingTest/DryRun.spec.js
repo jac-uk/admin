@@ -75,17 +75,49 @@ describe('DryRun.vue', () => {
     describe('formatEmails', () => {
 
       beforeEach(() => {
-        wrapper.setData({
-          invitedEmailsText: 'test123@test.com\nTest234@test.com\n user7564@test.com\nuser7564@test.com',
-        });
+        wrapper.vm.$store.dispatch.mockClear();
       });
 
-      it('formats emails', () => {
-        expect(wrapper.vm.$data.invitedEmailsText).toBe('test123@test.com\nTest234@test.com\n user7564@test.com\nuser7564@test.com');
+      it('removes duplicates', () => {
+          wrapper.setData({
+            invitedEmailsText: 'user123@test.com\nuser987@test.com\nuser987@test.com',
+          });
+        expect(wrapper.vm.$data.invitedEmailsText).toBe('user123@test.com\nuser987@test.com\nuser987@test.com');
         wrapper.vm.formatEmails();
         expect(wrapper.exists()).toBe(true);
-        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['test123@test.com','test234@test.com','user7564@test.com']);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com','user987@test.com']);
       });
+
+      it('trims white space', () => {
+        wrapper.setData({
+          invitedEmailsText: 'user123@test.com\n  user456@test.com \n user678@test.com ',
+        });
+        expect(wrapper.vm.$data.invitedEmailsText).toBe('user123@test.com\n  user456@test.com \n user678@test.com ');
+        wrapper.vm.formatEmails();
+        expect(wrapper.exists()).toBe(true);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com', 'user456@test.com', 'user678@test.com']);
+      });
+
+      it('converts to lower case', () => {
+        wrapper.setData({
+          invitedEmailsText: 'USER123@test.com\nUSER456@test.com\nUSER678@test.com',
+        });
+        expect(wrapper.vm.$data.invitedEmailsText).toBe('USER123@test.com\nUSER456@test.com\nUSER678@test.com');
+        wrapper.vm.formatEmails();
+        expect(wrapper.exists()).toBe(true);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com', 'user456@test.com', 'user678@test.com']);
+      });
+
+      it('formats emails correctly', () => {
+        wrapper.setData({
+          invitedEmailsText: 'user123@test.com\nUSER234@test.com\n user7564@test.com \nuser7564@test.com',
+        });
+        expect(wrapper.vm.$data.invitedEmailsText).toBe('user123@test.com\nUSER234@test.com\n user7564@test.com \nuser7564@test.com');
+        wrapper.vm.formatEmails();
+        expect(wrapper.exists()).toBe(true);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com','user234@test.com','user7564@test.com']);
+      });
+
     });
 
     describe('save', () => {

@@ -14,12 +14,18 @@ const mocks = {
   store: {
     dispatch: jest.fn(),
     state: {
+      auth: {
+        currentUser: {
+          role: 'superadmin',
+        },
+      },
       vacancy: {
         record: {
           typeOfExercise: null,
           referenceNumber: null,
+          isCourtOrTribunal: null,
+          appointmentType: null,
           welshRequirement: null,
-          unknownVariable: null,
         },
       },
       candidate: {
@@ -35,6 +41,10 @@ const mocks = {
       qualifyingTest: {
         record: {
           title: null,
+        },
+      },
+      qualifyingTestResponses: {
+        record: {
         },
       },
     },
