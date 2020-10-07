@@ -53,9 +53,20 @@ export default {
   },
   methods: {
     async save() {
-      this.qualifyingTest.invitedEmails = this.invitedEmailsText.split('\n');
+      this.formatEmails();
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: 'qualifying-test-review' });
+    },
+    formatEmails() {
+      this.qualifyingTest.invitedEmails = [];
+      this.invitedEmailsText.split('\n').forEach(email => {
+        const emailAddress = email.trim().toLowerCase();
+        if (emailAddress.length) {
+          if (!this.qualifyingTest.invitedEmails.includes(emailAddress)) {
+            this.qualifyingTest.invitedEmails.push(emailAddress);
+          }
+        }
+      });
     },
   },
 };
