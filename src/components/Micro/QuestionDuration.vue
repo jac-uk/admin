@@ -1,18 +1,20 @@
 <template>
   <div class="question-duration">
-    <p 
-      v-if="start" 
+    <p
+      v-if="start"
       class="govuk-body-s"
     >
       Start: {{ start | formatDate('datetime') }}
     </p>
-    <p 
+    <p
       v-if="end"
-      class="govuk-body-s"  
-    >End: {{ end | formatDate('datetime') }}</p>
-    <p 
+      class="govuk-body-s"
+    >
+      End: {{ end | formatDate('datetime') }}
+    </p>
+    <p
       v-if="duration"
-      class="govuk-body-s"  
+      class="govuk-body-s"
     >
       Duration: {{ duration }}
     </p>
