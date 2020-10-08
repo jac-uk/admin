@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test Response: 
+        Qualifying Test Response:
         <routerLink :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: $route.params.qualifyingTestId } }">
           {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         </routerLink>
@@ -16,7 +16,7 @@
       </h2>
 
       <dl
-        v-if="response" 
+        v-if="response"
         class="govuk-summary-list"
       >
         <div class="govuk-summary-list__row">
@@ -43,15 +43,15 @@
                 <option value="">
                   Choose new test date
                 </option>
-                <option 
-                  v-for="test in relatedTests" 
-                  :key="test.id" 
+                <option
+                  v-for="test in relatedTests"
+                  :key="test.id"
                   :value="test.id"
                 >
                   {{ test.title }} - {{ test.startDate | formatDate('datetime') }}
                 </option>
               </Select>
-              <button 
+              <button
                 class="govuk-button"
                 :disabled="!moveToTest"
                 @click="btnMoveTest"
@@ -59,19 +59,19 @@
                 Save
               </button>
             </div>
-            <span 
+            <span
               v-if="hasRelatedTests && !isEditingTestDate"
               class="float-right"
             >
-              <a 
+              <a
                 href="#"
                 class="govuk-link print-none"
-                @click.prevent="btnEditTestDate" 
+                @click.prevent="btnEditTestDate"
               >Change</a>
             </span>
           </dd>
         </div>
-        <div 
+        <div
           v-if="hasCompleted"
           class="govuk-summary-list__row"
         >
@@ -82,9 +82,9 @@
             {{ response.statusLog.completed | formatDate('datetime') }}
           </dd>
         </div>
-        <div 
+        <div
           v-if="hasCompleted"
-          class="govuk-summary-list__row" 
+          class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
             Time taken
@@ -93,9 +93,9 @@
             {{ timeTaken }}
           </dd>
         </div>
-        <div 
+        <div
           v-if="response.score"
-          class="govuk-summary-list__row" 
+          class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
             Score
@@ -108,9 +108,9 @@
           <dt class="govuk-summary-list__key">
             Reasonable Adjustments
           </dt>
-          <dd 
+          <dd
             v-if="response"
-            class="govuk-summary-list__value" 
+            class="govuk-summary-list__value"
           >
             <table class="govuk-table">
               <tr class="govuk-table__row">
@@ -126,7 +126,7 @@
                   Adjustment
                 </td>
                 <td class="govuk-table__cell">
-                  <EditableField 
+                  <EditableField
                     :value="response.duration.reasonableAdjustment"
                     field="reasonableAdjustment"
                     @changefield="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
@@ -142,7 +142,7 @@
                   Justification
                 </td>
                 <td class="govuk-table__cell">
-                  <EditableField 
+                  <EditableField
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
                     type="textarea"
@@ -180,7 +180,7 @@
                 {{ response.testQuestions.introduction }}
               </dd>
             </div>
-          
+
             <div
               v-for="(testQuestion, index) in questions"
               :key="index"
@@ -190,14 +190,14 @@
                 {{ questionLabel }} {{ index + 1 }}
               </dt>
               <dd class="govuk-summary-list__value">
-                <div 
+                <div
                   v-if="isScenario"
                 >
-                  <dl 
+                  <dl
                     v-for="(document, docIndex) in testQuestion.documents"
                     :key="docIndex"
                   >
-                    <dt>{{ document.title }}</dt> 
+                    <dt>{{ document.title }}</dt>
                     <!-- eslint-disable -->
                     <dd v-html="document.content" />
                     <!-- eslint-enable -->
@@ -210,7 +210,7 @@
                 />
                 <!-- eslint-enable -->
                 <hr class="govuk-section-break govuk-section-break--visible">
-                <ol 
+                <ol
                   v-if="isCriticalAnalysis && responses[index]"
                 >
                   <li
@@ -222,7 +222,7 @@
                   </li>
                 </ol>
 
-                <ol 
+                <ol
                   v-if="isSituationalJudgment && responses[index]"
                 >
                   <li
@@ -234,7 +234,7 @@
                   </li>
                 </ol>
 
-                <ol 
+                <ol
                   v-if="isScenario"
                 >
                   <li
@@ -332,8 +332,27 @@ export default {
       return qtList;
     },
     responses() {
-      const qtList = this.response.responses;
-      return qtList;
+      let responses = [];
+      if (this.response.responses && this.response.responses.length) {
+        responses = this.response.responses;
+      } else {  // check for responses on testQuestions (backward compatibility)
+        if (this.response.testQuestions && this.response.testQuestions.questions) {
+          this.response.testQuestions.questions.forEach(question => {
+            if (this.isScenario) {
+              if (question.responses) {
+                responses.push({
+                  responsesForScenario: question.responses,
+                });
+              }
+            } else {
+              if (question.response) {
+                responses.push(question.response);
+              }
+            }
+          });
+        }
+      }
+      return responses;
     },
     qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
@@ -435,7 +454,7 @@ export default {
     actionReasonableAdjustment(obj, duration, id) {
       const reasonableAdjustment = Number(obj.reasonableAdjustment);
       const calculation = reasonableAdjustment + Number(duration.testDuration);
-      const returnObj = { 
+      const returnObj = {
         duration: {
           ...this.response.duration,
           testDuration: duration.testDuration,
@@ -446,7 +465,7 @@ export default {
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
     actionReasonableAdjustmentJustification(obj, id) {
-      const returnObj = { 
+      const returnObj = {
         duration: {
           ...this.response.duration,
           reasonableAdjustmentsJustification: obj.reasonableAdjustmentsJustification,
@@ -478,7 +497,7 @@ export default {
       // eslint-disable-next-line no-console
       // console.log('checkSelectedSituationalJudgement', index, rightAnswer, selectedAnswer);
       let returnClass = '';
-      
+
       const isSelectedAnswerMost = index === selectedAnswer.mostAppropriate ;
       const isSelectedAnswerLeast = index === selectedAnswer.leastAppropriate;
 
@@ -487,7 +506,7 @@ export default {
 
       const isRightAndSelectedAnswerMost = isRightAnswerMost && isSelectedAnswerMost;
       const isRightAndSelectedAnswerLeast = isRightAnswerLeast && isSelectedAnswerLeast;
-      
+
       if (isRightAnswerMost || isRightAnswerLeast) {
         returnClass += ' answer--right';
       }
