@@ -1,82 +1,56 @@
-// import firebase from '@firebase/app';
-// import { firestore } from '@/firebase';
-// import { firestoreAction } from 'vuexfire';
-// import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import clone from 'clone';
+import firebase from '@firebase/app';
+import { firestore } from '@/firebase';
+import { firestoreAction } from 'vuexfire';
+import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 
-// const collection = firestore.collection('invitations');
-  
+const collectionRef = firestore.collection('invitations');
+
 export default {
   namespaced: true,
   state: {
-    record: null,
+    records: [],
   },
-  getters: {
-    id: (state) => {
-      if (state.record === null) return null;
-      return state.record.id;
+  actions: {
+    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId }) => {
+      const firestoreRef = collectionRef
+        .where('vacancy.id', '==', exerciseId);
+      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbind: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('records');
+    }),
+    addInvites: async (context, { emails }) => {
+      const exercise = context.rootState.exerciseDocument.record;
+      if (emails && emails.length && exercise && exercise.id) {
+        const emailsToAdd = emails;
+        if (context.state.records) {
+          // TODO check for emails that already have an invitation
+        }
+        if (emailsToAdd.length) {
+          emailsToAdd.forEach(email => {
+            collectionRef.add({
+              vacancy: {
+                id: exercise.id,
+                name: exercise.name,
+                referenceNumber: exercise.referenceNumber,
+                applicationOpenDate: exercise.applicationOpenDate,
+                applicationCloseDate: exercise.applicationCloseDate,
+              },
+              candidate: {
+                email: email,
+                id: null,  // populated when candidate updates the invite
+              },
+              status: 'created',  // 'created' | 'invited' | 'accepted' | 'rejected'
+              statusLog: {
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                invited: null,  // populated when email invite has been sent (out of scope right now)
+                accepted: null, // populated when candidate accepts the invitation
+                rejected: null, // populated when candidate rejects the invitation
+              },
+            });
+          });
+        }
+      }
     },
-    data: () => () => {
-      return clone([
-        {
-          vacancy: {
-            id: String,
-            title: String,
-            referenceNumber: String,
-            applicationOpenDate: Date,
-            applicationCloseDate: Date,
-          },
-          candidate: {
-            email: 'personone@gmail.com',
-            id: 'String', //  <-- populated when candidate accepts/rejects the invitation
-          },
-          status: 'invited',
-          statusLog: {
-            invited: new Date(95, 0, 20),
-            // accepted: Date, //  <-- populated when candidate accepts the invitation
-            // rejected: Date, // <-- populated when candidate rejects the invitation
-          },
-        },
-        {
-          vacancy: {
-            id: String,
-            title: String,
-            referenceNumber: String,
-            applicationOpenDate: Date,
-            applicationCloseDate: Date,
-          },
-          candidate: {
-            email: 'persontwo@gmail.com',
-            id: 'String', //  <-- populated when candidate accepts/rejects the invitation
-          },
-          status: 'accepted',
-          statusLog: {
-            invited: new Date(95, 0, 20),
-            accepted: new Date(2020, 0, 20), //  <-- populated when candidate accepts the invitation
-            // rejected: Date, // <-- populated when candidate rejects the invitation
-          },
-        },
-        {
-          vacancy: {
-            id: String,
-            title: String,
-            referenceNumber: String,
-            applicationOpenDate: Date,
-            applicationCloseDate: Date,
-          },
-          candidate: {
-            email: 'personthree@gmail.com',
-            id: 'String', //  <-- populated when candidate accepts/rejects the invitation
-          },
-          status: 'rejected',
-          statusLog: {
-            invited: new Date(95, 0, 20),
-            // accepted: new Date(2020, 0, 20), //  <-- populated when candidate accepts the invitation
-            rejected: new Date(2020, 0, 20), // <-- populated when candidate rejects the invitation
-          },
-        },
-      ]);
-    },
-    //record: (state) => clone(state.record),
   },
 };

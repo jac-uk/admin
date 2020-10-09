@@ -12,11 +12,11 @@
     <h1 class="govuk-heading-xl">
       Exercise invitations
     </h1>
-    <table 
+    <table
       class="govuk-table"
     >
       <tbody class="govuk-table__body">
-        <tr 
+        <tr
           v-for="invite in invitations"
           :key="invite.id"
           class="govuk-table__row"
@@ -65,9 +65,15 @@ export default {
     ...mapGetters('exerciseDocument', {
       isEditable: 'isEditable',
     }),
-    invitations() {
-      return this.$store.getters['invitations/data']();
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
     },
+    invitations() {
+      return this.$store.state.invitations.records;
+    },
+  },
+  created() {
+    this.$store.dispatch('invitations/bind', { exerciseId: this.exercise.id });
   },
   methods: {
     tagClass(status){

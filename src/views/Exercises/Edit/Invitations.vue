@@ -44,7 +44,7 @@ export default {
   },
   extends: Form,
   data() {
-    const invitations = this.$store.getters['invitations/data']();
+    const invitations = this.$store.state.invitations.records;
     const invitedEmailsText = [];
     invitations.forEach(invite=>{
       invitedEmailsText.push(invite.candidate.email);
@@ -55,10 +55,14 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.invitations = isValid ? true : false;
-      // await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      // await this.$store.dispatch('invitations/save', this.invitations);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-summary'));
+      // TODO clean emails
+      await this.$store.dispatch('invitations/addInvites', {
+        emails: this.invitedEmailsText.split('\n'),
+      });
+      await this.$store.dispatch('exerciseDocument/save', {
+        'progress.invitations': isValid,
+      });
+      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-invitations'));
     },
   },
 };
