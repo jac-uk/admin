@@ -23,11 +23,19 @@ export default {
       const exercise = context.rootState.exerciseDocument.record;
       if (emails && emails.length && exercise && exercise.id) {
         const emailsToAdd = emails;
-        if (context.state.records) {
-          // TODO check for emails that already have an invitation
-        }
         if (emailsToAdd.length) {
+          // Delete emails from database that were removed by the user
+          context.state.records.forEach (async (r) => {
+            const toBeAdded = emailsToAdd.find(email => email === r.candidate.email);
+            if (!toBeAdded) {
+              const ref = firestore.collection('invitations').doc(r.id);
+              await ref.delete();
+            }
+          });
+          // Add new emails that are not in the database
           emailsToAdd.forEach(email => {
+            const existing = context.state.records.find(r => r.candidate.email === email);
+            if (existing) return;
             collectionRef.add({
               vacancy: {
                 id: exercise.id,

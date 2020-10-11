@@ -55,14 +55,25 @@ export default {
   },
   methods: {
     async save(isValid) {
-      // TODO clean emails
       await this.$store.dispatch('invitations/addInvites', {
-        emails: this.invitedEmailsText.split('\n'),
+        emails: this.formatEmails(),
       });
       await this.$store.dispatch('exerciseDocument/save', {
         'progress.invitations': isValid,
       });
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-invitations'));
+    },
+    formatEmails() {
+      const formattedEmails = [];
+      this.invitedEmailsText.split('\n').forEach(email => {
+        const emailAddress = email.trim().toLowerCase();
+        if (emailAddress.length) {
+          if (!formattedEmails.includes(emailAddress)) {
+            formattedEmails.push(emailAddress);
+          }
+        }
+      });
+      return formattedEmails;
     },
   },
 };
