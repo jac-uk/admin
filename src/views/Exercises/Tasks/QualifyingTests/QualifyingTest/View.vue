@@ -56,6 +56,7 @@
         <h2 class="govuk-heading-l">
           Number of Participants
         </h2>
+
         <p class="govuk-body">
           <RouterLink
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
@@ -77,10 +78,10 @@
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
-          </RouterLink>
+          </RouterLink> / Out of Time
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.completed }}</span>
+          >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>
         </p>
       </div>
     </div>
