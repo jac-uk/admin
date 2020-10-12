@@ -14,7 +14,7 @@ export default {
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
-    }), 
+    }),
     unlock: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);

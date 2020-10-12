@@ -14,6 +14,8 @@ import application from '@/store/application';
 import assessment from '@/store/assessment';
 import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
+import invitations from '@/store/invitations';
+
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
@@ -42,6 +44,7 @@ const store = new Vuex.Store({
     assessment,
     assessments,
     notifications,
+    invitations,
     stageReview,
     stageSelected,
     stageHandover,

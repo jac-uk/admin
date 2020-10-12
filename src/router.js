@@ -15,6 +15,7 @@ import ExerciseEditName from '@/views/Exercises/Edit/EditName';
 import ExerciseEditAssessmentOptions from '@/views/Exercises/Edit/AssessmentOptions';
 import ExerciseEditWorkingPreferences from '@/views/Exercises/Edit/WorkingPreferences';
 import ExerciseEditDownloads from '@/views/Exercises/Edit/Downloads';
+import ExerciseEditInvitations from '@/views/Exercises/Edit/Invitations';
 
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
@@ -29,6 +30,7 @@ import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPrefer
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
+import ExerciseShowInvitations from '@/views/Exercises/Show/Invitations';
 
 // Application
 import ExerciseApplication from '@/views/Exercises/Applications/Application';
@@ -143,7 +145,7 @@ const router = new Router({
         title: 'Create An Exercise',
       },
     },
-    // sandbox component
+    // sandbox component VV
     {
       path: '/sandbox',
       component: Sandbox,
@@ -152,7 +154,7 @@ const router = new Router({
         title: 'sandbox',
       },
     },
-    // sandbox component
+    // sandbox component ^^
     {
       path: '/exercises/:id',
       component: ExerciseShow,
@@ -245,6 +247,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Downloads',
+          },
+        },
+        {
+          path: 'invitations',
+          component: ExerciseShowInvitations,
+          name: 'exercise-show-invitations',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Invitations',
           },
         },
         {
@@ -745,6 +756,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Downloads',
+          },
+        },
+        {
+          path: 'invitations',
+          component: ExerciseEditInvitations,
+          name: 'exercise-edit-invitations',
+          meta: {
+            requiresAuth: true,
+            title: 'Invitations',
           },
         },
       ],

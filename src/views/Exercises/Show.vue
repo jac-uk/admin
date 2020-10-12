@@ -122,7 +122,7 @@ export default {
       return false;
     },
     mainNavigation() {
-      return [
+      const result = [
         {
           title: 'Overview',
           name: 'exercise-show-overview',
@@ -164,6 +164,10 @@ export default {
           name: 'exercise-show-downloads',
         },
       ];
+      if (this.exercise.inviteOnly) {
+        result.splice(1, 0, { title: 'Exercise invitations',name: 'exercise-show-invitations' });
+      }
+      return result;
     },
     applicationStatusNavigation(){
       return [
