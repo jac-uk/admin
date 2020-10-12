@@ -86,7 +86,6 @@ import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
 import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
 import ExerciseShowReportsHandover from '@/views/Exercises/Show/Reports/Handover';
-
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
@@ -95,6 +94,9 @@ import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/
 import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
 import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
 import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/ReasonableAdjustments';
+import QualifyingTestReports from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReports';
+import QualifyingTestReport from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport';
+import QualifyingTestReportView from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -569,6 +571,30 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Exercise Reports | Reasonable Adjustments',
               },
+            },
+            {
+              path: 'qualifying-test-reports',
+              component: QualifyingTestReports,
+              name: 'qualifying-test-reports',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Test Reports',
+              },
+            },
+            {
+              path: 'qualifying-test-reports/:qualifyingTestReportId',
+              component: QualifyingTestReport,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestReportView,
+                  name: 'qualifying-test-report-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test Report | View',
+                  },
+                },
+              ],
             },
             {
               path: 'eligibility',
