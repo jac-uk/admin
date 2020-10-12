@@ -20,7 +20,15 @@
           Name
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.name }}
+          {{ exercise.name }} 
+          <span
+            v-if="exercise.inviteOnly"
+          >
+            - 
+            <b>
+              Invite only exercise
+            </b>
+          </span>
         </dd>
       </div>  
       <div class="govuk-summary-list__row">

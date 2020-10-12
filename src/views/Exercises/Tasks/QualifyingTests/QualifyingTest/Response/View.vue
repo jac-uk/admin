@@ -24,7 +24,7 @@
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.status | lookup }}
+            {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -188,6 +188,11 @@
             >
               <dt class="govuk-summary-list__key">
                 {{ questionLabel }} {{ index + 1 }}
+                <QuestionDuration 
+                  v-if="!isScenario"
+                  :start="responses[index].started"
+                  :end="responses[index].completed"
+                />
               </dt>
               <dd class="govuk-summary-list__value">
                 <div
@@ -242,8 +247,13 @@
                     :key="i"
                   >
                     <p><strong>{{ testQuestion.options[i].question }}</strong></p>
+                    
+                    <QuestionDuration 
+                      :start="res.started"
+                      :end="res.completed"
+                    />
                     <span
-                      v-if="res.text === null"
+                      v-if="res.started !== null && res.text === null"
                     >
                       [Answer skipped]
                     </span>
@@ -296,12 +306,14 @@ import { QUALIFYING_TEST } from '@/helpers/constants';
 import EditableField from '@/components/EditableField';
 import Select from '@/components/Form/Select';
 import TabsList from '@/components/Page/TabsList';
+import QuestionDuration from '@/components/Micro/QuestionDuration';
 
 export default {
   components: {
     EditableField,
     Select,
     TabsList,
+    QuestionDuration,
   },
   data() {
     return {

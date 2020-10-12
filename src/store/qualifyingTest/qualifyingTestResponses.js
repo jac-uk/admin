@@ -54,7 +54,7 @@ export default {
     }),
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
-    }), 
+    }),
     create: async (context, { data }) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collectionRef.add(data);
@@ -77,7 +77,6 @@ export default {
         additionalInstructions: qualifyingTest.additionalInstructions,
         feedbackSurvey: qualifyingTest.feedbackSurvey,
       };
-      // update qt data, empty questions and mark response as not having started yet
       const data = {
         qualifyingTest: qtData,
         testQuestions: [],
@@ -85,6 +84,26 @@ export default {
         'statusLog.started': null,
         'statusLog.completed': null,
       };
+      if (!(qualifyingTestResponse.responses && qualifyingTestResponse.responses.length)) {
+        // no existing responses, so check for responses alongside questions (backward compatibility with old data model)
+        if (qualifyingTestResponse.testQuestions && qualifyingTestResponse.testQuestions.questions) {
+          const responses = [];
+          qualifyingTestResponse.testQuestions.questions.forEach((question) => {
+            let response;
+            if (question.response) {
+              response = question.response;
+            } else {
+              response = {
+                selection: qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? {} : null,
+                started: null,
+                completed: null,
+              };
+            }
+            responses.push(response);
+          });
+          data.responses = responses;
+        }
+      }
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
   },
