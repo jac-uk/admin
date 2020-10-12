@@ -36,7 +36,7 @@
         <TableCell>
           {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
-        <TableCell>{{ row.status | lookup }}</TableCell>
+        <TableCell>{{ row.status | lookup }} {{ row.isOutOfTime ? 'DNF' : '' }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
         <TableCell>
           <RouterLink

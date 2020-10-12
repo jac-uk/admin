@@ -24,7 +24,7 @@
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.status | lookup }}
+            {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
           </dd>
         </div>
         <div class="govuk-summary-list__row">
