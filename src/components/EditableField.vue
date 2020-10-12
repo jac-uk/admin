@@ -51,7 +51,7 @@
       class="edit-field"
     >
       <TextField 
-        v-if="isText"
+        v-if="isText || isEmail"
         :id="`editable-field-${id}`"
         v-model="localField"
       />

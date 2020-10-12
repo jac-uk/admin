@@ -3,7 +3,7 @@
     <h2 class="govuk-heading-m">
       Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
-    <h3 
+    <h3
       class="govuk-heading-l"
       @click="goToQualifyingTest"
     >
@@ -47,12 +47,12 @@
         </TableCell>
       </template>
     </Table>
-  </div>    
+  </div>
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { downloadXLSX } from '@/helpers/export';
 import * as filters from '@/filters';
@@ -104,9 +104,9 @@ export default {
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT) {
           headers.push(
-            `Q ${ index + 1 }. Most Appropriate`,
-            `Q ${ index + 1 }. Least Appropriate`,
-            `Q ${ index + 1 }. Score`
+            `Q${ index + 1 }. Most Appropriate`,
+            `Q${ index + 1 }. Least Appropriate`,
+            `Q${ index + 1 }. Score`
           );
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
@@ -116,8 +116,8 @@ export default {
         }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
           headers.push(
-            `Q ${ index + 1 }. Answer`,
-            `Q ${ index + 1 }. Score`
+            `Q${ index + 1 }. Answer`,
+            `Q${ index + 1 }. Score`
           );
         }
       });
@@ -140,7 +140,14 @@ export default {
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            const response = element.responses[index];
+            let response = [];
+            if (element.responses.length) {
+              response = element.responses[index];
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                response = element.testQuestions.questions[index].response;
+              }
+            }
             if (response) {
               const responseSelection = response.selection;
               if (responseSelection) {
@@ -155,14 +162,14 @@ export default {
                     '---',
                     '---',
                     '---'
-                  );  
+                  );
                 }
               } else {
                 row.push(
                   '---',
                   '---',
                   '---'
-                );  
+                );
               }
             } else {
               row.push(
@@ -175,9 +182,16 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.SCENARIO:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            const response = element.responses[index].responsesForScenario;
-            if (response) { 
-              response.forEach((response) => {
+            let responses = [];
+            if (element.responses.length) {
+              responses = element.responses[index].responsesForScenario;
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                responses = element.testQuestions.questions[index].responses;
+              }
+            }
+            if (responses) {
+              responses.forEach((response) => {
                 row.push(response.text === null ? 'Question skipped' : response.text);
               });
             }
@@ -185,7 +199,14 @@ export default {
           break;
         case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            const response = element.responses[index];
+            let response = [];
+            if (element.responses.length) {
+              response = element.responses[index];
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                response = element.testQuestions.questions[index].response;
+              }
+            }
             if (response) {
               const responseSelection = response.selection;
               if (responseSelection !== undefined) {
@@ -224,7 +245,7 @@ export default {
     isReasonableAdjustment(needAdjustment) {
       return needAdjustment;
     },
-    formatTimeLimit(timeLimit) { 
+    formatTimeLimit(timeLimit) {
       // TODO
       // Function to format the time limit
       // If activated ...
@@ -235,8 +256,8 @@ export default {
     getTableData(params) {
       this.$store.dispatch(
         'qualifyingTestResponses/bind',
-        { 
-          qualifyingTestId: this.qualifyingTestId, 
+        {
+          qualifyingTestId: this.qualifyingTestId,
           searchStatus: this.searchStatus,
           ...params,
         }
