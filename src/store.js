@@ -25,6 +25,8 @@ import candidateApplications from '@/store/candidateApplications';
 import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 import connectionMonitor from '@/store/connectionMonitor';
+import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
+import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -51,6 +53,8 @@ const store = new Vuex.Store({
     qualifyingTest,
     qualifyingTestResponses,
     connectionMonitor,
+    qualifyingTestReports,
+    qualifyingTestReport,
   },
   state: {},
   mutations: {

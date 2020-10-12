@@ -267,6 +267,13 @@ export default {
             name: 'exercise-show-report-reasonable-adjustments',
           },
           {
+            title: 'Qualifying Test Reports',
+            name: 'qualifying-test-reports',
+            params: {
+              nav: '/reports/qualifying-test-reports',
+            },
+          },
+          {
             title: 'Agency',
             name: 'exercise-show-report-agency',
           },
@@ -296,7 +303,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('exerciseCreateJourney/end'); // ensures journey through forms is ended
-    const id = this.$route.params.id;    
+    const id = this.$route.params.id;
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
         if (data === null) {
