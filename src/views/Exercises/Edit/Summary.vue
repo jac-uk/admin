@@ -20,6 +20,13 @@
           required
         />
 
+        <Checkbox
+          id="invite-only"
+          v-model="exercise.inviteOnly"
+          label="Invite only exercise"
+          hint="When this is checked, only invited candidates will be able to apply to this exercise."
+        />
+
         <DateInput
           id="estimated-launch-date"
           v-model="launchDate"
@@ -27,6 +34,7 @@
           :type="type"
           required
         />
+
         <button
           class="govuk-button govuk-button--secondary govuk-!-margin-left-1"
           @click.prevent="toggleDay"
@@ -65,6 +73,7 @@ import TextField from '@/components/Form/TextField';
 import TextareaInput from '@/components/Form/TextareaInput';
 import DateInput from '@/components/Form/DateInput';
 import BackLink from '@/components/BackLink';
+import Checkbox from '@/components/Form/Checkbox';
 
 export default {
   components: {
@@ -73,6 +82,7 @@ export default {
     TextareaInput,
     DateInput,
     BackLink,
+    Checkbox,
   },
   extends: Form,
   data() {
