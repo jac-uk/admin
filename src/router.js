@@ -97,6 +97,7 @@ import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/Reas
 import QualifyingTestReports from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReports';
 import QualifyingTestReport from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport';
 import QualifyingTestReportView from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
+import QualifyingTestReportViewScore from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -592,6 +593,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Qualifying Test Report | View',
+                  },
+                },
+                {
+                  path: ':score',
+                  component: QualifyingTestReportViewScore,
+                  name: 'qualifying-test-report-view-score',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test Report | View Score',
                   },
                 },
               ],
