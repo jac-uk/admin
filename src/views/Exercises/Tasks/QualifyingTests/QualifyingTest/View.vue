@@ -289,7 +289,7 @@ export default {
   data() {
     return {
       exerciseStage: '',
-      exerciseSubStage: 'all',
+      candidateStatus: 'all',
       availableStatuses: null,
     };
   },
@@ -378,8 +378,8 @@ export default {
       const data = { qualifyingTestId: this.qualifyingTestId };
       if (!this.isDryRun) {
         data.stage = this.exerciseStage;
-        if (this.exerciseSubStage) {
-          data.subStage = this.exerciseSubStage;
+        if (this.candidateStatus) {
+          data.status = this.candidateStatus;
         }
       }
       await functions.httpsCallable('initialiseQualifyingTest')( data );
