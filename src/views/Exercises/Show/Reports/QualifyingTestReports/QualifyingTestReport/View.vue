@@ -38,10 +38,10 @@
           <TableCell>{{ row.rank }}</TableCell>
           <TableCell>{{ row.count }}</TableCell>
           <TableCell>{{ row.score }}</TableCell>
-          <TableCell />
-          <TableCell />
-          <TableCell />
-          <TableCell />
+          <TableCell>{{ row.cumPercentFemale }}</TableCell>
+          <TableCell>{{ row.cumPercentBAME }}</TableCell>
+          <TableCell>{{ row.cumPercentStateSchool }}</TableCell>
+          <TableCell>{{ row.cumPercentDisability }}</TableCell>
         </template>
       </Table>
     </div>
