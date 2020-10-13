@@ -61,6 +61,10 @@ const QUALIFYING_TEST = {
     CRITICAL_ANALYSIS: 'critical-analysis',
     SITUATIONAL_JUDGEMENT: 'situational-judgement',
   },
+  MODE: {
+    DRY_RUN: 'dry-run',
+    MOP_UP: 'mop-up',
+  },
   STATUS: {
     CREATED: 'created',
     SUBMITTED: 'submitted-for-approval',
@@ -71,6 +75,16 @@ const QUALIFYING_TEST = {
     STARTED: 'started',
     PROGRESS: 'in-progress',
     COMPLETED: 'completed',
+  },
+};
+
+const QUALIFYING_TEST_RESPONSE = {
+  STATUS: {
+    CREATED: 'created',
+    ACTIVATED: 'activated',
+    STARTED: 'started',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled',
   },
 };
 
@@ -85,5 +99,6 @@ export {
   APPLICATION_STATUS,
   SHORTLISTING,
   QUALIFYING_TEST,
+  QUALIFYING_TEST_RESPONSE,
   DEFAULT
 };

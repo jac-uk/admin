@@ -15,6 +15,7 @@ import ExerciseEditName from '@/views/Exercises/Edit/EditName';
 import ExerciseEditAssessmentOptions from '@/views/Exercises/Edit/AssessmentOptions';
 import ExerciseEditWorkingPreferences from '@/views/Exercises/Edit/WorkingPreferences';
 import ExerciseEditDownloads from '@/views/Exercises/Edit/Downloads';
+import ExerciseEditInvitations from '@/views/Exercises/Edit/Invitations';
 
 // Show views
 import ExerciseShow from '@/views/Exercises/Show';
@@ -29,6 +30,7 @@ import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPrefer
 import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
 import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
 import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
+import ExerciseShowInvitations from '@/views/Exercises/Show/Invitations';
 
 // Application
 import ExerciseApplication from '@/views/Exercises/Applications/Application';
@@ -84,7 +86,6 @@ import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
 import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
 import ExerciseShowReportsHandover from '@/views/Exercises/Show/Reports/Handover';
-
 import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
 import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
@@ -93,6 +94,9 @@ import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/
 import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
 import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
 import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/ReasonableAdjustments';
+import QualifyingTestReports from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReports';
+import QualifyingTestReport from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport';
+import QualifyingTestReportView from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -141,7 +145,7 @@ const router = new Router({
         title: 'Create An Exercise',
       },
     },
-    // sandbox component
+    // sandbox component VV
     {
       path: '/sandbox',
       component: Sandbox,
@@ -150,7 +154,7 @@ const router = new Router({
         title: 'sandbox',
       },
     },
-    // sandbox component
+    // sandbox component ^^
     {
       path: '/exercises/:id',
       component: ExerciseShow,
@@ -243,6 +247,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Downloads',
+          },
+        },
+        {
+          path: 'invitations',
+          component: ExerciseShowInvitations,
+          name: 'exercise-show-invitations',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details | Invitations',
           },
         },
         {
@@ -560,6 +573,30 @@ const router = new Router({
               },
             },
             {
+              path: 'qualifying-test-reports',
+              component: QualifyingTestReports,
+              name: 'qualifying-test-reports',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Test Reports',
+              },
+            },
+            {
+              path: 'qualifying-test-reports/:qualifyingTestReportId',
+              component: QualifyingTestReport,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestReportView,
+                  name: 'qualifying-test-report-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Qualifying Test Report | View',
+                  },
+                },
+              ],
+            },
+            {
               path: 'eligibility',
               component: ExerciseShowReportsEligibilityIssues,
               name: 'exercise-show-report-eligibility-issues',
@@ -719,6 +756,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Downloads',
+          },
+        },
+        {
+          path: 'invitations',
+          component: ExerciseEditInvitations,
+          name: 'exercise-edit-invitations',
+          meta: {
+            requiresAuth: true,
+            title: 'Invitations',
           },
         },
       ],

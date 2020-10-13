@@ -21,8 +21,16 @@
           >
             {{ row.title | showAlternative(row.id) }}
           </RouterLink>
+          <span
+            v-if="row.mode"
+            class="govuk-tag govuk-tag--grey govuk-!-margin-left-1"
+          >{{ row.mode | lookup }}</span>
+          <br>
+          <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
         </TableCell>
-        <TableCell>{{ row.type | lookup }}</TableCell>
+        <TableCell>
+          {{ row.type | lookup }}
+        </TableCell>
         <TableCell>{{ row.status | lookup }}</TableCell>
       </template>
     </Table>

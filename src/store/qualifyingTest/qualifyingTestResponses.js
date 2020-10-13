@@ -1,8 +1,9 @@
+import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import tableQuery from '@/helpers/tableQuery';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -53,11 +54,57 @@ export default {
     }),
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
-    }), 
+    }),
+    create: async (context, { data }) => {
+      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      return await collectionRef.add(data);
+    },
+    update: async (context, { data, id }) => {
+      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      return await collectionRef.doc(id).update(data);
+    },
     updateRA: async (context, { data, id }) => {
       // Update Reasonable Adjustments
-      const ref = collectionRef.doc(`${id}`);
-      await ref.update(data);
+      await context.dispatch('update', { data: data, id: id });
+    },
+    moveTest: async (context, { qualifyingTest, qualifyingTestResponse }) => {
+      const qtData = {
+        id: qualifyingTest.id,
+        type: qualifyingTest.type,
+        title: qualifyingTest.title,
+        startDate: qualifyingTest.startDate,
+        endDate: qualifyingTest.endDate,
+        additionalInstructions: qualifyingTest.additionalInstructions,
+        feedbackSurvey: qualifyingTest.feedbackSurvey,
+      };
+      const data = {
+        qualifyingTest: qtData,
+        testQuestions: [],
+        status: QUALIFYING_TEST_RESPONSE.STATUS.CREATED,
+        'statusLog.started': null,
+        'statusLog.completed': null,
+      };
+      if (!(qualifyingTestResponse.responses && qualifyingTestResponse.responses.length)) {
+        // no existing responses, so check for responses alongside questions (backward compatibility with old data model)
+        if (qualifyingTestResponse.testQuestions && qualifyingTestResponse.testQuestions.questions) {
+          const responses = [];
+          qualifyingTestResponse.testQuestions.questions.forEach((question) => {
+            let response;
+            if (question.response) {
+              response = question.response;
+            } else {
+              response = {
+                selection: qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? {} : null,
+                started: null,
+                completed: null,
+              };
+            }
+            responses.push(response);
+          });
+          data.responses = responses;
+        }
+      }
+      await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
   },
   state: {

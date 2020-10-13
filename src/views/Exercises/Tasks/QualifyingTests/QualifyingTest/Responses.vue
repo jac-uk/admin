@@ -3,11 +3,15 @@
     <h2 class="govuk-heading-m">
       Qualifying Test Responses / {{ searchStatus | lookup }}
     </h2>
-    <h3 
+    <h3
       class="govuk-heading-l"
       @click="goToQualifyingTest"
     >
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      <span
+        v-if="qualifyingTest.mode"
+        class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+      >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
     <button
       class="govuk-button govuk-!-margin-left-3 float-right"
@@ -32,7 +36,7 @@
         <TableCell>
           {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
-        <TableCell>{{ row.status | lookup }}</TableCell>
+        <TableCell>{{ row.status | lookup }} {{ row.isOutOfTime ? 'DNF' : '' }}</TableCell>
         <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
         <TableCell>
           <RouterLink
@@ -43,14 +47,15 @@
         </TableCell>
       </template>
     </Table>
-  </div>    
+  </div>
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import { downloadXLSX } from '@/helpers/export';
+import * as filters from '@/filters';
 
 export default {
   components: {
@@ -58,6 +63,13 @@ export default {
     TableCell,
   },
   computed: {
+    sortedByScoresArr() {
+      return this.responses.slice().sort((a, b) => {return a.score - b.score;}).reverse();
+    },
+    equalityAndDiversity() {
+      const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
+      return localDocs || {};
+    },
     responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
       return responsesList;
@@ -82,76 +94,139 @@ export default {
         'Full Name',
         'Total Duration',
         'Adjust applied',
+        'Time Taken',
         'Status',
         'Started',
         'Completed',
-        'Score',
+        `${this.typeInitials(this.qualifyingTest.type)} Score`,
       ];
 
       this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT) {
-          headers.push(`Q ${ index + 1 }. Most Appropriate`, `Q ${ index + 1 }. Least Appropriate`);
+          headers.push(
+            `Q${ index + 1 }. Most Appropriate`,
+            `Q${ index + 1 }. Least Appropriate`,
+            `Q${ index + 1 }. Score`
+          );
         }
-        // if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-        //   headers.push('scenario');
-        // }
+        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
+          question.options.forEach((option, decimal) => {
+            headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.question }`);
+          });
+        }
         if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
-          headers.push(`Q ${ index + 1 }. Answer`);
+          headers.push(
+            `Q${ index + 1 }. Answer`,
+            `Q${ index + 1 }. Score`
+          );
         }
       });
 
-      const data = this.responses.map(element => {
+      const data = this.sortedByScoresArr.map(element => {
+
         const row = [
           element.id,
-          element.application.referenceNumber,
-          element.candidate.fullName,
+          element.application ? element.application.referenceNumber : '',
+          element.candidate.fullName || element.candidate.email,
           element.duration.testDurationAdjusted,
           element.duration.reasonableAdjustment,
+          this.timeTaken(element),
           element.status,
           element.statusLog.started,
           element.statusLog.completed,
           element.score,
         ];
+
         switch (this.qualifyingTest.type){
         case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
           this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) { 
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate] !== undefined) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.mostAppropriate].answer);
-              } else {
-                row.push('---','---');  
+            let response = [];
+            if (element.responses.length) {
+              response = element.responses[index];
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                response = element.testQuestions.questions[index].response;
               }
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate] !== undefined) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection.leastAppropriate].answer);
+            }
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection) {
+                if (responseSelection.mostAppropriate !== undefined && responseSelection.leastAppropriate !== undefined) {
+                  row.push(
+                    question.options[responseSelection.mostAppropriate].answer,
+                    question.options[responseSelection.leastAppropriate].answer,
+                    response.score
+                  );
+                } else {
+                  row.push(
+                    '---',
+                    '---',
+                    '---'
+                  );
+                }
               } else {
-                row.push('---','---');  
+                row.push(
+                  '---',
+                  '---',
+                  '---'
+                );
+              }
+            } else {
+              row.push(
+                '---',
+                '---',
+                '---'
+              );
+            }
+          });
+          break;
+        case QUALIFYING_TEST.TYPE.SCENARIO:
+          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+            let responses = [];
+            if (element.responses.length) {
+              responses = element.responses[index].responsesForScenario;
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                responses = element.testQuestions.questions[index].responses;
+              }
+            }
+            if (responses) {
+              responses.forEach((response) => {
+                row.push(response.text === null ? 'Question skipped' : response.text);
+              });
+            }
+          });
+          break;
+        case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
+          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
+            let response = [];
+            if (element.responses.length) {
+              response = element.responses[index];
+            } else {
+              if (element.testQuestions && element.testQuestions.questions) {
+                response = element.testQuestions.questions[index].response;
+              }
+            }
+            if (response) {
+              const responseSelection = response.selection;
+              if (responseSelection !== undefined) {
+                row.push(
+                  question.options[response.selection].answer,
+                  response.score
+                );
+              } else {
+                row.push('---','---');
               }
             } else {
               row.push('---','---');
             }
           });
           break;
-        // case QUALIFYING_TEST.TYPE.SCENARIO:
-        //   this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-        //     // 
-        //   });
-        //   break;
-        case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
-          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            if (element.testQuestions.questions[index].response && (element.testQuestions.questions[index].response.selection !== undefined)) {
-              if (this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection]) {
-                row.push(this.qualifyingTest.testQuestions.questions[index].options[element.testQuestions.questions[index].response.selection].answer);
-              } else {
-                row.push('---');  
-              }
-            } else {
-              row.push('---');
-            }
-          });
-          break;
         }
         return row;
       });
+
+      data;
 
       const xlsxData = [
         headers,
@@ -161,16 +236,16 @@ export default {
       downloadXLSX(
         xlsxData,
         {
-          title: `${this.qualifyingTestId} - responses`,
-          sheetName: `${this.qualifyingTestId} - responses`,
-          fileName: `${this.qualifyingTestId} - responses.xlsx`,
+          title: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          sheetName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
+          fileName: `${this.qualifyingTest.title} - ${this.typeInitials(this.qualifyingTest.type)} - ${filters.formatDate(this.qualifyingTest.endDate)} - responses`,
         }
       );
     },
     isReasonableAdjustment(needAdjustment) {
       return needAdjustment;
     },
-    formatTimeLimit(timeLimit) { 
+    formatTimeLimit(timeLimit) {
       // TODO
       // Function to format the time limit
       // If activated ...
@@ -181,8 +256,8 @@ export default {
     getTableData(params) {
       this.$store.dispatch(
         'qualifyingTestResponses/bind',
-        { 
-          qualifyingTestId: this.qualifyingTestId, 
+        {
+          qualifyingTestId: this.qualifyingTestId,
           searchStatus: this.searchStatus,
           ...params,
         }
@@ -190,6 +265,28 @@ export default {
     },
     goToQualifyingTest() {
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    typeInitials(string) {
+      let result;
+      const strArray = string.split('-');
+      if (strArray.length === 1) {
+        result =  'SC';
+      } else {
+        result = `${strArray[0].charAt(0)}${strArray[strArray.length - 1].charAt(0)}`;
+      }
+      return result.toUpperCase();
+    },
+    timeTaken(response) {
+      let diff = 0;
+      if (response.statusLog.completed && response.statusLog.started) {
+        diff = response.statusLog.completed - response.statusLog.started;
+      }
+      const newDate = new Date(diff);
+      const hh = `0${newDate.getUTCHours()}`.slice(-2);
+      const mm = `0${newDate.getUTCMinutes()}`.slice(-2);
+      const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
+      const returnTimeTaken = `${hh}:${mm}:${ss}`;
+      return returnTimeTaken;
     },
   },
 };

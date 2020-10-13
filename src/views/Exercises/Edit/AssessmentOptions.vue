@@ -26,8 +26,16 @@
             label="Self Assessment with competencies"
           />
           <RadioItem
+            value="self-assessment-with-competencies-and-covering-letter"
+            label="Self Assessment with competencies and covering letter"
+          />
+          <RadioItem
             value="self-assessment-with-competencies-and-cv"
             label="Self Assessment with competencies and CV"
+          />
+          <RadioItem
+            value="self-assessment-with-competencies-and-cv-and-covering-letter"
+            label="Self Assessment with competencies and CV and covering letter"
           />
           <RadioItem
             value="statement-of-suitability-with-competencies"
@@ -38,8 +46,16 @@
             label="Statement of Suitability with skills and abilities"
           />
           <RadioItem
+            value="statement-of-suitability-with-skills-and-abilities-and-covering-letter"
+            label="Statement of Suitability with skills and abilities and covering letter"
+          />
+          <RadioItem
             value="statement-of-suitability-with-skills-and-abilities-and-cv"
             label="Statement of Suitability with skills and abilities and CV"
+          />
+          <RadioItem
+            value="statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter"
+            label="Statement of Suitability with skills and abilities and CV and covering letter"
           />
           <RadioItem
             value="statement-of-eligibility"

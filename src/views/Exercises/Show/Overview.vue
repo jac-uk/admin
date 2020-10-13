@@ -244,6 +244,9 @@ export default {
           data.push({ title: 'Working preferences', id: 'exercise-edit-working-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress['workingPreferences'] });
           data.push({ title: 'Assessment options', id: 'exercise-edit-assessment-options', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress['assessmentOptions'] });
           data.push({ title: 'Exercise downloads', id: 'exercise-edit-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress['downloads'] });
+          if (this.exercise.inviteOnly) {
+            data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-edit-invitations' , done: this.exerciseProgress.invitations, approved: this.approvalProgress['invitations'] });
+          }
         }
       }
       return data;

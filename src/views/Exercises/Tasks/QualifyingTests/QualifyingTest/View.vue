@@ -6,6 +6,10 @@
       </h2>
       <h3 class="govuk-heading-l">
         {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+        <span
+          v-if="qualifyingTest.mode"
+          class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+        >{{ qualifyingTest.mode | lookup }}</span>
       </h3>
 
       <table class="govuk-table">
@@ -40,11 +44,11 @@
           </tr>
         </tbody>
       </table>
-    </div>    
+    </div>
 
-    <div 
+    <div
       v-if="hasCounts"
-      class="govuk-grid-column-one-half" 
+      class="govuk-grid-column-one-half"
     >
       <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
@@ -52,19 +56,20 @@
         <h2 class="govuk-heading-l">
           Number of Participants
         </h2>
+
         <p class="govuk-body">
           <RouterLink
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
           >
             Initialised
           </RouterLink>
-          / 
+          /
           <RouterLink
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
-          <span 
+          <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.initialised }} / {{ qualifyingTest.counts.activated }}</span>
         </p>
@@ -73,20 +78,19 @@
             :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
-          </RouterLink>
-          <span 
+          </RouterLink> / Out of Time
+          <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.completed }}</span>
+          >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>
         </p>
       </div>
     </div>
 
-    <div 
+    <div
       v-if="hasCounts"
       class="govuk-grid-column-one-half"
     >
-      <div 
-        v-if="true"
+      <div
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
@@ -136,7 +140,16 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise dry run
+            Create dry run tests
+          </ActionButton>
+        </div>
+        <div v-else-if="isMopUp">
+          <ActionButton
+            type="primary"
+            class="govuk-!-margin-right-3"
+            @click="btnInitialise"
+          >
+            Create mop up tests
           </ActionButton>
         </div>
         <div v-else>
@@ -150,19 +163,19 @@
             </option>
             <option
               v-if="exercise.applicationRecords.review"
-              value="review" 
+              value="review"
             >
               Review ({{ exercise.applicationRecords.review }})
             </option>
             <option
               v-if="exercise.applicationRecords.shortlisted"
-              value="shortlisted" 
+              value="shortlisted"
             >
               Shortlisted ({{ exercise.applicationRecords.shortlisted }})
             </option>
             <option
               v-if="exercise.applicationRecords.selected"
-              value="selected" 
+              value="selected"
             >
               Selected ({{ exercise.applicationRecords.selected }})
             </option>
@@ -173,7 +186,7 @@
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
-            Initialise
+            Create tests
           </ActionButton>
         </div>
       </div>
@@ -184,7 +197,7 @@
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
-        Activate
+        Open tests
       </ActionButton>
 
       <button
@@ -212,10 +225,18 @@
         Reasonable Adjustments
       </button>
 
+      <button
+        v-if="canCreateCopy"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnCreateCopy"
+      >
+        Create Mop Up Test
+      </button>
+
       <ActionButton
         v-if="isInitialised"
         type="secondary"
-        :disabled="false"
+        :disabled="true"
         class="govuk-!-margin-right-3"
         @click="btnSendInvites"
       >
@@ -262,7 +283,7 @@ export default {
       return record;
     },
     hasCounts() {
-      return this.qualifyingTest.counts;
+      return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
     },
     isCreated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
@@ -275,6 +296,9 @@ export default {
     },
     isDryRun() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
+    },
+    isMopUp() {
+      return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'mop-up';
     },
     isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
@@ -292,6 +316,14 @@ export default {
       const today = new Date();
       const endDate = new Date(this.qualifyingTest.endDate);
       return isDateGreaterThan(endDate, today);
+    },
+    canCreateCopy() {
+      return !this.isMopUp && (
+        this.isInitialised ||
+        this.isActivated ||
+        this.isPaused ||
+        this.isCompleted
+      );
     },
   },
   methods: {
@@ -322,19 +354,29 @@ export default {
       console.log('Button clicked: PAUSE');
     },
     btnResponses(status) {
-      const route = { 
-        name: 'qualifying-test-responses', 
-        params: { 
-          qualifyingTestId: this.$route.params.qualifyingTestId, 
-          status: status, 
+      const route = {
+        name: 'qualifying-test-responses',
+        params: {
+          qualifyingTestId: this.$route.params.qualifyingTestId,
+          status: status,
         },
       };
-      
+
       this.$router.push(route);
     },
     qtStatus(status) {
       return QUALIFYING_TEST.STATUS[status];
     },
-  },  
+    async btnCreateCopy() {
+      const newTestId = await this.$store.dispatch('qualifyingTest/copy');
+      this.$router.push({
+        name: 'qualifying-test-edit',
+        params: {
+          qualifyingTestId: newTestId,
+        },
+      });
+
+    },
+  },
 };
 </script>

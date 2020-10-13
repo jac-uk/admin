@@ -5,7 +5,7 @@
       :active-tab.sync="activeTab"
     />
     <form
-      v-if="activeTab == 'source'"
+      v-if="activeTab == 'code'"
       class="govuk-grid-column-three-quarters"
       @submit.prevent="validateAndSave"
     >
@@ -77,15 +77,15 @@ export default {
       },
       qualifyingTest: qualifyingTest,
       testQuestionsJson: JSON.stringify(qualifyingTest.testQuestions),
-      activeTab: 'form',
+      activeTab: 'questions',
       tabs: [
         {
-          ref: 'form',
-          title: 'Form',
+          ref: 'questions',
+          title: 'Questions',
         },
         {
-          ref: 'source',
-          title: 'Source',
+          ref: 'code',
+          title: 'Test Code',
         },
       ],
     };
@@ -101,7 +101,7 @@ export default {
   methods: {
     async save(isValid) {
       if (isValid){
-        if (this.activeTab === 'source') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
+        if (this.activeTab === 'code') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
         this.$router.push({ name: 'qualifying-test-review' });
       }

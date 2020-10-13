@@ -5,6 +5,10 @@
     </h2>
     <h3 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      <span
+        v-if="qualifyingTest.mode"
+        class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
+      >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
 
     <div class="text-right">
@@ -116,7 +120,6 @@
           {{ qualifyingTest.testQuestions.introduction }}
         </dd>
       </div>
-
       <div
         v-for="(testQuestion, index) in qualifyingTest.testQuestions.questions"
         :key="index"
@@ -133,12 +136,14 @@
           <!-- eslint-enable -->
 
           <hr class="govuk-section-break govuk-section-break--visible">
-          <ol>
+          <ol
+            v-if="isSituationalJudgement || isCriticalAnalysis"
+          >
             <li
               v-for="(option, i) in testQuestion.options"
               :key="i"
             >
-              {{ option.answer }}
+              {{ option.answer }} 
             </li>
           </ol>
           <hr 
@@ -147,14 +152,43 @@
           >
           <div
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
+            class="govuk-!-padding-1"
           >
             Most appropriate: {{ testQuestion.options[testQuestion.mostAppropriate].answer }} <br>
             Least appropriate: {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
             v-if="isCriticalAnalysis && testQuestion.correct >= 0"
+            class="govuk-!-padding-1"
           >
             Correct: {{ testQuestion.options[testQuestion.correct].answer }}
+          </div>
+          <div
+            v-if="isScenario"
+            class="govuk-!-padding-1"
+          >
+            <div
+              v-for="(document, docNum) in testQuestion.documents"
+              :key="docNum"
+            >
+              <strong>
+                {{ document.title }}
+              </strong>
+              <!-- eslint-disable -->
+                <p 
+                  v-html="document.content"
+                />
+                <!-- eslint-enable -->
+              <hr>
+            </div>
+            <ol>
+              <li
+                v-for="(option, i) in testQuestion.options"
+                :key="i"
+              >
+                {{ option.question }}
+              </li>
+            </ol>
           </div>
         </dd>
       </div>
@@ -208,6 +242,15 @@
       </button>
     </span>
 
+    <span v-if="canDelete">
+      <button
+        class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+        @click="btnDelete"
+      >
+        Delete
+      </button>
+    </span>
+
     <button
       v-if="isApproved"
       class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -238,6 +281,9 @@ export default {
     },
     isApproved() {
       return !this.isDraft && !this.isReadyForApproval;
+    },
+    canDelete() {
+      return this.$store.state.auth.currentUser.role === 'superadmin';
     },
     questionLabel() {
       let label = 'Question';
@@ -271,7 +317,11 @@ export default {
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnGoBack() {
-      // TODO check we need go back button
+      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+    },
+    btnDelete() {
+      this.$store.dispatch('qualifyingTest/delete');
+      this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
     },
   },
 };
