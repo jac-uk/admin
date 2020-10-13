@@ -182,7 +182,7 @@
           <Select
             v-if="availableStatuses && availableStatuses.length > 0"
             id="availableStatuses"
-            v-model="exerciseSubStage"
+            v-model="candidateStatus"
             required
           >
             <option
