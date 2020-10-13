@@ -153,10 +153,9 @@
           </ActionButton>
         </div>
         <div v-else>
-          <select
+          <Select
             id="exercise-stage"
             v-model="exerciseStage"
-            class="govuk-select govuk-!-margin-right-3"
           >
             <option value="">
               Choose applications
@@ -179,7 +178,26 @@
             >
               Selected ({{ exercise.applicationRecords.selected }})
             </option>
-          </select>
+          </Select>
+          <Select
+            v-if="availableStatuses && availableStatuses.length > 0"
+            id="availableStatuses"
+            v-model="exerciseSubStage"
+            required
+          >
+            <option
+              value="all"
+            >
+              All
+            </option>
+            <option
+              v-for="item in availableStatuses"
+              :key="item"
+              :value="item"
+            >
+              {{ item | lookup }}
+            </option>
+          </Select>
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
@@ -259,16 +277,20 @@
 <script>
 import { functions } from '@/firebase';
 import ActionButton from '@/components/ActionButton';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { EXERCISE_STAGE, QUALIFYING_TEST } from '@/helpers/constants';
 import { isDateGreaterThan } from '@/helpers/date';
+import Select from '@/components/Form/Select';
 
 export default {
   components: {
     ActionButton,
+    Select,
   },
   data() {
     return {
       exerciseStage: '',
+      exerciseSubStage: 'all',
+      availableStatuses: null,
     };
   },
   computed: {
@@ -326,6 +348,22 @@ export default {
       );
     },
   },
+  watch: {
+    exerciseStage: function (valueNow, valueBefore) {
+      if (valueNow !== valueBefore) {
+        this.availableStatuses = [];
+      }
+      if (valueNow === EXERCISE_STAGE.REVIEW) {
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+      }
+      if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
+        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
+      }
+      if (valueNow === EXERCISE_STAGE.SELECTED) {
+        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
+      }
+    },
+  },
   methods: {
     btnEdit() {
       this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
@@ -337,11 +375,14 @@ export default {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
     },
     async btnInitialise() {
-      if (this.isDryRun) {
-        await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
-      } else {
-        await functions.httpsCallable('initialiseQualifyingTest')({ qualifyingTestId: this.qualifyingTestId, stage: this.exerciseStage });
+      const data = { qualifyingTestId: this.qualifyingTestId };
+      if (!this.isDryRun) {
+        data.stage = this.exerciseStage;
+        if (this.exerciseSubStage) {
+          data.subStage = this.exerciseSubStage;
+        }
       }
+      await functions.httpsCallable('initialiseQualifyingTest')( data );
     },
     async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
