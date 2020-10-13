@@ -66,7 +66,6 @@
             <ul class="moj-pagination__list">
               <li
                 class="moj-pagination__item  moj-pagination__item--prev"
-                @click="gotoScore(score-1)"
               >
                 <RouterLink
                   :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score-1 } }"
@@ -78,7 +77,6 @@
               <li
                 v-if="aboveScoreReport"
                 class="moj-pagination__item  moj-pagination__item--next"
-                @click="gotoScore(score+1)"
               >
                 <RouterLink
                   :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score+1 } }"
