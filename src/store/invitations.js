@@ -33,7 +33,6 @@ export default {
             }
           });
           // Add new emails that are not in the database
-          const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp();
           emailsToAdd.forEach(email => {
             const existing = context.state.records.find(r => r.candidate.email === email);
             if (existing) return;
@@ -47,8 +46,8 @@ export default {
               },
               status: 'created',  // 'created' | 'invited' | 'accepted' | 'rejected'
               statusLog: {
-                created: serverTimestamp,
-                invited: serverTimestamp,
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                invited: null, // populated when email invite has been sent (out of scope right now)
                 accepted: null, // populated when candidate accepts the invitation
                 rejected: null, // populated when candidate rejects the invitation
               },
