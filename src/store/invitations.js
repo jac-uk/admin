@@ -39,10 +39,6 @@ export default {
             collectionRef.add({
               vacancy: {
                 id: exercise.id,
-                name: exercise.name,
-                referenceNumber: exercise.referenceNumber,
-                applicationOpenDate: exercise.applicationOpenDate,
-                applicationCloseDate: exercise.applicationCloseDate,
               },
               candidate: {
                 email: email,
@@ -51,7 +47,7 @@ export default {
               status: 'created',  // 'created' | 'invited' | 'accepted' | 'rejected'
               statusLog: {
                 created: firebase.firestore.FieldValue.serverTimestamp(),
-                invited: null,  // populated when email invite has been sent (out of scope right now)
+                invited: null, // populated when email invite has been sent (out of scope right now)
                 accepted: null, // populated when candidate accepts the invitation
                 rejected: null, // populated when candidate rejects the invitation
               },
