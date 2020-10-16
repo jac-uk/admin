@@ -24,7 +24,6 @@
     </Table>
 
     <button
-      :disabled="true"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >

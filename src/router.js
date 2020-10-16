@@ -95,6 +95,7 @@ import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandove
 import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
 import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/ReasonableAdjustments';
 import QualifyingTestReports from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReports';
+import QualifyingTestReportNew from '@/views/Exercises/Show/Reports/QualifyingTestReports/AddEdit';
 import QualifyingTestReport from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport';
 import QualifyingTestReportView from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
@@ -580,6 +581,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Test Reports',
+              },
+            },
+            {
+              path: 'qualifying-test-report-new',
+              component: QualifyingTestReportNew,
+              name: 'qualifying-test-report-new',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Test Report | New',
               },
             },
             {
