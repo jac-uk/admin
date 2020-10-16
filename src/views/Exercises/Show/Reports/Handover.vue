@@ -250,26 +250,30 @@ export default {
         'other': 'otherProfessionalMemberships',
       };
 
-      const professionalMemberships = application.professionalMemberships.map(membership => {
-        let formattedMembership;
-        if (organisations[membership]) {
-          const fieldName = organisations[membership];
+      if (application.professionalMemberships) {
+        const professionalMemberships = application.professionalMemberships.map(membership => {
+          let formattedMembership;
+          if (organisations[membership]) {
+            const fieldName = organisations[membership];
 
-          formattedMembership = `${filters.lookup(membership)}, ${filters.formatDate(application[`${fieldName}Date`])}, ${application[`${fieldName}Number`]}`;
-        }
+            formattedMembership = `${filters.lookup(membership)}, ${filters.formatDate(application[`${fieldName}Date`])}, ${application[`${fieldName}Number`]}`;
+          }
 
-        if (application.memberships[membership]) {
-          const otherMembershipLabel = this.exercise.otherMemberships.find(m => m.value === membership).label;
+          if (application.memberships[membership]) {
+            const otherMembershipLabel = this.exercise.otherMemberships.find(m => m.value === membership).label;
 
-          formattedMembership = `${filters.lookup(otherMembershipLabel)}, ${filters.formatDate(application.memberships[membership].date)}, ${application.memberships[membership].number}`;
-        }
+            formattedMembership = `${filters.lookup(otherMembershipLabel)}, ${filters.formatDate(application.memberships[membership].date)}, ${application.memberships[membership].number}`;
+          }
 
-        return formattedMembership;
-      }).join('\n');
+          return formattedMembership;
+        }).join('\n');
 
-      return [
-        professionalMemberships,
-      ];
+        return [
+          professionalMemberships,
+        ];
+      } else {
+        return [];
+      }
     },
     gatherReportData() {
       const headers = {
