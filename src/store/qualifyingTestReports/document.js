@@ -1,3 +1,4 @@
+import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
@@ -14,6 +15,16 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
+    create: async (context, data) => {
+      data.created = firebase.firestore.FieldValue.serverTimestamp();
+      data.lastUpdated = null;
+      const doc = await collection.add(data);
+      return doc.id;
+    },
+    save: async (context, data) => {
+      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      return await collection.doc(context.state.record.id).update(data);
+    },
   },
   state: {
     record: null,
