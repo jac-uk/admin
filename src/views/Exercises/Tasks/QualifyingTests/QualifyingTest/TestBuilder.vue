@@ -1,5 +1,5 @@
 <template>
-  <div class="govuk-grid-row">  
+  <div class="govuk-grid-row">
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
@@ -102,6 +102,18 @@ export default {
     async save(isValid) {
       if (isValid){
         if (this.activeTab === 'code') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
+        if (this.qualifyingTest.testQuestions && this.qualifyingTest.testQuestions.questions.length) {
+          switch (this.qualifyingTest.type) {
+          case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
+            this.qualifyingTest.maxScore = this.qualifyingTest.testQuestions.questions.length;
+            break;
+          case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
+            this.qualifyingTest.maxScore = 2 * this.qualifyingTest.testQuestions.questions.length;
+            break;
+          default:
+            this.qualifyingTest.maxScore = null;
+          }
+        }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
         this.$router.push({ name: 'qualifying-test-review' });
       }
