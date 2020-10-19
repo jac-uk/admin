@@ -70,12 +70,30 @@ export default {
   },
   created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
-      console.log('ex id', this.exerciseId);
       this.$store.dispatch('qualifyingTest/bindQTs', this.exerciseId);
     }
   },
   methods: {
     async save() {
+      const qualifyingTests = [];
+      this.qualifyingTestIds.forEach(id => {
+        const qualifyingTest = this.qualifyingTests.find(qualifyingTest => {
+          return qualifyingTest.id === id;
+        });
+        qualifyingTests.push({
+          id: qualifyingTest.id,
+          title: qualifyingTest.title,
+          maxScore: qualifyingTest.maxScore,
+        });
+      });
+      const data = {
+        exercise: {
+          id: this.exerciseId,
+          qualifyingTests: qualifyingTests,
+        },
+      };
+      console.log('data to save', data);
+
       // const qualifyingTestId = await this.$store.dispatch('qualifyingTest/create', this.qualifyingTest);
       // this.$router.push({
       //   name: 'qualifying-test-edit',
