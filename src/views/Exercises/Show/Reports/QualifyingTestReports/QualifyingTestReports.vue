@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     btnCreate() {
-      this.$router.push({ name: 'qualifying-test-report-new' });
+      this.$router.push({ name: 'qualifying-test-report-create' });
     },
     reportTitle(report) {
       const titles = [];

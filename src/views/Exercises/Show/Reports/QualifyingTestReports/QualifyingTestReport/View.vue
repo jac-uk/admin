@@ -18,14 +18,21 @@
         <div class="moj-page-header-actions__actions govuk-!-margin-top-2">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+                type="button"
+                @click="btnEdit"
+              >
+                Edit
+              </button>
               <ActionButton
-                :disabled="true"
                 class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 @click="btnGenerateReport"
               >
                 Refresh
               </ActionButton>
               <button
+                :disabled="!hasReportData"
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 type="button"
                 @click="downloadData"
@@ -45,7 +52,7 @@
       </div>
 
       <Table
-        v-if="qualifyingTestReport.report"
+        v-if="hasReportData"
         data-key="score"
         :data="qualifyingTestReport.report"
         :columns="[
@@ -103,6 +110,9 @@ export default {
       const record = this.$store.state.qualifyingTestReport.record;
       return record;
     },
+    hasReportData() {
+      return this.qualifyingTestReport.report && this.qualifyingTestReport.report.length;
+    },
     maxScore() {
       let score = 0;
       this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
@@ -119,6 +129,14 @@ export default {
     },
   },
   methods: {
+    btnEdit() {
+      this.$router.push({
+        name: 'qualifying-test-report-edit',
+        params: {
+          qualifyingTestReportId: this.qualifyingTestReport.id,
+        },
+      });
+    },
     async btnGenerateReport() {
       await functions.httpsCallable('generateQualifyingTestReport')({ qualifyingTestReportId: this.qualifyingTestReportId });
     },

@@ -14,11 +14,11 @@
       <CheckboxGroup
         id="qualifyingTest-type"
         v-model="qualifyingTestIds"
-        label="Type of test"
+        label="Tests in report"
         required
       >
         <CheckboxItem
-          v-for="qualifyingTest in filteredQualifyingTests"
+          v-for="qualifyingTest in qualifyingTests"
           :key="qualifyingTest.id"
           :value="qualifyingTest.id"
           :label="qualifyingTest.title"
@@ -37,7 +37,6 @@ import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
-import { QUALIFYING_TEST } from '@/helpers/constants';
 
 export default {
   components: {
@@ -56,16 +55,7 @@ export default {
       return this.$route.params.id;
     },
     qualifyingTests() {
-      return this.$store.state.qualifyingTest.records;
-    },
-    filteredQualifyingTests() {
-      if (this.qualifyingTests && this.qualifyingTests.length) {
-        return this.qualifyingTests.filter(qualifyingTest => {
-          return qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED
-            && qualifyingTest.mode !== QUALIFYING_TEST.MODE.MOP_UP;
-        });
-      }
-      return [];
+      return this.$store.getters['qualifyingTest/getCompletedQTs'];
     },
   },
   created() {
@@ -75,32 +65,29 @@ export default {
   },
   methods: {
     async save() {
-      const qualifyingTests = [];
-      this.qualifyingTestIds.forEach(id => {
-        const qualifyingTest = this.qualifyingTests.find(qualifyingTest => {
-          return qualifyingTest.id === id;
+      if (this.qualifyingTestIds.length) {
+        const qualifyingTests = [];
+        this.qualifyingTestIds.forEach(id => {
+          const qualifyingTest = this.qualifyingTests.find(qualifyingTest => {
+            return qualifyingTest.id === id;
+          });
+          qualifyingTests.push({
+            id: qualifyingTest.id,
+            title: qualifyingTest.title,
+            maxScore: qualifyingTest.maxScore,
+          });
         });
-        qualifyingTests.push({
-          id: qualifyingTest.id,
-          title: qualifyingTest.title,
-          maxScore: qualifyingTest.maxScore,
-        });
-      });
-      const data = {
-        exercise: {
-          id: this.exerciseId,
+        const data = {
+          exercise: {
+            id: this.exerciseId,
+          },
           qualifyingTests: qualifyingTests,
-        },
-      };
-      console.log('data to save', data);
-
-      // const qualifyingTestId = await this.$store.dispatch('qualifyingTest/create', this.qualifyingTest);
-      // this.$router.push({
-      //   name: 'qualifying-test-edit',
-      //   params: {
-      //     qualifyingTestId: qualifyingTestId,
-      //   },
-      // });
+        };
+        await this.$store.dispatch('qualifyingTestReport/create', data);
+        this.$router.push({
+          name: 'qualifying-test-reports',
+        });
+      }
     },
   },
 };
