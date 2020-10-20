@@ -2,6 +2,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import { STATUS, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
 
 const collection = firestore.collection('applications');
 
@@ -71,6 +72,17 @@ export default {
           });
         }
       }
+    },
+    withdrawn: async (context, data ) => {
+      const applicationId = data.applicationId;
+
+      await context.dispatch('update', { data: { status: STATUS.WITHDRAWN }, id: applicationId });
+
+      //  If IAs has started ensure relevant assessments documents are removed (soft deleted)
+      context.dispatch('assessment/delete', { data: { status: STATUS.DELETED }, id: applicationId }, { root: true });
+
+      // If Qualifying Tests have started ensure the relevant qualifyingTestResponse document is removed (soft deleted)
+      context.dispatch('qualifyingTestResponses/delete', { data: { status: QUALIFYING_TEST_RESPONSE.STATUS.DELETED }, id: applicationId }, { root: true });
     },
   },
   state: {

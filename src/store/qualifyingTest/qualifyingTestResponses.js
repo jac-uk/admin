@@ -67,6 +67,26 @@ export default {
       // Update Reasonable Adjustments
       await context.dispatch('update', { data: data, id: id });
     },
+    delete: (context, { data, id }) => {
+      const batch = firestore.batch();
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      data.lastUpdated = timestamp;
+      // eslint-disable-next-line no-unused-vars
+      const collection = firestore.collection('qualifyingTestResponses')
+        .where('application.id', '==', id)
+        .get()
+        .then(async snapshot => {
+          // console.log('snapshot', snapshot);
+          // eslint-disable-next-line no-unused-vars
+          snapshot.forEach(response => {
+            // console.log('response.id', response.id);
+            const ref = firestore.collection('qualifyingTestResponses').doc(response.id);
+            batch.update(ref, data);
+            batch.set(ref, { statusLog: { 'deleted': timestamp } }, { merge: true } );
+          });
+          await batch.commit();
+        });
+    },
     moveTest: async (context, { qualifyingTest, qualifyingTestResponse }) => {
       const qtData = {
         id: qualifyingTest.id,

@@ -25,6 +25,17 @@ export default {
       const ref = collection.doc(docId);
       return await ref.set(data, { merge: true });
     },
+    delete: (context, { data, id }) => {
+      const collectionRef = collection
+        .where('application.id', '==', id)
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(async doc => {
+            await collection.doc(doc.id).update(data);
+          });
+        });
+      return collectionRef;
+    },
   },
   state: {
     record: null,
