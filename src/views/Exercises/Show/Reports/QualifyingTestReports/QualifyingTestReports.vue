@@ -24,7 +24,6 @@
     </Table>
 
     <button
-      :disabled="true"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >
@@ -62,7 +61,7 @@ export default {
   },
   methods: {
     btnCreate() {
-      this.$router.push({ name: 'qualifying-test-report-new' });
+      this.$router.push({ name: 'qualifying-test-report-create' });
     },
     reportTitle(report) {
       const titles = [];
