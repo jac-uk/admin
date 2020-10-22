@@ -108,6 +108,13 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
+
+      if (status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
+        selectedItems.map( async item => {
+          // call withdraw applicationstore 
+          await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
+        });
+      }
       
       let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
       if (nextStage[0]) {

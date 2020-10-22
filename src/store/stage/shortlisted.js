@@ -52,6 +52,13 @@ export default {
       });
       await batch.commit();
 
+      if (status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
+        selectedItems.map( async item => {
+          // call withdraw applicationstore 
+          await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
+        });
+      }
+
       let valueMessage = '';
       if (status) {
         valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
