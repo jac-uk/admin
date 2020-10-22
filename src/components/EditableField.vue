@@ -1,8 +1,8 @@
 <template>
   <div class="editable-field">
-    <div 
+    <div
       v-if="!editField"
-      class="non-editable" 
+      class="non-editable"
     >
       <span v-if="isEmail">
         <a
@@ -20,53 +20,53 @@
           {{ value }}
         </RouterLink>
       </span>
-      <span 
-        v-if="isText" 
+      <span
+        v-if="isText"
         class="wrap"
       >
         {{ value }}
       </span>
-      <p 
-        v-if="isTextarea" 
+      <p
+        v-if="isTextarea"
         class="wrap"
       >
         {{ value }}
       </p>
-      <span 
-        v-if="isDate" 
+      <span
+        v-if="isDate"
         class="wrap"
       >
         {{ value | formatDate }}
       </span>
-      <a 
+      <a
         href="#"
         class="govuk-link change-link print-none"
-        @click.prevent="btnClickEdit()" 
+        @click.prevent="btnClickEdit()"
       >
         {{ link }}
       </a>
     </div>
-    <div 
-      v-if="editField" 
+    <div
+      v-if="editField"
       class="edit-field"
     >
-      <TextField 
+      <TextField
         v-if="isText || isEmail"
         :id="`editable-field-${id}`"
         v-model="localField"
       />
-      <TextareaInput 
+      <TextareaInput
         v-if="isTextarea"
         :id="`editable-field-${id}`"
         v-model="localField"
       />
-      <DateInput 
-        v-if="isDate" 
+      <DateInput
+        v-if="isDate"
         :id="`data-of-birth$-{id}`"
         v-model="localField"
-        :value="localField" 
+        :value="localField"
       />
-      <button 
+      <button
         class="govuk-button"
         @click="btnClickSubmit()"
       >
@@ -80,6 +80,7 @@
 import TextField from '@/components/Form/TextField';
 import TextareaInput from '@/components/Form/TextareaInput';
 import DateInput from '@/components/Form/DateInput';
+import formatEmail from '@/helpers/Form/formatEmail';
 
 export default {
   components: {
@@ -146,6 +147,10 @@ export default {
       this.editField = true;
     },
     btnClickSubmit() {
+      if (this.isEmail) {
+        const value = formatEmail(this.localField);
+        this.localField = value;
+      }
       this.$emit('changefield', { [this.field]: this.localField });
       this.editField = false;
     },
