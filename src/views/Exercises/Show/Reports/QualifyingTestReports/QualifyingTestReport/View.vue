@@ -146,6 +146,7 @@ export default {
       // 'Name',
       // 'Email',
       this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
+        headers.push(`${qualifyingTest.title} - status`);
         headers.push(qualifyingTest.title);
       });
       headers.push('Total');
@@ -163,6 +164,7 @@ export default {
         // row.candidate.fullName,
         // '', // row.candidate.email,
         this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
+          mapData.push(row.qualifyingTests[qualifyingTest.id].status);
           mapData.push(row.qualifyingTests[qualifyingTest.id].score);
         });
         mapData.push(row.score);
