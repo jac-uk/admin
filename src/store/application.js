@@ -73,7 +73,7 @@ export default {
         }
       }
     },
-    withdrawn: async (context, data ) => {
+    withdraw: async (context, data ) => {
       const applicationId = data.applicationId;
 
       await context.dispatch('update', { data: { status: STATUS.WITHDRAWN }, id: applicationId });
