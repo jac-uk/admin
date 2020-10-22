@@ -246,7 +246,13 @@
                     v-for="(res, i) in responses[index].responsesForScenario"
                     :key="i"
                   >
-                    <p><strong>{{ testQuestion.options[i].question }}</strong></p>
+                    <p>
+                      <strong>{{ testQuestion.options[i].question }}</strong>
+                      <span 
+                        v-if="testQuestion.options[i].hint" 
+                        class="govuk-hint"
+                      >{{ testQuestion.options[i].hint }}</span>
+                    </p>
                     
                     <QuestionDuration 
                       :start="res.started"

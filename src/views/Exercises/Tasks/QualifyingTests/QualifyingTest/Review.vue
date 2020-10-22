@@ -187,6 +187,7 @@
                 :key="i"
               >
                 {{ option.question }}
+                <span v-if="option.hint" class="govuk-hint">{{ option.hint }}</span>
               </li>
             </ol>
           </div>
