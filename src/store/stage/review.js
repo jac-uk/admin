@@ -112,7 +112,7 @@ export default {
       if (status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
         selectedItems.map( async item => {
           // call withdraw applicationstore 
-          await context.dispatch('application/withdrawn', { applicationId: item }, { root: true });
+          await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
         });
       }
       

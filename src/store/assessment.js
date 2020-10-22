@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import { STATUS } from '@/helpers/constants';
 import clone from 'clone';
 
 const collection = firestore.collection('assessments');
@@ -25,7 +26,10 @@ export default {
       const ref = collection.doc(docId);
       return await ref.set(data, { merge: true });
     },
-    delete: (context, { data, id }) => {
+    delete: (context, { id }) => {
+      const data = {
+        status: STATUS.DELETED,
+      };
       const collectionRef = collection
         .where('application.id', '==', id)
         .get()
