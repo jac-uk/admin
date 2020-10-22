@@ -5,6 +5,12 @@
       v-model="row.question"
       :label="`${label} ${1 + index}`"
     />
+    <TextareaInput
+      :id="`scenarioquestion_hint_${id}_${index}`"
+      v-model="row.hint"
+      :label="`${label} ${1 + index} - hint`"
+      rows="2"
+    />
     <TextField
       :id="`scenarioquestion_word_limit_${id}_${index}`"
       v-model="row.wordLimit"
@@ -17,11 +23,13 @@
 
 <script>
 import TextField from '@/components/Form/TextField';
+import TextareaInput from '@/components/Form/TextareaInput';
 
 export default {
   name: 'ScenarioQuestion',
   components: {
     TextField,
+    TextareaInput,
   },
   props: {
     row: {
