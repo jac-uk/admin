@@ -7,11 +7,7 @@
           Exercise invitations
         </h1>
 
-        <ErrorSummary
-          :errors="errors"
-          :show-save-button="true"
-          @save="save"
-        />
+        <ErrorSummary :errors="errors" />
 
         <TextareaInput
           id="invitedEmailsText"

@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import { STATUS } from '@/helpers/constants';
 import clone from 'clone';
 
 const collection = firestore.collection('assessments');
@@ -24,6 +25,20 @@ export default {
       state.record == null ? docId = data.id : docId = state.record.id;
       const ref = collection.doc(docId);
       return await ref.set(data, { merge: true });
+    },
+    delete: (context, { id }) => {
+      const data = {
+        status: STATUS.DELETED,
+      };
+      const collectionRef = collection
+        .where('application.id', '==', id)
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(async doc => {
+            await collection.doc(doc.id).update(data);
+          });
+        });
+      return collectionRef;
     },
   },
   state: {

@@ -3,6 +3,7 @@ const STATUS = {
   APPLIED: 'applied',
   WITHDRAWN: 'withdrawn',
   SELECTED: 'selected',
+  DELETED: 'deleted',
 };
 
 const EXERCISE_STAGE = {
@@ -85,6 +86,7 @@ const QUALIFYING_TEST_RESPONSE = {
     STARTED: 'started',
     COMPLETED: 'completed',
     CANCELLED: 'cancelled',
+    DELETED: 'deleted',
   },
 };
 
