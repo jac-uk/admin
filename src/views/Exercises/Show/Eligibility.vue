@@ -39,7 +39,7 @@
           Does Schedule 2(d) or Schedule 3 apply?
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.schedule2DOr3Apply === true">
+          <span v-if="exercise.schedule2DOr3Apply === true || exercise.schedule2Apply">
             Yes: {{ exercise.appliedSchedule | lookup }}
           </span>
           <span v-else-if="exercise.schedule2DOr3Apply === false">
@@ -246,7 +246,6 @@ export default {
     isTribunal() {
       return this.exercise.isCourtOrTribunal === 'tribunal';
     },
-
   },
 };
 </script>
