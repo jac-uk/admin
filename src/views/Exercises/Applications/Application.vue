@@ -1977,15 +1977,17 @@ export default {
       // @NOTE this is a bit ugly as we can't just lookup label
       const selected = {};
 
-      this.application.professionalMemberships.forEach(membership => {
-        if (this.application.memberships[membership]) {
-          const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
-          selected[membership] = {
-            ...this.application.memberships[membership],
-            label: otherMembership.label,
-          };
-        }
-      });
+      if (this.application.professionalMemberships) {
+        this.application.professionalMemberships.forEach(membership => {
+          if (this.application.memberships[membership]) {
+            const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
+            selected[membership] = {
+              ...this.application.memberships[membership],
+              label: otherMembership.label,
+            };
+          }
+        });
+      }
 
       return selected;
     },
