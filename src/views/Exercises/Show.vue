@@ -108,16 +108,8 @@ export default {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
     },
     hasOpened() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-        case 'approved':
-        case 'pre-launch':
-          return false;
-        default:
-          return true;
-        }
+      if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {
+        return true;
       }
       return false;
     },
