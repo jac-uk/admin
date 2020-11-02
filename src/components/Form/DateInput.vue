@@ -88,7 +88,7 @@
               v-model.lazy="dayInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
               type="tel"
-              :disabled="assessmentsInitialised"
+              :disabled="disabled"
             >
           </div>
         </div>
@@ -106,7 +106,7 @@
               v-model.lazy="monthInput"
               class="govuk-input govuk-date-input__input govuk-input--width-2"
               type="tel"
-              :disabled="assessmentsInitialised"
+              :disabled="disabled"
             >
           </div>
         </div>
@@ -124,7 +124,7 @@
               v-model.lazy="yearInput"
               class="govuk-input govuk-date-input__input govuk-input--width-4"
               type="tel"
-              :disabled="assessmentsInitialised"
+              :disabled="disabled"
             >
           </div>
         </div>
@@ -146,7 +146,7 @@ export default {
   },
   extends: FormField,
   props: {
-    assessmentsInitialised: {
+    disabled: {
       type: Boolean,
       default: false,
     },
