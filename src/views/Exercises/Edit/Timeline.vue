@@ -205,6 +205,7 @@
           v-model="exercise.contactIndependentAssessors"
           label="Contact independent assessors"
           hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
+          :assessmentsInitialised="assessmentsInitialised"
           required
         />
         <DateInput
@@ -212,6 +213,7 @@
           v-model="exercise.independentAssessmentsReturnDate"
           label="Independent Assessments return date"
           hint="An asessor can submit late after this date, up until the (optional) hard limit below."
+          :assessmentsInitialised="assessmentsInitialised"
           required
         />
         <DateInput
@@ -219,6 +221,7 @@
           v-model="exercise.independentAssessmentsHardLimitDate"
           label="Independent Assessments hard limit"
           hint="An assessor cannot submit late after 23:59 on this date."
+          :assessmentsInitialised="assessmentsInitialised"
         />
 
         <h2 class="govuk-heading-l">
@@ -345,6 +348,7 @@ export default {
     const defaults = {
       applicationOpenDate: null,
       applicationCloseDate: null,
+      assessments: null,
       siftStartDate: null,
       siftEndDate: null,
       nameBlindSiftStartDate: null,
@@ -386,6 +390,7 @@ export default {
         SelectionDay,
       },
       exerciseShortlistingMethods: exercise.shortlistingMethods,
+      assessments: exercise.assessments,
       exercise: exercise,
     };
   },
@@ -407,6 +412,9 @@ export default {
     },
     hasTelephoneAssessment() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('telephone-assessment');
+    },
+    assessmentsInitialised() {
+      return this.assessments && this.assessments.initialised && this.assessments.initialised > 0;
     },
   },
   methods: {
