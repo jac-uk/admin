@@ -1,21 +1,21 @@
 <template>
-  <div 
+  <div
     v-if="application"
     class="govuk-grid-row"
   >
     <div class="govuk-grid-column-full">
-      <div 
+      <div
         v-if="applications.length"
         class="text-center"
       >
         <ul class="moj-pagination__list">
-          <li 
+          <li
             class="moj-pagination__item  moj-pagination__item--prev"
             @click="previousApplication"
           >
             <a class="moj-pagination__link govuk-link">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
           </li>
-          <li 
+          <li
             class="moj-pagination__item  moj-pagination__item--next"
             @click="nextApplication"
           >
@@ -129,7 +129,7 @@
         />
 
         <div v-if="application && exercise">
-          <div 
+          <div
             v-if="activeTab == 'full' || activeTab == 'panel'"
             class="application-details"
           >
@@ -150,7 +150,7 @@
                     Full Name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.fullName"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
                       field="fullName"
@@ -165,7 +165,7 @@
                     Email address
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.email"
                       field="email"
                       type="email"
@@ -179,7 +179,7 @@
                     Phone number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.phone"
                       field="phone"
                       @changefield="changeUserDetails"
@@ -192,7 +192,7 @@
                     Date of birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.dateOfBirth"
                       field="dateOfBirth"
                       type="date"
@@ -206,7 +206,7 @@
                     NI Number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
                       field="nationalInsuranceNumber"
                       @changefield="changeUserDetails"
@@ -836,7 +836,7 @@
                       ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
                     </span>
                   </dt>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -844,7 +844,7 @@
                       <li>{{ item.selection }}</li>
                     </ul>
                   </dd>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -869,7 +869,7 @@
                       </li>
                     </ul>
                   </dd>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -885,7 +885,7 @@
                     </ul>
                   </dd>
                 </div>
-              </dl> 
+              </dl>
             </div>
 
             <div
@@ -949,7 +949,7 @@
                 <template
                   v-if="item.qualificationNotComplete && item.details"
                 >
-                  <div 
+                  <div
                     class="govuk-summary-list__row"
                   >
                     <dt class="govuk-summary-list__key">
@@ -963,7 +963,7 @@
                       </ul>
                     </dd>
                   </div>
-                
+
                   <div
                     class="govuk-summary-list__row"
                   >
@@ -981,11 +981,11 @@
                 </template>
               </dl>
 
-              <dl 
+              <dl
                 v-if="exercise.schedule2Apply"
                 class="govuk-summary-list govuk-!-margin-bottom-8"
               >
-                <div 
+                <div
                   v-if="exercise.appliedSchedule == 'schedule-2-3'"
                   class="govuk-summary-list__row"
                 >
@@ -999,7 +999,7 @@
                   </dd>
                 </div>
 
-                <div 
+                <div
                   v-if="exercise.appliedSchedule == 'schedule-2-d'"
                   class="govuk-summary-list__row"
                 >
@@ -1015,8 +1015,8 @@
 
                 <div
                   v-if="
-                    (exercise.appliedSchedule=='schedule-2-3' && application.applyingUnderSchedule2Three) 
-                      || (exercise.appliedSchedule=='schedule-2-d' && application.applyingUnderSchedule2d)" 
+                    (exercise.appliedSchedule=='schedule-2-3' && application.applyingUnderSchedule2Three)
+                      || (exercise.appliedSchedule=='schedule-2-d' && application.applyingUnderSchedule2d)"
                   class="govuk-summary-list__row"
                 >
                   <dt
@@ -1555,7 +1555,7 @@
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.firstAssessorFullName"
                       field="firstAssessorFullName"
                       @changefield="changeAssesorDetails"
@@ -1568,7 +1568,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.firstAssessorTitle"
                       field="firstAssessorTitle"
                       @changefield="changeAssesorDetails"
@@ -1581,7 +1581,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.firstAssessorEmail"
                       field="firstAssessorEmail"
                       type="email"
@@ -1595,7 +1595,7 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.firstAssessorPhone"
                       field="firstAssessorPhone"
                       @changefield="changeAssesorDetails"
@@ -1610,7 +1610,7 @@
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.secondAssessorFullName"
                       field="secondAssessorFullName"
                       @changefield="changeAssesorDetails"
@@ -1623,7 +1623,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.secondAssessorTitle"
                       field="secondAssessorTitle"
                       @changefield="changeAssesorDetails"
@@ -1636,7 +1636,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.secondAssessorEmail"
                       field="secondAssessorEmail"
                       type="email"
@@ -1650,7 +1650,7 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.secondAssessorPhone"
                       field="secondAssessorPhone"
                       @changefield="changeAssesorDetails"
@@ -1798,7 +1798,37 @@
                 </div>
               </dl>
             </div>
-          </div> 
+
+            <div
+              v-if="showCoveringLetter"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Covering Letter
+              </h2>
+
+              <dl class="govuk-summary-list">
+                <div
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Uploaded Covering Letter
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <div v-if="application.uploadedCoveringLetter">
+                      <DownloadLink
+                        :file-name="application.uploadedCoveringLetter"
+                        :exercise-id="exercise.id"
+                        :user-id="application.userId"
+                        title="Covering Letter"
+                      />
+                    </div>
+                    <span v-else>Not yet received</span>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
 
           <div v-if="activeTab == 'issues'">
             No issues found
@@ -1910,6 +1940,8 @@ export default {
       case 'statement-of-suitability-with-competencies':
       case 'statement-of-suitability-with-skills-and-abilities':
       case 'statement-of-suitability-with-skills-and-abilities-and-cv':
+      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -1919,6 +1951,18 @@ export default {
       switch (this.exercise.assessmentOptions) {
       case 'self-assessment-with-competencies-and-cv':
       case 'statement-of-suitability-with-skills-and-abilities-and-cv':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
+        return true;
+      default:
+        return false;
+      }
+    },
+    showCoveringLetter() {
+      switch (this.exercise.assessmentOptions) {
+      case 'self-assessment-with-competencies-and-covering-letter':
+      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -1936,6 +1980,8 @@ export default {
       switch (this.exercise.assessmentOptions) {
       case 'self-assessment-with-competencies':
       case 'self-assessment-with-competencies-and-cv':
+      case 'self-assessment-with-competencies-and-covering-letter':
+      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -2020,8 +2066,8 @@ export default {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
             if (i < len) {
-              this.$router.replace({ 
-                name: 'exercise-applications-application', 
+              this.$router.replace({
+                name: 'exercise-applications-application',
                 params: { applicationId: this.applications[i + 1].id, status: this.applications[i + 1].status },
               });
             }
@@ -2035,8 +2081,8 @@ export default {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
             if (i > 0) {
-              this.$router.replace({ 
-                name: 'exercise-applications-application', 
+              this.$router.replace({
+                name: 'exercise-applications-application',
                 params: { applicationId: this.applications[i - 1].id, status: this.applications[i + 1].status },
               });
             }
