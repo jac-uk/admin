@@ -94,6 +94,8 @@ export default {
     async getDownloadURL() {
       const fileRef = firebase.storage().ref(this.savePath + this.fileName);
 
+      console.log('getDownloadURL: ', fileRef);
+
       try {
         const downloadUrl = await fileRef.getDownloadURL();
 
