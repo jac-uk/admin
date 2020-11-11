@@ -189,6 +189,7 @@
                   >
                     <DownloadLink
                       v-if="assessment.fileRef && !unapprovedLateSubmission(assessment)"
+                      v-model="assessment.fileRef"
                       class="moj-button-menu__item"
                       :file-name="assessment.fileRef"
                       :exercise-id="exercise.id"
@@ -227,9 +228,9 @@
                 </div>
                 <button 
                   class="govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
-                  @click="modalUploadOpen({ id: assessment.id, ...assessment })"
+                  @click="modalUploadOpen({ id: assessment.id, uuid: $store.state.auth.currentUser.uid, ...assessment })"
                 >
-                  Upload
+                  {{ assessment.fileRef ? 'Replace' : 'Upload' }}
                 </button>
                 <br>
                 <a 
