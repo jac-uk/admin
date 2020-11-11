@@ -29,3 +29,15 @@ describe('when input value is boolean `false`', () => {
     expect(heldFeePaidJudicialRole(false)).toBe('No');
   });
 });
+
+describe('when input value is an empty string', () => {
+  it('returns string `Prefer not to say`', () => {
+    expect(heldFeePaidJudicialRole('')).toBe('Prefer not to say');
+  });
+});
+
+describe('when input value is null', () => {
+  it('returns string `Prefer not to say`', () => {
+    expect(heldFeePaidJudicialRole(null)).toBe('Prefer not to say');
+  });
+});
