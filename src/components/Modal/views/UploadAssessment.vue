@@ -12,8 +12,8 @@
           :name="$attrs.id"
           :path="`/exercise/${$attrs.exercise.id}/application/${$attrs.application.id}/assessor/${userId}`"
           label="Upload Independent Assessment file"
-          @input="changeFileName"
           required
+          @input="changeFileName"
         />
       </p>
       <p>
