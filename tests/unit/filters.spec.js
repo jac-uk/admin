@@ -31,13 +31,19 @@ describe('when input value is boolean `false`', () => {
 });
 
 describe('when input value is an empty string', () => {
-  it('returns string `Prefer not to say`', () => {
-    expect(heldFeePaidJudicialRole('')).toBe('Prefer not to say');
+  it('returns string `Unknown`', () => {
+    expect(heldFeePaidJudicialRole('')).toBe('Unknown');
   });
 });
 
 describe('when input value is null', () => {
-  it('returns string `Prefer not to say`', () => {
-    expect(heldFeePaidJudicialRole(null)).toBe('Prefer not to say');
+  it('returns string `Unknown`', () => {
+    expect(heldFeePaidJudicialRole(null)).toBe('Unknown');
+  });
+});
+
+describe('when input value is undefined', () => {
+  it('returns string `Unknown`', () => {
+    expect(heldFeePaidJudicialRole(undefined)).toBe('Unknown');
   });
 });

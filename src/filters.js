@@ -84,6 +84,11 @@ const heldFeePaidJudicialRole = (value) => {
     return value;
   }
 
+  if (value === undefined || value === null || (typeof value === 'string' && value.length === 0)) {
+    value = 'Unknown';
+    return value;
+  }
+
   value = 'Prefer not to say';
   return value;
 };
