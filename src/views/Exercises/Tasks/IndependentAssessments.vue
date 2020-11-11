@@ -473,13 +473,9 @@ export default {
     },
     modalUploadOpen(obj) {
       this.uploadAsssessmentProps = obj;
-      // eslint-disable-next-line no-console
-      console.log('openModalUpload', this.uploadAsssessmentProps);
       this.$refs.modalRef.openModal();
     },
     modalUploadClose() {
-      // eslint-disable-next-line no-console
-      console.log('btnClosed');
       this.$refs.modalRef.closeModal();
     },
   },
