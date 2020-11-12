@@ -1,6 +1,6 @@
 {
   "name": "apply-admin",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",

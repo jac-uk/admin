@@ -2,6 +2,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import clone from 'clone';
 
 const collection = firestore.collection('qualifyingTestReports');
 
@@ -24,6 +25,21 @@ export default {
     save: async (context, data) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collection.doc(context.state.record.id).update(data);
+    },
+  },
+  getters: {
+    data: (state) => {
+      const report = clone(state.record);
+      const titles = [];
+      report.qualifyingTests.forEach(qualifyingTest => {
+        titles.push(qualifyingTest.title);
+      });
+      let title = titles.join(' + ');
+      if (report.filters && report.filters.jurisdiction) {
+        title = `${title} (${report.filters.jurisdiction})`;
+      }
+      report.title = title;
+      return report;
     },
   },
   state: {

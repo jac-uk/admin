@@ -1,7 +1,7 @@
 <template>
   <div
     class="govuk-!-margin-top-9 notes"
-  > 
+  >
     <NotesNew
       v-if="isNew || isUpdate"
       :note="noteSelectedObj"
@@ -19,13 +19,21 @@
         {{ title }}
       </h2>
 
-      <button 
+      <button
         class="govuk-button"
         @click="btnClickAddNote"
       >
         Add a note
-      </button>   
-      <NotesList 
+      </button>
+
+      <div v-if="notesList.length === 0">
+        <p class="govuk-body">
+          There are no notes available.
+        </p>
+      </div>
+
+      <NotesList
+        v-else
         :notes="notesList"
         @deleteNote="deleteNoteAction"
         @editNote="editNoteAction"
@@ -83,7 +91,7 @@ export default {
     },
     notesList() {
       const localNotes = this.$store.state.notes.records;
-      return localNotes || {};
+      return localNotes || [];
     },
   },
   created() {
