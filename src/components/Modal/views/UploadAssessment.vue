@@ -10,7 +10,8 @@
           ref="independent-assessment-file"
           v-model="fileName"
           :name="$attrs.id"
-          :path="`/exercise/${$attrs.exercise.id}/application/${$attrs.application.id}/assessor/${userId}`"
+          :path="buildFileFolder"
+          :file-path="buildFileFolder + fileName"
           label="Upload Independent Assessment file"
           required
           @input="changeFileName"
@@ -47,6 +48,9 @@ export default {
       const assessorId = this.$attrs.assessor.id;
       return assessorId ? assessorId : this.$attrs.uuid;
     },
+    buildFileFolder() {
+      return `/exercise/${this.$attrs.exercise.id}/application/${this.$attrs.application.id}/jac/`;
+    },
   },
   methods: {
     closeModal() {
@@ -66,10 +70,8 @@ export default {
         id: this.$attrs.id,
         status: 'completed',
         fileRef: this.fileName,
+        filePath: this.buildFileFolder + this.fileName,
         approved: true,
-      };
-      assessment.assessor = {
-        id: this.userId,
       };
       await this.$store.dispatch('assessment/save', assessment);
       this.closeModal();

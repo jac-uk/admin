@@ -192,6 +192,7 @@
                       v-model="assessment.fileRef"
                       class="moj-button-menu__item"
                       :file-name="assessment.fileRef"
+                      :file-path="assessment.filePath"
                       :exercise-id="exercise.id"
                       :application-id="assessment.application.id"
                       :assessor-id="assessment.assessor.id"
