@@ -7,7 +7,7 @@
             Qualifying Test Report
           </h2>
           <h3 class="govuk-heading-l govuk-!-margin-bottom-0">
-            {{ reportTitle }}
+            {{ qualifyingTestReport.title }}
           </h3>
           <span
             class="govuk-body govuk-!-font-size-14"
@@ -107,8 +107,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTestReport() {
-      const record = this.$store.state.qualifyingTestReport.record;
-      return record;
+      return this.$store.getters['qualifyingTestReport/data'];
     },
     hasReportData() {
       return this.qualifyingTestReport.report && this.qualifyingTestReport.report.length;
@@ -120,20 +119,13 @@ export default {
       });
       return score;
     },
-    reportTitle() {
-      const titles = [];
-      this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
-        titles.push(qualifyingTest.title);
-      });
-      return titles.join(' + ');
-    },
   },
   methods: {
     btnEdit() {
       this.$router.push({
         name: 'qualifying-test-report-edit',
         params: {
-          qualifyingTestReportId: this.qualifyingTestReport.id,
+          qualifyingTestReportId: this.qualifyingTestReportId,
         },
       });
     },

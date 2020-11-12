@@ -16,6 +16,23 @@ export default {
       return unbindFirestoreRef('records');
     }),
   },
+  getters: {
+    data: (state) => {
+      return state.records.map(item => {
+        const report = item;
+        const titles = [];
+        report.qualifyingTests.forEach(qualifyingTest => {
+          titles.push(qualifyingTest.title);
+        });
+        let title = titles.join(' + ');
+        if (report.filters && report.filters.jurisdiction) {
+          title = `${title} (${report.filters.jurisdiction})`;
+        }
+        report.title = title;
+        return report;
+      });
+    },
+  },
   state: {
     records: [],
   },

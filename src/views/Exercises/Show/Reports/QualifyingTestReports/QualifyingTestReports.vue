@@ -17,7 +17,7 @@
             class="govuk-link"
             :to="{ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: row.id } }"
           >
-            {{ reportTitle(row) | showAlternative(row.id) }}
+            {{ row.title | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
       </template>
@@ -46,7 +46,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTestReports() {
-      const qtList = this.$store.state.qualifyingTestReports.records;
+      const qtList = this.$store.getters['qualifyingTestReports/data'];
       return qtList;
     },
     hasData() {
@@ -62,13 +62,6 @@ export default {
   methods: {
     btnCreate() {
       this.$router.push({ name: 'qualifying-test-report-create' });
-    },
-    reportTitle(report) {
-      const titles = [];
-      report.qualifyingTests.forEach(qualifyingTest => {
-        titles.push(qualifyingTest.title);
-      });
-      return titles.join(' + ');
     },
   },
 };
