@@ -11,7 +11,7 @@
           v-model="fileName"
           :name="$attrs.id"
           :path="buildFileFolder"
-          :file-path="buildFileFolder + fileName"
+          :file-path="$attrs.filePath"
           label="Upload Independent Assessment file"
           required
           @input="changeFileName"
