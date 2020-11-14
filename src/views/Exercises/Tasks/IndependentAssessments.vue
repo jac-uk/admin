@@ -189,8 +189,10 @@
                   >
                     <DownloadLink
                       v-if="assessment.fileRef && !unapprovedLateSubmission(assessment)"
+                      v-model="assessment.fileRef"
                       class="moj-button-menu__item"
                       :file-name="assessment.fileRef"
+                      :file-path="assessment.filePath"
                       :exercise-id="exercise.id"
                       :application-id="assessment.application.id"
                       :assessor-id="assessment.assessor.id"
@@ -225,6 +227,12 @@
                     </ActionButton>
                   </div>
                 </div>
+                <button 
+                  class="govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
+                  @click="modalUploadOpen({ id: assessment.id, uuid: $store.state.auth.currentUser.uid, ...assessment })"
+                >
+                  {{ assessment.fileRef ? 'Replace' : 'Upload' }}
+                </button>
                 <br>
                 <a 
                   v-if="onStaging"
@@ -282,6 +290,16 @@
         status="warning"
       />
     </div>
+
+    <Modal 
+      ref="modalRef"
+    >
+      <component 
+        :is="`UploadAssessment`" 
+        v-bind="uploadAsssessmentProps" 
+        @close="modalUploadClose"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -291,16 +309,21 @@ import { isDateInFuture, isDateGreaterThan } from '@/helpers/date';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
 import Banner from '@/components/Page/Banner';
+import Modal from '@/components/Modal/Modal';
+import UploadAssessment from '@/components/Modal/views/UploadAssessment';
 
 export default {
   components: {
     ActionButton,
     Banner,
     DownloadLink,
+    Modal,
+    UploadAssessment,
   },
   data() {
     return {
       exerciseStage: '',
+      uploadAsssessmentProps: {},
     };
   },
   computed: {
@@ -383,6 +406,12 @@ export default {
     canSendRemindersToAll() {
       return this.hasInitialisedAssessments && (this.exercise.assessments && this.exercise.assessments.sent);
     },
+    uploadPath() {
+      const exerciseId = this.exercise.id;
+      const applicationId = this.assessment.application.id;
+      const assessorId = this.assessorId;
+      return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
+    },
   },
   created() {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
@@ -442,6 +471,13 @@ export default {
       assessment.approved = true;
 
       await this.$store.dispatch('assessment/save', assessment);
+    },
+    modalUploadOpen(obj) {
+      this.uploadAsssessmentProps = obj;
+      this.$refs.modalRef.openModal();
+    },
+    modalUploadClose() {
+      this.$refs.modalRef.closeModal();
     },
   },
 };

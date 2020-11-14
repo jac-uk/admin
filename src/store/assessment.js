@@ -1,3 +1,4 @@
+import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
@@ -21,6 +22,10 @@ export default {
       if (data.id == null && state.record == null){
         throw 'State null and no ID passed';
       }
+      if (!data.submittedDate){
+        data.submittedDate = firebase.firestore.FieldValue.serverTimestamp();
+      }
+      data.updatedDate = firebase.firestore.FieldValue.serverTimestamp();
       let docId;
       state.record == null ? docId = data.id : docId = state.record.id;
       const ref = collection.doc(docId);

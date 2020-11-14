@@ -27,6 +27,11 @@ export default {
       type: String,
       default: '',
     },
+    filePath: {
+      required: false,
+      type: String,
+      default: '',
+    },
     exerciseId: {
       required: true,
       type: String,
@@ -92,7 +97,8 @@ export default {
   },
   methods: {
     async getDownloadURL() {
-      const fileRef = firebase.storage().ref(this.savePath + this.fileName);
+      const urlString = this.filePath ? this.filePath : this.savePath + this.fileName;
+      const fileRef = firebase.storage().ref(urlString);
 
       try {
         const downloadUrl = await fileRef.getDownloadURL();
