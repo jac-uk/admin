@@ -8,7 +8,7 @@
         class="govuk-heading-l govuk-!-margin-bottom-0"
         @click="gotoView()"
       >
-        {{ reportTitle }}
+        {{ qualifyingTestReport.title }}
       </h3>
       <span
         class="govuk-body govuk-!-font-size-14"
@@ -192,8 +192,7 @@ export default {
       return this.$route.params.qualifyingTestReportId;
     },
     qualifyingTestReport() {
-      const record = this.$store.state.qualifyingTestReport.record;
-      return record;
+      return this.$store.getters['qualifyingTestReport/data'];
     },
     score() {
       return this.$route.params.score;
@@ -224,13 +223,6 @@ export default {
       data.push({ title: 'Solicitor' });
       data.push({ title: 'Disability' });
       return data;
-    },
-    reportTitle() {
-      const titles = [];
-      this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
-        titles.push(qualifyingTest.title);
-      });
-      return titles.join(' + ');
     },
   },
   methods: {

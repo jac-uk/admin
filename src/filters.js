@@ -73,6 +73,26 @@ const toYesNo = (value) => {
   return value;
 };
 
+const heldFeePaidJudicialRole = (value) => {
+  if (typeof value === 'string' && ['fee-paid-court-post', 'fee-paid-tribunal-post', 'other-fee-paid-judicial-office'].includes(value)) {
+    value = 'Yes';
+    return value;
+  }
+
+  if (typeof value === 'boolean' && value === false) {
+    value = 'No';
+    return value;
+  }
+
+  if (value === undefined || value === null || (typeof value === 'string' && value.length === 0)) {
+    value = 'Unknown';
+    return value;
+  }
+
+  value = 'Prefer not to say';
+  return value;
+};
+
 const slugify = (text) => {
   if (!text) {
     return '';
@@ -335,6 +355,7 @@ export {
   toHumanCase,
   toCSV,
   toYesNo,
+  heldFeePaidJudicialRole,
   slugify,
   candidateHasIssues,
   showAlternative,

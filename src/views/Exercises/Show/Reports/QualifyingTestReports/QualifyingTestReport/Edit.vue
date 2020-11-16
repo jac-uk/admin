@@ -5,7 +5,7 @@
         Qualifying Test Report
       </h2>
       <h3 class="govuk-heading-l ">
-        {{ reportTitle }}
+        {{ qualifyingTestReport.title }}
       </h3>
 
       <ErrorSummary
@@ -28,6 +28,24 @@
         />
       </CheckboxGroup>
 
+      <Select
+        v-if="exercise.jurisdictionQuestion"
+        id="filter-jurisdiction"
+        v-model="filters.jurisdiction"
+        label="Filter by jurisdiction"
+      >
+        <option value="">
+          No filter
+        </option>
+        <option
+          v-for="(answer, index) in exercise.jurisdictionQuestionAnswers"
+          :key="index"
+          :value="answer.answer"
+        >
+          {{ answer.answer }}
+        </option>
+      </Select>
+
       <button class="govuk-button">
         Save and continue
       </button>
@@ -40,43 +58,48 @@ import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
+import Select from '@/components/Form/Select';
 
 export default {
   components: {
     ErrorSummary,
     CheckboxGroup,
     CheckboxItem,
+    Select,
   },
   extends: Form,
-  data(){
+  data() {
     const selectedIds = [];
-    const qualifyingTestReport = this.$store.state.qualifyingTestReport.record;
+    const qualifyingTestReport = this.$store.getters['qualifyingTestReport/data'];
     if (qualifyingTestReport && qualifyingTestReport.qualifyingTests && qualifyingTestReport.qualifyingTests.length) {
       qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
         selectedIds.push(qualifyingTest.id);
       });
     }
+    let filters = {};
+    if (qualifyingTestReport.filters) {
+      filters = qualifyingTestReport.filters;
+    }
     return {
       qualifyingTestIds: selectedIds,
+      filters: filters,
     };
   },
   computed: {
     exerciseId() {
       return this.$route.params.id;
     },
+    qualifyingTestReportId() {
+      return this.$route.params.qualifyingTestReportId;
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     qualifyingTests() {
       return this.$store.getters['qualifyingTest/getCompletedQTs'];
     },
     qualifyingTestReport() {
-      const record = this.$store.state.qualifyingTestReport.record;
-      return record;
-    },
-    reportTitle() {
-      const titles = [];
-      this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
-        titles.push(qualifyingTest.title);
-      });
-      return titles.join(' + ');
+      return this.$store.getters['qualifyingTestReport/data'];
     },
   },
   created() {
@@ -100,12 +123,14 @@ export default {
         });
         const data = {
           qualifyingTests: qualifyingTests,
+          filters: this.filters,
         };
+
         await this.$store.dispatch('qualifyingTestReport/save', data);
         this.$router.push({
           name: 'qualifying-test-report-view',
           params: {
-            qualifyingTestReportId: this.qualifyingTestReport.id,
+            qualifyingTestReportId: this.qualifyingTestReportId,
           },
         });
       }
