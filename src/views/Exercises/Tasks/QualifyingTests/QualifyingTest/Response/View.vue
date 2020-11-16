@@ -26,9 +26,10 @@
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
             <ActionButton
+              v-if="authorisedToReset"
               :disabled="hasActivated"
               type="secondary"
-              class="float-right"
+              class="float-right govuk-!-margin-bottom-1"
               @click="resetTest"
             >
               Reset
@@ -483,16 +484,13 @@ export default {
   },
   async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
+    const email = firebase.auth().currentUser.email;
+    this.authorisedToReset = await authorisedToReset(email);
   },
   methods: {
-    async resetTest() {
-      const email = firebase.auth().currentUser.email;
-      const canReset = await authorisedToReset(email);
-      if (canReset) {
-        this.authorisedToReset = true;
+    resetTest() {
+      if (this.authorisedToReset && this.authorisedToReset === true) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
-      } else {
-        this.authorisedToReset = false;
       }
     },
     actionReasonableAdjustment(obj, duration, id) {
