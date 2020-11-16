@@ -2171,8 +2171,6 @@ export default {
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
     doFileUpload(val, field) {
-      // eslint-disable-next-line no-console
-      console.log('fileUpload val:', val);
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
       }
