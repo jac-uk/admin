@@ -25,6 +25,15 @@
           </dt>
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
+            <ActionButton
+              v-if="authorisedToReset"
+              :disabled="hasActivated"
+              type="secondary"
+              class="float-right govuk-!-margin-bottom-1"
+              @click="resetTest"
+            >
+              Reset
+            </ActionButton>
           </dd>
         </div>
         <div class="govuk-summary-list__row">
@@ -188,7 +197,7 @@
             >
               <dt class="govuk-summary-list__key">
                 {{ questionLabel }} {{ index + 1 }}
-                <QuestionDuration 
+                <QuestionDuration
                   v-if="!isScenario"
                   :start="responses[index].started"
                   :end="responses[index].completed"
@@ -248,13 +257,13 @@
                   >
                     <p>
                       <strong>{{ testQuestion.options[i].question }}</strong>
-                      <span 
-                        v-if="testQuestion.options[i].hint" 
+                      <span
+                        v-if="testQuestion.options[i].hint"
                         class="govuk-hint"
                       >{{ testQuestion.options[i].hint }}</span>
                     </p>
-                    
-                    <QuestionDuration 
+
+                    <QuestionDuration
                       :start="res.started"
                       :end="res.completed"
                     />
@@ -308,11 +317,14 @@
 </template>
 
 <script>
+import firebase from '@firebase/app';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import EditableField from '@/components/EditableField';
 import Select from '@/components/Form/Select';
 import TabsList from '@/components/Page/TabsList';
 import QuestionDuration from '@/components/Micro/QuestionDuration';
+import ActionButton from '@/components/ActionButton';
+import { authorisedToReset }  from '@/helpers/authUsers';
 
 export default {
   components: {
@@ -320,12 +332,14 @@ export default {
     Select,
     TabsList,
     QuestionDuration,
+    ActionButton,
   },
   data() {
     return {
       moveToTest: '',
       isEditingTestDate: false,
       activeTab: 'questions',
+      authorisedToReset: false,
     };
   },
   computed: {
@@ -440,6 +454,9 @@ export default {
     isScenario() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
+    hasActivated() {
+      return this.response.status === QUALIFYING_TEST.STATUS.ACTIVATED;
+    },
     hasStarted() {
       return this.response && (
         this.response.status === QUALIFYING_TEST.STATUS.STARTED
@@ -467,8 +484,15 @@ export default {
   },
   async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
+    const email = firebase.auth().currentUser.email;
+    this.authorisedToReset = await authorisedToReset(email);
   },
   methods: {
+    resetTest() {
+      if (this.authorisedToReset && this.authorisedToReset === true) {
+        this.$store.dispatch('qualifyingTestResponses/resetTest');
+      }
+    },
     actionReasonableAdjustment(obj, duration, id) {
       const reasonableAdjustment = Number(obj.reasonableAdjustment);
       const calculation = reasonableAdjustment + Number(duration.testDuration);
