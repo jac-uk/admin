@@ -9,57 +9,29 @@
           ref="formRef"
           @submit.prevent="save"
         >
-          <fieldset v-if="$attrs.AssessorNr == 1">
+          <fieldset>
             <TextField
-              id="first-assessor-full-name"
-              v-model="firstAssessorFullName"
+              id="full-name"
+              v-model="fullName"
               label="Full name"
               required
             />
             <TextField
-              id="first-assessor-title"
-              v-model="firstAssessorTitle"
+              id="title"
+              v-model="title"
               label="Title or position"
               required
             />
             <TextField
               id="first-assessor-email"
-              v-model="firstAssessorEmail"
+              v-model="email"
               label="Email"
               type="email"
               required
             />
             <TextField
               id="first-assessor-Phone"
-              v-model="firstAssessorPhone"
-              label="Phone"
-              type="tel"
-              required
-            />
-          </fieldset>
-          <fieldset v-if="$attrs.AssessorNr == 2">
-            <TextField
-              id="second-assessor-full-name"
-              v-model="secondAssessorFullName"
-              label="Full name"
-              required
-            />
-            <TextField
-              id="second-assessor-title"
-              v-model="secondAssessorTitle"
-              label="Title or position"
-              required
-            />
-            <TextField
-              id="second-assessor-email"
-              v-model="secondAssessorEmail"
-              label="Email"
-              type="email"
-              required
-            />
-            <TextField
-              id="second-assessor-Phone"
-              v-model="secondAssessorPhone"
+              v-model="phone"
               label="Phone"
               type="tel"
               required
@@ -93,14 +65,10 @@ export default {
   },
   data() {
     return {
-      firstAssessorEmail: null,
-      firstAssessorFullName: null,
-      firstAssessorPhone: null,
-      firstAssessorTitle: null,
-      secondAssessorEmail: null,
-      secondAssessorFullName: null,
-      secondAssessorPhone: null,
-      secondAssessorTitle: null,
+      email: null,
+      fullName: null,
+      phone: null,
+      title: null,
     };
   },
   computed: {
@@ -110,14 +78,10 @@ export default {
     },
   },
   created() {
-    this.firstAssessorEmail = this.$attrs.firstAssessorEmail;
-    this.firstAssessorFullName = this.$attrs.firstAssessorFullName;
-    this.firstAssessorPhone = this.$attrs.firstAssessorPhone;
-    this.firstAssessorTitle = this.$attrs.firstAssessorTitle;
-    this.secondAssessorEmail = this.$attrs.secondAssessorEmail;
-    this.secondAssessorFullName = this.$attrs.secondAssessorFullName;
-    this.secondAssessorPhone = this.$attrs.secondAssessorPhone;
-    this.secondAssessorTitle = this.$attrs.secondAssessorTitle;
+    this.email = this.$attrs.email;
+    this.fullName = this.$attrs.fullName;
+    this.phone = this.$attrs.phone;
+    this.title = this.$attrs.title;
   },
   methods: {
     closeModal() {
@@ -132,17 +96,17 @@ export default {
       let data = {};
       if (this.$attrs.AssessorNr == 1) {
         data = {
-          firstAssessorEmail: this.firstAssessorEmail,
-          firstAssessorFullName: this.firstAssessorFullName,
-          firstAssessorPhone: this.firstAssessorPhone,
-          firstAssessorTitle: this.firstAssessorTitle,
+          firstAssessorEmail: this.email,
+          firstAssessorFullName: this.fullName,
+          firstAssessorPhone: this.phone,
+          firstAssessorTitle: this.title,
         };
       } else if (this.$attrs.AssessorNr == 2) {
         data = {
-          secondAssessorEmail: this.secondAssessorEmail,
-          secondAssessorFullName: this.secondAssessorFullName,
-          secondAssessorPhone: this.secondAssessorPhone,
-          secondAssessorTitle: this.secondAssessorTitle,
+          secondAssessorEmail: this.email,
+          secondAssessorFullName: this.fullName,
+          secondAssessorPhone: this.phone,
+          secondAssessorTitle: this.title,
         };
       }
       this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });

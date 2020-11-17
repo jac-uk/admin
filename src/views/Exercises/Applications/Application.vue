@@ -2178,23 +2178,24 @@ export default {
       }
     },
     editAssessor(AssessorNr) {
+      this.assessorDetails = {};
       if (AssessorNr === 1) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
           applicationId: this.application.id,
-          firstAssessorEmail: this.application.firstAssessorEmail,
-          firstAssessorFullName: this.application.firstAssessorFullName,
-          firstAssessorPhone: this.application.firstAssessorPhone,
-          firstAssessorTitle: this.application.firstAssessorTitle,
+          email: this.application.firstAssessorEmail,
+          fullName: this.application.firstAssessorFullName,
+          phone: this.application.firstAssessorPhone,
+          title: this.application.firstAssessorTitle,
         };
       } else if (AssessorNr === 2) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
           applicationId: this.application.id,
-          secondAssessorEmail: this.application.secondAssessorEmail,
-          secondAssessorFullName: this.application.secondAssessorFullName,
-          secondAssessorPhone: this.application.secondAssessorPhone,
-          secondAssessorTitle: this.application.secondAssessorTitle,
+          email: this.application.secondAssessorEmail,
+          fullName: this.application.secondAssessorFullName,
+          phone: this.application.secondAssessorPhone,
+          title: this.application.secondAssessorTitle,
         };
       }
       this.openModal();
