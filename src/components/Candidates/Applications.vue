@@ -7,6 +7,7 @@
         </h2>
       </div>
     </div> -->
+    
     <Table
       v-if="!noApplications" 
       data-key="id"

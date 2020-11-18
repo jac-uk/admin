@@ -1,9 +1,13 @@
 <template>
   <div>
-    <Search 
-      v-if="search.length" 
-      @search="useSearch" 
-    />
+    <div style="display:flex;">
+      <Search 
+        v-if="search.length" 
+        class="govuk-!-width-two-thirds"
+        @search="useSearch" 
+      />
+      <SearchFilter :terms="filterTerms" />
+    </div>
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -120,10 +124,12 @@
 
 <script>
 import Search from '@/components/Search';
+import SearchFilter from '@/components/SearchFilter';
 
 export default {
   components: {
     Search,
+    SearchFilter,
   },
   props: {
     columns: {
@@ -162,6 +168,7 @@ export default {
   data() {
     return {
       searchTerm: null,
+      filterTerms: [],
       orderBy: null,
       direction: null,
       page: 0,
