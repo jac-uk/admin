@@ -1,16 +1,15 @@
 <template>
   <div>
     <div>
-      <!-- <div class="govuk-grid-row"> -->
       <button
         class="govuk-button govuk-button--secondary"
         @click="toggleTab"
       >
-        {{ (showTab ? "Hide filters" : "Show Filters") }}
+        {{ (showTab ? "Hide filters" : "Show filters") }}
       </button>
-      <div v-if="numOfFilters">
+      <!-- <div v-if="numOfFilters">
         {{ numOfFilters }}
-      </div>
+      </div> -->
     </div>
 
     <transition name="slide">
@@ -35,19 +34,19 @@
         <div class="content">
           <div class="scrollable">
             <div 
-              v-for="term in terms"
-              :key="term.type"
+              v-for="(term, index) in terms"
+              :key="term.title"
             >
               <div v-if="term.type==='checkbox'">
                 <CheckboxGroup
-                  :id="`filter-${term.type}`"
+                  :id="`filter-${term.title}-${index}`"
                   v-model="selected[`${term.title}`]"
-                  :label="term.type"
+                  :label="term.title"
                   hint="Select all that apply."
                 >
                   <CheckboxItem
-                    v-for="(option, index) in term.options"
-                    :key="index"
+                    v-for="(option, i) in term.options"
+                    :key="i"
                     :value="option"
                     :label="option"
                   />
@@ -60,18 +59,18 @@
                   {{ term.title }}
                 </legend>
                 <TextField
-                  :id="`keyword-${term.title}`"
+                  :id="`keyword-${term.title}-${index}`"
                   v-model="selected[`${term.title}`]"
                 />
               </div>
               <div v-if="term.type==='dateRange'">
                 <DateInput
-                  :id="`${term.title}-from`"
+                  :id="`${term.title}-${index}-from`"
                   v-model="selected[`${term.title}-from`]"
                   :label="`${term.title} from`"
                 />
                 <DateInput
-                  :id="`${term.title}-to`"
+                  :id="`${term.title}-${index}-to`"
                   v-model="selected[`${term.title}-to`]"
                   :label="`${term.title} to`"
                 />
@@ -166,7 +165,6 @@ export default {
   .container {
     border: 1px solid black;
     position: absolute;
-    // transform: translateX(170%);
     right: 0;
     top: 0;
     z-index: 11;
@@ -204,9 +202,6 @@ export default {
 
   .slide-enter, .slide-leave-to {
     transform: translateX(300%);
-  }
-
-  .button-section {
   }
 
 </style>

@@ -18,7 +18,7 @@ export default {
         },
         {
           type: 'checkbox',
-          title: 'Status',
+          title: 'Status1',
           options: ['one', 'two', 'three'],
         },
         {
@@ -27,15 +27,15 @@ export default {
         },
         {
           type: 'keyword',
-          title: 'keyword',
+          title: 'keyword2',
         },
         {
           type: 'dateRange',
-          title: 'dateRange',
+          title: 'open Date',
         },
         {
           type: 'dateRange',
-          title: 'dateRange',
+          title: 'Close Date',
         },
       ],
     };

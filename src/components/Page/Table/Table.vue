@@ -6,7 +6,6 @@
         class="govuk-!-width-two-thirds"
         @search="useSearch" 
       />
-      <SearchFilter :terms="filterTerms" />
     </div>
     <table class="govuk-table">
       <thead class="govuk-table__head">
@@ -124,12 +123,10 @@
 
 <script>
 import Search from '@/components/Search';
-import SearchFilter from '@/components/SearchFilter';
 
 export default {
   components: {
     Search,
-    SearchFilter,
   },
   props: {
     columns: {
