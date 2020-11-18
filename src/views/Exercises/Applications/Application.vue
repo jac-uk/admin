@@ -1547,19 +1547,26 @@
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
                 Independent assessors
-              </h2>
+              </h2> 
 
               <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row text-right print-none button-right">
+                  <dt class="govuk-summary-list__key" />
+                  <dd class="govuk-summary-list__value">
+                    <button 
+                      class="govuk-button btn-unlock" 
+                      @click="editAssessor(1)"
+                    >
+                      Edit
+                    </button>
+                  </dd>
+                </div>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.firstAssessorFullName"
-                      field="firstAssessorFullName"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorFullName }}
                   </dd>
                 </div>
 
@@ -1568,11 +1575,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.firstAssessorTitle"
-                      field="firstAssessorTitle"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorTitle }}
                   </dd>
                 </div>
 
@@ -1581,12 +1584,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.firstAssessorEmail"
-                      field="firstAssessorEmail"
-                      type="email"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorEmail }}
                   </dd>
                 </div>
 
@@ -1595,26 +1593,28 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.firstAssessorPhone"
-                      field="firstAssessorPhone"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorPhone }}
                   </dd>
                 </div>
 
                 <hr class="govuk-section-break govuk-section-break--l">
-
+                <div class="govuk-summary-list__row text-right print-none button-right">
+                  <dt class="govuk-summary-list__key" />
+                  <dd class="govuk-summary-list__value">
+                    <button 
+                      class="govuk-button btn-unlock" 
+                      @click="editAssessor(2)"
+                    >
+                      Edit
+                    </button>
+                  </dd>
+                </div>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.secondAssessorFullName"
-                      field="secondAssessorFullName"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorFullName }}
                   </dd>
                 </div>
 
@@ -1623,11 +1623,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.secondAssessorTitle"
-                      field="secondAssessorTitle"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorTitle }}
                   </dd>
                 </div>
 
@@ -1636,12 +1632,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.secondAssessorEmail"
-                      field="secondAssessorEmail"
-                      type="email"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorEmail }}
                   </dd>
                 </div>
 
@@ -1650,15 +1641,21 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.secondAssessorPhone"
-                      field="secondAssessorPhone"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorPhone }}
                   </dd>
                 </div>
               </dl>
             </div>
+
+            <Modal 
+              ref="modalRef"
+            >
+              <component 
+                :is="`IndependentAssessorChange`" 
+                v-bind="assessorDetails"
+                @close="closeModal"
+              />
+            </Modal>
 
             <div
               v-if="application.selectionCriteriaAnswers"
@@ -1853,6 +1850,8 @@ import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
+import Modal from '@/components/Modal/Modal';
+import IndependentAssessorChange from '@/components/Modal/views/IndependentAssessorChange';
 
 export default {
   components: {
@@ -1862,6 +1861,8 @@ export default {
     EventRenderer,
     EditableField,
     FileUpload,
+    Modal,
+    IndependentAssessorChange,
   },
   data() {
     return {
@@ -1885,6 +1886,7 @@ export default {
       ],
       activeTab: 'full',
       dropDownExpanded: false,
+      assessorDetails: {},
     };
   },
   computed: {
@@ -2174,6 +2176,35 @@ export default {
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
       }
+    },
+    editAssessor(AssessorNr) {
+      this.assessorDetails = {};
+      if (AssessorNr === 1) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.application.id,
+          email: this.application.firstAssessorEmail,
+          fullName: this.application.firstAssessorFullName,
+          phone: this.application.firstAssessorPhone,
+          title: this.application.firstAssessorTitle,
+        };
+      } else if (AssessorNr === 2) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.application.id,
+          email: this.application.secondAssessorEmail,
+          fullName: this.application.secondAssessorFullName,
+          phone: this.application.secondAssessorPhone,
+          title: this.application.secondAssessorTitle,
+        };
+      }
+      this.openModal();
+    },
+    openModal(){
+      this.$refs.modalRef.openModal();
+    },
+    closeModal() {
+      this.$refs.modalRef.closeModal();
     },
   },
 };

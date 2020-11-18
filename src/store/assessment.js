@@ -45,6 +45,33 @@ export default {
         });
       return collectionRef;
     },
+    update: async (context, { data, AssessorNr, id }) => {
+      let returnData = {};
+      if (AssessorNr == 1) { 
+        returnData = {
+          assessor: {
+            email: data.firstAssessorEmail,
+            fullName: data.firstAssessorFullName,
+          },
+        };
+      } else if (AssessorNr == 2) { 
+        returnData = {
+          assessor: {
+            email: data.secondAssessorEmail,
+            fullName: data.secondAssessorFullName,
+          },
+        };
+      }
+
+      const ref = collection.doc(`${id}-${AssessorNr}`);
+      await ref.get()
+        .then((docSnapshot) => {
+          if (docSnapshot.exists) {
+            ref.set(returnData, { merge: true });
+          }
+        });
+      return true;
+    },
   },
   state: {
     record: null,
