@@ -14,23 +14,23 @@
       Website listing
     </h2>
 
-    <dl class="govuk-summary-list"> 
+    <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Name
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.name }} 
+          {{ exercise.name }}
           <span
             v-if="exercise.inviteOnly"
           >
-            - 
+            -
             <b>
               Invite only exercise
             </b>
           </span>
         </dd>
-      </div>  
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Launch date
@@ -43,7 +43,7 @@
             TBC
           </span>
         </dd>
-      </div>           
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Role summary
@@ -54,12 +54,31 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+          Are there Welsh posts?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ areThereWelshPosts }}
+        </dd>
+      </div>
+      <div
+        v-if="exercise.welshPosts"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Role summary (Welsh)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.roleSummaryWelsh }}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
           Subscriber alerts url
         </dt>
         <dd class="govuk-summary-list__value">
           {{ exercise.subscriberAlertsUrl }}
         </dd>
-      </div>         
+      </div>
     </dl>
 
     <button
@@ -93,9 +112,15 @@ export default {
     },
     isPublished() {
       return this.exercise.published;
-    }, 
+    },
     canPublish() {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
+    },
+    areThereWelshPosts() {
+      if (this.exercise.welshPosts === true) {
+        return 'Yes';
+      }
+      return 'No';
     },
   },
   methods: {
