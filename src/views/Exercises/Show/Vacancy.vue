@@ -74,7 +74,7 @@
           <span v-if="exercise.appointmentType == 'salaried'">
             {{ exercise.appointmentType | lookup }}: 
             <span v-if="exercise.salaryGrouping">{{ exercise.salaryGrouping | lookup }}</span>
-            {{ exercise.salary | formatCurrency }}
+            <span v-if="exercise.salary">{{ exercise.salary | formatCurrency }}</span>
           </span>
           <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ exercise.appointmentType | lookup }}: £{{ exercise.feePaidFee }}</span>
           <span v-else>{{ exercise.appointmentType | lookup }}</span>
