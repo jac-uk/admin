@@ -79,7 +79,7 @@ export default {
         if (event && event.target) {
           value = event.target.value;
         }
-        if (this.required && (value === null || value.length === 0)) {
+        if (this.required && (value === null || value === undefined || value.length === 0)) {
           if (this.messages && this.messages.required) {
             this.setError(this.messages.required);
           } else {
