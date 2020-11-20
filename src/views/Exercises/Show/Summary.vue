@@ -57,7 +57,7 @@
           Are there Welsh posts?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ areThereWelshPosts }}
+          {{ exercise.welshPosts | toYesNo }}
         </dd>
       </div>
       <div
@@ -115,12 +115,6 @@ export default {
     },
     canPublish() {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
-    },
-    areThereWelshPosts() {
-      if (this.exercise.welshPosts === true) {
-        return 'Yes';
-      }
-      return 'No';
     },
   },
   methods: {
