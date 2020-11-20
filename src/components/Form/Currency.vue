@@ -23,7 +23,7 @@
     <input
       :id="id"
       v-model="currencyInput"
-      class="govuk-input moj-input__currency govuk-input--width-4"
+      class="govuk-input moj-input__currency govuk-!-width-one-third"
       type="number"
       step=".01"
       @change="validate"
