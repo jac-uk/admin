@@ -186,7 +186,6 @@ $jac-link-colour: #753880;
 
 .govuk-main-wrapper {
   padding-top: 0 !important;
-  overflow: hidden;
 }
 
 .govuk-grid-column-one-half {
@@ -196,7 +195,6 @@ $jac-link-colour: #753880;
 
 .govuk-footer {
   position: absolute;
-  display: block;
   bottom: 0;
   width: 100%;
 };
