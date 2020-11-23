@@ -162,7 +162,6 @@ export default {
   data() {
     return {
       searchTerm: null,
-      filterTerms: [],
       orderBy: null,
       direction: null,
       page: 0,
