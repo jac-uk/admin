@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div style="display:flex;">
-      <Search 
-        v-if="search.length" 
-        class="govuk-!-width-two-thirds"
-        @search="useSearch" 
-      />
-    </div>
+    <Search 
+      v-if="search.length" 
+      @search="useSearch" 
+    />
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
