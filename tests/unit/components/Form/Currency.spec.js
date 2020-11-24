@@ -111,7 +111,7 @@ describe('components/Form/Currency', () => {
       xit('v-model', () => {
       });
       it('has govuk-input moj-input__currency govuk-input--width-10 classes', () => {
-        expect(wrapper.find('input').attributes('class')).toBe('govuk-input moj-input__currency govuk-input--width-4');
+        expect(wrapper.find('input').attributes('class')).toBe('govuk-input moj-input__currency govuk-!-width-one-third');
       });
       it('has input type of number', () => {
         expect(wrapper.find('input').attributes('type')).toBe('number');

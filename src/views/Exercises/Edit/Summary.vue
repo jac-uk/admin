@@ -42,11 +42,28 @@
           {{ toggleLabel }}
         </button>
 
+        <Checkbox
+          id="welsh-posts"
+          v-model="exercise.welshPosts"
+          label="Are there Welsh posts?"
+          hint="If this exercise has any posts in Wales you should tick this box. You then need to complete the Role Summary (Welsh)."
+        />
+
         <TextareaInput
           id="role-summary"
           v-model="exercise.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
+          rows="2"
+          required
+        />
+
+        <TextareaInput
+          v-if="exercise.welshPosts"
+          id="role-summary-welsh"
+          v-model="exercise.roleSummaryWelsh"
+          label="Role summary (Welsh)"
+          hint="Fersywn Cymraeg"
           rows="2"
           required
         />

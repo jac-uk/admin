@@ -196,6 +196,7 @@
           required
         >
           <RadioItem
+            v-if="exercise.salaryGrouping"
             value="salaried"
             label="Salaried"
           >
@@ -250,6 +251,20 @@
               </select>
             </div>
           </RadioItem>
+
+          <RadioItem
+            v-else
+            value="salaried"
+            label="Salary Group"
+          >
+            <Currency
+              id="salary"
+              v-model="exercise.salary"
+              label="Amount"
+              :required="exercise.appointmentType == 'salaried'"
+            />
+          </RadioItem>
+
           <RadioItem
             value="fee-paid"
             label="Fee paid"
@@ -415,6 +430,7 @@ export default {
       typeOfExercise: null,
       isCourtOrTribunal: null,
       appointmentType: null,
+      salary: null,
       salaryGrouping: null,
       feePaidFee: null,
       isSPTWOffered: null,

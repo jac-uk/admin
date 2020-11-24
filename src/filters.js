@@ -52,6 +52,19 @@ const formatNIN = (value) => {
   return value ? value.toUpperCase() : '';
 };
 
+const formatCurrency = (value) => {
+  let amount = parseFloat(value);
+  if (isNaN(amount)) {
+    amount = 0;
+  }
+  if (typeof amount === 'number') {
+    amount = amount.toLocaleString('en-GB',
+      { style: 'currency', currency: 'GBP' }
+    );
+  }
+  return amount;
+};
+
 const toHumanCase = (value) => {
   if (value) {
     return value.replace(/([A-Z0-9])/g, ' $1');
@@ -352,6 +365,7 @@ export {
   formatEstimatedDate,
   formatNumber,
   formatNIN,
+  formatCurrency,
   toHumanCase,
   toCSV,
   toYesNo,
