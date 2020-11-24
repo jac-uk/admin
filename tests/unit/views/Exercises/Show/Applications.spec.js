@@ -130,7 +130,7 @@ describe('@/views/Exercises/Show/Applications', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();
-      expect(wrapper.find('table').exists()).toBe(true);
+      expect(wrapper.find('div').exists()).toBe(true);
     });
   });
 
