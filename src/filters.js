@@ -2,12 +2,7 @@ import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
   if (value) {
-    const objDate = new Date(Date.parse(value));
-
-    // If not a valid date
-    if (!(objDate instanceof Date)){
-      return null;
-    }
+    const objDate = new Date(value);
 
     switch (type) {
       case 'month':
