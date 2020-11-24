@@ -1,9 +1,8 @@
 import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
-  if (value) {
-    const objDate = new Date(value);
-
+  const objDate = new Date(value);
+  if (type && value){
     switch (type) {
       case 'month':
         return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;
@@ -15,7 +14,11 @@ const formatDate = (value, type) => {
         return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
       default:
         return objDate.toLocaleDateString('en-GB');
-    }
+    } 
+  } else if (value) {
+    return objDate.toLocaleDateString('en-Gb');
+  } else {
+    return new Date([]).toLocaleDateString('en-Gb');
   }
 };
 
@@ -356,17 +359,17 @@ const lookup = (value) => {
 };
 
 export {
+  candidateHasIssues,
+  formatCurrency,
   formatDate,
   formatEstimatedDate,
   formatNumber,
   formatNIN,
-  formatCurrency,
-  toHumanCase,
-  toCSV,
-  toYesNo,
   heldFeePaidJudicialRole,
   slugify,
-  candidateHasIssues,
+  toCSV,
+  toHumanCase,
+  toYesNo,
   showAlternative,
   lookup
 };
