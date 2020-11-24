@@ -26,11 +26,12 @@
     </div>
 
     <Table
+      ref="applicationsTable"
       data-key="id"
       :data="applications"
       :columns="[
         { title: 'Reference number', sort: 'referenceNumber', default: true },
-        { title: 'Name', sort: 'fullName' },
+        { title: 'Name', sort: 'personalDetails.fullName' },
         { title: 'Status' },
       ]"
       :search="['personalDetails.fullName']"
@@ -81,9 +82,10 @@ export default {
       return this.$route.params.status;
     },
   },
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: to.params.status });
-    next();
+  watch: {
+    status() {
+      this.$refs['applicationsTable'].reload();
+    },
   },
   methods: {
     flattenCurrentLegalRole(equalityAndDiversitySurvey) {

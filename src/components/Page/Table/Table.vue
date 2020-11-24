@@ -277,7 +277,9 @@ export default {
       }
       this.$emit('change', this.currentState);
     },
-
+    reload() {
+      this.$emit('change', this.currentState);
+    },
   },
 };
 </script>
