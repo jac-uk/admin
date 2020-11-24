@@ -1,26 +1,26 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import tableQuery from '@/helpers/tableQuery';
 
 export default {
   namespaced: true,
   actions: {
-    bindQueue: firestoreAction(({ bindFirestoreRef }) => {
-      const firestoreRef = firestore
+    bindQueue: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = firestore
         .collection('notifications')
-        .where('status', 'in', ['ready', 'failed'])
-        .orderBy('createdAt', 'desc');
+        .where('status', 'in', ['ready', 'failed']);
+      firestoreRef = tableQuery(state.queue, firestoreRef, params);
       return bindFirestoreRef('queue', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindQueue: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('queue');
     }),
-    bindSent: firestoreAction(({ bindFirestoreRef }) => {
-      const firestoreRef = firestore
+    bindSent: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = firestore
         .collection('notifications')
-        .where('status', '==', 'sent')
-        .orderBy('createdAt', 'desc')
-        .limit(200);
+        .where('status', '==', 'sent');
+      firestoreRef = tableQuery(state.queue, firestoreRef, params);
       return bindFirestoreRef('sent', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindSent: firestoreAction(({ unbindFirestoreRef }) => {
