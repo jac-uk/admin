@@ -98,7 +98,7 @@
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
+                {{ new Date(application.createdAt) | formatDate | showAlternative("Unknown") }}
               </h2>
             </div>
           </div>
