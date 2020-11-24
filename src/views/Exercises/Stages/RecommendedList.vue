@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Banner 
-      :message="message" 
-      status="success" 
+    <Banner
+      :message="message"
+      status="success"
     />
     <form>
       <div class="moj-page-header-actions">
@@ -14,15 +14,15 @@
         <div class="moj-page-header-actions__actions">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
-              <button  
-                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 :disabled="isButtonDisabled"
                 @click.prevent="moveBack()"
               >
                 Move back to ...
               </button>
-              <button 
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+              <button
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 :disabled="isButtonDisabled"
                 @click.prevent="setStatus()"
               >
@@ -32,18 +32,20 @@
           </div>
         </div>
       </div>
-      <Table 
+      <Table
         data-key="id"
-        :data="getPaginated"
+        :data="applicationRecords"
         :columns="[
           { title: 'Reference number' },
-          { title: 'Name' },
+          { title: 'Name', sort: 'candidate.fullName', default: true },
           { title: 'Issues' },
           { title: 'Status' },
           { title: 'EMP' }
         ]"
         multi-select
         :selection.sync="selectedItems"
+        :page-size="50"
+        @change="getTableData"
       >
         <template #row="{row}">
           <TableCell>
@@ -51,7 +53,7 @@
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
             >
               {{ row.application.referenceNumber }}
-            </RouterLink> 
+            </RouterLink>
           </TableCell>
           <TableCell>
             <RouterLink
@@ -65,33 +67,28 @@
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
       </Table>
-      <Pagination 
-        :high-index="numberOfPages"
-        @pageChanged="updatePage($event)"
-      />   
+      <p v-if="!applicationRecords.length">
+        No applications found.
+      </p>
     </form>
   </div>
 </template>
 
 <script>
 import Banner from '@/components/Page/Banner';
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
-import Pagination from '@/components/Page/Pagination';
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 
 export default {
   components: {
     Banner,
     Table,
     TableCell,
-    Pagination,
   },
   data() {
     return {
       message: null,
       selectedItems: [],
-      page: 1,
-      pageSize: 25,
     };
   },
   computed: {
@@ -109,30 +106,13 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-    numberOfPages() {
-      return Math.ceil(this.totalApplicationRecords / this.pageSize);
-    },
-    getPaginated() {
-      if (this.numberOfPages){
-        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
-
-        const sliceFrom = ((this.page - 1) * this.pageSize);
-        const sliceTo = sliceFrom + this.pageSize; 
-        const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
-
-        return sliced;
-      } else {
-        return this.applicationRecords;
-      }
-    },
   },
   async created() {
-    this.$store.dispatch('stageRecommended/bind', { exerciseId: this.exercise.id });
     this.message = await this.$store.dispatch('stageRecommended/getMessages');
   },
   methods: {
     checkForm() {
-      
+
     },
     moveBack() {
       this.$store.dispatch('stageRecommended/storeItems', { items: this.selectedItems });
@@ -142,8 +122,14 @@ export default {
       this.$store.dispatch('stageRecommended/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-recommended-edit' });
     },
-    updatePage(pageChanged){
-      this.page = pageChanged;
+    getTableData(params) {
+      this.$store.dispatch(
+        'stageRecommended/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };
