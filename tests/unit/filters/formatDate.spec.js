@@ -8,7 +8,7 @@ describe('Format Date', () => {
       [[1,1,2003], new Date([1,1,2003]).toLocaleDateString('en-GB')],
       [1600000000000, new Date(1600000000000).toLocaleDateString('en-GB')], // epoch/UTC time gives number
     ];
-    
+
     it.each(validTypes)('when given %s returns %o', async (value, result) => {
       expect(formatDate(value)).toBe(result);
     });
@@ -26,18 +26,17 @@ describe('Format Date', () => {
       expect(formatDate(value, type)).toBe(result);
     });
   });
-
   describe('invalid date', () => {
     
     const invalidTypes = [
-      ['string'],
-      [null],
-      [undefined],
-      [[]],
+      ['string', 'string'],
+      [null, null],
+      [undefined, undefined],
+      [[], []],
     ];
     
-    it.each(invalidTypes)('when given %o', (value) => {
-      expect(formatDate(value)).toBe('Invalid Date');
+    it.each(invalidTypes)('when given %o', (value, result) => {
+      expect(formatDate(value)).toEqual(result);
     });
   });
 
