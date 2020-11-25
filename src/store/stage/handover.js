@@ -4,22 +4,22 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE } from '@/helpers/constants';
+import tableQuery from '@/helpers/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, status } ) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
       let firestoreRef = collectionRef
-        .where('exercise.id', '==', exerciseId)
+        .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.HANDOVER)
         .where('active', '==', true);
-
-      if (status) {
-        firestoreRef = firestoreRef.where('status', '==', status);
+      if (params.status) {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
       }
-
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -29,7 +29,7 @@ export default {
       const data = {
         stage: nextStage,
       };
-      
+
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {
@@ -38,7 +38,7 @@ export default {
       });
       await batch.commit();
 
-      let valueMessage = `Updated ${selectedItems.length} candidates`; 
+      let valueMessage = `Updated ${selectedItems.length} candidates`;
       valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       context.commit('message', valueMessage);
     },

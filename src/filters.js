@@ -307,6 +307,7 @@ const lookup = (value) => {
       'white-asian': 'White and Asian',
       'white-black-african': 'White and Black African',
       'white-black-caribbean': 'White and Black Caribbean',
+      'withdrawn': 'Withdrawn',
       'write': 'Write',
       // 'xxx': 'xxx',
     };
