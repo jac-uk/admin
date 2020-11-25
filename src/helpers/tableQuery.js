@@ -18,7 +18,7 @@ const search = (searchValue) => {
 const nextChar = (c) => String.fromCharCode(c.charCodeAt(0) + 1);
 
 const getValueAtObjectPath = (object, path) => {
-  if (path.indexOf('.') >= 0) {
+  if (path && path.indexOf('.') >= 0) {
     let currentPath = path.substring(0, path.indexOf('.'));
     let remainingPath = path.substring(path.indexOf('.') + 1);
     let valueAtPath = object[currentPath];

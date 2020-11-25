@@ -2,7 +2,7 @@
   <SearchFilter :terms="terms" />
 </template>
 <script>
-import SearchFilter from '@/components/SearchFilter';
+import SearchFilter from '@/components/Filter/SearchFilter';
 
 export default {
   components: {

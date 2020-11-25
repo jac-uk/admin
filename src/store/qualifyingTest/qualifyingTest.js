@@ -4,6 +4,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { QUALIFYING_TEST } from '@/helpers/constants';
+import tableQuery from '@/helpers/tableQuery';
 
 const collection = firestore.collection('qualifyingTests');
 
@@ -17,11 +18,10 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    bindQTs: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection
-        .where('vacancy.id', '==', id)
-        .orderBy('title')
-        .orderBy('startDate');
+    bindQTs: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = collection
+        .where('vacancy.id', '==', params.exerciseId);
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindQTs: firestoreAction(({ unbindFirestoreRef }) => {

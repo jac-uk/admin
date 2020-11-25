@@ -1,15 +1,11 @@
 <template>
   <div>
     <div>
-      <button
-        class="govuk-button govuk-button--secondary"
-        @click="toggleTab"
-      >
-        {{ (showTab ? "Hide filters" : "Show filters") }}
-      </button>
-      <!-- <div v-if="numOfFilters">
-        {{ numOfFilters }}
-      </div> -->
+      <FilterButton 
+        :num-of-filters="numOfFilters"
+        :show-tab="showTab"
+        @toggle-tab="toggleTab"
+      />
     </div>
 
     <transition name="slide">
@@ -82,12 +78,13 @@
           <hr>
           <button
             class="govuk-button govuk-!-margin-2 govuk-button--secondary"
-            :disabled="selected.length ? false : true"
+            :disabled="!anySelected"
           >
             Apply
           </button>
           <button
             class="govuk-button govuk-!-margin-2 govuk-button--secondary"
+            @click.prevent="clearAll"
             @click="toggleTab"
           >
             Cancel
@@ -103,6 +100,7 @@ import CheckboxGroup from '@/components/Form/CheckboxGroup';
 import CheckboxItem from '@/components/Form/CheckboxItem';
 import TextField from '@/components/Form/TextField';
 import DateInput from '@/components/Form/DateInput';
+import FilterButton from '@/components/Filter/FilterButton';
 
 export default {
   components: {
@@ -110,6 +108,7 @@ export default {
     CheckboxItem,
     TextField,
     DateInput,
+    FilterButton,
   },
   props: {
     terms: {

@@ -5,6 +5,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
 import { lookup } from '@/filters';
+import tableQuery from '@/helpers/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -22,7 +23,7 @@ export default {
 
       // situational-judgement-qualifying-test || critical-analysis-qualifying-test
       if (
-        arrShortlistingMethods.includes(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) || 
+        arrShortlistingMethods.includes(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) ||
         arrShortlistingMethods.includes(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST)
       ) {
         arrToReturn.push(APPLICATION_STATUS.SUBMITTED_FIRST_TEST);
@@ -38,7 +39,7 @@ export default {
       }
 
       if (
-        arrShortlistingMethods.includes(SHORTLISTING.NAME_BLIND_PAPER_SIFT) || 
+        arrShortlistingMethods.includes(SHORTLISTING.NAME_BLIND_PAPER_SIFT) ||
         arrShortlistingMethods.includes(SHORTLISTING.PAPER_SIFT)
       ) {
         arrToReturn.push(APPLICATION_STATUS.PASSED_SIFT);
@@ -47,14 +48,14 @@ export default {
       }
 
       if (
-        arrShortlistingMethods.includes(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) || 
+        arrShortlistingMethods.includes(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) ||
         arrShortlistingMethods.includes(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) ||
         arrShortlistingMethods.includes(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST)
       ) {
         arrToReturn.push(APPLICATION_STATUS.NO_TEST_SUBMITTED);
         arrToReturn.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);
       }
-      
+
       // ALL SUBGROUPS
       arrToReturn.push(APPLICATION_STATUS.WITHDREW_APPLICATION);
 
@@ -69,12 +70,12 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      const firestoreRef = collectionRef
-        .where('exercise.id', '==', exerciseId)
+    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+      let firestoreRef = collectionRef
+        .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
-
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -84,11 +85,11 @@ export default {
       const stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
-      
+
       const data = {
         stage: stageValue,
       };
-      
+
       if (status) {
         data['status'] = status;
       }
@@ -100,7 +101,7 @@ export default {
       if (empApplied != null) {
         data['flags.empApplied'] = empApplied;
       }
-      
+
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
       selectedItems.map( item => {
@@ -111,12 +112,12 @@ export default {
 
       if (status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
         selectedItems.map( async item => {
-          // call withdraw applicationstore 
+          // call withdraw applicationstore
           await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
         });
       }
-      
-      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+
+      let valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`;
       if (nextStage[0]) {
         valueMessage = `${valueMessage} and moved to '${data.stage}'`;
       }

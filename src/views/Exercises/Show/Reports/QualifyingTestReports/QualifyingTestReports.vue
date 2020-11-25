@@ -4,12 +4,13 @@
       Qualifying test reports
     </h2>
     <Table
-      v-if="hasData"
       data-key="id"
       :data="qualifyingTestReports"
       :columns="[
         { title: 'Title' },
       ]"
+      :page-size="50"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -46,22 +47,24 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTestReports() {
-      const qtList = this.$store.getters['qualifyingTestReports/data'];
-      return qtList;
-    },
-    hasData() {
-      return this.qualifyingTestReports && this.qualifyingTestReports.length > 0;
+      return this.$store.getters['qualifyingTestReports/data'];
     },
     exerciseId() {
       return this.$route.params.id;
     },
   },
-  async created() {
-    this.$store.dispatch('qualifyingTestReports/bind', { exerciseId: this.exerciseId } );
-  },
   methods: {
     btnCreate() {
       this.$router.push({ name: 'qualifying-test-report-create' });
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'qualifyingTestReports/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };

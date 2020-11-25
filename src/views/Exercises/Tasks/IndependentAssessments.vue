@@ -3,7 +3,7 @@
     <h1 class="govuk-heading-l">
       Independent Assessments
     </h1>
-    <div 
+    <div
       v-if="hasInitialisedAssessments"
       class="govuk-grid-row"
     >
@@ -52,7 +52,7 @@
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
-      <div 
+      <div
         v-if="exercise.independentAssessmentsHardLimitDate"
         class="govuk-summary-list__row"
       >
@@ -91,159 +91,128 @@
           Send reminders
         </ActionButton>
 
-        <table class="govuk-table">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header app-custom-class"
+        <Table
+          data-key="id"
+          :data="assessments"
+          :page-size="50"
+          :columns="[
+            { title: 'Reference number' },
+            { title: 'Candidate name', sort: 'candidate.fullName', default: true },
+            { title: 'Assessor' },
+            { title: 'Status' },
+            { title: 'Actions' },
+          ]"
+          :search="['candidate.fullName']"
+          @change="getTableData"
+        >
+          <template #row="{row}">
+            <TableCell>
+              <RouterLink
+                class="govuk-link"
+                :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
               >
-                Reference number
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header app-custom-class"
+                {{ row.application.referenceNumber }}
+              </RouterLink>
+            </TableCell>
+            <TableCell>
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
               >
-                Candidate name
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header app-custom-class"
+                {{ row.candidate.fullName }}
+              </RouterLink>
+            </TableCell>
+            <TableCell>
+              <a
+                :href="`mailto:${row.assessor.email}`"
+                class="govuk-link govuk-link--no-visited-state"
+                target="_blank"
               >
-                Assessor
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header app-custom-class"
+                {{ row.assessor.fullName }}
+              </a>
+            </TableCell>
+            <TableCell>
+              {{ row.status | lookup }}
+              <strong
+                v-if="lateIASubmission(row)"
+                class="govuk-tag govuk-tag--red"
               >
-                Status
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header app-custom-class"
-              >
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr
-              v-for="assessment in assessments"
-              :key="assessment.id"
-              class="govuk-table__row"
-            >
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: assessment.application.id }}"
+                Late
+              </strong>
+            </TableCell>
+            <TableCell>
+              <div class="moj-button-menu">
+                <div
+                  v-if="!hasStartedSending"
+                  class="moj-button-menu__wrapper"
                 >
-                  {{ assessment.application.referenceNumber }}
-                </RouterLink>
-              </th>
-              <td class="govuk-table__cell">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: assessment.candidate.id } }"
-                >
-                  {{ assessment.candidate.fullName }}
-                </RouterLink>
-              </td>
-              <td class="govuk-table__cell">
-                <a
-                  :href="`mailto:${assessment.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ assessment.assessor.fullName }}
-                </a>
-              </td>
-              <td class="govuk-table__cell">
-                {{ assessment.status | lookup }}
-                <strong
-                  v-if="lateIASubmission(assessment)"
-                  class="govuk-tag govuk-tag--red"
-                >
-                  Late
-                </strong>
-              </td>
-              <td
-                class="govuk-table__cell govuk-!-padding-top-0"
-              >
-                <div class="moj-button-menu">
-                  <div
-                    v-if="!hasStartedSending"
-                    class="moj-button-menu__wrapper"
+                  <ActionButton
+                    class="moj-button-menu__item"
+                    @click="testRequest(row.id)"
                   >
-                    <ActionButton
-                      class="moj-button-menu__item"
-                      @click="testRequest(assessment.id)"
-                    >
-                      Test Request
-                    </ActionButton>
-                  </div>
-                  <div
-                    v-else-if="assessment.status === 'completed'"
-                    class="moj-button-menu__wrapper"
-                  >
-                    <DownloadLink
-                      v-if="assessment.fileRef && !unapprovedLateSubmission(assessment)"
-                      v-model="assessment.fileRef"
-                      class="moj-button-menu__item"
-                      :file-name="assessment.fileRef"
-                      :file-path="assessment.filePath"
-                      :exercise-id="exercise.id"
-                      :application-id="assessment.application.id"
-                      :assessor-id="assessment.assessor.id"
-                      title="Download assessment"
-                      type="button"
-                    />
-                    <ActionButton
-                      v-if="unapprovedLateSubmission(assessment)"
-                      class="moj-button-menu__item"
-                      type="primary"
-                      @click="approveLateSubmission(assessment)"
-                    >
-                      Approve late submission
-                    </ActionButton>
-                  </div>
-                  <div
-                    v-else
-                    class="moj-button-menu__wrapper"
-                  >
-                    <ActionButton
-                      class="moj-button-menu__item"
-                      @click="resendRequest(assessment.id)"
-                    >
-                      Request
-                    </ActionButton>
-
-                    <ActionButton
-                      class="moj-button-menu__item"
-                      @click="sendReminder(assessment.id)"
-                    >
-                      Reminder
-                    </ActionButton>
-                  </div>
+                    Test Request
+                  </ActionButton>
                 </div>
-                <button 
-                  class="govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
-                  @click="modalUploadOpen({ id: assessment.id, uuid: $store.state.auth.currentUser.uid, ...assessment })"
+                <div
+                  v-else-if="row.status === 'completed'"
+                  class="moj-button-menu__wrapper"
                 >
-                  {{ assessment.fileRef ? 'Replace' : 'Upload' }}
+                  <DownloadLink
+                    v-if="row.fileRef && !unapprovedLateSubmission(row)"
+                    v-model="row.fileRef"
+                    class="moj-button-menu__item"
+                    :file-name="row.fileRef"
+                    :file-path="row.filePath"
+                    :exercise-id="exercise.id"
+                    :application-id="row.application.id"
+                    :assessor-id="row.assessor.id"
+                    title="Download assessment"
+                    type="button"
+                  />
+                  <ActionButton
+                    v-if="unapprovedLateSubmission(row)"
+                    class="moj-button-menu__item"
+                    type="primary"
+                    @click="approveLateSubmission(row)"
+                  >
+                    Approve late submission
+                  </ActionButton>
+                </div>
+                <div
+                  v-else
+                  class="moj-button-menu__wrapper"
+                >
+                  <ActionButton
+                    class="moj-button-menu__item"
+                    @click="resendRequest(row.id)"
+                  >
+                    Request
+                  </ActionButton>
+
+                  <ActionButton
+                    class="moj-button-menu__item"
+                    @click="sendReminder(row.id)"
+                  >
+                    Reminder
+                  </ActionButton>
+                </div>
+              </div>
+              <div class="moj-button-menu__wrapper">
+                <button
+                  class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
+                  @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
+                >
+                  {{ row.fileRef ? 'Replace' : 'Upload' }}
                 </button>
-                <br>
-                <a 
-                  v-if="onStaging"
-                  target="_blank"
-                  :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${assessment.assessor.email}&ref=assessments/${assessment.id}`"
-                  class="govuk-link"
-                >Test the assessments app</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>      
+              </div>
+              <a
+                v-if="onStaging"
+                target="_blank"
+                :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
+                class="govuk-link"
+              >Test the assessments app</a>
+            </TableCell>
+          </template>
+        </Table>
       </div>
       <div v-else>
         <select
@@ -256,20 +225,20 @@
           </option>
           <option
             v-if="hasApplicationRecordsReview"
-            value="review" 
+            value="review"
           >
             Review ({{ exercise.applicationRecords.review }})
           </option>
           <option
             v-if="hasApplicationsRecordsShortlisted"
-            value="shortlisted" 
+            value="shortlisted"
           >
             Shortlisted ({{ exercise.applicationRecords.shortlisted }})
           </option>
 
           <option
             v-if="hasApplicationsRecordsSelected"
-            value="selected" 
+            value="selected"
           >
             Selected ({{ exercise.applicationRecords.selected }})
           </option>
@@ -285,18 +254,18 @@
       </div>
     </div>
     <div v-else>
-      <Banner 
+      <Banner
         :message="warningMessage"
         status="warning"
       />
     </div>
 
-    <Modal 
+    <Modal
       ref="modalRef"
     >
-      <component 
-        :is="`UploadAssessment`" 
-        v-bind="uploadAsssessmentProps" 
+      <component
+        :is="`UploadAssessment`"
+        v-bind="uploadAsssessmentProps"
         @close="modalUploadClose"
       />
     </Modal>
@@ -306,6 +275,8 @@
 <script>
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@/helpers/date';
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
 import Banner from '@/components/Page/Banner';
@@ -314,6 +285,8 @@ import UploadAssessment from '@/components/Modal/views/UploadAssessment';
 
 export default {
   components: {
+    Table,
+    TableCell,
     ActionButton,
     Banner,
     DownloadLink,
@@ -350,14 +323,14 @@ export default {
     assessmentsSent() {
       if (this.exercise.assessments && this.exercise.assessments.sent){
         return this.exercise.assessments.sent;
-      } 
+      }
 
       return 0;
     },
     assessmentsCompleted() {
       if (this.exercise.assessments && this.exercise.assessments.completed){
         return this.exercise.assessments.completed;
-      } 
+      }
 
       return 0;
     },
@@ -413,9 +386,6 @@ export default {
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
     },
   },
-  created() {
-    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
-  },
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
     next();
@@ -451,7 +421,7 @@ export default {
         return true;
       }
 
-      // Has timestamp, submitted and submitted late 
+      // Has timestamp, submitted and submitted late
       if (assessment.submittedDate && assessment.status == 'completed' && isDateGreaterThan(assessment.submittedDate, assessment.dueDate)){
         return true;
       }
@@ -478,6 +448,15 @@ export default {
     },
     modalUploadClose() {
       this.$refs.modalRef.closeModal();
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'assessments/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };
