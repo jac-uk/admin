@@ -1,20 +1,18 @@
-import { shallowMount } from '@vue/test-utils';
+import { createTestSubject } from '../helpers';
 import Warning from '@/components/Warning';
-
-const createTestSubject = (propsData) => {
-  return shallowMount(Warning, {
-      propsData: {
-      ...propsData,
-      },
-  });
-};
 
 describe('components/Warning', () => {
   let wrapper;
   const testMessage = 'This is a test message';
 
   beforeEach(() => {
-    wrapper = createTestSubject({ message: testMessage });
+    wrapper = createTestSubject(Warning, { 
+      propsData: {
+        message: testMessage,
+      },
+      stubs: [],
+      mocks: [],
+    });
   }); 
 
   it('renders the component', () => {
