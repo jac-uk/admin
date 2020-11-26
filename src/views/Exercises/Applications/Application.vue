@@ -559,7 +559,7 @@
                       v-if="application.equalityAndDiversitySurvey.gender == 'other-gender'"
                       class="govuk-body govuk-!-margin-bottom-0"
                     >
-                      {{ application.equalityAndDiversitySurvey.otherGenderDetails | lookup | toYesNo }}
+                      {{ application.equalityAndDiversitySurvey.otherGenderDetails }}
                     </p>
                   </dd>
                 </div>
