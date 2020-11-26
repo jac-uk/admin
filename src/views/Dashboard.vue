@@ -43,16 +43,19 @@
     <Table
       data-key="id"
       :data="records"
+      :page-size="50"
       :columns="[
-        { title: 'Reference number' },
-        { title: 'Name' },
-        { title: 'Open date' },
-        { title: 'Close date' },
+        { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
+        { title: 'Name', sort: 'name' },
+        { title: 'Open date', sort: 'applicationOpenDate' },
+        { title: 'Close date', sort: 'applicationCloseDate' },
         {
           title: 'Applications count',
+          sort: 'applicationsCount',
           class: 'govuk-table__header--numeric'
         },
       ]"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -107,9 +110,6 @@ export default {
     'records',
     'isFavourites',
   ]),
-  created() {
-    this.$store.dispatch('exerciseCollection/bind');
-  },
   destroyed() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
@@ -119,6 +119,12 @@ export default {
     },
     showAll() {
       this.$store.dispatch('exerciseCollection/showAll');
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'exerciseCollection/bind',
+        params,
+      );
     },
   },
 };

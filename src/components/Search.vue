@@ -1,22 +1,22 @@
 <template>
   <div class="moj-search">
-    <form 
+    <form
       autocomplete="off"
     >
       <div class="govuk-form-group">
-        <input 
-          id="search" 
+        <input
+          id="search"
           v-model="search"
-          class="govuk-input moj-search__input " 
-          name="search" 
-          type="search" 
+          class="govuk-input moj-search__input "
+          name="search"
+          type="search"
           aria-describedby="search-hint"
-          placeholder="Search candidate names"
+          placeholder="Search candidate names - enter first few letters of candidate name (case sensitive)"
           @keyup="startSearch"
         >
       </div>
     </form>
-  </div> 
+  </div>
 </template>
 
 <script>

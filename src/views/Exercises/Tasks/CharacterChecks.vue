@@ -74,11 +74,13 @@
       :data="applicationRecords"
       :columns="[
         { title: 'Reference number' },
-        { title: 'Name' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Status' }
       ]"
       multi-select
       :selection.sync="selectedItems"
+      :page-size="50"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>{{ row.application.referenceNumber }}</TableCell>
@@ -131,8 +133,6 @@ export default {
   async created() {
     if (! (this.exercise.characterChecks && typeof this.exercise.characterChecks.HMRC === 'boolean')) {
       this.$router.push({ name: 'exercise-tasks-character-checks-edit' });
-    } else {
-      this.$store.dispatch('stageShortlisted/bind', { exerciseId: this.exercise.id });
     }
   },
   methods: {
@@ -155,6 +155,15 @@ export default {
     setMessage(message, status = 'success') {
       this.status = status;
       this.message = message;
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'stageShortlisted/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };

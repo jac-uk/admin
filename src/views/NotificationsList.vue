@@ -9,7 +9,7 @@
         Notifications
       </h1>
 
-      <button 
+      <button
         v-if="isProcessing"
         class="govuk-button"
         @click="stopProcessing()"
@@ -17,7 +17,7 @@
         Stop
       </button>
 
-      <button 
+      <button
         v-else
         class="govuk-button"
         @click="startProcessing()"
@@ -30,128 +30,78 @@
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
-    
-    <table 
-      v-if="activeTab === 'queue' && notificationsQueue.length"
-      class="govuk-table"
+
+    <Table
+      v-show="activeTab == 'queue'"
+      data-key="id"
+      :data="notificationsQueue"
+      :page-size="50"
+      :columns="[
+        { title: 'Created', sort: 'createdAt', direction: 'desc', default: true },
+        { title: 'Template' },
+        { title: 'To' },
+        { title: 'Status' },
+      ]"
+      @change="getQueueData"
     >
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Created
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Template
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            To
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Status
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr
-          v-for="notification in notificationsQueue"
-          :key="notification.id"
-          class="govuk-table__row"
-        >
-          <td class="govuk-table__cell">
-            {{ notification.createdAt | formatDate('datetime') }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.template.name }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.email }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.status }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <template #row="{row}">
+        <TableCell>
+          {{ row.createdAt | formatDate('datetime') }}
+        </TableCell>
+        <TableCell>
+          {{ row.template.name }}
+        </TableCell>
+        <TableCell>
+          {{ row.email }}
+        </TableCell>
+        <TableCell>
+          {{ row.status }}
+        </TableCell>
+      </template>
+    </Table>
 
     <p v-if="activeTab === 'queue' && !notificationsQueue.length">
       No notifications in queue
     </p>
 
-    <table 
-      v-if="activeTab === 'sent'"
-      class="govuk-table"
+    <Table
+      v-show="activeTab == 'sent'"
+      data-key="id"
+      :data="notificationsSent"
+      :page-size="50"
+      :columns="[
+        { title: 'Created', sort: 'createdAt' },
+        { title: 'Sent', sort: 'sentAt', direction: 'desc', default: true },
+        { title: 'Template' },
+        { title: 'To' },
+      ]"
+      @change="getSentData"
     >
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Created
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Sent
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            Template
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header"
-          >
-            To
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr
-          v-for="notification in notificationsSent"
-          :key="notification.id"
-          class="govuk-table__row"
-        >
-          <td class="govuk-table__cell">
-            {{ notification.createdAt | formatDate('datetime') }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.sentAt | formatDate('datetime') }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.template.name }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ notification.email }}
-            <span v-if="notification.email != notification.sentTo">({{ notification.sentTo }})</span>            
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <template #row="{row}">
+        <TableCell>
+          {{ row.createdAt | formatDate('datetime') }}
+        </TableCell>
+        <TableCell>
+          {{ row.sentAt | formatDate('datetime') }}
+        </TableCell>
+        <TableCell>
+          {{ row.template.name }}
+        </TableCell>
+        <TableCell>
+          {{ row.email }}
+          <span v-if="row.email != row.sentTo">({{ row.sentTo }})</span>
+        </TableCell>
+      </template>
+    </Table>
 
-    <div 
+    <div
       v-if="activeTab === 'settings'"
       class="govuk-grid-row"
     >
       <form @submit.prevent="validateAndSave">
         <div class="govuk-grid-column-two-thirds">
-          <ErrorSummary 
-            :errors="errors" 
+          <ErrorSummary
+            :errors="errors"
           />
 
           <TextField
@@ -182,7 +132,7 @@
             Yes - send emails to the intended recipient
           </Checkbox>
 
-          <button 
+          <button
             class="govuk-button"
             :disabled="!hasChanges"
           >
@@ -190,11 +140,13 @@
           </button>
         </div>
       </form>
-    </div>      
-  </div>  
+    </div>
+  </div>
 </template>
 
 <script>
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 import TabsList from '@/components/Page/TabsList';
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
@@ -203,6 +155,8 @@ import Checkbox from '@/components/Form/Checkbox';
 
 export default {
   components: {
+    Table,
+    TableCell,
     TabsList,
     ErrorSummary,
     TextField,
@@ -221,14 +175,10 @@ export default {
   },
   computed: {
     tabs(){
-      let queueTitle = 'Queue';
-      if (this.notificationsQueue.length){
-        queueTitle += ` (${this.notificationsQueue.length})`;
-      }
       return [
         {
           ref: 'queue',
-          title: queueTitle,
+          title: 'Queue',
         },
         {
           ref: 'sent',
@@ -246,12 +196,6 @@ export default {
     notificationsSent() {
       return this.$store.state.notifications.sent;
     },
-    showingQueue() {
-      return this.currentView === 'queue';
-    },
-    showingSent() {
-      return this.currentView === 'sent';
-    },
     notificationsSettings() {
       return this.$store.getters['services/getNotificationSettings'];
     },
@@ -267,8 +211,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('notifications/bindQueue');
-    this.$store.dispatch('notifications/bindSent');
     if (this.notificationsSettings) {
       this.formData.delayInMinutes = this.notificationsSettings.delayInMinutes;
       this.formData.defaultMailbox = this.notificationsSettings.defaultMailbox;
@@ -284,6 +226,18 @@ export default {
     },
     async save() {
       await this.$store.dispatch('services/saveNotificationsSettings', this.formData);
+    },
+    getQueueData(params) {
+      this.$store.dispatch(
+        'notifications/bindQueue',
+        params,
+      );
+    },
+    getSentData(params) {
+      this.$store.dispatch(
+        'notifications/bindSent',
+        params,
+      );
     },
   },
 };
