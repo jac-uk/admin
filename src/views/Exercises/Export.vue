@@ -7,6 +7,7 @@
       >
         Export Exercise Data
       </h1>
+      <p>Exercises selected: {{ selectedItems.length }}</p>
       <form @submit.prevent="validateAndSave">
         <ErrorSummary
           :errors="errors"
@@ -23,6 +24,8 @@
 import Form from '@/components/Form/Form';
 import ErrorSummary from '@/components/Form/ErrorSummary';
 import BackLink from '@/components/BackLink';
+import { functions } from '@/firebase';
+import { downloadXLSX } from '@/helpers/export';
 
 export default {
   components: {
@@ -42,7 +45,26 @@ export default {
   },
   methods: {
     async save() {
-      console.log('download data', this.selectedItems);
+      const response = await functions.httpsCallable('exportExerciseData')({ exerciseIds: this.selectedItems });
+      const data = response.data;
+      const xlsxData = [];
+      for (let i = 0, len = data.rows.length; i < len; ++i) {
+        const row = [];
+        for (let j = 0, lenJ = data.columns.length; j < lenJ; ++j) {
+          row.push(data.rows[i][data.columns[j].ref]);
+        }
+        xlsxData.push(row);
+      }
+      const xlsxHeaders = data.columns.map(column => column.title);
+      xlsxData.unshift(xlsxHeaders);
+      downloadXLSX(
+        xlsxData,
+        {
+          title: 'Exercise export',
+          sheetName: 'Exercise data',
+          fileName: 'exercise-data.xlsx',
+        }
+      );
     },
   },
 };
