@@ -51,7 +51,7 @@
       class="edit-field"
     >
       <TextField
-        v-if="isText || isEmail"
+        v-if="isText || isEmail || isRoute"
         :id="`editable-field-${id}`"
         v-model="localField"
       />
@@ -94,7 +94,7 @@ export default {
       default: 'value',
     },
     value: {
-      type: [String, Date, Number],
+      type: [String, Date, Number, Object],
       default: '',
     },
     type: {
