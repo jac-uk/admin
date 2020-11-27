@@ -30,8 +30,8 @@
       data-key="id"
       :data="applications"
       :columns="[
-        { title: 'Reference number', sort: 'referenceNumber', default: true },
-        { title: 'Name', sort: 'personalDetails.fullName' },
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'personalDetails.fullName', default: true },
         { title: 'Status' },
       ]"
       :search="['personalDetails.fullName']"

@@ -98,20 +98,6 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-    selectAll: {
-      get: function () {
-        return this.applicationRecords ? this.selectedItems.length == this.applicationRecords.length : false;
-      },
-      set: function (value) {
-        const selectedItems = [];
-        if (value) {
-          this.applicationRecords.forEach((item) => {
-            selectedItems.push(item.id);
-          });
-        }
-        this.selectedItems = selectedItems;
-      },
-    },
   },
   async created() {
     this.message = await this.$store.dispatch('stageReview/getMessages');

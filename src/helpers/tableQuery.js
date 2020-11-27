@@ -36,45 +36,47 @@ const getValueAtObjectPath = (object, path) => {
 
 const tableQuery = (data, ref, params) => {
   let queryRef = ref;
-  let orderBy = params.orderBy;
-  if (params.searchTerm) {
-    const returnSearch = search(params.searchTerm);
-    if (returnSearch) {
-      queryRef = queryRef
-        .where(params.search[0], '>=', returnSearch.value1)
-        .where(params.search[0], '<', returnSearch.value2)
-        .orderBy(params.search[0], 'asc');
-      orderBy = params.search[0];
+  if (params) {
+    let orderBy = params.orderBy;
+    if (params.searchTerm) {
+      const returnSearch = search(params.searchTerm);
+      if (returnSearch) {
+        queryRef = queryRef
+          .where(params.search[0], '>=', returnSearch.value1)
+          .where(params.search[0], '<', returnSearch.value2)
+          .orderBy(params.search[0], 'asc');
+        orderBy = params.search[0];
+      }
+      // @TODO handle multiple search fields.
+      // N.B. this will involve multiple queries so may involve ditching vuexfire
+    } else if (params.orderBy) {
+      const direction = params.direction ? params.direction : 'asc';
+      queryRef = queryRef.orderBy(params.orderBy, direction);
     }
-    // @TODO handle multiple search fields.
-    // N.B. this will involve multiple queries so may involve ditching vuexfire
-  } else if (params.orderBy) {
-    const direction = params.direction ? params.direction : 'asc';
-    queryRef = queryRef.orderBy(params.orderBy, direction);
-  }
-  if (params.pageSize) {
-    if (params.pageChange > 0) {
-      // page forward
-      if (data.length) {
-        queryRef = queryRef
-          .startAfter(getValueAtObjectPath(data[data.length - 1], orderBy))
-          .limit(params.pageSize);
-        // @TODO use last document instead of single field value
+    if (params.pageSize) {
+      if (params.pageChange > 0) {
+        // page forward
+        if (data.length) {
+          queryRef = queryRef
+            .startAfter(getValueAtObjectPath(data[data.length - 1], orderBy))
+            .limit(params.pageSize);
+          // @TODO use last document instead of single field value
+        } else {
+          queryRef = queryRef.limit(params.pageSize);
+        }
+      } else if (params.pageChange < 0) {
+        // page backward
+        if (data.length) {
+          queryRef = queryRef
+            .endBefore(getValueAtObjectPath(data[0], orderBy))
+            .limitToLast(params.pageSize);
+          // @TODO use first document instead of single field value
+        } else {
+          queryRef = queryRef.limit(params.pageSize);
+        }
       } else {
         queryRef = queryRef.limit(params.pageSize);
       }
-    } else if (params.pageChange < 0) {
-      // page backward
-      if (data.length) {
-        queryRef = queryRef
-          .endBefore(getValueAtObjectPath(data[0], orderBy))
-          .limitToLast(params.pageSize);
-        // @TODO use first document instead of single field value
-      } else {
-        queryRef = queryRef.limit(params.pageSize);
-      }
-    } else {
-      queryRef = queryRef.limit(params.pageSize);
     }
   }
   return queryRef;

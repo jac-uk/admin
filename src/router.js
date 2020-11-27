@@ -106,6 +106,7 @@ import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
 
 import Dashboard from '@/views/Dashboard';
+import ExercisesExport from '@/views/Exercises/Export';
 import SignIn from '@/views/SignIn';
 import NotificationsList from '@/views/NotificationsList';
 
@@ -146,6 +147,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Create An Exercise',
+      },
+    },
+    {
+      path: '/exercises/export',
+      name: 'exercises-export',
+      component: ExercisesExport,
+      meta: {
+        requiresAuth: true,
+        title: 'Exercises Export',
       },
     },
     // sandbox component VV
