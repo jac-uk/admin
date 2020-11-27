@@ -18,7 +18,10 @@ jobs:
       - checkout
       - run:
           name: 'Setup'
-          command: npm ci
+          command: |
+            npm config set registry https://npm.pkg.github.com/jac-uk
+            echo "//npm.pkg.github.com/:_authToken=${DEVELOP_GITHUB_PACKAGES_TOKEN}" > ~/.npmrc
+            npm ci
       - persist_to_workspace:
           root: .
           paths:
@@ -54,7 +57,7 @@ jobs:
           name: 'Deploy to production'
           command: |
             npm run build-production
-            node_modules/.bin/firebase target:apply hosting production-admin-app jac-apply-admin-production --project production 
+            node_modules/.bin/firebase target:apply hosting production-admin-app jac-apply-admin-production --project production
             node_modules/.bin/firebase deploy --force --token=$FIREBASE_DEPLOY_TOKEN --only hosting:production-admin-app --project production
 
   build-and-deploy-staging:
@@ -117,6 +120,6 @@ workflows:
             - test
           filters:
             branches:
-              only: 
+              only:
                 - master
                 - /hotfix/.*/
