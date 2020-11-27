@@ -7,12 +7,15 @@ const collection = firestore.collection('notes');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId }) => {
-      let firestoreRef;
+    bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId, applicationId }) => {
+      let firestoreRef = collection;
       if (candidateId) {
-        firestoreRef = collection
+        firestoreRef = firestoreRef
           .where('candidate.id', '==', candidateId)
           .orderBy('created', 'desc');
+      }
+      if (applicationId) {
+        firestoreRef = firestoreRef.where('applicationId', '==', applicationId);
       }
       if (firestoreRef) {
         await bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });

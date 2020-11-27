@@ -65,6 +65,10 @@ export default {
       type: String,
       default: '',
     },
+    applicationId: {
+      type: String,
+      default: '',
+    },
     title: {
       type: String,
       default: 'Notes',
@@ -97,6 +101,7 @@ export default {
   created() {
     const data = {};
     data.candidateId = this.candidateId || null;
+    data.applicationId = this.applicationId || null;
     this.$store.dispatch('notes/bind', data );
   },
   methods: {
@@ -106,6 +111,9 @@ export default {
         data.candidate = {
           id: this.candidateId || null,
         };
+      }
+      if (this.applicationId) {
+        data.applicationId = this.applicationId;
       }
       this.noteSelectedObj = data;
       this.notesAction = STEPS.new;
