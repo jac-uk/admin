@@ -69,6 +69,9 @@ const mockStore = {
       record: mockApplication,
     },
   },
+  getters: {
+    'application/data': () => mockApplication,
+  },
 };
 
 const mockRoute = {
