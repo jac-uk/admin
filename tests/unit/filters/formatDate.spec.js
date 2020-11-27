@@ -14,11 +14,11 @@ const testCases = [
   dateToday,
   dateArray,
   dateNum,
-]
+];
 const testCasesFirebases = [
   fireBaseTimestamp,
   mockFireBaseTimestamp,
-]
+];
 
 describe('Format Date', () => {
 
