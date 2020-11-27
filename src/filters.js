@@ -2,6 +2,9 @@ import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
   if (value !== null && value !== undefined) {
+    if (value._seconds) {
+      value = new Date(1e3 * value._seconds + value._nanoseconds / 1e6);
+    }
     if (value.seconds) {
       value = new Date(1e3 * value.seconds + value.nanoseconds / 1e6);
     }

@@ -4,20 +4,16 @@ import { firestore } from 'firebase';
 const dateToday = new Date();
 const dateArray = [1,1,2003];
 const dateNum = 1600000000000;
-const fireBaseTimestamp = new firestore.Timestamp.now(); 
-const mockFireBaseTimestamp = {
-  seconds: 1041379200,
-  nanoseconds: 0,
+const testCaseFirebase = new firestore.Timestamp.now(); 
+const mockTestCaseFirebase = {
+  _seconds: 1041379200,
+  _nanoseconds: 0,
 };
 
 const testCases = [
   dateToday,
   dateArray,
   dateNum,
-];
-const testCasesFirebases = [
-  fireBaseTimestamp,
-  mockFireBaseTimestamp,
 ];
 
 describe('Format Date', () => {
@@ -36,18 +32,50 @@ describe('Format Date', () => {
       expect(formatDate(input, type)).toBe(expected);
     });
   });
-  describe.each(testCasesFirebases)('valid test cases firebase', (testCaseFirebase) => {
-    it.each`
-    input               | type            | expected
-    ${testCaseFirebase} |${''}            |${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB')}
-    ${testCaseFirebase} |${null}          |${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB')}
-    ${testCaseFirebase} |${'long'}        |${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
-    ${testCaseFirebase} |${'month'}       |${`${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleString('en-GB', { month: 'long' })} ${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).getUTCFullYear()}`}
-    ${testCaseFirebase} |${undefined}     |${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB')}
-    ${testCaseFirebase} |${'datetime'}    |${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleString('en-GB')}
-    ${testCaseFirebase} |${'longdatetime'}|${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' })}
-    `('when given $input with $type returns $expected', ({ input, type, expected }) => {
-      expect(formatDate(input, type)).toBe(expected);
+  describe('valid test cases mocked firebase', () => {
+    it('when given firebase timestamp with \'\' returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, '')).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with null returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, null)).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with undefined returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, undefined)).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with \'long\' returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, 'long')).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }));
+    });
+    it('when given firebase timestamp with \'month\' returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, 'month')).toBe(`${new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleString('en-GB', { month: 'long' })} ${new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).getUTCFullYear()}`);
+    });
+    it('when given firebase timestamp with \'datetime\' returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, 'datetime')).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleString('en-GB'));
+    });
+    it('when given firebase timestamp with \'longdatetime\' returns today', () => {
+      expect(formatDate(mockTestCaseFirebase, 'longdatetime')).toBe(new Date(new Date(1e3 * mockTestCaseFirebase._seconds + mockTestCaseFirebase._nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }));
+    });
+  });
+  describe('valid test cases firebase', () => {
+    it('when given firebase timestamp with \'\' returns today', () => {
+      expect(formatDate(testCaseFirebase, '')).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with null returns today', () => {
+      expect(formatDate(testCaseFirebase, null)).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with undefined returns today', () => {
+      expect(formatDate(testCaseFirebase, undefined)).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB'));
+    });
+    it('when given firebase timestamp with \'long\' returns today', () => {
+      expect(formatDate(testCaseFirebase, 'long')).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }));
+    });
+    it('when given firebase timestamp with \'month\' returns today', () => {
+      expect(formatDate(testCaseFirebase, 'month')).toBe(`${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleString('en-GB', { month: 'long' })} ${new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).getUTCFullYear()}`);
+    });
+    it('when given firebase timestamp with \'datetime\' returns today', () => {
+      expect(formatDate(testCaseFirebase, 'datetime')).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleString('en-GB'));
+    });
+    it('when given firebase timestamp with \'longdatetime\' returns today', () => {
+      expect(formatDate(testCaseFirebase, 'longdatetime')).toBe(new Date(new Date(1e3 * testCaseFirebase.seconds + testCaseFirebase.nanoseconds / 1e6)).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }));
     });
   });
 
