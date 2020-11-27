@@ -5,6 +5,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 import { lookup } from '@/filters';
+import tableQuery from '@/helpers/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -22,12 +23,12 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId } ) => {
-      const firestoreRef = collectionRef
-        .where('exercise.id', '==', exerciseId)
+    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+      let firestoreRef = collectionRef
+        .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.RECOMMENDED)
         .where('active', '==', true);
-
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -43,7 +44,7 @@ export default {
       if (status) {
         data['status'] = status;
       }
-      
+
       if (empApplied != null){
         data['flags.empApplied'] = empApplied;
       }
@@ -55,12 +56,12 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
-      
+
       let valueMessage = '';
       if (status) {
-        valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`; 
+        valueMessage = `Updated ${selectedItems.length} candidates to '${lookup(status)}'`;
       } else {
-        valueMessage = `Updated ${selectedItems.length} candidates`; 
+        valueMessage = `Updated ${selectedItems.length} candidates`;
       }
       if (moveToNextStage) {
         valueMessage = `${valueMessage} and moved to '${nextStage}'`;

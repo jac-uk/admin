@@ -25,7 +25,7 @@
       :page-size="50"
       :columns="[
         { title: 'Name', sort: 'candidate.fullName', default: true },
-        { title: 'Status', sort: 'status' },
+        { title: 'Status' },
         { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
         { title: '' },
       ]"
