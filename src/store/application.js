@@ -3,6 +3,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import { STATUS } from '@/helpers/constants';
+import clone from 'clone';
 
 const collection = firestore.collection('applications');
 
@@ -87,5 +88,10 @@ export default {
   },
   state: {
     record: null,
+  },
+  getters: {
+    data: (state) => () => {
+      return clone(state.record);
+    },
   },
 };

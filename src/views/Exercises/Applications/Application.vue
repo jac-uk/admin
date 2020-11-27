@@ -1907,7 +1907,7 @@ export default {
       return this.$store.state.applications.records;
     },
     application() {
-      return this.$store.state.application.record;
+      return this.$store.getters['application/data']();
     },
     applicationId() {
       return this.$route.params.applicationId;
