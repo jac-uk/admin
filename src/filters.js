@@ -1,27 +1,34 @@
 import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
-  if (value) {
-    const objDate = new Date(Date.parse(value));
-
-    // If not a valid date
-    if (!(objDate instanceof Date)){
-      return null;
-    }
-
-    switch (type) {
-      case 'month':
-        return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;
-      case 'datetime':
-        return objDate.toLocaleString('en-GB');
-      case 'long':
-        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-      case 'longdatetime':
-        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
-      default:
-        return objDate.toLocaleDateString('en-GB');
-    }
-  }
+  if (!isNaN(new Date(value).valueOf()) && value !== null) {
+    if (!type) {
+      if (value instanceof Date) {
+        value = value.toLocaleDateString('en-GB');
+      } else if (value instanceof Array) {
+        value = new Date(value).toLocaleDateString('en-GB');
+      } else {
+        value = new Date(value).toLocaleDateString('en-GB');
+      } 
+    } else {
+      value = new Date(value);
+      switch (type) {
+        case 'month':
+          value = `${value.toLocaleString('en-GB', { month: 'long' })} ${value.getUTCFullYear()}`;
+          break;
+        case 'datetime':
+          value = value.toLocaleString('en-GB');
+          break;
+        case 'long':
+          value = value.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+          break;
+        case 'longdatetime':
+          value = value.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+          break;
+      } 
+    } 
+  } 
+  return value;
 };
 
 const formatEstimatedDate = (value) => {
@@ -362,17 +369,17 @@ const lookup = (value) => {
 };
 
 export {
+  candidateHasIssues,
+  formatCurrency,
   formatDate,
   formatEstimatedDate,
   formatNumber,
   formatNIN,
-  formatCurrency,
-  toHumanCase,
-  toCSV,
-  toYesNo,
   heldFeePaidJudicialRole,
   slugify,
-  candidateHasIssues,
+  toCSV,
+  toHumanCase,
+  toYesNo,
   showAlternative,
   lookup
 };

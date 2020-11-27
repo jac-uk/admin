@@ -166,7 +166,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Gender
+          Sex
         </dt>
         <dd class="govuk-summary-list__value">
           <p class="govuk-body govuk-!-margin-bottom-0">
@@ -183,7 +183,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Gender is the same as sex assigned at birth
+          Gender indentity same as sex registered at birth?
         </dt>
         <dd class="govuk-summary-list__value">
           {{ data.changedGender | lookup | toYesNo }}
@@ -276,7 +276,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          Participated in Pre-Application Judicial Education programme
+          Participated in Pre-Application Judicial Education Programme
         </dt>
         <dd class="govuk-summary-list__value">
           {{ data.hasTakenPAJE | lookup | toYesNo }}

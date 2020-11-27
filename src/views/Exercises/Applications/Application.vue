@@ -584,7 +584,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Gender
+                    Sex
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -604,7 +604,17 @@
                     Gender is the same as sex assigned at birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    <p
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    </p>
+                    <p
+                      v-if="application.equalityAndDiversitySurvey.changedGender === false"
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.genderIdentityDetails }}
+                    </p>
                   </dd>
                 </div>
 
@@ -653,7 +663,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Religion or faith
+                    Religion
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -694,7 +704,7 @@
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
-                    Participated in Pre-Application Judicial Education programme
+                    Participated in Pre-Application Judicial Education Programme
                   </dt>
                   <dd class="govuk-summary-list__value">
                     {{ application.equalityAndDiversitySurvey.hasTakenPAJE | lookup | toYesNo }}

@@ -31,14 +31,21 @@ export default {
       commit('updateFavourites', false);
       dispatch('bind');
     },
+    storeItems: (context, { items }) => {
+      context.commit('selectedItems', items);
+    },
   },
   mutations: {
     updateFavourites(state, isFavourites) {
       state.isFavourites = isFavourites;
     },
+    selectedItems(state, items) {
+      state.selectedItems = items;
+    },
   },
   state: {
     records: [],
     isFavourites: null,
+    selectedItems: [],
   },
 };
