@@ -11,7 +11,7 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    '/node_modules/',
+    '/node_modules/(?!@jac-uk)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
