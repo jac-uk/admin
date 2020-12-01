@@ -1921,7 +1921,7 @@ import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
-import Modal from '@jac-uk/jackit/components/Modal/Modal';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
