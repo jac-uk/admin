@@ -287,7 +287,10 @@
                 Character information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl 
+                v-if="application.characterInformation"
+                class="govuk-summary-list" 
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Has been cautioned or convicted of a criminal offence
@@ -415,6 +418,12 @@
                   </dd>
                 </div>
               </dl>
+              <div 
+                v-else 
+                class="govuk-body"
+              >
+                No information on applicant's Character yet
+              </div>
             </div>
 
             <div
@@ -427,7 +436,10 @@
                 Equality and diversity information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl 
+                v-if="application.equalityAndDiversitySurvey" 
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Agreed to share data
@@ -711,6 +723,12 @@
                   </dd>
                 </div>
               </dl>
+              <div 
+                v-else
+                class="govuk-body"
+              >
+                No information on applicant's Equality and diversity yet
+              </div>
             </div>
 
             <div
