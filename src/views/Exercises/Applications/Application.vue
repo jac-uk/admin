@@ -94,7 +94,7 @@
         </div>
 
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half">
+          <div class="govuk-grid-column-one-third">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
@@ -103,7 +103,7 @@
             </div>
           </div>
 
-          <div class="govuk-grid-column-one-half">
+          <div class="govuk-grid-column-one-third">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Submitted on</span>
               <h2
@@ -120,6 +120,41 @@
               </h2>
             </div>
           </div>
+
+          <div class="govuk-grid-column-one-third">
+            <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+              <div class="govuk-caption-m">
+                Extension
+                <button 
+                  v-if="application.dateExtension"
+                  @click="openModal('modalRefExtension')"
+                >
+                  Change
+                </button>
+              </div>
+              <h2 
+                v-if="application.dateExtension" 
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
+              </h2>
+              <button 
+                v-else 
+                @click="openModal('modalRefExtension')"
+              >
+                Give Extension
+              </button>
+            </div>
+          </div>
+          <Modal 
+            ref="modalRefExtension"
+          >
+            <component 
+              :is="`SubmissionExtension`"
+              v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
+              @close="closeModal('modalRefExtension')"
+            />
+          </Modal>
         </div>
 
         <TabsList
@@ -549,7 +584,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Gender
+                    Sex
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -569,7 +604,17 @@
                     Gender is the same as sex assigned at birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    <p
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    </p>
+                    <p
+                      v-if="application.equalityAndDiversitySurvey.changedGender === false"
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.genderIdentityDetails }}
+                    </p>
                   </dd>
                 </div>
 
@@ -618,7 +663,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Religion or faith
+                    Religion
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -659,7 +704,7 @@
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
-                    Participated in Pre-Application Judicial Education programme
+                    Participated in Pre-Application Judicial Education Programme
                   </dt>
                   <dd class="govuk-summary-list__value">
                     {{ application.equalityAndDiversitySurvey.hasTakenPAJE | lookup | toYesNo }}
@@ -1653,7 +1698,7 @@
               <component 
                 :is="`IndependentAssessorChange`" 
                 v-bind="assessorDetails"
-                @close="closeModal"
+                @close="closeModal('modalRef')"
               />
             </Modal>
 
@@ -1834,6 +1879,14 @@
           <div v-if="activeTab == 'agency'">
             <AgencyReport />
           </div>
+
+          <div v-if="activeTab == 'notes'">
+            <Notes 
+              title="Notes about the Application"
+              :candidate-id="application.userId"
+              :application-id="applicationId"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -1850,8 +1903,10 @@ import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
-import Modal from '@/components/Modal/Modal';
-import IndependentAssessorChange from '@/components/Modal/views/IndependentAssessorChange';
+import Modal from '@jac-uk/jackit/components/Modal/Modal';
+import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
+import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
+import Notes from '@/components/Notes/Notes';
 
 export default {
   components: {
@@ -1863,6 +1918,8 @@ export default {
     FileUpload,
     Modal,
     IndependentAssessorChange,
+    SubmissionExtension,
+    Notes,
   },
   data() {
     return {
@@ -1870,6 +1927,10 @@ export default {
         {
           ref: 'full',
           title: 'Full information',
+        },
+        {
+          ref: 'notes',
+          title: 'Notes',
         },
         {
           ref: 'panel',
@@ -1897,7 +1958,7 @@ export default {
       return this.$store.state.applications.records;
     },
     application() {
-      return this.$store.state.application.record;
+      return this.$store.getters['application/data']();
     },
     applicationId() {
       return this.$route.params.applicationId;
@@ -2198,13 +2259,13 @@ export default {
           title: this.application.secondAssessorTitle,
         };
       }
-      this.openModal();
+      this.openModal('modalRef');
     },
-    openModal(){
-      this.$refs.modalRef.openModal();
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
     },
-    closeModal() {
-      this.$refs.modalRef.closeModal();
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
     },
   },
 };
