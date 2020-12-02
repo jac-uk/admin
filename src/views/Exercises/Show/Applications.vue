@@ -184,8 +184,9 @@ export default {
         ...contacts,
       ];
     },
-    exportContacts() {
+    async exportContacts() {
       const title = 'Contacts';
+      await this.getTableData({});
       const data = this.gatherContacts();
 
       downloadXLSX(
@@ -198,7 +199,7 @@ export default {
       );
     },
     getTableData(params) {
-      this.$store.dispatch(
+      return this.$store.dispatch(
         'applications/bind',
         {
           exerciseId: this.exercise.id,
