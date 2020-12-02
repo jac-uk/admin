@@ -86,7 +86,9 @@ export default {
     },
   },
   methods: {
-    downloadResponses() {
+    async downloadResponses() {
+
+      await this.getTableData({});
 
       const headers = [
         'ID',
@@ -254,7 +256,7 @@ export default {
       return `${timeLimit} min`;
     },
     getTableData(params) {
-      this.$store.dispatch(
+      return this.$store.dispatch(
         'qualifyingTestResponses/bind',
         {
           qualifyingTestId: this.qualifyingTestId,
