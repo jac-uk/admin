@@ -125,31 +125,31 @@
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <div class="govuk-caption-m">
                 Extension
-                <button 
+                <button
                   v-if="application.dateExtension"
                   @click="openModal('modalRefExtension')"
                 >
                   Change
                 </button>
               </div>
-              <h2 
-                v-if="application.dateExtension" 
+              <h2
+                v-if="application.dateExtension"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
                 {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
               </h2>
-              <button 
-                v-else 
+              <button
+                v-else
                 @click="openModal('modalRefExtension')"
               >
                 Give Extension
               </button>
             </div>
           </div>
-          <Modal 
+          <Modal
             ref="modalRefExtension"
           >
-            <component 
+            <component
               :is="`SubmissionExtension`"
               v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
               @close="closeModal('modalRefExtension')"
@@ -1610,14 +1610,14 @@
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
                 Independent assessors
-              </h2> 
+              </h2>
 
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row text-right print-none button-right">
                   <dt class="govuk-summary-list__key" />
                   <dd class="govuk-summary-list__value">
-                    <button 
-                      class="govuk-button btn-unlock" 
+                    <button
+                      class="govuk-button btn-unlock"
                       @click="editAssessor(1)"
                     >
                       Edit
@@ -1664,8 +1664,8 @@
                 <div class="govuk-summary-list__row text-right print-none button-right">
                   <dt class="govuk-summary-list__key" />
                   <dd class="govuk-summary-list__value">
-                    <button 
-                      class="govuk-button btn-unlock" 
+                    <button
+                      class="govuk-button btn-unlock"
                       @click="editAssessor(2)"
                     >
                       Edit
@@ -1710,11 +1710,11 @@
               </dl>
             </div>
 
-            <Modal 
+            <Modal
               ref="modalRef"
             >
-              <component 
-                :is="`IndependentAssessorChange`" 
+              <component
+                :is="`IndependentAssessorChange`"
                 v-bind="assessorDetails"
                 @close="closeModal('modalRef')"
               />
@@ -1899,7 +1899,7 @@
           </div>
 
           <div v-if="activeTab == 'notes'">
-            <Notes 
+            <Notes
               title="Notes about the Application"
               :candidate-id="application.userId"
               :application-id="applicationId"
@@ -1921,7 +1921,7 @@ import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
-import Modal from '@jac-uk/jackit/components/Modal/Modal';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';

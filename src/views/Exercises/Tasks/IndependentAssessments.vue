@@ -280,7 +280,7 @@ import TableCell from '@/components/Page/Table/TableCell';
 import ActionButton from '@/components/ActionButton';
 import DownloadLink from '@/components/DownloadLink';
 import Banner from '@/components/Page/Banner';
-import Modal from '@jac-uk/jackit/components/Modal/Modal';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
 
 export default {
