@@ -287,7 +287,10 @@
                 Character information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="application.characterInformation"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Has been cautioned or convicted of a criminal offence
@@ -415,6 +418,12 @@
                   </dd>
                 </div>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information on applicant's Character yet
+              </div>
             </div>
 
             <div
@@ -427,7 +436,10 @@
                 Equality and diversity information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="application.equalityAndDiversitySurvey"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Agreed to share data
@@ -711,6 +723,12 @@
                   </dd>
                 </div>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information on applicant's Equality and diversity yet
+              </div>
             </div>
 
             <div
@@ -1591,7 +1609,7 @@
 
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
-                Independent assessors
+                Independent assessors {{ applicationId }}
               </h2>
 
               <dl class="govuk-summary-list">
@@ -2120,7 +2138,7 @@ export default {
       if (this.$route.hash) {  // @TODO move this to within TabsList component
         this.activeTab = this.$route.hash.substring(1);
       }
-      if (this.applicationId && (!this.application || this.application.id !== this.applicationId)) {
+      if (this.applicationId && (!this.application || this.$store.state.application.record.id !== this.applicationId)) {
         this.$store.dispatch('application/bind', this.applicationId);
       }
     },
@@ -2225,9 +2243,6 @@ export default {
       }
       return false;
     },
-    changeAssesorDetails(objChanged) {
-      this.$store.dispatch('application/update', { data: objChanged, id: this.applicationId });
-    },
     changeUserDetails(objChanged) {
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
@@ -2243,7 +2258,7 @@ export default {
       if (AssessorNr === 1) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
-          applicationId: this.application.id,
+          applicationId: this.applicationId,
           email: this.application.firstAssessorEmail,
           fullName: this.application.firstAssessorFullName,
           phone: this.application.firstAssessorPhone,
@@ -2252,7 +2267,7 @@ export default {
       } else if (AssessorNr === 2) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
-          applicationId: this.application.id,
+          applicationId: this.applicationId,
           email: this.application.secondAssessorEmail,
           fullName: this.application.secondAssessorFullName,
           phone: this.application.secondAssessorPhone,
