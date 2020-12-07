@@ -1,5 +1,5 @@
 import Downloads from '@/views/Exercises/Edit/Downloads';
-import RepeatableFields from '@/components/RepeatableFields';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

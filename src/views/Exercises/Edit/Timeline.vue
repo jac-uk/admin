@@ -328,13 +328,13 @@
   </div>
 </template>
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import DateInput from '@/components/Form/DateInput';
-import TimeInput from '@/components/Form/TimeInput';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay';
-import BackLink from '@/components/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 export default {
   components: {
     ErrorSummary,

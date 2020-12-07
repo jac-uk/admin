@@ -2,10 +2,10 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@/filters';
-import tableQuery from '@/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 

@@ -1912,12 +1912,12 @@
 </template>
 
 <script>
-import TabsList from '@/components/Page/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
-import DownloadLink from '@/components/DownloadLink';
-import EventRenderer from '@/components/Page/EventRenderer';
-import EditableField from '@/components/EditableField';
-import FileUpload from '@/components/Form/FileUpload';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
+import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';

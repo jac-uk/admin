@@ -81,10 +81,10 @@
 <script>
 import { mapState } from 'vuex';
 import * as filters from '@/filters';
-import { downloadXLSX } from '@/helpers/export';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import { APPLICATION_STATUS } from '@/helpers/constants';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {

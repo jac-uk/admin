@@ -100,10 +100,10 @@
 <script>
 import { functions } from '@/firebase';
 
-import Banner from '@/components/Page/Banner';
-import ActionButton from '@/components/ActionButton';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
 
 export default {
   components: {

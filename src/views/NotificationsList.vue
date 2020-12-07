@@ -145,13 +145,13 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import TabsList from '@/components/Page/TabsList';
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import Checkbox from '@/components/Form/Checkbox';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
 export default {
   components: {

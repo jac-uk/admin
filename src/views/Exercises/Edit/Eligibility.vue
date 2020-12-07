@@ -189,7 +189,7 @@
           <CheckboxItem
             value="none"
             label="None"
-          />          
+          />
         </CheckboxGroup>
 
         <CheckboxGroup
@@ -209,7 +209,7 @@
           <CheckboxItem
             value="none"
             label="None"
-          />          
+          />
         </CheckboxGroup>
 
         <details
@@ -298,15 +298,15 @@
 </template>
 
  <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
-import TextField from '@/components/Form/TextField';
-import BackLink from '@/components/BackLink';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
 import Membership from '@/components/RepeatableFields/Membership';
 

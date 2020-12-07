@@ -1,9 +1,9 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import tableQuery from '@/helpers/tableQuery';
-import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@jac-uk/jac-kit/helpers/constants';
 import { authorisedToReset } from '@/helpers/authUsers';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');

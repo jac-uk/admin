@@ -1,7 +1,7 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 
 const collection = firestore.collection('exercises');
@@ -33,7 +33,7 @@ export default {
         });
       }).then((newId) => {
         return dispatch('bind', newId);
-      }); 
+      });
     },
     save: async ({ state }, data) => {
       const id = state.record.id;
@@ -55,7 +55,7 @@ export default {
         state: 'approved',
       };
       await ref.update(data);
-    },   
+    },
     unlock: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -71,7 +71,7 @@ export default {
         published: true,
       };
       await ref.update(data);
-    },    
+    },
     unpublish: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -87,7 +87,7 @@ export default {
         favouriteOf: firebase.firestore.FieldValue.arrayUnion(userId),
       };
       await ref.update(data);
-    },    
+    },
     removeFromFavourites: async ({ state }, userId) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -95,7 +95,7 @@ export default {
         favouriteOf: firebase.firestore.FieldValue.arrayRemove(userId),
       };
       await ref.update(data);
-    },    
+    },
   },
   state: {
     record: null,

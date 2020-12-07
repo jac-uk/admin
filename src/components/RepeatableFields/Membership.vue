@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import { slugify } from '@/filters';
 
 export default {

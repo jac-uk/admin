@@ -19,16 +19,16 @@
     </RadioGroup>
     <button class="govuk-button">
       Save and continue
-    </button>      
+    </button>
   </form>
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import { DEFAULT, EXERCISE_STAGE } from '@/helpers/constants';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import { DEFAULT, EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
@@ -59,8 +59,8 @@ export default {
       let stageValue = EXERCISE_STAGE.HANDOVER;
       if (this.newSelectedStatus === DEFAULT.YES) {
         stageValue = EXERCISE_STAGE.RECOMMENDED;
-        await this.$store.dispatch('stageHandover/updateStatus', { 
-          applicationId: this.applicationId, 
+        await this.$store.dispatch('stageHandover/updateStatus', {
+          applicationId: this.applicationId,
           nextStage: stageValue,
         });
       }

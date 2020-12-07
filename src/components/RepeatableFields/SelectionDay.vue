@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import DateInput from '@/components/Form/DateInput';
-import TextField from '@/components/Form/TextField';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   name: 'SelectionDay',

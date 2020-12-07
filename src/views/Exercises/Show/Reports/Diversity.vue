@@ -7,12 +7,12 @@
           <h2 class="govuk-heading-l">
             Diversity
           </h2>
-          <span 
+          <span
             v-if="diversity"
             class="govuk-body govuk-!-font-size-14"
           >
             {{ diversity.createdAt | formatDate('longdatetime') }}
-          </span>          
+          </span>
         </div>
         <div
           class="moj-page-header-actions__actions float-right"
@@ -169,7 +169,7 @@
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].gender.other" />
               </td>
-            </tr>            
+            </tr>
           </tbody>
         </table>
 
@@ -207,7 +207,7 @@
             </tr>
             <tr class="govuk-table__row">
               <th
-                scope="row" 
+                scope="row"
                 class="govuk-table__header"
               >
                 White
@@ -218,7 +218,7 @@
             </tr>
             <tr class="govuk-table__row">
               <th
-                scope="row" 
+                scope="row"
                 class="govuk-table__header"
               >
                 Prefer not to say
@@ -312,7 +312,7 @@
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row">
               <th
-                scope="row" 
+                scope="row"
                 class="govuk-table__header"
               >
                 Barrister
@@ -352,9 +352,9 @@
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].professionalBackground.other" />
               </td>
-            </tr>            
+            </tr>
           </tbody>
-        </table> 
+        </table>
 
         <table class="govuk-table">
           <caption class="govuk-table__caption hidden">
@@ -378,7 +378,7 @@
           </thead>
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row">
-              <th 
+              <th
                 scope="row"
                 class="govuk-table__header"
               >
@@ -389,8 +389,8 @@
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <th 
-                scope="row" 
+              <th
+                scope="row"
                 class="govuk-table__header"
               >
                 First generation to attend University
@@ -408,9 +408,9 @@
 
 <script>
 import { firestore, functions } from '@/firebase';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { downloadXLSX } from '@/helpers/export';
-import TabsList from '@/components/Page/TabsList';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Stat from '@/components/Report/Stat';
 
 export default {
@@ -449,7 +449,7 @@ export default {
           title: 'Summary',
         },
       ],
-      activeTab: 'applied',      
+      activeTab: 'applied',
     };
   },
   computed: {
@@ -472,7 +472,7 @@ export default {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
       .onSnapshot((snap) => {
         this.diversity = vuexfireSerialize(snap);
-      });    
+      });
   },
   destroyed() {
     if (this.unsubscribe) {
@@ -502,7 +502,7 @@ export default {
             } else {
               columns.push(this.diversity[stage][report][stat].total);
             }
-          });          
+          });
           data.push(columns);
         });
       });

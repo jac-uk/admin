@@ -56,7 +56,7 @@
       required
     />
 
-    <Select 
+    <Select
       v-if="isSituationalJudgement"
       id="mostAppropriate"
       v-model="row.mostAppropriate"
@@ -66,9 +66,9 @@
       <option>
         Select an answer option
       </option>
-      <option 
-        v-for="(option, optionIndex) in row.options" 
-        :key="optionIndex" 
+      <option
+        v-for="(option, optionIndex) in row.options"
+        :key="optionIndex"
         :value="optionIndex"
       >
         {{ option.answer }}
@@ -85,9 +85,9 @@
       <option>
         Select an answer option
       </option>
-      <option 
-        v-for="(option, optionIndex) in row.options" 
-        :key="optionIndex" 
+      <option
+        v-for="(option, optionIndex) in row.options"
+        :key="optionIndex"
         :value="optionIndex"
       >
         {{ option.answer }}
@@ -104,9 +104,9 @@
       <option>
         Select an answer option
       </option>
-      <option 
-        v-for="(option, optionIndex) in row.options" 
-        :key="optionIndex" 
+      <option
+        v-for="(option, optionIndex) in row.options"
+        :key="optionIndex"
         :value="optionIndex"
       >
         {{ option.answer }}
@@ -119,14 +119,14 @@
 </template>
 
 <script>
-import Select from '@/components/Form/Select';
-import RepeatableFields from '@/components/RepeatableFields';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
 import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument';
 import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
 import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
 import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'QualifyingTestQuestion',
@@ -153,7 +153,7 @@ export default {
       required: false,
       type: String,
       default: '',
-    },        
+    },
   },
   data() {
     const defaults = {

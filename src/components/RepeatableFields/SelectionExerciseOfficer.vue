@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   components: {

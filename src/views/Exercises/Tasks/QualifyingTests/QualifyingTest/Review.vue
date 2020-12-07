@@ -269,7 +269,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   computed: {

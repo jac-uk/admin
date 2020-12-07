@@ -110,10 +110,10 @@
 
 <script>
 import { firestore, functions } from '@/firebase';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import tableQuery from '@/helpers/tableQuery';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 export default {
   components: {

@@ -1,4 +1,4 @@
-import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
+import { APPLICATION_STATUS, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 const formatDate = (value, type) => {
   if (value !== null && value !== undefined) {
@@ -26,10 +26,10 @@ const formatDate = (value, type) => {
           case 'longdatetime':
             value = value.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
             break;
-        } 
-      } 
-    } 
-  } 
+        }
+      }
+    }
+  }
   return value;
 };
 

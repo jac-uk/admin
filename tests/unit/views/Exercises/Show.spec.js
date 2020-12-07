@@ -1,9 +1,9 @@
 import Show from '@/views/Exercises/Show';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import Navigation from '@/components/Page/Navigation';
-import LoadingMessage from '@/components/LoadingMessage';
-import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
+import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

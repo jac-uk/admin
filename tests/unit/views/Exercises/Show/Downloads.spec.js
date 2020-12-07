@@ -1,5 +1,5 @@
 import Downloads from '@/views/Exercises/Show/Downloads';
-import DownloadLink from '@/components/DownloadLink';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

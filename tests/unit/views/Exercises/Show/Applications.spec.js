@@ -1,6 +1,6 @@
 import Applications from '@/views/Exercises/Show/Applications';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { downloadXLSX } from '@/helpers/export';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Vuex from 'vuex';
 
 const localVue = createLocalVue();

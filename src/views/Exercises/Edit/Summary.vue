@@ -84,13 +84,13 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import TextareaInput from '@/components/Form/TextareaInput';
-import DateInput from '@/components/Form/DateInput';
-import BackLink from '@/components/BackLink';
-import Checkbox from '@/components/Form/Checkbox';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
 export default {
   components: {

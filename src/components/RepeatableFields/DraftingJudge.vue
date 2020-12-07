@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TextField 
+    <TextField
       :id="`drafting_judge_${index}`"
       v-model="row.name"
       type="email"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   components: {

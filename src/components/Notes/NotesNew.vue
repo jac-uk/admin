@@ -13,15 +13,15 @@
         </h2>
       </legend>
       <ErrorSummary :errors="errors" />
-      <TextArea 
-        id="body" 
+      <TextArea
+        id="body"
         v-model="body"
         class="govuk-!-margin-top-7"
         label="Note"
         :value="body"
         required
       />
-      <button 
+      <button
         class="govuk-button"
       >
         Save and return
@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import TextArea from '@/components/Form/TextareaInput';
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 
 export default {
   components: {

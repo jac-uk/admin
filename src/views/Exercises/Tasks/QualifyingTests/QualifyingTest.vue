@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import LoadingMessage from '@/components/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 export default {
   components: {
     LoadingMessage,

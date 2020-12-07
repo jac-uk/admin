@@ -1,8 +1,8 @@
 import review from '@/store/stage/review';
-import { SHORTLISTING, APPLICATION_STATUS } from '@/helpers/constants';
+import { SHORTLISTING, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 describe('store/review', () => {
-  
+
   describe('getters', () => {
     const getters = review.getters;
       describe('availableStatuses', () => {

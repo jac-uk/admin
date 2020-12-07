@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import TextField from '@/components/Form/TextField';
-import BackLink from '@/components/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {
