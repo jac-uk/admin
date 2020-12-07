@@ -9,7 +9,7 @@ localVue.use(Vuex);
 localVue.filter('lookup', jest.fn());
 localVue.filter('showAlternative', jest.fn());
 
-jest.mock('@/helpers/export', () => {
+jest.mock('@jac-uk/jac-kit/helpers/export', () => {
   return {
     downloadXLSX: jest.fn(),
   };

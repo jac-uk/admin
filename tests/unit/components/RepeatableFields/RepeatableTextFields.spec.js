@@ -1,4 +1,4 @@
-import TextField from '@/components/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import { shallowMount } from '@vue/test-utils';
 
 // repeatable components
