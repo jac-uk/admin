@@ -1,4 +1,4 @@
-## Apply Admin
+## Admin
 
 [![CircleCI](https://circleci.com/gh/jac-uk/apply-admin.svg?style=svg)](https://circleci.com/gh/jac-uk/apply-admin)
 
@@ -41,19 +41,19 @@ npm run test
 npm run lint
 ```
 
-## Project deploy 
+## Project deploy
 
 By default `firebase deploy` deploys to `staging`.
 
 ### Manually deploy to production
 
-To manually deploy to production use either: 
+To manually deploy to production use either:
 
 ```
 firebase deploy --project production
 ```
 
-**or** 
+**or**
 
 ```
 firebase use production
@@ -67,7 +67,7 @@ Merging to `master` automatically triggers a deploy to `production`.
 Merging to `staging` automatically triggers a deploy to `staging`.
 
 
-### CircleCI configuration 
+### CircleCI configuration
 
 The CircleCI instance has to have a `FIREBASE_DEPLOY_TOKEN` set.  This is tied to a specific firebase user.  If that user leaves
 the organisation, the token will need to be reset.  To do so run `firebase login:ci` and follow the instructions there and then on
