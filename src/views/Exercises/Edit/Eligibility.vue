@@ -62,6 +62,7 @@
               id="yes-schedule-2-applies"
               v-model="exercise.appliedSchedule"
               label="Which Schedule applies?"
+              required
             >
               <RadioItem
                 value="schedule-2-d"

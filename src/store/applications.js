@@ -1,20 +1,23 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import tableQuery from '@/helpers/tableQuery';
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, status, characterChecks }) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
       let firestoreRef = firestore
         .collection('applications')
-        .where('exerciseId', '==', exerciseId);
-      if (status) {
-        firestoreRef = firestoreRef.where('status', '==', status);
+        .where('exerciseId', '==', params.exerciseId);
+      if (params.status) {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
       }
-      if (characterChecks) {
-        firestoreRef = firestoreRef.where('characterChecks.declaration', '==', characterChecks);
+      if (params.characterChecks) {
+        firestoreRef = firestoreRef.where('characterChecks.declaration', '==', params.characterChecks);
       }
+
+      firestoreRef = tableQuery(state.records, firestoreRef, params);
 
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),

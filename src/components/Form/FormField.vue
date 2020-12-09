@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import formatEmail from '@/helpers/Form/formatEmail';
+
 export default {
   props: {
     id: {
@@ -57,7 +59,7 @@ export default {
     hasError() {
       return this.errorMessage ? true :  false;
     },
-  }, 
+  },
   mounted: function () {
     this.$root.$on('validate', this.handleValidate);
   },
@@ -77,7 +79,7 @@ export default {
         if (event && event.target) {
           value = event.target.value;
         }
-        if (this.required && (value === null || value.length === 0)) {
+        if (this.required && (value === null || value === undefined || value.length === 0)) {
           if (this.messages && this.messages.required) {
             this.setError(this.messages.required);
           } else {
@@ -85,6 +87,8 @@ export default {
           }
         }
         if (this.type && this.type === 'email' && value) {
+          value = formatEmail(value);
+          this.text = value;
           if (!this.regex.email.test(value)) {
             this.setError(`Enter a valid email address for ${this.label}`);
           }
@@ -109,7 +113,7 @@ export default {
     setError(message) {
       this.errorMessage = message;
       this.$root.$emit('handle-error', { id: this.id, message: this.errorMessage });
-    },    
+    },
   },
 };
 </script>

@@ -3,15 +3,16 @@
     <h2 class="govuk-heading-l">
       Qualifying tests
     </h2>
-    <Table 
-      v-if="hasData"
+    <Table
       data-key="id"
       :data="qualifyingTests"
+      :page-size="50"
       :columns="[
-        { title: 'Title' },
+        { title: 'Title', sort: 'title', default: true },
         { title: 'Type' },
         { title: 'Status' },
       ]"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -43,7 +44,7 @@
       Create New
     </button>
     <div v-else>
-      <Banner 
+      <Banner
         :message="warningMessage"
         status="warning"
       />
@@ -52,7 +53,7 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table'; 
+import Table from '@/components/Page/Table/Table';
 import TableCell from '@/components/Page/Table/TableCell';
 import { QUALIFYING_TEST } from '@/helpers/constants';
 import Banner from '@/components/Page/Banner';
@@ -85,15 +86,9 @@ export default {
       const qtList = this.$store.state.qualifyingTest.records;
       return qtList;
     },
-    hasData() {
-      return this.qualifyingTests.length > 0;
-    },
     exerciseId() {
       return this.$route.params.id;
     },
-  },
-  async created() {
-    this.$store.dispatch('qualifyingTest/bindQTs', this.exerciseId );
   },
   methods: {
     btnCreate() {
@@ -108,7 +103,15 @@ export default {
       } else {
         return 'qualifying-test-view';
       }
-      // 
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'qualifyingTest/bindQTs',
+        {
+          exerciseId: this.exerciseId,
+          ...params,
+        }
+      );
     },
   },
 };

@@ -4,6 +4,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@/helpers/vuexfireSerialize';
 import tableQuery from '@/helpers/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@/helpers/constants';
+import { authorisedToReset } from '@/helpers/authUsers';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -67,6 +68,28 @@ export default {
       // Update Reasonable Adjustments
       await context.dispatch('update', { data: data, id: id });
     },
+    delete: (context, { id }) => {
+      const batch = firestore.batch();
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const data = {
+        status: QUALIFYING_TEST_RESPONSE.STATUS.DELETED,
+        lastUpdated: timestamp,
+        statusLog: {
+          'deleted': timestamp,
+        },
+      };
+      // eslint-disable-next-line no-unused-vars
+      const collection = firestore.collection('qualifyingTestResponses')
+        .where('application.id', '==', id)
+        .get()
+        .then(async snapshot => {
+          snapshot.forEach(response => {
+            const ref = firestore.collection('qualifyingTestResponses').doc(response.id);
+            batch.set(ref, data, { merge: true } );
+          });
+          await batch.commit();
+        });
+    },
     moveTest: async (context, { qualifyingTest, qualifyingTestResponse }) => {
       const qtData = {
         id: qualifyingTest.id,
@@ -77,34 +100,33 @@ export default {
         additionalInstructions: qualifyingTest.additionalInstructions,
         feedbackSurvey: qualifyingTest.feedbackSurvey,
       };
+
       const data = {
         qualifyingTest: qtData,
         testQuestions: [],
         status: QUALIFYING_TEST_RESPONSE.STATUS.CREATED,
+        responses: qualifyingTestResponse.responses,
         'statusLog.started': null,
         'statusLog.completed': null,
       };
-      if (!(qualifyingTestResponse.responses && qualifyingTestResponse.responses.length)) {
-        // no existing responses, so check for responses alongside questions (backward compatibility with old data model)
-        if (qualifyingTestResponse.testQuestions && qualifyingTestResponse.testQuestions.questions) {
-          const responses = [];
-          qualifyingTestResponse.testQuestions.questions.forEach((question) => {
-            let response;
-            if (question.response) {
-              response = question.response;
-            } else {
-              response = {
-                selection: qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? {} : null,
-                started: null,
-                completed: null,
-              };
-            }
-            responses.push(response);
-          });
-          data.responses = responses;
-        }
-      }
+
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
+    },
+    resetTest: async (context ) => {
+      const email = firebase.auth().currentUser.email;
+      const canReset = await authorisedToReset(email);
+      if (canReset) {
+        const rec = context.state.record;
+        const data = {
+              'status': 'activated',
+              'statusLog.completed': null,
+              'statusLog.started': null,
+            };
+        if (rec.isOutOfTime === true) {
+          data.isOutOfTime = false;
+        }
+        await context.dispatch('update', { data: data, id: rec.id });
+      }
     },
   },
   state: {
@@ -112,4 +134,3 @@ export default {
     record: null,
   },
 };
-

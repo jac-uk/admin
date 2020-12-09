@@ -28,7 +28,7 @@ describe('@/components/RepeatableFields/MultiFileUpload', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    it('renders TextInput', () => {
+    it('renders TextField', () => {
       expect(wrapper.find(TextField).exists()).toBe(true);
     });
 

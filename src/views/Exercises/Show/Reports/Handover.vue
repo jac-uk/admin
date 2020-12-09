@@ -47,14 +47,16 @@
 
     <Table
       data-key="id"
-      :data="getPaginated"
+      :data="applicationRecords"
       :columns="[
         {
           title:'Reference number',
           class: ['govuk-!-width-one-third'],
         },
-        { title: 'Name' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
       ]"
+      :page-size="50"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -73,10 +75,6 @@
         </TableCell>
       </template>
     </Table>
-    <Pagination
-      :high-index="numberOfPages"
-      @pageChanged="updatePage($event)"
-    />
   </div>
 </template>
 
@@ -86,14 +84,12 @@ import * as filters from '@/filters';
 import { downloadXLSX } from '@/helpers/export';
 import Table from '@/components/Page/Table/Table';
 import TableCell from '@/components/Page/Table/TableCell';
-import Pagination from '@/components/Page/Pagination';
 import { APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   components: {
     Table,
     TableCell,
-    Pagination,
   },
   data() {
     return {
@@ -113,38 +109,17 @@ export default {
     totalApplicationRecords() {
       return this.applicationRecords.length;
     },
-    numberOfPages() {
-      return Math.ceil(this.totalApplicationRecords / this.pageSize);
-    },
-    getPaginated() {
-      if (this.numberOfPages){
-        if (this.page > this.numberOfPages) throw `Page ${this.page} exceeds page size of ${this.numberOfPages}`;
-
-        const sliceFrom = ((this.page - 1) * this.pageSize);
-        const sliceTo = sliceFrom + this.pageSize;
-        const sliced = this.applicationRecords.slice(sliceFrom, sliceTo);
-
-        return sliced;
-      } else {
-        return this.applicationRecords;
-      }
-    },
-  },
-  async created() {
-    this.$store.dispatch('stageHandover/bind', {
-      exerciseId: this.exercise.id,
-      status: APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
-    });
-
-    this.$store.dispatch('applications/bind', {
-      exerciseId: this.exercise.id,
-      status: 'applied',
-      //characterChecks: true,
-    });
   },
   methods: {
-    updatePage(pageChanged) {
-      this.page = pageChanged;
+    getTableData(params) {
+      this.$store.dispatch(
+        'stageHandover/bind',
+        {
+          exerciseId: this.exercise.id,
+          status: APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+          ...params,
+        }
+      );
     },
     formatPersonalDetails(personalDetails) {
       const formatAddress = (address => [
@@ -250,26 +225,30 @@ export default {
         'other': 'otherProfessionalMemberships',
       };
 
-      const professionalMemberships = application.professionalMemberships.map(membership => {
-        let formattedMembership;
-        if (organisations[membership]) {
-          const fieldName = organisations[membership];
+      if (application.professionalMemberships) {
+        const professionalMemberships = application.professionalMemberships.map(membership => {
+          let formattedMembership;
+          if (organisations[membership]) {
+            const fieldName = organisations[membership];
 
-          formattedMembership = `${filters.lookup(membership)}, ${filters.formatDate(application[`${fieldName}Date`])}, ${application[`${fieldName}Number`]}`;
-        }
+            formattedMembership = `${filters.lookup(membership)}, ${filters.formatDate(application[`${fieldName}Date`])}, ${application[`${fieldName}Number`]}`;
+          }
 
-        if (application.memberships[membership]) {
-          const otherMembershipLabel = this.exercise.otherMemberships.find(m => m.value === membership).label;
+          if (application.memberships[membership]) {
+            const otherMembershipLabel = this.exercise.otherMemberships.find(m => m.value === membership).label;
 
-          formattedMembership = `${filters.lookup(otherMembershipLabel)}, ${filters.formatDate(application.memberships[membership].date)}, ${application.memberships[membership].number}`;
-        }
+            formattedMembership = `${filters.lookup(otherMembershipLabel)}, ${filters.formatDate(application.memberships[membership].date)}, ${application.memberships[membership].number}`;
+          }
 
-        return formattedMembership;
-      }).join('\n');
+          return formattedMembership;
+        }).join('\n');
 
-      return [
-        professionalMemberships,
-      ];
+        return [
+          professionalMemberships,
+        ];
+      } else {
+        return [];
+      }
     },
     gatherReportData() {
       const headers = {
@@ -357,7 +336,14 @@ export default {
         ...reportData,
       ];
     },
-    exportData() {
+    async exportData() {
+      // ensure we have applications for this exercise
+      // TODO implement admin#1081 (or only fetch applications if we don't already have them)
+      await this.$store.dispatch('applications/bind', {
+        exerciseId: this.exercise.id,
+        status: 'applied',
+      });
+
       const title = 'Handover Report';
       const data = this.gatherReportData();
 

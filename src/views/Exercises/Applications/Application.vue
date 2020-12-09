@@ -1,21 +1,21 @@
 <template>
-  <div 
+  <div
     v-if="application"
     class="govuk-grid-row"
   >
     <div class="govuk-grid-column-full">
-      <div 
+      <div
         v-if="applications.length"
         class="text-center"
       >
         <ul class="moj-pagination__list">
-          <li 
+          <li
             class="moj-pagination__item  moj-pagination__item--prev"
             @click="previousApplication"
           >
             <a class="moj-pagination__link govuk-link">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
           </li>
-          <li 
+          <li
             class="moj-pagination__item  moj-pagination__item--next"
             @click="nextApplication"
           >
@@ -94,7 +94,7 @@
         </div>
 
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half">
+          <div class="govuk-grid-column-one-third">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Created on</span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
@@ -103,7 +103,7 @@
             </div>
           </div>
 
-          <div class="govuk-grid-column-one-half">
+          <div class="govuk-grid-column-one-third">
             <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
               <span class="govuk-caption-m">Submitted on</span>
               <h2
@@ -120,6 +120,41 @@
               </h2>
             </div>
           </div>
+
+          <div class="govuk-grid-column-one-third">
+            <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+              <div class="govuk-caption-m">
+                Extension
+                <button
+                  v-if="application.dateExtension"
+                  @click="openModal('modalRefExtension')"
+                >
+                  Change
+                </button>
+              </div>
+              <h2
+                v-if="application.dateExtension"
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
+              </h2>
+              <button
+                v-else
+                @click="openModal('modalRefExtension')"
+              >
+                Give Extension
+              </button>
+            </div>
+          </div>
+          <Modal
+            ref="modalRefExtension"
+          >
+            <component
+              :is="`SubmissionExtension`"
+              v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
+              @close="closeModal('modalRefExtension')"
+            />
+          </Modal>
         </div>
 
         <TabsList
@@ -129,7 +164,7 @@
         />
 
         <div v-if="application && exercise">
-          <div 
+          <div
             v-if="activeTab == 'full' || activeTab == 'panel'"
             class="application-details"
           >
@@ -150,7 +185,7 @@
                     Full Name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.fullName"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
                       field="fullName"
@@ -165,7 +200,7 @@
                     Email address
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.email"
                       field="email"
                       type="email"
@@ -179,7 +214,7 @@
                     Phone number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.phone"
                       field="phone"
                       @changefield="changeUserDetails"
@@ -192,7 +227,7 @@
                     Date of birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.dateOfBirth"
                       field="dateOfBirth"
                       type="date"
@@ -206,7 +241,7 @@
                     NI Number
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
+                    <EditableField
                       :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
                       field="nationalInsuranceNumber"
                       @changefield="changeUserDetails"
@@ -252,7 +287,10 @@
                 Character information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="application.characterInformation"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Has been cautioned or convicted of a criminal offence
@@ -380,6 +418,12 @@
                   </dd>
                 </div>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information on applicant's Character yet
+              </div>
             </div>
 
             <div
@@ -392,7 +436,10 @@
                 Equality and diversity information
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="application.equalityAndDiversitySurvey"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Agreed to share data
@@ -549,7 +596,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Gender
+                    Sex
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -569,7 +616,17 @@
                     Gender is the same as sex assigned at birth
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    <p
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
+                    </p>
+                    <p
+                      v-if="application.equalityAndDiversitySurvey.changedGender === false"
+                      class="govuk-body govuk-!-margin-bottom-0"
+                    >
+                      {{ application.equalityAndDiversitySurvey.genderIdentityDetails }}
+                    </p>
                   </dd>
                 </div>
 
@@ -618,7 +675,7 @@
 
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Religion or faith
+                    Religion
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <p class="govuk-body govuk-!-margin-bottom-0">
@@ -659,13 +716,19 @@
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
-                    Participated in Pre-Application Judicial Education programme
+                    Participated in Pre-Application Judicial Education Programme
                   </dt>
                   <dd class="govuk-summary-list__value">
                     {{ application.equalityAndDiversitySurvey.hasTakenPAJE | lookup | toYesNo }}
                   </dd>
                 </div>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information on applicant's Equality and diversity yet
+              </div>
             </div>
 
             <div
@@ -836,7 +899,7 @@
                       ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
                     </span>
                   </dt>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -844,7 +907,7 @@
                       <li>{{ item.selection }}</li>
                     </ul>
                   </dd>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -869,7 +932,7 @@
                       </li>
                     </ul>
                   </dd>
-                  <dd 
+                  <dd
                     v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
                     class="govuk-summary-list__value"
                   >
@@ -885,7 +948,7 @@
                     </ul>
                   </dd>
                 </div>
-              </dl> 
+              </dl>
             </div>
 
             <div
@@ -899,7 +962,7 @@
               <dl
                 v-for="item in application.qualifications"
                 :key="item.name"
-                class="govuk-summary-list govuk-!-margin-bottom-8"
+                class="govuk-summary-list govuk-!-margin-bottom-0"
               >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
@@ -949,7 +1012,7 @@
                 <template
                   v-if="item.qualificationNotComplete && item.details"
                 >
-                  <div 
+                  <div
                     class="govuk-summary-list__row"
                   >
                     <dt class="govuk-summary-list__key">
@@ -963,7 +1026,7 @@
                       </ul>
                     </dd>
                   </div>
-                
+
                   <div
                     class="govuk-summary-list__row"
                   >
@@ -979,6 +1042,62 @@
                     </dd>
                   </div>
                 </template>
+              </dl>
+
+              <dl
+                v-if="exercise.schedule2Apply"
+                class="govuk-summary-list govuk-!-margin-bottom-8"
+              >
+                <div
+                  v-if="exercise.appliedSchedule == 'schedule-2-3'"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Are you applying under Schedule 2(3)?
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li> {{ application.applyingUnderSchedule2Three | toYesNo }}</li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div
+                  v-if="exercise.appliedSchedule == 'schedule-2-d'"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Are you applying under Schedule 2(d)?
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li> {{ application.applyingUnderSchedule2d | toYesNo }}</li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div
+                  v-if="
+                    (exercise.appliedSchedule=='schedule-2-3' && application.applyingUnderSchedule2Three)
+                      || (exercise.appliedSchedule=='schedule-2-d' && application.applyingUnderSchedule2d)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt
+                    class="govuk-summary-list__key"
+                  >
+                    Explain how you've gained experience in law.
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li v-if="exercise.appliedSchedule=='schedule-2-3'">
+                        {{ application.experienceUnderSchedule2Three }}
+                      </li>
+                      <li v-if="exercise.appliedSchedule=='schedule-2-d'">
+                        {{ application.experienceUnderSchedule2D }}
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
               </dl>
             </div>
 
@@ -1490,20 +1609,27 @@
 
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
-                Independent assessors
+                Independent assessors {{ applicationId }}
               </h2>
 
               <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row text-right print-none button-right">
+                  <dt class="govuk-summary-list__key" />
+                  <dd class="govuk-summary-list__value">
+                    <button
+                      class="govuk-button btn-unlock"
+                      @click="editAssessor(1)"
+                    >
+                      Edit
+                    </button>
+                  </dd>
+                </div>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.firstAssessorFullName"
-                      field="firstAssessorFullName"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorFullName }}
                   </dd>
                 </div>
 
@@ -1512,11 +1638,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.firstAssessorTitle"
-                      field="firstAssessorTitle"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorTitle }}
                   </dd>
                 </div>
 
@@ -1525,12 +1647,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.firstAssessorEmail"
-                      field="firstAssessorEmail"
-                      type="email"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorEmail }}
                   </dd>
                 </div>
 
@@ -1539,26 +1656,28 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.firstAssessorPhone"
-                      field="firstAssessorPhone"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.firstAssessorPhone }}
                   </dd>
                 </div>
 
                 <hr class="govuk-section-break govuk-section-break--l">
-
+                <div class="govuk-summary-list__row text-right print-none button-right">
+                  <dt class="govuk-summary-list__key" />
+                  <dd class="govuk-summary-list__value">
+                    <button
+                      class="govuk-button btn-unlock"
+                      @click="editAssessor(2)"
+                    >
+                      Edit
+                    </button>
+                  </dd>
+                </div>
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.secondAssessorFullName"
-                      field="secondAssessorFullName"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorFullName }}
                   </dd>
                 </div>
 
@@ -1567,11 +1686,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.secondAssessorTitle"
-                      field="secondAssessorTitle"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorTitle }}
                   </dd>
                 </div>
 
@@ -1580,12 +1695,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.secondAssessorEmail"
-                      field="secondAssessorEmail"
-                      type="email"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorEmail }}
                   </dd>
                 </div>
 
@@ -1594,15 +1704,21 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    <EditableField 
-                      :value="application.secondAssessorPhone"
-                      field="secondAssessorPhone"
-                      @changefield="changeAssesorDetails"
-                    />
+                    {{ application.secondAssessorPhone }}
                   </dd>
                 </div>
               </dl>
             </div>
+
+            <Modal
+              ref="modalRef"
+            >
+              <component
+                :is="`IndependentAssessorChange`"
+                v-bind="assessorDetails"
+                @close="closeModal('modalRef')"
+              />
+            </Modal>
 
             <div
               v-if="application.selectionCriteriaAnswers"
@@ -1742,7 +1858,37 @@
                 </div>
               </dl>
             </div>
-          </div> 
+
+            <div
+              v-if="showCoveringLetter"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Covering Letter
+              </h2>
+
+              <dl class="govuk-summary-list">
+                <div
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Uploaded Covering Letter
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <div v-if="application.uploadedCoveringLetter">
+                      <DownloadLink
+                        :file-name="application.uploadedCoveringLetter"
+                        :exercise-id="exercise.id"
+                        :user-id="application.userId"
+                        title="Covering Letter"
+                      />
+                    </div>
+                    <span v-else>Not yet received</span>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
 
           <div v-if="activeTab == 'issues'">
             No issues found
@@ -1750,6 +1896,14 @@
 
           <div v-if="activeTab == 'agency'">
             <AgencyReport />
+          </div>
+
+          <div v-if="activeTab == 'notes'">
+            <Notes
+              title="Notes about the Application"
+              :candidate-id="application.userId"
+              :application-id="applicationId"
+            />
           </div>
         </div>
       </div>
@@ -1767,6 +1921,10 @@ import FileUpload from '@/components/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
+import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
+import Notes from '@/components/Notes/Notes';
 
 export default {
   components: {
@@ -1776,6 +1934,10 @@ export default {
     EventRenderer,
     EditableField,
     FileUpload,
+    Modal,
+    IndependentAssessorChange,
+    SubmissionExtension,
+    Notes,
   },
   data() {
     return {
@@ -1783,6 +1945,10 @@ export default {
         {
           ref: 'full',
           title: 'Full information',
+        },
+        {
+          ref: 'notes',
+          title: 'Notes',
         },
         {
           ref: 'panel',
@@ -1799,6 +1965,7 @@ export default {
       ],
       activeTab: 'full',
       dropDownExpanded: false,
+      assessorDetails: {},
     };
   },
   computed: {
@@ -1809,7 +1976,7 @@ export default {
       return this.$store.state.applications.records;
     },
     application() {
-      return this.$store.state.application.record;
+      return this.$store.getters['application/data']();
     },
     applicationId() {
       return this.$route.params.applicationId;
@@ -1854,6 +2021,8 @@ export default {
       case 'statement-of-suitability-with-competencies':
       case 'statement-of-suitability-with-skills-and-abilities':
       case 'statement-of-suitability-with-skills-and-abilities-and-cv':
+      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -1863,6 +2032,18 @@ export default {
       switch (this.exercise.assessmentOptions) {
       case 'self-assessment-with-competencies-and-cv':
       case 'statement-of-suitability-with-skills-and-abilities-and-cv':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
+        return true;
+      default:
+        return false;
+      }
+    },
+    showCoveringLetter() {
+      switch (this.exercise.assessmentOptions) {
+      case 'self-assessment-with-competencies-and-covering-letter':
+      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
+      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -1880,6 +2061,8 @@ export default {
       switch (this.exercise.assessmentOptions) {
       case 'self-assessment-with-competencies':
       case 'self-assessment-with-competencies-and-cv':
+      case 'self-assessment-with-competencies-and-covering-letter':
+      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
         return true;
       default:
         return false;
@@ -1921,15 +2104,17 @@ export default {
       // @NOTE this is a bit ugly as we can't just lookup label
       const selected = {};
 
-      this.application.professionalMemberships.forEach(membership => {
-        if (this.application.memberships[membership]) {
-          const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
-          selected[membership] = {
-            ...this.application.memberships[membership],
-            label: otherMembership.label,
-          };
-        }
-      });
+      if (this.application.professionalMemberships) {
+        this.application.professionalMemberships.forEach(membership => {
+          if (this.application.memberships[membership]) {
+            const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
+            selected[membership] = {
+              ...this.application.memberships[membership],
+              label: otherMembership.label,
+            };
+          }
+        });
+      }
 
       return selected;
     },
@@ -1953,7 +2138,7 @@ export default {
       if (this.$route.hash) {  // @TODO move this to within TabsList component
         this.activeTab = this.$route.hash.substring(1);
       }
-      if (this.applicationId && (!this.application || this.application.id !== this.applicationId)) {
+      if (this.applicationId && (!this.application || this.$store.state.application.record.id !== this.applicationId)) {
         this.$store.dispatch('application/bind', this.applicationId);
       }
     },
@@ -1962,8 +2147,8 @@ export default {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
             if (i < len) {
-              this.$router.replace({ 
-                name: 'exercise-applications-application', 
+              this.$router.replace({
+                name: 'exercise-applications-application',
                 params: { applicationId: this.applications[i + 1].id, status: this.applications[i + 1].status },
               });
             }
@@ -1977,8 +2162,8 @@ export default {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
             if (i > 0) {
-              this.$router.replace({ 
-                name: 'exercise-applications-application', 
+              this.$router.replace({
+                name: 'exercise-applications-application',
                 params: { applicationId: this.applications[i - 1].id, status: this.applications[i + 1].status },
               });
             }
@@ -2058,20 +2243,44 @@ export default {
       }
       return false;
     },
-    changeAssesorDetails(objChanged) {
-      this.$store.dispatch('application/update', { data: objChanged, id: this.applicationId });
-    },
     changeUserDetails(objChanged) {
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
     doFileUpload(val, field) {
-      // eslint-disable-next-line no-console
-      console.log('fileUpload val:', val);
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
       }
+    },
+    editAssessor(AssessorNr) {
+      this.assessorDetails = {};
+      if (AssessorNr === 1) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.firstAssessorEmail,
+          fullName: this.application.firstAssessorFullName,
+          phone: this.application.firstAssessorPhone,
+          title: this.application.firstAssessorTitle,
+        };
+      } else if (AssessorNr === 2) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.secondAssessorEmail,
+          fullName: this.application.secondAssessorFullName,
+          phone: this.application.secondAssessorPhone,
+          title: this.application.secondAssessorTitle,
+        };
+      }
+      this.openModal('modalRef');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
     },
   },
 };

@@ -4,12 +4,13 @@
       Qualifying test reports
     </h2>
     <Table
-      v-if="hasData"
       data-key="id"
       :data="qualifyingTestReports"
       :columns="[
         { title: 'Title' },
       ]"
+      :page-size="50"
+      @change="getTableData"
     >
       <template #row="{row}">
         <TableCell>
@@ -17,14 +18,13 @@
             class="govuk-link"
             :to="{ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: row.id } }"
           >
-            {{ reportTitle(row) | showAlternative(row.id) }}
+            {{ row.title | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
       </template>
     </Table>
 
     <button
-      :disabled="true"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >
@@ -47,29 +47,24 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTestReports() {
-      const qtList = this.$store.state.qualifyingTestReports.records;
-      return qtList;
-    },
-    hasData() {
-      return this.qualifyingTestReports && this.qualifyingTestReports.length > 0;
+      return this.$store.getters['qualifyingTestReports/data'];
     },
     exerciseId() {
       return this.$route.params.id;
     },
   },
-  async created() {
-    this.$store.dispatch('qualifyingTestReports/bind', { exerciseId: this.exerciseId } );
-  },
   methods: {
     btnCreate() {
-      this.$router.push({ name: 'qualifying-test-report-new' });
+      this.$router.push({ name: 'qualifying-test-report-create' });
     },
-    reportTitle(report) {
-      const titles = [];
-      report.qualifyingTests.forEach(qualifyingTest => {
-        titles.push(qualifyingTest.title);
-      });
-      return titles.join(' + ');
+    getTableData(params) {
+      this.$store.dispatch(
+        'qualifyingTestReports/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };

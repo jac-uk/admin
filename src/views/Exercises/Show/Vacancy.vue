@@ -71,7 +71,11 @@
           Appointment type
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="exercise.appointmentType == 'salaried'">{{ exercise.appointmentType | lookup }}: {{ exercise.salaryGrouping | lookup }}</span>
+          <span v-if="exercise.appointmentType == 'salaried'">
+            {{ exercise.appointmentType | lookup }}: 
+            <span v-if="exercise.salaryGrouping">{{ exercise.salaryGrouping | lookup }}</span>
+            <span v-if="exercise.salary">{{ exercise.salary | formatCurrency }}</span>
+          </span>
           <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ exercise.appointmentType | lookup }}: £{{ exercise.feePaidFee }}</span>
           <span v-else>{{ exercise.appointmentType | lookup }}</span>
         </dd>

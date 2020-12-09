@@ -1,27 +1,34 @@
 import { APPLICATION_STATUS, QUALIFYING_TEST } from '@/helpers/constants';
 
 const formatDate = (value, type) => {
-  if (value) {
-    const objDate = new Date(Date.parse(value));
-
-    // If not a valid date
-    if (!(objDate instanceof Date)){
-      return null;
-    }
-
-    switch (type) {
-      case 'month':
-        return `${objDate.toLocaleString('en-GB', { month: 'long' })} ${objDate.getUTCFullYear()}`;
-      case 'datetime':
-        return objDate.toLocaleString('en-GB');
-      case 'long':
-        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-      case 'longdatetime':
-        return objDate.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
-      default:
-        return objDate.toLocaleDateString('en-GB');
-    }
-  }
+  if (!isNaN(new Date(value).valueOf()) && value !== null) {
+    if (!type) {
+      if (value instanceof Date) {
+        value = value.toLocaleDateString('en-GB');
+      } else if (value instanceof Array) {
+        value = new Date(value).toLocaleDateString('en-GB');
+      } else {
+        value = new Date(value).toLocaleDateString('en-GB');
+      } 
+    } else {
+      value = new Date(value);
+      switch (type) {
+        case 'month':
+          value = `${value.toLocaleString('en-GB', { month: 'long' })} ${value.getUTCFullYear()}`;
+          break;
+        case 'datetime':
+          value = value.toLocaleString('en-GB');
+          break;
+        case 'long':
+          value = value.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+          break;
+        case 'longdatetime':
+          value = value.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+          break;
+      } 
+    } 
+  } 
+  return value;
 };
 
 const formatEstimatedDate = (value) => {
@@ -52,6 +59,19 @@ const formatNIN = (value) => {
   return value ? value.toUpperCase() : '';
 };
 
+const formatCurrency = (value) => {
+  let amount = parseFloat(value);
+  if (isNaN(amount)) {
+    amount = 0;
+  }
+  if (typeof amount === 'number') {
+    amount = amount.toLocaleString('en-GB',
+      { style: 'currency', currency: 'GBP' }
+    );
+  }
+  return amount;
+};
+
 const toHumanCase = (value) => {
   if (value) {
     return value.replace(/([A-Z0-9])/g, ' $1');
@@ -70,6 +90,26 @@ const toYesNo = (value) => {
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }
+  return value;
+};
+
+const heldFeePaidJudicialRole = (value) => {
+  if (typeof value === 'string' && ['fee-paid-court-post', 'fee-paid-tribunal-post', 'other-fee-paid-judicial-office'].includes(value)) {
+    value = 'Yes';
+    return value;
+  }
+
+  if (typeof value === 'boolean' && value === false) {
+    value = 'No';
+    return value;
+  }
+
+  if (value === undefined || value === null || (typeof value === 'string' && value.length === 0)) {
+    value = 'Unknown';
+    return value;
+  }
+
+  value = 'Prefer not to say';
   return value;
 };
 
@@ -274,6 +314,7 @@ const lookup = (value) => {
       'white-asian': 'White and Asian',
       'white-black-african': 'White and Black African',
       'white-black-caribbean': 'White and Black Caribbean',
+      'withdrawn': 'Withdrawn',
       'write': 'Write',
       // 'xxx': 'xxx',
     };
@@ -328,15 +369,17 @@ const lookup = (value) => {
 };
 
 export {
+  candidateHasIssues,
+  formatCurrency,
   formatDate,
   formatEstimatedDate,
   formatNumber,
   formatNIN,
-  toHumanCase,
-  toCSV,
-  toYesNo,
+  heldFeePaidJudicialRole,
   slugify,
-  candidateHasIssues,
+  toCSV,
+  toHumanCase,
+  toYesNo,
   showAlternative,
   lookup
 };

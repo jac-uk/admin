@@ -143,10 +143,10 @@
               v-for="(option, i) in testQuestion.options"
               :key="i"
             >
-              {{ option.answer }} 
+              {{ option.answer }}
             </li>
           </ol>
-          <hr 
+          <hr
             v-if="isSituationalJudgement || isCriticalAnalysis"
             class="govuk-section-break govuk-section-break--visible"
           >
@@ -175,7 +175,7 @@
                 {{ document.title }}
               </strong>
               <!-- eslint-disable -->
-                <p 
+                <p
                   v-html="document.content"
                 />
                 <!-- eslint-enable -->
@@ -187,6 +187,12 @@
                 :key="i"
               >
                 {{ option.question }}
+                <span
+                  v-if="option.hint"
+                  class="govuk-hint"
+                >
+                  {{ option.hint }}
+                </span>
               </li>
             </ol>
           </div>
@@ -200,7 +206,7 @@
           class="govuk-link"
           :to="{name: 'qualifying-test-dry-run'}"
         >
-          Update dry run details 
+          Update dry run details
         </router-link>
       </div>
 
@@ -232,7 +238,7 @@
         Submit for Approval
       </button>
     </span>
-    
+
     <span v-if="isReadyForApproval">
       <button
         class="govuk-button govuk-!-margin-right-3"

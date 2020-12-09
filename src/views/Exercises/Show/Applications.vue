@@ -25,67 +25,34 @@
       </div>
     </div>
 
-    <table
-      v-if="applications.length"
-      class="govuk-table"
+    <Table
+      ref="applicationsTable"
+      data-key="id"
+      :data="applications"
+      :columns="[
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'personalDetails.fullName', default: true },
+        { title: 'Status' },
+      ]"
+      :search="['personalDetails.fullName']"
+      :page-size="50"
+      @change="getTableData"
     >
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
+      <template #row="{row}">
+        <TableCell>
+          <RouterLink
+            class="govuk-link"
+            :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: status }}"
           >
-            Reference number
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          >
-            Name
-          </th>
-          <th
-            scope="col"
-            class="govuk-table__header app-custom-class"
-          >
-            Status
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr
-          v-for="application in applications"
-          :key="application.id"
-          class="govuk-table__row"
-        >
-          <th
-            scope="row"
-            class="govuk-table__header"
-          >
-            <RouterLink
-              class="govuk-link"
-              :to="{name: 'exercise-applications-application', params: { applicationId: application.id, status: status }}"
-            >
-              {{ application.referenceNumber | showAlternative(application.id) }}
-            </RouterLink>
-          </th>
-          <td class="govuk-table__cell">
-            <span v-if="application.personalDetails">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: application.userId } }"
-              >
-                {{ application.personalDetails.fullName }}
-              </RouterLink>
-            </span>
-          </td>
-          <td class="govuk-table__cell">
-            {{ application.status }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
+            {{ row.referenceNumber | showAlternative(row.id) }}
+          </RouterLink>
+        </TableCell>
+        <TableCell>{{ row.personalDetails && row.personalDetails.fullName }}</TableCell>
+        <TableCell>{{ row.status | lookup }}</TableCell>
+      </template>
+    </Table>
     <p
-      v-else
+      v-if="!applications.length"
       class="govuk-body"
     >
       No applications found.
@@ -94,10 +61,16 @@
 </template>
 
 <script>
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 import * as filters from '@/filters';
 import { downloadXLSX } from '@/helpers/export';
 
 export default {
+  components: {
+    Table,
+    TableCell,
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -109,15 +82,10 @@ export default {
       return this.$route.params.status;
     },
   },
-  created() {
-    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: this.status });
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: to.params.status });
-    next();
-  },
-  destroyed() {
-    // this.$store.dispatch('applications/unbind');
+  watch: {
+    status() {
+      this.$refs['applicationsTable'].reload();
+    },
   },
   methods: {
     flattenCurrentLegalRole(equalityAndDiversitySurvey) {
@@ -174,6 +142,7 @@ export default {
         'Ethnic Group',
         'Current Legal Role',
         'Professional Background',
+        'Held Fee-paid Judicial Role',
         'Attended UK State School',
         'First Generation Student',
         'First Assessor Name',
@@ -198,6 +167,7 @@ export default {
           filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup),
           this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey),
           this.flattenProfessionalBackground(application.equalityAndDiversitySurvey),
+          filters.heldFeePaidJudicialRole(application.equalityAndDiversitySurvey.feePaidJudicialRole),
           filters.toYesNo(this.attendedUKStateSchool(application.equalityAndDiversitySurvey)),
           filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)),
           application.firstAssessorFullName,
@@ -214,8 +184,9 @@ export default {
         ...contacts,
       ];
     },
-    exportContacts() {
+    async exportContacts() {
       const title = 'Contacts';
+      await this.getTableData({});
       const data = this.gatherContacts();
 
       downloadXLSX(
@@ -224,6 +195,16 @@ export default {
           title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
+    },
+    getTableData(params) {
+      return this.$store.dispatch(
+        'applications/bind',
+        {
+          exerciseId: this.exercise.id,
+          status: this.status,
+          ...params,
         }
       );
     },

@@ -1,6 +1,6 @@
 {
   "name": "apply-admin",
-  "version": "0.37.1",
+  "version": "0.48.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.1",
+    "@jac-uk/jac-kit": "latest",
     "@ministryofjustice/frontend": "0.0.17-alpha",
     "@sentry/browser": "^5.20.1",
     "@sentry/integrations": "^5.20.1",

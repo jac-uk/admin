@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Banner 
-      :message="message" 
-      status="success" 
+    <Banner
+      :message="message"
+      status="success"
     />
     <form @submit.prevent="checkForm">
       <div class="moj-page-header-actions">
@@ -14,15 +14,15 @@
         <div class="moj-page-header-actions__actions">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
-              <button  
-                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+              <button
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 :disabled="isButtonDisabled"
                 @click.prevent="moveBack()"
               >
                 Move back to ...
               </button>
-              <button 
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2" 
+              <button
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 :disabled="isButtonDisabled"
                 @click.prevent="setStatus()"
               >
@@ -32,18 +32,20 @@
           </div>
         </div>
       </div>
-      <Table 
+      <Table
         data-key="id"
         :data="applicationRecords"
         :columns="[
           { title: 'Reference number' },
-          { title: 'Name' },
+          { title: 'Name', sort: 'candidate.fullName', default: true },
           { title: 'Issues' },
           { title: 'Status' },
           { title: 'EMP' },
         ]"
         multi-select
         :selection.sync="selectedItems"
+        :page-size="50"
+        @change="getTableData"
       >
         <template #row="{row}">
           <TableCell>
@@ -51,28 +53,28 @@
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
             >
               {{ row.application.referenceNumber }}
-            </RouterLink> 
+            </RouterLink>
           </TableCell>
           <TableCell>
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
             >
               {{ row.candidate.fullName }}
-            </RouterLink> 
+            </RouterLink>
           </TableCell>
           <TableCell>{{ row | candidateHasIssues }}</TableCell>
           <TableCell>{{ row.status | lookup }}</TableCell>
           <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
         </template>
-      </Table>   
+      </Table>
     </form>
   </div>
 </template>
 
 <script>
 import Banner from '@/components/Page/Banner';
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import Table from '@/components/Page/Table/Table';
+import TableCell from '@/components/Page/Table/TableCell';
 
 export default {
   components: {
@@ -102,7 +104,6 @@ export default {
     },
   },
   async created() {
-    this.$store.dispatch('stageSelected/bind', { exerciseId: this.exercise.id });
     this.message = await this.$store.dispatch('stageSelected/getMessages');
   },
   methods: {
@@ -113,6 +114,15 @@ export default {
     setStatus() {
       this.$store.dispatch('stageSelected/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-selected-edit' });
+    },
+    getTableData(params) {
+      this.$store.dispatch(
+        'stageSelected/bind',
+        {
+          exerciseId: this.exercise.id,
+          ...params,
+        }
+      );
     },
   },
 };
