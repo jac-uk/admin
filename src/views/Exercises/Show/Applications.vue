@@ -63,7 +63,7 @@
 <script>
 import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
 import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
-import * as filters from '@/filters';
+import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {

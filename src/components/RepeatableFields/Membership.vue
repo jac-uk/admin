@@ -21,7 +21,7 @@
 
 <script>
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import { slugify } from '@/filters';
+import { slugify } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   name: 'Membership',
