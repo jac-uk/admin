@@ -1,6 +1,6 @@
 import ExerciseNew from '@/views/Exercises/New';
 import { shallowMount } from '@vue/test-utils';
-import BackLink from '@/components/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 const mockStore = {
   dispatch: jest.fn(),
@@ -13,7 +13,7 @@ const mockStore = {
         email: 'test@test.test',
       },
     },
-  },  
+  },
 };
 
 const mockRouter = {

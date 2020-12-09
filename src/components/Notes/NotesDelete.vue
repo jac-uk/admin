@@ -30,7 +30,7 @@
           :label="item"
         />
       </RadioGroup>
-      <button 
+      <button
         class="govuk-button"
       >
         Save and return
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import ErrorSummary from '@/components/Form/ErrorSummary';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 
 export default {
   components: {

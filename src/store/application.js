@@ -1,8 +1,8 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { STATUS } from '@/helpers/constants';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import clone from 'clone';
 
 const collection = firestore.collection('applications');

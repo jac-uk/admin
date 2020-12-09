@@ -11,31 +11,31 @@
       :active-tab.sync="activeTab"
     />
 
-    <div 
+    <div
       v-if="activeTab === 'details'"
     >
-      <PersonalDetails 
-        :candidate="personalDetails" 
+      <PersonalDetails
+        :candidate="personalDetails"
         @changedetails="updateCandidate"
       />
-      <CharacterInformation 
-        :data="characterInformation" 
+      <CharacterInformation
+        :data="characterInformation"
       />
-      <EqualityAndDiversity 
-        :data="equalityAndDiversity" 
+      <EqualityAndDiversity
+        :data="equalityAndDiversity"
       />
     </div>
 
-    <div 
+    <div
       v-if="activeTab === 'notes'"
     >
-      <Notes 
+      <Notes
         title="Notes about the Candidate"
         :candidate-id="getUserId"
       />
     </div>
 
-    <div 
+    <div
       v-if="activeTab === 'applications'"
     >
       <Applications :candidate-id="candidateId" />
@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import TabsList from '@/components/Page/TabsList';
-import PersonalDetails from '@/components/Candidates/PersonalDetails';
-import CharacterInformation from '@/components/Candidates/CharacterInformation';
-import EqualityAndDiversity from '@/components/Candidates/EqualityAndDiversity';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
+import CharacterInformation from '@jac-uk/jac-kit/draftComponents/Candidates/CharacterInformation';
+import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
-import Applications from '@/components/Candidates/Applications';
+import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
 
 export default {
   components: {

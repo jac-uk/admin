@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import RichTextInput from '@/components/Form/RichTextInput';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 
 export default {
   components: {

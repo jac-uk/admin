@@ -2,9 +2,9 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE } from '@/helpers/constants';
-import tableQuery from '@/helpers/tableQuery';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 

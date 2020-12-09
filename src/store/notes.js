@@ -1,6 +1,6 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 const collection = firestore.collection('notes');
 
@@ -43,7 +43,7 @@ export default {
         await collection.doc(id).update(data);
       } else {
         await collection.add(data);
-      }      
+      }
     },
     delete: async (context, { id }) => {
       const ref = firestore

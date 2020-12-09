@@ -8,10 +8,10 @@
           Working preferences
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
         <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -44,7 +44,7 @@
               value="ranked-choice"
               label="Ranked choice"
             />
-          </RadioGroup>          
+          </RadioGroup>
           <RepeatableFields
             v-model="exercise.locationQuestionAnswers"
             :component="repeatableFields.Answer"
@@ -85,7 +85,7 @@
               value="ranked-choice"
               label="Ranked choice"
             />
-          </RadioGroup>          
+          </RadioGroup>
           <RepeatableFields
             v-model="exercise.jurisdictionQuestionAnswers"
             :component="repeatableFields.Answer"
@@ -114,15 +114,15 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
 import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion';
-import BackLink from '@/components/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {
@@ -145,12 +145,12 @@ export default {
       additionalWorkingPreferences: [],
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };    
+    const exercise = { ...defaults, ...data };
     return {
       repeatableFields: {
         Answer,
         WorkingPreferenceQuestion,
-      },      
+      },
       exercise: exercise,
     };
   },

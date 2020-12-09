@@ -9,14 +9,14 @@
           Number of vacancies
         </h2>
         <p class="govuk-body">
-          Immediate start (S87) 
-          <span 
+          Immediate start (S87)
+          <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ exercise.immediateStart }}</span>
         </p>
       </div>
 
-      <div 
+      <div
         v-if="exercise.applicationsCount || hasOpened"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
@@ -32,7 +32,7 @@
     <div class="govuk-grid-column-one-half">
       <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
         <span v-if="isPublished">Published</span>
-        <span 
+        <span
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
         >{{ exercise.state | lookup }}</span>
@@ -60,7 +60,7 @@
       </h2>
       <table class="govuk-table">
         <tbody class="govuk-table__body">
-          <tr 
+          <tr
             v-for="task in taskList"
             :key="task.id"
             class="govuk-table__row"
@@ -82,7 +82,7 @@
               <span
                 v-else
                 :id="`${task.id}-completed`"
-              />                          
+              />
             </td>
           </tr>
         </tbody>
@@ -103,7 +103,7 @@
         @click="unPublish"
       >
         Remove from website
-      </button>      
+      </button>
       <button
         v-if="isDraft"
         :disabled="!isReadyToSubmit"
@@ -139,15 +139,15 @@
       >
         Process late applications
       </ActionButton>
-    </div>  
+    </div>
   </div>
 </template>
 
 <script>
-import Timeline from '@/components/Page/Timeline';
-import createTimeline from '@/helpers/Timeline/createTimeline';
-import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
-import ActionButton from '@/components/ActionButton';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 
 export default {
@@ -230,7 +230,7 @@ export default {
       } else {
         return {};
       }
-    },    
+    },
     taskList() {
       const data = [];
       if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
@@ -262,7 +262,7 @@ export default {
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
-    },  
+    },
   },
   methods: {
     submitForApproval() {

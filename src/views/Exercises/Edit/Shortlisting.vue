@@ -7,10 +7,10 @@
           Shortlisting methods
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="true" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="true"
+          @save="save"
         />
 
         <p class="govuk-body-l">
@@ -66,13 +66,13 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import OtherShortlistingMethod from '@/components/RepeatableFields/OtherShortlistingMethod';
-import BackLink from '@/components/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {
@@ -89,7 +89,7 @@ export default {
       otherShortlistingMethod: null,
     };
     const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };    
+    const exercise = { ...defaults, ...data };
     return {
       repeatableFields: {
         OtherShortlistingMethod,

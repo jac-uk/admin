@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from '@/App';
 import router from '@/router';
 import store from '@/store';
-import * as filters from '@/filters';
+import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { auth } from '@/firebase';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';

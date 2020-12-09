@@ -97,10 +97,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import Form from '@/components/Form/Form';
-import BackLink from '@/components/BackLink';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload';
 
 export default {

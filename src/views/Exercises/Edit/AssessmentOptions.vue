@@ -76,11 +76,11 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import BackLink from '@/components/BackLink';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
 
 export default {
   components: {

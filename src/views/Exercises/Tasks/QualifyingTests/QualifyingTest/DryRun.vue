@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextareaInput from '@/components/Form/TextareaInput';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {

@@ -88,10 +88,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import ActionButton from '@/components/ActionButton';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import { downloadXLSX } from '@/helpers/export';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {

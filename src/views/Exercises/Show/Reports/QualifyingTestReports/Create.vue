@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 
 export default {
   components: {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-right">
-      <router-link 
+      <router-link
         v-if="isEditable"
         class="govuk-link"
         :to="{name: 'exercise-edit-timeline'}"
@@ -19,9 +19,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Timeline from '@/components/Page/Timeline';
-import createTimeline from '@/helpers/Timeline/createTimeline';
-import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 
 export default {
   components: {

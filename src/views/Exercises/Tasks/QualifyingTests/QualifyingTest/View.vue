@@ -276,10 +276,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import ActionButton from '@/components/ActionButton';
-import { EXERCISE_STAGE, QUALIFYING_TEST } from '@/helpers/constants';
-import { isDateGreaterThan } from '@/helpers/date';
-import Select from '@/components/Form/Select';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
   components: {

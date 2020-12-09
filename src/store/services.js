@@ -1,6 +1,6 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 export default {
   namespaced: true,

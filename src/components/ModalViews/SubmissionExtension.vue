@@ -21,13 +21,13 @@
               :value="dateExtension"
             />
           </fieldset>
-          <button 
+          <button
             class="govuk-button govuk-!-margin-right-3"
             @click.prevent="save"
           >
             Save
           </button>
-          <button 
+          <button
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
             @click.prevent="closeModal"
           >
@@ -41,8 +41,8 @@
 
 <script>
 import firebase from '@firebase/app';
-import TextField from '@/components/Form/TextField';
-import DateInput from '@/components/Form/DateInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 
 export default {
   name: 'SubmissionExtension',
@@ -62,12 +62,12 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close');
-    },          
+    },
     confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
-    },  
+    },
     async save() {
       const data = {
         dateExtension: this.dateExtension,
@@ -84,7 +84,7 @@ export default {
       await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
       await this.$store.dispatch('notes/save', { data: dataNotes });
       this.closeModal();
-    },     
+    },
   },
 };
 </script>

@@ -7,10 +7,10 @@
           Create an exercise
         </h1>
 
-        <ErrorSummary 
-          :errors="errors" 
-          :show-save-button="false" 
-          @save="save" 
+        <ErrorSummary
+          :errors="errors"
+          :show-save-button="false"
+          @save="save"
         />
 
         <label class="govuk-heading-m">
@@ -34,7 +34,7 @@
           required
           :messages="{
             required: 'Please specify whether you\'d like to add more information'
-          }"          
+          }"
         >
           <RadioItem
             :value="true"
@@ -81,7 +81,7 @@
               <CheckboxItem
                 value="downloads"
                 label="Exercise Downloads"
-              />              
+              />
             </CheckboxGroup>
           </RadioItem>
 
@@ -99,14 +99,14 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
-import BackLink from '@/components/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {

@@ -18,7 +18,7 @@
         />
       </p>
       <p>
-        <button 
+        <button
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           @click="closeModal"
         >
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import FileUpload from '@/components/Form/FileUpload';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 
 export default {
   name: 'UploadAssessment',
@@ -55,16 +55,16 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close');
-    },          
+    },
     confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
-    },  
+    },
     changeFileName(val) {
       this.fileName = val;
       this.save();
-    },  
+    },
     async save() {
       const assessment = {
         id: this.$attrs.id,
@@ -75,7 +75,7 @@ export default {
       };
       await this.$store.dispatch('assessment/save', assessment);
       this.closeModal();
-    },     
+    },
   },
 };
 </script>

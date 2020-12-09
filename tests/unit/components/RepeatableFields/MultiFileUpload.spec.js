@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload';
-import TextField from '@/components/Form/TextField';
-import FileUpload from '@/components/Form/FileUpload';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 
 const mockProps = {
   id: 'mock-id',

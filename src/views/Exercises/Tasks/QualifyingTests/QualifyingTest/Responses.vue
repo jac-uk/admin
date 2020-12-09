@@ -51,11 +51,11 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import { QUALIFYING_TEST } from '@/helpers/constants';
-import { downloadXLSX } from '@/helpers/export';
-import * as filters from '@/filters';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {

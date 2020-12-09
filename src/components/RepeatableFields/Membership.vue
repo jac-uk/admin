@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
-import { slugify } from '@/filters';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import { slugify } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   name: 'Membership',

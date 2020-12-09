@@ -838,7 +838,7 @@
 </template>
 
 <script>
-import DateInput from '@/components/Form/DateInput';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 
 export default {
   components: {

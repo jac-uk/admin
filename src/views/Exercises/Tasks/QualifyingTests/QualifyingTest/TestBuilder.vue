@@ -47,12 +47,12 @@
   </div>
 </template>
 <script>
-import TabsList from '@/components/Page/TabsList';
-import Form from '@/components/Form/Form';
-import TextareaInput from '@/components/Form/TextareaInput';
-import RepeatableFields from '@/components/RepeatableFields';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTests/QualifyingTestQuestion';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {

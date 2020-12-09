@@ -37,7 +37,7 @@
         value="ranked-choice"
         label="Ranked choice"
       />
-    </RadioGroup>          
+    </RadioGroup>
     <RepeatableFields
       v-model="row.answers"
       :component="repeatableFields.Answer"
@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import RepeatableFields from '@/components/RepeatableFields';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
 
 export default {

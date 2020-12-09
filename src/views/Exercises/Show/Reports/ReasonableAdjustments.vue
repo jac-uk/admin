@@ -113,7 +113,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { downloadXLSX } from '@/helpers/export';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   computed: {

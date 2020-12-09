@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TextareaInput from '@/components/Form/TextareaInput';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   name: 'QTAdditionalInstruction',

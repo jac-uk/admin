@@ -1,17 +1,17 @@
 import ShowTimeline from '@/views/Exercises/Show/Timeline';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import Timeline from '@/components/Page/Timeline';
-import exerciseTimeline from '@/helpers/Timeline/exerciseTimeline';
-import createTimeline from '@/helpers/Timeline/createTimeline';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
+import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
-jest.mock('@/helpers/Timeline/exerciseTimeline', () => {
+jest.mock('@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline', () => {
   return jest.fn().mockImplementation(() => {
     return [];
   });
 });
 
-jest.mock('@/helpers/Timeline/createTimeline', () => {
+jest.mock('@jac-uk/jac-kit/helpers/Timeline/createTimeline', () => {
   return jest.fn().mockImplementation(() => {
     return [];
   });

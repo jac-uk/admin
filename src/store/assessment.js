@@ -1,8 +1,8 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import { STATUS } from '@/helpers/constants';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import clone from 'clone';
 
 const collection = firestore.collection('assessments');
@@ -47,14 +47,14 @@ export default {
     },
     update: async (context, { data, AssessorNr, id }) => {
       let returnData = {};
-      if (AssessorNr == 1) { 
+      if (AssessorNr == 1) {
         returnData = {
           assessor: {
             email: data.firstAssessorEmail,
             fullName: data.firstAssessorFullName,
           },
         };
-      } else if (AssessorNr == 2) { 
+      } else if (AssessorNr == 2) {
         returnData = {
           assessor: {
             email: data.secondAssessorEmail,

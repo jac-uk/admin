@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import BackLink from '@/components/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import { functions } from '@/firebase';
-import { downloadXLSX } from '@/helpers/export';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {

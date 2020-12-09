@@ -1,5 +1,5 @@
-<template>  
-  <Table 
+<template>
+  <Table
     data-key="notes"
     :data="notes"
     :columns="[
@@ -17,17 +17,17 @@
             {{ row.body }}
           </span>
           <span class="edit-links">
-            <a 
+            <a
               href="#"
               class="govuk-link"
-              @click.prevent="editNote(row.id)" 
+              @click.prevent="editNote(row.id)"
             >
               Edit
             </a>
-            <a 
+            <a
               href="#"
               class="govuk-link"
-              @click.prevent="deleteNote(row.id)" 
+              @click.prevent="deleteNote(row.id)"
             >
               Delete
             </a>
@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
 
 export default {
   components: {
