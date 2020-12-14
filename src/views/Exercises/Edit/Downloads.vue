@@ -26,16 +26,17 @@
                 class="govuk-table__row"
               >
                 <th class="govuk-table__header">
-                  <a
-                    class="govuk-link"
-                    href="#"
-                    @click.prevent="modalUploadOpen({ ...upload })"
-                  >
-                    {{ upload.title }}
-                  </a>
+                  {{ upload.title }}
                 </th>
                 <td class="govuk-table__cell">
                   <div>
+                    <a
+                      class="govuk-link moj-download-button"
+                      href="#"
+                      @click.prevent="modalUploadOpen({ ...upload })"
+                    >
+                      Add
+                    </a>
                     <span 
                       v-for="item in exercise.downloads[upload.id]" 
                       :key="item.id"
@@ -48,7 +49,7 @@
                         {{ item.title }}
                       </a>
                     </span>
-                    <span :id="`${upload.id}-error`" :ref="`${upload.id}-error`" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Please upload {{ upload.id }} </span>
+                    <span :id="`${upload.id}-error`" :ref="`${upload.id}-error`" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Please upload file: {{ upload.title }} </span>
                   </div>
                 </td>
                 <td class="govuk-table__cell text-right">
@@ -234,25 +235,25 @@ export default {
     uploadList() {
       const data = [
         { 
-          title: 'Job Description Upload', 
+          title: 'Job Description', 
           id: 'jobDescriptions',
           name: 'job-descriptions',
           done: true,
         },
         { 
-          title: 'Terms and Conditions Upload', 
+          title: 'Terms and Conditions', 
           id: 'termsAndConditions',
           name: 'terms-and-conditions',
           done: true,
         },
         { 
-          title: 'Competency Framework Upload', 
+          title: 'Competency Framework', 
           id: 'competencyFramework',
           name: 'competency-framework',
           done: true,
         },
         { 
-          title: 'Pensions Information Upload', 
+          title: 'Pensions Information', 
           id: 'pensionsInformation',
           name: 'pensions-information',
           done: true,
@@ -264,25 +265,25 @@ export default {
           done: true,
         },
         { 
-          title: 'Independent Assessors Upload', 
+          title: 'Independent Assessors', 
           id: 'independentAssessors',
           name: 'independent-assessors',
           done: true,
         },
         { 
-          title: 'Candidate Assessment Form Upload', 
+          title: 'Candidate Assessment Form', 
           id: 'candidateAssessementForms',
           name: 'candidate-assessement-forms',
           done: true,
         },
         { 
-          title: 'Welsh Translation Upload', 
+          title: 'Welsh Translation', 
           id: 'welshTranslation',
           name: 'welsh-translation',
           done: true,
         },
         { 
-          title: 'Other Donwloads Upload', 
+          title: 'Other Donwloads', 
           id: 'otherDownloads',
           name: 'other-downloads',
           done: true,
@@ -318,10 +319,14 @@ export default {
     },
     async submitForm() {
       this.validateDownloads();
-      if (this.errors.length === 0) {
+      const noErrors = this.errors.length === 0;
+      if (noErrors) {
         this.exercise.progress.downloads = true;
-
-        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      } else {
+        this.exercise.progress.downloads = false;
+      }
+      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      if (noErrors) {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
     },
@@ -343,10 +348,14 @@ export default {
     validateItem(downloadId) {
       const isValid = this.exercise.downloads[downloadId] && this.exercise.downloads[downloadId].length > 0;
       if (!isValid) {
-        this.errors.push({ id: downloadId, message: `Please add ${downloadId}` });
+        this.errors.push({ id: downloadId, message: `Please add ${this.getDownloadTitle(downloadId)}` });
         this.validateUI(downloadId, true);
       }
       return isValid;
+    },
+    getDownloadTitle(downloadId) {
+      const theList = this.uploadList.filter( item => item.id === downloadId)[0];
+      return theList.title;
     },
     validateUI(downloadId, add) {
       const wrapperCssClass = this.$refs[`${downloadId}-group`][0].classList;
@@ -367,8 +376,18 @@ export default {
 .moj-download-link {
   background-color: #f3f2f1;
   padding: 5px;
-  margin: 0 5px 5px 0;
+  margin: 0 5px 5px 5px;
   display: inline-block;
+}
+.moj-download-button {
+  @extend .moj-download-link;
+  background-color: #00703c;
+  text-decoration: none;
+
+  &:visited,
+  &:link {
+    color: #ffffff;
+  }
 }
 .govuk-form-group--error th {
   padding-left: .5em;
