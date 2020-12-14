@@ -14,9 +14,6 @@
         <div
           class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2"
         >
-          <h2 class="govuk-heading-l">
-            Upload Files
-          </h2>
           <table class="govuk-table">
             <tbody class="govuk-table__body">
               <tr
@@ -31,7 +28,7 @@
                 <td class="govuk-table__cell">
                   <div>
                     <a
-                      class="govuk-link moj-download-button"
+                      :class="`govuk-link moj-download-button ${!upload.mandatory ? 'optional' : ''}`"
                       href="#"
                       @click.prevent="modalUploadOpen({ ...upload })"
                     >
@@ -242,55 +239,55 @@ export default {
           title: 'Job Description', 
           id: 'jobDescriptions',
           name: 'job-descriptions',
-          done: true,
+          mandatory: true,
         },
         { 
           title: 'Terms and Conditions', 
           id: 'termsAndConditions',
           name: 'terms-and-conditions',
-          done: true,
+          mandatory: false,
         },
         { 
           title: 'Competency Framework', 
           id: 'competencyFramework',
           name: 'competency-framework',
-          done: true,
+          mandatory: true,
         },
         { 
           title: 'Pensions Information', 
           id: 'pensionsInformation',
           name: 'pensions-information',
-          done: true,
+          mandatory: false,
         },
         { 
           title: 'Skills and Abilities Criteria', 
           id: 'skillsAndAbilitiesCriteria',
           name: 'skills-and-abilities-criteria',
-          done: true,
+          mandatory: true,
         },
         { 
           title: 'Independent Assessors', 
           id: 'independentAssessors',
           name: 'independent-assessors',
-          done: true,
+          mandatory: true,
         },
         { 
           title: 'Candidate Assessment Form', 
           id: 'candidateAssessementForms',
           name: 'candidate-assessement-forms',
-          done: true,
+          mandatory: false,
         },
         { 
           title: 'Welsh Translation', 
           id: 'welshTranslation',
           name: 'welsh-translation',
-          done: true,
+          mandatory: true,
         },
         { 
           title: 'Other Downloads', 
           id: 'otherDownloads',
           name: 'other-downloads',
-          done: true,
+          mandatory: false,
         },
       ];
       return data;
@@ -391,6 +388,11 @@ export default {
   &:visited,
   &:link {
     color: #ffffff;
+  }
+
+  &.optional {
+    background-color: #f3f2f1;
+    color: #0b0c0c;
   }
 }
 .govuk-form-group--error th {
