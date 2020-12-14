@@ -49,7 +49,11 @@
                         {{ item.title }}
                       </a>
                     </span>
-                    <span :id="`${upload.id}-error`" :ref="`${upload.id}-error`" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Please upload file: {{ upload.title }} </span>
+                    <span
+                      :id="`${upload.id}-error`"
+                      :ref="`${upload.id}-error`"
+                      class="govuk-error-message"
+                    ><span class="govuk-visually-hidden">Error:</span> Please upload file: {{ upload.title }} </span>
                   </div>
                 </td>
                 <td class="govuk-table__cell text-right">
@@ -283,7 +287,7 @@ export default {
           done: true,
         },
         { 
-          title: 'Other Donwloads', 
+          title: 'Other Downloads', 
           id: 'otherDownloads',
           name: 'other-downloads',
           done: true,
