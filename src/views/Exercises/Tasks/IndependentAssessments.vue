@@ -275,8 +275,8 @@
 <script>
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
