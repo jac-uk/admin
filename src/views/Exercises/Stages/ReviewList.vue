@@ -11,18 +11,6 @@
             Review ({{ totalApplicationRecords }})
           </h1>
         </div>
-        <div class="moj-page-header-actions__actions">
-          <div class="moj-button-menu">
-            <div class="moj-button-menu__wrapper">
-              <button
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                :disabled="isButtonDisabled"
-              >
-                Set status
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
       <Table
         data-key="id"
@@ -37,8 +25,26 @@
         multi-select
         :selection.sync="selectedItems"
         :page-size="50"
+        :search="['candidate.fullName']"
+        :filters="[
+          {
+            title: 'Status',
+            field: 'status',
+            type: 'checkbox',
+            options: availableStatuses.concat(['']),
+          },
+        ]"
         @change="getTableData"
       >
+        <template #actions>
+          <button
+            class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+            :disabled="isButtonDisabled"
+          >
+            Set status
+          </button>
+        </template>
+
         <template #row="{row}">
           <TableCell>
             <RouterLink
@@ -65,8 +71,8 @@
 
 <script>
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
   components: {
@@ -97,6 +103,11 @@ export default {
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
+    },
+    availableStatuses() {
+      const shortlistingMethods = this.exercise.shortlistingMethods;
+      const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
+      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod) ;
     },
   },
   async created() {
