@@ -37,10 +37,10 @@
   </form>
 </template>
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
 
 export default {
   components: {
@@ -55,7 +55,7 @@ export default {
         HMRC: null,
       },
     };
-    
+
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };
 

@@ -1,6 +1,6 @@
 import exerciseCollection from '@/store/exercise/collection';
 import { firestore } from '@/firebase';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 jest.mock('@/firebase', () => {
   const firebase = require('firebase-mock');

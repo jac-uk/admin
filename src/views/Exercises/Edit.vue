@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import LoadingMessage from '@/components/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 export default {
   components: {
     LoadingMessage,
@@ -27,7 +27,7 @@ export default {
   },
   mounted() {
     const id = this.$route.params.id;
-    
+
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
         if (data === null) {

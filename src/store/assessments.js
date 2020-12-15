@@ -1,7 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
-import tableQuery from '@/helpers/tableQuery';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 export default {
   namespaced: true,

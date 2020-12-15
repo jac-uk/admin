@@ -5,7 +5,7 @@
     >
       Candidates
     </h1>
-    <Table 
+    <Table
       data-key="id"
       :data="tableData"
       :page-size="50"
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import Table from '@/components/Page/Table/Table'; 
-import TableCell from '@/components/Page/Table/TableCell'; 
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
 
 export default {
   components: {
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getTableData(params) {
-      this.$store.dispatch('candidates/bind', params);      
+      this.$store.dispatch('candidates/bind', params);
     },
   },
 };

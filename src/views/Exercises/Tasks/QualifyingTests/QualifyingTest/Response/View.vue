@@ -318,12 +318,12 @@
 
 <script>
 import firebase from '@firebase/app';
-import { QUALIFYING_TEST } from '@/helpers/constants';
-import EditableField from '@/components/EditableField';
-import Select from '@/components/Form/Select';
-import TabsList from '@/components/Page/TabsList';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import QuestionDuration from '@/components/Micro/QuestionDuration';
-import ActionButton from '@/components/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToReset }  from '@/helpers/authUsers';
 
 export default {

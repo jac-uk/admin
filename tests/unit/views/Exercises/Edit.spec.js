@@ -1,6 +1,6 @@
 import Edit from '@/views/Exercises/Edit';
 import { shallowMount } from '@vue/test-utils';
-import LoadingMessage from '@/components/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 
 const mockStore = {
   dispatch: jest.fn().mockResolvedValue(),

@@ -70,13 +70,13 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import DateInput from '@/components/Form/DateInput';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import QTAdditionalInstruction from '@/components/RepeatableFields/QualifyingTests/AdditionalInstruction.vue';
-import { QUALIFYING_TEST } from '@/helpers/constants';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {

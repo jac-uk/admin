@@ -274,12 +274,12 @@
 
 <script>
 import { functions } from '@/firebase';
-import { isDateInFuture, isDateGreaterThan } from '@/helpers/date';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
-import ActionButton from '@/components/ActionButton';
-import DownloadLink from '@/components/DownloadLink';
-import Banner from '@/components/Page/Banner';
+import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
 

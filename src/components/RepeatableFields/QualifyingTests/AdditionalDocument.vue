@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
-import RichTextInput from '@/components/Form/RichTextInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 
 export default {
   name: 'QTAdditionalRichText',

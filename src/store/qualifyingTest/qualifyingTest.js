@@ -1,10 +1,10 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
-import { QUALIFYING_TEST } from '@/helpers/constants';
-import tableQuery from '@/helpers/tableQuery';
+import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 const collection = firestore.collection('qualifyingTests');
 

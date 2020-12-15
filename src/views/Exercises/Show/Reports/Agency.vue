@@ -405,7 +405,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import TabsList from '@/components/Page/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 
 export default {
   components: {

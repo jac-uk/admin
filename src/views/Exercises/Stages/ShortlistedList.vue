@@ -72,9 +72,9 @@
 </template>
 
 <script>
-import Banner from '@/components/Page/Banner';
-import Table from '@/components/Page/Table/Table';
-import TableCell from '@/components/Page/Table/TableCell';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
+import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
 
 export default {
   components: {

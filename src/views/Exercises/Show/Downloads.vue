@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import DownloadLink from '@/components/DownloadLink';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -203,9 +203,9 @@ export default {
     },
     showPensionsInformation() {
       if (
-        this.exercise && 
-        this.exercise.downloads && 
-        this.exercise.downloads.pensionsInformation && 
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.pensionsInformation &&
         this.exercise.downloads.pensionsInformation.length
       ) {
         return true;
@@ -215,9 +215,9 @@ export default {
     },
     showCompetencyFramework() {
       if (
-        this.exercise && 
-        this.exercise.downloads && 
-        this.exercise.downloads.competencyFramework && 
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.competencyFramework &&
         this.exercise.downloads.competencyFramework.length
       ) {
         return true;
@@ -227,9 +227,9 @@ export default {
     },
     showWelshTranslation() {
       if (
-        this.exercise && 
-        this.exercise.downloads && 
-        this.exercise.downloads.welshTranslation && 
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.welshTranslation &&
         this.exercise.downloads.welshTranslation.length
       ) {
         return true;

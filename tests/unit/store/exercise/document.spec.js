@@ -1,6 +1,6 @@
 import exerciseDocument from '@/store/exercise/document';
 import { firestore } from '@/firebase';
-import vuexfireSerialize from '@/helpers/vuexfireSerialize';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 jest.mock('@/firebase', () => {
   const firebase = require('firebase-mock');
@@ -140,7 +140,7 @@ xdescribe('store/exercise/single', () => {
         await save();
 
         const docSnapshot = await firestore.collection('exercises').doc('001').get();
-        
+
         const expectedData = {
           name: 'Example exercise',
           exerciseMailbox: 'test@gmail.com',
@@ -182,7 +182,7 @@ xdescribe('store/exercise/single', () => {
       it('returns a clone of the record data (rather than a reference to the state object)', () => {
         const state = {
           record: {
-            futureStart: 123, 
+            futureStart: 123,
             hmctsWelshGovLead: 'Test Name',
             name: 'Test Name',
           },

@@ -399,17 +399,17 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import TextField from '@/components/Form/TextField';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
-import Currency from '@/components/Form/Currency';
-import TextareaInput from '@/components/Form/TextareaInput';
-import RichTextInput from '@/components/Form/RichTextInput';
-import BackLink from '@/components/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {

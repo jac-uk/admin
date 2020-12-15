@@ -73,11 +73,11 @@
 </template>
 
 <script>
-import LoadingMessage from '@/components/LoadingMessage';
-import Navigation from '@/components/Page/Navigation';
-import AddToFavouritesButton from '@/components/Page/AddToFavouritesButton';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';
+import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import { mapState, mapGetters } from 'vuex';
-import { STATUS } from '@/helpers/constants';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {

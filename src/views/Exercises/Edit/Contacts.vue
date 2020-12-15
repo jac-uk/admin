@@ -29,7 +29,7 @@
           required
           :pattern="patternJACEmail"
         />
-        
+
         <TextField
           id="exercise-email-signature-name"
           v-model="exercise.emailSignatureName"
@@ -163,12 +163,12 @@
 </template>
 
 <script>
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import TextField from '@/components/Form/TextField';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
-import RepeatableFields from '@/components/RepeatableFields';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SeniorSelectionExerciseManager from '@/components/RepeatableFields/SeniorSelectionExerciseManager';
 import SelectionExerciseManager from '@/components/RepeatableFields/SelectionExerciseManager';
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
@@ -176,7 +176,7 @@ import LeadJudge from '@/components/RepeatableFields/LeadJudge';
 import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
 import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
 import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
-import BackLink from '@/components/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
   components: {

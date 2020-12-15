@@ -1,12 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
-import { downloadXLSX } from '@/helpers/export';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-jest.mock('@/helpers/export', () => {
+jest.mock('@jac-uk/jac-kit/helpers/export', () => {
   return {
     downloadXLSX: jest.fn(),
   };

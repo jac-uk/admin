@@ -2,7 +2,7 @@
   <SearchFilter :terms="terms" />
 </template>
 <script>
-import SearchFilter from '@/components/Filter/SearchFilter';
+import SearchFilter from '@jac-uk/jac-kit/components/SearchFilter/SearchFilter';
 
 export default {
   components: {

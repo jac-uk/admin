@@ -37,13 +37,13 @@
               required
             />
           </fieldset>
-          <button 
+          <button
             class="govuk-button govuk-!-margin-right-3"
             @click="save"
           >
             Save
           </button>
-          <button 
+          <button
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
             @click="closeModal"
           >
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import TextField from '@/components/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   name: 'IndependentAssessorChange',
@@ -86,12 +86,12 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close');
-    },          
+    },
     confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
-    },  
+    },
     async save() {
       let data = {};
       if (this.$attrs.AssessorNr == 1) {
@@ -112,7 +112,7 @@ export default {
       this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
       this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
       this.closeModal();
-    },     
+    },
   },
 };
 </script>

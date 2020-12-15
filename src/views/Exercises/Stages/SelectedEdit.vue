@@ -11,8 +11,8 @@
         @click="confirm"
       >
         Proceed with change
-      </button>      
-      <button 
+      </button>
+      <button
         class="govuk-button govuk-button--secondary"
         @click="cancel"
       >
@@ -40,7 +40,7 @@
       id="emp-edit-toggle"
       v-model="editEmpApplied"
       label="Equal Merit Provision"
-      hint=""        
+      hint=""
     >
       <CheckboxItem
         :value="true"
@@ -52,7 +52,7 @@
           required
           :messages="{
             required: 'Please specify a value'
-          }" 
+          }"
           label=""
           hint=""
         >
@@ -63,26 +63,26 @@
           <RadioItem
             :value="false"
             label="No - EMP has not been Applied"
-          />                  
-        </RadioGroup> 
+          />
+        </RadioGroup>
       </CheckboxItem>
     </CheckboxGroup>
 
     <button class="govuk-button">
       Save and continue
-    </button>      
+    </button>
   </form>
 </template>
 
 <script>
-import Banner from '@/components/Page/Banner';
-import Form from '@/components/Form/Form';
-import ErrorSummary from '@/components/Form/ErrorSummary';
-import RadioGroup from '@/components/Form/RadioGroup';
-import RadioItem from '@/components/Form/RadioItem';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
-import CheckboxGroup from '@/components/Form/CheckboxGroup';
-import CheckboxItem from '@/components/Form/CheckboxItem';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 
 export default {
   components: {
@@ -144,10 +144,10 @@ export default {
           stageValue = EXERCISE_STAGE.RECOMMENDED;
         }
         const data = {
-          status: this.newSelectedStatus, 
+          status: this.newSelectedStatus,
           nextStage: stageValue,
         };
-        if (this.editEmpApplied[0]) {  
+        if (this.editEmpApplied[0]) {
           data.empApplied = this.empApplied;
         }
         await this.$store.dispatch('stageSelected/updateStatus', data);
