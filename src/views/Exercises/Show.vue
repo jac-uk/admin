@@ -251,6 +251,10 @@ export default {
             name: 'exercise-show-report-diversity',
           },
           {
+            title: 'Outreach',
+            name: 'exercise-show-report-outreach',
+          },
+          {
             title: 'Character Issues',
             name: 'exercise-show-report-character-issues',
           },
