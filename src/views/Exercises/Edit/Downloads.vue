@@ -69,11 +69,17 @@
           </table>
           <button 
             class="govuk-button"
-            @click="submitForm()"
+            @click="submitForm('continue')"
           >
             Save and continue
           </button>
         </div>
+        <button 
+          class="govuk-button govuk-button--secondary govuk-!-margin-left-3"
+          @click="submitForm('skip')"
+        >
+          Save and Skip
+        </button>
         <Modal
           ref="modalRef"
         >
@@ -245,13 +251,13 @@ export default {
           title: 'Terms and Conditions', 
           id: 'termsAndConditions',
           name: 'terms-and-conditions',
-          mandatory: false,
+          mandatory: true,
         },
         { 
           title: 'Competency Framework', 
           id: 'competencyFramework',
           name: 'competency-framework',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Pensions Information', 
@@ -263,7 +269,7 @@ export default {
           title: 'Skills and Abilities Criteria', 
           id: 'skillsAndAbilitiesCriteria',
           name: 'skills-and-abilities-criteria',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Independent Assessors', 
@@ -281,7 +287,7 @@ export default {
           title: 'Welsh Translation', 
           id: 'welshTranslation',
           name: 'welsh-translation',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Other Downloads', 
@@ -318,7 +324,7 @@ export default {
       // Refresh the information on the exercise
       this.exercise = this.$store.getters['exerciseDocument/data']();
     },
-    async submitForm() {
+    async submitForm(action) {
       this.validateDownloads();
       const noErrors = this.errors.length === 0;
       if (noErrors) {
@@ -327,20 +333,20 @@ export default {
         this.exercise.progress.downloads = false;
       }
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      if (noErrors) {
+      if (noErrors || action === 'skip') {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
     },
     validateDownloads() {
       this.errors = [];
       this.validateItem('jobDescriptions');
-      // this.validateItem('termsAndConditions');
-      this.validateItem('competencyFramework');
+      this.validateItem('termsAndConditions');
+      // this.validateItem('competencyFramework');
       // pensionsInformation: this.validateItem('pensionsInformation');
-      this.validateItem('skillsAndAbilitiesCriteria');
+      // this.validateItem('skillsAndAbilitiesCriteria');
       this.validateItem('independentAssessors');
       // this.validateItem('candidateAssessementForms');
-      this.validateItem('welshTranslation');
+      // this.validateItem('welshTranslation');
       // this.validateItem('otherDownloads');
 
       // govuk-form-group--error
