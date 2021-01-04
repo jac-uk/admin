@@ -73,8 +73,8 @@
 
 <script>
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
   components: {
