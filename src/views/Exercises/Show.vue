@@ -26,7 +26,7 @@
       <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
-          <h1 class="govuk-heading-xl">
+          <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exerciseName }}
           </h1>
           <router-link

@@ -82,8 +82,8 @@
 import { mapState } from 'vuex';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {

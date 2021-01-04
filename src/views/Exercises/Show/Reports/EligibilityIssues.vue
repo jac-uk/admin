@@ -111,8 +111,8 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 
 export default {

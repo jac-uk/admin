@@ -63,10 +63,10 @@
             beta
           </strong>
           <span class="govuk-phase-banner__text">
-            This is a new service – your 
-            <a 
+            This is a new service – your
+            <a
               class="govuk-link govuk-link--no-visited-state"
-              target="_blank" 
+              target="_blank"
               href="https://docs.google.com/forms/d/e/1FAIpQLSexm0qgMV0tOQTFP4QUSegOOX89VeYhWwuofV---JZTOEXGIQ/viewform"
             >
               feedback
@@ -187,11 +187,6 @@ $jac-link-colour: #753880;
 .govuk-main-wrapper {
   padding-top: 0 !important;
   overflow: hidden;
-}
-
-.govuk-grid-column-one-half {
-  width: 100%;
-  float: left;
 }
 
 .govuk-footer {

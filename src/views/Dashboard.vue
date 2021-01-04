@@ -42,16 +42,6 @@
           All exercises
         </h1>
         <form @submit.prevent="checkForm">
-          <div class="moj-button-menu">
-            <div class="moj-button-menu__wrapper">
-              <button
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
-                :disabled="isButtonDisabled"
-              >
-                Export data
-              </button>
-            </div>
-          </div>
           <Table
             ref="exercisesTable"
             data-key="id"
@@ -68,10 +58,31 @@
                 class: 'govuk-table__header--numeric'
               },
             ]"
+            :filters="[
+              {
+                title: 'State',
+                field: 'state',
+                type: 'checkbox',
+                options: exerciseStates,
+              },
+              {
+                type: 'dateRange',
+                field: 'applicationOpenDate',
+                title: 'Open date',
+              },
+            ]"
             multi-select
             :selection.sync="selectedItems"
             @change="getTableData"
           >
+            <template #actions>
+              <button
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
+                :disabled="isButtonDisabled"
+              >
+                Export data
+              </button>
+            </template>
             <template #row="{row}">
               <TableCell>
                 <RouterLink
@@ -116,8 +127,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
   components: {
@@ -127,6 +138,7 @@ export default {
   data() {
     return {
       selectedItems: [],
+      exerciseStates: ['draft', 'ready', 'approved'],
     };
   },
   computed: {

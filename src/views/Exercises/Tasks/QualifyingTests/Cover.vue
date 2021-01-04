@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/draftComponents/Table/Table';
-import TableCell from '@jac-uk/jac-kit/draftComponents/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 

@@ -91,7 +91,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    describe('form', () => {
+    xdescribe('form', () => {
       it('contains a form', () => {
         expect(wrapper.find('form').exists()).toBe(true);
       });
@@ -105,7 +105,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
       });
     });
 
-    it('contains 7 multi uploads', () => {
+    xit('contains 7 multi uploads', () => {
       expect(wrapper.findAll(RepeatableFields)).toHaveLength(7);
     });
   });
