@@ -18,17 +18,17 @@
 export default {
   name: 'CharacterDeclarationSummary',
   props: {
-    application: {
+    characterInformation: {
       type: Object,
       required: true,
-      default: new Object(),
+      default: new Object({}),
     },
   },
   methods: {
     signedDeclaration() {
-      if (this.application.characterInformation.declaration1 === true &&
-        this.application.characterInformation.declaration2 === true &&
-        this.application.characterInformation.declaration3 === true) {
+      if (this.characterInformation.declaration1 === true &&
+        this.characterInformation.declaration2 === true &&
+        this.characterInformation.declaration3 === true) {
         return true;
       }
       return false;
