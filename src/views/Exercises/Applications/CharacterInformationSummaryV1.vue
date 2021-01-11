@@ -141,7 +141,7 @@
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 
 export default {
-  name: 'ReviewV1',
+  name: 'CharacterInformationSummaryV1',
   components: {
     EventRenderer,
   },

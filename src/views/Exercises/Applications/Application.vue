@@ -311,7 +311,7 @@
                 />
               </dl>
               <dl v-else>
-                <ReviewV1
+                <CharacterInformationSummaryV1
                   :character-information="application.characterInformation"
                 />
               </dl>
@@ -1823,7 +1823,7 @@ import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersS
 import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import ReviewV1 from './ReviewV1.vue';
+import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 
 export default {
   components: {
@@ -1844,7 +1844,7 @@ export default {
     ProfessionalConductSummary,
     FurtherInformationSummary,
     CharacterDeclarationSummary,
-    ReviewV1,
+    CharacterInformationSummaryV1,
   },
   data() {
     return {
