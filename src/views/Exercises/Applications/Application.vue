@@ -287,36 +287,34 @@
                 Character information
               </h2>
 
-              <dl v-if="application.characterInformation">
+              <dl v-if="application.characterInformationV2">
                 <CriminalOffencesSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <FixedPenaltiesSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <MotoringOffencesSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <FinancialMattersSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <ProfessionalConductSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <FurtherInformationSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
                 <CharacterDeclarationSummary
-                  :application="application"
+                  :character-information="application.characterInformationV2"
                 />
               </dl>
-
-              <div
-                v-else
-                class="govuk-body"
-              >
-                No information on applicant's Character yet
-              </div>
+              <dl v-else>
+                <ReviewV1
+                  :character-information="application.characterInformation"
+                />
+              </dl>
             </div>
 
             <div
@@ -1825,6 +1823,7 @@ import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersS
 import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
+import ReviewV1 from './ReviewV1.vue';
 
 export default {
   components: {
@@ -1845,6 +1844,7 @@ export default {
     ProfessionalConductSummary,
     FurtherInformationSummary,
     CharacterDeclarationSummary,
+    ReviewV1,
   },
   data() {
     return {

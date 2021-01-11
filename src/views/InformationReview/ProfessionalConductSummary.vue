@@ -7,7 +7,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
+            :data="characterInformation.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
           />
         </dd>
       </div>
@@ -20,7 +20,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.subjectOfAllegationOrClaimOfNegligenceDetails"
+            :data="characterInformation.subjectOfAllegationOrClaimOfNegligenceDetails"
           />
         </dd>
       </div>
@@ -33,7 +33,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
+            :data="characterInformation.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
           />
         </dd>
       </div>
@@ -46,7 +46,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
+            :data="characterInformation.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
           />
         </dd>
       </div>
@@ -59,7 +59,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
+            :data="characterInformation.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
           />
         </dd>
       </div>
@@ -72,7 +72,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.complaintOrDisciplinaryActionDetails"
+            :data="characterInformation.complaintOrDisciplinaryActionDetails"
           />
         </dd>
       </div>
@@ -85,7 +85,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="application.characterInformation.requestedToResignDetails"
+            :data="characterInformation.requestedToResignDetails"
           />
         </dd>
       </div>
@@ -102,10 +102,10 @@ export default {
     InformationReviewRenderer,
   },
   props: {
-    application: {
+    characterInformation: {
       type: Object,
       required: true,
-      default: new Object(),
+      default: new Object({}),
     },
   },
 };
