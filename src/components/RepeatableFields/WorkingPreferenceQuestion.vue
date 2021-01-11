@@ -18,7 +18,7 @@
       label="What question would you like to ask?"
     />
     <RadioGroup
-      id="working-preference-question-type"
+      :id="`working-preference-question-type_${index}`"
       v-model="row.questionType"
       label="How would you like the question answered?"
       :messages="{

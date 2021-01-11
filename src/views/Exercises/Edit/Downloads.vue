@@ -69,11 +69,17 @@
           </table>
           <button 
             class="govuk-button"
-            @click="submitForm()"
+            @click="submitForm('continue')"
           >
             Save and continue
           </button>
         </div>
+        <button 
+          class="govuk-button govuk-button--secondary govuk-!-margin-left-3"
+          @click="submitForm('skip')"
+        >
+          Save and Skip
+        </button>
         <Modal
           ref="modalRef"
         >
@@ -84,94 +90,6 @@
           />
         </Modal>
       </div>
-
-      <form 
-        v-if="false" 
-        ref="downloadForm"
-        @submit.prevent="save"
-      >
-        <h2 class="govuk-heading-l">
-          Job description
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.jobDescriptions"
-          ident="job-description"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <h2 class="govuk-heading-l">
-          Terms and conditions
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.termsAndConditions"
-          ident="terms-and-conditions"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <h2 class="govuk-heading-l">
-          Independent assessors
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.independentAssessors"
-          ident="independent-assessors"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-          :max="1"
-        />
-
-        <h2 class="govuk-heading-l">
-          Candidate assessment form
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.candidateAssessementForms"
-          ident="candidate-assessement-forms"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <h2 class="govuk-heading-l">
-          Pensions Information
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.pensionsInformation"
-          ident="pensions-information"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <h2 class="govuk-heading-l">
-          Competency framework
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.competencyFramework"
-          ident="competency-framework"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <h2 class="govuk-heading-l">
-          Welsh Translation
-        </h2>
-
-        <RepeatableFields
-          v-model="exercise.downloads.welshTranslation"
-          ident="welsh-translation"
-          :component="repeatableFields.MultiFileUpload"
-          :path="uploadPath"
-        />
-
-        <button class="govuk-button">
-          Save and continue
-        </button>
-      </form>
     </div>
   </div>
 </template>
@@ -245,13 +163,13 @@ export default {
           title: 'Terms and Conditions', 
           id: 'termsAndConditions',
           name: 'terms-and-conditions',
-          mandatory: false,
+          mandatory: true,
         },
         { 
           title: 'Competency Framework', 
           id: 'competencyFramework',
           name: 'competency-framework',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Pensions Information', 
@@ -263,7 +181,7 @@ export default {
           title: 'Skills and Abilities Criteria', 
           id: 'skillsAndAbilitiesCriteria',
           name: 'skills-and-abilities-criteria',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Independent Assessors', 
@@ -281,7 +199,7 @@ export default {
           title: 'Welsh Translation', 
           id: 'welshTranslation',
           name: 'welsh-translation',
-          mandatory: true,
+          mandatory: false,
         },
         { 
           title: 'Other Downloads', 
@@ -318,7 +236,7 @@ export default {
       // Refresh the information on the exercise
       this.exercise = this.$store.getters['exerciseDocument/data']();
     },
-    async submitForm() {
+    async submitForm(action) {
       this.validateDownloads();
       const noErrors = this.errors.length === 0;
       if (noErrors) {
@@ -327,20 +245,20 @@ export default {
         this.exercise.progress.downloads = false;
       }
       await this.$store.dispatch('exerciseDocument/save', this.exercise);
-      if (noErrors) {
+      if (noErrors || action === 'skip') {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
     },
     validateDownloads() {
       this.errors = [];
       this.validateItem('jobDescriptions');
-      // this.validateItem('termsAndConditions');
-      this.validateItem('competencyFramework');
+      this.validateItem('termsAndConditions');
+      // this.validateItem('competencyFramework');
       // pensionsInformation: this.validateItem('pensionsInformation');
-      this.validateItem('skillsAndAbilitiesCriteria');
+      // this.validateItem('skillsAndAbilitiesCriteria');
       this.validateItem('independentAssessors');
       // this.validateItem('candidateAssessementForms');
-      this.validateItem('welshTranslation');
+      // this.validateItem('welshTranslation');
       // this.validateItem('otherDownloads');
 
       // govuk-form-group--error
