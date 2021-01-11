@@ -81,6 +81,7 @@ import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
 import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
 import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversity';
+import ExerciseShowReportsOutreach from '@/views/Exercises/Show/Reports/Outreach';
 import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
 import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
 import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
@@ -574,6 +575,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Exercise Reports | Diversity',
+              },
+            },
+            {
+              path: 'outreach',
+              component: ExerciseShowReportsOutreach,
+              name: 'exercise-show-report-outreach',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Reports | Oureach',
               },
             },
             {
