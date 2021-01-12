@@ -25,11 +25,10 @@
       -->
       <Table
         data-key="id"
-        :data="applications"
+        :data="applicationRecords"
         :columns="[
-          { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
+          { title: 'Candidate' },
         ]"
-        :search="['personalDetails.fullName']"
         :page-size="10"
         @change="getTableData"
       >
@@ -38,7 +37,7 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ row.referenceNumber }} <span v-if="row.personalDetails">{{ row.personalDetails.fullName }}</span>
+                  {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
                 </div>
               </div>
               <div class="govuk-grid-column-one-third text-right">
@@ -52,7 +51,7 @@
             </div>
 
             <div
-              v-for="(issue, index) in row.processing.eligibilityIssues"
+              v-for="(issue, index) in row.issues.eligibilityIssues"
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
@@ -63,16 +62,6 @@
               <div class="govuk-grid-column-two-thirds">
                 <div class="issue">
                   <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
-                </div>
-                <div
-                  v-if="issue.type == 'rls-issue'"
-                  class="relevant-info"
-                >
-                  <span class="govuk-!-font-weight-bold">Date of birth:</span> {{ row.personalDetails.dateOfBirth | formatDate }}<br>
-                  <span
-                    v-if="row.canGiveReasonableLOS"
-                    class="govuk-!-font-weight-bold"
-                  >Candidate comments:</span> {{ row.cantGiveReasonableLOSDetails }}
                 </div>
                 <div
                   v-if="issue.comments"
@@ -122,7 +111,7 @@ export default {
   },
   data () {
     return {
-      applications: [],
+      applicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
     };
@@ -145,18 +134,17 @@ export default {
     },
     getTableData(params) {
       let firestoreRef = firestore
-        .collection('applications')
-        .where('exerciseId', '==', this.exercise.id)
-        .where('status', '==', 'applied')
-        .where('processing.flags.eligibilityIssues', '==', true);
-      firestoreRef = tableQuery(this.applications, firestoreRef, params);
+        .collection('applicationRecords')
+        .where('exercise.id', '==', this.exercise.id)
+        .where('flags.eligibilityIssues', '==', true);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
-          const applications = [];
+          const applicationRecords = [];
           snap.forEach((doc) => {
-            applications.push(vuexfireSerialize(doc));
+            applicationRecords.push(vuexfireSerialize(doc));
           });
-          this.applications = applications;
+          this.applicationRecords = applicationRecords;
         });
     },
   },
