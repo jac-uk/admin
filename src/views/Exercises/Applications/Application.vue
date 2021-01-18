@@ -287,143 +287,34 @@
                 Character information
               </h2>
 
-              <dl
-                v-if="application.characterInformation"
-                class="govuk-summary-list"
-              >
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has been cautioned or convicted of a criminal offence
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.criminalOffences | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.criminalOffences"
-                      :events="application.characterInformation.criminalOffenceDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has received a non-motoring penalty notice in the last 4 years
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.nonMotoringFixedPenaltyNotices | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.nonMotoringFixedPenaltyNotices"
-                      :events="application.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has been disqualified from driving, or convicted for driving under the influence of drink or drugs
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.drivingDisqualificationDrinkDrugs | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.drivingDisqualificationDrinkDrugs"
-                      :events="application.characterInformation.drivingDisqualificationDrinkDrugsDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has endorsements on licence, or received any motoring fixed-penalty notices in the last 4 years
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.endorsementsOrMotoringFixedPenalties | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.endorsementsOrMotoringFixedPenalties"
-                      :events="application.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.declaredBankruptOrIVA | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.declaredBankruptOrIVA"
-                      :events="application.characterInformation.declaredBankruptOrIVADetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has filed late tax returns or been fined by HMRC
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.lateTaxReturnOrFined | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.lateTaxReturnOrFined"
-                      :events="application.characterInformation.lateTaxReturnOrFinedDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has ever been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.involvedInProfessionalMisconduct | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.involvedInProfessionalMisconduct"
-                      :events="application.characterInformation.involvedInProfessionalMisconductDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has ever been subject to complaints or disciplinary action, or been asked to resign from a position
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.diciplinaryActionOrAskedToResign | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.diciplinaryActionOrAskedToResign"
-                      :events="application.characterInformation.diciplinaryActionOrAskedToResignDetails"
-                    />
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Has any other character issues
-                  </dt>
-                  <dd
-                    class="govuk-summary-list__value"
-                  >
-                    {{ application.characterInformation.otherCharacterIssues | toYesNo }}
-                    <EventRenderer
-                      v-if="application.characterInformation.otherCharacterIssues"
-                      :events="application.characterInformation.otherCharacterIssuesDetails"
-                    />
-                  </dd>
-                </div>
+              <dl v-if="application.characterInformationV2">
+                <CriminalOffencesSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <FixedPenaltiesSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <MotoringOffencesSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <FinancialMattersSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <ProfessionalConductSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <FurtherInformationSummary
+                  :character-information="application.characterInformationV2"
+                />
+                <CharacterDeclarationSummary
+                  :character-information="application.characterInformationV2"
+                />
               </dl>
-              <div
-                v-else
-                class="govuk-body"
-              >
-                No information on applicant's Character yet
-              </div>
+              <dl v-else>
+                <CharacterInformationSummaryV1
+                  :character-information="application.characterInformation"
+                />
+              </dl>
             </div>
 
             <div
@@ -1925,6 +1816,14 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
+import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
+import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 
 export default {
   components: {
@@ -1938,6 +1837,14 @@ export default {
     IndependentAssessorChange,
     SubmissionExtension,
     Notes,
+    CriminalOffencesSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
+    ProfessionalConductSummary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
+    CharacterInformationSummaryV1,
   },
   data() {
     return {
