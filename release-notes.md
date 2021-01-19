@@ -1,5 +1,10 @@
 # Release Notes #
 
+0.53.0
+2 issues / 5sp
+ #1071 Eligibility and character reports
+ #1096 Create outreach report
+
 0.52.0
 2 issues / 4sp
  #1120 Make changes in Character Information in the Applications section of the Exercise
