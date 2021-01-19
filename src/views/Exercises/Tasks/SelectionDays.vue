@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      sift: null,
+      selection: null,
     };
   },
   computed: {
