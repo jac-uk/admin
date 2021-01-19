@@ -208,6 +208,22 @@ export default {
           },
         );
       }
+      if (this.exercise.siftStartDate) {
+        tasks.push(
+          {
+            title: 'Sift',
+            name: 'exercise-tasks-sift',
+          },
+        );
+      }
+      if (this.exercise.selectionDays) {
+        tasks.push(
+          {
+            title: 'Selection Days',
+            name: 'exercise-tasks-selection-days',
+          },
+        );
+      }
       return tasks;
     },
     applicationStageNavigation(){

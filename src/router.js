@@ -61,6 +61,8 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
+import ExerciseTasksSift from '@/views/Exercises/Tasks/Sift';
+import ExerciseTasksSelectionDays from '@/views/Exercises/Tasks/SelectionDays';
 
 // Temp
 import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
@@ -552,6 +554,24 @@ const router = new Router({
                   ],
                 },
               ],
+            },
+            {
+              path: 'sift',
+              component: ExerciseTasksSift,
+              name: 'exercise-tasks-sift',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Tasks | Sift',
+              },
+            },
+            {
+              path: 'selection-days',
+              component: ExerciseTasksSelectionDays,
+              name: 'exercise-tasks-selection-days',
+              meta: {
+                requiresAuth: true,
+                title: 'Exercise Tasks | Sift',
+              },
             },
           ],
         },
