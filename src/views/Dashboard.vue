@@ -47,17 +47,7 @@
             data-key="id"
             :data="records"
             :page-size="50"
-            :columns="[
-              { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
-              { title: 'Name', sort: 'name' },
-              { title: 'Open date', sort: 'applicationOpenDate' },
-              { title: 'Close date', sort: 'applicationCloseDate' },
-              {
-                title: 'Applications count',
-                sort: 'applicationsCount',
-                class: 'govuk-table__header--numeric'
-              },
-            ]"
+            :columns="tableColumns"
             :filters="[
               {
                 title: 'State',
@@ -84,28 +74,28 @@
               </button>
             </template>
             <template #row="{row}">
-              <TableCell>
+              <TableCell :title="tableColumns[0].title">
                 <RouterLink
                   :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
                 >
                   {{ row.referenceNumber }}
                 </RouterLink>
               </TableCell>
-              <TableCell>
+              <TableCell :title="tableColumns[1].title">
                 <RouterLink
                   :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
                 >
                   {{ row.name }}
                 </RouterLink>
               </TableCell>
-              <TableCell>
+              <TableCell :title="tableColumns[2].title">
                 <RouterLink
                   :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
                 >
                   {{ row.applicationOpenDate | formatDate }}
                 </RouterLink>
               </TableCell>
-              <TableCell>
+              <TableCell :title="tableColumns[3].title">
                 <RouterLink
                   :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
                 >
@@ -114,6 +104,7 @@
               </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
+                :title="tableColumns[4].title"
               >
                 {{ row.applicationsCount }}
               </TableCell>
@@ -139,6 +130,17 @@ export default {
     return {
       selectedItems: [],
       exerciseStates: ['draft', 'ready', 'approved'],
+      tableColumns: [
+        { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
+        { title: 'Name', sort: 'name' },
+        { title: 'Open date', sort: 'applicationOpenDate' },
+        { title: 'Close date', sort: 'applicationCloseDate' },
+        {
+          title: 'Applications count',
+          sort: 'applicationsCount',
+          class: 'govuk-table__header--numeric',
+        },
+      ],
     };
   },
   computed: {
