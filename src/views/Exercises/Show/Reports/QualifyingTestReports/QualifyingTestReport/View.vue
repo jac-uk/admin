@@ -55,20 +55,16 @@
         v-if="hasReportData"
         data-key="score"
         :data="qualifyingTestReport.report"
-        :columns="[
-          { title: 'Rank' },
-          { title: 'Count' },
-          { title: 'Score' },
-          { title: 'Female' },
-          { title: 'BAME' },
-          { title: 'Solicitor' },
-          { title: 'Disability' },
-        ]"
+        :columns="tableColumns"
       >
         <template #row="{row}">
-          <TableCell>{{ row.rank }}</TableCell>
-          <TableCell>{{ row.count }}</TableCell>
-          <TableCell>
+          <TableCell :title="tableColumns[0].title">
+            {{ row.rank }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.count }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
             <RouterLink
               :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: row.score } }"
               class="govuk-link"
@@ -76,10 +72,14 @@
               {{ row.score }}
             </RouterLink>
           </TableCell>
-          <TableCell>{{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
-          <TableCell>{{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
-          <TableCell>{{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
-          <TableCell>{{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+          <TableCell :title="tableColumns[3].title">
+            {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+          <TableCell :title="tableColumns[4].title">
+            {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+          <TableCell :title="tableColumns[5].title">
+            {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+          <TableCell :title="tableColumns[6].title">
+            {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
         </template>
       </Table>
     </div>
@@ -98,6 +98,17 @@ export default {
     ActionButton,
     Table,
     TableCell,
+  },
+  data() {
+    return [
+      { title: 'Rank' },
+      { title: 'Count' },
+      { title: 'Score' },
+      { title: 'Female' },
+      { title: 'BAME' },
+      { title: 'Solicitor' },
+      { title: 'Disability' },
+    ];
   },
   computed: {
     qualifyingTestReportId() {
