@@ -1,5 +1,10 @@
 # Release Notes #
 
+0.54.0
+2 issues / 6sp
+ #543  Ensure Table component displays well on small screens
+ #995 Mobile implementation for tables
+
 0.53.0
 2 issues / 5sp
  #1071 Eligibility and character reports
