@@ -10,7 +10,7 @@
       :data="panelsList"
       :page-size="50"
       :columns="[
-        { title: 'Name', sort: 'names' },
+        { title: 'Name', sort: 'name' },
         { title: 'Type' },
         { title: 'Status' },
       ]"
