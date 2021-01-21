@@ -36,25 +36,20 @@
       data-key="id"
       :data="notificationsQueue"
       :page-size="50"
-      :columns="[
-        { title: 'Created', sort: 'createdAt', direction: 'desc', default: true },
-        { title: 'Template' },
-        { title: 'To' },
-        { title: 'Status' },
-      ]"
+      :columns="tableColumns"
       @change="getQueueData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           {{ row.createdAt | formatDate('datetime') }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1].title">
           {{ row.template.name }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[2].title">
           {{ row.email }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[3].title">
           {{ row.status }}
         </TableCell>
       </template>
@@ -69,25 +64,20 @@
       data-key="id"
       :data="notificationsSent"
       :page-size="50"
-      :columns="[
-        { title: 'Created', sort: 'createdAt' },
-        { title: 'Sent', sort: 'sentAt', direction: 'desc', default: true },
-        { title: 'Template' },
-        { title: 'To' },
-      ]"
+      :columns="tableColumns"
       @change="getSentData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           {{ row.createdAt | formatDate('datetime') }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1].title">
           {{ row.sentAt | formatDate('datetime') }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[2].title">
           {{ row.template.name }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[3].title">
           {{ row.email }}
           <span v-if="row.email != row.sentTo">({{ row.sentTo }})</span>
         </TableCell>
@@ -171,6 +161,12 @@ export default {
         defaultMailbox: '',
         sendToRecipient: false,
       },
+      tableColumns: [
+        { title: 'Created', sort: 'createdAt', direction: 'desc', default: true },
+        { title: 'Template' },
+        { title: 'To' },
+        { title: 'Status' },
+      ],
     };
   },
   computed: {

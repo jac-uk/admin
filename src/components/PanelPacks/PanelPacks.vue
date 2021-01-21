@@ -9,21 +9,17 @@
       data-key="id"
       :data="panelsList"
       :page-size="50"
-      :columns="[
-        { title: 'Name', sort: 'name' },
-        { title: 'Type' },
-        { title: 'Status' },
-      ]"
+      :columns="tableColumns"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0]">
           {{ row.name }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1]">
           {{ row.type }}
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[2]">
           {{ row.status }}
         </TableCell>
       </template>
@@ -57,6 +53,11 @@ export default {
   data() {
     return {
       activeTab: 'panels',
+      tableColumns: [
+        { title: 'Name', sort: 'name' },
+        { title: 'Type' },
+        { title: 'Status' },
+      ],
     };
   },
   computed: {

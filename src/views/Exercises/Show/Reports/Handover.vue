@@ -48,25 +48,19 @@
     <Table
       data-key="id"
       :data="applicationRecords"
-      :columns="[
-        {
-          title:'Reference number',
-          class: ['govuk-!-width-one-third'],
-        },
-        { title: 'Name', sort: 'candidate.fullName', default: true },
-      ]"
+      :columns="tableColumns"
       :page-size="50"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           <RouterLink
             :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
           >
             {{ row.application.referenceNumber }}
           </RouterLink>
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1].title">
           <RouterLink
             :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
           >
@@ -95,6 +89,13 @@ export default {
     return {
       page: 1,
       pageSize: 25,
+      tableColumns: [
+        {
+          title: 'Reference number',
+          class: ['govuk-!-width-one-third'],
+        },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+      ],
     };
   },
   computed: {
