@@ -95,18 +95,12 @@
           data-key="id"
           :data="assessments"
           :page-size="50"
-          :columns="[
-            { title: 'Reference number' },
-            { title: 'Candidate name', sort: 'candidate.fullName', default: true },
-            { title: 'Assessor' },
-            { title: 'Status' },
-            { title: 'Actions' },
-          ]"
+          :columns="tableColumns"
           :search="['candidate.fullName']"
           @change="getTableData"
         >
           <template #row="{row}">
-            <TableCell>
+            <TableCell :title="tableColumns[0].title">
               <RouterLink
                 class="govuk-link"
                 :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
@@ -114,14 +108,14 @@
                 {{ row.application.referenceNumber }}
               </RouterLink>
             </TableCell>
-            <TableCell>
+            <TableCell :title="tableColumns[1].title">
               <RouterLink
                 :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
               >
                 {{ row.candidate.fullName }}
               </RouterLink>
             </TableCell>
-            <TableCell>
+            <TableCell :title="tableColumns[2].title">
               <a
                 :href="`mailto:${row.assessor.email}`"
                 class="govuk-link govuk-link--no-visited-state"
@@ -130,7 +124,7 @@
                 {{ row.assessor.fullName }}
               </a>
             </TableCell>
-            <TableCell>
+            <TableCell :title="tableColumns[3].title">
               {{ row.status | lookup }}
               <strong
                 v-if="lateIASubmission(row)"
@@ -139,7 +133,7 @@
                 Late
               </strong>
             </TableCell>
-            <TableCell>
+            <TableCell :title="tableColumns[4].title">
               <div class="moj-button-menu">
                 <div
                   v-if="!hasStartedSending"
@@ -297,6 +291,13 @@ export default {
     return {
       exerciseStage: '',
       uploadAsssessmentProps: {},
+      tableColumns: [
+        { title: 'Reference number' },
+        { title: 'Candidate name', sort: 'candidate.fullName', default: true },
+        { title: 'Assessor' },
+        { title: 'Status' },
+        { title: 'Actions' },
+      ],
     };
   },
   computed: {

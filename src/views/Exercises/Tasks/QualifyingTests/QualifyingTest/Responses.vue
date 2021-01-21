@@ -23,22 +23,21 @@
       data-key="id"
       :data="responses"
       :page-size="50"
-      :columns="[
-        { title: 'Name', sort: 'candidate.fullName', default: true },
-        { title: 'Status' },
-        { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
-        { title: '' },
-      ]"
+      :columns="tableColumns"
       :search="['candidate.fullName']"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
-        <TableCell>{{ row.status | lookup }} {{ row.isOutOfTime ? 'DNF' : '' }}</TableCell>
-        <TableCell>{{ formatTimeLimit(row.duration.testDurationAdjusted) }}</TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ row.status | lookup }} {{ row.isOutOfTime ? 'DNF' : '' }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
+          {{ formatTimeLimit(row.duration.testDurationAdjusted) }}
+        </TableCell>
+        <TableCell :title="tableColumns[3].title">
           <RouterLink
             :to="{ name: 'qualifying-test-response-view', params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
           >
@@ -61,6 +60,16 @@ export default {
   components: {
     Table,
     TableCell,
+  },
+  data() {
+    return {
+      tableColumns: [
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Status' },
+        { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
+        { title: '' },
+      ],
+    };
   },
   computed: {
     sortedByScoresArr() {

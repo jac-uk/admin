@@ -35,36 +35,36 @@
       <Table
         data-key="id"
         :data="applicationRecords"
-        :columns="[
-          { title: 'Reference number' },
-          { title: 'Name', sort: 'candidate.fullName', default: true },
-          { title: 'Issues' },
-          { title: 'Status' },
-          { title: 'EMP' }
-        ]"
+        :columns="columnsTable"
         multi-select
         :selection.sync="selectedItems"
         :page-size="50"
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell>
+          <TableCell :title="columnsTable[0].title">
             <RouterLink
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
             >
               {{ row.application.referenceNumber }}
             </RouterLink>
           </TableCell>
-          <TableCell>
+          <TableCell :title="columnsTable[1].title">
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
             >
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
-          <TableCell>{{ row | candidateHasIssues }}</TableCell>
-          <TableCell>{{ row.status | lookup }}</TableCell>
-          <TableCell>{{ row.flags.empApplied | toYesNo }}</TableCell>
+          <TableCell :title="columnsTable[2].title">
+            {{ row | candidateHasIssues }}
+          </TableCell>
+          <TableCell :title="columnsTable[3].title">
+            {{ row.status | lookup }}
+          </TableCell>
+          <TableCell :title="columnsTable[4].title">
+            {{ row.flags.empApplied | toYesNo }}
+          </TableCell>
         </template>
       </Table>
       <p v-if="!applicationRecords.length">
@@ -89,6 +89,13 @@ export default {
     return {
       message: null,
       selectedItems: [],
+      tableColumns: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Issues' },
+        { title: 'Status' },
+        { title: 'EMP' },
+      ],
     };
   },
   computed: {
