@@ -22,6 +22,11 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    create: async (context, data ) => {
+      // eslint-disable-next-line no-console
+      console.log('store create', data);
+      await collectionRef.add(data);
+    },
   },
   state: {
     records: [],
