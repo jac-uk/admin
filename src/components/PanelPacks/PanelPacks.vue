@@ -10,7 +10,7 @@
       :data="panelsList"
       :page-size="50"
       :columns="[
-        { title: 'Title', sort: 'title' },
+        { title: 'Name', sort: 'names' },
         { title: 'Type' },
         { title: 'Status' },
       ]"
@@ -18,7 +18,7 @@
     >
       <template #row="{row}">
         <TableCell>
-          {{ row.title }}
+          {{ row.name }}
         </TableCell>
         <TableCell>
           {{ row.type }}
