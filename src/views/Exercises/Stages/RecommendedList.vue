@@ -35,34 +35,34 @@
       <Table
         data-key="id"
         :data="applicationRecords"
-        :columns="columnsTable"
+        :columns="tableColumns"
         multi-select
         :selection.sync="selectedItems"
         :page-size="50"
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell :title="columnsTable[0].title">
+          <TableCell :title="tableColumns[0].title">
             <RouterLink
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
             >
               {{ row.application.referenceNumber }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="columnsTable[1].title">
+          <TableCell :title="tableColumns[1].title">
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
             >
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="columnsTable[2].title">
+          <TableCell :title="tableColumns[2].title">
             {{ row | candidateHasIssues }}
           </TableCell>
-          <TableCell :title="columnsTable[3].title">
+          <TableCell :title="tableColumns[3].title">
             {{ row.status | lookup }}
           </TableCell>
-          <TableCell :title="columnsTable[4].title">
+          <TableCell :title="tableColumns[4].title">
             {{ row.flags.empApplied | toYesNo }}
           </TableCell>
         </template>
