@@ -34,4 +34,16 @@ export default {
   mutations: {
     
   },
+  getters: {
+    getPanel: (state) => (id) => {
+      // eslint-disable-next-line no-console
+      console.log('getPanel', id, state.records);
+      const returnObj = state.records.filter(item => {
+        // eslint-disable-next-line no-console
+        console.log('filter item', id, item);
+        return item.id === id;
+      });
+      return (returnObj);
+    },
+  },
 };
