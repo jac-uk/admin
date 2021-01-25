@@ -43,8 +43,12 @@
             {{ row.referenceNumber | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
-        <TableCell :title="tableColumns[1].title">{{ row.personalDetails && row.personalDetails.fullName }}</TableCell>
-        <TableCell :title="tableColumns[2].title">{{ row.status | lookup }}</TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ row.personalDetails && row.personalDetails.fullName }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
+          {{ row.status | lookup }}
+        </TableCell>
       </template>
     </Table>
     <p

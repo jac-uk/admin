@@ -73,13 +73,17 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+            {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+            {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          </TableCell>
           <TableCell :title="tableColumns[5].title">
-            {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+            {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          </TableCell>
           <TableCell :title="tableColumns[6].title">
-            {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%</TableCell>
+            {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          </TableCell>
         </template>
       </Table>
     </div>
@@ -100,15 +104,17 @@ export default {
     TableCell,
   },
   data() {
-    return [
-      { title: 'Rank' },
-      { title: 'Count' },
-      { title: 'Score' },
-      { title: 'Female' },
-      { title: 'BAME' },
-      { title: 'Solicitor' },
-      { title: 'Disability' },
-    ];
+    return {
+      tableColumns: [
+        { title: 'Rank' },
+        { title: 'Count' },
+        { title: 'Score' },
+        { title: 'Female' },
+        { title: 'BAME' },
+        { title: 'Solicitor' },
+        { title: 'Disability' },
+      ],
+    };
   },
   computed: {
     qualifyingTestReportId() {
