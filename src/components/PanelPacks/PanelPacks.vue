@@ -18,7 +18,11 @@
     >
       <template #row="{row}">
         <TableCell>
-          {{ row.name }}
+          <RouterLink
+            :to="{ name: 'exercise-tasks-panels-view', params: { panelId: row.id} }"
+          >
+            {{ row.name }}
+          </RouterLink>
         </TableCell>
         <TableCell>
           {{ row.type }}
