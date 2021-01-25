@@ -1,4 +1,5 @@
 import { auth } from '@/firebase';
+import { roles } from '@/helpers/roles';
 
 const module = {
   namespaced: true,
@@ -27,7 +28,7 @@ const module = {
           }
           if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
             allOk = true;
-          }  
+          }
         }
         if (allOk) {
           let role = 'staff';
@@ -36,7 +37,7 @@ const module = {
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
               'lisias.loback@judicialappointments.digital',
-              'rebecca.mcknight@judicialappointments.digital',
+              'maria.brookes@judicialappointments.digital',
             ].indexOf(user.email) >= 0
           ) {
             role = 'superadmin';
@@ -47,7 +48,8 @@ const module = {
             emailVerified: user.emailVerified,
             displayName: user.displayName,
             role: role,
-          });  
+            permissions: roles[role],
+          });
         } else {
           auth().signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
