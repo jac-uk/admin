@@ -80,9 +80,11 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.application.referenceNumber }}</TableCell>
+          {{ row.application.referenceNumber }}
+        </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.candidate.fullName }}</TableCell>
+          {{ row.candidate.fullName }}
+        </TableCell>
         <TableCell :title="tableColumns[2].title">
           <span
             v-if="row.characterChecks"

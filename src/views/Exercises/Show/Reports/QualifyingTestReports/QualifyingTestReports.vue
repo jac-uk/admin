@@ -40,7 +40,7 @@ export default {
     Table,
     TableCell,
   },
-  data(){
+  data() {
     return {
       tableColumns: [
         { title: 'Title' },
