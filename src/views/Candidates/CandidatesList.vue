@@ -21,7 +21,9 @@
             {{ row.fullName | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
-        <TableCell :title="tableColumns[1].title">{{ new Date(row.created) | formatDate('long') }}</TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ new Date(row.created) | formatDate('long') }}
+        </TableCell>
         <TableCell :title="tableColumns[2].title">
           <span v-if="row.applications && row.applications.applied">
             {{ row.applications.applied }}
