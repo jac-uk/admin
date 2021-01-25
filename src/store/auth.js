@@ -1,5 +1,5 @@
 import { auth } from '@/firebase';
-import { roles } from '@/helpers/roles';
+import { ROLES } from '@/helpers/roles';
 
 const module = {
   namespaced: true,
@@ -31,7 +31,7 @@ const module = {
           }
         }
         if (allOk) {
-          let role = 'staff';
+          let role = ROLES.USER;
           if (
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
@@ -40,7 +40,7 @@ const module = {
               'maria.brookes@judicialappointments.digital',
             ].indexOf(user.email) >= 0
           ) {
-            role = 'superadmin';
+            role = ROLES.SUPERADMIN;
           }
           commit('setCurrentUser', {
             uid: user.uid,
@@ -48,7 +48,7 @@ const module = {
             emailVerified: user.emailVerified,
             displayName: user.displayName,
             role: role,
-            permissions: roles[role],
+            permissions: role.permissions,
           });
         } else {
           auth().signOut();

@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import { createLocalVue } from '@vue/test-utils';
 import PermissionsPlugin from '@/plugins/PermissionsPlugin';
+import { ROLES } from '@/helpers/roles';
 
 const currentUser = {
   uid: 1,
   email: 'test@test.com',
   emailVerified: 1,
   displayName: 'Test user',
-  role: 'superadmin',
-  permissions: ['createExercise'],
+  role: ROLES.ADMIN,
+  permissions: ['createExercise', 'viewExercise', 'updateExercise', 'deleteExercise', 'updateExerciseDatesAfterClose',
+                'updateApplication', 'updateCandidateContactDetails', 'candidateSearch', 'updateAssessorsDetails',
+                'createReports', 'triggerEmails', 'updateStateByActions', 'addNotes', 'uploadTemplates'],
 };
 
 const mockStore = {
