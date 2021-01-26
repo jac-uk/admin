@@ -128,7 +128,7 @@ export default {
           created: firebase.firestore.FieldValue.serverTimestamp(),
         };
         // eslint-disable-next-line no-console
-        console.log('validateAndSave', data);
+        // console.log('validateAndSave', data);
         await this.$store.dispatch('panels/create', data);
         this.$router.push({ 
           name: `exercise-tasks-${this.type}`,
