@@ -3,12 +3,17 @@
     <h1 class="govuk-heading-l">
       Selection Days
     </h1>
-    <p>Selection Days Under Construction</p>
+    <PanelPack type="selection-days" />
   </div>
 </template>
 
 <script>
+import PanelPack from '@/components/PanelPacks/PanelPacks';
+
 export default {
+  components: {
+    PanelPack,
+  },
   data() {
     return {
       selection: null,

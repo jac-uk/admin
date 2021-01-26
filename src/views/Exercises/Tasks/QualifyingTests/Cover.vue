@@ -7,15 +7,11 @@
       data-key="id"
       :data="qualifyingTests"
       :page-size="50"
-      :columns="[
-        { title: 'Title', sort: 'title', default: true },
-        { title: 'Type' },
-        { title: 'Status' },
-      ]"
+      :columns="tableColumns"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           <RouterLink
             class="govuk-link"
             :to="{ name: getViewName(row), params: { qualifyingTestId: row.id } }"
@@ -29,10 +25,12 @@
           <br>
           <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
         </TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[1].title">
           {{ row.type | lookup }}
         </TableCell>
-        <TableCell>{{ row.status | lookup }}</TableCell>
+        <TableCell :title="tableColumns[2].title">
+          {{ row.status | lookup }}
+        </TableCell>
       </template>
     </Table>
 
@@ -63,6 +61,15 @@ export default {
     Table,
     Banner,
     TableCell,
+  },
+  data() {
+    return {
+      tableColumns: [
+        { title: 'Title', sort: 'title', default: true },
+        { title: 'Type' },
+        { title: 'Status' },
+      ],
+    };
   },
   computed: {
     exercise() {

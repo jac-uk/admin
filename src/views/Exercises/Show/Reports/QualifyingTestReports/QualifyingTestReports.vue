@@ -6,14 +6,12 @@
     <Table
       data-key="id"
       :data="qualifyingTestReports"
-      :columns="[
-        { title: 'Title' },
-      ]"
+      :columns="tableColumns"
       :page-size="50"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           <RouterLink
             class="govuk-link"
             :to="{ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: row.id } }"
@@ -41,6 +39,13 @@ export default {
   components: {
     Table,
     TableCell,
+  },
+  data() {
+    return {
+      tableColumns: [
+        { title: 'Title' },
+      ],
+    };
   },
   computed: {
     exercise() {

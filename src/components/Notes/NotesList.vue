@@ -2,16 +2,13 @@
   <Table
     data-key="notes"
     :data="notes"
-    :columns="[
-      { title: 'Date' },
-      { title: 'Note' },
-    ]"
+    :columns="tableColumns"
   >
     <template #row="{row}">
-      <TableCell>
+      <TableCell :title="tableColumns[0].title">
         {{ new Date(row.created) | formatDate('long') }}
       </TableCell>
-      <TableCell>
+      <TableCell :title="tableColumns[1].title">
         <div class="notes__editable">
           <span>
             {{ row.body }}
@@ -52,6 +49,14 @@ export default {
       type: Array,
       default: null,
     },
+  },
+  data(){
+    return {
+      tableColumns: [
+        { title: 'Date' },
+        { title: 'Note' },
+      ],
+    };
   },
   methods: {
     editNote(id) {

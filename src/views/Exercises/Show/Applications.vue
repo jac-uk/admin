@@ -29,17 +29,13 @@
       ref="applicationsTable"
       data-key="id"
       :data="applications"
-      :columns="[
-        { title: 'Reference number' },
-        { title: 'Name', sort: 'personalDetails.fullName', default: true },
-        { title: 'Status' },
-      ]"
+      :columns="tableColumns"
       :search="['personalDetails.fullName']"
       :page-size="50"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
           <RouterLink
             class="govuk-link"
             :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: status }}"
@@ -47,8 +43,12 @@
             {{ row.referenceNumber | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
-        <TableCell>{{ row.personalDetails && row.personalDetails.fullName }}</TableCell>
-        <TableCell>{{ row.status | lookup }}</TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ row.personalDetails && row.personalDetails.fullName }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
+          {{ row.status | lookup }}
+        </TableCell>
       </template>
     </Table>
     <p
@@ -70,6 +70,15 @@ export default {
   components: {
     Table,
     TableCell,
+  },
+  data(){
+    return {
+      tableColumns: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'personalDetails.fullName', default: true },
+        { title: 'Status' },
+      ],
+    };
   },
   computed: {
     exercise() {

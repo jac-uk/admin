@@ -26,15 +26,13 @@
       <Table
         data-key="id"
         :data="applications"
-        :columns="[
-          { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
-        ]"
+        :columns="tableColumns"
         :search="['personalDetails.fullName']"
         :page-size="10"
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell>
+          <TableCell :title="tableColumns[0].title">
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
@@ -220,6 +218,9 @@ export default {
       applications: [],
       refreshingReport: false,
       unsubscribe: null,
+      tableColumns: [
+        { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
+      ],
     };
   },
   computed: {

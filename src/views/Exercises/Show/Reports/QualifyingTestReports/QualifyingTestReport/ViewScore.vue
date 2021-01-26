@@ -153,17 +153,28 @@
         :selection.sync="selectedItems"
       >
         <template #row="{row}">
-          <TableCell>{{ row.application.referenceNumber }}</TableCell>
+          <TableCell :title="columns[0].title">
+            {{ row.application.referenceNumber }}
+          </TableCell>
           <TableCell
             v-for="test in qualifyingTestReport.qualifyingTests"
             :key="test.id"
+            :title="columns[1].title"
           >
             {{ row.qualifyingTests[test.id].score }}
           </TableCell>
-          <TableCell>{{ row.diversity.female | toYesNo }}</TableCell>
-          <TableCell>{{ row.diversity.bame | toYesNo }}</TableCell>
-          <TableCell>{{ row.diversity.solicitor | toYesNo }}</TableCell>
-          <TableCell>{{ row.diversity.disability | toYesNo }}</TableCell>
+          <TableCell :title="columns[2].title">
+            {{ row.diversity.female | toYesNo }}
+          </TableCell>
+          <TableCell :title="columns[3].title">
+            {{ row.diversity.bame | toYesNo }}
+          </TableCell>
+          <TableCell :title="columns[4].title">
+            {{ row.diversity.solicitor | toYesNo }}
+          </TableCell>
+          <TableCell :title="columns[5].title">
+            {{ row.diversity.disability | toYesNo }}
+          </TableCell>
         </template>
       </Table>
     </div>

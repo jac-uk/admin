@@ -72,20 +72,20 @@
     <Table
       data-key="id"
       :data="applicationRecords"
-      :columns="[
-        { title: 'Reference number' },
-        { title: 'Name', sort: 'candidate.fullName', default: true },
-        { title: 'Status' }
-      ]"
+      :columns="tableColumns"
       multi-select
       :selection.sync="selectedItems"
       :page-size="50"
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell>{{ row.application.referenceNumber }}</TableCell>
-        <TableCell>{{ row.candidate.fullName }}</TableCell>
-        <TableCell>
+        <TableCell :title="tableColumns[0].title">
+          {{ row.application.referenceNumber }}
+        </TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ row.candidate.fullName }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
           <span
             v-if="row.characterChecks"
           >
@@ -117,6 +117,11 @@ export default {
       message: null,
       status: 'success',
       selectedItems: [],
+      tableColumns: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Status' },
+      ],
     };
   },
   computed: {
