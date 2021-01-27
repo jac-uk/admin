@@ -1,5 +1,6 @@
 import { auth } from '@/firebase';
 import { ROLES } from '@/helpers/roles';
+import { users } from '@/helpers/users';
 
 const module = {
   namespaced: true,
@@ -32,6 +33,8 @@ const module = {
         }
         if (allOk) {
           let role = ROLES.USER;
+          //for prototyping:
+          let r = 'admin';
           if (
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
@@ -41,6 +44,7 @@ const module = {
             ].indexOf(user.email) >= 0
           ) {
             role = ROLES.SUPERADMIN;
+            r = 'superadmin';
           }
           commit('setCurrentUser', {
             uid: user.uid,
@@ -50,6 +54,16 @@ const module = {
             role: role,
             permissions: role.permissions,
           });
+          //for prototyping:
+            const loggedInUser = {
+              id: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+              role: r,
+            };
+            users.push(loggedInUser);
+            const data = JSON.stringify(users);
+            localStorage.setItem('users', data);
         } else {
           auth().signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');

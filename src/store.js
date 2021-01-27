@@ -15,7 +15,6 @@ import assessment from '@/store/assessment';
 import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
-
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
@@ -29,7 +28,7 @@ import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestRespon
 import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
-import panels from '@/store/panels';
+import users from '@/store/users';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -59,7 +58,7 @@ const store = new Vuex.Store({
     connectionMonitor,
     qualifyingTestReports,
     qualifyingTestReport,
-    panels,
+    users,
   },
   state: {},
   mutations: {

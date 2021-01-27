@@ -111,6 +111,7 @@ import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
 
 import Dashboard from '@/views/Dashboard';
+import Users from '@/views/Users';
 import ExercisesExport from '@/views/Exercises/Export';
 import SignIn from '@/views/SignIn';
 import NotificationsList from '@/views/NotificationsList';
@@ -143,6 +144,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Notifications',
+      },
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: Users,
+      meta: {
+        requiresAuth: true,
+        title: 'Users',
       },
     },
     {
