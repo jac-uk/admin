@@ -1,7 +1,9 @@
 <template>
   <div>
     <form @submit.prevent="validateAndSave">
-      <h1 class="govuk-heading-l">{{ title }}</h1>
+      <h1 class="govuk-heading-l">
+        {{ title }}
+      </h1>
       
       <ErrorSummary
         :errors="errors"
@@ -43,6 +45,12 @@
         Save and continue
       </button>
     </form>
+    <button
+      class="govuk-button govuk-button--secondary"
+      @click="cancel"
+    >
+      Cancel
+    </button>
   </div>
 </template>
 
@@ -120,12 +128,17 @@ export default {
           created: firebase.firestore.FieldValue.serverTimestamp(),
         };
         // eslint-disable-next-line no-console
-        console.log('validateAndSave', data);
+        // console.log('validateAndSave', data);
         await this.$store.dispatch('panels/create', data);
         this.$router.push({ 
           name: `exercise-tasks-${this.type}`,
         });
       }
+    },
+    cancel() {
+      this.$router.push({ 
+        name: `exercise-tasks-${this.type}`,
+      });
     },
   },
 };

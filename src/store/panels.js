@@ -24,8 +24,26 @@ export default {
     }),
     create: async (context, data ) => {
       // eslint-disable-next-line no-console
-      console.log('store create', data);
+      // console.log('store create', data);
       await collectionRef.add(data);
+    },
+    updateMembers: async (context, data) => {
+      const panel = context.getters.getPanel(data.id)[0];
+      const members = [...panel.members];
+      if (data.action === 'edit') {
+        members[data.idx] = data.members;
+      } 
+      if (data.action === 'new') {
+        members.push(data.members);
+      }
+      if (data.action === 'delete') {
+        members.splice(data.idx, 1);
+      }
+      // eslint-disable-next-line no-console
+      // console.log('updateMembers store members: ', members);
+      await collectionRef.doc(data.id).set({
+        members: members,
+      }, { merge: true });
     },
   },
   state: {
@@ -33,5 +51,17 @@ export default {
   },
   mutations: {
     
+  },
+  getters: {
+    getPanel: (state) => (id) => {
+      // eslint-disable-next-line no-console
+      // console.log('getPanel', id, state.records);
+      const returnObj = state.records.filter(item => {
+        // eslint-disable-next-line no-console
+        // console.log('filter item', id, item);
+        return item.id === id;
+      });
+      return (returnObj);
+    },
   },
 };

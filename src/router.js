@@ -63,6 +63,7 @@ import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterCheck
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
 import ExerciseTasksPanels from '@/views/Exercises/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercises/Tasks/PanelsNew';
+import ExerciseTasksPanelsView from '@/views/Exercises/Tasks/PanelsView';
 import ExerciseTasksSift from '@/views/Exercises/Tasks/Sift';
 import ExerciseTasksSelectionDays from '@/views/Exercises/Tasks/SelectionDays';
 
@@ -578,6 +579,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Exercise Tasks | Sift - new',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-panels-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Panels - view',
                   },
                 },
               ],

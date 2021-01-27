@@ -13,13 +13,17 @@
       @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell :title="tableColumns[0]">
-          {{ row.name }}
+        <TableCell :title="tableColumns[0].title">
+          <RouterLink
+            :to="{ name: 'exercise-tasks-panels-view', params: { panelId: row.id} }"
+          >
+            {{ row.name }}
+          </RouterLink>
         </TableCell>
-        <TableCell :title="tableColumns[1]">
+        <TableCell :title="tableColumns[1].title">
           {{ row.type }}
         </TableCell>
-        <TableCell :title="tableColumns[2]">
+        <TableCell :title="tableColumns[2].title">
           {{ row.status }}
         </TableCell>
       </template>
