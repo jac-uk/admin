@@ -16,7 +16,7 @@
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
             <RouterLink
-              :to="{ name: 'exercise-tasks-panels-view', params: { panelId: row.id} }"
+              :to="{ name: `exercise-tasks-${row.type}-view`, params: { panelId: row.id} }"
             >
               {{ row.name }}
             </RouterLink>

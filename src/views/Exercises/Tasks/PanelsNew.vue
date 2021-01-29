@@ -81,10 +81,12 @@ export default {
   },
   computed: {
     isSift() {
+      // TODO: add this from store panel.js
       const route = this.$route.fullPath.includes('/tasks/sift/');
       return route;
     },
     isSelectionDay() {
+      // TODO: add this from store panel.js
       const route = this.$route.fullPath.includes('/tasks/selection-days/');
       return route;
     },
