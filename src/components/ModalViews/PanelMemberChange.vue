@@ -16,6 +16,13 @@
               label="Full name"
               required
             />
+            <!-- 
+              TODO: The title or position needs to be a dropwdown with 
+              • Chair
+              • Independent
+              • Judicial
+              • Other 
+            -->
             <TextField
               id="title"
               v-model="title"

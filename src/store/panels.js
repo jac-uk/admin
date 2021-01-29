@@ -66,7 +66,7 @@ export default {
       return (returnObj);
     },
     isSift: () => (url) => {
-      // TODO: add this implementation to PanelsNew.vue and PanelsView.vue
+      // TODO: add isSift to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
         route = url.includes('/tasks/sift/');
@@ -74,7 +74,7 @@ export default {
       return route;
     },
     isSelectionDay: () => (url) => {
-      // TODO: add this implementation to PanelsNew.vue and PanelsView.vue
+      // TODO: add isSelectionDay to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
         route = url.includes('/tasks/selection-days/');
