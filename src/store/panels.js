@@ -29,7 +29,9 @@ export default {
     },
     updateMembers: async (context, data) => {
       const panel = context.getters.getPanel(data.id)[0];
-      const members = [...panel.members];
+      // eslint-disable-next-line no-console
+      console.log('updateMembers panel  ', { panel });
+      const members = panel.members ? [...panel.members] : [];
       if (data.action === 'edit') {
         members[data.idx] = data.members;
       } 
@@ -62,6 +64,22 @@ export default {
         return item.id === id;
       });
       return (returnObj);
+    },
+    isSift: () => (url) => {
+      // TODO: add this implementation to PanelsNew.vue and PanelsView.vue
+      let route = false;
+      if (url) {
+        route = url.includes('/tasks/sift/');
+      }
+      return route;
+    },
+    isSelectionDay: () => (url) => {
+      // TODO: add this implementation to PanelsNew.vue and PanelsView.vue
+      let route = false;
+      if (url) {
+        route = url.includes('/tasks/selection-days/');
+      }
+      return route;
     },
   },
 };

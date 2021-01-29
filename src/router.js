@@ -584,10 +584,10 @@ const router = new Router({
                 {
                   path: 'view/:panelId',
                   component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-panels-view',
+                  name: 'exercise-tasks-sift-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Panels - view',
+                    title: 'Exercise Tasks | Panels - Sift - view',
                   },
                 },
               ],
@@ -613,6 +613,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Exercise Tasks | Selection Days - new',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-selection-days-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Panels - view',
                   },
                 },
               ],
