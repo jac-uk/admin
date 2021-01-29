@@ -9,6 +9,12 @@
           </h1>
         </div>
         <div class="govuk-grid-column-one-half text-right print-none">
+          <!-- 
+            TODO: The Actions buttons on the Panel View doesn't have any action.
+            If we are not going to use this, we should delete.
+            The idea was to have the GENERATE Panel Packs in different forms here
+            TODO: The magic to actually create the PANEL PACKS
+          -->
           <div class="moj-button-menu">
             <button
               ref="dropDownRef"
@@ -68,12 +74,16 @@
           </span>
         </div>
       </div>
-
+      <!-- 
+        TODO: The dashboard area on the Panel view needs to be coded.
+        This was added here as a placeholder.
+      -->
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              <!-- TODO: Add the dynamic status -->
               Created
             </h2>
           </div>
@@ -81,10 +91,11 @@
 
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">Interview</span>
+            <span class="govuk-caption-m">Sift / Selection Days</span>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
+              <!-- TODO: Add the dynamic date -->
               02/03/2021
             </h2>
           </div>
@@ -93,11 +104,12 @@
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
             <div class="govuk-caption-m">
-              Participants
+              Candidates
             </div>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
+              <!-- TODO: Add the candidates count -->
               25
             </h2>
           </div>
@@ -113,7 +125,7 @@
       <h2
         class="govuk-heading-l"
       >
-        List of Panelists
+        List of Panellists
       </h2>
       <button
         class="govuk-button"
@@ -186,6 +198,25 @@
       />
     </Modal>
     <!-- end MEMBER -->
+    <!-- CANDIDATE LIST -->
+    <div v-if="activeTab === 'candidates'">
+      <p>TODO: Add the list of the candidates that are part of a specific panel.</p>
+      <!-- 
+        TODO: Create a new database query on the review and shorlisted STORE to return the value
+        TODO: retrieve the candidate list according to the panel ID
+        TODO: Ability to remove a candidate from the list
+      -->  
+    </div>
+    <!-- //  END CANDIDATE LIST -->
+
+    <!-- INFO PANEL -->
+    <div v-if="activeTab === 'info'">
+      <p>TODO: Add the info panel.</p>
+      <!-- 
+        TODO: The information is already on the page - it is the additional information qhen creating a new panel and the information about the drive/location of the files
+      -->  
+    </div>
+    <!-- //  END INFO PANEL -->
   </div>
 </template>
 

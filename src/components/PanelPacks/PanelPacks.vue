@@ -94,6 +94,13 @@
       </Table>
     </div>
     <!-- CANDIDATES -->
+    <!-- CANDIDATES -->
+    <div v-show="activeTab == 'settings'">
+      <p>
+        TODO: Add the Settings Panel on the PanelPacks
+        <!-- TODO: We could remove this, but maybe we eant to have an eercise-wide selection for google drive, etc ... -->
+      </p>
+    </div>
   </div>
 </template>
 
