@@ -63,5 +63,19 @@ export default {
       });
       return (returnObj);
     },
+    isSift: () => (url) => {
+      let route = false;
+      if (url) {
+        route = url.includes('/tasks/sift/');
+      }
+      return route;
+    },
+    isSelectionDay: () => (url) => {
+      let route = false;
+      if (url) {
+        route = url.includes('/tasks/selection-days/');
+      }
+      return route;
+    },
   },
 };

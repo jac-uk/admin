@@ -4,36 +4,96 @@
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
-    <Table
-      v-show="activeTab == 'panels'"
-      data-key="id"
-      :data="panelsList"
-      :page-size="50"
-      :columns="tableColumns"
-      @change="getTableData"
-    >
-      <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
-          <RouterLink
-            :to="{ name: 'exercise-tasks-panels-view', params: { panelId: row.id} }"
+    <!-- PANELS -->
+    <div v-show="activeTab == 'panels'">
+      <Table
+        data-key="id"
+        :data="panelsList"
+        :page-size="50"
+        :columns="tableColumns"
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-tasks-panels-view', params: { panelId: row.id} }"
+            >
+              {{ row.name }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.type }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.status }}
+          </TableCell>
+        </template>
+      </Table>
+      <button
+        class="govuk-button govuk-!-margin-right-3"
+        @click="createNewPanel"
+      >
+        Create New
+      </button>
+    </div>
+    <!-- // END PANELS -->
+    <!-- CANDIDATES -->
+    <div v-show="activeTab == 'candidates'">
+      <Table
+        data-key="id"
+        :data="candidatesList"
+        :columns="tableColumnsCandidates"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        :search="['candidate.fullName']"
+        :filters="[
+          {
+            title: 'Status',
+            field: 'status',
+            type: 'checkbox',
+          },
+        ]"
+        @change="getTableDatacandidates"
+      >
+        <template #actions>
+          <button
+            class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+            :disabled="isButtonDisabled"
+            @click="btnClkSelectPanel"
           >
-            {{ row.name }}
-          </RouterLink>
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
-          {{ row.type }}
-        </TableCell>
-        <TableCell :title="tableColumns[2].title">
-          {{ row.status }}
-        </TableCell>
-      </template>
-    </Table>
-    <button
-      class="govuk-button govuk-!-margin-right-3"
-      @click="createNewPanel"
-    >
-      Create New
-    </button>
+            Set Panel
+          </button>
+        </template>
+
+        <template #row="{row}">
+          <TableCell :title="tableColumnsCandidates[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumnsCandidates[1].title">
+            <RouterLink
+              :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+            >
+              {{ row.candidate.fullName }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumnsCandidates[2].title">
+            {{ row.status | lookup }}
+          </TableCell>
+          <TableCell :title="tableColumnsCandidates[3].title">
+            {{ row | candidateHasIssues }}
+          </TableCell>
+          <TableCell :title="tableColumnsCandidates[4].title">
+            {{ row.flags.empApplied | toYesNo }}
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+    <!-- CANDIDATES -->
   </div>
 </template>
 
@@ -57,10 +117,18 @@ export default {
   data() {
     return {
       activeTab: 'panels',
+      selectedItems: [],
       tableColumns: [
-        { title: 'Name', sort: 'name' },
+        { title: 'Name' },
         { title: 'Type' },
         { title: 'Status' },
+      ],
+      tableColumnsCandidates: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Issues' },
+        { title: 'Status' },
+        { title: 'EMP' },
       ],
     };
   },
@@ -89,6 +157,32 @@ export default {
       // console.log('panelsList', this.$store.state.panels.records);
       return this.$store.state.panels.records;
     },
+    candidatesList() {
+      // eslint-disable-next-line no-console
+      // console.log('panelsList', this.$store.state);
+      let records = [];
+      if (this.isSift) {
+        records = this.$store.state.stageReview.records;
+      }
+      if (this.isSelectionDay) {
+        records = this.$store.state.stageShortlisted.records;
+      }
+      return records;
+    },
+    isSift() {
+      const routeFullPath = this.$route.fullPath ;
+      const route = this.$store.getters['panels/isSift'](routeFullPath);
+      return route;
+    },
+    isSelectionDay() {
+      const routeFullPath = this.$route.fullPath ;
+      const route = this.$store.getters['panels/isSelectionDay'](routeFullPath);
+      return route;
+    },
+    isButtonDisabled() {
+      const isDisabled = this.selectedItems && this.selectedItems.length;
+      return !isDisabled;
+    },
   },
   created() {
 
@@ -104,11 +198,36 @@ export default {
         }
       );
     },
+    getTableDatacandidates(params) {
+      if (this.isSift) {
+        this.$store.dispatch(
+          'stageReview/bind',
+          {
+            exerciseId: this.exerciseId,
+            ...params,
+          }
+        );
+      }
+      if (this.isSelectionDay) {
+        this.$store.dispatch(
+          'stageShortlisted/bind',
+          {
+            exerciseId: this.exerciseId,
+            ...params,
+          }
+        );
+      }
+    },
     createNewPanel() {
       const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-days-new';
       // eslint-disable-next-line no-console
       // console.log('create new Pack btn clicked');
       this.$router.push({ name: routeName });
+    },
+    btnClkSelectPanel() {
+      // TODO Select Panels to add these candidates
+      // eslint-disable-next-line no-console
+      console.log('SelectPanel');
     },
   },
 };
