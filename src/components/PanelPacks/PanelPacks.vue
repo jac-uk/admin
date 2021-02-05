@@ -74,6 +74,9 @@
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ getPanelName(row) }}
+          </TableCell>
         </template>
       </Table>
     </div>
@@ -126,11 +129,12 @@ export default {
       tableColumns: [
         { title: 'Name' },
         { title: 'Type' },
-        { title: 'Status' },
+        { title: 'Panel' },
       ],
       tableColumnsCandidates: [
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Panel' },
       ],
     };
   },
@@ -186,9 +190,6 @@ export default {
       return !isDisabled;
     },
   },
-  created() {
-
-  },
   methods: {
     getTableData(params) {
       this.$store.dispatch(
@@ -219,6 +220,17 @@ export default {
           }
         );
       }
+    },
+    getPanelName(candidate) {
+      if (!candidate.panelIds) {
+        return '';
+      }
+      const panelId = this.isSift ? candidate.panelIds.sift : candidate.panelIds.selection;
+      if (!panelId) {
+        return '';
+      }
+      const panel = this.$store.state.panels.records.find(p => p.id === panelId);
+      return panel ? panel.name : panelId;
     },
     createNewPanel() {
       const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-days-new';

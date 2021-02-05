@@ -83,7 +83,6 @@
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              <!-- TODO: Add the dynamic status -->
               {{ panel.status }}
             </h2>
           </div>
@@ -95,7 +94,6 @@
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              <!-- TODO: Add the dynamic date -->
               {{ exercise.siftStartDate | formatDate | showAlternative("Unknown") }},
             </h2>
             <ul class="govuk-list">
@@ -210,7 +208,6 @@
     <!-- end MEMBER -->
     <!-- CANDIDATE LIST -->
     <div v-if="activeTab === 'candidates'">
-      <p>TODO: Add the list of the candidates that are part of a specific panel.</p>
       <!-- CANDIDATES -->
       <div v-show="activeTab == 'candidates'">
         <Table
@@ -221,13 +218,6 @@
           :selection.sync="selectedItems"
           :page-size="50"
           :search="['candidate.fullName']"
-          :filters="[
-            {
-              title: 'Status',
-              field: 'status',
-              type: 'checkbox',
-            },
-          ]"
           @change="getTableDatacandidates"
         >
           <template #actions>
@@ -259,11 +249,6 @@
         </Table>
       </div>
       <!-- CANDIDATES -->
-      <!--
-        TODO: Create a new database query on the review and shorlisted STORE to return the value
-        TODO: retrieve the candidate list according to the panel ID
-        TODO: Ability to remove a candidate from the list
-      -->
     </div>
     <!-- //  END CANDIDATE LIST -->
 
@@ -416,7 +401,7 @@ export default {
         this.$store.dispatch(
           'stageReview/bind',
           {
-            exerciseId: this.exerciseId,
+            exerciseId: this.panel.exerciseId,
             ...params,
           }
         );
@@ -425,7 +410,7 @@ export default {
         this.$store.dispatch(
           'stageShortlisted/bind',
           {
-            exerciseId: this.exerciseId,
+            exerciseId: this.panel.exerciseId,
             ...params,
           }
         );
