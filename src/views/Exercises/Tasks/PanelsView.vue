@@ -9,7 +9,7 @@
           </h1>
         </div>
         <div class="govuk-grid-column-one-half text-right print-none">
-          <!-- 
+          <!--
             TODO: The Actions buttons on the Panel View doesn't have any action.
             If we are not going to use this, we should delete.
             The idea was to have the GENERATE Panel Packs in different forms here
@@ -74,7 +74,7 @@
           </span>
         </div>
       </div>
-      <!-- 
+      <!--
         TODO: The dashboard area on the Panel view needs to be coded.
         This was added here as a placeholder.
       -->
@@ -84,7 +84,7 @@
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
               <!-- TODO: Add the dynamic status -->
-              Created
+              {{ panel.status }}
             </h2>
           </div>
         </div>
@@ -96,8 +96,18 @@
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
               <!-- TODO: Add the dynamic date -->
-              02/03/2021
+              {{ exercise.siftStartDate | formatDate | showAlternative("Unknown") }},
             </h2>
+            <ul class="govuk-list">
+              <li
+                v-for="item in exercise.selectionDays"
+                :key="item.location"
+              >
+                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+                  {{ item.selectionDayStart | formatDate | showAlternative("Unknown") }}
+                </h2>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -201,26 +211,76 @@
     <!-- CANDIDATE LIST -->
     <div v-if="activeTab === 'candidates'">
       <p>TODO: Add the list of the candidates that are part of a specific panel.</p>
-      <!-- 
+      <!-- CANDIDATES -->
+      <div v-show="activeTab == 'candidates'">
+        <Table
+          data-key="id"
+          :data="candidatesList"
+          :columns="tableColumnsCandidates"
+          multi-select
+          :selection.sync="selectedItems"
+          :page-size="50"
+          :search="['candidate.fullName']"
+          :filters="[
+            {
+              title: 'Status',
+              field: 'status',
+              type: 'checkbox',
+            },
+          ]"
+          @change="getTableDatacandidates"
+        >
+          <template #actions>
+            <button
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+              :disabled="isButtonDisabled"
+              @click="removeFromPanel"
+            >
+              Remove from panel
+            </button>
+          </template>
+
+          <template #row="{row}">
+            <TableCell :title="tableColumnsCandidates[0].title">
+              <RouterLink
+                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+              >
+                {{ row.application.referenceNumber }}
+              </RouterLink>
+            </TableCell>
+            <TableCell :title="tableColumnsCandidates[1].title">
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
+            </TableCell>
+          </template>
+        </Table>
+      </div>
+      <!-- CANDIDATES -->
+      <!--
         TODO: Create a new database query on the review and shorlisted STORE to return the value
         TODO: retrieve the candidate list according to the panel ID
         TODO: Ability to remove a candidate from the list
-      -->  
+      -->
     </div>
     <!-- //  END CANDIDATE LIST -->
 
     <!-- INFO PANEL -->
     <div v-if="activeTab === 'info'">
       <p>TODO: Add the info panel.</p>
-      <!-- 
+      <!--
         TODO: The information is already on the page - it is the additional information qhen creating a new panel and the information about the drive/location of the files
-      -->  
+      -->
     </div>
     <!-- //  END INFO PANEL -->
   </div>
 </template>
 
 <script>
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import PanelMemberChange from '@/components/ModalViews/PanelMemberChange';
@@ -230,12 +290,24 @@ export default {
     TabsList,
     Modal,
     PanelMemberChange,
+    Table,
+    TableCell,
   },
   data() {
     return {
       activeTab: 'members',
       dropDownExpanded: false,
       memberDetails: {},
+      selectedItems: [],
+      tableColumns: [
+        { title: 'Name' },
+        { title: 'Type' },
+        { title: 'Status' },
+      ],
+      tableColumnsCandidates: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+      ],
     };
   },
   computed: {
@@ -258,6 +330,21 @@ export default {
     isSift() {
       const route = this.$route.fullPath.includes('/tasks/sift/');
       return route;
+    },
+    exercise() {
+      return this.$store.getters['exerciseDocument/data'](this.panel.exerciseId);
+    },
+    candidatesList() {
+      // eslint-disable-next-line no-console
+      // console.log('panelsList', this.$store.state);
+      let records = [];
+      if (this.isSift) {
+        records = this.$store.state.stageReview.records.filter(r => r.panelIds && r.panelIds.sift === this.panelId);
+      }
+      if (this.isSelectionDay) {
+        records = this.$store.state.stageShortlisted.records.filter(r => r.panelIds && r.panelIds.selection === this.panelId);
+      }
+      return records;
     },
     isSelectionDay() {
       const route = this.$route.fullPath.includes('/tasks/selection-days/');
@@ -285,11 +372,15 @@ export default {
     panelId() {
       return this.$route.params.panelId;
     },
+    isButtonDisabled() {
+      const isDisabled = this.selectedItems && this.selectedItems.length;
+      return !isDisabled;
+    },
   },
   created() {
     // Redirect if page Reload
     if (this.panel && this.panel.length === 0) {
-      this.$router.push({ 
+      this.$router.push({
         name: `exercise-tasks-${this.type}`,
       });
     }
@@ -303,7 +394,7 @@ export default {
     },
     btnClickEditMember(modal, idx, action) {
       // eslint-disable-next-line no-console
-      console.log('btnClickEditMember', idx, action);
+      //console.log('btnClickEditMember', idx, action);
       this.memberDetails = {};
       if (idx !== null) {
         this.memberDetails = { ...this.panel.members[idx] };
@@ -311,7 +402,7 @@ export default {
       this.memberDetails.action = action;
       this.memberDetails.id = this.panelId;
       this.memberDetails.idx = idx;
-      
+
       this.openModal(modal);
     },
     openModal(modalRef){
@@ -319,6 +410,44 @@ export default {
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
+    },
+    getTableDatacandidates(params) {
+      if (this.isSift) {
+        this.$store.dispatch(
+          'stageReview/bind',
+          {
+            exerciseId: this.exerciseId,
+            ...params,
+          }
+        );
+      }
+      if (this.isSelectionDay) {
+        this.$store.dispatch(
+          'stageShortlisted/bind',
+          {
+            exerciseId: this.exerciseId,
+            ...params,
+          }
+        );
+      }
+    },
+    async removeFromPanel() {
+      const records = [];
+      this.candidatesList.forEach(async (c) => {
+        if (this.selectedItems.includes(c.id)) {
+
+          const data = {
+            panelIds: c.panelIds ? { ...c.panelIds } : {},
+          };
+          if (this.panel.type === 'sift') {
+            data.panelIds.sift = '';
+          } else {
+            data.panelIds.selection = '';
+          }
+          records.push({ id: c.id, data: data });
+        }
+      });
+      await this.$store.dispatch('candidateApplications/update', records);
     },
   },
 };
