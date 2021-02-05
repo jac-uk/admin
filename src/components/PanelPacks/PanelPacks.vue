@@ -251,14 +251,13 @@ export default {
       const records = [];
       this.candidatesList.forEach(async (c) => {
         if (this.selectedItems.includes(c.id)) {
-
           const data = {
             panelIds: c.panelIds ? { ...c.panelIds } : {},
           };
           if (panel.type === 'sift') {
             data.panelIds.sift = panel.id;
           } else {
-            data.panelIds.selection = panel.id;
+            data.panelIds.selection = panel.id; // are there other panel types to add?
           }
           records.push({ id: c.id, data: data });
         }

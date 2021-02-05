@@ -117,8 +117,7 @@
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              <!-- TODO: Add the candidates count -->
-              25
+              {{ candidatesList.length }}
             </h2>
           </div>
         </div>
@@ -420,7 +419,6 @@ export default {
       const records = [];
       this.candidatesList.forEach(async (c) => {
         if (this.selectedItems.includes(c.id)) {
-
           const data = {
             panelIds: c.panelIds ? { ...c.panelIds } : {},
           };
