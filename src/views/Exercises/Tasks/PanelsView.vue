@@ -15,43 +15,6 @@
             The idea was to have the GENERATE Panel Packs in different forms here
             TODO: The magic to actually create the PANEL PACKS
           -->
-          <div class="moj-button-menu">
-            <button
-              ref="dropDownRef"
-              class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
-              type="button"
-              aria-haspopup="true"
-              :aria-expanded="dropDownExpanded.toString()"
-              @click="toggleExpand"
-            >
-              Actions
-            </button>
-            <div
-              class="moj-button-menu__wrapper moj-button-menu__wrapper--right"
-              role="menu"
-            >
-              <button
-                class="govuk-button govuk-button--secondary drop-down-button"
-                @click="nothing"
-              >
-                Download As PDF
-              </button>
-              <button
-                id="docDownloadButton"
-                class="govuk-button govuk-button--secondary drop-down-button"
-                @click="nothing"
-              >
-                Download As Doc
-              </button>
-              <button
-                id="clipboard-button"
-                class="govuk-button govuk-button--secondary drop-down-button"
-                @click="nothing"
-              >
-                Copy to clipboard
-              </button>
-            </div>
-          </div>
           <!--  -->
           <span
             v-if="activeTab == 'full'"
@@ -94,18 +57,9 @@
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              {{ exercise.siftStartDate | formatDate | showAlternative("Unknown") }},
+              {{ panel.dateFrom | formatDate | showAlternative("Unknown") }} -
+              {{ panel.dateTo | formatDate | showAlternative("Unknown") }}
             </h2>
-            <ul class="govuk-list">
-              <li
-                v-for="item in exercise.selectionDays"
-                :key="item.location"
-              >
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ item.selectionDayStart | formatDate | showAlternative("Unknown") }}
-                </h2>
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -251,14 +205,48 @@
     </div>
     <!-- //  END CANDIDATE LIST -->
 
-    <!-- INFO PANEL -->
-    <div v-if="activeTab === 'info'">
-      <p>TODO: Add the info panel.</p>
-      <!--
-        TODO: The information is already on the page - it is the additional information qhen creating a new panel and the information about the drive/location of the files
-      -->
+    <!-- //  END CANDIDATE LIST -->
+
+    <!-- EDIT PANEL -->
+    <div v-if="activeTab === 'edit'">
+      <div>
+        <h1
+          class="govuk-heading-l govuk-!-margin-bottom-8"
+          style="display: inline;"
+        >
+          Edit
+        </h1>
+
+        <TextField
+          id="panel-name"
+          v-model="updatePanel.name"
+          :value="panel.name"
+          label="Panel Name"
+          required
+        />
+
+        <DateInput
+          id="date-from"
+          v-model="updatePanel.dateFrom"
+          :value="panel.dateFrom"
+          label="Date range from"
+        />
+        <DateInput
+          id="date-to"
+          :v-model="updatePanel.dateTo"
+          :value="panel.dateTo"
+          label="to"
+        />
+
+        <button
+          class="govuk-button"
+          @click="updatePanelInfo()"
+        >
+          Confirm changes 
+        </button>
+      </div>
     </div>
-    <!-- //  END INFO PANEL -->
+    <!-- //  END EDIT PANEL -->
   </div>
 </template>
 
@@ -268,10 +256,14 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import PanelMemberChange from '@/components/ModalViews/PanelMemberChange';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 
 export default {
   components: {
     TabsList,
+    DateInput,
+    TextField,
     Modal,
     PanelMemberChange,
     Table,
@@ -292,6 +284,7 @@ export default {
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
       ],
+      updatePanel: {},
     };
   },
   computed: {
@@ -306,8 +299,8 @@ export default {
           title: 'Panel Members',
         },
         {
-          ref: 'info',
-          title: 'Info',
+          ref: 'edit',
+          title: 'Edit',
         },
       ];
     },
@@ -370,8 +363,10 @@ export default {
     }
   },
   methods: {
-    toggleExpand(){
-      this.dropDownExpanded = !this.dropDownExpanded;
+    updatePanelInfo(){
+      const update = { id: this.panel.id, ...this.updatePanel };
+      this.$store.dispatch('panels/updatePanel', update );
+      this.activeTab = 'members';
     },
     nothing() {
       return true;

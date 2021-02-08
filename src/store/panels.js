@@ -47,6 +47,15 @@ export default {
         members: members,
       }, { merge: true });
     },
+    updatePanel: async (context, data) => {
+      // const panel = context.getters.getPanel(data.id);
+      return await collectionRef.doc(data.id).update(data);
+      // },
+      // await collectionRef.doc(data.id).set({
+      //   members: members,
+      // }, { merge: true });
+
+    },
   },
   state: {
     records: [],

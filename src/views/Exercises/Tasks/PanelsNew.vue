@@ -19,15 +19,15 @@
       />
       <DateInput
         id="date-from"
-        v-model="datefrom"
+        v-model="dateFrom"
         label="Date range from"
-        :value="datefrom"
+        :value="dateFrom"
       />
       <DateInput
         id="date-to"
-        v-model="dateto"
+        v-model="dateTo"
         label="to"
-        :value="dateto"
+        :value="dateTo"
       />
       <TextareaInput
         id="additional"
@@ -73,8 +73,8 @@ export default {
   data() {
     return {
       name: null,
-      datefrom: null,
-      dateto: null,
+      dateFrom: null,
+      dateTo: null,
       additional: null,
       googledrive: null,
     };
@@ -121,8 +121,8 @@ export default {
         const data = {
           name: this.name,
           type: this.type,
-          datefrom: this.datefrom,
-          dateto: this.dateto,
+          dateFrom: this.dateFrom,
+          dateTo: this.dateTo,
           additional: this.additional,
           googledrive: this.googledrive,
           exerciseId: this.exerciseId,
