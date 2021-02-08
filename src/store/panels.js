@@ -47,6 +47,13 @@ export default {
         members: members,
       }, { merge: true });
     },
+    deletePanel: async (context, id) => {
+      const panel = await context.getters.getPanel(id);
+      if (panel.status === 'draft') {
+      // @TODO@ - add panel status to constants
+        collectionRef.doc(id).delete();
+      }
+    },
   },
   state: {
     records: [],
