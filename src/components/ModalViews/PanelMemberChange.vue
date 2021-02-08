@@ -16,12 +16,12 @@
               label="Full name"
               required
             />
-            <!-- 
-              TODO: The title or position needs to be a dropwdown with 
+            <!--
+              TODO: The title or position needs to be a dropwdown with
               • Chair
               • Independent
               • Judicial
-              • Other 
+              • Other
             -->
             <TextField
               id="title"

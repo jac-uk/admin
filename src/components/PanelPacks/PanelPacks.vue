@@ -47,20 +47,13 @@
         :selection.sync="selectedItems"
         :page-size="50"
         :search="['candidate.fullName']"
-        :filters="[
-          {
-            title: 'Status',
-            field: 'status',
-            type: 'checkbox',
-          },
-        ]"
         @change="getTableDatacandidates"
       >
         <template #actions>
           <button
             class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
             :disabled="isButtonDisabled"
-            @click="btnClkSelectPanel"
+            @click="btnClkSelectPanel('modalRefPanel')"
           >
             Set Panel
           </button>
@@ -81,18 +74,22 @@
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="tableColumnsCandidates[2].title">
-            {{ row.status | lookup }}
-          </TableCell>
-          <TableCell :title="tableColumnsCandidates[3].title">
-            {{ row | candidateHasIssues }}
-          </TableCell>
-          <TableCell :title="tableColumnsCandidates[4].title">
-            {{ row.flags.empApplied | toYesNo }}
+          <TableCell :title="tableColumns[2].title">
+            {{ getPanelName(row) }}
           </TableCell>
         </template>
       </Table>
     </div>
+    <Modal
+      ref="modalRefPanel"
+    >
+      <component
+        :is="`SelectPanel`"
+        :panels="panelsList"
+        @close="closeModal('modalRefPanel')"
+        @selected="selectPanel"
+      />
+    </Modal>
     <!-- CANDIDATES -->
     <!-- CANDIDATES -->
     <div v-show="activeTab == 'settings'">
@@ -108,12 +105,16 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import SelectPanel from '@/components/ModalViews/SelectPanel';
 
 export default {
   components: {
     Table,
     TableCell,
     TabsList,
+    Modal,
+    SelectPanel,
   },
   props: {
     type: {
@@ -128,14 +129,12 @@ export default {
       tableColumns: [
         { title: 'Name' },
         { title: 'Type' },
-        { title: 'Status' },
+        { title: 'Panel' },
       ],
       tableColumnsCandidates: [
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
-        { title: 'Issues' },
-        { title: 'Status' },
-        { title: 'EMP' },
+        { title: 'Panel' },
       ],
     };
   },
@@ -191,9 +190,6 @@ export default {
       return !isDisabled;
     },
   },
-  created() {
-
-  },
   methods: {
     getTableData(params) {
       this.$store.dispatch(
@@ -225,16 +221,48 @@ export default {
         );
       }
     },
+    getPanelName(candidate) {
+      if (!candidate.panelIds) {
+        return '';
+      }
+      const panelId = this.isSift ? candidate.panelIds.sift : candidate.panelIds.selection;
+      if (!panelId) {
+        return '';
+      }
+      const panel = this.$store.state.panels.records.find(p => p.id === panelId);
+      return panel ? panel.name : panelId;
+    },
     createNewPanel() {
       const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-days-new';
       // eslint-disable-next-line no-console
       // console.log('create new Pack btn clicked');
       this.$router.push({ name: routeName });
     },
-    btnClkSelectPanel() {
-      // TODO Select Panels to add these candidates
-      // eslint-disable-next-line no-console
-      console.log('SelectPanel');
+    btnClkSelectPanel(modal) {
+      this.openModal(modal);
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
+    async selectPanel(panel) {
+      const records = [];
+      this.candidatesList.forEach(async (c) => {
+        if (this.selectedItems.includes(c.id)) {
+          const data = {
+            panelIds: c.panelIds ? { ...c.panelIds } : {},
+          };
+          if (panel.type === 'sift') {
+            data.panelIds.sift = panel.id;
+          } else {
+            data.panelIds.selection = panel.id; // are there other panel types to add?
+          }
+          records.push({ id: c.id, data: data });
+        }
+      });
+      await this.$store.dispatch('candidateApplications/update', records);
     },
   },
 };
