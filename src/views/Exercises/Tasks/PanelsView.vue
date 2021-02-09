@@ -1,5 +1,8 @@
 <template>
-  <div class="panels-packs">
+  <div
+    v-if="panel"
+    class="panels-packs"
+  >
     <div id="panel-pack-div">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
@@ -9,32 +12,12 @@
           </h1>
         </div>
         <div class="govuk-grid-column-one-half text-right print-none">
-          <!--
-            TODO: The Actions buttons on the Panel View doesn't have any action.
-            If we are not going to use this, we should delete.
-            The idea was to have the GENERATE Panel Packs in different forms here
-            TODO: The magic to actually create the PANEL PACKS
-          -->
-          <!--  -->
-          <span
-            v-if="activeTab == 'full'"
-            class=" govuk-!-margin-left-4"
+          <button
+            class="govuk-button govuk-button--primary"
+            @click="exportToGoogleDrive"
           >
-            <button
-              v-if="nothing"
-              class="govuk-button btn-unlock"
-              @click="nothing"
-            >
-              Unlock
-            </button>
-            <button
-              v-else
-              class="govuk-button btn-mark-as-applied"
-              @click="submitApplication"
-            >
-              Mark as applied
-            </button>
-          </span>
+            Export to google drive
+          </button>
         </div>
       </div>
       <!--
@@ -53,7 +36,7 @@
 
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">Sift / Selection Days</span>
+            <span class="govuk-caption-m">{{ typeName }} Dates</span>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
@@ -81,7 +64,45 @@
         :active-tab.sync="activeTab"
       />
     </div>
-    <!-- MEMBER -->
+    <!-- CANDIDATE LIST -->
+    <div v-show="activeTab == 'candidates'">
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+        :disabled="isButtonDisabled"
+        @click="removeFromPanel"
+      >
+        Remove from panel
+      </button>
+      <Table
+        data-key="id"
+        :data="candidatesList"
+        :columns="tableColumnsCandidates"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        @change="getTableDataCandidates"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumnsCandidates[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumnsCandidates[1].title">
+            <RouterLink
+              :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+            >
+              {{ row.candidate.fullName }}
+            </RouterLink>
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+    <!-- //  END CANDIDATE LIST -->
+
+    <!-- MEMBERS -->
     <div v-if="activeTab === 'members'">
       <h2
         class="govuk-heading-l"
@@ -158,97 +179,56 @@
         @close="closeModal('modalRefMember')"
       />
     </Modal>
-    <!-- end MEMBER -->
-    <!-- CANDIDATE LIST -->
-    <div v-if="activeTab === 'candidates'">
-      <!-- CANDIDATES -->
-      <div v-show="activeTab == 'candidates'">
-        <Table
-          data-key="id"
-          :data="candidatesList"
-          :columns="tableColumnsCandidates"
-          multi-select
-          :selection.sync="selectedItems"
-          :page-size="50"
-          :search="['candidate.fullName']"
-          @change="getTableDatacandidates"
-        >
-          <template #actions>
-            <button
-              class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-              :disabled="isButtonDisabled"
-              @click="removeFromPanel"
-            >
-              Remove from panel
-            </button>
-          </template>
-
-          <template #row="{row}">
-            <TableCell :title="tableColumnsCandidates[0].title">
-              <RouterLink
-                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
-              >
-                {{ row.application.referenceNumber }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumnsCandidates[1].title">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-              >
-                {{ row.candidate.fullName }}
-              </RouterLink>
-            </TableCell>
-          </template>
-        </Table>
-      </div>
-      <!-- CANDIDATES -->
-    </div>
-    <!-- //  END CANDIDATE LIST -->
+    <!-- END MEMBERS -->
 
     <!-- EDIT PANEL -->
     <div v-if="activeTab === 'edit'">
-      <div>
-        <h1
-          class="govuk-heading-l govuk-!-margin-bottom-8"
-          style="display: inline;"
-        >
-          Edit
-        </h1>
+      <div class="govuk-grid-row">
+        <form @submit.prevent="validateAndSave">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+              Edit
+            </h1>
 
-        <TextField
-          id="panel-name"
-          v-model="updatePanel.name"
-          :value="panel.name"
-          label="Panel Name"
-          required
-        />
+            <ErrorSummary
+              :errors="errors"
+              :show-save-button="true"
+              @save="save"
+            />
 
-        <DateInput
-          id="date-from"
-          v-model="updatePanel.dateFrom"
-          :value="panel.dateFrom"
-          label="Date range from"
-        />
-        <DateInput
-          id="date-to"
-          :v-model="updatePanel.dateTo"
-          :value="panel.dateTo"
-          label="to"
-        />
+            <TextField
+              id="panel-name"
+              v-model="formData.name"
+              label="Panel Name"
+              required
+            />
 
-        <button
-          class="govuk-button"
-          @click="updatePanelInfo()"
-        >
-          Confirm changes 
-        </button>
-        <button
-          v-if="panel.status === 'draft'"
-          class="float-right govuk-button govuk-button--warning"
-          @click="deletePanel()"
-        >
-          Delete Panel Pack
-        </button>
+            <DateInput
+              id="date-from"
+              v-model="formData.dateFrom"
+              label="Date from"
+            />
+            <DateInput
+              id="date-to"
+              v-model="formData.dateTo"
+              label="to"
+            />
+
+            <button
+              class="govuk-button"
+            >
+              Confirm changes
+            </button>
+            <button
+              v-if="panel.status === 'draft'"
+              class="float-right govuk-button govuk-button--warning"
+              type="button"
+              @click="deletePanel()"
+            >
+              Delete Panel
+            </button>
+          </div>
+        </form>
       </div>
     </div>
     <!-- //  END EDIT PANEL -->
@@ -261,12 +241,16 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import PanelMemberChange from '@/components/ModalViews/PanelMemberChange';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import { functions } from '@/firebase';
 
 export default {
   components: {
     TabsList,
+    ErrorSummary,
     DateInput,
     TextField,
     Modal,
@@ -274,22 +258,28 @@ export default {
     Table,
     TableCell,
   },
+  extends: Form,
   data() {
+    const panelData = this.$store.getters['panels/getPanel'](this.$route.params.panelId);
     return {
       activeTab: 'members',
       dropDownExpanded: false,
       memberDetails: {},
       selectedItems: [],
-      tableColumns: [
-        { title: 'Name' },
-        { title: 'Type' },
-        { title: 'Status' },
-      ],
+      // tableColumns: [
+      //   { title: 'Name' },
+      //   { title: 'Type' },
+      //   { title: 'Status' },
+      // ],
       tableColumnsCandidates: [
         { title: 'Reference number' },
-        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Name' },
       ],
-      updatePanel: {},
+      formData: {
+        name: panelData.name,
+        dateFrom: panelData.dateFrom,
+        dateTo: panelData.dateTo,
+      },
     };
   },
   computed: {
@@ -309,50 +299,26 @@ export default {
         },
       ];
     },
-    isSift() {
-      const route = this.$route.fullPath.includes('/tasks/sift/');
-      return route;
-    },
-    exercise() {
-      return this.$store.getters['exerciseDocument/data'](this.panel.exerciseId);
-    },
-    candidatesList() {
-      // eslint-disable-next-line no-console
-      // console.log('panelsList', this.$store.state);
-      let records = [];
-      if (this.isSift) {
-        records = this.$store.state.stageReview.records.filter(r => r.panelIds && r.panelIds.sift === this.panelId);
-      }
-      if (this.isSelectionDay) {
-        records = this.$store.state.stageShortlisted.records.filter(r => r.panelIds && r.panelIds.selection === this.panelId);
-      }
-      return records;
-    },
-    isSelectionDay() {
-      const route = this.$route.fullPath.includes('/tasks/selection-days/');
-      return route;
-    },
-    type() {
-      let returnType = '';
-      if (this.isSift) {
-        returnType = 'sift';
-      }
-      if (this.isSelectionDay) {
-        returnType = 'selection-days';
-      }
-      return returnType;
-    },
-    panel(){
-      let panel = this.$store.getters['panels/getPanel'](this.panelId);
-      if (panel.length == 1) {
-        panel = panel[0];
-      }
-      // eslint-disable-next-line no-console
-      // console.log('panel', panel);
-      return panel;
-    },
     panelId() {
       return this.$route.params.panelId;
+    },
+    panel(){
+      return this.$store.getters['panels/getPanel'](this.panelId);
+    },
+    isSift() {
+      return this.panel.type === 'sift';
+    },
+    isSelectionDay() {
+      return this.panel.type === 'selection';
+    },
+    typeName() {
+      if (this.panel && this.panel.type) {
+        return this.panel.type.charAt(0).toUpperCase() + this.panel.type.slice(1);
+      }
+      return '';
+    },
+    candidatesList() {
+      return this.$store.state.panels.panelApplications;
     },
     isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
@@ -361,17 +327,19 @@ export default {
   },
   created() {
     // Redirect if page Reload
-    if (this.panel && this.panel.length === 0) {
+    if (!this.panel) {
+      const nextRoute = this.$route.fullPath.includes('/tasks/selection/') ? 'exercise-tasks-selection' : 'exercise-tasks-sift';
       this.$router.push({
-        name: `exercise-tasks-${this.type}`,
+        name: nextRoute,
       });
     }
   },
   methods: {
-    updatePanelInfo(){
-      const update = { id: this.panel.id, ...this.updatePanel };
-      this.$store.dispatch('panels/updatePanel', update );
-      this.activeTab = 'members';
+    async save(isValid) {
+      if (isValid) {
+        await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: this.formData });
+        this.activeTab = 'members';
+      }
     },
     nothing() {
       return true;
@@ -395,46 +363,34 @@ export default {
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    getTableDatacandidates(params) {
-      if (this.isSift) {
+    getTableDataCandidates(params) {
+      if (this.panel) {
         this.$store.dispatch(
-          'stageReview/bind',
+          'panels/bindPanelApplications',
           {
             exerciseId: this.panel.exerciseId,
-            ...params,
-          }
-        );
-      }
-      if (this.isSelectionDay) {
-        this.$store.dispatch(
-          'stageShortlisted/bind',
-          {
-            exerciseId: this.panel.exerciseId,
+            panelId: this.panelId,
+            type: this.panel.type,
             ...params,
           }
         );
       }
     },
     async removeFromPanel() {
-      const records = [];
-      this.candidatesList.forEach(async (c) => {
-        if (this.selectedItems.includes(c.id)) {
-          const data = {
-            panelIds: c.panelIds ? { ...c.panelIds } : {},
-          };
-          if (this.panel.type === 'sift') {
-            data.panelIds.sift = '';
-          } else {
-            data.panelIds.selection = '';
-          }
-          records.push({ id: c.id, data: data });
-        }
-      });
-      await this.$store.dispatch('candidateApplications/update', records);
+      await this.$store.dispatch('panels/removePanelApplications', { panelType: this.panel.type, applicationIds: this.selectedItems });
     },
     async deletePanel(){
-      await this.$store.dispatch('panels/deletePanel', this.panel.id );
-      this.$router.push({ name: 'exercise-tasks-sift' });
+      const redirectTo = `exercise-tasks-${this.panel.type}`;
+      await this.$store.dispatch('panels/deletePanel', this.panelId );
+      this.$router.push({ name: redirectTo });
+    },
+    async exportToGoogleDrive() {
+      await functions.httpsCallable('exportToGoogleDrive')({
+        driveId: '0AN9QJOw_we0gUk9PVA',
+        rootFolderId: '1H2vnVHtq-K2xqBRyGsZIG0WVNm7ESOQw',
+        exerciseId: this.panel.exerciseId,
+        panelId: this.panelId,
+      });
     },
   },
 };

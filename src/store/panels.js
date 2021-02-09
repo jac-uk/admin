@@ -4,6 +4,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import clone from 'clone';
 
 const collectionRef = firestore.collection('panels');
 
@@ -34,7 +35,7 @@ export default {
       const members = panel.members ? [...panel.members] : [];
       if (data.action === 'edit') {
         members[data.idx] = data.members;
-      } 
+      }
       if (data.action === 'new') {
         members.push(data.members);
       }
@@ -47,38 +48,52 @@ export default {
         members: members,
       }, { merge: true });
     },
-    updatePanel: async (context, data) => {
-      // const panel = context.getters.getPanel(data.id);
-      return await collectionRef.doc(data.id).update(data);
-      // },
-      // await collectionRef.doc(data.id).set({
-      //   members: members,
-      // }, { merge: true });
+    updatePanel: async (context, params) => {
+      return await collectionRef.doc(params.id).update(params.data);
     },
     deletePanel: async (context, id) => {
       const panel = await context.getters.getPanel(id);
       if (panel.status === 'draft') {
       // @TODO@ - add panel status to constants
-        collectionRef.doc(id).delete();
+        await collectionRef.doc(id).delete();
       }
+      return true;
+    },
+    bindPanelApplications: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = firestore.collection('applicationRecords')
+        .where('exercise.id', '==', params.exerciseId)
+        .where(`panelIds.${params.type}`, '==', params.panelId);
+      firestoreRef = tableQuery(state.panelApplications, firestoreRef, params);
+      return bindFirestoreRef('panelApplications', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindPanelApplications: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('panelApplications');
+    }),
+    removePanelApplications: async (context, { panelType, applicationIds }) => {
+      const batch = firestore.batch();
+      applicationIds.forEach(applicationId => {
+        const ref = firestore.collection('applicationRecords').doc(applicationId);
+        const data = {};
+        data[`panelIds.${panelType}`] = '';
+        batch.update(ref, data);
+      });
+      await batch.commit();
     },
   },
   state: {
     records: [],
-  },
-  mutations: {
-    
+    panelApplications: [],
   },
   getters: {
     getPanel: (state) => (id) => {
-      // eslint-disable-next-line no-console
-      // console.log('getPanel', id, state.records);
       const returnObj = state.records.filter(item => {
-        // eslint-disable-next-line no-console
-        // console.log('filter item', id, item);
         return item.id === id;
       });
-      return (returnObj);
+      if (returnObj.length > 0) {
+        return clone(returnObj[0]);
+      } else {
+        return;
+      }
     },
     isSift: () => (url) => {
       // TODO: add isSift to PanelsNew.vue and PanelsView.vue
@@ -92,7 +107,7 @@ export default {
       // TODO: add isSelectionDay to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/selection-days/');
+        route = url.includes('/tasks/selection/');
       }
       return route;
     },
