@@ -6,6 +6,12 @@
     />
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
+      <button
+        class="govuk-button govuk-!-margin-bottom-0"
+        @click="createNewPanel"
+      >
+        Create New
+      </button>
       <Table
         data-key="id"
         :data="panelsList"
@@ -22,19 +28,10 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.type }}
-          </TableCell>
-          <TableCell :title="tableColumns[2].title">
             {{ row.status }}
           </TableCell>
         </template>
       </Table>
-      <button
-        class="govuk-button govuk-!-margin-right-3"
-        @click="createNewPanel"
-      >
-        Create New
-      </button>
     </div>
     <!-- // END PANELS -->
     <!-- CANDIDATES -->
@@ -74,12 +71,13 @@
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="tableColumns[2].title">
+          <TableCell :title="tableColumnsCandidates[2].title">
             {{ getPanelName(row) }}
           </TableCell>
         </template>
       </Table>
     </div>
+    <!-- // END CANDIDATES -->
     <Modal
       ref="modalRefPanel"
     >
@@ -90,14 +88,6 @@
         @selected="selectPanel"
       />
     </Modal>
-    <!-- CANDIDATES -->
-    <!-- CANDIDATES -->
-    <div v-show="activeTab == 'settings'">
-      <p>
-        TODO: Add the Settings Panel on the PanelPacks
-        <!-- TODO: We could remove this, but maybe we eant to have an eercise-wide selection for google drive, etc ... -->
-      </p>
-    </div>
   </div>
 </template>
 
@@ -128,8 +118,7 @@ export default {
       selectedItems: [],
       tableColumns: [
         { title: 'Name' },
-        { title: 'Type' },
-        { title: 'Panel' },
+        { title: 'Status' },
       ],
       tableColumnsCandidates: [
         { title: 'Reference number' },
@@ -149,10 +138,6 @@ export default {
           ref: 'candidates',
           title: 'Candidates',
         },
-        {
-          ref: 'settings',
-          title: 'Settings',
-        },
       ];
     },
     exerciseId() {
@@ -171,7 +156,7 @@ export default {
         records = this.$store.state.stageReview.records;
       }
       if (this.isSelectionDay) {
-        records = this.$store.state.stageShortlisted.records;
+        records = this.$store.state.stageSelected.records;
       }
       return records;
     },
@@ -213,7 +198,7 @@ export default {
       }
       if (this.isSelectionDay) {
         this.$store.dispatch(
-          'stageShortlisted/bind',
+          'stageSelected/bind',
           {
             exerciseId: this.exerciseId,
             ...params,
@@ -229,11 +214,11 @@ export default {
       if (!panelId) {
         return '';
       }
-      const panel = this.$store.state.panels.records.find(p => p.id === panelId);
+      const panel = this.panelsList.find(p => p.id === panelId);
       return panel ? panel.name : panelId;
     },
     createNewPanel() {
-      const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-days-new';
+      const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-new';
       // eslint-disable-next-line no-console
       // console.log('create new Pack btn clicked');
       this.$router.push({ name: routeName });

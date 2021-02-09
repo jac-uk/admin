@@ -561,7 +561,6 @@ const router = new Router({
             {
               path: 'sift',
               component: ExerciseTasksPanels,
-              name: 'exercise-tasks-panels',
               children: [
                 {
                   path: '',
@@ -593,32 +592,31 @@ const router = new Router({
               ],
             },
             {
-              path: 'selection-days',
+              path: 'selection',
               component: ExerciseTasksPanels,
-              name: 'exercise-tasks-panels',
               children: [
                 {
                   path: '',
                   component: ExerciseTasksSelectionDays,
-                  name: 'exercise-tasks-selection-days',
+                  name: 'exercise-tasks-selection',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Selection Days',
+                    title: 'Exercise Tasks | Selection',
                   },
                 },
                 {
                   path: 'new',
                   component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-selection-days-new',
+                  name: 'exercise-tasks-selection-new',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Selection Days - new',
+                    title: 'Exercise Tasks | Selection - new',
                   },
                 },
                 {
                   path: 'view/:panelId',
                   component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-selection-days-view',
+                  name: 'exercise-tasks-selection-view',
                   meta: {
                     requiresAuth: true,
                     title: 'Exercise Tasks | Panels - view',

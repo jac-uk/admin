@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      Selection Days
+      Selection
     </h1>
-    <PanelPack type="selection-days" />
+    <PanelPack type="selection" />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
 
   },
   methods: {
-    
+
   },
 };
 </script>
