@@ -28,9 +28,6 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.type }}
-          </TableCell>
-          <TableCell :title="tableColumns[2].title">
             {{ row.status }}
           </TableCell>
         </template>
@@ -74,7 +71,7 @@
               {{ row.candidate.fullName }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="tableColumns[2].title">
+          <TableCell :title="tableColumnsCandidates[2].title">
             {{ getPanelName(row) }}
           </TableCell>
         </template>
@@ -121,8 +118,7 @@ export default {
       selectedItems: [],
       tableColumns: [
         { title: 'Name' },
-        { title: 'Type' },
-        { title: 'Panel' },
+        { title: 'Status' },
       ],
       tableColumnsCandidates: [
         { title: 'Reference number' },

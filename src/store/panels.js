@@ -29,7 +29,7 @@ export default {
       await collectionRef.add(data);
     },
     updateMembers: async (context, data) => {
-      const panel = context.getters.getPanel(data.id)[0];
+      const panel = context.getters.getPanel(data.id);
       // eslint-disable-next-line no-console
       console.log('updateMembers panel  ', { panel });
       const members = panel.members ? [...panel.members] : [];

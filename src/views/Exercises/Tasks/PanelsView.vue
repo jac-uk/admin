@@ -6,6 +6,12 @@
     <div id="panel-pack-div">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
+          <router-link
+            class="govuk-back-link"
+            :to="{ name: `exercise-tasks-${panel.type}` }"
+          >
+            Back
+          </router-link>
           <span class="govuk-caption-l">Panel</span>
           <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
             {{ panel.name }}
@@ -20,10 +26,6 @@
           </button>
         </div>
       </div>
-      <!--
-        TODO: The dashboard area on the Panel view needs to be coded.
-        This was added here as a placeholder.
-      -->
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
@@ -260,31 +262,8 @@ export default {
   },
   extends: Form,
   data() {
-    const panelData = this.$store.getters['panels/getPanel'](this.$route.params.panelId);
-    return {
-      activeTab: 'members',
-      dropDownExpanded: false,
-      memberDetails: {},
-      selectedItems: [],
-      // tableColumns: [
-      //   { title: 'Name' },
-      //   { title: 'Type' },
-      //   { title: 'Status' },
-      // ],
-      tableColumnsCandidates: [
-        { title: 'Reference number' },
-        { title: 'Name' },
-      ],
-      formData: {
-        name: panelData.name,
-        dateFrom: panelData.dateFrom,
-        dateTo: panelData.dateTo,
-      },
-    };
-  },
-  computed: {
-    tabs(){
-      return [
+    const data = {
+      tabs: [
         {
           ref: 'candidates',
           title: 'Candidates',
@@ -297,8 +276,27 @@ export default {
           ref: 'edit',
           title: 'Edit',
         },
-      ];
-    },
+      ],
+      activeTab: 'candidates',
+      memberDetails: {},
+      selectedItems: [],
+      tableColumnsCandidates: [
+        { title: 'Reference number' },
+        { title: 'Name' },
+      ],
+      formData: {},
+    };
+    const panelData = this.$store.getters['panels/getPanel'](this.$route.params.panelId);
+    if (panelData) {
+      data.formData = {
+        name: panelData.name,
+        dateFrom: panelData.dateFrom,
+        dateTo: panelData.dateTo,
+      };
+    }
+    return data;
+  },
+  computed: {
     panelId() {
       return this.$route.params.panelId;
     },
@@ -340,9 +338,6 @@ export default {
         await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: this.formData });
         this.activeTab = 'members';
       }
-    },
-    nothing() {
-      return true;
     },
     btnClickEditMember(modal, idx, action) {
       // eslint-disable-next-line no-console
