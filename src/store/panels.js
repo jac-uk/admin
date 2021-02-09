@@ -47,6 +47,14 @@ export default {
         members: members,
       }, { merge: true });
     },
+    updatePanel: async (context, data) => {
+      // const panel = context.getters.getPanel(data.id);
+      return await collectionRef.doc(data.id).update(data);
+      // },
+      // await collectionRef.doc(data.id).set({
+      //   members: members,
+      // }, { merge: true });
+    },
     deletePanel: async (context, id) => {
       const panel = await context.getters.getPanel(id);
       if (panel.status === 'draft') {
