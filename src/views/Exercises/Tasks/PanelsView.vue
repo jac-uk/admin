@@ -205,8 +205,6 @@
     </div>
     <!-- //  END CANDIDATE LIST -->
 
-    <!-- //  END CANDIDATE LIST -->
-
     <!-- EDIT PANEL -->
     <div v-if="activeTab === 'edit'">
       <div>
@@ -243,6 +241,13 @@
           @click="updatePanelInfo()"
         >
           Confirm changes 
+        </button>
+        <button
+          v-if="panel.status === 'draft'"
+          class="float-right govuk-button govuk-button--warning"
+          @click="deletePanel()"
+        >
+          Delete Panel Pack
         </button>
       </div>
     </div>
@@ -426,6 +431,10 @@ export default {
         }
       });
       await this.$store.dispatch('candidateApplications/update', records);
+    },
+    async deletePanel(){
+      await this.$store.dispatch('panels/deletePanel', this.panel.id );
+      this.$router.push({ name: 'exercise-tasks-sift' });
     },
   },
 };
