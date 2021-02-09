@@ -126,7 +126,8 @@ export default {
           additional: this.additional,
           googledrive: this.googledrive,
           exerciseId: this.exerciseId,
-          status: 'created',
+          status: 'draft',
+          // @TODO statuses
           created: firebase.firestore.FieldValue.serverTimestamp(),
         };
         // eslint-disable-next-line no-console

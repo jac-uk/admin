@@ -251,14 +251,25 @@
     </div>
     <!-- //  END CANDIDATE LIST -->
 
-    <!-- INFO PANEL -->
-    <div v-if="activeTab === 'info'">
-      <p>TODO: Add the info panel.</p>
-      <!--
-        TODO: The information is already on the page - it is the additional information qhen creating a new panel and the information about the drive/location of the files
-      -->
+    <!-- EDIT PANEL -->
+    <div v-if="activeTab === 'edit'">
+      <div>
+        <h1
+          class="govuk-heading-l govuk-!-margin-4"
+          style="display: inline;"
+        >
+          Edit
+        </h1>
+        <button
+          v-if="panel.status === 'draft'"
+          class="float-right govuk-button govuk-button--warning"
+          @click="deletePanel()"
+        >
+          Delete Panel Pack
+        </button>
+      </div>
     </div>
-    <!-- //  END INFO PANEL -->
+    <!-- //  END EDIT PANEL -->
   </div>
 </template>
 
@@ -306,8 +317,8 @@ export default {
           title: 'Panel Members',
         },
         {
-          ref: 'info',
-          title: 'Info',
+          ref: 'edit',
+          title: 'Edit',
         },
       ];
     },
@@ -431,6 +442,10 @@ export default {
         }
       });
       await this.$store.dispatch('candidateApplications/update', records);
+    },
+    async deletePanel(){
+      await this.$store.dispatch('panels/deletePanel', this.panel.id );
+      this.$router.push({ name: 'exercise-tasks-sift' });
     },
   },
 };
