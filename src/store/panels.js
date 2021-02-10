@@ -31,7 +31,7 @@ export default {
     updateMembers: async (context, data) => {
       const panel = context.getters.getPanel(data.id);
       // eslint-disable-next-line no-console
-      console.log('updateMembers panel  ', { panel });
+      // console.log('updateMembers panel  ', { panel });
       const members = panel.members ? [...panel.members] : [];
       if (data.action === 'edit') {
         members[data.idx] = data.members;
