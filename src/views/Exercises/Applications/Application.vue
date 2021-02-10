@@ -1500,7 +1500,7 @@
 
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
-                Independent assessors {{ applicationId }}
+                Independent assessors
               </h2>
 
               <dl class="govuk-summary-list">
@@ -1612,7 +1612,7 @@
             </Modal>
 
             <div
-              v-if="application.selectionCriteriaAnswers"
+              v-if="exercise.aSCApply"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">

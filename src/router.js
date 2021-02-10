@@ -61,6 +61,9 @@ import ExerciseTasks from '@/views/Exercises/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
+import ExerciseTasksPanels from '@/views/Exercises/Tasks/Panels';
+import ExerciseTasksPanelsNew from '@/views/Exercises/Tasks/PanelsNew';
+import ExerciseTasksPanelsView from '@/views/Exercises/Tasks/PanelsView';
 import ExerciseTasksSift from '@/views/Exercises/Tasks/Sift';
 import ExerciseTasksSelectionDays from '@/views/Exercises/Tasks/SelectionDays';
 
@@ -557,21 +560,69 @@ const router = new Router({
             },
             {
               path: 'sift',
-              component: ExerciseTasksSift,
-              name: 'exercise-tasks-sift',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Tasks | Sift',
-              },
+              component: ExerciseTasksPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseTasksSift,
+                  name: 'exercise-tasks-sift',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Sift - new',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTasksPanelsNew,
+                  name: 'exercise-tasks-sift-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Sift - new',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-sift-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Panels - Sift - view',
+                  },
+                },
+              ],
             },
             {
-              path: 'selection-days',
-              component: ExerciseTasksSelectionDays,
-              name: 'exercise-tasks-selection-days',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Tasks | Sift',
-              },
+              path: 'selection',
+              component: ExerciseTasksPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseTasksSelectionDays,
+                  name: 'exercise-tasks-selection',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Selection',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTasksPanelsNew,
+                  name: 'exercise-tasks-selection-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Selection - new',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-selection-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Exercise Tasks | Panels - view',
+                  },
+                },
+              ],
             },
           ],
         },

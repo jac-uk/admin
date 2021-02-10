@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-grid-row">
-    <div 
+    <div
       class="govuk-grid-column-two-thirds"
     >
       <BackLink />
@@ -9,7 +9,7 @@
       </h1>
 
       <ErrorSummary :errors="errors" />
-      
+
       <div v-if="true">
         <div
           class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2"
@@ -34,8 +34,8 @@
                     >
                       Add
                     </a>
-                    <span 
-                      v-for="item in exercise.downloads[upload.id]" 
+                    <span
+                      v-for="item in exercise.downloads[upload.id]"
                       :key="item.id"
                     >
                       <a
@@ -67,14 +67,14 @@
               </tr>
             </tbody>
           </table>
-          <button 
+          <button
             class="govuk-button"
             @click="submitForm('continue')"
           >
             Save and continue
           </button>
         </div>
-        <button 
+        <button
           class="govuk-button govuk-button--secondary govuk-!-margin-left-3"
           @click="submitForm('skip')"
         >
@@ -153,56 +153,56 @@ export default {
     },
     uploadList() {
       const data = [
-        { 
-          title: 'Job Description', 
+        {
+          title: 'Job Description',
           id: 'jobDescriptions',
           name: 'job-descriptions',
           mandatory: true,
         },
-        { 
-          title: 'Terms and Conditions', 
+        {
+          title: 'Terms and Conditions',
           id: 'termsAndConditions',
           name: 'terms-and-conditions',
           mandatory: true,
         },
-        { 
-          title: 'Competency Framework', 
+        {
+          title: 'Competency Framework',
           id: 'competencyFramework',
           name: 'competency-framework',
           mandatory: false,
         },
-        { 
-          title: 'Pensions Information', 
+        {
+          title: 'Pensions Information',
           id: 'pensionsInformation',
           name: 'pensions-information',
           mandatory: false,
         },
-        { 
-          title: 'Skills and Abilities Criteria', 
+        {
+          title: 'Skills and Abilities Criteria',
           id: 'skillsAndAbilitiesCriteria',
           name: 'skills-and-abilities-criteria',
           mandatory: false,
         },
-        { 
-          title: 'Independent Assessors', 
+        {
+          title: 'Independent Assessors',
           id: 'independentAssessors',
           name: 'independent-assessors',
           mandatory: true,
         },
-        { 
-          title: 'Candidate Assessment Form', 
+        {
+          title: 'Candidate Assessment Form',
           id: 'candidateAssessementForms',
           name: 'candidate-assessement-forms',
           mandatory: false,
         },
-        { 
-          title: 'Welsh Translation', 
+        {
+          title: 'Welsh Translation',
           id: 'welshTranslation',
           name: 'welsh-translation',
           mandatory: false,
         },
-        { 
-          title: 'Other Downloads', 
+        {
+          title: 'Other Downloads',
           id: 'otherDownloads',
           name: 'other-downloads',
           mandatory: false,
@@ -227,7 +227,7 @@ export default {
         ...obj,
         filePath: this.uploadPath,
         data: this.exercise.downloads,
-        exerciseId: this.exerciseId, 
+        exerciseId: this.exerciseId,
       };
       this.$refs.modalRef.openModal();
     },

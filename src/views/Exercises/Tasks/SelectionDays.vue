@@ -1,14 +1,19 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      Selection Days
+      Selection
     </h1>
-    <p>Selection Days Under Construction</p>
+    <PanelPack type="selection" />
   </div>
 </template>
 
 <script>
+import PanelPack from '@/components/PanelPacks/PanelPacks';
+
 export default {
+  components: {
+    PanelPack,
+  },
   data() {
     return {
       selection: null,
@@ -18,7 +23,7 @@ export default {
 
   },
   methods: {
-    
+
   },
 };
 </script>
