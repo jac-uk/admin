@@ -18,12 +18,12 @@
           </h1>
         </div>
         <div class="govuk-grid-column-one-half text-right print-none">
-          <button
-            class="govuk-button govuk-button--primary"
+          <ActionButton
+            type="primary"
             @click="exportToGoogleDrive"
           >
             Export to google drive
-          </button>
+          </ActionButton>
         </div>
       </div>
       <div class="govuk-grid-row">
@@ -247,6 +247,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 
 export default {
@@ -259,6 +260,7 @@ export default {
     PanelMemberChange,
     Table,
     TableCell,
+    ActionButton,
   },
   extends: Form,
   data() {
@@ -380,12 +382,15 @@ export default {
       this.$router.push({ name: redirectTo });
     },
     async exportToGoogleDrive() {
-      await functions.httpsCallable('exportToGoogleDrive')({
-        driveId: '0AN9QJOw_we0gUk9PVA',
-        rootFolderId: '1H2vnVHtq-K2xqBRyGsZIG0WVNm7ESOQw',
-        exerciseId: this.panel.exerciseId,
-        panelId: this.panelId,
-      });
+      const googleSettings = this.$store.state.services.record.google;
+      if (googleSettings) {
+        await functions.httpsCallable('exportToGoogleDrive')({
+          driveId: googleSettings.driveId,
+          rootFolderId: googleSettings.rootFolderId,
+          exerciseId: this.panel.exerciseId,
+          panelId: this.panelId,
+        });
+      }
     },
   },
 };
