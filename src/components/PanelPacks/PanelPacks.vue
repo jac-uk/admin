@@ -44,7 +44,7 @@
         :selection.sync="selectedItems"
         :page-size="50"
         :search="['candidate.fullName']"
-        @change="getTableDatacandidates"
+        @change="getTableDataCandidates"
       >
         <template #actions>
           <button
@@ -186,7 +186,7 @@ export default {
         }
       );
     },
-    getTableDatacandidates(params) {
+    getTableDataCandidates(params) {
       if (this.isSift) {
         this.$store.dispatch(
           'stageReview/bind',
@@ -215,7 +215,7 @@ export default {
         return '';
       }
       const panel = this.panelsList.find(p => p.id === panelId);
-      return panel ? panel.name : panelId;
+      return panel ? panel.name : '';
     },
     createNewPanel() {
       const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-new';
