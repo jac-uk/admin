@@ -49,7 +49,7 @@
       data-key="id"
       :data="applicationRecords"
       :columns="tableColumns"
-      :page-size="50"
+      :page-size="1000"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -87,8 +87,6 @@ export default {
   },
   data() {
     return {
-      page: 1,
-      pageSize: 25,
       tableColumns: [
         {
           title: 'Reference number',
@@ -108,7 +106,7 @@ export default {
       return this.exercise.typeOfExercise;
     },
     totalApplicationRecords() {
-      return this.applicationRecords.length;
+      return (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.handover) ? this.exercise.applicationRecords.handover : 0;
     },
   },
   methods: {
@@ -167,16 +165,16 @@ export default {
       }
 
       const formattedDiversityData = [
-        survey.shareData,
+        filters.toYesNo(survey.shareData),
         share(survey.professionalBackground.map(position => filters.lookup(position)).join(', ')),
         formattedFeePaidJudicialRole,
         share(filters.lookup(survey.stateOrFeeSchool)),
         share(filters.toYesNo(filters.lookup(survey.firstGenerationStudent))),
+        share(filters.lookup(survey.ethnicGroup)),
         share(filters.lookup(survey.gender)),
         share(filters.lookup(survey.sexualOrientation)),
-        share(filters.lookup(survey.ethnicGroup)),
-        share(filters.lookup(survey.religionFaith)),
         share(survey.disability ? survey.disabilityDetails : filters.toYesNo(survey.disability)),
+        share(filters.lookup(survey.religionFaith)),
         share(filters.toYesNo(filters.lookup(survey.attendedOutreachEvents))),
       ];
 
@@ -248,7 +246,7 @@ export default {
           professionalMemberships,
         ];
       } else {
-        return [];
+        return [''];
       }
     },
     gatherReportData() {
@@ -298,6 +296,9 @@ export default {
             'PAJE',
           ],
           'non-legal': [
+            'JAC Presentation',
+          ],
+          'leadership-non-legal': [
             'JAC Presentation',
           ],
           leadership: [
