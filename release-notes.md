@@ -1,5 +1,9 @@
 # Release Notes #
 
+0.55.1
+1 issue / 2sp
+ #1160 Handover Report. Fix column order
+
 0.55.0
 7 issues / 16sp
  #1130 Create Panel
