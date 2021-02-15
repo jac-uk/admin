@@ -1,5 +1,9 @@
 # Release Notes #
 
+0.56.0
+1 issue / 5sp
+ #1132 Generate Files & Copy to Folder Structure
+
 0.55.1
 1 issue / 2sp
  #1160 Handover Report. Fix column order
