@@ -8,6 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -21,6 +22,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.subjectOfAllegationOrClaimOfNegligenceDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -34,6 +36,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -47,6 +50,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -60,6 +64,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -73,6 +78,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.complaintOrDisciplinaryActionDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>
@@ -86,6 +92,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.requestedToResignDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>

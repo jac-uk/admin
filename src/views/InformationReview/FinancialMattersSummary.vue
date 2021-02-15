@@ -8,6 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.bankruptcyDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -21,6 +22,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.ivaDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -34,6 +36,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.lateTaxReturnDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -47,6 +50,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.lateVatReturnDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -60,6 +64,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.hmrcFineDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
