@@ -26,6 +26,7 @@ export default {
           data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
           data.progress = { started: true };
           data.state = 'draft';
+          data._applicationVersion = 2;
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
           transaction.set(exerciseRef, data);
