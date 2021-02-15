@@ -20,6 +20,7 @@
         <div class="govuk-grid-column-one-half text-right print-none">
           <ActionButton
             type="primary"
+            :disabled="!canExportToGoogleDrive"
             @click="exportToGoogleDrive"
           >
             Export to google drive
@@ -32,6 +33,9 @@
             <span class="govuk-caption-m">Status</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
               {{ panel.status }}
+              <span v-if="isProcessing">
+                {{ processingProgress }} of {{ processingTotal }}
+              </span>
             </h2>
           </div>
         </div>
@@ -81,7 +85,7 @@
         :columns="tableColumnsCandidates"
         multi-select
         :selection.sync="selectedItems"
-        :page-size="50"
+        :page-size="500"
         @change="getTableDataCandidates"
       >
         <template #row="{row}">
@@ -248,7 +252,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { functions } from '@/firebase';
+import firebase from '@firebase/app';
 
 export default {
   components: {
@@ -324,6 +328,31 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
+    canExportToGoogleDrive() {
+      if (this.panel && ['draft', 'created'].indexOf(this.panel.status) >= 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isProcessing() {
+      return this.panel && this.panel.status === 'processing';
+    },
+    processingTotal() {
+      if (this.panel && this.panel.applicationsMap) {
+        return Object.keys(this.panel.applicationsMap).length;
+      }
+      return 0;
+    },
+    processingRemaining() {
+      if (this.panel && this.panel.processing && this.panel.processing.queue) {
+        return this.panel.processing.queue.length;
+      }
+      return 0;
+    },
+    processingProgress() {
+      return this.processingTotal - this.processingRemaining;
+    },
   },
   created() {
     // Redirect if page Reload
@@ -382,15 +411,11 @@ export default {
       this.$router.push({ name: redirectTo });
     },
     async exportToGoogleDrive() {
-      const googleSettings = this.$store.state.services.record.google;
-      if (googleSettings) {
-        await functions.httpsCallable('exportToGoogleDrive')({
-          driveId: googleSettings.driveId,
-          rootFolderId: googleSettings.rootFolderId,
-          exerciseId: this.panel.exerciseId,
-          panelId: this.panelId,
-        });
-      }
+      const data = {
+        status: 'approved',
+        'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: data });
     },
   },
 };
