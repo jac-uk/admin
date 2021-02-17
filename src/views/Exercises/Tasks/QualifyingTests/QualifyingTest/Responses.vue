@@ -134,7 +134,6 @@ export default {
       });
 
       const data = this.sortedByScoresArr.map(element => {
-
         const row = [
           element.id,
           element.application ? element.application.referenceNumber : '',
@@ -143,8 +142,8 @@ export default {
           element.duration.reasonableAdjustment,
           this.timeTaken(element),
           element.status,
-          element.statusLog.started,
-          element.statusLog.completed,
+          filters.formatDate(element.statusLog.started, 'longdatetime'),
+          filters.formatDate(element.statusLog.completed, 'longdatetime'),
           element.score,
         ];
 
