@@ -52,11 +52,9 @@ export default {
       return await collectionRef.doc(params.id).update(params.data);
     },
     deletePanel: async (context, id) => {
-      const panel = await context.getters.getPanel(id);
-      if (panel.status === 'draft') {
+      await context.getters.getPanel(id);
       // @TODO@ - add panel status to constants
-        await collectionRef.doc(id).delete();
-      }
+      await collectionRef.doc(id).delete();
       return true;
     },
     bindPanelApplications: firestoreAction(({ bindFirestoreRef, state }, params) => {

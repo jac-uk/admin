@@ -34,14 +34,12 @@
               v-model="email"
               label="Email"
               type="email"
-              required
             />
             <TextField
               id="first-assessor-Phone"
               v-model="phone"
               label="Phone"
               type="tel"
-              required
             />
           </fieldset>
           <button
@@ -116,10 +114,10 @@ export default {
         idx: this.$attrs.idx,
         action: this.action,
         members: {
-          email: this.email,
           fullName: this.fullName,
-          phone: this.phone,
           title: this.title,
+          phone: this.phone === null || this.phone === undefined ? '' : this.phone,
+          email: this.email === null || this.email === undefined ? '' : this.email,
         },
       };
       await this.$store.dispatch('panels/updateMembers', { ...data });
