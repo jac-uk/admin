@@ -52,9 +52,8 @@ export default {
       return await collectionRef.doc(params.id).update(params.data);
     },
     deletePanel: async (context, id) => {
-      await context.getters.getPanel(id);
-      // @TODO@ - add panel status to constants
       await collectionRef.doc(id).delete();
+      // @TODO@ - ?also empty google drive folder, if it has been created?
       return true;
     },
     bindPanelApplications: firestoreAction(({ bindFirestoreRef, state }, params) => {
