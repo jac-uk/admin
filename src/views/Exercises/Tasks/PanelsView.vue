@@ -226,7 +226,6 @@
               Confirm changes
             </button>
             <button
-              v-if="panel.status === 'draft'"
               class="float-right govuk-button govuk-button--warning"
               type="button"
               @click="deletePanel()"

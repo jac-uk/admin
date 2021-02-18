@@ -117,7 +117,7 @@ export default {
       activeTab: 'panels',
       selectedItems: [],
       tableColumns: [
-        { title: 'Name' },
+        { title: 'Name', sort: 'name', direction: 'asc', default: true },
         { title: 'Status' },
       ],
       tableColumnsCandidates: [

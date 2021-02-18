@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      Selection
+      Selection day
     </h1>
     <PanelPack type="selection" />
   </div>
