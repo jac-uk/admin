@@ -1,5 +1,10 @@
 # Release Notes #
 
+0.57.0
+2 issues / 2sp
+ #1174 Changes following feedback on new Character Information section
+ #1178 Enable new and old Character Information form to co-exist
+
 0.56.0
 1 issue / 5sp
  #1132 Generate Files & Copy to Folder Structure
