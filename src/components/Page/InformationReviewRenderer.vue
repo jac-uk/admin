@@ -29,7 +29,7 @@
           v-if="item.date"
           class="govuk-!-margin-top-1"
         >
-          {{ item.date | formatDate }}
+          {{ displayDate(item.date) }}
         </div>
 
         <div
@@ -57,6 +57,9 @@
 </template>
 
 <script>
+
+import { formatDate } from '@jac-uk/jac-kit/filters/filters';
+
 export default {
   props: {
     data: {
@@ -68,6 +71,16 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    displayMonthYearOnly: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  },
+  methods: {
+    displayDate(date) {
+      return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
     },
   },
 };

@@ -8,6 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.furtherInformationDetails"
+            :display-month-year-only="true"
           />
         </dd>
       </div>

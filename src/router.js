@@ -578,6 +578,7 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Exercise Tasks | Sift - new',
+                    pageName: 'exercise-tasks-sift',
                   },
                 },
                 {
@@ -587,6 +588,7 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Exercise Tasks | Panels - Sift - view',
+                    pageName: 'exercise-tasks-sift',
                   },
                 },
               ],

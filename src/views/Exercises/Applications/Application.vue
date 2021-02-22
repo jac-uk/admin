@@ -287,7 +287,7 @@
                 Character information
               </h2>
 
-              <dl v-if="application.characterInformationV2">
+              <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
                 />
@@ -1878,6 +1878,12 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isVersion2 () {
+      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+        return true;
+      }
+      return false;
     },
     applications() {
       return this.$store.state.applications.records;

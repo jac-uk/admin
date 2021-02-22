@@ -8,32 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.drivingDisqualificationDetails"
-          />
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
-          Has been convicted for driving under the influence of drink or drugs
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewRenderer
-            :data="characterInformation.drivingUnderInfluenceConvictionDetails"
-          />
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
-          Has endorsements on driving licence
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewRenderer
-            :data="characterInformation.drivingLicenceEndorsementDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -47,6 +22,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.recentDrivingConvictionDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
