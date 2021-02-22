@@ -7,7 +7,7 @@ const mockContext = {
   dispatch: jest.fn(),
 };
 
-jest.spyOn(authUsers,'authorisedToReset').mockImplementation((email) => {
+jest.spyOn(authUsers,'authorisedToPerformAction').mockImplementation((email) => {
   return email === 'test@test.com';
 });
 
@@ -96,8 +96,6 @@ describe('store/qualifyingTestResponses', () => {
           const updateCallData = updateCall[1];
           expect(updateCallData.id).toBe('1');
           expect(updateCallData.data.status).toBe('activated');
-          expect(updateCallData.data['statusLog.started']).toBeNull();
-          expect(updateCallData.data['statusLog.completed']).toBeNull();
           expect(updateCallData.data.isOutOfTime).toBeUndefined();
         });
 
@@ -125,8 +123,6 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.id).toBe('1');
           expect(updateCallData.data.status).toBe('activated');
           expect(updateCallData.data.isOutOfTime).toBe(false);
-          expect(updateCallData.data['statusLog.started']).toBeNull();
-          expect(updateCallData.data['statusLog.completed']).toBeNull();
         });
 
         it('isOutOfTime field is not updated if exists and equals to false', async () => {
@@ -153,8 +149,49 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.id).toBe('1');
           expect(updateCallData.data.status).toBe('activated');
           expect(updateCallData.data.isOutOfTime).toBeUndefined();
-          expect(updateCallData.data['statusLog.started']).toBeNull();
-          expect(updateCallData.data['statusLog.completed']).toBeNull();
+        });
+
+      });
+
+      describe('canMarkAsCompleted', () => {
+        beforeEach(() => {
+          mockContext.dispatch.mockClear();
+        });
+
+        it('user is not authorised to mark candidate test as completed', async () => {
+          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+            currentUser: {
+              email: 'user@test.com',
+            },
+          }));
+          mockContext.state = {
+            record: {
+              id: '1',
+              status: 'activated',
+            },
+          };
+          await qualifyingTestResponses.actions.markAsCompleted(mockContext);
+          expect(mockContext.dispatch.mock.calls.length).toBe(0);
+        });
+
+        it('user is authorised to mark candidate test as completed', async () => {
+          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+            currentUser: {
+              email: 'test@test.com',
+            },
+          }));
+          mockContext.state = {
+            record: {
+              id: '1',
+              status: 'activated',
+            },
+          };
+          await qualifyingTestResponses.actions.markAsCompleted(mockContext);
+          const updateCall = mockContext.dispatch.mock.calls[0];
+          expect(updateCall[0]).toBe('update');
+          const updateCallData = updateCall[1];
+          expect(updateCallData.id).toBe('1');
+          expect(updateCallData.data.status).toBe('completed');
         });
 
       });
