@@ -1,9 +1,11 @@
 # Release Notes #
 
 0.57.0
-2 issues / 2sp
+4 issues / 5sp
  #1174 Changes following feedback on new Character Information section
  #1178 Enable new and old Character Information form to co-exist
+ #1180 Panel pack improvements 15/02/2021
+ #1181 Data Issue in QT Test Download
 
 0.56.0
 1 issue / 5sp
