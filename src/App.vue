@@ -7,7 +7,7 @@
             href="/"
             class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
           >
-            Internal service name
+            JAC Digital Platform
           </a>
 
           <nav class="float-right">
