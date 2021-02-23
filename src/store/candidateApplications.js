@@ -15,6 +15,14 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    update: async (context, data ) => {
+      const batch = firestore.batch();
+        data.forEach( item => {
+          const ref = collection.doc(item.id);
+          batch.update(ref, item.data);
+        });
+        await batch.commit();
+    },
   },
   state: {
     records: [],

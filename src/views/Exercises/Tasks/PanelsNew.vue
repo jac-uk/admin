@@ -1,14 +1,16 @@
 <template>
   <div>
     <form @submit.prevent="validateAndSave">
-      <h1 class="govuk-heading-l">{{ title }}</h1>
-      
+      <h1 class="govuk-heading-l">
+        {{ title }}
+      </h1>
+
       <ErrorSummary
         :errors="errors"
         :show-save-button="false"
         @save="validateAndSave"
       />
-      
+
       <TextField
         id="panel-name"
         v-model="name"
@@ -17,32 +19,26 @@
       />
       <DateInput
         id="date-from"
-        v-model="datefrom"
+        v-model="dateFrom"
         label="Date range from"
-        :value="datefrom"
+        :value="dateFrom"
       />
       <DateInput
         id="date-to"
-        v-model="dateto"
+        v-model="dateTo"
         label="to"
-        :value="dateto"
+        :value="dateTo"
       />
-      <TextareaInput
-        id="additional"
-        v-model="additional"
-        label="Additional information"
-        rows="3"
-      />
-      <TextField
-        id="googledrive"
-        v-model="googledrive"
-        label="Google Drive Folder URL"
-      />
-
       <button class="govuk-button">
         Save and continue
       </button>
     </form>
+    <button
+      class="govuk-button govuk-button--secondary"
+      @click="cancel"
+    >
+      Cancel
+    </button>
   </div>
 </template>
 
@@ -52,41 +48,39 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {
     ErrorSummary,
     TextField,
     DateInput,
-    TextareaInput,
   },
   extends: Form,
   data() {
     return {
       name: null,
-      datefrom: null,
-      dateto: null,
-      additional: null,
-      googledrive: null,
+      dateFrom: null,
+      dateTo: null,
     };
   },
   computed: {
     isSift() {
+      // TODO: add this from store panel.js
       const route = this.$route.fullPath.includes('/tasks/sift/');
       return route;
     },
     isSelectionDay() {
-      const route = this.$route.fullPath.includes('/tasks/selection-days/');
+      // TODO: add this from store panel.js
+      const route = this.$route.fullPath.includes('/tasks/selection/');
       return route;
     },
     title() {
       let returnTitle = 'New Panel for';
       if (this.isSift) {
-        returnTitle = `${returnTitle} Sift`; 
+        returnTitle = `${returnTitle} Sift`;
       }
       if (this.isSelectionDay) {
-        returnTitle = `${returnTitle} Selection Days`; 
+        returnTitle = `${returnTitle} Selection`;
       }
       return returnTitle;
     },
@@ -96,7 +90,7 @@ export default {
         returnType = 'sift';
       }
       if (this.isSelectionDay) {
-        returnType = 'selection-days';
+        returnType = 'selection';
       }
       return returnType;
     },
@@ -105,32 +99,29 @@ export default {
     },
   },
   methods: {
-    async validateAndSave() {
-      this.validate();
-      if (this.isValid()) {
+    async save(isValid) {
+      if (isValid) {
         const data = {
           name: this.name,
           type: this.type,
-          datefrom: this.datefrom,
-          dateto: this.dateto,
-          additional: this.additional,
-          googledrive: this.googledrive,
+          dateFrom: this.dateFrom,
+          dateTo: this.dateTo,
           exerciseId: this.exerciseId,
-          status: 'created',
+          status: 'draft',
+          // @TODO statuses
           created: firebase.firestore.FieldValue.serverTimestamp(),
         };
-        // eslint-disable-next-line no-console
-        console.log('validateAndSave', data);
         await this.$store.dispatch('panels/create', data);
-        this.$router.push({ 
+        this.$router.push({
           name: `exercise-tasks-${this.type}`,
         });
       }
     },
+    cancel() {
+      this.$router.push({
+        name: `exercise-tasks-${this.type}`,
+      });
+    },
   },
 };
 </script>
-
-<style scoped>
-
-</style>

@@ -4,7 +4,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@jac-uk/jac-kit/helpers/constants';
-import { authorisedToReset } from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -112,19 +112,28 @@ export default {
 
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
-    resetTest: async (context ) => {
+    resetTest: async (context) => {
       const email = firebase.auth().currentUser.email;
-      const canReset = await authorisedToReset(email);
+      const canReset = await authorisedToPerformAction(email);
       if (canReset) {
         const rec = context.state.record;
         const data = {
               'status': 'activated',
-              'statusLog.completed': null,
-              'statusLog.started': null,
             };
         if (rec.isOutOfTime === true) {
           data.isOutOfTime = false;
         }
+        await context.dispatch('update', { data: data, id: rec.id });
+      }
+    },
+    markAsCompleted: async (context) => {
+      const email = firebase.auth().currentUser.email;
+      const canMarkAsCompleted = await authorisedToPerformAction(email);
+      if (canMarkAsCompleted) {
+        const rec = context.state.record;
+        const data = {
+          'status': 'completed',
+        };
         await context.dispatch('update', { data: data, id: rec.id });
       }
     },

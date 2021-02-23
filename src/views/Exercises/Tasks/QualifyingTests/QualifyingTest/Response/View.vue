@@ -26,13 +26,22 @@
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
             <ActionButton
-              v-if="authorisedToReset"
+              v-if="authorisedToPerformAction"
               :disabled="hasActivated"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1"
               @click="resetTest"
             >
               Reset
+            </ActionButton>
+            <ActionButton
+              v-if="authorisedToPerformAction"
+              :disabled="hasCompleted"
+              type="secondary"
+              class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
+              @click="markAsCompleted"
+            >
+              Mark as completed
             </ActionButton>
           </dd>
         </div>
@@ -324,7 +333,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { authorisedToReset }  from '@/helpers/authUsers';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
 export default {
   components: {
@@ -339,7 +348,7 @@ export default {
       moveToTest: '',
       isEditingTestDate: false,
       activeTab: 'questions',
-      authorisedToReset: false,
+      authorisedToPerformAction: false,
     };
   },
   computed: {
@@ -485,12 +494,17 @@ export default {
   async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
     const email = firebase.auth().currentUser.email;
-    this.authorisedToReset = await authorisedToReset(email);
+    this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
     resetTest() {
-      if (this.authorisedToReset && this.authorisedToReset === true) {
+      if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
+      }
+    },
+    markAsCompleted() {
+      if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
+        this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
       }
     },
     actionReasonableAdjustment(obj, duration, id) {

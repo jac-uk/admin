@@ -287,7 +287,7 @@
                 Character information
               </h2>
 
-              <dl v-if="application.characterInformationV2">
+              <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
                 />
@@ -1500,7 +1500,7 @@
 
             <div class="govuk-!-margin-top-9">
               <h2 class="govuk-heading-l">
-                Independent assessors {{ applicationId }}
+                Independent assessors
               </h2>
 
               <dl class="govuk-summary-list">
@@ -1612,7 +1612,7 @@
             </Modal>
 
             <div
-              v-if="application.selectionCriteriaAnswers"
+              v-if="exercise.aSCApply"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
@@ -1878,6 +1878,12 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isVersion2 () {
+      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+        return true;
+      }
+      return false;
     },
     applications() {
       return this.$store.state.applications.records;

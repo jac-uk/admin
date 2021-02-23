@@ -219,8 +219,8 @@ export default {
       if (this.exercise.selectionDays) {
         tasks.push(
           {
-            title: 'Selection Days',
-            name: 'exercise-tasks-selection-days',
+            title: 'Selection day',
+            name: 'exercise-tasks-selection',
           },
         );
       }

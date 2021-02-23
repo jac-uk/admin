@@ -8,6 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :data="characterInformation.fixedPenaltyDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>

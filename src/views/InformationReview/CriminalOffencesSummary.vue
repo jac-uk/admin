@@ -3,11 +3,12 @@
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
-          Has been cautioned for a criminal offence
+          Has been convicted for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="characterInformation.criminalCautionDetails"
+            :data="characterInformation.criminalConvictionDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
@@ -16,11 +17,12 @@
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
-          Has been convicted for a criminal offence
+          Has been cautioned for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="characterInformation.criminalConvictionDetails"
+            :data="characterInformation.criminalCautionDetails"
+            :display-month-year-only="false"
           />
         </dd>
       </div>
