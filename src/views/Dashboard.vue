@@ -154,10 +154,6 @@ export default {
       return !hasSelection;
     },
   },
-  // async created(){
-  //   const res = await this.$store.dispatch('users/bind', 'DdvJcPCIYhgpZDFNhahO5nNvMMA2');
-  //   console.log('in created', res);
-  // },
   watch: {
     isFavourites() {
       if (this.$refs['exercisesTable']) {
