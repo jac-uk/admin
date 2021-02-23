@@ -27,7 +27,7 @@ const module = {
           }
           if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
             allOk = true;
-          }  
+          }
         }
         if (allOk) {
           let role = 'staff';
@@ -35,8 +35,9 @@ const module = {
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
-              'lisias.loback@judicialappointments.digital',
-              'rebecca.mcknight@judicialappointments.digital',
+              'maria.brookes@judicialappointments.digital',
+              'kate.malone@judicialappointments.digital',
+              'joy.adeagbo@judicialappointments.digital',
             ].indexOf(user.email) >= 0
           ) {
             role = 'superadmin';
@@ -47,7 +48,7 @@ const module = {
             emailVerified: user.emailVerified,
             displayName: user.displayName,
             role: role,
-          });  
+          });
         } else {
           auth().signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
