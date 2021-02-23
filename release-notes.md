@@ -1,5 +1,10 @@
 # Release Notes #
 
+0.58.0
+2 issues / 3sp
+ #1185 QT Test - add a button "Mark as completed"
+ #1187 Name the Admin app!
+
 0.57.0
 4 issues / 5sp
  #1174 Changes following feedback on new Character Information section
