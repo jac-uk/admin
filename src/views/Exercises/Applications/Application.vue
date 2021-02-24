@@ -312,7 +312,7 @@
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
-                  :character-information="application.characterInformation"
+                  :character-information="application.characterInformation || {}"
                 />
               </dl>
             </div>
@@ -328,15 +328,24 @@
               </h2>
 
               <dl
-                v-if="application.equalityAndDiversitySurvey"
+                v-if="application.equalityAndDiversitySurvey && Object.keys(application.equalityAndDiversitySurvey).length"
                 class="govuk-summary-list"
               >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Agreed to share data
                   </dt>
-                  <dd class="govuk-summary-list__value">
+                  <dd
+                    v-if="application.equalityAndDiversitySurvey.hasOwnProperty('shareData')"
+                    class="govuk-summary-list__value"
+                  >
                     {{ application.equalityAndDiversitySurvey.shareData | toYesNo }}
+                  </dd>
+                  <dd
+                    v-else
+                    class="govuk-summary-list__value"
+                  >
+                    {{ application.equalityAndDiversitySurvey.shareData | lookup }}
                   </dd>
                 </div>
 
@@ -353,7 +362,7 @@
                       Prefer not to say
                     </span>
                     <ul
-                      v-else
+                      v-else-if="application.equalityAndDiversitySurvey.professionalBackground && application.equalityAndDiversitySurvey.professionalBackground.length"
                       class="govuk-list"
                     >
                       <li
@@ -370,6 +379,12 @@
                         <span v-else>{{ item | lookup }}</span>
                       </li>
                     </ul>
+                    <p
+                      v-else
+                      class="govuk-body"
+                    >
+                      {{ application.equalityAndDiversitySurvey.currentLegalRole | lookup | toYesNo }}
+                    </p>
                   </dd>
                 </div>
 
@@ -389,7 +404,7 @@
                       Prefer not to say
                     </span>
                     <ul
-                      v-else
+                      v-else-if="application.equalityAndDiversitySurvey.currentLegalRole && application.equalityAndDiversitySurvey.currentLegalRole.length"
                       class="govuk-list"
                     >
                       <li
@@ -421,6 +436,12 @@
                         </p>
                       </li>
                     </ul>
+                    <p
+                      v-else
+                      class="govuk-body"
+                    >
+                      {{ application.equalityAndDiversitySurvey.currentLegalRole | lookup | toYesNo }}
+                    </p>
                   </dd>
                 </div>
 
@@ -618,7 +639,7 @@
                 v-else
                 class="govuk-body"
               >
-                No information on applicant's Equality and diversity yet
+                No information provided
               </div>
             </div>
 
@@ -650,7 +671,10 @@
                 Location preferences
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl 
+                v-if="application.locationPreferences"
+                class="govuk-summary-list"
+              >
                 <dt class="govuk-summary-list__key">
                   {{ exercise.locationQuestion }}
                 </dt>
@@ -658,7 +682,7 @@
                   v-if="exercise.locationQuestionType == 'single-choice'"
                   class="govuk-summary-list__value"
                 >
-                  {{ application.locationPreferences }}
+                  {{ application.locationPreferences || 'No answer provided' }}
                 </dd>
                 <dd
                   v-else
@@ -673,6 +697,12 @@
                   </p>
                 </dd>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information provided
+              </div>
             </div>
 
             <div
@@ -683,7 +713,10 @@
                 Jurisdiction preferences
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="application.jurisdictionPreferences"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     {{ exercise.jurisdictionQuestion }}
@@ -708,6 +741,12 @@
                   </dd>
                 </div>
               </dl>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information provided
+              </div>
             </div>
 
             <div
@@ -850,90 +889,99 @@
                 Qualifications
               </h2>
 
-              <dl
-                v-for="item in application.qualifications"
-                :key="item.name"
-                class="govuk-summary-list govuk-!-margin-bottom-0"
+              <div v-if="application.qualifications">
+                <dl
+                  v-for="item in application.qualifications"
+                  :key="item.name"
+                  class="govuk-summary-list govuk-!-margin-bottom-0"
+                >
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Qualification
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>{{ item.type | lookup }}</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Location
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>{{ item.location | lookup }}</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div
+                    v-if="item.date"
+                    class="govuk-summary-list__row"
+                  >
+                    <dt
+                      v-if="item.type === 'barrister'"
+                      class="govuk-summary-list__key"
+                    >
+                      Date completed pupillage
+                    </dt>
+                    <dt
+                      v-else
+                      class="govuk-summary-list__key"
+                    >
+                      Date qualified
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li> {{ item.date | formatDate }}</li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <template
+                    v-if="item.qualificationNotComplete && item.details"
+                  >
+                    <div
+                      class="govuk-summary-list__row"
+                    >
+                      <dt class="govuk-summary-list__key">
+                        Completed pupillage
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li>
+                            No
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
+
+                    <div
+                      class="govuk-summary-list__row"
+                    >
+                      <dt class="govuk-summary-list__key">
+                        Did not complete pupillage notes
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li>
+                            {{ item.details }}
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
+                  </template>
+                </dl>
+              </div>
+
+              <div
+                v-else
+                class="govuk-body"
               >
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Qualification
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>{{ item.type | lookup }}</li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Location
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>{{ item.location | lookup }}</li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div
-                  v-if="item.date"
-                  class="govuk-summary-list__row"
-                >
-                  <dt
-                    v-if="item.type === 'barrister'"
-                    class="govuk-summary-list__key"
-                  >
-                    Date completed pupillage
-                  </dt>
-                  <dt
-                    v-else
-                    class="govuk-summary-list__key"
-                  >
-                    Date qualified
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li> {{ item.date | formatDate }}</li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <template
-                  v-if="item.qualificationNotComplete && item.details"
-                >
-                  <div
-                    class="govuk-summary-list__row"
-                  >
-                    <dt class="govuk-summary-list__key">
-                      Completed pupillage
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <ul class="govuk-list">
-                        <li>
-                          No
-                        </li>
-                      </ul>
-                    </dd>
-                  </div>
-
-                  <div
-                    class="govuk-summary-list__row"
-                  >
-                    <dt class="govuk-summary-list__key">
-                      Did not complete pupillage notes
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <ul class="govuk-list">
-                        <li>
-                          {{ item.details }}
-                        </li>
-                      </ul>
-                    </dd>
-                  </div>
-                </template>
-              </dl>
+                No information provided
+              </div>
 
               <dl
                 v-if="exercise.schedule2Apply"
@@ -952,44 +1000,44 @@
                     </ul>
                   </dd>
                 </div>
-
-                <div
-                  v-if="exercise.appliedSchedule == 'schedule-2-d'"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Are you applying under Schedule 2(d)?
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li> {{ application.applyingUnderSchedule2d | toYesNo }}</li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div
-                  v-if="
-                    (exercise.appliedSchedule=='schedule-2-3' && application.applyingUnderSchedule2Three)
-                      || (exercise.appliedSchedule=='schedule-2-d' && application.applyingUnderSchedule2d)"
-                  class="govuk-summary-list__row"
-                >
-                  <dt
-                    class="govuk-summary-list__key"
-                  >
-                    Explain how you've gained experience in law.
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li v-if="exercise.appliedSchedule=='schedule-2-3'">
-                        {{ application.experienceUnderSchedule2Three }}
-                      </li>
-                      <li v-if="exercise.appliedSchedule=='schedule-2-d'">
-                        {{ application.experienceUnderSchedule2D }}
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
               </dl>
+            </div>
+
+            <div
+              v-if="exercise.appliedSchedule == 'schedule-2-d'"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Are you applying under Schedule 2(d)?
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <ul class="govuk-list">
+                  <li> {{ application.applyingUnderSchedule2d | toYesNo }}</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div
+              v-if="
+                (exercise.appliedSchedule=='schedule-2-3' && application.applyingUnderSchedule2Three)
+                  || (exercise.appliedSchedule=='schedule-2-d' && application.applyingUnderSchedule2d)"
+              class="govuk-summary-list__row"
+            >
+              <dt
+                class="govuk-summary-list__key"
+              >
+                Explain how you've gained experience in law.
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <ul class="govuk-list">
+                  <li v-if="exercise.appliedSchedule=='schedule-2-3'">
+                    {{ application.experienceUnderSchedule2Three }}
+                  </li>
+                  <li v-if="exercise.appliedSchedule=='schedule-2-d'">
+                    {{ application.experienceUnderSchedule2D }}
+                  </li>
+                </ul>
+              </dd>
             </div>
 
             <div
@@ -1239,76 +1287,86 @@
                 Post-qualification experience
               </h2>
 
-              <dl
-                v-for="item in application.experience"
-                :key="item.name"
-                class="govuk-summary-list govuk-!-margin-bottom-8"
+              <div
+                v-if="application.expereience && application.expereience.length"
               >
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Job title
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>{{ item.jobTitle }}</li>
-                    </ul>
-                  </dd>
-                </div>
+                <dl
+                  v-for="item in application.experience"
+                  :key="item.name"
+                  class="govuk-summary-list govuk-!-margin-bottom-8"
+                >
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Job title
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>{{ item.jobTitle }}</li>
+                      </ul>
+                    </dd>
+                  </div>
 
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Organisation or business
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li>{{ item.orgBusinessName }}</li>
-                    </ul>
-                  </dd>
-                </div>
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Organisation or business
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li>{{ item.orgBusinessName }}</li>
+                      </ul>
+                    </dd>
+                  </div>
 
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Dates worked
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul
-                      v-if="item.startDate"
-                      class="govuk-list"
-                    >
-                      <li v-if="item.endDate">
-                        {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
-                      </li>
-                      <li v-else>
-                        {{ item.startDate | formatDate }} — current
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Law-related tasks
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <ul class="govuk-list">
-                      <li
-                        v-for="task in item.tasks"
-                        :key="task.name"
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Dates worked
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul
+                        v-if="item.startDate"
+                        class="govuk-list"
                       >
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ task | lookup }}
-                        </p>
-                        <p
-                          v-if="task == 'other'"
-                          class="govuk-body govuk-!-margin-bottom-0"
+                        <li v-if="item.endDate">
+                          {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+                        </li>
+                        <li v-else>
+                          {{ item.startDate | formatDate }} — current
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key">
+                      Law-related tasks
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <ul class="govuk-list">
+                        <li
+                          v-for="task in item.tasks"
+                          :key="task.name"
                         >
-                          {{ item.otherTasks }}
-                        </p>
-                      </li>
-                    </ul>
-                  </dd>
-                </div>
-              </dl>
+                          <p class="govuk-body govuk-!-margin-bottom-0">
+                            {{ task | lookup }}
+                          </p>
+                          <p
+                            v-if="task == 'other'"
+                            class="govuk-body govuk-!-margin-bottom-0"
+                          >
+                            {{ item.otherTasks }}
+                          </p>
+                        </li>
+                      </ul>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <div
+                v-else
+                class="govuk-body"
+              >
+                No information provided
+              </div>
             </div>
 
             <div
@@ -1503,7 +1561,10 @@
                 Independent assessors
               </h2>
 
-              <dl class="govuk-summary-list">
+              <dl
+                v-if="applicantProvidedFirstAssessor"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row text-right print-none button-right">
                   <dt class="govuk-summary-list__key" />
                   <dd class="govuk-summary-list__value">
@@ -1515,7 +1576,10 @@
                     </button>
                   </dd>
                 </div>
-                <div class="govuk-summary-list__row">
+
+                <div 
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
@@ -1524,7 +1588,9 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div 
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Title or position
                   </dt>
@@ -1550,8 +1616,32 @@
                     {{ application.firstAssessorPhone }}
                   </dd>
                 </div>
+              </dl>
+              <dl
+                v-else 
+                class="govuk-summary-list"
+              >
+                <dt
+                  class="govuk-summary-list__key"
+                >
+                  No information for First Assessor
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <button
+                    class="govuk-button btn-unlock"
+                    @click="editAssessor(1)"
+                  >
+                    Add
+                  </button>
+                </dd>
+              </dl>
 
-                <hr class="govuk-section-break govuk-section-break--l">
+              <hr class="govuk-section-break govuk-section-break--l">
+
+              <dl
+                v-if="applicantProvidedSecondAssessor"
+                class="govuk-summary-list"
+              >
                 <div class="govuk-summary-list__row text-right print-none button-right">
                   <dt class="govuk-summary-list__key" />
                   <dd class="govuk-summary-list__value">
@@ -1563,7 +1653,10 @@
                     </button>
                   </dd>
                 </div>
-                <div class="govuk-summary-list__row">
+
+                <div 
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Full name
                   </dt>
@@ -1572,7 +1665,9 @@
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div 
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Title or position
                   </dt>
@@ -1599,202 +1694,220 @@
                   </dd>
                 </div>
               </dl>
-            </div>
-
-            <Modal
-              ref="modalRef"
-            >
-              <component
-                :is="`IndependentAssessorChange`"
-                v-bind="assessorDetails"
-                @close="closeModal('modalRef')"
-              />
-            </Modal>
-
-            <div
-              v-if="exercise.aSCApply"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Additional Selection Criteria
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  v-for="(item, index) in application.selectionCriteriaAnswers"
-                  :key="index"
-                  class="govuk-summary-list__row"
+              <dl
+                v-else 
+                class="govuk-summary-list"
+              >
+                <dt
+                  class="govuk-summary-list__key"
                 >
-                  <dt class="govuk-summary-list__key">
-                    {{ item.title }}
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <span v-if="item.answer">
-                      {{ item.answerDetails }}
-                    </span>
-                    <span v-else>Does not meet this requirement</span>
-                  </dd>
-                </div>
+                  No information for Second Assessor
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <button
+                    class="govuk-button btn-unlock"
+                    @click="editAssessor(2)"
+                  >
+                    Add
+                  </button>
+                </dd>
               </dl>
+
+              <Modal
+                ref="modalRef"
+              >
+                <component
+                  :is="`IndependentAssessorChange`"
+                  v-bind="assessorDetails"
+                  @close="closeModal('modalRef')"
+                />
+              </Modal>
+
+              <div
+                v-if="exercise.aSCApply"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Additional Selection Criteria
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <div
+                    v-for="(item, index) in application.selectionCriteriaAnswers"
+                    :key="index"
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      {{ item.title }}
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <span v-if="item.answer">
+                        {{ item.answerDetails }}
+                      </span>
+                      <span v-else>Does not meet this requirement</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div
+                v-if="showStatementOfSuitability"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Statement of suitability
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Uploaded statement of suitability
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <div v-if="application.uploadedSuitabilityStatement">
+                        <DownloadLink
+                          :file-name="application.uploadedSuitabilityStatement"
+                          :exercise-id="exercise.id"
+                          :user-id="application.userId"
+                          :title="application.uploadedSuitabilityStatement"
+                        />
+                      </div>
+                      <span v-else>Not yet received</span>
+                      <div>
+                        <FileUpload
+                          id="suitability-statement-file"
+                          ref="suitability-statement"
+                          v-model="application.uploadedSuitabilityStatement"
+                          name="suitability-statement"
+                          :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                          required
+                          @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+                        />
+                      </div>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div
+                v-if="showSelfAssessment"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Self assessment competencies
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Uploaded self assessment
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <div v-if="application.uploadedSelfAssessment">
+                        <DownloadLink
+                          :file-name="application.uploadedSelfAssessment"
+                          :exercise-id="exercise.id"
+                          :user-id="application.userId"
+                          :title="application.uploadedSelfAssessment"
+                        />
+                      </div>
+                      <span v-else>Not yet received</span>
+                      <div>
+                        <FileUpload
+                          id="self-assessment-upload"
+                          ref="self-assessment"
+                          v-model="application.uploadedSelfAssessment"
+                          name="self-assessment"
+                          :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                          required
+                          @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                        />
+                      </div>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div
+                v-if="showCV"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Curriculum vitae (CV)
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Uploaded CV
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <div v-if="application.uploadedCV">
+                        <DownloadLink
+                          :file-name="application.uploadedCV"
+                          :exercise-id="exercise.id"
+                          :user-id="application.userId"
+                          title="CV"
+                        />
+                      </div>
+                      <span v-else>Not yet received</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div
+                v-if="showCoveringLetter"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Covering Letter
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <div
+                    class="govuk-summary-list__row"
+                  >
+                    <dt class="govuk-summary-list__key">
+                      Uploaded Covering Letter
+                    </dt>
+                    <dd class="govuk-summary-list__value">
+                      <div v-if="application.uploadedCoveringLetter">
+                        <DownloadLink
+                          :file-name="application.uploadedCoveringLetter"
+                          :exercise-id="exercise.id"
+                          :user-id="application.userId"
+                          title="Covering Letter"
+                        />
+                      </div>
+                      <span v-else>Not yet received</span>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div v-if="activeTab == 'issues'">
+                No issues found
+              </div>
+
+              <div v-if="activeTab == 'agency'">
+                <AgencyReport />
+              </div>
+
+              <div v-if="activeTab == 'notes'">
+                <Notes
+                  title="Notes about the Application"
+                  :candidate-id="application.userId"
+                  :application-id="applicationId"
+                />
+              </div>
             </div>
-
-            <div
-              v-if="showStatementOfSuitability"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Statement of suitability
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Uploaded statement of suitability
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <div v-if="application.uploadedSuitabilityStatement">
-                      <DownloadLink
-                        :file-name="application.uploadedSuitabilityStatement"
-                        :exercise-id="exercise.id"
-                        :user-id="application.userId"
-                        :title="application.uploadedSuitabilityStatement"
-                      />
-                    </div>
-                    <span v-else>Not yet received</span>
-                    <div>
-                      <FileUpload
-                        id="suitability-statement-file"
-                        ref="suitability-statement"
-                        v-model="application.uploadedSuitabilityStatement"
-                        name="suitability-statement"
-                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                        required
-                        @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
-                      />
-                    </div>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
-              v-if="showSelfAssessment"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Self assessment competencies
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Uploaded self assessment
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <div v-if="application.uploadedSelfAssessment">
-                      <DownloadLink
-                        :file-name="application.uploadedSelfAssessment"
-                        :exercise-id="exercise.id"
-                        :user-id="application.userId"
-                        :title="application.uploadedSelfAssessment"
-                      />
-                    </div>
-                    <span v-else>Not yet received</span>
-                    <div>
-                      <FileUpload
-                        id="self-assessment-upload"
-                        ref="self-assessment"
-                        v-model="application.uploadedSelfAssessment"
-                        name="self-assessment"
-                        :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                        required
-                        @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
-                      />
-                    </div>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
-              v-if="showCV"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Curriculum vitae (CV)
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Uploaded CV
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <div v-if="application.uploadedCV">
-                      <DownloadLink
-                        :file-name="application.uploadedCV"
-                        :exercise-id="exercise.id"
-                        :user-id="application.userId"
-                        title="CV"
-                      />
-                    </div>
-                    <span v-else>Not yet received</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div
-              v-if="showCoveringLetter"
-              class="govuk-!-margin-top-9"
-            >
-              <h2 class="govuk-heading-l">
-                Covering Letter
-              </h2>
-
-              <dl class="govuk-summary-list">
-                <div
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Uploaded Covering Letter
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <div v-if="application.uploadedCoveringLetter">
-                      <DownloadLink
-                        :file-name="application.uploadedCoveringLetter"
-                        :exercise-id="exercise.id"
-                        :user-id="application.userId"
-                        title="Covering Letter"
-                      />
-                    </div>
-                    <span v-else>Not yet received</span>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
-          <div v-if="activeTab == 'issues'">
-            No issues found
-          </div>
-
-          <div v-if="activeTab == 'agency'">
-            <AgencyReport />
-          </div>
-
-          <div v-if="activeTab == 'notes'">
-            <Notes
-              title="Notes about the Application"
-              :candidate-id="application.userId"
-              :application-id="applicationId"
-            />
           </div>
         </div>
       </div>
@@ -2031,6 +2144,14 @@ export default {
 
       return selected;
     },
+    applicantProvidedFirstAssessor() {
+      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle  } = this.application;
+      return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
+    },
+    applicantProvidedSecondAssessor() {
+      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle  } = this.application;
+      return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -2167,7 +2288,7 @@ export default {
       }
     },
     editAssessor(AssessorNr) {
-      this.assessorDetails = {};
+      // this.assessorDetails = {};
       if (AssessorNr === 1) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
@@ -2177,7 +2298,8 @@ export default {
           phone: this.application.firstAssessorPhone,
           title: this.application.firstAssessorTitle,
         };
-      } else if (AssessorNr === 2) {
+      }
+      if (AssessorNr === 2) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
           applicationId: this.applicationId,
