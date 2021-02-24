@@ -2,15 +2,15 @@ const authorisedUsers = [
   'maria.brookes@judicialappointments.digital',
   'warren.searle@judicialappointments.digital',
   'tom.russell@judicialappointments.digital',
-  'lisias.loback@judicialappointments.digital',
-  'rebecca.mcknight@judicialappointments.digital',
+  'kate.malone@judicialappointments.digital',
+  'joy.adeagbo@judicialappointments.digital',
 ];
 
-const authorisedToReset = async (email) => {
+const authorisedToPerformAction = async (email) => {
   return authorisedUsers.includes(email);
 };
 
 export {
-  authorisedToReset
+  authorisedToPerformAction
 };
 
