@@ -1043,7 +1043,7 @@ router.beforeEach((to, from, next) => {
 
 // Global after hook to set an appropriate title for the page
 router.afterEach((to) => {
-  document.title = `${to.meta.title} | Judicial Appointments Commission`;
+  document.title = `${to.meta.title} | JAC Digital Platform`;
 });
 
 export default router;
