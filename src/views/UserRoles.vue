@@ -7,19 +7,10 @@
       <Table
         data-key="id"
         :data="userData"
-        :search="['fullName']"
         :columns="[
-          { title: 'Name', sort: 'name', default: true },
+          { title: 'Name' },
           { title: 'Email' },
           { title: 'Role' },
-        ]"
-        :filters="[
-          {
-            title: 'Admin',
-            field: 'admin',
-            type: 'checkbox',
-            options: roles,
-          },
         ]"
         :selection.sync="selectedUsers"
         multi-select
@@ -48,19 +39,18 @@
         :disabled="!selectedUsers.length"
       >
         <option
-          style="display:none;"
           selected
           value=""
         >
           Choose a role
         </option>
-        <option value="user">
+        <option value="USER">
           user
         </option>
-        <option value="admin">
+        <option value="ADMIN">
           admin
         </option>
-        <option value="manager">
+        <option value="MANAGER">
           manager
         </option>
       </Select>
@@ -68,7 +58,7 @@
     <ActionButton
       type="primary"
       :disabled="!selectedUsers.length"
-      @click="changeRole()"
+      @click="updateRole()"
     >
       Change role
     </ActionButton>
@@ -83,7 +73,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
-  name: 'Users',
+  name: 'UserRoles',
   components: {
     Table,
     TableCell,
@@ -93,12 +83,11 @@ export default {
   data() {
     return {
       users: users,
-      roles: ['admin', 'manager', 'user'],
-      searchUser: '',
+      roles: ['Admin', 'Manager', 'User'],
       selectedUsers: [],
       selectedRole: '',
       tableColumns: [
-        { title: 'Name', sort: 'user.displayName', default: true },
+        { title: 'Name' },
         { title: 'Email' },
         { title: 'Role' },
       ],
@@ -110,11 +99,14 @@ export default {
       return !isDisabled;
     },
     userData() {
-      return this.users;
+      return this.users.filter(user => user.role !== 'SUPERADMIN');
     },
   },
+  created() {
+    this.getUserData();
+  },
   methods: {
-    changeRole() {
+    updateRole() {
       this.selectedUsers.forEach(selectedUser => {
         users.forEach(user => {
           if (user.id === selectedUser) {
@@ -125,16 +117,13 @@ export default {
       this.saveData(users);
     },
     saveData(users) {
-      const data = JSON.stringify(users);
+      const data = JSON.stringify(users.filter(user => user.role !== 'SUPERADMIN'));
       localStorage.setItem('users', data);
     },
-
-  },
-  getUserData() {
-    console.log('calling');
-    const data = JSON.parse(localStorage.getItem('users'));
-    console.log(data);
-    return data;
+    getUserData() {
+      const data = JSON.parse(localStorage.getItem('users'));
+      return data;
+    },
   },
 };
 </script>

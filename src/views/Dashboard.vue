@@ -18,7 +18,7 @@
             Show my favourites
           </button>
           <router-link
-            v-if="$hasPermission(['all'])"
+            v-if="$hasPermission(['all', 'createExercise'])"
             ref="linkToNewExercise"
             to="/exercises/new"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"

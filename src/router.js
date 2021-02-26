@@ -112,7 +112,7 @@ import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
 
 import Dashboard from '@/views/Dashboard';
-import Users from '@/views/Users';
+import UserRoles from '@/views/UserRoles';
 import ExercisesExport from '@/views/Exercises/Export';
 import SignIn from '@/views/SignIn';
 import NotificationsList from '@/views/NotificationsList';
@@ -148,12 +148,13 @@ const router = new Router({
       },
     },
     {
-      path: '/users',
-      name: 'users',
-      component: Users,
+      path: '/user-roles',
+      name: 'user-roles',
+      component: UserRoles,
       meta: {
         requiresAuth: true,
-        title: 'Users',
+        title: 'User roles',
+        permissions: ['all'],
       },
     },
     {
@@ -1036,6 +1037,21 @@ router.beforeEach((to, from, next) => {
 
   if (requiresAuth && !isSignedIn) {
     return next({ name: 'sign-in' });
+  }
+
+  const userPermissions = store.getters['auth/getUserPermissions'];
+  const routePermissions = to.meta.permissions;
+
+  if (routePermissions) {
+    let hasPermission = false;
+    routePermissions.forEach(p => {
+      if (userPermissions.includes(p)) {
+        hasPermission = true;
+      }
+    });
+    if (!hasPermission) {
+      return;
+    }
   }
 
   return next();

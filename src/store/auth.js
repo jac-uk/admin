@@ -1,4 +1,6 @@
 import { auth } from '@/firebase';
+import { ROLES } from '@/helpers/roles';
+import { users, getUserObject } from '@/helpers/users';
 
 const module = {
   namespaced: true,
@@ -30,25 +32,23 @@ const module = {
           }
         }
         if (allOk) {
-          let role = 'staff';
-          if (
-            [ // TODO User roles!
-              'warren.searle@judicialappointments.digital',
-              'tom.russell@judicialappointments.digital',
-              'maria.brookes@judicialappointments.digital',
-              'kate.malone@judicialappointments.digital',
-              'joy.adeagbo@judicialappointments.digital',
-            ].indexOf(user.email) >= 0
-          ) {
-            role = 'superadmin';
-          }
+          // 1. read user object from users collection (or users.js for now)
+          const userObject = getUserObject(user.email); //or uuid?
+          // 2. const permissions = ROLES[role].permissions or get permissions from permissions collection
+          const role = userObject[0].role;
           commit('setCurrentUser', {
             uid: user.uid,
             email: user.email,
             emailVerified: user.emailVerified,
             displayName: user.displayName,
             role: role,
+            permissions: ROLES[role].permissions,
           });
+          if (role !== 'SUPERADMIN') {
+            users.push(user);
+            const data = JSON.stringify(users);
+            localStorage.setItem('users', data);
+          }
         } else {
           auth().signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
@@ -59,6 +59,12 @@ const module = {
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
+    },
+    getUserPermissions(state) {
+      if (state.currentUser && state.currentUser.permissions) {
+        return state.currentUser.permissions;
+      }
+      return null;
     },
   },
 };

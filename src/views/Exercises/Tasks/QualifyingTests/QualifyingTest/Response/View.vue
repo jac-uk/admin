@@ -26,7 +26,7 @@
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
             <ActionButton
-              v-if="authorisedToPerformAction"
+              v-if="$hasPermission('all')"
               :disabled="hasActivated"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1"
@@ -35,7 +35,7 @@
               Reset
             </ActionButton>
             <ActionButton
-              v-if="authorisedToPerformAction"
+              v-if="$hasPermission('all')"
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"

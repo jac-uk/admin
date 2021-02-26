@@ -1,5 +1,5 @@
   const SUPERADMIN = {
-    permissions: ['all'],
+    permissions: ['all', 'changeUserRoles'],
   };
 
   const ADMIN = {

@@ -9,9 +9,7 @@ const currentUser = {
   emailVerified: 1,
   displayName: 'Test user',
   role: ROLES.ADMIN,
-  permissions: ['createExercise', 'viewExercise', 'updateExercise', 'deleteExercise', 'updateExerciseDatesAfterClose',
-                'updateApplication', 'updateCandidateContactDetails', 'candidateSearch', 'updateAssessorsDetails',
-                'createReports', 'triggerEmails', 'updateStateByActions', 'addNotes', 'uploadTemplates'],
+  permissions: ROLES.ADMIN.permissions,
 };
 
 const mockStore = {

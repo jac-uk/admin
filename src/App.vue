@@ -36,12 +36,15 @@
                   Candidates
                 </RouterLink>
               </li>
-              <li class="govuk-header__navigation-item">
+              <li
+                v-if="$hasPermission('all')"
+                class="govuk-header__navigation-item"
+              >
                 <RouterLink
-                  :to="{ name: 'users' }"
+                  :to="{ name: 'user-roles' }"
                   class="govuk-header__link"
                 >
-                  Users
+                  User roles (Signed in as {{ userRole }})
                 </RouterLink>
               </li>
               <li class="govuk-header__navigation-item">
@@ -140,6 +143,12 @@ export default {
     },
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+    },
+    userRole() {
+      if (this.$store.state.auth.currentUser && this.$store.state.auth.currentUser.role) {
+        return this.$store.state.auth.currentUser.role;
+      }
+      return 'Staff';
     },
   },
   created() {
