@@ -19,6 +19,13 @@
             >
               Export data
             </button>
+            <ActionButton
+              v-if="totalApplicationRecords"
+              type="primary"
+              @click="transferHandoverData()"
+            >
+              Transfer Handover Data
+            </ActionButton>
           </div>
         </div>
       </div>
@@ -73,17 +80,20 @@
 </template>
 
 <script>
+import { functions } from '@/firebase';
 import { mapState } from 'vuex';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
     Table,
     TableCell,
+    ActionButton,
   },
   data() {
     return {
@@ -110,6 +120,9 @@ export default {
     },
   },
   methods: {
+    async transferHandoverData() {
+      await functions.httpsCallable('transferHandoverData')({ exerciseId: this.exercise.id });
+    },
     getTableData(params) {
       this.$store.dispatch(
         'stageHandover/bind',
