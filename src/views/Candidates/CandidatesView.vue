@@ -18,9 +18,39 @@
         :candidate="personalDetails"
         @changedetails="updateCandidate"
       />
-      <CharacterInformation
-        :data="characterInformation"
-      />
+      <h2 class="govuk-heading-l">
+        Character information
+      </h2>
+
+      <dl v-if="isVersion2 && characterInformation">
+        <CriminalOffencesSummary
+          :character-information="characterInformation"
+        />
+        <FixedPenaltiesSummary
+          :character-information="characterInformation"
+        />
+        <MotoringOffencesSummary
+          :character-information="characterInformation"
+        />
+        <FinancialMattersSummary
+          :character-information="characterInformation"
+        />
+        <ProfessionalConductSummary
+          :character-information="characterInformation"
+        />
+        <FurtherInformationSummary
+          :character-information="characterInformation"
+        />
+        <CharacterDeclarationSummary
+          :character-information="characterInformation"
+        />
+      </dl>
+      <dl v-else>
+        <CharacterInformationSummaryV1
+          :character-information="characterInformation"
+        />
+      </dl>
+
       <EqualityAndDiversity
         :data="equalityAndDiversity"
       />
@@ -46,19 +76,33 @@
 <script>
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
-import CharacterInformation from '@jac-uk/jac-kit/draftComponents/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
+import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
+import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1.vue';
 
 export default {
   components: {
     TabsList,
     PersonalDetails,
-    CharacterInformation,
     EqualityAndDiversity,
     Notes,
     Applications,
+    CriminalOffencesSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
+    ProfessionalConductSummary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
+    CharacterInformationSummaryV1,
   },
   data() {
     return {
@@ -81,6 +125,12 @@ export default {
     };
   },
   computed: {
+    isVersion2 () {
+      if (this.$router.params.applicationVersion && this.$router.params.applicationVersion === 2) {
+        return true;
+      }
+      return false;
+    },
     candidateRecord() {
       const localRecords = this.$store.state.candidates.record;
       return localRecords;

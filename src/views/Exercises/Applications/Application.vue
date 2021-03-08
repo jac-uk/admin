@@ -187,7 +187,7 @@
                   <dd class="govuk-summary-list__value">
                     <EditableField
                       :value="application.personalDetails.fullName"
-                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId, applicationVersion: exercise._applicationVersion } }"
                       field="fullName"
                       type="route"
                       @changefield="changeUserDetails"
