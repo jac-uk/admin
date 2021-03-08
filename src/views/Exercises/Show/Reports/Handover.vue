@@ -19,13 +19,13 @@
             >
               Export data
             </button>
-            <ActionButton
-              v-if="totalApplicationRecords"
-              type="primary"
-              @click="transferHandoverData()"
-            >
-              Transfer Handover Data
-            </ActionButton>
+            <!--            <ActionButton-->
+            <!--              v-if="totalApplicationRecords"-->
+            <!--              type="primary"-->
+            <!--              @click="transferHandoverData()"-->
+            <!--            >-->
+            <!--              Transfer Handover Data-->
+            <!--            </ActionButton>-->
           </div>
         </div>
       </div>
@@ -86,14 +86,14 @@ import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+//import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
     Table,
     TableCell,
-    ActionButton,
+    //ActionButton,
   },
   data() {
     return {
