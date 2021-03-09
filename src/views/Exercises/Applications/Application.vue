@@ -180,7 +180,44 @@
               </h2>
 
               <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
+
+                <div
+                  v-if="application.personalDetails.firstName && application.personalDetails.lastName"
+                  class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    First name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="application.personalDetails.firstName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="firstName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  v-if="application.personalDetails.firstName && application.personalDetails.lastName"
+                  class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Last name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="application.personalDetails.lastName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="lastName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  v-if="!application.personalDetails.firstName && !application.personalDetails.lastName"
+                  class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Full Name
                   </dt>
@@ -2156,10 +2193,26 @@ export default {
       }
       return false;
     },
+    makeFullName(objChanged) {
+      console.log('firstname', objChanged.firstName);
+      if (objChanged.firstName && this.application.personalDetails.lastName) {
+        objChanged.lastName = this.application.personalDetails.lastName;
+        objChanged.fullName = `${objChanged.firstName} ${objChanged.lastName}`;
+      }
+
+      if (objChanged.lastName && this.application.personalDetails.firstName) {
+        objChanged.firstName = this.application.personalDetails.firstName;
+        objChanged.fullName = `${objChanged.firstName} ${objChanged.lastName}`;
+      }
+      console.log('object with full name', objChanged);
+      return objChanged;
+    },
     changeUserDetails(objChanged) {
-      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
+      const result = this.makeFullName(objChanged);
+
+      const myPersonalDetails = { ...this.application.personalDetails, ...result };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: result, id: this.application.userId });
     },
     doFileUpload(val, field) {
       if (val) {
