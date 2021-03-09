@@ -2,7 +2,7 @@
   <div>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of an allegation or claim of professional misconduct
         </dt>
         <dd class="govuk-summary-list__value">
@@ -16,7 +16,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of an allegation or claim of negligence
         </dt>
         <dd class="govuk-summary-list__value">
@@ -30,7 +30,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of an allegation or claim of wrongful dismissal
         </dt>
         <dd class="govuk-summary-list__value">
@@ -44,7 +44,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of an allegation or claim of discrimination proceedings
         </dt>
         <dd class="govuk-summary-list__value">
@@ -58,7 +58,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of an allegation or claim of harassment proceedings
         </dt>
         <dd class="govuk-summary-list__value">
@@ -72,7 +72,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           A subject of complaints or disciplinary action
         </dt>
         <dd class="govuk-summary-list__value">
@@ -86,7 +86,7 @@
 
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Has been asked to resign from a position
         </dt>
         <dd class="govuk-summary-list__value">
@@ -113,6 +113,16 @@ export default {
       type: Object,
       required: true,
       default: new Object({}),
+    },
+    requiredWiderColumn: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+  computed: {
+    requiredStyle() {
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
 };

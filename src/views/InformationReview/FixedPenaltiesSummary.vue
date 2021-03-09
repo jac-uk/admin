@@ -2,7 +2,7 @@
   <div>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Has received a fixed penalty notice in the last 4 years
         </dt>
         <dd class="govuk-summary-list__value">
@@ -29,6 +29,16 @@ export default {
       type: Object,
       required: false,
       default: new Object({}),
+    },
+    requiredWiderColumn: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+  computed: {
+    requiredStyle() {
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
 };

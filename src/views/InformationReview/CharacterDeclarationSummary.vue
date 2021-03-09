@@ -2,7 +2,7 @@
   <div>
     <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Signed character information declaration
         </dt>
         <dd class="govuk-summary-list__value">
@@ -22,6 +22,16 @@ export default {
       type: Object,
       required: true,
       default: new Object({}),
+    },
+    requiredWiderColumn: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+  computed: {
+    requiredStyle() {
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
   methods: {

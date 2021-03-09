@@ -290,29 +290,37 @@
               <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FixedPenaltiesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <MotoringOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FinancialMattersSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <ProfessionalConductSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FurtherInformationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <CharacterDeclarationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
                   :character-information="application.characterInformation"
+                  :required-wider-column="true"
                 />
               </dl>
             </div>

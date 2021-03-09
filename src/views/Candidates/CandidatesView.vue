@@ -5,7 +5,6 @@
     >
       Candidate: {{ myFullName }}
     </h1>
-
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
@@ -25,29 +24,37 @@
       <dl v-if="isVersion2 && characterInformation">
         <CriminalOffencesSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <FixedPenaltiesSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <MotoringOffencesSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <FinancialMattersSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <ProfessionalConductSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <FurtherInformationSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
         <CharacterDeclarationSummary
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
       </dl>
       <dl v-else>
         <CharacterInformationSummaryV1
           :character-information="characterInformation"
+          :required-wider-column="false"
         />
       </dl>
 
@@ -122,18 +129,15 @@ export default {
       ],
       activeTab: 'details',
       candidateId: '',
+      applicationVersion: '',
     };
   },
   computed: {
     isVersion2 () {
-      if (this.$router.params.applicationVersion && this.$router.params.applicationVersion === 2) {
-        return true;
-      }
-      return false;
+      return this.applicationVersion === 2;
     },
     candidateRecord() {
-      const localRecords = this.$store.state.candidates.record;
-      return localRecords;
+      return this.$store.state.candidates.record;
     },
     personalDetails() {
       const localDocs = this.$store.state.candidates.personalDetails;
@@ -153,9 +157,13 @@ export default {
     getUserId() {
       return this.$route.params.id || '';
     },
+    getApplicationVersion() {
+      return this.$route.params.applicationVersion || '';
+    },
   },
   created() {
     this.candidateId = this.getUserId;
+    this.applicationVersion = this.getApplicationVersion;
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
