@@ -2194,25 +2194,19 @@ export default {
       return false;
     },
     makeFullName(objChanged) {
-      console.log('firstname', objChanged.firstName);
       if (objChanged.firstName && this.application.personalDetails.lastName) {
-        objChanged.lastName = this.application.personalDetails.lastName;
-        objChanged.fullName = `${objChanged.firstName} ${objChanged.lastName}`;
+        objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
       }
-
       if (objChanged.lastName && this.application.personalDetails.firstName) {
-        objChanged.firstName = this.application.personalDetails.firstName;
-        objChanged.fullName = `${objChanged.firstName} ${objChanged.lastName}`;
+        objChanged.fullName = `${objChanged.lastName} ${this.application.personalDetails.firstName}`;
       }
-      console.log('object with full name', objChanged);
       return objChanged;
     },
     changeUserDetails(objChanged) {
-      const result = this.makeFullName(objChanged);
-
-      const myPersonalDetails = { ...this.application.personalDetails, ...result };
+      const change = this.makeFullName(objChanged);
+      const myPersonalDetails = { ...this.application.personalDetails, ...change };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: result, id: this.application.userId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: change, id: this.application.userId });
     },
     doFileUpload(val, field) {
       if (val) {
