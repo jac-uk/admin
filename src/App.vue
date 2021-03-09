@@ -9,6 +9,7 @@
           >
             JAC Digital Platform
           </a>
+          <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appVersion }}</span>
 
           <nav class="float-right">
             <ul class="govuk-header__navigation user-menu">
