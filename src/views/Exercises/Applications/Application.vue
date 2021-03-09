@@ -765,7 +765,7 @@
                   <dd
                     class="govuk-summary-list__value"
                   >
-                    {{ application.applyingForWelshPost | toYesNo }}
+                    {{ application.applyingForWelshPost | toYesNo | showAlternative('Answer not supplied') }}
                   </dd>
                 </div>
                 <div
@@ -778,7 +778,7 @@
                   <dd
                     class="govuk-summary-list__value"
                   >
-                    {{ application.canSpeakWelsh | toYesNo }}
+                    {{ application.canSpeakWelsh | toYesNo | showAlternative('Answer not supplied') }}
                   </dd>
                 </div>
                 <div
@@ -794,12 +794,12 @@
                     <p
                       v-if="application.canReadAndWriteWelsh == false "
                     >
-                      {{ application.canReadAndWriteWelsh | toYesNo }}
+                      {{ application.canReadAndWriteWelsh | toYesNo | showAlternative('Answer not supplied') }}
                     </p>
                     <p
                       v-if="application.canReadAndWriteWelsh"
                     >
-                      {{ application.canReadAndWriteWelsh | lookup }}
+                      {{ application.canReadAndWriteWelsh | lookup | showAlternative('Answer not supplied') }}
                     </p>
                   </dd>
                 </div>
