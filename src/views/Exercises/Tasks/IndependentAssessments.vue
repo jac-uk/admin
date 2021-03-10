@@ -308,8 +308,7 @@ export default {
   },
   computed: {
     isLeadershipJudgeRequired() {
-      console.log('checking', this.exercise.id);
-      return this.exercise.id === '5S9fRWlCDr5m9AZmETFa';
+      return this.exercise.id === '5S9fRWlCDr5m9AZmETFa'; // exercise 35
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
