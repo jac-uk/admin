@@ -1498,7 +1498,66 @@
               </dl>
             </div>
 
-            <div class="govuk-!-margin-top-9">
+            <div
+              v-if="isLeadershipJudgeRequired"
+              class="govuk-!-margin-top-9">
+              <h2 class="govuk-heading-l">
+                Leadership Judge details
+              </h2>
+
+              <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row text-right print-none button-right">
+                  <dt class="govuk-summary-list__key" />
+                  <dd class="govuk-summary-list__value">
+                    <button
+                      class="govuk-button btn-unlock"
+                      @click="editAssessor(1)"
+                    >
+                      Edit
+                    </button>
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Full name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ application.firstAssessorFullName }}
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Title or position
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ application.firstAssessorTitle }}
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row print-none">
+                  <dt class="govuk-summary-list__key">
+                    Email
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ application.firstAssessorEmail }}
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row print-none">
+                  <dt class="govuk-summary-list__key">
+                    Telephone
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ application.firstAssessorPhone }}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div
+              v-else
+              class="govuk-!-margin-top-9"
+            >
               <h2 class="govuk-heading-l">
                 Independent assessors
               </h2>
@@ -1876,6 +1935,9 @@ export default {
     };
   },
   computed: {
+    isLeadershipJudgeRequired() {
+      return this.application.exerciseId === '5S9fRWlCDr5m9AZmETFa';
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
