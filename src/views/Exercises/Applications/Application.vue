@@ -2203,10 +2203,12 @@ export default {
       return objChanged;
     },
     changeUserDetails(objChanged) {
-      const change = this.makeFullName(objChanged);
-      const myPersonalDetails = { ...this.application.personalDetails, ...change };
+      if (objChanged.firstName || objChanged.lastName) {
+        objChanged = this.makeFullName(objChanged);
+      }
+      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: change, id: this.application.userId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
     doFileUpload(val, field) {
       if (val) {
