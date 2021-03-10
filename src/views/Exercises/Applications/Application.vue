@@ -1522,7 +1522,7 @@
                     Full name
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorFullName }}
+                    {{ application.leadershipJudgeName }}
                   </dd>
                 </div>
 
@@ -1531,7 +1531,7 @@
                     Title or position
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorTitle }}
+                    {{ application.leadershipJudgeTitle }}
                   </dd>
                 </div>
 
@@ -1540,7 +1540,7 @@
                     Email
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorEmail }}
+                    {{ application.leadershipJudgeEmail }}
                   </dd>
                 </div>
 
@@ -1549,7 +1549,7 @@
                     Telephone
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.firstAssessorPhone }}
+                    {{ application.leadershipJudgePhone }}
                   </dd>
                 </div>
               </dl>

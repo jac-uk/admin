@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div
+    v-if="isLeadershipJudgeRequired"
+  >
+    <h3>This functionality is not available for this exercise</h3>
+  </div>
+
+  <div v-else>
     <h1 class="govuk-heading-l">
       Independent Assessments
     </h1>
@@ -301,6 +307,10 @@ export default {
     };
   },
   computed: {
+    isLeadershipJudgeRequired() {
+      console.log('checking', this.exercise.id);
+      return this.exercise.id === '5S9fRWlCDr5m9AZmETFa';
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
