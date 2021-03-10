@@ -161,7 +161,9 @@ export default {
             if (response) {
               const responseSelection = response.selection;
               if (responseSelection) {
-                if (responseSelection.mostAppropriate !== undefined && responseSelection.leastAppropriate !== undefined) {
+                if ((responseSelection.mostAppropriate !== undefined && responseSelection.mostAppropriate !== null)
+                  && (responseSelection.leastAppropriate !== undefined && responseSelection.leastAppropriate !== null))
+                {
                   row.push(
                     question.options[responseSelection.mostAppropriate].answer,
                     question.options[responseSelection.leastAppropriate].answer,
@@ -202,7 +204,7 @@ export default {
             }
             if (responses) {
               responses.forEach((response) => {
-                row.push(response.text === null ? 'Question skipped' : response.text);
+                row.push(response.text === undefined || response.text === null ? 'Question skipped' : response.text);
               });
             }
           });
@@ -219,7 +221,7 @@ export default {
             }
             if (response) {
               const responseSelection = response.selection;
-              if (responseSelection !== undefined) {
+              if (responseSelection !== undefined && responseSelection !== null) {
                 row.push(
                   question.options[response.selection].answer,
                   response.score
@@ -235,8 +237,6 @@ export default {
         }
         return row;
       });
-
-      data;
 
       const xlsxData = [
         headers,
