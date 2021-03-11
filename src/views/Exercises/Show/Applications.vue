@@ -111,20 +111,17 @@ export default {
       // fetch data
       const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
 
-      // write headers
-      const xlsxData = [];
-      const line = [];
-      response.data.headers.forEach(e => line.push(e));
-      xlsxData.push(line);
+      const reportData = [];
 
-      // write rows
+      // get headers
+      reportData.push(response.data.headers.map(header => header));
+
+      // get rows
       response.data.rows.forEach((row) => {
-        const line = [];
-        row.headers.forEach(e => line.push(e));
-        xlsxData.push(line);
+        reportData.push(Object.values(row).map(cell => cell));
       });
 
-      return xlsxData;
+      return reportData;
     },
     async exportContacts() {
       const title = 'Contacts';
