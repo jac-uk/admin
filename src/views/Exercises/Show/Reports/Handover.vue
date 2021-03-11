@@ -162,10 +162,17 @@ export default {
       this.refreshingReport = false;
     },
     gatherReportData() {
-      return [
-        ...this.report.headers,
-        ...this.report.rows,
-      ];
+      const reportData = [];
+
+      // get headers
+      reportData.push(this.report.headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
+      });
+
+      return reportData;
     },
     async exportData() {
       const title = 'Handover Report';
