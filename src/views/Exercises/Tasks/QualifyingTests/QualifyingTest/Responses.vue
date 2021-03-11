@@ -52,7 +52,7 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
@@ -72,9 +72,6 @@ export default {
     };
   },
   computed: {
-    sortedByScoresArr() {
-      return this.responses.slice().sort((a, b) => {return a.score - b.score;}).reverse();
-    },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
@@ -95,153 +92,28 @@ export default {
     },
   },
   methods: {
+    async gatherExportData() {
+
+      // fetch data
+      const response = await functions.httpsCallable('exportQualifyingTestReponses')({ qualifyingTestId: this.qualifyingTest.id });
+
+      // write headers
+      const xlsxData = [];
+      const line = [];
+      response.data.headers.forEach(e => line.push(e));
+      xlsxData.push(line);
+
+      // write rows
+      response.data.rows.forEach((row) => {
+        const line = [];
+        row.headers.forEach(e => line.push(e));
+        xlsxData.push(line);
+      });
+
+      return xlsxData;
+    },
     async downloadResponses() {
-
-      await this.getTableData({});
-
-      const headers = [
-        'ID',
-        'Reference number',
-        'Full Name',
-        'Total Duration',
-        'Adjust applied',
-        'Time Taken',
-        'Status',
-        'Started',
-        'Completed',
-        `${this.typeInitials(this.qualifyingTest.type)} Score`,
-      ];
-
-      this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT) {
-          headers.push(
-            `Q${ index + 1 }. Most Appropriate`,
-            `Q${ index + 1 }. Least Appropriate`,
-            `Q${ index + 1 }. Score`
-          );
-        }
-        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
-          question.options.forEach((option, decimal) => {
-            headers.push(`Scenario ${ index + 1 }. Question ${ decimal + 1 }: ${ option.question }`);
-          });
-        }
-        if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS) {
-          headers.push(
-            `Q${ index + 1 }. Answer`,
-            `Q${ index + 1 }. Score`
-          );
-        }
-      });
-
-      const data = this.sortedByScoresArr.map(element => {
-        const row = [
-          element.id,
-          element.application ? element.application.referenceNumber : '',
-          element.candidate.fullName || element.candidate.email,
-          element.duration.testDurationAdjusted,
-          element.duration.reasonableAdjustment,
-          this.timeTaken(element),
-          element.status,
-          filters.formatDate(element.statusLog.started, 'longdatetime'),
-          filters.formatDate(element.statusLog.completed, 'longdatetime'),
-          element.score,
-        ];
-
-        switch (this.qualifyingTest.type){
-        case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
-          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            let response = [];
-            if (element.responses.length) {
-              response = element.responses[index];
-            } else {
-              if (element.testQuestions && element.testQuestions.questions) {
-                response = element.testQuestions.questions[index].response;
-              }
-            }
-            if (response) {
-              const responseSelection = response.selection;
-              if (responseSelection) {
-                if ((responseSelection.mostAppropriate !== undefined && responseSelection.mostAppropriate !== null)
-                  && (responseSelection.leastAppropriate !== undefined && responseSelection.leastAppropriate !== null))
-                {
-                  row.push(
-                    question.options[responseSelection.mostAppropriate].answer,
-                    question.options[responseSelection.leastAppropriate].answer,
-                    response.score
-                  );
-                } else {
-                  row.push(
-                    '---',
-                    '---',
-                    '---'
-                  );
-                }
-              } else {
-                row.push(
-                  '---',
-                  '---',
-                  '---'
-                );
-              }
-            } else {
-              row.push(
-                '---',
-                '---',
-                '---'
-              );
-            }
-          });
-          break;
-        case QUALIFYING_TEST.TYPE.SCENARIO:
-          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            let responses = [];
-            if (element.responses.length) {
-              responses = element.responses[index].responsesForScenario;
-            } else {
-              if (element.testQuestions && element.testQuestions.questions) {
-                responses = element.testQuestions.questions[index].responses;
-              }
-            }
-            if (responses) {
-              responses.forEach((response) => {
-                row.push(response.text === undefined || response.text === null ? 'Question skipped' : response.text);
-              });
-            }
-          });
-          break;
-        case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
-          this.qualifyingTest.testQuestions.questions.forEach((question, index) => {
-            let response = [];
-            if (element.responses.length) {
-              response = element.responses[index];
-            } else {
-              if (element.testQuestions && element.testQuestions.questions) {
-                response = element.testQuestions.questions[index].response;
-              }
-            }
-            if (response) {
-              const responseSelection = response.selection;
-              if (responseSelection !== undefined && responseSelection !== null) {
-                row.push(
-                  question.options[response.selection].answer,
-                  response.score
-                );
-              } else {
-                row.push('---','---');
-              }
-            } else {
-              row.push('---','---');
-            }
-          });
-          break;
-        }
-        return row;
-      });
-
-      const xlsxData = [
-        headers,
-        ...data,
-      ];
+      const xlsxData = await this.gatherExportData();
 
       downloadXLSX(
         xlsxData,
