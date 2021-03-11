@@ -104,7 +104,7 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
 
       it('calls gatherReportData', () => {
         wrapper.vm.gatherReportData = jest.fn();
-        wrapper.vm.exportData();
+        wrapper.vm.gatherReportData();
         expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
 

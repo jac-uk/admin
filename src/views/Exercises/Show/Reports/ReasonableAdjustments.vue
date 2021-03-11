@@ -173,7 +173,7 @@ export default {
 
       return reportData;
     },
-    async exportData() {
+    exportData() {
       const title = 'Reasonable Adjustments Report';
       const data = this.gatherReportData();
 
