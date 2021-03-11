@@ -1,6 +1,6 @@
 <template>
   <dl
-    v-if="characterInformation"
+    v-if="characterInformation && Object.keys(characterInformation).length"
     class="govuk-summary-list"
   >
     <div class="govuk-summary-list__row">
