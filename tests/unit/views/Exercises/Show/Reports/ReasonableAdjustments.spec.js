@@ -96,32 +96,6 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
     });
   });
   describe('methods', () => {
-    describe('gatherReportData()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.gatherReportData).toBe('function');
-      });
-
-      it('returns an array with header row and one row per application', () => {
-        const report = wrapper.vm.gatherReportData();
-
-        expect(report).toBeArrayOfSize(mockReport.candidates.length + 1);
-      });
-
-      it('returns an array starting with header row', () => {
-        const report = wrapper.vm.gatherReportData();
-
-        const headers = [
-          'Name',
-          'Email',
-          'Phone number',
-          'Details',
-        ];
-
-        expect(report[0]).toBeArray();
-        expect(report[0]).toEqual(headers);
-      });
-    });
-
     describe('exportData()', () => {
 
       it('is a function', () => {
