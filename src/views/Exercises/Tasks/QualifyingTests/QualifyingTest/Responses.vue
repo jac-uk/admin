@@ -95,22 +95,19 @@ export default {
     async gatherExportData() {
 
       // fetch data
-      const response = await functions.httpsCallable('exportQualifyingTestReponses')({ qualifyingTestId: this.qualifyingTest.id });
+      const response = await functions.httpsCallable('exportQualifyingTestResponses')({ qualifyingTestId: this.qualifyingTest.id });
 
-      // write headers
-      const xlsxData = [];
-      const line = [];
-      response.data.headers.forEach(e => line.push(e));
-      xlsxData.push(line);
+      const reportData = [];
 
-      // write rows
+      // get headers
+      reportData.push(response.data.headers.map(header => header));
+
+      // get rows
       response.data.rows.forEach((row) => {
-        const line = [];
-        row.headers.forEach(e => line.push(e));
-        xlsxData.push(line);
+        reportData.push(Object.values(row).map(cell => cell));
       });
 
-      return xlsxData;
+      return reportData;
     },
     async downloadResponses() {
       const xlsxData = await this.gatherExportData();
