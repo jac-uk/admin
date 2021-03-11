@@ -107,8 +107,7 @@ export default {
         }
       );
     },
-    async exportContacts() {
-
+    async gatherReportData() {
       // fetch data
       const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
 
@@ -125,8 +124,12 @@ export default {
         xlsxData.push(line);
       });
 
-      // write output (i.e., start the download)
+      return xlsxData;
+    },
+    async exportContacts() {
       const title = 'Contacts';
+      const xlsxData = await this.gatherReportData();
+
       downloadXLSX(
         xlsxData,
         {
@@ -135,7 +138,6 @@ export default {
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
-
     },
   },
 };
