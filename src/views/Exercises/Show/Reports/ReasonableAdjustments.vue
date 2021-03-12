@@ -19,6 +19,16 @@
             >
               Export data
             </button>
+            <button
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="refreshReport"
+            >
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
+            </button>
           </div>
         </div>
       </div>
@@ -113,9 +123,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import { firestore, functions } from '@/firebase';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
+  data() {
+    return {
+      report: null,
+      refreshingReport: false,
+    };
+  },
   computed: {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
@@ -126,26 +144,34 @@ export default {
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
+    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
+      .onSnapshot((snap) => {
+        this.report = vuexfireSerialize(snap);
+      });
+  },
+  destroyed() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   },
   methods: {
+    async refreshReport() {
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
+    },
     gatherReportData() {
-      const headers = [
-        'Name',
-        'Email',
-        'Phone number',
-        'Details',
-      ];
+      const reportData = [];
 
-      const data = this.reasonableAdjustments.candidates.map(candidate => [
-        candidate.name,
-        candidate.email,
-        candidate.phone,
-        candidate.adjustmentsDetails,
-      ]);
-      return [
-        headers,
-        ...data,
-      ];
+      // get headers
+      reportData.push(this.report.headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
+      });
+
+      return reportData;
     },
     exportData() {
       const title = 'Reasonable Adjustments Report';
