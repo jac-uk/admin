@@ -61,12 +61,18 @@ const store = new Vuex.Store({
     qualifyingTestReport,
     panels,
   },
-  state: {},
+  state: {
+    packageVersion: process.env.PACKAGE_VERSION || '0',
+  },
   mutations: {
     ...vuexfireMutations,
   },
   actions: {},
-  getters: {},
+  getters: {
+    appVersion: (state) => {
+      return state.packageVersion;
+    },
+  },
 });
 
 export default store;
