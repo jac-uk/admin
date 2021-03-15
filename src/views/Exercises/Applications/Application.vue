@@ -180,10 +180,10 @@
               </h2>
 
               <dl class="govuk-summary-list">
-
                 <div
                   v-if="application.personalDetails.firstName && application.personalDetails.lastName"
-                  class="govuk-summary-list__row">
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     First name
                   </dt>
@@ -200,7 +200,8 @@
 
                 <div
                   v-if="application.personalDetails.firstName && application.personalDetails.lastName"
-                  class="govuk-summary-list__row">
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Last name
                   </dt>
@@ -217,7 +218,8 @@
 
                 <div
                   v-if="!application.personalDetails.firstName && !application.personalDetails.lastName"
-                  class="govuk-summary-list__row">
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Full Name
                   </dt>
@@ -2198,7 +2200,7 @@ export default {
         objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
       }
       if (objChanged.lastName && this.application.personalDetails.firstName) {
-        objChanged.fullName = `${objChanged.lastName} ${this.application.personalDetails.firstName}`;
+        objChanged.fullName = `${this.application.personalDetails.firstName} ${objChanged.lastName}`;
       }
       return objChanged;
     },
