@@ -1745,7 +1745,7 @@
           class="govuk-!-margin-top-9"
         >
           <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
-            Leadership judge details
+            Leadership Judge details
           </h2>
 
           <dl
