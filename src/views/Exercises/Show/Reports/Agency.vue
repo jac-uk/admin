@@ -54,7 +54,7 @@
             v-if="activeTab === 'acro'"
           >
             <p
-              v-if="!agencyReport.acro.count"
+              v-if="!report || !report.totalApplications"
               class="govuk-body"
             >
               No candidates require this check.
@@ -94,7 +94,7 @@
               </thead>
               <tbody class="govuk-table__body">
                 <tr
-                  v-for="candidate in agencyReport.acro.candidates"
+                  v-for="candidate in report.rows"
                   :key="candidate.userId"
                   class="govuk-table__row"
                 >
@@ -119,7 +119,7 @@
             v-if="activeTab === 'sra'"
           >
             <p
-              v-if="!agencyReport.sra.count"
+              v-if="!sraRows.length"
               class="govuk-body"
             >
               No candidates require this check.
@@ -153,7 +153,7 @@
               </thead>
               <tbody class="govuk-table__body">
                 <tr
-                  v-for="candidate in agencyReport.sra.candidates"
+                  v-for="candidate in sraRows"
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
@@ -161,10 +161,10 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.date | formatDate('long') }}
+                    {{ candidate.sraDate | formatDate('long') }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.membershipNumber }}
+                    {{ candidate.sraNumber }}
                   </td>
                 </tr>
               </tbody>
@@ -175,7 +175,7 @@
             v-if="activeTab === 'bsb'"
           >
             <p
-              v-if="!agencyReport.bsb.count"
+              v-if="!bsbRows.length"
               class="govuk-body"
             >
               No candidates require this check.
@@ -209,7 +209,7 @@
               </thead>
               <tbody class="govuk-table__body">
                 <tr
-                  v-for="candidate in agencyReport.bsb.candidates"
+                  v-for="candidate in bsbRows"
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
@@ -217,10 +217,10 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.date | formatDate('long') }}
+                    {{ candidate.bsbDate | formatDate('long') }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.membershipNumber }}
+                    {{ candidate.bsbNumber }}
                   </td>
                 </tr>
               </tbody>
@@ -231,7 +231,7 @@
             v-if="activeTab === 'jcio'"
           >
             <p
-              v-if="!agencyReport.jcio.count"
+              v-if="!jcioRows.length"
               class="govuk-body"
             >
               No candidates require this check.
@@ -265,7 +265,7 @@
               </thead>
               <tbody class="govuk-table__body">
                 <tr
-                  v-for="candidate in agencyReport.jcio.candidates"
+                  v-for="candidate in jcioRows"
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
@@ -273,17 +273,10 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.judicialOffice | toYesNo }}
+                    {{ candidate.jcioOffice }}
                   </td>
                   <td class="govuk-table__cell">
-                    <ul class="govuk-list govuk-!-margin-bottom-0">
-                      <li
-                        v-for="(item, index) in candidate.experience"
-                        :key="index"
-                      >
-                        {{ item.jobTitle }}
-                      </li>
-                    </ul>
+                    {{ candidate.jcioPosts }}
                   </td>
                 </tr>
               </tbody>
@@ -294,7 +287,7 @@
             v-if="activeTab === 'hmrc'"
           >
             <p
-              v-if="!agencyReport.hmrc.count"
+              v-if="!hmrcRows.length"
               class="govuk-body"
             >
               No candidates require this check.
@@ -328,7 +321,7 @@
               </thead>
               <tbody class="govuk-table__body">
                 <tr
-                  v-for="candidate in agencyReport.hmrc.candidates"
+                  v-for="candidate in hmrcRows"
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
@@ -336,19 +329,10 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.dateOfBirth | formatDate('long') }}
+                    {{ candidate.dateOfBirth }}
                   </td>
                   <td class="govuk-table__cell">
-                    <ul
-                      class="govuk-list govuk-!-margin-bottom-0"
-                    >
-                      <li
-                        v-for="(item, index) in candidate.VATNumbers"
-                        :key="index"
-                      >
-                        {{ item.VATNumber }}
-                      </li>
-                    </ul>
+                    {{ candidate.hmrcVATNumbers }}
                   </td>
                 </tr>
               </tbody>
@@ -358,66 +342,114 @@
           <template
             v-if="activeTab === 'other'"
           >
-            <div
-              v-for="agency in agencyReport.other"
-              :key="agency.name"
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">
+              General Medical Council
+            </h3>
+            <p
+              v-if="!gmcRows.length"
+              class="govuk-body"
             >
-              <h3 class="govuk-heading-s govuk-!-margin-top-4">
-                {{ agency.name }}
-              </h3>
-
-              <p
-                v-if="!agency.count"
-                class="govuk-body"
-              >
-                No candidates require this check.
-              </p>
-
-              <table
-                v-else
-                class="govuk-table"
-              >
-                <thead class="govuk-table__head">
-                  <tr class="govuk-table__row">
-                    <th
-                      scope="col"
-                      class="govuk-table__header"
-                    >
-                      Name
-                    </th>
-                    <th
-                      scope="col"
-                      class="govuk-table__header"
-                    >
-                      Date of membership
-                    </th>
-                    <th
-                      scope="col"
-                      class="govuk-table__header"
-                    >
-                      Membership number
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                  <tr
-                    v-for="candidate in agency.candidates"
-                    :key="candidate.id"
-                    class="govuk-table__row"
+              No candidates require this check.
+            </p>
+            <table
+              v-else
+              class="govuk-table"
+            >
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
                   >
-                    <td class="govuk-table__cell">
-                      {{ candidate.fullName }}
-                    </td>
-                    <td class="govuk-table__cell">
-                      {{ candidate.date | formatDate('long') }}
-                    </td>
-                    <td class="govuk-table__cell">
-                      {{ candidate.membershipNumber }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Date of membership
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Membership number
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                <tr
+                  v-for="candidate in gmcRows"
+                  :key="candidate.id"
+                  class="govuk-table__row"
+                >
+                  <td class="govuk-table__cell">
+                    {{ candidate.fullName }}
+                  </td>
+                  <td class="govuk-table__cell">
+                    {{ candidate.gmcDate }}
+                  </td>
+                  <td class="govuk-table__cell">
+                    {{ candidate.gmcNumber }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">
+              Royal Institution Chartered Surveyors
+            </h3>
+            <p
+              v-if="!riscRows.length"
+              class="govuk-body"
+            >
+              No candidates require this check.
+            </p>
+            <table
+              v-else
+              class="govuk-table"
+            >
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Name
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Date of membership
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    Membership number
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                <tr
+                  v-for="candidate in riscRows"
+                  :key="candidate.id"
+                  class="govuk-table__row"
+                >
+                  <td class="govuk-table__cell">
+                    {{ candidate.fullName }}
+                  </td>
+                  <td class="govuk-table__cell">
+                    {{ candidate.riscDate }}
+                  </td>
+                  <td class="govuk-table__cell">
+                    {{ candidate.riscNumber }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </template>
         </div>
       </TabsList>
@@ -426,7 +458,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -476,20 +508,30 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    ...mapGetters('applications', [
-      'agencyReport',
-    ]),
     activeTabDetails() {
       const activeTab = this.tabs.find((tab) => tab.ref === this.activeTab );
       return activeTab;
     },
+    sraRows() {
+      return this.report.rows.filter((e) => e.sraDate);
+    },
+    bsbRows() {
+      return this.report.rows.filter((e) => e.bsbDate);
+    },
+    jcioRows() {
+      return this.report.rows.filter((e) => e.jcioOffice);
+    },
+    hmrcRows() {
+      return this.report.rows.filter((e) => e.hmrcVATNumbers);
+    },
+    gmcRows() {
+      return this.report.rows.filter((e) => e.gmcDate);
+    },
+    riscRows() {
+      return this.report.rows.filter((e) => e.riscDate);
+    },
   },
   created() {
-    this.$store.dispatch('applications/bind', {
-      exerciseId: this.exercise.id,
-      status: 'applied',
-      characterChecks: true,
-    });
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/agency`)
       .onSnapshot((snap) => {
         this.report = vuexfireSerialize(snap);
