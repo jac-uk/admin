@@ -1,5 +1,13 @@
 # Release Notes #
 
+0.60.0
+5 issues / 13sp
+ #1201 Include version number in UI and Sentry
+ #1033 FIX TypeError: Cannot read property 'shareData' of undefined
+ #1212 S9(1) type exercise functionality (ex 35)
+ #1100 Exports should be prepared server-side
+ #1081 Report improvements
+
 0.59.0
 3 issues / 4sp
  #1198 Ex 051 - Unable to download QT - critical analysis test results
