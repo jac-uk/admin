@@ -671,7 +671,7 @@
                 Location preferences
               </h2>
 
-              <dl 
+              <dl
                 v-if="application.locationPreferences"
                 class="govuk-summary-list"
               >
@@ -1348,7 +1348,7 @@
                   Law-related tasks
                 </dt>
                 <dd class="govuk-summary-list__value">
-                  <ul 
+                  <ul
                     v-if="item.tasks && item.tasks.length"
                     class="govuk-list"
                   >
@@ -1368,7 +1368,7 @@
                     </li>
                   </ul>
                   <div v-else>
-                    No Answers provided 
+                    No Answers provided
                   </div>
                 </dd>
               </div>
@@ -1569,8 +1569,11 @@
           </dl>
         </div>
 
-        <div class="govuk-!-margin-top-9">
-          <h2 class="govuk-heading-l">
+        <div
+          v-if="assessmentMethods.independentAssessments"
+          class="govuk-!-margin-top-9"
+        >
+          <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
             Independent assessors
           </h2>
 
@@ -1631,7 +1634,7 @@
             </div>
           </dl>
           <dl
-            v-else 
+            v-else
             class="govuk-summary-list"
           >
             <dt
@@ -1735,7 +1738,103 @@
               @close="closeModal('modalRef')"
             />
           </Modal>
+        </div>
 
+        <div
+          v-if="assessmentMethods.leadershipJudgeAssessment"
+          class="govuk-!-margin-top-9"
+        >
+          <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
+            Leadership Judge details
+          </h2>
+
+          <dl
+            v-if="application.leadershipJudgeDetails"
+            class="govuk-summary-list"
+          >
+            <div class="govuk-summary-list__row text-right print-none button-right">
+              <dt class="govuk-summary-list__key" />
+              <dd class="govuk-summary-list__value">
+                <button
+                  class="govuk-button btn-unlock"
+                  @click="editLeadershipJudgeDetails"
+                >
+                  Edit
+                </button>
+              </dd>
+            </div>
+
+            <div
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Full name
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ application.leadershipJudgeDetails.fullName }}
+              </dd>
+            </div>
+
+            <div
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Title or position
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ application.leadershipJudgeDetails.title }}
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row print-none">
+              <dt class="govuk-summary-list__key">
+                Email
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ application.leadershipJudgeDetails.email }}
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row print-none">
+              <dt class="govuk-summary-list__key">
+                Telephone
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ application.leadershipJudgeDetails.phone }}
+              </dd>
+            </div>
+          </dl>
+          <dl
+            v-else
+            class="govuk-summary-list"
+          >
+            <dt
+              class="govuk-summary-list__key"
+            >
+              No information for Leadership Judge
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <button
+                class="govuk-button btn-unlock"
+                @click="editLeadershipJudgeDetails"
+              >
+                Add
+              </button>
+            </dd>
+          </dl>
+          <Modal
+            ref="modalLeadershipJudgeDetails"
+          >
+            <component
+              :is="`LeadershipJudgeDetails`"
+              v-bind="application.leadershipJudgeDetails"
+              :application-id="applicationId"
+              @close="closeModal('modalLeadershipJudgeDetails')"
+            />
+          </Modal>
+        </div>
+
+        <div>
           <div
             v-if="exercise.aSCApply"
             class="govuk-!-margin-top-9"
@@ -1938,6 +2037,7 @@ import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from di
 import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
+import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
 import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
@@ -1959,6 +2059,7 @@ export default {
     FileUpload,
     Modal,
     IndependentAssessorChange,
+    LeadershipJudgeDetails,
     SubmissionExtension,
     Notes,
     CriminalOffencesSummary,
@@ -2051,6 +2152,22 @@ export default {
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupMixedDetails;
       default:
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupDetails;
+      }
+    },
+    assessmentMethods() {
+      if (this.exercise.assessmentMethods) {
+        return this.exercise.assessmentMethods;
+      } else {
+        // TODO populate this return object based upon the _old_ `assessmentOptions` data
+        return {
+          independentAssessments: true, // always show IAs unless they've been specifically turned off
+          leadershipJudgeAssessment: false,
+        // selfAssessment: false,
+        // statementOfEligibility: false,
+        // statementOfSuitability: false,
+        // coveringLetter: false,
+        // cv: false,
+        };
       }
     },
     showStatementOfSuitability() {
@@ -2320,6 +2437,9 @@ export default {
         };
       }
       this.openModal('modalRef');
+    },
+    editLeadershipJudgeDetails() {
+      this.openModal('modalLeadershipJudgeDetails');
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
