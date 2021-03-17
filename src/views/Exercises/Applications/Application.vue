@@ -180,16 +180,13 @@
               </h2>
 
               <dl class="govuk-summary-list">
-                <div
-                  v-if="firstNameLastNameExist"
-                  class="govuk-summary-list__row"
-                >
+                <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     First name
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <EditableField
-                      :value="application.personalDetails.firstName"
+                      :value="firstName"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
                       field="firstName"
                       type="route"
@@ -198,36 +195,15 @@
                   </dd>
                 </div>
 
-                <div
-                  v-if="firstNameLastNameExist"
-                  class="govuk-summary-list__row"
-                >
+                <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Last name
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <EditableField
-                      :value="application.personalDetails.lastName"
+                      :value="lastName"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
                       field="lastName"
-                      type="route"
-                      @changefield="changeUserDetails"
-                    />
-                  </dd>
-                </div>
-
-                <div
-                  v-if="!firstNameLastNameExist"
-                  class="govuk-summary-list__row"
-                >
-                  <dt class="govuk-summary-list__key">
-                    Full Name
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="application.personalDetails.fullName"
-                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="fullName"
                       type="route"
                       @changefield="changeUserDetails"
                     />
@@ -2144,7 +2120,7 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isVersion2 () {
+    isVersion2() {
       if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
         return true;
       }
@@ -2177,7 +2153,7 @@ export default {
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
     },
-    generateFilename(){
+    generateFilename() {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
@@ -2202,11 +2178,11 @@ export default {
         return {
           independentAssessments: true, // always show IAs unless they've been specifically turned off
           leadershipJudgeAssessment: false,
-        // selfAssessment: false,
-        // statementOfEligibility: false,
-        // statementOfSuitability: false,
-        // coveringLetter: false,
-        // cv: false,
+          // selfAssessment: false,
+          // statementOfEligibility: false,
+          // statementOfSuitability: false,
+          // coveringLetter: false,
+          // cv: false,
         };
       }
     },
@@ -2312,15 +2288,38 @@ export default {
       return selected;
     },
     applicantProvidedFirstAssessor() {
-      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle  } = this.application;
+      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
       return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
     },
     applicantProvidedSecondAssessor() {
-      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle  } = this.application;
+      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
       return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
     },
-    firstNameLastNameExist() {
-      return this.application.personalDetails.firstName && this.application.personalDetails.lastName;
+    firstName() {
+      let firstName = this.application.personalDetails.firstName;
+      const fullName = this.application.personalDetails.fullName;
+      if (!firstName) {
+        if (fullName) {
+          const result = splitFullName(fullName);
+          firstName = result[0];
+        } else {
+          firstName = '';
+        }
+      }
+      return firstName;
+    },
+    lastName() {
+      let lastName = this.application.personalDetails.lastName;
+      const fullName = this.application.personalDetails.fullName;
+      if (!lastName) {
+        if (fullName) {
+          const result = splitFullName(fullName);
+          lastName = result[1];
+        } else {
+          lastName = '';
+        }
+      }
+      return lastName;
     },
   },
   watch: {
@@ -2460,11 +2459,7 @@ export default {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
-      if (objChanged.fullName) {
-        const result = splitFullName(objChanged.fullName);
-        objChanged.firstName = result[0];
-        objChanged.lastName = result[1];
-      }
+
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
