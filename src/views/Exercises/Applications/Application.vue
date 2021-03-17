@@ -181,7 +181,7 @@
 
               <dl class="govuk-summary-list">
                 <div
-                  v-if="application.personalDetails.firstName && application.personalDetails.lastName"
+                  v-if="firstNameLastNameExist"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -199,7 +199,7 @@
                 </div>
 
                 <div
-                  v-if="application.personalDetails.firstName && application.personalDetails.lastName"
+                  v-if="firstNameLastNameExist"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -217,7 +217,7 @@
                 </div>
 
                 <div
-                  v-if="!application.personalDetails.firstName && !application.personalDetails.lastName"
+                  v-if="!firstNameLastNameExist"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -2087,6 +2087,7 @@ import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalCo
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
+import  { splitFullName } from '@/helpers/splitFullName';
 
 export default {
   components: {
@@ -2318,6 +2319,9 @@ export default {
       const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle  } = this.application;
       return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
     },
+    firstNameLastNameExist() {
+      return this.application.personalDetails.firstName && this.application.personalDetails.lastName;
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -2455,6 +2459,11 @@ export default {
     changeUserDetails(objChanged) {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
+      }
+      if (objChanged.fullName) {
+        const result = splitFullName(objChanged.fullName);
+        objChanged.firstName = result[0];
+        objChanged.lastName = result[1];
       }
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
