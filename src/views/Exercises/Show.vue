@@ -197,11 +197,13 @@ export default {
         },
       ];
       if (this.exercise.applicationRecords) {
-        tasks.push(
-          {
+        if (!(this.exercise.assessmentMethods && this.exercise.assessmentMethods.independentAssessments === false)) {
+          tasks.push({
             title: 'Independent Assessments',
             name: 'exercise-tasks-independent-assessments',
-          },
+          });
+        }
+        tasks.push(
           {
             title: 'Character Checks',
             name: 'exercise-tasks-character-checks',

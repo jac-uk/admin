@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Independent Assessor Change
+      Leadership Judge Details
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -23,14 +23,14 @@
               required
             />
             <TextField
-              id="first-assessor-email"
+              id="email"
               v-model="email"
               label="Email"
               type="email"
               required
             />
             <TextField
-              id="first-assessor-Phone"
+              id="phone"
               v-model="phone"
               label="Phone"
               type="tel"
@@ -59,7 +59,7 @@
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
-  name: 'IndependentAssessorChange',
+  name: 'LeadershipJudgeDetails',
   components: {
     TextField,
   },
@@ -72,9 +72,8 @@ export default {
     };
   },
   computed: {
-    userId() {
-      const assessorId = this.$attrs.assessor.id;
-      return assessorId ? assessorId : this.$attrs.uuid;
+    applicationId() {
+      return this.$attrs['application-id'];
     },
   },
   created() {
@@ -93,24 +92,15 @@ export default {
       document.body.style.overflow = '';
     },
     async save() {
-      let data = {};
-      if (this.$attrs.AssessorNr == 1) {
-        data = {
-          firstAssessorEmail: this.email,
-          firstAssessorFullName: this.fullName,
-          firstAssessorPhone: this.phone,
-          firstAssessorTitle: this.title,
-        };
-      } else if (this.$attrs.AssessorNr == 2) {
-        data = {
-          secondAssessorEmail: this.email,
-          secondAssessorFullName: this.fullName,
-          secondAssessorPhone: this.phone,
-          secondAssessorTitle: this.title,
-        };
-      }
-      this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
-      this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+      const data = {
+        leadershipJudgeDetails: {
+          email: this.email,
+          fullName: this.fullName,
+          phone: this.phone,
+          title: this.title,
+        },
+      };
+      await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
       this.closeModal();
     },
   },
