@@ -19,7 +19,8 @@ jobs:
       - run:
           name: 'Setup'
           command: |
-            echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" > ~/.npmrc
+            echo "registry=https://npm.pkg.github.com/jac-uk" > ~/.npmrc
+            echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_TOKEN}" >> ~/.npmrc
             npm ci
       - persist_to_workspace:
           root: .
