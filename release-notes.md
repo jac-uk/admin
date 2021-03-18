@@ -1,5 +1,11 @@
 # Release Notes #
 
+0.59.0
+3 issues / 4sp
+ #1198 Ex 051 - Unable to download QT - critical analysis test results
+ #1047 TypeError: e.application.personalDetails.address is undefined
+ #1192 Button to call transferHandoverData cloud function
+
 0.58.0
 2 issues / 3sp
  #1185 QT Test - add a button "Mark as completed"

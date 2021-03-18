@@ -53,11 +53,16 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div 
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Current Address
         </dt>
-        <dd class="govuk-summary-list__value">
+        <dd 
+          v-if="application.personalDetails.address && application.personalDetails.address.current"
+          class="govuk-summary-list__value"
+        >
           <ul class="govuk-list">
             <li>
               {{ application.personalDetails.address.current.street }}
@@ -80,16 +85,22 @@
             </li>
           </ul>
         </dd>
+        <dd
+          v-else
+          class="govuk-summary-list__value"
+        >
+          None provided
+        </dd>
       </div>
 
       <div
-        v-if="application.personalDetails.address.previous.length"
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
           Previous Addresses
         </dt>
         <dd
+          v-if="application.personalDetails.address && application.personalDetails.address.previous"
           class="govuk-summary-list__value"
         >
           <ul
@@ -120,6 +131,12 @@
               {{ address.postcode }}
             </li>
           </ul>
+        </dd>
+        <dd 
+          v-else
+          class="govuk-summary-list__value"
+        >
+          None provided
         </dd>
       </div>
     </dl>

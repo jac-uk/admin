@@ -140,204 +140,6 @@ describe('@/views/Exercises/Show/Applications', () => {
        wrapper = createTestSubject();
     });
 
-    describe('flattenCurrentLegalRole', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.flattenCurrentLegalRole).toBe('function');
-      });
-
-      it('returns empty string if no argument supplied', () => {
-        const flattened = wrapper.vm.flattenCurrentLegalRole();
-
-        expect(flattened).toBe('');
-      });
-
-      it('returns empty string if argument doesn\'t contain currentLegalRole', () => {
-        const flattened = wrapper.vm.flattenCurrentLegalRole({});
-
-        expect(flattened).toBe('');
-      });
-
-      it('returns a flattened string if argument contains a valid currentLegalRole', () => {
-        const flattened = wrapper.vm.flattenCurrentLegalRole(mockApplication.equalityAndDiversitySurvey);
-
-        expect(flattened).toBeString();
-        expect(flattened).toEqual(expect.stringContaining('Barrister'));
-        expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails));
-      });
-
-      it('only returns otherCurrentLegalRoleDetails when other has been selected', () => {
-        let flattened = wrapper.vm.flattenCurrentLegalRole({
-          currentLegalRole: [
-            'barrister',
-          ],
-          otherCurrentLegalRoleDetails: 'mock role details',
-        });
-        expect(flattened).toBe('Barrister');
-
-        flattened = wrapper.vm.flattenCurrentLegalRole({
-          currentLegalRole: [
-            'barrister',
-            'other-current-legal-role',
-          ],
-          otherCurrentLegalRoleDetails: 'mock role details',
-        });
-        expect(flattened).toEqual(expect.stringContaining('Barrister'));
-        expect(flattened).toEqual(expect.stringContaining('mock role details'));
-      });
-
-    });
-
-    describe('flattenProfessionalBackground', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.flattenProfessionalBackground).toBe('function');
-      });
-
-      it('returns empty string if no argument supplied', () => {
-        const flattened = wrapper.vm.flattenProfessionalBackground();
-        expect(flattened).toBe('');
-      });
-
-      it('returns empty string if argument doesn\'t contain professionalBackground', () => {
-        const flattened = wrapper.vm.flattenProfessionalBackground({});
-        expect(flattened).toBe('');
-      });
-
-      it('returns a flattened string if argument contains a valid professionalBackground', () => {
-        const flattened = wrapper.vm.flattenProfessionalBackground(mockApplication.equalityAndDiversitySurvey);
-        expect(flattened).toBeString();
-        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
-        expect(flattened).toEqual(expect.stringContaining(mockApplication.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails));
-      });
-
-      it('only returns otherProfessionalBackgroundDetails when other has been selected', () => {
-        let flattened = wrapper.vm.flattenProfessionalBackground({
-          professionalBackground: [
-            'solicitor',
-          ],
-          otherProfessionalBackgroundDetails: 'mock background details',
-        });
-        expect(flattened).toBe('Solicitor');
-        flattened = wrapper.vm.flattenProfessionalBackground({
-          professionalBackground: [
-            'solicitor',
-            'other-professional-background',
-          ],
-          otherProfessionalBackgroundDetails: 'mock background details',
-        });
-        expect(flattened).toEqual(expect.stringContaining('Solicitor'));
-        expect(flattened).toEqual(expect.stringContaining('mock background details'));
-      });
-
-    });
-
-    describe('attendedUKStateSchool()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.attendedUKStateSchool).toBe('function');
-      });
-
-      it('returns empty string if no argument supplied', () => {
-        const result = wrapper.vm.attendedUKStateSchool();
-        expect(result).toBe('');
-      });
-
-      it('returns empty string if argument doesn\'t contain stateOrFeeSchool', () => {
-        const result = wrapper.vm.attendedUKStateSchool({});
-        expect(result).toBe('');
-      });
-
-      it('returns \'Yes\' for \'uk-state-selective\'', () => {
-        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'uk-state-selective' });
-        expect(result).toBe('Yes');
-      });
-
-      it('returns \'Yes\' for \'uk-state-non-selective\'', () => {
-        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'uk-state-selective' });
-        expect(result).toBe('Yes');
-      });
-
-      it('returns \'No\' for anything else', () => {
-        const result = wrapper.vm.attendedUKStateSchool({ stateOrFeeSchool: 'mock-school' });
-        expect(result).toBe('No');
-      });
-
-    });
-
-    describe('gatherContacts()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.gatherContacts).toBe('function');
-      });
-
-      it('calls .flattenCurrentLegalRole() to flatten currentLegalRole', () => {
-        wrapper.vm.flattenCurrentLegalRole = jest.fn();
-
-        wrapper.vm.gatherContacts();
-
-        expect(wrapper.vm.flattenCurrentLegalRole).toHaveBeenCalledTimes(mockApplications.length);
-
-        mockApplications.forEach((mockApp) => {
-          expect(wrapper.vm.flattenCurrentLegalRole).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
-        });
-      });
-
-      it('calls .flattenProfessionalBackground() to flatten professionalBackground', () => {
-        wrapper.vm.flattenProfessionalBackground = jest.fn();
-
-        wrapper.vm.gatherContacts();
-
-        expect(wrapper.vm.flattenProfessionalBackground).toHaveBeenCalledTimes(mockApplications.length);
-
-        mockApplications.forEach((mockApp) => {
-          expect(wrapper.vm.flattenProfessionalBackground).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
-        });
-      });
-
-      it('calls .attendedUKStateSchool() to parse stateOrFeeSchool', () => {
-        wrapper.vm.attendedUKStateSchool = jest.fn();
-        wrapper.vm.gatherContacts();
-        expect(wrapper.vm.attendedUKStateSchool).toHaveBeenCalledTimes(mockApplications.length);
-        mockApplications.forEach((mockApp) => {
-          expect(wrapper.vm.attendedUKStateSchool).toHaveBeenCalledWith(mockApp.equalityAndDiversitySurvey);
-        });
-      });
-
-      it('returns an array with header row and one row per application', () => {
-        const contacts = wrapper.vm.gatherContacts();
-
-        expect(contacts).toBeArrayOfSize(mockApplications.length + 1);
-      });
-
-      it('returns an array starting with header row', () => {
-        const contacts = wrapper.vm.gatherContacts();
-
-        const headers = [
-          'Reference number',
-          'Status',
-          'Name',
-          'Email',
-          'Phone number',
-          'Date of Birth',
-          'National Insurance Number',
-          'Gender',
-          'Disability',
-          'Ethnic Group',
-          'Current Legal Role',
-          'Professional Background',
-          'Held Fee-paid Judicial Role',
-          'Attended UK State School',
-          'First Generation Student',
-          'First Assessor Name',
-          'First Assessor Email',
-          'First Assessor Phone',
-          'Second Assessor Name',
-          'Second Assessor Email',
-          'Second Assessor Phone',
-        ];
-
-        expect(contacts[0]).toBeArray();
-        expect(contacts[0]).toEqual(headers);
-      });
-    });
-
     describe('exportContacts()', () => {
 
       it('is a function', () => {
@@ -345,16 +147,16 @@ describe('@/views/Exercises/Show/Applications', () => {
       });
 
       it('calls gatherReportData', async () => {
-        wrapper.vm.gatherContacts = jest.fn();
-        await wrapper.vm.exportContacts();
-        expect(wrapper.vm.gatherContacts).toHaveBeenCalled();
+        wrapper.vm.gatherReportData = jest.fn();
+        await wrapper.vm.gatherReportData();
+        expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
 
       it('calls downloadXLSX', async () => {
         const mockReport = 'mock report';
         const mockTitle = 'Contacts';
 
-        wrapper.vm.gatherContacts = jest.fn().mockReturnValue(mockReport);
+        wrapper.vm.gatherReportData = jest.fn().mockReturnValue(mockReport);
 
         await wrapper.vm.exportContacts();
 

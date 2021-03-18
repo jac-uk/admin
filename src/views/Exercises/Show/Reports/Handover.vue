@@ -19,13 +19,23 @@
             >
               Export data
             </button>
-            <ActionButton
-              v-if="totalApplicationRecords"
-              type="primary"
-              @click="transferHandoverData()"
+            <button
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="refreshReport"
             >
-              Transfer Handover Data
-            </ActionButton>
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
+            </button>
+            <!--            <ActionButton-->
+            <!--              v-if="totalApplicationRecords"-->
+            <!--              type="primary"-->
+            <!--              @click="transferHandoverData()"-->
+            <!--            >-->
+            <!--              Transfer Handover Data-->
+            <!--            </ActionButton>-->
           </div>
         </div>
       </div>
@@ -80,23 +90,25 @@
 </template>
 
 <script>
-import { functions } from '@/firebase';
 import { mapState } from 'vuex';
-import * as filters from '@jac-uk/jac-kit/filters/filters';
+import { firestore, functions } from '@/firebase';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+//import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
     Table,
     TableCell,
-    ActionButton,
+    //ActionButton,
   },
   data() {
     return {
+      report: null,
+      refreshingReport: false,
       tableColumns: [
         {
           title: 'Reference number',
@@ -119,6 +131,17 @@ export default {
       return (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.handover) ? this.exercise.applicationRecords.handover : 0;
     },
   },
+  created() {
+    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/handover`)
+      .onSnapshot((snap) => {
+        this.report = vuexfireSerialize(snap);
+      });
+  },
+  destroyed() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  },
   methods: {
     async transferHandoverData() {
       await functions.httpsCallable('transferHandoverData')({ exerciseId: this.exercise.id });
@@ -133,232 +156,25 @@ export default {
         }
       );
     },
-    formatPersonalDetails(personalDetails) {
-      const formatAddress = (address => [
-        address.street1,
-        address.street2,
-        address.town,
-        address.county,
-        address.postcode,
-      ].join('\n')
-      );
-
-      let formattedPreviousAddresses;
-      if (personalDetails.address && !personalDetails.address.currentMoreThan5Years) {
-        formattedPreviousAddresses = personalDetails.address.previous.map((address) => {
-          const dates = `${filters.formatDate(address.startDate)} - ${filters.formatDate(address.endDate)}`;
-          const formattedAddress = formatAddress(address);
-          return `${dates}\n${formattedAddress}`;
-        }).join('\n\n');
-      }
-
-      return [
-        personalDetails.title,
-        personalDetails.fullName,
-        personalDetails.otherNames,
-        personalDetails.suffix,
-        personalDetails.email,
-        filters.formatDate(personalDetails.dateOfBirth),
-        filters.formatNIN(personalDetails.nationalInsuranceNumber),
-        filters.lookup(personalDetails.citizenship),
-        personalDetails.address ? formatAddress(personalDetails.address.current) : null,
-        formattedPreviousAddresses,
-        personalDetails.phone,
-      ];
-    },
-    formatDiversityData(survey) {
-      const share = (value) => survey.shareData ? value : null;
-
-      let formattedFeePaidJudicialRole;
-      if (survey.shareData) {
-        formattedFeePaidJudicialRole = filters.toYesNo(filters.lookup(survey.feePaidJudicialRole));
-        if (survey.feePaidJudicialRole == 'other-fee-paid-judicial-office') {
-          formattedFeePaidJudicialRole = `${formattedFeePaidJudicialRole}\n${survey.otherFeePaidJudicialRoleDetails}`;
-        }
-      }
-
-      const formattedDiversityData = [
-        filters.toYesNo(survey.shareData),
-        share(survey.professionalBackground.map(position => filters.lookup(position)).join(', ')),
-        formattedFeePaidJudicialRole,
-        share(filters.lookup(survey.stateOrFeeSchool)),
-        share(filters.toYesNo(filters.lookup(survey.firstGenerationStudent))),
-        share(filters.lookup(survey.ethnicGroup)),
-        share(filters.lookup(survey.gender)),
-        share(filters.lookup(survey.sexualOrientation)),
-        share(survey.disability ? survey.disabilityDetails : filters.toYesNo(survey.disability)),
-        share(filters.lookup(survey.religionFaith)),
-        share(filters.toYesNo(filters.lookup(survey.attendedOutreachEvents))),
-      ];
-
-      if (this.exerciseType === 'legal' || this.exerciseType === 'leadership') {
-        formattedDiversityData.push(
-          share(filters.toYesNo(filters.lookup(survey.participatedInJudicialWorkshadowingScheme))),
-          share(filters.toYesNo(filters.lookup(survey.hasTakenPAJE))),
-        );
-      }
-
-      return formattedDiversityData;
-    },
-    formatLegalData(application) {
-      const qualifications = application.qualifications.map(qualification => {
-        return [
-          filters.lookup(qualification.location),
-          filters.lookup(qualification.type),
-          filters.formatDate(qualification.date),
-          qualification.membershipNumber,
-        ].join(', ');
-      }).join('\n');
-
-      let judicialExperience;
-
-      if (application.feePaidOrSalariedJudge) {
-        judicialExperience = `Fee paid or salaried judge\n${filters.lookup(application.feePaidOrSalariedSittingDaysDetails)}`;
-      } else if (application.declaredAppointmentInQuasiJudicialBody) {
-        judicialExperience = `Quasi-judicial body\n${filters.lookup(application.quasiJudicialSittingDaysDetails)}`;
-      } else {
-        judicialExperience = `Acquired skills in other way\n${filters.lookup(application.skillsAquisitionDetails)}`;
-      }
-
-      return [
-        qualifications,
-        judicialExperience,
-      ];
-    },
-    formatNonLegalData(application) {
-      const organisations = {
-        'chartered-association-of-building-engineers': 'charteredAssociationBuildingEngineers',
-        'chartered-institute-of-building': 'charteredInstituteBuilding',
-        'chartered-institute-of-environmental-health': 'charteredInstituteEnvironmentalHealth',
-        'general-medical-council': 'generalMedicalCouncilDate',
-        'royal-college-of-psychiatrists': 'royalCollegeOfPsychiatrist',
-        'royal-institution-of-chartered-surveyors': 'royalInstitutionCharteredSurveyors',
-        'royal-institute-of-british-architects': 'royalInstituteBritishArchitects',
-        'other': 'otherProfessionalMemberships',
-      };
-
-      if (application.professionalMemberships) {
-        const professionalMemberships = application.professionalMemberships.map(membership => {
-          let formattedMembership;
-          if (organisations[membership]) {
-            const fieldName = organisations[membership];
-
-            formattedMembership = `${filters.lookup(membership)}, ${filters.formatDate(application[`${fieldName}Date`])}, ${application[`${fieldName}Number`]}`;
-          }
-
-          if (application.memberships[membership]) {
-            const otherMembershipLabel = this.exercise.otherMemberships.find(m => m.value === membership).label;
-
-            formattedMembership = `${filters.lookup(otherMembershipLabel)}, ${filters.formatDate(application.memberships[membership].date)}, ${application.memberships[membership].number}`;
-          }
-
-          return formattedMembership;
-        }).join('\n');
-
-        return [
-          professionalMemberships,
-        ];
-      } else {
-        return [''];
-      }
+    async refreshReport() {
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     gatherReportData() {
-      const headers = {
-        personalDetails: [
-          'Candidate Title',
-          'Candidate Name',
-          'Other Names',
-          'Suffix',
-          'Email address',
-          'Date of Birth',
-          'National Insurance Number',
-          'Citizenship',
-          'Current Address',
-          'Previous addresses',
-          'Telephone number',
-        ],
-        qualifications: {
-          legal: [
-            'Legal qualifications',
-            'Judicial experience',
-          ],
-          'non-legal': [
-            'Professional Memberships',
-          ],
-          leadership: [
-            'Legal qualifications',
-            'Judicial experience',
-          ],
-        },
-        diversity: {
-          common: [
-            'Agreed to share Diversity',
-            'Professional Background',
-            'Previous roles',
-            'School type',
-            'Attended university',
-            'Ethnicity',
-            'Gender',
-            'Sexual orientation',
-            'Disability',
-            'Religion or belief',
-          ],
-          legal: [
-            'JAC Presentation',
-            'Judicial workshadowing',
-            'PAJE',
-          ],
-          'non-legal': [
-            'JAC Presentation',
-          ],
-          'leadership-non-legal': [
-            'JAC Presentation',
-          ],
-          leadership: [
-            'JAC Presentation',
-            'Judicial workshadowing',
-            'PAJE',
-          ],
-        },
-      };
+      const reportData = [];
 
-      const reportData = this.applicationRecords.map(record => {
-        const application = this.$store.getters['applications/getById'](record.application.id);
+      // get headers
+      reportData.push(this.report.headers.map(header => header.title));
 
-        let qualifications;
-        if (this.exerciseType === 'legal' || this.exerciseType === 'leadership') {
-          qualifications = this.formatLegalData(application);
-        }
-        if (this.exerciseType === 'non-legal') {
-          qualifications = this.formatNonLegalData(application);
-        }
-
-        return [
-          ...this.formatPersonalDetails(application.personalDetails),
-          ...qualifications,
-          ...this.formatDiversityData(application.equalityAndDiversitySurvey)];
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
       });
 
-      const reportHeaders = [
-        ...headers.personalDetails,
-        ...headers.qualifications[this.exerciseType],
-        ...headers.diversity.common,
-        ...headers.diversity[this.exerciseType],
-      ];
-
-      return [
-        reportHeaders,
-        ...reportData,
-      ];
+      return reportData;
     },
     async exportData() {
-      // ensure we have applications for this exercise
-      // TODO implement admin#1081 (or only fetch applications if we don't already have them)
-      await this.$store.dispatch('applications/bind', {
-        exerciseId: this.exercise.id,
-        status: 'applied',
-      });
-
       const title = 'Handover Report';
       const data = this.gatherReportData();
 
