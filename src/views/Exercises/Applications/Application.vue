@@ -187,7 +187,7 @@
                   <dd class="govuk-summary-list__value">
                     <EditableField
                       :value="application.personalDetails.fullName"
-                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId, applicationVersion: exercise._applicationVersion } }"
                       field="fullName"
                       type="route"
                       @changefield="changeUserDetails"
@@ -290,28 +290,36 @@
               <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FixedPenaltiesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <MotoringOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FinancialMattersSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <ProfessionalConductSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FurtherInformationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <CharacterDeclarationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
+                  :required-wider-column="true"
                   :character-information="application.characterInformation || {}"
                 />
               </dl>

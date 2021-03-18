@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has any other character issues
@@ -47,5 +47,8 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
+  }
+  .smallerMargin {
+    margin-bottom: 0;
   }
 </style>

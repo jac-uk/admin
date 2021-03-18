@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has received a fixed penalty notice in the last 4 years
@@ -47,5 +47,8 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
+  }
+  .smallerMargin {
+    margin-bottom: 0;
   }
 </style>

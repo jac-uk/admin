@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has been disqualified from driving
@@ -14,7 +14,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Was convicted of any motoring offences in the past 4 years
@@ -61,6 +61,9 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
+  }
+  .smallerMargin {
+    margin-bottom: 0;
   }
 </style>
 

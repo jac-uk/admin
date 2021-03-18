@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has been declared bankrupt
@@ -14,7 +14,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has entered into an Individual Voluntary Agreement (IVA)
@@ -28,7 +28,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has filed late tax returns
@@ -42,7 +42,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has filed late VAT returns
@@ -56,7 +56,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has ever been fined by HMRC
@@ -103,5 +103,8 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
+  }
+  .smallerMargin {
+    margin-bottom: 0;
   }
 </style>

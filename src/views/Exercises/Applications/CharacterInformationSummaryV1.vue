@@ -149,7 +149,7 @@ export default {
     characterInformation: {
       type: Object,
       required: true,
-      default: new Object({}),
+      default: () => ({}),
     },
     requiredWiderColumn: {
       type: Boolean,

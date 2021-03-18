@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has been convicted for a criminal offence
@@ -14,7 +14,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list smallerMargin">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has been cautioned for a criminal offence
@@ -61,6 +61,9 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
+  }
+  .smallerMargin {
+    margin-bottom: 0;
   }
 </style>
 
