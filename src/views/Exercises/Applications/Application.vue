@@ -2063,7 +2063,7 @@ import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalCo
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
-import  { splitFullName } from '@/helpers/splitFullName';
+import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 
 export default {
   components: {
