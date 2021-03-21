@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of an allegation or claim of professional misconduct
@@ -14,7 +14,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of an allegation or claim of negligence
@@ -28,7 +28,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of an allegation or claim of wrongful dismissal
@@ -42,7 +42,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of an allegation or claim of discrimination proceedings
@@ -56,7 +56,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of an allegation or claim of harassment proceedings
@@ -70,7 +70,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           A subject of complaints or disciplinary action
@@ -84,7 +84,7 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list smallerMargin">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
           Has been asked to resign from a position
@@ -131,8 +131,5 @@ export default {
 <style scoped>
   .widerColumn {
     width: 70%;
-  }
-  .smallerMargin {
-    margin-bottom: 0;
   }
 </style>
