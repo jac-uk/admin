@@ -21,7 +21,7 @@
         Character information
       </h2>
 
-      <dl v-if="isVersion2 && characterInformation">
+      <dl v-if="displayNewCharacterInformation && characterInformation">
         <CriminalOffencesSummary
           :character-information="characterInformation"
           :required-wider-column="false"
@@ -129,13 +129,9 @@ export default {
       ],
       activeTab: 'details',
       candidateId: '',
-      applicationVersion: '',
     };
   },
   computed: {
-    isVersion2 () {
-      return this.applicationVersion === 2;
-    },
     candidateRecord() {
       return this.$store.state.candidates.record;
     },
@@ -157,13 +153,12 @@ export default {
     getUserId() {
       return this.$route.params.id || '';
     },
-    getApplicationVersion() {
-      return this.$route.params.applicationVersion || '';
+    displayNewCharacterInformation() {
+      return this.characterInformation._versionNumber === 2;
     },
   },
   created() {
     this.candidateId = this.getUserId;
-    this.applicationVersion = this.getApplicationVersion;
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
