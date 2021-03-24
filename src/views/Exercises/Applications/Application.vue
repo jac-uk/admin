@@ -3,7 +3,6 @@
     v-if="application"
     class="govuk-grid-row"
   >
-    {{ activeTab }}
     <div class="govuk-grid-column-full">
       <div
         v-if="applications.length"
