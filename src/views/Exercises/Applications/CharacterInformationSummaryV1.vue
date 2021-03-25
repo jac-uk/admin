@@ -4,7 +4,7 @@
     class="govuk-summary-list"
   >
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key widerColumn">
+      <dt :class="requiredStyle">
         Has been cautioned or convicted of a criminal offence
       </dt>
       <dd
@@ -18,7 +18,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has received a non-motoring penalty notice in the last 4 years
       </dt>
       <dd
@@ -32,7 +32,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has been disqualified from driving, or convicted for driving under the influence of drink or drugs
       </dt>
       <dd
@@ -46,7 +46,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has endorsements on licence, or received any motoring fixed-penalty notices in the last 4 years
       </dt>
       <dd
@@ -60,7 +60,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
       </dt>
       <dd
@@ -74,7 +74,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has filed late tax returns or been fined by HMRC
       </dt>
       <dd
@@ -88,7 +88,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has ever been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
       </dt>
       <dd
@@ -102,7 +102,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has ever been subject to complaints or disciplinary action, or been asked to resign from a position
       </dt>
       <dd
@@ -116,7 +116,7 @@
       </dd>
     </div>
     <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">
+      <dt :class="requiredStyle">
         Has any other character issues
       </dt>
       <dd
@@ -149,7 +149,17 @@ export default {
     characterInformation: {
       type: Object,
       required: true,
-      default: new Object({}),
+      default: () => ({}),
+    },
+    requiredWiderColumn: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+  computed: {
+    requiredStyle() {
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
 };
