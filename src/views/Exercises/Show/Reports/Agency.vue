@@ -513,22 +513,22 @@ export default {
       return activeTab;
     },
     sraRows() {
-      return this.report.rows.filter((e) => e.sraDate);
+      return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
     bsbRows() {
-      return this.report.rows.filter((e) => e.bsbDate);
+      return this.report ? this.report.rows.filter((e) => e.bsbDate) : [];
     },
     jcioRows() {
-      return this.report.rows.filter((e) => e.jcioOffice);
+      return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
     },
     hmrcRows() {
-      return this.report.rows.filter((e) => e.hmrcVATNumbers);
+      return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
     },
     gmcRows() {
-      return this.report.rows.filter((e) => e.gmcDate);
+      return this.report ? this.report.rows.filter((e) => e.gmcDate) : [];
     },
     riscRows() {
-      return this.report.rows.filter((e) => e.riscDate);
+      return this.report ? this.report.rows.filter((e) => e.riscDate) : [];
     },
   },
   created() {
