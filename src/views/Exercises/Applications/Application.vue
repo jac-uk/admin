@@ -182,6 +182,21 @@
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
+                    Title
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="title"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="title"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
                     First name
                   </dt>
                   <dd class="govuk-summary-list__value">
@@ -2294,6 +2309,13 @@ export default {
     applicantProvidedSecondAssessor() {
       const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
       return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
+    },
+    title() {
+      let title = this.application.personalDetails.title;
+      if (!title) {
+        title = '';
+      }
+      return title;
     },
     firstName() {
       let firstName = this.application.personalDetails.firstName;
