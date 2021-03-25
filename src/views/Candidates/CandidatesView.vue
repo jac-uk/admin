@@ -114,7 +114,17 @@ export default {
     this.$store.dispatch('candidates/unbindDocs');
   },
   methods: {
+    makeFullName(obj) {
+      if (obj.firstName && this.personalDetails.lastName) {
+        obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
+      }
+      if (obj.lastName && this.personalDetails.firstName) {
+        obj.fullName = `${this.personalDetails.firstName} ${obj.lastName}`;
+      }
+      return obj;
+    },
     updateCandidate(obj) {
+      this.makeFullName(obj);
       this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
   },
