@@ -15,6 +15,7 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
+              :disabled="hasReportData ? '' : disabled"
               @click="exportData()"
             >
               Export data
@@ -141,6 +142,9 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+  },
+  hasReportData() {
+    return this.report && this.report.headers;
   },
   methods: {
     async transferHandoverData() {
