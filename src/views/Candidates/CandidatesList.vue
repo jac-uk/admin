@@ -5,12 +5,21 @@
     >
       Candidates
     </h1>
+    <input
+      v-model="searchTerm"
+      type="text"
+      @change="getCandidateIds"
+    >
+    <pre>{{ candidateIds }}</pre>
     <Table
       data-key="id"
       :data="tableData"
       :page-size="50"
       :columns="tableColumns"
-      :search="['fullName']"
+      :custom-search="{
+        handler: getCandidateIds,
+        field: 'id',
+      }"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -51,6 +60,8 @@ export default {
         { title: 'Account created on', sort: 'created', direction: 'desc', default: true },
         { title: 'Number of Applications', sort: 'applications.applied', direction: 'desc' },
       ],
+      searchTerm: '',
+      candidateIds: [],
     };
   },
   computed: {
@@ -61,6 +72,10 @@ export default {
   methods: {
     getTableData(params) {
       this.$store.dispatch('candidates/bind', params);
+    },
+    async getCandidateIds() {
+      const candidates = await this.$store.dispatch('candidates/search', this.searchTerm);
+      return candidates.map(candidate => candidate.id);
     },
   },
 };

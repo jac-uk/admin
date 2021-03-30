@@ -15,6 +15,20 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    search: async (context, searchTerm) => {
+      const results = [];
+      if (searchTerm) {
+        const snap = await collection
+          .where('search', 'array-contains', searchTerm.toLowerCase())
+          .get();
+        snap.forEach(doc => {
+          const row = doc.data();
+          row.id = doc.id;
+          results.push(row);
+        });
+      }
+      return results;
+    },
     // @TODO tidy up these binds
     bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
       const firestoreRef = collection.doc(id);
