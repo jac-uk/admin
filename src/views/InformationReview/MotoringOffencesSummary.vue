@@ -1,8 +1,8 @@
 <template>
   <div>
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Has been disqualified from driving
         </dt>
         <dd class="govuk-summary-list__value">
@@ -14,9 +14,9 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Was convicted of any motoring offences in the past 4 years
         </dt>
         <dd class="govuk-summary-list__value">
@@ -43,6 +43,16 @@ export default {
       type: Object,
       required: true,
       default: new Object({}),
+    },
+    requiredWiderColumn: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+  },
+  computed: {
+    requiredStyle() {
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
 };
