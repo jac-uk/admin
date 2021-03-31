@@ -2,7 +2,7 @@
 
 0.59.1
 1 issue / 2sp
- #1212 S9(1) type exercise functionality (ex 35)
+ #1212 Enable leadership judge assessment
 
 0.59.0
 3 issues / 4sp
