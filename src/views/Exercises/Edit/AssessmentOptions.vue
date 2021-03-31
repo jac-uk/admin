@@ -67,6 +67,19 @@
           />
         </RadioGroup>
 
+        <Checkbox
+          id="assessment-method-independent-assessments"
+          v-model="exercise.assessmentMethods.independentAssessments"
+        >
+          Independent Assessments
+        </Checkbox>
+        <Checkbox
+          id="assessment-method-leadership-judge"
+          v-model="exercise.assessmentMethods.leadershipJudgeAssessment"
+        >
+          Leadership Judge Assessment
+        </Checkbox>
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -81,6 +94,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
 export default {
   components: {
@@ -88,11 +102,22 @@ export default {
     BackLink,
     RadioGroup,
     RadioItem,
+    Checkbox,
   },
   extends: Form,
   data(){
     const defaults = {
       assessmentOptions: null,
+      // TODO: `assessmentMethods` will eventually replace `assessmentOptions`
+      assessmentMethods: {
+        independentAssessments: true,
+        leadershipJudgeAssessment: false,
+        // selfAssessment: false,
+        // statementOfEligibility: false,
+        // statementOfSuitability: false,
+        // coveringLetter: false,
+        // cv: false,
+      },
     };
     const data = this.$store.getters['exerciseDocument/data']();
     const exercise = { ...defaults, ...data };

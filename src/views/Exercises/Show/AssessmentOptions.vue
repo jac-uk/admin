@@ -16,6 +16,11 @@
 
     <p class="govuk-body">
       <span class="display-block">{{ exercise.assessmentOptions | lookup }}</span>
+      <span
+        v-for="assessmentMethod in assessmentMethods"
+        :key="assessmentMethod"
+        class="display-block"
+      >{{ assessmentMethod }}</span>
     </p>
   </div>
 </template>
@@ -30,6 +35,18 @@ export default {
     }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    assessmentMethods() {
+      const assessmentMethods = [];
+      if (this.exercise && this.exercise.assessmentMethods) {
+        if (this.exercise.assessmentMethods.independentAssessments) {
+          assessmentMethods.push('Independent Assessments');
+        }
+        if (this.exercise.assessmentMethods.leadershipJudgeAssessment) {
+          assessmentMethods.push('Leadership Judge Assessment');
+        }
+      }
+      return assessmentMethods;
     },
   },
 };
