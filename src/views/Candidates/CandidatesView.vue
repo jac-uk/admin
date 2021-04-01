@@ -5,7 +5,6 @@
     >
       Candidate: {{ myFullName }}
     </h1>
-
     <TabsList
       :tabs="tabs"
       :active-tab.sync="activeTab"
@@ -18,9 +17,47 @@
         :candidate="personalDetails"
         @changedetails="updateCandidate"
       />
-      <CharacterInformation
-        :data="characterInformation"
-      />
+      <h2 class="govuk-heading-l">
+        Character information
+      </h2>
+
+      <dl v-if="displayNewCharacterInformation && characterInformation">
+        <CriminalOffencesSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <FixedPenaltiesSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <MotoringOffencesSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <FinancialMattersSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <ProfessionalConductSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <FurtherInformationSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+        <CharacterDeclarationSummary
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+      </dl>
+      <dl v-else>
+        <CharacterInformationSummaryV1
+          :character-information="characterInformation"
+          :required-wider-column="false"
+        />
+      </dl>
+
       <EqualityAndDiversity
         :data="equalityAndDiversity"
       />
@@ -46,19 +83,33 @@
 <script>
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
-import CharacterInformation from '@jac-uk/jac-kit/draftComponents/Candidates/CharacterInformation';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
+import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
+import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1.vue';
 
 export default {
   components: {
     TabsList,
     PersonalDetails,
-    CharacterInformation,
     EqualityAndDiversity,
     Notes,
     Applications,
+    CriminalOffencesSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
+    ProfessionalConductSummary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
+    CharacterInformationSummaryV1,
   },
   data() {
     return {
@@ -82,8 +133,7 @@ export default {
   },
   computed: {
     candidateRecord() {
-      const localRecords = this.$store.state.candidates.record;
-      return localRecords;
+      return this.$store.state.candidates.record;
     },
     personalDetails() {
       const localDocs = this.$store.state.candidates.personalDetails;
@@ -102,6 +152,9 @@ export default {
     },
     getUserId() {
       return this.$route.params.id || '';
+    },
+    displayNewCharacterInformation() {
+      return this.characterInformation._versionNumber === 2;
     },
   },
   created() {

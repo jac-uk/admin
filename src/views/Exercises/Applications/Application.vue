@@ -182,13 +182,43 @@
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Full Name
+                    Title
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <EditableField
-                      :value="application.personalDetails.fullName"
+                      :value="title"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="fullName"
+                      field="title"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    First name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="firstName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="firstName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Last name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="lastName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="lastName"
                       type="route"
                       @changefield="changeUserDetails"
                     />
@@ -290,28 +320,36 @@
               <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FixedPenaltiesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <MotoringOffencesSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FinancialMattersSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <ProfessionalConductSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <FurtherInformationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
                 <CharacterDeclarationSummary
                   :character-information="application.characterInformationV2"
+                  :required-wider-column="true"
                 />
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
+                  :required-wider-column="true"
                   :character-information="application.characterInformation || {}"
                 />
               </dl>
@@ -2046,6 +2084,7 @@ import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalCo
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
+import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 
 export default {
   components: {
@@ -2102,7 +2141,7 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isVersion2 () {
+    isVersion2() {
       if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
         return true;
       }
@@ -2135,7 +2174,7 @@ export default {
     showMemberships() {
       return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
     },
-    generateFilename(){
+    generateFilename() {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     ethnicGroupDetails() {
@@ -2160,11 +2199,11 @@ export default {
         return {
           independentAssessments: true, // always show IAs unless they've been specifically turned off
           leadershipJudgeAssessment: false,
-        // selfAssessment: false,
-        // statementOfEligibility: false,
-        // statementOfSuitability: false,
-        // coveringLetter: false,
-        // cv: false,
+          // selfAssessment: false,
+          // statementOfEligibility: false,
+          // statementOfSuitability: false,
+          // coveringLetter: false,
+          // cv: false,
         };
       }
     },
@@ -2270,12 +2309,45 @@ export default {
       return selected;
     },
     applicantProvidedFirstAssessor() {
-      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle  } = this.application;
+      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
       return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
     },
     applicantProvidedSecondAssessor() {
-      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle  } = this.application;
+      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
       return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
+    },
+    title() {
+      let title = this.application.personalDetails.title;
+      if (!title) {
+        title = '';
+      }
+      return title;
+    },
+    firstName() {
+      let firstName = this.application.personalDetails.firstName;
+      const fullName = this.application.personalDetails.fullName;
+      if (!firstName) {
+        if (fullName) {
+          const result = splitFullName(fullName);
+          firstName = result[0];
+        } else {
+          firstName = '';
+        }
+      }
+      return firstName;
+    },
+    lastName() {
+      let lastName = this.application.personalDetails.lastName;
+      const fullName = this.application.personalDetails.fullName;
+      if (!lastName) {
+        if (fullName) {
+          const result = splitFullName(fullName);
+          lastName = result[1];
+        } else {
+          lastName = '';
+        }
+      }
+      return lastName;
     },
   },
   watch: {
@@ -2402,7 +2474,20 @@ export default {
       }
       return false;
     },
+    makeFullName(objChanged) {
+      if (objChanged.firstName && this.application.personalDetails.lastName) {
+        objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
+      }
+      if (objChanged.lastName && this.application.personalDetails.firstName) {
+        objChanged.fullName = `${this.application.personalDetails.firstName} ${objChanged.lastName}`;
+      }
+      return objChanged;
+    },
     changeUserDetails(objChanged) {
+      if (objChanged.firstName || objChanged.lastName) {
+        objChanged = this.makeFullName(objChanged);
+      }
+
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
