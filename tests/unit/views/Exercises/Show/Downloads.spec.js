@@ -43,6 +43,7 @@ const createTestSubject = () => {
           id: jest.fn(),
           data: () => mockData,
           isEditable: mockIsApproved,
+          hasIndependentAssessments: () => true,
         },
       },
     },

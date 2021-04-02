@@ -1,5 +1,9 @@
 # Release Notes #
 
+0.59.1
+1 issue / 2sp
+ #1212 Enable leadership judge assessment
+
 0.59.0
 3 issues / 4sp
  #1198 Ex 051 - Unable to download QT - critical analysis test results
