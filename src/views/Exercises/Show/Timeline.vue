@@ -21,7 +21,7 @@
 import { mapGetters } from 'vuex';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
-import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
+import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
 
 export default {
   components: {
