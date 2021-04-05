@@ -15,6 +15,14 @@
             <ul class="govuk-header__navigation user-menu">
               <li class="govuk-header__navigation-item">
                 <RouterLink
+                  :to="{ name: 'events' }"
+                  class="govuk-header__link"
+                >
+                  Events
+                </RouterLink>
+              </li>
+              <li class="govuk-header__navigation-item">
+                <RouterLink
                   :to="{ name: 'notifications' }"
                   class="govuk-header__link"
                 >
