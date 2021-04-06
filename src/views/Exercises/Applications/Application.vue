@@ -182,43 +182,13 @@
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Title
+                    Full Name
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <EditableField
-                      :value="title"
+                      :value="application.personalDetails.fullName"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="title"
-                      type="route"
-                      @changefield="changeUserDetails"
-                    />
-                  </dd>
-                </div>
-
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    First name
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="firstName"
-                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="firstName"
-                      type="route"
-                      @changefield="changeUserDetails"
-                    />
-                  </dd>
-                </div>
-
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Last name
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    <EditableField
-                      :value="lastName"
-                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="lastName"
+                      field="fullName"
                       type="route"
                       @changefield="changeUserDetails"
                     />
@@ -320,36 +290,28 @@
               <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <FixedPenaltiesSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <MotoringOffencesSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <FinancialMattersSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <ProfessionalConductSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <FurtherInformationSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
                 <CharacterDeclarationSummary
                   :character-information="application.characterInformationV2"
-                  :required-wider-column="true"
                 />
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
-                  :required-wider-column="true"
                   :character-information="application.characterInformation || {}"
                 />
               </dl>

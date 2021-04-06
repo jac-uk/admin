@@ -124,5 +124,9 @@ export default {
         }
       }
     },
+    hasIndependentAssessments: (state) => {
+      if (state.record === null) return true;
+      return !(state.record.assessmentMethods && state.record.assessmentMethods.independentAssessments === false);
+    },
   },
 };
