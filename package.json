@@ -22,7 +22,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
-    "@jac-uk/jac-kit": "0.0.25",
+    "@jac-uk/jac-kit": "0.0.34",
     "@ministryofjustice/frontend": "0.0.17-alpha",
     "@sentry/browser": "^5.30.0",
     "@sentry/integrations": "^5.30.0",
@@ -37,6 +37,7 @@
     "jspdf": "^1.5.3",
     "save-file": "^2.3.1",
     "vue": "^2.6.12",
+    "vue-json-pretty": "^1.7.1",
     "vue-router": "^3.4.9",
     "vuex": "^3.6.0",
     "vuexfire": "^3.2.5",

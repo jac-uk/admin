@@ -34,7 +34,12 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          *** detail to go here ***
+          <VueJsonPretty
+            :v-bind="id"
+            :path="'res'"
+            :data="{ key: 'value' }"
+            @click="handleClick"
+          />
         </TableCell>
       </template>
     </Table>
@@ -62,7 +67,7 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          *** detail to go here ***
+          {{ row.details }}
         </TableCell>
       </template>
     </Table>
@@ -90,7 +95,7 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          *** detail to go here ***
+          {{ row.details }}
         </TableCell>
       </template>
     </Table>
@@ -106,12 +111,15 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 export default {
   components: {
     Table,
     TableCell,
     TabsList,
+    VueJsonPretty,
   },
   extends: Form,
   data() {
@@ -123,10 +131,10 @@ export default {
         sendToRecipient: false,
       },
       tableColumns: [
-        { title: 'Created', sort: 'createdAt', direction: 'desc', default: true },
-        { title: 'Template' },
-        { title: 'To' },
-        { title: 'Status' },
+        { title: 'Created', sort: 'timestamp', direction: 'desc', default: true },
+        { title: 'User' },
+        { title: 'Description' },
+        { title: 'Details' },
       ],
     };
   },
@@ -162,22 +170,13 @@ export default {
   },
   methods: {
     getInfoData(params) {
-      this.$store.dispatch(
-        'events/bindInfo',
-        params,
-      );
+      this.$store.dispatch('events/bindInfo', params);
     },
     getWarningsData(params) {
-      this.$store.dispatch(
-        'events/bindWarnings',
-        params,
-      );
+      this.$store.dispatch('events/bindWarnings', params);
     },
     getErrorsData(params) {
-      this.$store.dispatch(
-        'events/bindErrors',
-        params,
-      );
+      this.$store.dispatch('events/bindErrors', params);
     },
   },
 };
