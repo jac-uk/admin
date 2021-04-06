@@ -34,12 +34,7 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          <VueJsonPretty
-            :v-bind="id"
-            :path="'res'"
-            :data="{ key: 'value' }"
-            @click="handleClick"
-          />
+          <VueJsonPretty :data="row.details" />
         </TableCell>
       </template>
     </Table>
@@ -67,7 +62,7 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ row.details }}
+          <VueJsonPretty :data="row.details" />
         </TableCell>
       </template>
     </Table>
@@ -95,7 +90,9 @@
           {{ row.description }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ row.details }}
+          <VueJsonPretty
+            :data="row.details"
+          />
         </TableCell>
       </template>
     </Table>
@@ -165,8 +162,11 @@ export default {
       return this.$store.state.events.errors;
     },
   },
-  created() {
-
+  mounted() {
+    // if we try and close all elements straight away it doesn't work, so wait 1 second
+    window.setTimeout(() => {
+      this.closeAllDetailsElements();
+    }, 1000);
   },
   methods: {
     getInfoData(params) {
@@ -177,6 +177,15 @@ export default {
     },
     getErrorsData(params) {
       this.$store.dispatch('events/bindErrors', params);
+    },
+    closeAllDetailsElements() {
+      const allDetailsElements = document.getElementsByClassName('vjs-tree__brackets');
+      for (let i = 0; i < allDetailsElements.length; i++) {
+        const e = allDetailsElements[i];
+        if (e.innerText == '{') { // only 'click' the first curly brace in each JSON tree
+          allDetailsElements[i].click();
+        }
+      }
     },
   },
 };
