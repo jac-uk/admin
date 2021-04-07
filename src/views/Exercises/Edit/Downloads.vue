@@ -147,67 +147,79 @@ export default {
     }),
     ...mapGetters('exerciseDocument', {
       exerciseId: 'id',
+      hasIndependentAssessments: 'hasIndependentAssessments',
     }),
     uploadPath() {
       return `/exercise/${this.exerciseId}`;
     },
     uploadList() {
-      const data = [
-        {
-          title: 'Job Description',
-          id: 'jobDescriptions',
-          name: 'job-descriptions',
-          mandatory: true,
-        },
-        {
-          title: 'Terms and Conditions',
-          id: 'termsAndConditions',
-          name: 'terms-and-conditions',
-          mandatory: true,
-        },
-        {
-          title: 'Competency Framework',
-          id: 'competencyFramework',
-          name: 'competency-framework',
-          mandatory: false,
-        },
-        {
-          title: 'Pensions Information',
-          id: 'pensionsInformation',
-          name: 'pensions-information',
-          mandatory: false,
-        },
-        {
-          title: 'Skills and Abilities Criteria',
-          id: 'skillsAndAbilitiesCriteria',
-          name: 'skills-and-abilities-criteria',
-          mandatory: false,
-        },
-        {
+      const data = [];
+
+      data.push({
+        title: 'Job Description',
+        id: 'jobDescriptions',
+        name: 'job-descriptions',
+        mandatory: true,
+      });
+
+      data.push({
+        title: 'Terms and Conditions',
+        id: 'termsAndConditions',
+        name: 'terms-and-conditions',
+        mandatory: true,
+      });
+
+      data.push({
+        title: 'Competency Framework',
+        id: 'competencyFramework',
+        name: 'competency-framework',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Pensions Information',
+        id: 'pensionsInformation',
+        name: 'pensions-information',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Skills and Abilities Criteria',
+        id: 'skillsAndAbilitiesCriteria',
+        name: 'skills-and-abilities-criteria',
+        mandatory: false,
+      });
+
+      if (this.hasIndependentAssessments) {
+        data.push({
           title: 'Independent Assessors',
           id: 'independentAssessors',
           name: 'independent-assessors',
           mandatory: true,
-        },
-        {
-          title: 'Candidate Assessment Form',
-          id: 'candidateAssessementForms',
-          name: 'candidate-assessement-forms',
-          mandatory: false,
-        },
-        {
-          title: 'Welsh Translation',
-          id: 'welshTranslation',
-          name: 'welsh-translation',
-          mandatory: false,
-        },
-        {
-          title: 'Other Downloads',
-          id: 'otherDownloads',
-          name: 'other-downloads',
-          mandatory: false,
-        },
-      ];
+        });
+      }
+
+      data.push({
+        title: 'Candidate Assessment Form',
+        id: 'candidateAssessementForms',
+        name: 'candidate-assessement-forms',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Welsh Translation',
+        id: 'welshTranslation',
+        name: 'welsh-translation',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Other Downloads',
+        id: 'otherDownloads',
+        name: 'other-downloads',
+        mandatory: false,
+      });
+
       return data;
     },
   },

@@ -67,7 +67,10 @@
           </ul>
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="hasIndependentAssessments"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Independent Assessors
         </dt>
@@ -197,6 +200,7 @@ export default {
       exerciseId: 'id',
       //exercise: 'record',
       isEditable: 'isEditable',
+      hasIndependentAssessments: 'hasIndependentAssessments',
     }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
