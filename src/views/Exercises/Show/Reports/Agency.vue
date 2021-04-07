@@ -15,6 +15,7 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
+              :disabled="hasReportData ? '' : disabled"
               @click="exportData()"
             >
               Export data
@@ -513,22 +514,22 @@ export default {
       return activeTab;
     },
     sraRows() {
-      return this.report.rows.filter((e) => e.sraDate);
+      return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
     bsbRows() {
-      return this.report.rows.filter((e) => e.bsbDate);
+      return this.report ? this.report.rows.filter((e) => e.bsbDate) : [];
     },
     jcioRows() {
-      return this.report.rows.filter((e) => e.jcioOffice);
+      return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
     },
     hmrcRows() {
-      return this.report.rows.filter((e) => e.hmrcVATNumbers);
+      return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
     },
     gmcRows() {
-      return this.report.rows.filter((e) => e.gmcDate);
+      return this.report ? this.report.rows.filter((e) => e.gmcDate) : [];
     },
     riscRows() {
-      return this.report.rows.filter((e) => e.riscDate);
+      return this.report ? this.report.rows.filter((e) => e.riscDate) : [];
     },
   },
   created() {
@@ -541,6 +542,9 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+  },
+  hasReportData() {
+    return this.report && this.report.headers;
   },
   methods: {
     async refreshReport() {
