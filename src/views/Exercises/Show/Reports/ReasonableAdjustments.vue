@@ -35,14 +35,16 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row">
+    <div
+      v-if="report != null"
+      class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ reasonableAdjustments.totalCount }}
+            {{ report.totalApplications }}
           </h2>
         </div>
       </div>
@@ -52,14 +54,14 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ reasonableAdjustments.candidates.length }}
+            {{ report.rows.length }}
           </h2>
         </div>
       </div>
     </div>
 
     <div
-      v-if="reasonableAdjustments.candidates.length"
+      v-if="report != null && report.rows.length"
       class="govuk-grid-column-full"
     >
       <table class="govuk-table">
@@ -93,27 +95,27 @@
         </thead>
         <tbody class="govuk-table__body">
           <tr
-            v-for="candidate in reasonableAdjustments.candidates"
-            :key="candidate.userId"
+            v-for="row in report.rows"
+            :key="row.name + Math.random()"
             class="govuk-table__row"
           >
             <td class="govuk-table__cell">
-              {{ candidate.name }}
+              {{ row.name }}
             </td>
             <td class="govuk-table__cell">
               <a
-                :href="`mailto:${candidate.email}`"
+                :href="`mailto:${row.email}`"
                 class="govuk-link govuk-link--no-visited-state"
                 target="_blank"
               >
-                {{ candidate.email }}
+                {{ row.email }}
               </a>
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ candidate.phone }}
+              {{ row.phone }}
             </td>
             <td class="govuk-table__cell">
-              {{ candidate.adjustmentsDetails }}
+              {{ row.details }}
             </td>
           </tr>
         </tbody>
@@ -123,7 +125,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -139,9 +141,6 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    ...mapGetters('applications', [
-      'reasonableAdjustments',
-    ]),
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
