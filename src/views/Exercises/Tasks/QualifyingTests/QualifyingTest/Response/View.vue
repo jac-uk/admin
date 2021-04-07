@@ -258,7 +258,7 @@
                 </ol>
 
                 <ol
-                  v-if="isScenario"
+                  v-if="isScenario && responses[index]"
                 >
                   <li
                     v-for="(res, i) in responses[index].responsesForScenario"
@@ -467,10 +467,7 @@ export default {
       return this.response.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
     hasStarted() {
-      return this.response && (
-        this.response.status === QUALIFYING_TEST.STATUS.STARTED
-        || this.response.status === QUALIFYING_TEST.STATUS.COMPLETED
-      );
+      return this.response ? true : false;
     },
     hasCompleted() {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
