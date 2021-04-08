@@ -1,5 +1,9 @@
 # Release Notes #
 
+0.59.3
+1 issue / 1sp
+ #1252 Unable to download report data
+
 0.59.1
 1 issue / 2sp
  #1212 Enable leadership judge assessment
