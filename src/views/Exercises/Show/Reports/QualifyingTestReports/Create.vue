@@ -60,7 +60,7 @@ export default {
   },
   created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
-      this.$store.dispatch('qualifyingTest/bindQTs', this.exerciseId);
+      this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
     }
   },
   methods: {

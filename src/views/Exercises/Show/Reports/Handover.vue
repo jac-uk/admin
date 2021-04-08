@@ -15,6 +15,7 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
+              :disabled="hasReportData ? '' : disabled"
               @click="exportData()"
             >
               Export data
@@ -63,8 +64,9 @@
     </div>
 
     <Table
+      v-if="report != null"
       data-key="id"
-      :data="applicationRecords"
+      :data="report.rows"
       :columns="tableColumns"
       :page-size="1000"
       @change="getTableData"
@@ -72,16 +74,16 @@
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
           <RouterLink
-            :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            :to="{ name: 'exercise-application', params: { applicationId: row.applicationId } }"
           >
-            {{ row.application.referenceNumber }}
+            {{ row.referenceNumber }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           <RouterLink
-            :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+            :to="{ name: 'candidates-view', params: { id: row.candidateId } }"
           >
-            {{ row.candidate.fullName }}
+            {{ row.fullName }}
           </RouterLink>
         </TableCell>
       </template>
@@ -121,14 +123,12 @@ export default {
   computed: {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
-      applications: state => state.applications.records,
-      applicationRecords: state => state.stageHandover.records,
     }),
     exerciseType() {
       return this.exercise.typeOfExercise;
     },
     totalApplicationRecords() {
-      return (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.handover) ? this.exercise.applicationRecords.handover : 0;
+      return this.report ? this.report.totalApplications : 0;
     },
   },
   created() {
@@ -141,6 +141,9 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+  },
+  hasReportData() {
+    return this.report && this.report.headers;
   },
   methods: {
     async transferHandoverData() {
