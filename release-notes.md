@@ -1,5 +1,9 @@
 # Release Notes #
 
+0.59.4
+1 issue / 1sp
+ #1243 Exercise Download for S9(1) Exercise-035
+
 0.59.3
 1 issue / 1sp
  #1252 Unable to download report data
