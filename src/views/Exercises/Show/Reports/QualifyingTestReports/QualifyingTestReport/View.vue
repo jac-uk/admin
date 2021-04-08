@@ -179,10 +179,17 @@ export default {
         mapData.push(row.score);
         mapData.push((100 * (row.score / this.maxScore)).toFixed(2));
         mapData.push(row.rank);
-        mapData.push(row.diversity.female);
-        mapData.push(row.diversity.bame);
-        mapData.push(row.diversity.solicitor);
-        mapData.push(row.diversity.disability);
+        if (row.diversity) {
+          mapData.push(row.diversity.female);
+          mapData.push(row.diversity.bame);
+          mapData.push(row.diversity.solicitor);
+          mapData.push(row.diversity.disability);
+        } else {
+          mapData.push('');
+          mapData.push('');
+          mapData.push('');
+          mapData.push('');
+        }
         return mapData;
       });
 
