@@ -154,6 +154,7 @@
         </div>
         <div v-else>
           <Select
+            v-if="exercise.applicationRecords"
             id="exercise-stage"
             v-model="exerciseStage"
           >
@@ -179,6 +180,12 @@
               Selected ({{ exercise.applicationRecords.selected }})
             </option>
           </Select>
+          <div v-else>
+            <Banner
+              :message="`No applications found`"
+              status="warning"
+            />
+          </div>
           <Select
             v-if="availableStatuses && availableStatuses.length > 0"
             id="availableStatuses"
