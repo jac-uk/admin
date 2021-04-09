@@ -97,6 +97,12 @@ export default {
     typeName() {
       return this.isScenario ? 'scenario' : 'question';
     },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     async save(isValid) {
@@ -115,7 +121,7 @@ export default {
           }
         }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-        this.$router.push({ name: 'qualifying-test-review' });
+        this.$router.push({ name: `${this.routeNamePrefix}-review` });
       }
     },
   },

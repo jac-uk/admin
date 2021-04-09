@@ -468,6 +468,9 @@ const router = new Router({
             {
               path: 'qualifying-tests',
               component: QualifyingTestsCover,
+              props: {
+                tieBreakers: false,
+              },
               name: 'exercise-tasks-qualifying-tests',
               meta: {
                 requiresAuth: true,
@@ -477,6 +480,9 @@ const router = new Router({
             {
               path: 'qualifying-tests/new',
               component: QualifyingTestNew,
+              props: {
+                isTieBreaker: false,
+              },
               name: 'qualifying-test-new',
               meta: {
                 requiresAuth: true,
@@ -623,6 +629,105 @@ const router = new Router({
                     requiresAuth: true,
                     title: 'Exercise Tasks | Panels - view',
                   },
+                },
+              ],
+            },
+            {
+              path: 'equal-merit-tie-breakers',
+              component: QualifyingTestsCover,
+              props: {
+                tieBreakers: true,
+              },
+              name: 'exercise-tasks-equal-merit-tie-breakers',
+              meta: {
+                requiresAuth: true,
+                title: 'Equal Merit Tie-Breakers',
+              },
+            },
+            {
+              path: 'equal-merit-tie-breakers/new',
+              component: QualifyingTestNew,
+              props: {
+                isTieBreaker: true,
+              },
+              name: 'equal-merit-tie-breaker-new',
+              meta: {
+                requiresAuth: true,
+                title: 'Equal Merit Tie-Breakers | New',
+              },
+            },
+            {
+              path: 'equal-merit-tie-breakers/:qualifyingTestId',
+              component: QualifyingTest,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestView,
+                  name: 'equal-merit-tie-breaker-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | View',
+                  },
+                },
+                {
+                  path: 'edit',
+                  component: QualifyingTestEdit,
+                  name: 'equal-merit-tie-breaker-edit',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | Edit',
+                  },
+                },
+                {
+                  path: 'build',
+                  component: QualifyingTestQuestionBuilder,
+                  name: 'equal-merit-tie-breaker-question-builder',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | Question Builder',
+                  },
+                },
+                {
+                  path: 'dry-run',
+                  component: QualifyingTestDryRun,
+                  name: 'equal-merit-tie-breaker-dry-run',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | Dry Run',
+                  },
+                },
+                {
+                  path: 'review',
+                  component: QualifyingTestReview,
+                  name: 'equal-merit-tie-breaker-review',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | Review',
+                  },
+                },
+                {
+                  path: 'responses/:status',
+                  component: QualifyingTestResponses,
+                  name: 'equal-merit-tie-breaker-responses',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-Breaker | Responses',
+                  },
+                },
+                {
+                  path: 'response/:responseId',
+                  component: QualifyingTestResponse,
+                  children: [
+                    {
+                      path: '',
+                      component: QualifyingTestResponseView,
+                      name: 'equal-merit-tie-breaker-response-view',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Equal Merit Tie-Breaker | Response View',
+                      },
+                    },
+                  ],
                 },
               ],
             },

@@ -226,6 +226,14 @@ export default {
           },
         );
       }
+      if (this.exercise.equalMeritSecondStageStartDate) {
+        tasks.push(
+          {
+            title: 'Equal Merit Tie-breakers',
+            name: 'exercise-tasks-equal-merit-tie-breakers',
+          },
+        );
+      }
       return tasks;
     },
     applicationStageNavigation(){

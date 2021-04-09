@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="govuk-heading-l">
-      Qualifying tests
+      {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
     </h2>
     <Table
       data-key="id"
@@ -62,6 +62,12 @@ export default {
     Banner,
     TableCell,
   },
+  props: {
+    tieBreakers: {
+      required: true,
+      type: Boolean,
+    },
+  },
   data() {
     return {
       tableColumns: [
@@ -86,29 +92,43 @@ export default {
       if (!this.exercise.emailSignatureName) {
         msg = `${msg} an email signature name`;
       }
-      msg = `${msg} before creating a qualifying test`;
+      msg = `${msg} before creating `;
+      msg += this.tieBreakers ? 'an equal merit tie-breaker' : 'a qualifying test';
       return msg;
     },
     qualifyingTests() {
       const qtList = this.$store.state.qualifyingTest.records;
-      return qtList;
+      // For the Tie-breakers page we want to show tests where isTieBreaker == true
+      // For the Qualifying Tests page we want to show tests where isTieBreaker == false
+      // To support old records though, on the Qualifying Tests page we also need to show tests where the isTieBreaker field is absent
+      // Note: We filter on this here (instead of in the store function) because the firebase SDK does not allow the where() function
+      // to query on the absense of a field
+      return qtList.filter(row => {
+        return this.tieBreakers ? row.isTieBreaker : (!row.isTieBreaker || typeof(row.isTieBreaker) === 'undefined');
+      });
     },
     exerciseId() {
       return this.$route.params.id;
     },
+    routeNamePrefix() {
+      return this.isTieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     btnCreate() {
-      this.$router.push({ name: 'qualifying-test-new' });
+      this.$router.push({
+        name: `${this.routeNamePrefix}-new`,
+        props: { isTieBreaker: this.tieBreakers },
+      });
     },
     getViewName(qualifyingTest) {
       if (
         qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED
         || qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED
       ) {
-        return 'qualifying-test-review';
+        return `${this.routeNamePrefix}-review`;
       } else {
-        return 'qualifying-test-view';
+        return `${this.routeNamePrefix}-view`;
       }
     },
     getTableData(params) {

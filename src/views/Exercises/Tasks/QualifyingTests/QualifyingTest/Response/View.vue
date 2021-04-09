@@ -2,8 +2,8 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test Response:
-        <routerLink :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: $route.params.qualifyingTestId } }">
+        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
+        <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
           {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         </routerLink>
       </h2>
@@ -479,6 +479,12 @@ export default {
       const qtList = this.$store.state.connectionMonitor.records;
       return qtList;
     },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   watch: {
     activeTab: async function (newActiveTab) {
@@ -581,7 +587,7 @@ export default {
         await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: destinationTest, qualifyingTestResponse: this.response });
         this.isEditingTestDate = false;
         this.$router.push({
-          name: 'qualifying-test-responses',
+          name: `${this.routeNamePrefix}-responses`,
           params: {
             qualifyingTestId: this.qualifyingTest.id,
             status: 'all',  // TODO go to same list status as before
@@ -639,4 +645,3 @@ export default {
     padding: 5px;
   }
 </style>
-

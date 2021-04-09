@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-l">
-        Edit qualifying test details
+        Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
       </h2>
 
       <ErrorSummary
@@ -112,12 +112,17 @@ export default {
     testTypes() {
       return QUALIFYING_TEST.TYPE;
     },
-
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     async save() {
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-      this.$router.push({ name: 'qualifying-test-question-builder' });
+      this.$router.push({ name: `${this.routeNamePrefix}-question-builder` });
     },
     getTimelineDate(exercise, qtType, dateType) {
       if (!exercise.shortlistingMethods) {

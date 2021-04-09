@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test
+        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
       </h2>
       <h3 class="govuk-heading-l">
         {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
@@ -59,13 +59,13 @@
 
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
           >
             Initialised
           </RouterLink>
           /
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
@@ -75,7 +75,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
           </RouterLink> / Out of Time
@@ -98,7 +98,7 @@
         </h2>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
           >
             Started
           </RouterLink>
@@ -106,7 +106,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
           >
             In Progress
           </RouterLink>
@@ -287,11 +287,13 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {
   components: {
     ActionButton,
     Select,
+    Banner,
   },
   data() {
     return {
@@ -308,8 +310,7 @@ export default {
       return this.$route.params.qualifyingTestId;
     },
     qualifyingTest() {
-      const record = this.$store.state.qualifyingTest.record;
-      return record;
+      return this.$store.state.qualifyingTest.record;
     },
     hasCounts() {
       return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
@@ -354,6 +355,12 @@ export default {
         this.isCompleted
       );
     },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   watch: {
     exerciseStage: function (valueNow, valueBefore) {
@@ -373,10 +380,10 @@ export default {
   },
   methods: {
     btnEdit() {
-      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-edit`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnReview() {
-      this.$router.push({ name: 'qualifying-test-review', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-review`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
@@ -403,13 +410,12 @@ export default {
     },
     btnResponses(status) {
       const route = {
-        name: 'qualifying-test-responses',
+        name: `${this.routeNamePrefix}-responses`,
         params: {
           qualifyingTestId: this.$route.params.qualifyingTestId,
           status: status,
         },
       };
-
       this.$router.push(route);
     },
     qtStatus(status) {
@@ -418,12 +424,11 @@ export default {
     async btnCreateCopy() {
       const newTestId = await this.$store.dispatch('qualifyingTest/copy');
       this.$router.push({
-        name: 'qualifying-test-edit',
+        name: `${this.routeNamePrefix}-edit`,
         params: {
           qualifyingTestId: newTestId,
         },
       });
-
     },
   },
 };
