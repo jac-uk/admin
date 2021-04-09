@@ -182,13 +182,43 @@
               <dl class="govuk-summary-list">
                 <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
-                    Full Name
+                    Title
                   </dt>
                   <dd class="govuk-summary-list__value">
                     <EditableField
-                      :value="application.personalDetails.fullName"
+                      :value="title"
                       :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                      field="fullName"
+                      field="title"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    First name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="firstName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="firstName"
+                      type="route"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Last name
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="lastName"
+                      :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
+                      field="lastName"
                       type="route"
                       @changefield="changeUserDetails"
                     />
