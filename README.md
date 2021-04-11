@@ -3,7 +3,6 @@
 [![CircleCI](https://circleci.com/gh/jac-uk/apply-admin.svg?style=svg)](https://circleci.com/gh/jac-uk/apply-admin)
 
 This is the Vue SPA for managing exercises and candidates. By default, it deploys to `digital-staging-apply-admin`.
-
 ## Clone repository onto local machine
 ```
 git clone git@github.com:jac-uk/admin.git
