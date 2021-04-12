@@ -108,13 +108,13 @@ export default {
       // Note: We filter on this here (instead of in the store function) because the firebase SDK does not allow the where() function
       // to query on the absense of a field
       return qtList.filter(row => {
-        return this.tieBreakers ? row.isTieBreaker : (!row.isTieBreaker || typeof(row.isTieBreaker) === 'undefined');
+        return this.tieBreakers ? row.isTieBreaker : !row.isTieBreaker; // Note: !row.isTieBreaker is equivilant to isTieBreaker being undefined or false
       });
     },
     canCreateTieBreakers() {
       // only allow tie-breakers to be created if one or more QTs have been created
       const nonTieBreakerQTs = this.$store.state.qualifyingTest.records.filter(row => {
-        return !row.isTieBreaker || typeof(row.isTieBreaker) === 'undefined';
+        return !row.isTieBreaker; // Note: !row.isTieBreaker is equivilant to isTieBreaker being undefined or false
       });
       return nonTieBreakerQTs.length > 0;
     },
