@@ -63,7 +63,7 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import * as filters from '@jac-uk/jac-kit/filters/filters';
+import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
@@ -97,116 +97,6 @@ export default {
     },
   },
   methods: {
-    flattenCurrentLegalRole(equalityAndDiversitySurvey) {
-      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.currentLegalRole)) {
-        return '';
-      }
-
-      const roles = [];
-      equalityAndDiversitySurvey.currentLegalRole.forEach((role) => {
-        if (role === 'other-fee-paid-judicial-office-holder') {
-          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }`);
-        } else if (role === 'other-salaried-judicial-office-holder') {
-          roles.push(`other: ${ equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails}`);
-        } else if (role === 'other-current-legal-role') {
-          roles.push(`Other: ${ equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }`);
-        } else {
-          roles.push(filters.lookup(role));
-        }
-      });
-
-      return roles.join('\n');
-    },
-    flattenProfessionalBackground(equalityAndDiversitySurvey) {
-      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.professionalBackground)) {
-        return '';
-      }
-      const roles = [];
-      equalityAndDiversitySurvey.professionalBackground.forEach((role) => {
-        if (role === 'other-professional-background') {
-          roles.push(`Other: ${ equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }`);
-        } else {
-          roles.push(filters.lookup(role));
-        }
-      });
-      return roles.join('\n');
-    },
-    attendedUKStateSchool(equalityAndDiversitySurvey) {
-      if (!(equalityAndDiversitySurvey && equalityAndDiversitySurvey.stateOrFeeSchool)) {
-        return '';
-      }
-      return filters.toYesNo(['uk-state-selective', 'uk-state-non-selective'].indexOf(equalityAndDiversitySurvey.stateOrFeeSchool) >= 0);
-    },
-    gatherContacts() {
-      const headers = [
-        'Reference number',
-        'Status',
-        'Name',
-        'Email',
-        'Phone number',
-        'Date of Birth',
-        'National Insurance Number',
-        'Gender',
-        'Disability',
-        'Ethnic Group',
-        'Current Legal Role',
-        'Professional Background',
-        'Held Fee-paid Judicial Role',
-        'Attended UK State School',
-        'First Generation Student',
-        'First Assessor Name',
-        'First Assessor Email',
-        'First Assessor Phone',
-        'Second Assessor Name',
-        'Second Assessor Email',
-        'Second Assessor Phone',
-      ];
-
-      const contacts = this.applications.map((application) => {
-        return [
-          application.referenceNumber,
-          filters.lookup(application.status),
-          application.personalDetails.fullName,
-          application.personalDetails.email,
-          application.personalDetails.phone,
-          filters.formatDate(application.personalDetails.dateOfBirth),
-          filters.formatNIN(application.personalDetails.nationalInsuranceNumber),
-          filters.lookup(application.equalityAndDiversitySurvey.gender),
-          filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.disability)),
-          filters.lookup(application.equalityAndDiversitySurvey.ethnicGroup),
-          this.flattenCurrentLegalRole(application.equalityAndDiversitySurvey),
-          this.flattenProfessionalBackground(application.equalityAndDiversitySurvey),
-          filters.heldFeePaidJudicialRole(application.equalityAndDiversitySurvey.feePaidJudicialRole),
-          filters.toYesNo(this.attendedUKStateSchool(application.equalityAndDiversitySurvey)),
-          filters.toYesNo(filters.lookup(application.equalityAndDiversitySurvey.firstGenerationStudent)),
-          application.firstAssessorFullName,
-          application.firstAssessorEmail,
-          application.firstAssessorPhone,
-          application.secondAssessorFullName,
-          application.secondAssessorEmail,
-          application.secondAssessorPhone,
-        ];
-      });
-
-      return [
-        headers,
-        ...contacts,
-      ];
-    },
-    async exportContacts() {
-      const title = 'Contacts';
-      await this.getTableData({});
-      const data = this.gatherContacts();
-
-      downloadXLSX(
-        data,
-        {
-          title: `${this.exercise.referenceNumber} ${title}`,
-          sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-        }
-      );
-    },
     getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
@@ -214,6 +104,35 @@ export default {
           exerciseId: this.exercise.id,
           status: this.status,
           ...params,
+        }
+      );
+    },
+    async gatherReportData() {
+      // fetch data
+      const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
+
+      const reportData = [];
+
+      // get headers
+      reportData.push(response.data.headers.map(header => header));
+
+      // get rows
+      response.data.rows.forEach((row) => {
+        reportData.push(Object.values(row).map(cell => cell));
+      });
+
+      return reportData;
+    },
+    async exportContacts() {
+      const title = 'Contacts';
+      const xlsxData = await this.gatherReportData();
+
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
     },

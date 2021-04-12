@@ -19,19 +19,6 @@ const mockExercise = {
   applicationCloseDate: 'TestClose',
 };
 
-const mockReport = {
-  totalCount: 3,
-  candidates: [
-    {
-      userId: '234',
-      name: 'mock name 2',
-      email: 'email2@somewhere.com',
-      requiresAdjustments: true,
-      adjustmentsDetails: 'Indexs sunt quadras de barbatus animalis.',
-    }],
-};
-
-const reasonableAdjustmentsGetter = jest.fn().mockReturnValue(mockReport);
 const store = new Vuex.Store({
   modules: {
     applications: {
@@ -41,9 +28,6 @@ const store = new Vuex.Store({
       },
       state: {
         records: [],
-      },
-      getters: {
-        reasonableAdjustments: reasonableAdjustmentsGetter,
       },
     },
     exerciseDocument: {
@@ -89,39 +73,9 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
         expect(wrapper.vm.exercise).toEqual(mockExercise);
       });
     });
-    describe('reasonableAdjustments', () => {
-      it('returns generated report object', () => {
-        expect(wrapper.vm.reasonableAdjustments).toEqual(mockReport);
-      });
-    });
+
   });
   describe('methods', () => {
-    describe('gatherReportData()', () => {
-      it('is a function', () => {
-        expect(typeof wrapper.vm.gatherReportData).toBe('function');
-      });
-
-      it('returns an array with header row and one row per application', () => {
-        const report = wrapper.vm.gatherReportData();
-
-        expect(report).toBeArrayOfSize(mockReport.candidates.length + 1);
-      });
-
-      it('returns an array starting with header row', () => {
-        const report = wrapper.vm.gatherReportData();
-
-        const headers = [
-          'Name',
-          'Email',
-          'Phone number',
-          'Details',
-        ];
-
-        expect(report[0]).toBeArray();
-        expect(report[0]).toEqual(headers);
-      });
-    });
-
     describe('exportData()', () => {
 
       it('is a function', () => {
@@ -130,7 +84,7 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
 
       it('calls gatherReportData', () => {
         wrapper.vm.gatherReportData = jest.fn();
-        wrapper.vm.exportData();
+        wrapper.vm.gatherReportData();
         expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
 

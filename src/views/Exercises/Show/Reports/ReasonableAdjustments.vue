@@ -15,23 +15,36 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
+              :disabled="hasReportData ? '' : disabled"
               @click="exportData()"
             >
               Export data
+            </button>
+            <button
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="refreshReport"
+            >
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="govuk-grid-row">
+    <div
+      v-if="report != null"
+      class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ reasonableAdjustments.totalCount }}
+            {{ report.totalApplications }}
           </h2>
         </div>
       </div>
@@ -41,14 +54,14 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ reasonableAdjustments.candidates.length }}
+            {{ report.rows.length }}
           </h2>
         </div>
       </div>
     </div>
 
     <div
-      v-if="reasonableAdjustments.candidates.length"
+      v-if="report != null && report.rows.length"
       class="govuk-grid-column-full"
     >
       <table class="govuk-table">
@@ -82,27 +95,27 @@
         </thead>
         <tbody class="govuk-table__body">
           <tr
-            v-for="candidate in reasonableAdjustments.candidates"
-            :key="candidate.userId"
+            v-for="row in report.rows"
+            :key="row.name + Math.random()"
             class="govuk-table__row"
           >
             <td class="govuk-table__cell">
-              {{ candidate.name }}
+              {{ row.name }}
             </td>
             <td class="govuk-table__cell">
               <a
-                :href="`mailto:${candidate.email}`"
+                :href="`mailto:${row.email}`"
                 class="govuk-link govuk-link--no-visited-state"
                 target="_blank"
               >
-                {{ candidate.email }}
+                {{ row.email }}
               </a>
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ candidate.phone }}
+              {{ row.phone }}
             </td>
             <td class="govuk-table__cell">
-              {{ candidate.adjustmentsDetails }}
+              {{ row.details }}
             </td>
           </tr>
         </tbody>
@@ -112,40 +125,56 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
+import { firestore, functions } from '@/firebase';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
+  data() {
+    return {
+      report: null,
+      refreshingReport: false,
+    };
+  },
   computed: {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    ...mapGetters('applications', [
-      'reasonableAdjustments',
-    ]),
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
+    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
+      .onSnapshot((snap) => {
+        this.report = vuexfireSerialize(snap);
+      });
+  },
+  destroyed() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  },
+  hasReportData() {
+    return this.report && this.report.headers;
   },
   methods: {
+    async refreshReport() {
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
+    },
     gatherReportData() {
-      const headers = [
-        'Name',
-        'Email',
-        'Phone number',
-        'Details',
-      ];
+      const reportData = [];
 
-      const data = this.reasonableAdjustments.candidates.map(candidate => [
-        candidate.name,
-        candidate.email,
-        candidate.phone,
-        candidate.adjustmentsDetails,
-      ]);
-      return [
-        headers,
-        ...data,
-      ];
+      // get headers
+      reportData.push(this.report.headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
+      });
+
+      return reportData;
     },
     exportData() {
       const title = 'Reasonable Adjustments Report';
