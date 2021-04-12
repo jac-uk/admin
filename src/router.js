@@ -777,6 +777,9 @@ const router = new Router({
               path: 'qualifying-test-reports',
               component: QualifyingTestReports,
               name: 'qualifying-test-reports',
+              props: {
+                tieBreakers: false,
+              },
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Test Reports',
@@ -785,6 +788,9 @@ const router = new Router({
             {
               path: 'qualifying-test-report-create',
               component: QualifyingTestReportCreate,
+              props: {
+                tieBreakers: false,
+              },
               name: 'qualifying-test-report-create',
               meta: {
                 requiresAuth: true,
@@ -820,6 +826,63 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Qualifying Test Report | View Score',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'equal-merit-tie-breaker-reports',
+              component: QualifyingTestReports,
+              props: {
+                tieBreakers: true,
+              },
+              name: 'equal-merit-tie-breaker-reports',
+              meta: {
+                requiresAuth: true,
+                title: 'Equal Merit Tie-breaker Reports',
+              },
+            },
+            {
+              path: 'equal-merit-tie-breaker-report-create',
+              component: QualifyingTestReportCreate,
+              props: {
+                tieBreakers: true,
+              },
+              name: 'equal-merit-tie-breaker-report-create',
+              meta: {
+                requiresAuth: true,
+                title: 'Equal Merit Tie-breaker Report | New',
+              },
+            },
+            {
+              path: 'equal-merit-tie-breaker-reports/:qualifyingTestReportId',
+              component: QualifyingTestReport,
+              children: [
+                {
+                  path: '',
+                  component: QualifyingTestReportView,
+                  name: 'equal-merit-tie-breaker-report-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-breaker Report | View',
+                  },
+                },
+                {
+                  path: 'edit',
+                  component: QualifyingTestReportEdit,
+                  name: 'equal-merit-tie-breaker-report-edit',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-breaker Report | Edit',
+                  },
+                },
+                {
+                  path: ':score',
+                  component: QualifyingTestReportViewScore,
+                  name: 'equal-merit-tie-breaker-report-view-score',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Equal Merit Tie-breaker Report | View Score',
                   },
                 },
               ],

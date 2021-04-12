@@ -271,7 +271,7 @@ export default {
     },
     applicationReportNavigation(){
       if (this.exercise.applicationRecords){
-        return [
+        const reports = [
           {
             title: 'Diversity',
             name: 'exercise-show-report-diversity',
@@ -299,6 +299,19 @@ export default {
               nav: '/reports/qualifying-test-reports',
             },
           },
+        ];
+        if (this.exercise.equalMeritSecondStageStartDate) {
+          reports.push(
+            {
+              title: 'Equal Merit Tie-breaker Reports',
+              name: 'equal-merit-tie-breaker-reports',
+              params: {
+                nav: '/reports/equal-merit-tie-breaker-reports',
+              },
+            },
+          );
+        }
+        reports.push([
           {
             title: 'Agency',
             name: 'exercise-show-report-agency',
@@ -307,7 +320,8 @@ export default {
             title: 'Handover',
             name: 'exercise-show-report-handover',
           },
-        ];
+        ]);
+        return reports;
       } else {
         return [];
       }

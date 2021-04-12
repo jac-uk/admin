@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="govuk-heading-l">
-      Qualifying test reports
+      {{ tieBreakers ? 'Equal merit tie-breaker' : 'Qualifying test' }} reports
     </h2>
     <Table
       data-key="id"
@@ -14,7 +14,7 @@
         <TableCell :title="tableColumns[0].title">
           <RouterLink
             class="govuk-link"
-            :to="{ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: row.id } }"
+            :to="{ name: `${routeNamePrefix}-report-view`, params: { qualifyingTestReportId: row.id } }"
           >
             {{ row.title | showAlternative(row.id) }}
           </RouterLink>
@@ -40,6 +40,12 @@ export default {
     Table,
     TableCell,
   },
+  props: {
+    tieBreakers: {
+      required: true,
+      type: Boolean,
+    },
+  },
   data() {
     return {
       tableColumns: [
@@ -52,15 +58,20 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTestReports() {
-      return this.$store.getters['qualifyingTestReports/data'];
+      return this.$store.getters['qualifyingTestReports/data'].filter(row => {
+        return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
+      });
     },
     exerciseId() {
       return this.$route.params.id;
     },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     btnCreate() {
-      this.$router.push({ name: 'qualifying-test-report-create' });
+      this.$router.push({ name: `${this.routeNamePrefix}-report-create` });
     },
     getTableData(params) {
       this.$store.dispatch(
