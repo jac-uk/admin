@@ -122,7 +122,7 @@ export default {
       return this.$route.params.id;
     },
     routeNamePrefix() {
-      return this.isTieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
