@@ -218,8 +218,8 @@
 
       <ActionButton
         v-if="isInitialised"
-        :disabled="false"
         class="govuk-!-margin-right-3"
+        :disabled="!canOpenTests"
         @click="btnActivate"
       >
         Open tests
@@ -354,6 +354,17 @@ export default {
         this.isPaused ||
         this.isCompleted
       );
+    },
+    canOpenTests() {
+      // do not allow QTs or tie-breakers to be opened until they have been initialised
+      // also, do not allow tie-breakers to be opened if there are open QTs for this exercise
+      return this.isInitialised && !(this.isTieBreaker && this.exerciseHasOpenQTs);
+    },
+    exerciseHasOpenQTs() {
+      const qtList = this.$store.getters['qualifyingTest/getActivatedQTs'].filter(row => {
+        return !row.isTieBreaker;
+      });
+      return qtList.length > 0;
     },
     isTieBreaker() {
       return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;

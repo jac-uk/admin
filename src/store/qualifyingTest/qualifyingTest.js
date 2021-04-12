@@ -90,5 +90,10 @@ export default {
           && qualifyingTest.mode !== QUALIFYING_TEST.MODE.MOP_UP;
       });
     },
+    getActivatedQTs: (state) => {
+      return state.records.filter(qualifyingTest => {
+        return qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
+      });
+    },
   },
 };
