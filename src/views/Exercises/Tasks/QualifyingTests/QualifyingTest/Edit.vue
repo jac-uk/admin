@@ -24,6 +24,8 @@
         type="datetime"
         label="Start date"
         required
+        :min-date="minDate"
+        :max-date="maxDate"
       />
 
       <DateInput
@@ -32,6 +34,8 @@
         type="datetime"
         label="End date"
         required
+        :min-date="minDate"
+        :max-date="maxDate"
       />
 
       <TextField
@@ -92,8 +96,8 @@ export default {
 
     const defaults = {
       title: null,
-      startDate: this.getTimelineDate(exercise, data.type, 'start') || null,
-      endDate: this.getTimelineDate(exercise, data.type, 'end') || null,
+      startDate: this.getTimelineDate(exercise, data.type, 'Start') || null,
+      endDate: this.getTimelineDate(exercise, data.type, 'End') || null,
       testDuration: null,
       additionalInstructions: [],
       feedbackSurvey: null,
@@ -102,6 +106,7 @@ export default {
     const qualifyingTest = { ...defaults, ...data };
 
     return {
+      exercise,
       repeatableFields: {
         QTAdditionalInstruction,
       },
@@ -117,6 +122,12 @@ export default {
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    minDate() {
+      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'Start') : null;
+    },
+    maxDate() {
+      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'End') : null;
     },
   },
   methods: {
@@ -141,7 +152,7 @@ export default {
       }
 
       const date = exercise[`${fieldName}Date`];
-      const time = exercise[`${fieldName}${dateType[0].toUpperCase()}${dateType.slice(1)}Time`];
+      const time = exercise[`${fieldName}${dateType}Time`];
 
       let datetime;
       if (date instanceof Date) {
@@ -153,6 +164,13 @@ export default {
       }
 
       return datetime;
+    },
+    getEMZDate(exercise, dateType) {
+      const date = exercise[`equalMeritSecondStage${dateType}Date`];
+      if (date instanceof Date) {
+        return new Date(date.getTime());
+      }
+      return;
     },
   },
 };
