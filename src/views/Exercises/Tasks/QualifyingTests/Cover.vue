@@ -127,10 +127,7 @@ export default {
   },
   methods: {
     btnCreate() {
-      this.$router.push({
-        name: `${this.routeNamePrefix}-new`,
-        props: { isTieBreaker: this.tieBreakers },
-      });
+      this.$router.push({ name: `${this.routeNamePrefix}-new` });
     },
     getViewName(qualifyingTest) {
       if (
