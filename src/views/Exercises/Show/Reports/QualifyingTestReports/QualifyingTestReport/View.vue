@@ -4,7 +4,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-m">
-            Qualifying Test Report
+            {{ tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test' }} Report
           </h2>
           <h3 class="govuk-heading-l govuk-!-margin-bottom-0">
             {{ qualifyingTestReport.title }}
@@ -66,7 +66,7 @@
           </TableCell>
           <TableCell :title="tableColumns[2].title">
             <RouterLink
-              :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: row.score } }"
+              :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: row.score } }"
               class="govuk-link"
             >
               {{ row.score }}
@@ -136,11 +136,17 @@ export default {
       });
       return score;
     },
+    tieBreakers() {
+      return this.qualifyingTestReport.tieBreakers;
+    },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     btnEdit() {
       this.$router.push({
-        name: 'qualifying-test-report-edit',
+        name: `${this.routeNamePrefix}-report-edit`,
         params: {
           qualifyingTestReportId: this.qualifyingTestReportId,
         },
@@ -199,7 +205,7 @@ export default {
       ];
     },
     downloadData() {
-      const title = 'Qualifying Test Report';
+      const title = `${this.tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test'} Report`;
       const data = this.gatherReportData();
       downloadXLSX(
         data,

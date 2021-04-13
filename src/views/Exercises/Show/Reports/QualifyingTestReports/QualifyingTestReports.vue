@@ -59,7 +59,7 @@ export default {
     },
     qualifyingTestReports() {
       return this.$store.getters['qualifyingTestReports/data'].filter(row => {
-        return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
+        return this.tieBreakers == (row.tieBreakers == true); // to cater for the tieBreakers field being absent
       });
     },
     exerciseId() {
