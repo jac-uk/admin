@@ -19,19 +19,6 @@ const mockExercise = {
   applicationCloseDate: 'TestClose',
 };
 
-const mockReport = {
-  totalCount: 3,
-  candidates: [
-    {
-      userId: '234',
-      name: 'mock name 2',
-      email: 'email2@somewhere.com',
-      requiresAdjustments: true,
-      adjustmentsDetails: 'Indexs sunt quadras de barbatus animalis.',
-    }],
-};
-
-const reasonableAdjustmentsGetter = jest.fn().mockReturnValue(mockReport);
 const store = new Vuex.Store({
   modules: {
     applications: {
@@ -41,9 +28,6 @@ const store = new Vuex.Store({
       },
       state: {
         records: [],
-      },
-      getters: {
-        reasonableAdjustments: reasonableAdjustmentsGetter,
       },
     },
     exerciseDocument: {
@@ -89,11 +73,7 @@ describe('@/views/Exercises/Show/Reports/ReasonableAdjustments', () => {
         expect(wrapper.vm.exercise).toEqual(mockExercise);
       });
     });
-    describe('reasonableAdjustments', () => {
-      it('returns generated report object', () => {
-        expect(wrapper.vm.reasonableAdjustments).toEqual(mockReport);
-      });
-    });
+
   });
   describe('methods', () => {
     describe('exportData()', () => {

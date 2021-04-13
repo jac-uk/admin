@@ -1,5 +1,24 @@
 # Release Notes #
 
+0.60.0
+8 issues / 13sp
+ #1201 Include version number in UI and Sentry
+ #1033 FIX TypeError: Cannot read property 'shareData' of undefined
+ #1212 S9(1) type exercise functionality (ex 35)
+ #1100 Exports should be prepared server-side
+ #1081 Report improvements
+ #1224 Fix: Tabs no longer function on application view
+ #1237 Fix: Configure npm to use github packages for JAC Kit
+ #1242 Fix: All candidates in stages tab moved to withdrawn Exercise 014 and 010
+
+0.59.4
+1 issue / 1sp
+ #1243 Exercise Download for S9(1) Exercise-035
+
+0.59.3
+1 issue / 1sp
+ #1252 Unable to download report data
+
 0.59.1
 1 issue / 2sp
  #1212 Enable leadership judge assessment

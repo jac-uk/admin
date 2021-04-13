@@ -130,7 +130,6 @@ export default {
   },
   async created() {
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
-    this.selectedItems = this.$store.state.stageShortlisted.selectedItems;
   },
   methods: {
     moveBack() {
