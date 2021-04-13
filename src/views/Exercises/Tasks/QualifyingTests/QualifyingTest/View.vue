@@ -367,7 +367,7 @@ export default {
       return qtList.length > 0;
     },
     isTieBreaker() {
-      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+      return this.qualifyingTest.isTieBreaker;
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';

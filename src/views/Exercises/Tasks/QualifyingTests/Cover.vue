@@ -104,17 +104,18 @@ export default {
       const qtList = this.$store.state.qualifyingTest.records;
       // For the Tie-breakers page we want to show tests where isTieBreaker == true
       // For the Qualifying Tests page we want to show tests where isTieBreaker == false
-      // To support old records though, on the Qualifying Tests page we also need to show tests where the isTieBreaker field is absent
-      // Note: We filter on this here (instead of in the store function) because the firebase SDK does not allow the where() function
-      // to query on the absense of a field
+      // To support old records though, on the Qualifying Tests page we also need to show tests where the
+      // isTieBreaker field is absent
+      // Note: We filter on this here (instead of in the store function) because the firebase SDK does not
+      // allow the where() function to query on the absense of a field
       return qtList.filter(row => {
-        return this.tieBreakers ? row.isTieBreaker : !row.isTieBreaker; // Note: !row.isTieBreaker is equivilant to isTieBreaker being undefined or false
+        return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
     },
     canCreateTieBreakers() {
       // only allow tie-breakers to be created if one or more QTs have been created
       const nonTieBreakerQTs = this.$store.state.qualifyingTest.records.filter(row => {
-        return !row.isTieBreaker; // Note: !row.isTieBreaker is equivilant to isTieBreaker being undefined or false
+        return !row.isTieBreaker;
       });
       return nonTieBreakerQTs.length > 0;
     },

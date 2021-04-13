@@ -91,7 +91,7 @@ export default {
       return this.$route.params.status;
     },
     isTieBreaker() {
-      return this.qualifyingTest.isTieBreaker && this.qualifyingTest.isTieBreaker;
+      return this.qualifyingTest.isTieBreaker;
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
