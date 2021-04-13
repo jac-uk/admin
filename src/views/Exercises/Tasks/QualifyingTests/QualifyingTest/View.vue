@@ -309,6 +309,9 @@ export default {
     };
   },
   computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -394,6 +397,11 @@ export default {
         this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
       }
     },
+  },
+  created() {
+    if (this.$store.state.qualifyingTest.records.length === 0) {
+      this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
+    }
   },
   methods: {
     btnEdit() {
