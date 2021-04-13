@@ -10,9 +10,9 @@
 Describe the changes included in this pull request and highlight dependencies with other repos/tickets
 
 ## Who should test?
-- ✅ Product owner
-- ✅ Developers
-- ✅ UTG
+✅ Product owner
+✅ Developers
+✅ UTG
 
 ## How to test?
 Describe the steps required to test & verify this change
