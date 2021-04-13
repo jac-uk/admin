@@ -45,7 +45,7 @@ jobs:
         run: npm run build-develop
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.DEPLOY_TOKEN }}'
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.DEVELOP_FIREBASE_SERVICE_ACCOUNT }}'
           projectId: digital-platform-develop
           target: develop-admin-app
