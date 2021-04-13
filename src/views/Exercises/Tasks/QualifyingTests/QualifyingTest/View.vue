@@ -216,6 +216,12 @@
         </div>
       </div>
 
+      <Banner
+        v-if="isTieBreaker && exerciseHasOpenQTs"
+        message="You cannot open this tie-breaker test yet as there are still qualifying tests open for this exercise"
+        status="warning"
+      />
+
       <ActionButton
         v-if="isInitialised"
         class="govuk-!-margin-right-3"
