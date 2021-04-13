@@ -25,6 +25,10 @@ jobs:
       - uses: actions/setup-node@master
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+      - name: Lint
+        run: npm run lint-ci
+      - name: Test
+        run: npm run test-ci
       - name: Create env file
         run: |
           touch .env.develop
