@@ -17,7 +17,13 @@
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit"
+    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:local": "cypress run -C cypress.env.develop.local.json",
+    "cypress:run:develop": "cypress run -C cypress.env.develop.json",
+    "cypress:run:staging": "cypress run -C cypress.env.staging.json",
+    "cypress:run:production": "cypress run -C cypress.env.production.json"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
@@ -53,6 +59,7 @@
     "babel-jest": "^25.5.1",
     "bufferutil": "^4.0.3",
     "clone": "^2.1.2",
+    "cypress": "^7.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "firebase": "^7.24.0",
