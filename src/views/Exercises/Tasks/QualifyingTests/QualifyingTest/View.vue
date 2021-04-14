@@ -159,7 +159,7 @@
             v-model="exerciseStage"
           >
             <option value="">
-              Choose applications
+              Choose applications{{ isTieBreaker ? ' (for EMP candidates)' : '' }}
             </option>
             <option
               v-if="exercise.applicationRecords.review"
