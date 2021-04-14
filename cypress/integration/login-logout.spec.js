@@ -5,6 +5,6 @@ context('Window', () => {
 
   it('cy.title() - get the title', () => {
     // https://on.cypress.io/title
-    cy.title().should('include', 'Kitchen Sink')
+    cy.title().should('include', 'JAC Digital Platform')
   })
 })
