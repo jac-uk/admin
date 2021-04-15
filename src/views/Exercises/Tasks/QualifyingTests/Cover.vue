@@ -35,7 +35,7 @@
     </Table>
 
     <button
-      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName && (!tieBreakers || canCreateTieBreakers)"
+      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >
@@ -82,10 +82,6 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     warningMessage() {
-      if (this.tieBreakers && !this.canCreateTieBreakers) {
-        return 'You must create qualifying tests before you create equal merit tie-breakers';
-      }
-
       let msg = 'Please add';
       if (!this.exercise.exercisePhoneNumber) {
         msg = `${msg} an exercise phone number`;
@@ -111,13 +107,6 @@ export default {
       return qtList.filter(row => {
         return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
-    },
-    canCreateTieBreakers() {
-      // only allow tie-breakers to be created if one or more QTs have been created
-      const nonTieBreakerQTs = this.$store.state.qualifyingTest.records.filter(row => {
-        return !row.isTieBreaker;
-      });
-      return nonTieBreakerQTs.length > 0;
     },
     exerciseId() {
       return this.$route.params.id;
