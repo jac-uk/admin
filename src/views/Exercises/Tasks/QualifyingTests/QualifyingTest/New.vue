@@ -16,6 +16,7 @@
         v-model="qualifyingTest.type"
         label="Type of test"
         required
+        v-if="!isTieBreaker"
       >
         <RadioItem
           v-for="item in testTypes"
@@ -67,7 +68,7 @@ export default {
 
     const defaults = {
       isTieBreaker: this.isTieBreaker,
-      type: null,
+      type: this.isTieBreaker ? QUALIFYING_TEST.TYPE.SCENARIO : null,
       vacancy: {
         mailbox: exercise.exerciseMailbox,
         contactPhone: exercise.exercisePhoneNumber,
