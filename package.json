@@ -18,12 +18,11 @@
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
     "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "cypress:run:local": "cypress run -C cypress.env.develop.local.json",
-    "cypress:run:develop": "cypress run -C cypress.env.develop.json",
-    "cypress:run:staging": "cypress run -C cypress.env.staging.json",
-    "cypress:run:production": "cypress run -C cypress.env.production.json"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run -C cypress.env.develop.local.json",
+    "cy:run:develop": "cypress run -C cypress.env.develop.json",
+    "cy:run:staging": "cypress run -C cypress.env.staging.json",
+    "cy:run:production": "cypress run -C cypress.env.production.json"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
