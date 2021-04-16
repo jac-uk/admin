@@ -15,6 +15,7 @@
             <ul class="govuk-header__navigation user-menu">
               <li class="govuk-header__navigation-item">
                 <RouterLink
+                  data-cy="nav-notifications-link"
                   :to="{ name: 'notifications' }"
                   class="govuk-header__link"
                 >
@@ -23,6 +24,7 @@
               </li>
               <li class="govuk-header__navigation-item">
                 <RouterLink
+                  data-cy="nav-exercises-link"
                   :to="{ name: 'dashboard' }"
                   class="govuk-header__link"
                 >
@@ -31,6 +33,7 @@
               </li>
               <li class="govuk-header__navigation-item">
                 <RouterLink
+                  data-cy="nav-candidates-link"
                   :to="{ name: 'candidates-list' }"
                   class="govuk-header__link"
                 >

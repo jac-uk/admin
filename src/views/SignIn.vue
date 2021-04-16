@@ -12,6 +12,7 @@
           <span class="govuk-visually-hidden">Error:</span> {{ authError }}
         </span>
         <button
+          data-cy="google-sign-in-button"
           type="button"
           class="govuk-button button-image"
           @click="loginWithGoogle"
