@@ -1,10 +1,10 @@
 context('Window', () => {
+
   before(() => {
-    cy.visit('/');
+    cy.visit('/').wait(5000);
   });
 
   it('cy.title() - get the title', () => {
-    // https://on.cypress.io/title
     cy.title().should('include', 'JAC Digital Platform');
   });
 
