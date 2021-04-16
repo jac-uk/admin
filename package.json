@@ -18,7 +18,7 @@
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
     "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
-    "cy:open": "cypress open",
+    "cy:open": "cypress open -C cypress.env.develop.local.json",
     "cy:run": "cypress run -C cypress.env.develop.local.json",
     "cy:run:develop": "cypress run -C cypress.env.develop.json",
     "cy:run:staging": "cypress run -C cypress.env.staging.json",
