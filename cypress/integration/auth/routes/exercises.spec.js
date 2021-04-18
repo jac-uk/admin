@@ -1,7 +1,7 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types="cypress" />
 
-// TODO - Get a random exercise id (that has applications)
+// TODO - Get a random exercise id
 const exerciseId = '3CI2dLS5qaa0iaCKxFBD';
 
 const routes = [
