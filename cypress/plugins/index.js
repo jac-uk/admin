@@ -16,16 +16,32 @@ const admin = require('firebase-admin');
 const cypressFirebasePlugin = require('cypress-firebase').plugin;
 
 /**
- * @type {Cypress.PluginConfig}
+ * @param on - Used to hook into various events Cypress emits
+ * @param config - The resolved Cypress config
+ * @return {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
 
+  on('before:browser:launch', (browser = {}, launchOptions) => {
+
+    // allow Chrome to use more than 64 MB of RAM when running in a Docker container
+    if (browser.name === 'chrome') {
+      launchOptions.args.push('--disable-dev-shm-usage');
+    } else if (browser.name === 'electron') {
+      launchOptions.args['disable-dev-shm-usage'] = true;
+    }
+
+    return launchOptions;
+
+  });
+
+  // add our own config options
   config.ignoreTestFiles = '**/__examples__/*.spec.js';
 
+  // the cypress-firebase plugin extends the normal Cypress config
   const extendedConfig = cypressFirebasePlugin(on, config, admin);
 
   return extendedConfig;
+
 };
