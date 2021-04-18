@@ -38,13 +38,13 @@ context('Routes - Exercises', () => {
     cy.visit('/').wait(3000); // in case the page content takes a while to render on the Browser
   });
 
-  // it ('when logged out', () => {
-  //   cy.logout();
-  //   routes.forEach((route) => {
-  //     cy.visit(route).wait(1000);
-  //     cy.url().should('eq', `${Cypress.config().baseUrl}/sign-in`);
-  //   });
-  // });
+  it ('when logged out', () => {
+    cy.logout();
+    routes.forEach((route) => {
+      cy.visit(route).wait(1000);
+      cy.url().should('eq', `${Cypress.config().baseUrl}/sign-in`);
+    });
+  });
 
   it('when logged in', () => {
     cy.login(Cypress.env('ADMIN_TEST_UID'));
