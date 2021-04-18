@@ -29,6 +29,9 @@ const module = {
             allOk = true;
           }
         }
+        if (user.email === 'admin.testing@judicialappointments.digital') { // Cypress testing account
+          allOk = true;
+        }
         if (allOk) {
           let role = 'staff';
           if (

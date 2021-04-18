@@ -30,3 +30,9 @@ cypress.env.develop.local.json
 cypress.json
 /cypress/videos
 /cypress/screenshots
+
+# Firebase service account is required for testing auth in Cypress
+service-account.json
+service-account.*.json
+serviceAccount.json
+serviceAccount.*.json

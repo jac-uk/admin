@@ -45,6 +45,7 @@
                   v-if="$route.name !== 'sign-in'"
                   href="#"
                   class="govuk-header__link"
+                  data-cy="nav-sign-out-link"
                   @click="signOut"
                 >
                   Sign out
