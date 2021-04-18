@@ -38,7 +38,7 @@ context('Routes - Exercises', () => {
     cy.visit('/').wait(3000); // in case the page content takes a while to render on the Browser
   });
 
-  it ('when logged out', () => {
+  it('when logged out', () => {
     cy.logout();
     routes.forEach((route) => {
       cy.visit(route).wait(1000);
