@@ -62,6 +62,7 @@
     "clone": "^2.1.2",
     "cypress": "^7.1.0",
     "eslint": "^5.16.0",
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-vue": "^5.0.0",
     "firebase": "^7.24.0",
     "firebase-mock": "^2.3.2",
