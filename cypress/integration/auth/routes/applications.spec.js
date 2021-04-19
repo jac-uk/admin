@@ -1,7 +1,19 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types="cypress" />
 
+/*
+import admin from 'firebase-admin';
+import { getDocument } from '../../../support/helpers';
+
 // TODO - Get a random application
+const aYearInMS = 1000 * 60 * 60 * 24 * 365; // 1000 ms x 60 secs x 60 mins x 24 hours x 365 days
+const query = admin.firestore().collection('applications')
+  .where('created_at', '>=', new Date() - parseInt(Math.random() * aYearInMS)) // a random timestamp in the last 12 months
+  .orderBy('created_at')
+  .limit(1);
+const application = getDocument(query);
+console.log(application);
+*/
 const applicationId = 'bqtwu9opOL1yXwSnhesc';
 // TODO - Read the exercise from the application
 const exerciseId = '3CI2dLS5qaa0iaCKxFBD';
