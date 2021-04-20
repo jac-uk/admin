@@ -12,11 +12,11 @@
       />
 
       <RadioGroup
+        v-if="!isTieBreaker"
         id="qualifyingTest-type"
         v-model="qualifyingTest.type"
         label="Type of test"
         required
-        v-if="!isTieBreaker"
       >
         <RadioItem
           v-for="item in testTypes"
