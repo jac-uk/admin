@@ -79,10 +79,10 @@ export default {
   },
   methods: {
     async save() {
-      if (this.isDryRun) {
-        this.qualifyingTest.mode = QUALIFYING_TEST.MODE.DRY_RUN;
-      }
       const data = { ...this.qualifyingTest, ...JSON.parse(this.copiedTest) };
+      if (this.isDryRun) {
+        data.mode = QUALIFYING_TEST.MODE.DRY_RUN;
+      }
       const qualifyingTestId = await this.$store.dispatch('qualifyingTest/create', data);
 
       this.$router.push({
