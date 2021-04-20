@@ -153,33 +153,62 @@
           </ActionButton>
         </div>
         <div v-else>
-          <Select
-            v-if="exercise.applicationRecords"
-            id="exercise-stage"
-            v-model="exerciseStage"
-          >
-            <option value="">
-              Choose applications{{ isTieBreaker ? ' (for EMP candidates)' : '' }}
-            </option>
-            <option
-              v-if="exercise.applicationRecords.review"
-              value="review"
+          <div v-if="exercise.applicationRecords">
+            <Select
+              v-if="!isTieBreaker"
+              id="exercise-stage"
+              v-model="exerciseStage"
             >
-              Review ({{ exercise.applicationRecords.review }})
-            </option>
-            <option
-              v-if="exercise.applicationRecords.shortlisted"
-              value="shortlisted"
+              <option value="">
+                Choose applications
+              </option>
+              <option
+                v-if="exercise.applicationRecords.review"
+                value="review"
+              >
+                Review ({{ exercise.applicationRecords.review }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.shortlisted"
+                value="shortlisted"
+              >
+                Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.selected"
+                value="selected"
+              >
+                Selected ({{ exercise.applicationRecords.selected }})
+              </option>
+            </Select>
+            <Select
+              v-if="isTieBreaker && hasEMPCandidates"
+              id="exercise-stage"
+              v-model="exerciseStage"
             >
-              Shortlisted ({{ exercise.applicationRecords.shortlisted }})
-            </option>
-            <option
-              v-if="exercise.applicationRecords.selected"
-              value="selected"
-            >
-              Selected ({{ exercise.applicationRecords.selected }})
-            </option>
-          </Select>
+              <option value="">
+                Choose applications (for EMP candidates)
+              </option>
+              <option
+                v-if="exercise.applicationRecords.reviewEMP"
+                value="review"
+              >
+                Review ({{ exercise.applicationRecords.reviewEMP }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.shortlistedEMP"
+                value="shortlisted"
+              >
+                Shortlisted ({{ exercise.applicationRecords.shortlistedEMP }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.selectedEMP"
+                value="selected"
+              >
+                Selected ({{ exercise.applicationRecords.selectedEMP }})
+              </option>
+            </Select>
+          </div>
           <div v-else>
             <Banner
               :message="`No applications found`"
@@ -374,6 +403,10 @@ export default {
         return !row.isTieBreaker;
       });
       return qtList.length > 0;
+    },
+    hasEMPCandidates() {
+      const appRecs = this.exercise.applicationRecords;
+      return appRecs.reviewEMP || appRecs.shortlistedEMP || appRecs.selectedEMP;
     },
     isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
