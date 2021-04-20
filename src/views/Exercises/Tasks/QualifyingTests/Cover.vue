@@ -41,6 +41,13 @@
     >
       Create New
     </button>
+    <button
+      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="btnCreateFromClipboard"
+    >
+      Create New from Clipboard
+    </button>
     <div v-else>
       <Banner
         :message="warningMessage"
@@ -100,6 +107,9 @@ export default {
   methods: {
     btnCreate() {
       this.$router.push({ name: 'qualifying-test-new' });
+    },
+    btnCreateFromClipboard() {
+      this.$router.push({ name: 'qualifying-test-new-from-clipboard' });
     },
     getViewName(qualifyingTest) {
       if (
