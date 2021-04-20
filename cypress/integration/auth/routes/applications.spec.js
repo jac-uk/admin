@@ -1,9 +1,10 @@
 /* eslint-disable cypress/no-unnecessary-waiting */
 /// <reference types="cypress" />
 
-// TODO get a random application
+// The IDs below need to be for suitable database records
+// i.e. if the application document has no exerciseId defined all tests will fail anyway
+// because of the bad data!
 const applicationId = 'bqtwu9opOL1yXwSnhesc';
-// TODO - Read the exercise from the application
 const exerciseId = '3CI2dLS5qaa0iaCKxFBD';
 
 const routes = [
@@ -41,10 +42,13 @@ context('Routes - Applications', () => {
 
 });
 
+// The code below is experimental - the idea being to use database records selected at random
 /*
+import { getRandomString } from '../../../support/helpers';
+
 // TODO - Get a random application
 // const 30daysaYearInMS = 1000 * 60 * 60 * 24 * 365; // 1000 ms x 60 secs x 60 mins x 24 hours x 365 days
-const thirtyDatesInMS = 1000 * 60 * 60 * 24 * 30; // 1000 ms x 60 secs x 60 mins x 24 hours x 365 days
+// const thirtyDatesInMS = 1000 * 60 * 60 * 24 * 30; // 1000 ms x 60 secs x 60 mins x 24 hours x 365 days
 const getRoutes = (application) => {
   return [
     `/exercises/${application.exerciseId}/applications/draft`,
@@ -65,15 +69,18 @@ context('Routes - Applications', () => {
 
   it('when logged out', () => {
     cy.logout();
+
+    const randPrefix = getRandomString(1);
     cy.callFirestore('get', 'applications', {
-      where: ['exerciseId', '!=', ''], // just to exclude applications with no exerciseId
+      // where: ['exerciseId', '!=', ''], // just to exclude applications with no exerciseId
       // where: ['createdAt', '>=', new Date() - parseInt(Math.random() * aYearInMS)], // a random timestamp in the last 12 months
       // where: [
         // ['exerciseId', '!=', ''], // just to exclude applications with no exerciseId
         // ['createdAt', '>=', new Date() - parseInt(Math.random() * thirtyDatesInMS)], // a random timestamp in the last 30 days
       // ],
+      where: ['id', '>=', randPrefix],
+      orderByKey: ['id', 'DESC'],
       limit: 1,
-      orderByKey: ['exerciseId', 'DESC'],
     }).then((applications) => {
 
       // console.log('application', applications[0]);
@@ -96,4 +103,5 @@ context('Routes - Applications', () => {
   });
 
 });
+
 */

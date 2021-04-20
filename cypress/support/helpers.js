@@ -1,3 +1,5 @@
+/* eslint-disable func-style */
+
 const firebase = require('firebase-admin');
 const Timestamp = firebase.firestore.Timestamp;
 
@@ -12,6 +14,7 @@ module.exports = {
   isDateInPast, // @TODO we want one set of date & exercise helpers (see actions/shared/converters)
   formatDate,
   getDate,
+  getRandomString,
 };
 
 async function getDocument(query) {
@@ -182,4 +185,13 @@ function formatDate(value) {
     value = toDateString(value);
   }
   return value ? value : '';
+}
+
+function getRandomString(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const result = [];
+  for (let i = 0; i < length; i++) {
+    result.push(chars.charAt(Math.floor(Math.random() * chars.length)));
+  }
+  return result.join('');
 }
