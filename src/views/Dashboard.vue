@@ -18,6 +18,7 @@
             Show my favourites
           </button>
           <router-link
+            data-cy="createExerciseButton"
             ref="linkToNewExercise"
             to="/exercises/new"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
@@ -43,6 +44,7 @@
         </h1>
         <form @submit.prevent="checkForm">
           <Table
+            data-cy="dashboardTable"
             ref="exercisesTable"
             data-key="id"
             :data="records"

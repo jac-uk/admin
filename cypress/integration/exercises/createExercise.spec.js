@@ -8,12 +8,21 @@ context('Dashboard', () => {
     cy.visit('/dashboard').wait(3000); // in case the page content takes a while to render on the Browser
   });
 
+  after(() => {
+    // TODO - delete test data
+  });
+
   it('check page layout', () => {
     cy.get('h1').should('contain', 'Your exercises');
-    cy.get('[data-cy="dashboardTable"]');
-    // TODO - check data table is present
-    // TODO - check CTA buttons are visible
-    // TODO - check there are no console errors
+    cy.get('[data-cy="createExerciseButton"]').click();
+  });
+
+  it ('validate form', () => {
+
+  });
+
+  it ('complete form', () => {
+
   });
 
 });
