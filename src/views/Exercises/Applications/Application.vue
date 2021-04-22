@@ -982,13 +982,45 @@
                   </div>
 
                   <template
-                    v-if="item.qualificationNotComplete && item.details"
+                    v-if="item.type === 'barrister'"
                   >
                     <div
+                      v-if="item.qualificationNotComplete"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
                         Completed pupillage
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li>
+                            No
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
+                    <div
+                      v-if="item.qualificationNotComplete && !item.notCalledToBar"
+                      class="govuk-summary-list__row"
+                    >
+                      <dt
+                        class="govuk-summary-list__key"
+                      >
+                        Date called to bar
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li> {{ item.calledToBarDate | formatDate }}</li>
+                        </ul>
+                      </dd>
+                    </div>
+
+                    <div
+                      v-if="item.notCalledToBar && item.notCalledToBar === true"
+                      class="govuk-summary-list__row"
+                    >
+                      <dt class="govuk-summary-list__key">
+                        Called to bar
                       </dt>
                       <dd class="govuk-summary-list__value">
                         <ul class="govuk-list">
