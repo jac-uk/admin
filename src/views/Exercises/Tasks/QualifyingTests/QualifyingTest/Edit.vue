@@ -97,7 +97,7 @@ export default {
     const defaults = {
       title: null,
       startDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'Start') : this.getTimelineDate(exercise, data.type, 'Start')) || null,
-      endDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'End') : this.getTimelineDate(exercise, data.type, 'StarEndt')) || null,
+      endDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'End') : this.getTimelineDate(exercise, data.type, 'StarEnd')) || null,
       testDuration: null,
       additionalInstructions: [],
       feedbackSurvey: null,
