@@ -5,7 +5,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@/componentsTMP/Table/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 
@@ -70,13 +70,17 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
-      firestoreRef = tableQuery(state.records, firestoreRef, params);
-      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      firestoreRef = await tableQuery(state.records, firestoreRef, params);
+      if (firestoreRef) {
+        return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      } else {
+        commit('records', []);
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
@@ -144,6 +148,9 @@ export default {
     },
     changeSelectedItems(state, items) {
       state.selectedItems = items;
+    },
+    records(state, data) {
+      state.records = data;
     },
   },
 };

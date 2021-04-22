@@ -24,7 +24,11 @@
       :data="responses"
       :page-size="50"
       :columns="tableColumns"
-      :search="['candidate.fullName']"
+      :custom-search="{
+        placeholder: 'Search candidate names',
+        handler: candidateSearch,
+        field: 'candidate.id',
+      }"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -50,8 +54,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@/componentsTMP/Table/Table';
+import TableCell from '@/componentsTMP/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
@@ -72,6 +76,9 @@ export default {
     };
   },
   computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
@@ -166,6 +173,9 @@ export default {
       const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exerciseId });
     },
   },
 };

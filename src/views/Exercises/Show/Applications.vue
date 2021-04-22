@@ -30,7 +30,11 @@
       data-key="id"
       :data="applications"
       :columns="tableColumns"
-      :search="['personalDetails.fullName']"
+      :custom-search="{
+        placeholder: 'Search candidate names',
+        handler: candidateSearch,
+        field: 'userId',
+      }"
       :page-size="50"
       @change="getTableData"
     >
@@ -61,8 +65,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@/componentsTMP/Table/Table';
+import TableCell from '@/componentsTMP/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
@@ -135,6 +139,9 @@ export default {
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
   },
 };

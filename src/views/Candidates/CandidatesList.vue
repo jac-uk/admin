@@ -5,19 +5,14 @@
     >
       Candidates
     </h1>
-    <input
-      v-model="searchTerm"
-      type="text"
-      @change="getCandidateIds"
-    >
-    <pre>{{ candidateIds }}</pre>
     <Table
       data-key="id"
       :data="tableData"
       :page-size="50"
       :columns="tableColumns"
       :custom-search="{
-        handler: getCandidateIds,
+        placeholder: 'Search candidate names',
+        handler: candidateSearch,
         field: 'id',
       }"
       @change="getTableData"
@@ -34,10 +29,7 @@
           {{ new Date(row.created) | formatDate('long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          <span v-if="row.applications && row.applications.applied">
-            {{ row.applications.applied }}
-          </span>
-          <span v-else>0</span>
+          {{ countApplications(row) }}
         </TableCell>
       </template>
     </Table>
@@ -45,8 +37,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@/componentsTMP/Table/Table';
+import TableCell from '@/componentsTMP/Table/TableCell';
 
 export default {
   components: {
@@ -58,10 +50,8 @@ export default {
       tableColumns: [
         { title: 'Name', sort: 'fullName' },
         { title: 'Account created on', sort: 'created', direction: 'desc', default: true },
-        { title: 'Number of Applications', sort: 'applications.applied', direction: 'desc' },
+        { title: 'Number of Applications', sort: 'computed.totalApplications', direction: 'desc' },
       ],
-      searchTerm: '',
-      candidateIds: [],
     };
   },
   computed: {
@@ -73,9 +63,15 @@ export default {
     getTableData(params) {
       this.$store.dispatch('candidates/bind', params);
     },
-    async getCandidateIds() {
-      const candidates = await this.$store.dispatch('candidates/search', this.searchTerm);
-      return candidates.map(candidate => candidate.id);
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    countApplications(candidate) {
+      if (candidate && candidate.computed && candidate.computed.totalApplications) {
+        return candidate.computed.totalApplications;
+      } else {
+        return 0;
+      }
     },
   },
 };

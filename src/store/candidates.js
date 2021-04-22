@@ -1,33 +1,43 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@/componentsTMP/Table/tableQuery';
 
 const collection = firestore.collection('candidates');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.records, collection, params);
-      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
+      const firestoreRef = await tableQuery(state.records, collection, params);
+      if (firestoreRef) {
+        return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      } else {
+        commit('records', []);
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    search: async (context, searchTerm) => {
+    search: async (context, { searchTerm, exerciseId }) => {
       const results = [];
       if (searchTerm) {
-        const snap = await collection
-          .where('search', 'array-contains', searchTerm.toLowerCase())
-          .get();
+        let query = collection.where('computed.search', 'array-contains', searchTerm.toLowerCase());
+        if (exerciseId) {
+          query = query.where(`computed.exercisesMap.${exerciseId}`, 'in', ['applied', 'draft', 'withdrawn']);
+        }
+        const snap = await query.limit(10).get();
         snap.forEach(doc => {
           const row = doc.data();
           row.id = doc.id;
           results.push(row);
         });
       }
-      return results;
+      if (results.length) { // only interested in candidate ids
+        return results.map(candidate => candidate.id);
+      } else {
+        return [];
+      }
     },
     // @TODO tidy up these binds
     bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
@@ -52,6 +62,11 @@ export default {
     savePersonalDetails: async (context, { data, id }) => {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.update(data);
+    },
+  },
+  mutations: {
+    records(state, data) {
+      state.records = data;
     },
   },
   state: {
