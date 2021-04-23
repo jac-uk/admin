@@ -1032,6 +1032,7 @@
                     </div>
 
                     <div
+                      v-if="item.qualificationNotComplete"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
