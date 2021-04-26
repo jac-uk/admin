@@ -1016,7 +1016,7 @@
                     </div>
 
                     <div
-                      v-if="item.notCalledToBar && item.notCalledToBar === true"
+                      v-if="item.notCalledToBar"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
