@@ -1880,9 +1880,9 @@
                 <dt class="govuk-summary-list__key">
                   {{ item.title }}
                   <!-- eslint-disable -->
-                  <p
+                  <!-- <p
                     v-html="exercise.selectionCriteria[index].text"
-                  />
+                  /> -->
                   <!-- eslint-enable -->
                 </dt>
                 <dd class="govuk-summary-list__value">
