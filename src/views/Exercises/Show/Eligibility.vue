@@ -84,10 +84,12 @@
               >
                 {{ criterion.title }}
               </p>
-              <p>
-                {{ criterion.text }}
-              </p>
+              <!-- eslint-disable -->
+              <p
+                v-html="criterion.text"
+              />
             </li>
+          <!-- eslint-enable -->
           </ul>
           <span v-else-if="exercise.aSCApply === false">
             Does not apply.
