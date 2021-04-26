@@ -67,7 +67,10 @@
           </ul>
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="hasIndependentAssessments"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Independent Assessors
         </dt>
@@ -122,6 +125,28 @@
           <ul class="govuk-list">
             <li
               v-for="file in exercise.downloads.pensionsInformation"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Skills and Abilities Criteria	
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!showSkillsAndAbilitiesCriteria">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.skillsAndAbilitiesCriteria"
               :key="file.file"
             >
               <DownloadLink
@@ -197,6 +222,7 @@ export default {
       exerciseId: 'id',
       //exercise: 'record',
       isEditable: 'isEditable',
+      hasIndependentAssessments: 'hasIndependentAssessments',
     }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
@@ -219,6 +245,18 @@ export default {
         this.exercise.downloads &&
         this.exercise.downloads.competencyFramework &&
         this.exercise.downloads.competencyFramework.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showSkillsAndAbilitiesCriteria() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.skillsAndAbilitiesCriteria &&
+        this.exercise.downloads.skillsAndAbilitiesCriteria.length
       ) {
         return true;
       } else {

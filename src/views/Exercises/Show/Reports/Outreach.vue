@@ -22,6 +22,7 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
+                :disabled="showTabs ? '' : disabled"
                 @click="exportData(activeTab)"
               >
                 Export stage data
@@ -29,6 +30,7 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
+                :disabled="showTabs ? '' : disabled"
                 @click="exportData()"
               >
                 Export all data
@@ -93,8 +95,8 @@
         Summary report coming soon
       </p>
 
-      <div 
-        v-else 
+      <div
+        v-else
       >
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
@@ -117,8 +119,8 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <tr 
-              v-for="(answer, key, answerIndex) in reduceReport(report[activeTab].outreach)" 
+            <tr
+              v-for="(answer, key, answerIndex) in reduceReport(report[activeTab].outreach)"
               :key="answerIndex"
               class="govuk-table__row"
             >

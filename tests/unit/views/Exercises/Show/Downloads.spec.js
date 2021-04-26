@@ -43,6 +43,7 @@ const createTestSubject = () => {
           id: jest.fn(),
           data: () => mockData,
           isEditable: mockIsApproved,
+          hasIndependentAssessments: () => true,
         },
       },
     },
@@ -88,6 +89,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
           pensionsInformation: [],
           competencyFramework: [],
           welshTranslation: [],
+          skillsAndAbilitiesCriteria: [],
         },
       };
 
@@ -103,14 +105,14 @@ describe('@/views/Exercises/Show/Downloads', () => {
         const wrapper = createTestSubject();
         const lists = wrapper.findAll('dt');
 
-        expect(lists.length).toEqual(7);
+        expect(lists.length).toEqual(Object.keys(exercise.downloads).length);
       });
 
       it('renders message for each item with no downloads available', () => {
         mockData.mockReturnValue(exercise);
         const wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > span');
-        expect(lists.length).toEqual(7);
+        expect(lists.length).toEqual(Object.keys(exercise.downloads).length);
       });
 
       it('renders download links for every non-empty list', () => {
@@ -128,7 +130,7 @@ describe('@/views/Exercises/Show/Downloads', () => {
         const wrapper = createTestSubject();
         const lists = wrapper.findAll('dd > ul');
 
-        expect(lists.length).toEqual(7);
+        expect(lists.length).toEqual(Object.keys(exercise.downloads).length);
         expect(lists.at(0).findAll(DownloadLink).length).toEqual(1);
       });
     });

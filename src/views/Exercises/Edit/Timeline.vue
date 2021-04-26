@@ -197,32 +197,34 @@
           required
         />
 
-        <h2 class="govuk-heading-l">
-          Independent Assessors
-        </h2>
-        <DateInput
-          id="contact-independent-assessors"
-          v-model="exercise.contactIndependentAssessors"
-          label="Contact independent assessors"
-          hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
-          :disabled="assessmentsInitialised"
-          required
-        />
-        <DateInput
-          id="independent-assessments-return-date"
-          v-model="exercise.independentAssessmentsReturnDate"
-          label="Independent Assessments return date"
-          hint="An asessor can submit late after this date, up until the (optional) hard limit below."
-          :disabled="assessmentsInitialised"
-          required
-        />
-        <DateInput
-          id="independent-assessments-hard-limit"
-          v-model="exercise.independentAssessmentsHardLimitDate"
-          label="Independent Assessments hard limit"
-          hint="An assessor cannot submit late after 23:59 on this date."
-          :disabled="assessmentsInitialised"
-        />
+        <div v-if="hasIndependentAssessments">
+          <h2 class="govuk-heading-l">
+            Independent Assessors
+          </h2>
+          <DateInput
+            id="contact-independent-assessors"
+            v-model="exercise.contactIndependentAssessors"
+            label="Contact independent assessors"
+            hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
+            :disabled="assessmentsInitialised"
+            required
+          />
+          <DateInput
+            id="independent-assessments-return-date"
+            v-model="exercise.independentAssessmentsReturnDate"
+            label="Independent Assessments return date"
+            hint="An asessor can submit late after this date, up until the (optional) hard limit below."
+            :disabled="assessmentsInitialised"
+            required
+          />
+          <DateInput
+            id="independent-assessments-hard-limit"
+            v-model="exercise.independentAssessmentsHardLimitDate"
+            label="Independent Assessments hard limit"
+            hint="An assessor cannot submit late after 23:59 on this date."
+            :disabled="assessmentsInitialised"
+          />
+        </div>
 
         <h2 class="govuk-heading-l">
           Eligibility SCC
@@ -328,6 +330,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
@@ -395,6 +398,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('exerciseDocument', {
+      hasIndependentAssessments: 'hasIndependentAssessments',
+    }),
     hasScenarioQT() {
       return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('scenario-test-qualifying-test');
     },
