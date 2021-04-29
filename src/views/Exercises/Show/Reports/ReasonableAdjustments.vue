@@ -37,7 +37,8 @@
 
     <div
       v-if="report != null"
-      class="govuk-grid-row">
+      class="govuk-grid-row"
+    >
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
