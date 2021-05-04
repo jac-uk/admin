@@ -356,18 +356,29 @@ export default {
       );
     },
     testQuestionsJson() {
-      const clipboardQT = { ...this.qualifyingTest };
+      const {
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      } = this.qualifyingTest;
 
-      delete clipboardQT.counts;
-      delete clipboardQT.created; 
-      delete clipboardQT.endDate;
-      if (clipboardQT.invitedEmails) delete clipboardQT.invitedEmails;
-      delete clipboardQT.lastUpdated;
-      if (clipboardQT.mode) delete clipboardQT.mode;
-      if (clipboardQT.relationship) delete clipboardQT.relationship;
-      delete clipboardQT.startDate;
-      delete clipboardQT.status;
-      delete clipboardQT.vacancy;
+      const clipboardQT = { 
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      };
 
       const returnValue = JSON.stringify(clipboardQT);
       return returnValue;
