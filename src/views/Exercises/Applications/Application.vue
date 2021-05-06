@@ -719,11 +719,14 @@
                   class="govuk-summary-list__value"
                 >
                   <p
-                    v-for="item in application.locationPreferences"
+                    v-for="(item, index) in application.locationPreferences"
                     :key="item.name"
                     class="govuk-body"
                   >
-                    {{ item }}
+                    <strong>
+                      {{ `${index + 1}:` }}
+                    </strong>
+                    {{ `${item}` }}
                   </p>
                 </dd>
               </dl>
