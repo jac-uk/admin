@@ -461,15 +461,16 @@ export default {
     },
     async useSearch(searchTerm) {
       this.searchTerm = searchTerm;
-      if (searchTerm) {
+      if (this.searchTerm) { this.searchTerm = this.searchTerm.trim(); }
+      if (this.searchTerm) {
         this.orderBy = '';
       } else {
         this.orderBy = this.defaultState.orderBy;
       }
       if (this.defaultState.customSearch) {
         this.customSearchValues = [];
-        if (searchTerm) {
-          const handlerResults = await this.defaultState.customSearch.handler(searchTerm);
+        if (this.searchTerm) {
+          const handlerResults = await this.defaultState.customSearch.handler(this.searchTerm);
           if (handlerResults.length) {
             this.customSearchValues = handlerResults;
           }
