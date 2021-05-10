@@ -219,7 +219,7 @@
 
       <ActionButton
         v-if="isInitialised"
-        :disabled="false"
+        :disabled="!isUserAdded"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
@@ -335,6 +335,9 @@ export default {
     },
     isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
+    },
+    isUserAdded() {
+      return this.qualifyingTest.counts.initialised > 0;
     },
     isActivated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
