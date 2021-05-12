@@ -1385,6 +1385,7 @@
                         v-for="task in item.tasks"
                         :key="task.name"
                       >
+                        {{ task.name }}
                         <p class="govuk-body govuk-!-margin-bottom-0">
                           {{ task | lookup }}
                         </p>
@@ -1394,6 +1395,108 @@
                         >
                           {{ item.otherTasks }}
                         </p>
+                        <div
+                          v-if="task == 'judicial-functions'"
+                          class="govuk-body govuk-!-margin-bottom-0"
+                        >
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Legal Experience:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Date:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Category of Law:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Category of Law:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Time engaged in this activity:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Judicial Office:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Previous Judicial Office Type:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Judicial Appointment:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Nature of Appointment:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Circuit or Region:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Jurisdiction:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Tribunal:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              #VALUE
+                            </dd>
+                          </div>
+                        </div>
+                        <hr>
                       </li>
                     </ul>
                     <div v-else>
