@@ -7,7 +7,17 @@
     </div>
     <div class="govuk-grid-column-one-third text-right">
       <button
-        class="govuk-button govuk-button--secondary"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="downloadReport"
+      >
+        <span
+          v-if="downloadingReport"
+          class="spinner-border spinner-border-sm"
+        />
+        Export All Data
+      </button>
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
         <span
@@ -206,6 +216,7 @@ import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -221,6 +232,7 @@ export default {
       tableColumns: [
         { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
       ],
+      downloadingReport: false,
     };
   },
   computed: {
@@ -238,6 +250,17 @@ export default {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
+    },
+    async downloadReport() {
+      this.downloadingReport = true;
+      const reportData = await functions.httpsCallable('generateCharacterCheckReport')({ exerciseId: this.exercise.id });
+      const title = `Character Check Report - ${this.exercise.ref}`;
+      downloadXLSX(reportData, {
+        title,
+        sheetName: title,
+        filename: `${title}.xlsx`,
+      });
+      this.downloadingReport = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
