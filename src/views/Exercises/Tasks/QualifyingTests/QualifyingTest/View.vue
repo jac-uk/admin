@@ -137,11 +137,19 @@
         <div v-if="isDryRun">
           <ActionButton
             type="primary"
+            :disabled="!isDryRunCandidates"
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
           >
             Create dry run tests
           </ActionButton>
+          <router-link
+            v-if="!isDryRunCandidates"
+            :to="{ name: 'qualifying-test-dry-run' }"
+            class="govuk-hint"
+          >
+            Please add emails before creating
+          </router-link>
         </div>
         <div v-else-if="isMopUp">
           <ActionButton
@@ -326,6 +334,9 @@ export default {
     },
     isDryRun() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
+    },
+    isDryRunCandidates() {
+      return this.qualifyingTest && this.qualifyingTest.invitedEmails && this.qualifyingTest.invitedEmails.length > 0;
     },
     isMopUp() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'mop-up';
