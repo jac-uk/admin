@@ -88,8 +88,8 @@
               <p
                 v-html="criterion.text"
               />
+              <!-- eslint-enable -->
             </li>
-          <!-- eslint-enable -->
           </ul>
           <span v-else-if="exercise.aSCApply === false">
             Does not apply.
