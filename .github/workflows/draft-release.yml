@@ -1,0 +1,37 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  draft_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update release notes
+        id: release_drafter
+        uses: release-drafter/release-drafter@v5
+        with:
+          config-name: release-drafter.yml
+          disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
+
+      - uses: actions/checkout@v2
+
+      - name: Check package version
+        id: package_version
+        run: echo "::set-output name=current_version::$(node -p "require('./package.json').version")"
+
+      - name: Bump package version
+        if: steps.package_version.outputs.current_version != steps.release_drafter.outputs.tag_name
+        run: |
+          echo "Bump package version from ${{ steps.package_version.outputs.current_version }} to ${{ steps.release_drafter.outputs.tag_name }}"
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+          npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
+          git push
