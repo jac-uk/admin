@@ -19,7 +19,7 @@ jobs:
           config-name: release-drafter.yml
           disable-autolabeler: true
         env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_KEY }}
 
       - uses: actions/checkout@v2
 
