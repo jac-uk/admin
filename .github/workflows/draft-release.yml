@@ -35,3 +35,6 @@ jobs:
           git config --local user.name "$(git log --format='%an' HEAD^!)"
           npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
