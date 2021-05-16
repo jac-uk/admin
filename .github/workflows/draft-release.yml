@@ -22,6 +22,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
 
       - name: Check package version
         id: package_version
@@ -35,6 +37,4 @@ jobs:
           git config --local user.name "$(git log --format='%an' HEAD^!)"
           npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
