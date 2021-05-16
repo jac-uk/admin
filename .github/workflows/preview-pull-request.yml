@@ -1,9 +1,11 @@
-# Builds and deploys to firebase hosting preview channel.
-
 name: Preview pull request
-'on': pull_request
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
 jobs:
-  preview:
+
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,7 +17,6 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
@@ -23,31 +24,93 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - uses: actions/setup-node@master
+        with:
+          node-version: '10'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Lint
         run: npm run lint-ci
       - name: Test
         run: npm run test-ci
+
+  check_preview:
+    runs-on: ubuntu-latest
+    needs: test
+    outputs:
+      environment: ${{ env.environment }}
+    steps:
+      - uses: khan/pull-request-comment-trigger@master
+        id: check_preview_develop
+        with:
+          trigger: 'PREVIEW:DEVELOP'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - if: steps.check_preview_develop.outputs.triggered == 'true'
+        run: echo "environment=develop" >> $GITHUB_ENV
+
+      - uses: khan/pull-request-comment-trigger@master
+        id: check_preview_staging
+        with:
+          trigger: 'PREVIEW:STAGING'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - if: steps.check_preview_staging.outputs.triggered == 'true'
+        run: echo "environment=staging" >> $GITHUB_ENV
+
+      - uses: khan/pull-request-comment-trigger@master
+        id: check_preview_production
+        with:
+          trigger: 'PREVIEW:PRODUCTION'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - if: steps.check_preview_production.outputs.triggered == 'true'
+        run: echo "environment=production" >> $GITHUB_ENV
+
+  preview:
+    runs-on: ubuntu-latest
+    needs: check_preview
+    if: ${{ needs.check_preview.outputs.environment == 'develop' || needs.check_preview.outputs.environment == 'staging' || needs.check_preview.outputs.environment == 'production' }}
+    environment:
+      name: ${{ needs.check_preview.outputs.environment }}
+    env:
+      environment: ${{ needs.check_preview.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10'
+      - name: Installing project dependencies
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file
         run: |
-          touch .env.develop
-          echo "NODE_ENV=production" > .env.develop
-          echo "VUE_APP_FIREBASE_API_KEY=${{ secrets.DEVELOP_FIREBASE_API_KEY }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.DEVELOP_FIREBASE_AUTH_DOMAIN }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_DATABASE_URL=${{ secrets.DEVELOP_FIREBASE_DATABASE_URL }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_PROJECT_ID=${{ secrets.DEVELOP_FIREBASE_PROJECT_ID }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.DEVELOP_FIREBASE_STORAGE_BUCKET }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.DEVELOP_FIREBASE_MESSAGING_SENDER_ID }}" >> .env.develop
-          echo "VUE_APP_FIREBASE_APP_ID=${{ secrets.DEVELOP_FIREBASE_APP_ID }}" >> .env.develop
-          cat .env.develop
+          touch .env.${{ env.environment }}
+          echo "NODE_ENV=production" > .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
+          cat .env.${{ env.environment }}
       - name: Building the project
-        run: npm run build-develop
+        run: npm run build-${{ env.environment }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.DEVELOP_FIREBASE_SERVICE_ACCOUNT }}'
-          projectId: digital-platform-develop
-          target: develop-admin-app
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          target: '${{ env.environment }}-admin-app'
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
