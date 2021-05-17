@@ -255,7 +255,14 @@ export default {
       this.downloadingReport = true;
       const reportData = await functions.httpsCallable('generateCharacterCheckReport')({ exerciseId: this.exercise.id });
       const title = `Character Check Report - ${this.exercise.ref}`;
-      downloadXLSX(reportData, {
+      const data = [];
+      data.push(reportData.data.headers.map(header => header.title));
+      // get rows
+      reportData.data.rows.forEach((row) => {
+        data.push(Object.values(row).map(cell => cell));
+      });
+
+      downloadXLSX(data, {
         title,
         sheetName: title,
         filename: `${title}.xlsx`,
