@@ -1,4 +1,4 @@
-name: Preview pull request
+name: On pull request
 on:
   pull_request:
     types: [opened, reopened, synchronize, edited]
