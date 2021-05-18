@@ -1404,7 +1404,7 @@
                               Legal Experience:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.legalExperience }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1412,7 +1412,7 @@
                               Date:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.date | formatDate }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1420,15 +1420,7 @@
                               Category of Law:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
-                            </dd>
-                          </div>
-                          <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                              Category of Law:
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.categoryOfLaw }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1436,7 +1428,16 @@
                               Time engaged in this activity:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              <ul
+                                class="govuk-list"
+                              >
+                                <li v-if="item.judicialFunctions.timeEngagedEnd">
+                                  {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
+                                </li>
+                                <li v-else>
+                                  {{ item.judicialFunctions.timeEngagedStart | formatDate }} — current
+                                </li>
+                              </ul>
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1444,23 +1445,26 @@
                               Judicial Office:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.judicialOffice | toYesNo }}
                             </dd>
                           </div>
-                          <div class="govuk-summary-list__row">
+                          <div 
+                            v-if="item.judicialFunctions.judicialOffice"
+                            class="govuk-summary-list__row"
+                          >
                             <dt class="govuk-summary-list__key">
                               Previous Judicial Office Type:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.judicialOfficeType }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
-                              Judicial Appointment:
+                              Judicial Appointment Date:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.judicialAppointmentDate | formatDate }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1468,7 +1472,7 @@
                               Nature of Appointment:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.natureOfAppointment }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1476,7 +1480,7 @@
                               Circuit or Region:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.circuitOrRegion }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1484,7 +1488,7 @@
                               Jurisdiction:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.jurisdiction }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1492,7 +1496,7 @@
                               Tribunal:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              #VALUE
+                              {{ item.judicialFunctions.tribunal }}
                             </dd>
                           </div>
                         </div>
