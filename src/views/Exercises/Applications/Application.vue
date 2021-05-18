@@ -356,9 +356,8 @@
               >
                 Equality and diversity information
               </h2>
-
               <dl
-                v-if="Object.keys(application.equalityAndDiversitySurvey).length"
+                v-if="application.equalityAndDiversitySurvey"
                 class="govuk-summary-list"
               >
                 <div class="govuk-summary-list__row">
@@ -1396,7 +1395,8 @@
                           {{ item.otherTasks }}
                         </p>
                         <div
-                          v-if="task == 'judicial-functions'"
+                          v-if="task == 'judicial-functions' 
+                            && item.judicialFunctions"
                           class="govuk-body govuk-!-margin-bottom-0"
                         >
                           <div class="govuk-summary-list__row">
