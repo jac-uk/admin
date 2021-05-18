@@ -26,3 +26,4 @@ Include screen grabs, notes etc.
 
 ---
 PREVIEW:DEVELOP
+_can be OFF, DEVELOP or STAGING_
