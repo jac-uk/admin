@@ -253,9 +253,17 @@ export default {
     },
     async downloadReport() {
       this.downloadingReport = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
       const reportData = await functions.httpsCallable('generateCharacterCheckReport')({ exerciseId: this.exercise.id });
-      const title = `Character Check Report - ${this.exercise.ref}`;
+      const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
+      if (reportData.data.rows.length === 0) {
+        this.downloadingReport = false;
+        return; //Abort if no applications or data.
+      }
       data.push(reportData.data.headers.map(header => header.title));
       // get rows
       reportData.data.rows.forEach((row) => {
