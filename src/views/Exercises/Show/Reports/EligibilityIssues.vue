@@ -37,8 +37,8 @@
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
-        :search="['personalDetails.fullName']"
-        :page-size="50"
+        :search="['candidate.fullName']"
+        :page-size="10"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -126,7 +126,7 @@ export default {
       generatingExport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
+        { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
     };
   },
@@ -134,9 +134,6 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    // applicationRecords() {
-    //   return this.$store.state.candidateApplications.records;
-    // },
   },
   destroyed() {
     if (this.unsubscribe) {
@@ -154,6 +151,7 @@ export default {
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
         .where('flags.eligibilityIssues', '==', true);
+      firestoreRef = tableQuery(null, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
@@ -162,9 +160,6 @@ export default {
           });
           this.applicationRecords = applicationRecords;
         });
-      // @TODO fix the tableQuery logic as currently doesn't work
-      firestoreRef = tableQuery(null, firestoreRef, params);
-
     },
 
     async gatherReportData() {
