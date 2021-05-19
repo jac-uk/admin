@@ -12,9 +12,9 @@ jobs:
   test_build_deploy:
     runs-on: ubuntu-latest
     environment:
-      name: develop
+      name: production
     env:
-      environment: develop
+      environment: production
     steps:
       - uses: actions/checkout@v2
         with:

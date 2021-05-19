@@ -70,9 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [draft_release,test]
     environment:
-      name: develop
+      name: staging
     env:
-      environment: develop
+      environment: staging
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules

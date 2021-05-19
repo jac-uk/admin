@@ -8,9 +8,9 @@ jobs:
   deploy_to_production:
     runs-on: ubuntu-latest
     environment:
-      name: develop
+      name: production
     env:
-      environment: develop
+      environment: production
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
