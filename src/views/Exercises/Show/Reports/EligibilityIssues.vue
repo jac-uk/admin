@@ -151,7 +151,7 @@ export default {
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
         .where('flags.eligibilityIssues', '==', true);
-      firestoreRef = tableQuery(null, firestoreRef, params);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
