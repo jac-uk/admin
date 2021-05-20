@@ -58,9 +58,10 @@
     "firebase": "^7.24.0",
     "firebase-mock": "^2.3.2",
     "jest-extended": "^0.11.5",
-    "sass": "^1.32.5",
-    "sass-loader": "^7.3.1",
+    "sass": "^1.32.13",
+    "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^4.44.1"
   }
 }
