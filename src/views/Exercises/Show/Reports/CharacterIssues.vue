@@ -7,7 +7,17 @@
     </div>
     <div class="govuk-grid-column-one-third text-right">
       <button
-        class="govuk-button govuk-button--secondary"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="downloadReport"
+      >
+        <span
+          v-if="downloadingReport"
+          class="spinner-border spinner-border-sm"
+        />
+        Export All Data
+      </button>
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
         <span
@@ -25,9 +35,9 @@
       -->
       <Table
         data-key="id"
-        :data="applications"
+        :data="applicationRecords"
         :columns="tableColumns"
-        :search="['personalDetails.fullName']"
+        :search="['candidate.fullName']"
         :page-size="10"
         @change="getTableData"
       >
@@ -36,7 +46,7 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ row.referenceNumber }} <span v-if="row.personalDetails">{{ row.personalDetails.fullName }}</span>
+                  {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
                 </div>
               </div>
               <div class="govuk-grid-column-one-third text-right">
@@ -49,7 +59,7 @@
               </div>
             </div>
             <div
-              v-for="(issue, index) in row.processing.characterIssues"
+              v-for="(issue, index) in row.issues.characterIssues"
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
@@ -66,7 +76,7 @@
                     Candidate has been cautioned or convicted of a criminal offence
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.criminalOffenceDetails"
+                    :events="row.issues.characterInformation.criminalOffenceDetails"
                   />
                 </div>
 
@@ -78,7 +88,7 @@
                     Candidate has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.declaredBankruptOrIVADetails"
+                    :events="row.issues.characterInformation.declaredBankruptOrIVADetails"
                   />
                 </div>
 
@@ -90,7 +100,7 @@
                     Candidate has been subject to complaints or disciplinary action, or been asked to resign from a position
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.diciplinaryActionOrAskedToResignDetails"
+                    :events="row.issues.characterInformation.diciplinaryActionOrAskedToResignDetails"
                   />
                 </div>
                 <div
@@ -101,7 +111,7 @@
                     Candidate has been disqualified from driving, or convicted for driving under the influence of drink or drugs
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.drivingDisqualificationDrinkDrugsDetails"
+                    :events="row.issues.characterInformation.drivingDisqualificationDrinkDrugsDetails"
                   />
                 </div>
                 <div
@@ -112,7 +122,7 @@
                     Candidate has endorsements on their licence, or received any motoring fixed-penalty notices in the last 4 years
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
+                    :events="row.issues.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
                   />
                 </div>
                 <div
@@ -123,7 +133,7 @@
                     Candidate has been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.involvedInProfessionalMisconductDetails"
+                    :events="row.issues.characterInformation.involvedInProfessionalMisconductDetails"
                   />
                 </div>
                 <div
@@ -134,7 +144,7 @@
                     Candidate has filed late tax returns or been fined by HMRC
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.lateTaxReturnOrFinedDetails"
+                    :events="row.issues.characterInformation.lateTaxReturnOrFinedDetails"
                   />
                 </div>
                 <div
@@ -145,7 +155,7 @@
                     Candidate has received a non-motoring penalty notice in the last 4 years
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
+                    :events="row.issues.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
                   />
                 </div>
                 <div
@@ -156,7 +166,7 @@
                     Candidate has declared other issues we should know about
                   </p>
                   <EventRenderer
-                    :events="row.characterInformation.otherCharacterIssuesDetails"
+                    :events="row.issues.characterInformation.otherCharacterIssuesDetails"
                   />
                 </div>
                 <div
@@ -206,6 +216,7 @@ import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -215,12 +226,13 @@ export default {
   },
   data () {
     return {
-      applications: [],
+      applicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
+        { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
+      downloadingReport: false,
     };
   },
   computed: {
@@ -239,20 +251,47 @@ export default {
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
+    async downloadReport() {
+      this.downloadingReport = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({ exerciseId: this.exercise.id });
+      const title = `Character Check Report - ${this.exercise.referenceNumber}`;
+      const data = [];
+      if (reportData.data.rows.length === 0) {
+        this.downloadingReport = false;
+        return; //Abort if no applications or data.
+      }
+      data.push(reportData.data.headers.map(header => header.title));
+      // get rows
+      reportData.data.rows.forEach((row) => {
+        data.push(Object.values(row).map(cell => cell));
+      });
+
+      downloadXLSX(data, {
+        title,
+        sheetName: title,
+        filename: `${title}.xlsx`,
+      });
+      this.downloadingReport = false;
+    },
     getTableData(params) {
       let firestoreRef = firestore
-        .collection('applications')
-        .where('exerciseId', '==', this.exercise.id)
-        .where('status', '==', 'applied')
-        .where('processing.flags.characterIssues', '==', true);
+        .collection('applicationRecords')
+        .where('exercise.id', '==', this.exercise.id)
+        .where('flags.characterIssues', '==', true)
+        .where('status', '!=', 'withdrewApplication')
+        .orderBy('status');
       firestoreRef = tableQuery(this.applications, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
-          const applications = [];
+          const applicationRecords = [];
           snap.forEach((doc) => {
-            applications.push(vuexfireSerialize(doc));
+            applicationRecords.push(vuexfireSerialize(doc));
           });
-          this.applications = applications;
+          this.applicationRecords = applicationRecords;
         });
     },
   },
