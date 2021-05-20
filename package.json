@@ -3,6 +3,7 @@
   "version": "0.63.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "serve": "vue-cli-service serve --mode develop",
     "build": "vue-cli-service build --mode develop;",
     "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
@@ -67,5 +68,8 @@
   },
   "peerDependencies": {
     "postcss": "8.2.15"
+  },
+  "resolutions": {
+    "lodash.merge": "4.6.2"
   }
 }
