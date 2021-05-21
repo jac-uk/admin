@@ -208,8 +208,8 @@
                 {{ questionLabel }} {{ index + 1 }}
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="responses[index].started"
-                  :end="responses[index].completed"
+                  :start="responses[index] && responses[index].started"
+                  :end="responses[index] && responses[index].completed"
                 />
               </dt>
               <dd class="govuk-summary-list__value">
@@ -439,6 +439,10 @@ export default {
         returnQuestions = this.response.testQuestions.questions.map((item, index) => {
           return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
         });
+      }
+      // #1077 get questions from the QT when copied over
+      if (returnQuestions.length === 0) {
+        returnQuestions = this.qualifyingTest.testQuestions && this.qualifyingTest.testQuestions.questions;
       }
       return returnQuestions;
     },
