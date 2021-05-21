@@ -259,6 +259,14 @@
         Create Mop Up Test
       </button>
 
+      <button
+        ref="btnCopyToClipboard"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnCopyToClipboard"
+      >
+        Copy QT to clipboard
+      </button>
+
       <ActionButton
         v-if="isInitialised"
         type="secondary"
@@ -358,6 +366,34 @@ export default {
         this.isCompleted
       );
     },
+    testQuestionsJson() {
+      const {
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      } = this.qualifyingTest;
+
+      const clipboardQT = { 
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      };
+
+      const returnValue = JSON.stringify(clipboardQT);
+      return returnValue;
+    },
   },
   watch: {
     exerciseStage: function (valueNow, valueBefore) {
@@ -427,7 +463,21 @@ export default {
           qualifyingTestId: newTestId,
         },
       });
+    },
+    btnCopyToClipboard() {
+      this.$refs.btnCopyToClipboard.innerText = 'Copying to clipboard ...';
+      this.$refs.btnCopyToClipboard.disabled = 'disabled';
+      const el = document.createElement('textarea');
+      el.value = this.testQuestionsJson;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
 
+      setTimeout(() => {
+        this.$refs.btnCopyToClipboard.innerText = 'QT Copied to clipboard';
+        this.$refs.btnCopyToClipboard.disabled = false;
+      },3000);
     },
   },
 };
