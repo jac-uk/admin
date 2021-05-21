@@ -2114,6 +2114,11 @@
             :application-id="applicationId"
           />
         </div>
+        <div v-if="activeTab == 'characterchecks'">
+          <CharacterChecks
+            :application="application"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -2142,6 +2147,7 @@ import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalCo
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
+import CharacterChecks from '@/components/CharacterChecks/CharacterChecks';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import {
   isLegal,
@@ -2176,6 +2182,7 @@ export default {
     FurtherInformationSummary,
     CharacterDeclarationSummary,
     CharacterInformationSummaryV1,
+    CharacterChecks,
   },
   data() {
     return {
@@ -2199,6 +2206,10 @@ export default {
         {
           ref: 'agency',
           title: 'Agency report',
+        },
+        {
+          ref: 'characterchecks',
+          title: 'Character checks',
         },
       ],
       activeTab: 'full',

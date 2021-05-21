@@ -6,7 +6,6 @@
 
     <Banner
       :message="message"
-      :status="status"
     />
 
     <dl
@@ -46,7 +45,7 @@
           <span
             v-if="exercise.characterChecks"
           >
-            {{ exercise.characterChecks.HMRC | toYesNo }}
+            {{ hmrcCheckRequired | toYesNo }}
           </span>
         </dd>
         <dd class="govuk-summary-list__actions">
@@ -61,45 +60,131 @@
       </div>
     </dl>
 
-    <ActionButton
-      type="primary"
-      :disabled="!selectedItems.length"
-      @click="sendRequests()"
-    >
-      Send requests
-    </ActionButton>
+    <TabsList
+      ref="tabs"
+      class="print-none"
+      :tabs="tabs"
+      :active-tab.sync="activeTab"
+    />
 
-    <Table
-      data-key="id"
-      :data="applicationRecords"
-      :columns="tableColumns"
-      multi-select
-      :selection.sync="selectedItems"
-      :page-size="50"
-      @change="getTableData"
+    <div
+      v-if="activeTab == 'notrequested'"
+      class="application-details"
     >
-      <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
-          {{ row.application.referenceNumber }}
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
-          {{ row.candidate.fullName }}
-        </TableCell>
-        <TableCell :title="tableColumns[2].title">
-          <span
-            v-if="row.characterChecks"
-          >
-            {{ row.characterChecks.status | lookup }}
-          </span>
-        </TableCell>
-      </template>
-    </Table>
+      <ActionButton
+        type="primary"
+        :disabled="!selectedItems.length"
+        @click="sendRequests()"
+      >
+        Send requests
+      </ActionButton>
+
+      <Table
+        data-key="id"
+        :data="applicationRecordsCharacterChecksNotRequested"
+        :columns="tableColumns"
+        :search="['candidate.fullName']"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        :filters="[
+          {
+            title: 'Stage',
+            field: 'stage',
+            type: 'checkbox',
+            options: exerciseStages,
+          },
+        ]"
+        @change="getApplicationRecordsCharacterChecksNotRequested"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.candidate.fullName }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.stage }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.characterChecks.status }}
+          </TableCell>
+        </template>
+      </Table>
+      <p
+        v-if="!applicationRecordsCharacterChecksNotRequested.length"
+        class="govuk-body govuk-!-margin-top-6"
+      >
+        No applications found.
+      </p>
+    </div>
+
+    <div
+      v-if="activeTab == 'requested'"
+    >
+      <ActionButton
+        type="primary"
+        :disabled="!selectedItems.length"
+        @click="sendReminders()"
+      >
+        Send reminders
+      </ActionButton>
+
+      <Table
+        data-key="id"
+        :data="applicationRecordsCharacterChecksRequested"
+        :columns="tableColumns"
+        :search="['candidate.fullName']"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        :filters="[
+          {
+            title: 'Stage',
+            field: 'stage',
+            type: 'checkbox',
+            options: exerciseStages,
+          },
+        ]"
+        @change="getApplicationRecordsCharacterChecksRequested"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.candidate.fullName }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.stage }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.characterChecks.status }}
+          </TableCell>
+        </template>
+      </Table>
+      <p
+        v-if="!applicationRecordsCharacterChecksRequested.length"
+        class="govuk-body govuk-!-margin-top-6"
+      >
+        No applications found.
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-import { functions } from '@/firebase';
-
+//import { functions } from '@/firebase';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
@@ -111,15 +196,28 @@ export default {
     ActionButton,
     Table,
     TableCell,
+    TabsList,
   },
   data(){
     return {
+      tabs: [
+        {
+          ref: 'notrequested',
+          title: 'Not requested',
+        },
+        {
+          ref: 'requested',
+          title: 'Requested',
+        },
+      ],
+      activeTab: 'notrequested',
       message: null,
-      status: 'success',
       selectedItems: [],
+      exerciseStages: ['shortlisted', 'selected', 'recommended', 'handover'],
       tableColumns: [
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Stage' },
         { title: 'Status' },
       ],
     };
@@ -128,11 +226,14 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationRecords() {
-      return this.$store.state.stageShortlisted.records;
+    applicationRecordsCharacterChecksRequested() {
+      return this.$store.state.characterChecks.checksRequestedRecords;
     },
-    totalApplicationRecords() {
-      return this.exercise.applicationRecords.shortlisted || 0;
+    applicationRecordsCharacterChecksNotRequested() {
+      return this.$store.state.characterChecks.checksNotRequestedRecords;
+    },
+    hmrcCheckRequired() {
+      return this.exercise.characterChecks.HMRC;
     },
   },
   async created() {
@@ -142,30 +243,53 @@ export default {
   },
   methods: {
     async sendRequests() {
-      try {
-        const response = await functions.httpsCallable('sendCharacterCheckRequests')({
-          items: this.selectedItems,
-        });
+      this.message = 'Request has been sent';
+      setTimeout(() => {
+        this.message = '';
+      },3000);
 
-        if (response.result === false) {
-          this.setMessage('Failed to send requests.', 'warning');
-        } else {
-          this.setMessage(`Sent requests to ${this.selectedItems.length} candidates.`);
-        }
-      }
-      catch (error) {
-        this.setMessage('Failed to send requests.', 'warning');
-      }
+    //   try {
+    //     const response = await functions.httpsCallable('sendCharacterCheckRequests')({
+    //       items: this.selectedItems,
+    //     });
+    //
+    //     if (response.result === false) {
+    //       this.setMessage('Failed to send requests.', 'warning');
+    //     } else {
+    //       this.setMessage(`Sent requests to ${this.selectedItems.length} candidates.`);
+    //     }
+    //   }
+    //   catch (error) {
+    //     this.setMessage('Failed to send requests.', 'warning');
+    //   }
+    // },
+    // setMessage(message, status = 'success') {
+    //   this.status = status;
+    //   this.message = message;
+    // },
     },
-    setMessage(message, status = 'success') {
-      this.status = status;
-      this.message = message;
+    sendReminders () {
+      this.message = 'Reminder has been sent';
+      setTimeout(() => {
+        this.message = '';
+      },3000);
     },
-    getTableData(params) {
+    getApplicationRecordsCharacterChecksNotRequested(params) {
       this.$store.dispatch(
-        'stageShortlisted/bind',
+        'characterChecks/bind',
         {
           exerciseId: this.exercise.id,
+          requested: false,
+          ...params,
+        }
+      );
+    },
+    getApplicationRecordsCharacterChecksRequested(params) {
+      this.$store.dispatch(
+        'characterChecks/bind',
+        {
+          exerciseId: this.exercise.id,
+          requested: true,
           ...params,
         }
       );

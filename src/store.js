@@ -9,6 +9,7 @@ import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
 import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
+import applicationRecord from '@/store/applicationRecord';
 import applications from '@/store/applications';
 import application from '@/store/application';
 import assessment from '@/store/assessment';
@@ -22,6 +23,7 @@ import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
 import stageRecommended from '@/store/stage/recommended';
 import stageShortlisted from '@/store/stage/shortlisted';
+import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
@@ -42,6 +44,7 @@ const store = new Vuex.Store({
     exerciseCreateJourney,
     exerciseDocument,
     applications,
+    applicationRecord,
     application,
     assessment,
     assessments,
@@ -62,6 +65,7 @@ const store = new Vuex.Store({
     qualifyingTestReports,
     qualifyingTestReport,
     panels,
+    characterChecks,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',
