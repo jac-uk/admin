@@ -69,6 +69,10 @@
       <div
         v-if="hasInitialisedAssessments"
       >
+        <Banner
+          :message="sendErrors"
+          status="warning"
+        />
         <ActionButton
           v-if="canCancelAssessments"
           class="govuk-!-margin-right-3"
@@ -298,6 +302,7 @@ export default {
         { title: 'Status' },
         { title: 'Actions' },
       ],
+      sendErrors: '',
     };
   },
   computed: {
@@ -402,16 +407,30 @@ export default {
       await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id });
     },
     async sendRequestsToAll() {
-      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
+      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
+      this.processSendAssessmentResult(result);
     },
     async sendRemindersToAll() {
-      await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id });
+      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id });
+      this.processSendAssessmentResult(result);
     },
     async resendRequest(assessmentId) {
-      await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
+      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
+      this.processSendAssessmentResult(result);
     },
     async sendReminder(assessmentId) {
-      await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
+      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
+      this.processSendAssessmentResult(result);
+    },
+    async processSendAssessmentResult(result) {
+      if (result.data.errors) {
+        const csvAssessors = result.data.errors.map(err => `(${err.applicationRef}) ${err.assessor.fullName} - ${err.assessor.email}`)
+          .join(', \n');
+        this.sendErrors = `No emails were sent because the following assessors have invalid email addresses: ${csvAssessors}`;
+        window.scrollTo(0, 350); // make sure the warning message is visible
+      } else {
+        this.sendErrors = '';
+      }
     },
     async testRequest(assessmentId) {
       await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
