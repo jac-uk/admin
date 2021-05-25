@@ -2,54 +2,57 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 
+import ExerciseDetails from '@/views/Exercise/ExerciseDetails/Index';
+import ExerciseDetailsOverview from '@/views/Exercise/ExerciseDetails/Overview/Index';
+
 // Edit views
-import ExerciseNew from '@/views/Exercises/New';
-import ExerciseEdit from '@/views/Exercises/Edit';
-import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
-import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
-import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
-import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
-import ExerciseEditSummary from '@/views/Exercises/Edit/Summary';
-import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
-import ExerciseEditName from '@/views/Exercises/Edit/EditName';
-import ExerciseEditAssessmentOptions from '@/views/Exercises/Edit/AssessmentOptions';
-import ExerciseEditWorkingPreferences from '@/views/Exercises/Edit/WorkingPreferences';
-import ExerciseEditDownloads from '@/views/Exercises/Edit/Downloads';
-import ExerciseEditInvitations from '@/views/Exercises/Edit/Invitations';
+import ExerciseNew from '@/views/Exercise/New';
+import ExerciseEditContacts from '@/views/Exercise/Edit/Contacts';
+import ExerciseEditShortlisting from '@/views/Exercise/Edit/Shortlisting';
+import ExerciseEditTimeline from '@/views/Exercise/Edit/Timeline';
+import ExerciseEditEligibility from '@/views/Exercise/Edit/Eligibility';
+import ExerciseEditSummary from '@/views/Exercise/Edit/Summary';
+import ExerciseEditVacancy from '@/views/Exercise/Edit/Vacancy';
+import ExerciseEditName from '@/views/Exercise/Edit/EditName';
+import ExerciseEditAssessmentOptions from '@/views/Exercise/Edit/AssessmentOptions';
+import ExerciseEditWorkingPreferences from '@/views/Exercise/Edit/WorkingPreferences';
+import ExerciseEditDownloads from '@/views/Exercise/Edit/Downloads';
+import ExerciseEditInvitations from '@/views/Exercise/Edit/Invitations';
+import ExerciseEditApplicationContent from '@/views/Exercise/Edit/ApplicationContent';
 
 // Show views
-import ExerciseShow from '@/views/Exercises/Show';
-import ExerciseShowOverview from '@/views/Exercises/Show/Overview';
-import ExerciseShowContacts from '@/views/Exercises/Show/Contacts';
-import ExerciseShowTimeline from '@/views/Exercises/Show/Timeline';
-import ExerciseShowShortlisting from '@/views/Exercises/Show/Shortlisting';
-import ExerciseShowSummary from '@/views/Exercises/Show/Summary';
-import ExerciseShowVacancy from '@/views/Exercises/Show/Vacancy';
-import ExerciseShowEligibility from '@/views/Exercises/Show/Eligibility';
-import ExerciseShowWorkingPreferences from '@/views/Exercises/Show/WorkingPreferences';
-import ExerciseShowAssessmentOptions from '@/views/Exercises/Show/AssessmentOptions';
-import ExerciseShowDownloads from '@/views/Exercises/Show/Downloads';
-import ExerciseShowApplications from '@/views/Exercises/Show/Applications';
-import ExerciseShowInvitations from '@/views/Exercises/Show/Invitations';
+import ExerciseShow from '@/views/Exercise/Index';
+import ExerciseShowOverview from '@/views/Exercise/Show/Overview';
+import ExerciseShowContacts from '@/views/Exercise/Show/Contacts';
+import ExerciseShowTimeline from '@/views/Exercise/Show/Timeline';
+import ExerciseShowShortlisting from '@/views/Exercise/Show/Shortlisting';
+import ExerciseShowSummary from '@/views/Exercise/Show/Summary';
+import ExerciseShowVacancy from '@/views/Exercise/Show/Vacancy';
+import ExerciseShowEligibility from '@/views/Exercise/Show/Eligibility';
+import ExerciseShowWorkingPreferences from '@/views/Exercise/Show/WorkingPreferences';
+import ExerciseShowAssessmentOptions from '@/views/Exercise/Show/AssessmentOptions';
+import ExerciseShowDownloads from '@/views/Exercise/Show/Downloads';
+import ExerciseShowApplications from '@/views/Exercise/Show/Applications';
+import ExerciseShowInvitations from '@/views/Exercise/Show/Invitations';
 
 // Application
-import ExerciseApplication from '@/views/Exercises/Applications/Application';
+import ExerciseApplication from '@/views/Exercise/Applications/Application';
 
 // Stages
-import ExerciseStages from '@/views/Exercises/Stages';
-import ExerciseStagesReviewList from '@/views/Exercises/Stages/ReviewList';
-import ExerciseStagesReviewEdit from '@/views/Exercises/Stages/ReviewEdit';
-import ExerciseStagesSelectedList from '@/views/Exercises/Stages/SelectedList';
-import ExerciseStagesSelectedEdit from '@/views/Exercises/Stages/SelectedEdit';
-import ExerciseStagesSelectedBack from '@/views/Exercises/Stages/SelectedBack';
-import ExerciseStagesRecommendedList from '@/views/Exercises/Stages/RecommendedList';
-import ExerciseStagesRecommendedEdit from '@/views/Exercises/Stages/RecommendedEdit';
-import ExerciseStagesRecommendedBack from '@/views/Exercises/Stages/RecommendedBack';
-import ExerciseStagesHandoverList from '@/views/Exercises/Stages/HandoverList';
-import ExerciseStagesHandoverBack from '@/views/Exercises/Stages/HandoverBack';
-import ExerciseStagesShortlistedList from '@/views/Exercises/Stages/ShortlistedList';
-import ExerciseStagesShortlistedEdit from '@/views/Exercises/Stages/ShortlistedEdit';
-import ExerciseStagesShortlistedBack from '@/views/Exercises/Stages/ShortlistedBack';
+import ExerciseStages from '@/views/Exercise/Stages';
+import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
+import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit';
+import ExerciseStagesSelectedList from '@/views/Exercise/Stages/SelectedList';
+import ExerciseStagesSelectedEdit from '@/views/Exercise/Stages/SelectedEdit';
+import ExerciseStagesSelectedBack from '@/views/Exercise/Stages/SelectedBack';
+import ExerciseStagesRecommendedList from '@/views/Exercise/Stages/RecommendedList';
+import ExerciseStagesRecommendedEdit from '@/views/Exercise/Stages/RecommendedEdit';
+import ExerciseStagesRecommendedBack from '@/views/Exercise/Stages/RecommendedBack';
+import ExerciseStagesHandoverList from '@/views/Exercise/Stages/HandoverList';
+import ExerciseStagesHandoverBack from '@/views/Exercise/Stages/HandoverBack';
+import ExerciseStagesShortlistedList from '@/views/Exercise/Stages/ShortlistedList';
+import ExerciseStagesShortlistedEdit from '@/views/Exercise/Stages/ShortlistedEdit';
+import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBack';
 
 // Candidates
 import Candidates from '@/views/Candidates/Candidates';
@@ -57,63 +60,55 @@ import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
 
 // Tasks
-import ExerciseTasks from '@/views/Exercises/Tasks';
-import ExerciseTasksIndependentAssessments from '@/views/Exercises/Tasks/IndependentAssessments';
-import ExerciseTasksCharacterChecks from '@/views/Exercises/Tasks/CharacterChecks';
-import ExerciseTasksCharacterChecksEdit from '@/views/Exercises/Tasks/CharacterChecksEdit';
-import ExerciseTasksPanels from '@/views/Exercises/Tasks/Panels';
-import ExerciseTasksPanelsNew from '@/views/Exercises/Tasks/PanelsNew';
-import ExerciseTasksPanelsView from '@/views/Exercises/Tasks/PanelsView';
-import ExerciseTasksSift from '@/views/Exercises/Tasks/Sift';
-import ExerciseTasksSelectionDays from '@/views/Exercises/Tasks/SelectionDays';
+import ExerciseTasks from '@/views/Exercise/Tasks';
+import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
+import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
+import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
+import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
+import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
+import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
+import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
 
 // Temp
-import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover';
+import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 
 // QTs
-import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
-import QualifyingTestNew from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/New';
-import QualifyingTestNewFromClipboard from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
-import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
-import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
-import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
-import QualifyingTestDryRun from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/DryRun';
-import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
-import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
-import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
+import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
+import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
+import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
+import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
+import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun';
+import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 
 // Report views
-import ExerciseShowReports from '@/views/Exercises/Show/Reports';
-import ExerciseShowReportsIndex from '@/views/Exercises/Show/Reports/Index';
-import ExerciseShowReportsDiversity from '@/views/Exercises/Show/Reports/Diversity';
-import ExerciseShowReportsOutreach from '@/views/Exercises/Show/Reports/Outreach';
-import ExerciseShowReportsReasonableAdjustments from '@/views/Exercises/Show/Reports/ReasonableAdjustments';
-import ExerciseShowReportsEligibilityIssues from '@/views/Exercises/Show/Reports/EligibilityIssues';
-import ExerciseShowReportsCharacterIssues from '@/views/Exercises/Show/Reports/CharacterIssues';
-import ExerciseShowReportsAgency from '@/views/Exercises/Show/Reports/Agency';
-import ExerciseShowReportsHandover from '@/views/Exercises/Show/Reports/Handover';
-import ExerciseReportsCharacterIssues from '@/views/Exercises/Reports/CharacterIssues';
-import ExerciseReportsEligibilityIssues from '@/views/Exercises/Reports/EligibilityIssues';
-import ExerciseReportsCharacterChecks from '@/views/Exercises/Reports/CharacterChecks';
-import ExerciseReportsDiversityDashboard from '@/views/Exercises/Reports/DiversityDashboard';
-import ExerciseReportsEducationAndCareerHistory from '@/views/Exercises/Reports/EducationAndCareerHistory';
-import ExerciseReportsJOHandoverReport from '@/views/Exercises/Reports/JOHandoverReport';
-import ExerciseReportsStatutoryConsultationTable from '@/views/Exercises/Reports/StatutoryConsultationTable';
-import ExerciseReportsReasonableAdjustments from '@/views/Exercises/Reports/ReasonableAdjustments';
-import QualifyingTestReports from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReports';
-import QualifyingTestReportCreate from '@/views/Exercises/Show/Reports/QualifyingTestReports/Create';
-import QualifyingTestReport from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport';
-import QualifyingTestReportEdit from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
-import QualifyingTestReportView from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
-import QualifyingTestReportViewScore from '@/views/Exercises/Show/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
+import ExerciseShowReports from '@/views/Exercise/Show/Reports';
+import ExerciseShowReportsIndex from '@/views/Exercise/Show/Reports/Index';
+import ExerciseShowReportsDiversity from '@/views/Exercise/Show/Reports/Diversity';
+import ExerciseShowReportsOutreach from '@/views/Exercise/Show/Reports/Outreach';
+import ExerciseShowReportsReasonableAdjustments from '@/views/Exercise/Show/Reports/ReasonableAdjustments';
+import ExerciseShowReportsEligibilityIssues from '@/views/Exercise/Show/Reports/EligibilityIssues';
+import ExerciseShowReportsCharacterIssues from '@/views/Exercise/Show/Reports/CharacterIssues';
+import ExerciseShowReportsAgency from '@/views/Exercise/Show/Reports/Agency';
+import ExerciseShowReportsHandover from '@/views/Exercise/Show/Reports/Handover';
+import QualifyingTestReports from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReports';
+import QualifyingTestReportCreate from '@/views/Exercise/Show/Reports/QualifyingTestReports/Create';
+import QualifyingTestReport from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport';
+import QualifyingTestReportEdit from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
+import QualifyingTestReportView from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
+import QualifyingTestReportViewScore from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
 
-import Dashboard from '@/views/Dashboard';
-import ExercisesExport from '@/views/Exercises/Export';
+import Exercises from '@/views/Exercises';
+import ExercisesExport from '@/views/Exercise/Export';
 import SignIn from '@/views/SignIn';
 import EventsList from '@/views/EventsList';
 import NotificationsList from '@/views/NotificationsList';
@@ -128,15 +123,15 @@ const router = new Router({
   routes: [
     {
       path: '*',
-      redirect: '/dashboard',
+      redirect: '/exercises',
     },
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: Dashboard,
+      path: '/exercises',
+      name: 'exercises',
+      component: Exercises,
       meta: {
         requiresAuth: true,
-        title: 'Dashboard',
+        title: 'Exercises',
       },
     },
     {
@@ -158,7 +153,7 @@ const router = new Router({
       },
     },
     {
-      path: '/exercises/new',
+      path: '/exercise/new',
       name: 'exercise-new',
       component: ExerciseNew,
       meta: {
@@ -167,7 +162,7 @@ const router = new Router({
       },
     },
     {
-      path: '/exercises/export',
+      path: '/exercise/export',
       name: 'exercises-export',
       component: ExercisesExport,
       meta: {
@@ -186,9 +181,53 @@ const router = new Router({
     },
     // sandbox component ^^
     {
-      path: '/exercises/:id',
+      path: '/candidates',
+      component: Candidates,
+      children: [
+        {
+          path: '',
+          component: CandidatesList,
+          name: 'candidates-list',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidate | List',
+          },
+        },
+        {
+          path: ':id',
+          component: CandidatesView,
+          name: 'candidates-view',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidate | View',
+          },
+        },
+      ],
+    },
+    {
+      path: '/exercise/:id',
       component: ExerciseShow,
       children: [
+        {
+          path: 'details',
+          component: ExerciseDetails,
+          name: 'exercise-details',
+          meta: {
+            requiresAuth: true,
+            title: 'Exercise Details',
+          },
+          children: [
+            {
+              path: '',
+              component: ExerciseDetailsOverview,
+              name: 'exercise-details-overview',
+              meta: {
+                requiresAuth: true,
+                title: 'Overview | Exercise Details',
+              },
+            },
+          ],
+        },
         {
           path: '',
           component: ExerciseShowOverview,
@@ -196,6 +235,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Exercise Details | Overview',
+          },
+        },
+        {
+          path: 'application-content',
+          component: ExerciseEditApplicationContent,
+          name: 'exercise-edit-application-content',
+          meta: {
+            requiresAuth: true,
+            title: 'Application content',
           },
         },
         {
@@ -780,32 +828,8 @@ const router = new Router({
       ],
     },
     {
-      path: '/candidates',
-      component: Candidates,
-      children: [
-        {
-          path: '',
-          component: CandidatesList,
-          name: 'candidates-list',
-          meta: {
-            requiresAuth: true,
-            title: 'Candidate | List',
-          },
-        },
-        {
-          path: ':id',
-          component: CandidatesView,
-          name: 'candidates-view',
-          meta: {
-            requiresAuth: true,
-            title: 'Candidate | View',
-          },
-        },
-      ],
-    },
-    {
-      path: '/exercises/:id/edit',
-      component: ExerciseEdit,
+      path: '/exercise/:id/edit',
+      component: ExerciseShow,
       meta: {
         requiresAuth: true,
         title: 'Edit An Exercise',
@@ -913,88 +937,6 @@ const router = new Router({
       ],
     },
     {
-      path: '/exercises/:id/report-directory',
-      component: ExerciseShowReports,
-      meta: {
-        requiresAuth: true,
-        title: 'View exercise reports ',
-      },
-      children: [
-        {
-          path: 'character-issues',
-          component: ExerciseReportsCharacterIssues,
-          name: 'exercise-reports-character-issues',
-          meta: {
-            requiresAuth: true,
-            title: 'Character Issues',
-          },
-        },
-        {
-          path: 'character-checks',
-          component: ExerciseReportsCharacterChecks,
-          name: 'exercise-reports-character-checks',
-          meta: {
-            requiresAuth: true,
-            title: 'Character Checks',
-          },
-        },
-        {
-          path: 'diversity-dashboard',
-          component: ExerciseReportsDiversityDashboard,
-          name: 'exercise-reports-diversity-dashboard',
-          meta: {
-            requiresAuth: true,
-            title: 'Diversity Dashboard',
-          },
-        },
-        {
-          path: 'eligibility-issues',
-          component: ExerciseReportsEligibilityIssues,
-          name: 'exercise-reports-eligibility-issues',
-          meta: {
-            requiresAuth: true,
-            title: 'Eligibility Issues',
-          },
-        },
-        {
-          path: 'education-and-career-history',
-          component: ExerciseReportsEducationAndCareerHistory,
-          name: 'exercise-reports-education-and-career-history',
-          meta: {
-            requiresAuth: true,
-            title: 'Education and Career History',
-          },
-        },
-        {
-          path: 'jo-handover-report',
-          component: ExerciseReportsJOHandoverReport,
-          name: 'exercise-reports-jo-handover-report',
-          meta: {
-            requiresAuth: true,
-            title: 'JO Handover Report',
-          },
-        },
-        {
-          path: 'statutory-consultation-table',
-          component: ExerciseReportsStatutoryConsultationTable,
-          name: 'exercise-reports-statutory-consultation-table',
-          meta: {
-            requiresAuth: true,
-            title: 'Statutory Consultation Table',
-          },
-        },
-        {
-          path: 'reasonable-adjustments',
-          component: ExerciseReportsReasonableAdjustments,
-          name: 'exercise-reports-reasonable-adjustments',
-          meta: {
-            requiresAuth: true,
-            title: 'Reasonable Adjustments',
-          },
-        },
-      ],
-    },
-    {
       path: '/errors/exercise-not-found',
       name: 'exercise-not-found',
       component: ExerciseNotFound,
@@ -1022,7 +964,7 @@ const router = new Router({
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters['auth/isSignedIn'];
         if (isSignedIn) {
-          return next({ name: 'dashboard' });
+          return next({ name: 'exercises' });
         }
 
         return next();

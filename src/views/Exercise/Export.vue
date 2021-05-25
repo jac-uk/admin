@@ -40,7 +40,7 @@ export default {
   },
   created() {
     if (this.selectedItems.length === 0) {
-      this.$router.push({ name: 'dashboard' });
+      this.$router.push({ name: 'exercises' });
     }
   },
   methods: {

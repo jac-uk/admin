@@ -1,4 +1,4 @@
-import ExerciseNew from '@/views/Exercises/New';
+import ExerciseNew from '@/views/Exercise/New';
 import { shallowMount } from '@vue/test-utils';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
@@ -20,7 +20,7 @@ const mockRouter = {
   push: jest.fn(),
 };
 
-xdescribe('views/Exercises/New', () => {
+xdescribe('views/Exercise/New', () => {
   let wrapper;
   beforeEach(() => {
     mockStore.dispatch.mockClear();

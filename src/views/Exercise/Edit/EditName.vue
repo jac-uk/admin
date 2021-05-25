@@ -1,12 +1,14 @@
 <template>
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
-      <div class="govuk-grid-column-two-thirds">
-        <BackLink />
+      <div class="govuk-grid-column-full">
+        <div class="text-right">
+          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
+        </div>
 
-        <h1 class="govuk-heading-l">
+        <h2 class="govuk-heading-l">
           Update exercise name
-        </h1>
+        </h2>
 
         <TextField
           id="exercise-name"

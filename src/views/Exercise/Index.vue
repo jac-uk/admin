@@ -8,7 +8,7 @@
       <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
-            class="govuk-back-link"
+            class="govuk-back-link govuk-!-margin-top-0"
             :to="goBack"
           >
             Back
@@ -17,13 +17,14 @@
         <div class="govuk-grid-column-three-quarters">
           <div class="float-right govuk-!-margin-0">
             <AddToFavouritesButton
+              class="govuk-!-margin-bottom-0"
               :in-favourites="isInFavourites"
               @click="updateFavourites"
             />
           </div>
         </div>
       </div>
-      <div class="govuk-grid-row clearfix govuk-!-margin-bottom-8">
+      <div class="govuk-grid-row clearfix govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
@@ -38,43 +39,39 @@
           </router-link>
         </div>
       </div>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter print-none">
-          <Navigation
-            :pages="mainNavigation"
-            title="Exercise"
-          />
-          <Navigation
-            v-if="exercise.applicationsCount || hasOpened"
-            :pages="applicationStatusNavigation"
-            title="Applications"
-          />
-          <Navigation
-            :pages="exerciseTasksNavigation"
-            title="Tasks"
-          />
-          <Navigation
-            v-if="exercise.applicationRecords"
-            :pages="applicationStageNavigation"
-            title="Stages"
-          />
-          <Navigation
-            v-if="exercise.applicationRecords"
-            :pages="applicationReportNavigation"
-            title="Reports"
-          />
-        </div>
-        <div class="govuk-grid-column-three-quarters print-full-width">
-          <RouterView />
-        </div>
-      </div>
+      <RouterView
+        :sub-navigation="subNavigation"
+        :exercise="exercise"
+      />
+     <!-- <Navigation
+        :pages="mainNavigation"
+        title="Exercise"
+      />
+      <Navigation
+        v-if="exercise.applicationsCount || hasOpened"
+        :pages="applicationStatusNavigation"
+        title="Applications"
+      />
+      <Navigation
+        :pages="exerciseTasksNavigation"
+        title="Tasks"
+      />
+      <Navigation
+        v-if="exercise.applicationRecords"
+        :pages="applicationStageNavigation"
+        title="Stages"
+      />
+      <Navigation
+        v-if="exercise.applicationRecords"
+        :pages="applicationReportNavigation"
+        title="Reports"
+      /> -->
     </div>
   </div>
 </template>
 
 <script>
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';
 import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import { mapState, mapGetters } from 'vuex';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
@@ -82,13 +79,19 @@ import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 export default {
   components: {
     LoadingMessage,
-    Navigation,
     AddToFavouritesButton,
   },
   data() {
     return {
       loaded: false,
       loadFailed: false,
+      subNavigation: [
+        { name: 'exercise-details', title: 'Exercise' },
+        { name: 'applications', title: 'Applications' },
+        { name: 'tasks', title: 'Tasks' },
+        { name: 'stages', title: 'Stages' },
+        { name: 'reports', title: 'Reports' },
+      ],
     };
   },
   computed: {
@@ -112,54 +115,6 @@ export default {
         return true;
       }
       return false;
-    },
-    mainNavigation() {
-      const result = [
-        {
-          title: 'Overview',
-          name: 'exercise-show-overview',
-        },
-        {
-          title: 'Website listing',
-          name: 'exercise-show-summary',
-        },
-        {
-          title: 'Vacancy information',
-          name: 'exercise-show-vacancy',
-        },
-        {
-          title: 'Contacts',
-          name: 'exercise-show-contacts',
-        },
-        {
-          title: 'Timeline',
-          name: 'exercise-show-timeline',
-        },
-        {
-          title: 'Shortlisting',
-          name: 'exercise-show-shortlisting',
-        },
-        {
-          title: 'Eligibility information',
-          name: 'exercise-show-eligibility',
-        },
-        {
-          title: 'Working preferences',
-          name: 'exercise-show-working-preferences',
-        },
-        {
-          title: 'Assessment options',
-          name: 'exercise-show-assessment-options',
-        },
-        {
-          title: 'Exercise downloads',
-          name: 'exercise-show-downloads',
-        },
-      ];
-      if (this.exercise.inviteOnly) {
-        result.splice(1, 0, { title: 'Exercise invitations',name: 'exercise-show-invitations' });
-      }
-      return result;
     },
     applicationStatusNavigation(){
       return [
@@ -307,7 +262,7 @@ export default {
     goBack() {
       if (this.$route.name === 'exercise-show-overview') {
         return {
-          name: 'dashboard',
+          name: 'exercises',
         };
       } else {
         return {
