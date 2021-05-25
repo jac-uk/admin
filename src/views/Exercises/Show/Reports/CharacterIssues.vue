@@ -14,7 +14,7 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export All Data
+        Export Data
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
@@ -25,6 +25,65 @@
           class="spinner-border spinner-border-sm"
         /> Refresh
       </button>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <Select
+        id="exercise-stage"
+        v-model="exerciseStage"
+      >
+        <option value="all">
+          All applications
+        </option>
+        <option
+          v-if="exercise.applicationRecords.review"
+          value="review"
+        >
+          Review
+        </option>
+        <option
+          v-if="exercise.applicationRecords.shortlisted"
+          value="shortlisted"
+        >
+          Shortlisted
+        </option>
+        <option
+          v-if="exercise.applicationRecords.selected"
+          value="selected"
+        >
+          Selected
+        </option>
+        <option
+          v-if="exercise.applicationRecords.recommended"
+          value="recommended"
+        >
+          Recommended
+        </option>
+        <option
+          v-if="exercise.applicationRecords.handover"
+          value="handover"
+        >
+          Handover
+        </option>
+      </Select>
+      <Select
+        v-if="availableStatuses && availableStatuses.length > 0"
+        id="availableStatuses"
+        v-model="candidateStatus"
+      >
+        <option
+          value="all"
+        >
+          All
+        </option>
+        <option
+          v-for="item in availableStatuses"
+          :key="item"
+          :value="item"
+        >
+          {{ item | lookup }}
+        </option>
+      </Select>
     </div>
 
     <div class="govuk-grid-column-full">
@@ -183,8 +242,8 @@
                 </div>
               </div>
               <div class="govuk-grid-column-one-third">
-                <select
-                  class="govuk-select"
+                <Select
+                  id="issue-action"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -199,7 +258,7 @@
                   <option value="discuss">
                     Discuss
                   </option>
-                </select>
+                </Select>
               </div>
             </div>
           </TableCell>
@@ -217,15 +276,21 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
+    EventRenderer,
+    Select,
     Table,
     TableCell,
-    EventRenderer,
   },
   data () {
     return {
+      exerciseStage: 'all',
+      candidateStatus: 'all',
+      availableStatuses: null,
       applicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
@@ -238,6 +303,29 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+  },
+  watch: {
+    exerciseStage: function (valueNow) {
+      // populate the status dropdown, for the chosen stage
+      if (valueNow === EXERCISE_STAGE.REVIEW) {
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
+        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
+        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
+        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
+      } else { // handover
+        this.availableStatuses = [];
+      }
+      // reset the status dropdown to 'All'
+      this.candidateStatus = 'all';
+
+      this.getTableData(this.$route.params);
+    },
+    candidateStatus: function() {
+      this.getTableData(this.$route.params);
     },
   },
   destroyed() {
@@ -257,7 +345,11 @@ export default {
         this.downloadingReport = false;
         return; //Abort if no ref
       }
-      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({ exerciseId: this.exercise.id });
+      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+      });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
       if (reportData.data.rows.length === 0) {
@@ -281,9 +373,15 @@ export default {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
-        .where('flags.characterIssues', '==', true)
-        .where('status', '!=', 'withdrewApplication')
-        .orderBy('status');
+        .where('flags.characterIssues', '==', true);
+      if (this.exerciseStage !== 'all') {
+        firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+      }
+      if (this.candidateStatus !== 'all') {
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+      } else {
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
+      }
       firestoreRef = tableQuery(this.applications, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
