@@ -23,7 +23,7 @@
               </li>
               <li class="govuk-header__navigation-item">
                 <RouterLink
-                  :to="{ name: 'dashboard' }"
+                  :to="{ name: 'exercises' }"
                   class="govuk-header__link"
                 >
                   Exercises

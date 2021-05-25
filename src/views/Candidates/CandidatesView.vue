@@ -93,7 +93,7 @@ import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersS
 import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1.vue';
 
 export default {
   components: {

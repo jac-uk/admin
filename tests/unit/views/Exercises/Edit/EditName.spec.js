@@ -1,4 +1,4 @@
-import EditName from '@/views/Exercises/Edit/EditName';
+import EditName from '@/views/Exercise/Edit/EditName';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -30,7 +30,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Edit/EditName', () => {
+xdescribe('@/views/Exercise/Edit/EditName', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();

@@ -319,7 +319,7 @@ export default {
     },
     approve() {
       this.$store.dispatch('qualifyingTest/approve');
-      // #799 On Approval of the QT send back to the dashboard
+      // #799 On Approval of the QT send back to the exercises
       this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnGoBack() {

@@ -1,4 +1,4 @@
-import Applications from '@/views/Exercises/Show/Applications';
+import Applications from '@/views/Exercise/Show/Applications';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Vuex from 'vuex';
@@ -126,7 +126,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Show/Applications', () => {
+describe('@/views/Exercise/Show/Applications', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

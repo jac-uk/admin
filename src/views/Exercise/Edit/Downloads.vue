@@ -1,12 +1,13 @@
 <template>
   <div class="govuk-grid-row">
-    <div
-      class="govuk-grid-column-two-thirds"
-    >
-      <BackLink />
-      <h1 class="govuk-heading-xl">
+    <div class="govuk-grid-column-full">
+      <div class="text-right">
+        <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
+      </div>
+
+      <h2 class="govuk-heading-l">
         Downloads
-      </h1>
+      </h2>
 
       <ErrorSummary :errors="errors" />
 

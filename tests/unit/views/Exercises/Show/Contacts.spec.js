@@ -1,4 +1,4 @@
-import Contacts from '@/views/Exercises/Show/Contacts';
+import Contacts from '@/views/Exercise/Show/Contacts';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -35,7 +35,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
+xdescribe('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

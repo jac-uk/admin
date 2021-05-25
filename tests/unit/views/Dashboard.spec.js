@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Dashboard from '@/views/Dashboard';
+import Exercises from '@/views/Exercises';
 import Router from 'vue-router';
 
 const localVue = createLocalVue();
@@ -24,13 +24,13 @@ const store = new Vuex.Store({
 });
 
 const createTestSubject = () => {
-  return shallowMount(Dashboard, {
+  return shallowMount(Exercises, {
     store,
     localVue,
   });
 };
 
-xdescribe('views/Dashboard', () => {
+xdescribe('views/Exercises', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {

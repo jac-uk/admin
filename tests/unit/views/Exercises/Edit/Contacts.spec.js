@@ -1,4 +1,4 @@
-import ExerciseEditContacts from '@/views/Exercises/Edit/Contacts';
+import ExerciseEditContacts from '@/views/Exercise/Edit/Contacts';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -22,7 +22,7 @@ const mockRouter = {
   push: jest.fn(),
 };
 
-xdescribe('views/Exercises/Edit/Contacts', () => {
+xdescribe('views/Exercise/Edit/Contacts', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditContacts, {

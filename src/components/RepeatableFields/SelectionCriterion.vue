@@ -1,14 +1,14 @@
 <template>
   <div>
     <TextField
-      :id="selectionCriterionTitle"
+      :id="`selection-criterion-title_${index}`"
       v-model="row.title"
       label="Provide title to be displayed to the candidate."
       required
     />
 
     <TextareaInput
-      :id="selectionCriterionText"
+      :id="`selection-criterion-text_${index}`"
       v-model="row.text"
       label="Provide text to be displayed to the candidate."
       required
@@ -36,11 +36,6 @@ export default {
     index: {
       required: true,
       type: Number,
-    },
-  },
-  computed: {
-    selectionCriterionText() {
-      return `selection_criterion_text_${this.index}`;
     },
   },
 };

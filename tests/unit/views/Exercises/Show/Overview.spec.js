@@ -1,4 +1,4 @@
-import Overview from '@/views/Exercises/Show/Overview';
+import Overview from '@/views/Exercise/Show/Overview';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
@@ -47,7 +47,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
+xdescribe('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders Timeline component', () => {
       const wrapper = createTestSubject();
