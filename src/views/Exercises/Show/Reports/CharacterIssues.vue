@@ -205,7 +205,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 export default {
   components: {

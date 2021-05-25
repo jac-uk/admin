@@ -1,7 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import tableQuery from '@/componentsTMP/Table/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 const collection = firestore.collection('candidates');
 

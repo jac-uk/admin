@@ -3,7 +3,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 const collectionRef = firestore.collection('applicationRecords');
 

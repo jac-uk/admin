@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import Table from '@/componentsTMP/Table/Table';
-import TableCell from '@/componentsTMP/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
