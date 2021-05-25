@@ -73,6 +73,7 @@ import QualifyingTestsCover from '@/views/Exercises/Tasks/QualifyingTests/Cover'
 // QTs
 import QualifyingTest from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/New';
+import QualifyingTestNewFromClipboard from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
 import QualifyingTestEdit from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Edit';
 import QualifyingTestView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/View';
 import QualifyingTestQuestionBuilder from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
@@ -481,6 +482,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Qualifying Tests | New',
+              },
+            },
+            {
+              path: 'qualifying-tests/new-from-clipboard',
+              component: QualifyingTestNewFromClipboard,
+              name: 'qualifying-test-new-from-clipboard',
+              meta: {
+                requiresAuth: true,
+                title: 'Qualifying Tests | New from Clipboard',
               },
             },
             {
