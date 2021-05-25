@@ -135,6 +135,7 @@
                     Candidate has been cautioned or convicted of a criminal offence
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.criminalOffenceDetails"
                   />
                 </div>
@@ -147,6 +148,7 @@
                     Candidate has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.declaredBankruptOrIVADetails"
                   />
                 </div>
@@ -159,6 +161,7 @@
                     Candidate has been subject to complaints or disciplinary action, or been asked to resign from a position
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.diciplinaryActionOrAskedToResignDetails"
                   />
                 </div>
@@ -170,6 +173,7 @@
                     Candidate has been disqualified from driving, or convicted for driving under the influence of drink or drugs
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.drivingDisqualificationDrinkDrugsDetails"
                   />
                 </div>
@@ -181,6 +185,7 @@
                     Candidate has endorsements on their licence, or received any motoring fixed-penalty notices in the last 4 years
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
                   />
                 </div>
@@ -192,6 +197,7 @@
                     Candidate has been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.involvedInProfessionalMisconductDetails"
                   />
                 </div>
@@ -203,6 +209,7 @@
                     Candidate has filed late tax returns or been fined by HMRC
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.lateTaxReturnOrFinedDetails"
                   />
                 </div>
@@ -214,6 +221,7 @@
                     Candidate has received a non-motoring penalty notice in the last 4 years
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
                   />
                 </div>
@@ -225,6 +233,7 @@
                     Candidate has declared other issues we should know about
                   </p>
                   <EventRenderer
+                    v-if="row.issues.characterInformation"
                     :events="row.issues.characterInformation.otherCharacterIssuesDetails"
                   />
                 </div>
