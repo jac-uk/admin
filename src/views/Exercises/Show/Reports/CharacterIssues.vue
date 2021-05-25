@@ -96,7 +96,6 @@
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
-        :search="['candidate.fullName']"
         :page-size="10"
         @change="getTableData"
       >
