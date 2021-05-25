@@ -94,9 +94,8 @@ export default {
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async save() {
-      await this.validate();
-      if (this.isValid()) {
+    async save(isValid) {
+      if (isValid()) {
         let data = {};
         if (this.$attrs.AssessorNr == 1) {
           data = {

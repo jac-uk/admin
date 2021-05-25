@@ -93,9 +93,8 @@ export default {
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async save() {
-      await this.validate();
-      if (this.isValid()) {
+    async save(isValid) {
+      if (isValid()) {
         const data = {
           leadershipJudgeDetails: {
             email: this.email,
