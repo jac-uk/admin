@@ -6,6 +6,7 @@
 
     <Banner
       :message="message"
+      :status="status"
     />
 
     <dl
@@ -71,10 +72,23 @@
       v-if="activeTab == 'notrequested'"
       class="application-details"
     >
+      <Modal ref="modalRefRequests">
+        <component
+          :is="`CharacterChecksRequests`"
+          :selected-items="selectedItems"
+          :type="`request`"
+          :exercise-mailbox="exerciseMailbox"
+          :exercise-manager-name="exerciseManagerName"
+          :due-date="dueDate"
+          @close="closeModal('modalRefRequests')"
+          @setmessage="setMessage"
+        />
+      </Modal>
+
       <ActionButton
         type="primary"
         :disabled="!selectedItems.length"
-        @click="sendRequests()"
+        @click="openModal('modalRefRequests')"
       >
         Send requests
       </ActionButton>
@@ -108,10 +122,10 @@
           <TableCell :title="tableColumns[1].title">
             {{ row.candidate.fullName }}
           </TableCell>
-          <TableCell :title="tableColumns[1].title">
+          <TableCell :title="tableColumns[2].title">
             {{ row.stage }}
           </TableCell>
-          <TableCell :title="tableColumns[2].title">
+          <TableCell :title="tableColumns[3].title">
             {{ row.characterChecks.status }}
           </TableCell>
         </template>
@@ -127,10 +141,23 @@
     <div
       v-if="activeTab == 'requested'"
     >
+      <Modal ref="modalRefRequests">
+        <component
+          :is="`CharacterChecksRequests`"
+          :selected-items="selectedItems"
+          :type="`reminder`"
+          :exercise-mailbox="exerciseMailbox"
+          :exercise-manager-name="exerciseManagerName"
+          :due-date="dueDate"
+          @close="closeModal('modalRefRequests')"
+          @setmessage="setMessage"
+        />
+      </Modal>
+
       <ActionButton
         type="primary"
         :disabled="!selectedItems.length"
-        @click="sendReminders()"
+        @click="openModal('modalRefRequests')"
       >
         Send reminders
       </ActionButton>
@@ -138,7 +165,7 @@
       <Table
         data-key="id"
         :data="applicationRecordsCharacterChecksRequested"
-        :columns="tableColumns"
+        :columns="tableColumnsCharacterChecksRequested"
         :search="['candidate.fullName']"
         multi-select
         :selection.sync="selectedItems"
@@ -154,21 +181,27 @@
         @change="getApplicationRecordsCharacterChecksRequested"
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
+          <TableCell :title="tableColumnsCharacterChecksRequested[0].title">
             <RouterLink
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
             >
               {{ row.application.referenceNumber }}
             </RouterLink>
           </TableCell>
-          <TableCell :title="tableColumns[1].title">
+          <TableCell :title="tableColumnsCharacterChecksRequested[1].title">
             {{ row.candidate.fullName }}
           </TableCell>
-          <TableCell :title="tableColumns[1].title">
+          <TableCell :title="tableColumnsCharacterChecksRequested[2].title">
             {{ row.stage }}
           </TableCell>
-          <TableCell :title="tableColumns[2].title">
+          <TableCell :title="tableColumnsCharacterChecksRequested[3].title">
             {{ row.characterChecks.status }}
+          </TableCell>
+          <TableCell :title="tableColumnsCharacterChecksRequested[4].title">
+            {{ row.characterChecks.requestedAt | formatDate }}
+          </TableCell>
+          <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
+            {{ reminderSent(row.characterChecks.reminderSentAt) }}
           </TableCell>
         </template>
       </Table>
@@ -179,16 +212,66 @@
         No applications found.
       </p>
     </div>
+
+    <div
+      v-if="activeTab == 'completed'"
+    >
+      <Table
+        data-key="id"
+        :data="applicationRecordsCharacterChecksCompleted"
+        :columns="tableColumns"
+        :search="['candidate.fullName']"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        :filters="[
+          {
+            title: 'Stage',
+            field: 'stage',
+            type: 'checkbox',
+            options: exerciseStages,
+          },
+        ]"
+        @change="getApplicationRecordsCharacterChecksCompleted"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.candidate.fullName }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.stage }}
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            {{ row.characterChecks.status }}
+          </TableCell>
+        </template>
+      </Table>
+      <p
+        v-if="!applicationRecordsCharacterChecksCompleted.length"
+        class="govuk-body govuk-!-margin-top-6"
+      >
+        No applications found.
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
-//import { functions } from '@/firebase';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
+import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {
@@ -197,8 +280,10 @@ export default {
     Table,
     TableCell,
     TabsList,
+    Modal,
+    CharacterChecksRequests,
   },
-  data(){
+  data() {
     return {
       tabs: [
         {
@@ -209,9 +294,14 @@ export default {
           ref: 'requested',
           title: 'Requested',
         },
+        {
+          ref: 'completed',
+          title: 'Completed',
+        },
       ],
       activeTab: 'notrequested',
       message: null,
+      status: 'success',
       selectedItems: [],
       exerciseStages: ['shortlisted', 'selected', 'recommended', 'handover'],
       tableColumns: [
@@ -220,11 +310,28 @@ export default {
         { title: 'Stage' },
         { title: 'Status' },
       ],
+      tableColumnsCharacterChecksRequested: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: 'candidate.fullName', default: true },
+        { title: 'Stage' },
+        { title: 'Status' },
+        { title: 'Date requested' },
+        { title: 'Date reminder sent' },
+      ],
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    exerciseMailbox() {
+      return this.exercise.exerciseMailbox;
+    },
+    exerciseManagerName() {
+      return this.exercise.emailSignatureName;
+    },
+    dueDate(){
+      return this.exercise.characterChecksReturnDate;
     },
     applicationRecordsCharacterChecksRequested() {
       return this.$store.state.characterChecks.checksRequestedRecords;
@@ -232,47 +339,48 @@ export default {
     applicationRecordsCharacterChecksNotRequested() {
       return this.$store.state.characterChecks.checksNotRequestedRecords;
     },
+    applicationRecordsCharacterChecksCompleted() {
+      return this.$store.state.characterChecks.checksCompletedRecords;
+    },
     hmrcCheckRequired() {
       return this.exercise.characterChecks.HMRC;
     },
   },
+  watch: {
+    activeTab() {
+      this.selectedItems = [];
+    },
+  },
   async created() {
-    if (! (this.exercise.characterChecks && typeof this.exercise.characterChecks.HMRC === 'boolean')) {
+    if (!(this.exercise.characterChecks && typeof this.exercise.characterChecks.HMRC === 'boolean')) {
       this.$router.push({ name: 'exercise-tasks-character-checks-edit' });
     }
   },
   methods: {
-    async sendRequests() {
-      this.message = 'Request has been sent';
-      setTimeout(() => {
-        this.message = '';
-      },3000);
-
-    //   try {
-    //     const response = await functions.httpsCallable('sendCharacterCheckRequests')({
-    //       items: this.selectedItems,
-    //     });
-    //
-    //     if (response.result === false) {
-    //       this.setMessage('Failed to send requests.', 'warning');
-    //     } else {
-    //       this.setMessage(`Sent requests to ${this.selectedItems.length} candidates.`);
-    //     }
-    //   }
-    //   catch (error) {
-    //     this.setMessage('Failed to send requests.', 'warning');
-    //   }
-    // },
-    // setMessage(message, status = 'success') {
-    //   this.status = status;
-    //   this.message = message;
-    // },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
     },
-    sendReminders () {
-      this.message = 'Reminder has been sent';
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
+    reminderSent(item) {
+      if (item) {
+        return item | formatDate();
+      }
+      return 'n/a';
+    },
+    setMessage(value, status) {
+      if (value === true) {
+        this.status = status;
+        this.message = `Sent requests to ${this.selectedItems.length} candidate(s).`;
+      } else {
+        this.status = status;
+        this.message = 'Failed to send request(s).';
+      }
       setTimeout(() => {
         this.message = '';
-      },3000);
+      },10000);
+
     },
     getApplicationRecordsCharacterChecksNotRequested(params) {
       this.$store.dispatch(
@@ -290,6 +398,16 @@ export default {
         {
           exerciseId: this.exercise.id,
           requested: true,
+          ...params,
+        }
+      );
+    },
+    getApplicationRecordsCharacterChecksCompleted(params) {
+      this.$store.dispatch(
+        'characterChecks/bind',
+        {
+          exerciseId: this.exercise.id,
+          completed: true,
           ...params,
         }
       );

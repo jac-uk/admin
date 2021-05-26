@@ -9,7 +9,6 @@ import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
 import exerciseCreateJourney from '@/store/exercise/createJourney';
 import exerciseDocument from '@/store/exercise/document';
-import applicationRecord from '@/store/applicationRecord';
 import applications from '@/store/applications';
 import application from '@/store/application';
 import assessment from '@/store/assessment';
@@ -44,7 +43,6 @@ const store = new Vuex.Store({
     exerciseCreateJourney,
     exerciseDocument,
     applications,
-    applicationRecord,
     application,
     assessment,
     assessments,

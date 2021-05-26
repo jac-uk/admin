@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!characterChecksConsentFormSubmitted">
+    <div v-if="!characterChecksConsentFormCompleted">
       <span class="govuk-body">Consent form not completed.</span>
     </div>
     <div
@@ -335,8 +335,8 @@ export default {
     },
   },
   computed: {
-    characterChecksConsentFormSubmitted() {
-      return !!(this.application.characterChecks && this.application.characterChecks.status === 'submitted');
+    characterChecksConsentFormCompleted() {
+      return this.application.characterChecks && this.application.characterChecks.declaration;
     },
   },
 };
