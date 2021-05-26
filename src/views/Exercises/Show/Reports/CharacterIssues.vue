@@ -126,121 +126,14 @@
                 :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
               >
               <div class="govuk-grid-column-two-thirds">
-                <div
-                  v-if="issue.type == 'criminalOffences'"
-                  class="issue"
-                >
+                <div class="issue">
                   <p class="govuk-body">
-                    Candidate has been cautioned or convicted of a criminal offence
+                    {{ issue.summary }}
                   </p>
                   <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.criminalOffenceDetails"
+                    v-if="issue.events"
+                    :events="issue.events"
                   />
-                </div>
-
-                <div
-                  v-else-if="issue.type == 'declaredBankruptOrIVA'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.declaredBankruptOrIVADetails"
-                  />
-                </div>
-
-                <div
-                  v-else-if="issue.type == 'diciplinaryActionOrAskedToResign'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been subject to complaints or disciplinary action, or been asked to resign from a position
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.diciplinaryActionOrAskedToResignDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'drivingDisqualificationDrinkDrugs'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been disqualified from driving, or convicted for driving under the influence of drink or drugs
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.drivingDisqualificationDrinkDrugsDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'endorsementsOrMotoringFixedPenalties'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has endorsements on their licence, or received any motoring fixed-penalty notices in the last 4 years
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'involvedInProfessionalMisconduct'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.involvedInProfessionalMisconductDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'lateTaxReturnOrFined'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has filed late tax returns or been fined by HMRC
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.lateTaxReturnOrFinedDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'nonMotoringFixedPenaltyNotices'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has received a non-motoring penalty notice in the last 4 years
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'otherCharacterIssues'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has declared other issues we should know about
-                  </p>
-                  <EventRenderer
-                    v-if="row.issues.characterInformation"
-                    :events="row.issues.characterInformation.otherCharacterIssuesDetails"
-                  />
-                </div>
-                <div
-                  v-else
-                  class="issue"
-                >
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
                 </div>
                 <div
                   v-if="issue.comments"
