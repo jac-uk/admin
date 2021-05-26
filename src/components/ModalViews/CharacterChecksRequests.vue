@@ -32,7 +32,7 @@
 </template>
 
 <script>
-//import { functions } from '@/firebase';
+import { functions } from '@/firebase';
 
 export default {
   name: 'CharacterChecksRequests',
@@ -81,27 +81,26 @@ export default {
       document.body.style.overflow = '';
     },
     async send() {
-      console.log('date', this.dueDate);
-      // try {
-      //   const response = await functions.httpsCallable('sendCharacterCheckRequests')({
-      //     items: this.selectedItems,
-      //     type: this.type,
-      //     exerciseMailbox: this.exerciseMailbox,
-      //     exerciseManagerName: this.exerciseManagerName,
-      //     dueDate: this.dueDate,
-      //   });
-      //   if (response.result === false) {
-      //     this.$emit('setmessage', false, 'warning');
-      //   } else {
-      //     await this.$store.dispatch('characterChecks/updateStatus', {
-      //       selectedItems: this.selectedItems,
-      //       status: 'requested',
-      //     });
-      //     this.$emit('setmessage', true, 'success');
-      //   }
-      // } catch (error) {
-      //   this.$emit('setmessage', false, 'warning');
-      // }
+      try {
+        const response = await functions.httpsCallable('sendCharacterCheckRequests')({
+          items: this.selectedItems,
+          type: this.type,
+          exerciseMailbox: this.exerciseMailbox,
+          exerciseManagerName: this.exerciseManagerName,
+          dueDate: this.dueDate,
+        });
+        if (response.result === false) {
+          this.$emit('setmessage', false, 'warning');
+        } else {
+          await this.$store.dispatch('characterChecks/updateStatus', {
+            selectedItems: this.selectedItems,
+            status: 'requested',
+          });
+          this.$emit('setmessage', true, 'success');
+        }
+      } catch (error) {
+        this.$emit('setmessage', false, 'warning');
+      }
       this.closeModal();
     },
   },

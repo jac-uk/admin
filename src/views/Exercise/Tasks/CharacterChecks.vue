@@ -331,7 +331,8 @@ export default {
       return this.exercise.emailSignatureName;
     },
     dueDate(){
-      return this.exercise.characterChecksReturnDate;
+      const date = this.exercise.characterChecksReturnDate;
+      return `${ date.getDate().toString() }/${ date.getMonth().toString() }/${ date.getFullYear().toString() }`;
     },
     applicationRecordsCharacterChecksRequested() {
       return this.$store.state.characterChecks.checksRequestedRecords;
