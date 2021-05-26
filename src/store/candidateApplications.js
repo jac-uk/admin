@@ -9,7 +9,7 @@ export default {
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { candidateId }) => {
       const firestoreRef = collection
-        .where('candidate.id', '==', candidateId);
+        .where('candidate.id', '==', candidateId).limit(50);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
