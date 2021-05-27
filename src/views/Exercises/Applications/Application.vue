@@ -127,7 +127,7 @@
                 Extension
                 <button
                   v-if="application.dateExtension"
-                  @click="openModal('modalRefExtension')"
+                  @click="openModal('modalExtension')"
                 >
                   Change
                 </button>
@@ -140,19 +140,19 @@
               </h2>
               <button
                 v-else
-                @click="openModal('modalRefExtension')"
+                @click="openModal('modalExtension')"
               >
                 Give Extension
               </button>
             </div>
           </div>
           <Modal
-            ref="modalRefExtension"
+            ref="modalExtension"
           >
             <component
               :is="`SubmissionExtension`"
               v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
-              @close="closeModal('modalRefExtension')"
+              @close="closeModal('modalExtension')"
             />
           </Modal>
         </div>
@@ -1760,12 +1760,12 @@
             </dl>
 
             <Modal
-              ref="modalRef"
+              ref="assessorModal"
             >
               <component
                 :is="`IndependentAssessorChange`"
                 v-bind="assessorDetails"
-                @close="closeModal('modalRef')"
+                @close="closeModal('assessorModal')"
               />
             </Modal>
           </div>
@@ -2533,7 +2533,7 @@ export default {
           title: this.application.secondAssessorTitle,
         };
       }
-      this.openModal('modalRef');
+      this.openModal('assessorModal');
     },
     editLeadershipJudgeDetails() {
       this.openModal('modalLeadershipJudgeDetails');
