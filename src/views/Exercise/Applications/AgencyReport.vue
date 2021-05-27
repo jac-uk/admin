@@ -26,7 +26,10 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="application.personalDetails.dateOfBirth"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Date of birth
         </dt>
@@ -35,7 +38,10 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="application.personalDetails.placeOfBirth"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Place of birth
         </dt>
@@ -324,7 +330,10 @@
           </dd>
         </div>
 
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="application.personalDetails.dateOfBirth"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             Date of birth
           </dt>
@@ -333,7 +342,10 @@
           </dd>
         </div>
 
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="application.personalDetails.hasVATNumbers"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             VAT Numbers
           </dt>

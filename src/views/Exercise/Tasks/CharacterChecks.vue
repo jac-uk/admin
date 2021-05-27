@@ -201,7 +201,7 @@
             {{ row.characterChecks.requestedAt | formatDate }}
           </TableCell>
           <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
-            {{ reminderSent(row.characterChecks.reminderSentAt) }}
+            {{ row.characterChecks.reminderSentAt ? (row.characterChecks.reminderSentAt | formatDate) : 'n/a' }}
           </TableCell>
         </template>
       </Table>
@@ -332,7 +332,7 @@ export default {
     },
     dueDate(){
       const date = this.exercise.characterChecksReturnDate;
-      return `${ date.getDate().toString() }/${ date.getMonth().toString() }/${ date.getFullYear().toString() }`;
+      return formatDate(date);
     },
     applicationRecordsCharacterChecksRequested() {
       return this.$store.state.characterChecks.checksRequestedRecords;
@@ -364,23 +364,17 @@ export default {
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    reminderSent(item) {
-      if (item) {
-        return item | formatDate();
-      }
-      return 'n/a';
-    },
-    setMessage(value, status) {
+    setMessage(value, type, status) {
       if (value === true) {
         this.status = status;
-        this.message = `Sent requests to ${this.selectedItems.length} candidate(s).`;
+        this.message = `Sent ${type}(s) to ${this.selectedItems.length} candidate(s).`;
       } else {
         this.status = status;
-        this.message = 'Failed to send request(s).';
+        this.message = `Failed to send ${type}(s).`;
       }
       setTimeout(() => {
         this.message = '';
-      },10000);
+      },20000);
 
     },
     getApplicationRecordsCharacterChecksNotRequested(params) {

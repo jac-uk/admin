@@ -96,10 +96,10 @@ export default {
             selectedItems: this.selectedItems,
             status: 'requested',
           });
-          this.$emit('setmessage', true, 'success');
+          this.$emit('setmessage', true, this.type, 'success');
         }
       } catch (error) {
-        this.$emit('setmessage', false, 'warning');
+        this.$emit('setmessage', false, this.type, 'warning');
       }
       this.closeModal();
     },
