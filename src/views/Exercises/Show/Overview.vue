@@ -274,11 +274,27 @@ export default {
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
     },
-    publish() {
-      this.$store.dispatch('exerciseDocument/publish');
+    async publish() {
+      await this.$store.dispatch('exerciseDocument/publish');
+      await functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: 'Exercise published',
+        details: {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
-    unPublish() {
-      this.$store.dispatch('exerciseDocument/unpublish');
+    async unPublish() {
+      await this.$store.dispatch('exerciseDocument/unpublish');
+      await functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: 'Exercise unpublished',
+        details: {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
     async startProcessing() {
       await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });

@@ -101,6 +101,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { functions } from '@/firebase';
 
 export default {
   computed: {
@@ -110,6 +111,9 @@ export default {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
     isPublished() {
       return this.exercise.published;
     },
@@ -118,11 +122,27 @@ export default {
     },
   },
   methods: {
-    publish() {
-      this.$store.dispatch('exerciseDocument/publish');
+    async publish() {
+      await this.$store.dispatch('exerciseDocument/publish');
+      await functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: 'Exercise published',
+        details: {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
-    unPublish() {
-      this.$store.dispatch('exerciseDocument/unpublish');
+    async unPublish() {
+      await this.$store.dispatch('exerciseDocument/unpublish');
+      await functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: 'Exercise unpublished',
+        details: {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
   },
 };
