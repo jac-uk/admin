@@ -93,6 +93,7 @@
       </p>
       -->
       <Table
+        ref="issuesTable"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
@@ -223,10 +224,10 @@ export default {
       // reset the status dropdown to 'All'
       this.candidateStatus = 'all';
 
-      this.getTableData(this.$route.params);
+      this.$refs['issuesTable'].reload();
     },
     candidateStatus: function() {
-      this.getTableData(this.$route.params);
+      this.$refs['issuesTable'].reload();
     },
   },
   destroyed() {
