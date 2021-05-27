@@ -2078,6 +2078,7 @@ import FurtherInformationSummary from '@/views/InformationReview/FurtherInformat
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
+import { functions } from '@/firebase';
 
 export default {
   components: {
@@ -2484,6 +2485,16 @@ export default {
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+
+      functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: 'Application updated (personal details)',
+        details: {
+          applicationId: this.applicationId,
+          candidateName: myPersonalDetails.fullName,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
     doFileUpload(val, field) {
       if (val) {
