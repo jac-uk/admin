@@ -2499,6 +2499,16 @@ export default {
     doFileUpload(val, field) {
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
+
+        functions.httpsCallable('logEvent')({
+          type: 'info',
+          description: 'Application updated (document uploaded)',
+          details: {
+            applicationId: this.applicationId,
+            candidateName: this.application.personalDetails.fullName,
+            exerciseRef: this.exercise.referenceNumber,
+          },
+        });
       }
     },
     editAssessor(AssessorNr) {
