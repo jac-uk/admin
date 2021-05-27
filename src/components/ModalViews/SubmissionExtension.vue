@@ -83,6 +83,7 @@ export default {
 
       await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
       await this.$store.dispatch('notes/save', { data: dataNotes });
+      this.$emit('saved');
       this.closeModal();
     },
   },

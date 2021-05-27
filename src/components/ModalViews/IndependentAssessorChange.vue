@@ -111,6 +111,7 @@ export default {
       }
       this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
       this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+      this.$emit('saved');
       this.closeModal();
     },
   },

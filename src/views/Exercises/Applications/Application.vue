@@ -153,6 +153,7 @@
               :is="`SubmissionExtension`"
               v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
               @close="closeModal('modalExtension')"
+              @saved="savedModal('extension')"
             />
           </Modal>
         </div>
@@ -1766,6 +1767,7 @@
                 :is="`IndependentAssessorChange`"
                 v-bind="assessorDetails"
                 @close="closeModal('assessorModal')"
+                @saved="savedModal('assessor ' + assessorDetails.AssessorNr)"
               />
             </Modal>
           </div>
@@ -1860,6 +1862,7 @@
                 v-bind="application.leadershipJudgeDetails"
                 :application-id="applicationId"
                 @close="closeModal('modalLeadershipJudgeDetails')"
+                @saved="savedModal('leadership judge')"
               />
             </Modal>
           </div>
@@ -2543,6 +2546,18 @@ export default {
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
+    },
+    savedModal(modalRef) {
+      console.log(modalRef);
+      functions.httpsCallable('logEvent')({
+        type: 'info',
+        description: `Application updated (${modalRef})`,
+        details: {
+          applicationId: this.applicationId,
+          candidateName: this.application.personalDetails.fullName,
+          exerciseRef: this.exercise.referenceNumber,
+        },
+      });
     },
   },
 };
