@@ -101,7 +101,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { functions } from '@/firebase';
+import { logEvent } from '@/helpers/logEvent';
 
 export default {
   computed: {
@@ -124,24 +124,16 @@ export default {
   methods: {
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
-      await functions.httpsCallable('logEvent')({
-        type: 'info',
-        description: 'Exercise published',
-        details: {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        },
+      logEvent('info', 'Exercise published', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
       });
     },
     async unPublish() {
       await this.$store.dispatch('exerciseDocument/unpublish');
-      await functions.httpsCallable('logEvent')({
-        type: 'info',
-        description: 'Exercise unpublished',
-        details: {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        },
+      logEvent('info', 'Exercise unpublished', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
       });
     },
   },

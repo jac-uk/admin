@@ -2081,7 +2081,7 @@ import FurtherInformationSummary from '@/views/InformationReview/FurtherInformat
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
-import { functions } from '@/firebase';
+import { logEvent } from '@/helpers/logEvent';
 
 export default {
   components: {
@@ -2489,28 +2489,20 @@ export default {
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
 
-      functions.httpsCallable('logEvent')({
-        type: 'info',
-        description: 'Application updated (personal details)',
-        details: {
-          applicationId: this.applicationId,
-          candidateName: myPersonalDetails.fullName,
-          exerciseRef: this.exercise.referenceNumber,
-        },
+      logEvent('info', 'Application updated (personal details)', {
+        applicationId: this.applicationId,
+        candidateName: myPersonalDetails.fullName,
+        exerciseRef: this.exercise.referenceNumber,
       });
     },
     doFileUpload(val, field) {
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
 
-        functions.httpsCallable('logEvent')({
-          type: 'info',
-          description: 'Application updated (document uploaded)',
-          details: {
-            applicationId: this.applicationId,
-            candidateName: this.application.personalDetails.fullName,
-            exerciseRef: this.exercise.referenceNumber,
-          },
+        logEvent('info', 'Application updated (document uploaded)', {
+          applicationId: this.applicationId,
+          candidateName: this.application.personalDetails.fullName,
+          exerciseRef: this.exercise.referenceNumber,
         });
       }
     },
@@ -2548,15 +2540,10 @@ export default {
       this.$refs[modalRef].closeModal();
     },
     savedModal(modalRef) {
-      console.log(modalRef);
-      functions.httpsCallable('logEvent')({
-        type: 'info',
-        description: `Application updated (${modalRef})`,
-        details: {
-          applicationId: this.applicationId,
-          candidateName: this.application.personalDetails.fullName,
-          exerciseRef: this.exercise.referenceNumber,
-        },
+      logEvent('info',  `Application updated (${modalRef})`, {
+        applicationId: this.applicationId,
+        candidateName: this.application.personalDetails.fullName,
+        exerciseRef: this.exercise.referenceNumber,
       });
     },
   },
