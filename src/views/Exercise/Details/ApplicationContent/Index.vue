@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-column-one-quarter print-none">
       <SideNavigation
-        current="exercise-details-overview"
+        current="exercise-application-content"
         :pages="sideNavigation"
       />
     </div>

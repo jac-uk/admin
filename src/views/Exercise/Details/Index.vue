@@ -30,7 +30,7 @@ export default {
     const sideNavigation = [
       {
         title: 'Overview',
-        name: 'exercise-details-overview',
+        name: 'exercise-overview',
       },
       {
         title: 'Website listing',
@@ -70,7 +70,7 @@ export default {
       },
       {
         title: 'Application form',
-        name: 'exercise-edit-application-content',
+        name: 'exercise-application-content',
       },
     ];
     if (this.exercise.inviteOnly) {

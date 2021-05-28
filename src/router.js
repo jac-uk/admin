@@ -2,8 +2,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 
-import ExerciseDetails from '@/views/Exercise/ExerciseDetails/Index';
-import ExerciseDetailsOverview from '@/views/Exercise/ExerciseDetails/Overview/Index';
+import ExerciseDetails from '@/views/Exercise/Details/Index';
+import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview/Index';
+import ExerciseDetailsOverviewView from '@/views/Exercise/Details/Overview/View';
+import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent/Index';
+import ExerciseDetailsApplicationContentEdit from '@/views/Exercise/Details/ApplicationContent/Edit';
 
 // Edit views
 import ExerciseNew from '@/views/Exercise/New';
@@ -18,11 +21,9 @@ import ExerciseEditAssessmentOptions from '@/views/Exercise/Edit/AssessmentOptio
 import ExerciseEditWorkingPreferences from '@/views/Exercise/Edit/WorkingPreferences';
 import ExerciseEditDownloads from '@/views/Exercise/Edit/Downloads';
 import ExerciseEditInvitations from '@/views/Exercise/Edit/Invitations';
-import ExerciseEditApplicationContent from '@/views/Exercise/Edit/ApplicationContent';
 
 // Show views
 import ExerciseShow from '@/views/Exercise/Index';
-import ExerciseShowOverview from '@/views/Exercise/Show/Overview';
 import ExerciseShowContacts from '@/views/Exercise/Show/Contacts';
 import ExerciseShowTimeline from '@/views/Exercise/Show/Timeline';
 import ExerciseShowShortlisting from '@/views/Exercise/Show/Shortlisting';
@@ -209,43 +210,52 @@ const router = new Router({
       component: ExerciseShow,
       children: [
         {
-          path: 'details',
-          component: ExerciseDetails,
           name: 'exercise-details',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details',
-          },
+          path: '',
+          component: ExerciseDetails,
           children: [
             {
               path: '',
               component: ExerciseDetailsOverview,
-              name: 'exercise-details-overview',
-              meta: {
-                requiresAuth: true,
-                title: 'Overview | Exercise Details',
-              },
+              children: [
+                {
+                  path: '',
+                  redirect: 'overview',
+                },
+                {
+                  path: 'overview',
+                  component: ExerciseDetailsOverviewView,
+                  name: 'exercise-overview',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Overview | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'application-content',
+              component: ExerciseDetailsApplicationContent,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseDetailsApplicationContentEdit,
+                  name: 'exercise-application-content',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Application Content | Exercise Details',
+                  },
+                },
+              ],
             },
           ],
         },
-        {
-          path: '',
-          component: ExerciseShowOverview,
-          name: 'exercise-show-overview',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Overview',
-          },
-        },
-        {
-          path: 'application-content',
-          component: ExerciseEditApplicationContent,
-          name: 'exercise-edit-application-content',
-          meta: {
-            requiresAuth: true,
-            title: 'Application content',
-          },
-        },
+      ],
+    },
+    {
+      path: '/old-exercise/:id',
+      component: ExerciseShow,
+      children: [
         {
           path: 'contacts',
           component: ExerciseShowContacts,

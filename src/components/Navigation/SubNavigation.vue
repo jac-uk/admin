@@ -10,11 +10,16 @@
         class="moj-sub-navigation__item"
       >
         <router-link
-          :aria-current="current == page.name ? 'page' : false"
-          class="moj-sub-navigation__link"
+          v-slot="{ href, navigate, isActive }"
           :to="page"
         >
-          {{ page.title }}
+          <a
+            class="moj-sub-navigation__link"
+            :active="isActive"
+            :aria-current="current == page.name ? 'page' : false"
+            :href="href"
+            @click="navigate"
+          >{{ page.title }}</a>
         </router-link>
       </li>
     </ul>
