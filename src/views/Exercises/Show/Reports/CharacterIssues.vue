@@ -285,7 +285,7 @@ export default {
       } else {
         firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
       }
-      firestoreRef = tableQuery(this.applications, firestoreRef, params);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
