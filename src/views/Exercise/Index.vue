@@ -43,7 +43,7 @@
         :sub-navigation="subNavigation"
         :exercise="exercise"
       />
-     <!-- <Navigation
+      <!-- <Navigation
         :pages="mainNavigation"
         title="Exercise"
       />

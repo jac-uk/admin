@@ -76,28 +76,28 @@
             <template #row="{row}">
               <TableCell :title="tableColumns[0].title">
                 <RouterLink
-                  :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+                  :to="{ name: 'exercise-overview', params: { id: row.id } }"
                 >
                   {{ row.referenceNumber }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
-                  :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+                  :to="{ name: 'exercise-overview', params: { id: row.id } }"
                 >
                   {{ row.name }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[2].title">
                 <RouterLink
-                  :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+                  :to="{ name: 'exercise-overview', params: { id: row.id } }"
                 >
                   {{ row.applicationOpenDate | formatDate }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[3].title">
                 <RouterLink
-                  :to="{ name: 'exercise-show-overview', params: { id: row.id } }"
+                  :to="{ name: 'exercise-overview', params: { id: row.id } }"
                 >
                   {{ row.applicationCloseDate | formatDate }}
                 </RouterLink>
