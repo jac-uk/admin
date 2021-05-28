@@ -5,8 +5,10 @@
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
-        <form @submit.prevent="validateAndSave">
-          <ErrorSummary :errors="errors" />
+        <form
+          ref="formRef"
+          @submit.prevent="save"
+        >
           <fieldset>
             <TextField
               id="full-name"
@@ -54,17 +56,13 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   name: 'IndependentAssessorChange',
   components: {
-    ErrorSummary,
     TextField,
   },
-  extends: Form,
   data() {
     return {
       email: null,
@@ -95,28 +93,25 @@ export default {
       document.body.style.overflow = '';
     },
     async save() {
-      await this.validate();
-      if (this.isValid()) {
-        let data = {};
-        if (this.$attrs.AssessorNr == 1) {
-          data = {
-            firstAssessorEmail: this.email,
-            firstAssessorFullName: this.fullName,
-            firstAssessorPhone: this.phone,
-            firstAssessorTitle: this.title,
-          };
-        } else if (this.$attrs.AssessorNr == 2) {
-          data = {
-            secondAssessorEmail: this.email,
-            secondAssessorFullName: this.fullName,
-            secondAssessorPhone: this.phone,
-            secondAssessorTitle: this.title,
-          };
-        }
-        await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
-        this.closeModal();
+      let data = {};
+      if (this.$attrs.AssessorNr == 1) {
+        data = {
+          firstAssessorEmail: this.email,
+          firstAssessorFullName: this.fullName,
+          firstAssessorPhone: this.phone,
+          firstAssessorTitle: this.title,
+        };
+      } else if (this.$attrs.AssessorNr == 2) {
+        data = {
+          secondAssessorEmail: this.email,
+          secondAssessorFullName: this.fullName,
+          secondAssessorPhone: this.phone,
+          secondAssessorTitle: this.title,
+        };
       }
+      this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
+      this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+      this.closeModal();
     },
   },
 };

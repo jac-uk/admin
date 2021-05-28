@@ -5,8 +5,10 @@
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
-        <form @submit.prevent="validateAndSave">
-          <ErrorSummary :errors="errors" />
+        <form
+          ref="formRef"
+          @submit.prevent="save"
+        >
           <fieldset>
             <TextField
               id="full-name"
@@ -54,17 +56,13 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
   name: 'LeadershipJudgeDetails',
   components: {
-    ErrorSummary,
     TextField,
   },
-  extends: Form,
   data() {
     return {
       email: null,
@@ -94,19 +92,16 @@ export default {
       document.body.style.overflow = '';
     },
     async save() {
-      await this.validate();
-      if (this.isValid()) {
-        const data = {
-          leadershipJudgeDetails: {
-            email: this.email,
-            fullName: this.fullName,
-            phone: this.phone,
-            title: this.title,
-          },
-        };
-        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
-        this.closeModal();
-      }
+      const data = {
+        leadershipJudgeDetails: {
+          email: this.email,
+          fullName: this.fullName,
+          phone: this.phone,
+          title: this.title,
+        },
+      };
+      await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
+      this.closeModal();
     },
   },
 };
