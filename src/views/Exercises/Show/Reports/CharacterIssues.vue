@@ -31,6 +31,7 @@
       <Select
         id="exercise-stage"
         v-model="exerciseStage"
+        class="exercise-stage"
       >
         <option value="all">
           All applications
@@ -297,3 +298,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .exercise-stage {
+    float: left;
+    margin-right: 20px;
+  }
+</style>
