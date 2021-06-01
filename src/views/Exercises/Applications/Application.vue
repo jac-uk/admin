@@ -1404,7 +1404,7 @@
                               Legal Experience:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.legalExperience }}
+                              {{ item.judicialFunctions.legalExperience | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1412,7 +1412,7 @@
                               Date:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.date | formatDate }}
+                              {{ item.judicialFunctions.date | formatDate | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1420,7 +1420,7 @@
                               Category of Law:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.categoryOfLaw }}
+                              {{ item.judicialFunctions.categoryOfLaw | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1431,6 +1431,9 @@
                               <ul
                                 class="govuk-list"
                               >
+                                <li v-if="!item.judicialFunctions.timeEngagedStart">
+                                  {{ showAlternative('No Answer provided') }}
+                                </li>
                                 <li v-if="item.judicialFunctions.timeEngagedEnd">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
                                 </li>
@@ -1445,7 +1448,7 @@
                               Judicial Office:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.judicialOffice | toYesNo }}
+                              {{ item.judicialFunctions.judicialOffice | toYesNo | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div 
@@ -1456,7 +1459,7 @@
                               Previous Judicial Office Type:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.judicialOfficeType }}
+                              {{ item.judicialFunctions.judicialOfficeType | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1464,7 +1467,7 @@
                               Judicial Appointment Date:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.judicialAppointmentDate | formatDate }}
+                              {{ item.judicialFunctions.judicialAppointmentDate | formatDate | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1472,7 +1475,7 @@
                               Nature of Appointment:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.natureOfAppointment }}
+                              {{ item.judicialFunctions.natureOfAppointment | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1480,7 +1483,7 @@
                               Circuit or Region:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.circuitOrRegion }}
+                              {{ item.judicialFunctions.circuitOrRegion | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1488,7 +1491,7 @@
                               Jurisdiction:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.jurisdiction }}
+                              {{ item.judicialFunctions.jurisdiction | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1496,7 +1499,7 @@
                               Tribunal:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.tribunal }}
+                              {{ item.judicialFunctions.tribunal | showAlternative('No Answer provided') }}
                             </dd>
                           </div>
                         </div>
