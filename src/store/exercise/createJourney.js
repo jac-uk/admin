@@ -2,7 +2,8 @@ import router from '@/router';
 
 // For improved readability, this module deals with page names without their prefix
 // All route names are prefixed with this string before navigation
-const routeNamePrefix = 'exercise-edit-';
+const routeNamePrefix = 'exercise-details-';
+const routeNameSuffix = '-edit';
 
 // This is the complete journey available, sorted in order
 // Partial journeys should still follow this order, skipping pages which weren't selected by the user
@@ -13,8 +14,8 @@ const completeJourneyInOrder = [
   'timeline',
   'vacancy',
   'eligibility',
-  'working-preferences',
-  'assessment-options',
+  'preferences',
+  'assessments',
   'downloads',
 ];
 
@@ -37,7 +38,13 @@ export default {
       state.currentPage = null;
     },
     setCurrentPage(state, page) {
+      if (state.currentPage) {  // remove existing page from journey
+        state.journey = state.journey.filter(item => item !== state.currentPage);
+      }
       state.currentPage = page;
+      if (state.journey.length > 0 && state.journey.indexOf(state.currentPage) < 0) {  // end the journey if we have navigated away
+        state.journey = [];
+      }
     },
   },
   actions: {
@@ -55,6 +62,9 @@ export default {
       // Trim routeNamePrefix off the beginning of the route name
       if (name.indexOf(routeNamePrefix) === 0) {
         name = name.slice(routeNamePrefix.length);
+      }
+      if (name.indexOf(routeNameSuffix) > 0) {
+        name = name.replace(routeNameSuffix, '');
       }
       commit('setCurrentPage', name);
     },
@@ -79,14 +89,17 @@ export default {
       if (pageIndex === null) {
         if (router.currentRoute.params && router.currentRoute.params.referrer) {
           return routeLocation(router.currentRoute.params.referrer, id);
-        } else if (defaultRouteName) {
+        } else if (state.journey.length > 1 && defaultRouteName) {
           return routeLocation(defaultRouteName, id);
         } else {
-          return routeLocation('exercise-show-overview', id);
+          return routeLocation('exercise-overview', id);
         }
       }
       const name = state.journey[pageIndex];
-      return routeLocation(routeNamePrefix + name, id);
+      return routeLocation(routeNamePrefix + name + routeNameSuffix, id);
+    },
+    hasJourney(state) {
+      return state.journey.length > 0;
     },
   },
 };

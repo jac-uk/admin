@@ -2,7 +2,10 @@
   <div class="govuk-grid-row">
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-full">
-        <div class="text-right">
+        <div
+          v-if="!hasJourney"
+          class="text-right"
+        >
           <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
         </div>
 
@@ -51,6 +54,11 @@ export default {
     return {
       invitedEmailsText: invitedEmailsText.join('\n'),
     };
+  },
+  computed: {
+    hasJourney() {
+      return this.$store.getters['exerciseCreateJourney/hasJourney'];
+    },
   },
   methods: {
     async save(isValid) {

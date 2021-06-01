@@ -19,7 +19,7 @@
           </button>
           <router-link
             ref="linkToNewExercise"
-            to="/exercise/new"
+            to="/create-exercise"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
           >
             Create an exercise

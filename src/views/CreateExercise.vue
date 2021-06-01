@@ -71,11 +71,11 @@
                 label="Eligibility Information"
               />
               <CheckboxItem
-                value="working-preferences"
+                value="preferences"
                 label="Working Preferences"
               />
               <CheckboxItem
-                value="assessment-options"
+                value="assessments"
                 label="Assessment Options"
               />
               <CheckboxItem
