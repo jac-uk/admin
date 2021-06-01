@@ -1431,7 +1431,7 @@
                               <ul
                                 class="govuk-list"
                               >
-                                <li v-if="!item.judicialFunctions.timeEngagedStart && item.judicialFunctions.timeEngagedEnd">
+                                <li v-if="!item.judicialFunctions.timeEngagedStart && !item.judicialFunctions.timeEngagedEnd">
                                   No Dates provided
                                 </li>
                                 <li v-if="item.judicialFunctions.timeEngagedEnd">
