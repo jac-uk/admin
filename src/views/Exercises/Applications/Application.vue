@@ -358,7 +358,7 @@
               </h2>
 
               <dl
-                v-if="application.equalityAndDiversitySurvey && Object.keys(application.equalityAndDiversitySurvey).length"
+                v-if="application.equalityAndDiversitySurvey"
                 class="govuk-summary-list"
               >
                 <div class="govuk-summary-list__row">
