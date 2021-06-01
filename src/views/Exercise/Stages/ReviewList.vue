@@ -5,11 +5,23 @@
       status="success"
     />
     <form @submit.prevent="checkForm">
-      <div class="moj-page-header-actions">
+      <div class="moj-page-header-actions govuk-!-margin-bottom-2">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
             Review ({{ totalApplicationRecords }})
           </h1>
+        </div>
+        <div class="moj-page-header-actions__actions float-right">
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <button
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+                :disabled="isButtonDisabled"
+              >
+                Set status
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <Table
@@ -34,15 +46,6 @@
         ]"
         @change="getTableData"
       >
-        <template #actions>
-          <button
-            class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-            :disabled="isButtonDisabled"
-          >
-            Set status
-          </button>
-        </template>
-
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
             <RouterLink

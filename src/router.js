@@ -1,45 +1,90 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
-import ExerciseDetails from '@/views/Exercise/Details/Index';
-import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview/Index';
-import ExerciseDetailsOverviewView from '@/views/Exercise/Details/Overview/View';
-import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent/Index';
-import ExerciseDetailsApplicationContentEdit from '@/views/Exercise/Details/ApplicationContent/Edit';
+import EmptyRouterView from '@/components/EmptyRouterView';
 
-// Edit views
-import ExerciseNew from '@/views/Exercise/New';
-import ExerciseEditContacts from '@/views/Exercise/Edit/Contacts';
-import ExerciseEditShortlisting from '@/views/Exercise/Edit/Shortlisting';
-import ExerciseEditTimeline from '@/views/Exercise/Edit/Timeline';
-import ExerciseEditEligibility from '@/views/Exercise/Edit/Eligibility';
-import ExerciseEditSummary from '@/views/Exercise/Edit/Summary';
-import ExerciseEditVacancy from '@/views/Exercise/Edit/Vacancy';
-import ExerciseEditName from '@/views/Exercise/Edit/EditName';
-import ExerciseEditAssessmentOptions from '@/views/Exercise/Edit/AssessmentOptions';
-import ExerciseEditWorkingPreferences from '@/views/Exercise/Edit/WorkingPreferences';
-import ExerciseEditDownloads from '@/views/Exercise/Edit/Downloads';
-import ExerciseEditInvitations from '@/views/Exercise/Edit/Invitations';
+import SignIn from '@/views/SignIn';
+import NotificationsList from '@/views/NotificationsList';
 
-// Show views
-import ExerciseShow from '@/views/Exercise/Index';
-import ExerciseShowContacts from '@/views/Exercise/Show/Contacts';
-import ExerciseShowTimeline from '@/views/Exercise/Show/Timeline';
-import ExerciseShowShortlisting from '@/views/Exercise/Show/Shortlisting';
-import ExerciseShowSummary from '@/views/Exercise/Show/Summary';
-import ExerciseShowVacancy from '@/views/Exercise/Show/Vacancy';
-import ExerciseShowEligibility from '@/views/Exercise/Show/Eligibility';
-import ExerciseShowWorkingPreferences from '@/views/Exercise/Show/WorkingPreferences';
-import ExerciseShowAssessmentOptions from '@/views/Exercise/Show/AssessmentOptions';
-import ExerciseShowDownloads from '@/views/Exercise/Show/Downloads';
-import ExerciseShowApplications from '@/views/Exercise/Show/Applications';
-import ExerciseShowInvitations from '@/views/Exercise/Show/Invitations';
+// Exercises
+import CreateExercise from '@/views/CreateExercise';
+import Exercises from '@/views/Exercises';
+import ExercisesExport from '@/views/ExercisesExport';
+import Exercise from '@/views/Exercise';
 
-// Application
+// Exercise details
+import ExerciseDetails from '@/views/Exercise/Details';
+import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview';
+import ExerciseDetailsEditName from '@/views/Exercise/Details/EditName';
+import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent';
+import ExerciseDetailsAssessments from '@/views/Exercise/Details/Assessments/View';
+import ExerciseDetailsAssessmentsEdit from '@/views/Exercise/Details/Assessments/Edit';
+import ExerciseDetailsContacts from '@/views/Exercise/Details/Contacts/View';
+import ExerciseDetailsContactsEdit from '@/views/Exercise/Details/Contacts/Edit';
+import ExerciseDetailsDownloads from '@/views/Exercise/Details/Downloads/View';
+import ExerciseDetailsDownloadsEdit from '@/views/Exercise/Details/Downloads/Edit';
+import ExerciseDetailsEligibility from '@/views/Exercise/Details/Eligibility/View';
+import ExerciseDetailsEligibilityEdit from '@/views/Exercise/Details/Eligibility/Edit';
+import ExerciseDetailsInvitations from '@/views/Exercise/Details/Invitations/View';
+import ExerciseDetailsInvitationsEdit from '@/views/Exercise/Details/Invitations/Edit';
+import ExerciseDetailsShortlisting from '@/views/Exercise/Details/Shortlisting/View';
+import ExerciseDetailsShortlistingEdit from '@/views/Exercise/Details/Shortlisting/Edit';
+import ExerciseDetailsSummary from '@/views/Exercise/Details/Summary/View';
+import ExerciseDetailsSummaryEdit from '@/views/Exercise/Details/Summary/Edit';
+import ExerciseDetailsTimeline from '@/views/Exercise/Details/Timeline/View';
+import ExerciseDetailsTimelineEdit from '@/views/Exercise/Details/Timeline/Edit';
+import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View';
+import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit';
+import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View';
+import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit';
+
+// Appplications
+import ExerciseApplications from '@/views/Exercise/Applications';
+import ExerciseApplicationsList from '@/views/Exercise/Applications/List';
 import ExerciseApplication from '@/views/Exercise/Applications/Application';
 
-// Stages
+// Exercise reports
+import ExerciseReports from '@/views/Exercise/Reports';
+import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
+import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
+import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
+import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues';
+import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments';
+import ExerciseReportsQualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
+import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency';
+import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover';
+import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create';
+import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport';
+import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
+import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
+import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
+
+// Exercise tasks
+import ExerciseTasks from '@/views/Exercise/Tasks';
+import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
+import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
+import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
+import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
+import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
+import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
+import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
+import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
+import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
+import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
+import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
+import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit';
+import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View';
+import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
+import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun';
+import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review';
+import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
+import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
+import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
+
+// Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
 import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
 import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit';
@@ -60,58 +105,9 @@ import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
 
-// Tasks
-import ExerciseTasks from '@/views/Exercise/Tasks';
-import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
-import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
-import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
-import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
-import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
-import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
-
-// Temp
-import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
-
-// QTs
-import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
-import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
-import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
-import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit';
-import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View';
-import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
-import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun';
-import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
-import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
-import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
-
-// Report views
-import ExerciseShowReports from '@/views/Exercise/Show/Reports';
-import ExerciseShowReportsIndex from '@/views/Exercise/Show/Reports/Index';
-import ExerciseShowReportsDiversity from '@/views/Exercise/Show/Reports/Diversity';
-import ExerciseShowReportsOutreach from '@/views/Exercise/Show/Reports/Outreach';
-import ExerciseShowReportsReasonableAdjustments from '@/views/Exercise/Show/Reports/ReasonableAdjustments';
-import ExerciseShowReportsEligibilityIssues from '@/views/Exercise/Show/Reports/EligibilityIssues';
-import ExerciseShowReportsCharacterIssues from '@/views/Exercise/Show/Reports/CharacterIssues';
-import ExerciseShowReportsAgency from '@/views/Exercise/Show/Reports/Agency';
-import ExerciseShowReportsHandover from '@/views/Exercise/Show/Reports/Handover';
-import QualifyingTestReports from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReports';
-import QualifyingTestReportCreate from '@/views/Exercise/Show/Reports/QualifyingTestReports/Create';
-import QualifyingTestReport from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport';
-import QualifyingTestReportEdit from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
-import QualifyingTestReportView from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/View';
-import QualifyingTestReportViewScore from '@/views/Exercise/Show/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
-
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
 import PageNotFound from '@/views/Errors/PageNotFound';
-
-import Exercises from '@/views/Exercises';
-import ExercisesExport from '@/views/Exercise/Export';
-import SignIn from '@/views/SignIn';
-import NotificationsList from '@/views/NotificationsList';
 
 import Sandbox from '@/views/Sandbox';
 
@@ -141,15 +137,6 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Notifications',
-      },
-    },
-    {
-      path: '/exercise/new',
-      name: 'exercise-new',
-      component: ExerciseNew,
-      meta: {
-        requiresAuth: true,
-        title: 'Create An Exercise',
       },
     },
     {
@@ -196,299 +183,359 @@ const router = new Router({
       ],
     },
     {
+      path: '/create-exercise',
+      component: CreateExercise,
+      name: 'create-exercise',
+      meta: {
+        requiresAuth: true,
+        title: 'Create Exercise',
+      },
+    },
+    {
       path: '/exercise/:id',
-      component: ExerciseShow,
+      component: Exercise,
       children: [
         {
-          name: 'exercise-details',
-          path: '',
+          path: 'details',
           component: ExerciseDetails,
           children: [
             {
               path: '',
+              redirect: 'overview',
+            },
+            {
+              name: 'exercise-overview',
+              path: 'overview',
               component: ExerciseDetailsOverview,
+              meta: {
+                requiresAuth: true,
+                title: 'Overview | Exercise Details',
+              },
+            },
+            {
+              name: 'exercise-edit-name',
+              path: 'edit-name',
+              component: ExerciseDetailsEditName,
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Name | Exercise Details',
+              },
+            },
+            {
+              path: 'assessments',
+              component: EmptyRouterView,
               children: [
                 {
+                  name: 'exercise-details-assessments',
                   path: '',
-                  redirect: 'overview',
-                },
-                {
-                  path: 'overview',
-                  component: ExerciseDetailsOverviewView,
-                  name: 'exercise-overview',
+                  component: ExerciseDetailsAssessments,
                   meta: {
                     requiresAuth: true,
-                    title: 'Overview | Exercise Details',
+                    title: 'Assessment Options | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-assessments-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsAssessmentsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Assessment Options | Exercise Details',
                   },
                 },
               ],
             },
             {
-              path: 'application-content',
-              component: ExerciseDetailsApplicationContent,
+              path: 'contacts',
+              component: EmptyRouterView,
               children: [
                 {
+                  name: 'exercise-details-contacts',
                   path: '',
-                  component: ExerciseDetailsApplicationContentEdit,
-                  name: 'exercise-application-content',
+                  component: ExerciseDetailsContacts,
                   meta: {
                     requiresAuth: true,
-                    title: 'Edit Application Content | Exercise Details',
+                    title: 'Contacts | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-contacts-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsContactsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Contacts | Exercise Details',
                   },
                 },
               ],
+            },
+            {
+              path: 'downloads',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-downloads',
+                  path: '',
+                  component: ExerciseDetailsDownloads,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Downloads | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-downloads-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsDownloadsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Downloads | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'eligibility',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-eligibility',
+                  path: '',
+                  component: ExerciseDetailsEligibility,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Eligibility | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-eligibility-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsEligibilityEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Eligibility | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'invitations',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-invitations',
+                  path: '',
+                  component: ExerciseDetailsInvitations,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Invitations | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-invitations-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsInvitationsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Invitations | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'shortlisting',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-shortlisting',
+                  path: '',
+                  component: ExerciseDetailsShortlisting,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Shortlisting | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-shortlisting-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsShortlistingEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Shortlisting | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'summary',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-summary',
+                  path: '',
+                  component: ExerciseDetailsSummary,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Summary | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-summary-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsSummaryEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Summary | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'timeline',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-timeline',
+                  path: '',
+                  component: ExerciseDetailsTimeline,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Timeline | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-timeline-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsTimelineEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Timeline | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'vacancy',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-vacancy',
+                  path: '',
+                  component: ExerciseDetailsVacancy,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Vacancy Information | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-vacancy-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsVacancyEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Vacancy Information | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'preferences',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-preferences',
+                  path: '',
+                  component: ExerciseDetailsPreferences,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Preferences | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-preferences-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsPreferencesEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Preferences | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              name: 'exercise-application-content',
+              path: 'application-content',
+              component: ExerciseDetailsApplicationContent,
+              meta: {
+                requiresAuth: true,
+                title: 'Application Content | Exercise Details',
+              },
             },
           ],
         },
-      ],
-    },
-    {
-      path: '/old-exercise/:id',
-      component: ExerciseShow,
-      children: [
-        {
-          path: 'contacts',
-          component: ExerciseShowContacts,
-          name: 'exercise-show-contacts',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Contacts',
-          },
-        },
-        {
-          path: 'timeline',
-          component: ExerciseShowTimeline,
-          name: 'exercise-show-timeline',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Timeline',
-          },
-        },
-        {
-          path: 'shortlisting',
-          component: ExerciseShowShortlisting,
-          name: 'exercise-show-shortlisting',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Shortlisting',
-          },
-        },
-        {
-          path: 'summary',
-          component: ExerciseShowSummary,
-          name: 'exercise-show-summary',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Vacancy summary',
-          },
-        },
-        {
-          path: 'vacancy',
-          component: ExerciseShowVacancy,
-          name: 'exercise-show-vacancy',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Vacancy information',
-          },
-        },
-        {
-          path: 'eligibility',
-          component: ExerciseShowEligibility,
-          name: 'exercise-show-eligibility',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Eligibility information',
-          },
-        },
-        {
-          path: 'working-preferences',
-          component: ExerciseShowWorkingPreferences,
-          name: 'exercise-show-working-preferences',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Working Preferences',
-          },
-        },
-        {
-          path: 'assessment-options',
-          component: ExerciseShowAssessmentOptions,
-          name: 'exercise-show-assessment-options',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Assessment Options',
-          },
-        },
-        {
-          path: 'downloads',
-          component: ExerciseShowDownloads,
-          name: 'exercise-show-downloads',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Downloads',
-          },
-        },
-        {
-          path: 'invitations',
-          component: ExerciseShowInvitations,
-          name: 'exercise-show-invitations',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Invitations',
-          },
-        },
         {
           path: 'applications',
-          name: 'exercise-show-applications',
-          redirect: 'applications/applied',
-        },
-        // @TODO move this to Applications folder, not Show
-        {
-          path: 'applications/:status',
-          component: ExerciseShowApplications,
-          name: 'exercise-show-applications-in-status',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Details | Applications',
-          },
-        },
-        // this route enables side navigation to show active state for :status
-        {
-          path: 'applications/:status/application/:applicationId',
-          component: ExerciseApplication,
-          name: 'exercise-applications-application',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Application',
-          },
-        },
-        {
-          path: 'application/:applicationId',
-          component: ExerciseApplication,
-          name: 'exercise-application',
-          meta: {
-            requiresAuth: true,
-            title: 'Exercise Application',
-          },
-        },
-        {
-          path: 'stages',
-          component: ExerciseStages,
+          component: ExerciseApplications,
           children: [
             {
-              path: 'review',
-              component: ExerciseStagesReviewList,
-              name: 'exercise-stages-review-list',
+              path: '',
+              redirect: STATUS.APPLIED,
+            },
+            {
+              name: `exercise-applications-${STATUS.DRAFT}`,
+              path: STATUS.DRAFT,
+              component: ExerciseApplicationsList,
+              props: {
+                status: STATUS.DRAFT,
+              },
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Review list',
+                title: 'Draft | Applications',
               },
             },
             {
-              path: 'review/edit',
-              component: ExerciseStagesReviewEdit,
-              name: 'exercise-stages-review-edit',
+              name: `exercise-applications-${STATUS.APPLIED}`,
+              path: STATUS.APPLIED,
+              component: ExerciseApplicationsList,
+              props: {
+                status: STATUS.APPLIED,
+              },
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Review edit',
+                title: 'Applied | Applications',
               },
             },
             {
-              path: 'selected',
-              component: ExerciseStagesSelectedList,
-              name: 'exercise-stages-selected-list',
+              name: `exercise-applications-${STATUS.WITHDRAWN}`,
+              path: STATUS.WITHDRAWN,
+              component: ExerciseApplicationsList,
+              props: {
+                status: STATUS.WITHDRAWN,
+              },
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Selected list',
+                title: 'Withdrawn | Applications',
               },
             },
             {
-              path: 'selected/edit',
-              component: ExerciseStagesSelectedEdit,
-              name: 'exercise-stages-selected-edit',
+              path: 'application/:applicationId',
+              // Note this path accepts incoming requests where we just know the applicationId
+              // Our `ExerciseApplication` component gets the status
+              // and then redirects to the 'exercise-applications-application' route
+              // so that the status side navigation works
+              component: ExerciseApplication,
+              name: 'exercise-application',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Selected edit',
+                title: 'Exercise Application',
               },
             },
             {
-              path: 'selected/back',
-              component: ExerciseStagesSelectedBack,
-              name: 'exercise-stages-selected-back',
+              path: ':status/application/:applicationId',
+              component: ExerciseApplication,
+              name: 'exercise-applications-application',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Stages | Selected back',
-              },
-            },
-            {
-              path: 'recommended',
-              component: ExerciseStagesRecommendedList,
-              name: 'exercise-stages-recommended-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Recommended list',
-              },
-            },
-            {
-              path: 'recommended/edit',
-              component: ExerciseStagesRecommendedEdit,
-              name: 'exercise-stages-recommended-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Recommended edit',
-              },
-            },
-            {
-              path: 'recommended/back',
-              component: ExerciseStagesRecommendedBack,
-              name: 'exercise-stages-recommended-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Recommended back',
-              },
-            },
-            {
-              path: 'handover',
-              component: ExerciseStagesHandoverList,
-              name: 'exercise-stages-handover-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Selected list',
-              },
-            },
-            {
-              path: 'handover/back',
-              component: ExerciseStagesHandoverBack,
-              name: 'exercise-stages-handover-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Selected back',
-              },
-            },
-            {
-              path: 'shortlisted',
-              component: ExerciseStagesShortlistedList,
-              name: 'exercise-stages-shortlisted-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Shortlisted',
-              },
-            },
-            {
-              path: 'shortlisted/edit',
-              component: ExerciseStagesShortlistedEdit,
-              name: 'exercise-stages-shortlisted-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Shortlisted edit',
-              },
-            },
-            {
-              path: 'shortlisted/back',
-              component: ExerciseStagesShortlistedBack,
-              name: 'exercise-stages-shortlisted-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Stages | Shortlisted back',
+                title: 'Exercise Application',
               },
             },
           ],
@@ -498,12 +545,16 @@ const router = new Router({
           component: ExerciseTasks,
           children: [
             {
+              path: '',
+              redirect: 'qualifying-tests',
+            },
+            {
               path: 'independent-assessments',
               component: ExerciseTasksIndependentAssessments,
               name: 'exercise-tasks-independent-assessments',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Tasks | Independent Assessments',
+                title: 'Independent Assessments | Exercise Tasks',
               },
             },
             {
@@ -512,7 +563,7 @@ const router = new Router({
               name: 'exercise-tasks-character-checks',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Tasks | Character Checks edit',
+                title: 'Character Checks | Exercise Tasks',
               },
             },
             {
@@ -521,16 +572,16 @@ const router = new Router({
               name: 'exercise-tasks-character-checks-edit',
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Tasks | Character Checks',
+                title: 'Edit Character Checks | Exercise Tasks',
               },
             },
             {
               path: 'qualifying-tests',
-              component: QualifyingTestsCover,
+              component: QualifyingTests,
               name: 'exercise-tasks-qualifying-tests',
               meta: {
                 requiresAuth: true,
-                title: 'Qualifying Tests',
+                title: 'Qualifying Tests | Exercise Tasks',
               },
             },
             {
@@ -539,7 +590,7 @@ const router = new Router({
               name: 'qualifying-test-new',
               meta: {
                 requiresAuth: true,
-                title: 'Qualifying Tests | New',
+                title: 'Create Qualifying Test | Exercise Tasks',
               },
             },
             {
@@ -548,7 +599,7 @@ const router = new Router({
               name: 'qualifying-test-new-from-clipboard',
               meta: {
                 requiresAuth: true,
-                title: 'Qualifying Tests | New from Clipboard',
+                title: 'Create Qualifying Test from Clipboard | Exercise Tasks',
               },
             },
             {
@@ -561,7 +612,7 @@ const router = new Router({
                   name: 'qualifying-test-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test | View',
+                    title: 'Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -570,7 +621,7 @@ const router = new Router({
                   name: 'qualifying-test-edit',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test | Edit',
+                    title: 'Edit Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -579,7 +630,7 @@ const router = new Router({
                   name: 'qualifying-test-question-builder',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Tests | Question Builder',
+                    title: 'Edit Questions | Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -588,7 +639,7 @@ const router = new Router({
                   name: 'qualifying-test-dry-run',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Tests | Dry Run',
+                    title: 'Dry Run | Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -597,7 +648,7 @@ const router = new Router({
                   name: 'qualifying-test-review',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test | Review',
+                    title: 'Review | Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -606,7 +657,7 @@ const router = new Router({
                   name: 'qualifying-test-responses',
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test | Responses',
+                    title: 'Responses | Qualifying Test | Exercise Tasks',
                   },
                 },
                 {
@@ -619,7 +670,7 @@ const router = new Router({
                       name: 'qualifying-test-response-view',
                       meta: {
                         requiresAuth: true,
-                        title: 'Qualifying Test | Response View',
+                        title: 'Response | Qualifying Test | Exercise Tasks',
                       },
                     },
                   ],
@@ -636,7 +687,7 @@ const router = new Router({
                   name: 'exercise-tasks-sift',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Sift - new',
+                    title: 'Sift | Exercise Tasks',
                   },
                 },
                 {
@@ -645,7 +696,7 @@ const router = new Router({
                   name: 'exercise-tasks-sift-new',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Sift - new',
+                    title: 'Create Sift Panel | Exercise Tasks',
                     pageName: 'exercise-tasks-sift',
                   },
                 },
@@ -655,7 +706,7 @@ const router = new Router({
                   name: 'exercise-tasks-sift-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Panels - Sift - view',
+                    title: 'Sift Panel | Exercise Tasks',
                     pageName: 'exercise-tasks-sift',
                   },
                 },
@@ -671,7 +722,7 @@ const router = new Router({
                   name: 'exercise-tasks-selection',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Selection',
+                    title: 'Selection | Exercise Tasks',
                   },
                 },
                 {
@@ -680,7 +731,7 @@ const router = new Router({
                   name: 'exercise-tasks-selection-new',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Selection - new',
+                    title: 'Create Selection Panel | Exercise Tasks',
                   },
                 },
                 {
@@ -689,250 +740,261 @@ const router = new Router({
                   name: 'exercise-tasks-selection-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Exercise Tasks | Panels - view',
+                    title: 'Selection Panel | Exercise Tasks',
                   },
                 },
               ],
+            },
+          ],
+        },
+        {
+          path: 'stages',
+          component: ExerciseStages,
+          children: [
+            {
+              path: '',
+              redirect: 'review',
+            },
+            {
+              path: 'review',
+              component: ExerciseStagesReviewList,
+              name: 'exercise-stages-review-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Review | Exercise Stages',
+              },
+            },
+            {
+              path: 'review/edit',
+              component: ExerciseStagesReviewEdit,
+              name: 'exercise-stages-review-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Review | Exercise Stages',
+              },
+            },
+            {
+              path: 'selected',
+              component: ExerciseStagesSelectedList,
+              name: 'exercise-stages-selected-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Selected | Exercise Stages',
+              },
+            },
+            {
+              path: 'selected/edit',
+              component: ExerciseStagesSelectedEdit,
+              name: 'exercise-stages-selected-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Selected | Exercise Stages',
+              },
+            },
+            {
+              path: 'selected/back',
+              component: ExerciseStagesSelectedBack,
+              name: 'exercise-stages-selected-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Move Back Selected | Exercise Stages',
+              },
+            },
+            {
+              path: 'recommended',
+              component: ExerciseStagesRecommendedList,
+              name: 'exercise-stages-recommended-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Recommended | Exercise Stages',
+              },
+            },
+            {
+              path: 'recommended/edit',
+              component: ExerciseStagesRecommendedEdit,
+              name: 'exercise-stages-recommended-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Recommended | Exercise Stages',
+              },
+            },
+            {
+              path: 'recommended/back',
+              component: ExerciseStagesRecommendedBack,
+              name: 'exercise-stages-recommended-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Move Back Recommended | Exercise Stages',
+              },
+            },
+            {
+              path: 'handover',
+              component: ExerciseStagesHandoverList,
+              name: 'exercise-stages-handover-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Handover | Exercise Stages',
+              },
+            },
+            {
+              path: 'handover/back',
+              component: ExerciseStagesHandoverBack,
+              name: 'exercise-stages-handover-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Move Back Handover | Exercise Stages',
+              },
+            },
+            {
+              path: 'shortlisted',
+              component: ExerciseStagesShortlistedList,
+              name: 'exercise-stages-shortlisted-list',
+              meta: {
+                requiresAuth: true,
+                title: 'Shortlisted | Exercise Stages',
+              },
+            },
+            {
+              path: 'shortlisted/edit',
+              component: ExerciseStagesShortlistedEdit,
+              name: 'exercise-stages-shortlisted-edit',
+              meta: {
+                requiresAuth: true,
+                title: 'Edit Shortlisted | Exercise Stages',
+              },
+            },
+            {
+              path: 'shortlisted/back',
+              component: ExerciseStagesShortlistedBack,
+              name: 'exercise-stages-shortlisted-back',
+              meta: {
+                requiresAuth: true,
+                title: 'Move Back Shortlisted | Exercise Stages',
+              },
             },
           ],
         },
         {
           path: 'reports',
-          component: ExerciseShowReports,
+          component: ExerciseReports,
           children: [
             {
               path: '',
-              component: ExerciseShowReportsIndex,
-              name: 'exercise-show-reports',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Reports',
-              },
+              redirect: 'diversity',
             },
             {
               path: 'diversity',
-              component: ExerciseShowReportsDiversity,
-              name: 'exercise-show-report-diversity',
+              component: ExerciseReportsDiversity,
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Reports | Diversity',
+                title: 'Diversity | Exercise Reports',
               },
             },
             {
               path: 'outreach',
-              component: ExerciseShowReportsOutreach,
-              name: 'exercise-show-report-outreach',
+              component: ExerciseReportsOutreach,
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Reports | Oureach',
+                title: 'Outreach | Exercise Reports',
+              },
+            },
+            {
+              path: 'character-issues',
+              component: ExerciseReportsCharacterIssues,
+              meta: {
+                requiresAuth: true,
+                title: 'Character Issues | Exercise Reports',
+              },
+            },
+            {
+              path: 'eligibility-issues',
+              component: ExerciseReportsEligibilityIssues,
+              meta: {
+                requiresAuth: true,
+                title: 'Eligibility Issues | Exercise Reports',
               },
             },
             {
               path: 'reasonable-adjustments',
-              component: ExerciseShowReportsReasonableAdjustments,
-              name: 'exercise-show-report-reasonable-adjustments',
+              component: ExerciseReportsReasonableAdjustments,
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Reports | Reasonable Adjustments',
+                title: 'Reasonable Adjustments | Exercise Reports',
               },
             },
             {
               path: 'qualifying-test-reports',
-              component: QualifyingTestReports,
-              name: 'qualifying-test-reports',
-              meta: {
-                requiresAuth: true,
-                title: 'Qualifying Test Reports',
-              },
-            },
-            {
-              path: 'qualifying-test-report-create',
-              component: QualifyingTestReportCreate,
-              name: 'qualifying-test-report-create',
-              meta: {
-                requiresAuth: true,
-                title: 'Qualifying Test Report | New',
-              },
-            },
-            {
-              path: 'qualifying-test-reports/:qualifyingTestReportId',
-              component: QualifyingTestReport,
+              component: EmptyRouterView,
               children: [
                 {
                   path: '',
-                  component: QualifyingTestReportView,
-                  name: 'qualifying-test-report-view',
+                  component: ExerciseReportsQualifyingTestReports,
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test Report | View',
+                    title: 'Qualifying Test Reports | Exercise Reports',
                   },
                 },
                 {
-                  path: 'edit',
-                  component: QualifyingTestReportEdit,
-                  name: 'qualifying-test-report-edit',
+                  path: 'create',
+                  name: 'qualifying-test-report-create',
+                  component: QualifyingTestReportCreate,
                   meta: {
                     requiresAuth: true,
-                    title: 'Qualifying Test Report | Edit',
+                    title: 'Create Qualifying Test Report | Exercise Reports',
                   },
                 },
                 {
-                  path: ':score',
-                  component: QualifyingTestReportViewScore,
-                  name: 'qualifying-test-report-view-score',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Qualifying Test Report | View Score',
-                  },
+                  path: ':qualifyingTestReportId',
+                  component: QualifyingTestReport,
+                  children: [
+                    {
+                      path: '',
+                      component: QualifyingTestReportView,
+                      name: 'qualifying-test-report-view',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Qualifying Test Report | Exercise Reports',
+                      },
+                    },
+                    {
+                      path: 'edit',
+                      component: QualifyingTestReportEdit,
+                      name: 'qualifying-test-report-edit',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Edit Qualifying Test Report | Exercise Reports',
+                      },
+                    },
+                    {
+                      path: ':score',
+                      component: QualifyingTestReportViewScore,
+                      name: 'qualifying-test-report-view-score',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Score | Qualifying Test Report | Exercise Reports',
+                      },
+                    },
+                  ],
                 },
-              ],
-            },
-            {
-              path: 'eligibility',
-              component: ExerciseShowReportsEligibilityIssues,
-              name: 'exercise-show-report-eligibility-issues',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Reports | Eligibility Issues',
-              },
-            },
-            {
-              path: 'character',
-              component: ExerciseShowReportsCharacterIssues,
-              name: 'exercise-show-report-character-issues',
-              meta: {
-                requiresAuth: true,
-                title: 'Exercise Reports | Character Issues',
-              },
+             ],
             },
             {
               path: 'agency',
-              component: ExerciseShowReportsAgency,
-              name: 'exercise-show-report-agency',
+              component: ExerciseReportsAgency,
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Reports | Agency',
+                title: 'Agency | Exercise Reports',
               },
             },
             {
               path: 'handover',
-              component: ExerciseShowReportsHandover,
-              name: 'exercise-show-report-handover',
+              component: ExerciseReportsHandover,
               meta: {
                 requiresAuth: true,
-                title: 'Exercise Reports | Handover',
+                title: 'Handover | Exercise Reports',
               },
             },
           ],
-        },
-      ],
-    },
-    {
-      path: '/exercise/:id/edit',
-      component: ExerciseShow,
-      meta: {
-        requiresAuth: true,
-        title: 'Edit An Exercise',
-      },
-      children: [
-        {
-          path: 'name',
-          component: ExerciseEditName,
-          name: 'exercise-edit-name',
-          meta: {
-            requiresAuth: true,
-            title: 'Update exercise name',
-          },
-        },
-        {
-          path: 'contacts',
-          component: ExerciseEditContacts,
-          name: 'exercise-edit-contacts',
-          meta: {
-            requiresAuth: true,
-            title: 'Contacts',
-          },
-        },
-        {
-          path: 'shortlisting',
-          component: ExerciseEditShortlisting,
-          name: 'exercise-edit-shortlisting',
-          meta: {
-            requiresAuth: true,
-            title: 'Shortlisting Methods',
-          },
-        },
-        {
-          path: 'timeline',
-          component: ExerciseEditTimeline,
-          name: 'exercise-edit-timeline',
-          meta: {
-            requiresAuth: true,
-            title: 'Timeline',
-          },
-        },
-        {
-          path: 'eligibility',
-          component: ExerciseEditEligibility,
-          name: 'exercise-edit-eligibility',
-          meta: {
-            requiresAuth: true,
-            title: 'Eligibility Information',
-          },
-        },
-        {
-          path: 'summary',
-          component: ExerciseEditSummary,
-          name: 'exercise-edit-summary',
-          meta: {
-            requiresAuth: true,
-            title: 'Vacancy Summary',
-          },
-        },
-        {
-          path: 'vacancy',
-          component: ExerciseEditVacancy,
-          name: 'exercise-edit-vacancy',
-          meta: {
-            requiresAuth: true,
-            title: 'Vacancy Information',
-          },
-        },
-        {
-          path: 'assessment-options',
-          component: ExerciseEditAssessmentOptions,
-          name: 'exercise-edit-assessment-options',
-          meta: {
-            requiresAuth: true,
-            title: 'Assessment Options',
-          },
-        },
-        {
-          path: 'working-preferences',
-          component: ExerciseEditWorkingPreferences,
-          name: 'exercise-edit-working-preferences',
-          meta: {
-            requiresAuth: true,
-            title: 'Working Preferences',
-          },
-        },
-        {
-          path: 'downloads',
-          component: ExerciseEditDownloads,
-          name: 'exercise-edit-downloads',
-          meta: {
-            requiresAuth: true,
-            title: 'Downloads',
-          },
-        },
-        {
-          path: 'invitations',
-          component: ExerciseEditInvitations,
-          name: 'exercise-edit-invitations',
-          meta: {
-            requiresAuth: true,
-            title: 'Invitations',
-          },
         },
       ],
     },
@@ -966,7 +1028,6 @@ const router = new Router({
         if (isSignedIn) {
           return next({ name: 'exercises' });
         }
-
         return next();
       },
     },
