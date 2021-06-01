@@ -1432,7 +1432,7 @@
                                 class="govuk-list"
                               >
                                 <li v-if="!item.judicialFunctions.timeEngagedStart">
-                                  {{ showAlternative('No Answer provided') }}
+                                  No Answer provided
                                 </li>
                                 <li v-if="item.judicialFunctions.timeEngagedEnd">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
