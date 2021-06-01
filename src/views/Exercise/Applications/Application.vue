@@ -2380,7 +2380,7 @@ export default {
     this.$store.dispatch('application/unbind');
   },
   methods: {
-    pageLoad() {
+    async pageLoad() {
       if (this.$route.params.tab) {
         this.activeTab = this.$route.params.tab;
       }
@@ -2388,7 +2388,13 @@ export default {
         this.activeTab = this.$route.hash.substring(1);
       }
       if (this.applicationId && (!this.application || this.$store.state.application.record.id !== this.applicationId)) {
-        this.$store.dispatch('application/bind', this.applicationId);
+        await this.$store.dispatch('application/bind', this.applicationId);
+        if (this.$route.name === 'exercise-application') {  // redirect so the status side navigation is highlighted
+          this.$router.replace({
+            name: 'exercise-applications-application',
+            params: { applicationId: this.applicationId, status: this.application.status },
+          });
+        }
       }
     },
     nextApplication() {

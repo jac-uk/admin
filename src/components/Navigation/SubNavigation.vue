@@ -12,11 +12,12 @@
         <router-link
           v-slot="{ href, navigate, isActive }"
           :to="page"
+          custom
         >
           <a
             class="moj-sub-navigation__link"
             :active="isActive"
-            :aria-current="current == page.name ? 'page' : false"
+            :aria-current="isActive ? 'page' : false"
             :href="href"
             @click="navigate"
           >{{ page.title }}</a>
@@ -33,10 +34,10 @@ export default {
       required: true,
       type: Array,
     },
-    current: {
-      required: true,
-      type: String,
-    },
+    // current: {
+    //   required: true,
+    //   type: String,
+    // },
   },
 };
 </script>

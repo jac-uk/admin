@@ -4,19 +4,26 @@
     aria-label="Side navigation"
   >
     <ul class="moj-side-navigation__list">
-      <li
+      <router-link
         v-for="page in pages"
         :key="page.name"
-        class="moj-side-navigation__item"
-        :class="current == page.name ? 'moj-side-navigation__item--active' : ''"
+        v-slot="{ href, navigate, isActive }"
+        :to="page"
+        custom
       >
-        <router-link
-          :aria-current="current == page.name ? 'location' : false"
-          :to="page"
+        <li
+          class="moj-side-navigation__item"
+          :class="{'moj-side-navigation__item--active': isActive}"
         >
-          {{ page.title }}
-        </router-link>
-      </li>
+          <a
+            class="moj-side-navigation__link"
+            :active="isActive"
+            :aria-current="isActive ? 'location' : false"
+            :href="href"
+            @click="navigate"
+          >{{ page.title }}</a>
+        </li>
+      </router-link>
     </ul>
   </nav>
 </template>
@@ -27,10 +34,6 @@ export default {
     pages: {
       required: true,
       type: Array,
-    },
-    current: {
-      required: true,
-      type: String,
     },
   },
 };

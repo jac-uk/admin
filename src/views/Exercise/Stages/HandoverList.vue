@@ -5,13 +5,13 @@
       status="success"
     />
     <form>
-      <div class="moj-page-header-actions">
+      <div class="moj-page-header-actions govuk-!-margin-bottom-2">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
             Handover ({{ totalApplicationRecords }})
           </h1>
         </div>
-        <div class="moj-page-header-actions__actions">
+        <div class="moj-page-header-actions__actions float-right">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
