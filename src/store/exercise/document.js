@@ -128,5 +128,13 @@ export default {
       if (state.record === null) return true;
       return !(state.record.assessmentMethods && state.record.assessmentMethods.independentAssessments === false);
     },
+    hasQualifyingTests: (state) => {
+      if (state.record === null) return false;
+      if (!state.record.shortlistingMethods || state.record.shortlistingMethods.length === 0) return false;
+      if (state.record.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0) return true;
+      if (state.record.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0) return true;
+      if (state.record.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
+      return false;
+    },
   },
 };

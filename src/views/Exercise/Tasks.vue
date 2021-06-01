@@ -20,15 +20,14 @@ export default {
   data() {
     const exercise = this.$store.state.exerciseDocument.record;
     const path = `/exercise/${exercise.id}/tasks`;
-    const sideNavigation = [
-      {
-        title: 'Qualifying Tests',
-        path: `${path}/qualifying-tests`,
-        params: {
-          nav: '/tasks/qualifying-tests', // TODO check this is needed
-        },
+    const sideNavigation = [];
+    sideNavigation.push({
+      title: 'Qualifying Tests',
+      path: `${path}/qualifying-tests`,
+      params: {
+        nav: '/tasks/qualifying-tests', // TODO check this is needed
       },
-    ];
+    });
     if (exercise.applicationRecords) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
