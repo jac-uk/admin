@@ -1434,13 +1434,13 @@
                               <ul
                                 class="govuk-list"
                               >
-                                <li v-if="!item.judicialFunctions.timeEngagedStart && !item.judicialFunctions.timeEngagedEnd">
+                                <li v-if="!item.judicialFunctions.timeEngagedStart">
                                   No Dates provided
                                 </li>
-                                <li v-if="item.judicialFunctions.timeEngagedEnd">
+                                <li v-if="item.judicialFunctions.timeEngagedStart && item.judicialFunctions.timeEngagedEnd">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
                                 </li>
-                                <li v-else>
+                                <li v-else-if="item.judicialFunctions.timeEngagedStart">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} — current
                                 </li>
                               </ul>
