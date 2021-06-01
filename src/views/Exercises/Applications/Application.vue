@@ -1434,8 +1434,8 @@
                               <ul
                                 class="govuk-list"
                               >
-                                <li v-if="!item.judicialFunctions.timeEngagedStart">
-                                  No Answer provided
+                                <li v-if="!item.judicialFunctions.timeEngagedStart && item.judicialFunctions.timeEngagedEnd">
+                                  No Dates provided
                                 </li>
                                 <li v-if="item.judicialFunctions.timeEngagedEnd">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
