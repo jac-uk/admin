@@ -89,7 +89,7 @@ export default {
       if (pageIndex === null) {
         if (router.currentRoute.params && router.currentRoute.params.referrer) {
           return routeLocation(router.currentRoute.params.referrer, id);
-        } else if (state.journey.length > 1 && defaultRouteName) {
+        } else if (defaultRouteName && getters.currentPageIndex === -1) {
           return routeLocation(defaultRouteName, id);
         } else {
           return routeLocation('exercise-overview', id);
