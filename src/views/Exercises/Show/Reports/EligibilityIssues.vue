@@ -9,7 +9,7 @@
       <button
         class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
         :disabled="generatingExport"
-        @click="exportContacts"
+        @click="exportData"
       >
         <span
           v-if="generatingExport"
@@ -183,8 +183,8 @@ export default {
 
       return reportData;
     },
-    async exportContacts() {
-      const title = 'Contacts';
+    async exportData() {
+      const title = 'Eligibility Issues';
       const xlsxData = await this.gatherReportData();
 
       downloadXLSX(
