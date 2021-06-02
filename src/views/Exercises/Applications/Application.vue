@@ -1032,7 +1032,7 @@
                     </div>
 
                     <div
-                      v-if="item.qualificationNotComplete"
+                      v-if="item.qualificationNotComplete === true && item.notCalledToBar === true"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
