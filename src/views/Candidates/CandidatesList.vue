@@ -10,7 +10,11 @@
       :data="tableData"
       :page-size="50"
       :columns="tableColumns"
-      :search="['fullName']"
+      :custom-search="{
+        placeholder: 'Search candidate names',
+        handler: candidateSearch,
+        field: 'id',
+      }"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -25,10 +29,7 @@
           {{ new Date(row.created) | formatDate('long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          <span v-if="row.applications && row.applications.applied">
-            {{ row.applications.applied }}
-          </span>
-          <span v-else>0</span>
+          {{ countApplications(row) }}
         </TableCell>
       </template>
     </Table>
@@ -49,7 +50,7 @@ export default {
       tableColumns: [
         { title: 'Name', sort: 'fullName' },
         { title: 'Account created on', sort: 'created', direction: 'desc', default: true },
-        { title: 'Number of Applications', sort: 'applications.applied', direction: 'desc' },
+        { title: 'Number of Applications', sort: 'computed.totalApplications', direction: 'desc' },
       ],
     };
   },
@@ -61,6 +62,16 @@ export default {
   methods: {
     getTableData(params) {
       this.$store.dispatch('candidates/bind', params);
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    countApplications(candidate) {
+      if (candidate && candidate.computed && candidate.computed.totalApplications) {
+        return candidate.computed.totalApplications;
+      } else {
+        return 0;
+      }
     },
   },
 };

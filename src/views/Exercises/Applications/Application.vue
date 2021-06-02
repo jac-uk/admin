@@ -380,7 +380,7 @@
               </h2>
 
               <dl
-                v-if="Object.keys(application.equalityAndDiversitySurvey).length"
+                v-if="application.equalityAndDiversitySurvey"
                 class="govuk-summary-list"
               >
                 <div class="govuk-summary-list__row">
@@ -741,11 +741,14 @@
                   class="govuk-summary-list__value"
                 >
                   <p
-                    v-for="item in application.locationPreferences"
+                    v-for="(item, index) in application.locationPreferences"
                     :key="item.name"
                     class="govuk-body"
                   >
-                    {{ item }}
+                    <strong>
+                      {{ `${index + 1}:` }}
+                    </strong>
+                    {{ `${item}` }}
                   </p>
                 </dd>
               </dl>
@@ -1523,6 +1526,7 @@
           </div>
 
           <div
+            v-if="!isNonLegal"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">

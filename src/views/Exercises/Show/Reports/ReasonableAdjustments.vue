@@ -15,7 +15,7 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
-              :disabled="hasReportData ? '' : disabled"
+              :disabled="!hasReportData"
               @click="exportData()"
             >
               Export data
@@ -37,7 +37,8 @@
 
     <div
       v-if="report != null"
-      class="govuk-grid-row">
+      class="govuk-grid-row"
+    >
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
@@ -141,6 +142,9 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
+    hasReportData() {
+      return this.report && this.report.headers;
+    },
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
@@ -153,9 +157,6 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
-  },
-  hasReportData() {
-    return this.report && this.report.headers;
   },
   methods: {
     async refreshReport() {
