@@ -450,7 +450,6 @@
                 </tr>
               </tbody>
             </table>
-
           </template>
         </div>
       </TabsList>

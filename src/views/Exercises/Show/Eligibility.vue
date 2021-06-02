@@ -89,6 +89,7 @@
                 v-html="criterion.text"
               />
               <!-- eslint-enable -->
+              <hr>
             </li>
           </ul>
           <span v-else-if="exercise.aSCApply === false">
