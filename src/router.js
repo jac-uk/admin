@@ -18,7 +18,8 @@ import Exercise from '@/views/Exercise';
 import ExerciseDetails from '@/views/Exercise/Details';
 import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview';
 import ExerciseDetailsEditName from '@/views/Exercise/Details/EditName';
-import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent';
+import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent/View';
+import ExerciseDetailsApplicationContentEdit from '@/views/Exercise/Details/ApplicationContent/Edit';
 import ExerciseDetailsAssessments from '@/views/Exercise/Details/Assessments/View';
 import ExerciseDetailsAssessmentsEdit from '@/views/Exercise/Details/Assessments/Edit';
 import ExerciseDetailsContacts from '@/views/Exercise/Details/Contacts/View';
@@ -462,13 +463,28 @@ const router = new Router({
               ],
             },
             {
-              name: 'exercise-application-content',
               path: 'application-content',
-              component: ExerciseDetailsApplicationContent,
-              meta: {
-                requiresAuth: true,
-                title: 'Application Content | Exercise Details',
-              },
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-application-content',
+                  path: '',
+                  component: ExerciseDetailsApplicationContent,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Application Content | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-application-content-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsApplicationContentEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Application Content | Exercise Details',
+                  },
+                },
+              ],
             },
           ],
         },
