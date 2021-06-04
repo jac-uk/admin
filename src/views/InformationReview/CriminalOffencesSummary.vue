@@ -7,8 +7,9 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="characterInformation.criminalConvictionDetails"
+            :data="application.characterInformationV2.criminalConvictionDetails"
             :display-month-year-only="false"
+            :user-id="application.userId"
           />
         </dd>
       </div>
@@ -21,8 +22,9 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :data="characterInformation.criminalCautionDetails"
+            :data="application.characterInformationV2.criminalCautionDetails"
             :display-month-year-only="false"
+            :user-id="application.userId"
           />
         </dd>
       </div>
@@ -39,7 +41,7 @@ export default {
     InformationReviewRenderer,
   },
   props: {
-    characterInformation: {
+    application: {
       type: Object,
       required: true,
       default: new Object({}),

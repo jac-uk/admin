@@ -28,7 +28,9 @@
             :value="item.title"
             field="Sentence, penalty or fine"
             type="route"
+            @changefield="emitChangeUserDetails"
           />
+            <!-- :route-to="{ name: 'candidates-view', params: { id: userId } }" -->
           <!-- <EditableField
             :value="title"
             :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
@@ -88,6 +90,10 @@ export default {
     EditableField,
   },
   props: {
+    userId: {
+      type: String,
+      required: true,
+    },
     data: {
       type: Array,
       required: false,
@@ -116,6 +122,9 @@ export default {
   methods: {
     displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
+    },
+    emitChangeUserDetails() {
+      this.$root.$emit('changeUserDetails');
     },
   },
 };
