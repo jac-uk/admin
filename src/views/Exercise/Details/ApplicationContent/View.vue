@@ -38,7 +38,8 @@ export default {
     },
     selectedApplicationParts() {
       if (this.exercise && this.exercise.applicationContent && this.exercise.applicationContent.registration) {
-        return this.exercise.applicationContent.registration;
+        const selected = Object.entries(this.exercise.applicationContent.registration).filter((keyValue) => keyValue[1] === true);
+        return selected.map((keyValue) => keyValue[0]);
       } else {
         return this.getApplicationParts;
       }
