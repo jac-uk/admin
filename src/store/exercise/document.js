@@ -283,5 +283,11 @@ export default {
       }
       return applicationParts;
     },
+    getApplicationPartsMap: (state, getters) => {
+      const applicationParts = getters.getApplicationParts;
+      const applicationPartsMap = {};
+      applicationParts.forEach(part => applicationPartsMap[part] = true);
+      return applicationPartsMap;
+    },
   },
 };

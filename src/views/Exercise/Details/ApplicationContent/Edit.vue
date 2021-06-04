@@ -19,20 +19,15 @@
           @save="save"
         />
 
-        <CheckboxGroup
-          id="application-content"
-          v-model="exercise.applicationContent.registration"
-          required
-          :messages="{required: 'Please choose at least one item'}"
-          label="Configure which parts to include on the application form for this exercise"
+        <label>Configure which parts to include on the application form for this exercise</label>
+        <Checkbox
+          v-for="item in applicationParts"
+          :id="`application-part-${item}`"
+          :key="item"
+          v-model="exercise.applicationContent.registration[item]"
         >
-          <CheckboxItem
-            v-for="item in applicationParts"
-            :key="item"
-            :value="item"
-            :label="item | lookup"
-          />
-        </CheckboxGroup>
+          {{ item | lookup }}
+        </Checkbox>
         <button class="govuk-button">
           Save and continue
         </button>
@@ -45,21 +40,19 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
 export default {
   components: {
     ErrorSummary,
     BackLink,
-    CheckboxGroup,
-    CheckboxItem,
+    Checkbox,
   },
   extends: Form,
   data(){
     const defaults = {
       applicationContent: {
-        registration: this.$store.getters['exerciseDocument/getApplicationParts'],
+        registration: this.$store.getters['exerciseDocument/getApplicationPartsMap'],
       },
     };
     const data = this.$store.getters['exerciseDocument/data']();
