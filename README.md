@@ -14,6 +14,7 @@ cd admin
 npm install
 ```
 
+
 ## Add environment variables to root project
 
 create .env.develop.local file in root directory + credentials
