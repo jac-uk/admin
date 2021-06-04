@@ -341,9 +341,11 @@
 
               <dl v-if="isVersion2 && application.characterInformationV2">
                 <CriminalOffencesSummary
+                  :application="application"
                   :character-information="application.characterInformationV2"
+                  @changeUserDetails="changeUserDetails"
                 />
-                <FixedPenaltiesSummary
+                <!-- <FixedPenaltiesSummary
                   :character-information="application.characterInformationV2"
                 />
                 <MotoringOffencesSummary
@@ -360,7 +362,7 @@
                 />
                 <CharacterDeclarationSummary
                   :character-information="application.characterInformationV2"
-                />
+                /> -->
               </dl>
               <dl v-else>
                 <CharacterInformationSummaryV1
@@ -2378,6 +2380,7 @@ export default {
   },
   created() {
     this.pageLoad();
+    this.$root.$on('changeUserDetails', this.changeUserDetails);
   },
   destroyed() {
     this.$store.dispatch('application/unbind');
@@ -2511,6 +2514,7 @@ export default {
       return objChanged;
     },
     changeUserDetails(objChanged) {
+      console.log('cahnge');
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
