@@ -24,7 +24,7 @@
           v-for="item in applicationParts"
           :id="`application-part-${item}`"
           :key="item"
-          v-model="exercise.applicationContent.registration[item]"
+          v-model="formData.applicationContent.registration[item]"
         >
           {{ item | lookup }}
         </Checkbox>
@@ -55,10 +55,9 @@ export default {
         registration: this.$store.getters['exerciseDocument/getApplicationPartsMap'],
       },
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
     };
   },
   computed: {
@@ -71,7 +70,7 @@ export default {
   },
   methods: {
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
     },
   },
