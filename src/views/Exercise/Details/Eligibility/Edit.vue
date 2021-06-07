@@ -26,7 +26,7 @@
         <RadioGroup
           v-if="isLegal"
           id="post-qualification-experience"
-          v-model="exercise.postQualificationExperience"
+          v-model="formData.postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
         >
@@ -44,7 +44,7 @@
           >
             <TextField
               id="other-years"
-              v-model="exercise.otherYears"
+              v-model="formData.otherYears"
               label="Number of years"
               class="govuk-!-width-one-quarter"
               type="number"
@@ -56,7 +56,7 @@
         <RadioGroup
           v-if="isLegal && isTribunal"
           id="schedule-2d-or-3-apply"
-          v-model="exercise.schedule2Apply"
+          v-model="formData.schedule2Apply"
           label="Does Schedule 2(d) or Schedule 2(3) apply?"
           hint="This lets appropriate candidates apply, even if they don't have the right qualifications. It only applies to tribunal vacancies."
         >
@@ -66,7 +66,7 @@
           >
             <RadioGroup
               id="yes-schedule-2-applies"
-              v-model="exercise.appliedSchedule"
+              v-model="formData.appliedSchedule"
               label="Which Schedule applies?"
               required
             >
@@ -89,7 +89,7 @@
 
         <CheckboxGroup
           id="authorisations"
-          v-model="exercise.authorisations"
+          v-model="formData.authorisations"
           label="Authorisations"
           hint="Select all that apply."
           required
@@ -110,7 +110,7 @@
 
         <RadioGroup
           id="additional-selection-criteria-apply"
-          v-model="exercise.aSCApply"
+          v-model="formData.aSCApply"
           label="Does additional selection criteria (ASC) apply?"
           hint="This is also known as non-statutory eligibility. It describes what additional skills or experience candidates must have."
         >
@@ -119,7 +119,7 @@
             label="Yes"
           >
             <RepeatableFields
-              v-model="exercise.selectionCriteria"
+              v-model="formData.selectionCriteria"
               :component="repeatableFields.SelectionCriterion"
               :max="2"
             />
@@ -133,7 +133,7 @@
 
         <RadioGroup
           id="previous-judicial-experience-apply"
-          v-model="exercise.previousJudicialExperienceApply"
+          v-model="formData.previousJudicialExperienceApply"
           label="Does previous judicial experience (PJE) apply?"
         >
           <RadioItem
@@ -142,7 +142,7 @@
           >
             <TextField
               id="pje-days"
-              v-model="exercise.pjeDays"
+              v-model="formData.pjeDays"
               label="Number of days"
               class="govuk-!-width-one-quarter"
               type="number"
@@ -159,7 +159,7 @@
         <CheckboxGroup
           v-if="isLegal"
           id="qualifications"
-          v-model="exercise.qualifications"
+          v-model="formData.qualifications"
           label="Qualifications"
           hint="Select all that apply."
           required
@@ -186,7 +186,7 @@
           >
             <TextField
               id="other-qualifications"
-              v-model="exercise.otherQualifications"
+              v-model="formData.otherQualifications"
               label="Add details of other relevant professions, qualifications or experience"
               hint="For example, Patent attorney."
               required
@@ -201,7 +201,7 @@
         <CheckboxGroup
           v-if="isNonLegal"
           id="memberships"
-          v-model="exercise.memberships"
+          v-model="formData.memberships"
           label="Memberships"
           required
         >
@@ -229,7 +229,7 @@
           </summary>
           <div class="govuk-details__text">
             <RepeatableFields
-              v-model="exercise.otherMemberships"
+              v-model="formData.otherMemberships"
               ident="otherMemberships"
               :allow-empty="true"
               :component="repeatableFields.Membership"
@@ -240,7 +240,7 @@
 
         <RadioGroup
           id="reasonable-length-service"
-          v-model="exercise.reasonableLengthService"
+          v-model="formData.reasonableLengthService"
           label="Reasonable length of service"
           hint="This is the minimum number of years the candidate must work."
         >
@@ -262,7 +262,7 @@
           >
             <TextField
               id="other-LOS"
-              v-model="exercise.otherLOS"
+              v-model="formData.otherLOS"
               label="Number of years"
               class="govuk-!-width-one-quarter"
               type="number"
@@ -273,7 +273,7 @@
 
         <RadioGroup
           id="retirement-age"
-          v-model="exercise.retirementAge"
+          v-model="formData.retirementAge"
           label="Retirement age"
         >
           <RadioItem
@@ -286,7 +286,7 @@
           >
             <TextField
               id="other-retirement"
-              v-model="exercise.otherRetirement"
+              v-model="formData.otherRetirement"
               label="Retirement age"
               class="govuk-!-width-one-quarter"
               type="number"
@@ -315,6 +315,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
 import Membership from '@/components/RepeatableFields/Membership';
+import { mapGetters } from 'vuex';
 
 const fixedFields = {
   memberships: [
@@ -350,7 +351,6 @@ const fixedFields = {
 };
 
 const findRemoved = (oldArray, newArray) => {
-
   return oldArray.filter(item => !newArray.includes(item));
 };
 
@@ -386,51 +386,29 @@ export default {
       otherRetirement: null,
       pjeDays: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = {
-      ...defaults,
-      ...data,
-    };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      formData: formData,
       repeatableFields: {
         SelectionCriterion,
         Membership,
       },
-      exercise: exercise,
-      isCourtOrTribunal: exercise.isCourtOrTribunal,
-      typeOfExercise: exercise.typeOfExercise,
     };
   },
   computed: {
+    ...mapGetters('exerciseDocument', [
+      'isLegal',
+      'isNonLegal',
+      'isTribunal',
+    ]),
     memberships() {
-      if (Array.isArray(this.exercise.otherMemberships)) {
+      if (Array.isArray(this.formData.otherMemberships)) {
         return [
           ...fixedFields.memberships,
-          ...this.exercise.otherMemberships,
+          ...this.formData.otherMemberships,
         ];
       }
       return fixedFields.memberships;
-    },
-    isLegal() {
-      if (this.typeOfExercise === 'legal') {
-        return true;
-      }
-      if (this.typeOfExercise === 'leadership') {
-        return true;
-      }
-      return false;
-    },
-    isNonLegal() {
-      if (this.typeOfExercise === 'non-legal') {
-        return true;
-      }
-      if (this.typeOfExercise === 'leadership-non-legal') {
-        return true;
-      }
-      return false;
-    },
-    isTribunal() {
-      return this.isCourtOrTribunal === 'tribunal';
     },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
@@ -439,19 +417,19 @@ export default {
   watch: {
     memberships(newMemberships, oldMemberships) {
       // @NOTE remove deleted custom membership from selected
-      if (Array.isArray(this.exercise.memberships) && oldMemberships.length > newMemberships.length) {
+      if (Array.isArray(this.formData.memberships) && oldMemberships.length > newMemberships.length) {
         const removedMembership = findRemoved(oldMemberships, newMemberships);
-        const selectedIndex = this.exercise.memberships.indexOf(removedMembership[0].value);
+        const selectedIndex = this.formData.memberships.indexOf(removedMembership[0].value);
         if (selectedIndex > -1) {
-          this.exercise.memberships.splice(selectedIndex, 1);
+          this.formData.memberships.splice(selectedIndex, 1);
         }
       }
     },
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.eligibility = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.eligibility'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-eligibility'));
     },
   },

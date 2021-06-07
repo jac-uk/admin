@@ -40,13 +40,13 @@
         </h2>
         <DateInput
           id="open-for-applications"
-          v-model="exercise.applicationOpenDate"
+          v-model="formData.applicationOpenDate"
           label="Open for applications"
           required
         />
         <DateInput
           id="closed-for-applications"
-          v-model="exercise.applicationCloseDate"
+          v-model="formData.applicationCloseDate"
           label="Closed for applications"
           required
         />
@@ -57,42 +57,42 @@
         <DateInput
           v-if="hasPaperSift"
           id="sift-start-date"
-          v-model="exercise.siftStartDate"
+          v-model="formData.siftStartDate"
           label="Sift start date"
           required
         />
         <DateInput
           v-if="hasPaperSift"
           id="sift-end-date"
-          v-model="exercise.siftEndDate"
+          v-model="formData.siftEndDate"
           label="Sift end date"
           required
         />
         <DateInput
           v-if="hasNameBlindSift"
           id="name-blind-sift-start-date"
-          v-model="exercise.nameBlindSiftStartDate"
+          v-model="formData.nameBlindSiftStartDate"
           label="Name-blind sift start date"
           required
         />
         <DateInput
           v-if="hasNameBlindSift"
           id="name-blind-sift-end-date"
-          v-model="exercise.nameBlindSiftEndDate"
+          v-model="formData.nameBlindSiftEndDate"
           label="Name-blind sift end date"
           required
         />
         <DateInput
           v-if="hasTelephoneAssessment"
           id="telephone-assessment-start-date"
-          v-model="exercise.telephoneAssessmentStartDate"
+          v-model="formData.telephoneAssessmentStartDate"
           label="Telephone assessment start date"
           required
         />
         <DateInput
           v-if="hasTelephoneAssessment"
           id="telephone-assessment-end-date"
-          v-model="exercise.telephoneAssessmentEndDate"
+          v-model="formData.telephoneAssessmentEndDate"
           label="Telephone assessment end date"
           required
         />
@@ -106,25 +106,25 @@
           </h3>
           <DateInput
             id="sj-test-date"
-            v-model="exercise.situationalJudgementTestDate"
+            v-model="formData.situationalJudgementTestDate"
             label="Test date"
             required
           />
           <TimeInput
             id="sj-test-start-time"
-            v-model="exercise.situationalJudgementTestStartTime"
+            v-model="formData.situationalJudgementTestStartTime"
             label="Start time"
             required
           />
           <TimeInput
             id="sj-test-end-time"
-            v-model="exercise.situationalJudgementTestEndTime"
+            v-model="formData.situationalJudgementTestEndTime"
             label="End time"
             required
           />
           <DateInput
             id="sj-test-outcome"
-            v-model="exercise.situationalJudgementTestOutcome"
+            v-model="formData.situationalJudgementTestOutcome"
             label="Outcome to candidates"
             required
           />
@@ -139,25 +139,25 @@
           </h3>
           <DateInput
             id="ca-test-date"
-            v-model="exercise.criticalAnalysisTestDate"
+            v-model="formData.criticalAnalysisTestDate"
             label="Test date"
             required
           />
           <TimeInput
             id="ca-test-start-time"
-            v-model="exercise.criticalAnalysisTestStartTime"
+            v-model="formData.criticalAnalysisTestStartTime"
             label="Start time"
             required
           />
           <TimeInput
             id="ca-test-end-time"
-            v-model="exercise.criticalAnalysisTestEndTime"
+            v-model="formData.criticalAnalysisTestEndTime"
             label="End time"
             required
           />
           <DateInput
             id="ca-test-outcome"
-            v-model="exercise.criticalAnalysisTestOutcome"
+            v-model="formData.criticalAnalysisTestOutcome"
             label="Outcome to candidates"
             required
           />
@@ -172,24 +172,24 @@
           </h3>
           <DateInput
             id="scenario-test-date"
-            v-model="exercise.scenarioTestDate"
+            v-model="formData.scenarioTestDate"
             label="Test date"
             required
           />
           <TimeInput
             id="scenario-test-start-time"
-            v-model="exercise.scenarioTestStartTime"
+            v-model="formData.scenarioTestStartTime"
             label="Start time"
             required
           />
           <TimeInput
             id="scenario-test-end-time"
-            v-model="exercise.scenarioTestEndTime"
+            v-model="formData.scenarioTestEndTime"
             label="End time"
           />
           <DateInput
             id="scenario-test-outcome"
-            v-model="exercise.scenarioTestOutcome"
+            v-model="formData.scenarioTestOutcome"
             label="Outcome to candidates"
             required
           />
@@ -197,7 +197,7 @@
 
         <DateInput
           id="shortlisting-outcome-date"
-          v-model="exercise.shortlistingOutcomeDate"
+          v-model="formData.shortlistingOutcomeDate"
           label="Shortlisting outcome"
           type="month"
           required
@@ -209,7 +209,7 @@
           </h2>
           <DateInput
             id="contact-independent-assessors"
-            v-model="exercise.contactIndependentAssessors"
+            v-model="formData.contactIndependentAssessors"
             label="Contact independent assessors"
             hint="Email reminders will be sent to assessors who have not responded after 2 weeks."
             :disabled="assessmentsInitialised"
@@ -217,7 +217,7 @@
           />
           <DateInput
             id="independent-assessments-return-date"
-            v-model="exercise.independentAssessmentsReturnDate"
+            v-model="formData.independentAssessmentsReturnDate"
             label="Independent Assessments return date"
             hint="An asessor can submit late after this date, up until the (optional) hard limit below."
             :disabled="assessmentsInitialised"
@@ -225,7 +225,7 @@
           />
           <DateInput
             id="independent-assessments-hard-limit"
-            v-model="exercise.independentAssessmentsHardLimitDate"
+            v-model="formData.independentAssessmentsHardLimitDate"
             label="Independent Assessments hard limit"
             hint="An assessor cannot submit late after 23:59 on this date."
             :disabled="assessmentsInitialised"
@@ -237,7 +237,7 @@
         </h2>
         <DateInput
           id="eligibility-scc-date"
-          v-model="exercise.eligibilitySCCDate"
+          v-model="formData.eligibilitySCCDate"
           label="Eligibility SCC date"
           required
         />
@@ -246,7 +246,7 @@
           Selection Day
         </h2>
         <RepeatableFields
-          v-model="exercise.selectionDays"
+          v-model="formData.selectionDays"
           :component="repeatableFields.SelectionDay"
           required
         />
@@ -256,14 +256,14 @@
         </h2>
         <DateInput
           id="character-checks-date"
-          v-model="exercise.characterChecksDate"
+          v-model="formData.characterChecksDate"
           label="Character Checks request date"
           required
         />
 
         <DateInput
           id="character-checks-date"
-          v-model="exercise.characterChecksReturnDate"
+          v-model="formData.characterChecksReturnDate"
           label="Character Checks return date"
           required
         />
@@ -273,7 +273,7 @@
         </h2>
         <DateInput
           id="statutory-consultation-date"
-          v-model="exercise.statutoryConsultationDate"
+          v-model="formData.statutoryConsultationDate"
           label="Statutory Consultation date"
           required
         />
@@ -283,7 +283,7 @@
         </h2>
         <DateInput
           id="character-and-selection-scc-date"
-          v-model="exercise.characterAndSCCDate"
+          v-model="formData.characterAndSCCDate"
           label="Character and SCC date"
           required
         />
@@ -293,7 +293,7 @@
         </h2>
         <DateInput
           id="final-outcome"
-          v-model="exercise.finalOutcome"
+          v-model="formData.finalOutcome"
           label="Final outcome to candidates"
           type="month"
           required
@@ -304,25 +304,25 @@
         </h2>
         <DateInput
           id="emd-second-stage-start-date"
-          v-model="exercise.equalMeritSecondStageStartDate"
+          v-model="formData.equalMeritSecondStageStartDate"
           label="Second stage start date"
           required
         />
         <DateInput
           id="emd-second-stage-end-date"
-          v-model="exercise.equalMeritSecondStageEndDate"
+          v-model="formData.equalMeritSecondStageEndDate"
           label="Second stage end date"
           required
         />
         <DateInput
           id="emp-scc-date"
-          v-model="exercise.eMPSCCDate"
+          v-model="formData.eMPSCCDate"
           label="EMP SCC date"
           required
         />
         <DateInput
           id="emp-outcome-date"
-          v-model="exercise.eMPOutcomeDate"
+          v-model="formData.eMPOutcomeDate"
           label="EMP Outcomes"
           type="month"
           required
@@ -357,7 +357,6 @@ export default {
     const defaults = {
       applicationOpenDate: null,
       applicationCloseDate: null,
-      assessments: null,
       siftStartDate: null,
       siftEndDate: null,
       nameBlindSiftStartDate: null,
@@ -392,41 +391,41 @@ export default {
       eMPSCCDate: null,
       eMPOutcomeDate: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      formData: formData,
       repeatableFields: {
         SelectionDay,
       },
-      exerciseShortlistingMethods: exercise.shortlistingMethods,
-      assessments: exercise.assessments,
-      exercise: exercise,
     };
   },
   computed: {
     ...mapGetters('exerciseDocument', {
       hasIndependentAssessments: 'hasIndependentAssessments',
     }),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     hasScenarioQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('scenario-test-qualifying-test');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('scenario-test-qualifying-test');
     },
     hasSituationalJudgementQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('situational-judgement-qualifying-test');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('situational-judgement-qualifying-test');
     },
     hasCriticalAnalysisQT() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('critical-analysis-qualifying-test');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('critical-analysis-qualifying-test');
     },
     hasPaperSift() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('paper-sift');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('paper-sift');
     },
     hasNameBlindSift() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('name-blind-paper-sift');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('name-blind-paper-sift');
     },
     hasTelephoneAssessment() {
-      return this.exerciseShortlistingMethods && this.exerciseShortlistingMethods.includes('telephone-assessment');
+      return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('telephone-assessment');
     },
     assessmentsInitialised() {
-      return this.assessments && this.assessments.initialised && this.assessments.initialised > 0;
+      return this.exercise && this.exercise.assessments && this.exercise.assessments.initialised && this.exercise.assessments.initialised > 0;
     },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
@@ -434,8 +433,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.timeline = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.timeline'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-timeline'));
     },
   },

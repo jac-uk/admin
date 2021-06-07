@@ -66,7 +66,7 @@ export default {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
     applicationParts() {
-      return this.$store.getters['exerciseDocument/getApplicationParts'];
+      return this.$store.getters['exerciseDocument/getApplicationParts']();
     },
   },
   methods: {

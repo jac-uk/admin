@@ -29,7 +29,7 @@
 
         <TextField
           id="exercise-mailbox"
-          v-model="exercise.exerciseMailbox"
+          v-model="formData.exerciseMailbox"
           label="Exercise mailbox"
           type="email"
           required
@@ -38,41 +38,41 @@
 
         <TextField
           id="exercise-email-signature-name"
-          v-model="exercise.emailSignatureName"
+          v-model="formData.emailSignatureName"
           label="Email signature name"
           required
         />
 
         <TextField
           id="exercise-phone-number"
-          v-model="exercise.exercisePhoneNumber"
+          v-model="formData.exercisePhoneNumber"
           label="Exercise phone number"
           type="tel"
           required
         />
 
         <RepeatableFields
-          v-model="exercise.seniorSelectionExerciseManager"
+          v-model="formData.seniorSelectionExerciseManager"
           :component="repeatableFields.SeniorSelectionExerciseManager"
           required
           :pattern="patternJACEmail"
         />
 
         <RepeatableFields
-          v-model="exercise.selectionExerciseManager"
+          v-model="formData.selectionExerciseManager"
           :component="repeatableFields.SelectionExerciseManager"
           required
           :pattern="patternJACEmail"
         />
 
         <RepeatableFields
-          v-model="exercise.selectionExerciseOfficer"
+          v-model="formData.selectionExerciseOfficer"
           :component="repeatableFields.SelectionExerciseOfficer"
           required
         />
 
         <RepeatableFields
-          v-model="exercise.assignedCommissioner"
+          v-model="formData.assignedCommissioner"
           :component="repeatableFields.AssignedCommissioner"
           required
         />
@@ -83,7 +83,7 @@
 
         <CheckboxGroup
           id="appropriate-authority"
-          v-model="exercise.appropriateAuthority"
+          v-model="formData.appropriateAuthority"
           label="Appropriate authority"
           hint="Select all that apply."
         >
@@ -113,7 +113,7 @@
           >
             <TextField
               id="other-text-input"
-              v-model="exercise.otherAppropriateAuthority"
+              v-model="formData.otherAppropriateAuthority"
               label="Name of the appropriate authority"
               required
             />
@@ -122,40 +122,40 @@
 
         <TextField
           id="hmcts-welshgov-lead"
-          v-model="exercise.hmctsWelshGovLead"
+          v-model="formData.hmctsWelshGovLead"
           label="HMCTS or Welsh Government lead contact"
           type="email"
         />
 
         <TextField
           id="hmcts-welshgov-contact"
-          v-model="exercise.hmctsWelshGovContact"
+          v-model="formData.hmctsWelshGovContact"
           label="HMCTS or Welsh Government contact"
           type="email"
         />
 
         <TextField
           id="judicial-office-contact"
-          v-model="exercise.judicialOfficeContact"
+          v-model="formData.judicialOfficeContact"
           name="judicial-office-contact"
           label="Judicial Office contact"
           type="email"
         />
 
         <RepeatableFields
-          v-model="exercise.leadJudge"
+          v-model="formData.leadJudge"
           :component="repeatableFields.LeadJudge"
           required
         />
 
         <RepeatableFields
-          v-model="exercise.draftingJudge"
+          v-model="formData.draftingJudge"
           :component="repeatableFields.DraftingJudge"
           required
         />
 
         <RepeatableFields
-          v-model="exercise.statutoryConsultee"
+          v-model="formData.statutoryConsultee"
           :component="repeatableFields.StatutoryConsultee"
           required
         />
@@ -211,12 +211,10 @@ export default {
       leadJudge: null,
       draftingJudge: null,
       statutoryConsultee: null,
-      progress: {},
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
       patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
       repeatableFields: {
         SeniorSelectionExerciseManager,
@@ -237,8 +235,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.contacts = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.contacts'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-contacts'));
     },
   },

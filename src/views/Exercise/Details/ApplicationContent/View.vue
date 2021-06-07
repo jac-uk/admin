@@ -29,10 +29,10 @@ import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters('exerciseDocument', {
-      isEditable: 'isEditable',
-      getApplicationParts: 'getApplicationParts',
-    }),
+    ...mapGetters('exerciseDocument', [
+      'isEditable',
+      'getApplicationParts',
+    ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -41,7 +41,7 @@ export default {
         const selected = Object.entries(this.exercise.applicationContent.registration).filter((keyValue) => keyValue[1] === true);
         return selected.map((keyValue) => keyValue[0]);
       } else {
-        return this.getApplicationParts;
+        return this.getApplicationParts();
       }
     },
   },
