@@ -22,7 +22,7 @@ Describe the steps required to test & verify this change
 🔴 High risk - this includes a lot of changes to shared code
 
 ## Additional context
-Include screen grabs, notes etc.
+Include screen grabs, video demo, notes etc.
 
 ---
 PREVIEW:DEVELOP

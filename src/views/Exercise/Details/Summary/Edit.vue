@@ -21,14 +21,14 @@
 
         <TextField
           id="exercise-name"
-          v-model="exercise.name"
+          v-model="formData.name"
           label="Exercise name"
           required
         />
 
         <Checkbox
           id="invite-only"
-          v-model="exercise.inviteOnly"
+          v-model="formData.inviteOnly"
           label="Invite only exercise"
           hint="When this is checked, only invited candidates will be able to apply to this exercise."
         />
@@ -50,14 +50,14 @@
 
         <Checkbox
           id="welsh-posts"
-          v-model="exercise.welshPosts"
+          v-model="formData.welshPosts"
           label="Are there Welsh posts?"
           hint="If this exercise has any posts in Wales you should tick this box. You then need to complete the Role Summary (Welsh)."
         />
 
         <TextareaInput
           id="role-summary"
-          v-model="exercise.roleSummary"
+          v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
           rows="2"
@@ -65,9 +65,9 @@
         />
 
         <TextareaInput
-          v-if="exercise.welshPosts"
+          v-if="formData.welshPosts"
           id="role-summary-welsh"
-          v-model="exercise.roleSummaryWelsh"
+          v-model="formData.roleSummaryWelsh"
           label="Role summary (Welsh)"
           hint="Fersywn Cymraeg"
           rows="2"
@@ -76,7 +76,7 @@
 
         <TextField
           id="subscriber-alerts-url"
-          v-model="exercise.subscriberAlertsUrl"
+          v-model="formData.subscriberAlertsUrl"
           label="Subscriber alerts url"
           type="url"
         />
@@ -112,20 +112,22 @@ export default {
     const defaults = {
       name: null,
       estimatedLaunchDate: null,
+      inviteOnly: false,
+      welshPosts: false,
       roleSummary: null,
+      roleSummaryWelsh: null,
       subscriberAlertsUrl: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
       setDay: false,
     };
   },
   computed: {
     launchDate: {
       get() {
-        return this.parseDate(this.exercise.estimatedLaunchDate);
+        return this.parseDate(this.formData.estimatedLaunchDate);
       },
       set(val) {
         if (!val || !(val instanceof Date)){
@@ -137,7 +139,7 @@ export default {
           dateString = `${dateString}-${val.getUTCDate()}`;
         }
 
-        this.exercise.estimatedLaunchDate = dateString;
+        this.formData.estimatedLaunchDate = dateString;
       },
     },
     type() {
@@ -158,8 +160,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.vacancySummary = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.vacancySummary'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-summary'));
     },
     toggleDay() {

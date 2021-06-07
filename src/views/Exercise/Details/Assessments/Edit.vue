@@ -21,7 +21,7 @@
 
         <RadioGroup
           id="shortlisting-methods"
-          v-model="exercise.assessmentOptions"
+          v-model="formData.assessmentOptions"
           required
           :messages="{
             required: 'Please choose one of the following options'
@@ -75,13 +75,13 @@
 
         <Checkbox
           id="assessment-method-independent-assessments"
-          v-model="exercise.assessmentMethods.independentAssessments"
+          v-model="formData.assessmentMethods.independentAssessments"
         >
           Independent Assessments
         </Checkbox>
         <Checkbox
           id="assessment-method-leadership-judge"
-          v-model="exercise.assessmentMethods.leadershipJudgeAssessment"
+          v-model="formData.assessmentMethods.leadershipJudgeAssessment"
         >
           Leadership Judge Assessment
         </Checkbox>
@@ -125,10 +125,9 @@ export default {
         // cv: false,
       },
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
     };
   },
   computed: {
@@ -138,8 +137,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.assessmentOptions = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.assessmentOptions'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-assessments'));
     },
   },

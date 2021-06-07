@@ -39,7 +39,7 @@
                       Add
                     </a>
                     <span
-                      v-for="item in exercise.downloads[upload.id]"
+                      v-for="item in formData.downloads[upload.id]"
                       :key="item.id"
                     >
                       <a
@@ -59,7 +59,7 @@
                 </td>
                 <td class="govuk-table__cell text-right">
                   <strong
-                    v-if="exercise.downloads[upload.id] && exercise.downloads[upload.id].length > 0"
+                    v-if="formData.downloads[upload.id] && formData.downloads[upload.id].length > 0"
                     class="govuk-tag"
                   >
                     Done
@@ -131,14 +131,9 @@ export default {
         otherDownloads: [],
       },
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = {
-      ...defaults,
-      ...data,
-    };
-
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
       repeatableFields: {
         MultiFileUpload,
       },
@@ -234,9 +229,8 @@ export default {
     async save() {
       this.validate();
       if (this.isValid()) {
-        this.exercise.progress.downloads = true;
-
-        await this.$store.dispatch('exerciseDocument/save', this.exercise);
+        this.formData['progress.downloads'] = true;
+        await this.$store.dispatch('exerciseDocument/save', this.formData);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
     },
@@ -245,7 +239,7 @@ export default {
       this.uploadProps = {
         ...obj,
         filePath: this.uploadPath,
-        data: this.exercise.downloads,
+        data: this.formData.downloads,
         exerciseId: this.exerciseId,
       };
       this.$refs.modalRef.openModal();
@@ -259,11 +253,11 @@ export default {
       this.validateDownloads();
       const noErrors = this.errors.length === 0;
       if (noErrors) {
-        this.exercise.progress.downloads = true;
+        this.formData['progress.downloads'] = true;
       } else {
-        this.exercise.progress.downloads = false;
+        this.formData['progress.downloads'] = false;
       }
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       if (noErrors || action === 'skip') {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-downloads'));
       }
@@ -284,7 +278,7 @@ export default {
       // <span id="candidate-assessement-forms_0--title-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Please enter a value for Title of file </span>
     },
     validateItem(downloadId) {
-      const isValid = this.exercise.downloads[downloadId] && this.exercise.downloads[downloadId].length > 0;
+      const isValid = this.formData.downloads[downloadId] && this.formData.downloads[downloadId].length > 0;
       if (!isValid) {
         this.errors.push({ id: downloadId, message: `Please add ${this.getDownloadTitle(downloadId)}` });
         this.validateUI(downloadId, true);

@@ -12,7 +12,7 @@
 
         <TextField
           id="exercise-name"
-          v-model="exercise.name"
+          v-model="formData.name"
           label="Exercise name"
           required
         />
@@ -40,16 +40,15 @@ export default {
     const defaults = {
       name: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
     };
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.started = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.started'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push({ name: 'exercise-overview' });
     },
   },

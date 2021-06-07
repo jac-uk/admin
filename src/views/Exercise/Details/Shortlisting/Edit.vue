@@ -25,7 +25,7 @@
 
         <CheckboxGroup
           id="shortlisting-methods"
-          v-model="exercise.shortlistingMethods"
+          v-model="formData.shortlistingMethods"
           required
           :messages="{required: 'Please choose at least one shortlisting method'}"
         >
@@ -58,7 +58,7 @@
             label="Other"
           >
             <RepeatableFields
-              v-model="exercise.otherShortlistingMethod"
+              v-model="formData.otherShortlistingMethod"
               :component="repeatableFields.OtherShortlistingMethod"
             />
           </CheckboxItem>
@@ -94,13 +94,12 @@ export default {
       shortlistingMethods: null,
       otherShortlistingMethod: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      formData: formData,
       repeatableFields: {
         OtherShortlistingMethod,
       },
-      exercise: exercise,
     };
   },
   computed: {
@@ -110,8 +109,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.shortlisting = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.shortlisting'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-shortlisting'));
     },
   },

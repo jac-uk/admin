@@ -26,12 +26,12 @@
           </legend>
           <TextField
             id="exercise-location-question"
-            v-model="exercise.locationQuestion"
+            v-model="formData.locationQuestion"
             label="What question would you like to ask?"
           />
           <RadioGroup
             id="exercise-location-question-type"
-            v-model="exercise.locationQuestionType"
+            v-model="formData.locationQuestionType"
             label="How would you like the question answered?"
             :messages="{
               required: 'Please choose one of the following options'
@@ -51,7 +51,7 @@
             />
           </RadioGroup>
           <RepeatableFields
-            v-model="exercise.locationQuestionAnswers"
+            v-model="formData.locationQuestionAnswers"
             :component="repeatableFields.Answer"
             ident="location"
             type-name="answer"
@@ -67,12 +67,12 @@
           </legend>
           <TextField
             id="exercise-jurisdiction-question"
-            v-model="exercise.jurisdictionQuestion"
+            v-model="formData.jurisdictionQuestion"
             label="What question would you like to ask?"
           />
           <RadioGroup
             id="exercise-jurisdiction-question-type"
-            v-model="exercise.jurisdictionQuestionType"
+            v-model="formData.jurisdictionQuestionType"
             label="How would you like the question answered?"
             :messages="{
               required: 'Please choose one of the following options'
@@ -92,7 +92,7 @@
             />
           </RadioGroup>
           <RepeatableFields
-            v-model="exercise.jurisdictionQuestionAnswers"
+            v-model="formData.jurisdictionQuestionAnswers"
             :component="repeatableFields.Answer"
             ident="jurisdiction"
             type-name="answer"
@@ -103,7 +103,7 @@
         <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-5">
 
         <RepeatableFields
-          v-model="exercise.additionalWorkingPreferences"
+          v-model="formData.additionalWorkingPreferences"
           :component="repeatableFields.WorkingPreferenceQuestion"
           ident="additional-working-preferences"
           type-name="question"
@@ -149,14 +149,13 @@ export default {
       jurisdictionQuestionAnswers: null,
       additionalWorkingPreferences: [],
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      formData: formData,
       repeatableFields: {
         Answer,
         WorkingPreferenceQuestion,
       },
-      exercise: exercise,
     };
   },
   computed: {
@@ -166,8 +165,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.workingPreferences = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.workingPreferences'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-preferences'));
     },
   },

@@ -25,7 +25,7 @@
 
         <RadioGroup
           id="type-of-exercise"
-          v-model="exercise.typeOfExercise"
+          v-model="formData.typeOfExercise"
           label="Type of exercise"
           required
         >
@@ -53,7 +53,7 @@
 
         <RadioGroup
           id="is-court-or-tribunal"
-          v-model="exercise.isCourtOrTribunal"
+          v-model="formData.isCourtOrTribunal"
           label="Is the vacancy for a court or tribunal?"
         >
           <RadioItem
@@ -68,11 +68,11 @@
 
         <CheckboxGroup
           id="jurisdiction"
-          v-model="exercise.jurisdiction"
+          v-model="formData.jurisdiction"
           label="Jurisdiction"
         >
           <div
-            v-if="exercise.isCourtOrTribunal === 'court'"
+            v-if="formData.isCourtOrTribunal === 'court'"
           >
             <CheckboxItem
               value="crime"
@@ -89,7 +89,7 @@
           </div>
 
           <div
-            v-if="exercise.isCourtOrTribunal === 'tribunal'"
+            v-if="formData.isCourtOrTribunal === 'tribunal'"
             class="govuk-!-margin-bottom-5"
           >
             <p class="govuk-heading-s govuk-!-margin-bottom-1">
@@ -163,7 +163,7 @@
           >
             <TextField
               id="other-jurisdiction"
-              v-model="exercise.otherJurisdiction"
+              v-model="formData.otherJurisdiction"
               class="govuk-!-width-one-half"
               label="Other jurisdiction"
               type="text"
@@ -174,7 +174,7 @@
 
         <RadioGroup
           id="is-statutory-consultation-waived"
-          v-model="exercise.statutoryConsultationWaived"
+          v-model="formData.statutoryConsultationWaived"
           label="Is statutory consultation waived for this exercise?"
           required
         >
@@ -184,7 +184,7 @@
           >
             <TextareaInput
               id="statutory-consultation-waived-details"
-              v-model="exercise.statutoryConsultationWaivedDetails"
+              v-model="formData.statutoryConsultationWaivedDetails"
               label="Explain why."
               required
             />
@@ -197,12 +197,12 @@
 
         <RadioGroup
           id="appointment-type"
-          v-model="exercise.appointmentType"
+          v-model="formData.appointmentType"
           label="Appointment type"
           required
         >
           <RadioItem
-            v-if="exercise.salaryGrouping"
+            v-if="formData.salaryGrouping"
             value="salaried"
             label="Salaried"
           >
@@ -215,7 +215,7 @@
               </label>
               <select
                 id="salary-group"
-                v-model="exercise.salaryGrouping"
+                v-model="formData.salaryGrouping"
                 class="govuk-select"
               >
                 <option value="">
@@ -265,9 +265,9 @@
           >
             <Currency
               id="salary"
-              v-model="exercise.salary"
+              v-model="formData.salary"
               label="Amount"
-              :required="exercise.appointmentType == 'salaried'"
+              :required="formData.appointmentType == 'salaried'"
             />
           </RadioItem>
 
@@ -277,9 +277,9 @@
           >
             <Currency
               id="fee-paid-fee"
-              v-model="exercise.feePaidFee"
+              v-model="formData.feePaidFee"
               label="Fee"
-              :required="exercise.appointmentType == 'fee-paid'"
+              :required="formData.appointmentType == 'fee-paid'"
             />
           </RadioItem>
           <RadioItem
@@ -289,9 +289,9 @@
         </RadioGroup>
 
         <RadioGroup
-          v-if="exercise.appointmentType == 'salaried'"
+          v-if="formData.appointmentType == 'salaried'"
           id="is-sptw-offered"
-          v-model="exercise.isSPTWOffered"
+          v-model="formData.isSPTWOffered"
           label="Is salaried part-time working (SPTW) offered?"
         >
           <RadioItem
@@ -300,7 +300,7 @@
           >
             <TextareaInput
               id="yes-salary-details"
-              v-model="exercise.yesSalaryDetails"
+              v-model="formData.yesSalaryDetails"
               label="Detail of salaried part-time working (SPTW)"
             />
           </RadioItem>
@@ -310,7 +310,7 @@
           >
             <TextareaInput
               id="no-salary-details"
-              v-model="exercise.noSalaryDetails"
+              v-model="formData.noSalaryDetails"
               label="Add why SPTW is not offered"
             />
           </RadioItem>
@@ -322,7 +322,7 @@
 
         <TextField
           id="immediate-start"
-          v-model="exercise.immediateStart"
+          v-model="formData.immediateStart"
           label="Immediate start"
           input-class="govuk-input--width-3"
           hint="These are also called Section 87 (S87) vacancies."
@@ -330,7 +330,7 @@
 
         <TextField
           id="future-start"
-          v-model="exercise.futureStart"
+          v-model="formData.futureStart"
           label="Future start"
           input-class="govuk-input--width-3"
           hint="These are also called Section 94 (S94) vacancies."
@@ -338,14 +338,14 @@
 
         <TextareaInput
           id="location"
-          v-model="exercise.location"
+          v-model="formData.location"
           label="Location"
           rows="2"
         />
 
         <RadioGroup
           id="welsh-requirement"
-          v-model="exercise.welshRequirement"
+          v-model="formData.welshRequirement"
           label="Is there a Welsh requirement?"
           required
         >
@@ -355,7 +355,7 @@
           >
             <CheckboxGroup
               id="welsh-requirement-type"
-              v-model="exercise.welshRequirementType"
+              v-model="formData.welshRequirementType"
               label="Type of requirement"
               hint="Select all that apply."
             >
@@ -381,7 +381,7 @@
 
         <TextareaInput
           id="role-summary"
-          v-model="exercise.roleSummary"
+          v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
           rows="2"
@@ -390,7 +390,7 @@
 
         <RichTextInput
           id="about-the-role"
-          v-model="exercise.aboutTheRole"
+          v-model="formData.aboutTheRole"
           label="About the role"
           hint="Add information about this role for the information page."
           required
@@ -454,10 +454,9 @@ export default {
       roleSummary: null,
       aboutTheRole: null,
     };
-    const data = this.$store.getters['exerciseDocument/data']();
-    const exercise = { ...defaults, ...data };
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
-      exercise: exercise,
+      formData: formData,
     };
   },
   computed: {
@@ -467,8 +466,8 @@ export default {
   },
   methods: {
     async save(isValid) {
-      this.exercise.progress.vacancyInformation = isValid ? true : false;
-      await this.$store.dispatch('exerciseDocument/save', this.exercise);
+      this.formData['progress.vacancyInformation'] = isValid ? true : false;
+      await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-vacancy'));
     },
   },
