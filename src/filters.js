@@ -27,6 +27,13 @@ const lookup = (value) => {
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
+
+    // exercise states
+    'shortlisting': 'Shortlisting',
+    'selection': 'Selection',
+    'recommended': 'Recommended',
+    'handover': 'Handover',
+
     // 'xxx': 'xxx',`
   };
   returnValue = lookup[value];
