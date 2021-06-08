@@ -70,8 +70,6 @@ export default {
         state: 'review',
       },
       exerciseStates: [
-        'draft',
-        'ready',
         'approved',
         'shortlisting',
         'selection',

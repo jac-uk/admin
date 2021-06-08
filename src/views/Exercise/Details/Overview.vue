@@ -33,7 +33,7 @@
       <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
         <span v-if="isPublished">Published</span>
         <div
-          v-if="exercise.state"
+          v-if="isApproved"
           class="float-right"
         >
           <a
