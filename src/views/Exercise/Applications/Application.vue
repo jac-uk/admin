@@ -1090,7 +1090,7 @@
           </div>
 
           <div
-            v-if="showMemberships"
+            v-if="hasRelevantMemberships"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1289,52 +1289,60 @@
               Experience
             </h2>
 
-            <dl
-              v-for="item in application.experience"
-              :key="item.name"
-              class="govuk-summary-list govuk-!-margin-bottom-8"
+            <div v-if="application.experience && application.experience.length">
+              <dl
+                v-for="item in application.experience"
+                :key="item.name"
+                class="govuk-summary-list govuk-!-margin-bottom-8"
+              >
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Organisation or business
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li>{{ item.orgBusinessName }}</li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Job title
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul class="govuk-list">
+                      <li>{{ item.jobTitle }}</li>
+                    </ul>
+                  </dd>
+                </div>
+
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Date qualified
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <ul
+                      v-if="item.startDate"
+                      class="govuk-list"
+                    >
+                      <li v-if="item.endDate">
+                        {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+                      </li>
+                      <li v-else>
+                        {{ item.startDate | formatDate }} — current
+                      </li>
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div
+              v-else
+              class="govuk-body"
             >
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Organisation or business
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <ul class="govuk-list">
-                    <li>{{ item.orgBusinessName }}</li>
-                  </ul>
-                </dd>
-              </div>
-
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Job title
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <ul class="govuk-list">
-                    <li>{{ item.jobTitle }}</li>
-                  </ul>
-                </dd>
-              </div>
-
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Date qualified
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <ul
-                    v-if="item.startDate"
-                    class="govuk-list"
-                  >
-                    <li v-if="item.endDate">
-                      {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
-                    </li>
-                    <li v-else>
-                      {{ item.startDate | formatDate }} — current
-                    </li>
-                  </ul>
-                </dd>
-              </div>
-            </dl>
+              No information provided
+            </div>
           </div>
 
           <div
@@ -1625,7 +1633,7 @@
           </div>
 
           <div
-            v-if="assessmentMethods.independentAssessments"
+            v-if="hasIndependentAssessments"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
@@ -1796,7 +1804,7 @@
           </div>
 
           <div
-            v-if="assessmentMethods.leadershipJudgeAssessment"
+            v-if="hasLeadershipJudgeAssessment"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
@@ -1917,7 +1925,7 @@
           </div>
 
           <div
-            v-if="showStatementOfSuitability"
+            v-if="hasStatementOfSuitability"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1958,7 +1966,7 @@
           </div>
 
           <div
-            v-if="showSelfAssessment"
+            v-if="hasSelfAssessment"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1999,7 +2007,7 @@
           </div>
 
           <div
-            v-if="showCV"
+            v-if="hasCV"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -2029,7 +2037,7 @@
           </div>
 
           <div
-            v-if="showCoveringLetter"
+            v-if="hasCoveringLetter"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -2103,6 +2111,7 @@ import FurtherInformationSummary from '@/views/InformationReview/FurtherInformat
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -2156,6 +2165,18 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('exerciseDocument', [
+      'isLegal',
+      'isNonLegal',
+      'hasRelevantMemberships',
+      'hasStatementOfSuitability',
+      'hasIndependentAssessments',
+      'hasLeadershipJudgeAssessment',
+      'hasCV',
+      'hasCoveringLetter',
+      'hasSelfAssessment',
+      'getApplicationParts',
+    ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -2183,15 +2204,6 @@ export default {
     isPanelView() {
       return this.activeTab === 'panel';
     },
-    isLegal() {
-      return this.exercise.typeOfExercise === 'legal' || this.exercise.typeOfExercise === 'leadership';
-    },
-    isNonLegal() {
-      return this.exercise.typeOfExercise === 'non-legal' || this.exercise.typeOfExercise === 'leadership-non-legal';
-    },
-    showMemberships() {
-      return this.exercise.memberships && this.exercise.memberships.indexOf('none') === -1;
-    },
     generateFilename() {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
@@ -2207,74 +2219,6 @@ export default {
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupMixedDetails;
       default:
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupDetails;
-      }
-    },
-    assessmentMethods() {
-      if (this.exercise.assessmentMethods) {
-        return this.exercise.assessmentMethods;
-      } else {
-        // TODO populate this return object based upon the _old_ `assessmentOptions` data
-        return {
-          independentAssessments: true, // always show IAs unless they've been specifically turned off
-          leadershipJudgeAssessment: false,
-          // selfAssessment: false,
-          // statementOfEligibility: false,
-          // statementOfSuitability: false,
-          // coveringLetter: false,
-          // cv: false,
-        };
-      }
-    },
-    showStatementOfSuitability() {
-      switch (this.exercise.assessmentOptions) {
-      case 'statement-of-suitability-with-competencies':
-      case 'statement-of-suitability-with-skills-and-abilities':
-      case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-        return true;
-      default:
-        return false;
-      }
-    },
-    showCV() {
-      switch (this.exercise.assessmentOptions) {
-      case 'self-assessment-with-competencies-and-cv':
-      case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-        return true;
-      default:
-        return false;
-      }
-    },
-    showCoveringLetter() {
-      switch (this.exercise.assessmentOptions) {
-      case 'self-assessment-with-competencies-and-covering-letter':
-      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-      case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-      case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-        return true;
-      default:
-        return false;
-      }
-    },
-    showStatementOfEligibility() {
-      switch (this.exercise.assessmentOptions) {
-      case 'statement-of-eligibility':
-        return true;
-      default:
-        return false;
-      }
-    },
-    showSelfAssessment() {
-      switch (this.exercise.assessmentOptions) {
-      case 'self-assessment-with-competencies':
-      case 'self-assessment-with-competencies-and-cv':
-      case 'self-assessment-with-competencies-and-covering-letter':
-      case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-        return true;
-      default:
-        return false;
       }
     },
     hasEmploymentGaps() {
@@ -2294,7 +2238,9 @@ export default {
       return false;
     },
     hasEthnicGroupDetails() {
-      return this.application.equalityAndDiversitySurvey.ethnicGroup &&
+      return this.application &&
+        this.application.equalityAndDiversitySurvey &&
+        this.application.equalityAndDiversitySurvey.ethnicGroup &&
         this.application.equalityAndDiversitySurvey.ethnicGroup.startsWith('other-');
     },
     isApplied() {
