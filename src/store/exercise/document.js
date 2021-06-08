@@ -344,7 +344,7 @@ export default {
       if (hasSelfAssessment(exercise)) {
         applicationParts.push('selfAssessmentCompetencies');
       }
-      applicationParts.push('additionalInformation');
+      applicationParts.push('additionalInfo');
       return applicationParts;
     },
     getApplicationPartsMap: (state, getters) => {
