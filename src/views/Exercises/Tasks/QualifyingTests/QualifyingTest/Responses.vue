@@ -24,7 +24,11 @@
       :data="responses"
       :page-size="50"
       :columns="tableColumns"
-      :search="['candidate.fullName']"
+      :custom-search="{
+        placeholder: 'Search candidate names',
+        handler: candidateSearch,
+        field: 'candidate.id',
+      }"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -72,6 +76,9 @@ export default {
     };
   },
   computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
@@ -172,6 +179,9 @@ export default {
       const ss = `0${newDate.getUTCSeconds()}`.slice(-2);
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exerciseId });
     },
   },
 };

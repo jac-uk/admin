@@ -96,7 +96,11 @@
           :data="assessments"
           :page-size="50"
           :columns="tableColumns"
-          :search="['candidate.fullName']"
+          :custom-search="{
+            placeholder: 'Search candidate names',
+            handler: candidateSearch,
+            field: 'userId',
+          }"
           @change="getTableData"
         >
           <template #row="{row}">
@@ -458,6 +462,9 @@ export default {
           ...params,
         }
       );
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
   },
 };

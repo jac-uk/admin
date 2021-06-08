@@ -261,8 +261,8 @@
 
       <ActionButton
         v-if="isInitialised"
+        :disabled="!isUserAdded || !canOpenTests"
         class="govuk-!-margin-right-3"
-        :disabled="!canOpenTests"
         @click="btnActivate"
       >
         Open tests
@@ -299,6 +299,14 @@
         @click="btnCreateCopy"
       >
         Create Mop Up Test
+      </button>
+
+      <button
+        ref="btnCopyToClipboard"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnCopyToClipboard"
+      >
+        Copy QT to clipboard
       </button>
 
       <ActionButton
@@ -382,6 +390,9 @@ export default {
     isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
     },
+    isUserAdded() {
+      return this.qualifyingTest.counts.initialised > 0;
+    },
     isActivated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
@@ -424,6 +435,34 @@ export default {
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    testQuestionsJson() {
+      const {
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      } = this.qualifyingTest;
+
+      const clipboardQT = {
+        additionalInstructions,
+        feedbackSurvey,
+        maxScore,
+        responsesReport,
+        results,
+        testDuration,
+        testQuestions,
+        title,
+        type,
+      };
+
+      const returnValue = JSON.stringify(clipboardQT);
+      return returnValue;
     },
   },
   watch: {
@@ -498,6 +537,21 @@ export default {
           qualifyingTestId: newTestId,
         },
       });
+    },
+    btnCopyToClipboard() {
+      this.$refs.btnCopyToClipboard.innerText = 'Copying to clipboard ...';
+      this.$refs.btnCopyToClipboard.disabled = 'disabled';
+      const el = document.createElement('textarea');
+      el.value = this.testQuestionsJson;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      setTimeout(() => {
+        this.$refs.btnCopyToClipboard.innerText = 'QT Copied to clipboard';
+        this.$refs.btnCopyToClipboard.disabled = false;
+      },3000);
     },
   },
 };
