@@ -226,14 +226,14 @@
         Open tests
       </ActionButton>
 
-      <button
+      <!-- <button
         v-if="isActivated"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnPause"
       >
         Pause
-      </button>
+      </button> -->
 
       <button
         v-if="isInitialised || isActivated || isPaused || isCompleted"
@@ -442,7 +442,7 @@ export default {
     },
     btnPause() {
       // eslint-disable-next-line no-console
-      console.log('Button clicked: PAUSE');
+      // console.log('Button clicked: PAUSE');
     },
     btnResponses(status) {
       const route = {

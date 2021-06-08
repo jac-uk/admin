@@ -104,16 +104,23 @@
           </div>
 
           <div class="govuk-grid-column-one-third">
-            <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
+            <div
+              v-if="isApplied"
+              class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey"
+            >
               <span class="govuk-caption-m">Submitted on</span>
               <h2
-                v-if="isApplied"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
                 {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
               </h2>
+            </div>
+            <div
+              v-else
+              class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey"
+            >
+              <span class="govuk-caption-m">Status</span>
               <h2
-                v-else
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
                 Draft
@@ -343,34 +350,25 @@
                 <CriminalOffencesSummary
                   :application="application"
                   :character-information="application.characterInformationV2"
-                  @changeUserDetails="changeUserDetails"
-                />
-                <!-- <FixedPenaltiesSummary
-                  :character-information="application.characterInformationV2"
-                />
-                <MotoringOffencesSummary
-                  :character-information="application.characterInformationV2"
-                />
-                <FinancialMattersSummary
-                  :character-information="application.characterInformationV2"
-                />
-                <ProfessionalConductSummary
-                  :character-information="application.characterInformationV2"
-                />
-                <FurtherInformationSummary
-                  :character-information="application.characterInformationV2"
-                />
-                <CharacterDeclarationSummary
-                  :character-information="application.characterInformationV2"
-                /> -->
-              </dl>
-              <dl v-else>
-                <CharacterInformationSummaryV1
-                  :character-information="application.characterInformation || {}"
                 />
               </dl>
-            </div>
 
+              <div
+                v-if="!isPanelView"
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Character information
+                </h2>
+
+                <dl class="govuk-summary-list">
+                  <CharacterInformationSummary
+                    :application="application"
+                    :character-information="application.characterInformationV2"
+                  />
+                </dl>
+              </div> 
+            <!--
             <div
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
@@ -2115,6 +2113,11 @@
             :candidate-id="application.userId"
             :application-id="applicationId"
           />
+      </div>
+    </div>
+    -->
+            </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -2136,14 +2139,9 @@ import IndependentAssessorChange from '@/components/ModalViews/IndependentAssess
 import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
-import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
-import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
-import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
-import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
-import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
-import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import {
   isLegal,
@@ -2170,14 +2168,9 @@ export default {
     LeadershipJudgeDetails,
     SubmissionExtension,
     Notes,
-    CriminalOffencesSummary,
-    FixedPenaltiesSummary,
-    MotoringOffencesSummary,
-    FinancialMattersSummary,
-    ProfessionalConductSummary,
-    FurtherInformationSummary,
-    CharacterDeclarationSummary,
+    PersonalDetailsSummary,
     CharacterInformationSummaryV1,
+    CharacterInformationSummary,
   },
   data() {
     return {
@@ -2380,7 +2373,7 @@ export default {
   },
   created() {
     this.pageLoad();
-    this.$root.$on('changeUserDetails', this.changeUserDetails);
+    this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
   },
   destroyed() {
     this.$store.dispatch('application/unbind');
@@ -2503,25 +2496,6 @@ export default {
         return true;
       }
       return false;
-    },
-    makeFullName(objChanged) {
-      if (objChanged.firstName && this.application.personalDetails.lastName) {
-        objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
-      }
-      if (objChanged.lastName && this.application.personalDetails.firstName) {
-        objChanged.fullName = `${this.application.personalDetails.firstName} ${objChanged.lastName}`;
-      }
-      return objChanged;
-    },
-    changeUserDetails(objChanged) {
-      console.log('cahnge');
-      if (objChanged.firstName || objChanged.lastName) {
-        objChanged = this.makeFullName(objChanged);
-      }
-
-      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
-      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
     },
     doFileUpload(val, field) {
       if (val) {

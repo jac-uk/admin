@@ -15,7 +15,7 @@
     >
       <PersonalDetails
         :candidate="personalDetails"
-        @changedetails="updateCandidate"
+        @changeField="updateCandidate"
       />
       <h2 class="govuk-heading-l">
         Character information
