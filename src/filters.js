@@ -26,7 +26,7 @@ const lookup = (value) => {
     coveringLetter: 'Covering letter',
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
-    additionalInformation: 'Additional Information',
+    additionalInfo: 'Additional Information',
     // 'xxx': 'xxx',`
   };
   returnValue = lookup[value];

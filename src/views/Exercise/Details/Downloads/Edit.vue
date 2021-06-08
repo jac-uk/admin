@@ -269,7 +269,9 @@ export default {
       // this.validateItem('competencyFramework');
       // pensionsInformation: this.validateItem('pensionsInformation');
       // this.validateItem('skillsAndAbilitiesCriteria');
-      this.validateItem('independentAssessors');
+      if (this.hasIndependentAssessments) {
+        this.validateItem('independentAssessors');
+      }
       // this.validateItem('candidateAssessementForms');
       // this.validateItem('welshTranslation');
       // this.validateItem('otherDownloads');
@@ -287,7 +289,7 @@ export default {
     },
     getDownloadTitle(downloadId) {
       const theList = this.uploadList.filter( item => item.id === downloadId)[0];
-      return theList.title;
+      return theList ? theList.title : '';
     },
     validateUI(downloadId, add) {
       const wrapperCssClass = this.$refs[`${downloadId}-group`][0].classList;
