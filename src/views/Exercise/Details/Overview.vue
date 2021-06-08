@@ -32,6 +32,17 @@
     <div class="govuk-grid-column-one-half">
       <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
         <span v-if="isPublished">Published</span>
+        <div
+          v-if="exercise.state"
+          class="float-right"
+        >
+          <a
+            class="govuk-link"
+            @click="changeState"
+          >
+            Change
+          </a>
+        </div>
         <span
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
@@ -140,6 +151,14 @@
         Process late applications
       </ActionButton>
     </div>
+    <Modal
+      ref="modalChangeExerciseState"
+    >
+      <ChangeExerciseState
+        :state="exercise.state"
+        @close="$refs['modalChangeExerciseState'].closeModal()"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -148,12 +167,16 @@ import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import { functions } from '@/firebase';
 
 export default {
   components: {
     Timeline,
     ActionButton,
+    Modal,
+    ChangeExerciseState,
   },
   computed: {
     exercise() {
@@ -287,6 +310,16 @@ export default {
       // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
       await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
     },
+    changeState() {
+      this.$refs['modalChangeExerciseState'].openModal();
+    },
   },
 };
 </script>
+
+<style scoped>
+.background-blue .govuk-link {
+  cursor: pointer;
+
+}
+</style>
