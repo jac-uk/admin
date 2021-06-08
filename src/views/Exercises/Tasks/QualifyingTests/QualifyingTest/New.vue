@@ -12,7 +12,6 @@
       />
 
       <RadioGroup
-        v-if="!isTieBreaker"
         id="qualifyingTest-type"
         v-model="qualifyingTest.type"
         label="Type of test"
@@ -88,7 +87,7 @@ export default {
   },
   computed: {
     testTypes() {
-      return QUALIFYING_TEST.TYPE;
+      return this.isTieBreaker ? [QUALIFYING_TEST.TYPE.SCENARIO] : QUALIFYING_TEST.TYPE;
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
