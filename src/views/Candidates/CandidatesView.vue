@@ -15,7 +15,7 @@
     >
       <PersonalDetails
         :candidate="personalDetails"
-        @changedetails="updateCandidate"
+        @changeField="updateCandidate"
       />
       <h2 class="govuk-heading-l">
         Character information
@@ -86,13 +86,13 @@ import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/Personal
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
-import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
-import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
-import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
-import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
-import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
-import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
-import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
+import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/CharacterReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1.vue';
 
 export default {

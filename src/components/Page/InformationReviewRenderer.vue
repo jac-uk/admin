@@ -1,100 +1,119 @@
 <template>
-  <div>
+  <div
+    class="govuk-body"
+  >
     <div
-      v-if="data"
-      class="govuk-body"
+      v-if="isDate"
     >
-      <div>Yes</div>
-      <div
-        v-for="( item, index ) in data"
-        :key="item.name"
-        class="govuk-list"
-      >
-        {{ index + 1 }}
-        <!-- <div
-          v-if="item.financialYear"
-          class="govuk-!-margin-top-1"
-        >
-          {{ item.financialYear }}
-          <EditableField />
-        </div> -->
-
-        <div
-          v-if="item.title"
-          class="govuk-!-margin-top-1"
-        >
-          <EditableField
-            v-if="authorisedToPerformAction"
-            :value="item.title"
-            field="Sentence, penalty or fine"
-            type="route"
-            @changefield="emitChangeUserDetails"
-          />
-            <!-- :route-to="{ name: 'candidates-view', params: { id: userId } }" -->
-          <!-- <EditableField
-            :value="title"
-            :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-            field="title"
-            type="route"
-            @changefield="changeUserDetails"
-          /> 
-          -->
-          <div
-            v-else
-          >
-            {{ item.title }}
-          </div>
-        </div>
-
-        <!-- 
-        <div
-          v-if="item.date"
-          class="govuk-!-margin-top-1"
-        >
-          {{ displayDate(item.date) }}
-        </div>
-
-        <div
-          v-if="item.details"
-          class="govuk-!-margin-top-1"
-        >
-          {{ item.details }}
-        </div>
-
-        <div
-          v-if="item.investigationConclusionDate"
-          class="govuk-!-margin-top-1"
-        >
-          {{ item.investigationConclusionDate | formatDate }}
-        </div>
-    -->
-      </div>
+      <EditableField
+        :value="data"
+        :field="field"
+        type="date"
+        :index="index"
+        :extension="extension"
+        @changeField="changeField"
+      />
     </div>
+
+    <div
+      v-else-if="isRouted"
+    >
+      <EditableField
+        :value="data"
+        :field="field"
+        :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+        type="route"
+        :extension="extension"
+        @changeField="changeField"
+      />
+    </div>
+
+    <div
+      v-else-if="isEmail"
+    >
+      <EditableField
+        :value="data"
+        :field="field"
+        :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+        type="email"
+        :extension="extension"
+        @changeField="changeField"
+      />
+    </div>
+
+    <div
+      v-else-if="isSelection"
+    >
+      <EditableField
+        :value="data"
+        :field="field"
+        type="selection"
+        :extension="extension"
+        :options="options"
+        @changeField="changeField"
+      />
+    </div>
+
     <div
       v-else
-      class="govuk-body"
     >
-      No
-    </div> 
+      <EditableField
+        v-if="data"
+        :value="data"
+        :field="field"
+        :extension="extension"
+        :index="index"
+        @changeField="changeField"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {
     EditableField,
   },
   props: {
-    userId: {
+    type: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    extension: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    index: {
+      type: [Number, String],
+      required: false,
+      default: null,
+    },
+    applicationId: {
+      type: String,
+      required: false,
+      default: () => '',
+    },
+    field: {
       type: String,
       required: true,
+      default: () => '',
     },
     data: {
+      type: [Array, String, Date, Boolean],
+      required: false,
+      default: () => null,
+    },
+    selection: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
+    options: {
       type: Array,
       required: false,
       default: () => [],
@@ -106,25 +125,30 @@ export default {
     },
     displayMonthYearOnly: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
   },
-  data() {
-    return {
-      authorisedToPerformAction: false,
-    };
-  },
-  async created() {
-    const email = firebase.auth().currentUser.email;
-    this.authorisedToPerformAction = await authorisedToPerformAction(email);
+  computed: {
+    isDate() {
+      return this.$props.data instanceof Date;
+    },
+    isEmail() {
+      return this.$props.field === 'email';
+    },
+    isSelection() {
+      return this.$props.selection === true;
+    },
+    isRouted() {
+      return ['title', 'firstName', 'lastName'].some(field => field === this.$props.field) && this.applicationId;
+    },
   },
   methods: {
     displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
     },
-    emitChangeUserDetails() {
-      this.$root.$emit('changeUserDetails');
+    changeField(obj) {
+      this.$emit('changeField', obj);
     },
   },
 };

@@ -147,7 +147,7 @@
                   <EditableField
                     :value="response.duration.reasonableAdjustment"
                     field="reasonableAdjustment"
-                    @changefield="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
+                    @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
                   />
                   {{ response.candidate.reasonableAdjustmentsDetails }}
                 </td>
@@ -164,7 +164,7 @@
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
                     type="textarea"
-                    @changefield="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
+                    @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
               </tr>

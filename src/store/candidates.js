@@ -63,6 +63,10 @@ export default {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.update(data);
     },
+    saveCharacterInfo: async (context, { data, id }) => {
+      const ref = collection.doc(`${id}/documents/characterInformation`);
+      await ref.update(data);
+    },
   },
   mutations: {
     records(state, data) {
