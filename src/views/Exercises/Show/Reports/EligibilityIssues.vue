@@ -7,6 +7,16 @@
     </div>
     <div class="govuk-grid-column-one-third text-right">
       <button
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
+        :disabled="generatingExport"
+        @click="exportContacts"
+      >
+        <span
+          v-if="generatingExport"
+          class="spinner-border spinner-border-sm"
+        /> Export data
+      </button>
+      <button
         class="govuk-button govuk-button--secondary"
         @click="refreshReport"
       >
@@ -27,6 +37,7 @@
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
+        :search="['candidate.fullName']"
         :page-size="10"
         @change="getTableData"
       >
@@ -101,6 +112,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -111,9 +123,10 @@ export default {
     return {
       applicationRecords: [],
       refreshingReport: false,
+      generatingExport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'personalDetails.fullName', default: true },
+        { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
     };
   },
@@ -148,6 +161,42 @@ export default {
           this.applicationRecords = applicationRecords;
         });
     },
+
+    async gatherReportData() {
+
+      this.generatingExport = true;
+
+      // fetch data
+      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id });
+
+      this.generatingExport = false;
+
+      const reportData = [];
+
+      // get headers
+      reportData.push(response.data.headers.map(header => header));
+
+      // get rows
+      response.data.rows.forEach((row) => {
+        reportData.push(Object.values(row).map(cell => cell));
+      });
+
+      return reportData;
+    },
+    async exportContacts() {
+      const title = 'Contacts';
+      const xlsxData = await this.gatherReportData();
+
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
+    },
+
   },
 };
 </script>

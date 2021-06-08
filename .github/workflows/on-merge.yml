@@ -1,0 +1,114 @@
+name: On merge
+
+on:
+  push:
+    branches:
+      - develop
+    paths-ignore:
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  draft_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update release notes
+        id: release_drafter
+        uses: release-drafter/release-drafter@v5
+        with:
+          config-name: release-drafter.yml
+          disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
+
+      - name: Check package version
+        id: package_version
+        run: echo "::set-output name=current_version::$(node -p "require('./package.json').version")"
+
+      - name: Bump package version
+        if: steps.package_version.outputs.current_version != steps.release_drafter.outputs.tag_name
+        run: |
+          echo "Bump package version from ${{ steps.package_version.outputs.current_version }} to ${{ steps.release_drafter.outputs.tag_name }}"
+          git config --local user.email "$(git log --format='%ae' HEAD^!)"
+          git config --local user.name "$(git log --format='%an' HEAD^!)"
+          npm version ${{ steps.release_drafter.outputs.tag_name }} -m "Bump version number to %s"
+          git push
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: potiuk/cancel-workflow-runs@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10'
+      - name: Installing project dependencies
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+      - name: Lint
+        run: npm run lint-ci
+      - name: Test
+        run: npm run test-ci
+
+  deploy_to_staging:
+    runs-on: ubuntu-latest
+    needs: [draft_release,test]
+    environment:
+      name: staging
+    env:
+      environment: staging
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10'
+      - name: Installing project dependencies
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+      - name: Create env file
+        run: |
+          touch .env.${{ env.environment }}
+          echo "NODE_ENV=production" > .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
+          cat .env.${{ env.environment }}
+      - name: Building the project
+        run: npm run build-${{ env.environment }}
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: '${{ secrets.FIREBASE_PROJECT_ID }}'
+          target: '${{ env.environment }}-admin-app'
+          channelId: live

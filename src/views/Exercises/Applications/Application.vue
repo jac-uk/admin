@@ -1501,6 +1501,7 @@
           </div>
 
           <div
+            v-if="!isNonLegal"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">

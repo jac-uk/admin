@@ -121,7 +121,11 @@ export default {
           }
         }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-        this.$router.push({ name: `${this.routeNamePrefix}-review` });
+        if (this.qualifyingTest.mode === QUALIFYING_TEST.MODE.DRY_RUN) {
+          this.$router.push({ name: `${this.routeNamePrefix}-dry-run` });
+        } else {
+          this.$router.push({ name: `${this.routeNamePrefix}-review` });
+        }
       }
     },
   },
