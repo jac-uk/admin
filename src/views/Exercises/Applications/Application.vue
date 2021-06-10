@@ -177,24 +177,26 @@
           <div v-if="application && exercise">
             <div
               v-if="!isPanelView"
-              class="govuk-!-margin-top-9"
             >
-              <h2 class="govuk-heading-l">
-                Personal details
-                <span class="govuk-hint print-none">
-                  Any changes made here will also update the candidate information.
-                </span>
-              </h2>
+              <div
+                class="govuk-!-margin-top-9"
+              >
+                <h2 class="govuk-heading-l">
+                  Personal details
+                  <span class="govuk-hint print-none">
+                    Any changes made here will also update the candidate information.
+                  </span>
+                </h2>
 
-              <dl class="govuk-summary-list">
-                <PersonalDetailsSummary
-                  :application="application"
-                  :character-information="application.characterInformationV2"
-                />
-              </dl>
+                <dl class="govuk-summary-list">
+                  <PersonalDetailsSummary
+                    :application="application"
+                    :character-information="application.characterInformationV2"
+                  />
+                </dl>
+              </div>
 
               <div
-                v-if="!isPanelView"
                 class="govuk-!-margin-top-9"
               >
                 <h2 class="govuk-heading-l">

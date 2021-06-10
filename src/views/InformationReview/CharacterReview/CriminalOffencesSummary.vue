@@ -15,20 +15,20 @@
       </div>
     </dl>
 
-    <!-- <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
           Has been cautioned for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
-          <InformationReviewRenderer
-            :data="application.characterInformationV2.criminalCautionDetails"
-            field="application.characterInformationV2.criminalCautionDetails"
+          <InformationReviewSectionRenderer
+            :data="characterInformation.criminalCautionDetails"
+            field="characterInformation.criminalCautionDetails"
             :user-id="application.userId"
           />
         </dd>
       </div>
-    </dl> -->
+    </dl>
   </div>
 </template>
 

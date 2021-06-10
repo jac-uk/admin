@@ -16,6 +16,7 @@
         </dd>
       </div>
     </dl>
+    
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
@@ -65,7 +66,7 @@
         </dd>
       </div>
     </dl>
-
+    
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
@@ -82,7 +83,7 @@
         </dd>
       </div>
     </dl>
-
+    
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
@@ -93,6 +94,7 @@
             :application="application"
             :value="application.personalDetails.dateOfBirth"
             :data="application.personalDetails.dateOfBirth"
+            type="date"
             field="dateOfBirth"
             @changeField="changeUserDetails"
           />
