@@ -1014,9 +1014,8 @@
                         </ul>
                       </dd>
                     </div>
-
                     <div
-                      v-if="item.notCalledToBar"
+                      v-if="item.notCalledToBar && !item.date"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
