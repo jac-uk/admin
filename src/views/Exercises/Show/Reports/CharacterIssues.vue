@@ -28,63 +28,65 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <Select
-        id="exercise-stage"
-        v-model="exerciseStage"
-        class="exercise-stage"
-      >
-        <option value="all">
-          All applications
-        </option>
-        <option
-          v-if="exercise.applicationRecords.review"
-          value="review"
+      <div class="govuk-button-group">
+        <Select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-!-margin-right-2"
         >
-          Review
-        </option>
-        <option
-          v-if="exercise.applicationRecords.shortlisted"
-          value="shortlisted"
+          <option value="all">
+            All applications
+          </option>
+          <option
+            v-if="exercise.applicationRecords.review"
+            value="review"
+          >
+            Review
+          </option>
+          <option
+            v-if="exercise.applicationRecords.shortlisted"
+            value="shortlisted"
+          >
+            Shortlisted
+          </option>
+          <option
+            v-if="exercise.applicationRecords.selected"
+            value="selected"
+          >
+            Selected
+          </option>
+          <option
+            v-if="exercise.applicationRecords.recommended"
+            value="recommended"
+          >
+            Recommended
+          </option>
+          <option
+            v-if="exercise.applicationRecords.handover"
+            value="handover"
+          >
+            Handover
+          </option>
+        </Select>
+        <Select
+          v-if="availableStatuses && availableStatuses.length > 0"
+          id="availableStatuses"
+          v-model="candidateStatus"
         >
-          Shortlisted
-        </option>
-        <option
-          v-if="exercise.applicationRecords.selected"
-          value="selected"
-        >
-          Selected
-        </option>
-        <option
-          v-if="exercise.applicationRecords.recommended"
-          value="recommended"
-        >
-          Recommended
-        </option>
-        <option
-          v-if="exercise.applicationRecords.handover"
-          value="handover"
-        >
-          Handover
-        </option>
-      </Select>
-      <Select
-        v-if="availableStatuses && availableStatuses.length > 0"
-        id="availableStatuses"
-        v-model="candidateStatus"
-      >
-        <option
-          value="all"
-        >
-          All
-        </option>
-        <option
-          v-for="item in availableStatuses"
-          :key="item"
-          :value="item"
-        >
-          {{ item | lookup }}
-        </option>
-      </Select>
+          <option
+            value="all"
+          >
+            All
+          </option>
+          <option
+            v-for="item in availableStatuses"
+            :key="item"
+            :value="item"
+          >
+            {{ item | lookup }}
+          </option>
+        </Select>
+      </div>
     </div>
 
     <div class="govuk-grid-column-full">
@@ -298,10 +300,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-  .exercise-stage {
-    float: left;
-    margin-right: 20px;
-  }
-</style>
