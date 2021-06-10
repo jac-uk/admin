@@ -1000,7 +1000,7 @@
                       </dd>
                     </div>
                     <div
-                      v-if="item.qualificationNotComplete && !item.notCalledToBar"
+                      v-if="item.notCalledToBar === false && item.qualificationNotComplete"
                       class="govuk-summary-list__row"
                     >
                       <dt
@@ -1015,7 +1015,7 @@
                       </dd>
                     </div>
                     <div
-                      v-if="item.notCalledToBar && !item.date"
+                      v-if="item.notCalledToBar === true && item.qualificationNotComplete"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
