@@ -8,7 +8,7 @@
       <EditableField
         :value="data"
         :field="field"
-        type="date"
+        :type="type"
         :index="index"
         :extension="extension"
         @changeField="changeField"
@@ -22,8 +22,8 @@
         :value="data"
         :field="field"
         :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
-        type="route"
         :extension="extension"
+        type="route"
         @changeField="changeField"
       />
     </div>
@@ -58,10 +58,10 @@
       v-else
     >
       <EditableField
-        v-if="data"
         :value="data"
         :field="field"
         :extension="extension"
+        :type="type"
         :index="index"
         @changeField="changeField"
       />
@@ -81,17 +81,17 @@ export default {
     type: {
       type: String,
       required: false,
-      default: null,
+      default: () => 'text',
     },
     extension: {
       type: String,
       required: false,
-      default: null,
+      default: () => null,
     },
     index: {
       type: [Number, String],
       required: false,
-      default: null,
+      default: () => null,
     },
     applicationId: {
       type: String,
