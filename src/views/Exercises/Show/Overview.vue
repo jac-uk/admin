@@ -6,7 +6,7 @@
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
-          Number of vacancies
+          Vacancies
         </h2>
         <p class="govuk-body">
           Immediate start (S87)
