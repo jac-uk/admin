@@ -70,7 +70,7 @@ export default {
           path: `${path}/downloads`,
         },
         {
-          title: 'Application form',
+          title: 'Application process',
           path: `${path}/application-content`,
         },
       ];
