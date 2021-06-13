@@ -6,6 +6,34 @@ import clone from 'clone';
 
 const collection = firestore.collection('exercises');
 
+// application process config
+const APPLICATION_STEPS = ['registration', 'selection', 'recommended', 'handover'];
+const APPLICATION_PARTS = [
+  'personalDetails',
+  'characterInformation',
+  'equalityAndDiversitySurvey',
+  'partTimeWorkingPreferences',
+  'locationPreferences',
+  'jurisdictionPreferences',
+  'additionalWorkingPreferences',
+  'welshPosts',
+  'relevantQualifications',
+  'relevantMemberships',
+  'postQualificationWorkExperience',
+  'judicialExperience',
+  'relevantExperience',
+  'employmentGaps',
+  'reasonableLengthOfService',
+  'assessorsDetails',
+  'leadershipJudgeDetails',
+  'statementOfSuitability',
+  'coveringLetter',
+  'cv',
+  'statementOfEligibility',
+  'selfAssessmentCompetencies',
+  'additionalInfo',
+];
+
 // exercise helpers
 const hasIndependentAssessments = (data) => {
   return !(data.assessmentMethods && data.assessmentMethods.independentAssessments === false);
@@ -128,14 +156,25 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const saveData = clone(data);
-      if (Object.keys(saveData).indexOf('applicationContent') === -1) {  // recalculate applicationContent
+      if (JSON.stringify(saveData).indexOf('applicationContent') === -1) {  // recalculate applicationContent (if necessary)
         const applicationParts = getters.getApplicationParts(data);
-        const registrationParts = {};
-        const existingValues = state.record.applicationContent ? state.record.applicationContent.registration : {};
-        applicationParts.forEach(key => {
-          registrationParts[key] = existingValues[key] !== undefined ? existingValues[key] : true;  // default is to include new parts
-        });
-        saveData['applicationContent.registration'] = registrationParts;
+        const configuredApplicationParts = getters.configuredApplicationParts;
+        const newApplicationParts = applicationParts.filter(part => configuredApplicationParts.indexOf(part) === -1);
+        if (newApplicationParts.length || configuredApplicationParts.length !== applicationParts.length) {
+          const applicationContentBefore = state.record.applicationContent ? state.record.applicationContent : {};
+          const applicationContentAfter = {};
+          APPLICATION_STEPS.forEach(step => {
+            applicationContentAfter[step] = {};
+            applicationParts.forEach(part => {
+              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
+                applicationContentAfter[step][part] = applicationContentBefore[step][part];
+              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
+                applicationContentAfter[step][part] = true;
+              }
+            });
+          });
+          saveData['applicationContent'] = applicationContentAfter;
+        }
       }
       await ref.update(saveData);
     },
@@ -352,6 +391,61 @@ export default {
       const applicationPartsMap = {};
       applicationParts.forEach(part => applicationPartsMap[part] = true);
       return applicationPartsMap;
+    },
+    applicationContentList: (state) => {  // returns applicationContent map as an array
+      if (state.record === null) return false;
+      const exercise = clone(state.record);
+      const data = [];
+      if (exercise && exercise.applicationContent) {
+        APPLICATION_STEPS.forEach(step => {
+          if (exercise.applicationContent[step]) {
+            const selectedParts = [];
+            APPLICATION_PARTS.forEach(part => {
+              if (exercise.applicationContent[step][part]) {
+                selectedParts.push(part);
+              }
+            });
+            data.push({
+              ref: step,
+              parts: selectedParts,
+            });
+          } else {
+            data.push({
+              ref: step,
+              parts: [],
+            });
+          }
+        });
+      }
+      return data;
+    },
+    selectedApplicationParts: (state) => {
+      if (state.record === null) return false;
+      const exercise = clone(state.record);
+      let selectedParts = [];
+      if (exercise && exercise.applicationContent) {
+        Object.entries(exercise.applicationContent).forEach((keyValue) => {
+          selectedParts = selectedParts.concat(Object.entries(keyValue[1]).filter((part) => part[1] === true).map(part => part[0]));
+        });
+      }
+      return selectedParts;
+    },
+    unselectedApplicationParts: (state, getters) => {
+      if (state.record === null) return false;
+      const availableParts = getters.getApplicationParts();
+      const selectedParts = getters.selectedApplicationParts;
+      return availableParts.filter((el) => !selectedParts.includes(el));
+    },
+    configuredApplicationParts: (state) => {
+      if (state.record === null) return false;
+      const exercise = clone(state.record);
+      let configuredParts = [];
+      if (exercise && exercise.applicationContent) {
+        Object.entries(exercise.applicationContent).forEach((keyValue) => {
+          configuredParts = configuredParts.concat(Object.entries(keyValue[1]).map(part => part[0]).filter(part => configuredParts.indexOf(part) === -1));
+        });
+      }
+      return configuredParts;
     },
   },
 };

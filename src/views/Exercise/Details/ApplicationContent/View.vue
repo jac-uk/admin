@@ -6,21 +6,54 @@
         class="govuk-link"
         :to="{name: 'exercise-details-application-content-edit'}"
       >
-        Update application form
+        Update application process
       </router-link>
     </div>
 
     <h2 class="govuk-heading-l">
-      Application form
+      Application process
     </h2>
 
-    <p class="govuk-body">
-      <span
-        v-for="item in selectedApplicationParts"
-        :key="item"
-        class="display-block"
-      >{{ item | lookup }}</span>
-    </p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div
+          v-for="(state, index) in applicationContentList"
+          :key="index"
+        >
+          <div v-if="state.parts.length">
+            <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
+              {{ state.ref | lookup }}
+            </h3>
+            <p class="govuk-body">
+              <span
+                v-for="part in state.parts"
+                :key="part"
+                class="display-block"
+              >
+                {{ part | lookup }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="unselectedApplicationParts.length"
+        class="govuk-grid-column-one-half"
+      >
+        <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Not requested
+        </h3>
+        <p class="govuk-body">
+          <span
+            v-for="part in unselectedApplicationParts"
+            :key="part"
+            class="display-block"
+          >
+            {{ part | lookup }}
+          </span>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,17 +65,11 @@ export default {
     ...mapGetters('exerciseDocument', [
       'isEditable',
       'getApplicationParts',
+      'applicationContentList',
+      'unselectedApplicationParts',
     ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },
-    selectedApplicationParts() {
-      if (this.exercise && this.exercise.applicationContent && this.exercise.applicationContent.registration) {
-        const selected = Object.entries(this.exercise.applicationContent.registration).filter((keyValue) => keyValue[1] === true);
-        return selected.map((keyValue) => keyValue[0]);
-      } else {
-        return this.getApplicationParts();
-      }
     },
   },
 };
