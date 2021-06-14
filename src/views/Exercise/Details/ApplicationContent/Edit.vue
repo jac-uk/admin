@@ -106,7 +106,7 @@ export default {
   data(){
     const defaults = {
       applicationContent: {
-        registration: this.$store.getters['exerciseDocument/getApplicationPartsMap'],
+        registration: this.$store.getters['exerciseDocument/applicationPartsMap'],
       },
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
@@ -116,15 +116,12 @@ export default {
   },
   computed: {
     ...mapGetters('exerciseDocument', [
-      'getApplicationParts',
+      'applicationParts',
       'applicationContentList',
       'unselectedApplicationParts',
     ]),
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
-    },
-    applicationParts() {
-      return this.getApplicationParts;
     },
   },
   methods: {

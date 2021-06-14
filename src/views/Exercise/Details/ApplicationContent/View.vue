@@ -64,7 +64,7 @@ export default {
   computed: {
     ...mapGetters('exerciseDocument', [
       'isEditable',
-      'getApplicationParts',
+      'applicationParts',
       'applicationContentList',
       'unselectedApplicationParts',
     ]),

@@ -157,7 +157,7 @@ export default {
       const ref = collection.doc(id);
       const saveData = clone(data);
       if (JSON.stringify(saveData).indexOf('applicationContent') === -1) {  // recalculate applicationContent (if necessary)
-        const applicationParts = getters.getApplicationParts(data);
+        const applicationParts = getters.applicationParts(data);
         const configuredApplicationParts = getters.configuredApplicationParts;
         const newApplicationParts = applicationParts.filter(part => configuredApplicationParts.indexOf(part) === -1);
         if (newApplicationParts.length || configuredApplicationParts.length !== applicationParts.length) {
@@ -318,7 +318,7 @@ export default {
       if (state.record === null) return false;
       return isTribunal(state.record);
     },
-    getApplicationParts: (state) => (data) => {
+    applicationParts: (state) => (data) => {
       if (state.record === null) return [];
       const exercise = clone(state.record);
       if (data) {  // override stored values with passed in data
@@ -386,8 +386,8 @@ export default {
       applicationParts.push('additionalInfo');
       return applicationParts;
     },
-    getApplicationPartsMap: (state, getters) => {
-      const applicationParts = getters.getApplicationParts();
+    applicationPartsMap: (state, getters) => {
+      const applicationParts = getters.applicationParts();
       const applicationPartsMap = {};
       applicationParts.forEach(part => applicationPartsMap[part] = true);
       return applicationPartsMap;
@@ -432,7 +432,7 @@ export default {
     },
     unselectedApplicationParts: (state, getters) => {
       if (state.record === null) return false;
-      const availableParts = getters.getApplicationParts();
+      const availableParts = getters.applicationParts();
       const selectedParts = getters.selectedApplicationParts;
       return availableParts.filter((el) => !selectedParts.includes(el));
     },
