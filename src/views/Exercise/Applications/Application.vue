@@ -2153,7 +2153,7 @@ export default {
       'hasCV',
       'hasCoveringLetter',
       'hasSelfAssessment',
-      'getApplicationParts',
+      'applicationParts',
     ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
