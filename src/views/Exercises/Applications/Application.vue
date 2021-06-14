@@ -805,10 +805,14 @@
                   v-if="application.applyingForWelshPost"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-if="application.canSpeakWelsh"
+                    class="govuk-summary-list__key"
+                  >
                     Can speak Welsh
                   </dt>
                   <dd
+                    v-if="application.canSpeakWelsh"
                     class="govuk-summary-list__value"
                   >
                     {{ application.canSpeakWelsh | toYesNo | showAlternative('Answer not provided') }}
@@ -818,10 +822,14 @@
                   v-if="application.applyingForWelshPost"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
+                  <dt
+                    v-if="application.canReadAndWriteWelsh"
+                    class="govuk-summary-list__key"
+                  >
                     Can read and write in Welsh?
                   </dt>
                   <dd
+                    v-if="application.canReadAndWriteWelsh"
                     class="govuk-summary-list__value"
                   >
                     <p
