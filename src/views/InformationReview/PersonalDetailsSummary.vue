@@ -74,7 +74,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.phone"
             :data="application.personalDetails.phone"
             field="phone"
@@ -91,7 +90,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.dateOfBirth"
             :data="application.personalDetails.dateOfBirth"
             type="date"
@@ -109,7 +107,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
             :data="application.personalDetails.nationalInsuranceNumber | formatNIN"
             field="nationalInsuranceNumber"
@@ -126,7 +123,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.citizenship"
             :data="application.personalDetails.citizenship"
             :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
@@ -146,7 +142,6 @@
 
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.reasonableAdjustments"
             :data="application.personalDetails.reasonableAdjustments"
             :options="[true, false]"
@@ -172,7 +167,6 @@
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
-            :application="application"
             :value="application.personalDetails.reasonableAdjustmentsDetails"
             :data="application.personalDetails.reasonableAdjustmentsDetails"
             field="reasonableAdjustmentsDetails"
@@ -226,8 +220,6 @@ export default {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
-
-      // console.log(objChanged);
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });

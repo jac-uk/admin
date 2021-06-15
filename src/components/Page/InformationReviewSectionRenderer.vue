@@ -6,7 +6,7 @@
       <div
         v-for="(item, index) in data"
         :key="item.name"
-        class="govuk-summary-list govuk-!-margin-bottom-0"
+        :class="index <= data.length ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-4'"
       >
         <div 
           v-if="item.financialYear"
@@ -28,7 +28,6 @@
         </div>
 
         <div
-          v-if="item.title"
           class="govuk-summary-list govuk-!-margin-bottom-0"
         >
           <dt class="govuk-summary-list__key">
@@ -49,23 +48,7 @@
           </dd>
         </div>
 
-        <!-- <div
-        v-else
-        class="govuk-summary-list govuk-!-margin-bottom-0"
-      >
-        <dd class="govuk-summary-list__value">
-            type="selection"
-            :options="[true, false]"
-            :value="data[index]"
-            :field="field"
-            :index="index"
-            @changeField="changeField"
-          />
-        </dd>
-      </div>  -->
-
         <div
-          v-if="item.date"
           class="govuk-summary-list govuk-!-margin-bottom-0"
         >
           <dt class="govuk-summary-list__key">
@@ -84,7 +67,6 @@
         </div>
 
         <div
-          v-if="item.details"
           class="govuk-summary-list govuk-!-margin-bottom-0"
         >
           <dt class="govuk-summary-list__key">
@@ -120,39 +102,54 @@
             />
           </dd>
         </div>
-    
-        <hr>
+        <button
+          class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
+          @click="$refs.removeFieldModal[index].openModal()"
+        >
+          Remove
+        </button>
+        <Modal
+          ref="removeFieldModal"
+        >
+          <component
+            :is="`ModalInner`"
+            @close="$refs.removeFieldModal[index].closeModal()"
+            @confirmed="closeModal(index)"
+          />
+        </Modal>
       </div>
     </div>
     <div
       v-else
     >
-      No
-      <!-- <EditableField
-        :value="data"
-        :field="field"
-        type="addSection"
-        link="Add"
-        @changeField="changeField"
-      /> -->
+      <div
+        style="width: 100%;"
+      >
+        <span>
+          No
+          <!-- {{ $props }} -->
+        </span>
+        <!-- <button
+          class="change-link print-none govuk-button govuk-!-margin-bottom-0 float-right"
+          @click="addField"
+        >
+          Add
+        </button> -->
+      </div>
     </div>
-    <div>
-      / Add button /
-    </div>
-    <!--
-      <EditableField
-        :value="data"
-        :field="field"
-        type="addSection"
-        link="Add"
-        @changeField="changeField"
-      />
-    -->
+    <button
+      class="change-link print-none govuk-button float-left"
+      @click="addField"
+    >
+      Add
+    </button>
   </div>
 </template>
 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 // import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
@@ -160,6 +157,8 @@ import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 export default {
   components: {
     InformationReviewRenderer,
+    Modal,
+    ModalInner,
     // EditableField,
   },
   props: {
@@ -173,6 +172,11 @@ export default {
       required: false,
       default: () => null,
     },
+    dataDefault: {
+      type: Object,
+      required: true,
+      default: () => null,
+    },
   },
   methods: {
     displayDate(date) {
@@ -182,6 +186,20 @@ export default {
       // console.log(obj);
       this.$emit('changeField', obj);
     },
+    addField() {
+      this.$emit('changeField', {
+        field: this.field,
+        index: this.data ? this.data.length : 0,
+        change: this.dataDefault,
+      });
+    },
+    // removeField(index) {
+    //   this.$refs.removeFieldModal[index].openModal();
+    // },
+    // closeModal(index) {
+    // this.$refs.removeFieldModal[index].closeModal();
+    // console.log(index);
+    // },
   },
 };
 </script>
