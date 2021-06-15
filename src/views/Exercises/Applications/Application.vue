@@ -791,7 +791,10 @@
               </h2>
 
               <dl class="govuk-summary-list">
-                <div class="govuk-summary-list__row">
+                <div
+                  v-if="application.applyingForWelshPost != null"
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Applying for a Welsh post
                   </dt>
@@ -802,7 +805,7 @@
                   </dd>
                 </div>
                 <div
-                  v-if="application.applyingForWelshPost"
+                  v-if="application.canSpeakWelsh != null"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -815,7 +818,7 @@
                   </dd>
                 </div>
                 <div
-                  v-if="application.applyingForWelshPost"
+                  v-if="application.canReadAndWriteWelsh != null"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key">
@@ -825,7 +828,7 @@
                     class="govuk-summary-list__value"
                   >
                     <p
-                      v-if="application.canReadAndWriteWelsh == false "
+                      v-if="application.canReadAndWriteWelsh == false"
                     >
                       {{ application.canReadAndWriteWelsh | toYesNo | showAlternative('Answer not provided') }}
                     </p>
