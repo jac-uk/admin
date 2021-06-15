@@ -70,7 +70,7 @@
                 </button>
               </div>
             </div>
-            <!--  -->
+
             <span
               v-if="activeTab == 'full'"
               class=" govuk-!-margin-left-4"
@@ -95,8 +95,10 @@
 
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-third">
-            <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
-              <span class="govuk-caption-m">Created on</span>
+            <div class="panel govuk-!-margin-bottom-7 govuk-!-padding-4 background-light-grey">
+              <span class="govuk-caption-m">
+                Created on
+              </span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
                 {{ application.createdAt | formatDate | showAlternative("Unknown") }}
               </h2>
@@ -106,7 +108,7 @@
           <div class="govuk-grid-column-one-third">
             <div
               v-if="isApplied"
-              class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey"
+              class="panel govuk-!-margin-bottom-7 background-light-grey"
             >
               <span class="govuk-caption-m">Submitted on</span>
               <h2
@@ -117,7 +119,7 @@
             </div>
             <div
               v-else
-              class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey"
+              class="panel govuk-!-margin-bottom-7 background-light-grey"
             >
               <span class="govuk-caption-m">Status</span>
               <h2
@@ -129,16 +131,16 @@
           </div>
 
           <div class="govuk-grid-column-one-third">
-            <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
-              <div class="govuk-caption-m">
+            <div class="panel govuk-!-margin-bottom-7 background-light-grey">
+              <span class="govuk-caption-m">
                 Extension
-                <button
-                  v-if="application.dateExtension"
-                  @click="openModal('modalRefExtension')"
-                >
-                  Change
-                </button>
-              </div>
+              </span>
+              <button
+                v-if="application.dateExtension"
+                @click="$refs.modalRefExtension.openModal()"
+              >
+                Change
+              </button>
               <h2
                 v-if="application.dateExtension"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
@@ -147,38 +149,40 @@
               </h2>
               <button
                 v-else
-                @click="openModal('modalRefExtension')"
+                class="govuk-button govuk-!-margin-bottom-0"
+                @click="$refs.modalRefExtension.openModal()"
               >
                 Give Extension
               </button>
             </div>
           </div>
-          <Modal
-            ref="modalRefExtension"
-          >
-            <component
-              :is="`SubmissionExtension`"
-              v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
-              @close="closeModal('modalRefExtension')"
-            />
-          </Modal>
         </div>
-
-        <TabsList
-          class="print-none"
-          :tabs="tabs"
-          :active-tab.sync="activeTab"
-        />
-
-        <div
-          v-if="activeTab == 'full' || activeTab == 'panel'"
-          class="application-details"
+        <Modal
+          ref="modalRefExtension"
         >
-          <div v-if="application && exercise">
-            <div
-              v-if="!isPanelView"
-            >
-              <div
+          <component
+            :is="`SubmissionExtension`"
+            v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
+            @close="$refs.modalRefExtension.closeModal()"
+          />
+        </Modal>
+      </div>
+
+      <TabsList
+        class="print-none"
+        :tabs="tabs"
+        :active-tab.sync="activeTab"
+      />
+
+      <div
+        v-if="activeTab == 'full' || activeTab == 'panel'"
+        class="application-details"
+      >
+        <div v-if="application && exercise">
+          <div
+            v-if="!isPanelView"
+          >
+            <!-- <div
                 class="govuk-!-margin-top-9"
               >
                 <h2 class="govuk-heading-l">
@@ -338,38 +342,38 @@
                     </dd>
                   </div>
                 </dl>
-              </div>
+              </div> -->
+
+            <div
+              v-if="!isPanelView"
+              class="govuk-!-margin-top-9"
+            >
+              <h2 class="govuk-heading-l">
+                Character information
+              </h2>
+
+              <dl v-if="isVersion2 && application.characterInformationV2">
+                <CriminalOffencesSummary
+                  :application="application"
+                  :character-information="application.characterInformationV2"
+                />
+              </dl>
 
               <div
-                v-if="!isPanelView"
                 class="govuk-!-margin-top-9"
               >
                 <h2 class="govuk-heading-l">
                   Character information
                 </h2>
 
-                <dl v-if="isVersion2 && application.characterInformationV2">
-                  <CriminalOffencesSummary
+                <dl class="govuk-summary-list">
+                  <CharacterInformationSummary
                     :application="application"
                     :character-information="application.characterInformationV2"
                   />
                 </dl>
-
-                <div
-                  class="govuk-!-margin-top-9"
-                >
-                  <h2 class="govuk-heading-l">
-                    Character information
-                  </h2>
-
-                  <dl class="govuk-summary-list">
-                    <CharacterInformationSummary
-                      :application="application"
-                      :character-information="application.characterInformationV2"
-                    />
-                  </dl>
-                </div> 
-                <!--
+              </div> 
+              <!--
             <div
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
@@ -2117,8 +2121,7 @@
       </div>
     </div>
     -->
-              </div> 
-            </div>
+            </div> 
           </div>
         </div>
       </div>
@@ -2526,14 +2529,14 @@ export default {
           title: this.application.secondAssessorTitle,
         };
       }
-      this.openModal('modalRef');
+      this.modalRef.openModal();
     },
     editLeadershipJudgeDetails() {
-      this.openModal('modalLeadershipJudgeDetails');
+      this.$refs.modalLeadershipJudgeDetails.openModal();
     },
-    openModal(modalRef){
-      this.$refs[modalRef].openModal();
-    },
+    // openModal(modalRef){
+    //   this.$refs[modalRef].openModal();
+    // },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },

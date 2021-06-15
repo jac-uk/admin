@@ -8,6 +8,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
             :data="characterInformation.criminalConvictionDetails"
+            :data-default="emptyDetailObject"
             field="criminalConvictionDetails"
             @changeField="changeCharacterInfo"
           />
@@ -16,18 +17,19 @@
     </dl>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
+      <!-- <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
           Has been cautioned for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
             :data="characterInformation.criminalCautionDetails"
-            field="characterInformation.criminalCautionDetails"
-            :user-id="application.userId"
+            :data-default="emptyDetailObject"
+            field="criminalCautionDetails"
+            @changeField="changeCharacterInfo"
           />
         </dd>
-      </div>
+      </div> -->
     </dl>
   </div>
 </template>
@@ -46,11 +48,6 @@ export default {
       required: true,
       default: () => {},
     },
-    application: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
     requiredWiderColumn: {
       type: Boolean,
       required: false,
@@ -61,23 +58,27 @@ export default {
     requiredStyle() {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
-    emptyCriminalConvictionDetails() {
+    emptyDetailObject() {
       return {
         'details': '',
-        'date': '',
+        'date': new Date(),
         'title': '',
       };
     },
   },
   methods: {
     changeCharacterInfo(obj) {
-      // console.log(obj);
-      if (obj.extension && obj.field) {
-        let changedObj = this.application.characterInformationV2[obj.field];
+      let changedObj = this.characterInformation[obj.field];
+      if (obj.change && obj.extension && obj.field && obj.index) {
         changedObj[obj.index][obj.extension] = obj.change;
         changedObj = { [obj.field]: changedObj };
-        this.$emit('changeCharacterInfo', changedObj);
+      } else if (obj.index && obj.change) {
+        changedObj[obj.index] = obj.change;
+        changedObj = { [obj.field]: changedObj };
+      } else {
+        changedObj = obj;
       }
+      this.$emit('changeCharacterInfo', changedObj);
     },
   },
 };

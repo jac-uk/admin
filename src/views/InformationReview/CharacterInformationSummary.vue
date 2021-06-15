@@ -1,13 +1,14 @@
 <template>
-  <dl 
-    v-if="isVersion2 && application.characterInformationV2"
-    class="govuk-summary-list"
-  >
-    <CriminalOffencesSummary
-      :character-information="application.characterInformationV2"
-      :application="application"
-      @changeCharacterInfo="changeCharacterInfo"
-    />
+  <div>
+    <dl 
+      v-if="isVersion2 && application.characterInformationV2"
+      class="govuk-summary-list"
+    >
+      <CriminalOffencesSummary
+        :character-information="application.characterInformationV2"
+        @changeCharacterInfo="changeCharacterInfo"
+      />
+    </dl>
     <!-- 
     <FixedPenaltiesSummary
       :character-information="application.characterInformationV2"
@@ -28,11 +29,13 @@
       :character-information="application.characterInformationV2"
     /> 
     </dl>
+    -->
     <dl v-else>
-    <CharacterInformationSummaryV1
-      :character-information="application.characterInformation || {}"
-    /> -->
-  </dl>
+      <CharacterInformationSummaryV1
+        :character-information="application.characterInformation || {}"
+      /> 
+    </dl>
+  </div>
 </template>
 
 <script>
@@ -59,7 +62,7 @@ export default {
     application: {
       type: Object,
       required: true,
-      default: new Object({}),
+      default: () => {},
     },
   //     requiredWiderColumn: {
   //       type: Boolean,
@@ -86,11 +89,11 @@ export default {
       let myCharacterInfo;
       if (this.isVersion2 && this.application.characterInformationV2) {
         myCharacterInfo = { ...this.application.characterInformationV2, ...objChanged };
+        // console.log(myCharacterInfo);
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
         this.$store.dispatch('candidates/saveCharacterInfo', { data: objChanged, id: this.application.userId });
-        // console.log(myCharacterInfo);
-      // } else {
-        //   myCharacterInfo = { ...this.application.characterInformation, ...objChanged };
+      } else {
+        myCharacterInfo = { ...this.application.characterInformation, ...objChanged };
       }
     },
   },
