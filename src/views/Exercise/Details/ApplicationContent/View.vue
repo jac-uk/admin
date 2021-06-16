@@ -58,18 +58,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+
+import { isEditable, applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
 
 export default {
   computed: {
-    ...mapGetters('exerciseDocument', [
-      'isEditable',
-      'applicationParts',
-      'applicationContentList',
-      'unselectedApplicationParts',
-    ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    applicationContentList() {
+      return applicationContentList(this.exercise);
+    },
+    isEditable() {
+      return isEditable(this.exercise);
+    },
+    unselectedApplicationParts() {
+      return unselectedApplicationParts(this.exercise);
     },
   },
 };

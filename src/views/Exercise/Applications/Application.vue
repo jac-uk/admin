@@ -2111,7 +2111,17 @@ import FurtherInformationSummary from '@/views/InformationReview/FurtherInformat
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
-import { mapGetters } from 'vuex';
+import {
+  isLegal,
+  isNonLegal,
+  hasRelevantMemberships,
+  hasStatementOfSuitability,
+  hasIndependentAssessments,
+  hasLeadershipJudgeAssessment,
+  hasCV,
+  hasCoveringLetter,
+  hasSelfAssessment
+} from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -2165,20 +2175,35 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('exerciseDocument', [
-      'isLegal',
-      'isNonLegal',
-      'hasRelevantMemberships',
-      'hasStatementOfSuitability',
-      'hasIndependentAssessments',
-      'hasLeadershipJudgeAssessment',
-      'hasCV',
-      'hasCoveringLetter',
-      'hasSelfAssessment',
-      'applicationParts',
-    ]),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
+    isNonLegal() {
+      return isNonLegal(this.exercise);
+    },
+    hasRelevantMemberships() {
+      return hasRelevantMemberships(this.exercise);
+    },
+    hasStatementOfSuitability() {
+      return hasStatementOfSuitability(this.exercise);
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
+    },
+    hasLeadershipJudgeAssessment() {
+      return hasLeadershipJudgeAssessment(this.exercise);
+    },
+    hasCV() {
+      return hasCV(this.exercise);
+    },
+    hasCoveringLetter() {
+      return hasCoveringLetter(this.exercise);
+    },
+    hasSelfAssessment() {
+      return hasSelfAssessment(this.exercise);
     },
     isVersion2() {
       if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {

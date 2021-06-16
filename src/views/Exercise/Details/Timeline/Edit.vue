@@ -336,7 +336,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
@@ -400,11 +400,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('exerciseDocument', {
-      hasIndependentAssessments: 'hasIndependentAssessments',
-    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
     },
     hasScenarioQT() {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('scenario-test-qualifying-test');

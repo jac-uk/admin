@@ -99,7 +99,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
+import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
@@ -144,10 +145,15 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    ...mapGetters('exerciseDocument', {
-      exerciseId: 'id',
-      hasIndependentAssessments: 'hasIndependentAssessments',
-    }),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    exerciseId() {
+      return this.exercise.id;
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
+    },
     uploadPath() {
       return `/exercise/${this.exerciseId}`;
     },
@@ -246,8 +252,6 @@ export default {
     },
     modalUploadClose() {
       this.$refs.modalRef.closeModal();
-      // Refresh the information on the exercise
-      this.exercise = this.$store.getters['exerciseDocument/data']();
     },
     async submitForm(action) {
       this.validateDownloads();

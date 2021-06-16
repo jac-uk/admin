@@ -93,7 +93,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import Draggable from '@/components/DragAndDrop/Draggable';
 import Droppable from '@/components/DragAndDrop/Droppable';
-import { mapGetters } from 'vuex';
+import { applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -103,25 +103,18 @@ export default {
     Droppable,
   },
   extends: Form,
-  data(){
-    const defaults = {
-      applicationContent: {
-        registration: this.$store.getters['exerciseDocument/applicationPartsMap'],
-      },
-    };
-    const formData = this.$store.getters['exerciseDocument/data'](defaults);
-    return {
-      formData: formData,
-    };
-  },
   computed: {
-    ...mapGetters('exerciseDocument', [
-      'applicationParts',
-      'applicationContentList',
-      'unselectedApplicationParts',
-    ]),
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    applicationContentList() {
+      return applicationContentList(this.exercise);
+    },
+    unselectedApplicationParts() {
+      return unselectedApplicationParts(this.exercise);
     },
   },
   methods: {

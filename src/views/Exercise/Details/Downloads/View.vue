@@ -208,7 +208,8 @@
 
 <script>
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
+import { isEditable, hasIndependentAssessments } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -218,14 +219,17 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    ...mapGetters('exerciseDocument', {
-      exerciseId: 'id',
-      //exercise: 'record',
-      isEditable: 'isEditable',
-      hasIndependentAssessments: 'hasIndependentAssessments',
-    }),
     exercise() {
-      return this.$store.getters['exerciseDocument/data']();
+      return this.$store.state.exerciseDocument.record;
+    },
+    exerciseId() {
+      return this.exercise.id;
+    },
+    isEditable() {
+      return isEditable(this.exercise);
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
     },
     showPensionsInformation() {
       if (
