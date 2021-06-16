@@ -2,7 +2,7 @@
   <div>
     <div class="modal__title text-left govuk-!-padding-2 background-blue">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        Exercise State
+        Exercise Stage
       </h2>
     </div>
     <div class="modal__content govuk-!-margin-6">
@@ -50,6 +50,7 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { processingStages } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'PanelMemberChange',
@@ -65,17 +66,14 @@ export default {
     },
   },
   data() {
+    const exercise = this.$store.state.exerciseDocument.record;
+    const exerciseStates = processingStages(exercise);
+
     return {
       formData: {
         state: 'review',
       },
-      exerciseStates: [
-        'approved',
-        'shortlisting',
-        'selection',
-        'recommended',
-        'handover',
-      ],
+      exerciseStates: exerciseStates,
     };
   },
   created() {

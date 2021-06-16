@@ -315,7 +315,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
 import Membership from '@/components/RepeatableFields/Membership';
-import { mapGetters } from 'vuex';
+import { isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
 
 const fixedFields = {
   memberships: [
@@ -396,11 +396,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('exerciseDocument', [
-      'isLegal',
-      'isNonLegal',
-      'isTribunal',
-    ]),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
+    isNonLegal() {
+      return isNonLegal(this.exercise);
+    },
+    isTribunal() {
+      return isTribunal(this.exercise);
+    },
     memberships() {
       if (Array.isArray(this.formData.otherMemberships)) {
         return [

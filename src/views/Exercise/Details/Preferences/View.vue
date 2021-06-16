@@ -121,15 +121,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { isEditable } from '@/helpers/exerciseHelper';
 
 export default {
   computed: {
-    ...mapGetters('exerciseDocument', {
-      isEditable: 'isEditable',
-    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isEditable() {
+      return isEditable(this.exercise);
     },
   },
 };

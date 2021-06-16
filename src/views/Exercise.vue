@@ -56,7 +56,8 @@
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import SubNavigation from '@/components/Navigation/SubNavigation';
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
+import { isEditable, hasQualifyingTests } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -74,12 +75,14 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    ...mapGetters('exerciseDocument', {
-      isEditable: 'isEditable',
-      hasQualifyingTests: 'hasQualifyingTests',
-    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isEditable() {
+      return isEditable(this.exercise);
+    },
+    hasQualifyingTests() {
+      return hasQualifyingTests(this.exercise);
     },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];

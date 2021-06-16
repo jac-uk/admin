@@ -191,13 +191,25 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
 
 export default {
   computed: {
-    ...mapGetters('exerciseDocument', {
-      isEditable: 'isEditable',
-    }),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    isEditable() {
+      return isEditable(this.exercise);
+    },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
+    isNonLegal() {
+      return isNonLegal(this.exercise);
+    },
+    isTribunal() {
+      return isTribunal(this.exercise);
+    },
     memberships() {
       // @NOTE this is needed because we don't have the custom memberships in lookup
       const memberships = [];
@@ -223,30 +235,6 @@ export default {
       }
 
       return memberships;
-    },
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
-    },
-    isLegal() {
-      if (this.exercise.typeOfExercise === 'legal') {
-        return true;
-      }
-      if (this.exercise.typeOfExercise === 'leadership') {
-        return true;
-      }
-      return false;
-    },
-    isNonLegal() {
-      if (this.exercise.typeOfExercise === 'non-legal') {
-        return true;
-      }
-      if (this.exercise.typeOfExercise === 'leadership-non-legal') {
-        return true;
-      }
-      return false;
-    },
-    isTribunal() {
-      return this.exercise.isCourtOrTribunal === 'tribunal';
     },
   },
 };
