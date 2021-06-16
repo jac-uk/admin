@@ -1,144 +1,143 @@
 <template>
   <div>
     <div
-      v-if="data"
+      v-if="data && data.length"
     >
       <div
         v-for="(item, index) in data"
         :key="item.name"
         :class="index <= data.length ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-4'"
       >
-        <div 
-          v-if="item.financialYear"
-          class="govuk-summary-list govuk-!-margin-top-1"
-        >
-          <dt class="govuk-summary-list__key">
-            Financial year
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="data[index].financialYear"
-              :field="field"
-              type="date"
-              :index="index"
-              extension="financialYear"
-              @changeField="changeField"
-            />
-          </dd>
-        </div>
+        <div> 
+          <div 
+            v-if="item.financialYear"
+            class="govuk-summary-list govuk-!-margin-top-1"
+          >
+            <dt class="govuk-summary-list__key">
+              Financial year
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="data[index].financialYear"
+                :field="field"
+                type="date"
+                :index="index"
+                extension="financialYear"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
 
-        <div
-          class="govuk-summary-list govuk-!-margin-bottom-0"
-        >
-          <dt class="govuk-summary-list__key">
-            <span>
-              {{ index + 1 }}:
-            </span>
-            Title
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="data[index].title"
-              :field="field"
-              :index="index"
-              type="text"
-              extension="title"
-              @changeField="changeField"
-            />
-          </dd>
-        </div>
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <dt class="govuk-summary-list__key">
+              <span>
+                {{ index + 1 }}:
+              </span>
+              Title
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="data[index].title"
+                :field="field"
+                :index="index"
+                type="text"
+                extension="title"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
 
-        <div
-          class="govuk-summary-list govuk-!-margin-bottom-0"
-        >
-          <dt class="govuk-summary-list__key">
-            Date
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="data[index].date"
-              :field="field"
-              :index="index"
-              extension="date"
-              type="date"
-              @changeField="changeField"
-            />
-          </dd>
-        </div>
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <dt class="govuk-summary-list__key">
+              Date
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="data[index].date"
+                :field="field"
+                :index="index"
+                extension="date"
+                type="date"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
 
-        <div
-          class="govuk-summary-list govuk-!-margin-bottom-0"
-        >
-          <dt class="govuk-summary-list__key">
-            Details
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="data[index].details"
-              :field="field"
-              :index="index"
-              type="text"
-              extension="details"
-              @changeField="changeField"
-            />
-          </dd>
-        </div>
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <dt class="govuk-summary-list__key">
+              Details
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="data[index].details"
+                :field="field"
+                :index="index"
+                type="text"
+                extension="details"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
 
-        <div
-          v-if="item.investigationConclusionDate" 
-          class="govuk-summary-list govuk-!-margin-bottom-0"
-        >
-          <dt class="govuk-summary-list__key">
-            Investigation Conclusion Date
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :value="data[index].investigationConclusionDate"
-              :field="field"
-              :index="index"
-              extension="investigationConclusionDate"
-              type="date"
-              @changeField="changeField"
-            />
-          </dd>
+          <div
+            v-if="item.investigationConclusionDate" 
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <dt class="govuk-summary-list__key">
+              Investigation Conclusion Date
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :value="data[index].investigationConclusionDate"
+                :field="field"
+                :index="index"
+                extension="investigationConclusionDate"
+                type="date"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
         </div>
-        <button
-          class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
-          @click="$refs.removeFieldModal[index].openModal()"
-        >
-          Remove
-        </button>
         <Modal
-          ref="removeFieldModal"
+          ref="removeModal"
         >
           <component
             :is="`ModalInner`"
-            @close="$refs.removeFieldModal[index].closeModal()"
-            @confirmed="closeModal(index)"
+            :index="index"
+            @close="closeModal"
+            @confirmed="removeField"
           />
         </Modal>
+
+        <button
+          class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
+          @click="removeField(index)"
+        >
+          <!-- @click="$refs.removeModal[index].openModal()" -->
+          Remove
+        </button>
       </div>
     </div>
     <div
       v-else
+      style="display: inline-block"
     >
       <div
-        style="width: 100%;"
+        style="width: 100%; display: inline-block"
       >
         <span>
           No
-          <!-- {{ $props }} -->
         </span>
-        <!-- <button
-          class="change-link print-none govuk-button govuk-!-margin-bottom-0 float-right"
-          @click="addField"
-        >
-          Add
-        </button> -->
       </div>
     </div>
     <button
-      class="change-link print-none govuk-button float-left"
+      class="change-link print-none govuk-button govuk-!-margin-bottom-0 govuk-!-margin-right-4 float-right"
       @click="addField"
     >
       Add
@@ -150,8 +149,6 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-// import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
@@ -159,7 +156,6 @@ export default {
     InformationReviewRenderer,
     Modal,
     ModalInner,
-    // EditableField,
   },
   props: {
     field: {
@@ -183,23 +179,26 @@ export default {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
     },
     changeField(obj) {
-      // console.log(obj);
       this.$emit('changeField', obj);
     },
     addField() {
       this.$emit('changeField', {
         field: this.field,
-        index: this.data ? this.data.length : 0,
+        index: (this.data ? this.data.length : 0),
         change: this.dataDefault,
       });
     },
-    // removeField(index) {
-    //   this.$refs.removeFieldModal[index].openModal();
-    // },
-    // closeModal(index) {
-    // this.$refs.removeFieldModal[index].closeModal();
-    // console.log(index);
-    // },
+    removeField(index) {
+      this.$emit('changeField', {
+        field: this.field,
+        index: index,
+        remove: true,
+      });
+      this.$refs.removeModal[index].closeModal();
+    },
+    closeModal(index) {
+      this.$refs.removeModal[index].closeModal();
+    },
   },
 };
 </script>

@@ -90,9 +90,9 @@ export default {
       this.$emit('close');
     },
     confirmModal() {
-      this.modalOpen = false;
+      // this.modalOpen = false;
       this.$emit('confirmed');
-      document.body.style.overflow = '';
+      // document.body.style.overflow = '';
     },
     async save() {
       await this.validate();

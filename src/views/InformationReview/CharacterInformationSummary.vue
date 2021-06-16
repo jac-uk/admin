@@ -87,14 +87,16 @@ export default {
   methods: {
     changeCharacterInfo(objChanged) {
       let myCharacterInfo;
+      console.log(objChanged);
       if (this.isVersion2 && this.application.characterInformationV2) {
         myCharacterInfo = { ...this.application.characterInformationV2, ...objChanged };
         // console.log(myCharacterInfo);
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
         this.$store.dispatch('candidates/saveCharacterInfo', { data: objChanged, id: this.application.userId });
-      } else {
-        myCharacterInfo = { ...this.application.characterInformation, ...objChanged };
-      }
+      } 
+      // else {
+      //   myCharacterInfo = { ...this.application.characterInformation, ...objChanged };
+      // }
     },
   },
 };
