@@ -17,7 +17,7 @@
     </dl>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <!-- <div class="govuk-summary-list__row">
+      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
           Has been cautioned for a criminal offence
         </dt>
@@ -29,7 +29,7 @@
             @changeField="changeCharacterInfo"
           />
         </dd>
-      </div> -->
+      </div>
     </dl>
   </div>
 </template>
@@ -68,16 +68,27 @@ export default {
   },
   methods: {
     changeCharacterInfo(obj) {
-      let changedObj = this.characterInformation[obj.field];
-      if (obj.change && obj.extension && obj.field && obj.index) {
+      let changedObj = this.characterInformation[obj.field] || {};
+
+      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+        console.log('updateCO');
         changedObj[obj.index][obj.extension] = obj.change;
-        changedObj = { [obj.field]: changedObj };
-      } else if (obj.index && obj.change) {
-        changedObj[obj.index] = obj.change;
-        changedObj = { [obj.field]: changedObj };
-      } else {
-        changedObj = obj;
-      }
+      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
+        console.log('addCO');
+        if (changedObj.length > 0){
+          changedObj = [...changedObj, obj.change];
+        } else {
+          changedObj = [obj.change];
+        } 
+      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
+        console.log('remCO');
+        if (changedObj.length > 0){
+          changedObj.splice(obj.index, 1);
+        } else {
+          changedObj = [];
+        } 
+      } 
+      changedObj = { [obj.field]: changedObj };
       this.$emit('changeCharacterInfo', changedObj);
     },
   },
