@@ -46,7 +46,7 @@ export {
   unselectedApplicationParts,
   configuredApplicationParts,
   currentApplicationParts,
-  moreInformationNeeded,
+  isMoreInformationNeeded,
   isApplicationComplete
 };
 
@@ -333,14 +333,14 @@ function configuredApplicationParts(data) {
 // application parts up to and including current stage
 function applicationParts(data) {
   if (data.applicationContent) {
-    const applicationContentList = applicationContentList(data);
+    const applicationContent = applicationContentList(data);
     const applicationParts = {};
-    const currentState = currentState(data);
+    const state = currentState(data);
     let stateFound = false;
-    for (let i = applicationContentList.length - 1; i >= 0; --i) {
-      if (stateFound || applicationContentList[i].ref === currentState) {
+    for (let i = applicationContent.length - 1; i >= 0; --i) {
+      if (stateFound || applicationContent[i].ref === state) {
         stateFound = true;
-        applicationContentList[i].parts.forEach(part => applicationParts[part] = true);
+        applicationContent[i].parts.forEach(part => applicationParts[part] = true);
       }
     }
     return applicationParts;
@@ -355,7 +355,7 @@ function currentApplicationParts(data) {
   return [];
 }
 // are there application parts in current stage (not registration)
-function moreInformationNeeded(data) {
+function isMoreInformationNeeded(data) {
   if (data.applicationContent && data.state) {
     if (
       data.state !== 'registration'
