@@ -286,7 +286,25 @@
       >
         Close & Score
       </ActionButton>
+
+      <Button
+        v-if="isActivated || isCompleted"
+        type="primary"
+        class="govuk-button govuk-button--primary govuk-!-margin-right-3"
+        @click="modalUploadOpen"
+      >
+        Upload Scores
+      </Button>
     </div>
+    <Modal
+      ref="modalRef"
+    >
+      <component
+        :is="`UploadScores`"
+        v-bind="uploadProps"
+        @close="modalUploadClose"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -296,17 +314,22 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import UploadScores from '@/components/ModalViews/UploadScores';
 
 export default {
   components: {
     ActionButton,
     Select,
+    Modal,
+    UploadScores,
   },
   data() {
     return {
       exerciseStage: '',
       candidateStatus: 'all',
       availableStatuses: null,
+      uploadProps: {},
     };
   },
   computed: {
@@ -382,7 +405,7 @@ export default {
         type,
       } = this.qualifyingTest;
 
-      const clipboardQT = { 
+      const clipboardQT = {
         additionalInstructions,
         feedbackSurvey,
         maxScore,
@@ -396,6 +419,9 @@ export default {
 
       const returnValue = JSON.stringify(clipboardQT);
       return returnValue;
+    },
+    uploadPath() {
+      return `/exercise/${this.exercise.id}/qualifying-tests/${this.qualifyingTestId}/`;
     },
   },
   watch: {
@@ -438,7 +464,30 @@ export default {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     async btnGetScores() {
-      await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
+      await functions.httpsCallable('scoreQualifyingTest')({qualifyingTestId: this.qualifyingTestId});
+    },
+    btnShowUploadScores() {
+      const route = {
+        name: 'upload-scores-view',
+        params: {
+          qualifyingTestId: this.$route.params.qualifyingTestId,
+        },
+      };
+      this.$router.push(route);
+    },
+    modalUploadOpen() {
+      this.uploadProps = {
+        name: 'QTScores',
+        filePath: this.uploadPath,
+        exerciseId: this.exercise.id,
+        qualifyingTestId: this.qualifyingTestId,
+        title: 'Upload Qualifying Test Scores',
+      };
+
+      this.$refs.modalRef.openModal();
+    },
+    modalUploadClose() {
+      this.$refs.modalRef.closeModal();
     },
     btnPause() {
       // eslint-disable-next-line no-console
