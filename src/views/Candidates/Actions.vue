@@ -41,7 +41,7 @@
             :errors="errors"
           />
           <h2
-            class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-6"
+            class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-6"
           >
             Current email address: {{ currentEmail }}
           </h2>
