@@ -36,10 +36,7 @@
       </div>
 
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-          <ErrorSummary
-            :errors="errors"
-          />
+        <div class="govuk-grid-column-three-quarters">
           <h2
             class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-6"
           >
@@ -48,13 +45,14 @@
           <TextField
             id="new-login-email-address"
             v-model="newEmailAddress"
-            label="New email address"
+            class="govuk-!-width-one-half"
+            label="New email address:"
             type="email"
             required
           />
           <button
-            :disabled="authorisedToPerformAction && status === 'warning'"
-            class="govuk-button govuk-!-margin-bottom-1"
+            :disabled="authorisedToPerformAction || status === 'warning'"
+            class="govuk-button govuk-!-margin-bottom-4"
             @click="save"
           >
             Update
@@ -72,14 +70,12 @@ import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 
 export default {
   name: 'Actions',
   components: {
     TextField,
     Banner,
-    ErrorSummary,
   },
   extends: Form,
   props: {
