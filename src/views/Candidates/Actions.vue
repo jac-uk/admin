@@ -15,7 +15,7 @@
       </div>
 
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-grid-column-one-half">
           <Banner
             v-if="status"
             :message="message"
