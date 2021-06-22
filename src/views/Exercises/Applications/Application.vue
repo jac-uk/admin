@@ -284,26 +284,48 @@
                     Citizenship
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    {{ application.personalDetails.citizenship | lookup }}
+                    <EditableField
+                      :value="application.personalDetails.citizenship"
+                      type="selection"
+                      :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
+                      field="citizenship"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
 
-                <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row ">
                   <dt class="govuk-summary-list__key">
                     Reasonable adjustments
+                  </dt>
+
+                  <dd class="govuk-summary-list__value">
+                    <EditableField
+                      :value="application.personalDetails.reasonableAdjustments | toYesNo"
+                      type="selection"
+                      :options="[true, false]"
+                      field="reasonableAdjustments"
+                      @changefield="changeUserDetails"
+                    />
+                  </dd>
+                </div>
+                <div 
+                  v-if="application.personalDetails.reasonableAdjustments === true"
+                  class="govuk-summary-list__row "
+                >
+                  <dt 
+                    class="govuk-summary-list__key"
+                  >
+                    Reasonable Adjustments Details
                   </dt>
                   <dd
                     class="govuk-summary-list__value"
                   >
-                    {{ application.personalDetails.reasonableAdjustments | toYesNo }}
-                    <ul
-                      v-if="application.personalDetails.reasonableAdjustmentsDetails"
-                      class="govuk-list govuk-!-margin-top-1"
-                    >
-                      <li>
-                        {{ application.personalDetails.reasonableAdjustmentsDetails }}
-                      </li>
-                    </ul>
+                    <EditableField
+                      :value="application.personalDetails.reasonableAdjustmentsDetails"
+                      field="reasonableAdjustmentsDetails"
+                      @changefield="changeUserDetails"
+                    />
                   </dd>
                 </div>
               </dl>
