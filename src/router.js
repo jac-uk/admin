@@ -82,7 +82,6 @@ import QualifyingTestReview from '@/views/Exercises/Tasks/QualifyingTests/Qualif
 import QualifyingTestResponses from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Responses';
 import QualifyingTestResponse from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Response/View';
-import UploadScores from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/UploadScores';
 
 // Report views
 import ExerciseShowReports from '@/views/Exercises/Show/Reports';
@@ -566,15 +565,6 @@ const router = new Router({
                       },
                     },
                   ],
-                },
-                {
-                  path: 'upload-scores',
-                  component: UploadScores,
-                  name: 'upload-scores-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Qualifying Test | Upload Scores',
-                  },
                 },
               ],
             },
