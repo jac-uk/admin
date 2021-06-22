@@ -464,7 +464,7 @@ export default {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     async btnGetScores() {
-      await functions.httpsCallable('scoreQualifyingTest')({qualifyingTestId: this.qualifyingTestId});
+      await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
     btnShowUploadScores() {
       const route = {

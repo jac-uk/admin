@@ -3,7 +3,10 @@
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
       Upload Scenario QT Scores
     </div>
-    <div class="modal__content govuk-!-padding-4" v-if="!fileName">
+    <div
+      v-if="!fileName"
+      class="modal__content govuk-!-padding-4"
+    >
       <p class="modal__message govuk-body-l">
         <FileUpload
           id="qt-scores-file"
@@ -26,11 +29,16 @@
       </p>
     </div>
 
-    <div class="modal__content govuk-!-padding-4" v-if="this.fileName && !this.importResults">
+    <div
+      v-if="fileName && !importResults"
+      class="modal__content govuk-!-padding-4"
+    >
       Processing file...
-
     </div>
-    <div class="modal__content govuk-!-padding-4" v-if="this.importResults">
+    <div
+      v-if="importResults"
+      class="modal__content govuk-!-padding-4"
+    >
       <p>Successfully imported {{ importResults.data.successfullyImported }} records.</p>
       <p>The following row numbers were not imported: </p>
       <ul>
@@ -84,7 +92,6 @@ export default {
       document.body.style.overflow = '';
     },
     changeFileName(val) {
-      console.log(val);
       this.fileName = val;
       this.save();
     },
