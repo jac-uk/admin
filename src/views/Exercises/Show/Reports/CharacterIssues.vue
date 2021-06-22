@@ -14,7 +14,7 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export All Data
+        Export Data
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
@@ -28,16 +28,78 @@
     </div>
 
     <div class="govuk-grid-column-full">
+      <div class="govuk-button-group">
+        <Select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-!-margin-right-2"
+        >
+          <option value="all">
+            All applications
+          </option>
+          <option
+            v-if="exercise.applicationRecords.review"
+            value="review"
+          >
+            Review
+          </option>
+          <option
+            v-if="exercise.applicationRecords.shortlisted"
+            value="shortlisted"
+          >
+            Shortlisted
+          </option>
+          <option
+            v-if="exercise.applicationRecords.selected"
+            value="selected"
+          >
+            Selected
+          </option>
+          <option
+            v-if="exercise.applicationRecords.recommended"
+            value="recommended"
+          >
+            Recommended
+          </option>
+          <option
+            v-if="exercise.applicationRecords.handover"
+            value="handover"
+          >
+            Handover
+          </option>
+        </Select>
+        <Select
+          v-if="availableStatuses && availableStatuses.length > 0"
+          id="availableStatuses"
+          v-model="candidateStatus"
+        >
+          <option
+            value="all"
+          >
+            All
+          </option>
+          <option
+            v-for="item in availableStatuses"
+            :key="item"
+            :value="item"
+          >
+            {{ item | lookup }}
+          </option>
+        </Select>
+      </div>
+    </div>
+
+    <div class="govuk-grid-column-full">
       <!-- // TODO Include count for character issues across whole exercise. Then display here.
        <p class="govuk-body">
         Candidates with character issues: <b>{{ applications.length }}</b>
       </p>
       -->
       <Table
+        ref="issuesTable"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
-        :search="['candidate.fullName']"
         :page-size="10"
         @change="getTableData"
       >
@@ -68,112 +130,14 @@
                 :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
               >
               <div class="govuk-grid-column-two-thirds">
-                <div
-                  v-if="issue.type == 'criminalOffences'"
-                  class="issue"
-                >
+                <div class="issue">
                   <p class="govuk-body">
-                    Candidate has been cautioned or convicted of a criminal offence
+                    {{ issue.summary }}
                   </p>
                   <EventRenderer
-                    :events="row.issues.characterInformation.criminalOffenceDetails"
+                    v-if="issue.events"
+                    :events="issue.events"
                   />
-                </div>
-
-                <div
-                  v-else-if="issue.type == 'declaredBankruptOrIVA'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.declaredBankruptOrIVADetails"
-                  />
-                </div>
-
-                <div
-                  v-else-if="issue.type == 'diciplinaryActionOrAskedToResign'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been subject to complaints or disciplinary action, or been asked to resign from a position
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.diciplinaryActionOrAskedToResignDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'drivingDisqualificationDrinkDrugs'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been disqualified from driving, or convicted for driving under the influence of drink or drugs
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.drivingDisqualificationDrinkDrugsDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'endorsementsOrMotoringFixedPenalties'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has endorsements on their licence, or received any motoring fixed-penalty notices in the last 4 years
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'involvedInProfessionalMisconduct'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.involvedInProfessionalMisconductDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'lateTaxReturnOrFined'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has filed late tax returns or been fined by HMRC
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.lateTaxReturnOrFinedDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'nonMotoringFixedPenaltyNotices'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has received a non-motoring penalty notice in the last 4 years
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.nonMotoringFixedPenaltyNoticesDetails"
-                  />
-                </div>
-                <div
-                  v-else-if="issue.type == 'otherCharacterIssues'"
-                  class="issue"
-                >
-                  <p class="govuk-body">
-                    Candidate has declared other issues we should know about
-                  </p>
-                  <EventRenderer
-                    :events="row.issues.characterInformation.otherCharacterIssuesDetails"
-                  />
-                </div>
-                <div
-                  v-else
-                  class="issue"
-                >
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
                 </div>
                 <div
                   v-if="issue.comments"
@@ -183,8 +147,8 @@
                 </div>
               </div>
               <div class="govuk-grid-column-one-third">
-                <select
-                  class="govuk-select"
+                <Select
+                  id="issue-action"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -199,7 +163,7 @@
                   <option value="discuss">
                     Discuss
                   </option>
-                </select>
+                </Select>
               </div>
             </div>
           </TableCell>
@@ -217,15 +181,21 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
+    EventRenderer,
+    Select,
     Table,
     TableCell,
-    EventRenderer,
   },
   data () {
     return {
+      exerciseStage: 'all',
+      candidateStatus: 'all',
+      availableStatuses: null,
       applicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
@@ -238,6 +208,29 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+  },
+  watch: {
+    exerciseStage: function (valueNow) {
+      // populate the status dropdown, for the chosen stage
+      if (valueNow === EXERCISE_STAGE.REVIEW) {
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
+        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
+        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
+        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
+      } else { // handover
+        this.availableStatuses = [];
+      }
+      // reset the status dropdown to 'All'
+      this.candidateStatus = 'all';
+
+      this.$refs['issuesTable'].reload();
+    },
+    candidateStatus: function() {
+      this.$refs['issuesTable'].reload();
     },
   },
   destroyed() {
@@ -257,7 +250,11 @@ export default {
         this.downloadingReport = false;
         return; //Abort if no ref
       }
-      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({ exerciseId: this.exercise.id });
+      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+      });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
       if (reportData.data.rows.length === 0) {
@@ -281,10 +278,16 @@ export default {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
-        .where('flags.characterIssues', '==', true)
-        .where('status', '!=', 'withdrewApplication')
-        .orderBy('status');
-      firestoreRef = tableQuery(this.applications, firestoreRef, params);
+        .where('flags.characterIssues', '==', true);
+      if (this.exerciseStage !== 'all') {
+        firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+      }
+      if (this.candidateStatus !== 'all') {
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+      } else {
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
+      }
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
