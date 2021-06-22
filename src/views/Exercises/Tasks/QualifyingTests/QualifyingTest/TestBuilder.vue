@@ -115,7 +115,11 @@ export default {
           }
         }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-        this.$router.push({ name: 'qualifying-test-review' });
+        if (this.qualifyingTest.mode === QUALIFYING_TEST.MODE.DRY_RUN) {
+          this.$router.push({ name: 'qualifying-test-dry-run' });  
+        } else {
+          this.$router.push({ name: 'qualifying-test-review' });
+        }
       }
     },
   },
