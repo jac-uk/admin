@@ -118,14 +118,14 @@ export default {
     },
   },
   methods: {
-    async onDrop(data) {
-      if (data && data.id !== data.data.step) {
+    async onDrop(droppedItem) {
+      if (droppedItem && droppedItem.id !== droppedItem.data.step) {
         const saveData = {};
-        if (data.id !== 'empty') {
-          saveData[`applicationContent.${data.id}.${data.data.part}`] = true;
+        if (droppedItem.id !== 'empty') {
+          saveData[`_applicationContent.${droppedItem.id}.${droppedItem.data.part}`] = true;
         }
-        if (data.data.step !== 'empty') {
-          saveData[`applicationContent.${data.data.step}.${data.data.part}`] = false;
+        if (droppedItem.data.step !== 'empty') {
+          saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
         }
         await this.$store.dispatch('exerciseDocument/save', saveData);
       }

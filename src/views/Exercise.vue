@@ -104,7 +104,7 @@ export default {
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
-      if (this.exercise.applicationsCount || this.hasOpened) {
+      if (this.exercise.applications || this.hasOpened) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
       if (this.hasQualifyingTests || this.exercise.applicationRecords) {

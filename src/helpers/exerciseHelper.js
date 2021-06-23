@@ -23,8 +23,12 @@ unselectedApplicationParts,
 
 export {
   APPLICATION_STEPS,
-  processingStages,
+  applicationCurrentStep,
+  exerciseStates,
+  applicationContentSteps,
+  configuredApplicationContentSteps,
   isEditable,
+  isProcessing,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
   hasQualifyingTests,
@@ -50,8 +54,23 @@ export {
   isApplicationComplete
 };
 
+// const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
+// const APPLICATION_CONTENT = {
+//   _currentStep: {
+//     step: 'passedTests',
+//     start: Date,
+//     end: Date,
+//   },
+//   registration: {
+//     personalDetails: true,
+//   },
+//   passedTests: {
+//     characterInformation: true,
+//   },
+// };
+
 // application process config
-const APPLICATION_STEPS = ['registration', 'qualifying', 'shortlisting', 'selection', 'recommendation', 'handover'];
+const APPLICATION_STEPS = ['registration', 'passedTests', 'shortlisted', 'selected', 'recommended'];
 const APPLICATION_PARTS = [
   'personalDetails',
   'characterInformation',
@@ -78,6 +97,34 @@ const APPLICATION_PARTS = [
   'additionalInfo',
 ];
 
+// application helpers
+function applicationCurrentStep(exercise, application) {
+  let currentStep;
+  switch (application.stage) {
+    case 'review':
+      if (hasQualifyingTests(exercise)) {
+        if (hasScenarioTest(exercise)) {
+          if (application.status === 'passedScenarioTest') {
+            currentStep = 'passedTests';
+          }
+        } else {
+          if (application.status === 'passedFirstTest') {
+            currentStep = 'passedTests';
+          }
+        }
+      }
+      break;
+    case 'shortlisted':
+    case 'selected':
+    case 'recommended':
+      currentStep = application.stage;
+      break;
+    default:
+      currentStep = null;
+  }
+  return currentStep;
+}
+
 // exercise helpers
 function isEditable(data) {
   if (data === null) return false;
@@ -89,32 +136,38 @@ function isEditable(data) {
       return false;
   }
 }
-
-function processingStages(data) {
+function isProcessing(exercise) {
+  if (!exercise) { return false; }
+  return exercise.applicationRecords ? true : false;
+}
+function exerciseStates(exercise) {
+  if (!exercise) { return []; }
+  const states = [];
+  states.push('shortlisting');
+  states.push('selection');
+  states.push('recommendation');
+  states.push('recommended');
+  states.push('handover');
+  return states;
+}
+function applicationContentSteps(data) {
   if (!data) { return []; }
-  const stages = [];
+  const steps = [];
   if (hasQualifyingTests(data)) {
-    stages.push('qualifying');
+    steps.push('passedTests');
   }
-  if (hasShortlisting(data)) {
-    stages.push('shortlisting');
-  }
-  if (hasSelectionDay(data)) {
-    stages.push('selection');
-  }
-  stages.push('recommendation');
-  stages.push('handover');
-  return stages;
+  steps.push('shortlisted');
+  steps.push('selected');
+  steps.push('recommended');
+  return steps;
 }
-function hasShortlisting(data) {
-  if (!data) { return false; }
-  return true;
+function configuredApplicationContentSteps(exercise) {
+  if (!exercise) { return []; }
+  if (!exercise._applicationContent) { return []; }
+  return applicationContentSteps(exercise)
+    .filter(step => Object.values(exercise._applicationContent[step]).filter(value => value === true)
+      .length);
 }
-function hasSelectionDay(data) {
-  if (!data) { return false; }
-  return true;
-}
-
 function hasIndependentAssessments(data) {
   return !(data.assessmentMethods && data.assessmentMethods.independentAssessments === false);
 }
@@ -125,6 +178,11 @@ function hasQualifyingTests(data) {
   if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
   if (data.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0) return true;
   if (data.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0) return true;
+  if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
+  return false;
+}
+function hasScenarioTest(data) {
+  if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
   if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
   return false;
 }
@@ -202,17 +260,22 @@ function isTribunal(data) {
   return data.isCourtOrTribunal === 'tribunal';
 }
 function currentState(data) { // default to registration
-  return APPLICATION_STEPS.indexOf(data.state) >= 0 ? data.state : 'registration';
+  if (data._applicationContent && data._applicationContent._currentStep) {
+    if (APPLICATION_STEPS.indexOf(data._applicationContent._currentStep.step) >= 0) {
+      return data._applicationContent._currentStep.step;
+    }
+  }
+  return 'registration';
 }
 function applicationContentList(data) {  // returns applicationContent map as an array
   const applicationContentList = [];
-  if (data && data.applicationContent) {
-    const steps = ['registration'].concat(processingStages(data));
+  if (data && data._applicationContent) {
+    const steps = ['registration'].concat(applicationContentSteps(data));
     steps.forEach(step => {
-      if (data.applicationContent[step]) {
+      if (data._applicationContent[step]) {
         const selectedParts = [];
         APPLICATION_PARTS.forEach(part => {
-          if (data.applicationContent[step][part]) {
+          if (data._applicationContent[step][part]) {
             selectedParts.push(part);
           }
         });
@@ -308,8 +371,8 @@ function applicationPartsMap(data) {
 
 function selectedApplicationParts(data) {
   let selectedParts = [];
-  if (data && data.applicationContent) {
-    Object.entries(data.applicationContent).forEach((keyValue) => {
+  if (data && data._applicationContent) {
+    Object.entries(data._applicationContent).forEach((keyValue) => {
       selectedParts = selectedParts.concat(Object.entries(keyValue[1]).filter((part) => part[1] === true).map(part => part[0]));
     });
   }
@@ -322,8 +385,8 @@ function unselectedApplicationParts(data) {
 }
 function configuredApplicationParts(data) {
   let configuredParts = [];
-  if (data && data.applicationContent) {
-    Object.entries(data.applicationContent).forEach((keyValue) => {
+  if (data && data._applicationContent) {
+    Object.entries(data._applicationContent).forEach((keyValue) => {
       configuredParts = configuredParts.concat(Object.entries(keyValue[1]).map(part => part[0]).filter(part => configuredParts.indexOf(part) === -1));
     });
   }
@@ -332,7 +395,7 @@ function configuredApplicationParts(data) {
 
 // application parts up to and including current stage
 function applicationParts(data) {
-  if (data.applicationContent) {
+  if (data._applicationContent) {
     const applicationContent = applicationContentList(data);
     const applicationParts = {};
     const state = currentState(data);
@@ -349,18 +412,20 @@ function applicationParts(data) {
 }
 // application parts in current stage (n.b. returns registration by default)
 function currentApplicationParts(data) {
-  if (data.applicationContent && data.state) {
-    return data.applicationContent[currentState(data)];
+  if (data._applicationContent) {
+    return data._applicationContent[currentState(data)];
   }
   return [];
 }
 // are there application parts in current stage (not registration)
 function isMoreInformationNeeded(data) {
-  if (data.applicationContent && data.state) {
+  if (data._applicationContent && data._applicationContent._currentStep && data._applicationContent._currentStep.step) {
     if (
-      data.state !== 'registration'
-      && APPLICATION_STEPS.indexOf(data.state) >= 0
+      data._applicationContent._currentStep.step !== 'registration'
+      && APPLICATION_STEPS.indexOf(data._applicationContent._currentStep.step) >= 0
       && Object.keys(currentApplicationParts(data)).length
+      && data._applicationContent._currentStep.start < new Date() // TODO refine for time comparision
+      && data._applicationContent._currentStep.end > new Date()
     ) {
       return true;
     }
@@ -369,9 +434,10 @@ function isMoreInformationNeeded(data) {
 }
 function isApplicationComplete(vacancy, application) {
   if (!(application && application.progress)) return false;
-  const applicationParts = applicationParts(vacancy);
-  if (!applicationParts) return false;
-  const partsToComplete = Object.keys(applicationParts).filter(part => applicationParts[part] === true);
+  const requiredParts = applicationParts(vacancy);
+  if (!requiredParts) return false;
+  const partsToComplete = Object.keys(requiredParts).filter(part => requiredParts[part] === true);
   const incompleteParts = partsToComplete.filter(part => application.progress[part] !== true);
+  // console.log('incompleteParts', incompleteParts);
   return incompleteParts.length === 0;
 }

@@ -30,11 +30,16 @@ const lookup = (value) => {
 
     // exercise states
     'registration': 'Registration',
-    'qualifying': 'Qualifying',
     'shortlisting': 'Shortlisting',
     'selection': 'Selection',
     'recommendation': 'Recommendation',
     'handover': 'Handover',
+
+    // application process steps
+    passedTests: 'Passed Tests',
+    shortlisted: 'Shortlisted',
+    selected: 'Selected',
+    recommended: 'Recommended',
 
     // 'xxx': 'xxx',`
   };
