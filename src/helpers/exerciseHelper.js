@@ -23,7 +23,6 @@ unselectedApplicationParts,
 
 export {
   APPLICATION_STEPS,
-  applicationCurrentStep,
   exerciseStates,
   applicationContentSteps,
   configuredApplicationContentSteps,
@@ -51,7 +50,8 @@ export {
   configuredApplicationParts,
   currentApplicationParts,
   isMoreInformationNeeded,
-  isApplicationComplete
+  isApplicationComplete,
+  hasApplicationProcess
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -99,16 +99,17 @@ const APPLICATION_PARTS = [
 
 // application helpers
 function applicationCurrentStep(exercise, application) {
+  if (!application._processing) { return null; }
   let currentStep;
-  switch (application.stage) {
+  switch (application._processing.stage) {
     case 'review':
       if (hasQualifyingTests(exercise)) {
         if (hasScenarioTest(exercise)) {
-          if (application.status === 'passedScenarioTest') {
+          if (application._processing.status === 'passedScenarioTest') {
             currentStep = 'passedTests';
           }
         } else {
-          if (application.status === 'passedFirstTest') {
+          if (application._processing.status === 'passedFirstTest') {
             currentStep = 'passedTests';
           }
         }
@@ -117,7 +118,7 @@ function applicationCurrentStep(exercise, application) {
     case 'shortlisted':
     case 'selected':
     case 'recommended':
-      currentStep = application.stage;
+      currentStep = application._processing.stage;
       break;
     default:
       currentStep = null;
@@ -165,8 +166,7 @@ function configuredApplicationContentSteps(exercise) {
   if (!exercise) { return []; }
   if (!exercise._applicationContent) { return []; }
   return applicationContentSteps(exercise)
-    .filter(step => Object.values(exercise._applicationContent[step]).filter(value => value === true)
-      .length);
+    .filter(step => Object.values(exercise._applicationContent[step]).filter(value => value === true).length);
 }
 function hasIndependentAssessments(data) {
   return !(data.assessmentMethods && data.assessmentMethods.independentAssessments === false);
@@ -418,14 +418,15 @@ function currentApplicationParts(data) {
   return [];
 }
 // are there application parts in current stage (not registration)
-function isMoreInformationNeeded(data) {
-  if (data._applicationContent && data._applicationContent._currentStep && data._applicationContent._currentStep.step) {
+function isMoreInformationNeeded(exercise, application) {
+  if (exercise._applicationContent && exercise._applicationContent._currentStep && exercise._applicationContent._currentStep.step) {
     if (
-      data._applicationContent._currentStep.step !== 'registration'
-      && APPLICATION_STEPS.indexOf(data._applicationContent._currentStep.step) >= 0
-      && Object.keys(currentApplicationParts(data)).length
-      && data._applicationContent._currentStep.start < new Date() // TODO refine for time comparision
-      && data._applicationContent._currentStep.end > new Date()
+      exercise._applicationContent._currentStep.step !== 'registration'
+      && APPLICATION_STEPS.indexOf(exercise._applicationContent._currentStep.step) >= 0
+      && Object.keys(currentApplicationParts(exercise)).length
+      && exercise._applicationContent._currentStep.start <= new Date()
+      && exercise._applicationContent._currentStep.end >= new Date()
+      && applicationCurrentStep(exercise, application) === exercise._applicationContent._currentStep.step
     ) {
       return true;
     }
@@ -440,4 +441,11 @@ function isApplicationComplete(vacancy, application) {
   const incompleteParts = partsToComplete.filter(part => application.progress[part] !== true);
   // console.log('incompleteParts', incompleteParts);
   return incompleteParts.length === 0;
+}
+
+// does the exercise have an application process configured
+function hasApplicationProcess(exercise) {
+  if (!exercise) { return false; }
+  const applicationSteps = configuredApplicationContentSteps(exercise);
+  return applicationSteps.length >= 1;
 }
