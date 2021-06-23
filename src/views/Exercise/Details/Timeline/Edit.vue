@@ -365,7 +365,7 @@ export default {
       telephoneAssessmentEndDate: null,
       criticalAnalysisTestDate: null,
       criticalAnalysisTestStartTime: null,
-      criticalAnalysisTestEndime: null,
+      criticalAnalysisTestEndTime: null,
       criticalAnalysisTestOutcome: null,
       situationalJudgementTestDate: null,
       situationalJudgementTestStartTime: null,
