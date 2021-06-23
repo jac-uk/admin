@@ -38,15 +38,13 @@ export default {
       });
     },
     save: async ({ state }, data) => {
-      const id = state.record.id;
-      const ref = collection.doc(id);
       const saveData = clone(data);
-      if (JSON.stringify(saveData).indexOf('applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
         const applicationParts = exerciseApplicationParts(state.record, data);
         const existingApplicationParts = configuredApplicationParts(state.record);
         const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
         if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
-          const applicationContentBefore = state.record.applicationContent ? state.record.applicationContent : {};
+          const applicationContentBefore = state.record._applicationContent ? state.record._applicationContent : {};
           const applicationContentAfter = {};
           APPLICATION_STEPS.forEach(step => {
             applicationContentAfter[step] = {};
@@ -58,10 +56,13 @@ export default {
               }
             });
           });
-          saveData['applicationContent'] = applicationContentAfter;
+          if (applicationContentBefore._currentStep) {
+            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
+          }
+          saveData['_applicationContent'] = applicationContentAfter;
         }
       }
-      await ref.update(saveData);
+      await collection.doc(state.record.id).update(saveData);
     },
     submitForApproval: async ({ state }) => {
       const id = state.record.id;

@@ -70,7 +70,7 @@ export default {
           path: `${path}/downloads`,
         },
       ];
-      if (this.exercise.applicationContent) {
+      if (this.exercise._applicationContent) {
         sideNavigation.push({
           title: 'Application process',
           path: `${path}/application-content`,

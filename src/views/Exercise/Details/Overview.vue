@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
       <div
         v-if="exercise.immediateStart"
@@ -17,15 +17,26 @@
       </div>
 
       <div
-        v-if="exercise.applicationsCount || hasOpened"
+        v-if="exercise.applications || hasOpened"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
           Number of applications
         </h2>
-        <p class="govuk-body">
-          <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applicationsCount }}</span>
-        </p>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-half">
+            <p class="govuk-body">
+              Draft
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applications.draft || 0 }}</span>
+            </p>
+          </div>
+          <div class="govuk-grid-column-one-half">
+            <p class="govuk-body">
+              Applied
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applications.applied || 0 }}</span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
 

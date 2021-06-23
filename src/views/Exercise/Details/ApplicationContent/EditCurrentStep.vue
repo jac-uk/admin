@@ -2,7 +2,7 @@
   <div>
     <div class="modal__title text-left govuk-!-padding-2 background-blue">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        Exercise Stage
+        Application Process
       </h2>
     </div>
     <div class="modal__content govuk-!-margin-6">
@@ -16,17 +16,30 @@
           <fieldset>
             <Select
               id="exercise-state"
-              v-model="formData.state"
+              v-model="formData.step"
+              label="Current stage"
               required
             >
               <option
-                v-for="exerciseState in exerciseStates"
-                :key="exerciseState"
-                :value="exerciseState"
+                v-for="step in steps"
+                :key="step"
+                :value="step"
               >
-                {{ exerciseState | lookup }}
+                {{ step | lookup }}
               </option>
             </Select>
+            <DateInput
+              id="start"
+              v-model="formData.start"
+              label="Open for changes"
+              required
+            />
+            <DateInput
+              id="end"
+              v-model="formData.end"
+              label="Closed for changes"
+              required
+            />
           </fieldset>
           <button
             class="govuk-button govuk-!-margin-right-3"
@@ -50,44 +63,48 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import { exerciseStates } from '@/helpers/exerciseHelper';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import { configuredApplicationContentSteps } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'PanelMemberChange',
   components: {
     Select,
+    DateInput,
     ErrorSummary,
   },
   extends: Form,
   props: {
-    state: {
-      type: String,
+    exercise: {
+      type: Object,
       required: true,
     },
   },
   data() {
-    const exercise = this.$store.state.exerciseDocument.record;
     return {
       formData: {
-        state: 'review',
+        step: 'registration',
+        start: null,
+        end: null,
       },
-      exerciseStates: exerciseStates(exercise),
+      steps: configuredApplicationContentSteps(this.exercise),
     };
   },
   created() {
-    this.formData.state = this.state;
+    if (this.exercise && this.exercise._applicationContent && this.exercise._applicationContent._currentStep) {
+      this.formData.step = this.exercise._applicationContent._currentStep.step;
+      this.formData.start = this.exercise._applicationContent._currentStep.start;
+      this.formData.end = this.exercise._applicationContent._currentStep.end;
+    }
   },
   methods: {
     closeModal() {
       this.$emit('close');
     },
-    confirmModal() {
-      this.modalOpen = false;
-      this.$emit('confirmed');
-      document.body.style.overflow = '';
-    },
     async save() {
-      await this.$store.dispatch('exerciseDocument/save', this.formData);
+      const saveData = {};
+      saveData['_applicationContent._currentStep'] = this.formData;
+      await this.$store.dispatch('exerciseDocument/save', saveData);
       this.closeModal();
     },
   },
