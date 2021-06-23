@@ -15,7 +15,7 @@
             <button
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
-              :disabled="hasReportData ? '' : disabled"
+              :disabled="!hasReportData"
               @click="exportData()"
             >
               Export data
@@ -450,7 +450,6 @@
                 </tr>
               </tbody>
             </table>
-
           </template>
         </div>
       </TabsList>
@@ -531,6 +530,9 @@ export default {
     riscRows() {
       return this.report ? this.report.rows.filter((e) => e.riscDate) : [];
     },
+    hasReportData() {
+      return this.report && this.report.headers;
+    },
   },
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/agency`)
@@ -542,9 +544,6 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
-  },
-  hasReportData() {
-    return this.report && this.report.headers;
   },
   methods: {
     async refreshReport() {

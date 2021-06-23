@@ -22,7 +22,7 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
-                :disabled="showTabs ? '' : disabled"
+                :disabled="!showTabs"
                 @click="exportData(activeTab)"
               >
                 Export stage data
@@ -30,7 +30,7 @@
               <button
                 class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"
-                :disabled="showTabs ? '' : disabled"
+                :disabled="!showTabs"
                 @click="exportData()"
               >
                 Export all data
