@@ -9,6 +9,7 @@
           <InformationReviewSectionRenderer
             :data="characterInformation.criminalConvictionDetails"
             :data-default="emptyDetailObject"
+            :edit="edit"
             field="criminalConvictionDetails"
             @changeField="changeCharacterInfo"
           />
@@ -18,12 +19,13 @@
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
+        <dt :class="requiredStyle">
           Has been cautioned for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
             :data="characterInformation.criminalCautionDetails"
+            :edit="edit"
             :data-default="emptyDetailObject"
             field="criminalCautionDetails"
             @changeField="changeCharacterInfo"
@@ -48,6 +50,11 @@ export default {
       required: true,
       default: () => {},
     },
+    edit: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
+    },
     requiredWiderColumn: {
       type: Boolean,
       required: false,
@@ -69,19 +76,15 @@ export default {
   methods: {
     changeCharacterInfo(obj) {
       let changedObj = this.characterInformation[obj.field] || {};
-
       if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
-        console.log('updateCO');
         changedObj[obj.index][obj.extension] = obj.change;
       } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-        console.log('addCO');
         if (changedObj.length > 0){
           changedObj = [...changedObj, obj.change];
         } else {
           changedObj = [obj.change];
         } 
       } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-        console.log('remCO');
         if (changedObj.length > 0){
           changedObj.splice(obj.index, 1);
         } else {
