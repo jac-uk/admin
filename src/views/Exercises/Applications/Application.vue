@@ -92,6 +92,7 @@
                 </button>
               </span>
               <span
+                v-if="authorisedToPerformAction"
                 class=" govuk-!-margin-left-4"
               >
                 <button
