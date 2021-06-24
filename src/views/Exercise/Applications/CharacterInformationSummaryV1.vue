@@ -1,6 +1,6 @@
 <template>
   <dl
-    v-if="characterInformation && Object.keys(characterInformation).length"
+    v-if="characterInformation && Object.keys(characterInformation).length || edit"
     class="govuk-summary-list"
   >
     <div class="govuk-summary-list__row">
@@ -10,13 +10,27 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.criminalOffences | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.criminalOffences"
+          :data="characterInformation.criminalOffences"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="criminalOffences"
+          @changeField="changeCharacterFlag"
+        />
+        <InformationReviewSectionRenderer
           v-if="characterInformation.criminalOffences"
-          :events="characterInformation.criminalOffenceDetails"
+          :value="characterInformation.criminalOffenceDetails"
+          :data="characterInformation.criminalOffenceDetails"
+          :data-default="emptyDetailObject"
+          :edit="edit"
+          field="criminalOffenceDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+    
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has received a non-motoring penalty notice in the last 4 years
@@ -24,13 +38,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.nonMotoringFixedPenaltyNotices | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.nonMotoringFixedPenaltyNotices"
+          :data="characterInformation.nonMotoringFixedPenaltyNotices"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="nonMotoringFixedPenaltyNotices"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.nonMotoringFixedPenaltyNotices"
-          :events="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
+          :value="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
+          :data="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
+          :edit="edit"
+          :data-default="emptyDetailObject"
+          field="nonMotoringFixedPenaltyNoticeDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has been disqualified from driving, or convicted for driving under the influence of drink or drugs
@@ -38,13 +67,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.drivingDisqualificationDrinkDrugs | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.drivingDisqualificationDrinkDrugs"
+          :data="characterInformation.drivingDisqualificationDrinkDrugs"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="drivingDisqualificationDrinkDrugs"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.drivingDisqualificationDrinkDrugs"
-          :events="characterInformation.drivingDisqualificationDrinkDrugsDetails"
+          :value="characterInformation.drivingDisqualificationDrinkDrugsDetails"
+          :data="characterInformation.drivingDisqualificationDrinkDrugsDetails"
+          :data-default="emptyDetailObject"
+          :edit="edit"
+          field="drivingDisqualificationDrinkDrugsDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has endorsements on licence, or received any motoring fixed-penalty notices in the last 4 years
@@ -52,13 +96,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.endorsementsOrMotoringFixedPenalties | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.endorsementsOrMotoringFixedPenalties"
+          :data="characterInformation.endorsementsOrMotoringFixedPenalties"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="endorsementsOrMotoringFixedPenalties"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.endorsementsOrMotoringFixedPenalties"
-          :events="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
+          :value="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
+          :edit="edit"
+          :data="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
+          :data-default="emptyDetailObject"
+          field="endorsementsOrMotoringFixedPenaltiesDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has been declared bankrupt or entered into an Individual Voluntary Agreement (IVA)
@@ -66,13 +125,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.declaredBankruptOrIVA | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.declaredBankruptOrIVA"
+          :data="characterInformation.declaredBankruptOrIVA"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="declaredBankruptOrIVA"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.declaredBankruptOrIVA"
-          :events="characterInformation.declaredBankruptOrIVADetails"
+          :value="characterInformation.declaredBankruptOrIVADetails"
+          :edit="edit"
+          :data="characterInformation.declaredBankruptOrIVADetails"
+          :data-default="emptyDetailObject"
+          field="declaredBankruptOrIVADetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has filed late tax returns or been fined by HMRC
@@ -80,13 +154,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.lateTaxReturnOrFined | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.lateTaxReturnOrFined"
+          :data="characterInformation.lateTaxReturnOrFined"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="lateTaxReturnOrFined"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.lateTaxReturnOrFined"
-          :events="characterInformation.lateTaxReturnOrFinedDetails"
+          :edit="edit"
+          :value="characterInformation.lateTaxReturnOrFinedDetails"
+          :data="characterInformation.lateTaxReturnOrFinedDetails"
+          :data-default="emptyDetailObject"
+          field="lateTaxReturnOrFinedDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has ever been, or is currently, subject to professional misconduct, negligence, wrongful dismissal, discrimination or harassment proceedings
@@ -94,10 +183,24 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.involvedInProfessionalMisconduct | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.involvedInProfessionalMisconduct"
+          :data="characterInformation.involvedInProfessionalMisconduct"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="involvedInProfessionalMisconduct"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.involvedInProfessionalMisconduct"
-          :events="characterInformation.involvedInProfessionalMisconductDetails"
+          :value="characterInformation.involvedInProfessionalMisconductDetails"
+          :data="characterInformation.involvedInProfessionalMisconductDetails"
+          :edit="edit"
+          :data-default="emptyDetailObject"
+          field="involvedInProfessionalMisconductDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
@@ -108,13 +211,28 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.diciplinaryActionOrAskedToResign | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.diciplinaryActionOrAskedToResign"
+          :data="characterInformation.diciplinaryActionOrAskedToResign"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="diciplinaryActionOrAskedToResign"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.diciplinaryActionOrAskedToResign"
-          :events="characterInformation.diciplinaryActionOrAskedToResignDetails"
+          :value="characterInformation.diciplinaryActionOrAskedToResignDetails"
+          :data="characterInformation.diciplinaryActionOrAskedToResignDetails"
+          :data-default="emptyDetailObject"
+          :edit="edit"
+          field="diciplinaryActionOrAskedToResignDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has any other character issues
@@ -122,10 +240,24 @@
       <dd
         class="govuk-summary-list__value"
       >
-        {{ characterInformation.otherCharacterIssues | toYesNo }}
-        <EventRenderer
+        <InformationReviewRenderer
+          :value="characterInformation.otherCharacterIssues"
+          :data="characterInformation.otherCharacterIssues"
+          :options="[true, false]"
+          :edit="edit"
+          :selection="true"
+          field="otherCharacterIssues"
+          @changeField="changeCharacterFlag"
+        />
+          
+        <InformationReviewSectionRenderer
           v-if="characterInformation.otherCharacterIssues"
-          :events="characterInformation.otherCharacterIssuesDetails"
+          :value="characterInformation.otherCharacterIssuesDetails"
+          :data="characterInformation.otherCharacterIssuesDetails"
+          :edit="edit"
+          :data-default="emptyDetailObject"
+          field="otherCharacterIssuesDetails"
+          @changeField="changeCharacterInfo"
         />
       </dd>
     </div>
@@ -133,23 +265,31 @@
   <span
     v-else
     class="govuk-body"
-  >No information provided
+  >
+    No information provided
   </span>
 </template>
 
 <script>
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 export default {
   name: 'CharacterInformationSummaryV1',
   components: {
-    EventRenderer,
+    InformationReviewRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     characterInformation: {
       type: Object,
       required: true,
-      default: () => ({}),
+      default: () => {},
+    },
+    edit: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
     },
     requiredWiderColumn: {
       type: Boolean,
@@ -160,6 +300,44 @@ export default {
   computed: {
     requiredStyle() {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+    },
+    emptyDetailObject() {
+      return {
+        'details': '',
+        'date': new Date(),
+        'title': '',
+      };
+    },
+  },
+  methods: {
+    changeCharacterInfo(obj) {
+      let changedObj = this.characterInformation[obj.field] || {};
+
+      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+
+        changedObj[obj.index][obj.extension] = obj.change;
+      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
+
+        if (changedObj.length > 0){
+          changedObj = [...changedObj, obj.change];
+        } else {
+          changedObj = [obj.change];
+        } 
+      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
+
+        if (changedObj.length > 0){
+          changedObj.splice(obj.index, 1);
+        } else {
+          changedObj = [];
+        } 
+      } 
+      changedObj = { [obj.field]: changedObj };
+
+      this.$emit('changeCharacterInfo', changedObj);
+
+    },
+    changeCharacterFlag(obj) {
+      this.$emit('changeCharacterInfo', obj);
     },
   },
 };

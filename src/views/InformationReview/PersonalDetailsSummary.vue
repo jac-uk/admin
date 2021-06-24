@@ -10,6 +10,7 @@
             :application-id="application.userId"
             :value="application.personalDetails.title"
             field="title"
+            :edit="editable"
             :data="application.personalDetails.title"
             @changeField="changeUserDetails"
           />
@@ -24,6 +25,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :application-id="application.userId"
             :value="application.personalDetails.firstName"
             :data="application.personalDetails.firstName"
@@ -33,6 +35,7 @@
         </dd>
       </div>
     </dl>
+
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
@@ -40,6 +43,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :application-id="application.userId"
             :value="application.personalDetails.lastName"
             :data="application.personalDetails.lastName"
@@ -57,6 +61,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :application-id="application.userId"
             :value="application.personalDetails.email"
             :data="application.personalDetails.email"
@@ -74,6 +79,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.phone"
             :data="application.personalDetails.phone"
             field="phone"
@@ -90,6 +96,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.dateOfBirth"
             :data="application.personalDetails.dateOfBirth"
             type="date"
@@ -107,6 +114,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
             :data="application.personalDetails.nationalInsuranceNumber | formatNIN"
             field="nationalInsuranceNumber"
@@ -118,11 +126,12 @@
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
+        <dt :class="requiredStyle">
           Citizenship
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.citizenship"
             :data="application.personalDetails.citizenship"
             :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
@@ -136,12 +145,13 @@
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row ">
-        <dt class="govuk-summary-list__key">
+        <dt :class="requiredStyle">
           Reasonable adjustments
         </dt>
 
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.reasonableAdjustments"
             :data="application.personalDetails.reasonableAdjustments"
             :options="[true, false]"
@@ -167,6 +177,7 @@
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
+            :edit="editable"
             :value="application.personalDetails.reasonableAdjustmentsDetails"
             :data="application.personalDetails.reasonableAdjustmentsDetails"
             field="reasonableAdjustmentsDetails"
@@ -182,7 +193,7 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 
 export default {
-  name: 'CriminalOffencesSummary',
+  name: 'PersonalDetailsSummary',
   components: {
     InformationReviewRenderer,
   },
@@ -196,6 +207,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    editable: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
     },
   },
   computed: {

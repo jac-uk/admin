@@ -1,83 +1,99 @@
 <template>
-  <div
-    class="govuk-body"
-  >
+  <div>
     <div
-      v-if="isDate"
+      v-if="!(data === null || data.length == 0)"
     >
-      <EditableField
-        :value="data"
-        :field="field"
-        :type="type"
-        :index="index"
-        :extension="extension"
-        @changeField="changeField"
-      />
-    </div>
+      <div
+        v-if="isDate"
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :type="type"
+          :index="index"
+          :extension="extension"
+          @changeField="changeField"
+        />
+      </div>
 
-    <div
-      v-else-if="isRouted"
-    >
-      <EditableField
-        :value="data"
-        :field="field"
-        :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
-        :extension="extension"
-        type="route"
-        @changeField="changeField"
-      />
-    </div>
+      <div
+        v-else-if="isRouted"
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+          :extension="extension"
+          type="route"
+          @changeField="changeField"
+        />
+      </div>
 
-    <div
-      v-else-if="isEmail"
-    >
-      <EditableField
-        :value="data"
-        :field="field"
-        :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
-        type="email"
-        :extension="extension"
-        @changeField="changeField"
-      />
-    </div>
+      <div
+        v-else-if="isEmail"
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+          type="email"
+          :extension="extension"
+          @changeField="changeField"
+        />
+      </div>
 
-    <div
-      v-else-if="isSelection"
-    >
-      <EditableField
-        :value="data"
-        :field="field"
-        type="selection"
-        :extension="extension"
-        :options="options"
-        @changeField="changeField"
-      />
-    </div>
+      <div
+        v-else-if="isSelection"
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          type="selection"
+          :extension="extension"
+          :options="options"
+          @changeField="changeField"
+        />
+      </div>
 
-    <div
-      v-else
-    >
-      <EditableField
-        :value="data"
-        :field="field"
-        :extension="extension"
-        :type="type"
-        :index="index"
-        @changeField="changeField"
-      />
+      <div
+        v-else
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :extension="extension"
+          :type="type"
+          :index="index"
+          @changeField="changeField"
+        />
+      </div>
+    </div>
+    <div v-if="data === null || data.length == 0">
+      {{ 'No ' + (filters.lookup(field)) + (extension ? ' ' + filters.lookup(extension) : '' ) + ' provided' }}
     </div>
   </div>
 </template>
 
 <script>
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-import { formatDate } from '@jac-uk/jac-kit/filters/filters';
+// import { formatDate } from '@jac-uk/jac-kit/filters/filters';
+import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {
     EditableField,
   },
   props: {
+    edit: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: () => false,
+    },
     type: {
       type: String,
       required: false,
@@ -129,6 +145,11 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      filters: filters,
+    };
+  },
   computed: {
     isDate() {
       return this.$props.data instanceof Date;
@@ -145,7 +166,7 @@ export default {
   },
   methods: {
     displayDate(date) {
-      return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
+      return this.displayMonthYearOnly ? filters.formatDate(date, 'month') : filters.formatDate(date);
     },
     changeField(obj) {
       this.$emit('changeField', obj);

@@ -6,9 +6,12 @@
           Has been disqualified from driving
         </dt>
         <dd class="govuk-summary-list__value">
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.drivingDisqualificationDetails"
-            :display-month-year-only="false"
+            :data-default="emptyDetailObject"
+            :edit="edit"
+            field="drivingDisqualificationDetails"
+            @changeField="changeCharacterInfo"
           />
         </dd>
       </div>
@@ -20,9 +23,12 @@
           Was convicted of any motoring offences in the past 4 years
         </dt>
         <dd class="govuk-summary-list__value">
-          <InformationReviewRenderer
+          <InformationReviewSectionRenderer
             :data="characterInformation.recentDrivingConvictionDetails"
-            :display-month-year-only="false"
+            :data-default="emptyDetailObject"
+            :edit="edit"
+            field="recentDrivingConvictionDetails"
+            @changeField="changeCharacterInfo"
           />
         </dd>
       </div>
@@ -31,18 +37,23 @@
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 export default {
   name: 'MotoringOffencesSummary',
   components: {
-    InformationReviewRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     characterInformation: {
       type: Object,
       required: true,
-      default: new Object({}),
+      default: () => {},
+    },
+    edit: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
     },
     requiredWiderColumn: {
       type: Boolean,
@@ -53,6 +64,39 @@ export default {
   computed: {
     requiredStyle() {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+    },
+    emptyDetailObject() {
+      return {
+        'details': '',
+        'date': new Date(),
+        'title': '',
+      };
+    },
+  },
+  methods: {
+    changeCharacterInfo(obj) {
+      let changedObj = this.characterInformation[obj.field] || {};
+
+      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+
+        changedObj[obj.index][obj.extension] = obj.change;
+      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
+
+        if (changedObj.length > 0){
+          changedObj = [...changedObj, obj.change];
+        } else {
+          changedObj = [obj.change];
+        } 
+      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
+
+        if (changedObj.length > 0){
+          changedObj.splice(obj.index, 1);
+        } else {
+          changedObj = [];
+        } 
+      } 
+      changedObj = { [obj.field]: changedObj };
+      this.$emit('changeCharacterInfo', changedObj);
     },
   },
 };

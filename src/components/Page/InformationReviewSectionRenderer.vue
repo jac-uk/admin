@@ -8,10 +8,12 @@
         :key="item.name"
         :class="index <= data.length ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-4'"
       >
-        <div> 
+        <div
+          class="govuk-!-padding-top-1"
+        > 
           <div 
             v-if="item.financialYear"
-            class="govuk-summary-list govuk-!-margin-top-1"
+            class="govuk-summary-list govuk-!-margin-top-2"
           >
             <dt class="govuk-summary-list__key">
               Financial year
@@ -20,6 +22,7 @@
               <InformationReviewRenderer
                 :data="data[index].financialYear"
                 :field="field"
+                :edit="edit"
                 type="date"
                 :index="index"
                 extension="financialYear"
@@ -41,6 +44,7 @@
               <InformationReviewRenderer
                 :data="data[index].title"
                 :field="field"
+                :edit="edit"
                 :index="index"
                 type="text"
                 extension="title"
@@ -59,6 +63,7 @@
               <InformationReviewRenderer
                 :data="data[index].date"
                 :field="field"
+                :edit="edit"
                 :index="index"
                 extension="date"
                 type="date"
@@ -77,6 +82,7 @@
               <InformationReviewRenderer
                 :data="data[index].details"
                 :field="field"
+                :edit="edit"
                 :index="index"
                 type="text"
                 extension="details"
@@ -96,6 +102,7 @@
               <InformationReviewRenderer
                 :value="data[index].investigationConclusionDate"
                 :field="field"
+                :edit="edit"
                 :index="index"
                 extension="investigationConclusionDate"
                 type="date"
@@ -107,8 +114,7 @@
         <Modal
           ref="removeModal"
         >
-          <component
-            :is="`ModalInner`"
+          <ModalInner
             :index="index"
             @close="closeModal"
             @confirmed="removeField"
@@ -116,10 +122,10 @@
         </Modal>
 
         <button
+          v-if="edit"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
-          @click="removeField(index)"
+          @click="openModal(index)"
         >
-          <!-- @click="$refs.removeModal[index].openModal()" -->
           Remove
         </button>
       </div>
@@ -132,11 +138,12 @@
         style="width: 100%; display: inline-block"
       >
         <span>
-          No
+          No {{ field | lookup }} declaired
         </span>
       </div>
     </div>
     <button
+      v-if="edit"
       class="change-link print-none govuk-button govuk-!-margin-bottom-0 govuk-!-margin-right-4 float-right"
       @click="addField"
     >
@@ -158,6 +165,11 @@ export default {
     ModalInner,
   },
   props: {
+    edit: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: () => false,
+    },
     field: {
       type: String,
       required: true,
@@ -194,10 +206,23 @@ export default {
         index: index,
         remove: true,
       });
-      this.$refs.removeModal[index].closeModal();
+      this.$refs.removeModal.forEach((modal) => {
+        // console.log(i === index);
+        // i === index ? modal.closeModal() : null;
+        modal.closeModal();
+      });
     },
-    closeModal(index) {
-      this.$refs.removeModal[index].closeModal();
+    closeModal() {
+      this.$refs.removeModal.forEach((modal) => {
+        // console.log(i === index);
+        // i === index ? modal.closeModal() : null;
+        modal.closeModal();
+      });
+    },
+    openModal(index) {
+      this.$refs.removeModal.forEach((modal, i) => {
+        i === index ? modal.openModal() : null;
+      });
     },
   },
 };
