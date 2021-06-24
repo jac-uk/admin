@@ -147,7 +147,7 @@ export default {
           },5000);
           setTimeout(() => {
             this.status = null;
-          },10000);
+          },5000);
         } else {
           this.setMessage('Unauthorised to perform action.', 'warning');
         }
