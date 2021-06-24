@@ -51,7 +51,6 @@
             required
           />
           <button
-            :disabled="authorisedToPerformAction || status === 'warning'"
             class="govuk-button govuk-!-margin-bottom-4"
             @click="save"
           >
@@ -112,10 +111,10 @@ export default {
         const response = await functions.httpsCallable('getUserEmailByID')({
           candidateId: this.candidateId });
 
-        if (response.result === false) {
+        if (response.data === false) {
           this.setMessage('Current email address could not be retrieved.', 'warning');
         } else {
-          this.currentEmailAddress = response.result;
+          this.currentEmailAddress = response.data;
         }
       }
       catch (error) {
@@ -132,11 +131,11 @@ export default {
               currentEmailAddress: this.currentEmailAddress,
               newEmailAddress: this.newEmailAddress });
 
-            if (response.result === false) {
+            if (response.data === false) {
               this.setMessage('Failed to update email address.', 'warning');
             } else {
               this.setMessage('Email address was updated.', 'success');
-              this.currentEmailAddress = response.result;
+              this.currentEmailAddress = response.data;
             }
           }
           catch (error) {
@@ -149,6 +148,8 @@ export default {
           setTimeout(() => {
             this.status = null;
           },10000);
+        } else {
+          this.setMessage('Unauthorised to perform action.', 'warning');
         }
       }
     },
