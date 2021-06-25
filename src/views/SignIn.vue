@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <p class="govuk-hint govuk-body govuk-!-margin-bottom-7">
-        Sign in to admin dashboard with your judicialappointments.digital Google account.
+        Sign in to admin dashboard with your judicialappointments.gov.uk account.
       </p>
       <p>
         <span
