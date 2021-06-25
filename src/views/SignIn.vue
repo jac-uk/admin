@@ -30,7 +30,6 @@
         >
           Sign in with Microsoft
         </button>
-
       </p>
     </div>
   </div>
