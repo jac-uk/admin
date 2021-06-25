@@ -13,22 +13,23 @@
         </span>
         <button
           type="button"
-          class="govuk-button button-image"
+          class="govuk-button"
+          @click="loginWithMicrosoft"
+        >
+          Sign in with Microsoft
+        </button>
+
+        <button
+          type="button"
+          class="govuk-button button-image govuk-!-margin-left-5"
           @click="loginWithGoogle"
+          v-if="showGoogleLogin"
         >
           <img
             alt="Sign in with Google"
             src="@/assets/btn_google_signin_light_normal_web@2x.png"
             width="191"
           >
-        </button>
-
-        <button
-          type="button"
-          class="govuk-button"
-          @click="loginWithMicrosoft"
-        >
-          Sign in with Microsoft
         </button>
       </p>
     </div>
@@ -42,12 +43,20 @@ export default {
   data: function() {
     return {
       signInError: null,
+      showGoogleLogin: false,
     };
   },
   computed: {
     authError() {
       return this.$store.state.auth.authError || this.signInError;
     },
+  },
+  created() {
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        this.showGoogleLogin = true;
+      }
+    });
   },
   methods: {
     loginWithGoogle() {
