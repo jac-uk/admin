@@ -20,10 +20,10 @@
         </button>
 
         <button
+          v-if="showGoogleLogin"
           type="button"
           class="govuk-button button-image govuk-!-margin-left-5"
           @click="loginWithGoogle"
-          v-if="showGoogleLogin"
         >
           <img
             alt="Sign in with Google"
