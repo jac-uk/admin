@@ -22,6 +22,15 @@
             width="191"
           >
         </button>
+
+        <button
+          type="button"
+          class="govuk-button"
+          @click="loginWithMicrosoft"
+        >
+          Sign in with Microsoft
+        </button>
+
       </p>
     </div>
   </div>
@@ -44,6 +53,12 @@ export default {
   methods: {
     loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
+      auth().signInWithPopup(provider).catch(err => {
+        this.signInError = err.message;
+      });
+    },
+    loginWithMicrosoft() {
+      const provider = new auth.OAuthProvider('microsoft.com');
       auth().signInWithPopup(provider).catch(err => {
         this.signInError = err.message;
       });
