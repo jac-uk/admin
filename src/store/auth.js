@@ -21,10 +21,7 @@ const module = {
       } else {
         if (state.authError) { commit('setAuthError', null); }
         let allOk = false;
-        if (
-          user.email.indexOf('@judicialappointments.gov.uk') > 0 || 
-          user.email.indexOf('@justice.gov.uk') > 0
-        ) {
+        if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
           'warren.searle@judicialappointments.digital',
@@ -33,7 +30,10 @@ const module = {
           'maria.brookes@judicialappointments.digital',
           'kate.malone@judicialappointments.digital',
           'joy.adeagbo@judicialappointments.digital',
-        ].indexOf(user.email) >= 0) {
+          'julian.sandler@justice.gov.uk',
+          'lisa.grant@justice.gov.uk',
+          'rita.kumi.ampofo@justice.gov.uk',
+        ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
         if (allOk) {
@@ -45,7 +45,7 @@ const module = {
               'maria.brookes@judicialappointments.digital',
               'kate.malone@judicialappointments.digital',
               'joy.adeagbo@judicialappointments.digital',
-            ].indexOf(user.email) >= 0
+            ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
           }
