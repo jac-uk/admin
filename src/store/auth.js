@@ -21,7 +21,10 @@ const module = {
       } else {
         if (state.authError) { commit('setAuthError', null); }
         let allOk = false;
-        if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
+        if (
+          user.email.indexOf('@judicialappointments.gov.uk') > 0 || 
+          user.email.indexOf('@justice.gov.uk') > 0
+        ) {
           allOk = true;
         } else if ([
           'warren.searle@judicialappointments.digital',
