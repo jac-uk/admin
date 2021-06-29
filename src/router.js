@@ -115,6 +115,7 @@ import PageNotFound from '@/views/Errors/PageNotFound';
 import Dashboard from '@/views/Dashboard';
 import ExercisesExport from '@/views/Exercises/Export';
 import SignIn from '@/views/SignIn';
+import EventsList from '@/views/EventsList';
 import NotificationsList from '@/views/NotificationsList';
 
 import Sandbox from '@/views/Sandbox';
@@ -136,6 +137,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Dashboard',
+      },
+    },
+    {
+      path: '/events',
+      name: 'events',
+      component: EventsList,
+      meta: {
+        requiresAuth: true,
+        title: 'Events',
       },
     },
     {
