@@ -7,9 +7,10 @@
       required
     />
 
-    <TextareaInput
+    <RichTextInput
       :id="selectionCriterionText"
       v-model="row.text"
+      class="govuk-!-margin-bottom-5"
       label="Provide text to be displayed to the candidate."
       required
     />
@@ -19,14 +20,14 @@
 </template>
 
 <script>
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 
 export default {
   name: 'SelectionCriterion',
   components: {
-    TextareaInput,
     TextField,
+    RichTextInput,
   },
   props: {
     row: {
@@ -39,6 +40,9 @@ export default {
     },
   },
   computed: {
+    selectionCriterionTitle() {
+      return `selection_criterion_title_${this.index}`;
+    },
     selectionCriterionText() {
       return `selection_criterion_text_${this.index}`;
     },

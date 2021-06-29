@@ -1904,7 +1904,7 @@
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key">
-                  {{ item.title }}
+                  {{ exercise.selectionCriteria[index].title }}
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <span v-if="item.answer">
