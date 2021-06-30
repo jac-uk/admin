@@ -982,7 +982,7 @@
                   </div>
 
                   <template
-                    v-if="item.type === 'barrister'"
+                    v-else-if="item.type === 'barrister'"
                   >
                     <div
                       v-if="item.qualificationNotComplete"
