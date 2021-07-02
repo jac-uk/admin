@@ -100,6 +100,7 @@ export default {
   },
   computed: {
     applicationRecords() {
+      console.log(this.$store.state);
       const records = this.$store.state.stageRecommended.records;
       return records;
     },
