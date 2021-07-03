@@ -1404,18 +1404,19 @@
                         >
                           <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
+                              Nature of Appointment:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.natureOfAppointment }}
+                            </dd>
+                          </div>
+
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
                               Legal Experience:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.legalExperience | showAlternative('No Answer provided') }}
-                            </dd>
-                          </div>
-                          <div class="govuk-summary-list__row">
-                            <dt class="govuk-summary-list__key">
-                              Date:
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.date | formatDate | showAlternative('No Answer provided') }}
+                              {{ item.judicialFunctions.legalExperience }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
@@ -1423,112 +1424,83 @@
                               Category of Law:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.categoryOfLaw | showAlternative('No Answer provided') }}
+                              {{ item.judicialFunctions.categoryOfLaw }}
+                            </dd>
+                          </div>
+                          <div 
+                            class="govuk-summary-list__row"
+                          >
+                            <dt class="govuk-summary-list__key">
+                              Previous Judicial Office Type:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.judicialOfficeType }}
                             </dd>
                           </div>
                           <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
-                              Dates Engaged In This Activity:
+                              Circuit or Region:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.circuitOrRegion }}
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Jurisdiction:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.jurisdiction }}
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Tribunal:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.tribunal }}
+                            </dd>
+                          </div> 
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Working Basis:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.workingBasis }}
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Average days per month:
+                            </dt>
+                            <dd class="govuk-summary-list__value">
+                              {{ item.judicialFunctions.workingBasisDays }}
+                            </dd>
+                          </div>
+                          <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__key">
+                              Dates engaged in this activity:
                             </dt>
                             <dd class="govuk-summary-list__value">
                               <ul
                                 class="govuk-list"
                               >
-                                <li v-if="!item.judicialFunctions.timeEngagedStart">
-                                  No Dates provided
-                                </li>
-                                <li v-if="item.judicialFunctions.timeEngagedStart && item.judicialFunctions.timeEngagedEnd">
+                                <li v-if="item.judicialFunctions.timeEngagedEnd">
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} to {{ item.judicialFunctions.timeEngagedEnd | formatDate }}
                                 </li>
-                                <li v-else-if="item.judicialFunctions.timeEngagedStart">
+                                <li v-else>
                                   {{ item.judicialFunctions.timeEngagedStart | formatDate }} — current
                                 </li>
                               </ul>
                             </dd>
                           </div>
-
                           <div class="govuk-summary-list__row">
                             <dt class="govuk-summary-list__key">
-                              Working Basis
+                              Judicial Appointment Date:
                             </dt>
                             <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.workingBasis | showAlternative('No Answer provided') }}
+                              {{ item.judicialFunctions.judicialAppointmentDate | formatDate }}
                             </dd>
-                          </div>
-
-                          <div 
-                            v-if="['Other', 'Part Time'].some((element) => element === item.judicialFunctions.workingBasis)"
-                            class="govuk-summary-list__row"
-                          >
-                            <dt class="govuk-summary-list__key">
-                              Working Basis (Days Per Month)
-                            </dt>
-                            <dd class="govuk-summary-list__value">
-                              {{ item.judicialFunctions.workingBasisDays | showAlternative('No Answer provided') }}
-                            </dd>
-                          </div>
-
-                          <div
-                            v-if="item.judicialFunctions.judicialOffice === true"
-                          >
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Judicial Office:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.judicialOffice | toYesNo | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div 
-                              class="govuk-summary-list__row"
-                            >
-                              <dt class="govuk-summary-list__key">
-                                Previous Judicial Office Type:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.judicialOfficeType | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Judicial Appointment Date:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.judicialAppointmentDate | formatDate | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Nature of Appointment:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.natureOfAppointment | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Circuit or Region:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.circuitOrRegion | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Jurisdiction:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.jurisdiction | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                              <dt class="govuk-summary-list__key">
-                                Tribunal:
-                              </dt>
-                              <dd class="govuk-summary-list__value">
-                                {{ item.judicialFunctions.tribunal | showAlternative('No Answer provided') }}
-                              </dd>
-                            </div>
                           </div>
                         </div>
                         <hr>
