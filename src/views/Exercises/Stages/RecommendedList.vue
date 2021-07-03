@@ -28,6 +28,13 @@
               >
                 Set status
               </button>
+              <button
+                v-if="exercise.id === 'kVlymRGRhZndRaQuqDTf'"
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+                @click.prevent="exportCustom021Data()"
+              >
+                Export Data
+              </button>
             </div>
           </div>
         </div>
@@ -78,6 +85,8 @@
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import { functions } from '@/firebase';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -100,7 +109,6 @@ export default {
   },
   computed: {
     applicationRecords() {
-      console.log(this.$store.state);
       const records = this.$store.state.stageRecommended.records;
       return records;
     },
@@ -119,8 +127,34 @@ export default {
     this.message = await this.$store.dispatch('stageRecommended/getMessages');
   },
   methods: {
-    checkForm() {
+    async gatherReportData() {
+      // fetch data
+      const response = await functions.httpsCallable('exportCustom021Data')({ exerciseId: this.exercise.id });
 
+      const reportData = [];
+
+      // get headers
+      reportData.push(response.data.headers.map(header => header));
+
+      // get rows
+      response.data.rows.forEach((row) => {
+        reportData.push(Object.values(row).map(cell => cell));
+      });
+
+      return reportData;
+    },
+    async exportCustom021Data() {
+      const title = 'Exercise 021 data';
+      const xlsxData = await this.gatherReportData();
+
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
     moveBack() {
       this.$store.dispatch('stageRecommended/storeItems', { items: this.selectedItems });
