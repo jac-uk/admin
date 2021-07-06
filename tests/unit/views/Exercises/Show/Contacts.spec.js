@@ -1,4 +1,4 @@
-import Contacts from '@/views/Exercise/Show/Contacts';
+import Contacts from '@/views/Exercise/Details/Contacts/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

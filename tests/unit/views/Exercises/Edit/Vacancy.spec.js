@@ -1,4 +1,4 @@
-import ExerciseEditVacancy from '@/views/Exercise/Edit/Vacancy';
+import ExerciseEditVacancy from '@/views/Exercise/Details/Vacancy/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {

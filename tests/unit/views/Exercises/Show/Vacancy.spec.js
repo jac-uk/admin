@@ -1,4 +1,4 @@
-import Vacancy from '@/views/Exercise/Show/Vacancy';
+import Vacancy from '@/views/Exercise/Details/Vacancy/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

@@ -1,4 +1,4 @@
-import ExerciseEditShortlisting from '@/views/Exercise/Edit/Shortlisting';
+import ExerciseEditShortlisting from '@/views/Exercise/Details/Shortlisting/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {

@@ -1,4 +1,4 @@
-import ShowTimeline from '@/views/Exercise/Show/Timeline';
+import ShowTimeline from '@/views/Exercise/Details/Timeline/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';

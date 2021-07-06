@@ -1,4 +1,4 @@
-import Applications from '@/views/Exercise/Show/Applications';
+import Applications from '@/views/Exercise/Applications/List';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Vuex from 'vuex';
