@@ -1,4 +1,4 @@
-import Downloads from '@/views/Exercises/Edit/Downloads';
+import Downloads from '@/views/Exercise/Edit/Downloads';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
@@ -80,7 +80,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Show/Downloads', () => {
+describe('@/views/Exercise/Show/Downloads', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {

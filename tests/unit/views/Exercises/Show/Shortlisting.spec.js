@@ -1,4 +1,4 @@
-import Shortlisting from '@/views/Exercises/Show/Shortlisting';
+import Shortlisting from '@/views/Exercise/Show/Shortlisting';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -35,7 +35,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
+xdescribe('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

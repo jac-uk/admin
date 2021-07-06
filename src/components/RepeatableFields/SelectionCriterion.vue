@@ -1,14 +1,14 @@
 <template>
   <div>
     <TextField
-      :id="selectionCriterionTitle"
+      :id="`selection-criterion-title_${index}`"
       v-model="row.title"
       label="Provide title to be displayed to the candidate."
       required
     />
 
     <RichTextInput
-      :id="selectionCriterionText"
+      :id="`selection-criterion-text_${index}`"
       v-model="row.text"
       class="govuk-!-margin-bottom-5"
       label="Provide text to be displayed to the candidate."
@@ -37,14 +37,6 @@ export default {
     index: {
       required: true,
       type: Number,
-    },
-  },
-  computed: {
-    selectionCriterionTitle() {
-      return `selection_criterion_title_${this.index}`;
-    },
-    selectionCriterionText() {
-      return `selection_criterion_text_${this.index}`;
     },
   },
 };

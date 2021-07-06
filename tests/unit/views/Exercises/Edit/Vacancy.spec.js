@@ -1,4 +1,4 @@
-import ExerciseEditVacancy from '@/views/Exercises/Edit/Vacancy';
+import ExerciseEditVacancy from '@/views/Exercise/Edit/Vacancy';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -32,7 +32,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('views/Exercises/Edit/Vacancy', () => {
+xdescribe('views/Exercise/Edit/Vacancy', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();

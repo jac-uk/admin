@@ -27,11 +27,11 @@ jobs:
         with:
           node-version: '10'
       - name: Installing project dependencies
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc && npm ci
       - name: Lint
         run: npm run lint-ci
-      - name: Test
-        run: npm run test-ci
+      # - name: Test
+      #   run: npm run test-ci
 
   check_preview:
     runs-on: ubuntu-latest

@@ -1,4 +1,4 @@
-import Eligibility from '@/views/Exercises/Show/Eligibility';
+import Eligibility from '@/views/Exercise/Show/Eligibility';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -44,7 +44,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show/Eligibility', () => {
+xdescribe('@/views/Exercise/Show/Eligibility', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

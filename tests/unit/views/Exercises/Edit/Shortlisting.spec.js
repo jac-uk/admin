@@ -1,4 +1,4 @@
-import ExerciseEditShortlisting from '@/views/Exercises/Edit/Shortlisting';
+import ExerciseEditShortlisting from '@/views/Exercise/Edit/Shortlisting';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -23,7 +23,7 @@ const mockRouter = {
   push: jest.fn(),
 };
 
-xdescribe('views/Exercises/Edit/Shortlisting', () => {
+xdescribe('views/Exercise/Edit/Shortlisting', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditShortlisting, {

@@ -1,4 +1,4 @@
-import Application from '@/views/Exercises/Applications/Application';
+import Application from '@/views/Exercise/Applications/Application';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -111,7 +111,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Applications/Application', () => {
+describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {

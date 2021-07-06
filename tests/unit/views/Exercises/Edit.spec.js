@@ -1,4 +1,4 @@
-import Edit from '@/views/Exercises/Edit';
+import Edit from '@/views/Exercise/Edit';
 import { shallowMount } from '@vue/test-utils';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 
@@ -30,7 +30,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercises/Edit', () => {
+describe('@/views/Exercise/Edit', () => {
   let wrapper;
   beforeEach(() => {
     mockStore.dispatch.mockClear();
