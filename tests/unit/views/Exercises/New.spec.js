@@ -1,4 +1,4 @@
-import ExerciseNew from '@/views/Exercise/New';
+import ExerciseNew from '@/views/CreateExercise';
 import { shallowMount } from '@vue/test-utils';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 

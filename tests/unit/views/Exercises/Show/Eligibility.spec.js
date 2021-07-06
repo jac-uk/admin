@@ -1,4 +1,4 @@
-import Eligibility from '@/views/Exercise/Show/Eligibility';
+import Eligibility from '@/views/Exercise/Details/Eligibility/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

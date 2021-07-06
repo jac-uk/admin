@@ -1,4 +1,4 @@
-import EditName from '@/views/Exercise/Edit/EditName';
+import EditName from '@/views/Exercise/Details/EditName';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {

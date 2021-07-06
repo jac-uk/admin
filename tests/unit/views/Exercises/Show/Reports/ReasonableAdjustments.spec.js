@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import ReasonableAdjustments from '@/views/Exercise/Show/Reports/ReasonableAdjustments';
+import ReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 const localVue = createLocalVue();

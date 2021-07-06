@@ -1,4 +1,4 @@
-import Show from '@/views/Exercise/Show';
+import Show from '@/views/Exercise';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';

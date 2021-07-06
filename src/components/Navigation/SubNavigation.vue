@@ -34,10 +34,6 @@ export default {
       required: true,
       type: Array,
     },
-    // current: {
-    //   required: true,
-    //   type: String,
-    // },
   },
 };
 </script>

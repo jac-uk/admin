@@ -1,4 +1,4 @@
-import ExerciseEditTimeline from '@/views/Exercise/Edit/Timeline';
+import ExerciseEditTimeline from '@/views/Exercise/Details/Timeline/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {

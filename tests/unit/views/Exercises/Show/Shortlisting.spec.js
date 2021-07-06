@@ -1,4 +1,4 @@
-import Shortlisting from '@/views/Exercise/Show/Shortlisting';
+import Shortlisting from '@/views/Exercise/Details/Shortlisting/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 

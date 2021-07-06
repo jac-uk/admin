@@ -1,4 +1,4 @@
-import ExerciseEditContacts from '@/views/Exercise/Edit/Contacts';
+import ExerciseEditContacts from '@/views/Exercise/Details/Contacts/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
