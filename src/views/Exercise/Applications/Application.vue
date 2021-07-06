@@ -309,11 +309,11 @@
                     />
                   </dd>
                 </div>
-                <div 
+                <div
                   v-if="application.personalDetails.reasonableAdjustments === true"
                   class="govuk-summary-list__row "
                 >
-                  <dt 
+                  <dt
                     class="govuk-summary-list__key"
                   >
                     Reasonable Adjustments Details
@@ -1471,7 +1471,7 @@
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key">
-                  Sat for at least {{ application.pjeDays || 30 }} days
+                  Sat for at least {{ exercise.pjeDays || 30 }} days
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <p class="govuk-body">
@@ -1503,7 +1503,7 @@
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key">
-                  Sat for at least {{ application.pjeDays || 30 }} days in one or all of these appointments
+                  Sat for at least {{ exercise.pjeDays || 30 }} days in one or all of these appointments
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <p class="govuk-body">
