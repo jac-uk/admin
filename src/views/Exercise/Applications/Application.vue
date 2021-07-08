@@ -1004,9 +1004,10 @@
                   </div>
 
                   <template
-                    v-if="item.qualificationNotComplete && item.details"
+                    v-else-if="item.type === 'barrister'"
                   >
                     <div
+                      v-if="item.qualificationNotComplete"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
@@ -1020,8 +1021,39 @@
                         </ul>
                       </dd>
                     </div>
+                    <div
+                      v-if="item.notCalledToBar === false && item.qualificationNotComplete"
+                      class="govuk-summary-list__row"
+                    >
+                      <dt
+                        class="govuk-summary-list__key"
+                      >
+                        Date called to bar
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li> {{ item.calledToBarDate | formatDate }}</li>
+                        </ul>
+                      </dd>
+                    </div>
+                    <div
+                      v-if="item.notCalledToBar === true && item.qualificationNotComplete"
+                      class="govuk-summary-list__row"
+                    >
+                      <dt class="govuk-summary-list__key">
+                        Called to bar
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        <ul class="govuk-list">
+                          <li>
+                            No
+                          </li>
+                        </ul>
+                      </dd>
+                    </div>
 
                     <div
+                      v-if="item.qualificationNotComplete === true && item.notCalledToBar === true"
                       class="govuk-summary-list__row"
                     >
                       <dt class="govuk-summary-list__key">
