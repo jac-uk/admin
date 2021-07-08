@@ -3,12 +3,6 @@
     <h1 class="govuk-heading-l">
       Character checks
     </h1>
-
-    <Banner
-      :message="message"
-      :status="status"
-    />
-
     <dl
       class="govuk-summary-list"
     >
@@ -72,6 +66,11 @@
       v-if="activeTab == 'notrequested'"
       class="application-details"
     >
+      <Banner
+        :message="message"
+        :status="status"
+      />
+
       <Modal ref="modalRefRequests">
         <component
           :is="`CharacterChecksRequests`"
@@ -82,6 +81,7 @@
           :due-date="dueDate"
           @close="closeModal('modalRefRequests')"
           @setmessage="setMessage"
+          @reset="resetSelectedItems"
         />
       </Modal>
 
@@ -141,6 +141,11 @@
     <div
       v-if="activeTab == 'requested'"
     >
+      <Banner
+        :message="message"
+        :status="status"
+      />
+
       <Modal ref="modalRefRequests">
         <component
           :is="`CharacterChecksRequests`"
@@ -151,6 +156,7 @@
           :due-date="dueDate"
           @close="closeModal('modalRefRequests')"
           @setmessage="setMessage"
+          @reset="resetSelectedItems"
         />
       </Modal>
 
@@ -201,7 +207,7 @@
             {{ row.characterChecks.requestedAt | formatDate }}
           </TableCell>
           <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
-            {{ row.characterChecks.reminderSentAt ? (row.characterChecks.reminderSentAt | formatDate) : 'n/a' }}
+            {{ getDate(row.characterChecks.reminderSentAt) || 'n/a' }}
           </TableCell>
         </template>
       </Table>
@@ -301,7 +307,7 @@ export default {
       ],
       activeTab: 'notrequested',
       message: null,
-      status: 'success',
+      status: null,
       selectedItems: [],
       exerciseStages: ['shortlisted', 'selected', 'recommended', 'handover'],
       tableColumns: [
@@ -349,7 +355,7 @@ export default {
   },
   watch: {
     activeTab() {
-      this.selectedItems = [];
+      this.resetSelectedItems();
     },
   },
   async created() {
@@ -376,6 +382,9 @@ export default {
         this.message = '';
       },20000);
 
+    },
+    getDate(value) {
+      return formatDate(value);
     },
     getApplicationRecordsCharacterChecksNotRequested(params) {
       this.$store.dispatch(
@@ -406,6 +415,9 @@ export default {
           ...params,
         }
       );
+    },
+    resetSelectedItems() {
+      this.selectedItems = [];
     },
   },
 };

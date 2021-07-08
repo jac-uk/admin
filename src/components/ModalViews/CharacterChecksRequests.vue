@@ -17,7 +17,7 @@
             class="govuk-button govuk-!-margin-right-3 govuk-!-top-3"
             @click.prevent="send"
           >
-            I confirm, please send {{ typeOfEmail }}
+            {{ buttonText }}
           </button>
           <button
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -63,12 +63,23 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      processing: false,
+    };
+  },
   computed: {
     numberOfCandidates() {
       return this.selectedItems.length;
     },
     typeOfEmail() {
       return this.type;
+    },
+    buttonText() {
+      if (this.processing === true) {
+        return 'Processing...';
+      }
+      return `I confirm, please send ${this.type}`;
     },
   },
   methods: {
@@ -82,6 +93,7 @@ export default {
     },
     async send() {
       try {
+        this.processing = true;
         const response = await functions.httpsCallable('sendCharacterCheckRequests')({
           items: this.selectedItems,
           type: this.type,
@@ -89,9 +101,11 @@ export default {
           exerciseManagerName: this.exerciseManagerName,
           dueDate: this.dueDate,
         });
-        if (response.result === false) {
+        if (response === false) {
+          this.processing = false;
           this.$emit('setmessage', false, 'warning');
         } else {
+          this.processing = false;
           await this.$store.dispatch('characterChecks/updateStatus', {
             selectedItems: this.selectedItems,
             status: 'requested',
@@ -102,6 +116,7 @@ export default {
         this.$emit('setmessage', false, this.type, 'warning');
       }
       this.closeModal();
+      this.$emit('reset');
     },
   },
 };
