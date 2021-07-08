@@ -77,10 +77,16 @@
     >
       <Applications :candidate-id="candidateId" />
     </div>
+    <div
+      v-if="activeTab === 'actions' && authorisedUser"
+    >
+      <Actions :candidate-id="getUserId" />
+    </div>
   </div>
 </template>
 
 <script>
+import firebase from '@firebase/app';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
@@ -93,7 +99,9 @@ import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersS
 import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1.vue';
+import Actions from '@/views/Candidates/Actions';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
 export default {
   components: {
@@ -110,9 +118,11 @@ export default {
     FurtherInformationSummary,
     CharacterDeclarationSummary,
     CharacterInformationSummaryV1,
+    Actions,
   },
   data() {
     return {
+      authorisedToPerformAction: false,
       tabs: [
         {
           ref: 'details',
@@ -126,12 +136,19 @@ export default {
           ref: 'applications',
           title: 'Applications',
         },
+        {
+          ref: 'actions',
+          title: 'Actions',
+        },
       ],
       activeTab: 'details',
       candidateId: '',
     };
   },
   computed: {
+    authorisedUser(){
+      return this.authorisedToPerformAction;
+    },
     candidateRecord() {
       return this.$store.state.candidates.record;
     },
@@ -157,10 +174,12 @@ export default {
       return this.characterInformation._versionNumber === 2;
     },
   },
-  created() {
+  async created() {
     this.candidateId = this.getUserId;
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
+    const email = firebase.auth().currentUser.email;
+    this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   destroyed() {
     this.$store.dispatch('candidates/unbindDoc');
