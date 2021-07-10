@@ -1,4 +1,4 @@
-import Vacancy from '@/views/Exercises/Show/Vacancy';
+import Vacancy from '@/views/Exercise/Details/Vacancy/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
@@ -35,7 +35,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
+xdescribe('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

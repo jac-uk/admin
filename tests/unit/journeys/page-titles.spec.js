@@ -69,14 +69,14 @@ xdescribe('Page titles', () => {
     });
   });
 
-  describe('dashboard', () => {
+  describe('exercises', () => {
     beforeEach(() => {
       store.dispatch('auth/setCurrentUser', user);
-      router.push({ name: 'dashboard' });
+      router.push({ name: 'exercises' });
     });
 
-    it('contains Dashboard', () => {
-      expect(document.title).toContain('Dashboard');
+    it('contains exercises', () => {
+      expect(document.title).toContain('exercises');
     });
 
     it('contains Judicial Appointments Commission', () => {

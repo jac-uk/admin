@@ -1,4 +1,4 @@
-import ExerciseEditEligibility from '@/views/Exercises/Edit/Eligibility';
+import ExerciseEditEligibility from '@/views/Exercise/Details/Eligibility/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -31,7 +31,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('views/Exercises/Edit/Eligibility', () => {
+xdescribe('views/Exercise/Edit/Eligibility', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();
