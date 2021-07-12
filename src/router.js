@@ -42,7 +42,7 @@ import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit';
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit';
 
-// Appplications
+// Applications
 import ExerciseApplications from '@/views/Exercise/Applications';
 import ExerciseApplicationsList from '@/views/Exercise/Applications/List';
 import ExerciseApplication from '@/views/Exercise/Applications/Application';
@@ -904,18 +904,18 @@ const router = new Router({
                 title: 'Move Back Shortlisted | Exercise Stages',
               },
             },
-            {
-              path: 'equal-merit-tie-breakers',
-              component: QualifyingTestsCover,
-              props: {
-                tieBreakers: true,
-              },
-              name: 'exercise-tasks-equal-merit-tie-breakers',
-              meta: {
-                requiresAuth: true,
-                title: 'Equal Merit Tie-Breakers',
-              },
-            },
+            // {
+            //   path: 'equal-merit-tie-breakers',
+            //   component: QualifyingTestsCover,
+            //   props: {
+            //     tieBreakers: true,
+            //   },
+            //   name: 'exercise-tasks-equal-merit-tie-breakers',
+            //   meta: {
+            //     requiresAuth: true,
+            //     title: 'Equal Merit Tie-Breakers',
+            //   },
+            // },
             {
               path: 'equal-merit-tie-breakers/new',
               component: QualifyingTestNew,
@@ -1115,18 +1115,18 @@ const router = new Router({
                 },
               ],
             },
-            {
-              path: 'equal-merit-tie-breaker-reports',
-              component: QualifyingTestReports,
-              props: {
-                tieBreakers: true,
-              },
-              name: 'equal-merit-tie-breaker-reports',
-              meta: {
-                requiresAuth: true,
-                title: 'Equal Merit Tie-breaker Reports',
-              },
-            },
+            // {
+            //   path: 'equal-merit-tie-breaker-reports',
+            //   component: QualifyingTestReports,
+            //   props: {
+            //     tieBreakers: true,
+            //   },
+            //   name: 'equal-merit-tie-breaker-reports',
+            //   meta: {
+            //     requiresAuth: true,
+            //     title: 'Equal Merit Tie-breaker Reports',
+            //   },
+            // },
             {
               path: 'equal-merit-tie-breaker-report-create',
               component: QualifyingTestReportCreate,
