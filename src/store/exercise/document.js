@@ -3,6 +3,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
+import { APPLICATION_STEPS, exerciseApplicationParts, configuredApplicationParts } from '@/helpers/exerciseHelper';
 
 const collection = firestore.collection('exercises');
 
@@ -37,9 +38,31 @@ export default {
       });
     },
     save: async ({ state }, data) => {
-      const id = state.record.id;
-      const ref = collection.doc(id);
-      await ref.update(data);
+      const saveData = clone(data);
+      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+        const applicationParts = exerciseApplicationParts(state.record, data);
+        const existingApplicationParts = configuredApplicationParts(state.record);
+        const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
+        if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
+          const applicationContentBefore = state.record._applicationContent ? state.record._applicationContent : {};
+          const applicationContentAfter = {};
+          APPLICATION_STEPS.forEach(step => {
+            applicationContentAfter[step] = {};
+            applicationParts.forEach(part => {
+              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
+                applicationContentAfter[step][part] = applicationContentBefore[step][part];
+              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
+                applicationContentAfter[step][part] = true;
+              }
+            });
+          });
+          if (applicationContentBefore._currentStep) {
+            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
+          }
+          saveData['_applicationContent'] = applicationContentAfter;
+        }
+      }
+      await collection.doc(state.record.id).update(saveData);
     },
     submitForApproval: async ({ state }) => {
       const id = state.record.id;
@@ -107,26 +130,18 @@ export default {
 
       return state.record.id;
     },
-    data: (state) => () => {
-      return clone(state.record);
-    },
-    //record: (state) => clone(state.record),
-    isEditable: (state) => {
-      if (state.record === null) return true;
-
-      if (state.record) {
-        switch (state.record.state) {
-        case 'draft':
-        case 'ready':
-          return true;
-        default:
-          return false;
-        }
+    data: (state) => (objectToPopulate) => {
+      const data = clone(state.record);
+      if (objectToPopulate) {
+        Object.keys(objectToPopulate).forEach(key => {
+          if (data[key] !== undefined) {
+            objectToPopulate[key] = data[key];
+          }
+        });
+        return objectToPopulate;
+      } else {
+        return data;
       }
-    },
-    hasIndependentAssessments: (state) => {
-      if (state.record === null) return true;
-      return !(state.record.assessmentMethods && state.record.assessmentMethods.independentAssessments === false);
     },
   },
 };
