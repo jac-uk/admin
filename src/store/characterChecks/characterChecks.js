@@ -50,9 +50,6 @@ export default {
         case 'reminder sent':
           field = 'characterChecks.reminderSentAt';
           break;
-        case 'completed':
-          field = 'characterChecks.completedAt';
-          break;
         case null || undefined:
           throw 'Error';
       }
