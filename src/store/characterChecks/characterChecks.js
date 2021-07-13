@@ -16,7 +16,7 @@ export default {
         .where('active', '==', true);
 
       if (params.where.length === 0) {
-        firestoreRef = firestoreRef.where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED]);
+        firestoreRef = firestoreRef.where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]);
       }
 
       if (params.requested === true) {
