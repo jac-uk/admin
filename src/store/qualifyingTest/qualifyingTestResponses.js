@@ -117,15 +117,13 @@ export default {
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
     resetTest: async (context) => {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const email = firebase.auth().currentUser.email;
       const canReset = await authorisedToPerformAction(email);
       if (canReset) {
         const rec = context.state.record;
         const data = {
-          'status': 'activated',
-          'statusLog.reset': timestamp,
-        };
+              'status': 'activated',
+            };
         if (rec.isOutOfTime === true) {
           data.isOutOfTime = false;
         }
