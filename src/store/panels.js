@@ -96,7 +96,7 @@ export default {
       // TODO: add isSift to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/sift/');
+        route = url.includes('/tasks/sift');
       }
       return route;
     },
@@ -104,7 +104,7 @@ export default {
       // TODO: add isSelectionDay to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/selection/');
+        route = url.includes('/tasks/selection');
       }
       return route;
     },
