@@ -41,21 +41,19 @@ export default {
       unbindFirestoreRef('checksCompletedRecords');
       return true;
     }),
-    updateStatus: async ( context, { selectedItems, status } ) => {
+    updateStatus: async ( context, { selectedItems, newStatus } ) => {
       let field = '';
-      switch (status) {
-        case 'requested':
-          field = 'characterChecks.requestedAt';
-          break;
-        case 'reminder sent':
-          field = 'characterChecks.reminderSentAt';
-          break;
-        case null || undefined:
-          throw 'Error';
+      const existingStatus = 'requested';
+
+      if (newStatus === 'requested') {
+        field = 'characterChecks.requestedAt';
+      }
+      if (newStatus === 'reminder sent') {
+        field = 'characterChecks.reminderSentAt';
       }
 
       const data = {
-        'characterChecks.status': status,
+        'characterChecks.status': existingStatus,
         [field]: firebase.firestore.FieldValue.serverTimestamp(),
       };
 

@@ -91,6 +91,12 @@ export default {
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
+    async updateApplicationRecord(status) {
+      await this.$store.dispatch('characterChecks/updateStatus', {
+        selectedItems: this.selectedItems,
+        newStatus: status,
+      });
+    },
     async send() {
       try {
         this.processing = true;
@@ -106,10 +112,12 @@ export default {
           this.$emit('setmessage', false, 'warning');
         } else {
           this.processing = false;
-          await this.$store.dispatch('characterChecks/updateStatus', {
-            selectedItems: this.selectedItems,
-            status: 'requested',
-          });
+          if (this.type === 'request') {
+            this.updateApplicationRecord('requested');
+          }
+          if (this.type === 'reminder') {
+            this.updateApplicationRecord('reminder sent');
+          }
           this.$emit('setmessage', true, this.type, 'success');
         }
       } catch (error) {
