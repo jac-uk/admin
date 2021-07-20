@@ -234,7 +234,7 @@ function hasCV(data) {
 function hasStatementOfEligibility(data) {
   switch (data.assessmentOptions) {
     case 'statement-of-eligibility':
-      return true;
+      return !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
     default:
       return false;
   }
