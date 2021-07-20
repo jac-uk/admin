@@ -5,29 +5,29 @@ import Vuex from 'vuex';
 
 const id = 12345;
 const routes = [
-  ['exercise-new', '/exercises/new'],
-  ['exercise-show-overview', `/exercises/${id}/`],
-  ['exercise-show-applications', `/exercises/${id}/applications`],
-  ['exercise-show-contacts', `/exercises/${id}/contacts`],
-  ['exercise-show-timeline', `/exercises/${id}/timeline`],
-  ['exercise-show-shortlisting', `/exercises/${id}/shortlisting`],
-  ['exercise-show-vacancy', `/exercises/${id}/vacancy`],
-  ['exercise-show-eligibility', `/exercises/${id}/eligibility`],
-  ['exercise-show-independent-assessments', `/exercises/${id}/independent-assessments`],
-  ['exercise-edit-contacts', `/exercises/${id}/edit/contacts`],
-  ['exercise-edit-shortlisting', `/exercises/${id}/edit/shortlisting`],
-  ['exercise-edit-timeline', `/exercises/${id}/edit/timeline`],
-  ['exercise-edit-eligibility', `/exercises/${id}/edit/eligibility`],
-  ['exercise-edit-vacancy', `/exercises/${id}/edit/vacancy`],
-  ['exercise-edit-name', `/exercises/${id}/edit/name`],
-  ['exercise-reports-character-issues', `/exercises/${id}/report-directory/character-issues`],
-  ['exercise-reports-character-checks', `/exercises/${id}/report-directory/character-checks`],
-  ['exercise-reports-diversity-dashboard', `/exercises/${id}/report-directory/diversity-dashboard`],
-  ['exercise-reports-eligibility-issues', `/exercises/${id}/report-directory/eligibility-issues`],
-  ['exercise-reports-education-and-career-history', `/exercises/${id}/report-directory/education-and-career-history`],
-  ['exercise-reports-jo-handover-report', `/exercises/${id}/report-directory/jo-handover-report`],
-  ['exercise-reports-statutory-consultation-table', `/exercises/${id}/report-directory/statutory-consultation-table`],
-  ['exercise-reports-reasonable-adjustments', `/exercises/${id}/report-directory/reasonable-adjustments`],
+  ['exercise-new', '/exercise/new'],
+  ['exercise-show-overview', `/exercise/${id}/`],
+  ['exercise-show-applications', `/exercise/${id}/applications`],
+  ['exercise-show-contacts', `/exercise/${id}/contacts`],
+  ['exercise-show-timeline', `/exercise/${id}/timeline`],
+  ['exercise-show-shortlisting', `/exercise/${id}/shortlisting`],
+  ['exercise-show-vacancy', `/exercise/${id}/vacancy`],
+  ['exercise-show-eligibility', `/exercise/${id}/eligibility`],
+  ['exercise-show-independent-assessments', `/exercise/${id}/independent-assessments`],
+  ['exercise-edit-contacts', `/exercise/${id}/edit/contacts`],
+  ['exercise-edit-shortlisting', `/exercise/${id}/edit/shortlisting`],
+  ['exercise-edit-timeline', `/exercise/${id}/edit/timeline`],
+  ['exercise-edit-eligibility', `/exercise/${id}/edit/eligibility`],
+  ['exercise-edit-vacancy', `/exercise/${id}/edit/vacancy`],
+  ['exercise-edit-name', `/exercise/${id}/edit/name`],
+  ['exercise-reports-character-issues', `/exercise/${id}/report-directory/character-issues`],
+  ['exercise-reports-character-checks', `/exercise/${id}/report-directory/character-checks`],
+  ['exercise-reports-diversity-dashboard', `/exercise/${id}/report-directory/diversity-dashboard`],
+  ['exercise-reports-eligibility-issues', `/exercise/${id}/report-directory/eligibility-issues`],
+  ['exercise-reports-education-and-career-history', `/exercise/${id}/report-directory/education-and-career-history`],
+  ['exercise-reports-jo-handover-report', `/exercise/${id}/report-directory/jo-handover-report`],
+  ['exercise-reports-statutory-consultation-table', `/exercise/${id}/report-directory/statutory-consultation-table`],
+  ['exercise-reports-reasonable-adjustments', `/exercise/${id}/report-directory/reasonable-adjustments`],
   ['exercise-not-found', '/errors/exercise-not-found'],
   ['page-not-found', '/errors/page-not-found'],
 ];
@@ -79,16 +79,16 @@ xdescribe('Sign in journey', () => {
     });
 
     describe('when going to page that does not exist', () => {
-      it('redirects to the dashboard page', () => {
+      it('redirects to the exercises page', () => {
         router.push('/whatever');
-        expect(subject.vm.$route.path).toBe('/dashboard');
+        expect(subject.vm.$route.path).toBe('/exercises');
       });
     });
 
     describe('when they visit page sign in', () => {
-      it("redirects to the dashboard page'", () => {
+      it("redirects to the exercises page'", () => {
         router.push({ name: 'sign-in' });
-        expect(subject.vm.$route.path).toBe('/dashboard');
+        expect(subject.vm.$route.path).toBe('/exercises');
       });
     });
 

@@ -1,4 +1,4 @@
-import Review from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review.vue';
+import Review from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
 const mockCandidate = {
@@ -12,7 +12,7 @@ const mockCandidate = {
 const mockTestQuestions = {
   introduction: 'Hello',
   questions: [
-    { 
+    {
       type: 'critical-analysis',
       details: 'I am the first question',
         options: [
@@ -102,8 +102,8 @@ const mockQualifyingTestResponses = {
   ],
 };
 
-xdescribe('@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review', () => { 
-  
+xdescribe('@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review', () => {
+
   describe('component instance', () => {
     let wrapper;
 
@@ -118,7 +118,7 @@ xdescribe('@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/Review', () =>
       wrapper.vm.$store.state.qualifyingTestResponses = mockQualifyingTestResponses;
       wrapper.vm.$store.state.candidate = mockQualifyingTestResponses.candidate;
     });
-      
+
     describe('template', () => {
       it('renders the component', () => {
         expect(wrapper.exists()).toBe(true);

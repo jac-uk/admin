@@ -1,4 +1,4 @@
-import DryRun from '@/views/Exercises/Tasks/QualifyingTests/QualifyingTest/DryRun.vue';
+import DryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
 const mockTestQuestions = {

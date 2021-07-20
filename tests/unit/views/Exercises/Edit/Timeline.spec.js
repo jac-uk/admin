@@ -1,4 +1,4 @@
-import ExerciseEditTimeline from '@/views/Exercises/Edit/Timeline';
+import ExerciseEditTimeline from '@/views/Exercise/Details/Timeline/Edit';
 import { shallowMount } from '@vue/test-utils';
 
 const exercise = {
@@ -24,7 +24,7 @@ const mockRouter = {
   push: jest.fn(),
 };
 
-xdescribe('views/Exercises/Edit/Timeline', () => {
+xdescribe('views/Exercise/Edit/Timeline', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditTimeline, {
