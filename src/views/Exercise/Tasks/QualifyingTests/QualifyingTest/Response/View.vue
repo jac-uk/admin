@@ -208,8 +208,8 @@
                 {{ questionLabel }} {{ index + 1 }}
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="responses[index].started"
-                  :end="responses[index].completed"
+                  :start="responses[index] && responses[index].started"
+                  :end="responses[index] && responses[index].completed"
                 />
               </dt>
               <dd class="govuk-summary-list__value">
@@ -258,7 +258,7 @@
                 </ol>
 
                 <ol
-                  v-if="isScenario"
+                  v-if="isScenario && responses[index]"
                 >
                   <li
                     v-for="(res, i) in responses[index].responsesForScenario"
@@ -440,6 +440,10 @@ export default {
           return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
         });
       }
+      // #1077 get questions from the QT when copied over
+      if (returnQuestions.length === 0) {
+        returnQuestions = this.qualifyingTest.testQuestions && this.qualifyingTest.testQuestions.questions;
+      }
       return returnQuestions;
     },
     timeTaken() {
@@ -467,10 +471,7 @@ export default {
       return this.response.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
     hasStarted() {
-      return this.response && (
-        this.response.status === QUALIFYING_TEST.STATUS.STARTED
-        || this.response.status === QUALIFYING_TEST.STATUS.COMPLETED
-      );
+      return this.response ? true : false;
     },
     hasCompleted() {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
