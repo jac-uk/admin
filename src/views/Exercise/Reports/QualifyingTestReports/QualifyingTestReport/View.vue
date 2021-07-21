@@ -42,7 +42,8 @@
               <button
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 type="button"
-                :disabled="true"
+                :disabled="cutOffScore"
+                @click="setCutOffScore"
               >
                 Set pass mark
               </button>
@@ -87,6 +88,15 @@
         </template>
       </Table>
     </div>
+    <Modal
+      ref="SetCutOffScoreModal"
+    >
+      <component
+        :is="`SetCutOffScore`"
+        :application-ids="applicationIds"
+        @close="closeModal('SetCutOffScoreModal')"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -96,12 +106,16 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import SetCutOffScore from '@/components/ModalViews/SetCutOffScore';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   components: {
     ActionButton,
     Table,
     TableCell,
+    SetCutOffScore,
+    Modal,
   },
   data() {
     return {
@@ -114,6 +128,7 @@ export default {
         { title: 'Solicitor' },
         { title: 'Disability' },
       ],
+      cutOffScore: null,
     };
   },
   computed: {
@@ -142,8 +157,27 @@ export default {
     routeNamePrefix() {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
+    applicationIds() {
+      const ids = [];
+      this.qualifyingTestReport.rawData.forEach(data => {
+        ids.push({
+          applicationId: data.application.id,
+          score: data.score,
+        });
+      });
+      return ids;
+    },
   },
   methods: {
+    setCutOffScore() {
+      this.openModal('SetCutOffScoreModal');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
     btnEdit() {
       this.$router.push({
         name: `${this.routeNamePrefix}-report-edit`,
