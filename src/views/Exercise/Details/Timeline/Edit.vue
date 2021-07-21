@@ -227,7 +227,7 @@
             id="independent-assessments-hard-limit"
             v-model="formData.independentAssessmentsHardLimitDate"
             label="Independent Assessments hard limit"
-            hint="An assessor cannot submit late after 23:59 on this date."
+            :hint="`An assessor cannot submit after ${iaHardLimitTime} on this date.`"
             :disabled="assessmentsInitialised"
           />
         </div>
@@ -344,6 +344,8 @@ import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import { formatDate } from '@/helpersTMP/date';
+
 export default {
   components: {
     ErrorSummary,
@@ -429,6 +431,9 @@ export default {
     },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
+    },
+    iaHardLimitTime() {
+      return formatDate(this.exercise.independentAssessmentsHardLimitDate, 'time');
     },
   },
   methods: {
