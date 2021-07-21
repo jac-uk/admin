@@ -59,6 +59,7 @@ import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency';
 import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover';
 import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create';
 import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport';
+import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
 import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
 import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
@@ -85,6 +86,7 @@ import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/Qualify
 import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
 import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
+import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
