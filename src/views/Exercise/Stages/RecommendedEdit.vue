@@ -6,6 +6,18 @@
       <Banner
         :message="warningMessage"
       />
+      <button
+        class="govuk-button govuk-!-margin-right-1"
+        @click="confirm"
+      >
+        Proceed with change
+      </button>
+      <button
+        class="govuk-button govuk-button--secondary"
+        @click="cancel"
+      >
+        Cancel and amend
+      </button>
     </div>
     <ErrorSummary
       :errors="errors"
@@ -128,7 +140,7 @@ export default {
       this.showWarning = false;
     },
     async save() {
-      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT){
+      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT && !this.confirmedSave){
         this.showWarning = true;
       } else {
         let stageValue = EXERCISE_STAGE.RECOMMENDED;
