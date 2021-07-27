@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.66.0",
+  "version": "0.70.0",
   "private": true,
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
@@ -38,6 +38,7 @@
     "jspdf": "^1.5.3",
     "save-file": "^2.3.1",
     "vue": "^2.6.12",
+    "vue-json-pretty": "^1.7.1",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2",
     "vuexfire": "^3.2.5",
