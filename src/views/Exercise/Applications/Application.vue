@@ -955,7 +955,7 @@
             </div>
 
             <div
-              v-if="showMemberships"
+              v-if="hasRelevantMemberships"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
@@ -1595,7 +1595,7 @@
           </div>
 
           <div
-            v-if="assessmentMethods.independentAssessments"
+            v-if="hasIndependentAssessments"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
@@ -1766,7 +1766,7 @@
           </div>
 
           <div
-            v-if="assessmentMethods.leadershipJudgeAssessment"
+            v-if="hasLeadershipJudgeAssessment"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
@@ -1887,7 +1887,7 @@
           </div>
 
           <div
-            v-if="showStatementOfSuitability"
+            v-if="hasStatementOfSuitability"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1928,7 +1928,7 @@
           </div>
 
           <div
-            v-if="showSelfAssessment"
+            v-if="hasSelfAssessment"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1969,7 +1969,7 @@
           </div>
 
           <div
-            v-if="showCV"
+            v-if="hasCV"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
@@ -1999,7 +1999,7 @@
           </div>
 
           <div
-            v-if="showCoveringLetter"
+            v-if="hasCoveringLetter"
             class="govuk-!-margin-top-9"
           >
             <h2 class="govuk-heading-l">
