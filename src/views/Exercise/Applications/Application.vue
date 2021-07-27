@@ -2056,24 +2056,43 @@
 
 <script>
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
 import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
+import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/CharacterReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
+import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
 import PageNotFound from '@/views/Errors/PageNotFound.vue';
+import AgencyReport from './AgencyReport.vue';
+import {
+  isLegal,
+  isNonLegal,
+  hasRelevantMemberships,
+  hasStatementOfSuitability,
+  hasIndependentAssessments,
+  hasLeadershipJudgeAssessment,
+  hasCV,
+  hasCoveringLetter,
+  hasSelfAssessment
+} from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -2091,6 +2110,14 @@ export default {
     PersonalDetailsSummary,
     CharacterInformationSummary,
     PageNotFound,
+    CriminalOffencesSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
+    ProfessionalConductSummary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
+    CharacterInformationSummaryV1,
   },
   data() {
     return {
@@ -2125,6 +2152,39 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
+    isNonLegal() {
+      return isNonLegal(this.exercise);
+    },
+    hasRelevantMemberships() {
+      return hasRelevantMemberships(this.exercise);
+    },
+    hasStatementOfSuitability() {
+      return hasStatementOfSuitability(this.exercise);
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
+    },
+    hasLeadershipJudgeAssessment() {
+      return hasLeadershipJudgeAssessment(this.exercise);
+    },
+    hasCV() {
+      return hasCV(this.exercise);
+    },
+    hasCoveringLetter() {
+      return hasCoveringLetter(this.exercise);
+    },
+    hasSelfAssessment() {
+      return hasSelfAssessment(this.exercise);
+    },
+    isVersion2() {
+      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+        return true;
+      }
+      return false;
     },
     applications() {
       return this.$store.state.applications.records;
@@ -2423,9 +2483,6 @@ export default {
     editLeadershipJudgeDetails() {
       this.$refs.modalLeadershipJudgeDetails.openModal();
     },
-    // openModal(modalRef){
-    //   this.$refs[modalRef].openModal();
-    // },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },
