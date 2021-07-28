@@ -25,7 +25,6 @@
         label="Start date"
         required
         :min-date="minDate"
-        :max-date="maxDate"
       />
 
       <DateInput
@@ -35,7 +34,6 @@
         label="End date"
         required
         :min-date="minDate"
-        :max-date="maxDate"
       />
 
       <TextField
