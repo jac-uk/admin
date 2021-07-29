@@ -58,13 +58,13 @@
       :status="characterChecksStatus"
     />
 
-    <ActionButton
+    <button
       v-if="!characterChecksEnabled"
-      type="primary"
+      class="govuk-button"
       @click="enableCharacterChecks()"
     >
       {{ buttonText }}
-    </ActionButton>
+    </button>
 
     <div v-if="characterChecksEnabled">
       <TabsList
