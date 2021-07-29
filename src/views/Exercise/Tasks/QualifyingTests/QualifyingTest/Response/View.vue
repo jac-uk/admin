@@ -25,15 +25,15 @@
           </dt>
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
-            <ActionButton
+            <button
               v-if="authorisedToPerformAction"
               :disabled="hasActivated"
               type="secondary"
-              class="float-right govuk-!-margin-bottom-1"
+              class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1"
               @click="resetTest"
             >
               Reset
-            </ActionButton>
+            </button>
             <ActionButton
               v-if="authorisedToPerformAction"
               :disabled="hasCompleted"
@@ -172,7 +172,38 @@
           </dd>
         </div>
       </dl>
+      <Modal
+        ref="confirmResetModal"
+      >
+        <div class="container">
+          <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+            Caution
+          </div>
+          <div class="modal__content govuk-!-padding-4">
+            <p class="modal__message govuk-body-l">
+              Reseting this candidate's test will overwrite their
+              'started', 'completed' and 'time taken' fields.
+              <br>
+              Please ensure there is a record of these before continuing.
+            </p>
 
+            <span>
+              <button
+                class="govuk-button govuk-button--secondary govuk-!-margin-right-3 deny info-btn--modal--cancel"
+                @click="$refs['confirmResetModal'].closeModal()"
+              >
+                Cancel
+              </button>
+            </span>
+            <ActionButton
+              class="govuk-button govuk-button--warning"
+              @click="confirmReset"
+            >
+              Reset Test
+            </ActionButton>
+          </div>
+        </div>
+      </Modal>
       <div v-if="hasStarted">
         <TabsList
           :tabs="tabs"
@@ -334,12 +365,14 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   components: {
     EditableField,
     Select,
     TabsList,
+    Modal,
     QuestionDuration,
     ActionButton,
   },
@@ -504,10 +537,14 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
-    resetTest() {
+    confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
+        this.$refs['confirmResetModal'].closeModal();
       }
+    },
+    resetTest() {
+      this.$refs['confirmResetModal'].openModal();
     },
     markAsCompleted() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
@@ -622,7 +659,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .deny {
+    background-color: #f3f2f1;
+  }
   .answer--right {
     font-weight: bold;
     text-decoration: underline;
