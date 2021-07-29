@@ -70,6 +70,7 @@
                 <RouterLink
                   :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score-1 } }"
                   class="moj-pagination__link govuk-link"
+                  @click.native="clearSelectedItems"
                 >
                   Lower score
                 </RouterLink>
@@ -81,6 +82,7 @@
                 <RouterLink
                   :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score+1 } }"
                   class="moj-pagination__link govuk-link"
+                  @click.native="clearSelectedItems"
                 >
                   Higher score
                 </RouterLink>
@@ -135,7 +137,8 @@
             <div class="moj-button-menu__wrapper">
               <button
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                :disabled="true"
+                :disabled="!selectedItems"
+                @click="setStatus"
               >
                 Set status
               </button>
@@ -178,17 +181,30 @@
         </template>
       </Table>
     </div>
+    <Modal
+      ref="SetStatusModal"
+    >
+      <component
+        :is="`SetStatus`"
+        :selected-items="selectedItems"
+        @close="closeModal('SetStatusModal')"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import SetStatus from '@/components/ModalViews/SetStatus';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   components: {
     Table,
     TableCell,
+    SetStatus,
+    Modal,
   },
   data() {
     return {
@@ -237,6 +253,19 @@ export default {
     },
   },
   methods: {
+    clearSelectedItems() {
+      this.selectedItems = [];
+    },
+    setStatus() {
+      this.openModal('SetStatusModal');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+      this.selectedItems = [];
+    },
     gotoView() {
       this.$router.push({ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: this.qualifyingTestReportId } });
     },
