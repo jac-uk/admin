@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import clone from 'clone';
 
 const collectionRef = firestore.collection('panels');
@@ -96,7 +96,7 @@ export default {
       // TODO: add isSift to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/sift/');
+        route = url.includes('/tasks/sift');
       }
       return route;
     },
@@ -104,7 +104,7 @@ export default {
       // TODO: add isSelectionDay to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/selection/');
+        route = url.includes('/tasks/selection');
       }
       return route;
     },

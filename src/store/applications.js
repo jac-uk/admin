@@ -1,12 +1,12 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
+    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
       let firestoreRef = firestore
         .collection('applications')
         .where('exerciseId', '==', params.exerciseId);
@@ -17,9 +17,13 @@ export default {
         firestoreRef = firestoreRef.where('characterChecks.declaration', '==', params.characterChecks);
       }
 
-      firestoreRef = tableQuery(state.records, firestoreRef, params);
+      firestoreRef = await tableQuery(state.records, firestoreRef, params);
 
-      return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      if (firestoreRef) {
+        return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+      } else {
+        commit('records', []);
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
@@ -27,6 +31,11 @@ export default {
   },
   state: {
     records: [],
+  },
+  mutations: {
+    records(state, data) {
+      state.records = data;
+    },
   },
   getters: {
     getById: (state) => (applicationId) => {
