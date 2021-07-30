@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-l">
-        Edit qualifying test dry run details
+        Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} dry run details
       </h2>
 
       <ErrorSummary
@@ -51,11 +51,19 @@ export default {
       invitedEmailsText: qualifyingTest.invitedEmails.join('\n'),
     };
   },
+  computed: {
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+  },
   methods: {
     async save() {
       this.formatEmails();
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-      this.$router.push({ name: 'qualifying-test-review' });
+      this.$router.push({ name: `${this.routeNamePrefix}-review` });
     },
     formatEmails() {
       this.qualifyingTest.invitedEmails = [];

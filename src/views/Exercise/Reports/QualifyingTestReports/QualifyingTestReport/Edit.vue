@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        Qualifying Test Report
+        {{ tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test' }} Report
       </h2>
       <h3 class="govuk-heading-l ">
         {{ qualifyingTestReport.title }}
@@ -96,10 +96,18 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     qualifyingTests() {
-      return this.$store.getters['qualifyingTest/getCompletedQTs'];
+      return this.$store.getters['qualifyingTest/getCompletedQTs'].filter(row => {
+        return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
+      });
     },
     qualifyingTestReport() {
       return this.$store.getters['qualifyingTestReport/data'];
+    },
+    tieBreakers() {
+      return this.qualifyingTestReport.tieBreakers;
+    },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   created() {
@@ -128,7 +136,7 @@ export default {
 
         await this.$store.dispatch('qualifyingTestReport/save', data);
         this.$router.push({
-          name: 'qualifying-test-report-view',
+          name: `${this.routeNamePrefix}-report-view`,
           params: {
             qualifyingTestReportId: this.qualifyingTestReportId,
           },

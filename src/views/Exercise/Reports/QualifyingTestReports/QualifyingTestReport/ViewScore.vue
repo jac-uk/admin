@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test Report
+        {{ tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test' }} Report
       </h2>
       <h3
         class="govuk-heading-l govuk-!-margin-bottom-0"
@@ -68,7 +68,7 @@
                 class="moj-pagination__item  moj-pagination__item--prev"
               >
                 <RouterLink
-                  :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score-1 } }"
+                  :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: score-1 } }"
                   class="moj-pagination__link govuk-link"
                   @click.native="clearSelectedItems"
                 >
@@ -80,7 +80,7 @@
                 class="moj-pagination__item  moj-pagination__item--next"
               >
                 <RouterLink
-                  :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: score+1 } }"
+                  :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: score+1 } }"
                   class="moj-pagination__link govuk-link"
                   @click.native="clearSelectedItems"
                 >
@@ -251,6 +251,12 @@ export default {
       data.push({ title: 'Disability' });
       return data;
     },
+    tieBreakers() {
+      return this.qualifyingTestReport.tieBreakers;
+    },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     clearSelectedItems() {
@@ -267,7 +273,7 @@ export default {
       this.selectedItems = [];
     },
     gotoView() {
-      this.$router.push({ name: 'qualifying-test-report-view', params: { qualifyingTestReportId: this.qualifyingTestReportId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-report-view`, params: { qualifyingTestReportId: this.qualifyingTestReportId } });
     },
     checkForm() {
       // console.log('save selection');

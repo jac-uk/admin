@@ -1,7 +1,7 @@
 <template>
   <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
     <h2 class="govuk-heading-m">
-      Qualifying Test Responses / {{ searchStatus | lookup }}
+      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
     </h2>
     <h3
       class="govuk-heading-l"
@@ -43,7 +43,7 @@
         </TableCell>
         <TableCell :title="tableColumns[3].title">
           <RouterLink
-            :to="{ name: 'qualifying-test-response-view', params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
+            :to="{ name: `${routeNamePrefix}-response-view`, params: { qualifyingTestId: qualifyingTestId, responseId: row.id, status: 'all' } }"
           >
             View
           </RouterLink>
@@ -96,6 +96,12 @@ export default {
     },
     searchStatus() {
       return this.$route.params.status;
+    },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
@@ -150,7 +156,7 @@ export default {
       );
     },
     goToQualifyingTest() {
-      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     typeInitials(string) {
       let result;
