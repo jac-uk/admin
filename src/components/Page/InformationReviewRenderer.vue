@@ -81,7 +81,6 @@
 
 <script>
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-// import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
