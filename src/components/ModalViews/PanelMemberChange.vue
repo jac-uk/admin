@@ -90,19 +90,13 @@ export default {
     this.phone = this.$attrs.phone;
     this.title = this.$attrs.title;
     this.action = this.$attrs.action;
-    // eslint-disable-next-line no-console
-    // console.log('Modal', this.$attrs);
   },
   methods: {
     closeModal() {
-      // eslint-disable-next-line no-console
-      // console.log('closeModal emit CLOSE');
       this.$emit('close');
     },
     confirmModal() {
-      // this.modalOpen = false;
       this.$emit('confirmed');
-      // document.body.style.overflow = '';
     },
     deleteAction() {
       this.action = 'delete';

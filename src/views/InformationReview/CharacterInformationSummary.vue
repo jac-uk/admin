@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import CharacterInformationSummaryV1 from '@/views/Exercises/Applications/CharacterInformationSummaryV1';
+import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1';
 import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
 import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
 import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';

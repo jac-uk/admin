@@ -3,8 +3,8 @@ const authorisedUsers = [
   'warren.searle@judicialappointments.digital',
   'kate.malone@judicialappointments.digital',
   'joy.adeagbo@judicialappointments.digital',
-  'halcyon@judicialappointments.digital',
   'tom.russell@judicialappointments.digital',
+  'halcyon@judicialappointments.digital',
 ];
 
 const authorisedToPerformAction = async (email) => {
