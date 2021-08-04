@@ -97,19 +97,17 @@ describe('@/views/Exercise/Applications/Application', () => {
         },
         stubs: [],
       });
-      // console.log(wrapper.vm.$store.state.exerciseDocument.record);
-      // wrapper = mockExercise;
     });
 
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    it.only('displays application reference in header', () => {
+    it('displays application reference in header', () => {
       expect(wrapper.find('h1').text()).toEqual(expect.stringContaining(mockApplication.referenceNumber));
     });
 
-    it('has unlock button if application completed', () => {
+    it.only('has unlock button if application completed', () => {
       const mockApp = {
         ...mockApplication,
         status: 'applied',
