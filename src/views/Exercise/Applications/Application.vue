@@ -211,205 +211,36 @@
                   </span>
                 </h2>
 
-                <dl class="govuk-summary-list">
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Title
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="title"
-                        :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                        field="title"
-                        type="route"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      First name
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="firstName"
-                        :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                        field="firstName"
-                        type="route"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Last name
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="lastName"
-                        :route-to="{ name: 'candidates-view', params: { id: application.userId } }"
-                        field="lastName"
-                        type="route"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Email address
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.email"
-                        field="email"
-                        type="email"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Phone number
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.phone"
-                        field="phone"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Date of birth
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.dateOfBirth"
-                        field="dateOfBirth"
-                        type="date"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      NI Number
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
-                        field="nationalInsuranceNumber"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row">
-                    <dt class="govuk-summary-list__key">
-                      Citizenship
-                    </dt>
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.citizenship"
-                        type="selection"
-                        :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
-                        field="citizenship"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-
-                  <div class="govuk-summary-list__row ">
-                    <dt class="govuk-summary-list__key">
-                      Reasonable adjustments
-                    </dt>
-
-                    <dd class="govuk-summary-list__value">
-                      <EditableField
-                        :value="application.personalDetails.reasonableAdjustments | toYesNo"
-                        type="selection"
-                        :options="[true, false]"
-                        field="reasonableAdjustments"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-                  <div
-                    v-if="application.personalDetails.reasonableAdjustments === true"
-                    class="govuk-summary-list__row "
-                  >
-                    <dt
-                      class="govuk-summary-list__key"
-                    >
-                      Reasonable Adjustments Details
-                    </dt>
-                    <dd
-                      class="govuk-summary-list__value"
-                    >
-                      <EditableField
-                        :value="application.personalDetails.reasonableAdjustmentsDetails"
-                        field="reasonableAdjustmentsDetails"
-                        @changefield="changeUserDetails"
-                      />
-                    </dd>
-                  </div>
-                </dl>
-              </div> -->
-
-              <div
-                v-if="!isPanelView"
-                class="govuk-!-margin-top-9"
-              >
-                <h2 class="govuk-heading-l">
-                  Character information
-                </h2>
-
-                <dl v-if="isVersion2 && application.characterInformationV2">
-                  <CriminalOffencesSummary
-                    :application="application"
-                    :character-information="application.characterInformationV2"
-                  />
-                </dl>
+                <PersonalDetailsSummary 
+                  :application="application"
+                  :editable="(editMode && authorisedToPerformAction)"
+                />
 
                 <div
+                  v-if="!isPanelView"
                   class="govuk-!-margin-top-9"
                 >
                   <h2 class="govuk-heading-l">
                     Character information
                   </h2>
 
-                  <dl class="govuk-summary-list">
+                  <dl v-if="isVersion2 && application.characterInformationV2">
                     <CharacterInformationSummary
                       :application="application"
+                      :editable="(editMode && authorisedToPerformAction)"
                       :character-information="application.characterInformationV2"
                     />
                   </dl>
-                </div> 
-                <div
-                  v-if="!isPanelView"
-                  class="govuk-!-margin-top-9"
-                >
-                  <h2
-                    class="govuk-heading-l"
-                  >
-                    <h2 class="govuk-heading-l">
-                      Character information
-                    </h2>
 
-                    <dl class="govuk-summary-list">
-                      <CharacterInformationSummary
-                        :application="application"
-                        :editable="(editMode && authorisedToPerformAction)"
-                      />
-                    </dl>
-                  </h2>
+                  <dl
+                    v-else
+                    class="govuk-summary-list"
+                  >
+                    <CharacterInformationSummary
+                      :application="application"
+                      :editable="(editMode && authorisedToPerformAction)"
+                    />
+                  </dl>
                 </div>  
                 <div
                   v-if="!isPanelView"
@@ -1132,7 +963,6 @@
               </div>
 
               <div
-                v-if="showMemberships"
                 class="govuk-!-margin-top-9"
               >
                 <h2 class="govuk-heading-l">
@@ -2197,7 +2027,7 @@
             </div>
 
             <div
-              v-if="showStatementOfSuitability"
+              v-if="hasStatementOfSuitability"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
@@ -2238,7 +2068,7 @@
             </div>
 
             <div
-              v-if="showSelfAssessment"
+              v-if="hasSelfAssessment"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l">
@@ -2653,9 +2483,6 @@ export default {
       this.pageLoad();
     },
   },
-  // mounted(){
-  //   console.log(this.$store.state);
-  // },
   created() {
     this.pageLoad();
     this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
