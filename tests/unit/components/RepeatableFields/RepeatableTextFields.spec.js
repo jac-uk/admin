@@ -26,7 +26,7 @@ describe('Repeatable text fields', () => {
           index: 1,
         },
       });
-      expect(wrapper.find(TextField).exists()).toBe(true);
+      expect(wrapper.find('textfield-stub').exists()).toBe(true);
     });
 
     describe('props', () => {

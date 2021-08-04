@@ -1,15 +1,5 @@
 import Application from '@/views/Exercise/Applications/Application';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
-
-localVue.filter('lookup', jest.fn());
-localVue.filter('toYesNo', jest.fn());
-localVue.filter('formatNIN', jest.fn());
-localVue.filter('formatDate', jest.fn());
-localVue.filter('showAlternative', jest.fn());
+import { createTestSubject } from '@/../tests/unit/helpers';
 
 const mockExercise = {
   exerciseRef: 'mock exercise',
@@ -56,36 +46,6 @@ const mockApplication = {
   SecondAssessorPhone: '0123456789',
 };
 
-const mockStore = {
-  dispatch: jest.fn(),
-  state: {
-    exerciseDocument: {
-      record: mockExercise,
-    },
-    applications: {
-      records: [],
-    },
-    application: {
-      record: mockApplication,
-    },
-  },
-  getters: {
-    'application/data': () => mockApplication,
-  },
-};
-
-const mockRoute = {
-  name: 'name-of-current-route',
-  params: {
-    id: 'abc123',
-    applicationId: 'application1',
-  },
-};
-
-const mockRouter = {
-  replace: jest.fn(),
-};
-
 const mockProps = {
   exercise: {
     id: 'mockid',
@@ -94,35 +54,58 @@ const mockProps = {
   activeTab: 'panel',
 };
 
-const createTestSubject = () => {
-  return shallowMount(Application, {
-    //store,
-    localVue,
-    mocks: {
-      $route: mockRoute,
-      $router: mockRouter,
-      $store: mockStore,
-    },
-    stubs: {
-      RouterView: true,
-      RouterLink: true,
-    },
-    propsData: mockProps,
-  });
-};
+// const createTestSubject = () => {
+//   return shallowMount(Application, {
+//     //store,
+//     localVue,
+//     mocks: {
+//       $route: mockRoute,
+//       $router: mockRouter,
+//       $store: mockStore,
+//     },
+//     stubs: {
+//       RouterView: true,
+//       RouterLink: true,
+//     },
+//     propsData: mockProps,
+//   });
+// };
 
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
-    beforeEach(() => {
-      wrapper = createTestSubject();
+    beforeAll(() => {
+      wrapper = createTestSubject(Application, {
+        propsData: mockProps,
+        mocks: {
+          $store: {
+            getters: {
+              'application/data': jest.fn(() => mockApplication),
+            },
+            state: {
+              exerciseDocument: {
+                record: mockExercise,
+              },
+              applications: {
+                records: [mockApplication],
+              },
+              application: {
+                record: mockApplication,
+              },
+            },
+          },
+        },
+        stubs: [],
+      });
+      // console.log(wrapper.vm.$store.state.exerciseDocument.record);
+      // wrapper = mockExercise;
     });
 
-    it.only('renders the component', () => {
-      expect(wrapper.find('.govuk-grid-row').exists()).toBe(true);
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
     });
 
-    it('displays application reference in header', () => {
+    it.only('displays application reference in header', () => {
       expect(wrapper.find('h1').text()).toEqual(expect.stringContaining(mockApplication.referenceNumber));
     });
 

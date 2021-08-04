@@ -1822,7 +1822,7 @@
             </div>
 
             <div
-              v-if="assessmentMethods.independentAssessments"
+              v-if="hasIndependentAssessments"
               class="govuk-!-margin-top-9"
             >
               <div
@@ -2076,7 +2076,7 @@
             </div>
 
             <div
-              v-if="assessmentMethods.leadershipJudgeAssessment"
+              v-if="hasLeadershipJudgeAssessment"
               class="govuk-!-margin-top-9"
             >
               <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
@@ -2653,6 +2653,9 @@ export default {
       this.pageLoad();
     },
   },
+  // mounted(){
+  //   console.log(this.$store.state);
+  // },
   created() {
     this.pageLoad();
     this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
@@ -2817,9 +2820,6 @@ export default {
     editLeadershipJudgeDetails() {
       this.$refs.modalLeadershipJudgeDetails.openModal();
     },
-    // openModal(modalRef){
-    //   this.$refs[modalRef].openModal();
-    // },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },

@@ -62,7 +62,7 @@ describe('@/components/RepeatableFields/SelectionDay', () => {
   describe('template', () => {
     it('renders DateInput', () => {
       const wrapper = createTestSubject({ index: 1, row: {} });
-      expect(wrapper.find(DateInput).exists()).toBe(true);
+      expect(wrapper.find('dateinput-stub').exists()).toBe(true);
     });
   });
 });

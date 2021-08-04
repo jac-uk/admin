@@ -16,7 +16,7 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  setupFilesAfterEnv: ['jest-extended'],
+  setupFilesAfterEnv: ['jest-extended', 'jest-canvas-mock'],
   snapshotSerializers: [
     'jest-serializer-vue',
   ],
