@@ -28,6 +28,12 @@ export default {
         nav: '/tasks/qualifying-tests', // TODO check this is needed
       },
     });
+    if (exercise.equalMeritSecondStageStartDate) {
+      sideNavigation.push({
+        title: 'Equal Merit Tie-breakers',
+        path: `${path}/equal-merit-tie-breakers`,
+      });
+    }
     if (exercise.applicationRecords) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
