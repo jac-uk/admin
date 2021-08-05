@@ -97,6 +97,12 @@ export default {
     typeName() {
       return this.isScenario ? 'scenario' : 'question';
     },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     async save(isValid) {
@@ -116,9 +122,9 @@ export default {
         }
         await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
         if (this.qualifyingTest.mode === QUALIFYING_TEST.MODE.DRY_RUN) {
-          this.$router.push({ name: 'qualifying-test-dry-run' });  
+          this.$router.push({ name: `${this.routeNamePrefix}-dry-run` });
         } else {
-          this.$router.push({ name: 'qualifying-test-review' });
+          this.$router.push({ name: `${this.routeNamePrefix}-review` });
         }
       }
     },
