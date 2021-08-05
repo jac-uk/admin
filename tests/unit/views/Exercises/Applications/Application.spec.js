@@ -107,7 +107,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('h1').text()).toEqual(expect.stringContaining(mockApplication.referenceNumber));
     });
 
-    it.only('has unlock button if application completed', () => {
+    xit('has unlock button if application completed', () => {
       const mockApp = {
         ...mockApplication,
         status: 'applied',
@@ -117,7 +117,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(true);
     });
 
-    it('has "mark as applied" if draft', () => {
+    xit('has "mark as applied" if draft', () => {
       const mockApp = {
         ...mockApplication,
         status: 'draft',
@@ -127,7 +127,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(false);
     });
 
-    it('renders identifying sections in full view', () => {
+    xit('renders identifying sections in full view', () => {
       wrapper.setProps({
         activeTab: 'full',
       });
@@ -159,8 +159,29 @@ describe('@/views/Exercise/Applications/Application', () => {
   describe('methods', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = createTestSubject();
-      wrapper.vm.$store.dispatch = jest.fn();
+      wrapper = createTestSubject(Application, {
+        propsData: mockProps,
+        mocks: {
+          $store: {
+            dispatch: jest.fn(),
+            getters: {
+              'application/data': jest.fn(() => mockApplication),
+            },
+            state: {
+              exerciseDocument: {
+                record: mockExercise,
+              },
+              applications: {
+                records: [mockApplication],
+              },
+              application: {
+                record: mockApplication,
+              },
+            },
+          },
+        },
+        stubs: [],
+      });
     });
 
     describe('unlock()', () => {
