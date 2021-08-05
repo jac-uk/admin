@@ -19,7 +19,6 @@ const mockApplication = {
     dateOfBirth: '',
   },
   characterInformation: {
-
   },
   equalityAndDiversitySurvey: {
     gender: 'female',
@@ -53,23 +52,6 @@ const mockProps = {
   status: 'mockstatus',
   activeTab: 'panel',
 };
-
-// const createTestSubject = () => {
-//   return shallowMount(Application, {
-//     //store,
-//     localVue,
-//     mocks: {
-//       $route: mockRoute,
-//       $router: mockRouter,
-//       $store: mockStore,
-//     },
-//     stubs: {
-//       RouterView: true,
-//       RouterLink: true,
-//     },
-//     propsData: mockProps,
-//   });
-// };
 
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {

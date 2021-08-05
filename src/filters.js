@@ -43,7 +43,9 @@ const lookup = (value) => {
 
     // 'xxx': 'xxx',`
   };
+
   returnValue = lookup[value];
+  
   if (!returnValue) {
     if (Object.keys(filters).indexOf('lookup') >= 0) { // use jac-kit lookup, if it exists
       returnValue = filters.lookup(value);

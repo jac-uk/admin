@@ -2238,7 +2238,6 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
@@ -2272,7 +2271,6 @@ export default {
     AgencyReport,
     DownloadLink,
     EventRenderer,
-    EditableField,
     FileUpload,
     Modal,
     IndependentAssessorChange,
