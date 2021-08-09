@@ -294,7 +294,7 @@
               class="govuk-summary-list__value"
             >
               <p class="govuk-body">
-                {{ application.magistrateStartDate | formatDate }} - {{ application.magistrateEndDate ? formatDate(application.magistrateEndDate) : 'present' }}
+                {{ application.magistrateStartDate | formatDate }} - {{ getDate(application.magistrateEndDate) || 'present' }}
               </p>
               <p class="govuk-body">
                 {{ application.magistrateLocation }}
@@ -311,7 +311,7 @@
       </div>
 
       <div
-        v-if="hasHMRCCheck"
+        v-if="hmrcCheckRequired"
         class="govuk-!-margin-top-9"
       >
         <h2
@@ -320,54 +320,56 @@
         >
           HMRC Check
         </h2>
+
+        <dl class="govuk-summary-list">
+          <div
+            v-if="application.personalDetails.hasVATNumbers"
+            class="govuk-summary-list__row"
+          >
+            <dt class="govuk-summary-list__key widerColumn">
+              Do you have a VAT registration number?
+            </dt>
+            <dd
+              class="govuk-summary-list__value"
+            >
+              {{ application.personalDetails.hasVATNumbers | toYesNo }}
+            </dd>
+          </div>
+          <div
+            v-else
+            class="govuk-body"
+          >
+            No information provided
+          </div>
+
+          <div
+            v-if="application.personalDetails.VATNumbers"
+            class="govuk-summary-list__row"
+          >
+            <dt class="govuk-summary-list__key widerColumn">
+              VAT numbers
+            </dt>
+            <dd
+              class="govuk-summary-list__value"
+            >
+              <p
+                v-for="(item, index) in application.personalDetails.VATNumbers"
+                :key="index"
+                class="govuk-body"
+              >
+                {{ item.VATNumber }}
+              </p>
+            </dd>
+          </div>
+        </dl>
       </div>
 
-      <dl class="govuk-summary-list">
-        <div
-          v-if="application.personalDetails.hasVATNumbers"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key widerColumn">
-            Do you have a VAT registration number?
-          </dt>
-          <dd
-            class="govuk-summary-list__value"
-          >
-            {{ application.personalDetails.hasVATNumbers | toYesNo }}
-          </dd>
-        </div>
-        <div
-          v-else
-          class="govuk-body"
-        >
-          No information provided
-        </div>
-
-        <div
-          v-if="application.personalDetails.VATNumbers"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key widerColumn">
-            VAT numbers
-          </dt>
-          <dd
-            class="govuk-summary-list__value"
-          >
-            <p
-              v-for="(item, index) in application.personalDetails.VATNumbers"
-              :key="index"
-              class="govuk-body"
-            >
-              {{ item.VATNumber }}
-            </p>
-          </dd>
-        </div>
-      </dl>
-
-      <OtherProfessionalBodies
-        :application="application"
-        :exercise="exercise"
-      />
+      <div v-if="application.professionalMemberships && application.professionalMemberships.length">
+        <OtherProfessionalBodies
+          :application="application"
+          :exercise="exercise"
+        />
+      </div>
 
       <div class="govuk-!-margin-top-9">
         <h2
@@ -405,6 +407,7 @@
 
 <script>
 import OtherProfessionalBodies from './OtherProfessionalBodies';
+import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {
@@ -426,8 +429,13 @@ export default {
     characterChecksConsentFormCompleted() {
       return this.application.characterChecks && this.application.characterChecks.consent;
     },
-    hasHMRCCheck() {
-      return this.application.personalDetails.hasVATNumbers;
+    hmrcCheckRequired() {
+      return this.exercise.characterChecks.HMRC;
+    },
+  },
+  methods: {
+    getDate(value) {
+      return formatDate(value);
     },
   },
 };
