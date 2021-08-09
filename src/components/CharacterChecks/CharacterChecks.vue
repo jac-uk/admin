@@ -21,7 +21,7 @@
           v-if="application.personalDetails.title"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Title
           </dt>
           <dd class="govuk-summary-list__value">
@@ -33,7 +33,7 @@
           v-if="application.personalDetails.firstName && application.personalDetails.lastName"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             First name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -45,7 +45,7 @@
           v-if="application.personalDetails.firstName && application.personalDetails.lastName"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Last name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -57,7 +57,7 @@
           v-if="!application.personalDetails.firstName && !application.personalDetails.lastName"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Full Name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -69,7 +69,7 @@
           v-if="application.personalDetails.otherNames"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Other names
           </dt>
           <dd class="govuk-summary-list__value">
@@ -81,7 +81,7 @@
           v-if="application.personalDetails.suffix"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Suffix
           </dt>
           <dd class="govuk-summary-list__value">
@@ -93,7 +93,7 @@
           v-if="application.equalityAndDiversitySurvey"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             What is your sex?
           </dt>
           <dd class="govuk-summary-list__value">
@@ -112,7 +112,7 @@
           v-if="application.personalDetails.dateOfBirth"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Date of birth
           </dt>
           <dd class="govuk-summary-list__value">
@@ -126,7 +126,7 @@
           v-if="application.personalDetails.placeOfBirth"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Place of birth
           </dt>
           <dd class="govuk-summary-list__value">
@@ -138,7 +138,7 @@
           v-if="application.personalDetails.nationalInsuranceNumber"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             National Insurance Number
           </dt>
           <dd class="govuk-summary-list__value">
@@ -150,7 +150,7 @@
           v-if="application.personalDetails.citizenship"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Citizenship
           </dt>
           <dd class="govuk-summary-list__value">
@@ -159,7 +159,7 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Address
           </dt>
           <dd
@@ -192,7 +192,7 @@
           v-if="application.personalDetails.address && application.personalDetails.address.currentMoreThan5Years"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Have you lived at this address for more than 5 years?
           </dt>
           <dd
@@ -203,7 +203,7 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Previous addresses
           </dt>
           <dd
@@ -252,7 +252,7 @@
           class="govuk-heading-l"
           style="display:inline-block;"
         >
-          Professional bodies
+          Professional details
         </h2>
       </div>
 
@@ -266,7 +266,7 @@
             :key="index"
             class="govuk-summary-list__row"
           >
-            <dt class="govuk-summary-list__key">
+            <dt class="govuk-summary-list__key widerColumn">
               {{ qualification.type | lookup }}
             </dt>
             <dd
@@ -287,14 +287,14 @@
           class="govuk-summary-list"
         >
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
+            <dt class="govuk-summary-list__key widerColumn">
               Magistrate
             </dt>
             <dd
               class="govuk-summary-list__value"
             >
               <p class="govuk-body">
-                {{ application.magistrateStartDate | formatDate }} - {{ application.magistrateEndDate | formatDate }}
+                {{ application.magistrateStartDate | formatDate }} - {{ application.magistrateEndDate ? formatDate(application.magistrateEndDate) : 'present' }}
               </p>
               <p class="govuk-body">
                 {{ application.magistrateLocation }}
@@ -310,7 +310,10 @@
         No information provided
       </div>
 
-      <div class="govuk-!-margin-top-9">
+      <div
+        v-if="hasHMRCCheck"
+        class="govuk-!-margin-top-9"
+      >
         <h2
           class="govuk-heading-l"
           style="display:inline-block;"
@@ -324,7 +327,7 @@
           v-if="application.personalDetails.hasVATNumbers"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Do you have a VAT registration number?
           </dt>
           <dd
@@ -344,7 +347,7 @@
           v-if="application.personalDetails.VATNumbers"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             VAT numbers
           </dt>
           <dd
@@ -361,58 +364,32 @@
         </div>
       </dl>
 
-      <div class="govuk-!-margin-top-9">
-        <h2
-          class="govuk-heading-l"
-          style="display:inline-block;"
-        >
-          Further information to disclose
-        </h2>
-      </div>
-
-      <dl class="govuk-summary-list">
-        <div
-          v-if="application.characterChecks.furtherInformation"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Details
-          </dt>
-          <dd
-            class="govuk-summary-list__value"
-          >
-            {{ application.characterChecks.furtherInformation }}
-          </dd>
-        </div>
-        <div
-          v-else
-          class="govuk-body"
-        >
-          No information provided
-        </div>
-      </dl>
+      <OtherProfessionalBodies
+        :application="application"
+        :exercise="exercise"
+      />
 
       <div class="govuk-!-margin-top-9">
         <h2
           class="govuk-heading-l"
           style="display:inline-block;"
         >
-          Declaration
+          Consent
         </h2>
       </div>
 
       <dl class="govuk-summary-list">
         <div
-          v-if="application.characterChecks.declaration"
+          v-if="application.characterChecks.consent"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
-            Signed declaration
+          <dt class="govuk-summary-list__key widerColumn">
+            I understand and consent to character checks being undertaken
           </dt>
           <dd
             class="govuk-summary-list__value"
           >
-            {{ application.characterChecks.declaration | toYesNo }}
+            {{ application.characterChecks.consent | toYesNo }}
           </dd>
         </div>
         <div
@@ -427,9 +404,19 @@
 </template>
 
 <script>
+import OtherProfessionalBodies from './OtherProfessionalBodies';
+
 export default {
+  components: {
+    OtherProfessionalBodies,
+  },
   props: {
     application: {
+      type: Object,
+      required: false,
+      default: new Object({}),
+    },
+    exercise: {
       type: Object,
       required: false,
       default: new Object({}),
@@ -437,7 +424,10 @@ export default {
   },
   computed: {
     characterChecksConsentFormCompleted() {
-      return this.application.characterChecks && this.application.characterChecks.declaration;
+      return this.application.characterChecks && this.application.characterChecks.consent;
+    },
+    hasHMRCCheck() {
+      return this.application.personalDetails.hasVATNumbers;
     },
   },
 };

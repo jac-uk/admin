@@ -2117,6 +2117,7 @@
         <div v-if="activeTab == 'characterchecks'">
           <CharacterChecks
             :application="application"
+            :exercise="exercise"
           />
         </div>
       </div>
