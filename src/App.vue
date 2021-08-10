@@ -11,7 +11,10 @@
           </a>
           <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appVersion }}</span>
 
-          <nav class="float-right">
+          <nav
+            v-if="isSignedIn"
+            class="float-right"
+          >
             <ul class="govuk-header__navigation user-menu">
               <li class="govuk-header__navigation-item">
                 <RouterLink
@@ -154,9 +157,9 @@ export default {
   async created() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/bind');
+      const email = firebase.auth().currentUser.email;
+      this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
-    const email = firebase.auth().currentUser.email;
-    this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   destroyed() {
     if (this.isSignedIn) {
