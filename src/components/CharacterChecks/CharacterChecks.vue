@@ -272,8 +272,17 @@
             <dd
               class="govuk-summary-list__value"
             >
-              <p class="govuk-body">
+              <p
+                v-if="qualification.date"
+                class="govuk-body"
+              >
                 {{ qualification.date | formatDate }}
+              </p>
+              <p
+                v-if="qualification.calledToBarDate"
+                class="govuk-body"
+              >
+                {{ qualification.calledToBarDate | formatDate }}
               </p>
               <p class="govuk-body">
                 {{ qualification.membershipNumber }}
