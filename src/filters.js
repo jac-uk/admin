@@ -44,6 +44,7 @@ const lookup = (value) => {
     // equality and diversity survey
     professionalBackground: 'Professional Background',
     otherProfessionalBackgroundDetails: 'Other Professional Background Details',
+    otherFeePaidJudicialRoleDetails: 'Other Fee-Paid Judicial Role Details',
 
     // 'xxx': 'xxx',`
   };
