@@ -120,6 +120,9 @@ import NotificationsList from '@/views/NotificationsList';
 
 import Sandbox from '@/views/Sandbox';
 
+// Users
+import Users from '@/views/Users/Users';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -146,6 +149,15 @@ const router = new Router({
       meta: {
         requiresAuth: true,
         title: 'Events',
+      },
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: Users,
+      meta: {
+        requiresAuth: true,
+        title: 'Users',
       },
     },
     {
@@ -1019,6 +1031,7 @@ const router = new Router({
       meta: {
         title: 'Sign In',
       },
+
       beforeEnter: (to, from, next) => {
         const isSignedIn = store.getters['auth/isSignedIn'];
         if (isSignedIn) {

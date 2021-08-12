@@ -24,6 +24,11 @@ Describe the steps required to test & verify this change
 ## Additional context
 Include screen grabs, notes etc.
 
+## Related permissions
+Have permissions been considered for this functionality?
+- No permission changes required
+- Permissions have been added / updated. Details:
+
 ---
 PREVIEW:DEVELOP
 _can be OFF, DEVELOP or STAGING_
