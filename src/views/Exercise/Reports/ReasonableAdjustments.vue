@@ -150,7 +150,9 @@ export default {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
       .onSnapshot((snap) => {
-        this.report = vuexfireSerialize(snap);
+        if (snap.exists) {
+          this.report = vuexfireSerialize(snap);
+        }
       });
   },
   destroyed() {

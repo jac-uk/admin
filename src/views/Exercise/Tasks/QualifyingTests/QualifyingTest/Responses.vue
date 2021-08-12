@@ -66,13 +66,22 @@ export default {
     TableCell,
   },
   data() {
+    const qualifyingTest = this.$store.state.qualifyingTest.record;
+    const tableColumns = [];
+    if (qualifyingTest.mode === 'dry-run') {
+      tableColumns.push({ title: 'Name', sort: 'candidate.email', default: true });
+      tableColumns.push({ title: 'Status' });
+      tableColumns.push({ title: 'Time Limit' });
+      tableColumns.push({ title: '' });
+    } else {
+      tableColumns.push({ title: 'Name', sort: 'candidate.fullName', default: true });
+      tableColumns.push({ title: 'Status' });
+      tableColumns.push({ title: 'Time Limit', sort: 'duration.testDurationAdjusted' });
+      tableColumns.push({ title: '' });
+    }
+
     return {
-      tableColumns: [
-        { title: 'Name', sort: 'candidate.fullName', default: true },
-        { title: 'Status' },
-        { title: 'Time Limit', sort: 'duration.testDurationAdjusted' },
-        { title: '' },
-      ],
+      tableColumns: tableColumns,
     };
   },
   computed: {
