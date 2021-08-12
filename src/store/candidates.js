@@ -67,6 +67,10 @@ export default {
       const ref = collection.doc(`${id}/documents/characterInformation`);
       await ref.update(data);
     },
+    saveEqualityAndDiversityInfo: async (context, { data, id }) => {
+      const ref = collection.doc(`${id}/documents/equalityAndDiversitySurvey`);
+      await ref.update(data);
+    },
   },
   mutations: {
     records(state, data) {

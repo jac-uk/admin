@@ -204,6 +204,7 @@
               <div
                 class="govuk-!-margin-top-9"
               >
+                <!-- 
                 <h2 class="govuk-heading-l">
                   Personal details
                   <span class="govuk-hint print-none">
@@ -211,7 +212,7 @@
                   </span>
                 </h2>
 
-                <PersonalDetailsSummary 
+                  <PersonalDetailsSummary 
                   :application="application"
                   :editable="(editMode && authorisedToPerformAction)"
                 />
@@ -230,7 +231,7 @@
                       :editable="(editMode && authorisedToPerformAction)"
                       :character-information="application.characterInformationV2"
                     />
-                  </dl>
+                  </dl> 
 
                   <dl
                     v-else
@@ -242,6 +243,7 @@
                     />
                   </dl>
                 </div>  
+                -->
                 <div
                   v-if="!isPanelView"
                   class="govuk-!-margin-top-9"
@@ -251,323 +253,16 @@
                   >
                     Equality and diversity information
                   </h2>
-
-                  <dl
-                    v-if="application.equalityAndDiversitySurvey"
-                    class="govuk-summary-list"
-                  >
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Agreed to share data
-                      </dt>
-                      <dd
-                        v-if="application.equalityAndDiversitySurvey.hasOwnProperty('shareData')"
-                        class="govuk-summary-list__value"
-                      >
-                        {{ application.equalityAndDiversitySurvey.shareData | toYesNo }}
-                      </dd>
-                      <dd
-                        v-else
-                        class="govuk-summary-list__value"
-                      >
-                        {{ application.equalityAndDiversitySurvey.shareData | lookup }}
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Professional background
-                      </dt>
-                      <dd
-                        class="govuk-summary-list__value"
-                      >
-                        <span
-                          v-if="preferNotToSay(application.equalityAndDiversitySurvey.professionalBackground)"
-                        >
-                          Prefer not to say
-                        </span>
-                        <ul
-                          v-else-if="application.equalityAndDiversitySurvey.professionalBackground && application.equalityAndDiversitySurvey.professionalBackground.length"
-                          class="govuk-list"
-                        >
-                          <li
-                            v-for="item in application.equalityAndDiversitySurvey.professionalBackground"
-                            :key="item.name"
-                          >
-                            <p
-                              v-if="item == 'other-professional-background'"
-                              class="govuk-body govuk-!-margin-bottom-0"
-                            >
-                              <span>{{ item | lookup }}</span>
-                              {{ application.equalityAndDiversitySurvey.otherProfessionalBackgroundDetails }}
-                            </p>
-                            <span v-else>{{ item | lookup }}</span>
-                          </li>
-                        </ul>
-                        <p
-                          v-else
-                          class="govuk-body"
-                        >
-                          {{ application.equalityAndDiversitySurvey.currentLegalRole | lookup | toYesNo }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div
-                      v-if="isLegal"
-                      class="govuk-summary-list__row"
-                    >
-                      <dt class="govuk-summary-list__key">
-                        Current legal role
-                      </dt>
-                      <dd
-                        class="govuk-summary-list__value"
-                      >
-                        <span
-                          v-if="preferNotToSay(application.equalityAndDiversitySurvey.currentLegalRole)"
-                        >
-                          Prefer not to say
-                        </span>
-                        <ul
-                          v-else-if="application.equalityAndDiversitySurvey.currentLegalRole && application.equalityAndDiversitySurvey.currentLegalRole.length"
-                          class="govuk-list"
-                        >
-                          <li
-                            v-for="item in application.equalityAndDiversitySurvey.currentLegalRole"
-                            :key="item.name"
-                          >
-                            <p class="govuk-body govuk-!-margin-bottom-0">
-                              {{ item | lookup }}
-                            </p>
-                            <p
-                              v-if="item == 'other-fee-paid-judicial-office-holder'"
-                              class="govuk-body govuk-!-margin-bottom-0"
-                            >
-                              {{ application.equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails }}
-                            </p>
-
-                            <p
-                              v-else-if="item == 'other-salaried-judicial-office-holder'"
-                              class="govuk-body govuk-!-margin-bottom-0"
-                            >
-                              {{ application.equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails }}
-                            </p>
-
-                            <p
-                              v-else-if="item == 'other-current-legal-role'"
-                              class="govuk-body govuk-!-margin-bottom-0"
-                            >
-                              {{ application.equalityAndDiversitySurvey.otherCurrentLegalRoleDetails }}
-                            </p>
-                          </li>
-                        </ul>
-                        <p
-                          v-else
-                          class="govuk-body"
-                        >
-                          {{ application.equalityAndDiversitySurvey.currentLegalRole | lookup | toYesNo }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Held fee-paid judicial role
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body">
-                          {{ application.equalityAndDiversitySurvey.feePaidJudicialRole | lookup | toYesNo }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.feePaidJudicialRole == 'other-fee-paid-judicial-office'"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.otherFeePaidJudicialRoleDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Attended state or fee-paying school
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.stateOrFeeSchool | lookup }}
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Attended Oxbridge universities
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.oxbridgeUni | lookup | toYesNo }}
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        First generation to go to university
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.firstGenerationStudent | lookup | toYesNo }}
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Ethnic group
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ application.equalityAndDiversitySurvey.ethnicGroup | lookup }}
-                        </p>
-                        <p
-                          v-if="hasEthnicGroupDetails"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ ethnicGroupDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Sex
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ application.equalityAndDiversitySurvey.gender | lookup }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.gender == 'other-gender'"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.otherGenderDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Gender is the same as sex assigned at birth
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.changedGender | lookup | toYesNo }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.changedGender === false"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.genderIdentityDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Sexual orientation
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ application.equalityAndDiversitySurvey.sexualOrientation | lookup }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.sexualOrientation == 'other-sexual-orientation'"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.otherSexualOrientationDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Disability
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ application.equalityAndDiversitySurvey.disability | lookup | toYesNo }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.disability === true"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          <span
-                            v-if="application.equalityAndDiversitySurvey.disabilityDetails"
-                          >
-                            {{ application.equalityAndDiversitySurvey.disabilityDetails }}
-                          </span>
-                          <span
-                            v-else
-                          >
-                            No details provided.
-                          </span>
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Religion
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        <p class="govuk-body govuk-!-margin-bottom-0">
-                          {{ application.equalityAndDiversitySurvey.religionFaith | lookup }}
-                        </p>
-                        <p
-                          v-if="application.equalityAndDiversitySurvey.religionFaith == 'other-religion'"
-                          class="govuk-body govuk-!-margin-bottom-0"
-                        >
-                          {{ application.equalityAndDiversitySurvey.otherReligionDetails }}
-                        </p>
-                      </dd>
-                    </div>
-
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                        Attended Outreach events
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.attendedOutreachEvents | lookup | toYesNo }}
-                      </dd>
-                    </div>
-
-                    <div
-                      v-if="isLegal"
-                      class="govuk-summary-list__row"
-                    >
-                      <dt class="govuk-summary-list__key">
-                        Participated in a Judicial Workshadowing Scheme
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme | lookup | toYesNo }}
-                      </dd>
-                    </div>
-
-                    <div
-                      v-if="isLegal"
-                      class="govuk-summary-list__row"
-                    >
-                      <dt class="govuk-summary-list__key">
-                        Participated in Pre-Application Judicial Education Programme
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                        {{ application.equalityAndDiversitySurvey.hasTakenPAJE | lookup | toYesNo }}
-                      </dd>
-                    </div>
+                  <dl>
+                    <EqualityAndDiversityInformationSummary
+                      :application="application"
+                      :editable="editable"
+                      :is-legal="isLegal"
+                    />
                   </dl>
-                  <div
-                    v-else
-                    class="govuk-body"
-                  >
-                    No information provided
-                  </div>
                 </div>
 
+                <!---
                 <div
                   v-if="!isPanelView && exercise.yesSalaryDetails"
                   class="govuk-!-margin-top-9"
@@ -2213,6 +1908,9 @@
                 </dd>
               </div>
             </dl>
+          --->
+              </div>
+            </div>
           </div>
 
           <div v-if="activeTab == 'notes'">
@@ -2249,6 +1947,7 @@ import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import PageNotFound from '@/views/Errors/PageNotFound';
@@ -2280,9 +1979,11 @@ export default {
     PersonalDetailsSummary,
     CharacterInformationSummary,
     PageNotFound,
+    EqualityAndDiversityInformationSummary,
   },
   data() {
     return {
+      authorisedToPerformAction: false,
       editMode: false,
       tabs: [
         {
@@ -2312,6 +2013,9 @@ export default {
     };
   },
   computed: {
+    editable() {
+      return this.editMode && this.authorisedToPerformAction;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -2399,12 +2103,6 @@ export default {
       }
       return false;
     },
-    hasEthnicGroupDetails() {
-      return this.application &&
-        this.application.equalityAndDiversitySurvey &&
-        this.application.equalityAndDiversitySurvey.ethnicGroup &&
-        this.application.equalityAndDiversitySurvey.ethnicGroup.startsWith('other-');
-    },
     isApplied() {
       if (this.application) {
         switch (this.application.status) {
@@ -2489,10 +2187,8 @@ export default {
     this.$store.dispatch('application/unbind');
   },
   methods: {
-    async authorisedToPerformAction() {
-      await authorisedToPerformAction();
-    },
     async pageLoad() {
+      this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {
         this.activeTab = this.$route.params.tab;
       }
@@ -2600,16 +2296,6 @@ export default {
     showMembershipOption(ref) {
       if (this.application && this.application.professionalMemberships) {
         return this.application.professionalMemberships.indexOf(ref) >= 0;
-      }
-      return false;
-    },
-    preferNotToSay(field) {
-      const val = 'prefer-not-to-say';
-      if (field === val) {
-        return true;
-      }
-      if (Array.isArray(field) && field.includes(val)) {
-        return true;
       }
       return false;
     },

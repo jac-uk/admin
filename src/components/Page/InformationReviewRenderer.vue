@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div
-      v-if="!(data === null || data.length == 0)"
-    >
+    <!-- v-if="!(data === null || data.length == 0)" -->
+    <div>
       <div
         v-if="isDate"
       >
@@ -46,6 +45,20 @@
       </div>
 
       <div
+        v-else-if="isMultiSelection"
+      >
+        <EditableField
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :type="type"
+          :extension="extension"
+          :options="options"
+          @changeField="changeField"
+        />
+      </div>
+
+      <div
         v-else-if="isSelection"
       >
         <EditableField
@@ -72,9 +85,6 @@
           @changeField="changeField"
         />
       </div>
-    </div>
-    <div v-if="data === null || data.length == 0">
-      {{ 'No ' + (filters.lookup(field)) + (extension ? ' ' + filters.lookup(extension) : '' ) + ' provided' }}
     </div>
   </div>
 </template>
@@ -119,14 +129,9 @@ export default {
       default: () => '',
     },
     data: {
-      type: [Array, String, Date, Boolean],
+      type: [Array, String, Date, Boolean, Array],
       required: false,
       default: () => null,
-    },
-    selection: {
-      type: Boolean,
-      required: false,
-      default: () => false,
     },
     options: {
       type: Array,
@@ -157,7 +162,10 @@ export default {
       return this.$props.field === 'email';
     },
     isSelection() {
-      return this.$props.selection === true;
+      return this.$props.type === 'selection';
+    },
+    isMultiSelection() {
+      return this.$props.type === 'multi-selection';
     },
     isRouted() {
       return ['title', 'firstName', 'lastName'].some(field => field === this.$props.field) && this.applicationId;
