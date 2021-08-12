@@ -50,6 +50,7 @@ import ExerciseApplication from '@/views/Exercise/Applications/Application';
 // Exercise reports
 import ExerciseReports from '@/views/Exercise/Reports';
 import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
+import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom';
 import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
 import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues';
@@ -914,6 +915,14 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Diversity | Exercise Reports',
+              },
+            },
+            {
+              path: 'custom',
+              component: ExerciseReportsCustom,
+              meta: {
+                requiresAuth: true,
+                title: 'Custom Report | Exercise Reports',
               },
             },
             {
