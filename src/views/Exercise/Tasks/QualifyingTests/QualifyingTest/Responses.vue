@@ -70,12 +70,15 @@ export default {
     const tableColumns = [];
     if (qualifyingTest.mode === 'dry-run') {
       tableColumns.push({ title: 'Name', sort: 'candidate.email', default: true });
+      tableColumns.push({ title: 'Status' });
+      tableColumns.push({ title: 'Time Limit' });
+      tableColumns.push({ title: '' });
     } else {
       tableColumns.push({ title: 'Name', sort: 'candidate.fullName', default: true });
+      tableColumns.push({ title: 'Status' });
+      tableColumns.push({ title: 'Time Limit', sort: 'duration.testDurationAdjusted' });
+      tableColumns.push({ title: '' });
     }
-    tableColumns.push({ title: 'Status' });
-    tableColumns.push({ title: 'Time Limit', sort: 'duration.testDurationAdjusted' });
-    tableColumns.push({ title: '' });
 
     return {
       tableColumns: tableColumns,
