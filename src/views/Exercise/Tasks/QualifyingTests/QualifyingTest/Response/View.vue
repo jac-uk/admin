@@ -240,7 +240,7 @@
                 <QuestionDuration
                   v-if="!isScenario"
                   :start="responses[index] && responses[index].started"
-                  :end="responses[index] && responses[index].completed"
+                  :end="lastUpdatedQuestion(index)"
                 />
               </dt>
               <dd class="govuk-summary-list__value">
@@ -325,7 +325,7 @@
         </div>
         <div v-if="activeTab === 'logs'">
           <h2 class="govuk-heading-m">
-            Connection Logs
+            Connection
           </h2>
           <div
             v-for="(log, i) in logs"
@@ -354,20 +354,26 @@
         <!-- // END CONNECTION TAB -->
         <div v-if="activeTab === 'history'">
           <h2 class="govuk-heading-m">
-            History Logs
+            History
           </h2>
-          <div>
+          <div v-if="responses.length">
             <table class="history-logs">
-              <div 
+              <div
                 v-for="(testQuestion, index) in questions"
                 :key="index"
               >
-                <tr 
+                <tr
                   class="log_row"
                 >
-                  <td rowspan="6">
+                  <td rowspan="8">
                     Question {{ index + 1 }}
                   </td>
+                </tr>
+                <tr>
+                  <td>First started question: </td><td>{{ responses[index].started | formatDate('datetime') }}</td>
+                </tr>
+                <tr>
+                  <td>Last updated answer: </td><td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
                 </tr>
                 <tr>
                   <td>Amount of time on question: </td><td>{{ amountOfTimeOnQuestion(index) }}</td>
@@ -376,7 +382,7 @@
                   <td>How many times visited question: </td><td>{{ amountOfTimeVisitedQuestion(index) }} </td>
                 </tr>
                 <tr>
-                  <td>how many times saved: </td><td>{{ historyCount('save', index) }}</td>
+                  <td>How many times saved: </td><td>{{ historyCount('save', index) }}</td>
                 </tr>
                 <tr>
                   <td>How many times skipped: </td><td>{{ historyCount('skip', index) }}</td>
@@ -401,7 +407,7 @@
                   <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
                   <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
                   <!-- <span v-if="log.location">{{ log.location }}</span> -->
-                  
+
                   <!-- <br>
                   {{ i }}<br> {{ log }} -->
                 </td>
@@ -574,8 +580,7 @@ export default {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
     logs() {
-      const qtList = this.$store.state.connectionMonitor.records;
-      return qtList;
+      return this.$store.state.connectionMonitor.records;
     },
     isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
@@ -723,7 +728,7 @@ export default {
       const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
       const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
       const timeOffline = nextTimeOnline - thisTimeOffline;
-      if (nextTimeOnline === undefined) {
+      if (nextTimeOnline === undefined || thisTimeOffline === undefined) {
         return;
       } else {
         return new Date(timeOffline).toISOString().substr(11, 8);
@@ -734,10 +739,10 @@ export default {
       if (this.response.history) {
         ordered = Object.keys(this.response.history).sort()
           .reduce(
-            (obj, key) => { 
-              obj[key] = this.response.history[key]; 
+            (obj, key) => {
+              obj[key] = this.response.history[key];
               return obj;
-            }, 
+            },
             {}
           );
       }
@@ -748,7 +753,7 @@ export default {
       if (this.response.history) {
         timeSaved = Object.keys(this.response.history)
           .filter(key => {
-            return (this.response.history[key].action === value && this.response.history[key].question === index); 
+            return (this.response.history[key].action === value && this.response.history[key].question === index);
           });
       }
       const amountTimeSaved = Object.keys(timeSaved).length;
@@ -763,7 +768,7 @@ export default {
             const diff = this.differenceInMills(item.end, item.start);
             millisecs = millisecs + diff;
           }
-        }); 
+        });
       }
       return new Date(millisecs).toISOString().substr(11, 8);
     },
@@ -775,9 +780,27 @@ export default {
           if (item.question === index && (item.action === 'save' || item.action === 'skip' || item.action === 'exit')) {
             counter++;
           }
-        }); 
+        });
       }
       return counter;
+    },
+    lastUpdatedQuestion(index) {
+      let latestTimestamp;
+      if (this.response.history) {
+        Object.keys(this.response.history).map(key => {
+          const item = this.response.history[key];
+          if (item.question === index && (item.action === 'save' || item.action === 'changed')) {
+            if (item.timestamp && (!latestTimestamp || item.timestamp > latestTimestamp)) {
+              latestTimestamp = item.timestamp;
+            }
+          }
+        });
+      } else {  // default to completed timestamp
+        if (this.responses && this.responses[index]) {
+          latestTimestamp = this.responses[index].completed;
+        }
+      }
+      return latestTimestamp;
     },
   },
 };
