@@ -111,16 +111,6 @@
             </dd>
           </div>
         </div>
-        <Modal
-          ref="removeModal"
-        >
-          <ModalInner
-            :index="index"
-            @close="closeModal"
-            @confirmed="removeField"
-          />
-        </Modal>
-
         <button
           v-if="edit"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
@@ -129,6 +119,15 @@
           Remove
         </button>
       </div>
+      <!-- :index="index" -->
+      <Modal
+        ref="removeModal"
+      >
+        <ModalInner
+          @close="closeModal"
+          @confirmed="removeField"
+        />
+      </Modal>
     </div>
     <div
       v-else
@@ -186,6 +185,11 @@ export default {
       default: () => null,
     },
   },
+  data() {
+    return {
+      currentIndex: null,
+    };
+  },
   methods: {
     displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
@@ -200,29 +204,21 @@ export default {
         change: this.dataDefault,
       });
     },
-    removeField(index) {
+    removeField() {
       this.$emit('changeField', {
         field: this.field,
-        index: index,
+        index: this.currentIndex,
         remove: true,
       });
-      this.$refs.removeModal.forEach((modal) => {
-        // console.log(i === index);
-        // i === index ? modal.closeModal() : null;
-        modal.closeModal();
-      });
+      this.closeModal();
     },
     closeModal() {
-      this.$refs.removeModal.forEach((modal) => {
-        // console.log(i === index);
-        // i === index ? modal.closeModal() : null;
-        modal.closeModal();
-      });
+      this.currentIndex = null;
+      this.$refs.removeModal.closeModal();
     },
     openModal(index) {
-      this.$refs.removeModal.forEach((modal, i) => {
-        i === index ? modal.openModal() : null;
-      });
+      this.currentIndex = index;
+      this.$refs.removeModal.openModal();
     },
   },
 };

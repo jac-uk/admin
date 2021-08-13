@@ -118,11 +118,16 @@ export default {
       required: false,
       default: () => null,
     },
-    applicationId: {
-      type: String,
-      required: false,
-      default: () => '',
-    },
+    // route: {
+    //   type: String,
+    //   required: false,
+    //   default: () => '',
+    // },
+    // applicationId: {
+    //   type: String,
+    //   required: false,
+    //   default: () => '',
+    // },
     field: {
       type: String,
       required: true,
@@ -156,10 +161,11 @@ export default {
   },
   computed: {
     isDate() {
-      return this.$props.data instanceof Date;
+      // return this.$props.data instanceof Date;
+      return this.$props.type === 'date';
     },
     isEmail() {
-      return this.$props.field === 'email';
+      return this.$props.type === 'email';
     },
     isSelection() {
       return this.$props.type === 'selection';
@@ -168,7 +174,8 @@ export default {
       return this.$props.type === 'multi-selection';
     },
     isRouted() {
-      return ['title', 'firstName', 'lastName'].some(field => field === this.$props.field) && this.applicationId;
+      return !!this.route;
+      // return ['title', 'firstName', 'lastName'].some(field => field === this.$props.field) && this.applicationId;
     },
   },
   methods: {
