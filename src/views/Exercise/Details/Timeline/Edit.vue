@@ -9,7 +9,7 @@
           <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
         </div>
 
-        <h2 class="govuk-heading-l">
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">
           Timeline
         </h2>
 
@@ -19,11 +19,10 @@
           @save="save"
         />
 
-        <p class="govuk-body-l">
-          You can return to this page later to add or change dates.
-        </p>
-
-        <p class="govuk_body">
+        <div class="govuk_body govuk-!-margin-bottom-2">
+          <p class="govuk-body-l govuk-!-margin-bottom-2">
+            You can return to this page later to add or change dates.
+          </p>
           <a
             href="#"
             class="govuk-link"
@@ -33,7 +32,7 @@
           <span class="govuk-hint">
             This can help you plan your own key dates (opens in a new tab).
           </span>
-        </p>
+        </div>
 
         <h2 class="govuk-heading-l">
           Application dates
@@ -433,7 +432,7 @@ export default {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
     iaHardLimitTime() {
-      return formatDate(this.exercise.independentAssessmentsHardLimitDate, 'time');
+      return this.exercise.independentAssessmentsHardLimitDate ? formatDate(this.exercise.independentAssessmentsHardLimitDate, 'time') : false;
     },
   },
   methods: {

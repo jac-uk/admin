@@ -1,7 +1,7 @@
 <template>
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">
-      Qualifying Test
+      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
     </h2>
     <h3 class="govuk-heading-l">
       {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
@@ -14,7 +14,7 @@
     <div class="text-right">
       <router-link
         class="govuk-link"
-        :to="{name: 'qualifying-test-edit'}"
+        :to="{name: `${routeNamePrefix}-edit`}"
       >
         Update details
       </router-link>
@@ -93,7 +93,7 @@
     <div class="text-right">
       <router-link
         class="govuk-link"
-        :to="{name: 'qualifying-test-question-builder'}"
+        :to="{name: `${routeNamePrefix}-question-builder`}"
       >
         Update questions
       </router-link>
@@ -204,7 +204,7 @@
       <div class="text-right">
         <router-link
           class="govuk-link"
-          :to="{name: 'qualifying-test-dry-run'}"
+          :to="{name: `${routeNamePrefix}-dry-run`}"
         >
           Update dry run details
         </router-link>
@@ -311,23 +311,29 @@ export default {
     isSituationalJudgement() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? true : false;
     },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
   },
   methods: {
     submitForApproval() {
       this.$store.dispatch('qualifyingTest/submitForApproval');
-      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     approve() {
       this.$store.dispatch('qualifyingTest/approve');
-      // #799 On Approval of the QT send back to the exercises
-      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+      // #799 On Approval of the QT send back to the dashboard
+      this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnGoBack() {
-      this.$router.push({ name: 'qualifying-test-view', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnDelete() {
       this.$store.dispatch('qualifyingTest/delete');
-      this.$router.push({ name: 'exercise-tasks-qualifying-tests' });
+      this.$router.push({ name: `exercise-tasks-${this.routeNamePrefix}s` });
     },
   },
 };

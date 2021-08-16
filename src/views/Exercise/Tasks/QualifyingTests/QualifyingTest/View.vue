@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test
+        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
       </h2>
       <h3 class="govuk-heading-l">
         {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
@@ -59,13 +59,13 @@
 
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: 'all', }}"
           >
             Initialised
           </RouterLink>
           /
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('ACTIVATED') }}"
           >
             Activated
           </RouterLink>
@@ -75,7 +75,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
           </RouterLink> / Out of Time
@@ -98,7 +98,7 @@
         </h2>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('STARTED'), }}"
           >
             Started
           </RouterLink>
@@ -106,7 +106,7 @@
         </p>
         <p class="govuk-body">
           <RouterLink
-            :to="{ name: 'qualifying-test-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
+            :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('PROGRESS'), }}"
           >
             In Progress
           </RouterLink>
@@ -161,32 +161,68 @@
           </ActionButton>
         </div>
         <div v-else>
-          <Select
-            id="exercise-stage"
-            v-model="exerciseStage"
-          >
-            <option value="">
-              Choose applications
-            </option>
-            <option
-              v-if="exercise.applicationRecords.review"
-              value="review"
+          <div v-if="exercise.applicationRecords">
+            <Select
+              v-if="!isTieBreaker"
+              id="exercise-stage"
+              v-model="exerciseStage"
             >
-              Review ({{ exercise.applicationRecords.review }})
-            </option>
-            <option
-              v-if="exercise.applicationRecords.shortlisted"
-              value="shortlisted"
+              <option value="">
+                Choose applications
+              </option>
+              <option
+                v-if="exercise.applicationRecords.review"
+                value="review"
+              >
+                Review ({{ exercise.applicationRecords.review }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.shortlisted"
+                value="shortlisted"
+              >
+                Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.selected"
+                value="selected"
+              >
+                Selected ({{ exercise.applicationRecords.selected }})
+              </option>
+            </Select>
+            <Select
+              v-if="isTieBreaker && hasEMPCandidates"
+              id="exercise-stage"
+              v-model="exerciseStage"
             >
-              Shortlisted ({{ exercise.applicationRecords.shortlisted }})
-            </option>
-            <option
-              v-if="exercise.applicationRecords.selected"
-              value="selected"
-            >
-              Selected ({{ exercise.applicationRecords.selected }})
-            </option>
-          </Select>
+              <option value="">
+                Choose applications (for EMP candidates)
+              </option>
+              <option
+                v-if="exercise.applicationRecords.reviewEMP"
+                value="review"
+              >
+                Review ({{ exercise.applicationRecords.reviewEMP }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.shortlistedEMP"
+                value="shortlisted"
+              >
+                Shortlisted ({{ exercise.applicationRecords.shortlistedEMP }})
+              </option>
+              <option
+                v-if="exercise.applicationRecords.selectedEMP"
+                value="selected"
+              >
+                Selected ({{ exercise.applicationRecords.selectedEMP }})
+              </option>
+            </Select>
+          </div>
+          <div v-else>
+            <Banner
+              :message="`No applications found`"
+              status="warning"
+            />
+          </div>
           <Select
             v-if="availableStatuses && availableStatuses.length > 0"
             id="availableStatuses"
@@ -217,9 +253,15 @@
         </div>
       </div>
 
+      <Banner
+        v-if="isTieBreaker && exerciseHasOpenQTs"
+        message="You cannot open this tie-breaker test yet as there are still qualifying tests open for this exercise"
+        status="warning"
+      />
+
       <ActionButton
         v-if="isInitialised"
-        :disabled="!isUserAdded"
+        :disabled="!isUserAdded || !canOpenTests"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
       >
@@ -296,11 +338,13 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {
   components: {
     ActionButton,
     Select,
+    Banner,
   },
   data() {
     return {
@@ -310,6 +354,9 @@ export default {
     };
   },
   computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -317,8 +364,7 @@ export default {
       return this.$route.params.qualifyingTestId;
     },
     qualifyingTest() {
-      const record = this.$store.state.qualifyingTest.record;
-      return record;
+      return this.$store.state.qualifyingTest.record;
     },
     hasCounts() {
       return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
@@ -369,6 +415,27 @@ export default {
         this.isCompleted
       );
     },
+    canOpenTests() {
+      // do not allow QTs or tie-breakers to be opened until they have been initialised
+      // also, do not allow tie-breakers to be opened if there are open QTs for this exercise
+      return this.isInitialised && !(this.isTieBreaker && this.exerciseHasOpenQTs);
+    },
+    exerciseHasOpenQTs() {
+      const qtList = this.$store.getters['qualifyingTest/getActivatedQTs'].filter(row => {
+        return !row.isTieBreaker;
+      });
+      return qtList.length > 0;
+    },
+    hasEMPCandidates() {
+      const appRecs = this.exercise.applicationRecords;
+      return appRecs.reviewEMP || appRecs.shortlistedEMP || appRecs.selectedEMP;
+    },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
     testQuestionsJson() {
       const {
         additionalInstructions,
@@ -382,7 +449,7 @@ export default {
         type,
       } = this.qualifyingTest;
 
-      const clipboardQT = { 
+      const clipboardQT = {
         additionalInstructions,
         feedbackSurvey,
         maxScore,
@@ -414,12 +481,17 @@ export default {
       }
     },
   },
+  created() {
+    if (this.$store.state.qualifyingTest.records.length === 0) {
+      this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
+    }
+  },
   methods: {
     btnEdit() {
-      this.$router.push({ name: 'qualifying-test-edit', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-edit`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     btnReview() {
-      this.$router.push({ name: 'qualifying-test-review', params: { qualifyingTestId: this.qualifyingTestId } });
+      this.$router.push({ name: `${this.routeNamePrefix}-review`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
     async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
@@ -446,13 +518,12 @@ export default {
     },
     btnResponses(status) {
       const route = {
-        name: 'qualifying-test-responses',
+        name: `${this.routeNamePrefix}-responses`,
         params: {
           qualifyingTestId: this.$route.params.qualifyingTestId,
           status: status,
         },
       };
-
       this.$router.push(route);
     },
     qtStatus(status) {
@@ -461,7 +532,7 @@ export default {
     async btnCreateCopy() {
       const newTestId = await this.$store.dispatch('qualifyingTest/copy');
       this.$router.push({
-        name: 'qualifying-test-edit',
+        name: `${this.routeNamePrefix}-edit`,
         params: {
           qualifyingTestId: newTestId,
         },

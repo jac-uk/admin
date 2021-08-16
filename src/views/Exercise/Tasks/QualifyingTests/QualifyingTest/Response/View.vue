@@ -2,8 +2,8 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test Response:
-        <routerLink :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: $route.params.qualifyingTestId } }">
+        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
+        <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
           {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         </routerLink>
       </h2>
@@ -240,7 +240,7 @@
                 <QuestionDuration
                   v-if="!isScenario"
                   :start="responses[index] && responses[index].started"
-                  :end="responses[index] && responses[index].completed"
+                  :end="lastUpdatedQuestion(index)"
                 />
               </dt>
               <dd class="govuk-summary-list__value">
@@ -325,7 +325,7 @@
         </div>
         <div v-if="activeTab === 'logs'">
           <h2 class="govuk-heading-m">
-            Logs
+            Connection
           </h2>
           <div
             v-for="(log, i) in logs"
@@ -351,6 +351,71 @@
             </table>
           </div>
         </div>
+        <!-- // END CONNECTION TAB -->
+        <div v-if="activeTab === 'history'">
+          <h2 class="govuk-heading-m">
+            History
+          </h2>
+          <div v-if="responses.length">
+            <table class="history-logs">
+              <div
+                v-for="(testQuestion, index) in questions"
+                :key="index"
+              >
+                <tr
+                  class="log_row"
+                >
+                  <td rowspan="8">
+                    Question {{ index + 1 }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>First started question: </td><td>{{ responses[index].started | formatDate('datetime') }}</td>
+                </tr>
+                <tr>
+                  <td>Last updated answer: </td><td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
+                </tr>
+                <tr>
+                  <td>Amount of time on question: </td><td>{{ amountOfTimeOnQuestion(index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times visited question: </td><td>{{ amountOfTimeVisitedQuestion(index) }} </td>
+                </tr>
+                <tr>
+                  <td>How many times saved: </td><td>{{ historyCount('save', index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times skipped: </td><td>{{ historyCount('skip', index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times changed answer: </td><td>{{ historyCount('changed', index) }}</td>
+                </tr>
+              </div>
+            </table>
+          </div>
+          <div
+            v-for="(log, i, index) in sortHistory()"
+            :key="i"
+          >
+            <table>
+              <tr class="log_row">
+                <td class="log_row_time">
+                  {{ differenceInTime(index, log.timestamp) }}
+                </td>
+                <td class="log_row_date">
+                  <span v-if="log.action">{{ log.action }} </span>
+                  <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
+                  <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
+                  <!-- <span v-if="log.location">{{ log.location }}</span> -->
+
+                  <!-- <br>
+                  {{ i }}<br> {{ log }} -->
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- // END HISTORY TAB -->
       </div><!-- hasStarted -->
     </div>
   </div>
@@ -382,6 +447,7 @@ export default {
       isEditingTestDate: false,
       activeTab: 'questions',
       authorisedToPerformAction: false,
+      history: null,
     };
   },
   computed: {
@@ -393,7 +459,11 @@ export default {
         },
         {
           ref: 'logs',
-          title: 'Logs',
+          title: 'Connection',
+        },
+        {
+          ref: 'history',
+          title: 'History',
         },
       ];
     },
@@ -510,8 +580,13 @@ export default {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
     logs() {
-      const qtList = this.$store.state.connectionMonitor.records;
-      return qtList;
+      return this.$store.state.connectionMonitor.records;
+    },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   watch: {
@@ -519,9 +594,10 @@ export default {
       if (newActiveTab === 'logs') {
         const candidateId = this.candidate.id;
         const qualifyingTestId = this.$route.params.qualifyingTestId;
-        // eslint-disable-next-line no-console
-        // console.log('mounted', candidateId, qualifyingTestId, this);
         await this.$store.dispatch('connectionMonitor/bind', { qualifyingTestId, candidateId });
+      }
+      if (newActiveTab === 'history') {
+        this.dateCalculate = null;
       }
     },
   },
@@ -619,7 +695,7 @@ export default {
         await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: destinationTest, qualifyingTestResponse: this.response });
         this.isEditingTestDate = false;
         this.$router.push({
-          name: 'qualifying-test-responses',
+          name: `${this.routeNamePrefix}-responses`,
           params: {
             qualifyingTestId: this.qualifyingTest.id,
             status: 'all',  // TODO go to same list status as before
@@ -638,16 +714,93 @@ export default {
         return new Date(minDate).toISOString().substr(11, 8);
       }
     },
+    differenceInTime(index, date) {
+      const date2 = this.dateCalculate === null ? date : this.dateCalculate ;
+      const minDate = date - date2;
+      this.dateCalculate = date;
+      return index === 0 ? '00:00:00' : new Date(minDate).toISOString().substr(11, 8);
+    },
+    differenceInMills(entry1, entry2) {
+      return (entry1 - entry2);
+    },
     timeOffline(index) {
       const thisTimeOffline = this.logs[index] && this.logs[index].offline;
       const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
       const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
       const timeOffline = nextTimeOnline - thisTimeOffline;
-      if (nextTimeOnline === undefined) {
+      if (nextTimeOnline === undefined || thisTimeOffline === undefined) {
         return;
       } else {
         return new Date(timeOffline).toISOString().substr(11, 8);
       }
+    },
+    sortHistory() {
+      let ordered = {};
+      if (this.response.history) {
+        ordered = Object.keys(this.response.history).sort()
+          .reduce(
+            (obj, key) => {
+              obj[key] = this.response.history[key];
+              return obj;
+            },
+            {}
+          );
+      }
+      return ordered;
+    },
+    historyCount(value, index) {
+      let timeSaved = {};
+      if (this.response.history) {
+        timeSaved = Object.keys(this.response.history)
+          .filter(key => {
+            return (this.response.history[key].action === value && this.response.history[key].question === index);
+          });
+      }
+      const amountTimeSaved = Object.keys(timeSaved).length;
+      return amountTimeSaved;
+    },
+    amountOfTimeOnQuestion(index) {
+      let millisecs = 0;
+      if (this.response.history) {
+        Object.keys(this.response.questionSession).map(key => {
+          const item = this.response.questionSession[key];
+          if (item.question === index) {
+            const diff = this.differenceInMills(item.end, item.start);
+            millisecs = millisecs + diff;
+          }
+        });
+      }
+      return new Date(millisecs).toISOString().substr(11, 8);
+    },
+    amountOfTimeVisitedQuestion(index) {
+      let counter = 0;
+      if (this.response.history) {
+        Object.keys(this.response.history).map(key => {
+          const item = this.response.history[key];
+          if (item.question === index && (item.action === 'save' || item.action === 'skip' || item.action === 'exit')) {
+            counter++;
+          }
+        });
+      }
+      return counter;
+    },
+    lastUpdatedQuestion(index) {
+      let latestTimestamp;
+      if (this.response.history) {
+        Object.keys(this.response.history).map(key => {
+          const item = this.response.history[key];
+          if (item.question === index && (item.action === 'save' || item.action === 'changed')) {
+            if (item.timestamp && (!latestTimestamp || item.timestamp > latestTimestamp)) {
+              latestTimestamp = item.timestamp;
+            }
+          }
+        });
+      } else {  // default to completed timestamp
+        if (this.responses && this.responses[index]) {
+          latestTimestamp = this.responses[index].completed;
+        }
+      }
+      return latestTimestamp;
     },
   },
 };
@@ -678,5 +831,9 @@ export default {
     border-bottom: 1px solid silver;
     line-height: 1;
     padding: 5px;
+  }
+  .history-logs [rowspan] {
+    font-weight: bold;
+    font-size: larger;
   }
 </style>

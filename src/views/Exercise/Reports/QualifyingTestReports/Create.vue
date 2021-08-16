@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-l">
-        Create a qualifying test
+        Create a {{ tieBreakers ? 'an equal merit tie-breaker' : 'a qualifying test' }} report
       </h2>
 
       <ErrorSummary
@@ -45,6 +45,12 @@ export default {
     CheckboxItem,
   },
   extends: Form,
+  props: {
+    tieBreakers: {
+      required: true,
+      type: Boolean,
+    },
+  },
   data(){
     return {
       qualifyingTestIds: [],
@@ -55,7 +61,12 @@ export default {
       return this.$route.params.id;
     },
     qualifyingTests() {
-      return this.$store.getters['qualifyingTest/getCompletedQTs'];
+      return this.$store.getters['qualifyingTest/getCompletedQTs'].filter(row => {
+        return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
+      });
+    },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   created() {
@@ -81,11 +92,12 @@ export default {
           exercise: {
             id: this.exerciseId,
           },
+          tieBreakers: this.tieBreakers,
           qualifyingTests: qualifyingTests,
         };
         await this.$store.dispatch('qualifyingTestReport/create', data);
         this.$router.push({
-          name: 'qualifying-test-reports',
+          name: `${this.routeNamePrefix}-reports`,
         });
       }
     },
