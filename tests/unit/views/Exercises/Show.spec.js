@@ -1,4 +1,4 @@
-import Show from '@/views/Exercises/Show';
+import Show from '@/views/Exercise';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';
@@ -47,7 +47,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show', () => {
+xdescribe('@/views/Exercise/Show', () => {
 
   beforeEach(() => {
     mockStore.dispatch.mockClear();
