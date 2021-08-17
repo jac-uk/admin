@@ -48,7 +48,10 @@ export default {
         },
       );
     }
-    if (exercise.siftStartDate || exercise.nameBlindSiftStartDate) {
+    if (
+      (exercise.shortlistingMethods.indexOf('sift') && exercise.siftStartDate)
+      || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') && exercise.nameBlindSiftStartDate)
+    ) {
       sideNavigation.push(
         {
           title: 'Sift',
