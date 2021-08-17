@@ -50,8 +50,8 @@ export default {
     }
     if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
       if (
-        (exercise.shortlistingMethods.indexOf('sift') && exercise.siftStartDate)
-        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') && exercise.nameBlindSiftStartDate)
+        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
       ) {
         sideNavigation.push(
           {
