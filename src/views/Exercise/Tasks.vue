@@ -48,7 +48,7 @@ export default {
         },
       );
     }
-    if (exercise.siftStartDate) {
+    if (exercise.siftStartDate || exercise.nameBlindSiftStartDate) {
       sideNavigation.push(
         {
           title: 'Sift',
