@@ -48,13 +48,18 @@ export default {
         },
       );
     }
-    if (exercise.siftStartDate) {
-      sideNavigation.push(
-        {
-          title: 'Sift',
-          path: `${path}/sift`,
-        },
-      );
+    if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+      if (
+        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+      ) {
+        sideNavigation.push(
+          {
+            title: 'Sift',
+            path: `${path}/sift`,
+          },
+        );
+      }
     }
     if (exercise.selectionDays) {
       sideNavigation.push(
