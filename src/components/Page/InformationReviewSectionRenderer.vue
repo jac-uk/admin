@@ -119,7 +119,6 @@
           Remove
         </button>
       </div>
-      <!-- :index="index" -->
       <Modal
         ref="removeModal"
       >

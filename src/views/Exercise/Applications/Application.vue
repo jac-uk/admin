@@ -198,7 +198,6 @@
             class="application-details"
           >
             <!---
-
             <div v-if="application && exercise">
               <div
                 v-if="!isPanelView"
@@ -216,7 +215,6 @@
                   :editable="(editMode && authorisedToPerformAction)"
                 />
               </div>  
-              ---->
 
             <div
               v-if="!isPanelView"
@@ -243,8 +241,7 @@
                   :editable="(editMode && authorisedToPerformAction)"
                 />
               </dl>
-            </div>  
-            <!-- 
+            </div> 
               <div
                 v-if="!isPanelView"
                 class="govuk-!-margin-top-9"

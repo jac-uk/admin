@@ -73,6 +73,23 @@
       </div>
 
       <div
+        v-else-if="isRankedSelection"
+      >
+        <span>
+          <EditableField
+            :edit-mode="edit"
+            :value="data"
+            :field="field"
+            :index="index"
+            :extension="extension"
+            :options="options"
+            type="ranked-selection"
+            @changeField="changeField"
+          />
+        </span>
+      </div>
+
+      <div
         v-else
       >
         <EditableField
@@ -118,16 +135,6 @@ export default {
       required: false,
       default: () => null,
     },
-    // route: {
-    //   type: String,
-    //   required: false,
-    //   default: () => '',
-    // },
-    // applicationId: {
-    //   type: String,
-    //   required: false,
-    //   default: () => '',
-    // },
     field: {
       type: String,
       required: true,
@@ -172,6 +179,9 @@ export default {
     },
     isMultiSelection() {
       return this.$props.type === 'multi-selection';
+    },
+    isRankedSelection() {
+      return this.$props.type === 'ranked-selection';
     },
     isRouted() {
       return !!this.route;
