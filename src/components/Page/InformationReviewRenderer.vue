@@ -65,6 +65,7 @@
           :edit-mode="edit"
           :value="data"
           :field="field"
+          :index="index"
           type="selection"
           :extension="extension"
           :options="options"

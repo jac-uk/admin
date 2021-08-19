@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!---
     <div
       v-if="!isPanelView && exercise.yesSalaryDetails"
       class="govuk-!-margin-top-9"
@@ -24,6 +25,7 @@
         </dd>
       </dl>
     </div>
+
     <div
       v-if="!isPanelView && exercise.locationQuestion"
       class="govuk-!-margin-top-9"
@@ -161,133 +163,135 @@
           <dt class="govuk-summary-list__key">
             Applying for a Welsh post
           </dt>
+          
           <dd
             class="govuk-summary-list__value"
           >
-            {{ application.applyingForWelshPost | toYesNo | showAlternative('Answer not provided') }}
+            <InformationReviewRenderer
+              :data="application.applyingForWelshPost"
+              field="applyingForWelshPost"
+              :edit="editable"
+              :options="[true, false]"
+              type="selection"
+              @changeField="changePreferences"
+            />
           </dd>
         </div>
-        <!---
-      <div
-        v-if="application.applyingForWelshPost"
-        class="govuk-summary-list__row"
-      >
-        <dt class="govuk-summary-list__key">
-          Can speak Welsh
-        </dt>
-        <dd
-          class="govuk-summary-list__value"
-        >
-          {{ application.canSpeakWelsh | toYesNo | showAlternative('Answer not provided') }}
-        </dd>
-      </div>
-      <div
-        v-if="application.applyingForWelshPost"
-        class="govuk-summary-list__row"
-      >
-        <dt class="govuk-summary-list__key">
-          Can read and write in Welsh?
-        </dt>
-        <dd
-          class="govuk-summary-list__value"
-        >
-          <p
-            v-if="application.canReadAndWriteWelsh == false "
-          >
-            {{ application.canReadAndWriteWelsh | toYesNo | showAlternative('Answer not provided') }}
-          </p>
-          <p
-            v-if="application.canReadAndWriteWelsh"
-          >
-            {{ application.canReadAndWriteWelsh | lookup | showAlternative('Answer not provided') }}
-          </p>
-        </dd>
-      </div>
-    </dl>
-  </div>
 
-  <div
-    v-if="application.additionalWorkingPreferences"
-    class="govuk-!-margin-top-9"
-  >
-    <h2
-      class="govuk-heading-l"
-      style="display:inline-block;"
-    >
-      Additional Preferences
-    </h2>
-
-    <div v-if="application.additionalWorkingPreferences && application.additionalWorkingPreferences.length">
-      <dl
-        v-for="(item, index) in application.additionalWorkingPreferences"
-        :key="index"
-        class="govuk-summary-list"
-      >
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="application.applyingForWelshPost"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
-            {{ exercise.additionalWorkingPreferences[index].question }}
-            <span class="govuk-body govuk-!-font-size-19">
-              ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
-            </span>
+            Can speak Welsh
           </dt>
           <dd
-            v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
             class="govuk-summary-list__value"
           >
-            <ul class="govuk-list">
-              <li>{{ item.selection }}</li>
-            </ul>
+            <InformationReviewRenderer
+              :data="application.canSpeakWelsh"
+              field="canSpeakWelsh"
+              :edit="editable"
+              :options="[true, false]"
+              type="selection"
+              @changeField="changePreferences"
+            />
           </dd>
+        </div>
+        <div
+          v-if="application.applyingForWelshPost"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Can read and write in Welsh?
+          </dt>
           <dd
-            v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
             class="govuk-summary-list__value"
           >
-            <ul class="govuk-list">
-              <li>
-                <span
-                  v-for="(option, count) in exercise.additionalWorkingPreferences[index].answers"
-                  :key="count"
-                >
-                  <strong
-                    v-if="item.selection.includes(option.answer)"
-                  > {{ option.answer }} </strong>
-                  <span
-                    v-else
-                  >
-                    {{ option.answer }}
-                  </span>
-                  <span
-                    v-if="count+1!==exercise.additionalWorkingPreferences[index].answers.length"
-                  >,</span>
-                </span>
-              </li>
-            </ul>
-          </dd>
-          <dd
-            v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
-            class="govuk-summary-list__value"
-          >
-            <ul class="govuk-list">
-              <li>
-                <span
-                  v-for="(choice, count) in item.selection"
-                  :key="count"
-                >
-                  <strong>{{ count+1 }}.</strong> {{ choice }}
-                </span>
-              </li>
-            </ul>
+            <InformationReviewRenderer
+              :data="application.canReadAndWriteWelsh"
+              field="canReadAndWriteWelsh"
+              :edit="editable"
+              :options="[false, 'read', 'write', 'both']"
+              type="selection"
+              @changeField="changePreferences"
+            />
           </dd>
         </div>
       </dl>
     </div>
-    <div
-      v-else
-      class="govuk-body"
-    >
-      No information provided
     --->
-      </dl>
+    <div
+      v-if="application.additionalWorkingPreferences"
+      class="govuk-!-margin-top-9"
+    >
+      <h2
+        class="govuk-heading-l"
+        style="display:inline-block;"
+      >
+        Additional Preferences
+      </h2>
+
+      <div v-if="application.additionalWorkingPreferences">
+        <dl
+          v-for="(item, index) in exercise.additionalWorkingPreferences"
+          :key="index"
+          class="govuk-summary-list"
+        >
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {{ exercise.additionalWorkingPreferences[index].question }}
+              <span class="govuk-body govuk-!-font-size-19">
+                ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
+              </span>
+            </dt>
+
+            <dd
+              v-if="exercise.additionalWorkingPreferences[index].questionType === 'single-choice'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="application.additionalWorkingPreferences[index].selection"
+                field="additionalWorkingPreferences"
+                :index="index"
+                :edit="editable"
+                :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
+                type="selection"
+                @changeField="changePreferences"
+              />
+            </dd>
+            
+            <dd
+              v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="application.additionalWorkingPreferences[index].selection"
+                field="additionalWorkingPreferences"
+                :index="index"
+                :edit="editable"
+                :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
+                type="multi-selection"
+                @changeField="changePreferences"
+              />
+            </dd>
+            <dd
+              v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="application.additionalWorkingPreferences[index].selection"
+                field="additionalWorkingPreferences"
+                :index="index"
+                :edit="editable"
+                :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
+                type="ranked-selection"
+                @changeField="changePreferences"
+              />
+            </dd>
+          </div>
+        </dl>
+      </div>
     </div>
   </div>
 </template>
@@ -357,7 +361,12 @@ export default {
     //   }
     //   return false;
     // },
-    changePreferences(objChanged) {
+    changePreferences(obj) {
+      const objChanged = this.application[obj.field] || [];
+
+      if (obj.change && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+        objChanged[obj.index].selection = obj.change;
+      } 
       const myPrefs = { ...this.application, ...objChanged };
       this.$store.dispatch('application/update', { data: myPrefs, id: this.applicationId });
     },
