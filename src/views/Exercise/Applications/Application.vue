@@ -1945,6 +1945,10 @@
               >
                 <dt class="govuk-summary-list__key">
                   {{ exercise.selectionCriteria[index].title }}
+                  <span v-if="exercise.selectionCriteria[index].wordLimit">
+                    <br>
+                    {{ exercise.selectionCriteria[index].wordLimit + ' words ' }}
+                  </span>
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <span v-if="item.answer">
