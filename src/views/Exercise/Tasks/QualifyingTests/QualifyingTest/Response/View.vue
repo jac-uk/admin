@@ -351,7 +351,62 @@
             </table>
           </div>
         </div>
-        <!-- // END CONNECTION TAB -->
+        <div v-if="activeTab === 'client'">
+          <h2 class="govuk-heading-m">
+            Client
+          </h2>
+          <dl
+            v-if="response.client"
+            class="govuk-summary-list"
+          >
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Platform
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.platform }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Browser
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.userAgent }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Timezone
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.timezone }}
+              </dd>
+            </div>
+            <div
+              v-if="initialServerOffset"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Initial time offset
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ initialServerOffset / 1000 }} seconds
+              </dd>
+            </div>
+            <div
+              v-if="latestServerOffset"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Latest time offset
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ latestServerOffset / 1000 }} seconds
+              </dd>
+            </div>
+          </dl>
+        </div>
         <div v-if="activeTab === 'history'">
           <h2 class="govuk-heading-m">
             History
@@ -415,8 +470,7 @@
             </table>
           </div>
         </div>
-        <!-- // END HISTORY TAB -->
-      </div><!-- hasStarted -->
+      </div>
     </div>
   </div>
 </template>
@@ -452,20 +506,32 @@ export default {
   },
   computed: {
     tabs(){
-      return [
-        {
+      const tabsList = [];
+      if (this.response) {
+        tabsList.push({
           ref: 'questions',
           title: 'Questions',
-        },
-        {
-          ref: 'logs',
-          title: 'Connection',
-        },
-        {
-          ref: 'history',
-          title: 'History',
-        },
-      ];
+        });
+        if (this.response.client) {
+          tabsList.push({
+            ref: 'client',
+            title: 'Client',
+          });
+        }
+        if (this.logs) {
+          tabsList.push({
+            ref: 'logs',
+            title: 'Connection',
+          });
+        }
+        if (this.response.history) {
+          tabsList.push({
+            ref: 'history',
+            title: 'History',
+          });
+        }
+      }
+      return tabsList;
     },
     responseId() {
       const id = this.$route.params.responseId;
@@ -587,6 +653,20 @@ export default {
     },
     routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    initialServerOffset() {
+      if (this.response && this.response.client && this.response.statusLog) {
+        const offset = this.response.statusLog.started - this.response.client.timestamp;
+        return offset;
+      }
+      return false;
+    },
+    latestServerOffset() {
+      if (this.response && this.response.lastUpdated && this.response.lastUpdatedClientTime) {
+        const offset = this.response.lastUpdated - this.response.lastUpdatedClientTime;
+        return offset;
+      }
+      return false;
     },
   },
   watch: {
