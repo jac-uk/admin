@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!---
     <div
       v-if="!isPanelView && exercise.yesSalaryDetails"
       class="govuk-!-margin-top-9"
@@ -220,7 +219,6 @@
         </div>
       </dl>
     </div>
-    --->
     <div
       v-if="application.additionalWorkingPreferences"
       class="govuk-!-margin-top-9"
@@ -330,41 +328,12 @@ export default {
     applicationId() {
       return this.$route.params.applicationId;
     },
-    // hasEthnicGroupDetails() {
-    //   return this.application &&
-    //     this.application.equalityAndDiversitySurvey &&
-    //     this.application.equalityAndDiversitySurvey.ethnicGroup &&
-    //     this.application.equalityAndDiversitySurvey.ethnicGroup.startsWith('other-');
-    // },
-    // ethnicGroupDetails() {
-    //   switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
-    //   case 'other-asian':
-    //     return 'otherEthnicGroupAsianDetails';
-    //   case 'other-white':
-    //     return 'otherEthnicGroupWhiteDetails';
-    //   case 'other-black':
-    //     return 'otherEthnicGroupBlackDetails';
-    //   case 'other-mixed':
-    //     return 'otherEthnicGroupMixedDetails';
-    //   default:
-    //     return 'otherEthnicGroupDetails';
-    //   }
-    // },
   },
   methods: {
-    // fieldContains(field, item) {
-    //   if (field === item) {
-    //     return true;
-    //   }
-    //   if (Array.isArray(field) && field.includes(item)) {
-    //     return true;
-    //   }
-    //   return false;
-    // },
     changePreferences(obj) {
       const objChanged = this.application[obj.field] || [];
 
-      if (obj.change && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+      if (obj.change && obj.field && obj.hasOwnProperty('index')) {
         objChanged[obj.index].selection = obj.change;
       } 
       const myPrefs = { ...this.application, ...objChanged };
