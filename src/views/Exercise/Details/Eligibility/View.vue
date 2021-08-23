@@ -89,6 +89,12 @@
                 v-html="criterion.text"
               />
               <!-- eslint-enable -->
+              <p
+                v-if="criterion.wordLimit"
+                class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1"
+              >
+                {{ criterion.wordLimit }} word limit
+              </p>
               <hr>
             </li>
           </ul>

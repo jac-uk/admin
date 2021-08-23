@@ -878,7 +878,10 @@
                   :key="index"
                   class="govuk-summary-list"
                 >
-                  <div class="govuk-summary-list__row">
+                  <div
+                    v-if="exercise.additionalWorkingPreferences[index]"
+                    class="govuk-summary-list__row"
+                  >
                     <dt class="govuk-summary-list__key">
                       {{ exercise.additionalWorkingPreferences[index].question }}
                       <span class="govuk-body govuk-!-font-size-19">
@@ -1945,6 +1948,10 @@
               >
                 <dt class="govuk-summary-list__key">
                   {{ exercise.selectionCriteria[index].title }}
+                  <span v-if="exercise.selectionCriteria[index].wordLimit">
+                    <br>
+                    {{ exercise.selectionCriteria[index].wordLimit + ' words ' }}
+                  </span>
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <span v-if="item.answer">
