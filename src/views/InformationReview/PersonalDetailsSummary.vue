@@ -1,5 +1,11 @@
 <template>
   <div>
+    <h2 class="govuk-heading-l">
+      Personal details
+      <span class="govuk-hint print-none">
+        Any changes made here will also update the candidate information.
+      </span>
+    </h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
         <dt :class="requiredStyle">
@@ -223,22 +229,22 @@ export default {
     },
   },
   methods: {
-    makeFullName(objChanged) {
-      if (objChanged.firstName && this.application.personalDetails.lastName) {
-        objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
+    makeFullName(obj) {
+      if (obj.firstName && this.application.personalDetails.lastName) {
+        obj.fullName = `${obj.firstName} ${this.application.personalDetails.lastName}`;
       }
-      if (objChanged.lastName && this.application.personalDetails.firstName) {
-        objChanged.fullName = `${this.application.personalDetails.firstName} ${objChanged.lastName}`;
+      if (obj.lastName && this.application.personalDetails.firstName) {
+        obj.fullName = `${this.application.personalDetails.firstName} ${obj.lastName}`;
       }
-      return objChanged;
+      return obj;
     },
-    changeUserDetails(objChanged) {
-      if (objChanged.firstName || objChanged.lastName) {
-        objChanged = this.makeFullName(objChanged);
+    changeUserDetails(obj) {
+      if (obj.firstName || obj.lastName) {
+        obj = this.makeFullName(obj);
       }
-      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
+      const myPersonalDetails = { ...this.application.personalDetails, ...obj };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.application.userId });
     },
   },
 };

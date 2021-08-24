@@ -1,5 +1,8 @@
 <template>
   <div>
+    <h2 class="govuk-heading-l">
+      Character information
+    </h2>
     <dl 
       v-if="isVersion2"
       class="govuk-summary-list"
@@ -99,16 +102,16 @@ export default {
     },
   },
   methods: {
-    changeCharacterInfo(objChanged) {
+    changeCharacterInfo(obj) {
       let myCharacterInfo;
       if (this.isVersion2 && this.application.characterInformationV2) {
-        myCharacterInfo = { ...this.application.characterInformationV2, ...objChanged };
+        myCharacterInfo = { ...this.application.characterInformationV2, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
-        this.$store.dispatch('candidates/saveCharacterInfo', { data: objChanged, id: this.application.userId });
+        this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       } else {
-        myCharacterInfo = { ...this.application.characterInformation, ...objChanged };
+        myCharacterInfo = { ...this.application.characterInformation, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformation: myCharacterInfo }, id: this.applicationId });
-        this.$store.dispatch('candidates/saveCharacterInfo', { data: objChanged, id: this.application.userId });
+        this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       }
     },
   },
