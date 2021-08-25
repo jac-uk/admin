@@ -67,9 +67,9 @@ export default {
     },
     emptyDetailObject() {
       return {
+        'title': '',
         'details': '',
         'date': new Date(),
-        'title': '',
       };
     },
   },

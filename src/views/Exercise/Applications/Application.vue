@@ -198,8 +198,7 @@
             v-if="activeTab == 'full' || activeTab == 'panel'"
             class="application-details"
           >
-            <!--
-              <div v-if="application && exercise">
+            <div v-if="application && exercise">
               <div
                 v-if="!isPanelView"
                 class="govuk-!-margin-top-9"
@@ -232,31 +231,27 @@
                 />
               </div>
 
-            <div
-              v-if="!isPanelView"
-              class="govuk-!-margin-top-9"
-            >
-              <PreferencesSummary
-                :application="application"
-                :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
-                :is-panel-view="isPanelView"
-              />
-            </div>
-            -->
+              <div
+                v-if="!isPanelView"
+                class="govuk-!-margin-top-9"
+              >
+                <PreferencesSummary
+                  :application="application"
+                  :exercise="exercise"
+                  :editable="(editMode && authorisedToPerformAction)"
+                  :is-panel-view="isPanelView"
+                />
+              </div>
 
-            <div
-              v-if="isLegal"
-              class="govuk-!-margin-top-9"
-            >
-              <QualificationsAndMembershipsSummary 
-                :application="application"
-                :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
-                :is-panel-view="isPanelView"
-              />
-            </div>
-
+              <div
+                class="govuk-!-margin-top-9"
+              >
+                <QualificationsAndMembershipsSummary 
+                  :application="application"
+                  :exercise="exercise"
+                  :editable="(editMode && authorisedToPerformAction)"
+                />
+              </div>
             <!--
               <div
                 v-if="isLegal"
@@ -292,13 +287,14 @@
               </div>
             </div>
             -->
-          </div>
-          <div v-if="activeTab == 'notes'">
-            <Notes
-              title="Notes about the Application"
-              :candidate-id="application.userId"
-              :application-id="applicationId"
-            />
+            </div>
+            <div v-if="activeTab == 'notes'">
+              <Notes
+                title="Notes about the Application"
+                :candidate-id="application.userId"
+                :application-id="applicationId"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -343,7 +339,6 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import {
   isLegal,
   isNonLegal,
-  hasRelevantMemberships,
   hasStatementOfSuitability,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
@@ -418,9 +413,6 @@ export default {
     },
     isNonLegal() {
       return isNonLegal(this.exercise);
-    },
-    hasRelevantMemberships() {
-      return hasRelevantMemberships(this.exercise);
     },
     hasStatementOfSuitability() {
       return hasStatementOfSuitability(this.exercise);

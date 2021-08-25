@@ -8,6 +8,35 @@
         :key="item.name"
         :class="index <= data.length ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-4'"
       >
+        <span>
+          {{ index + 1 }}:
+        </span>
+        <div
+          v-for="(value, key) in dataDefault"
+          :key="`${key}_${index}`"
+          class="govuk-!-padding-top-1"
+        >
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <dt class="govuk-summary-list__key">
+              {{ key }}
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="text"
+                :extension="key"
+                @changeField="changeField"
+              />
+            </dd>
+          </div>
+        </div>
+
+        <!---
         <div
           class="govuk-!-padding-top-1"
         > 
@@ -26,28 +55,6 @@
                 type="date"
                 :index="index"
                 extension="financialYear"
-                @changeField="changeField"
-              />
-            </dd>
-          </div>
-
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <dt class="govuk-summary-list__key">
-              <span>
-                {{ index + 1 }}:
-              </span>
-              Title
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :data="data[index].title"
-                :field="field"
-                :edit="edit"
-                :index="index"
-                type="text"
-                extension="title"
                 @changeField="changeField"
               />
             </dd>
@@ -110,7 +117,7 @@
               />
             </dd>
           </div>
-        </div>
+        --->
         <button
           v-if="edit"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"

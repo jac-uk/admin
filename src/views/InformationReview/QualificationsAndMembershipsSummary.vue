@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--
     <h2 class="govuk-heading-l">
       Qualifications
     </h2>
@@ -124,7 +125,7 @@
       No information provided
     </div>
 
-    <!-- applied shedules -->
+    applied shedules
     <div>
       <dl
         v-if="exercise.schedule2Apply"
@@ -182,9 +183,9 @@
         </dd>
       </dl>
     </div>
+    --->
 
     <!-- 
-      <div>
         <div v-if="application.professionalMemberships && application.professionalMemberships.length">
           <dl
             class="govuk-summary-list govuk-!-margin-bottom-8"
@@ -277,7 +278,9 @@
                 </ul>
               </dd>
             </div>
+            --->
 
+    <!--
             <div
               v-if="showMembershipOption('royal-college-of-psychiatrists')"
               class="govuk-summary-list__row"
@@ -419,9 +422,10 @@
       </div>
     </div>
     -->
-
+    <!-- <h2 class="govuk-heading-l">
+        Memberships
+      </h2> -->
     <!-- memberships -->
-    <!-- 
     <div
       v-if="hasRelevantMemberships"
       class="govuk-!-margin-top-9"
@@ -430,11 +434,20 @@
         Memberships
       </h2>
 
-      <dl
+      <!-- <dl
         v-for="item in application.experience"
         :key="item.name"
         class="govuk-summary-list govuk-!-margin-bottom-8"
-      >
+      > -->
+      <InformationReviewSectionRenderer
+        :value="application.experience"
+        :data="application.experience"
+        :data-default="emptyExperienceObject"
+        :edit="editable"
+        field="experience"
+        @changeField="changeQualificationOrMembership"
+      />
+      <!---
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Organisation or business
@@ -445,7 +458,6 @@
             </ul>
           </dd>
         </div>
-
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Job title
@@ -476,19 +488,24 @@
           </dd>
         </div>
       </dl>
+      --->
     </div>
-    -->
   </div>
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+// import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+
+import {
+  hasRelevantMemberships
+} from '@/helpers/exerciseHelper';
 
 export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
-    InformationReviewRenderer,
-    // InformationReviewSectionRenderer,
+    // InformationReviewRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     application: {
@@ -509,6 +526,17 @@ export default {
     applicationId() {
       return this.$route.params.applicationId;
     },
+    hasRelevantMemberships() {
+      return hasRelevantMemberships(this.exercise);
+    },
+    emptyExperienceObject() {
+      return {
+        'orgBusinessName': '',
+        'jobTitle': '',
+        'startDate': new Date(),
+        'endDate': new Date(),
+      };
+    },
   },
   methods: {
     changeQualificationOrMembership(obj) {
@@ -522,7 +550,9 @@ export default {
       }
       const updatedApplication = { ...this.application, ...objChanged };
 
-      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
+      console.log(updatedApplication);
+
+      // this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
 
     },
   },
