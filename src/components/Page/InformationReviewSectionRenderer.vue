@@ -6,7 +6,7 @@
       <div
         v-for="(item, index) in data"
         :key="item.name"
-        :class="index <= data.length ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-4'"
+        class="govuk-!-margin-bottom-6"
       >
         <span>
           {{ index + 1 }}:
@@ -35,89 +35,6 @@
             </dd>
           </div>
         </div>
-
-        <!---
-        <div
-          class="govuk-!-padding-top-1"
-        > 
-          <div 
-            v-if="item.financialYear"
-            class="govuk-summary-list govuk-!-margin-top-2"
-          >
-            <dt class="govuk-summary-list__key">
-              Financial year
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :data="data[index].financialYear"
-                :field="field"
-                :edit="edit"
-                type="date"
-                :index="index"
-                extension="financialYear"
-                @changeField="changeField"
-              />
-            </dd>
-          </div>
-
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <dt class="govuk-summary-list__key">
-              Date
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :data="data[index].date"
-                :field="field"
-                :edit="edit"
-                :index="index"
-                extension="date"
-                type="date"
-                @changeField="changeField"
-              />
-            </dd>
-          </div>
-
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <dt class="govuk-summary-list__key">
-              Details
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :data="data[index].details"
-                :field="field"
-                :edit="edit"
-                :index="index"
-                type="text"
-                extension="details"
-                @changeField="changeField"
-              />
-            </dd>
-          </div>
-
-          <div
-            v-if="item.investigationConclusionDate" 
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <dt class="govuk-summary-list__key">
-              Investigation Conclusion Date
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :value="data[index].investigationConclusionDate"
-                :field="field"
-                :edit="edit"
-                :index="index"
-                extension="investigationConclusionDate"
-                type="date"
-                @changeField="changeField"
-              />
-            </dd>
-          </div>
-        --->
         <button
           v-if="edit"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"

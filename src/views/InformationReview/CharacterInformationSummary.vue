@@ -12,7 +12,6 @@
         :edit="editable"
         @changeCharacterInfo="changeCharacterInfo"
       />
-      <!--
       <FixedPenaltiesSummary
         :character-information="application.characterInformationV2"
         :edit="editable"
@@ -43,7 +42,6 @@
         :edit="editable"
         @changeCharacterInfo="changeCharacterInfo"
       /> 
-      -->
     </dl>
     <dl v-else>
       <CharacterInformationSummaryV1
@@ -58,23 +56,23 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1';
 import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
-// import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
-// import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
-// import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
-// import ProfessionalConductSummary from '@/views/InformationReview/CharacterReview/ProfessionalConductSummary';
-// import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
-// import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
+import ProfessionalConductSummary from '@/views/InformationReview/CharacterReview/ProfessionalConductSummary';
+import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
 
 export default {
   name: 'CharacterInformationSummary',
   components: {
     CriminalOffencesSummary,
-    // FixedPenaltiesSummary,
-    // MotoringOffencesSummary,
-    // FinancialMattersSummary,
-    // ProfessionalConductSummary,
-    // FurtherInformationSummary,
-    // CharacterDeclarationSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
+    ProfessionalConductSummary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
     CharacterInformationSummaryV1,
   },
   props: {

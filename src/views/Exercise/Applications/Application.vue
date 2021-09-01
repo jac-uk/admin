@@ -199,6 +199,7 @@
             class="application-details"
           >
             <div v-if="application && exercise">
+              <!--
               <div
                 v-if="!isPanelView"
                 class="govuk-!-margin-top-9"
@@ -242,6 +243,7 @@
                   :is-panel-view="isPanelView"
                 />
               </div>
+              -->
 
               <div
                 class="govuk-!-margin-top-9"
@@ -678,12 +680,6 @@ export default {
     },
     submitApplication() {
       this.$store.dispatch('application/submit');
-    },
-    showMembershipOption(ref) {
-      if (this.application && this.application.professionalMemberships) {
-        return this.application.professionalMemberships.indexOf(ref) >= 0;
-      }
-      return false;
     },
     doFileUpload(val, field) {
       if (val) {
