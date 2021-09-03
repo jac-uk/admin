@@ -4,12 +4,6 @@
       v-if="exercise.aSCApply"
       class="govuk-!-margin-top-9"
     >
-      <AssessmentsSummary
-        :application="application"
-        :exercise="exercise"
-        :editable="(editMode && authorisedToPerformAction)"
-        :is-panel-view="isPanelView"
-      />
       <h2 class="govuk-heading-l">
         Additional Selection Criteria
       </h2>
@@ -32,6 +26,7 @@
         </div>
       </dl>
     </div>
+
     <div
       v-if="hasStatementOfSuitability"
       class="govuk-!-margin-top-9"
@@ -221,3 +216,47 @@
     </div>
   </div>
 </template>
+<script>
+import {
+  hasStatementOfSuitability,
+  hasCV,
+  hasCoveringLetter,
+  hasSelfAssessment
+} from '@/helpers/exerciseHelper';
+
+export default {
+  components: {
+  },
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      assessorDetails: {},
+    };
+  },
+  computed: {
+    hasStatementOfSuitability() {
+      return hasStatementOfSuitability(this.exercise);
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    hasSelfAssessment() {
+      return hasSelfAssessment(this.exercise);
+    },
+    hasCV() {
+      return hasCV(this.exercise);
+    },
+    hasCoveringLetter() {
+      return hasCoveringLetter(this.exercise);
+    },
+  },
+  methods: {
+  },
+};
+</script>

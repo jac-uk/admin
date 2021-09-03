@@ -28,7 +28,7 @@
         <div id="panel-pack-div">
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
-              <span class="govuk-caption-l">
+              <span class="govuk-heading-l">
                 Application
               </span>
               <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
@@ -231,7 +231,6 @@
                   :is-legal="isLegal"
                 />
               </div>
-
               <div
                 v-if="!isPanelView"
                 class="govuk-!-margin-top-9"
@@ -245,6 +244,7 @@
               </div>
               -->
 
+              <!-- 
               <div
                 class="govuk-!-margin-top-9"
               >
@@ -254,7 +254,8 @@
                   :editable="(editMode && authorisedToPerformAction)"
                 />
               </div>
-            <!--
+              -->
+
               <div
                 v-if="isLegal"
                 class="govuk-!-margin-top-9"
@@ -288,8 +289,6 @@
                 />
               </div>
             </div>
-            -->
-            </div>
             <div v-if="activeTab == 'notes'">
               <Notes
                 title="Notes about the Application"
@@ -319,8 +318,6 @@ import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
-import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
@@ -331,7 +328,6 @@ import QualificationsAndMembershipsSummary from '@/views/InformationReview/Quali
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
-// import MembershipsSummary from '@/views/InformationReview/MembershipsSummary';
 
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
@@ -343,7 +339,6 @@ import {
   isNonLegal,
   hasStatementOfSuitability,
   hasIndependentAssessments,
-  hasLeadershipJudgeAssessment,
   hasCV,
   hasCoveringLetter,
   hasSelfAssessment
@@ -357,8 +352,6 @@ export default {
     EventRenderer,
     FileUpload,
     Modal,
-    IndependentAssessorChange,
-    LeadershipJudgeDetails,
     SubmissionExtension,
     Notes,
     PersonalDetailsSummary,
@@ -400,7 +393,6 @@ export default {
       ],
       activeTab: 'full',
       dropDownExpanded: false,
-      assessorDetails: {},
     };
   },
   computed: {
@@ -421,9 +413,6 @@ export default {
     },
     hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
-    },
-    hasLeadershipJudgeAssessment() {
-      return hasLeadershipJudgeAssessment(this.exercise);
     },
     hasCV() {
       return hasCV(this.exercise);
@@ -519,14 +508,6 @@ export default {
       }
 
       return selected;
-    },
-    applicantProvidedFirstAssessor() {
-      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
-      return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
-    },
-    applicantProvidedSecondAssessor() {
-      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
-      return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
     },
     title() {
       let title = this.application.personalDetails.title;
@@ -685,33 +666,6 @@ export default {
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
       }
-    },
-    editAssessor(AssessorNr) {
-      // this.assessorDetails = {};
-      if (AssessorNr === 1) {
-        this.assessorDetails = {
-          AssessorNr: AssessorNr,
-          applicationId: this.applicationId,
-          email: this.application.firstAssessorEmail,
-          fullName: this.application.firstAssessorFullName,
-          phone: this.application.firstAssessorPhone,
-          title: this.application.firstAssessorTitle,
-        };
-      }
-      if (AssessorNr === 2) {
-        this.assessorDetails = {
-          AssessorNr: AssessorNr,
-          applicationId: this.applicationId,
-          email: this.application.secondAssessorEmail,
-          fullName: this.application.secondAssessorFullName,
-          phone: this.application.secondAssessorPhone,
-          title: this.application.secondAssessorTitle,
-        };
-      }
-      this.modalRef.openModal();
-    },
-    editLeadershipJudgeDetails() {
-      this.$refs.modalLeadershipJudgeDetails.openModal();
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();

@@ -124,16 +124,6 @@
           </dd>
         </div>
       </dl>
-      <dl
-        v-else
-        class="govuk-summary-list"
-      >
-        <dt
-          class="govuk-summary-list__key"
-        >
-          No information for First Assessor
-        </dt>
-      </dl>
     </div>
     <!--  -->
     <div
@@ -159,6 +149,17 @@
             </button>
           </dd>
         </div>
+      </dl>
+
+      <dl
+        v-else
+        class="govuk-summary-list"
+      >
+        <dt
+          class="govuk-summary-list__key"
+        >
+          No information for First Assessor
+        </dt>
       </dl>
 
       <hr class="govuk-section-break govuk-section-break--l">
@@ -344,3 +345,77 @@
     </div>
   </div>
 </template>
+<script>
+import { hasLeadershipJudgeAssessment, hasIndependentAssessments } from '@/helpers/exerciseHelper';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
+import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
+
+export default {
+  components: {
+    Modal,
+    IndependentAssessorChange,
+    LeadershipJudgeDetails,
+  },
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  },
+  data() {
+    return {
+      assessorDetails: {},
+    };
+  },
+  computed: {
+    applicantProvidedFirstAssessor() {
+      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
+      return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
+    },
+    applicantProvidedSecondAssessor() {
+      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
+      return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    hasLeadershipJudgeAssessment() {
+      return hasLeadershipJudgeAssessment(this.exercise);
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
+    },
+  },
+  methods: {
+    editAssessor(AssessorNr) {
+      // this.assessorDetails = {};
+      if (AssessorNr === 1) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.firstAssessorEmail,
+          fullName: this.application.firstAssessorFullName,
+          phone: this.application.firstAssessorPhone,
+          title: this.application.firstAssessorTitle,
+        };
+      }
+      if (AssessorNr === 2) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.secondAssessorEmail,
+          fullName: this.application.secondAssessorFullName,
+          phone: this.application.secondAssessorPhone,
+          title: this.application.secondAssessorTitle,
+        };
+      }
+      this.modalRef.openModal();
+    },
+    editLeadershipJudgeDetails() {
+      this.$refs.modalLeadershipJudgeDetails.openModal();
+    },
+  },
+};
+</script>

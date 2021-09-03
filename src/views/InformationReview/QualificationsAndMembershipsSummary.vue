@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- qualifications -->
-    <!-- 
+    
     <div>
       <h2 class="govuk-heading-l">
         Qualifications
@@ -126,10 +126,10 @@
       >
         No information provided
       </div>
-    </div> -->
+    </div>
 
     <!-- applied shedules -->
-    <!-- <div>
+    <div>
       <dl
         v-if="exercise.schedule2Apply"
         class="govuk-summary-list"
@@ -185,7 +185,7 @@
           </ul>
         </dd>
       </dl>
-    </div> -->
+    </div>
   
     <!-- memberships -->
     <div
@@ -195,396 +195,55 @@
       <h2 class="govuk-heading-l">
         Memberships
       </h2>
-      <!-- {{ otherMemberships }} -->
       <div>
-        <!-- v-if="application.professionalMemberships && application.professionalMemberships.length"> -->
         <dl
           class="govuk-summary-list govuk-!-margin-bottom-8"
         >
-          <!-- <div
-            v-if="showMembershipOption('chartered-association-of-building-engineers')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Chartered Association of Building Engineers
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredAssociationBuildingEngineersDate"
-                    field="charteredAssociationBuildingEngineersDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredAssociationBuildingEngineersNumber"
-                    field="charteredAssociationBuildingEngineersNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredAssociationBuildingEngineersInformation"
-                    field="charteredAssociationBuildingEngineersInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
           <div
-            v-if="showMembershipOption('chartered-institute-of-building')"
+            v-for="membership in otherMemberships"
+            :id="membership.value"
+            :key="membership.value"
+            :value="membership.value"
+            :label="membership.label"
             class="govuk-summary-list__row"
           >
             <dt class="govuk-summary-list__key">
-              Chartered Institue of Building
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteBuildingDate"
-                    field="charteredInstituteBuildingDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteBuildingNumber"
-                    field="charteredInstituteBuildingNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteBuildingInformation"
-                    field="charteredInstituteBuildingInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
-          <div
-            v-if="showMembershipOption('chartered-institute-of-environmental-health')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Chartered Institute of Environmental Health
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteEnvironmentalHealthDate"
-                    field="charteredInstituteEnvironmentalHealthDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteEnvironmentalHealthNumber"
-                    field="charteredInstituteEnvironmentalHealthNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.charteredInstituteEnvironmentalHealthInformation"
-                    field="charteredInstituteEnvironmentalHealthInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
-          <div
-            v-if="showMembershipOption('general-medical-council')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              General Medical Council
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilDate"
-                    field="generalMedicalCouncilDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilNumber"
-                    field="generalMedicalCouncilNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilInformation"
-                    field="generalMedicalCouncilInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-
-              <ul
-                v-if="application.generalMedicalCouncilConditional"
-                class="govuk-list"
-              >
-                <p class="govuk-hint">
-                  Conditions
-                </p>
-                <li
-                  v-if="application.generalMedicalCouncilConditionalStartDate
-                    && application.generalMedicalCouncilConditionalEndDate"
-                >
-                  {{ application.generalMedicalCouncilConditionalStartDate | formatDate }}
-                  to {{ application.generalMedicalCouncilConditionalEndDate | formatDate }}
-                </li>
-
-                <li
-                  v-if="application.generalMedicalCouncilConditionalStartDate
-                    && !application.generalMedicalCouncilConditionalEndDate"
-                >
-                  {{ application.generalMedicalCouncilConditionalStartDate | formatDate }} — current
-                </li>
-
-                <li>
-                  {{ application.generalMedicalCouncilConditionalDetails }}
-                </li>
-              </ul>
-              <ul
-                v-else-if="editable"
-                class="govuk-list"
-              >
-                <p class="govuk-hint">
-                  Conditional details
-                </p>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilConditionalDetails"
-                    field="generalMedicalCouncilConditionalDetails"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                
-                <p class="govuk-hint">
-                  Start date
-                </p>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilConditionalStartDate"
-                    field="generalMedicalCouncilConditionalStartDate"
-                    type="date"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-
-                <p class="govuk-hint">
-                  End date
-                </p>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.generalMedicalCouncilConditionalEndDate"
-                    field="generalMedicalCouncilConditionalEndDate"
-                    type="date"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
-          <div
-            v-if="showMembershipOption('royal-college-of-psychiatrists')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Royal College of Psychiatrists
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalCollegeOfPsychiatristsDate"
-                    field="royalCollegeOfPsychiatristsDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalCollegeOfPsychiatristsNumber"
-                    field="royalCollegeOfPsychiatristsNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalCollegeOfPsychiatristsInformation"
-                    field="royalCollegeOfPsychiatristsInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
-          <div
-            v-if="showMembershipOption('royal-institution-of-chartered-surveyors')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Royal Institution of Chartered Surveyors
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <ul class="govuk-list">
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalInstitutionCharteredSurveyorsDate"
-                    field="royalInstitutionCharteredSurveyorsDate"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalInstitutionCharteredSurveyorsNumber"
-                    field="royalInstitutionCharteredSurveyorsNumber"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-                <li>
-                  <InformationReviewRenderer
-                    :data="application.royalInstitutionCharteredSurveyorsInformation"
-                    field="royalInstitutionCharteredSurveyorsInformation"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </li>
-              </ul>
-            </dd>
-          </div>
-
-          <div
-            v-if="showMembershipOption('royal-institute-of-british-architects')"
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Royal Institute of British Architects
+              {{ membership.value }}
             </dt>
             <dd class="govuk-summary-list__value">
               <InformationReviewRenderer
-                :data="application.royalInstituteBritishArchitectsDate"
-                field="royalInstituteBritishArchitectsDate"
+                :data="extendedApplication.memberships[membership.value].date || null"
+                field="memberships"
+                extension="date"
+                :index="membership.value"
                 :edit="editable"
                 type="date"
                 @changeField="changeQualificationOrMembership"
               />
               <InformationReviewRenderer
-                :data="application.royalInstituteBritishArchitectsNumber"
-                field="royalInstituteBritishArchitectsNumber"
+                :data="extendedApplication.memberships[membership.value].number || null"
+                field="memberships"
+                extension="number"
+                :index="membership.value"
                 :edit="editable"
                 @changeField="changeQualificationOrMembership"
               />
               <InformationReviewRenderer
-                :data="application.royalInstituteBritishArchitectsInformation"
-                field="royalInstituteBritishArchitectsInformation"
+                :data="extendedApplication.memberships[membership.value].information || null"
+                field="memberships"
+                extension="information"
+                :index="membership.value"
                 :edit="editable"
                 @changeField="changeQualificationOrMembership"
               />
             </dd>
-          </div> -->
-
-          <template
-            v-if="showMembershipOption('other') || otherMemberships"
-          >
-            <div
-              v-for="(membership, key) in otherMemberships"
-              :id="membership.value"
-              :key="key"
-              class="govuk-summary-list__row"
-              :value="membership.value"
-            >
-              <dt class="govuk-summary-list__key">
-                {{ membership.value }}
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <!-- {{ application.memberships ? application.memberships[membership.value].date : 'null' }} -->
-                {{ application.memberships }}
-                <strong v-if="editable">
-                  date
-                </strong>
-                <InformationReviewRenderer
-                  :data="(application.memberships && application.memberships[membership.value]) ? application.memberships[membership.value].date : null"
-                  field="memberships"
-                  extension="date"
-                  :index="key"
-                  :edit="editable"
-                  type="date"
-                  @changeField="changeQualificationOrMembership"
-                />
-                <strong v-if="editable">
-                  number
-                </strong>
-                  <InformationReviewRenderer
-                  :data="(application.memberships && application.memberships[membership.value]) ? application.memberships[membership.value].number : null"
-                  field="memberships"
-                  extension="number"
-                  :index="key"
-                  :edit="editable"
-                  @changeField="changeQualificationOrMembership"
-                />
-                <!-- 
-                <InformationReviewRenderer
-                  :data="memberships[key].information"
-                  field="memberships"
-                  extension="information"
-                  :index="key"
-                  :edit="editable"
-                  @changeField="changeQualificationOrMembership"
-                /> -->
-              </dd>
-            </div>
-          </template>
+          </div>
         </dl>
       </div>
     </div>
 
     <!-- experience -->
-    <!-- <div
+    <div
       v-if="isNonLegal"
       class="govuk-!-margin-top-9"
     >
@@ -607,13 +266,13 @@
       >
         No information provided
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-// import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 import {
   hasRelevantMemberships,
@@ -624,7 +283,7 @@ export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
     InformationReviewRenderer,
-    // InformationReviewSectionRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     application: {
@@ -637,6 +296,20 @@ export default {
       required: true,
       default: false,
     },
+  },
+  data() {
+    const data = {
+      memberships: {},
+    };
+    this.$store.state.exerciseDocument.record.otherMemberships.forEach(membership => {
+      data.memberships[membership.value] = this.application[membership.value] || {};
+    });
+    return {
+      extendedApplication: {
+        ...data,
+        ...this.application,
+      },
+    };
   },
   computed: {
     exercise() {
@@ -652,7 +325,10 @@ export default {
       return isNonLegal(this.exercise);
     },
     otherMemberships() {
-      return this.exercise.otherMemberships;
+      if (Array.isArray(this.exercise.otherMemberships)) {
+        return this.exercise.otherMemberships.filter(membership => this.exercise.memberships.includes(membership.value));
+      }
+      return null;
     },
     emptyExperienceObject() {
       return {
@@ -669,11 +345,14 @@ export default {
     },
     changeQualificationOrMembership(obj) {
 
-      let objChanged = this.application[obj.field] || [];
-      console.log(objChanged);
-      
+      let objChanged = this.application[obj.field] || {};
+
       if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
-        console.log('a');
+        if (!objChanged[obj.index]) {
+          objChanged = {
+            [obj.index]: {},
+          };
+        }
         objChanged[obj.index][obj.extension] = obj.change;
       } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
         objChanged[obj.index] = obj.change;
@@ -688,9 +367,7 @@ export default {
       }
       const updatedApplication = { ...this.application, ...objChanged };
 
-      console.log(updatedApplication);
-
-      // this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
+      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
 
     },
   },

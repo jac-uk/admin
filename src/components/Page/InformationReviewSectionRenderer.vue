@@ -20,9 +20,46 @@
             class="govuk-summary-list govuk-!-margin-bottom-0"
           >
             <dt class="govuk-summary-list__key">
-              {{ key }}
+              {{ key | lookup }}
             </dt>
-            <dd class="govuk-summary-list__value">
+            <!-- <dd
+              v-if="true"
+              class="govuk-summary-list__value"
+            >
+            </dd> -->
+            <dd
+              v-if="data[index][key] instanceof Array && key === 'tasks'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="multi-selection"
+                :options="taskOptions"
+                :extension="key"
+                @changeField="changeField"
+              />
+              <div v-if="data[index][key].includes('other')">
+                <dt class="govuk-summary-list__key">
+                  Other task
+                </dt>
+                <InformationReviewRenderer
+                  :data="data[index].otherTasks"
+                  :field="field"
+                  :edit="edit"
+                  :index="index"
+                  type="text"
+                  :extension="key"
+                  @changeField="changeField"
+                />
+              </div>
+            </dd>
+            <dd
+              v-else
+              class="govuk-summary-list__value"
+            >
               <InformationReviewRenderer
                 :data="data[index][key]"
                 :field="field"
@@ -105,6 +142,10 @@ export default {
     dataDefault: {
       type: Object,
       required: true,
+      default: () => null,
+    },
+    taskOptions: {
+      type: Array,
       default: () => null,
     },
   },
