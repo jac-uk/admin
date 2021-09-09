@@ -3,10 +3,12 @@ import App from '@/App';
 import router from '@/router';
 import store from '@/store';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
+import * as localFilters from '@/filters';
 import { auth } from '@/firebase';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
+import './styles/main.scss';
 
 if (process.env.NODE_ENV !== 'development') {
   // Split the URL
@@ -28,6 +30,11 @@ Vue.use( CKEditor );
 Object.keys(filters)
   .forEach((filterName) => {
     Vue.filter(filterName, filters[filterName]);
+  });
+// Register local filters (replace global filters of same name)
+Object.keys(localFilters)
+  .forEach((filterName) => {
+    Vue.filter(filterName, localFilters[filterName]);
   });
 
 let vueInstance = false;
