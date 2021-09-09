@@ -29,9 +29,9 @@
                 Set status
               </button>
               <button
-                v-if="exercise.id === 'kVlymRGRhZndRaQuqDTf'"
+                v-if="exercise.id === 'G7d4Y3iwggL6HXAK6IU3'"
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                @click.prevent="exportCustom021Data()"
+                @click.prevent="exportCustom033Data()"
               >
                 Export Data
               </button>
@@ -129,7 +129,7 @@ export default {
   methods: {
     async gatherReportData() {
       // fetch data
-      const response = await functions.httpsCallable('exportCustom021Data')({ exerciseId: this.exercise.id });
+      const response = await functions.httpsCallable('exportCustom033Data')({ exerciseId: this.exercise.id });
 
       const reportData = [];
 
@@ -143,8 +143,8 @@ export default {
 
       return reportData;
     },
-    async exportCustom021Data() {
-      const title = 'Exercise 021 data';
+    async exportCustom033Data() {
+      const title = 'Exercise 033 data';
       const xlsxData = await this.gatherReportData();
 
       downloadXLSX(
