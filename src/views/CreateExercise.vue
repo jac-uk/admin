@@ -133,6 +133,7 @@ export default {
         const data = {
           name: this.exerciseName,
           exerciseMailbox: this.$store.state.auth.currentUser.email,
+          characterChecksEnabled: true,
         };
         await this.$store.dispatch('exerciseDocument/create', data);
         const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
