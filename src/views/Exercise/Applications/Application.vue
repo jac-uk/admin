@@ -199,95 +199,51 @@
             class="application-details"
           >
             <div v-if="application && exercise">
+              <!-- <PersonalDetailsSummary 
+                :application="application"
+                :editable="(editMode && authorisedToPerformAction)"
+              />
+              <CharacterInformationSummary
+                :application="application"
+                :editable="(editMode && authorisedToPerformAction)"
+                :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
+              />
+              <EqualityAndDiversityInformationSummary
+                :application="application"
+                :editable="editable"
+                :is-legal="isLegal"
+              />
+              <PreferencesSummary
+                :application="application"
+                :exercise="exercise"
+                :editable="(editMode && authorisedToPerformAction)"
+                :is-panel-view="isPanelView"
+              />
+              <QualificationsAndMembershipsSummary 
+                :application="application"
+                :exercise="exercise"
+                :editable="(editMode && authorisedToPerformAction)"
+              />
+              -->
+              <ExperienceSummary
+                :application="application"
+                :exercise="exercise"
+                :editable="(editMode && authorisedToPerformAction)"
+                :is-panel-view="isPanelView"
+              />
               <!--
-              <div
-                v-if="!isPanelView"
-                class="govuk-!-margin-top-9"
-              >
-                <PersonalDetailsSummary 
-                  :application="application"
-                  :editable="(editMode && authorisedToPerformAction)"
-                />
-              </div>
-
-              <div
-                v-if="!isPanelView"
-                class="govuk-!-margin-top-9"
-              >
-                <CharacterInformationSummary
-                  :application="application"
-                  :editable="(editMode && authorisedToPerformAction)"
-                  :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
-                />
-              </div>
-
-              <div
-                v-if="!isPanelView"
-                class="govuk-!-margin-top-9"
-              >
-                <EqualityAndDiversityInformationSummary
-                  :application="application"
-                  :editable="editable"
-                  :is-legal="isLegal"
-                />
-              </div>
-              <div
-                v-if="!isPanelView"
-                class="govuk-!-margin-top-9"
-              >
-                <PreferencesSummary
-                  :application="application"
-                  :exercise="exercise"
-                  :editable="(editMode && authorisedToPerformAction)"
-                  :is-panel-view="isPanelView"
-                />
-              </div>
-              -->
-
-              <!-- 
-              <div
-                class="govuk-!-margin-top-9"
-              >
-                <QualificationsAndMembershipsSummary 
-                  :application="application"
-                  :exercise="exercise"
-                  :editable="(editMode && authorisedToPerformAction)"
-                />
-              </div>
-              -->
-
-              <div
-                v-if="isLegal"
-                class="govuk-!-margin-top-9"
-              >
-                <ExperienceSummary
-                  :application="application"
-                  :exercise="exercise"
-                  :editable="(editMode && authorisedToPerformAction)"
-                  :is-panel-view="isPanelView"
-                />
-              </div>
-
-              <div>
-                <AssessorsSummary
-                  :application="application"
-                  :exercise="exercise"
-                  :editable="(editMode && authorisedToPerformAction)"
-                  :is-panel-view="isPanelView"
-                />
-              </div>
-
-              <div
-                v-if="exercise.aSCApply"
-                class="govuk-!-margin-top-9"
-              >
-                <AssessmentsSummary
-                  :application="application"
-                  :exercise="exercise"
-                  :editable="(editMode && authorisedToPerformAction)"
-                  :is-panel-view="isPanelView"
-                />
-              </div>
+              <AssessorsSummary
+                :application="application"
+                :exercise="exercise"
+                :editable="(editMode && authorisedToPerformAction)"
+                :is-panel-view="isPanelView"
+              />
+              <AssessmentsSummary
+                :application="application"
+                :exercise="exercise"
+                :editable="(editMode && authorisedToPerformAction)"
+                :is-panel-view="isPanelView"
+              /> -->
             </div>
             <div v-if="activeTab == 'notes'">
               <Notes
@@ -311,9 +267,7 @@
 <script>
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
@@ -338,19 +292,14 @@ import {
   isLegal,
   isNonLegal,
   hasStatementOfSuitability,
-  hasIndependentAssessments,
-  hasCV,
-  hasCoveringLetter,
-  hasSelfAssessment
+  hasIndependentAssessments
 } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
     TabsList,
     AgencyReport,
-    DownloadLink,
     EventRenderer,
-    FileUpload,
     Modal,
     SubmissionExtension,
     Notes,
@@ -413,15 +362,6 @@ export default {
     },
     hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
-    },
-    hasCV() {
-      return hasCV(this.exercise);
-    },
-    hasCoveringLetter() {
-      return hasCoveringLetter(this.exercise);
-    },
-    hasSelfAssessment() {
-      return hasSelfAssessment(this.exercise);
     },
     isVersion2() {
       if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
@@ -661,11 +601,6 @@ export default {
     },
     submitApplication() {
       this.$store.dispatch('application/submit');
-    },
-    doFileUpload(val, field) {
-      if (val) {
-        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
-      }
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();

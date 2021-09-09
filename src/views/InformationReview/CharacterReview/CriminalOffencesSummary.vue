@@ -2,7 +2,7 @@
   <div>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
+        <dt class="govuk-summary-list__key widerColumn">
           Has been convicted for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
@@ -17,9 +17,9 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl class="govuk-summary-list  govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
+        <dt class="govuk-summary-list__key widerColumn">
           Has been cautioned for a criminal offence
         </dt>
         <dd class="govuk-summary-list__value">
@@ -63,7 +63,7 @@ export default {
   },
   computed: {
     requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : '';
     },
     emptyDetailObject() {
       return {
@@ -100,7 +100,7 @@ export default {
 
 <style scoped>
   .widerColumn {
-    width: 50%;
+    width: 70%;
   }
 </style>
 

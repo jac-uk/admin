@@ -22,11 +22,6 @@
             <dt class="govuk-summary-list__key">
               {{ key | lookup }}
             </dt>
-            <!-- <dd
-              v-if="true"
-              class="govuk-summary-list__value"
-            >
-            </dd> -->
             <dd
               v-if="data[index][key] instanceof Array && key === 'tasks'"
               class="govuk-summary-list__value"
@@ -91,15 +86,11 @@
     </div>
     <div
       v-else
-      style="display: inline-block"
+      style="width: 100%; display: inline-block"
     >
-      <div
-        style="width: 100%; display: inline-block"
-      >
-        <span>
-          No {{ field | lookup }} declaired
-        </span>
-      </div>
+      <span>
+        No {{ field | lookup }} declaired
+      </span>
     </div>
     <button
       v-if="edit"

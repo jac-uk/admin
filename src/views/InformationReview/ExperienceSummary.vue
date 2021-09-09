@@ -103,49 +103,49 @@
       > -->
       <!-- ??? may be duplicate  ??? -->
       <!-- confused -->
-      <!-- <div
-          v-if="application.feePaidOrSalariedSatForThirtyDays == false || application.feePaidOrSalariedJudge == false"
-          class="govuk-summary-list__row"
+      <div
+        v-if="application.feePaidOrSalariedSatForThirtyDays == false || application.feePaidOrSalariedJudge == false"
+        class="govuk-summary-list__row"
+      >
+        <h2 class="govuk-heading-l">
+          Memberships
+        </h2>
+        <InformationReviewSectionRenderer
+          :data="application.memberships"
+          :data-default="emptyMembershipObject"
+          :edit="editable"
+          field="memberships"
+          @changeField="changeExperience"
+        />
+        <dl
+          v-for="(membership, index) in application.memberships"
+          :key="index"
         >
-          <h2 class="govuk-heading-l">
-            Memberships
-          </h2>
-          <InformationReviewSectionRenderer
-            :data="application.memberships"
-            :data-default="emptyMembershipObject"
-            :edit="editable"
-            field="memberships"
-            @changeField="changeExperience"
-          />
-          <dl
-            v-for="(membership, index) in application.memberships"
-            :key="index"
-          >
-            <dt class="govuk-summary-list__key">
-              {{ index }}
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <InformationReviewRenderer
-                :data="membership.date"
-                :edit="editable"
-                type="date"
-                field="date"
-                @changeField="changeExperience"
-              />
+          <dt class="govuk-summary-list__key">
+            {{ index }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :data="membership.date"
+              :edit="editable"
+              type="date"
+              field="date"
+              @changeField="changeExperience"
+            />
 
-              <ul class="govuk-list">
-                <li>{{ membership.date | formatDate }}</li>
-                <li>{{ membership.number }}</li>
-                <li>{{ membership.information }}</li>
-              </ul>
-            </dd>
-          </dl>
-        </div> -->
+            <ul class="govuk-list">
+              <li>{{ membership.date | formatDate }}</li>
+              <li>{{ membership.number }}</li>
+              <li>{{ membership.information }}</li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
       <!-- ??? may be duplicate  ??? -->
       <!-- </dl> -->
     </div>
     <!-- Experience -->
-    <!-- <div
+    <div
       v-if="isNonLegal"
       class="govuk-!-margin-top-9"
     >
@@ -207,9 +207,9 @@
       >
         No information provided
       </div>
-    </div> -->
+    </div>
     <!-- PQE? -->
-    <!-- <div
+    <div
       v-if="isLegal"
       class="govuk-!-margin-top-9"
     >
@@ -249,9 +249,9 @@
           {{ application.skillsAquisitionDetails }}
         </dd>
       </div>
-    </div> -->
+    </div>
     <!-- Gaps in Employment -->
-    <!-- <div
+    <div
       v-if="!isNonLegal"
       class="govuk-!-margin-top-9"
     >
@@ -326,9 +326,9 @@
           </dd>
         </div>
       </dl>
-    </div> -->
+    </div>
     <!-- Reasonable length of service -->
-    <!-- <div
+    <div
       v-if="!isPanelView"
       class="govuk-!-margin-top-9"
     >
@@ -348,7 +348,7 @@
           </dd>
         </div>
       </dl>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -371,6 +371,10 @@ export default {
     editable: {
       type: [Boolean, Function, Promise],
       required: true,
+      default: false,
+    },
+    isPanelView: {
+      type: Boolean,
       default: false,
     },
   },

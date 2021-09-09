@@ -6,7 +6,7 @@
       Equality and diversity information
     </h2>
     <dl
-      v-if="application.equalityAndDiversitySurvey"
+      v-if="application.equalityAndDiversitySurvey || editable"
       class="govuk-summary-list"
     >
       <div class="govuk-summary-list__row">
@@ -577,6 +577,12 @@
         </dd>
       </div>
     </dl>
+    <span
+      v-else
+      class="govuk-body"
+    >
+      No information provided
+    </span>
   </div>
 </template>
 <script>

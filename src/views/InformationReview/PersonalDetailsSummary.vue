@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-l">
       Personal details
       <span class="govuk-hint print-none">

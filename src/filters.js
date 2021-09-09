@@ -47,6 +47,7 @@ const lookup = (value) => {
     otherFeePaidJudicialRoleDetails: 'Other Fee-Paid Judicial Role Details',
 
     // 'xxx': 'xxx',`
+    subjectOfAllegationOrClaimOfProfessionalMisconductDetails: 'allegation or claim',
   };
 
   returnValue = lookup[value];

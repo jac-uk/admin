@@ -1,55 +1,67 @@
 <template>
   <div>
-    <h2 class="govuk-heading-l">
-      Character information
-    </h2>
-    <dl 
-      v-if="isVersion2"
-      class="govuk-summary-list"
-    >
-      <CriminalOffencesSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <FixedPenaltiesSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <MotoringOffencesSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <FinancialMattersSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <ProfessionalConductSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <FurtherInformationSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      />
-      <CharacterDeclarationSummary
-        :character-information="application.characterInformationV2"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      /> 
-    </dl>
-    <dl v-else>
-      <CharacterInformationSummaryV1
-        :character-information="application.characterInformation || {}"
-        :edit="editable"
-        @changeCharacterInfo="changeCharacterInfo"
-      /> 
-    </dl>
+    <div>
+      <h2 class="govuk-heading-l">
+        Character information
+      </h2>
+      <dl 
+        v-if="isVersion2"
+        class="govuk-summary-list"
+      >
+        <div v-if="Object.values(application.characterInformationV2).some(item => item.length) || editable">
+          <CriminalOffencesSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <FixedPenaltiesSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <MotoringOffencesSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <FinancialMattersSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <ProfessionalConductSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <FurtherInformationSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+          <CharacterDeclarationSummary
+            :character-information="application.characterInformationV2 || {}"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          />
+        </div>
+        <div v-else>
+          No information providied
+        </div>
+      </dl>
+      <dl v-else>
+        <div v-if="Object.values(application.characterInformation).some(item => item.length) || editable">
+          <CharacterInformationSummaryV1
+            :character-information="application.characterInformation"
+            :edit="editable"
+            @changeCharacterInfo="changeCharacterInfo"
+          /> 
+        </div>
+        <div v-else>
+          No information providied
+        </div>
+      </dl>
+    </div>
   </div>
 </template>
 
@@ -104,7 +116,7 @@ export default {
   methods: {
     changeCharacterInfo(obj) {
       let myCharacterInfo;
-      if (this.isVersion2 && this.application.characterInformationV2) {
+      if (this.isVersion2) {
         myCharacterInfo = { ...this.application.characterInformationV2, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
         this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });

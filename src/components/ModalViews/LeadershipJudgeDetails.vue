@@ -65,6 +65,13 @@ export default {
     TextField,
   },
   extends: Form,
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  },
   data() {
     return {
       email: null,
@@ -101,7 +108,7 @@ export default {
             title: this.title,
           },
         };
-        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
+        await this.$store.dispatch('application/update', { data: data, id: this.application.userId });
         this.closeModal();
       }
     },

@@ -65,6 +65,13 @@ export default {
     TextField,
   },
   extends: Form,
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+  },
   data() {
     return {
       email: null,
@@ -111,8 +118,8 @@ export default {
             secondAssessorTitle: this.title,
           };
         }
-        await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+        await this.$store.dispatch('application/update', { data: data, id: this.application.userId });
+        await this.$store.dispatch('assessment/update', { data: data, id: this.application.userId, AssessorNr: this.$attrs.AssessorNr });
         this.closeModal();
       }
     },
