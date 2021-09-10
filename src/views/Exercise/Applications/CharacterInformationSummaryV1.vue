@@ -15,7 +15,7 @@
           :data="characterInformation.criminalOffences"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="criminalOffences"
           @changeField="changeCharacterFlag"
         />
@@ -43,7 +43,7 @@
           :data="characterInformation.nonMotoringFixedPenaltyNotices"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="nonMotoringFixedPenaltyNotices"
           @changeField="changeCharacterFlag"
         />
@@ -72,7 +72,7 @@
           :data="characterInformation.drivingDisqualificationDrinkDrugs"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="drivingDisqualificationDrinkDrugs"
           @changeField="changeCharacterFlag"
         />
@@ -101,7 +101,7 @@
           :data="characterInformation.endorsementsOrMotoringFixedPenalties"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="endorsementsOrMotoringFixedPenalties"
           @changeField="changeCharacterFlag"
         />
@@ -130,7 +130,7 @@
           :data="characterInformation.declaredBankruptOrIVA"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="declaredBankruptOrIVA"
           @changeField="changeCharacterFlag"
         />
@@ -159,7 +159,7 @@
           :data="characterInformation.lateTaxReturnOrFined"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="lateTaxReturnOrFined"
           @changeField="changeCharacterFlag"
         />
@@ -188,7 +188,7 @@
           :data="characterInformation.involvedInProfessionalMisconduct"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="involvedInProfessionalMisconduct"
           @changeField="changeCharacterFlag"
         />
@@ -216,7 +216,7 @@
           :data="characterInformation.diciplinaryActionOrAskedToResign"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="diciplinaryActionOrAskedToResign"
           @changeField="changeCharacterFlag"
         />
@@ -245,7 +245,7 @@
           :data="characterInformation.otherCharacterIssues"
           :options="[true, false]"
           :edit="edit"
-          :selection="true"
+          type="selection"
           field="otherCharacterIssues"
           @changeField="changeCharacterFlag"
         />

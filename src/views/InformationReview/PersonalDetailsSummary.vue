@@ -141,7 +141,7 @@
             :value="application.personalDetails.citizenship"
             :data="application.personalDetails.citizenship"
             :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
-            :selection="true"
+            type="selection"
             field="citizenship"
             @changeField="changeUserDetails"
           />
@@ -161,7 +161,7 @@
             :value="application.personalDetails.reasonableAdjustments"
             :data="application.personalDetails.reasonableAdjustments"
             :options="[true, false]"
-            :selection="true"
+            type="selection"
             field="reasonableAdjustments"
             @changeField="changeUserDetails"
           />

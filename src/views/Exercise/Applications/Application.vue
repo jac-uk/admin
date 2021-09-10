@@ -199,7 +199,7 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <!-- <PersonalDetailsSummary 
+              <PersonalDetailsSummary 
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
               />
@@ -208,6 +208,7 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
               />
+              <!-- 
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :editable="editable"
@@ -219,12 +220,12 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
+              -->
               <QualificationsAndMembershipsSummary 
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
               />
-              -->
               <ExperienceSummary
                 :application="application"
                 :exercise="exercise"
