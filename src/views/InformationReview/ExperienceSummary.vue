@@ -187,7 +187,8 @@
       </dl>
     </div>
     <!-- Gaps in Employment -->
-    <!-- <div
+    <!-- 
+    <div
       v-if="!isNonLegal"
       class="govuk-!-margin-top-9"
     >
@@ -263,6 +264,82 @@
         </div>
       </dl>
     </div> -->
+    <div
+      v-if="!isNonLegal"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Gaps in employment
+      </h2>
+
+      <p
+        v-if="!hasEmploymentGaps"
+        class="govuk-body"
+      >
+        No employment gaps declared.
+      </p>
+
+      <dl
+        v-for="item in application.employmentGaps"
+        v-else
+        :key="item.name"
+        class="govuk-summary-list govuk-!-margin-bottom-8"
+      >
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Date of gap
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul
+              v-if="item.startDate"
+              class="govuk-list"
+            >
+              <li v-if="item.endDate">
+                {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
+              </li>
+              <li v-else>
+                {{ item.startDate | formatDate }} — current
+              </li>
+            </ul>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Details
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul class="govuk-list">
+              <li>{{ item.details }}</li>
+            </ul>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Law-related tasks
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul class="govuk-list">
+              <li
+                v-for="task in item.tasks"
+                :key="task.name"
+              >
+                <p class="govuk-body govuk-!-margin-bottom-0">
+                  {{ task | lookup }}
+                </p>
+                <p
+                  v-if="task == 'other'"
+                  class="govuk-body govuk-!-margin-bottom-0"
+                >
+                  {{ item.otherTasks }}
+                </p>
+              </li>
+            </ul>
+          </dd>
+        </div>
+      </dl>
+    </div>
 
     <!-- Reasonable length of service -->
     <!-- <div
@@ -298,107 +375,6 @@
         </div>
       </dl>
     </div> -->
-
-    <!-- 
-
-  <div
-    v-if="!isNonLegal"
-    class="govuk-!-margin-top-9"
-  >
-    <h2 class="govuk-heading-l">
-      Gaps in employment
-    </h2>
-
-    <p
-      v-if="!hasEmploymentGaps"
-      class="govuk-body"
-    >
-      No employment gaps declared.
-    </p>
-
-    <dl
-      v-for="item in application.employmentGaps"
-      v-else
-      :key="item.name"
-      class="govuk-summary-list govuk-!-margin-bottom-8"
-    >
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Date of gap
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul
-            v-if="item.startDate"
-            class="govuk-list"
-          >
-            <li v-if="item.endDate">
-              {{ item.startDate | formatDate }} to {{ item.endDate | formatDate }}
-            </li>
-            <li v-else>
-              {{ item.startDate | formatDate }} — current
-            </li>
-          </ul>
-        </dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Details
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li>{{ item.details }}</li>
-          </ul>
-        </dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Law-related tasks
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="task in item.tasks"
-              :key="task.name"
-            >
-              <p class="govuk-body govuk-!-margin-bottom-0">
-                {{ task | lookup }}
-              </p>
-              <p
-                v-if="task == 'other'"
-                class="govuk-body govuk-!-margin-bottom-0"
-              >
-                {{ item.otherTasks }}
-              </p>
-            </li>
-          </ul>
-        </dd>
-      </div>
-    </dl>
-  </div>
-
-  <div
-    v-if="!isPanelView"
-    class="govuk-!-margin-top-9"
-  >
-    <h2 class="govuk-heading-l">
-      Reasonable length of service
-    </h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-8">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Can work a reasonable length of service
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ application.canGiveReasonableLOS | toYesNo }}
-          <p v-if="application.canGiveReasonableLOS == false">
-            {{ application.cantGiveReasonableLOSDetails }}
-          </p>
-        </dd>
-      </div>
-    </dl>
-  </div> -->
   </div>
 </template>
 <script>
