@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- qualifications -->
-    
     <div>
       <h2 class="govuk-heading-l">
         Qualifications
@@ -242,37 +241,11 @@
       </div>
     </div>
 
-    <!-- experience -->
-    <div
-      v-if="isNonLegal"
-      class="govuk-!-margin-top-9"
-    >
-      <h2 class="govuk-heading-l">
-        Experience
-      </h2>
-      <div v-if="application.experience && application.experience.length">
-        <InformationReviewSectionRenderer
-          :value="application.experience"
-          :data="application.experience"
-          :data-default="emptyExperienceObject"
-          :edit="editable"
-          field="experience"
-          @changeField="changeQualificationOrMembership"
-        />
-      </div>
-      <div
-        v-else
-        class="govuk-body"
-      >
-        No information provided
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 import {
   hasRelevantMemberships,
@@ -283,7 +256,6 @@ export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
     InformationReviewRenderer,
-    InformationReviewSectionRenderer,
   },
   props: {
     application: {

@@ -48,6 +48,8 @@ const lookup = (value) => {
 
     // 'xxx': 'xxx',`
     subjectOfAllegationOrClaimOfProfessionalMisconductDetails: 'allegation or claim',
+    orgBusinessName: 'Organisation or business',
+    jobTitle: 'Job Title',
   };
 
   returnValue = lookup[value];

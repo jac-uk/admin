@@ -8,9 +8,9 @@
         :key="item.name"
         class="govuk-!-margin-bottom-6"
       >
-        <span>
+        <!-- <span>
           {{ index + 1 }}:
-        </span>
+        </span> -->
         <div
           v-for="(value, key) in dataDefault"
           :key="`${key}_${index}`"
