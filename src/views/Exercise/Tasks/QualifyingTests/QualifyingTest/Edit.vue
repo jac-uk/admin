@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-l">
-        Edit qualifying test details
+        Edit {{ isTieBreaker ? 'equal merit tie-breaker' : 'qualifying test' }} details
       </h2>
 
       <ErrorSummary
@@ -24,6 +24,7 @@
         type="datetime"
         label="Start date"
         required
+        :min-date="minDate"
       />
 
       <DateInput
@@ -32,6 +33,7 @@
         type="datetime"
         label="End date"
         required
+        :min-date="minDate"
       />
 
       <TextField
@@ -92,8 +94,8 @@ export default {
 
     const defaults = {
       title: null,
-      startDate: this.getTimelineDate(exercise, data.type, 'start') || null,
-      endDate: this.getTimelineDate(exercise, data.type, 'end') || null,
+      startDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'Start') : this.getTimelineDate(exercise, data.type, 'Start')) || null,
+      endDate: (data.isTieBreaker ? this.getEMZDate(exercise, 'End') : this.getTimelineDate(exercise, data.type, 'StarEnd')) || null,
       testDuration: null,
       additionalInstructions: [],
       feedbackSurvey: null,
@@ -102,6 +104,7 @@ export default {
     const qualifyingTest = { ...defaults, ...data };
 
     return {
+      exercise,
       repeatableFields: {
         QTAdditionalInstruction,
       },
@@ -112,12 +115,23 @@ export default {
     testTypes() {
       return QUALIFYING_TEST.TYPE;
     },
-
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    minDate() {
+      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'Start') : null;
+    },
+    maxDate() {
+      return this.isTieBreaker ? this.getEMZDate(this.exercise, 'End') : null;
+    },
   },
   methods: {
     async save() {
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
-      this.$router.push({ name: 'qualifying-test-question-builder' });
+      this.$router.push({ name: `${this.routeNamePrefix}-question-builder` });
     },
     getTimelineDate(exercise, qtType, dateType) {
       if (!exercise.shortlistingMethods) {
@@ -136,7 +150,7 @@ export default {
       }
 
       const date = exercise[`${fieldName}Date`];
-      const time = exercise[`${fieldName}${dateType[0].toUpperCase()}${dateType.slice(1)}Time`];
+      const time = exercise[`${fieldName}${dateType}Time`];
 
       let datetime;
       if (date instanceof Date) {
@@ -148,6 +162,13 @@ export default {
       }
 
       return datetime;
+    },
+    getEMZDate(exercise, dateType) {
+      const date = exercise[`equalMeritSecondStage${dateType}Date`];
+      if (date instanceof Date) {
+        return new Date(date.getTime());
+      }
+      return;
     },
   },
 };

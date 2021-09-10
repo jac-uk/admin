@@ -8,6 +8,7 @@ import { auth } from '@/firebase';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
 import * as Integrations from '@sentry/integrations';
+import './styles/main.scss';
 
 if (process.env.NODE_ENV !== 'development') {
   // Split the URL

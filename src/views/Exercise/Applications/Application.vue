@@ -877,7 +877,10 @@
                   :key="index"
                   class="govuk-summary-list"
                 >
-                  <div class="govuk-summary-list__row">
+                  <div
+                    v-if="exercise.additionalWorkingPreferences[index]"
+                    class="govuk-summary-list__row"
+                  >
                     <dt class="govuk-summary-list__key">
                       {{ exercise.additionalWorkingPreferences[index].question }}
                       <span class="govuk-body govuk-!-font-size-19">
@@ -1818,7 +1821,6 @@
                 {{ application.secondAssessorTitle }}
               </dd>
             </div>
-
             <div class="govuk-summary-list__row print-none">
               <dt class="govuk-summary-list__key">
                 Email
@@ -1827,7 +1829,6 @@
                 {{ application.secondAssessorEmail }}
               </dd>
             </div>
-
             <div class="govuk-summary-list__row print-none">
               <dt class="govuk-summary-list__key">
                 Telephone
@@ -1968,7 +1969,6 @@
           <h2 class="govuk-heading-l">
             Additional Selection Criteria
           </h2>
-
           <dl class="govuk-summary-list">
             <div
               v-for="(item, index) in application.selectionCriteriaAnswers"
@@ -1977,6 +1977,10 @@
             >
               <dt class="govuk-summary-list__key">
                 {{ exercise.selectionCriteria[index].title }}
+                <span v-if="exercise.selectionCriteria[index].wordLimit">
+                  <br>
+                  {{ exercise.selectionCriteria[index].wordLimit + ' words ' }}
+                </span>
               </dt>
               <dd class="govuk-summary-list__value">
                 <span v-if="item.answer">
@@ -2129,6 +2133,12 @@
             </div>
           </dl>
         </div>
+        <div v-if="activeTab == 'characterchecks'">
+          <CharacterChecks
+            :application="application"
+            :exercise="exercise"
+          />
+        </div>
       </div>
 
       <div v-if="activeTab == 'issues'">
@@ -2173,6 +2183,7 @@ import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalCo
 import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
 import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
 import CharacterInformationSummaryV1 from './CharacterInformationSummaryV1.vue';
+import CharacterChecks from '@/components/CharacterChecks/CharacterChecks';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import {
   isLegal,
@@ -2207,6 +2218,7 @@ export default {
     FurtherInformationSummary,
     CharacterDeclarationSummary,
     CharacterInformationSummaryV1,
+    CharacterChecks,
   },
   data() {
     return {
@@ -2230,6 +2242,10 @@ export default {
         {
           ref: 'agency',
           title: 'Agency report',
+        },
+        {
+          ref: 'characterchecks',
+          title: 'Character checks',
         },
       ],
       activeTab: 'full',

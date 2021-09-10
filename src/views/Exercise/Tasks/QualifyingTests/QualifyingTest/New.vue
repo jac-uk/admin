@@ -2,7 +2,7 @@
   <div class="govuk-grid-column-two-thirds">
     <form @submit.prevent="validateAndSave">
       <h2 class="govuk-heading-l">
-        Create a qualifying test
+        Create {{ isTieBreaker ? 'an equal merit tie-breaker' : 'a qualifying test' }}
       </h2>
 
       <ErrorSummary
@@ -56,11 +56,18 @@ export default {
     Checkbox,
   },
   extends: Form,
+  props: {
+    isTieBreaker: {
+      required: true,
+      type: Boolean,
+    },
+  },
   data(){
     const exercise = this.$store.state.exerciseDocument.record;
 
     const defaults = {
-      type: null,
+      isTieBreaker: this.isTieBreaker,
+      type: this.isTieBreaker ? QUALIFYING_TEST.TYPE.SCENARIO : null,
       vacancy: {
         mailbox: exercise.exerciseMailbox,
         contactPhone: exercise.exercisePhoneNumber,
@@ -80,7 +87,10 @@ export default {
   },
   computed: {
     testTypes() {
-      return QUALIFYING_TEST.TYPE;
+      return this.isTieBreaker ? [QUALIFYING_TEST.TYPE.SCENARIO] : QUALIFYING_TEST.TYPE;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
@@ -91,7 +101,7 @@ export default {
       const qualifyingTestId = await this.$store.dispatch('qualifyingTest/create', this.qualifyingTest);
 
       this.$router.push({
-        name: 'qualifying-test-edit',
+        name: `${this.routeNamePrefix}-edit`,
         params: {
           qualifyingTestId: qualifyingTestId,
         },
