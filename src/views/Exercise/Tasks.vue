@@ -28,6 +28,12 @@ export default {
         nav: '/tasks/qualifying-tests', // TODO check this is needed
       },
     });
+    if (exercise.equalMeritSecondStageStartDate) {
+      sideNavigation.push({
+        title: 'Equal Merit Tie-breakers',
+        path: `${path}/equal-merit-tie-breakers`,
+      });
+    }
     if (exercise.applicationRecords) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
@@ -42,13 +48,18 @@ export default {
         },
       );
     }
-    if (exercise.siftStartDate) {
-      sideNavigation.push(
-        {
-          title: 'Sift',
-          path: `${path}/sift`,
-        },
-      );
+    if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+      if (
+        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+      ) {
+        sideNavigation.push(
+          {
+            title: 'Sift',
+            path: `${path}/sift`,
+          },
+        );
+      }
     }
     if (exercise.selectionDays) {
       sideNavigation.push(

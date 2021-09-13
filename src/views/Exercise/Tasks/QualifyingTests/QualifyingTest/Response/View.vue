@@ -2,8 +2,8 @@
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
       <h2 class="govuk-heading-m">
-        Qualifying Test Response:
-        <routerLink :to="{ name: 'qualifying-test-view', params: { qualifyingTestId: $route.params.qualifyingTestId } }">
+        {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
+        <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
           {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
         </routerLink>
       </h2>
@@ -25,15 +25,15 @@
           </dt>
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
-            <ActionButton
+            <button
               v-if="authorisedToPerformAction"
               :disabled="hasActivated"
               type="secondary"
-              class="float-right govuk-!-margin-bottom-1"
+              class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1"
               @click="resetTest"
             >
               Reset
-            </ActionButton>
+            </button>
             <ActionButton
               v-if="authorisedToPerformAction"
               :disabled="hasCompleted"
@@ -172,7 +172,38 @@
           </dd>
         </div>
       </dl>
+      <Modal
+        ref="confirmResetModal"
+      >
+        <div class="container">
+          <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+            Caution
+          </div>
+          <div class="modal__content govuk-!-padding-4">
+            <p class="modal__message govuk-body-l">
+              Reseting this candidate's test will overwrite their
+              'started', 'completed' and 'time taken' fields.
+              <br>
+              Please ensure there is a record of these before continuing.
+            </p>
 
+            <span>
+              <button
+                class="govuk-button govuk-button--secondary govuk-!-margin-right-3 deny info-btn--modal--cancel"
+                @click="$refs['confirmResetModal'].closeModal()"
+              >
+                Cancel
+              </button>
+            </span>
+            <ActionButton
+              class="govuk-button govuk-button--warning"
+              @click="confirmReset"
+            >
+              Reset Test
+            </ActionButton>
+          </div>
+        </div>
+      </Modal>
       <div v-if="hasStarted">
         <TabsList
           :tabs="tabs"
@@ -208,8 +239,8 @@
                 {{ questionLabel }} {{ index + 1 }}
                 <QuestionDuration
                   v-if="!isScenario"
-                  :start="responses[index].started"
-                  :end="responses[index].completed"
+                  :start="responses[index] && responses[index].started"
+                  :end="lastUpdatedQuestion(index)"
                 />
               </dt>
               <dd class="govuk-summary-list__value">
@@ -258,7 +289,7 @@
                 </ol>
 
                 <ol
-                  v-if="isScenario"
+                  v-if="isScenario && responses[index]"
                 >
                   <li
                     v-for="(res, i) in responses[index].responsesForScenario"
@@ -294,7 +325,7 @@
         </div>
         <div v-if="activeTab === 'logs'">
           <h2 class="govuk-heading-m">
-            Logs
+            Connection
           </h2>
           <div
             v-for="(log, i) in logs"
@@ -320,7 +351,126 @@
             </table>
           </div>
         </div>
-      </div><!-- hasStarted -->
+        <div v-if="activeTab === 'client'">
+          <h2 class="govuk-heading-m">
+            Client
+          </h2>
+          <dl
+            v-if="response.client"
+            class="govuk-summary-list"
+          >
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Platform
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.platform }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Browser
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.userAgent }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Timezone
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ response.client.timezone }}
+              </dd>
+            </div>
+            <div
+              v-if="initialServerOffset"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Initial time offset
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ initialServerOffset / 1000 }} seconds
+              </dd>
+            </div>
+            <div
+              v-if="latestServerOffset"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key">
+                Latest time offset
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ latestServerOffset / 1000 }} seconds
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <div v-if="activeTab === 'history'">
+          <h2 class="govuk-heading-m">
+            History
+          </h2>
+          <div v-if="responses.length">
+            <table class="history-logs">
+              <div
+                v-for="(testQuestion, index) in questions"
+                :key="index"
+              >
+                <tr
+                  class="log_row"
+                >
+                  <td rowspan="8">
+                    Question {{ index + 1 }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>First started question: </td><td>{{ responses[index].started | formatDate('datetime') }}</td>
+                </tr>
+                <tr>
+                  <td>Last updated answer: </td><td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
+                </tr>
+                <tr>
+                  <td>Amount of time on question: </td><td>{{ amountOfTimeOnQuestion(index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times visited question: </td><td>{{ amountOfTimeVisitedQuestion(index) }} </td>
+                </tr>
+                <tr>
+                  <td>How many times saved: </td><td>{{ historyCount('save', index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times skipped: </td><td>{{ historyCount('skip', index) }}</td>
+                </tr>
+                <tr>
+                  <td>How many times changed answer: </td><td>{{ historyCount('changed', index) }}</td>
+                </tr>
+              </div>
+            </table>
+          </div>
+          <div
+            v-for="(log, i, index) in sortHistory()"
+            :key="i"
+          >
+            <table>
+              <tr class="log_row">
+                <td class="log_row_time">
+                  {{ differenceInTime(index, log.timestamp) }}
+                </td>
+                <td class="log_row_date">
+                  <span v-if="log.action">{{ log.action }} </span>
+                  <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
+                  <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
+                  <!-- <span v-if="log.location">{{ log.location }}</span> -->
+
+                  <!-- <br>
+                  {{ i }}<br> {{ log }} -->
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -334,12 +484,14 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   components: {
     EditableField,
     Select,
     TabsList,
+    Modal,
     QuestionDuration,
     ActionButton,
   },
@@ -349,20 +501,37 @@ export default {
       isEditingTestDate: false,
       activeTab: 'questions',
       authorisedToPerformAction: false,
+      history: null,
     };
   },
   computed: {
     tabs(){
-      return [
-        {
+      const tabsList = [];
+      if (this.response) {
+        tabsList.push({
           ref: 'questions',
           title: 'Questions',
-        },
-        {
-          ref: 'logs',
-          title: 'Logs',
-        },
-      ];
+        });
+        if (this.response.client) {
+          tabsList.push({
+            ref: 'client',
+            title: 'Client',
+          });
+        }
+        if (this.logs) {
+          tabsList.push({
+            ref: 'logs',
+            title: 'Connection',
+          });
+        }
+        if (this.response.history) {
+          tabsList.push({
+            ref: 'history',
+            title: 'History',
+          });
+        }
+      }
+      return tabsList;
     },
     responseId() {
       const id = this.$route.params.responseId;
@@ -440,6 +609,10 @@ export default {
           return { ...item, ...this.qualifyingTest.testQuestions.questions[index] };
         });
       }
+      // #1077 get questions from the QT when copied over
+      if (returnQuestions.length === 0) {
+        returnQuestions = this.qualifyingTest.testQuestions && this.qualifyingTest.testQuestions.questions;
+      }
       return returnQuestions;
     },
     timeTaken() {
@@ -467,17 +640,33 @@ export default {
       return this.response.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
     hasStarted() {
-      return this.response && (
-        this.response.status === QUALIFYING_TEST.STATUS.STARTED
-        || this.response.status === QUALIFYING_TEST.STATUS.COMPLETED
-      );
+      return this.response ? true : false;
     },
     hasCompleted() {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
     logs() {
-      const qtList = this.$store.state.connectionMonitor.records;
-      return qtList;
+      return this.$store.state.connectionMonitor.records;
+    },
+    isTieBreaker() {
+      return this.qualifyingTest.isTieBreaker;
+    },
+    routeNamePrefix() {
+      return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    initialServerOffset() {
+      if (this.response && this.response.client && this.response.statusLog) {
+        const offset = this.response.statusLog.started - this.response.client.timestamp;
+        return offset;
+      }
+      return false;
+    },
+    latestServerOffset() {
+      if (this.response && this.response.lastUpdated && this.response.lastUpdatedClientTime) {
+        const offset = this.response.lastUpdated - this.response.lastUpdatedClientTime;
+        return offset;
+      }
+      return false;
     },
   },
   watch: {
@@ -485,9 +674,10 @@ export default {
       if (newActiveTab === 'logs') {
         const candidateId = this.candidate.id;
         const qualifyingTestId = this.$route.params.qualifyingTestId;
-        // eslint-disable-next-line no-console
-        // console.log('mounted', candidateId, qualifyingTestId, this);
         await this.$store.dispatch('connectionMonitor/bind', { qualifyingTestId, candidateId });
+      }
+      if (newActiveTab === 'history') {
+        this.dateCalculate = null;
       }
     },
   },
@@ -497,10 +687,14 @@ export default {
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
-    resetTest() {
+    confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
+        this.$refs['confirmResetModal'].closeModal();
       }
+    },
+    resetTest() {
+      this.$refs['confirmResetModal'].openModal();
     },
     markAsCompleted() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
@@ -581,7 +775,7 @@ export default {
         await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: destinationTest, qualifyingTestResponse: this.response });
         this.isEditingTestDate = false;
         this.$router.push({
-          name: 'qualifying-test-responses',
+          name: `${this.routeNamePrefix}-responses`,
           params: {
             qualifyingTestId: this.qualifyingTest.id,
             status: 'all',  // TODO go to same list status as before
@@ -600,22 +794,102 @@ export default {
         return new Date(minDate).toISOString().substr(11, 8);
       }
     },
+    differenceInTime(index, date) {
+      const date2 = this.dateCalculate === null ? date : this.dateCalculate ;
+      const minDate = date - date2;
+      this.dateCalculate = date;
+      return index === 0 ? '00:00:00' : new Date(minDate).toISOString().substr(11, 8);
+    },
+    differenceInMills(entry1, entry2) {
+      return (entry1 - entry2);
+    },
     timeOffline(index) {
       const thisTimeOffline = this.logs[index] && this.logs[index].offline;
       const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
       const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
       const timeOffline = nextTimeOnline - thisTimeOffline;
-      if (nextTimeOnline === undefined) {
+      if (nextTimeOnline === undefined || thisTimeOffline === undefined) {
         return;
       } else {
         return new Date(timeOffline).toISOString().substr(11, 8);
       }
     },
+    sortHistory() {
+      let ordered = {};
+      if (this.response.history) {
+        ordered = Object.keys(this.response.history).sort()
+          .reduce(
+            (obj, key) => {
+              obj[key] = this.response.history[key];
+              return obj;
+            },
+            {}
+          );
+      }
+      return ordered;
+    },
+    historyCount(value, index) {
+      let timeSaved = {};
+      if (this.response.history) {
+        timeSaved = Object.keys(this.response.history)
+          .filter(key => {
+            return (this.response.history[key].action === value && this.response.history[key].question === index);
+          });
+      }
+      const amountTimeSaved = Object.keys(timeSaved).length;
+      return amountTimeSaved;
+    },
+    amountOfTimeOnQuestion(index) {
+      let millisecs = 0;
+      if (this.response.history) {
+        Object.keys(this.response.questionSession).map(key => {
+          const item = this.response.questionSession[key];
+          if (item.question === index) {
+            const diff = this.differenceInMills(item.end, item.start);
+            millisecs = millisecs + diff;
+          }
+        });
+      }
+      return new Date(millisecs).toISOString().substr(11, 8);
+    },
+    amountOfTimeVisitedQuestion(index) {
+      let counter = 0;
+      if (this.response.history) {
+        Object.keys(this.response.history).map(key => {
+          const item = this.response.history[key];
+          if (item.question === index && (item.action === 'save' || item.action === 'skip' || item.action === 'exit')) {
+            counter++;
+          }
+        });
+      }
+      return counter;
+    },
+    lastUpdatedQuestion(index) {
+      let latestTimestamp;
+      if (this.response.history) {
+        Object.keys(this.response.history).map(key => {
+          const item = this.response.history[key];
+          if (item.question === index && (item.action === 'save' || item.action === 'changed')) {
+            if (item.timestamp && (!latestTimestamp || item.timestamp > latestTimestamp)) {
+              latestTimestamp = item.timestamp;
+            }
+          }
+        });
+      } else {  // default to completed timestamp
+        if (this.responses && this.responses[index]) {
+          latestTimestamp = this.responses[index].completed;
+        }
+      }
+      return latestTimestamp;
+    },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .deny {
+    background-color: #f3f2f1;
+  }
   .answer--right {
     font-weight: bold;
     text-decoration: underline;
@@ -638,5 +912,8 @@ export default {
     line-height: 1;
     padding: 5px;
   }
+  .history-logs [rowspan] {
+    font-weight: bold;
+    font-size: larger;
+  }
 </style>
-

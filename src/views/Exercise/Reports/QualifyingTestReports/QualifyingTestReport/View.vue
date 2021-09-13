@@ -4,7 +4,7 @@
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-m">
-            Qualifying Test Report
+            {{ tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test' }} Report
           </h2>
           <h3 class="govuk-heading-l govuk-!-margin-bottom-0">
             {{ qualifyingTestReport.title }}
@@ -42,7 +42,8 @@
               <button
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 type="button"
-                :disabled="true"
+                :disabled="cutOffScore"
+                @click="setCutOffScore"
               >
                 Set pass mark
               </button>
@@ -66,7 +67,7 @@
           </TableCell>
           <TableCell :title="tableColumns[2].title">
             <RouterLink
-              :to="{ name: 'qualifying-test-report-view-score', params: { qualifyingTestReportId: qualifyingTestReportId, score: row.score } }"
+              :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: row.score } }"
               class="govuk-link"
             >
               {{ row.score }}
@@ -87,6 +88,15 @@
         </template>
       </Table>
     </div>
+    <Modal
+      ref="SetCutOffScoreModal"
+    >
+      <component
+        :is="`SetCutOffScore`"
+        :application-ids="applicationIds"
+        @close="closeModal('SetCutOffScoreModal')"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -96,12 +106,16 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import SetCutOffScore from '@/components/ModalViews/SetCutOffScore';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   components: {
     ActionButton,
     Table,
     TableCell,
+    SetCutOffScore,
+    Modal,
   },
   data() {
     return {
@@ -114,6 +128,7 @@ export default {
         { title: 'Solicitor' },
         { title: 'Disability' },
       ],
+      cutOffScore: null,
     };
   },
   computed: {
@@ -136,11 +151,36 @@ export default {
       });
       return score;
     },
+    tieBreakers() {
+      return this.qualifyingTestReport.tieBreakers;
+    },
+    routeNamePrefix() {
+      return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
+    },
+    applicationIds() {
+      const ids = [];
+      this.qualifyingTestReport.rawData.forEach(data => {
+        ids.push({
+          applicationId: data.application.id,
+          score: data.score,
+        });
+      });
+      return ids;
+    },
   },
   methods: {
+    setCutOffScore() {
+      this.openModal('SetCutOffScoreModal');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+    },
     btnEdit() {
       this.$router.push({
-        name: 'qualifying-test-report-edit',
+        name: `${this.routeNamePrefix}-report-edit`,
         params: {
           qualifyingTestReportId: this.qualifyingTestReportId,
         },
@@ -199,7 +239,7 @@ export default {
       ];
     },
     downloadData() {
-      const title = 'Qualifying Test Report';
+      const title = `${this.tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test'} Report`;
       const data = this.gatherReportData();
       downloadXLSX(
         data,
