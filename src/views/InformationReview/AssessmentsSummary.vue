@@ -17,12 +17,12 @@
           :key="index"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             {{ item.title }}
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :data="application.selectionCriteriaAnswers[index].answer"
+              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answer : null"
               :edit="editable"
               :index="index"
               extension="answer"
@@ -33,8 +33,8 @@
               @changeField="changeAssessmentInfo"
             />
             <InformationReviewRenderer
-              v-if="application.selectionCriteriaAnswers[index].answer"
-              :data="application.selectionCriteriaAnswers[index].answerDetails"
+              v-if="hasAscAnswers && (application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true)"
+              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
               :edit="editable"
               :index="index"
               :data-default="emptyASCObject"
@@ -48,9 +48,13 @@
           </dd>
         </div>
       </dl>
-      <span v-else>No answers provided</span>
+      <dl v-else>
+        <p class="govuk-body">
+          No answers provided
+        </p>
+      </dl>
     </div>
-    
+
     <div
       v-if="hasStatementOfSuitability"
       class="govuk-!-margin-top-9"
@@ -63,7 +67,7 @@
         <div
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Uploaded statement of suitability
           </dt>
           <dd class="govuk-summary-list__value">
@@ -91,7 +95,7 @@
         </div>
       </dl>
     </div>
-      
+
     <div
       v-if="hasSelfAssessment"
       class="govuk-!-margin-top-9"
@@ -109,12 +113,12 @@
           :key="index"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             {{ item.title }}
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :data="application.selectionCriteriaAnswers[index].answer"
+              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answer : null"
               :edit="editable"
               :index="index"
               extension="answer"
@@ -125,8 +129,8 @@
               @changeField="changeAssessmentInfo"
             />
             <InformationReviewRenderer
-              v-if="application.selectionCriteriaAnswers[index].answer"
-              :data="application.selectionCriteriaAnswers[index].answerDetails"
+              v-if="hasAscAnswers && (application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true)"
+              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
               :edit="editable"
               :index="index"
               :data-default="emptyASCObject"
@@ -140,7 +144,11 @@
           </dd>
         </div>
       </dl>
-      <span v-else>No answers provided</span>
+      <dl v-else>
+        <p class="govuk-body">
+          No answers provided
+        </p>
+      </dl>
     </div>
 
     <div
@@ -155,7 +163,7 @@
         <div
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Uploaded CV
           </dt>
           <dd class="govuk-summary-list__value">
@@ -195,7 +203,7 @@
         <div
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Uploaded Covering Letter
           </dt>
           <dd class="govuk-summary-list__value">
@@ -232,7 +240,6 @@ import {
   hasCoveringLetter,
   hasSelfAssessment
 } from '@/helpers/exerciseHelper';
-// import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer'; fs
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
@@ -241,7 +248,6 @@ export default {
   components: {
     DownloadLink,
     FileUpload,
-    // InformationReviewSectionRenderer,
     InformationReviewRenderer,
   },
   props: {
@@ -259,6 +265,7 @@ export default {
   data() {
     return {
       assessorDetails: {},
+      hasAscAnswers: !!this.application.selectionCriteriaAnswers,
     };
   },
   computed: {
@@ -295,7 +302,29 @@ export default {
   },
   methods: {
     changeAssessmentInfo(obj) {
-      console.log(obj);
+      let objChanged = this.application[obj.field] || {};
+
+      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
+        if (!objChanged[obj.index]) {
+          objChanged = {
+            [obj.index]: {},
+          };
+        }
+        objChanged[obj.index][obj.extension] = obj.change;
+      // } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
+      //   objChanged[obj.index] = obj.change;
+      // } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
+      //   if (objChanged.length > 0){
+      //     objChanged.splice(obj.index, 1);
+      //   } else {
+      //     objChanged = [];
+      //   } 
+      } else {
+        objChanged = obj;
+      }
+      const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
+
+      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
     },
     doFileUpload(val, field) {
       if (val) {
@@ -305,3 +334,8 @@ export default {
   },
 };
 </script>
+<style>
+.widerColumn {
+  width: 70%;
+}
+</style>

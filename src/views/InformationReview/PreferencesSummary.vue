@@ -8,7 +8,7 @@
         Part Time Working Preferences
       </h2>
       <dl class="govuk-summary-list">
-        <dt class="govuk-summary-list__key">
+        <dt class="govuk-summary-list__key widerColumn">
           {{ exercise.yesSalaryDetails }}
         </dt>
         <dd
@@ -37,7 +37,7 @@
         v-if="exercise.locationQuestion"
         class="govuk-summary-list"
       >
-        <dt class="govuk-summary-list__key">
+        <dt class="govuk-summary-list__key widerColumn">
           {{ exercise.locationQuestion }}
         </dt>
         <dd
@@ -95,11 +95,10 @@
       </h2>
 
       <dl
-        v-if="application.jurisdictionPreferences"
         class="govuk-summary-list"
       >
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             {{ exercise.jurisdictionQuestion }}
           </dt>
           <dd
@@ -159,7 +158,7 @@
 
       <dl class="govuk-summary-list">
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Applying for a Welsh post
           </dt>
           
@@ -181,7 +180,7 @@
           v-if="application.applyingForWelshPost"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Can speak Welsh
           </dt>
           <dd
@@ -201,7 +200,7 @@
           v-if="application.applyingForWelshPost"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Can read and write in Welsh?
           </dt>
           <dd
@@ -219,6 +218,7 @@
         </div>
       </dl>
     </div>
+
     <div
       v-if="application.additionalWorkingPreferences"
       class="govuk-!-margin-top-9"
@@ -237,7 +237,7 @@
           class="govuk-summary-list"
         >
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
+            <dt class="govuk-summary-list__key widerColumn">
               {{ exercise.additionalWorkingPreferences[index].question }}
               <span class="govuk-body govuk-!-font-size-19">
                 ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
@@ -295,13 +295,11 @@
 </template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-// import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 export default {
   name: 'PersonalDetailsSummary',
   components: {
     InformationReviewRenderer,
-    // InformationReviewSectionRenderer,
   },
   props: {
     application: {
@@ -331,14 +329,23 @@ export default {
   },
   methods: {
     changePreferences(obj) {
-      const objChanged = this.application[obj.field] || [];
+      let objChanged = this.application[obj.field] || [];
 
       if (obj.change && obj.field && obj.hasOwnProperty('index')) {
         objChanged[obj.index].selection = obj.change;
-      } 
+      } else {
+        objChanged = obj;
+      }
       const myPrefs = { ...this.application, ...objChanged };
+
       this.$store.dispatch('application/update', { data: myPrefs, id: this.applicationId });
     },
   },
 };
 </script>
+
+<style scoped>
+  .widerColumn {
+    width: 70%;
+  }
+</style>

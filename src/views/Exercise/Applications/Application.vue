@@ -199,7 +199,6 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <!-- 
               <PersonalDetailsSummary 
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
@@ -211,8 +210,8 @@
               />
               <EqualityAndDiversityInformationSummary
                 :application="application"
+                :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
                 :editable="editable"
-                :is-legal="isLegal"
               />
               <PreferencesSummary
                 :application="application"
@@ -225,14 +224,12 @@
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
               />
-              -->
               <ExperienceSummary
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
-              <!--
               <AssessorsSummary
                 :application="application"
                 :exercise="exercise"
@@ -245,7 +242,6 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
-              -->
             </div>
             <div v-if="activeTab == 'notes'">
               <Notes
@@ -405,22 +401,6 @@ export default {
       default:
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupDetails;
       }
-    },
-    hasEmploymentGaps() {
-      if (Array.isArray(this.application.employmentGaps)) {
-        if (!this.application.employmentGaps.length) {
-          return false;
-        }
-        if (this.application.employmentGaps.length > 1) {
-          return true;
-        } else {
-          const gap = this.application.employmentGaps[0];
-          if (gap.startDate || gap.endDate) {
-            return true;
-          }
-        }
-      }
-      return false;
     },
     isApplied() {
       if (this.application) {

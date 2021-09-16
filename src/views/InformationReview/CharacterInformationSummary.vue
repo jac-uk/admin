@@ -8,7 +8,7 @@
         v-if="isVersion2"
         class="govuk-summary-list"
       >
-        <div v-if="Object.values(application.characterInformationV2).some(item => item.length) || editable">
+        <div v-if="hasValues(application.characterInformationV2) || editable">
           <CriminalOffencesSummary
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
@@ -50,7 +50,7 @@
         </div>
       </dl>
       <dl v-else>
-        <div v-if="Object.values(application.characterInformation).some(item => item.length) || editable">
+        <div v-if="hasValues(application.characterInformation)|| editable">
           <CharacterInformationSummaryV1
             :character-information="application.characterInformation"
             :edit="editable"
@@ -114,16 +114,23 @@ export default {
     },
   },
   methods: {
+    hasValues(target){
+      if (target) {
+        return Object.values(target).some(item => item.length);
+      } else {
+        return false;
+      }
+    },
     changeCharacterInfo(obj) {
       let myCharacterInfo;
       if (this.isVersion2) {
         myCharacterInfo = { ...this.application.characterInformationV2, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
-        this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
+        // this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       } else {
         myCharacterInfo = { ...this.application.characterInformation, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformation: myCharacterInfo }, id: this.applicationId });
-        this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
+        // this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       }
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-l">
-      Personal details
+      Personal details 
       <span class="govuk-hint print-none">
         Any changes made here will also update the candidate information.
       </span>
@@ -14,10 +14,9 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :application-id="application.userId"
-            :value="application.personalDetails.title"
             field="title"
             :edit="editable"
-            :data="application.personalDetails.title"
+            :data="hasPersonalDetails ? application.personalDetails.title : ''"
             @changeField="changeUserDetails"
           />
         </dd>
@@ -33,8 +32,7 @@
           <InformationReviewRenderer
             :edit="editable"
             :application-id="application.userId"
-            :value="application.personalDetails.firstName"
-            :data="application.personalDetails.firstName"
+            :data="hasPersonalDetails ? application.personalDetails.firstName : ''"
             field="firstName"
             @changeField="changeUserDetails"
           />
@@ -51,8 +49,7 @@
           <InformationReviewRenderer
             :edit="editable"
             :application-id="application.userId"
-            :value="application.personalDetails.lastName"
-            :data="application.personalDetails.lastName"
+            :data="hasPersonalDetails ? application.personalDetails.lastName : ''"
             field="lastName"
             @changeField="changeUserDetails"
           />
@@ -69,8 +66,7 @@
           <InformationReviewRenderer
             :edit="editable"
             :application-id="application.userId"
-            :value="application.personalDetails.email"
-            :data="application.personalDetails.email"
+            :data="hasPersonalDetails ? application.personalDetails.email : ''"
             field="email"
             @changeField="changeUserDetails"
           />
@@ -86,8 +82,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.phone"
-            :data="application.personalDetails.phone"
+            :data="hasPersonalDetails ? application.personalDetails.phone : ''"
             field="phone"
             @changeField="changeUserDetails"
           />
@@ -103,8 +98,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.dateOfBirth"
-            :data="application.personalDetails.dateOfBirth"
+            :data="hasPersonalDetails ? application.personalDetails.dateOfBirth : ''"
             type="date"
             field="dateOfBirth"
             @changeField="changeUserDetails"
@@ -121,8 +115,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.nationalInsuranceNumber | formatNIN"
-            :data="application.personalDetails.nationalInsuranceNumber | formatNIN"
+            :data="(hasPersonalDetails ? application.personalDetails.nationalInsuranceNumber: '') | formatNIN "
             field="nationalInsuranceNumber"
             @changeField="changeUserDetails"
           />
@@ -138,8 +131,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.citizenship"
-            :data="application.personalDetails.citizenship"
+            :data="hasPersonalDetails ? application.personalDetails.citizenship : ''"
             :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
             type="selection"
             field="citizenship"
@@ -158,8 +150,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.reasonableAdjustments"
-            :data="application.personalDetails.reasonableAdjustments"
+            :data="hasPersonalDetails ? application.personalDetails.reasonableAdjustments : ''"
             :options="[true, false]"
             type="selection"
             field="reasonableAdjustments"
@@ -170,7 +161,7 @@
     </dl>
   
     <dl 
-      v-if="application.personalDetails.reasonableAdjustments === true"
+      v-if="application.personalDetails && application.personalDetails.reasonableAdjustments === true"
       class="govuk-summary-list govuk-!-margin-bottom-0"
     >
       <div 
@@ -184,8 +175,7 @@
         >
           <InformationReviewRenderer
             :edit="editable"
-            :value="application.personalDetails.reasonableAdjustmentsDetails"
-            :data="application.personalDetails.reasonableAdjustmentsDetails"
+            :data="hasPersonalDetails ? application.personalDetails.reasonableAdjustmentsDetails : ''"
             field="reasonableAdjustmentsDetails"
             @changeField="changeUserDetails"
           />
@@ -219,6 +209,11 @@ export default {
       required: true,
       default: false,
     },
+  },
+  data() {
+    return {
+      hasPersonalDetails: !!this.application.personalDetails,
+    };
   },
   computed: {
     requiredStyle() {

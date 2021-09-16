@@ -8,9 +8,13 @@
         :key="item.name"
         class="govuk-!-margin-bottom-6"
       >
-        <!-- <span>
-          {{ index + 1 }}:
-        </span> -->
+        <button
+          v-if="edit"
+          class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
+          @click="openModal(index)"
+        >
+          Remove
+        </button>
         <div
           v-for="(value, key) in dataDefault"
           :key="`${key}_${index}`"
@@ -67,13 +71,7 @@
             </dd>
           </div>
         </div>
-        <button
-          v-if="edit"
-          class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
-          @click="openModal(index)"
-        >
-          Remove
-        </button>
+        <div />
       </div>
       <Modal
         ref="removeModal"
@@ -84,17 +82,15 @@
         />
       </Modal>
     </div>
-    <div
+
+    <span
       v-else
-      style="width: 100%; display: inline-block"
     >
-      <span>
-        No {{ field | lookup }} declaired
-      </span>
-    </div>
+      No {{ field | lookup }} declaired
+    </span>
     <button
       v-if="edit"
-      class="change-link print-none govuk-button govuk-!-margin-bottom-0 govuk-!-margin-right-4 float-right"
+      class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
       @click="addField"
     >
       Add

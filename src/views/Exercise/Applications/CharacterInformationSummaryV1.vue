@@ -11,7 +11,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.criminalOffences"
           :data="characterInformation.criminalOffences"
           :options="[true, false]"
           :edit="edit"
@@ -21,7 +20,6 @@
         />
         <InformationReviewSectionRenderer
           v-if="characterInformation.criminalOffences"
-          :value="characterInformation.criminalOffenceDetails"
           :data="characterInformation.criminalOffenceDetails"
           :data-default="emptyDetailObject"
           :edit="edit"
@@ -39,7 +37,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.nonMotoringFixedPenaltyNotices"
           :data="characterInformation.nonMotoringFixedPenaltyNotices"
           :options="[true, false]"
           :edit="edit"
@@ -50,7 +47,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.nonMotoringFixedPenaltyNotices"
-          :value="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
           :data="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
           :edit="edit"
           :data-default="emptyDetailObject"
@@ -68,7 +64,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.drivingDisqualificationDrinkDrugs"
           :data="characterInformation.drivingDisqualificationDrinkDrugs"
           :options="[true, false]"
           :edit="edit"
@@ -79,7 +74,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.drivingDisqualificationDrinkDrugs"
-          :value="characterInformation.drivingDisqualificationDrinkDrugsDetails"
           :data="characterInformation.drivingDisqualificationDrinkDrugsDetails"
           :data-default="emptyDetailObject"
           :edit="edit"
@@ -97,7 +91,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.endorsementsOrMotoringFixedPenalties"
           :data="characterInformation.endorsementsOrMotoringFixedPenalties"
           :options="[true, false]"
           :edit="edit"
@@ -108,7 +101,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.endorsementsOrMotoringFixedPenalties"
-          :value="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
           :edit="edit"
           :data="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
           :data-default="emptyDetailObject"
@@ -126,7 +118,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.declaredBankruptOrIVA"
           :data="characterInformation.declaredBankruptOrIVA"
           :options="[true, false]"
           :edit="edit"
@@ -137,7 +128,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.declaredBankruptOrIVA"
-          :value="characterInformation.declaredBankruptOrIVADetails"
           :edit="edit"
           :data="characterInformation.declaredBankruptOrIVADetails"
           :data-default="emptyDetailObject"
@@ -155,7 +145,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.lateTaxReturnOrFined"
           :data="characterInformation.lateTaxReturnOrFined"
           :options="[true, false]"
           :edit="edit"
@@ -167,7 +156,6 @@
         <InformationReviewSectionRenderer
           v-if="characterInformation.lateTaxReturnOrFined"
           :edit="edit"
-          :value="characterInformation.lateTaxReturnOrFinedDetails"
           :data="characterInformation.lateTaxReturnOrFinedDetails"
           :data-default="emptyDetailObject"
           field="lateTaxReturnOrFinedDetails"
@@ -184,7 +172,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.involvedInProfessionalMisconduct"
           :data="characterInformation.involvedInProfessionalMisconduct"
           :options="[true, false]"
           :edit="edit"
@@ -195,7 +182,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.involvedInProfessionalMisconduct"
-          :value="characterInformation.involvedInProfessionalMisconductDetails"
           :data="characterInformation.involvedInProfessionalMisconductDetails"
           :edit="edit"
           :data-default="emptyDetailObject"
@@ -204,6 +190,7 @@
         />
       </dd>
     </div>
+    
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has ever been subject to complaints or disciplinary action, or been asked to resign from a position
@@ -212,7 +199,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.diciplinaryActionOrAskedToResign"
           :data="characterInformation.diciplinaryActionOrAskedToResign"
           :options="[true, false]"
           :edit="edit"
@@ -223,7 +209,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.diciplinaryActionOrAskedToResign"
-          :value="characterInformation.diciplinaryActionOrAskedToResignDetails"
           :data="characterInformation.diciplinaryActionOrAskedToResignDetails"
           :data-default="emptyDetailObject"
           :edit="edit"
@@ -241,7 +226,6 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :value="characterInformation.otherCharacterIssues"
           :data="characterInformation.otherCharacterIssues"
           :options="[true, false]"
           :edit="edit"
@@ -252,7 +236,6 @@
           
         <InformationReviewSectionRenderer
           v-if="characterInformation.otherCharacterIssues"
-          :value="characterInformation.otherCharacterIssuesDetails"
           :data="characterInformation.otherCharacterIssuesDetails"
           :edit="edit"
           :data-default="emptyDetailObject"

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- v-if="!(data === null || data.length == 0)" -->
     <div>
       <div
         v-if="isDate"

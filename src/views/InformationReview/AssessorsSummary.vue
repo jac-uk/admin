@@ -4,7 +4,7 @@
       v-if="hasIndependentAssessments"
       class="govuk-!-margin-top-9"
     >
-      <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-4">
         Independent assessors
       </h2>
 
@@ -85,8 +85,6 @@
           </button>
         </dd>
       </dl>
-
-      <hr class="govuk-section-break govuk-section-break--l">
 
       <dl
         v-if="applicantProvidedSecondAssessor"
