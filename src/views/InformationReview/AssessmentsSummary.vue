@@ -104,50 +104,36 @@
         Self assessment competencies
       </h2>
 
-      <dl
-        v-if="application.selectionCriteriaAnswers || editable"
-        class="govuk-summary-list"
-      >
+      <dl class="govuk-summary-list">
         <div
-          v-for="(item, index) in exercise.selectionCriteria"
-          :key="index"
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key widerColumn">
-            {{ item.title }}
+          <dt class="govuk-summary-list__key">
+            Uploaded self assessment
           </dt>
           <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answer : null"
-              :edit="editable"
-              :index="index"
-              extension="answer"
-              :data-default="emptyASCObject"
-              type="selection"
-              :options="[true, false]"
-              field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
-            />
-            <InformationReviewRenderer
-              v-if="hasAscAnswers && (application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true)"
-              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
-              :edit="editable"
-              :index="index"
-              :data-default="emptyASCObject"
-              extension="answerDetails"
-              field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
-            />
-            <span v-else>
-              Does not meet this requirement
-            </span>
+            <div v-if="application.uploadedSelfAssessment">
+              <DownloadLink
+                :file-name="application.uploadedSelfAssessment"
+                :exercise-id="exercise.id"
+                :user-id="application.userId"
+                :title="application.uploadedSelfAssessment"
+              />
+            </div>
+            <span v-else>Not yet received</span>
+            <div v-if="editable">
+              <FileUpload
+                id="self-assessment-upload"
+                ref="self-assessment"
+                v-model="application.uploadedSelfAssessment"
+                name="self-assessment"
+                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                required
+                @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+              />
+            </div>
           </dd>
         </div>
-      </dl>
-      <dl v-else>
-        <p class="govuk-body">
-          No answers provided
-        </p>
       </dl>
     </div>
 

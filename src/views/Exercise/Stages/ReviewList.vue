@@ -62,10 +62,10 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[2].title">
-            {{ row.status | lookup }}
+            {{ row | candidateHasIssues }}
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ row | candidateHasIssues }}
+            {{ row.status | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
             {{ row.flags.empApplied | toYesNo }}

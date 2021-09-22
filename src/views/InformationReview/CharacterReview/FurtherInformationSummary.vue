@@ -52,7 +52,6 @@ export default {
       return {
         'details': '',
         'date': new Date(),
-        'title': '',
       };
     },
   },

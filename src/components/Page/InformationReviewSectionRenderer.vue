@@ -15,6 +15,7 @@
         >
           Remove
         </button>
+
         <div
           v-for="(value, key) in dataDefault"
           :key="`${key}_${index}`"
@@ -26,6 +27,7 @@
             <dt class="govuk-summary-list__key">
               {{ key | lookup }}
             </dt>
+
             <dd
               v-if="data[index][key] instanceof Array && key === 'tasks'"
               class="govuk-summary-list__value"
@@ -55,6 +57,7 @@
                 />
               </div>
             </dd>
+            
             <dd
               v-else
               class="govuk-summary-list__value"

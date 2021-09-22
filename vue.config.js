@@ -17,7 +17,7 @@ module.exports = {
     loaderOptions: {
       sass: {
         // always import main.scss first
-        additionalData: '@import "@/styles/main.scss";',
+        additionalData: '@import "@/styles/_shared.scss";',
       },
     },
   },
