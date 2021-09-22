@@ -110,7 +110,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
             :data="characterInformation.requestedToResignDetails"
-            :data-default="emptyDetailObject"
+            :data-default="emptyResignObject"
             :edit="edit"
             field="requestedToResignDetails"
             @changeField="changeCharacterInfo"
@@ -154,7 +154,14 @@ export default {
       return {
         'details': '',
         'date': new Date(),
-        'title': '',
+        'investigations': '',
+        'investigationConclusionDate': '',
+      };
+    },
+    emptyResignObject() {
+      return {
+        'details': '',
+        'date': new Date(),
       };
     },
   },
