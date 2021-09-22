@@ -51,7 +51,7 @@
       </dl>
       <dl v-else>
         <div v-if="hasValues(application.characterInformation)|| editable">
-          <CharacterInformationSummaryV1
+          <CharacterInformationV1Summary
             :character-information="application.characterInformation"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1';
+import CharacterInformationV1Summary from '@/views/Exercise/Applications/CharacterInformationV1Summary';
 import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
 import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
 import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
@@ -85,7 +85,7 @@ export default {
     ProfessionalConductSummary,
     FurtherInformationSummary,
     CharacterDeclarationSummary,
-    CharacterInformationSummaryV1,
+    CharacterInformationV1Summary,
   },
   props: {
     application: {
@@ -115,8 +115,8 @@ export default {
   },
   methods: {
     hasValues(target){
-      if (target) {
-        return Object.values(target).some(item => item.length);
+      if (target !== null && target !== undefined) {
+        return Object.values(target).some(item => item && item.length);
       } else {
         return false;
       }

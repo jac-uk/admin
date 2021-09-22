@@ -258,7 +258,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 export default {
-  name: 'CharacterInformationSummaryV1',
+  name: 'CharacterInformationV1Summary',
   components: {
     InformationReviewRenderer,
     InformationReviewSectionRenderer,

@@ -194,6 +194,7 @@
             :tabs="tabs"
             :active-tab.sync="activeTab"
           />
+
           <div
             v-if="activeTab == 'full' || activeTab == 'panel'"
             class="application-details"
@@ -243,15 +244,24 @@
                 :is-panel-view="isPanelView"
               />
             </div>
-            <div v-if="activeTab == 'notes'">
-              <Notes
-                title="Notes about the Application"
-                :candidate-id="application.userId"
-                :application-id="applicationId"
-              />
-            </div>
           </div>
         </div>
+      </div>
+
+      <div v-if="activeTab == 'issues'">
+        No issues found
+      </div>
+
+      <div v-if="activeTab == 'agency'">
+        <AgencyReport />
+      </div>
+
+      <div v-if="activeTab == 'notes'">
+        <Notes
+          title="Notes about the Application"
+          :candidate-id="application.userId"
+          :application-id="applicationId"
+        />
       </div>
     </div>
     <div v-else>
@@ -336,6 +346,10 @@ export default {
         {
           ref: 'agency',
           title: 'Agency report',
+        },
+        {
+          ref: 'characterchecks',
+          title: 'Character checks',
         },
       ],
       activeTab: 'full',

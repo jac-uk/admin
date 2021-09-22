@@ -206,7 +206,9 @@ export default {
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
       .onSnapshot((snap) => {
-        this.report = vuexfireSerialize(snap);
+        if (snap.exists) {
+          this.report = vuexfireSerialize(snap);
+        }
       });
   },
   destroyed() {

@@ -1,0 +1,6 @@
+// overwrite the font
+$govuk-font-family: "Khula", "HelveticaNeue", "Helvetica Neue", "Arial", "Helvetica", sans-serif;
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+$moj-assets-path: "~@ministryofjustice/frontend/moj/assets/";
+
+@import "~govuk-frontend/govuk/base";

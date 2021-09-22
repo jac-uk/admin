@@ -28,11 +28,11 @@ const module = {
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
           'maria.brookes@judicialappointments.digital',
-          'kate.malone@judicialappointments.digital',
           'joy.adeagbo@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
+          'wincen.lowe@justice.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -43,7 +43,6 @@ const module = {
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
               'maria.brookes@judicialappointments.digital',
-              'kate.malone@judicialappointments.digital',
               'joy.adeagbo@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
