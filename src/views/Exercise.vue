@@ -39,6 +39,7 @@
           </router-link>
         </div>
       </div>
+      <RoleSelector />
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <SubNavigation
@@ -58,12 +59,14 @@ import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavourit
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests } from '@/helpers/exerciseHelper';
+import RoleSelector from '@/components/Roles/RoleSelector';
 
 export default {
   components: {
     LoadingMessage,
     AddToFavouritesButton,
     SubNavigation,
+    RoleSelector,
   },
   data() {
     return {

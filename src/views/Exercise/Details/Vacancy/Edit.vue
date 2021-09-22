@@ -396,6 +396,37 @@
           required
         />
 
+        <RadioGroup
+          id="is-multiple-role-exercise"
+          v-model="formData.isMultipleRoleExercise"
+          label="Are there multiple roles within this exercise?"
+          required
+        >
+          <RadioItem
+            :value="true"
+            label="Yes"
+          >
+            <TextField
+              v-for="(role, roleIndex) in formData.roles"
+              :id="roleIndex.toString()"
+              :key="roleIndex"
+              v-model="formData.roles[roleIndex]"
+              :label="'Role ' + (roleIndex + 1) + ' title'"
+              required
+            />
+            <button
+              class="govuk-button govuk-!-margin-top-5"
+              @click.prevent="addRole()"
+            >
+              + Add a role
+            </button>
+          </RadioItem>
+          <RadioItem
+            :value="false"
+            label="No"
+          />
+        </RadioGroup>
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -453,6 +484,8 @@ export default {
       welshRequirementType: null,
       roleSummary: null,
       aboutTheRole: null,
+      isMultipleRoleExercise: null,
+      roles: [],
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
@@ -470,6 +503,10 @@ export default {
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-vacancy'));
     },
+    addRole() {
+      this.formData.roles.push('');
+    },
   },
+
 };
 </script>

@@ -16,6 +16,9 @@ export default {
       if (params.characterChecks) {
         firestoreRef = firestoreRef.where('characterChecks.declaration', '==', params.characterChecks);
       }
+      if (Number.isInteger(params.role)) {
+        firestoreRef = firestoreRef.where('roles', 'array-contains', params.role);
+      }
 
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
 

@@ -97,9 +97,15 @@ export default {
     applications() {
       return this.$store.state.applications.records;
     },
+    role() {
+      return this.$store.state.exerciseDocument.role;
+    },
   },
   watch: {
     status() {
+      this.$refs['applicationsTable'].reload();
+    },
+    role() {
       this.$refs['applicationsTable'].reload();
     },
   },
@@ -110,12 +116,13 @@ export default {
         {
           exerciseId: this.exercise.id,
           status: this.status,
+          role: this.role,
           ...params,
         }
       );
     },
     async gatherReportData() {
-      const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
+      const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status, role: this.role });
       const reportData = [];
       reportData.push(response.data.headers.map(header => header));
       response.data.rows.forEach((row) => {

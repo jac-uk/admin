@@ -120,9 +120,14 @@ export default {
       };
       await ref.update(data);
     },
+    updateSelectedRole: async (state, roleIndex) => {
+      state.commit('mutateSelectedRole', roleIndex);
+    },
   },
   state: {
     record: null,
+    role: null,
+    roleExerciseId: null,
   },
   getters: {
     id: (state) => {
@@ -142,6 +147,12 @@ export default {
       } else {
         return data;
       }
+    },
+  },
+  mutations: {
+    mutateSelectedRole(state, roleIndex) {
+      state.role = roleIndex;
+      state.roleExerciseId = state.record.id;
     },
   },
 };

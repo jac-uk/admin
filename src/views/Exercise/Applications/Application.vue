@@ -172,6 +172,23 @@
               v-if="!isPanelView"
               class="govuk-!-margin-top-9"
             >
+              <h2>
+                Roles
+              </h2>
+              <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Role(s) applied for
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <span
+                      v-for="(role,roleIndex) in application.roles"
+                      :key="roleIndex"
+                    >{{ exercise.roles[role] }}<br></span>
+                  </dd>
+                </div>
+              </dl>
+
               <h2 class="govuk-heading-l">
                 Personal details
                 <span class="govuk-hint print-none">

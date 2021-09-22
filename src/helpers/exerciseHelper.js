@@ -95,6 +95,7 @@ const APPLICATION_PARTS = [
   'statementOfEligibility',
   'selfAssessmentCompetencies',
   'additionalInfo',
+  'roles',
 ];
 
 // application helpers
@@ -359,6 +360,7 @@ function exerciseApplicationParts(data, newValues) {
     applicationParts.push('selfAssessmentCompetencies');
   }
   applicationParts.push('additionalInfo');
+  applicationParts.push('roles');
   return applicationParts;
 }
 

@@ -156,6 +156,22 @@
           <!-- eslint-enable -->
         </dd>
       </div>
+      <div
+        v-if="exercise.roles && exercise.roles.length > 0"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Roles
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p
+            v-for="(role, roleIndex) in exercise.roles"
+            :key="roleIndex"
+          >
+            {{ roleIndex + 1 }}. {{ role }}
+          </p>
+        </dd>
+      </div>
     </dl>
   </div>
 </template>

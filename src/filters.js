@@ -27,6 +27,7 @@ const lookup = (value) => {
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
+    roles: 'Roles',
 
     // exercise states
     'registration': 'Registration',
