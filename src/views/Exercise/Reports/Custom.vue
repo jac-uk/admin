@@ -289,6 +289,8 @@ export default {
     return {
       type: 'showData',
       data: null,
+      isLoading: null,
+      loadFailed: null,
       customReports: [],
       customReportName: null,
       selectedColumn: '',
