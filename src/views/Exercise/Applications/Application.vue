@@ -247,6 +247,21 @@
           </div>
         </div>
       </div>
+      <div v-if="activeTab == 'issues'">
+        No issues found
+      </div>
+
+      <div v-if="activeTab == 'agency'">
+        <AgencyReport />
+      </div>
+
+      <div v-if="activeTab == 'notes'">
+        <Notes
+          title="Notes about the Application"
+          :candidate-id="application.userId"
+          :application-id="applicationId"
+        />
+      </div>
 
       <div v-if="activeTab == 'issues'">
         No issues found
@@ -290,7 +305,6 @@ import QualificationsAndMembershipsSummary from '@/views/InformationReview/Quali
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
-
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import PageNotFound from '@/views/Errors/PageNotFound';
