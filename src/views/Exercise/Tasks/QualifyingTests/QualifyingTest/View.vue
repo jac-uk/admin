@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
@@ -268,14 +269,14 @@
         Open tests
       </ActionButton>
 
-      <!-- <button
+      <button
         v-if="isActivated"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnPause"
       >
         Pause
-      </button> -->
+      </button>
 
       <button
         v-if="isInitialised || isActivated || isPaused || isCompleted"
