@@ -305,6 +305,12 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
         tasks: [],
+        taskDetails: {
+          location: '',
+          jurisdiction: '',
+          workingBasis: '',
+          totalDaysInRole: 0,
+        },
       };
     },
     emptyNonLegalExperienceObject() {
