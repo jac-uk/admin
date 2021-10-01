@@ -50,6 +50,7 @@
           :edit-mode="edit"
           :value="data"
           :field="field"
+          :index="index"
           :type="type"
           :extension="extension"
           :options="options"

@@ -16,6 +16,11 @@
           Remove
         </button>
 
+        <!-- <div v-if="dataDefault.hasOwnProperty('taskDetails')">
+          yup
+        </div>
+
+        <div v-else> -->
         <div
           v-for="(value, key) in dataDefault"
           :key="`${key}_${index}`"
@@ -24,9 +29,63 @@
           <div
             class="govuk-summary-list govuk-!-margin-bottom-0"
           >
-            <dt class="govuk-summary-list__key">
+            <dt
+              v-if="key != 'taskDetails'"
+              class="govuk-summary-list__key"
+            >
               {{ key | lookup }}
             </dt>
+
+            <dd
+              v-if="key === 'taskDetails'"
+              class="govuk-summary-list__value"
+            >
+              <h1>
+                Yup
+              </h1>
+              <!-- <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="multi-selection"
+                :options="taskOptions"
+                :extension="key"
+                @changeField="changeField"
+              /> -->
+            </dd>
+
+            <dd
+              v-else-if="typeof value === Object && key != 'taskDetails'"
+              class="govuk-summary-list__value"
+            >
+              {{ index }}
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="multi-selection"
+                :options="taskOptions"
+                :extension="key"
+                @changeField="changeField"
+              />
+              
+              <div v-if="data[index][key].includes('other')">
+                <dt class="govuk-summary-list__key">
+                  Other task
+                </dt>
+                <InformationReviewRenderer
+                  :data="data[index].otherTasks"
+                  :field="field"
+                  :edit="edit"
+                  :index="index"
+                  type="text"
+                  :extension="key"
+                  @changeField="changeField"
+                />
+              </div>
+            </dd>
 
             <dd
               v-if="data[index][key] instanceof Array && key === 'tasks'"
@@ -57,8 +116,8 @@
                 />
               </div>
             </dd>
-            
-            <dd
+              
+            <!-- <dd
               v-else
               class="govuk-summary-list__value"
             >
@@ -71,9 +130,10 @@
                 :extension="key"
                 @changeField="changeField"
               />
-            </dd>
+            </dd> -->
           </div>
         </div>
+        <!-- </div> -->
         <div />
       </div>
       <Modal

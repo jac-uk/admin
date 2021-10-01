@@ -33,11 +33,12 @@
       <h2 class="govuk-heading-l">
         Post-qualification experience
       </h2>
-      <div v-if="application.experience && application.experience.length">
+      <div v-if="(application.experience && application.experience.length) || editable">
         <InformationReviewSectionRenderer
           :value="application.experience"
           :data="application.experience"
           :data-default="emptyExperienceObject"
+          :task-options="['judicial-functions', 'acting-arbitrator', 'practice-or-employment-as-lawyer', 'advising-application-of-law', 'assisting-in-proceedings-for-resolution-of-issues-under-law', 'acting-mediator-in-resolving-issues-that-are-of-proceedings', 'drafting-documents-that-affect-rights-obligations', 'teaching-researching-law', 'other']"
           :edit="editable"
           field="experience"
           @changeField="changeExperience"
@@ -340,7 +341,7 @@ export default {
   },
   methods: {
     changeExperience(obj) {
-
+      
       let objChanged = this.application[obj.field] || {};
 
       if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
@@ -350,14 +351,22 @@ export default {
           };
         }
         objChanged[obj.index][obj.extension] = obj.change;
-      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
-        objChanged[obj.index] = obj.change;
+      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
+
+        if (objChanged.length > 0){
+          objChanged[obj.field] = [...objChanged, obj.change];
+        } else {
+          objChanged[obj.field] = [obj.change];
+        } 
+
       } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
         if (objChanged.length > 0){
           objChanged.splice(obj.index, 1);
         } else {
           objChanged = [];
         } 
+      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
+        objChanged[obj.index] = obj.change;
       } else {
         objChanged = obj;
       }
