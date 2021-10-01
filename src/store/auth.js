@@ -33,6 +33,8 @@ const module = {
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
+          'wincen.lowe@justice.gov.uk',
+          'molly.meadows@justice.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
