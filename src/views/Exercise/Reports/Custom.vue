@@ -238,6 +238,7 @@
                 <th
                   scope="col"
                   class="govuk-table__header"
+                  style="cursor: pointer"
                   @click="addWhereClause(column, '==', rowIndex)"
                 >
                   {{ rowIndex }}
