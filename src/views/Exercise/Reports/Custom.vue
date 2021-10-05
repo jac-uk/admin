@@ -43,6 +43,10 @@
           </div>
         </div>
       </div>
+      <Banner
+        v-if="warnings"
+        :message="warnings"
+      />
       <div class="govuk-inset-text govuk-!-margin-bottom-7">
         <p class="govuk-body">
           This report is experimental. Please provide feedback if something doesn't look right.
@@ -284,12 +288,14 @@ import draggable from 'vuedraggable';
 import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 
 export default {
   components: {
     Modal,
     draggable,
     LoadingMessage,
+    Banner,
   },
   data() {
     return {
@@ -302,6 +308,8 @@ export default {
       selectedColumn: '',
       whereClauses: [],
       columns: [],
+      warnings: '',
+      warningTimeout: null,
       groups: [
         {
           name: 'Welsh',
@@ -522,6 +530,12 @@ export default {
       this.whereClauses.splice(index, 1);
     },
     openModal(modalRef){
+      if (this.columns.length === 0) {
+        clearTimeout(this.warningTimeout);
+        this.warnings = 'You have select no columns to save the report';
+        this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
+        return;
+      }
       this.$refs[modalRef].openModal();
     },
     closeModal(modalRef) {
@@ -529,12 +543,19 @@ export default {
       this.customReportName = null;
     },
     async saveReport() {
-      this.data = await functions.httpsCallable('customReport')({
+      if (this.customReports.map(r => r.name).includes(this.customReportName)) {
+        this.closeModal('modalRefSaveReport');
+        clearTimeout(this.warningTimeout);
+        this.warnings = 'Your report has not been saved. There is already a report with that name';
+        this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
+        return;
+      }
+      const reports = await functions.httpsCallable('customReport')({
         columns: this.columns,
         whereClauses: this.whereClauses,
         name: this.customReportName,
-
       });
+      this.customReports = reports.data;
       this.closeModal('modalRefSaveReport');
     },
     async getReports() {
