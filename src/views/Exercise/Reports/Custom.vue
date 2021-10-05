@@ -199,6 +199,12 @@
             </tr>
           </tbody>
         </table>
+        <button
+          class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
+          @click="downloadReport"
+        >
+          Download Report
+        </button>
       </div>
       <div
         v-if="data && type === 'count'"
@@ -539,6 +545,21 @@ export default {
       const report = this.customReports[event.target.value];
       this.columns = report.columns;
       this.whereClauses = report.whereClauses;
+    },
+    downloadReport() {
+      const header = [...this.columns].map(col => this.keys[col].label);
+      const csv = [[...header]];
+      for (let i = 0; i < this.data.data.length; i++) {
+        csv.push([...this.columns.map(col => this.data.data[i][col])]);
+      }
+      const csvContent = `data:text/csv;charset=utf-8,${
+        csv.map(e => e.join(',')).join('\n')}`;
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'custom_report.csv');
+      document.body.appendChild(link);
+      link.click();
     },
   },
 };
