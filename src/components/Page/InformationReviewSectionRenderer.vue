@@ -16,11 +16,6 @@
           Remove
         </button>
 
-        <!-- <div v-if="dataDefault.hasOwnProperty('taskDetails')">
-          yup
-        </div>
-
-        <div v-else> -->
         <div
           v-for="(value, key) in dataDefault"
           :key="`${key}_${index}`"
@@ -37,26 +32,93 @@
             </dt>
 
             <dd
-              v-if="key === 'taskDetails'"
+              v-else-if="key === 'taskDetails'"
               class="govuk-summary-list__value"
             >
-              <h1>
-                Yup
-              </h1>
-              <!-- <InformationReviewRenderer
-                :data="data[index][key]"
-                :field="field"
-                :edit="edit"
-                :index="index"
-                type="multi-selection"
-                :options="taskOptions"
-                :extension="key"
-                @changeField="changeField"
-              /> -->
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div
+                  class="govuk-summary-list__key"
+                >
+                  Location
+                </div>
+                <div
+                  class="govuk-summary-list__value"
+                >
+                  <InformationReviewRenderer
+                    :edit="edit"
+                    :field="field"
+                    :index="index"
+                    type="text"
+                    :data="data[index][key].location"
+                    :extension="'location'"
+                    @changeField="changeTaskDetail"
+                  />
+                </div>
+              </div>
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div
+                  class="govuk-summary-list__key"
+                >
+                  Jurisdiction
+                </div>
+                <div
+                  class="govuk-summary-list__value"
+                >
+                  <InformationReviewRenderer
+                    :edit="edit"
+                    :data="data[index][key].jurisdiction"
+                    :field="field"
+                    :index="index"
+                    :extension="'jurisdiction'"
+                    type="text"
+                    @changeField="changeTaskDetail"
+                  />
+                </div>
+              </div>
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div
+                  class="govuk-summary-list__key"
+                >
+                  Working Basis
+                </div>
+                <div
+                  class="govuk-summary-list__value"
+                >
+                  <InformationReviewRenderer
+                    :edit="edit"
+                    :data="data[index][key].workingBasis"
+                    :field="field"
+                    :index="index"
+                    :extension="'workingBasis'"
+                    type="selection"
+                    :options="['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
+                    @changeField="changeTaskDetail"
+                  />
+                </div>
+              </div>
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div
+                  class="govuk-summary-list__key"
+                >
+                  Total Days In Role
+                </div>
+                <div
+                  class="govuk-summary-list__value"
+                >
+                  <InformationReviewRenderer
+                    :edit="edit"
+                    :data="data[index][key].totalDaysInRole"
+                    :field="field"
+                    :index="index"
+                    :extension="'totalDaysInRole'"
+                    type="text"
+                    @changeField="changeTaskDetail"
+                  />
+                </div>
+              </div>
             </dd>
-
             <dd
-              v-else-if="typeof value === Object && key != 'taskDetails'"
+              v-else-if="(typeof value === Object && key != 'taskDetails')"
               class="govuk-summary-list__value"
             >
               {{ index }}
@@ -117,8 +179,23 @@
               </div>
             </dd>
               
-            <!-- <dd
-              v-else
+            <dd
+              v-else-if="value instanceof Date"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="date"
+                :extension="key"
+                @changeField="changeField"
+              />
+            </dd>
+
+            <dd
+              v-else-if="key != 'taskDetails'"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -130,11 +207,9 @@
                 :extension="key"
                 @changeField="changeField"
               />
-            </dd> -->
+            </dd>
           </div>
         </div>
-        <!-- </div> -->
-        <div />
       </div>
       <Modal
         ref="removeModal"
@@ -210,6 +285,9 @@ export default {
     },
     changeField(obj) {
       this.$emit('changeField', obj);
+    },
+    changeTaskDetail(obj) {
+      this.$emit('changeField', { ...obj, ...{ taskDetails: true } });
     },
     addField() {
       this.$emit('changeField', {

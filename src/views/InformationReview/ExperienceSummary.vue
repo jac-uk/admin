@@ -310,7 +310,7 @@ export default {
           location: '',
           jurisdiction: '',
           workingBasis: '',
-          totalDaysInRole: 0,
+          totalDaysInRole: '',
         },
       };
     },
@@ -343,8 +343,10 @@ export default {
     changeExperience(obj) {
       
       let objChanged = this.application[obj.field] || {};
-
-      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
+      
+      if (obj.taskDetails) {
+        objChanged[obj.index].taskDetails[obj.extension] = obj.change;
+      } else if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
         if (!objChanged[obj.index]) {
           objChanged = {
             [obj.index]: {},
@@ -371,6 +373,8 @@ export default {
         objChanged = obj;
       }
       const updatedApplication = { ...this.application, ...objChanged };
+
+      // console.log('done: ', updatedApplication);
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
     },
