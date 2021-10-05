@@ -352,6 +352,13 @@ export default {
           ],
         },
         {
+          name: 'Working Preferences',
+          keys: [
+            'jurisdictionPreferences',
+            'locationPreferences',
+          ],
+        },
+        {
           name: 'Welsh',
           keys: [
             'applyingForWelshPost',
@@ -475,6 +482,8 @@ export default {
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
         quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
+        jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
+        locationPreferences: { label: 'Location Preferences', type: String },
       },
     };
   },
