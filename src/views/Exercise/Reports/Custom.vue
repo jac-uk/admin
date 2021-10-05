@@ -279,6 +279,22 @@
         </button>
       </div>
     </Modal>
+    <Modal
+      ref="modalRefReportSaved"
+    >
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Save report
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p>The report has been saved.</p>
+        <button
+          class="govuk-button govuk-!-margin-right-3"
+          @click="closeModal('modalRefReportSaved')"
+        >
+          OK
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -312,6 +328,30 @@ export default {
       warningTimeout: null,
       groups: [
         {
+          name: 'Application Info',
+          keys: [
+            'personalDetails.dateOfBirth',
+            'personalDetails.title',
+            'personalDetails.citizenship',
+            'personalDetails.lastName',
+            'personalDetails.fullName',
+            'personalDetails.phone',
+            'personalDetails.nationalInsuranceNumber',
+            'personalDetails.firstName',
+            'personalDetails.reasonableAdjustmentsDetails',
+            'personalDetails.email',
+            'personalDetails.reasonableAdjustments',
+            'status',
+            'appliedAt',
+            'interestedInPartTime',
+            'applyingUnderSchedule2d',
+            'canGiveReasonableLOS',
+            'applyingUnderSchedule2Three',
+            '_processing.status',
+            '_processing.stage',
+          ],
+        },
+        {
           name: 'Welsh',
           keys: [
             'applyingForWelshPost',
@@ -320,22 +360,21 @@ export default {
           ],
         },
         {
-          name: 'Character Issues',
+          name: 'Qualifications',
           keys: [
-            'employmentGaps',
+            'qualifications',
+            'skillsAquisitionDetails',
+            'feePaidOrSalariedJudge',
+            'feePaidOrSalariedSatForThirtyDays',
+            'experienceUnderSchedule2Three',
+            'quasiJudicialSittingDaysDetails',
+            'quasiJudicialSatForThirtyDays',
           ],
         },
         {
-          name: 'Assessor',
+          name: 'Character Issues',
           keys: [
-            'firstAssessorEmail',
-            'firstAssessorTitle',
-            'firstAssessorFullName',
-            'firstAssessorPhone',
-            'secondAssessorEmail',
-            'secondAssessorTitle',
-            'secondAssessorFullName',
-            'secondAssessorPhone',
+            'employmentGaps',
           ],
         },
         {
@@ -364,39 +403,16 @@ export default {
           ],
         },
         {
-          name: 'Application Info',
+          name: 'Assessor',
           keys: [
-            'status',
-            'appliedAt',
-            'interestedInPartTime',
-            'applyingUnderSchedule2d',
-            'canGiveReasonableLOS',
-            'applyingUnderSchedule2Three',
-            '_processing.status',
-            '_processing.stage',
-            'personalDetails.phone',
-            'personalDetails.nationalInsuranceNumber',
-            'personalDetails.firstName',
-            'personalDetails.reasonableAdjustmentsDetails',
-            'personalDetails.email',
-            'personalDetails.reasonableAdjustments',
-            'personalDetails.dateOfBirth',
-            'personalDetails.title',
-            'personalDetails.citizenship',
-            'personalDetails.lastName',
-            'personalDetails.fullName',
-          ],
-        },
-        {
-          name: 'Qualifications',
-          keys: [
-            'qualifications',
-            'skillsAquisitionDetails',
-            'feePaidOrSalariedJudge',
-            'feePaidOrSalariedSatForThirtyDays',
-            'experienceUnderSchedule2Three',
-            'quasiJudicialSittingDaysDetails',
-            'quasiJudicialSatForThirtyDays',
+            'firstAssessorEmail',
+            'firstAssessorTitle',
+            'firstAssessorFullName',
+            'firstAssessorPhone',
+            'secondAssessorEmail',
+            'secondAssessorTitle',
+            'secondAssessorFullName',
+            'secondAssessorPhone',
           ],
         },
       ],
@@ -557,6 +573,7 @@ export default {
       });
       this.customReports = reports.data;
       this.closeModal('modalRefSaveReport');
+      this.openModal('modalRefReportSaved');
     },
     async getReports() {
       const reports = await functions.httpsCallable('customReport')({});
