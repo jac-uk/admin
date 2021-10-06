@@ -19,8 +19,9 @@ const functions = firebase.initializeApp(config).functions('europe-west2');
 
 //
 const appCheck = firebase.appCheck();
-appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
-
+if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
+  appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+}
 // Initialise Firestore
 const firestore = firebase.firestore();
 
