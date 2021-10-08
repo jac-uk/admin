@@ -1,4 +1,4 @@
-import firebase from '@firebase/app';
+import firebase from 'firebase';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
