@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
@@ -12,6 +13,12 @@ const config = {
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
 const functions = firebase.initializeApp(config).functions('europe-west2');
+
+//Only activate app check if token provided.
+const appCheck = firebase.appCheck();
+if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
+  appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+}
 
 // Initialise Firestore
 const firestore = firebase.firestore();
