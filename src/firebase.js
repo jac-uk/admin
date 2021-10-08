@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import 'firebase/app-check';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
