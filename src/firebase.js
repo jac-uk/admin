@@ -18,7 +18,6 @@ const firestore = firebase.firestore();
 
 // Other firebase exports
 const auth = firebase.auth;
-console.log(process.env.VUE_APP_RECAPTCHA_TOKEN);
 const appCheck = firebase.appCheck();
 if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
   appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
