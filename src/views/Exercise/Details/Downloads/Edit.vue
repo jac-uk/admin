@@ -201,6 +201,7 @@ export default {
           id: 'independentAssessors',
           name: 'independent-assessors',
           mandatory: true,
+          type: 'ia',
         });
       }
 
