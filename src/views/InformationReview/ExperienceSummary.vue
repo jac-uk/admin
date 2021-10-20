@@ -35,7 +35,6 @@
       </h2>
       <div v-if="(application.experience && application.experience.length) || editable">
         <InformationReviewSectionRenderer
-          :value="application.experience"
           :data="application.experience"
           :data-default="emptyExperienceObject"
           :task-options="['judicial-functions', 'acting-arbitrator', 'practice-or-employment-as-lawyer', 'advising-application-of-law', 'assisting-in-proceedings-for-resolution-of-issues-under-law', 'acting-mediator-in-resolving-issues-that-are-of-proceedings', 'drafting-documents-that-affect-rights-obligations', 'teaching-researching-law', 'other']"
@@ -43,12 +42,6 @@
           field="experience"
           @changeField="changeExperience"
         />
-      </div>
-      <div
-        v-else
-        class="govuk-body"
-      >
-        No information provided
       </div>
     </div>
     <!-- Judicial Experience -->
@@ -200,15 +193,9 @@
           :data="application.employmentGaps"
           :data-default="emptyExperienceObject"
           :edit="editable"
-          field="experience"
+          field="employmentGaps"
           @changeField="changeExperience"
         />
-      </div>
-      <div
-        v-else
-        class="govuk-body"
-      >
-        No employment gaps declared.
       </div>
     </div>
     <!-- Reasonable length of service -->
@@ -354,11 +341,10 @@ export default {
         }
         objChanged[obj.index][obj.extension] = obj.change;
       } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-
         if (objChanged.length > 0){
-          objChanged[obj.field] = [...objChanged, obj.change];
+          objChanged = [...objChanged, obj.change];
         } else {
-          objChanged[obj.field] = [obj.change];
+          objChanged = [obj.change];
         } 
 
       } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
@@ -372,11 +358,15 @@ export default {
       } else {
         objChanged = obj;
       }
-      const updatedApplication = { ...this.application, ...objChanged };
-
-      // console.log('done: ', updatedApplication);
+      let updatedApplication;
+      if (obj.field) {
+        updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
+      } else {
+        updatedApplication = { ...this.application, ...objChanged };
+      }
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
+
     },
 
   },

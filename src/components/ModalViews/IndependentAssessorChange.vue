@@ -118,8 +118,9 @@ export default {
             secondAssessorTitle: this.title,
           };
         }
+        // console.log(('application/update', { data: data, id: this.application.userId }));
         await this.$store.dispatch('application/update', { data: data, id: this.application.userId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.application.userId, AssessorNr: this.$attrs.AssessorNr });
+        // await this.$store.dispatch('assessment/update', { data: data, id: this.application.userId, AssessorNr: this.$attrs.AssessorNr });
         this.closeModal();
       }
     },

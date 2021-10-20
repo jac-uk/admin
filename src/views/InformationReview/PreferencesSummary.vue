@@ -249,7 +249,7 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index].selection"
+                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"
@@ -264,7 +264,7 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index].selection"
+                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"
@@ -273,12 +273,13 @@
                 @changeField="changePreferences"
               />
             </dd>
+
             <dd
               v-if="exercise.additionalWorkingPreferences[index].questionType === 'ranked-choice'"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index].selection"
+                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"

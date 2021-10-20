@@ -267,8 +267,8 @@
           :is="`LeadershipJudgeDetails`"
           v-bind="application.leadershipJudgeDetails"
           :application="application"
-          @close="closeModal('modalLeadershipJudgeDetails')"
         />
+        <!-- @close="this.$refs.modalLeadershipJudgeDetails.closeModal()" -->
       </Modal>
     </div>
   </div>
@@ -322,6 +322,9 @@ export default {
     },
   },
   methods: {
+    closeModal(modal){
+      this.$refs[modal].closeModal();
+    },
     editAssessor(AssessorNr) {
       // this.assessorDetails = {};
       if (AssessorNr === 1) {

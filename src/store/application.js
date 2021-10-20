@@ -30,23 +30,9 @@ export default {
       await ref.set(data, { merge: true });
     },
     update: async (context, { data, id }) => {
-      // console.log('data: ', data);
-      // console.log('id: ', id);
+      // console.log(context);
       const ref = collection.doc(id);
-      // await ref.update(data);
       await ref.set(data, { merge: true });
-      // const ref = collection.doc(id);
-      // ref.get().then( async (doc) => {
-      //     if (doc.exists) {
-      //       ref.update(data);
-      //       // console.log('Document data:', doc);
-      //     } else {
-      //       ref.set(data, { merge: true });
-      //       // console.log('No such document!');
-      //     }
-      // }).catch((error) => {
-      //     throw error;
-      // });
     },
     // NOTE: this is copied across from Candidate app. @todo work out a better way to share code (or use an api)
     submit: async ({ state, dispatch }) => {

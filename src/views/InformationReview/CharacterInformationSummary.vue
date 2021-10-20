@@ -9,7 +9,7 @@
         class="govuk-summary-list"
       >
         <div v-if="hasValues(application.characterInformationV2) || editable">
-          <!-- <CriminalOffencesSummary
+          <CriminalOffencesSummary
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
@@ -28,13 +28,13 @@
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
-          /> -->
+          />
           <ProfessionalConductSummary
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
           />
-          <!-- <FurtherInformationSummary
+          <FurtherInformationSummary
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
@@ -43,7 +43,7 @@
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
-          /> -->
+          />
         </div>
         <div v-else>
           No information providied
@@ -66,26 +66,26 @@
 </template>
 
 <script>
-// import CharacterInformationV1Summary from '@/views/Exercise/Applications/CharacterInformationV1Summary';
-// import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
-// import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
-// import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
-// import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
+import CharacterInformationV1Summary from '@/views/Exercise/Applications/CharacterInformationV1Summary';
+import CriminalOffencesSummary from '@/views/InformationReview/CharacterReview/CriminalOffencesSummary';
+import FixedPenaltiesSummary from '@/views/InformationReview/CharacterReview/FixedPenaltiesSummary';
+import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary';
+import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary';
 import ProfessionalConductSummary from '@/views/InformationReview/CharacterReview/ProfessionalConductSummary';
-// import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
-// import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
+import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary';
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary';
 
 export default {
   name: 'CharacterInformationSummary',
   components: {
-    // CriminalOffencesSummary,
-    // FixedPenaltiesSummary,
-    // MotoringOffencesSummary,
-    // FinancialMattersSummary,
+    CriminalOffencesSummary,
+    FixedPenaltiesSummary,
+    MotoringOffencesSummary,
+    FinancialMattersSummary,
     ProfessionalConductSummary,
-    // FurtherInformationSummary,
-    // CharacterDeclarationSummary,
-    // CharacterInformationV1Summary,
+    FurtherInformationSummary,
+    CharacterDeclarationSummary,
+    CharacterInformationV1Summary,
   },
   props: {
     application: {

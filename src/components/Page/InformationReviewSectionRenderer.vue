@@ -28,6 +28,7 @@
               v-if="key != 'taskDetails'"
               class="govuk-summary-list__key"
             >
+              {{ data.taskDetails }}
               {{ key | lookup }}
             </dt>
 
@@ -39,7 +40,7 @@
                 <div
                   class="govuk-summary-list__key"
                 >
-                  Location
+                  Location 
                 </div>
                 <div
                   class="govuk-summary-list__value"
@@ -49,7 +50,7 @@
                     :field="field"
                     :index="index"
                     type="text"
-                    :data="data[index][key].location"
+                    :data="data[index][key] ? data[index][key].location : ''"
                     :extension="'location'"
                     @changeField="changeTaskDetail"
                   />
@@ -66,7 +67,7 @@
                 >
                   <InformationReviewRenderer
                     :edit="edit"
-                    :data="data[index][key].jurisdiction"
+                    :data="data[index][key] ? data[index][key].jurisdiction : ''"
                     :field="field"
                     :index="index"
                     :extension="'jurisdiction'"
@@ -86,7 +87,7 @@
                 >
                   <InformationReviewRenderer
                     :edit="edit"
-                    :data="data[index][key].workingBasis"
+                    :data="data[index][key] ? data[index][key].workingBasis : ''"
                     :field="field"
                     :index="index"
                     :extension="'workingBasis'"
@@ -107,7 +108,7 @@
                 >
                   <InformationReviewRenderer
                     :edit="edit"
-                    :data="data[index][key].totalDaysInRole"
+                    :data="data[index][key] ? data[index][key].totalDaysInRole : ''"
                     :field="field"
                     :index="index"
                     :extension="'totalDaysInRole'"
@@ -117,8 +118,9 @@
                 </div>
               </div>
             </dd>
+
             <dd
-              v-else-if="(typeof value === Object && key != 'taskDetails')"
+              v-else-if="(typeof value === Object && key !== 'taskDetails')"
               class="govuk-summary-list__value"
             >
               {{ index }}

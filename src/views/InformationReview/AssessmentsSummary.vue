@@ -19,10 +19,11 @@
         >
           <dt class="govuk-summary-list__key widerColumn">
             {{ item.title }}
+            {{ hasAscAnswers(index) }}
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answer : null"
+              :data="hasAscAnswers(index) ? application.selectionCriteriaAnswers[index].answer : null"
               :edit="editable"
               :index="index"
               extension="answer"
@@ -41,7 +42,7 @@
               extension="answerDetails"
               field="selectionCriteriaAnswers"
               @changeField="changeAssessmentInfo"
-            />
+            /> 
             <span v-else>
               Does not meet this requirement
             </span>
@@ -251,7 +252,6 @@ export default {
   data() {
     return {
       assessorDetails: {},
-      hasAscAnswers: !!this.application.selectionCriteriaAnswers,
     };
   },
   computed: {
@@ -287,7 +287,13 @@ export default {
     },
   },
   methods: {
+    hasAscAnswers(index){
+      return this.application.selectionCriteriaAnswers[index] && this.application.selectionCriteriaAnswers[index].answer;
+    },
     changeAssessmentInfo(obj) {
+
+      console.log(obj);
+      
       let objChanged = this.application[obj.field] || {};
 
       if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
@@ -297,18 +303,20 @@ export default {
           };
         }
         objChanged[obj.index][obj.extension] = obj.change;
-      // } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
-      //   objChanged[obj.index] = obj.change;
-      // } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-      //   if (objChanged.length > 0){
-      //     objChanged.splice(obj.index, 1);
-      //   } else {
-      //     objChanged = [];
-      //   } 
+      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
+        objChanged[obj.index] = obj.change;
+      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
+        if (objChanged.length > 0){
+          objChanged.splice(obj.index, 1);
+        } else {
+          objChanged = [];
+        } 
       } else {
         objChanged = obj;
       }
       const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
+
+      console.log(updatedApplication);
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
     },
