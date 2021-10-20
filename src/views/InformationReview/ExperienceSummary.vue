@@ -188,7 +188,7 @@
       <h2 class="govuk-heading-l">
         Gaps in employment
       </h2>
-      <div v-if="hasEmploymentGaps || editable">
+      <div>
         <InformationReviewSectionRenderer
           :data="application.employmentGaps"
           :data-default="emptyExperienceObject"
@@ -308,22 +308,6 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
       };
-    },
-    hasEmploymentGaps() {
-      if (Array.isArray(this.application.employmentGaps)) {
-        if (!this.application.employmentGaps.length) {
-          return false;
-        }
-        if (this.application.employmentGaps.length > 1) {
-          return true;
-        } else {
-          const gap = this.application.employmentGaps[0];
-          if (gap.startDate || gap.endDate) {
-            return true;
-          }
-        }
-      }
-      return false;
     },
   },
   methods: {

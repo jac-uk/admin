@@ -8,9 +8,7 @@
         Qualifications
       </h2>
       <div>
-        <div
-          v-if="application.qualifications"
-        >
+        <div>
           <dl
             v-for="(item, index) in application.qualifications"
             :key="item.name"
@@ -132,18 +130,22 @@
           </dl>
         </div>
         <div
-          v-else
           class="govuk-body"
         >
-          No qualifications provided
+          <div
+            v-if="!application.qualificiations"
+          >
+            No answers provided
+          </div>
+          <button
+            v-if="editable"
+            style="display: inline-block;"
+            class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
+            @click="addQualification"
+          >
+            Add
+          </button>
         </div>
-        <button
-          v-if="editable"
-          class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
-          @click="addQualification"
-        >
-          Add
-        </button>
       </div>
     </div>
 
@@ -280,7 +282,7 @@
           v-else
           class="govuk-body"
         >
-          No memberships providied
+          No answers provided
         </dl>
       </div>
     </div>

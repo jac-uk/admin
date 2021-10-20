@@ -108,7 +108,7 @@ export default {
             title: this.title,
           },
         };
-        await this.$store.dispatch('application/update', { data: data, id: this.application.userId });
+        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
         this.closeModal();
       }
     },

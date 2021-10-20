@@ -41,15 +41,7 @@ const lookup = (value) => {
     selected: 'Selected',
     recommended: 'Recommended',
 
-    // equality and diversity survey
-    professionalBackground: 'Professional Background',
-    otherProfessionalBackgroundDetails: 'Other Professional Background Details',
-    otherFeePaidJudicialRoleDetails: 'Other Fee-Paid Judicial Role Details',
-
     // 'xxx': 'xxx',`
-    subjectOfAllegationOrClaimOfProfessionalMisconductDetails: 'allegation or claim',
-    orgBusinessName: 'Organisation or business',
-    jobTitle: 'Job Title',
   };
 
   returnValue = lookup[value];

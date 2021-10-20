@@ -23,7 +23,7 @@
           v-else
           class="govuk-summary-list__value"
         >
-          No answer given
+          Question not answered
         </dd>
       </div>
 

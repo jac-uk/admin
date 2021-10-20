@@ -225,8 +225,9 @@
 
     <span
       v-else
+      class="govuk-body"
     >
-      No {{ field | lookup }} declaired
+      No answers provided
     </span>
     <button
       v-if="edit"
@@ -236,8 +237,7 @@
       Add
     </button>
   </div>
-</template>
-
+</template>gaps 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';

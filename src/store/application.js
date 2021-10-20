@@ -30,7 +30,6 @@ export default {
       await ref.set(data, { merge: true });
     },
     update: async (context, { data, id }) => {
-      // console.log(context);
       const ref = collection.doc(id);
       await ref.set(data, { merge: true });
     },
