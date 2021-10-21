@@ -53,7 +53,7 @@
         <div
           class="govuk-summary-list__row"
         >
-          <dt class="govuk-summary-list__key">
+          <dt class="govuk-summary-list__key widerColumn">
             Fee-paid or salaried judge
           </dt>
           <dd class="govuk-summary-list__value">

@@ -28,7 +28,6 @@
               v-if="key != 'taskDetails'"
               class="govuk-summary-list__key"
             >
-              {{ data.taskDetails }}
               {{ key | lookup }}
             </dt>
 

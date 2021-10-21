@@ -12,96 +12,47 @@
           <dl
             v-for="(item, index) in application.qualifications"
             :key="item.name"
-            class="govuk-summary-list govuk-!-margin-bottom-5"
           >
             <button
               v-if="editable"
-              class="print-none govuk-button govuk-button--warning govuk-!-margin-bottom-0 float-left"
+              class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
               @click="removeQualification(index)"
             >
               Remove
             </button>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Qualification
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].type"
-                  field="qualifications"
-                  extension="type"
-                  :index="index"
-                  :edit="editable"
-                  :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
-                  type="selection"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div>
-
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Location
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].location"
-                  field="qualifications"
-                  extension="location"
-                  :index="index"
-                  :edit="editable"
-                  :options="['england-wales', 'northern-ireland', 'scotland']"
-                  type="selection"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div>
-
             <div
-              v-if="item.date || editable"
-              class="govuk-summary-list__row"
+              class="govuk-summary-list govuk-!-margin-bottom-5"
             >
-              <dt
-                v-if="item.type === 'barrister'"
-                class="govuk-summary-list__key widerColumn"
-              >
-                Date completed pupillage
-              </dt>
-              <dt
-                v-else
-                class="govuk-summary-list__key widerColumn"
-              >
-                Date qualified
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].date"
-                  field="qualifications"
-                  extension="date"
-                  :index="index"
-                  :edit="editable"
-                  type="date"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div> 
-
-            <template>
-              <div
-                v-if="item.type === 'barrister' || ((item.qualificationNotComplete && item.details) || editable)"
-                class="govuk-summary-list__row"
-              >
+              <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key widerColumn">
-                  Has not completed pupillage
+                  Qualification
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].qualificationNotComplete"
+                    :data="application.qualifications[index].type"
                     field="qualifications"
-                    extension="qualificationNotComplete"
+                    extension="type"
                     :index="index"
                     :edit="editable"
-                    :options="[true, false]"
+                    :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
+                    type="selection"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key widerColumn">
+                  Location
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications[index].location"
+                    field="qualifications"
+                    extension="location"
+                    :index="index"
+                    :edit="editable"
+                    :options="['england-wales', 'northern-ireland', 'scotland']"
                     type="selection"
                     @changeField="changeQualificationOrMembership"
                   />
@@ -109,43 +60,95 @@
               </div>
 
               <div
-                v-if="item.type === 'barrister' && (item.qualificationNotComplete === true)"
+                v-if="item.date || editable"
                 class="govuk-summary-list__row"
               >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Did not complete pupillage notes
+                <dt
+                  v-if="item.type === 'barrister'"
+                  class="govuk-summary-list__key widerColumn"
+                >
+                  Date completed pupillage
+                </dt>
+                <dt
+                  v-else
+                  class="govuk-summary-list__key widerColumn"
+                >
+                  Date qualified
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].details"
+                    :data="application.qualifications[index].date"
                     field="qualifications"
-                    extension="details"
+                    extension="date"
                     :index="index"
                     :edit="editable"
+                    type="date"
                     @changeField="changeQualificationOrMembership"
                   />
                 </dd>
-              </div>
-            </template>
+              </div> 
+
+              <template>
+                <div
+                  v-if="item.type === 'barrister' || ((item.qualificationNotComplete && item.details) || editable)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key widerColumn">
+                    Has not completed pupillage
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <InformationReviewRenderer
+                      :data="application.qualifications[index].qualificationNotComplete"
+                      field="qualifications"
+                      extension="qualificationNotComplete"
+                      :index="index"
+                      :edit="editable"
+                      :options="[true, false]"
+                      type="selection"
+                      @changeField="changeQualificationOrMembership"
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  v-if="item.type === 'barrister' && (item.qualificationNotComplete === true)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key widerColumn">
+                    Did not complete pupillage notes
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <InformationReviewRenderer
+                      :data="application.qualifications[index].details"
+                      field="qualifications"
+                      extension="details"
+                      :index="index"
+                      :edit="editable"
+                      @changeField="changeQualificationOrMembership"
+                    />
+                  </dd>
+                </div>
+              </template>
+            </div>
           </dl>
         </div>
+      </div>
+      <div
+        class="govuk-body"
+      >
         <div
-          class="govuk-body"
+          v-if="!applicationHasQualifications"
         >
-          <div
-            v-if="!application.qualificiations"
-          >
-            No answers provided
-          </div>
-          <button
-            v-if="editable"
-            style="display: inline-block;"
-            class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
-            @click="addQualification"
-          >
-            Add
-          </button>
+          No answers provided
         </div>
+        <button
+          v-if="editable"
+          style="display: inline-block;"
+          class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
+          @click="addQualification"
+        >
+          Add
+        </button>
       </div>
     </div>
 
@@ -327,6 +330,9 @@ export default {
     };
   },
   computed: {
+    applicationHasQualifications() {
+      return this.application.qualifications.length > 0;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -419,7 +425,8 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
   .widerColumn {
     width: 70%;
   }

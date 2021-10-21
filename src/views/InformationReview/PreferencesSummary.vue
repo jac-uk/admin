@@ -220,7 +220,7 @@
     </div>
 
     <div
-      v-if="exercise.additionalWorkingPreferences"
+      v-if="exercise.additionalWorkingPreferences.length"
       class="govuk-!-margin-top-9"
     >
       <h2

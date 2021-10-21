@@ -10,7 +10,7 @@
 
       <dl
         v-if="applicantProvidedFirstAssessor"
-        class="govuk-summary-list"
+        class="govuk-summary-list govuk-!-margin-bottom-0"
       >
         <div class="govuk-summary-list__row text-right print-none button-right">
           <dt class="govuk-summary-list__key" />
@@ -64,12 +64,13 @@
           </dd>
         </div>
       </dl>
+
       <dl
         v-else
-        class="govuk-summary-list"
+        class="govuk-summary-list govuk-!-margin-bottom-0"
       >
         <dt
-          class="govuk-summary-list__key"
+          class="govuk-summary-list__key widerColumn"
         >
           No information for First Assessor
         </dt>
@@ -78,7 +79,7 @@
           class="govuk-summary-list__value"
         >
           <button
-            class="govuk-button btn-unlock"
+            class="govuk-button btn-unlock float-right"
             @click="editAssessor(1)"
           >
             Add
@@ -142,12 +143,13 @@
           </dd>
         </div>
       </dl>
+
       <dl
         v-else
         class="govuk-summary-list"
       >
         <dt
-          class="govuk-summary-list__key"
+          class="govuk-summary-list__key widerColumn"
         >
           No information for Second Assessor
         </dt>
@@ -156,13 +158,14 @@
           class="govuk-summary-list__value"
         >
           <button
-            class="govuk-button btn-unlock"
+            class="govuk-button btn-unlock float-right"
             @click="editAssessor(2)"
           >
             Add
           </button>
         </dd>
       </dl>
+
       <Modal
         ref="modalRef"
       >
@@ -240,12 +243,13 @@
           </dd>
         </div>
       </dl>
+
       <dl
         v-else
         class="govuk-summary-list"
       >
         <dt
-          class="govuk-summary-list__key"
+          class="govuk-summary-list__key widerColumn"
         >
           No information for Leadership Judge
         </dt>
@@ -261,6 +265,7 @@
           </button>
         </dd>
       </dl>
+
       <Modal
         ref="modalLeadershipJudgeDetails"
       >
@@ -360,3 +365,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .widerColumn {
+    width: 70%;
+  }
+</style>
