@@ -120,7 +120,7 @@
             </dd>
 
             <dd
-              v-else-if="(typeof value === Object && key !== 'taskDetails')"
+              v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails')"
               class="govuk-summary-list__value"
             >
               {{ index }}
@@ -182,7 +182,7 @@
             </dd>
               
             <dd
-              v-else-if="value instanceof Date"
+              v-else-if="data[index][key] instanceof Date"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer

@@ -170,6 +170,7 @@
           :is="`IndependentAssessorChange`"
           v-bind="assessorDetails"
           :application="application"
+          :application-id="applicationId"
           @close="closeModal('modalRef')"
         />
       </Modal>
@@ -267,8 +268,9 @@
           :is="`LeadershipJudgeDetails`"
           v-bind="application.leadershipJudgeDetails"
           :application="application"
+          :application-id="applicationId"
+          @close="closeModal('modalLeadershipJudgeDetails')"
         />
-        <!-- @close="this.$refs.modalLeadershipJudgeDetails.closeModal()" -->
       </Modal>
     </div>
   </div>
@@ -290,6 +292,10 @@ export default {
       type: Object,
       required: true,
       default: () => {},
+    },
+    applicationId: {
+      type: String,
+      required: true,
     },
     editable: {
       type: [Boolean, Function, Promise],
@@ -326,7 +332,6 @@ export default {
       this.$refs[modal].closeModal();
     },
     editAssessor(AssessorNr) {
-      // this.assessorDetails = {};
       if (AssessorNr === 1) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,

@@ -71,6 +71,10 @@ export default {
       required: true,
       default: () => {},
     },
+    applicationId: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -119,8 +123,8 @@ export default {
           };
         }
 
-        await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
+        await this.$store.dispatch('assessment/update', { data: data, id: this.applicationId, AssessorNr: this.$attrs.AssessorNr });
         this.closeModal();
       }
     },

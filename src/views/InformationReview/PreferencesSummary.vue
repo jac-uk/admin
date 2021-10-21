@@ -220,7 +220,7 @@
     </div>
 
     <div
-      v-if="application.additionalWorkingPreferences"
+      v-if="exercise.additionalWorkingPreferences"
       class="govuk-!-margin-top-9"
     >
       <h2
@@ -230,7 +230,7 @@
         Additional Preferences
       </h2>
 
-      <div v-if="application.additionalWorkingPreferences">
+      <div>
         <dl
           v-for="(item, index) in exercise.additionalWorkingPreferences"
           :key="index"

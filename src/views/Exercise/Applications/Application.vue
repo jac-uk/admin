@@ -231,12 +231,13 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
-              <!-- <AssessorsSummary
+              <AssessorsSummary
                 :application="application"
+                :application-id="applicationId"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
-              /> -->
+              />
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"

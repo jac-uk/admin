@@ -71,6 +71,10 @@ export default {
       required: true,
       default: () => {},
     },
+    applicationId: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -79,11 +83,6 @@ export default {
       phone: null,
       title: null,
     };
-  },
-  computed: {
-    applicationId() {
-      return this.$attrs['application-id'];
-    },
   },
   created() {
     this.email = this.$attrs.email;

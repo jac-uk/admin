@@ -8,7 +8,7 @@
       <h2 class="govuk-heading-l">
         Experience
       </h2>
-      <div v-if="application.experience && application.experience.length">
+      <div>
         <InformationReviewSectionRenderer
           :value="application.experience"
           :data="application.experience"
@@ -17,12 +17,6 @@
           field="experience"
           @changeField="changeExperience"
         />
-      </div>
-      <div
-        v-else
-        class="govuk-body"
-      >
-        No information provided
       </div>
     </div>
     <!-- PQE -->
@@ -33,7 +27,7 @@
       <h2 class="govuk-heading-l">
         Post-qualification experience
       </h2>
-      <div v-if="(application.experience && application.experience.length) || editable">
+      <div>
         <InformationReviewSectionRenderer
           :data="application.experience"
           :data-default="emptyExperienceObject"
