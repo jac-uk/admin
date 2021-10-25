@@ -203,7 +203,7 @@
               <PersonalDetailsSummary 
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
-              />
+              /> 
               <CharacterInformationSummary
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
@@ -238,12 +238,13 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
+             
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
-              /> 
+              />
             </div>
           </div>
         </div>

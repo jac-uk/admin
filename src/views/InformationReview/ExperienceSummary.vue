@@ -317,6 +317,7 @@ export default {
             [obj.index]: {},
           };
         }
+        
         objChanged[obj.index][obj.extension] = obj.change;
       } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
         if (objChanged.length > 0){

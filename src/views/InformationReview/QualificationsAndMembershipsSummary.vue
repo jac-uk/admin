@@ -16,7 +16,7 @@
             <button
               v-if="editable"
               class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
-              @click="removeQualification(index)"
+              @click="openModal(index)"
             >
               Remove
             </button>
@@ -64,16 +64,9 @@
                 class="govuk-summary-list__row"
               >
                 <dt
-                  v-if="item.type === 'barrister'"
                   class="govuk-summary-list__key widerColumn"
                 >
-                  Date completed pupillage
-                </dt>
-                <dt
-                  v-else
-                  class="govuk-summary-list__key widerColumn"
-                >
-                  Date qualified
+                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
@@ -90,7 +83,7 @@
 
               <template>
                 <div
-                  v-if="item.type === 'barrister' || ((item.qualificationNotComplete && item.details) || editable)"
+                  v-if="item.type === 'barrister' && ((item.qualificationNotComplete && item.details) || editable)"
                   class="govuk-summary-list__row"
                 >
                   <dt class="govuk-summary-list__key widerColumn">
@@ -150,6 +143,14 @@
           Add
         </button>
       </div>
+      <Modal
+        ref="removeModal"
+      >
+        <ModalInner
+          @closed="closeModal"
+          @confirmed="removeQualification()"
+        />
+      </Modal>
     </div>
 
     <!-- applied shedules -->
@@ -294,6 +295,8 @@
 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 import {
   hasRelevantMemberships,
@@ -304,6 +307,8 @@ export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
     InformationReviewRenderer,
+    Modal,
+    ModalInner,
   },
   props: {
     application: {
@@ -322,11 +327,12 @@ export default {
       dataDefault: {
         type: null,
         location: null,
-        date: new Date(),
+        date: null,
         qualificationNotComplete: null,
         details: null,
       },
       hasMemberships: !!this.application.memberships,
+      currentIndex: null,
     };
   },
   computed: {
@@ -383,11 +389,11 @@ export default {
       this.$store.dispatch('application/update', { data: { qualifications: objChanged }, id: this.applicationId });
 
     },
-    removeQualification(index) {
+    removeQualification() {
       let objChanged = this.application.qualifications || [];
 
       if (objChanged.length > 0){
-        objChanged.splice(index, 1);
+        objChanged.splice(this.currentIndex, 1);
       } else {
         objChanged = [];
       } 
@@ -396,6 +402,8 @@ export default {
 
     },
     changeQualificationOrMembership(obj) {
+
+      // console.log(obj);
 
       let objChanged = this.application[obj.field] || {};
 
@@ -421,6 +429,14 @@ export default {
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
 
+    },
+    closeModal() {
+      this.currentIndex = null;
+      this.$refs.removeModal.closeModal();
+    },
+    openModal(index) {
+      this.currentIndex = index;
+      this.$refs.removeModal.openModal();
     },
   },
 };

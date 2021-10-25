@@ -216,7 +216,7 @@
         ref="removeModal"
       >
         <ModalInner
-          @close="closeModal"
+          @closed="closeModal"
           @confirmed="removeField"
         />
       </Modal>
@@ -236,7 +236,7 @@
       Add
     </button>
   </div>
-</template>gaps 
+</template> 
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';

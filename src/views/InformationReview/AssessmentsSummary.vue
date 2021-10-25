@@ -9,7 +9,7 @@
       </h2>
 
       <div
-        v-if="application.selectionCriteriaAnswers || editable"
+        v-if="editable || (application.selectionCriteriaAnswers && exercise.selectionCriteria)"
       >
         <div
           v-for="(item, index) in exercise.selectionCriteria"
@@ -31,19 +31,25 @@
               field="selectionCriteriaAnswers"
               @changeField="changeAssessmentInfo"
             />
-            <InformationReviewRenderer
-              v-if="hasAscAnswers && (application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true)"
-              :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
-              :edit="editable"
-              :index="index"
-              :data-default="emptyASCObject"
-              extension="answerDetails"
-              field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
-            /> 
-            <span v-else>
-              Does not meet this requirement
-            </span>
+          
+            <div
+              v-if="hasAscAnswers(index)"
+            >
+              <InformationReviewRenderer
+                v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
+                :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
+                :edit="editable"
+                :index="index"
+                :data-default="emptyASCObject"
+                extension="answerDetails"
+                field="selectionCriteriaAnswers"
+                @changeField="changeAssessmentInfo"
+              /> 
+              <span v-else>
+                Does not meet this requirement
+              </span>
+              <div />
+            </div>
           </dd>
         </div>
       </div>
@@ -55,168 +61,168 @@
       </dl>
     </div>
 
-    <!-- <div
-        v-if="hasStatementOfSuitability"
-        class="govuk-!-margin-top-9"
-      >
-        <h2 class="govuk-heading-l">
-          Statement of suitability
-        </h2>
+    <div
+      v-if="hasStatementOfSuitability"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Statement of suitability
+      </h2>
 
-        <dl class="govuk-summary-list">
-          <div
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key widerColumn">
-              Uploaded statement of suitability
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <div v-if="application.uploadedSuitabilityStatement">
-                <DownloadLink
-                  :file-name="application.uploadedSuitabilityStatement"
-                  :exercise-id="exercise.id"
-                  :user-id="application.userId"
-                  :title="application.uploadedSuitabilityStatement"
-                />
-              </div>
-              <span v-else>Not yet received</span>
-              <div>
-                <FileUpload
-                  v-if="editable"
-                  id="suitability-statement-file"
-                  ref="suitability-statement"
-                  v-model="application.uploadedSuitabilityStatement"
-                  name="suitability-statement"
-                  :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                  @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
-                />
-              </div>
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <dl class="govuk-summary-list">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Uploaded statement of suitability
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="application.uploadedSuitabilityStatement">
+              <DownloadLink
+                :file-name="application.uploadedSuitabilityStatement"
+                :exercise-id="exercise.id"
+                :user-id="application.userId"
+                :title="application.uploadedSuitabilityStatement"
+              />
+            </div>
+            <span v-else>Not yet received</span>
+            <div>
+              <FileUpload
+                v-if="editable"
+                id="suitability-statement-file"
+                ref="suitability-statement"
+                v-model="application.uploadedSuitabilityStatement"
+                name="suitability-statement"
+                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+              />
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
 
-      <div
-        v-if="hasSelfAssessment"
-        class="govuk-!-margin-top-9"
-      >
-        <h2 class="govuk-heading-l">
-          Self assessment competencies
-        </h2>
+    <div
+      v-if="hasSelfAssessment"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Self assessment competencies
+      </h2>
 
-        <dl class="govuk-summary-list">
-          <div
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key">
-              Uploaded self assessment
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <div v-if="application.uploadedSelfAssessment">
-                <DownloadLink
-                  :file-name="application.uploadedSelfAssessment"
-                  :exercise-id="exercise.id"
-                  :user-id="application.userId"
-                  :title="application.uploadedSelfAssessment"
-                />
-              </div>
-              <span v-else>Not yet received</span>
-              <div v-if="editable">
-                <FileUpload
-                  id="self-assessment-upload"
-                  ref="self-assessment"
-                  v-model="application.uploadedSelfAssessment"
-                  name="self-assessment"
-                  :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                  required
-                  @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
-                />
-              </div>
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <dl class="govuk-summary-list">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Uploaded self assessment
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="application.uploadedSelfAssessment">
+              <DownloadLink
+                :file-name="application.uploadedSelfAssessment"
+                :exercise-id="exercise.id"
+                :user-id="application.userId"
+                :title="application.uploadedSelfAssessment"
+              />
+            </div>
+            <span v-else>Not yet received</span>
+            <div v-if="editable">
+              <FileUpload
+                id="self-assessment-upload"
+                ref="self-assessment"
+                v-model="application.uploadedSelfAssessment"
+                name="self-assessment"
+                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                required
+                @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+              />
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
 
-      <div
-        v-if="hasCV"
-        class="govuk-!-margin-top-9"
-      >
-        <h2 class="govuk-heading-l">
-          Curriculum vitae (CV)
-        </h2>
+    <div
+      v-if="hasCV"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Curriculum vitae (CV)
+      </h2>
 
-        <dl class="govuk-summary-list">
-          <div
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key widerColumn">
-              Uploaded CV
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <div v-if="application.uploadedCV">
-                <DownloadLink
-                  :file-name="application.uploadedCV"
-                  :exercise-id="exercise.id"
-                  :user-id="application.userId"
-                  title="CV"
-                />
-              </div>
-              <span v-else>Not yet received</span>
-              <div>
-                <FileUpload
-                  v-if="editable"
-                  id="cv-upload"
-                  ref="cv"
-                  v-model="application.uploadedCV"
-                  name="cv"
-                  :path="uploadPath"
-                />
-              </div>
-            </dd>
-          </div>
-        </dl>
-      </div>
+      <dl class="govuk-summary-list">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Uploaded CV
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="application.uploadedCV">
+              <DownloadLink
+                :file-name="application.uploadedCV"
+                :exercise-id="exercise.id"
+                :user-id="application.userId"
+                title="CV"
+              />
+            </div>
+            <span v-else>Not yet received</span>
+            <div>
+              <FileUpload
+                v-if="editable"
+                id="cv-upload"
+                ref="cv"
+                v-model="application.uploadedCV"
+                name="cv"
+                :path="uploadPath"
+              />
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
 
-      <div
-        v-if="hasCoveringLetter"
-        class="govuk-!-margin-top-9"
-      >
-        <h2 class="govuk-heading-l">
-          Covering letter
-        </h2>
+    <div
+      v-if="hasCoveringLetter"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Covering letter
+      </h2>
 
-        <dl class="govuk-summary-list">
-          <div
-            class="govuk-summary-list__row"
-          >
-            <dt class="govuk-summary-list__key widerColumn">
-              Uploaded Covering Letter
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <div v-if="application.uploadedCoveringLetter">
-                <DownloadLink
-                  :file-name="application.uploadedCoveringLetter"
-                  :exercise-id="exercise.id"
-                  :user-id="application.userId"
-                  title="Covering Letter"
-                />
-              </div>
-              <span v-else>Not yet received</span>
-              <div>
-                <FileUpload
-                  v-if="editable"
-                  id="covering-letter-file"
-                  ref="covering-letter-upload"
-                  v-model="application.uploadedCoveringLetter"
-                  name="covering-letter"
-                  :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                  @input="val => doFileUpload(val, 'uploadedCoveringLetter')"
-                />
-              </div>
-            </dd>
-          </div>
-        </dl>
-      </div> -->
+      <dl class="govuk-summary-list">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Uploaded Covering Letter
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="application.uploadedCoveringLetter">
+              <DownloadLink
+                :file-name="application.uploadedCoveringLetter"
+                :exercise-id="exercise.id"
+                :user-id="application.userId"
+                title="Covering Letter"
+              />
+            </div>
+            <span v-else>Not yet received</span>
+            <div>
+              <FileUpload
+                v-if="editable"
+                id="covering-letter-file"
+                ref="covering-letter-upload"
+                v-model="application.uploadedCoveringLetter"
+                name="covering-letter"
+                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                @input="val => doFileUpload(val, 'uploadedCoveringLetter')"
+              />
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
   </div>
 </template>
 <script>
@@ -227,13 +233,14 @@ import {
   hasSelfAssessment
 } from '@/helpers/exerciseHelper';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-// import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-// import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 
 export default {
+  name: 'AssessmentsSummary',
   components: {
-    // DownloadLink,
-    // FileUpload,
+    DownloadLink,
+    FileUpload,
     InformationReviewRenderer,
   },
   props: {
@@ -287,11 +294,15 @@ export default {
   },
   methods: {
     hasAscAnswers(index){
-      return this.application.selectionCriteriaAnswers[index] && this.application.selectionCriteriaAnswers[index].answer;
+      if (this.application.selectionCriteriaAnswers) {
+        return this.application.selectionCriteriaAnswers[index] && this.application.selectionCriteriaAnswers[index].answer;
+      } else {
+        return false;
+      }
     },
     changeAssessmentInfo(obj) {
 
-      console.log(obj);
+      // console.log(obj);
       
       let objChanged = this.application[obj.field] || {};
 
@@ -315,7 +326,7 @@ export default {
       }
       const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
 
-      console.log(updatedApplication);
+      // console.log(updatedApplication);
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
     },

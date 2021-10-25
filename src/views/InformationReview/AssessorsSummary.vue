@@ -16,6 +16,7 @@
           <dt class="govuk-summary-list__key" />
           <dd class="govuk-summary-list__value">
             <button
+              v-if="editable"
               class="govuk-button btn-unlock"
               @click="editAssessor(1)"
             >
@@ -95,6 +96,7 @@
           <dt class="govuk-summary-list__key" />
           <dd class="govuk-summary-list__value">
             <button
+              v-if="editable"
               class="govuk-button btn-unlock"
               @click="editAssessor(2)"
             >
@@ -195,6 +197,7 @@
           <dt class="govuk-summary-list__key" />
           <dd class="govuk-summary-list__value">
             <button
+              v-if="editable"
               class="govuk-button btn-unlock"
               @click="editLeadershipJudgeDetails"
             >
@@ -287,6 +290,7 @@ import IndependentAssessorChange from '@/components/ModalViews/IndependentAssess
 import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
 
 export default {
+  name: 'AssessorsSummary',
   components: {
     Modal,
     IndependentAssessorChange,

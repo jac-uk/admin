@@ -298,7 +298,7 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 
 export default {
-  name: 'PersonalDetailsSummary',
+  name: 'PreferencesSummary',
   components: {
     InformationReviewRenderer,
   },
