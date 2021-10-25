@@ -52,6 +52,7 @@
         />
       </dl>
       <dl v-else>
+        bb
         <CharacterInformationV1Summary
           :character-information="characterInformation"
           :required-wider-column="false"

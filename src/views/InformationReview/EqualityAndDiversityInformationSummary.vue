@@ -590,7 +590,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import { isLegal } from '@/helpers/exerciseHelper';
 
 export default {
-  name: 'PersonalDetailsSummary',
+  name: 'EqualityAndDiversityInformationSummary',
   components: {
     InformationReviewRenderer,
   },

@@ -52,7 +52,7 @@
       <dl v-else>
         <div v-if="hasValues(application.characterInformation)|| editable">
           <CharacterInformationV1Summary
-            :character-information="application.characterInformation"
+            :character-information="application.characterInformation || {}"
             :edit="editable"
             @changeCharacterInfo="changeCharacterInfo"
           /> 
@@ -126,11 +126,9 @@ export default {
       if (this.isVersion2) {
         myCharacterInfo = { ...this.application.characterInformationV2, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformationV2: myCharacterInfo }, id: this.applicationId });
-        // this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       } else {
         myCharacterInfo = { ...this.application.characterInformation, ...obj };
         this.$store.dispatch('application/update', { data: { characterInformation: myCharacterInfo }, id: this.applicationId });
-        // this.$store.dispatch('candidates/saveCharacterInfo', { data: obj, id: this.application.userId });
       }
     },
   },

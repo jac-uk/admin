@@ -238,7 +238,6 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
               />
-             
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"

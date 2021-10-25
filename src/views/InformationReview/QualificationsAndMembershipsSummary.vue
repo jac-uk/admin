@@ -337,7 +337,7 @@ export default {
   },
   computed: {
     applicationHasQualifications() {
-      return this.application.qualifications.length > 0;
+      return this.application.qualifications && this.application.qualifications.length > 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

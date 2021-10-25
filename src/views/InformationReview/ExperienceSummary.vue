@@ -234,7 +234,7 @@ import InformationReviewSectionRenderer from '@/components/Page/InformationRevie
 import { isNonLegal, isLegal } from '@/helpers/exerciseHelper';
 
 export default {
-  name: 'QualificationsAndMembershipsSummary',
+  name: 'ExperienceSummary',
   components: {
     InformationReviewRenderer,
     InformationReviewSectionRenderer,

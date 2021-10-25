@@ -18,6 +18,8 @@
         >
           <dt class="govuk-summary-list__key widerColumn">
             {{ item.title }}
+            <br>
+            {{ item.wordLimit }} words
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
@@ -43,6 +45,7 @@
                 :data-default="emptyASCObject"
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
+                type="textarea"
                 @changeField="changeAssessmentInfo"
               /> 
               <span v-else>
