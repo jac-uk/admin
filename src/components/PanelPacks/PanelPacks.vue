@@ -215,7 +215,6 @@ export default {
         );
       }
       if (this.isScenario) {
-        console.log(params);
         this.$store.dispatch(
           'stageReview/bind',
           {
