@@ -74,6 +74,7 @@ import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
 import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
 import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
+import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -884,8 +885,8 @@ const router = new Router({
               children: [
                 {
                   path: '',
-                  component: ExerciseTasksSelectionDays,
-                  name: 'exercise-tasks-selection',
+                  component: ExerciseTaskScenario,
+                  name: 'exercise-tasks-scenario',
                   meta: {
                     requiresAuth: true,
                     title: 'Scenario Responses | Exercise Tasks',
@@ -894,7 +895,7 @@ const router = new Router({
                 {
                   path: 'new',
                   component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-selection-new',
+                  name: 'exercise-tasks-scenario-new',
                   meta: {
                     requiresAuth: true,
                     title: 'Create Scenario Response Panel | Exercise Tasks',
@@ -903,7 +904,7 @@ const router = new Router({
                 {
                   path: 'view/:panelId',
                   component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-selection-view',
+                  name: 'exercise-tasks-scenario-view',
                   meta: {
                     requiresAuth: true,
                     title: 'Scenario Response Panel | Exercise Tasks',
