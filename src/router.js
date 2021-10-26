@@ -878,6 +878,39 @@ const router = new Router({
                 },
               ],
             },
+            {
+              path: 'scenario',
+              component: ExerciseTasksPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseTasksSelectionDays,
+                  name: 'exercise-tasks-selection',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Responses | Exercise Tasks',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTasksPanelsNew,
+                  name: 'exercise-tasks-selection-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Scenario Response Panel | Exercise Tasks',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-selection-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Response Panel | Exercise Tasks',
+                  },
+                },
+              ],
+            },
           ],
         },
         {
