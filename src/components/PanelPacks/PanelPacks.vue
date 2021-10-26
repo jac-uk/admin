@@ -229,7 +229,7 @@ export default {
       if (!candidate.panelIds) {
         return '';
       }
-      const panelId = this.isSift ? candidate.panelIds.sift : candidate.panelIds.selection;
+      const panelId = this.isSift ? candidate.panelIds.sift : this.isScenario ? candidate.panelIds.scenario : candidate.panelIds.selection;
       if (!panelId) {
         return '';
       }
@@ -268,6 +268,8 @@ export default {
           };
           if (panel.type === 'sift') {
             data.panelIds.sift = panel.id;
+          } else if (panel.type === 'scenario') {
+            data.panelIds.scenario = panel.id;
           } else {
             data.panelIds.selection = panel.id; // are there other panel types to add?
           }
