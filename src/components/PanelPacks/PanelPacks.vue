@@ -237,7 +237,6 @@ export default {
       return panel ? panel.name : '';
     },
     createNewPanel() {
-      //const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-new';
       let routeName = '';
       if (this.type === 'sift') {
         routeName = 'exercise-tasks-sift-new';
@@ -246,8 +245,6 @@ export default {
       } else {
         routeName = 'exercise-tasks-selection-new';
       }
-      // eslint-disable-next-line no-console
-      // console.log('create new Pack btn clicked');
       this.$router.push({ name: routeName });
     },
     btnClkSelectPanel(modal) {
