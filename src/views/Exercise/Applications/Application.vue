@@ -976,7 +976,10 @@
                       Location
                     </dt>
                     <dd class="govuk-summary-list__value">
-                      <ul class="govuk-list">
+                      <ul
+                        v-if="item.location"
+                        class="govuk-list"
+                      >
                         <li>{{ item.location | lookup }}</li>
                       </ul>
                     </dd>
@@ -1463,43 +1466,72 @@
                   </div>
                 </dd>
               </div>
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Base location and/or region where you predominately operate/d
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  {{ item.taskDetails.location }}
-                </dd>
-              </div>
+              <div v-if="item.taskDetails">
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Base location and/or region where you predominately operate/d
+                  </dt>
+                  <dd
+                    v-if="item.location"
+                    class="govuk-summary-list__value"
+                  >
+                    {{ item.taskDetails.location }}
+                  </dd>
+                  <dd
+                    else
+                    class="govuk-summary-list__value"
+                  >
+                    No Answer provided
+                  </dd>
+                </div>
 
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Jurisdiction/area of law
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  {{ item.taskDetails.jurisdiction }}
-                </dd>
-              </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Jurisdiction/area of law
+                  </dt>
+                  <dd
+                    v-if="item.jurisdiction"
+                    class="govuk-summary-list__value"
+                  >
+                    {{ item.taskDetails.jurisdiction }}
+                  </dd>
+                  <dd
+                    else
+                    class="govuk-summary-list__value"
+                  >
+                    No Answer provided
+                  </dd>
+                </div>
 
-              <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                  Working Basis
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  {{ item.taskDetails.workingBasis }}
-                </dd>
-              </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Working Basis
+                  </dt>
+                  <dd
+                    v-if="item.taskDetails.workingBasis"
+                    class="govuk-summary-list__value"
+                  >
+                    {{ item.taskDetails.workingBasis }}
+                  </dd>
+                  <dd
+                    else
+                    class="govuk-summary-list__value"
+                  >
+                    No Answer provided
+                  </dd>
+                </div>
 
-              <div
-                v-if="item.taskDetails.totalDaysInRole"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key">
-                  Total number of days engaged in this role
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  {{ item.taskDetails.totalDaysInRole }}
-                </dd>
+                <div
+                  v-if="item.taskDetails.totalDaysInRole"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key">
+                    Total number of days engaged in this role
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    {{ item.taskDetails.totalDaysInRole }}
+                  </dd>
+                </div>
               </div>
             </dl>
           </div>
