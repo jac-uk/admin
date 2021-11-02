@@ -1466,19 +1466,26 @@
                   </div>
                 </dd>
               </div>
-              <div v-if="item.taskDetails">
-                <div class="govuk-summary-list__row">
+
+              <template
+                v-if="item.taskDetails"
+              >
+                <div
+                  class="govuk-summary-list__row"
+                >
                   <dt class="govuk-summary-list__key">
                     Base location and/or region where you predominately operate/d
                   </dt>
+
                   <dd
                     v-if="item.location"
                     class="govuk-summary-list__value"
                   >
                     {{ item.taskDetails.location }}
                   </dd>
+
                   <dd
-                    else
+                    v-else
                     class="govuk-summary-list__value"
                   >
                     No Answer provided
@@ -1496,7 +1503,7 @@
                     {{ item.taskDetails.jurisdiction }}
                   </dd>
                   <dd
-                    else
+                    v-else
                     class="govuk-summary-list__value"
                   >
                     No Answer provided
@@ -1514,7 +1521,7 @@
                     {{ item.taskDetails.workingBasis }}
                   </dd>
                   <dd
-                    else
+                    v-else
                     class="govuk-summary-list__value"
                   >
                     No Answer provided
@@ -1532,7 +1539,7 @@
                     {{ item.taskDetails.totalDaysInRole }}
                   </dd>
                 </div>
-              </div>
+              </template>
             </dl>
           </div>
           <div
