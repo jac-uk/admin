@@ -109,17 +109,19 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(false);
     });
 
-    xit('renders identifying sections in full view', () => {
+    it('renders identifying sections in full view', () => {
       wrapper.setProps({
         activeTab: 'full',
       });
 
-      const headers = wrapper.findAll('.application-details > div > h2');
-
-      expect(headers.length).toBeGreaterThan(1);
-      expect(headers.at(0).text()).toEqual(expect.stringContaining('Personal details'));
-      expect(headers.at(1).text()).toEqual(expect.stringContaining('Character information'));
-      expect(headers.at(2).text()).toEqual(expect.stringContaining('Equality and diversity information'));
+      expect(wrapper.contains('personaldetailssummary-stub')).toBe(true);
+      expect(wrapper.contains('characterinformationsummary-stub')).toBe(true);
+      expect(wrapper.contains('equalityanddiversityinformationsummary-stub')).toBe(true);
+      expect(wrapper.contains('preferencessummary-stub')).toBe(true);
+      expect(wrapper.contains('qualificationsandmembershipssummary-stub')).toBe(true);
+      expect(wrapper.contains('assessorssummary-stub')).toBe(true);
+      expect(wrapper.contains('experiencesummary-stub')).toBe(true);
+      expect(wrapper.contains('assessmentssummary-stub')).toBe(true);
     });
 
     // @TODO fix this test :)

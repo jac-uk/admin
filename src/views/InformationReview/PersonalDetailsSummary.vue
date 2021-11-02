@@ -239,7 +239,6 @@ export default {
       }
       const myPersonalDetails = { ...this.application.personalDetails, ...obj };
       this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
-      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.application.userId });
     },
   },
 };
