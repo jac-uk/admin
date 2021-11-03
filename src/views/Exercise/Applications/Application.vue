@@ -1529,14 +1529,24 @@
                 </div>
 
                 <div
-                  v-if="item.taskDetails.totalDaysInRole"
                   class="govuk-summary-list__row"
                 >
-                  <dt class="govuk-summary-list__key">
+                  <dt 
+                    class="govuk-summary-list__key"
+                  >
                     Total number of days engaged in this role
                   </dt>
-                  <dd class="govuk-summary-list__value">
+                  <dd 
+                    v-if="item.taskDetails.totalDaysInRole"
+                    class="govuk-summary-list__value"
+                  >
                     {{ item.taskDetails.totalDaysInRole }}
+                  </dd>
+                  <dd
+                    v-else
+                    class="govuk-summary-list__value"
+                  >
+                    No Answer provided
                   </dd>
                 </div>
               </template>
