@@ -18,7 +18,7 @@
           :path="buildFileFolder"
           :file-path="$attrs.filePath"
           label=""
-          :type="$attrs.type"
+          :types="$attrs.types"
           required
           @input="changeFileName"
         />
