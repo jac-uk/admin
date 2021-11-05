@@ -1,91 +1,106 @@
-{/* <template>
-  <div>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has any other character issues
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.furtherInformationDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="furtherInformationDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-  </div>
-</template>
+const mockExercise = {
+};
 
-<script>
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-
-export default {
-  name: 'ProfessionalConductSummary',
-  components: {
-    InformationReviewSectionRenderer,
+const mockApplication = {
+  userId: '0123456',
+  characterInformation: {
+    hmrcFineDetails: [
+      {
+        title: '',
+        details: '',
+        date: new Date(),
+      },
+    ],
   },
-  props: {
-    characterInformation: {
-      type: Object,
-      required: true,
-      default: new Object({}),
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-    edit: {
-      type: [Boolean, Function, Promise],
-      required: true,
-      default: false,
-    },
+};
+
+const mockProps = {
+  edit: false,
+  application: mockApplication,
+  characterInformation: mockApplication.characterInformation,
+};
+
+const mockStore = {
+  dispatch: jest.fn(),
+  getters: {
+    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
   },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+  state: {
+    exerciseDocument: {
+      record: mockExercise,
     },
-    emptyDetailObject() {
-      return {
-        'details': '',
-        'date': new Date(),
-      };
+    applications: {
+      records: [mockApplication],
     },
-  },
-  methods: {
-    changeCharacterInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
-
-        changedObj[obj.index][obj.extension] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-
-        if (changedObj.length > 0){
-          changedObj = [...changedObj, obj.change];
-        } else {
-          changedObj = [obj.change];
-        } 
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-
-        if (changedObj.length > 0){
-          changedObj.splice(obj.index, 1);
-        } else {
-          changedObj = [];
-        } 
-      } 
-      changedObj = { [obj.field]: changedObj };
-      this.$emit('changeCharacterInfo', changedObj);
+    application: {
+      record: mockApplication,
     },
   },
 };
-</script>
 
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style> */}
+import FurtherInformationSummary from '@/views/InformationReview/CharacterReview/FurtherInformationSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
+describe('views/InformationReview/CharacterReview/FurtherInformationSummary.vue', () => {
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(FurtherInformationSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+  describe('template', () => {
+    
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
+    
+  });
+  describe('methods', () => {
+
+    let obj = {
+      field: 'hmrcFineDetails',
+      index: 1,
+      change: {
+          title: '',
+          details: '',
+          date: new Date(),
+      },
+    };
+
+    it('change info', () => {
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo).toBeTruthy();
+    });
+
+    it('add item', () => {
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[1][0][obj.field][obj.index]).toEqual(obj.change);
+    });
+
+    it('update item', () => {
+      obj = {
+        field: 'hmrcFineDetails',
+        change: 'Test',
+        index: 0, 
+        extension: 'title',
+      };
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[2][0][obj.field][obj.index][obj.extension]).toEqual(obj.change);
+    });
+
+    it('Remove item', () => {
+      obj = {
+        field: 'hmrcFineDetails',
+        index: 0,
+        remove: true,
+      };
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[3][0][obj.field][obj.index]).toEqual();
+    });
+
+  });
+});

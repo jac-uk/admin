@@ -51,7 +51,6 @@
               <span v-else>
                 Does not meet this requirement
               </span>
-              <div />
             </div>
           </dd>
         </div>
@@ -298,24 +297,25 @@ export default {
   methods: {
     hasAscAnswers(index){
       if (this.application.selectionCriteriaAnswers) {
-        return this.application.selectionCriteriaAnswers[index] && this.application.selectionCriteriaAnswers[index].answer;
+        return this.application.selectionCriteriaAnswers[index] && 'answer' in this.application.selectionCriteriaAnswers[index];
       } else {
         return false;
       }
     },
     changeAssessmentInfo(obj) {
 
-      // console.log(obj);
-      
       let objChanged = this.application[obj.field] || {};
 
-      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
+      if (obj.extension && obj.hasOwnProperty('index')) { //nested field
         if (!objChanged[obj.index]) {
           objChanged = {
-            [obj.index]: {},
+            [obj.index]: {
+              [obj.extension]: obj.change,
+            },
           };
+        } else {
+          objChanged[obj.index][obj.extension] = obj.change;
         }
-        objChanged[obj.index][obj.extension] = obj.change;
       } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
         objChanged[obj.index] = obj.change;
       } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
@@ -327,9 +327,8 @@ export default {
       } else {
         objChanged = obj;
       }
-      const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
 
-      // console.log(updatedApplication);
+      const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
 
       this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
     },

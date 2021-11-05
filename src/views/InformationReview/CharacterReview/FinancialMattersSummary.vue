@@ -11,7 +11,7 @@
             :data-default="emptyDetailObject"
             :edit="edit"
             field="bankruptcyDetails"
-            @changeField="changeCharacterInfo"
+            @changeField="changeInfo"
           />
         </dd>
       </div>
@@ -28,7 +28,7 @@
             :data-default="emptyDetailObject"
             :edit="edit"
             field="ivaDetails"
-            @changeField="changeCharacterInfo"
+            @changeField="changeInfo"
           />
         </dd>
       </div>
@@ -45,7 +45,7 @@
             :data-default="emptyDetailObject"
             :edit="edit"
             field="lateTaxReturnDetails"
-            @changeField="changeCharacterInfo"
+            @changeField="changeInfo"
           />
         </dd>
       </div>
@@ -62,7 +62,7 @@
             :data-default="emptyDetailObject"
             :edit="edit"
             field="lateVatReturnDetails"
-            @changeField="changeCharacterInfo"
+            @changeField="changeInfo"
           />
         </dd>
       </div>
@@ -79,7 +79,7 @@
             :data-default="emptyDetailObject"
             field="hmrcFineDetails"
             :edit="edit"
-            @changeField="changeCharacterInfo"
+            @changeField="changeInfo"
           />
         </dd>
       </div>
@@ -125,7 +125,7 @@ export default {
     },
   },
   methods: {
-    changeCharacterInfo(obj) {
+    changeInfo(obj) {
       let changedObj = this.characterInformation[obj.field] || {};
 
       if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE

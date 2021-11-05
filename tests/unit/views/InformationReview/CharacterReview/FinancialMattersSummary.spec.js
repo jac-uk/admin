@@ -1,160 +1,62 @@
-{/* <template>
-  <div>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has been declared bankrupt
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.bankruptcyDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="bankruptcyDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
+const mockExercise = {
+};
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has entered into an Individual Voluntary Agreement (IVA)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.ivaDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="ivaDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has filed late tax returns
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.lateTaxReturnDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="lateTaxReturnDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has filed late VAT returns
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.lateVatReturnDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="lateVatReturnDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has ever been fined by HMRC
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.hmrcFineDetails"
-            :data-default="emptyDetailObject"
-            field="hmrcFineDetails"
-            :edit="edit"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-  </div>
-</template>
-
-<script>
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-
-export default {
-  name: 'FinancialMattersSummary',
-  components: {
-    InformationReviewSectionRenderer,
+const mockApplication = {
+  userId: '0123456',
+  characterInformation: {
+    hmrcFineDetails: [
+      {
+        title: '',
+        details: '',
+        date: new Date(),
+      },
+    ],
   },
-  props: {
-    characterInformation: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-    edit: {
-      type: [Boolean, Function, Promise],
-      required: true,
-      default: false,
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+};
+
+const mockProps = {
+  edit: false,
+  application: mockApplication,
+  characterInformation: mockApplication.characterInformation,
+};
+
+const mockStore = {
+  dispatch: jest.fn(),
+  getters: {
+    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
   },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+  state: {
+    exerciseDocument: {
+      record: mockExercise,
     },
-    emptyDetailObject() {
-      return {
-        'details': '',
-        'date': new Date(),
-        'title': '',
-      };
+    applications: {
+      records: [mockApplication],
     },
-  },
-  methods: {
-    changeCharacterInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
-
-        changedObj[obj.index][obj.extension] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-
-        if (changedObj.length > 0){
-          changedObj = [...changedObj, obj.change];
-        } else {
-          changedObj = [obj.change];
-        } 
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-        if (changedObj.length > 0){
-          changedObj.splice(obj.index, 1);
-        } else {
-          changedObj = [];
-        } 
-      } 
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeCharacterInfo', changedObj);
+    application: {
+      record: mockApplication,
     },
   },
 };
-</script>
 
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style> */}
+import FinancialMattersSummary from '@/views/InformationReview/CharacterReview/FinancialMattersSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
+describe('@/views/InformationReview/CharacterReview/FinancialMattersSummary', () => {
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(FinancialMattersSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+  describe('template', () => {
+    
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
+    
+  });
+});

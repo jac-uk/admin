@@ -6,7 +6,23 @@ const mockExercise = {
 const mockApplication = {
   userId: '0123456',
 };
-
+const mockStore = {
+  dispatch: jest.fn(),
+  getters: {
+    'application/data': jest.fn(() => mockApplication),
+  },
+  state: {
+    exerciseDocument: {
+      record: mockExercise,
+    },
+    applications: {
+      records: [mockApplication],
+    },
+    application: {
+      record: mockApplication,
+    },
+  },
+};
 const mockProps = {
   editable: false,
   application: mockApplication,
@@ -17,36 +33,45 @@ import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
-  describe('template', () => {
-    let wrapper;
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(ExperienceSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+
+  it('renders the component', () => {
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  describe('methods', () => {
     beforeAll(() => {
-      wrapper = createTestSubject(ExperienceSummary, {
-        propsData: mockProps,
-        mocks: {
-          $store: {
-            getters: {
-              'application/data': jest.fn(() => mockApplication),
-            },
-            state: {
-              exerciseDocument: {
-                record: mockExercise,
-              },
-              applications: {
-                records: [mockApplication],
-              },
-              application: {
-                record: mockApplication,
-              },
-            },
-          },
-        },
-        stubs: [],
-      });
+      const obj = {
+        experience: 'test',
+      };
+      wrapper.vm.changeExperience(obj);
     });
 
-    it('renders the component', () => {
-      expect(wrapper.exists()).toBe(true);
+    it('changeUserDetails', () => {
+      expect(wrapper.vm.$store.dispatch).toHaveBeenCalled();
+    });
+    
+    it('dispatches `application/update` Vuex action', () => {
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+      const dispatchedAction = mockStore.dispatch.mock.calls[0][0];
+      expect(dispatchedAction).toBe('application/update');
+    });
+    
+    it('dispatches formatted change', () => {
+      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
+      const dispatchedChange = mockStore.dispatch.mock.calls[0][1];
+      expect(dispatchedChange).toEqual( { data: { experience: 'test', userId: '0123456' }, id: 'application1' } );
     });
 
   });
+
 });

@@ -4,7 +4,7 @@
   const mockApplication = {
     userId: '0123456',
     personalDetails: {
-      lastName: '',
+      firstName: '',
     },
   };
   
@@ -56,7 +56,6 @@ describe('@/views/Exercise/Applications/Application', () => {
     beforeAll(() => {
       const obj = {
         firstName: 'test',
-        lastName: 'test',
       };
       wrapper.vm.changeUserDetails(obj);
     });
@@ -74,7 +73,7 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('dispatches formatted change', () => {
       expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
       const dispatchedChange = mockStore.dispatch.mock.calls[0][1];
-      expect(dispatchedChange).toEqual( { 'data': { 'personalDetails': { 'firstName': 'test', 'lastName': 'test' } }, 'id': 'application1' } );
+      expect(dispatchedChange).toEqual( { 'data': { 'personalDetails': { 'firstName': 'test' } }, 'id': 'application1' } );
     });
 
   });

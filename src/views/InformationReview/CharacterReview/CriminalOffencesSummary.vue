@@ -76,7 +76,6 @@ export default {
   methods: {
     changeCharacterInfo(obj) {
       let changedObj = this.characterInformation[obj.field] || {};
-      console.log(this.characterInformation);
       if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
         changedObj[obj.index][obj.extension] = obj.change;
       } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD

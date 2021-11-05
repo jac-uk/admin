@@ -1,110 +1,106 @@
-{/* <template>
-  <div>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has been disqualified from driving
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.drivingDisqualificationDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="drivingDisqualificationDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
+const mockExercise = {
+};
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Was convicted of any motoring offences in the past 4 years
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <InformationReviewSectionRenderer
-            :data="characterInformation.recentDrivingConvictionDetails"
-            :data-default="emptyDetailObject"
-            :edit="edit"
-            field="recentDrivingConvictionDetails"
-            @changeField="changeCharacterInfo"
-          />
-        </dd>
-      </div>
-    </dl>
-  </div>
-</template>
-
-<script>
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-
-export default {
-  name: 'MotoringOffencesSummary',
-  components: {
-    InformationReviewSectionRenderer,
+const mockApplication = {
+  userId: '0123456',
+  characterInformation: {
+    recentDrivingConvictionDetails: [
+      {
+        title: '',
+        details: '',
+        date: new Date(),
+      },
+    ],
   },
-  props: {
-    characterInformation: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-    edit: {
-      type: [Boolean, Function, Promise],
-      required: true,
-      default: false,
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+};
+
+const mockProps = {
+  edit: false,
+  application: mockApplication,
+  characterInformation: mockApplication.characterInformation,
+};
+
+const mockStore = {
+  dispatch: jest.fn(),
+  getters: {
+    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
   },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+  state: {
+    exerciseDocument: {
+      record: mockExercise,
     },
-    emptyDetailObject() {
-      return {
-        'title': '',
-        'date': new Date(),
-        'details': '',
-      };
+    applications: {
+      records: [mockApplication],
     },
-  },
-  methods: {
-    changeCharacterInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
-
-        changedObj[obj.index][obj.extension] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-
-        if (changedObj.length > 0){
-          changedObj = [...changedObj, obj.change];
-        } else {
-          changedObj = [obj.change];
-        } 
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-
-        if (changedObj.length > 0){
-          changedObj.splice(obj.index, 1);
-        } else {
-          changedObj = [];
-        } 
-      } 
-      changedObj = { [obj.field]: changedObj };
-      this.$emit('changeCharacterInfo', changedObj);
+    application: {
+      record: mockApplication,
     },
   },
 };
-</script>
 
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style>
- */}
+import MotoringOffencesSummary from '@/views/InformationReview/CharacterReview/MotoringOffencesSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
+describe('@/views/InformationReview/CharacterReview/MotoringOffencesSummary.vue', () => {
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(MotoringOffencesSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+  describe('template', () => {
+    
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
+    
+  });
+  describe('methods', () => {
+
+    let obj = {
+      field: 'recentDrivingConvictionDetails',
+      index: 1,
+      change: {
+          title: '',
+          details: '',
+          date: new Date(),
+      },
+    };
+
+    it('change info', () => {
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo).toBeTruthy();
+    });
+
+    it('add item', () => {
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[1][0][obj.field][obj.index]).toEqual(obj.change);
+    });
+
+    it('update item', () => {
+      obj = {
+        field: 'recentDrivingConvictionDetails',
+        change: 'Test',
+        index: 0, 
+        extension: 'title',
+      };
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[2][0][obj.field][obj.index][obj.extension]).toEqual(obj.change);
+    });
+
+    it('Remove item', () => {
+      obj = {
+        field: 'recentDrivingConvictionDetails',
+        index: 0,
+        remove: true,
+      };
+      wrapper.vm.changeCharacterInfo(obj);
+      expect(wrapper.emitted().changeCharacterInfo[3][0][obj.field][obj.index]).toEqual();
+    });
+
+  });
+});

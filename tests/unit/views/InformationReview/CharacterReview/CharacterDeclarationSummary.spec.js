@@ -1,56 +1,62 @@
-{/* <template>
-  <div>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Signed character information declaration
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ signedDeclaration() | toYesNo }}
-        </dd>
-      </div>
-    </dl>
-  </div>
-</template>
+const mockExercise = {
+};
 
-<script>
+const mockApplication = {
+  userId: '0123456',
+  characterInformation: {
+    criminalConvictionDetails: [
+      {
+        title: '',
+        details: '',
+        date: new Date(),
+      },
+    ],
+  },
+};
 
-export default {
-  name: 'CharacterDeclarationSummary',
-  props: {
-    characterInformation: {
-      type: Object,
-      required: true,
-      default: new Object({}),
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+const mockProps = {
+  edit: false,
+  application: mockApplication,
+  characterInformation: mockApplication.characterInformation,
+};
+
+const mockStore = {
+  dispatch: jest.fn(),
+  getters: {
+    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
   },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
+  state: {
+    exerciseDocument: {
+      record: mockExercise,
     },
-  },
-  methods: {
-    signedDeclaration() {
-      if (this.characterInformation.declaration1 === true &&
-        this.characterInformation.declaration2 === true &&
-        this.characterInformation.declaration3 === true) {
-        return true;
-      }
-      return false;
+    applications: {
+      records: [mockApplication],
+    },
+    application: {
+      record: mockApplication,
     },
   },
 };
 
-</script>
+import CharacterDeclarationSummary from '@/views/InformationReview/CharacterReview/CharacterDeclarationSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
 
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style>
- */}
+describe('@/views/InformationReview/CharacterReview/CharacterDeclarationSummary', () => {
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(CharacterDeclarationSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+  describe('template', () => {
+    
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
+    
+  });
+});
