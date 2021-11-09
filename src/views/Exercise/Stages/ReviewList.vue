@@ -24,6 +24,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body"
+      >
+        No Applications
+      </p>
       <Table
         data-key="id"
         :data="applicationRecords"

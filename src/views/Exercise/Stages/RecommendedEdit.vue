@@ -51,15 +51,19 @@
           id="emp-edit-input"
           v-model="empApplied"
           label=""
-          required
           hint=""
+          required
           :messages="{
             required: 'Please specify a value'
           }"
         >
           <RadioItem
-            :value="true"
-            label="Yes - EMP has been Applied"
+            value="gender"
+            label="Yes - EMP has been Applied on basis of gender"
+          />
+          <RadioItem
+            value="ethnicity"
+            label="Yes - EMP has been Applied on basis of ethnicity"
           />
           <RadioItem
             :value="false"
