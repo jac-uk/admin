@@ -23,26 +23,23 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :data="hasAscAnswers(index) ? application.selectionCriteriaAnswers[index].answer : null"
+              :data="application.selectionCriteriaAnswers[index].answer"
               :edit="editable"
               :index="index"
               extension="answer"
-              :data-default="emptyASCObject"
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
               @changeField="changeAssessmentInfo"
             />
-          
             <div
               v-if="hasAscAnswers(index)"
             >
               <InformationReviewRenderer
                 v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
-                :data="hasAscAnswers ? application.selectionCriteriaAnswers[index].answerDetails : null"
+                :data="application.selectionCriteriaAnswers[index].answerDetails"
                 :edit="editable"
                 :index="index"
-                :data-default="emptyASCObject"
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
@@ -304,7 +301,7 @@ export default {
     },
     changeAssessmentInfo(obj) {
 
-      let objChanged = this.application[obj.field] || {};
+      let objChanged = this.application[obj.field] || [];
 
       if (obj.extension && obj.hasOwnProperty('index')) { //nested field
         if (!objChanged[obj.index]) {
