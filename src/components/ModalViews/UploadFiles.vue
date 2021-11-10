@@ -5,7 +5,7 @@
     </div>
     <div class="modal__content govuk-!-padding-4">
       <p class="modal__message govuk-body-l">
-        <TextField 
+        <TextField
           :id="`${$attrs.name}-file-title`"
           v-model="fileTitle"
           label="Title of file"
@@ -18,6 +18,7 @@
           :path="buildFileFolder"
           :file-path="$attrs.filePath"
           label=""
+          :types="$attrs.types"
           required
           @input="changeFileName"
         />
@@ -29,9 +30,9 @@
         >
           Cancel
         </button>
-        <a 
+        <a
           v-if="$attrs.fileRef"
-          href="#" 
+          href="#"
           class="govuk-body-m govuk-link"
           @click.prevent="save('delete')"
         >Delete</a>
@@ -89,7 +90,7 @@ export default {
       }
       let extraData = null;
       if (action !== 'delete') {
-        extraData = { 
+        extraData = {
           title: this.fileTitle,
           file: this.fileName,
         };
