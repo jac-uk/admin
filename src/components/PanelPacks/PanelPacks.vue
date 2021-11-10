@@ -219,7 +219,7 @@ export default {
           'stageReview/bind',
           {
             exerciseId: this.exerciseId,
-            status: APPLICATION_STATUS.PASSED_SCENARIO_TEST,
+            status: APPLICATION_STATUS.PASSED_FIRST_TEST,
             ...params,
           }
         );
