@@ -61,7 +61,7 @@ export default {
   methods: {
     async disableNewUser(uid) {
       await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
-      this.signInError = 'Your account required approval before access is granted. Please request this from a manager.';
+      this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
     },
     signOut() {
       auth().signOut();
