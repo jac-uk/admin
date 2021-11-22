@@ -74,6 +74,9 @@ export default {
       const route = this.$route.fullPath.includes('/tasks/selection/');
       return route;
     },
+    isScenario() {
+      return this.$route.fullPath.includes('/tasks/scenario/');
+    },
     title() {
       let returnTitle = 'New Panel for';
       if (this.isSift) {
@@ -81,6 +84,9 @@ export default {
       }
       if (this.isSelectionDay) {
         returnTitle = `${returnTitle} Selection`;
+      }
+      if (this.isScenario) {
+        returnTitle = `${returnTitle} Scenario Pack`;
       }
       return returnTitle;
     },
@@ -91,6 +97,9 @@ export default {
       }
       if (this.isSelectionDay) {
         returnType = 'selection';
+      }
+      if (this.isScenario) {
+        returnType = 'scenario';
       }
       return returnType;
     },
