@@ -61,19 +61,11 @@ describe('@/views/Exercise/Applications/Application', () => {
     });
 
     it('changeUserDetails', () => {
-      expect(wrapper.vm.$store.dispatch).toHaveBeenCalled();
-    });
-    
-    it('dispatches `application/update` Vuex action', () => {
-      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
-      const dispatchedAction = mockStore.dispatch.mock.calls[0][0];
-      expect(dispatchedAction).toBe('application/update');
+      expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
     
     it('dispatches formatted change', () => {
-      expect(mockStore.dispatch).toHaveBeenCalledTimes(1);
-      const dispatchedChange = mockStore.dispatch.mock.calls[0][1];
-      expect(dispatchedChange).toEqual( { 'data': { 'personalDetails': { 'firstName': 'test' } }, 'id': 'application1' } );
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { 'personalDetails': { 'firstName': 'test' } } );
     });
 
   });
