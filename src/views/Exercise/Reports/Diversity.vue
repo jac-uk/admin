@@ -403,6 +403,74 @@
             </tr>
           </tbody>
         </table>
+
+        <table class="govuk-table table-with-border">
+          <caption class="govuk-table__caption hidden">
+            Gender by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                EMP status
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                EMP Not applied
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].emp.noAnswer" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                EMP applied
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].emp.applied" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                EMP applied on basis of ethnicity
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].emp.ethnicity" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                EMP applied on basis of gender
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].emp.gender" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
