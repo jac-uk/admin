@@ -479,7 +479,7 @@
           <InformationReviewRenderer
             v-else
             type="selection"
-            :options="['no-religion', 'athiest', 'buddhist', 'christian', 'hindu', 'jewish', 'muslim', 'sikh', 'other-religion', 'prefer-not-to-say']"
+            :options="['no-religion', 'atheist', 'buddhist', 'christian', 'hindu', 'jewish', 'muslim', 'sikh', 'other-religion', 'prefer-not-to-say']"
             field="religionFaith"
             :edit="editable"
             :data="equalityAndDiversitySurvey.religionFaith"
@@ -656,7 +656,7 @@ export default {
     },
     changeEqualityAndDiversityInformation(obj) {
       const myEqualityAndDiversityInfo = { ...this.application.equalityAndDiversitySurvey, ...obj };
-      this.$store.dispatch('application/update', { data: { equalityAndDiversitySurvey: myEqualityAndDiversityInfo }, id: this.applicationId });
+      this.$emit('updateApplication', { equalityAndDiversitySurvey: myEqualityAndDiversityInfo });
     },
   },
 };

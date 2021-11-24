@@ -39,7 +39,7 @@
                 <div
                   class="govuk-summary-list__key"
                 >
-                  Location 
+                  Location
                 </div>
                 <div
                   class="govuk-summary-list__value"
@@ -288,20 +288,19 @@ export default {
       this.$emit('changeField', obj);
     },
     changeTaskDetail(obj) {
-      this.$emit('changeField', { ...obj, ...{ taskDetails: true } });
+      this.$emit('changeTaskDetails', { ...obj, ...{ taskDetails: true } });
     },
     addField() {
-      this.$emit('changeField', {
+      this.$emit('addField', {
         field: this.field,
         index: (this.data ? this.data.length : 0),
         change: this.dataDefault,
       });
     },
     removeField() {
-      this.$emit('changeField', {
+      this.$emit('removeField', {
         field: this.field,
         index: this.currentIndex,
-        remove: true,
       });
       this.closeModal();
     },

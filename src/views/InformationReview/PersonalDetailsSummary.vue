@@ -238,7 +238,9 @@ export default {
         obj = this.makeFullName(obj);
       }
       const myPersonalDetails = { ...this.application.personalDetails, ...obj };
-      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+
+      this.$emit('updateApplication', { personalDetails: myPersonalDetails });
+
     },
   },
 };

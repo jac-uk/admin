@@ -24,7 +24,9 @@
           :data-default="emptyDetailObject"
           :edit="edit"
           field="criminalOffenceDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -51,7 +53,9 @@
           :edit="edit"
           :data-default="emptyDetailObject"
           field="nonMotoringFixedPenaltyNoticeDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -78,7 +82,9 @@
           :data-default="emptyDetailObject"
           :edit="edit"
           field="drivingDisqualificationDrinkDrugsDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -105,7 +111,9 @@
           :data="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
           :data-default="emptyDetailObject"
           field="endorsementsOrMotoringFixedPenaltiesDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -132,7 +140,9 @@
           :data="characterInformation.declaredBankruptOrIVADetails"
           :data-default="emptyDetailObject"
           field="declaredBankruptOrIVADetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -159,7 +169,9 @@
           :data="characterInformation.lateTaxReturnOrFinedDetails"
           :data-default="emptyDetailObject"
           field="lateTaxReturnOrFinedDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -186,7 +198,9 @@
           :edit="edit"
           :data-default="emptyDetailObject"
           field="involvedInProfessionalMisconductDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -213,7 +227,9 @@
           :data-default="emptyDetailObject"
           :edit="edit"
           field="diciplinaryActionOrAskedToResignDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -240,7 +256,9 @@
           :edit="edit"
           :data-default="emptyDetailObject"
           field="otherCharacterIssuesDetails"
-          @changeField="changeCharacterInfo"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </dd>
     </div>
@@ -286,37 +304,48 @@ export default {
     },
     emptyDetailObject() {
       return {
-        'details': '',
-        'date': new Date(),
         'title': '',
+        'date': new Date(),
+        'details': '',
       };
     },
   },
   methods: {
-    changeCharacterInfo(obj) {
+    changeInfo(obj) {
       let changedObj = this.characterInformation[obj.field] || {};
 
-      if (obj.change && obj.extension && obj.field && obj.hasOwnProperty('index')) { //UPDATE
+      changedObj[obj.index][obj.extension] = obj.change;
 
-        changedObj[obj.index][obj.extension] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-
-        if (changedObj.length > 0){
-          changedObj = [...changedObj, obj.change];
-        } else {
-          changedObj = [obj.change];
-        } 
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-
-        if (changedObj.length > 0){
-          changedObj.splice(obj.index, 1);
-        } else {
-          changedObj = [];
-        } 
-      } 
       changedObj = { [obj.field]: changedObj };
 
-      this.$emit('changeCharacterInfo', changedObj);
+      this.$emit('changeInfo', changedObj);
+
+    },
+    addInfo(obj) {
+      let changedObj = this.characterInformation[obj.field] || {};
+      
+      if (changedObj.length > 0){
+        changedObj = [...changedObj, obj.change];
+      } else {
+        changedObj = [obj.change];
+      }
+
+      changedObj = { [obj.field]: changedObj };
+
+      this.$emit('changeInfo', changedObj);
+    },
+    removeInfo(obj) {
+      let changedObj = this.characterInformation[obj.field] || {};
+
+      if (changedObj.length > 0){
+        changedObj.splice(obj.index, 1);
+      } else {
+        changedObj = [];
+      } 
+
+      changedObj = { [obj.field]: changedObj };
+
+      this.$emit('changeInfo', changedObj);
 
     },
     changeCharacterFlag(obj) {

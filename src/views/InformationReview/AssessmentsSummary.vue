@@ -23,7 +23,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
-              :data="application.selectionCriteriaAnswers[index].answer"
+              :data="hasAscAnswers(index) ? application.selectionCriteriaAnswers[index].answer : null"
               :edit="editable"
               :index="index"
               extension="answer"
@@ -37,7 +37,7 @@
             >
               <InformationReviewRenderer
                 v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
-                :data="application.selectionCriteriaAnswers[index].answerDetails"
+                :data="hasAscAnswerDetails(index) ? application.selectionCriteriaAnswers[index].answerDetails : null"
                 :edit="editable"
                 :index="index"
                 extension="answerDetails"
@@ -133,7 +133,6 @@
                 v-model="application.uploadedSelfAssessment"
                 name="self-assessment"
                 :path="`/exercise/${exercise.id}/user/${application.userId}`"
-                required
                 @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
               />
             </div>
@@ -292,46 +291,35 @@ export default {
     },
   },
   methods: {
+    hasAscAnswerDetails(index){
+      if (this.application.selectionCriteriaAnswers[index]) {
+        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
+      }
+    },
     hasAscAnswers(index){
-      if (this.application.selectionCriteriaAnswers) {
-        return this.application.selectionCriteriaAnswers[index] && 'answer' in this.application.selectionCriteriaAnswers[index];
-      } else {
-        return false;
+      if (this.application.selectionCriteriaAnswers[index]) {
+        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
       }
     },
     changeAssessmentInfo(obj) {
 
-      let objChanged = this.application[obj.field] || [];
+      let changedObj = this.application[obj.field] || [];
 
-      if (obj.extension && obj.hasOwnProperty('index')) { //nested field
-        if (!objChanged[obj.index]) {
-          objChanged = {
-            [obj.index]: {
-              [obj.extension]: obj.change,
-            },
-          };
-        } else {
-          objChanged[obj.index][obj.extension] = obj.change;
-        }
-      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
-        objChanged[obj.index] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-        if (objChanged.length > 0){
-          objChanged.splice(obj.index, 1);
-        } else {
-          objChanged = [];
-        } 
+      if (!changedObj[obj.index]) {
+        changedObj = {
+          [obj.index]: {
+            [obj.extension]: obj.change,
+          },
+        };
       } else {
-        objChanged = obj;
+        changedObj[obj.index][obj.extension] = obj.change;
       }
 
-      const updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
-
-      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
+      this.$emit('updateApplication', { [obj.field]: changedObj });
     },
     doFileUpload(val, field) {
       if (val) {
-        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
+        this.$emit('updateApplication', { [field]: val });
       }
     },
   },

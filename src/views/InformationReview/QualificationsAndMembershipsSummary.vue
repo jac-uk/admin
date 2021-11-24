@@ -148,12 +148,12 @@
       >
         <ModalInner
           @closed="closeModal"
-          @confirmed="removeQualification()"
+          @confirmed="removeQualification"
         />
       </Modal>
     </div>
 
-    <!-- applied shedules -->
+    <!-- applied schedules -->
     <div>
       <dl
         v-if="exercise.schedule2Apply"
@@ -378,56 +378,50 @@ export default {
       return this.exercise.memberships.indexOf(ref) >= 0;
     },
     addQualification() {
-      let objChanged = this.application.qualifications || [];
+      let changedObj = this.application.qualifications || [];
 
-      if (objChanged.length){
-        objChanged = [...objChanged, this.dataDefault];
+      if (changedObj.length){
+        changedObj = [...changedObj, this.dataDefault];
       } else {
-        objChanged = [this.dataDefault];
+        changedObj = [this.dataDefault];
       } 
 
-      this.$store.dispatch('application/update', { data: { qualifications: objChanged }, id: this.applicationId });
+      this.$emit('updateApplication', { qualifications: changedObj });
 
     },
     removeQualification() {
-      let objChanged = this.application.qualifications || [];
+      
+      let changedObj = this.application.qualifications || [];
 
-      if (objChanged.length > 0){
-        objChanged.splice(this.currentIndex, 1);
+      if (changedObj.length > 0){
+        changedObj.splice(this.currentIndex, 1);
       } else {
-        objChanged = [];
+        changedObj = [];
       } 
 
-      this.$store.dispatch('application/update', { data: { qualifications: objChanged }, id: this.applicationId });
+      this.$emit('updateApplication', { qualifications: changedObj });
+
+      this.$refs.removeModal.closeModal();
 
     },
     changeQualificationOrMembership(obj) {
+      
+      let changedObj = this.application[obj.field] || {};
 
-      // console.log(obj);
-
-      let objChanged = this.application[obj.field] || {};
-
-      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
-        if (!objChanged[obj.index]) {
-          objChanged = {
+      if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { //nested field
+        if (!changedObj[obj.index]) {
+          changedObj = {
             [obj.index]: {},
           };
         }
-        objChanged[obj.index][obj.extension] = obj.change;
-      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
-        objChanged[obj.index] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-        if (objChanged.length > 0){
-          objChanged.splice(obj.index, 1);
-        } else {
-          objChanged = [];
-        } 
-      } else {
-        objChanged = obj;
+        changedObj[obj.index][obj.extension] = obj.change;
+      } 
+      else {
+        changedObj = obj;
       }
-      const updatedApplication = { ...this.application, ...objChanged };
+      const updatedApplication = { ...this.application, ...changedObj };
 
-      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
+      this.$emit('updateApplication', updatedApplication );
 
     },
     closeModal() {

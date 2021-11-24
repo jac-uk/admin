@@ -330,16 +330,20 @@ export default {
   },
   methods: {
     changePreferences(obj) {
-      let objChanged = this.application[obj.field] || [];
+      let changedObj = this.application[obj.field] || [];
 
-      if (obj.change && obj.field && obj.hasOwnProperty('index')) {
-        objChanged[obj.index].selection = obj.change;
+      if (obj.change && obj.hasOwnProperty('index')) {
+        changedObj[obj.index].selection = obj.change;
       } else {
-        objChanged = obj;
+        changedObj = obj;
       }
-      const myPrefs = { ...this.application, ...objChanged };
 
-      this.$store.dispatch('application/update', { data: myPrefs, id: this.applicationId });
+      const updatedApplication = { 
+        ...this.application,
+        ...changedObj,
+      };
+
+      this.$emit('updateApplication', updatedApplication );
     },
   },
 };

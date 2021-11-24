@@ -186,7 +186,6 @@ export default {
     },
     isRouted() {
       return !!this.route;
-      // return ['title', 'firstName', 'lastName'].some(field => field === this.$props.field) && this.applicationId;
     },
   },
   methods: {

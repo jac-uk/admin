@@ -15,10 +15,13 @@
           :data-default="emptyNonLegalExperienceObject"
           :edit="editable"
           field="experience"
-          @changeField="changeExperience"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </div>
     </div>
+
     <!-- PQE -->
     <div
       v-if="isLegal"
@@ -34,10 +37,14 @@
           :task-options="['judicial-functions', 'acting-arbitrator', 'practice-or-employment-as-lawyer', 'advising-application-of-law', 'assisting-in-proceedings-for-resolution-of-issues-under-law', 'acting-mediator-in-resolving-issues-that-are-of-proceedings', 'drafting-documents-that-affect-rights-obligations', 'teaching-researching-law', 'other']"
           :edit="editable"
           field="experience"
-          @changeField="changeExperience"
+          @changeField="changeInfo"
+          @changeTaskDetails="changeTaskDetails"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </div>
     </div>
+
     <!-- Judicial Experience -->
     <div
       v-if="isLegal && exercise.previousJudicialExperienceApply"
@@ -63,13 +70,12 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
-              @changeField="changeExperience"
+              @changeField="changeInfo"
             />
           </dd>
         </div>
 
         <div
-          v-if="application.feePaidOrSalariedJudge === true"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
@@ -82,7 +88,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
-              @changeField="changeExperience"
+              @changeField="changeInfo"
             />
             <div
               v-if="application.feePaidOrSalariedSittingDaysDetails || editable"
@@ -95,7 +101,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
-                @changeField="changeExperience"
+                @changeField="changeInfo"
               />
             </div>
           </dd>
@@ -115,7 +121,7 @@
               :edit="editable"
               type="selection"
               field="declaredAppointmentInQuasiJudicialBody"
-              @changeField="changeExperience"
+              @changeField="changeInfo"
             />
           </dd>
         </div>
@@ -135,7 +141,7 @@
                 :edit="editable"
                 type="selection"
                 field="quasiJudicialSatForThirtyDays"
-                @changeField="changeExperience"
+                @changeField="changeInfo"
               />
             </p>
             <div
@@ -149,7 +155,7 @@
                 :data="application.quasiJudicialSittingDaysDetails"
                 :edit="editable"
                 field="quasiJudicialSittingDaysDetails"
-                @changeField="changeExperience"
+                @changeField="changeInfo"
               />
             </div>
           </dd>
@@ -168,12 +174,13 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
-              @changeField="changeExperience"
+              @changeField="changeInfo"
             />
           </dd>
         </div>
       </dl>
     </div>
+
     <!-- Gaps in Employment -->
     <div
       v-if="!isNonLegal"
@@ -185,13 +192,17 @@
       <div>
         <InformationReviewSectionRenderer
           :data="application.employmentGaps"
-          :data-default="emptyExperienceObject"
+          :data-default="emptyEmploymentGapObject"
+          :task-options="['judicial-functions', 'acting-arbitrator', 'practice-or-employment-as-lawyer', 'advising-application-of-law', 'assisting-in-proceedings-for-resolution-of-issues-under-law', 'acting-mediator-in-resolving-issues-that-are-of-proceedings', 'drafting-documents-that-affect-rights-obligations', 'teaching-researching-law', 'other']"
           :edit="editable"
           field="employmentGaps"
-          @changeField="changeExperience"
+          @changeField="changeInfo"
+          @removeField="removeInfo"
+          @addField="addInfo"
         />
       </div>
     </div>
+
     <!-- Reasonable length of service -->
     <div
       v-if="!isPanelView"
@@ -212,14 +223,14 @@
               :edit="editable"
               type="selection"
               field="canGiveReasonableLOS"
-              @changeField="changeExperience"
+              @changeField="changeInfo"
             />
             <p v-if="application.canGiveReasonableLOS == false">
               <InformationReviewRenderer
                 :data="application.cantGiveReasonableLOSDetails"
                 :edit="editable"
                 field="cantGiveReasonableLOSDetails"
-                @changeField="changeExperience"
+                @changeField="changeInfo"
               />
             </p>
           </dd>
@@ -280,6 +291,15 @@ export default {
         information: '',
       };
     },
+    emptyEmploymentGapObject() {
+      return {
+        orgBusinessName: '',
+        jobTitle: '',
+        startDate: new Date(),
+        endDate: new Date(),
+        tasks: [],
+      };
+    },
     emptyExperienceObject() {
       return {
         orgBusinessName: '',
@@ -305,47 +325,66 @@ export default {
     },
   },
   methods: {
-    changeExperience(obj) {
+    emitUpdate(update) {
+      this.$emit('updateApplication', update );
+    },
+    formatUpdate(field, changedObj) {
+      if (field) {
+        this.emitUpdate({ ...this.application, ...{ [field]: changedObj } });
+      } else {
+        this.emitUpdate({ ...this.application, ...changedObj });
+      }
+    },
+    addInfo(obj) {
+      let changedObj = this.application[obj.field] || {};
       
-      let objChanged = this.application[obj.field] || {};
+      if (changedObj.length > 0){
+        changedObj = [...changedObj, obj.change];
+      } else {
+        changedObj = [obj.change];
+      }
+
+      this.formatUpdate(obj.field, changedObj);
+
+    },
+    removeInfo(obj) {
+      let changedObj = this.application[obj.field] || {};
+
+      this.application[obj.field];
       
-      if (obj.taskDetails) {
-        objChanged[obj.index].taskDetails[obj.extension] = obj.change;
-      } else if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
-        if (!objChanged[obj.index]) {
-          objChanged = {
+      if (changedObj.length > 0){
+        changedObj.splice(obj.index, 1);
+      } else {
+        changedObj = [];
+      }
+
+      this.formatUpdate(obj.field, changedObj);
+
+    },
+    changeTaskDetails(obj) {
+      const changedObj = this.application[obj.field] || {};
+
+      changedObj[obj.index].taskDetails[obj.extension] = obj.change;
+
+      this.formatUpdate(obj.field, changedObj);
+
+    },
+    changeInfo(obj) {
+      let changedObj = this.application[obj.field] || {};
+      
+      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
+        if (!changedObj[obj.index]) {
+          changedObj = {
             [obj.index]: {},
           };
         }
         
-        objChanged[obj.index][obj.extension] = obj.change;
-      } else if (obj.hasOwnProperty('index') && obj.change && !obj.remove) { // ADD
-        if (objChanged.length > 0){
-          objChanged = [...objChanged, obj.change];
-        } else {
-          objChanged = [obj.change];
-        } 
-
-      } else if (obj.hasOwnProperty('index') && obj.remove) { // REMOVE
-        if (objChanged.length > 0){
-          objChanged.splice(obj.index, 1);
-        } else {
-          objChanged = [];
-        } 
-      } else if (obj.change && obj.hasOwnProperty('index')) { //direct field
-        objChanged[obj.index] = obj.change;
+        changedObj[obj.index][obj.extension] = obj.change;
       } else {
-        objChanged = obj;
-      }
-      let updatedApplication;
-      if (obj.field) {
-        updatedApplication = { ...this.application, ...{ [obj.field]: objChanged } };
-      } else {
-        updatedApplication = { ...this.application, ...objChanged };
+        changedObj = obj;
       }
 
-      this.$store.dispatch('application/update', { data: updatedApplication, id: this.applicationId });
-
+      this.formatUpdate(obj.field, changedObj);
     },
 
   },
