@@ -424,7 +424,10 @@
               </th>
             </tr>
           </thead>
-          <tbody class="govuk-table__body">
+          <tbody 
+            v-if="diversity[activeTab].emp"
+            class="govuk-table__body"
+          >
             <tr class="govuk-table__row">
               <th
                 scope="col"
