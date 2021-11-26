@@ -196,6 +196,25 @@
             />
           </dd>
         </div>
+
+        <div
+          v-if="exercise.appliedSchedule == 'schedule-2-d'"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Are you applying under Schedule 2(d)?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :data="application.applyingUnderSchedule2d"
+              field="applyingUnderSchedule2d"
+              :edit="editable"
+              :options="[true, false]"
+              type="selection"
+              @changeField="changeQualificationOrMembership"
+            />
+          </dd>
+        </div>
       </dl>
 
       <dl
