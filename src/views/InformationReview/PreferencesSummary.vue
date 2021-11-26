@@ -157,7 +157,10 @@
       </h2>
 
       <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
+        <div 
+          v-if="exercise.welshRequirementType.some((req) => req === 'welsh-administration-questions')"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key widerColumn">
             Applying for a Welsh post
           </dt>
@@ -177,7 +180,7 @@
         </div>
 
         <div
-          v-if="application.applyingForWelshPost"
+          v-if="exercise.welshRequirementType.some((req) => req === 'welsh-speaking')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
@@ -197,7 +200,7 @@
           </dd>
         </div>
         <div
-          v-if="application.applyingForWelshPost"
+          v-if="exercise.welshRequirementType.some((req) => req === 'welsh-reading-writing')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
