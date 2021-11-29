@@ -18,8 +18,6 @@
         >
           <dt class="govuk-summary-list__key widerColumn">
             {{ item.title }}
-            <br>
-            {{ item.wordLimit }} words
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
@@ -34,7 +32,12 @@
             />
             <div
               v-if="hasAscAnswers(index)"
+
+              class="govuk-body"
             >
+              <dt class="govuk-summary-list__key">
+                Answer ({{ item.wordLimit ? item.wordLimit : '250' }} words)
+              </dt>
               <InformationReviewRenderer
                 v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
                 :data="hasAscAnswerDetails(index) ? application.selectionCriteriaAnswers[index].answerDetails : null"
@@ -45,9 +48,6 @@
                 type="textarea"
                 @changeField="changeAssessmentInfo"
               /> 
-              <span v-else>
-                Does not meet this requirement
-              </span>
             </div>
           </dd>
         </div>

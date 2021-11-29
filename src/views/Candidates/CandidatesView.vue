@@ -22,13 +22,13 @@
       </h2>
 
       <dl v-if="displayNewCharacterInformation && characterInformation">
-        <CharacterInformationV2Summary
+        <CharacterInformationSummaryV2
           :character-information="characterInformation"
           :required-wider-column="false"
         />
       </dl>
       <dl v-else>
-        <CharacterInformationV1Summary
+        <CharacterInformationSummaryV1
           :character-information="characterInformation"
           :required-wider-column="false"
         />
@@ -68,8 +68,8 @@ import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/Personal
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
-import CharacterInformationV1Summary from '@/views/InformationReview/CharacterInformationV1Summary.vue';
-import CharacterInformationV2Summary from '@/views/InformationReview/CharacterInformationV2Summary.vue';
+import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
@@ -80,8 +80,8 @@ export default {
     EqualityAndDiversity,
     Notes,
     Applications,
-    CharacterInformationV1Summary,
-    CharacterInformationV2Summary,
+    CharacterInformationSummaryV1,
+    CharacterInformationSummaryV2,
     Actions,
   },
   data() {

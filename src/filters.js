@@ -29,17 +29,27 @@ const lookup = (value) => {
     additionalInfo: 'Additional Information',
 
     // exercise states
-    'registration': 'Registration',
-    'shortlisting': 'Shortlisting',
-    'selection': 'Selection',
-    'recommendation': 'Recommendation',
-    'handover': 'Handover',
+    registration: 'Registration',
+    shortlisting: 'Shortlisting',
+    selection: 'Selection',
+    recommendation: 'Recommendation',
+    handover: 'Handover',
 
     // application process steps
     passedTests: 'Passed Tests',
     shortlisted: 'Shortlisted',
     selected: 'Selected',
     recommended: 'Recommended',
+    
+    // Editable Application helpers
+    date: 'Date',
+    details: 'Details',
+    investigations: 'Investigations',
+    orgBusinessName: 'Organization or Business name',
+    jobTitle: 'Job Title',
+    tasks: 'Tasks',
+    startDate: 'Start Date',
+    endDate: 'End Date',
 
     // 'xxx': 'xxx',`
   };

@@ -9,7 +9,7 @@
         class="govuk-summary-list"
       >
         <div v-if="hasValues(application.characterInformationV2) || editable">
-          <CharacterInformationV2Summary
+          <CharacterInformationSummaryV2
             :character-information="application.characterInformationV2 || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
@@ -21,7 +21,7 @@
       </dl>
       <dl v-else>
         <div v-if="hasValues(application.characterInformation)|| editable">
-          <CharacterInformationV1Summary
+          <CharacterInformationSummaryV1
             :character-information="application.characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import CharacterInformationV1Summary from '@/views/InformationReview/CharacterInformationV1Summary.vue';
-import CharacterInformationV2Summary from '@/views/InformationReview/CharacterInformationV2Summary.vue';
+import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
 
 export default {
   name: 'CharacterInformationSummary',
   components: {
-    CharacterInformationV1Summary,
-    CharacterInformationV2Summary,
+    CharacterInformationSummaryV1,
+    CharacterInformationSummaryV2,
   },
   props: {
     application: {
