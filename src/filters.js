@@ -51,7 +51,10 @@ const lookup = (value) => {
     startDate: 'Start Date',
     endDate: 'End Date',
 
-    // 'xxx': 'xxx',`
+    // emp flags
+    'gender': 'Gender',
+    'ethnicity': 'Ethnicity',
+    // 'xxx': 'xxx',
   };
 
   returnValue = lookup[value];
