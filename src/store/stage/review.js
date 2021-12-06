@@ -75,6 +75,9 @@ export default {
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
+      if (params.status) {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+      }
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });

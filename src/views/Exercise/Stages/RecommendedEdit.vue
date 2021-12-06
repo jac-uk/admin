@@ -50,9 +50,7 @@
         <RadioGroup
           id="emp-edit-input"
           v-model="empApplied"
-          label=""
           required
-          hint=""
           :messages="{
             required: 'Please specify a value'
           }"

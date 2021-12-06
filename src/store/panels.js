@@ -108,5 +108,12 @@ export default {
       }
       return route;
     },
+    isScenario: () => (url) => {
+      let route = false;
+      if (url) {
+        route = url.includes('/tasks/scenario');
+      }
+      return route;
+    },
   },
 };
