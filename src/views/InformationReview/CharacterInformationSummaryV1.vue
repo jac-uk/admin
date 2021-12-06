@@ -11,13 +11,14 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
+          :edit="edit"
           :data="characterInformation.criminalOffences"
           :options="[true, false]"
-          :edit="edit"
           type="selection"
           field="criminalOffences"
           @changeField="changeCharacterFlag"
         />
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.criminalOffences"
           :data="characterInformation.criminalOffenceDetails"
@@ -46,13 +47,13 @@
           field="nonMotoringFixedPenaltyNotices"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.nonMotoringFixedPenaltyNotices"
           :data="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
-          :edit="edit"
           :data-default="emptyDetailObject"
-          field="nonMotoringFixedPenaltyNoticeDetails"
+          :edit="edit"
+          field="nonMotoringFixedPenaltyNoticesDetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
           @addField="addInfo"
@@ -75,7 +76,7 @@
           field="drivingDisqualificationDrinkDrugs"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.drivingDisqualificationDrinkDrugs"
           :data="characterInformation.drivingDisqualificationDrinkDrugsDetails"
@@ -104,7 +105,7 @@
           field="endorsementsOrMotoringFixedPenalties"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.endorsementsOrMotoringFixedPenalties"
           :edit="edit"
@@ -133,7 +134,7 @@
           field="declaredBankruptOrIVA"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.declaredBankruptOrIVA"
           :edit="edit"
@@ -155,14 +156,15 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.lateTaxReturnOrFined"
-          :options="[true, false]"
           :edit="edit"
-          type="selection"
+          :data="characterInformation.lateTaxReturnOrFined"
           field="lateTaxReturnOrFined"
+          :options="[true, false]"
+          type="selection"
           @changeField="changeCharacterFlag"
         />
-          
+
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.lateTaxReturnOrFined"
           :edit="edit"
@@ -191,7 +193,7 @@
           field="involvedInProfessionalMisconduct"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.involvedInProfessionalMisconduct"
           :data="characterInformation.involvedInProfessionalMisconductDetails"
@@ -220,7 +222,7 @@
           field="diciplinaryActionOrAskedToResign"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.diciplinaryActionOrAskedToResign"
           :data="characterInformation.diciplinaryActionOrAskedToResignDetails"
@@ -249,7 +251,7 @@
           field="otherCharacterIssues"
           @changeField="changeCharacterFlag"
         />
-          
+        <hr>
         <InformationReviewSectionRenderer
           v-if="characterInformation.otherCharacterIssues"
           :data="characterInformation.otherCharacterIssuesDetails"
@@ -349,7 +351,7 @@ export default {
 
     },
     changeCharacterFlag(obj) {
-      this.$emit('changeCharacterInfo', obj);
+      this.$emit('changeInfo', obj);
     },
   },
 };
