@@ -45,9 +45,9 @@ const lookup = (value) => {
     date: 'Date',
     details: 'Details',
     investigations: 'Investigations',
-    orgBusinessName: 'Organization or Business name',
+    orgBusinessName: 'Organisation or business',
     jobTitle: 'Job Title',
-    tasks: 'Tasks',
+    tasks: 'Law-related tasks',
     startDate: 'Start Date',
     endDate: 'End Date',
 

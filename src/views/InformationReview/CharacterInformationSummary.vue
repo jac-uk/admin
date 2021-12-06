@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h2 class="govuk-heading-l">
+      <h2 class="govuk-heading-l govuk-!-padding-top-6">
         Character information
       </h2>
       <dl 
@@ -15,20 +15,21 @@
             @changeInfo="changeCharacterInfo"
           /> 
         </div>
-        <div v-else>
-          No information providied
-        </div>
       </dl>
       <dl v-else>
-        <div v-if="hasValues(application.characterInformation)|| editable">
+        <div v-if="hasValues(application.characterInformation) || editable">
           <CharacterInformationSummaryV1
             :character-information="application.characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
           /> 
         </div>
-        <div v-else>
-          No information providied
+        <div
+          v-else
+          class="govuk-body"
+        >
+          No information provided
+          <hr>
         </div>
       </dl>
     </div>

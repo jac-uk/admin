@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- qualifications -->
-    <div
-      class="govuk-!-margin-bottom-6"
-    >
-      <h2 class="govuk-heading-l">
+    <div>
+      <h2 
+        class="govuk-heading-l govuk-!-margin-top-6"
+      >
         Qualifications
       </h2>
       <div>

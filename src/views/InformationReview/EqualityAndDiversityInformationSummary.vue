@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2
-      class="govuk-heading-l"
+      class="govuk-heading-l govuk-!-padding-top-6"
     >
       Equality and diversity information
     </h2>

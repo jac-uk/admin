@@ -224,16 +224,15 @@
 
     <div
       v-if="exercise.additionalWorkingPreferences.length"
-      class="govuk-!-margin-top-9"
     >
       <h2
-        class="govuk-heading-l"
+        class="govuk-heading-l govuk-!-margin-top-6"
         style="display:inline-block;"
       >
         Additional Preferences
       </h2>
 
-      <div>
+      <div v-if="application.additionalWorkingPreferences || editable">
         <dl
           v-for="(item, index) in exercise.additionalWorkingPreferences"
           :key="index"
@@ -252,7 +251,7 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
+                :data="additionalWorkingPreferenceAnswer(index)"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"
@@ -267,7 +266,7 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
+                :data="additionalWorkingPreferenceAnswer(index)"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"
@@ -282,7 +281,7 @@
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
-                :data="application.additionalWorkingPreferences[index] ? application.additionalWorkingPreferences[index].selection : null"
+                :data="additionalWorkingPreferenceAnswer(index)"
                 field="additionalWorkingPreferences"
                 :index="index"
                 :edit="editable"
@@ -293,6 +292,15 @@
             </dd>
           </div>
         </dl>
+      </div>
+      <div
+        v-else
+      >
+        <span
+          class="govuk-body"
+        >
+          No answers provided
+        </span>
       </div>
     </div>
   </div>
@@ -332,19 +340,40 @@ export default {
     },
   },
   methods: {
+    additionalWorkingPreferenceAnswer(index) {
+      let result = null;
+      if (this.application.additionalWorkingPreferences) {
+        if (this.application.additionalWorkingPreferences[index]) {
+          result = this.application.additionalWorkingPreferences[index].selection;
+        }
+      }
+      return result;
+    },
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
       if (obj.change && obj.hasOwnProperty('index')) {
-        changedObj[obj.index].selection = obj.change;
+        if (changedObj.length) {
+          changedObj[obj.index].selection = obj.change;
+        } else {
+          changedObj = {
+            [obj.field]: {
+              [obj.index]: {
+                selection: obj.change,
+              },
+            },
+          };
+        }
       } else {
         changedObj = obj;
       }
 
       const updatedApplication = { 
         ...this.application,
-        ...changedObj,
+        ...changedObj ,
       };
+
+      // console.log(updatedApplication[obj.field]);
 
       this.$emit('updateApplication', updatedApplication );
     },

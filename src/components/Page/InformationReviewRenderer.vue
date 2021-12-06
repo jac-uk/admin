@@ -18,11 +18,12 @@
       <div
         v-else-if="isRouted"
       >
+        <!-- Only for Personal Details section -->
         <EditableField
           :edit-mode="edit"
           :value="data"
           :field="field"
-          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }" 
           :extension="extension"
           type="route"
           @changeField="changeField"
@@ -121,6 +122,11 @@ export default {
       required: true,
       default: () => false,
     },
+    applicationId: {
+      type: String,
+      required: false,
+      default: () => '',
+    },
     type: {
       type: String,
       required: false,
@@ -185,7 +191,7 @@ export default {
       return this.$props.type === 'ranked-selection';
     },
     isRouted() {
-      return !!this.route;
+      return this.$props.type === 'route';
     },
   },
   methods: {

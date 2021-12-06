@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-!-margin-bottom-4">
-    <h2 class="govuk-heading-l">
+    <h2 class="govuk-heading-l govuk-!-padding-top-6">
       Personal details 
       <span class="govuk-hint print-none">
         Any changes made here will also update the candidate information.
@@ -16,6 +16,7 @@
             :application-id="application.userId"
             field="title"
             :edit="editable"
+            type="route"
             :data="hasPersonalDetails ? application.personalDetails.title : ''"
             @changeField="changeUserDetails"
           />
@@ -32,7 +33,8 @@
           <InformationReviewRenderer
             :edit="editable"
             :application-id="application.userId"
-            :data="hasPersonalDetails ? application.personalDetails.firstName : ''"
+            :data="application.personalDetails.firstName || ''"
+            type="route"
             field="firstName"
             @changeField="changeUserDetails"
           />
@@ -49,10 +51,25 @@
           <InformationReviewRenderer
             :edit="editable"
             :application-id="application.userId"
-            :data="hasPersonalDetails ? application.personalDetails.lastName : ''"
+            :data="application.personalDetails.lastName || ''"
+            type="route"
             field="lastName"
             @changeField="changeUserDetails"
           />
+        </dd>
+      </div>
+    </dl>
+
+    <dl
+      v-if="!(application.personalDetails.lastName || application.personalDetails.firstName) && application.personalDetails.fullName && !editable"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
+      <div class="govuk-summary-list__row">
+        <dt :class="requiredStyle">
+          Full name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
         </dd>
       </div>
     </dl>
@@ -67,6 +84,7 @@
             :edit="editable"
             :application-id="application.userId"
             :data="hasPersonalDetails ? application.personalDetails.email : ''"
+            type="route"
             field="email"
             @changeField="changeUserDetails"
           />
