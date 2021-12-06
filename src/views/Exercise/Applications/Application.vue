@@ -200,25 +200,24 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <!-- <PersonalDetailsSummary 
+              <PersonalDetailsSummary 
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
                 @updateApplication="changeApplication"
-              /> -->
+              />
               <CharacterInformationSummary
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
               />
-              <!--
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
                 :editable="editable"
                 @updateApplication="changeApplication"
               />
-                <PreferencesSummary
+              <PreferencesSummary
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
@@ -251,7 +250,7 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
-              /> -->
+              />
             </div>
           </div>
         </div>
