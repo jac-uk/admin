@@ -10,7 +10,7 @@
       >
         <div v-if="hasValues(application.characterInformationV2) || editable">
           <CharacterInformationSummaryV2
-            :character-information="application.characterInformationV2 || {}"
+            :form-data="application.characterInformationV2 || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
           /> 
@@ -19,7 +19,7 @@
       <dl v-else>
         <div v-if="hasValues(application.characterInformation) || editable">
           <CharacterInformationSummaryV1
-            :character-information="application.characterInformation || {}"
+            :form-data="application.characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
           /> 

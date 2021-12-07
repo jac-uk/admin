@@ -199,7 +199,7 @@
       </dl>
 
       <dl
-        v-if="sheduleApplies"
+        v-if="scheduleApplies"
         class="govuk-summary-list govuk-!-margin-bottom-8"
       >
         <dt
@@ -376,7 +376,7 @@ export default {
       }
       return null;
     },
-    sheduleApplies(){
+    scheduleApplies(){
       return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
         (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
     },

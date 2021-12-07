@@ -8,7 +8,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.criminalConvictionDetails"
+            :data="formData.criminalConvictionDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="criminalConvictionDetails"
@@ -27,7 +27,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.criminalCautionDetails"
+            :data="formData.criminalCautionDetails"
             :edit="edit"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="criminalCautionDetails"
@@ -47,7 +47,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.fixedPenaltyDetails"
+            :data="formData.fixedPenaltyDetails"
             :display-month-year-only="false"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
@@ -68,7 +68,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.drivingDisqualificationDetails"
+            :data="formData.drivingDisqualificationDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="drivingDisqualificationDetails"
@@ -87,7 +87,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.recentDrivingConvictionDetails"
+            :data="formData.recentDrivingConvictionDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="recentDrivingConvictionDetails"
@@ -106,7 +106,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.bankruptcyDetails"
+            :data="formData.bankruptcyDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="bankruptcyDetails"
@@ -125,7 +125,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.ivaDetails"
+            :data="formData.ivaDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="ivaDetails"
@@ -144,7 +144,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.lateTaxReturnDetails"
+            :data="formData.lateTaxReturnDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="lateTaxReturnDetails"
@@ -163,7 +163,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.lateVatReturnDetails"
+            :data="formData.lateVatReturnDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="lateVatReturnDetails"
@@ -182,7 +182,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.hmrcFineDetails"
+            :data="formData.hmrcFineDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="hmrcFineDetails"
             :edit="edit"
@@ -202,7 +202,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
+            :data="formData.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
@@ -221,7 +221,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.subjectOfAllegationOrClaimOfNegligenceDetails"
+            :data="formData.subjectOfAllegationOrClaimOfNegligenceDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="subjectOfAllegationOrClaimOfNegligenceDetails"
@@ -240,7 +240,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
+            :data="formData.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
@@ -259,7 +259,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
+            :data="formData.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
@@ -278,7 +278,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
+            :data="formData.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
@@ -297,7 +297,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.complaintOrDisciplinaryActionDetails"
+            :data="formData.complaintOrDisciplinaryActionDetails"
             :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
             :edit="edit"
             field="complaintOrDisciplinaryActionDetails"
@@ -316,7 +316,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.requestedToResignDetails"
+            :data="formData.requestedToResignDetails"
             :data-default="emptyObject(['details', 'date' ])"
             :edit="edit"
             field="requestedToResignDetails"
@@ -336,7 +336,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewSectionRenderer
-            :data="characterInformation.furtherInformationDetails"
+            :data="formData.furtherInformationDetails"
             :data-default="emptyObject(['details', 'date'])"
             :edit="edit"
             field="furtherInformationDetails"
@@ -362,104 +362,23 @@
 </template>
 
 <script>
-// import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import Summary from '@/views/InformationReview/Summary';
 
 export default {
   name: 'CharacterInformationSummaryV2',
   components: {
-    // InformationReviewRenderer,
     InformationReviewSectionRenderer,
   },
-  props: {
-    characterInformation: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-    edit: {
-      type: [Boolean, Function, Promise],
-      required: true,
-      default: false,
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
+  extends: Summary,
   computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
-    },
     signedDeclaration() {
-      if (this.characterInformation.declaration1 === true &&
-        this.characterInformation.declaration2 === true &&
-        this.characterInformation.declaration3 === true) {
+      if (this.formData.declaration1 === true &&
+        this.formData.declaration2 === true &&
+        this.formData.declaration3 === true) {
         return true;
       }
       return false;
-    },
-  },
-  methods: {
-    emptyObject(items){
-      const obj = {};
-      if (items.some(item => item === 'title')) {
-        obj.title = '';
-      }
-      if (items.some(item => item === 'date')) {
-        obj.date = new Date();
-      }
-      if (items.some(item => item === 'investigationConclusionDate')) {
-        obj.investigationConclusionDate = new Date();
-      }
-      if (items.some(item => item === 'investigations')) {
-        obj.investigations = '';
-      }
-      if (items.some(item => item === 'details')) {
-        obj.details = '';
-      }
-      return obj;
-    },
-    changeInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      changedObj[obj.index][obj.extension] = obj.change;
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-
-    },
-    addInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-      
-      if (changedObj.length > 0){
-        changedObj = [...changedObj, obj.change];
-      } else {
-        changedObj = [obj.change];
-      }
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-    },
-    removeInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      if (changedObj.length > 0){
-        changedObj.splice(obj.index, 1);
-      } else {
-        changedObj = [];
-      } 
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-
-    },
-    changeCharacterFlag(obj) {
-      this.$emit('changeInfo', obj);
     },
   },
 };

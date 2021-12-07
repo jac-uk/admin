@@ -1,6 +1,6 @@
 <template>
   <dl
-    v-if="characterInformation && Object.keys(characterInformation).length || edit"
+    v-if="formData && Object.keys(formData).length || edit"
     class="govuk-summary-list"
   >
     <div class="govuk-summary-list__row">
@@ -12,7 +12,7 @@
       >
         <InformationReviewRenderer
           :edit="edit"
-          :data="characterInformation.criminalOffences"
+          :data="formData.criminalOffences"
           :options="[true, false]"
           type="selection"
           field="criminalOffences"
@@ -20,9 +20,9 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.criminalOffences"
-          :data="characterInformation.criminalOffenceDetails"
-          :data-default="emptyDetailObject"
+          v-if="formData.criminalOffences"
+          :data="formData.criminalOffenceDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
           field="criminalOffenceDetails"
           @changeField="changeInfo"
@@ -40,7 +40,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.nonMotoringFixedPenaltyNotices"
+          :data="formData.nonMotoringFixedPenaltyNotices"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -49,9 +49,9 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.nonMotoringFixedPenaltyNotices"
-          :data="characterInformation.nonMotoringFixedPenaltyNoticesDetails"
-          :data-default="emptyDetailObject"
+          v-if="formData.nonMotoringFixedPenaltyNotices"
+          :data="formData.nonMotoringFixedPenaltyNoticesDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
           field="nonMotoringFixedPenaltyNoticesDetails"
           @changeField="changeInfo"
@@ -69,7 +69,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.drivingDisqualificationDrinkDrugs"
+          :data="formData.drivingDisqualificationDrinkDrugs"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -78,9 +78,9 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.drivingDisqualificationDrinkDrugs"
-          :data="characterInformation.drivingDisqualificationDrinkDrugsDetails"
-          :data-default="emptyDetailObject"
+          v-if="formData.drivingDisqualificationDrinkDrugs"
+          :data="formData.drivingDisqualificationDrinkDrugsDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
           field="drivingDisqualificationDrinkDrugsDetails"
           @changeField="changeInfo"
@@ -98,7 +98,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.endorsementsOrMotoringFixedPenalties"
+          :data="formData.endorsementsOrMotoringFixedPenalties"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -107,10 +107,10 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.endorsementsOrMotoringFixedPenalties"
+          v-if="formData.endorsementsOrMotoringFixedPenalties"
           :edit="edit"
-          :data="characterInformation.endorsementsOrMotoringFixedPenaltiesDetails"
-          :data-default="emptyDetailObject"
+          :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           field="endorsementsOrMotoringFixedPenaltiesDetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
@@ -127,7 +127,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.declaredBankruptOrIVA"
+          :data="formData.declaredBankruptOrIVA"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -136,10 +136,10 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.declaredBankruptOrIVA"
+          v-if="formData.declaredBankruptOrIVA"
           :edit="edit"
-          :data="characterInformation.declaredBankruptOrIVADetails"
-          :data-default="emptyDetailObject"
+          :data="formData.declaredBankruptOrIVADetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           field="declaredBankruptOrIVADetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
@@ -157,7 +157,7 @@
       >
         <InformationReviewRenderer
           :edit="edit"
-          :data="characterInformation.lateTaxReturnOrFined"
+          :data="formData.lateTaxReturnOrFined"
           field="lateTaxReturnOrFined"
           :options="[true, false]"
           type="selection"
@@ -166,10 +166,10 @@
 
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.lateTaxReturnOrFined"
+          v-if="formData.lateTaxReturnOrFined"
           :edit="edit"
-          :data="characterInformation.lateTaxReturnOrFinedDetails"
-          :data-default="emptyDetailObject"
+          :data="formData.lateTaxReturnOrFinedDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           field="lateTaxReturnOrFinedDetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
@@ -186,7 +186,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.involvedInProfessionalMisconduct"
+          :data="formData.involvedInProfessionalMisconduct"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -195,10 +195,10 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.involvedInProfessionalMisconduct"
-          :data="characterInformation.involvedInProfessionalMisconductDetails"
+          v-if="formData.involvedInProfessionalMisconduct"
+          :data="formData.involvedInProfessionalMisconductDetails"
           :edit="edit"
-          :data-default="emptyDetailObject"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           field="involvedInProfessionalMisconductDetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
@@ -215,7 +215,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.diciplinaryActionOrAskedToResign"
+          :data="formData.diciplinaryActionOrAskedToResign"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -224,9 +224,9 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.diciplinaryActionOrAskedToResign"
-          :data="characterInformation.diciplinaryActionOrAskedToResignDetails"
-          :data-default="emptyDetailObject"
+          v-if="formData.diciplinaryActionOrAskedToResign"
+          :data="formData.diciplinaryActionOrAskedToResignDetails"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
           field="diciplinaryActionOrAskedToResignDetails"
           @changeField="changeInfo"
@@ -244,7 +244,7 @@
         class="govuk-summary-list__value"
       >
         <InformationReviewRenderer
-          :data="characterInformation.otherCharacterIssues"
+          :data="formData.otherCharacterIssues"
           :options="[true, false]"
           :edit="edit"
           type="selection"
@@ -253,10 +253,10 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="characterInformation.otherCharacterIssues"
-          :data="characterInformation.otherCharacterIssuesDetails"
+          v-if="formData.otherCharacterIssues"
+          :data="formData.otherCharacterIssuesDetails"
           :edit="edit"
-          :data-default="emptyDetailObject"
+          :data-default="emptyObject(['details', 'date', 'title'])"
           field="otherCharacterIssuesDetails"
           @changeField="changeInfo"
           @removeField="removeInfo"
@@ -284,7 +284,7 @@ export default {
     InformationReviewSectionRenderer,
   },
   props: {
-    characterInformation: {
+    formData: {
       type: Object,
       required: true,
       default: () => {},
@@ -298,60 +298,6 @@ export default {
       type: Boolean,
       required: false,
       default: true,
-    },
-  },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
-    },
-    emptyDetailObject() {
-      return {
-        'title': '',
-        'date': new Date(),
-        'details': '',
-      };
-    },
-  },
-  methods: {
-    changeInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      changedObj[obj.index][obj.extension] = obj.change;
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-
-    },
-    addInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-      
-      if (changedObj.length > 0){
-        changedObj = [...changedObj, obj.change];
-      } else {
-        changedObj = [obj.change];
-      }
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-    },
-    removeInfo(obj) {
-      let changedObj = this.characterInformation[obj.field] || {};
-
-      if (changedObj.length > 0){
-        changedObj.splice(obj.index, 1);
-      } else {
-        changedObj = [];
-      } 
-
-      changedObj = { [obj.field]: changedObj };
-
-      this.$emit('changeInfo', changedObj);
-
-    },
-    changeCharacterFlag(obj) {
-      this.$emit('changeInfo', obj);
     },
   },
 };
