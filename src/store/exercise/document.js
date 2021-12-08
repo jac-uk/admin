@@ -30,6 +30,7 @@ export default {
           data._applicationVersion = 2;
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
+          data.createdOn = firebase.firestore.FieldValue.serverTimestamp(),
           transaction.set(exerciseRef, data);
           return exerciseRef.id;
         });
