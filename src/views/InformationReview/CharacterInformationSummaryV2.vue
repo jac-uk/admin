@@ -363,14 +363,14 @@
 
 <script>
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-import Summary from '@/views/InformationReview/Summary';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary';
 
 export default {
   name: 'CharacterInformationSummaryV2',
   components: {
     InformationReviewSectionRenderer,
   },
-  extends: Summary,
+  extends: CharacterSummary,
   computed: {
     signedDeclaration() {
       if (this.formData.declaration1 === true &&

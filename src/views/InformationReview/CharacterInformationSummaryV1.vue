@@ -276,6 +276,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary';
 
 export default {
   name: 'CharacterInformationSummaryV1',
@@ -283,23 +284,7 @@ export default {
     InformationReviewRenderer,
     InformationReviewSectionRenderer,
   },
-  props: {
-    formData: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-    edit: {
-      type: [Boolean, Function, Promise],
-      required: true,
-      default: false,
-    },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
+  extends: CharacterSummary,
 };
 </script>
 
