@@ -24,6 +24,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body"
+      >
+        No Applications
+      </p>
       <Table
         data-key="id"
         :data="applicationRecords"
@@ -62,10 +68,10 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[2].title">
-            {{ row.status | lookup }}
+            {{ row | candidateHasIssues }}
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ row | candidateHasIssues }}
+            {{ row.status | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
             {{ row.flags.empApplied | toYesNo }}

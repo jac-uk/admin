@@ -26,7 +26,10 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="application.personalDetails.dateOfBirth"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Date of birth
         </dt>
@@ -35,7 +38,10 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="application.personalDetails.placeOfBirth"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
           Place of birth
         </dt>
@@ -53,13 +59,13 @@
         </dd>
       </div>
 
-      <div 
+      <div
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
           Current Address
         </dt>
-        <dd 
+        <dd
           v-if="application.personalDetails.address && application.personalDetails.address.current"
           class="govuk-summary-list__value"
         >
@@ -132,7 +138,7 @@
             </li>
           </ul>
         </dd>
-        <dd 
+        <dd
           v-else
           class="govuk-summary-list__value"
         >
@@ -324,7 +330,10 @@
           </dd>
         </div>
 
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="application.personalDetails.dateOfBirth"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             Date of birth
           </dt>
@@ -333,7 +342,10 @@
           </dd>
         </div>
 
-        <div class="govuk-summary-list__row">
+        <div
+          v-if="application.personalDetails.hasVATNumbers"
+          class="govuk-summary-list__row"
+        >
           <dt class="govuk-summary-list__key">
             VAT Numbers
           </dt>
@@ -352,15 +364,37 @@
         </div>
 
         <div
-          v-if="application.characterInformation.lateTaxReturnOrFined"
+          v-if="application.characterInformation && application.characterInformation.lateTaxReturnOrFined"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
             Issues declared by the candidate
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.characterInformation.lateTaxReturnOrFinedDetails }}
+            <dl
+              v-for="(item, index) in application.characterInformation.lateTaxReturnOrFinedDetails"
+              :key="index"
+            >
+              <div
+                class="govuk-!-font-weight-bold"
+              >
+                {{ item.date | formatDate }}
+              </div>
+              <div>{{ item.details }}</div>
+            </dl>
           </dd>
+        </div>
+
+        <div
+          v-if="isVersion2 && application.characterInformationV2 && hasFinancialIssues"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Issues declared by the candidate
+          </dt>
+          <FinancialMattersAgencyReport
+            :character-information="application.characterInformationV2"
+          />
         </div>
       </dl>
     </template>
@@ -522,11 +556,24 @@
 </template>
 
 <script>
+import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport';
 
 export default {
+  components: {
+    FinancialMattersAgencyReport,
+  },
   computed: {
     application() {
       return this.$store.state.application.record;
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    isVersion2() {
+      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+        return true;
+      }
+      return false;
     },
     sra() {
       const qualifications = this.application.qualifications || [];
@@ -549,6 +596,14 @@ export default {
     },
     hasRICSCheck() {
       return !!this.application.royalInstitutionCharteredSurveyorsNumber;
+    },
+    hasFinancialIssues() {
+      return !!(this.application.characterInformationV2 &&
+        (this.application.characterInformationV2.bankruptcies
+        || this.application.characterInformationV2.ivas
+        || this.application.characterInformationV2.lateTaxReturns
+        || this.application.characterInformationV2.lateVatReturns
+        || this.application.characterInformationV2.hmrcFines));
     },
   },
 };

@@ -28,7 +28,6 @@ const module = {
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
           'maria.brookes@judicialappointments.digital',
-          'kate.malone@judicialappointments.digital',
           'joy.adeagbo@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
@@ -45,7 +44,6 @@ const module = {
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
               'maria.brookes@judicialappointments.digital',
-              'kate.malone@judicialappointments.digital',
               'joy.adeagbo@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {

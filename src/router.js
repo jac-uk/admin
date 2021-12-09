@@ -50,6 +50,7 @@ import ExerciseApplication from '@/views/Exercise/Applications/Application';
 // Exercise reports
 import ExerciseReports from '@/views/Exercise/Reports';
 import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
+import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom';
 import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
 import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
 import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues';
@@ -74,6 +75,7 @@ import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
 import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
 import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
+import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -878,6 +880,39 @@ const router = new Router({
                 },
               ],
             },
+            {
+              path: 'scenario',
+              component: ExerciseTasksPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseTaskScenario,
+                  name: 'exercise-tasks-scenario',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Responses | Exercise Tasks',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTasksPanelsNew,
+                  name: 'exercise-tasks-scenario-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Scenario Response Panel | Exercise Tasks',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-tasks-scenario-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Response Panel | Exercise Tasks',
+                  },
+                },
+              ],
+            },
           ],
         },
         {
@@ -1021,6 +1056,14 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Diversity | Exercise Reports',
+              },
+            },
+            {
+              path: 'custom',
+              component: ExerciseReportsCustom,
+              meta: {
+                requiresAuth: true,
+                title: 'Custom Report | Exercise Reports',
               },
             },
             {
