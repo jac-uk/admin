@@ -461,7 +461,7 @@
                   <span v-if="log.action">{{ log.action }} </span>
                   <span v-if="log.question >= 0">question {{ log.question + 1 }} </span>
                   <span v-if="log.txt">("{{ log.txt }}" on {{ log.location }})</span>
-                  <span v-if="log.answer">(to answer {{ log.answer.value + 1 }})</span>
+                  <span v-if="log.answer">(to answer {{ log.answer.value + 1 }} {{ log.answer.type }})</span>
                   <!-- <span v-if="log.location">{{ log.location }}</span> -->
 
                   <!-- <br>
@@ -827,7 +827,6 @@ export default {
             {}
           );
       }
-      console.log(ordered);
       return ordered;
     },
     historyCount(value, index) {
