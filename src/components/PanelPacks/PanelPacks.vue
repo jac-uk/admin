@@ -97,6 +97,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SelectPanel from '@/components/ModalViews/SelectPanel';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
@@ -158,6 +159,9 @@ export default {
       if (this.isSelectionDay) {
         records = this.$store.state.stageSelected.records;
       }
+      if (this.isScenario) {
+        records = this.$store.state.stageReview.records;
+      }
       return records;
     },
     isSift() {
@@ -168,6 +172,11 @@ export default {
     isSelectionDay() {
       const routeFullPath = this.$route.fullPath ;
       const route = this.$store.getters['panels/isSelectionDay'](routeFullPath);
+      return route;
+    },
+    isScenario() {
+      const routeFullPath = this.$route.fullPath ;
+      const route = this.$store.getters['panels/isScenario'](routeFullPath);
       return route;
     },
     isButtonDisabled() {
@@ -205,12 +214,22 @@ export default {
           }
         );
       }
+      if (this.isScenario) {
+        this.$store.dispatch(
+          'stageReview/bind',
+          {
+            exerciseId: this.exerciseId,
+            status: APPLICATION_STATUS.PASSED_FIRST_TEST,
+            ...params,
+          }
+        );
+      }
     },
     getPanelName(candidate) {
       if (!candidate.panelIds) {
         return '';
       }
-      const panelId = this.isSift ? candidate.panelIds.sift : candidate.panelIds.selection;
+      const panelId = this.isSift ? candidate.panelIds.sift : this.isScenario ? candidate.panelIds.scenario : candidate.panelIds.selection;
       if (!panelId) {
         return '';
       }
@@ -218,9 +237,14 @@ export default {
       return panel ? panel.name : '';
     },
     createNewPanel() {
-      const routeName = this.type === 'sift' ? 'exercise-tasks-sift-new' : 'exercise-tasks-selection-new';
-      // eslint-disable-next-line no-console
-      // console.log('create new Pack btn clicked');
+      let routeName = '';
+      if (this.type === 'sift') {
+        routeName = 'exercise-tasks-sift-new';
+      } else if (this.type === 'scenario') {
+        routeName = 'exercise-tasks-scenario-new';
+      } else {
+        routeName = 'exercise-tasks-selection-new';
+      }
       this.$router.push({ name: routeName });
     },
     btnClkSelectPanel(modal) {
@@ -241,6 +265,8 @@ export default {
           };
           if (panel.type === 'sift') {
             data.panelIds.sift = panel.id;
+          } else if (panel.type === 'scenario') {
+            data.panelIds.scenario = panel.id;
           } else {
             data.panelIds.selection = panel.id; // are there other panel types to add?
           }
