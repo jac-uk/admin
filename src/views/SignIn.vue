@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { auth } from '@/firebase';
+import { auth, functions } from '@/firebase';
 
 export default {
   data: function() {
@@ -59,15 +59,36 @@ export default {
     });
   },
   methods: {
+    async disableNewUser(uid) {
+      await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
+      this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
+    },
+    signOut() {
+      auth().signOut();
+    },
+    checkIfNewUser(user) {
+      if (user.additionalUserInfo.isNewUser) {
+        this.disableNewUser(auth().currentUser.uid).then(() => {
+          this.signOut();
+        }).catch((e) => {
+          console.log(e);
+          this.signOut();
+        });
+      }
+    },
     loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
-      auth().signInWithPopup(provider).catch(err => {
+      auth().signInWithPopup(provider).then((user) => {
+        this.checkIfNewUser(user);
+      }).catch(err => {
         this.signInError = err.message;
       });
     },
     loginWithMicrosoft() {
       const provider = new auth.OAuthProvider('microsoft.com');
-      auth().signInWithPopup(provider).catch(err => {
+      auth().signInWithPopup(provider).then((user) => {
+        this.checkIfNewUser(user);
+      }).catch(err => {
         this.signInError = err.message;
       });
     },

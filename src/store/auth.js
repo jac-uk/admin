@@ -16,11 +16,12 @@ const module = {
   },
   actions: {
     setCurrentUser({ state, commit }, user) {
-      if (user === null) {
+      if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
         if (state.authError) { commit('setAuthError', null); }
         let allOk = false;
+
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
