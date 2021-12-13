@@ -38,6 +38,7 @@ const module = {
           'thomas.hudson.testing@judicialappointments.digital',
           'liam.price.testing@judicialappointments.digital',
           'trefor.walters.testing@judicialappointments.digital',
+          'tom.russelltesting.testing@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -52,6 +53,7 @@ const module = {
               'thomas.hudson.testing@judicialappointments.digital',
               'liam.price.testing@judicialappointments.digital',
               'trefor.walters.testing@judicialappointments.digital',
+              'tom.russelltesting.testing@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
