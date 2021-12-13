@@ -41,7 +41,10 @@ const lookup = (value) => {
     selected: 'Selected',
     recommended: 'Recommended',
 
-    // 'xxx': 'xxx',`
+    // emp flags
+    'gender': 'Gender',
+    'ethnicity': 'Ethnicity',
+    // 'xxx': 'xxx',
   };
   returnValue = lookup[value];
   if (!returnValue) {

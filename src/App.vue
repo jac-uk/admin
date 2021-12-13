@@ -49,6 +49,18 @@
                   Candidates
                 </RouterLink>
               </li>
+
+              <li
+                v-if="authorisedToPerformAction"
+                class="govuk-header__navigation-item"
+              >
+                <RouterLink
+                  :to="{ name: 'users' }"
+                  class="govuk-header__link"
+                >
+                  Users
+                </RouterLink>
+              </li>
               <li class="govuk-header__navigation-item">
                 <a
                   v-if="$route.name !== 'sign-in'"

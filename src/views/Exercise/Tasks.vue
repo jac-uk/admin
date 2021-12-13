@@ -69,6 +69,14 @@ export default {
         },
       );
     }
+    if (exercise.scenarioTestDate) {
+      sideNavigation.push(
+        {
+          title: 'Scenario Responses',
+          path: `${path}/scenario`,
+        }
+      );
+    }
     return {
       sideNavigation: sideNavigation,
     };
