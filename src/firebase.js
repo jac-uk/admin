@@ -24,12 +24,14 @@ if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
 // Initialise Firestore
 const firestore = firebase.firestore();
 
-// Other firebase exports
-const auth = firebase.auth;
+// App check
 const appCheck = firebase.appCheck();
 if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
   appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
 }
+
+// Other firebase exports
+const auth = firebase.auth;
 
 export { firestore, auth, functions, appCheck };
 export default firebase;
