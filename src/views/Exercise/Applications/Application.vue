@@ -1,5 +1,4 @@
 <template>
-  <<<<<<< HEAD
   <div>
     <div
       v-if="application"
