@@ -18,7 +18,7 @@ const config = {
 const functions = firebase.initializeApp(config).functions('europe-west2');
 
 if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
-  functions.useFunctionsEmulator('http://localhost:5001');
+  functions.useEmulator('http://localhost', '5001');
 }
 
 // Initialise Firestore
