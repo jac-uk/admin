@@ -1,4 +1,5 @@
 <template>
+  <<<<<<< HEAD
   <div>
     <div
       v-if="application"
@@ -254,23 +255,30 @@
               />
             </div>
           </div>
+      
+          <div v-if="activeTab == 'characterchecks'">
+            <CharacterChecks
+              :application="application"
+              :exercise="exercise"
+            />
+          </div>
+
+          <div v-if="activeTab == 'issues'">
+            No issues found
+          </div>
+
+          <div v-if="activeTab == 'agency'">
+            <AgencyReport />
+          </div>
+
+          <div v-if="activeTab == 'notes'">
+            <Notes
+              title="Notes about the Application"
+              :candidate-id="application.userId"
+              :application-id="applicationId"
+            />
+          </div>
         </div>
-      </div>
-
-      <div v-if="activeTab == 'issues'">
-        No issues found
-      </div>
-
-      <div v-if="activeTab == 'agency'">
-        <AgencyReport />
-      </div>
-
-      <div v-if="activeTab == 'notes'">
-        <Notes
-          title="Notes about the Application"
-          :candidate-id="application.userId"
-          :application-id="applicationId"
-        />
       </div>
     </div>
     <div v-else>

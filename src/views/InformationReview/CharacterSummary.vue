@@ -29,6 +29,9 @@ export default {
   },
 
   methods: {
+    changeCharacterFlag(obj) {
+      this.$emit('changeInfo', obj);
+    },
     emptyObject(items){
       const obj = {};
       if (items.some(item => item === 'title')) {

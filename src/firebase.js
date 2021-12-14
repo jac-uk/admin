@@ -22,6 +22,9 @@ if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
 
 // Initialise Firestore
 const firestore = firebase.firestore();
+firestore.settings({
+  experimentalForceLongPolling: true,
+});
 
 // Other firebase exports
 const auth = firebase.auth;
