@@ -129,11 +129,7 @@
           {{ questionLabel }} {{ index + 1 }}
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            v-html="testQuestion.details"
-          />
-          <!-- eslint-enable -->
+          {{ testQuestion.details }}
 
           <hr class="govuk-section-break govuk-section-break--visible">
           <ol
