@@ -257,12 +257,11 @@
                     <!-- eslint-enable -->
                   </dl>
                 </div>
-                <!-- eslint-disable -->
                 <div
                   v-else
-                  v-html="testQuestion.details"
-                />
-                <!-- eslint-enable -->
+                >
+                  {{ testQuestion.details }}
+                </div>
                 <hr class="govuk-section-break govuk-section-break--visible">
                 <ol
                   v-if="isCriticalAnalysis && responses[index]"
