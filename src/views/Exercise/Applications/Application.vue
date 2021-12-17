@@ -94,7 +94,6 @@
                 </button>
               </span>
               <span
-                v-if="authorisedToPerformAction"
                 class=" govuk-!-margin-left-4"
               >
                 <button
@@ -208,7 +207,7 @@
               />
               <CharacterInformationSummary
                 :application="application"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
               />
