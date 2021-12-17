@@ -94,7 +94,6 @@
                 </button>
               </span>
               <span
-                v-if="authorisedToPerformAction"
                 class=" govuk-!-margin-left-4"
               >
                 <button
@@ -102,14 +101,14 @@
                   class="govuk-button govuk-button btn-unlock"
                   @click="toggleEdit"
                 >
-                  Done editing
+                  Done
                 </button>
                 <button
                   v-else
                   class="govuk-button govuk-button--secondary btn-mark-as-applied"
                   @click="toggleEdit"
                 >
-                  Edit Application
+                  Edit
                 </button>
               </span>
             </div>
@@ -203,12 +202,12 @@
             <div v-if="application && exercise">
               <PersonalDetailsSummary 
                 :application="application"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 @updateApplication="changeApplication"
               />
               <CharacterInformationSummary
                 :application="application"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
               />
