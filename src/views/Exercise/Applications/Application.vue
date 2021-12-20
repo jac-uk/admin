@@ -214,7 +214,7 @@
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
-                :editable="editable"
+                :editable="editMode"
                 @updateApplication="changeApplication"
               />
               <PreferencesSummary
