@@ -1,4 +1,3 @@
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import { shallowMount } from '@vue/test-utils';
 
 // repeatable components
@@ -26,7 +25,7 @@ describe('Repeatable text fields', () => {
           index: 1,
         },
       });
-      expect(wrapper.find(TextField).exists()).toBe(true);
+      expect(wrapper.find('textfield-stub').exists()).toBe(true);
     });
 
     describe('props', () => {

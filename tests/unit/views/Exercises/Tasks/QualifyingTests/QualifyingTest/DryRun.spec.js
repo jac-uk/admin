@@ -56,7 +56,7 @@ describe('DryRun.vue', () => {
     });
 
     it('contains a <h2>', () => {
-      expect(wrapper.contains('h2')).toBe(true);
+      expect(wrapper.find('h2')).toBeTruthy();
     });
 
     it('contains a <form>', () => {
@@ -64,10 +64,10 @@ describe('DryRun.vue', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
-      wrapper.setMethods({ save: mockSave });
+      const mockSave = jest.spyOn(wrapper.vm, 'save');
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);
+      mockSave.mockRestore();
     });
   });
 

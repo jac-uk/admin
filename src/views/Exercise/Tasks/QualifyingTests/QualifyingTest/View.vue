@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
@@ -514,7 +515,7 @@ export default {
     },
     btnPause() {
       // eslint-disable-next-line no-console
-      console.log('Button clicked: PAUSE');
+      // console.log('Button clicked: PAUSE');
     },
     btnResponses(status) {
       const route = {

@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">
-        Page not found
+        {{ page }} not found
       </h1>
       <p class="govuk-body">
         If you typed the web address, check it is correct.
@@ -15,5 +15,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    page: {
+      type: String,
+      required: false,
+      default: 'Page',
+    },
+  },
+};
 </script>

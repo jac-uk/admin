@@ -65,6 +65,17 @@ export default {
     TextField,
   },
   extends: Form,
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    applicationId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       email: null,
@@ -90,9 +101,7 @@ export default {
       this.$emit('close');
     },
     confirmModal() {
-      this.modalOpen = false;
       this.$emit('confirmed');
-      document.body.style.overflow = '';
     },
     async save() {
       await this.validate();
@@ -113,8 +122,9 @@ export default {
             secondAssessorTitle: this.title,
           };
         }
-        await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
+
+        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
+        await this.$store.dispatch('assessment/update', { data: data, id: this.applicationId, AssessorNr: this.$attrs.AssessorNr });
         this.closeModal();
       }
     },

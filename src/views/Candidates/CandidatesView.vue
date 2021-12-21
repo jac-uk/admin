@@ -15,38 +15,14 @@
     >
       <PersonalDetails
         :candidate="personalDetails"
-        @changedetails="updateCandidate"
+        @changeField="updateCandidate"
       />
       <h2 class="govuk-heading-l">
         Character information
       </h2>
 
       <dl v-if="displayNewCharacterInformation && characterInformation">
-        <CriminalOffencesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FixedPenaltiesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <MotoringOffencesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FinancialMattersSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <ProfessionalConductSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FurtherInformationSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <CharacterDeclarationSummary
+        <CharacterInformationSummaryV2
           :character-information="characterInformation"
           :required-wider-column="false"
         />
@@ -92,14 +68,8 @@ import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/Personal
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
-import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
-import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
-import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
-import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
-import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
-import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
-import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
+import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
@@ -110,14 +80,8 @@ export default {
     EqualityAndDiversity,
     Notes,
     Applications,
-    CriminalOffencesSummary,
-    FixedPenaltiesSummary,
-    MotoringOffencesSummary,
-    FinancialMattersSummary,
-    ProfessionalConductSummary,
-    FurtherInformationSummary,
-    CharacterDeclarationSummary,
     CharacterInformationSummaryV1,
+    CharacterInformationSummaryV2,
     Actions,
   },
   data() {
