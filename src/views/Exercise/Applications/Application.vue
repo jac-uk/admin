@@ -210,7 +210,7 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
-              /> 
+              />
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
