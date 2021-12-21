@@ -200,7 +200,7 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <!-- <PersonalDetailsSummary 
+              <PersonalDetailsSummary 
                 :application="application"
                 :editable="editMode"
                 @updateApplication="changeApplication"
@@ -217,7 +217,6 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 @updateApplication="changeApplication"
               />
-              -->
               <PreferencesSummary
                 :application="application"
                 :exercise="exercise"
@@ -225,7 +224,6 @@
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
-              <!-- 
               <QualificationsAndMembershipsSummary 
                 :application="application"
                 :exercise="exercise"
@@ -252,7 +250,7 @@
                 :editable="(editMode && authorisedToPerformAction)"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
-              /> -->
+              />
             </div>
           </div>
       
