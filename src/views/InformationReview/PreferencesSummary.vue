@@ -180,7 +180,7 @@
         </div>
 
         <div
-          v-if="exercise.welshRequirementType.some((req) => req === 'welsh-speaking')"
+          v-if="hasWelshPosts('welsh-speaking')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
@@ -200,7 +200,7 @@
           </dd>
         </div>
         <div
-          v-if="exercise.welshRequirementType.some((req) => req === 'welsh-reading-writing')"
+          v-if="hasWelshPosts('welsh-reading-writing')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
@@ -349,6 +349,9 @@ export default {
       }
       return result;
     },
+    hasWelshPosts(requirement) {
+      return this.exercise.welshRequirementType.some((req) => req === requirement);
+    },
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
@@ -372,8 +375,6 @@ export default {
         ...this.application,
         ...changedObj ,
       };
-
-      // console.log(updatedApplication[obj.field]);
 
       this.$emit('updateApplication', updatedApplication );
     },
