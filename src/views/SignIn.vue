@@ -2,7 +2,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <p class="govuk-hint govuk-body govuk-!-margin-bottom-7">
-        Sign in to admin dashboard with your judicialappointments.digital Google account.
+        Sign in to admin dashboard with your judicialappointments.gov.uk account.
       </p>
       <p>
         <span
@@ -13,7 +13,16 @@
         </span>
         <button
           type="button"
-          class="govuk-button button-image"
+          class="govuk-button"
+          @click="loginWithMicrosoft"
+        >
+          Sign in with Microsoft
+        </button>
+
+        <button
+          v-if="showGoogleLogin"
+          type="button"
+          class="govuk-button button-image govuk-!-margin-left-5"
           @click="loginWithGoogle"
         >
           <img
@@ -28,12 +37,13 @@
 </template>
 
 <script>
-import { auth } from '@/firebase';
+import { auth, functions } from '@/firebase';
 
 export default {
   data: function() {
     return {
       signInError: null,
+      showGoogleLogin: false,
     };
   },
   computed: {
@@ -41,10 +51,44 @@ export default {
       return this.$store.state.auth.authError || this.signInError;
     },
   },
+  created() {
+    window.addEventListener('keyup', (e) => {
+      if (e.key === 'Escape') {
+        this.showGoogleLogin = true;
+      }
+    });
+  },
   methods: {
+    async disableNewUser(uid) {
+      await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
+      this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
+    },
+    signOut() {
+      auth().signOut();
+    },
+    checkIfNewUser(user) {
+      if (user.additionalUserInfo.isNewUser) {
+        this.disableNewUser(auth().currentUser.uid).then(() => {
+          this.signOut();
+        }).catch((e) => {
+          console.log(e);
+          this.signOut();
+        });
+      }
+    },
     loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
-      auth().signInWithPopup(provider).catch(err => {
+      auth().signInWithPopup(provider).then((user) => {
+        this.checkIfNewUser(user);
+      }).catch(err => {
+        this.signInError = err.message;
+      });
+    },
+    loginWithMicrosoft() {
+      const provider = new auth.OAuthProvider('microsoft.com');
+      auth().signInWithPopup(provider).then((user) => {
+        this.checkIfNewUser(user);
+      }).catch(err => {
         this.signInError = err.message;
       });
     },

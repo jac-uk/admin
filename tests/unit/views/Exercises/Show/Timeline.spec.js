@@ -1,4 +1,4 @@
-import ShowTimeline from '@/views/Exercises/Show/Timeline';
+import ShowTimeline from '@/views/Exercise/Details/Timeline/View';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
@@ -64,7 +64,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercises/Show/Timeline', () => {
+xdescribe('@/views/Exercise/Show/Timeline', () => {
   describe('template', () => {
     it('renders Timeline component', () => {
       const wrapper = createTestSubject();

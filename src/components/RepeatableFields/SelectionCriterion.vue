@@ -1,32 +1,43 @@
 <template>
   <div>
     <TextField
-      :id="selectionCriterionTitle"
+      :id="`selection-criterion-title_${index}`"
       v-model="row.title"
+      style="display:inline-block;"
       label="Provide title to be displayed to the candidate."
       required
     />
 
-    <TextareaInput
-      :id="selectionCriterionText"
+    <RichTextInput
+      :id="`selection-criterion-text_${index}`"
       v-model="row.text"
+      class="govuk-!-margin-bottom-5"
       label="Provide text to be displayed to the candidate."
       required
     />
+    <TextField
+      id="word-limit"
+      v-model="row.wordLimit"
+      input-class="govuk-input--width-5"
+      label="Would you like to add a custom word limit to this question?"
+      hint="if none is provided this will default to 250 words"
+      type="number"
+    />
+    <hr>
 
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 
 export default {
   name: 'SelectionCriterion',
   components: {
-    TextareaInput,
     TextField,
+    RichTextInput,
   },
   props: {
     row: {
@@ -36,11 +47,6 @@ export default {
     index: {
       required: true,
       type: Number,
-    },
-  },
-  computed: {
-    selectionCriterionText() {
-      return `selection_criterion_text_${this.index}`;
     },
   },
 };

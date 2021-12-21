@@ -15,12 +15,14 @@ import assessment from '@/store/assessment';
 import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
+import events from '@/store/events';
 
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
 import stageRecommended from '@/store/stage/recommended';
 import stageShortlisted from '@/store/stage/shortlisted';
+import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
@@ -44,6 +46,7 @@ const store = new Vuex.Store({
     application,
     assessment,
     assessments,
+    events,
     notifications,
     invitations,
     stageReview,
@@ -60,6 +63,7 @@ const store = new Vuex.Store({
     qualifyingTestReports,
     qualifyingTestReport,
     panels,
+    characterChecks,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

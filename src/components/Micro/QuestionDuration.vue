@@ -4,19 +4,13 @@
       v-if="start"
       class="govuk-body-s"
     >
-      Start: {{ start | formatDate('datetime') }}
+      First started: {{ start | formatDate('datetime') }}
     </p>
     <p
       v-if="end"
       class="govuk-body-s"
     >
-      End: {{ end | formatDate('datetime') }}
-    </p>
-    <p
-      v-if="duration"
-      class="govuk-body-s"
-    >
-      Duration: {{ duration }}
+      Last updated: {{ end | formatDate('datetime') }}
     </p>
   </div>
 </template>
@@ -31,17 +25,6 @@ export default {
     end: {
       type: Date,
       default: null,
-    },
-  },
-  computed: {
-    duration() {
-      const timeDiff = this.end - this.start;
-      let durationReturn = '';
-      if (timeDiff !== undefined && this.end) {
-        const timeDiffFormatted = new Date(timeDiff).toISOString().substr(11, 8);
-        durationReturn = timeDiffFormatted === '00:00:00' ? '' : timeDiffFormatted;
-      }
-      return durationReturn;
     },
   },
 };

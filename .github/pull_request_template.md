@@ -22,7 +22,12 @@ Describe the steps required to test & verify this change
 🔴 High risk - this includes a lot of changes to shared code
 
 ## Additional context
-Include screen grabs, notes etc.
+Include screen grabs, video demo, notes etc.
+
+## Related permissions
+Have permissions been considered for this functionality?
+- No permission changes required
+- Permissions have been added / updated. Details:
 
 ---
 PREVIEW:DEVELOP

@@ -4,7 +4,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
-import tableQuery from '@jac-uk/jac-kit/helpers/tableQuery';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 const collection = firestore.collection('qualifyingTests');
 
@@ -88,6 +88,11 @@ export default {
       return state.records.filter(qualifyingTest => {
         return qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED
           && qualifyingTest.mode !== QUALIFYING_TEST.MODE.MOP_UP;
+      });
+    },
+    getActivatedQTs: (state) => {
+      return state.records.filter(qualifyingTest => {
+        return qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
       });
     },
   },

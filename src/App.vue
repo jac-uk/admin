@@ -11,8 +11,20 @@
           </a>
           <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appVersion }}</span>
 
-          <nav class="float-right">
+          <nav
+            v-if="isSignedIn"
+            class="float-right"
+          >
             <ul class="govuk-header__navigation user-menu">
+              <li class="govuk-header__navigation-item">
+                <RouterLink
+                  v-if="authorisedToPerformAction"
+                  :to="{ name: 'events' }"
+                  class="govuk-header__link"
+                >
+                  Events
+                </RouterLink>
+              </li>
               <li class="govuk-header__navigation-item">
                 <RouterLink
                   :to="{ name: 'notifications' }"
@@ -23,7 +35,7 @@
               </li>
               <li class="govuk-header__navigation-item">
                 <RouterLink
-                  :to="{ name: 'dashboard' }"
+                  :to="{ name: 'exercises' }"
                   class="govuk-header__link"
                 >
                   Exercises
@@ -35,6 +47,18 @@
                   class="govuk-header__link"
                 >
                   Candidates
+                </RouterLink>
+              </li>
+
+              <li
+                v-if="authorisedToPerformAction"
+                class="govuk-header__navigation-item"
+              >
+                <RouterLink
+                  :to="{ name: 'users' }"
+                  class="govuk-header__link"
+                >
+                  Users
                 </RouterLink>
               </li>
               <li class="govuk-header__navigation-item">
@@ -124,9 +148,16 @@
 
 <script>
 import { auth } from '@/firebase';
+import firebase from '@firebase/app';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      authorisedToPerformAction: false,
+    };
+  },
   computed: {
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
@@ -135,9 +166,11 @@ export default {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
     },
   },
-  created() {
+  async created() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/bind');
+      const email = firebase.auth().currentUser.email;
+      this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
   },
   destroyed() {
