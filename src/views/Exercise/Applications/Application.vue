@@ -87,7 +87,8 @@
                 </button>
                 <button
                   v-else
-                  class="govuk-summary-list__value"
+                  class="govuk-button btn-mark-as-applied"
+                  @click="submitApplication"
                 >
                   Mark as applied
                 </button>
