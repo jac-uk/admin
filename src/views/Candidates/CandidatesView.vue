@@ -9,34 +9,46 @@
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
+    <span
+      class="float-right govuk-!-margin-left-4"
+    >
+      <button
+        v-if="editMode"
+        class="govuk-button govuk-button btn-unlock"
+        @click="toggleEdit"
+      >
+        Done
+      </button>
+      <button
+        v-else
+        class="govuk-button govuk-button--secondary btn-mark-as-applied"
+        @click="toggleEdit"
+      >
+        Edit
+      </button>
+    </span>
 
     <div
       v-if="activeTab === 'details'"
     >
-      <PersonalDetails
-        :candidate="personalDetails"
-        @changeField="updateCandidate"
+      <PersonalDetailsSummary
+        :personal-details="personalDetails"
+        :editable="editMode"
+        @update="updateCandidate"
       />
-      <h2 class="govuk-heading-l">
-        Character information
-      </h2>
-
       <dl v-if="displayNewCharacterInformation && characterInformation">
-        <CharacterInformationSummaryV2
-          :character-information="characterInformation"
-          :required-wider-column="false"
+        <CharacterInformationSummary
+          :editable="editMode"
+          :character-information="{ characterInformation }"
+          :application="{}"
         />
-      </dl>
-      <dl v-else>
-        <CharacterInformationSummaryV1
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
+        <!-- edit and v2 compatible -->
       </dl>
 
+      <!--
       <EqualityAndDiversity
         :data="equalityAndDiversity"
-      />
+      /> -->
     </div>
 
     <div
@@ -64,29 +76,28 @@
 <script>
 import firebase from '@firebase/app';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
-import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
-import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
-import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+// import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
 export default {
   components: {
     TabsList,
-    PersonalDetails,
-    EqualityAndDiversity,
     Notes,
     Applications,
-    CharacterInformationSummaryV1,
-    CharacterInformationSummaryV2,
     Actions,
+    PersonalDetailsSummary,
+    CharacterInformationSummary,
+    // EqualityAndDiversity,
   },
   data() {
     return {
       authorisedToPerformAction: false,
+      editMode: false,
       tabs: [
         {
           ref: 'details',
@@ -161,7 +172,11 @@ export default {
     },
     updateCandidate(obj) {
       this.makeFullName(obj);
-      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
+      // ??? not working  - decide order
+      // this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
+    },
+    toggleEdit(){
+      this.editMode = !this.editMode;
     },
   },
 };

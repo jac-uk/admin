@@ -13,11 +13,11 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
-            :application-id="application.userId"
+            :application-id="userId"
             field="title"
             :edit="editable"
             type="route"
-            :data="hasPersonalDetails ? application.personalDetails.title : ''"
+            :data="hasPersonalDetails ? personalDetails.title : ''"
             @changeField="changeUserDetails"
           />
         </dd>
@@ -32,8 +32,8 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :application-id="application.userId"
-            :data="application.personalDetails.firstName || ''"
+            :application-id="userId"
+            :data="personalDetails.firstName || ''"
             type="route"
             field="firstName"
             @changeField="changeUserDetails"
@@ -50,8 +50,8 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :application-id="application.userId"
-            :data="application.personalDetails.lastName || ''"
+            :application-id="userId"
+            :data="personalDetails.lastName || ''"
             type="route"
             field="lastName"
             @changeField="changeUserDetails"
@@ -61,7 +61,7 @@
     </dl>
 
     <dl
-      v-if="!(application.personalDetails.lastName || application.personalDetails.firstName) && application.personalDetails.fullName && !editable"
+      v-if="!(personalDetails.lastName || personalDetails.firstName) && personalDetails.fullName && !editable"
       class="govuk-summary-list govuk-!-margin-bottom-0"
     >
       <div class="govuk-summary-list__row">
@@ -69,7 +69,7 @@
           Full name
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ application.personalDetails.fullName }}
+          {{ personalDetails.fullName }}
         </dd>
       </div>
     </dl>
@@ -82,8 +82,8 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :application-id="application.userId"
-            :data="hasPersonalDetails ? application.personalDetails.email : ''"
+            :application-id="userId"
+            :data="hasPersonalDetails ? personalDetails.email : ''"
             type="route"
             field="email"
             @changeField="changeUserDetails"
@@ -100,7 +100,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :data="hasPersonalDetails ? application.personalDetails.phone : ''"
+            :data="hasPersonalDetails ? personalDetails.phone : ''"
             field="phone"
             @changeField="changeUserDetails"
           />
@@ -116,7 +116,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :data="hasPersonalDetails ? application.personalDetails.dateOfBirth : ''"
+            :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
             type="date"
             field="dateOfBirth"
             @changeField="changeUserDetails"
@@ -133,7 +133,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :data="(hasPersonalDetails ? application.personalDetails.nationalInsuranceNumber: '') | formatNIN "
+            :data="(hasPersonalDetails ? personalDetails.nationalInsuranceNumber: '') | formatNIN "
             field="nationalInsuranceNumber"
             @changeField="changeUserDetails"
           />
@@ -149,7 +149,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :data="hasPersonalDetails ? application.personalDetails.citizenship : ''"
+            :data="hasPersonalDetails ? personalDetails.citizenship : ''"
             :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
             type="selection"
             field="citizenship"
@@ -168,7 +168,7 @@
         <dd class="govuk-summary-list__value">
           <InformationReviewRenderer
             :edit="editable"
-            :data="hasPersonalDetails ? application.personalDetails.reasonableAdjustments : ''"
+            :data="hasPersonalDetails ? personalDetails.reasonableAdjustments : ''"
             :options="[true, false]"
             type="selection"
             field="reasonableAdjustments"
@@ -179,7 +179,7 @@
     </dl>
   
     <dl 
-      v-if="application.personalDetails && application.personalDetails.reasonableAdjustments === true"
+      v-if="personalDetails && personalDetails.reasonableAdjustments === true"
       class="govuk-summary-list govuk-!-margin-bottom-0"
     >
       <div 
@@ -193,7 +193,7 @@
         >
           <InformationReviewRenderer
             :edit="editable"
-            :data="hasPersonalDetails ? application.personalDetails.reasonableAdjustmentsDetails : ''"
+            :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
             field="reasonableAdjustmentsDetails"
             @changeField="changeUserDetails"
           />
@@ -212,7 +212,12 @@ export default {
     InformationReviewRenderer,
   },
   props: {
-    application: {
+    userId: {
+      type: String,
+      required: false,
+      default: () => '',
+    },
+    personalDetails: {
       type: Object,
       required: true,
       default: () => {},
@@ -230,7 +235,7 @@ export default {
   },
   data() {
     return {
-      hasPersonalDetails: !!this.application.personalDetails,
+      hasPersonalDetails: !!this.personalDetails,
     };
   },
   computed: {
@@ -243,11 +248,11 @@ export default {
   },
   methods: {
     makeFullName(obj) {
-      if (obj.firstName && this.application.personalDetails.lastName) {
-        obj.fullName = `${obj.firstName} ${this.application.personalDetails.lastName}`;
+      if (obj.firstName && this.personalDetails.lastName) {
+        obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
       }
-      if (obj.lastName && this.application.personalDetails.firstName) {
-        obj.fullName = `${this.application.personalDetails.firstName} ${obj.lastName}`;
+      if (obj.lastName && this.personalDetails.firstName) {
+        obj.fullName = `${this.personalDetails.firstName} ${obj.lastName}`;
       }
       return obj;
     },
@@ -255,9 +260,9 @@ export default {
       if (obj.firstName || obj.lastName) {
         obj = this.makeFullName(obj);
       }
-      const myPersonalDetails = { ...this.application.personalDetails, ...obj };
+      const myPersonalDetails = { ...this.personalDetails, ...obj };
 
-      this.$emit('updateApplication', { personalDetails: myPersonalDetails });
+      this.$emit('update', { personalDetails: myPersonalDetails });
 
     },
   },

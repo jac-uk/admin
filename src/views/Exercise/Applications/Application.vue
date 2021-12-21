@@ -201,9 +201,10 @@
           >
             <div v-if="application && exercise">
               <PersonalDetailsSummary 
-                :application="application"
+                :user-id="application.userId"
+                :personal-details="application.personalDetails"
                 :editable="editMode"
-                @updateApplication="changeApplication"
+                @update="changeApplication"
               />
               <CharacterInformationSummary
                 :application="application"
@@ -211,6 +212,7 @@
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
               />
+              <!--
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
@@ -251,6 +253,7 @@
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
+              -->
             </div>
           </div>
       

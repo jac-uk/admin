@@ -25,7 +25,7 @@
           :field="field"
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }" 
           :extension="extension"
-          type="route"
+          :type="applicationId ? 'route' : 'text'"
           @changeField="changeField"
         />
       </div>
