@@ -174,7 +174,7 @@
                   :edit="edit"
                   :index="index"
                   type="text"
-                  :extension="key"
+                  extension="otherTasks"
                   @changeField="changeField"
                 />
               </div>
@@ -216,12 +216,18 @@
         ref="removeModal"
       >
         <ModalInner
-          @closed="closeModal"
+          @close="closeModal"
           @confirmed="removeField"
         />
       </Modal>
     </div>
 
+    <span
+      v-else-if="isCharacterInformationSection"
+      class="govuk-body"
+    >
+      No
+    </span>
     <span
       v-else
       class="govuk-body"
@@ -283,6 +289,9 @@ export default {
   methods: {
     displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
+    },
+    isCharacterInformationSection() {
+      return this.$parent.$options.name == 'CharacterInformationSummaryV2';
     },
     changeField(obj) {
       this.$emit('changeField', obj);
