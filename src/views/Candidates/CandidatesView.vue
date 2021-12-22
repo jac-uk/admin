@@ -173,7 +173,7 @@ export default {
     updateCandidate(obj) {
       this.makeFullName(obj);
       // ??? not working  - decide order
-      // this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
     toggleEdit(){
       this.editMode = !this.editMode;

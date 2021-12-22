@@ -204,7 +204,7 @@
                 :user-id="application.userId"
                 :personal-details="application.personalDetails"
                 :editable="editMode"
-                @update="changeApplication"
+                @update="changePersonalDetails"
               />
               <CharacterInformationSummary
                 :application="application"
@@ -212,7 +212,7 @@
                 :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
                 @updateApplication="changeApplication"
               />
-              <!--
+              
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
@@ -253,7 +253,6 @@
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
-              -->
             </div>
           </div>
       
@@ -620,6 +619,11 @@ export default {
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    },
+    updateCandidate(obj) {
+      this.changeApplication(obj);
+      // updateCandidate(obj) {
+      // this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
     },
   },
 };

@@ -61,7 +61,9 @@ export default {
     }),
     savePersonalDetails: async (context, { data, id }) => {
       const ref = collection.doc(`${id}/documents/personalDetails`);
-      await ref.update(data);
+      console.log(id);
+      console.log(data);
+      await ref.set(data, { merge: true });
     },
   },
   mutations: {

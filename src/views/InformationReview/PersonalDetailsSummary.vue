@@ -5,6 +5,10 @@
       <span class="govuk-hint print-none">
         Any changes made here will also update the candidate information.
       </span>
+      <!-- <span class="govuk-hint">
+        Any changes made here will not update the details on the most recent application.
+        Please go to the Personal Details section to make the change.
+      </span> -->
     </h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
@@ -263,7 +267,6 @@ export default {
       const myPersonalDetails = { ...this.personalDetails, ...obj };
 
       this.$emit('update', { personalDetails: myPersonalDetails });
-
     },
   },
 };
