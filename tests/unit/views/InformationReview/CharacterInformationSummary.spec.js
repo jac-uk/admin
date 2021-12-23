@@ -4,13 +4,15 @@ const mockExercise = {
 const mockApplication = {
   userId: '0123456',
   characterInformation: {
+    _versionNumber: 2,
     furtherInformationDetails: '',
   },
 };
 
 const mockProps = {
   editable: false,
-  application: mockApplication,
+  characterInformation: mockApplication.characterInformation,
+  version: 2,
 };
 
 const mockStore = {
@@ -63,7 +65,7 @@ describe('@/views/Exercise/Applications/Application', () => {
     });
     
     it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { characterInformation: { furtherInformationDetails: 'test' } } );
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { characterInformationV2: { _versionNumber: 2, furtherInformationDetails: 'test' } } );
     });
 
   });

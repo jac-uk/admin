@@ -4,32 +4,35 @@
       <h2 class="govuk-heading-l govuk-!-padding-top-6">
         Character information
       </h2>
-      <dl 
-        v-if="isVersion2"
+      <h3 class="govuk-visually-hidden govuk-heading-s">
+        Version {{ version }}
+      </h3>
+      <div
+        v-if="!hasValues(characterInformation)"
+        class="govuk-body"
+      >
+        No information provided
+        <hr>
+      </div>
+      <dl
+        v-else-if="isVersion2"
         class="govuk-summary-list"
       >
-        <div v-if="hasValues(application.characterInformationV2) || editable">
+        <div>
           <CharacterInformationSummaryV2
-            :form-data="application.characterInformationV2 || {}"
+            :form-data="characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
-          /> 
+          />
         </div>
       </dl>
       <dl v-else>
-        <div v-if="hasValues(application.characterInformation) || editable">
+        <div>
           <CharacterInformationSummaryV1
-            :form-data="application.characterInformation || {}"
+            :form-data="characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
-          /> 
-        </div>
-        <div
-          v-else
-          class="govuk-body"
-        >
-          No information provided
-          <hr>
+          />
         </div>
       </dl>
     </div>
@@ -47,7 +50,7 @@ export default {
     CharacterInformationSummaryV2,
   },
   props: {
-    application: {
+    characterInformation: {
       type: Object,
       required: true,
       default: () => {},
@@ -57,16 +60,14 @@ export default {
       required: true,
       default: false,
     },
+    version: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
-    },
     isVersion2() {
-      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
-        return true;
-      }
-      return false;
+      return this.version === 2;
     },
     applicationId() {
       return this.$route.params.applicationId;
@@ -75,7 +76,7 @@ export default {
   methods: {
     hasValues(target){
       if (target !== null && target !== undefined) {
-        return Object.values(target).some(item => item && item.length);
+        return Object.keys(target).some(item => (item && item.length) || (item !== false && item !== true));
       } else {
         return false;
       }
@@ -83,20 +84,13 @@ export default {
     changeCharacterInfo(obj) {
       let myCharacterInfo;
       if (this.isVersion2) {
-        myCharacterInfo = { ...this.application.characterInformationV2, ...obj };
+        myCharacterInfo = { ...this.characterInformation, ...obj };
         this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
       } else {
-        myCharacterInfo = { ...this.application.characterInformation, ...obj };
+        myCharacterInfo = { ...this.characterInformation, ...obj };
         this.$emit('updateApplication', { characterInformation: myCharacterInfo });
       }
     },
   },
 };
 </script>
-
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style>
-

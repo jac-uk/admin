@@ -23,7 +23,7 @@
               <a class="moj-pagination__link govuk-link">Next<span class="govuk-visually-hidden"> set of pages</span></a>
             </li>
           </ul>
-        </div> 
+        </div>
 
         <div id="panel-pack-div">
           <div class="govuk-grid-row">
@@ -202,15 +202,16 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <PersonalDetailsSummary 
-                :application="application"
+              <PersonalDetailsSummary
+                :user-id="application.userId"
+                :personal-details="application.personalDetails || {}"
                 :editable="editMode"
-                @updateApplication="changeApplication"
+                @update="changePersonalDetails"
               />
               <CharacterInformationSummary
-                :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
-                :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
+                :character-information="correctCharacterInformation"
+                :version="applicationVersion"
                 @updateApplication="changeApplication"
               />
               <EqualityAndDiversityInformationSummary
@@ -226,7 +227,7 @@
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
-              <QualificationsAndMembershipsSummary 
+              <QualificationsAndMembershipsSummary
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
@@ -255,7 +256,7 @@
               />
             </div>
           </div>
-      
+
           <div v-if="activeTab == 'characterchecks'">
             <CharacterChecks
               :application="application"
@@ -387,17 +388,30 @@ export default {
     isNonLegal() {
       return isNonLegal(this.exercise);
     },
+    correctCharacterInformation() {
+      if (this.isVersion2) {
+        return this.application.characterInformationV2 || {};
+      } else {
+        return this.application.characterInformation || {};
+      }
+    },
     hasStatementOfSuitability() {
       return hasStatementOfSuitability(this.exercise);
     },
     hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
     },
-    isVersion2() {
-      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
-        return true;
+    applicationVersion() {
+      if (this.exercise._applicationVersion) {
+        return this.exercise._applicationVersion;
+      } else if (this.application.characterInformationV2) {
+        return 2;
+      } else {
+        return 1;
       }
-      return false;
+    },
+    isVersion2() {
+      return this.applicationVersion === 2;
     },
     applications() {
       return this.$store.state.applications.records;
@@ -621,6 +635,9 @@ export default {
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    },
+    changePersonalDetails(obj) {
+      this.changeApplication({ personalDetails: obj });
     },
   },
 };

@@ -10,7 +10,7 @@
   
   const mockProps = {
     editable: false,
-    application: mockApplication,
+    personalDetails: mockApplication.personalDetails,
   };
 
   const mockStore = {
@@ -61,11 +61,11 @@ describe('@/views/Exercise/Applications/Application', () => {
     });
 
     it('changeUserDetails', () => {
-      expect(wrapper.emitted().updateApplication).toBeTruthy();
+      expect(wrapper.emitted().update).toBeTruthy();
     });
     
     it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { 'personalDetails': { 'firstName': 'test' } } );
+      expect(wrapper.emitted().update[0][0]).toEqual( { 'firstName': 'test' } );
     });
 
   });

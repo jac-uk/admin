@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div
+    <template
       v-if="data && data.length"
     >
       <div
@@ -25,7 +25,7 @@
             class="govuk-summary-list govuk-!-margin-bottom-0"
           >
             <dt
-              v-if="key != 'taskDetails'"
+              v-if="key != 'taskDetails' && key != 'details'"
               class="govuk-summary-list__key"
             >
               {{ key | lookup }}
@@ -134,24 +134,26 @@
                 @changeField="changeField"
               />
               
-              <div v-if="data[index][key].includes('other')">
-                <dt class="govuk-summary-list__key">
-                  Other task
-                </dt>
-                <InformationReviewRenderer
-                  :data="data[index].otherTasks"
-                  :field="field"
-                  :edit="edit"
-                  :index="index"
-                  type="text"
-                  :extension="key"
-                  @changeField="changeField"
-                />
-              </div>
+              <template v-if="data[index][key]">
+                <div v-if="data[index][key].includes('other')">
+                  <dt class="govuk-summary-list__key">
+                    Other task
+                  </dt>
+                  <InformationReviewRenderer
+                    :data="data[index].otherTasks"
+                    :field="field"
+                    :edit="edit"
+                    :index="index"
+                    type="text"
+                    :extension="key"
+                    @changeField="changeField"
+                  />
+                </div>
+              </template>
             </dd>
 
             <dd
-              v-if="data[index][key] instanceof Array && key === 'tasks'"
+              v-if="key === 'tasks'"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -164,24 +166,26 @@
                 :extension="key"
                 @changeField="changeField"
               />
-              <div v-if="data[index][key].includes('other')">
-                <dt class="govuk-summary-list__key">
-                  Other task
-                </dt>
-                <InformationReviewRenderer
-                  :data="data[index].otherTasks"
-                  :field="field"
-                  :edit="edit"
-                  :index="index"
-                  type="text"
-                  extension="otherTasks"
-                  @changeField="changeField"
-                />
-              </div>
+              <template v-if="data[index][key]">
+                <div v-if="data[index][key].includes('other')">
+                  <dt class="govuk-summary-list__key">
+                    Other task
+                  </dt>
+                  <InformationReviewRenderer
+                    :data="data[index].otherTasks"
+                    :field="field"
+                    :edit="edit"
+                    :index="index"
+                    type="text"
+                    extension="otherTasks"
+                    @changeField="changeField"
+                  />
+                </div>
+              </template>
             </dd>
-              
+
             <dd
-              v-else-if="data[index][key] ? data[index][key] instanceof Date : key.search('Date')"
+              v-else-if="key === 'date' || key.search('Date') > 0"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -190,6 +194,25 @@
                 :edit="edit"
                 :index="index"
                 type="date"
+                :extension="key"
+                @changeField="changeField"
+              />
+            </dd>
+
+            <dd
+              v-else-if="key === 'details'"
+              class="govuk-summary-list__value"
+            >
+              <div class="govuk-summary-list__key">
+                Details
+              </div>
+
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="textarea"
                 :extension="key"
                 @changeField="changeField"
               />
@@ -220,7 +243,7 @@
           @confirmed="removeField"
         />
       </Modal>
-    </div>
+    </template>
 
     <span
       v-else
@@ -235,8 +258,8 @@
     >
       Add
     </button>
-  </div>
-</template> 
+  </div> 
+</template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';

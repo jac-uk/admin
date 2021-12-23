@@ -20,7 +20,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.criminalOffences"
           :data="formData.criminalOffenceDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
@@ -49,7 +48,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.nonMotoringFixedPenaltyNotices"
           :data="formData.nonMotoringFixedPenaltyNoticesDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
@@ -78,7 +76,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.drivingDisqualificationDrinkDrugs"
           :data="formData.drivingDisqualificationDrinkDrugsDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
@@ -107,7 +104,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.endorsementsOrMotoringFixedPenalties"
           :edit="edit"
           :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
@@ -136,7 +132,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.declaredBankruptOrIVA"
           :edit="edit"
           :data="formData.declaredBankruptOrIVADetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
@@ -166,7 +161,6 @@
 
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.lateTaxReturnOrFined"
           :edit="edit"
           :data="formData.lateTaxReturnOrFinedDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
@@ -195,7 +189,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.involvedInProfessionalMisconduct"
           :data="formData.involvedInProfessionalMisconductDetails"
           :edit="edit"
           :data-default="emptyObject(['details', 'date', 'title'])"
@@ -224,7 +217,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.diciplinaryActionOrAskedToResign"
           :data="formData.diciplinaryActionOrAskedToResignDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"
@@ -253,7 +245,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.otherCharacterIssues"
           :data="formData.otherCharacterIssuesDetails"
           :edit="edit"
           :data-default="emptyObject(['details', 'date', 'title'])"
