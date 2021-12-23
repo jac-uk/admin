@@ -12,6 +12,7 @@ const mockApplication = {
 const mockProps = {
   editable: false,
   characterInformation: mockApplication.characterInformation,
+  version: 2,
 };
 
 const mockStore = {

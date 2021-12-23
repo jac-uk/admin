@@ -134,20 +134,22 @@
                 @changeField="changeField"
               />
               
-              <div v-if="data[index][key].includes('other')">
-                <dt class="govuk-summary-list__key">
-                  Other task
-                </dt>
-                <InformationReviewRenderer
-                  :data="data[index].otherTasks"
-                  :field="field"
-                  :edit="edit"
-                  :index="index"
-                  type="text"
-                  :extension="key"
-                  @changeField="changeField"
-                />
-              </div>
+              <template v-if="data[index][key]">
+                <div v-if="data[index][key].includes('other')">
+                  <dt class="govuk-summary-list__key">
+                    Other task
+                  </dt>
+                  <InformationReviewRenderer
+                    :data="data[index].otherTasks"
+                    :field="field"
+                    :edit="edit"
+                    :index="index"
+                    type="text"
+                    :extension="key"
+                    @changeField="changeField"
+                  />
+                </div>
+              </template>
             </dd>
 
             <dd
@@ -164,20 +166,22 @@
                 :extension="key"
                 @changeField="changeField"
               />
-              <div v-if="data[index][key].includes('other')">
-                <dt class="govuk-summary-list__key">
-                  Other task
-                </dt>
-                <InformationReviewRenderer
-                  :data="data[index].otherTasks"
-                  :field="field"
-                  :edit="edit"
-                  :index="index"
-                  type="text"
-                  extension="otherTasks"
-                  @changeField="changeField"
-                />
-              </div>
+              <template v-if="data[index][key]">
+                <div v-if="data[index][key].includes('other')">
+                  <dt class="govuk-summary-list__key">
+                    Other task
+                  </dt>
+                  <InformationReviewRenderer
+                    :data="data[index].otherTasks"
+                    :field="field"
+                    :edit="edit"
+                    :index="index"
+                    type="text"
+                    extension="otherTasks"
+                    @changeField="changeField"
+                  />
+                </div>
+              </template>
             </dd>
 
             <dd
