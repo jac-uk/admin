@@ -255,7 +255,6 @@
           </div>
         </div>
       </div>
-
     </div>
     <Modal
       ref="modalRef"
@@ -296,7 +295,6 @@
           Please wait...
         </h2>
       </div>
-
     </Modal>
   </div>
 </template>

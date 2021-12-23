@@ -209,10 +209,9 @@
               <CharacterInformationSummary
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
-                :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
+                :character-information="isVersion2 ? application.characterInformationV2 : application.characterInformation"
                 @updateApplication="changeApplication"
               />
-              
               <EqualityAndDiversityInformationSummary
                 :application="application"
                 :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
@@ -392,10 +391,13 @@ export default {
       return hasIndependentAssessments(this.exercise);
     },
     isVersion2() {
-      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+      if (this.exercise._applicationVersion) {
+        return this.exercise._applicationVersion === 2;
+      } else if (this.application.characterInformationV2) {
         return true;
+      } else {
+        return false;
       }
-      return false;
     },
     applications() {
       return this.$store.state.applications.records;
@@ -620,10 +622,8 @@ export default {
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
     },
-    updateCandidate(obj) {
-      this.changeApplication(obj);
-      // updateCandidate(obj) {
-      // this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    changePersonalDetails(obj) {
+      this.changeApplication({ personalDetails: obj });
     },
   },
 };

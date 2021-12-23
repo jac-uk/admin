@@ -75,6 +75,23 @@
       </div>
 
       <div
+        v-else-if="isTextarea"
+      >
+        <span>
+          <EditableField
+            :edit-mode="edit"
+            :value="data"
+            :field="field"
+            :index="index"
+            :extension="extension"
+            :options="options"
+            type="textarea"
+            @changeField="changeField"
+          />
+        </span>
+      </div>
+
+      <div
         v-else-if="isRankedSelection"
       >
         <span>
@@ -175,23 +192,26 @@ export default {
   },
   computed: {
     isDate() {
-      // return this.$props.data instanceof Date;
-      return this.$props.type === 'date';
+      // return this.data instanceof Date;
+      return this.type === 'date';
     },
     isEmail() {
-      return this.$props.type === 'email';
+      return this.type === 'email';
     },
     isSelection() {
-      return this.$props.type === 'selection';
+      return this.type === 'selection';
     },
     isMultiSelection() {
-      return this.$props.type === 'multi-selection';
+      return this.type === 'multi-selection';
     },
     isRankedSelection() {
-      return this.$props.type === 'ranked-selection';
+      return this.type === 'ranked-selection';
+    },
+    isTextarea() {
+      return this.type === 'textarea';
     },
     isRouted() {
-      return this.$props.type === 'route';
+      return this.type === 'route';
     },
   },
   methods: {

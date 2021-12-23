@@ -36,19 +36,15 @@
         :editable="editMode"
         @update="updateCandidate"
       />
-      <dl v-if="displayNewCharacterInformation && characterInformation">
+      <dl v-if="characterInformation">
         <CharacterInformationSummary
-          :editable="editMode"
-          :character-information="{ characterInformation }"
-          :application="{}"
+          :editable="false"
+          :character-information="characterInformation || {}"
         />
-        <!-- edit and v2 compatible -->
-      </dl>
-
-      <!--
+      </dl>  
       <EqualityAndDiversity
         :data="equalityAndDiversity"
-      /> -->
+      />
     </div>
 
     <div
@@ -80,7 +76,7 @@ import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-// import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
+import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
@@ -92,7 +88,7 @@ export default {
     Actions,
     PersonalDetailsSummary,
     CharacterInformationSummary,
-    // EqualityAndDiversity,
+    EqualityAndDiversity,
   },
   data() {
     return {
@@ -145,9 +141,6 @@ export default {
     getUserId() {
       return this.$route.params.id || '';
     },
-    displayNewCharacterInformation() {
-      return this.characterInformation._versionNumber === 2;
-    },
   },
   async created() {
     this.candidateId = this.getUserId;
@@ -172,7 +165,6 @@ export default {
     },
     updateCandidate(obj) {
       this.makeFullName(obj);
-      // ??? not working  - decide order
       this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
     toggleEdit(){

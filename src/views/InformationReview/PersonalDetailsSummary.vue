@@ -2,13 +2,21 @@
   <div class="govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-l govuk-!-padding-top-6">
       Personal details 
-      <span class="govuk-hint print-none">
-        Any changes made here will also update the candidate information.
+      <span
+        v-if="!isCandidateView"
+        class="govuk-hint print-none"
+      >
+        <!-- Any changes made here will also update the candidate information.  --> 
+        <!-- ^^ this isnt true at the moment -->
+        Any changes made here will only update the application information.
       </span>
-      <!-- <span class="govuk-hint">
+      <span
+        v-else
+        class="govuk-hint"
+      >
         Any changes made here will not update the details on the most recent application.
-        Please go to the Personal Details section to make the change.
-      </span> -->
+        Please go to the Application to make the change.
+      </span>
     </h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
@@ -249,6 +257,9 @@ export default {
     applicationId() {
       return this.$route.params.applicationId;
     },
+    isCandidateView() {
+      return this.$route.name === 'candidates-view';
+    },
   },
   methods: {
     makeFullName(obj) {
@@ -266,7 +277,7 @@ export default {
       }
       const myPersonalDetails = { ...this.personalDetails, ...obj };
 
-      this.$emit('update', { personalDetails: myPersonalDetails });
+      this.$emit('update', myPersonalDetails );
     },
   },
 };
@@ -277,4 +288,3 @@ export default {
     width: 70%;
   }
 </style>
-
