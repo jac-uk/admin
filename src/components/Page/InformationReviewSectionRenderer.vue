@@ -181,7 +181,7 @@
             </dd>
               
             <dd
-              v-else-if="data[index][key] instanceof Date"
+              v-else-if="data[index][key] ? data[index][key] instanceof Date : key.search('Date')"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer

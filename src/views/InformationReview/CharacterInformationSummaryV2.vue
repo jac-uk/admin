@@ -14,9 +14,10 @@
             :edit="edit"
             :options="[true, false]"
             type="selection"
-            field="criminalOffences"
-            @changeField="changeInfo"
+            field="criminalConvictions"
+            @changeField="changeCharacterFlag"
           />
+
           <hr>
           <InformationReviewSectionRenderer
             :data="formData.criminalConvictionDetails"
@@ -47,7 +48,7 @@
             :options="[true, false]"
             type="selection"
             field="criminalCautions"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -78,7 +79,7 @@
             :options="[true, false]"
             type="selection"
             field="fixedPenalties"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -110,7 +111,7 @@
             :options="[true, false]"
             type="selection"
             field="drivingDisqualifications"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -141,7 +142,7 @@
             :options="[true, false]"
             type="selection"
             field="recentDrivingConvictions"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -172,7 +173,7 @@
             :options="[true, false]"
             type="selection"
             field="bankruptcies"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -203,7 +204,7 @@
             :options="[true, false]"
             type="selection"
             field="ivas"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -234,7 +235,7 @@
             :options="[true, false]"
             type="selection"
             field="lateTaxReturns"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -265,7 +266,7 @@
             :options="[true, false]"
             type="selection"
             field="lateVatReturns"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -296,7 +297,7 @@
             :options="[true, false]"
             type="selection"
             field="hmrcFines"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -327,7 +328,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfProfessionalMisconduct"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -358,7 +359,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfNegligence"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -389,7 +390,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfWrongfulDismissal"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -420,7 +421,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfDiscriminationProceeding"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -451,7 +452,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfHarassmentProceeding"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -482,7 +483,7 @@
             :options="[true, false]"
             type="selection"
             field="complaintOrDisciplinaryAction"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -513,7 +514,7 @@
             :options="[true, false]"
             type="selection"
             field="requestedToResign"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
@@ -544,7 +545,7 @@
             :options="[true, false]"
             type="selection"
             field="furtherInformationDetails"
-            @changeField="changeInfo"
+            @changeField="changeCharacterFlag"
           />
           <hr>
           <InformationReviewSectionRenderer
