@@ -109,7 +109,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(false);
     });
 
-    xit('renders identifying sections in full view', () => {
+    it('renders identifying sections in full view', () => {
       wrapper.setProps({
         activeTab: 'full',
       });
