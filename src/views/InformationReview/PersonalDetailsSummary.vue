@@ -6,8 +6,9 @@
         v-if="!isCandidateView"
         class="govuk-hint print-none"
       >
+        <!-- vv this isnt true at the moment vv -->
         <!-- Any changes made here will also update the candidate information.  --> 
-        <!-- ^^ this isnt true at the moment -->
+        <!-- ^^ this isnt true at the moment ^^ have updated the line below tell the truth -->
         Any changes made here will only update the application information.
       </span>
       <span

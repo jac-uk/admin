@@ -202,14 +202,14 @@
             <div v-if="application && exercise">
               <PersonalDetailsSummary 
                 :user-id="application.userId"
-                :personal-details="application.personalDetails"
+                :personal-details="application.personalDetails || {}"
                 :editable="editMode"
                 @update="changePersonalDetails"
               />
               <CharacterInformationSummary
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
-                :character-information="isVersion2 ? application.characterInformationV2 : application.characterInformation"
+                :character-information="correctCharacterInformation"
                 @updateApplication="changeApplication"
               />
               <EqualityAndDiversityInformationSummary
@@ -383,6 +383,13 @@ export default {
     },
     isNonLegal() {
       return isNonLegal(this.exercise);
+    },
+    correctCharacterInformation() {
+      if (this.isVersion2) {
+        return this.application.characterInformationV2 || {};
+      } else {
+        return this.application.characterInformation || {};
+      }
     },
     hasStatementOfSuitability() {
       return hasStatementOfSuitability(this.exercise);

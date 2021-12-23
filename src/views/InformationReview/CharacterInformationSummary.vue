@@ -7,8 +7,15 @@
       <h3 class="govuk-visually-hidden govuk-heading-s">
         Version {{ isVersion2 ? 2 : 1 }}
       </h3>
+      <div
+        v-if="!hasValues(characterInformation)"
+        class="govuk-body"
+      >
+        No information provided
+        <hr>
+      </div>
       <dl 
-        v-if="isVersion2"
+        v-else-if="isVersion2"
         class="govuk-summary-list"
       >
         <div>
@@ -26,13 +33,6 @@
             :edit="editable"
             @changeInfo="changeCharacterInfo"
           /> 
-        </div>
-        <div
-          v-if="!hasValues(characterInformation)"
-          class="govuk-body"
-        >
-          No information provided
-          <hr>
         </div>
       </dl>
     </div>
