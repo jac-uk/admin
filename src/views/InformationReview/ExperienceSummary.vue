@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <!-- PQE -->
+    <!-- Post-qualification experience/PQE -->
     <div
       v-if="isLegal"
       class="govuk-!-margin-top-9"
@@ -371,8 +371,8 @@ export default {
     },
     changeInfo(obj) {
       let changedObj = this.application[obj.field] || {};
-      
-      if (obj.change && obj.extension && obj.hasOwnProperty('index')) { //nested field
+
+      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) { // extension ie. field[index].extension 
         if (!changedObj[obj.index]) {
           changedObj = {
             [obj.index]: {},

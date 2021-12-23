@@ -352,7 +352,7 @@ export default {
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
-      if (obj.change && obj.hasOwnProperty('index')) {
+      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
         if (changedObj.length) {
           changedObj[obj.index].selection = obj.change;
         } else {

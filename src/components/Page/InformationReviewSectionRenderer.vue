@@ -174,14 +174,14 @@
                   :edit="edit"
                   :index="index"
                   type="text"
-                  :extension="key"
+                  extension="otherTasks"
                   @changeField="changeField"
                 />
               </div>
             </dd>
               
             <dd
-              v-else-if="data[index][key] instanceof Date"
+              v-else-if="data[index][key] ? data[index][key] instanceof Date : key.search('Date')"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -216,7 +216,7 @@
         ref="removeModal"
       >
         <ModalInner
-          @closed="closeModal"
+          @close="closeModal"
           @confirmed="removeField"
         />
       </Modal>
