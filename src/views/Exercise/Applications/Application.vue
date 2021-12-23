@@ -23,7 +23,7 @@
               <a class="moj-pagination__link govuk-link">Next<span class="govuk-visually-hidden"> set of pages</span></a>
             </li>
           </ul>
-        </div> 
+        </div>
 
         <div id="panel-pack-div">
           <div class="govuk-grid-row">
@@ -202,7 +202,7 @@
             class="application-details"
           >
             <div v-if="application && exercise">
-              <PersonalDetailsSummary 
+              <PersonalDetailsSummary
                 :user-id="application.userId"
                 :personal-details="application.personalDetails || {}"
                 :editable="editMode"
@@ -211,6 +211,7 @@
               <CharacterInformationSummary
                 :editable="(editMode && authorisedToPerformAction)"
                 :character-information="correctCharacterInformation"
+                :version="applicationVersion"
                 @updateApplication="changeApplication"
               />
               <EqualityAndDiversityInformationSummary
@@ -226,7 +227,7 @@
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
-              <QualificationsAndMembershipsSummary 
+              <QualificationsAndMembershipsSummary
                 :application="application"
                 :exercise="exercise"
                 :editable="(editMode && authorisedToPerformAction)"
@@ -255,7 +256,7 @@
               />
             </div>
           </div>
-      
+
           <div v-if="activeTab == 'characterchecks'">
             <CharacterChecks
               :application="application"
@@ -400,14 +401,17 @@ export default {
     hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
     },
-    isVersion2() {
+    applicationVersion() {
       if (this.exercise._applicationVersion) {
-        return this.exercise._applicationVersion === 2;
+        return this.exercise._applicationVersion;
       } else if (this.application.characterInformationV2) {
-        return true;
+        return 2;
       } else {
-        return false;
+        return 1;
       }
+    },
+    isVersion2() {
+      return this.applicationVersion === 2;
     },
     applications() {
       return this.$store.state.applications.records;

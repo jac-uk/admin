@@ -40,8 +40,9 @@
         <CharacterInformationSummary
           :editable="false"
           :character-information="characterInformation || {}"
+          :version="characterInformationVersion"
         />
-      </dl>  
+      </dl>
       <EqualityAndDiversity
         :data="equalityAndDiversity"
       />
@@ -130,6 +131,9 @@ export default {
     characterInformation() {
       const localDocs = this.$store.state.candidates.characterInformation;
       return localDocs || {};
+    },
+    characterInformationVersion() {
+      return this.characterInformation._versionNumber ? this.characterInformation._versionNumber : 1;
     },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;

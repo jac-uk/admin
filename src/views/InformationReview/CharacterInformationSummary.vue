@@ -5,7 +5,7 @@
         Character information
       </h2>
       <h3 class="govuk-visually-hidden govuk-heading-s">
-        Version {{ isVersion2 ? 2 : 1 }}
+        Version {{ version }}
       </h3>
       <div
         v-if="!hasValues(characterInformation)"
@@ -14,7 +14,7 @@
         No information provided
         <hr>
       </div>
-      <dl 
+      <dl
         v-else-if="isVersion2"
         class="govuk-summary-list"
       >
@@ -23,7 +23,7 @@
             :form-data="characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
-          /> 
+          />
         </div>
       </dl>
       <dl v-else>
@@ -32,7 +32,7 @@
             :form-data="characterInformation || {}"
             :edit="editable"
             @changeInfo="changeCharacterInfo"
-          /> 
+          />
         </div>
       </dl>
     </div>
@@ -60,16 +60,14 @@ export default {
       required: true,
       default: false,
     },
+    version: {
+      type: Number,
+      required: true,
+    },
   },
   computed: {
     isVersion2() {
-      if (this.characterInformation._versionNumber) {
-        return this.characterInformation._versionNumber === 2;
-      } else if (!(Object.keys(this.characterInformation).length)) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.version === 2;
     },
     applicationId() {
       return this.$route.params.applicationId;
