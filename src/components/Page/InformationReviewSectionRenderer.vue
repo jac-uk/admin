@@ -174,7 +174,7 @@
                   :edit="edit"
                   :index="index"
                   type="text"
-                  :extension="key"
+                  extension="otherTasks"
                   @changeField="changeField"
                 />
               </div>
