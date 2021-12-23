@@ -20,7 +20,6 @@
         />
         <hr>
         <InformationReviewSectionRenderer
-          v-if="formData.criminalOffences"
           :data="formData.criminalOffenceDetails"
           :data-default="emptyObject(['details', 'date', 'title'])"
           :edit="edit"

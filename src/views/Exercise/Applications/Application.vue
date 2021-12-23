@@ -201,14 +201,15 @@
           >
             <div v-if="application && exercise">
               <PersonalDetailsSummary 
-                :application="application"
+                :user-id="application.userId"
+                :personal-details="application.personalDetails || {}"
                 :editable="editMode"
-                @updateApplication="changeApplication"
+                @update="changePersonalDetails"
               />
               <CharacterInformationSummary
                 :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
-                :character-information="isVersion2 && application.characterInformationV2 ? application.characterInformationV2 : null"
+                :character-information="correctCharacterInformation"
                 @updateApplication="changeApplication"
               />
               <EqualityAndDiversityInformationSummary
@@ -383,6 +384,13 @@ export default {
     isNonLegal() {
       return isNonLegal(this.exercise);
     },
+    correctCharacterInformation() {
+      if (this.isVersion2) {
+        return this.application.characterInformationV2 || {};
+      } else {
+        return this.application.characterInformation || {};
+      }
+    },
     hasStatementOfSuitability() {
       return hasStatementOfSuitability(this.exercise);
     },
@@ -390,10 +398,13 @@ export default {
       return hasIndependentAssessments(this.exercise);
     },
     isVersion2() {
-      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
+      if (this.exercise._applicationVersion) {
+        return this.exercise._applicationVersion === 2;
+      } else if (this.application.characterInformationV2) {
         return true;
+      } else {
+        return false;
       }
-      return false;
     },
     applications() {
       return this.$store.state.applications.records;
@@ -617,6 +628,9 @@ export default {
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    },
+    changePersonalDetails(obj) {
+      this.changeApplication({ personalDetails: obj });
     },
   },
 };
