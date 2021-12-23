@@ -209,7 +209,6 @@
                 @update="changePersonalDetails"
               />
               <CharacterInformationSummary
-                :application="application"
                 :editable="(editMode && authorisedToPerformAction)"
                 :character-information="correctCharacterInformation"
                 @updateApplication="changeApplication"
