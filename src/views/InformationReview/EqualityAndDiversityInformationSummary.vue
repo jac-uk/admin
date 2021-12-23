@@ -662,3 +662,8 @@ export default {
 };
 </script>
 
+<style scoped>
+  .widerColumn {
+    width: 70%;
+  }
+</style>
