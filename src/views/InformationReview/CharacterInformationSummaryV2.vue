@@ -18,16 +18,18 @@
             @changeField="changeCharacterFlag"
           />
 
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.criminalConvictionDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="criminalConvictionDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.criminalConvictions">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.criminalConvictionDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="criminalConvictionDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -50,16 +52,18 @@
             field="criminalCautions"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.criminalCautionDetails"
-            :edit="edit"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            field="criminalCautionDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.criminalCautions">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.criminalCautionDetails"
+              :edit="edit"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              field="criminalCautionDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -81,17 +85,19 @@
             field="fixedPenalties"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.fixedPenaltyDetails"
-            :display-month-year-only="false"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="fixedPenaltyDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.fixedPenalties">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.fixedPenaltyDetails"
+              :display-month-year-only="false"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="fixedPenaltyDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -113,16 +119,18 @@
             field="drivingDisqualifications"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.drivingDisqualificationDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="drivingDisqualificationDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.drivingDisqualifications">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.drivingDisqualificationDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="drivingDisqualificationDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -144,16 +152,18 @@
             field="recentDrivingConvictions"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.recentDrivingConvictionDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="recentDrivingConvictionDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.recentDrivingConvictions">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.recentDrivingConvictionDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="recentDrivingConvictionDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -175,16 +185,18 @@
             field="bankruptcies"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.bankruptcyDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="bankruptcyDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.bankruptcies">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.bankruptcyDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="bankruptcyDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -206,16 +218,18 @@
             field="ivas"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.ivaDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="ivaDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.ivas">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.ivaDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="ivaDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -237,16 +251,18 @@
             field="lateTaxReturns"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.lateTaxReturnDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="lateTaxReturnDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.lateTaxReturns">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.lateTaxReturnDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="lateTaxReturnDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -268,16 +284,18 @@
             field="lateVatReturns"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.lateVatReturnDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            :edit="edit"
-            field="lateVatReturnDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.lateVatReturns">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.lateVatReturnDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              :edit="edit"
+              field="lateVatReturnDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -299,20 +317,22 @@
             field="hmrcFines"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.hmrcFineDetails"
-            :data-default="emptyObject(['details', 'date', 'title'])"
-            field="hmrcFineDetails"
-            :edit="edit"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.hmrcFines">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.hmrcFineDetails"
+              :data-default="emptyObject(['details', 'date', 'title'])"
+              field="hmrcFineDetails"
+              :edit="edit"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
-    
+
     <!-- ProfessionalConductSummary -->
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
@@ -330,16 +350,18 @@
             field="subjectOfAllegationOrClaimOfProfessionalMisconduct"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.subjectOfAllegationOrClaimOfProfessionalMisconduct">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -361,16 +383,18 @@
             field="subjectOfAllegationOrClaimOfNegligence"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.subjectOfAllegationOrClaimOfNegligenceDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="subjectOfAllegationOrClaimOfNegligenceDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.subjectOfAllegationOrClaimOfNegligence">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.subjectOfAllegationOrClaimOfNegligenceDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="subjectOfAllegationOrClaimOfNegligenceDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -392,20 +416,22 @@
             field="subjectOfAllegationOrClaimOfWrongfulDismissal"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.subjectOfAllegationOrClaimOfWrongfulDismissal">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
-    
+
     <!-- subjectOfAllegationOrClaimOfDiscriminationProceedingDetails -->
     <dl class="govuk-summary-list govuk-!-margin-bottom-0">
       <div class="govuk-summary-list__row">
@@ -423,16 +449,18 @@
             field="subjectOfAllegationOrClaimOfDiscriminationProceeding"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.subjectOfAllegationOrClaimOfDiscriminationProceeding">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -454,16 +482,18 @@
             field="subjectOfAllegationOrClaimOfHarassmentProceeding"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.subjectOfAllegationOrClaimOfHarassmentProceeding">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -485,16 +515,18 @@
             field="complaintOrDisciplinaryAction"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.complaintOrDisciplinaryActionDetails"
-            :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
-            :edit="edit"
-            field="complaintOrDisciplinaryActionDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.complaintOrDisciplinaryAction">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.complaintOrDisciplinaryActionDetails"
+              :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
+              :edit="edit"
+              field="complaintOrDisciplinaryActionDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -516,16 +548,18 @@
             field="requestedToResign"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.requestedToResignDetails"
-            :data-default="emptyObject(['details', 'date' ])"
-            :edit="edit"
-            field="requestedToResignDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.requestedToResign">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.requestedToResignDetails"
+              :data-default="emptyObject(['details', 'date' ])"
+              :edit="edit"
+              field="requestedToResignDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>
@@ -540,23 +574,25 @@
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
-            :data="formData.furtherInformationDetails"
+            :data="formData.furtherInformation"
             :edit="edit"
             :options="[true, false]"
             type="selection"
             field="furtherInformationDetails"
             @changeField="changeCharacterFlag"
           />
-          <hr>
-          <InformationReviewSectionRenderer
-            :data="formData.furtherInformationDetails"
-            :data-default="emptyObject(['details', 'date'])"
-            :edit="edit"
-            field="furtherInformationDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
-          />
+          <div v-if="formData.furtherInformation">
+            <hr>
+            <InformationReviewSectionRenderer
+              :data="formData.furtherInformationDetails"
+              :data-default="emptyObject(['details', 'date'])"
+              :edit="edit"
+              field="furtherInformationDetails"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </div>
         </dd>
       </div>
     </dl>

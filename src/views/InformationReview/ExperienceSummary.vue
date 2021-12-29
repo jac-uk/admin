@@ -292,13 +292,15 @@ export default {
       };
     },
     emptyEmploymentGapObject() {
-      return {
-        orgBusinessName: '',
-        jobTitle: '',
+      const model = {
+        details: '',
         startDate: new Date(),
         endDate: new Date(),
-        tasks: [],
       };
+      if (this.isLegal) {
+        model.tasks = [];
+      }
+      return model;
     },
     emptyExperienceObject() {
       return {
@@ -337,7 +339,7 @@ export default {
     },
     addInfo(obj) {
       let changedObj = this.application[obj.field] || {};
-      
+
       if (changedObj.length > 0){
         changedObj = [...changedObj, obj.change];
       } else {
@@ -351,7 +353,7 @@ export default {
       let changedObj = this.application[obj.field] || {};
 
       this.application[obj.field];
-      
+
       if (changedObj.length > 0){
         changedObj.splice(obj.index, 1);
       } else {
@@ -372,13 +374,13 @@ export default {
     changeInfo(obj) {
       let changedObj = this.application[obj.field] || {};
 
-      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) { // extension ie. field[index].extension 
+      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) { // extension ie. field[index].extension
         if (!changedObj[obj.index]) {
           changedObj = {
             [obj.index]: {},
           };
         }
-        
+
         changedObj[obj.index][obj.extension] = obj.change;
       } else {
         changedObj = obj;

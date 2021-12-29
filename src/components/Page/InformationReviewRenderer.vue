@@ -23,7 +23,7 @@
           :edit-mode="edit"
           :value="data"
           :field="field"
-          :route-to="{ name: 'candidates-view', params: { id: applicationId } }" 
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           :extension="extension"
           type="route"
           @changeField="changeField"
