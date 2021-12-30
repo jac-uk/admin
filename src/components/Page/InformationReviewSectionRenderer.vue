@@ -1,7 +1,7 @@
 <template>
   <div>
     <template
-      v-if="data && data.length"
+      v-if="hasData"
     >
       <div
         v-for="(item, index) in data"
@@ -30,7 +30,12 @@
             >
               {{ key | lookup }}
             </dt>
-
+            <dt
+              v-else-if="key == 'details'"
+              class="govuk-summary-list__key"
+            >
+              Details
+            </dt>
             <dd
               v-else-if="key === 'taskDetails'"
               class="govuk-summary-list__value"
@@ -117,7 +122,6 @@
                 </div>
               </div>
             </dd>
-
             <dd
               v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails')"
               class="govuk-summary-list__value"
@@ -133,7 +137,7 @@
                 :extension="key"
                 @changeField="changeField"
               />
-              
+
               <template v-if="data[index][key]">
                 <div v-if="data[index][key].includes('other')">
                   <dt class="govuk-summary-list__key">
@@ -183,7 +187,6 @@
                 </div>
               </template>
             </dd>
-
             <dd
               v-else-if="key === 'date' || key.search('Date') > 0"
               class="govuk-summary-list__value"
@@ -198,15 +201,10 @@
                 @changeField="changeField"
               />
             </dd>
-
             <dd
               v-else-if="key === 'details'"
               class="govuk-summary-list__value"
             >
-              <div class="govuk-summary-list__key">
-                Details
-              </div>
-
               <InformationReviewRenderer
                 :data="data[index][key]"
                 :field="field"
@@ -217,7 +215,6 @@
                 @changeField="changeField"
               />
             </dd>
-
             <dd
               v-else-if="key != 'taskDetails'"
               class="govuk-summary-list__value"
@@ -258,9 +255,10 @@
     >
       Add
     </button>
-  </div> 
+  </div>
 </template>
 <script>
+import _ from 'lodash';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
@@ -302,6 +300,17 @@ export default {
     return {
       currentIndex: null,
     };
+  },
+  computed: {
+    hasData() {
+      if (this.data && this.data.length) {
+        if (this.data.length === 1 && _.isEmpty(this.data[0])) {
+          return false; // ignore array containing empty object e.g. `[{}]`
+        }
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     displayDate(date) {
