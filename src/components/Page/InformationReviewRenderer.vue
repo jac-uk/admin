@@ -148,7 +148,7 @@ export default {
       default: () => '',
     },
     data: {
-      type: [Array, String, Date, Boolean, Array],
+      type: [String, Date, Boolean, Array],
       required: false,
       default: () => null,
     },
