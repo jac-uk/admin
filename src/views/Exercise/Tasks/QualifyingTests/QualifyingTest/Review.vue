@@ -129,11 +129,7 @@
           {{ questionLabel }} {{ index + 1 }}
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            v-html="testQuestion.details"
-          />
-          <!-- eslint-enable -->
+          {{ testQuestion.details }}
 
           <hr class="govuk-section-break govuk-section-break--visible">
           <ol
@@ -154,8 +150,15 @@
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
             class="govuk-!-padding-1"
           >
-            Most appropriate: {{ testQuestion.options[testQuestion.mostAppropriate].answer }} <br>
-            Least appropriate: {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
+            <strong> 
+              Most appropriate:
+            </strong> 
+            {{ testQuestion.options[testQuestion.mostAppropriate].answer }} 
+            <br>
+            <strong> 
+              Least appropriate:
+            </strong> 
+            {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
             v-if="isCriticalAnalysis && testQuestion.correct >= 0"

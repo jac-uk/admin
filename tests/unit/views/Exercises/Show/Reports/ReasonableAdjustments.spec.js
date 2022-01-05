@@ -59,9 +59,9 @@ describe('@/views/Exercise/Show/Reports/ReasonableAdjustments', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
-
+    
     it('contains a <h2>', () => {
-      expect(wrapper.contains('h2')).toBe(true);
+      expect(wrapper.find('h2')).toBeTruthy();
     });
 
   });

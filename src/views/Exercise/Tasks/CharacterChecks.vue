@@ -294,6 +294,7 @@ import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 
 export default {
+  name: 'CharacterChecks',
   components: {
     Banner,
     ActionButton,

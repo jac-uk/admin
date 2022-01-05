@@ -9,55 +9,40 @@
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
+    <span
+      class="float-right govuk-!-margin-left-4"
+    >
+      <button
+        v-if="editMode"
+        class="govuk-button govuk-button btn-unlock"
+        @click="toggleEdit"
+      >
+        Done
+      </button>
+      <button
+        v-else
+        class="govuk-button govuk-button--secondary btn-mark-as-applied"
+        @click="toggleEdit"
+      >
+        Edit
+      </button>
+    </span>
 
     <div
       v-if="activeTab === 'details'"
     >
-      <PersonalDetails
-        :candidate="personalDetails"
-        @changedetails="updateCandidate"
+      <PersonalDetailsSummary
+        :personal-details="personalDetails"
+        :editable="editMode"
+        @update="updateCandidate"
       />
-      <h2 class="govuk-heading-l">
-        Character information
-      </h2>
-
-      <dl v-if="displayNewCharacterInformation && characterInformation">
-        <CriminalOffencesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FixedPenaltiesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <MotoringOffencesSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FinancialMattersSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <ProfessionalConductSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <FurtherInformationSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-        <CharacterDeclarationSummary
-          :character-information="characterInformation"
-          :required-wider-column="false"
+      <dl v-if="characterInformation">
+        <CharacterInformationSummary
+          :editable="false"
+          :character-information="characterInformation || {}"
+          :version="characterInformationVersion"
         />
       </dl>
-      <dl v-else>
-        <CharacterInformationSummaryV1
-          :character-information="characterInformation"
-          :required-wider-column="false"
-        />
-      </dl>
-
       <EqualityAndDiversity
         :data="equalityAndDiversity"
       />
@@ -88,41 +73,28 @@
 <script>
 import firebase from '@firebase/app';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import PersonalDetails from '@jac-uk/jac-kit/draftComponents/Candidates/PersonalDetails';
-import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
-import CriminalOffencesSummary from '@/views/InformationReview/CriminalOffencesSummary';
-import FixedPenaltiesSummary from '@/views/InformationReview/FixedPenaltiesSummary';
-import MotoringOffencesSummary from '@/views/InformationReview/MotoringOffencesSummary';
-import FinancialMattersSummary from '@/views/InformationReview/FinancialMattersSummary';
-import ProfessionalConductSummary from '@/views/InformationReview/ProfessionalConductSummary';
-import FurtherInformationSummary from '@/views/InformationReview/FurtherInformationSummary';
-import CharacterDeclarationSummary from '@/views/InformationReview/CharacterDeclarationSummary';
-import CharacterInformationSummaryV1 from '@/views/Exercise/Applications/CharacterInformationSummaryV1.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 
 export default {
   components: {
     TabsList,
-    PersonalDetails,
-    EqualityAndDiversity,
     Notes,
     Applications,
-    CriminalOffencesSummary,
-    FixedPenaltiesSummary,
-    MotoringOffencesSummary,
-    FinancialMattersSummary,
-    ProfessionalConductSummary,
-    FurtherInformationSummary,
-    CharacterDeclarationSummary,
-    CharacterInformationSummaryV1,
     Actions,
+    PersonalDetailsSummary,
+    CharacterInformationSummary,
+    EqualityAndDiversity,
   },
   data() {
     return {
       authorisedToPerformAction: false,
+      editMode: false,
       tabs: [
         {
           ref: 'details',
@@ -160,6 +132,9 @@ export default {
       const localDocs = this.$store.state.candidates.characterInformation;
       return localDocs || {};
     },
+    characterInformationVersion() {
+      return this.characterInformation._versionNumber ? this.characterInformation._versionNumber : 1;
+    },
     equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
@@ -169,9 +144,6 @@ export default {
     },
     getUserId() {
       return this.$route.params.id || '';
-    },
-    displayNewCharacterInformation() {
-      return this.characterInformation._versionNumber === 2;
     },
   },
   async created() {
@@ -198,6 +170,9 @@ export default {
     updateCandidate(obj) {
       this.makeFullName(obj);
       this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
+    },
+    toggleEdit(){
+      this.editMode = !this.editMode;
     },
   },
 };
