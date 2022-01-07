@@ -244,7 +244,7 @@
                 :application="application"
                 :application-id="applicationId"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :is-panel-view="isPanelView"
               />
               <AssessmentsSummary
