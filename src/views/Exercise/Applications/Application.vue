@@ -251,6 +251,7 @@
                 :application="application"
                 :exercise="exercise"
                 :editable="editMode"
+                :authorised-to-perform-action="authorisedToPerformAction"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />

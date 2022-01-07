@@ -22,7 +22,7 @@
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :data="hasAscAnswers(index) ? application.selectionCriteriaAnswers[index].answer : null"
-              :edit="editable"
+              :edit="editable && authorisedToPerformAction"
               :index="index"
               extension="answer"
               type="selection"
@@ -41,7 +41,7 @@
               <InformationReviewRenderer
                 v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
                 :data="hasAscAnswerDetails(index) ? application.selectionCriteriaAnswers[index].answerDetails : null"
-                :edit="editable"
+                :edit="editable && authorisedToPerformAction"
                 :index="index"
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
@@ -248,6 +248,11 @@ export default {
       default: () => {},
     },
     editable: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
+    },
+    authorisedToPerformAction: {
       type: [Boolean, Function, Promise],
       required: true,
       default: false,
