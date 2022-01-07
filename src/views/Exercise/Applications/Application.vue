@@ -244,13 +244,14 @@
                 :application="application"
                 :application-id="applicationId"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :is-panel-view="isPanelView"
               />
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
+                :authorised-to-perform-action="authorisedToPerformAction"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
