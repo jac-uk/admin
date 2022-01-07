@@ -250,7 +250,7 @@
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
