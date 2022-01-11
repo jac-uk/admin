@@ -91,7 +91,7 @@
 
     <div class="govuk-grid-column-full">
       <!-- // TODO Include count for character issues across whole exercise. Then display here.
-       <p class="govuk-body">
+      <p class="govuk-body">
         Candidates with character issues: <b>{{ applications.length }}</b>
       </p>
       -->
@@ -284,9 +284,7 @@ export default {
       }
       if (this.candidateStatus !== 'all') {
         firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-      } else {
-        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
-      }
+      } 
       firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
