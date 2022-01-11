@@ -45,7 +45,7 @@
           <Table
             ref="exercisesTable"
             data-key="id"
-            :data="records"
+            :data="tableData"
             :page-size="50"
             :columns="tableColumns"
             :filters="[
@@ -137,7 +137,7 @@ export default {
         { title: 'Close date', sort: 'applicationCloseDate' },
         {
           title: 'Applications count',
-          sort: 'applicationsCount',
+          sort: '_applications._total',
           class: 'govuk-table__header--numeric',
         },
       ],
@@ -151,6 +151,14 @@ export default {
     isButtonDisabled() {
       const hasSelection = this.selectedItems && this.selectedItems.length;
       return !hasSelection;
+    },
+    tableData() {
+      return this.records.map(row => {
+        const data = { ...row };
+        data.id = row.id;
+        data.applicationsCount = (row._applications && row._applications._total) || 0;
+        return data;
+      });
     },
   },
   watch: {

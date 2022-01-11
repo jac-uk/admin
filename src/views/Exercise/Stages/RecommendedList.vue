@@ -107,7 +107,7 @@ export default {
       return records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.recommended || 0;
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.recommended) || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
