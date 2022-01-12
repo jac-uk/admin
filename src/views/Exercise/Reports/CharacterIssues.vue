@@ -284,7 +284,10 @@ export default {
       }
       if (this.candidateStatus !== 'all') {
         firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-      } 
+      } else {
+        params.orderBy = 'status';
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
+      }
       firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
