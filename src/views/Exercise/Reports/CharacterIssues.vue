@@ -200,7 +200,7 @@ export default {
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'candidate.fullName', default: true },
+        { title: 'Candidate' },
       ],
       downloadingReport: false,
     };
@@ -282,11 +282,14 @@ export default {
       if (this.exerciseStage !== 'all') {
         firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
       }
-      if (this.candidateStatus !== 'all') {
-        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-      } else {
-        params.orderBy = 'status';
+      if (this.candidateStatus === 'all') {
         firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
+        if (params.orderBy && params.orderBy !== 'status') { params.orderByTMP = params.orderBy; } // temporarily pollute params object
+        params.orderBy = 'status';
+      } else {
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+        params.orderBy = params.orderByTMP;
+        if (params.orderByTMP) { delete params.orderByTMP; } // tidy up params object pollution
       }
       firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
       this.unsubscribe = firestoreRef
