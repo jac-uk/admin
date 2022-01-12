@@ -112,7 +112,7 @@
           class="govuk-summary-list__value"
         >
           <InformationReviewRenderer
-            :data="formData.drivingDisqualifications || !formData.drivingDisqualificationDetails"
+            :data="formData.drivingDisqualifications"
             :edit="edit"
             :options="[true, false]"
             type="selection"
