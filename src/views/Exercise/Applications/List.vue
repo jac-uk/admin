@@ -26,6 +26,7 @@
     </div>
 
     <Table
+      :key="status"
       ref="applicationsTable"
       data-key="id"
       :data="applications"
@@ -81,26 +82,23 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      tableColumns: [
-        { title: 'Reference number' },
-        { title: 'Name', sort: 'personalDetails.fullName', default: true },
-        { title: 'Status' },
-      ],
-    };
-  },
   computed: {
+    tableColumns() {
+      const cols = [];
+      cols.push({ title: 'Reference number' });
+      if (this.status === 'draft') {
+        cols.push({ title: 'Name', sort: 'documentId', default: true });
+      } else {
+        cols.push({ title: 'Name', sort: 'personalDetails.fullName', default: true });
+      }
+      cols.push({ title: 'Status' });
+      return cols;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
     applications() {
       return this.$store.state.applications.records;
-    },
-  },
-  watch: {
-    status() {
-      this.$refs['applicationsTable'].reload();
     },
   },
   methods: {

@@ -162,7 +162,7 @@
           </ActionButton>
         </div>
         <div v-else>
-          <div v-if="exercise.applicationRecords">
+          <div v-if="isProcessing">
             <Select
               v-if="!isTieBreaker"
               id="exercise-stage"
@@ -172,22 +172,22 @@
                 Choose applications
               </option>
               <option
-                v-if="exercise.applicationRecords.review"
+                v-if="applicationRecordCounts.review"
                 value="review"
               >
-                Review ({{ exercise.applicationRecords.review }})
+                Review ({{ applicationRecordCounts.review }})
               </option>
               <option
-                v-if="exercise.applicationRecords.shortlisted"
+                v-if="applicationRecordCounts.shortlisted"
                 value="shortlisted"
               >
-                Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+                Shortlisted ({{ applicationRecordCounts.shortlisted }})
               </option>
               <option
-                v-if="exercise.applicationRecords.selected"
+                v-if="applicationRecordCounts.selected"
                 value="selected"
               >
-                Selected ({{ exercise.applicationRecords.selected }})
+                Selected ({{ applicationRecordCounts.selected }})
               </option>
             </Select>
             <Select
@@ -199,22 +199,22 @@
                 Choose applications (for EMP candidates)
               </option>
               <option
-                v-if="exercise.applicationRecords.reviewEMP"
+                v-if="applicationRecordCounts.reviewEMP"
                 value="review"
               >
-                Review ({{ exercise.applicationRecords.reviewEMP }})
+                Review ({{ applicationRecordCounts.reviewEMP }})
               </option>
               <option
-                v-if="exercise.applicationRecords.shortlistedEMP"
+                v-if="applicationRecordCounts.shortlistedEMP"
                 value="shortlisted"
               >
-                Shortlisted ({{ exercise.applicationRecords.shortlistedEMP }})
+                Shortlisted ({{ applicationRecordCounts.shortlistedEMP }})
               </option>
               <option
-                v-if="exercise.applicationRecords.selectedEMP"
+                v-if="applicationRecordCounts.selectedEMP"
                 value="selected"
               >
-                Selected ({{ exercise.applicationRecords.selectedEMP }})
+                Selected ({{ applicationRecordCounts.selectedEMP }})
               </option>
             </Select>
           </div>
@@ -340,6 +340,7 @@ import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constan
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -360,6 +361,12 @@ export default {
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isProcessing() {
+      return isProcessing(this.exercise);
+    },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
     },
     qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
@@ -428,7 +435,7 @@ export default {
       return qtList.length > 0;
     },
     hasEMPCandidates() {
-      const appRecs = this.exercise.applicationRecords;
+      const appRecs = this.applicationRecordCounts;
       return appRecs.reviewEMP || appRecs.shortlistedEMP || appRecs.selectedEMP;
     },
     isTieBreaker() {

@@ -66,6 +66,9 @@ const module = {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
+    getEmail(state) {
+      return state.currentUser.email;
+    },
   },
 };
 

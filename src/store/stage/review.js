@@ -130,6 +130,15 @@ export default {
       }
       context.commit('message', valueMessage);
       context.commit('changeSelectedItems', []);
+
+      if (
+        nextStage[0] ||
+        status === APPLICATION_STATUS.WITHDREW_APPLICATION ||
+        empApplied != null
+      ) {
+        context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
+      }
+
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);
