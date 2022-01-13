@@ -11,6 +11,7 @@
           :type="type"
           :index="index"
           :extension="extension"
+          :display-month-year-only="displayMonthYearOnly"
           @changeField="changeField"
         />
       </div>
@@ -164,7 +165,6 @@ export default {
     },
     displayMonthYearOnly: {
       type: Boolean,
-      required: false,
       default: false,
     },
   },
