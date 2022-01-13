@@ -26,6 +26,7 @@
     </div>
 
     <Table
+      :key="status"
       ref="applicationsTable"
       data-key="id"
       :data="applications"
@@ -98,11 +99,6 @@ export default {
     },
     applications() {
       return this.$store.state.applications.records;
-    },
-  },
-  watch: {
-    status() {
-      this.$refs['applicationsTable'].reload();
     },
   },
   methods: {
