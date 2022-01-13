@@ -282,16 +282,16 @@ export default {
       if (this.exerciseStage !== 'all') {
         firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
       }
+      // intercept params so we can override without polluting the passed in object
+      const localParams = { ...params };
       if (this.candidateStatus === 'all') {
         firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
-        if (params.orderBy && params.orderBy !== 'status') { params.orderByTMP = params.orderBy; } // temporarily pollute params object
-        params.orderBy = 'status';
+        localParams.orderBy = ['status', 'documentId'];
       } else {
         firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-        params.orderBy = params.orderByTMP;
-        if (params.orderByTMP) { delete params.orderByTMP; } // tidy up params object pollution
+        localParams.orderBy = 'documentId';
       }
-      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, localParams);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
