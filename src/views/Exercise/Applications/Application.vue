@@ -390,7 +390,7 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.isVersion2) {
+      if (this.applicationVersion === 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
@@ -403,16 +403,7 @@ export default {
       return hasIndependentAssessments(this.exercise);
     },
     applicationVersion() {
-      if (this.exercise._applicationVersion) {
-        return this.exercise._applicationVersion;
-      } else if (this.application.characterInformationV2) {
-        return 2;
-      } else {
-        return 1;
-      }
-    },
-    isVersion2() {
-      return this.applicationVersion === 2;
+      return this.exercise._applicationVersion || 1;
     },
     applications() {
       return this.$store.state.applications.records;
