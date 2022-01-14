@@ -91,7 +91,7 @@
 
     <div class="govuk-grid-column-full">
       <!-- // TODO Include count for character issues across whole exercise. Then display here.
-       <p class="govuk-body">
+      <p class="govuk-body">
         Candidates with character issues: <b>{{ applications.length }}</b>
       </p>
       -->
@@ -201,7 +201,7 @@ export default {
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'candidate.fullName', default: true },
+        { title: 'Candidate' },
       ],
       downloadingReport: false,
     };
@@ -286,12 +286,16 @@ export default {
       if (this.exerciseStage !== 'all') {
         firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
       }
-      if (this.candidateStatus !== 'all') {
-        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+      // intercept params so we can override without polluting the passed in object
+      const localParams = { ...params };
+      if (this.candidateStatus === 'all') {
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
+        localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+        localParams.orderBy = 'documentId';
       }
-      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, localParams);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];
