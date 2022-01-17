@@ -406,6 +406,7 @@ export default {
             exerciseId: this.panel.exerciseId,
             panelId: this.panelId,
             type: this.panel.type,
+            orderBy: 'candidate.fullName',
             ...params,
           }
         );
