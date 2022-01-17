@@ -28,7 +28,8 @@ const module = {
           'warren.searle@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
-          'joy.adeagbo@judicialappointments.digital',
+          'andrew.isaac@judicialappointments.digital',
+          'blaise.buckland@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
@@ -43,7 +44,8 @@ const module = {
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
-              'joy.adeagbo@judicialappointments.digital',
+              'andrew.isaac@judicialappointments.digital',
+              'blaise.buckland@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
