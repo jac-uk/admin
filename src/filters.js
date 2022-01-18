@@ -40,7 +40,7 @@ const lookup = (value) => {
     shortlisted: 'Shortlisted',
     selected: 'Selected',
     recommended: 'Recommended',
-    
+
     // Editable Application helpers
     date: 'Date',
     details: 'Details',
@@ -54,11 +54,16 @@ const lookup = (value) => {
     // emp flags
     'gender': 'Gender',
     'ethnicity': 'Ethnicity',
+
+    // PAJE answers
+    'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
+    'online-only': 'Yes - online resources only',
+
     // 'xxx': 'xxx',
   };
 
   returnValue = lookup[value];
-  
+
   if (!returnValue) {
     if (Object.keys(filters).indexOf('lookup') >= 0) { // use jac-kit lookup, if it exists
       returnValue = filters.lookup(value);
