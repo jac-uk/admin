@@ -28,18 +28,13 @@ const module = {
           'warren.searle@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
-          'maria.brookes@judicialappointments.digital',
-          'joy.adeagbo@judicialappointments.digital',
+          'andrew.isaac@judicialappointments.digital',
+          'blaise.buckland@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
           'wincen.lowe@justice.gov.uk',
           'molly.meadows@justice.gov.uk',
-          'thomas.hudson.testing@judicialappointments.digital',
-          'liam.price.testing@judicialappointments.digital',
-          'trefor.walters.testing@judicialappointments.digital',
-          'tom.russelltesting.testing@judicialappointments.digital',
-          'stefan.thomas.testing@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -49,13 +44,8 @@ const module = {
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
-              'maria.brookes@judicialappointments.digital',
-              'joy.adeagbo@judicialappointments.digital',
-              'thomas.hudson.testing@judicialappointments.digital',
-              'liam.price.testing@judicialappointments.digital',
-              'trefor.walters.testing@judicialappointments.digital',
-              'tom.russelltesting.testing@judicialappointments.digital',
-              'stefan.thomas.testing@judicialappointments.digital',
+              'andrew.isaac@judicialappointments.digital',
+              'blaise.buckland@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
@@ -77,6 +67,9 @@ const module = {
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
+    },
+    getEmail(state) {
+      return state.currentUser.email;
     },
   },
 };

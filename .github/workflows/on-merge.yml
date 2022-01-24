@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '10'
+          node-version: '12'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Lint
@@ -88,7 +88,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '10'
+          node-version: '12'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file
@@ -135,7 +135,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '10'
+          node-version: '12'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file

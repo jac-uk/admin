@@ -226,23 +226,23 @@
             Choose applications
           </option>
           <option
-            v-if="hasApplicationRecordsReview"
+            v-if="applicationRecordCounts.review"
             value="review"
           >
-            Review ({{ exercise.applicationRecords.review }})
+            Review ({{ applicationRecordCounts.review }})
           </option>
           <option
-            v-if="hasApplicationsRecordsShortlisted"
+            v-if="applicationRecordCounts.shortlisted"
             value="shortlisted"
           >
-            Shortlisted ({{ exercise.applicationRecords.shortlisted }})
+            Shortlisted ({{ applicationRecordCounts.shortlisted }})
           </option>
 
           <option
-            v-if="hasApplicationsRecordsSelected"
+            v-if="applicationRecordCounts.selected"
             value="selected"
           >
-            Selected ({{ exercise.applicationRecords.selected }})
+            Selected ({{ applicationRecordCounts.selected }})
           </option>
         </select>
 
@@ -284,6 +284,7 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
+import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -312,6 +313,9 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
     },
     warningMessage() {
       let msg = 'Please add';
@@ -355,27 +359,6 @@ export default {
     },
     hasStartedSending() {
       return this.exercise.assessments && this.exercise.assessments.sent;
-    },
-    hasApplicationRecordsReview(){
-      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.review){
-        return true;
-      } else {
-        return false;
-      }
-    },
-    hasApplicationsRecordsShortlisted(){
-      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
-        return true;
-      } else {
-        return false;
-      }
-    },
-    hasApplicationsRecordsSelected(){
-      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.selected){
-        return true;
-      } else {
-        return false;
-      }
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;

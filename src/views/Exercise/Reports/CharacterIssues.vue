@@ -38,31 +38,31 @@
             All applications
           </option>
           <option
-            v-if="exercise.applicationRecords.review"
+            v-if="applicationRecordCounts.review"
             value="review"
           >
             Review
           </option>
           <option
-            v-if="exercise.applicationRecords.shortlisted"
+            v-if="applicationRecordCounts.shortlisted"
             value="shortlisted"
           >
             Shortlisted
           </option>
           <option
-            v-if="exercise.applicationRecords.selected"
+            v-if="applicationRecordCounts.selected"
             value="selected"
           >
             Selected
           </option>
           <option
-            v-if="exercise.applicationRecords.recommended"
+            v-if="applicationRecordCounts.recommended"
             value="recommended"
           >
             Recommended
           </option>
           <option
-            v-if="exercise.applicationRecords.handover"
+            v-if="applicationRecordCounts.handover"
             value="handover"
           >
             Handover
@@ -91,7 +91,7 @@
 
     <div class="govuk-grid-column-full">
       <!-- // TODO Include count for character issues across whole exercise. Then display here.
-       <p class="govuk-body">
+      <p class="govuk-body">
         Candidates with character issues: <b>{{ applications.length }}</b>
       </p>
       -->
@@ -183,6 +183,7 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
+import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -200,7 +201,7 @@ export default {
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
-        { title: 'Candidate', sort: 'candidate.fullName', default: true },
+        { title: 'Candidate' },
       ],
       downloadingReport: false,
     };
@@ -208,6 +209,9 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
     },
   },
   watch: {
@@ -282,12 +286,16 @@ export default {
       if (this.exerciseStage !== 'all') {
         firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
       }
-      if (this.candidateStatus !== 'all') {
-        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+      // intercept params so we can override without polluting the passed in object
+      const localParams = { ...params };
+      if (this.candidateStatus === 'all') {
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
+        localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication').orderBy('status');
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+        localParams.orderBy = 'documentId';
       }
-      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
+      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, localParams);
       this.unsubscribe = firestoreRef
         .onSnapshot((snap) => {
           const applicationRecords = [];

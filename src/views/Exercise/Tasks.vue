@@ -13,6 +13,8 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
+import { isProcessing } from '@/helpers/exerciseHelper';
+
 export default {
   components: {
     SideNavigation,
@@ -34,7 +36,7 @@ export default {
         path: `${path}/equal-merit-tie-breakers`,
       });
     }
-    if (exercise.applicationRecords) {
+    if (isProcessing(exercise)) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
           title: 'Independent Assessments',

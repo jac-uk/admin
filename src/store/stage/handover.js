@@ -26,6 +26,8 @@ export default {
       return unbindFirestoreRef('records');
     }),
     updateStatus: async ( context, { nextStage } ) => {
+      const moveToNextStage = nextStage !== EXERCISE_STAGE.HANDOVER;
+
       const data = {
         stage: nextStage,
       };
@@ -41,6 +43,11 @@ export default {
       let valueMessage = `Updated ${selectedItems.length} candidates`;
       valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       context.commit('message', valueMessage);
+
+      if (moveToNextStage) {
+        context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
+      }
+
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);

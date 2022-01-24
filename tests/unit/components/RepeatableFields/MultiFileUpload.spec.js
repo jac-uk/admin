@@ -1,7 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 
 const mockProps = {
   id: 'mock-id',
@@ -29,11 +27,11 @@ describe('@/components/RepeatableFields/MultiFileUpload', () => {
     });
 
     it('renders TextField', () => {
-      expect(wrapper.find(TextField).exists()).toBe(true);
+      expect(wrapper.find('textfield-stub').exists()).toBe(true);
     });
 
     it('renders FileUpload', () => {
-      expect(wrapper.find(FileUpload).exists()).toBe(true);
+      expect(wrapper.find('fileupload-stub').exists()).toBe(true);
     });
   });
 

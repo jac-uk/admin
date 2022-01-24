@@ -1,6 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 
 const createTestSubject = (props) => {
   return shallowMount(SelectionDay, {
@@ -62,7 +61,7 @@ describe('@/components/RepeatableFields/SelectionDay', () => {
   describe('template', () => {
     it('renders DateInput', () => {
       const wrapper = createTestSubject({ index: 1, row: {} });
-      expect(wrapper.find(DateInput).exists()).toBe(true);
+      expect(wrapper.find('dateinput-stub').exists()).toBe(true);
     });
   });
 });
