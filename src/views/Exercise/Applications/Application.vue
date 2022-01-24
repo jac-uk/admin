@@ -32,7 +32,48 @@
               {{ applicationReferenceNumber }}
             </h1>
           </div>
+
           <div class="govuk-grid-column-one-half text-right print-none">
+            <span
+              v-if="activeTab == 'full'"
+            >
+              <span
+                class="govuk-!-margin-left-4"
+              >
+                <button
+                  v-if="isApplied"
+                  class="govuk-button btn-unlock"
+                  @click="unlock"
+                >
+                  Unlock
+                </button>
+                <button
+                  v-else
+                  class="govuk-button btn-mark-as-applied"
+                  @click="submitApplication"
+                >
+                  Mark as applied
+                </button>
+              </span>
+              <span
+                class="govuk-!-margin-left-4 govuk-!-margin-right-4"
+              >
+                <button
+                  v-if="editMode"
+                  class="govuk-button govuk-button btn-unlock"
+                  @click="toggleEdit"
+                >
+                  Done
+                </button>
+                <button
+                  v-else
+                  class="govuk-button govuk-button--secondary btn-mark-as-applied"
+                  @click="toggleEdit"
+                >
+                  Edit
+                </button>
+              </span>
+            </span>
             <div class="moj-button-menu">
               <button
                 ref="dropDownRef"
