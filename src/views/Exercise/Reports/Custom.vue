@@ -368,12 +368,13 @@ export default {
           ],
         },
         {
-          name: 'Qualifications',
+          name: 'Qualifications and Experience',
           keys: [
             'qualifications',
             'skillsAquisitionDetails',
             'feePaidOrSalariedJudge',
             'feePaidOrSalariedSatForThirtyDays',
+            'experience',
             'experienceUnderSchedule2Three',
             'quasiJudicialSittingDaysDetails',
             'quasiJudicialSatForThirtyDays',
@@ -480,6 +481,7 @@ export default {
         skillsAquisitionDetails: { label: 'Skills aquisition details', type: String },
         feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
         feePaidOrSalariedSatForThirtyDays: { label: 'Fee paid or salaried sat for thirty days?', type: Boolean },
+        experience: { label: 'Post-qualificatin experience', type: String },
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
         quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
