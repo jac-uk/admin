@@ -142,12 +142,6 @@
             </TableCell>
           </template>
         </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksNotRequested.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
       </div>
 
       <div
@@ -223,12 +217,6 @@
             </TableCell>
           </template>
         </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksRequested.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
       </div>
 
       <div
@@ -271,12 +259,6 @@
             </TableCell>
           </template>
         </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksCompleted.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
       </div>
     </div>
   </div>
