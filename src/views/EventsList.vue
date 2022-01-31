@@ -39,10 +39,6 @@
       </template>
     </Table>
 
-    <p v-if="activeTab === 'info' && !info.length">
-      No events
-    </p>
-
     <Table
       v-show="activeTab == 'warnings'"
       data-key="id"
@@ -66,10 +62,6 @@
         </TableCell>
       </template>
     </Table>
-
-    <p v-if="activeTab === 'warnings' && !warnings.length">
-      No events
-    </p>
 
     <Table
       v-show="activeTab == 'errors'"
@@ -96,10 +88,6 @@
         </TableCell>
       </template>
     </Table>
-
-    <p v-if="activeTab === 'errors' && !errorEvents.length">
-      No events
-    </p>
   </div>
 </template>
 

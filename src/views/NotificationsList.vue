@@ -55,10 +55,6 @@
       </template>
     </Table>
 
-    <p v-if="activeTab === 'queue' && !notificationsQueue.length">
-      No notifications in queue
-    </p>
-
     <Table
       v-show="activeTab == 'sent'"
       data-key="id"
