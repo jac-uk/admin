@@ -331,6 +331,7 @@ export default {
         {
           name: 'Application Info',
           keys: [
+            'referenceNumber',
             'personalDetails.dateOfBirth',
             'personalDetails.title',
             'personalDetails.citizenship',
@@ -425,6 +426,7 @@ export default {
         },
       ],
       keys: {
+        referenceNumber: { label: 'Candidate reference number', type: String },
         applyingForWelshPost: { label: 'Applying for Welsh Post?', type: Boolean },
         canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
         canSpeakWelsh: { label: 'Can speak Welsh?', type: Boolean },
