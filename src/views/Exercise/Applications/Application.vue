@@ -301,18 +301,18 @@ import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
 import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
 import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PageNotFound from '@/views/Errors/PageNotFound';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 
 import {
