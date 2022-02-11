@@ -297,13 +297,17 @@ export default {
   },
   methods: {
     hasAscAnswerDetails(index){
-      if (this.application.selectionCriteriaAnswers[index]) {
-        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
+      if (this.application.selectionCriteriaAnswers) {
+        if (this.application.selectionCriteriaAnswers[index]) {
+          return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
+        }
       }
     },
     hasAscAnswers(index){
-      if (this.application.selectionCriteriaAnswers[index]) {
-        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
+      if (this.application.selectionCriteriaAnswers) {
+        if (this.application.selectionCriteriaAnswers[index]) {
+          return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
+        }
       }
     },
     changeAssessmentInfo(obj) {
