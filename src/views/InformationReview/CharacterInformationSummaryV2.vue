@@ -578,7 +578,7 @@
             :edit="edit"
             :options="[true, false]"
             type="selection"
-            field="furtherInformationDetails"
+            field="furtherInformation"
             @changeField="changeCharacterFlag"
           />
           <div v-if="formData.furtherInformation">
