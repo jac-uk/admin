@@ -50,8 +50,8 @@
           />
         </dd>
       </div>
-    
-      <div 
+
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.professionalBackground, 'other-professional-background')"
         class="govuk-summary-list__row"
       >
@@ -69,7 +69,7 @@
           />
         </dd>
       </div>
-      
+
       <div
         v-if="isLegal"
         class="govuk-summary-list__row"
@@ -97,7 +97,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.currentLegalRole, 'other-fee-paid-judicial-office-holder')"
         class="govuk-summary-list__row"
       >
@@ -115,8 +115,8 @@
           />
         </dd>
       </div>
-        
-      <div 
+
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.currentLegalRole, 'other-salaried-judicial-office-holder')"
         class="govuk-summary-list__row"
       >
@@ -134,8 +134,8 @@
           />
         </dd>
       </div>
-        
-      <div 
+
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.currentLegalRole, 'other-current-legal-role')"
         class="govuk-summary-list__row"
       >
@@ -178,7 +178,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.feePaidJudicialRole, 'other-fee-paid-judicial-office')"
         class="govuk-summary-list__row"
       >
@@ -292,8 +292,8 @@
           />
         </dd>
       </div>
-    
-      <div 
+
+      <div
         v-if="hasEthnicGroupDetails"
         class="govuk-summary-list__row"
       >
@@ -332,7 +332,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.gender, 'other-gender')"
         class="govuk-summary-list__row"
       >
@@ -371,7 +371,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.changedGender, false)"
         class="govuk-summary-list__row"
       >
@@ -410,7 +410,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.sexualOrientation, 'other-sexual-orientation')"
         class="govuk-summary-list__row"
       >
@@ -449,7 +449,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.disability, true)"
         class="govuk-summary-list__row"
       >
@@ -488,7 +488,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="fieldContains(equalityAndDiversitySurvey.religionFaith, 'other-religion')"
         class="govuk-summary-list__row"
       >
@@ -504,7 +504,7 @@
           />
         </dd>
       </div>
-    
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
           Attended outreach events
@@ -526,8 +526,8 @@
           />
         </dd>
       </div>
-    
-      <div 
+
+      <div
         v-if="isLegal"
         class="govuk-summary-list__row"
       >
@@ -552,7 +552,7 @@
         </dd>
       </div>
 
-      <div 
+      <div
         v-if="isLegal"
         class="govuk-summary-list__row"
       >
@@ -568,13 +568,13 @@
           <InformationReviewRenderer
             v-else
             type="selection"
-            :options="[true, false, 'prefer-not-to-say']"
+            :options="['online-and-judge-led', 'online-only', false, 'prefer-not-to-say']"
             field="hasTakenPAJE"
             :edit="editable"
             :data="equalityAndDiversitySurvey.hasTakenPAJE"
             @changeField="changeEqualityAndDiversityInformation"
           />
-        </dd> 
+        </dd>
       </div>
     </dl>
     <span
