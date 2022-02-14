@@ -18,16 +18,20 @@
           field="criminalOffences"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.criminalOffenceDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          :edit="edit"
-          field="criminalOffenceDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.criminalOffences === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.criminalOffenceDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="edit"
+            field="criminalOffenceDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
     
@@ -46,16 +50,20 @@
           field="nonMotoringFixedPenaltyNotices"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.nonMotoringFixedPenaltyNoticesDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          :edit="edit"
-          field="nonMotoringFixedPenaltyNoticesDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.nonMotoringFixedPenaltyNotices === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.nonMotoringFixedPenaltyNoticesDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="edit"
+            field="nonMotoringFixedPenaltyNoticesDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -74,16 +82,20 @@
           field="drivingDisqualificationDrinkDrugs"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.drivingDisqualificationDrinkDrugsDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          :edit="edit"
-          field="drivingDisqualificationDrinkDrugsDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.drivingDisqualificationDrinkDrugs === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.drivingDisqualificationDrinkDrugsDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="edit"
+            field="drivingDisqualificationDrinkDrugsDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -102,16 +114,20 @@
           field="endorsementsOrMotoringFixedPenalties"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :edit="edit"
-          :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          field="endorsementsOrMotoringFixedPenaltiesDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.endorsementsOrMotoringFixedPenalties === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :edit="edit"
+            :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            field="endorsementsOrMotoringFixedPenaltiesDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -130,16 +146,20 @@
           field="declaredBankruptOrIVA"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :edit="edit"
-          :data="formData.declaredBankruptOrIVADetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          field="declaredBankruptOrIVADetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.declaredBankruptOrIVA === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :edit="edit"
+            :data="formData.declaredBankruptOrIVADetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            field="declaredBankruptOrIVADetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -158,17 +178,20 @@
           type="selection"
           @changeField="changeCharacterFlag"
         />
-
-        <hr>
-        <InformationReviewSectionRenderer
-          :edit="edit"
-          :data="formData.lateTaxReturnOrFinedDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          field="lateTaxReturnOrFinedDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.lateTaxReturnOrFined === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :edit="edit"
+            :data="formData.lateTaxReturnOrFinedDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            field="lateTaxReturnOrFinedDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -187,16 +210,20 @@
           field="involvedInProfessionalMisconduct"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.involvedInProfessionalMisconductDetails"
-          :edit="edit"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          field="involvedInProfessionalMisconductDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.involvedInProfessionalMisconduct === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.involvedInProfessionalMisconductDetails"
+            :edit="edit"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            field="involvedInProfessionalMisconductDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div> 
       </dd>
     </div>
     
@@ -215,16 +242,20 @@
           field="diciplinaryActionOrAskedToResign"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.diciplinaryActionOrAskedToResignDetails"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          :edit="edit"
-          field="diciplinaryActionOrAskedToResignDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.diciplinaryActionOrAskedToResign === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.diciplinaryActionOrAskedToResignDetails"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            :edit="edit"
+            field="diciplinaryActionOrAskedToResignDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
 
@@ -243,25 +274,23 @@
           field="otherCharacterIssues"
           @changeField="changeCharacterFlag"
         />
-        <hr>
-        <InformationReviewSectionRenderer
-          :data="formData.otherCharacterIssuesDetails"
-          :edit="edit"
-          :data-default="emptyObject(['details', 'date', 'title'])"
-          field="otherCharacterIssuesDetails"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
-        />
+        <div
+          v-if="formData.otherCharacterIssues === true || edit"
+        >
+          <hr>
+          <InformationReviewSectionRenderer
+            :data="formData.otherCharacterIssuesDetails"
+            :edit="edit"
+            :data-default="emptyObject(['details', 'date', 'title'])"
+            field="otherCharacterIssuesDetails"
+            @changeField="changeInfo"
+            @removeField="removeInfo"
+            @addField="addInfo"
+          />
+        </div>
       </dd>
     </div>
   </dl>
-  <span
-    v-else
-    class="govuk-body"
-  >
-    No information provided
-  </span>
 </template>
 
 <script>

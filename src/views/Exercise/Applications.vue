@@ -18,25 +18,34 @@ export default {
   components: {
     SideNavigation,
   },
-  data() {
-    const exercise = this.$store.state.exerciseDocument.record;
-    const path = `/exercise/${exercise.id}/applications`;
-    return {
-      sideNavigation: [
+  computed: {
+    sideNavigation() {
+      const exercise = this.$store.state.exerciseDocument.record;
+      const path = `/exercise/${exercise.id}/applications`;
+      let draft = 0;
+      let applied = 0;
+      let withdrawn = 0;
+      if (exercise._applications){
+        draft = exercise._applications.draft || 0;
+        applied = exercise._applications.applied || 0;
+        withdrawn = exercise._applications.withdrawn || 0;
+      }
+      const sideNavigation = [
         {
-          title: 'Draft',
+          title: `Draft (${draft})`,
           path: `${path}/draft`,
         },
         {
-          title: 'Applied',
+          title: `Applied (${applied})`,
           path: `${path}/applied`,
         },
         {
-          title: 'Withdrawn',
+          title: `Withdrawn (${withdrawn})`,
           path: `${path}/withdrawn`,
         },
-      ],
-    };
+      ];
+      return sideNavigation;
+    },
   },
 };
 </script>

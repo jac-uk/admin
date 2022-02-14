@@ -22,7 +22,7 @@
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :data="hasAscAnswers(index) ? application.selectionCriteriaAnswers[index].answer : null"
-              :edit="editable"
+              :edit="editable && authorisedToPerformAction"
               :index="index"
               extension="answer"
               type="selection"
@@ -41,7 +41,7 @@
               <InformationReviewRenderer
                 v-if="application.selectionCriteriaAnswers[index] && application.selectionCriteriaAnswers[index].answer === true"
                 :data="hasAscAnswerDetails(index) ? application.selectionCriteriaAnswers[index].answerDetails : null"
-                :edit="editable"
+                :edit="editable && authorisedToPerformAction"
                 :index="index"
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
@@ -252,6 +252,11 @@ export default {
       required: true,
       default: false,
     },
+    authorisedToPerformAction: {
+      type: [Boolean, Function, Promise],
+      required: true,
+      default: false,
+    },
   },
   data() {
     return {
@@ -292,13 +297,17 @@ export default {
   },
   methods: {
     hasAscAnswerDetails(index){
-      if (this.application.selectionCriteriaAnswers[index]) {
-        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
+      if (this.application.selectionCriteriaAnswers) {
+        if (this.application.selectionCriteriaAnswers[index]) {
+          return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
+        }
       }
     },
     hasAscAnswers(index){
-      if (this.application.selectionCriteriaAnswers[index]) {
-        return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
+      if (this.application.selectionCriteriaAnswers) {
+        if (this.application.selectionCriteriaAnswers[index]) {
+          return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
+        }
       }
     },
     changeAssessmentInfo(obj) {

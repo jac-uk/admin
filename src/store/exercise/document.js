@@ -1,5 +1,6 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
+import { functions } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
@@ -119,6 +120,11 @@ export default {
         favouriteOf: firebase.firestore.FieldValue.arrayRemove(userId),
       };
       await ref.update(data);
+    },
+    refreshApplicationCounts: async ({ state }) => {
+      if (state.record) {
+        await functions.httpsCallable('refreshApplicationCounts')({ exerciseId: state.record.id });
+      }
     },
   },
   state: {

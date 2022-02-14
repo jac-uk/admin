@@ -244,13 +244,14 @@
                 :application="application"
                 :application-id="applicationId"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
                 :is-panel-view="isPanelView"
               />
               <AssessmentsSummary
                 :application="application"
                 :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
+                :editable="editMode"
+                :authorised-to-perform-action="authorisedToPerformAction"
                 :is-panel-view="isPanelView"
                 @updateApplication="changeApplication"
               />
@@ -300,18 +301,18 @@ import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
 import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
 import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PageNotFound from '@/views/Errors/PageNotFound';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 
 import {
@@ -389,7 +390,7 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.isVersion2) {
+      if (this.applicationVersion === 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
@@ -402,16 +403,7 @@ export default {
       return hasIndependentAssessments(this.exercise);
     },
     applicationVersion() {
-      if (this.exercise._applicationVersion) {
-        return this.exercise._applicationVersion;
-      } else if (this.application.characterInformationV2) {
-        return 2;
-      } else {
-        return 1;
-      }
-    },
-    isVersion2() {
-      return this.applicationVersion === 2;
+      return this.exercise._applicationVersion || 1;
     },
     applications() {
       return this.$store.state.applications.records;

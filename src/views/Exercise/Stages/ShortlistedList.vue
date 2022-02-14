@@ -106,11 +106,7 @@ export default {
       return this.$store.state.stageShortlisted.records;
     },
     totalApplicationRecords() {
-      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
-        return this.exercise.applicationRecords.shortlisted;
-      } else {
-        return 0;
-      }
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.shortlisted) || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

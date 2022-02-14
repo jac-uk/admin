@@ -168,7 +168,7 @@ export default {
   },
   async created() {
     if (this.isSignedIn) {
-      this.$store.dispatch('services/bind');
+      await this.$store.dispatch('services/bind');
       const email = firebase.auth().currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
