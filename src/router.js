@@ -72,11 +72,9 @@ import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/Independ
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
-import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
-import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
-import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
-import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
+import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/Panels/List';
+import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/Panels/New';
+import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/Panels/View';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -112,6 +110,11 @@ import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
 import TargetedOutreachReport from '@/views/Candidates/TargetedOutreachReport';
+
+// Panellists
+import Panellists from '@/views/Panellists';
+import PanellistsList from '@/views/Panellists/List';
+import PanellistsView from '@/views/Panellists/Panellist';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -218,6 +221,31 @@ const router = new Router({
             title: 'Candidates | Targeted Oureach Report',
           },
         },
+      ],
+    },
+    {
+      path: '/panellists',
+      component: Panellists,
+      children: [
+        {
+          path: '',
+          component: PanellistsList,
+          name: 'panellists-list',
+          meta: {
+            requiresAuth: true,
+            title: 'Panellists',
+          },
+        },
+        {
+          path: 'view/:id',
+          component: PanellistsView,
+          name: 'panellists-view',
+          meta: {
+            requiresAuth: true,
+            title: 'View Panellist',
+          },
+        },
+
       ],
     },
     {
@@ -836,102 +864,35 @@ const router = new Router({
               ],
             },
             {
-              path: 'sift',
+              path: 'panels/:type',
               component: ExerciseTasksPanels,
+              props: true,
               children: [
                 {
                   path: '',
-                  component: ExerciseTasksSift,
-                  name: 'exercise-tasks-sift',
+                  component: ExerciseTasksPanelsList,
+                  name: 'exercise-tasks-panels',
                   meta: {
                     requiresAuth: true,
-                    title: 'Sift | Exercise Tasks',
+                    title: 'Panels | Exercise Tasks',
                   },
                 },
                 {
                   path: 'new',
                   component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-sift-new',
+                  name: 'exercise-tasks-panels-new',
                   meta: {
                     requiresAuth: true,
-                    title: 'Create Sift Panel | Exercise Tasks',
-                    pageName: 'exercise-tasks-sift',
+                    title: 'Create Panel | Exercise Tasks',
                   },
                 },
                 {
                   path: 'view/:panelId',
                   component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-sift-view',
+                  name: 'exercise-tasks-panels-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Sift Panel | Exercise Tasks',
-                    pageName: 'exercise-tasks-sift',
-                  },
-                },
-              ],
-            },
-            {
-              path: 'selection',
-              component: ExerciseTasksPanels,
-              children: [
-                {
-                  path: '',
-                  component: ExerciseTasksSelectionDays,
-                  name: 'exercise-tasks-selection',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Selection | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-selection-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Create Selection Panel | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'view/:panelId',
-                  component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-selection-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Selection Panel | Exercise Tasks',
-                  },
-                },
-              ],
-            },
-            {
-              path: 'scenario',
-              component: ExerciseTasksPanels,
-              children: [
-                {
-                  path: '',
-                  component: ExerciseTaskScenario,
-                  name: 'exercise-tasks-scenario',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Scenario Responses | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-scenario-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Create Scenario Response Panel | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'view/:panelId',
-                  component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-scenario-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Scenario Response Panel | Exercise Tasks',
+                    title: 'Panel | Exercise Tasks',
                   },
                 },
               ],

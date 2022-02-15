@@ -60,6 +60,15 @@ const lookup = (value) => {
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
     'online-only': 'Yes - online resources only',
 
+    // Panel types
+    'sift': 'Sift',
+    'scenario': 'Scenario responses',
+
+    // Panel roles
+    'chair': 'Chair',
+    'independent': 'Independent',
+    'judicial': 'Judicial',
+
     // 'xxx': 'xxx',
   };
 

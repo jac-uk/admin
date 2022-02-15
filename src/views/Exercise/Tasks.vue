@@ -52,14 +52,14 @@ export default {
     }
     if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
       if (
-        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+        (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
         || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
       ) {
         sideNavigation.push(
           {
             title: 'Sift',
-            path: `${path}/sift`,
-          }
+            path: `${path}/panels/sift`,
+          },
         );
       }
     }
@@ -69,13 +69,11 @@ export default {
           title: 'Selection day',
           path: `${path}/selection`,
         }
-      );
     }
     if (exercise.scenarioTestDate) {
       sideNavigation.push(
-        {
-          title: 'Scenario Responses',
-          path: `${path}/scenario`,
+          title: 'Scenario',
+          path: `${path}/panels/scenario`,
         }
       );
     }

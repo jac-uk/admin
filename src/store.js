@@ -33,7 +33,11 @@ import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestRespon
 import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
-import panels from '@/store/panels';
+
+import panels from '@/store/panels/collection';
+import panel from '@/store/panels/document';
+import panellists from '@/store/panellists/collection';
+import panellist from '@/store/panellists/document';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -66,6 +70,9 @@ const store = new Vuex.Store({
     qualifyingTestReports,
     qualifyingTestReport,
     panels,
+    panel,
+    panellists,
+    panellist,
     characterChecks,
   },
   state: {

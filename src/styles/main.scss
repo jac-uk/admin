@@ -6,3 +6,15 @@
 @import "print";
 
 @import "@jac-uk/jac-kit/helpers/css/global.scss";
+
+
+// global styles and overrides
+.modal {
+  max-height: 90%;
+  overflow: auto;
+  text-align: left;
+}
+
+.text--inverse {
+  color: white;
+}
