@@ -1,52 +1,43 @@
 <template>
-  <div>
-    <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Set panel
-    </div>
-    <div class="modal__content govuk-!-margin-6">
-      <div class="govuk-grid-row">
-        <form
-          ref="formRef"
-          @submit.prevent="save"
+  <form
+    ref="formRef"
+    @submit.prevent="save"
+  >
+    <div class="govuk-form-group">
+      <select
+        id="selectPanel"
+        v-model="selected"
+        name="selectPanel"
+        class="govuk-select"
+      >
+        <option
+          value=""
+          selected
         >
-          <div class="govuk-form-group">
-            <select
-              id="selectPanel"
-              v-model="selected"
-              name="selectPanel"
-              class="govuk-select"
-            >
-              <option
-                value=""
-                selected
-              >
-                Please select from available options:
-              </option>
-              <option
-                v-for="panel in panelList"
-                :key="panel.id"
-                :value="panel"
-              >
-                {{ panel.name }}
-              </option>
-            </select>
-          </div>
-          <button
-            class="govuk-button govuk-!-margin-right-3"
-            @click="save"
-          >
-            Save
-          </button>
-          <button
-            class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-            @click="closeModal"
-          >
-            Cancel
-          </button>
-        </form>
-      </div>
+          Please select from available options:
+        </option>
+        <option
+          v-for="panel in panelList"
+          :key="panel.id"
+          :value="panel"
+        >
+          {{ panel.name }}
+        </option>
+      </select>
     </div>
-  </div>
+    <button
+      class="govuk-button govuk-!-margin-right-3"
+      @click="save"
+    >
+      Save
+    </button>
+    <button
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="closeModal"
+    >
+      Cancel
+    </button>
+  </form>
 </template>
 
 <script>

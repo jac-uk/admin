@@ -49,7 +49,14 @@
                   Candidates
                 </RouterLink>
               </li>
-
+              <li class="govuk-header__navigation-item">
+                <RouterLink
+                  :to="{ name: 'panellists-list' }"
+                  class="govuk-header__link"
+                >
+                  Panellists
+                </RouterLink>
+              </li>
               <li
                 v-if="authorisedToPerformAction"
                 class="govuk-header__navigation-item"
