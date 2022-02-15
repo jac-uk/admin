@@ -50,6 +50,7 @@ jobs:
           echo "VUE_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> .env.${{ env.environment }}
           echo "VUE_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env.${{ env.environment }}
           echo "VUE_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
+          echo "VUE_APP_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
         run: npm run build-${{ env.environment }}
