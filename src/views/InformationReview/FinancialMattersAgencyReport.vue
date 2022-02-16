@@ -1,11 +1,12 @@
 <template>
   <div>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl
+      v-if="characterInformation.bankruptcyDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has been declared bankrupt
-        </dt>
         <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Has been declared bankrupt</span>
           <InformationReviewRenderer
             :data="characterInformation.bankruptcyDetails"
             :display-month-year-only="false"
@@ -14,12 +15,13 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl
+      v-if="characterInformation.ivaDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has entered into an Individual Voluntary Agreement (IVA)
-        </dt>
         <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Has entered into an Individual Voluntary Agreement (IVA)</span>
           <InformationReviewRenderer
             :data="characterInformation.ivaDetails"
             :display-month-year-only="false"
@@ -28,12 +30,13 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl
+      v-if="characterInformation.lateTaxReturnDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has filed late tax returns
-        </dt>
         <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Has filed late tax returns</span>
           <InformationReviewRenderer
             :data="characterInformation.lateTaxReturnDetails"
             :display-month-year-only="false"
@@ -42,12 +45,13 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl
+      v-if="characterInformation.lateVatReturnDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has filed late VAT returns
-        </dt>
         <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Has filed late VAT returns</span>
           <InformationReviewRenderer
             :data="characterInformation.lateVatReturnDetails"
             :display-month-year-only="false"
@@ -56,12 +60,13 @@
       </div>
     </dl>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+    <dl
+      v-if="characterInformation.hmrcFineDetails"
+      class="govuk-summary-list govuk-!-margin-bottom-0"
+    >
       <div class="govuk-summary-list__row">
-        <dt :class="requiredStyle">
-          Has ever been fined by HMRC
-        </dt>
         <dd class="govuk-summary-list__value">
+          <span class="govuk-!-font-weight-bold">Has ever been fined by HMRC</span>
           <InformationReviewRenderer
             :data="characterInformation.hmrcFineDetails"
             :display-month-year-only="false"
@@ -76,7 +81,7 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 
 export default {
-  name: 'FinancialMattersSummary',
+  name: 'FinancialMattersAgencyReport',
   components: {
     InformationReviewRenderer,
   },
@@ -86,22 +91,6 @@ export default {
       required: true,
       default: new Object({}),
     },
-    requiredWiderColumn: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
-  },
-  computed: {
-    requiredStyle() {
-      return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
-    },
   },
 };
 </script>
-
-<style scoped>
-  .widerColumn {
-    width: 70%;
-  }
-</style>

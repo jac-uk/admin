@@ -17,23 +17,26 @@
       </div>
 
       <div
-        v-if="exercise.applications || hasOpened"
+        v-if="totalApplications || hasOpened"
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
-        <h2 class="govuk-heading-l">
+        <h2
+          class="govuk-heading-l"
+          @click="refreshApplicationCounts"
+        >
           Number of applications
         </h2>
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Draft
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applications.draft || 0 }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ draftApplications }}</span>
             </p>
           </div>
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Applied
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ exercise.applications.applied || 0 }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ appliedApplications }}</span>
             </p>
           </div>
         </div>
@@ -181,6 +184,8 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import { functions } from '@/firebase';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -195,6 +200,18 @@ export default {
     },
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
+    applicationCounts() {
+      return applicationCounts(this.exercise);
+    },
+    draftApplications() {
+      return this.applicationCounts.draft || 0;
+    },
+    appliedApplications() {
+      return this.applicationCounts.applied || 0;
+    },
+    totalApplications() {
+      return this.applicationCounts._total || 0;
     },
     isPublished() {
       return this.exercise.published;
@@ -213,26 +230,16 @@ export default {
       return this.exercise && this.exercise.state && this.exercise.state === 'ready';
     },
     isApproved() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
-    isReadyForProcessing() {
-      return this.isApproved &&
-        !(this.exercise.applicationRecords && this.exercise.applicationRecords.initialised);
-      // @TODO perhaps also check that exercise has closed
+      return isApproved(this.exercise);
     },
     isProcessing() {
-      return this.isApproved &&
-        (this.exercise.applicationRecords && this.exercise.applicationRecords.initialised);
+      return isProcessing(this.exercise);
     },
+    isReadyForProcessing() {
+      return this.isApproved && !this.isProcessing;
+      // @TODO perhaps also check that exercise has closed
+    },
+
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
@@ -323,6 +330,11 @@ export default {
     },
     changeState() {
       this.$refs['modalChangeExerciseState'].openModal();
+    },
+    refreshApplicationCounts() {
+      if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
+        this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
+      }
     },
   },
 };

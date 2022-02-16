@@ -26,12 +26,12 @@ export default {
       let selected = 0;
       let recommended = 0;
       let handover = 0;
-      if (exercise.applicationRecords){
-        review = exercise.applicationRecords.review;
-        if (exercise.applicationRecords.shortlisted) { shortlisted = exercise.applicationRecords.shortlisted; }
-        if (exercise.applicationRecords.selected) { selected = exercise.applicationRecords.selected; }
-        if (exercise.applicationRecords.recommended) { recommended = exercise.applicationRecords.recommended; }
-        if (exercise.applicationRecords.handover) { handover = exercise.applicationRecords.handover; }
+      if (exercise._applicationRecords){
+        review = exercise._applicationRecords.review || 0;
+        shortlisted = exercise._applicationRecords.shortlisted || 0;
+        selected = exercise._applicationRecords.selected || 0;
+        recommended = exercise._applicationRecords.recommended || 0;
+        handover = exercise._applicationRecords.handover || 0;
       }
       const sideNavigation = [
         {

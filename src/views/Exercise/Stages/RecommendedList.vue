@@ -32,6 +32,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body govuk-!-margin-bottom-0"
+      >
+        No Recommended Applications
+      </p>
       <Table
         data-key="id"
         :data="applicationRecords"
@@ -63,13 +69,10 @@
             {{ row.status | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ row.flags.empApplied | toYesNo }}
+            {{ row.flags.empApplied | toYesNo | lookup }}
           </TableCell>
         </template>
       </Table>
-      <p v-if="!applicationRecords.length">
-        No applications found.
-      </p>
     </form>
   </div>
 </template>
@@ -104,7 +107,7 @@ export default {
       return records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.recommended || 0;
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.recommended) || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

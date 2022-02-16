@@ -49,6 +49,18 @@
                   Candidates
                 </RouterLink>
               </li>
+
+              <li
+                v-if="authorisedToPerformAction"
+                class="govuk-header__navigation-item"
+              >
+                <RouterLink
+                  :to="{ name: 'users' }"
+                  class="govuk-header__link"
+                >
+                  Users
+                </RouterLink>
+              </li>
               <li class="govuk-header__navigation-item">
                 <a
                   v-if="$route.name !== 'sign-in'"
@@ -156,7 +168,7 @@ export default {
   },
   async created() {
     if (this.isSignedIn) {
-      this.$store.dispatch('services/bind');
+      await this.$store.dispatch('services/bind');
       const email = firebase.auth().currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }

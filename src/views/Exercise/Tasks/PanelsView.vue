@@ -314,6 +314,9 @@ export default {
     isSelectionDay() {
       return this.panel.type === 'selection';
     },
+    isScenario() {
+      return this.panel.type === 'scenario';
+    },
     typeName() {
       if (this.panel && this.panel.type) {
         return this.panel.type.charAt(0).toUpperCase() + this.panel.type.slice(1);
@@ -356,7 +359,14 @@ export default {
   created() {
     // Redirect if page Reload
     if (!this.panel) {
-      const nextRoute = this.$route.fullPath.includes('/tasks/selection/') ? 'exercise-tasks-selection' : 'exercise-tasks-sift';
+      let nextRoute = '';
+      if (this.$route.fullPath.includes('/tasks/selection/')) {
+        nextRoute = 'exercise-tasks-selection';
+      } else if (this.$route.fullPath.includes('/tasks/scenario')) {
+        nextRoute = 'exercise-tasks-scenario';
+      } else {
+        nextRoute = 'exercise-tasks-sift';
+      }
       this.$router.push({
         name: nextRoute,
       });

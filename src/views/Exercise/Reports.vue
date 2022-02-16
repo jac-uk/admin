@@ -58,6 +58,10 @@ export default {
           title: 'Handover',
           path: `${path}/handover`,
         },
+        {
+          title: 'Custom',
+          path: `${path}/custom`,
+        },
       ],
     };
   },

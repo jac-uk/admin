@@ -13,6 +13,8 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
+import { isProcessing } from '@/helpers/exerciseHelper';
+
 export default {
   components: {
     SideNavigation,
@@ -34,7 +36,7 @@ export default {
         path: `${path}/equal-merit-tie-breakers`,
       });
     }
-    if (exercise.applicationRecords) {
+    if (isProcessing(exercise)) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
           title: 'Independent Assessments',
@@ -48,13 +50,18 @@ export default {
         },
       );
     }
-    if (exercise.siftStartDate) {
-      sideNavigation.push(
-        {
-          title: 'Sift',
-          path: `${path}/sift`,
-        },
-      );
+    if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+      if (
+        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+      ) {
+        sideNavigation.push(
+          {
+            title: 'Sift',
+            path: `${path}/sift`,
+          },
+        );
+      }
     }
     if (exercise.selectionDays) {
       sideNavigation.push(
@@ -62,6 +69,14 @@ export default {
           title: 'Selection day',
           path: `${path}/selection`,
         },
+      );
+    }
+    if (exercise.scenarioTestDate) {
+      sideNavigation.push(
+        {
+          title: 'Scenario Responses',
+          path: `${path}/scenario`,
+        }
       );
     }
     return {

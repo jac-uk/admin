@@ -75,6 +75,9 @@ export default {
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
         .where('active', '==', true);
+      if (params.status) {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+      }
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -127,6 +130,15 @@ export default {
       }
       context.commit('message', valueMessage);
       context.commit('changeSelectedItems', []);
+
+      if (
+        nextStage[0] ||
+        status === APPLICATION_STATUS.WITHDREW_APPLICATION ||
+        empApplied != null
+      ) {
+        context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
+      }
+
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);

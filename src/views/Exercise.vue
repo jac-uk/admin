@@ -26,7 +26,9 @@
       </div>
       <div class="govuk-grid-row clearfix govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
-          <span class="govuk-caption-xl">{{ exercise.referenceNumber }}</span>
+          <span class="govuk-caption-xl">
+            {{ exercise.referenceNumber }}
+          </span>
           <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">
             {{ exerciseName }}
           </h1>
@@ -57,7 +59,7 @@ import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
-import { isEditable, hasQualifyingTests } from '@/helpers/exerciseHelper';
+import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -84,6 +86,9 @@ export default {
     hasQualifyingTests() {
       return hasQualifyingTests(this.exercise);
     },
+    isProcessing() {
+      return isProcessing(this.exercise);
+    },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
@@ -107,10 +112,10 @@ export default {
       if (this.exercise.applications || this.hasOpened) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
-      if (this.hasQualifyingTests || this.exercise.applicationRecords) {
+      if (this.hasQualifyingTests || this.isProcessing) {
         subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
       }
-      if (this.exercise.applicationRecords) {
+      if (this.isProcessing) {
         subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
         subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
       }

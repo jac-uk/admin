@@ -32,6 +32,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body govuk-!-margin-bottom-0"
+      >
+        No Shortlisted Applications
+      </p>
       <Table
         data-key="id"
         :data="applicationRecords"
@@ -63,7 +69,7 @@
             {{ row.status | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ row.flags.empApplied | toYesNo }}
+            {{ row.flags.empApplied | toYesNo | lookup }}
           </TableCell>
         </template>
       </Table>
@@ -100,11 +106,7 @@ export default {
       return this.$store.state.stageShortlisted.records;
     },
     totalApplicationRecords() {
-      if (this.exercise && this.exercise.applicationRecords && this.exercise.applicationRecords.shortlisted){
-        return this.exercise.applicationRecords.shortlisted;
-      } else {
-        return 0;
-      }
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.shortlisted) || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

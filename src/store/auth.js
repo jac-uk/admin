@@ -17,25 +17,27 @@ const module = {
   },
   actions: {
     async setCurrentUser({ state, commit }, user) {
-      if (user === null) {
+      if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
         if (state.authError) {
           commit('setAuthError', null);
         }
         let allOk = false;
+
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
           'warren.searle@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
-          'maria.brookes@judicialappointments.digital',
-          'kate.malone@judicialappointments.digital',
-          'joy.adeagbo@judicialappointments.digital',
+          'andrew.isaac@judicialappointments.digital',
+          'blaise.buckland@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
+          'wincen.lowe@justice.gov.uk',
+          'molly.meadows@justice.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -50,9 +52,8 @@ const module = {
             [ // TODO User roles!
               'warren.searle@judicialappointments.digital',
               'tom.russell@judicialappointments.digital',
-              'maria.brookes@judicialappointments.digital',
-              'kate.malone@judicialappointments.digital',
-              'joy.adeagbo@judicialappointments.digital',
+              'andrew.isaac@judicialappointments.digital',
+              'blaise.buckland@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
@@ -77,6 +78,9 @@ const module = {
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
+    },
+    getEmail(state) {
+      return state.currentUser.email;
     },
   },
 };

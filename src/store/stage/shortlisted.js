@@ -70,6 +70,14 @@ export default {
         valueMessage = `${valueMessage} and moved to '${nextStage}'`;
       }
       context.commit('message', valueMessage);
+
+      if (
+        moveToNextStage ||
+        status === APPLICATION_STATUS.WITHDREW_APPLICATION ||
+        empApplied != null
+      ) {
+        context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
+      }
     },
     storeItems: ( context, { items }) => {
       context.commit('changeSelectedItems', items);

@@ -25,6 +25,12 @@
           </div>
         </div>
       </div>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body govuk-!-margin-bottom-0"
+      >
+        No Handover Applications
+      </p>
       <Table
         data-key="id"
         :data="applicationRecords"
@@ -56,7 +62,7 @@
             {{ row.status | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[0].title">
-            {{ row.flags.empApplied | toYesNo }}
+            {{ row.flags.empApplied | toYesNo | lookup }}
           </TableCell>
         </template>
       </Table>
@@ -93,7 +99,7 @@ export default {
       return this.$store.state.stageHandover.records;
     },
     totalApplicationRecords() {
-      return this.exercise.applicationRecords.handover || 0;
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.handover) || 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

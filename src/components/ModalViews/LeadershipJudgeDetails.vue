@@ -65,6 +65,17 @@ export default {
     TextField,
   },
   extends: Form,
+  props: {
+    application: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
+    applicationId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       email: null,
@@ -72,11 +83,6 @@ export default {
       phone: null,
       title: null,
     };
-  },
-  computed: {
-    applicationId() {
-      return this.$attrs['application-id'];
-    },
   },
   created() {
     this.email = this.$attrs.email;
@@ -89,9 +95,7 @@ export default {
       this.$emit('close');
     },
     confirmModal() {
-      this.modalOpen = false;
       this.$emit('confirmed');
-      document.body.style.overflow = '';
     },
     async save(isValid) {
       if (isValid()) {

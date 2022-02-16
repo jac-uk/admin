@@ -27,6 +27,7 @@ export {
   applicationContentSteps,
   configuredApplicationContentSteps,
   isEditable,
+  isApproved,
   isProcessing,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
@@ -51,7 +52,9 @@ export {
   currentApplicationParts,
   isMoreInformationNeeded,
   isApplicationComplete,
-  hasApplicationProcess
+  hasApplicationProcess,
+  applicationCounts,
+  applicationRecordCounts
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -137,9 +140,25 @@ function isEditable(data) {
       return false;
   }
 }
+function isApproved(data) {
+  if (!data) return false;
+  switch (data.state) {
+    case 'draft':
+    case 'ready':
+      return false;
+    default:
+      return true;
+  }
+}
 function isProcessing(exercise) {
   if (!exercise) { return false; }
-  return exercise.applicationRecords ? true : false;
+  return exercise._applicationRecords ? true : false;
+}
+function applicationCounts(exercise) {
+  return exercise && exercise._applications ? exercise._applications : {};
+}
+function applicationRecordCounts(exercise) {
+  return isProcessing(exercise) ? exercise._applicationRecords : {};
 }
 function exerciseStates(exercise) {
   if (!exercise) { return []; }

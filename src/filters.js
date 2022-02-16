@@ -29,11 +29,11 @@ const lookup = (value) => {
     additionalInfo: 'Additional Information',
 
     // exercise states
-    'registration': 'Registration',
-    'shortlisting': 'Shortlisting',
-    'selection': 'Selection',
-    'recommendation': 'Recommendation',
-    'handover': 'Handover',
+    registration: 'Registration',
+    shortlisting: 'Shortlisting',
+    selection: 'Selection',
+    recommendation: 'Recommendation',
+    handover: 'Handover',
 
     // application process steps
     passedTests: 'Passed Tests',
@@ -41,9 +41,29 @@ const lookup = (value) => {
     selected: 'Selected',
     recommended: 'Recommended',
 
-    // 'xxx': 'xxx',`
+    // Editable Application helpers
+    date: 'Date',
+    details: 'Details',
+    investigations: 'Investigations',
+    orgBusinessName: 'Organisation or business',
+    jobTitle: 'Job Title',
+    tasks: 'Law-related tasks',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+
+    // emp flags
+    'gender': 'Gender',
+    'ethnicity': 'Ethnicity',
+
+    // PAJE answers
+    'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
+    'online-only': 'Yes - online resources only',
+
+    // 'xxx': 'xxx',
   };
+
   returnValue = lookup[value];
+
   if (!returnValue) {
     if (Object.keys(filters).indexOf('lookup') >= 0) { // use jac-kit lookup, if it exists
       returnValue = filters.lookup(value);
