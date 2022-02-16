@@ -295,7 +295,7 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import jsPDF from 'jspdf';
+import JsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
@@ -571,23 +571,15 @@ export default {
       this.editMode = !this.editMode;
     },
     downloadAsPdf() {
-      const pdf = new jsPDF();
-
-      pdf.fromHTML(
+      const pdf = new JsPDF('portrait', 'pt', 'a4');
+      pdf.setFontSize(14);
+      pdf.html(
         this.returnPrintReadyPanelPack(),
-        15,
-        15,
-        {
-          width: 170,
-          elementHandlers: {
-            '.jac-button-group': () => true,
-          },
-        },
-      );
-
-      const fileName = this.generateFilename;
-
-      pdf.save(`${fileName}.pdf`);
+        { x: 15, y: 15, width: 170, html2canvas: { scale: 0.70 } }
+      ).then(() => {
+        const fileName = this.generateFilename;
+        pdf.save(`${fileName}.pdf`);
+      });
     },
     returnPrintReadyPanelPack(){
       const htmlCollection = (document.querySelector('#panel-pack-div'));
