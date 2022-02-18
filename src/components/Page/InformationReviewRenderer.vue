@@ -5,6 +5,7 @@
         v-if="isDate"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -20,6 +21,7 @@
       >
         <!-- Only for Personal Details section -->
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -34,6 +36,7 @@
         v-else-if="isEmail"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -48,6 +51,7 @@
         v-else-if="isMultiSelection"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -63,6 +67,7 @@
         v-else-if="isSelection"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -79,6 +84,7 @@
       >
         <span>
           <EditableField
+            :id="field"
             :edit-mode="edit"
             :value="data"
             :field="field"
@@ -95,6 +101,7 @@
         v-else
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
