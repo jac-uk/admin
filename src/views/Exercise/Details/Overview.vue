@@ -152,6 +152,22 @@
         Unlock
       </button>
       <br>
+      <button
+        v-if="isReadyForTesting"
+        class="govuk-button"
+        type="primary"
+        @click="changeNoOfTestApplications()"
+      >
+        Create test applications
+      </button>
+      <ActionButton
+        v-if="isTesting"
+        ref="createTestApplicationsBtn"
+        type="primary"
+        @click="createTestApplications()"
+      >
+        Create test applications
+      </ActionButton>
       <ActionButton
         v-if="isReadyForProcessing"
         @click="startProcessing()"
@@ -173,6 +189,13 @@
         @close="$refs['modalChangeExerciseState'].closeModal()"
       />
     </Modal>
+    <Modal ref="modalChangeNoOfTestApplications">
+      <ChangeNoOfTestApplications
+        :no-of-test-applications="1"
+        @close="cancelChangeNoOfTestApplications()"
+        @confirmed="confirmedNoOfTestApplications()"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -183,6 +206,7 @@ import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline'
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
+import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
@@ -194,6 +218,7 @@ export default {
     ActionButton,
     Modal,
     ChangeExerciseState,
+    ChangeNoOfTestApplications,
   },
   computed: {
     exercise() {
@@ -233,11 +258,20 @@ export default {
     isApproved() {
       return isApproved(this.exercise);
     },
+    isTesting() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
+    },
+    isTested() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
+    },
+    isReadyForTesting() {
+      return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
+    },
     isProcessing() {
-      return isProcessing(this.exercise);
+      return isProcessing(this.exercise) && this.isTested;
     },
     isReadyForProcessing() {
-      return this.isApproved && !this.isProcessing;
+      return this.isApproved && !this.isProcessing && this.isTested;
       // @TODO perhaps also check that exercise has closed
     },
 
@@ -344,6 +378,25 @@ export default {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
         this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
       }
+    },
+    changeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].openModal();
+      this.$store.dispatch('exerciseDocument/testing');
+    },
+    cancelChangeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$store.dispatch('exerciseDocument/isReadyForTest');
+    },
+    confirmedNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$refs['createTestApplicationsBtn'].$el.click();
+    },
+    async createTestApplications() {
+      const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
+      if (!noOfTestApplications) return;
+      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
+      this.$store.dispatch('exerciseDocument/tested');
+      this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
     },
   },
 };
