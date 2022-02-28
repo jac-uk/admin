@@ -10,6 +10,11 @@ const collection = firestore.collection('exercises');
 
 export default {
   namespaced: true,
+  mutations: {
+    setNoOfTestApplications(state, noOfTestApplications) {
+      state.noOfTestApplications = noOfTestApplications;
+    },
+  },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
       const firestoreRef = collection.doc(id);
@@ -81,11 +86,36 @@ export default {
       };
       await ref.update(data);
     },
+    isReadyForTest: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        testingState: null,
+      };
+      await ref.update(data);
+    },
+    testing: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        testingState: 'testing',
+      };
+      await ref.update(data);
+    },
+    tested: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        testingState: 'tested',
+      };
+      await ref.update(data);
+    },
     unlock: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
+        testingState: null,
       };
       await ref.update(data);
     },
@@ -102,6 +132,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         published: false,
+        testingState: null,
       };
       await ref.update(data);
     },
@@ -126,9 +157,17 @@ export default {
         await functions.httpsCallable('refreshApplicationCounts')({ exerciseId: state.record.id });
       }
     },
+    createTestApplications: async ({ state }, noOfTestApplications) => {
+      const exercise = state.record;
+      await functions.httpsCallable('createTestApplications')({ exerciseId: exercise.id, noOfTestApplications });
+    },
+    changeNoOfTestApplications({ commit }, noOfTestApplications) {
+      commit('setNoOfTestApplications', noOfTestApplications);
+    },
   },
-  state: {
+  state: {  
     record: null,
+    noOfTestApplications: 0,
   },
   getters: {
     id: (state) => {
@@ -149,5 +188,6 @@ export default {
         return data;
       }
     },
+    noOfTestApplications: state => state.noOfTestApplications,
   },
 };
