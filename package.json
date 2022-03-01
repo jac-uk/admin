@@ -18,7 +18,11 @@
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit"
+    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
+    "deploy-service-offline:develop": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:develop-candidate-app -P develop",
+    "deploy-service-offline:staging": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:staging-candidate-app -P staging",
+    "deploy-service-offline:production": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:production-candidate-app -P production",
+
   },
   "engines": {
     "node": ">6",
