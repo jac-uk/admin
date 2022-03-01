@@ -375,7 +375,7 @@ export default {
   },
   computed: {
     applicationHasQualifications() {
-      return this.application.qualifications && this.application.qualifications.length > 0;
+      return this.application.qualifications && Object.values(this.application.qualifications).length > 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -453,12 +453,16 @@ export default {
           };
         }
         changedObj[obj.index][obj.extension] = obj.change;
-      } 
-      else {
+      } else {
         changedObj = obj;
       }
-      const updatedApplication = { ...this.application, ...changedObj };
 
+      const updatedApplication = { 
+        [obj.field]: {
+          ...this.application[obj.field], ...changedObj },
+      };
+
+      // console.log(updatedApplication);
       this.$emit('updateApplication', updatedApplication );
 
     },
