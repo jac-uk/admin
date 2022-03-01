@@ -93,9 +93,9 @@
                 >
                   <button
                     class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="downloadAsPdf"
+                    @click="downloadPage"
                   >
-                    Download As PDF
+                    Download Page
                   </button>
                   <button
                     id="docDownloadButton"
@@ -295,7 +295,6 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import jsPDF from 'jspdf';
 import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
 import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
@@ -570,24 +569,8 @@ export default {
     toggleEdit(){
       this.editMode = !this.editMode;
     },
-    downloadAsPdf() {
-      const pdf = new jsPDF();
-
-      pdf.fromHTML(
-        this.returnPrintReadyPanelPack(),
-        15,
-        15,
-        {
-          width: 170,
-          elementHandlers: {
-            '.jac-button-group': () => true,
-          },
-        },
-      );
-
-      const fileName = this.generateFilename;
-
-      pdf.save(`${fileName}.pdf`);
+    downloadPage() {
+      window.print();
     },
     returnPrintReadyPanelPack(){
       const htmlCollection = (document.querySelector('#panel-pack-div'));
