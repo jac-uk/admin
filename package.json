@@ -20,6 +20,10 @@
     "test": "vue-cli-service test:unit",
     "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit"
   },
+  "engines": { 
+    "node": "16.5.0",
+    "npm": "7.19.1"
+  },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
