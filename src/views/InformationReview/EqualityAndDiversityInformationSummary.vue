@@ -582,6 +582,7 @@
       class="govuk-body"
     >
       No information provided
+      <hr>
     </span>
   </div>
 </template>

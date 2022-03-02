@@ -23,10 +23,6 @@
     "deploy-service-offline:staging": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:staging-admin-app -P staging",
     "deploy-service-offline:production": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:production-admin-app -P production"
   },
-  "engines": {
-    "node": ">6",
-    "npm": ">12"
-  },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
