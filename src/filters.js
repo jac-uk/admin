@@ -68,6 +68,12 @@ const lookup = (value) => {
     'independent': 'Independent',
     'judicial': 'Judicial',
 
+    // Selection categories
+    'leadership': 'Strategic Leadership Question',
+    'roleplay': 'Role Play / Situational Questions',
+    'interview': 'Interview',
+    'overall': 'Overall',
+
     // 'xxx': 'xxx',
   };
 

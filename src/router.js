@@ -50,6 +50,7 @@ import ExerciseApplication from '@/views/Exercise/Applications/Application';
 // Exercise reports
 import ExerciseReports from '@/views/Exercise/Reports';
 import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
 import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom';
 import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
 import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
@@ -1029,6 +1030,14 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Diversity | Exercise Reports',
+              },
+            },
+            {
+              path: 'merit-list',
+              component: ExerciseReportsMeritList,
+              meta: {
+                requiresAuth: true,
+                title: 'Merit List | Exercise Reports',
               },
             },
             {

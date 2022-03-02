@@ -7,6 +7,81 @@
       :tabs="tabs"
       :active-tab.sync="activeTab"
     />
+    <!-- SCORE SHEET -->
+    <div v-show="hasScoreSheet && activeTab == 'scoreSheet'">
+      <Table
+        ref="scoreSheet"
+        data-key="id"
+        :data="scoreSheetRows"
+        :columns="scoreSheetColumns"
+        :page-size="500"
+        @change="onChangeScoreSheet"
+        class="merit-list"
+      >
+        <template #header v-if="isSelection">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header table-cell-application"></th>
+            <th scope="col" class="govuk-table__header table-cell"></th>
+            <th
+              v-for="category in selectionCategories"
+              :key="category"
+              scope="col"
+              :colspan="capabilities.length"
+              class="govuk-table__header text-center"
+            >
+              {{ category | lookup }}
+            </th>
+          </tr>
+        </template>
+        <template #row="{row}">
+          <TableCell class="table-cell-application">
+            {{ row.referenceNumber }}
+          </TableCell>
+          <TableCell class="table-cell">
+            <RouterLink
+              :to="{
+                name: 'exercise-tasks-panels-view',
+                params: {
+                  type: type,
+                  panelId: row.panel.id
+                }
+              }"
+              class="govuk-link"
+            >
+              {{ row.panel.name }}
+            </RouterLink>
+          </TableCell>
+
+          <template v-if="isSift">
+            <TableCell
+              v-for="(cap, index) in capabilities"
+              :key="`sift_${index}`"
+              class="text-center table-cell-score"
+            >
+              {{ row.scoreSheet[cap] }}
+            </TableCell>
+          </template>
+
+          <template v-if="isSelection">
+            <template
+              v-for="category in selectionCategories"
+            >
+              <TableCell
+                v-for="(cap, index) in capabilities"
+                :key="`${category}_${index}`"
+                class="text-center table-cell-score"
+              >
+                <span v-if="row.scoreSheet[category]">
+                  {{ row.scoreSheet[category][cap] }}
+                </span>
+              </TableCell>
+            </template>
+          </template>
+        </template>
+      </Table>
+    </div>
+    <!-- // END SCORE SHEET -->
+
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
       <button
@@ -17,7 +92,7 @@
       </button>
       <Table
         data-key="id"
-        :data="panelsList"
+        :data="panels"
         :page-size="50"
         :columns="tableColumns"
         @change="getTableData"
@@ -87,7 +162,7 @@
       </TitleBar>
       <SelectPanel
         class="govuk-!-margin-6"
-        :panels="panelsList"
+        :panels="panels"
         @save="selectPanel"
         @cancel="$refs['setPanelModal'].closeModal()"
       />
@@ -133,6 +208,7 @@ export default {
         },
       ],
       activeTab: 'panels',
+      panelsLoaded: false,
       selectedItems: [],
       tableColumns: [
         { title: 'Name', sort: 'name', direction: 'asc', default: true },
@@ -152,24 +228,77 @@ export default {
     exerciseId() {
       return this.exercise.id;
     },
+    capabilities() {
+      return this.$store.getters['exerciseDocument/capabilities'];
+    },
+    selectionCategories() {
+      return this.$store.getters['exerciseDocument/selectionCategories'];
+    },
     isSift() {
       return this.type === PANEL_TYPES.SIFT;
     },
-    isSelectionDay() {
+    isSelection() {
       return this.type === PANEL_TYPES.SELECTION;
     },
     isScenario() {
       return this.type === PANEL_TYPES.SCENARIO;
     },
-    panelsList() {
+    panels() {
       return this.$store.state.panels.records;
+    },
+    hasScoreSheet() {
+      if (this.panels && this.panels.length) {
+        if (this.panels.find(p => p.scoreSheet)) return true;
+      }
+      return false;
+    },
+    scoreSheetRows() {
+      const rows = [];
+      if (!this.hasScoreSheet) return rows;
+      this.panels.forEach(panel => {
+        if (!panel.applicationIds) return;
+        if (!panel.capabilities) return;
+        if (!panel.scoreSheet) return;
+        panel.applicationIds.forEach(applicationId => {
+          const row = {
+            panel: {
+              id: panel.id,
+              name: panel.name,
+              type: panel.type,
+            },
+            id: applicationId,
+            referenceNumber: panel.applications[applicationId].referenceNumber,
+            scoreSheet: panel.scoreSheet[applicationId],
+            report: panel.reports ? panel.reports[applicationId] : null,
+          };
+          rows.push(row);
+        });
+      });
+      return rows;
+    },
+    scoreSheetColumns() {
+      const columns = [];
+      if (!this.hasScoreSheet) return columns;
+      columns.push({ title: 'Application', class: 'table-cell-application' });
+      columns.push({ title: 'Panel', class: 'table-cell' });
+      if (this.isSift) {
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+      }
+      if (this.isSelection) {
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+      }
+      // columns.push({ title: 'Report', class: 'text-center' });
+      return columns;
     },
     applicationsList() {
       let records = [];
       if (this.isSift) {
         records = this.$store.state.stageReview.records;
       }
-      if (this.isSelectionDay) {
+      if (this.isSelection) {
         records = this.$store.state.stageSelected.records;
       }
       if (this.isScenario) {
@@ -182,7 +311,33 @@ export default {
       return !isDisabled;
     },
   },
+  created() {
+  },
+  watch: {
+    panels() {
+      if (this.panels && !this.panelsLoaded) {
+        console.log('panels loaded');
+        this.panelsLoaded = true;
+        if (this.hasScoreSheet) {
+          if (this.$refs['scoreSheet']) {
+            this.$refs['scoreSheet'].loaded();
+          }
+          this.tabs.unshift({
+            ref: 'scoreSheet',
+            title: 'Score sheet',
+          });
+          this.activeTab = 'scoreSheet';
+        }
+      }
+    },
+  },
   methods: {
+    onChangeScoreSheet() {
+      console.log('update score sheet view');
+      if (this.$refs['scoreSheet']) {
+        this.$refs['scoreSheet'].loaded();
+      }
+    },
     getTableData(params) {
       this.$store.dispatch(
         'panels/bind',
@@ -203,7 +358,7 @@ export default {
           }
         );
       }
-      if (this.isSelectionDay) {
+      if (this.isSelection) {
         this.$store.dispatch(
           'stageSelected/bind',
           {
@@ -227,7 +382,7 @@ export default {
       if (!candidate.panelIds) { return ''; }
       const panelId = candidate.panelIds[this.type];
       if (!panelId) { return ''; }
-      const panel = this.panelsList.find(p => p.id === panelId);
+      const panel = this.panels.find(p => p.id === panelId);
       return panel ? panel.name : '';
     },
     createNewPanel() {

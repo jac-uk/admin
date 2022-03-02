@@ -70,6 +70,64 @@
         :active-tab.sync="activeTab"
       />
     </div>
+
+    <div v-show="panel.scoreSheet && activeTab == 'scoreSheet'">
+      <Table
+        ref="scoreSheet"
+        data-key="id"
+        :data="scoreSheetRows"
+        :columns="scoreSheetColumns"
+        :page-size="500"
+        @change="onChangeScoreSheet"
+        class="merit-list"
+      >
+        <template #header v-if="panel.type == 'selection'">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header table-cell-application"></th>
+            <th
+              v-for="category in selectionCategories"
+              :key="category"
+              scope="col"
+              :colspan="capabilities.length"
+              class="govuk-table__header text-center"
+            >
+              {{ category | lookup }}
+            </th>
+          </tr>
+        </template>
+        <template #row="{row}">
+          <TableCell class="table-cell-application">
+            {{ row.referenceNumber }}
+          </TableCell>
+
+          <template v-if="panel.type == 'sift'">
+            <TableCell
+              v-for="(cap, index) in capabilities"
+              :key="`sift_${index}`"
+              class="text-center table-cell-score"
+            >
+              {{ row.scoreSheet[cap] }}
+            </TableCell>
+          </template>
+
+          <template v-if="panel.type == 'selection'">
+            <template
+              v-for="category in selectionCategories"
+            >
+              <TableCell
+                v-for="(cap, index) in capabilities"
+                :key="`${category}_${index}`"
+                class="text-center table-cell-score"
+              >
+                {{ row.scoreSheet[category][cap] }}
+              </TableCell>
+            </template>
+          </template>
+        </template>
+      </Table>
+
+    </div>
+
     <!-- APPLICATIONS LIST -->
     <div v-show="activeTab == 'applications'">
       <button
@@ -192,6 +250,7 @@ export default {
   },
   data() {
     const data = {
+      activeTab: 'applications',
       tabs: [
         {
           ref: 'applications',
@@ -206,7 +265,6 @@ export default {
           title: 'Edit',
         },
       ],
-      activeTab: 'applications',
       selectedItems: [],
       tableColumnsApplications: [
         { title: 'Reference number' },
@@ -223,6 +281,53 @@ export default {
     return data;
   },
   computed: {
+    scoreSheetRows() {
+      const rows = [];
+      if (!this.panel) return rows;
+      if (!this.panel.applicationIds) return rows;
+      if (!this.panel.capabilities) return rows;
+      if (!this.panel.scoreSheet) return rows;
+      this.panel.applicationIds.forEach(applicationId => {
+        const row = {
+          id: applicationId,
+          referenceNumber: this.panel.applications[applicationId].referenceNumber,
+          scoreSheet: this.panel.scoreSheet[applicationId],
+          report: this.panel.reports ? this.panel.reports[applicationId] : null,
+        };
+        rows.push(row);
+      });
+      return rows;
+    },
+    scoreSheetColumns() {
+      const columns = [];
+      if (!this.panel) return columns;
+      if (!this.panel.capabilities) return columns;
+      if (!this.panel.scoreSheet) return columns;
+      columns.push({ title: 'Application', class: 'table-cell-application' });
+      if (this.type == 'sift') {
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+      }
+      if (this.type == 'selection') {
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+      }
+      // columns.push({ title: 'Report', class: 'text-center' });
+      return columns;
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    capabilities() {
+      return this.$store.getters['exerciseDocument/capabilities'];
+    },
+    selectionCategories() {
+      return this.$store.getters['exerciseDocument/selectionCategories'];
+    },
+    grades() {
+      return this.$store.getters['exerciseDocument/grades'];
+    },
     panelId() {
       return this.$route.params.panelId;
     },
@@ -279,6 +384,19 @@ export default {
     if (this.panel && this.panel.panellistIds) {
       this.$store.dispatch('panel/bindPanellists', { ids: this.panel.panellistIds });
     }
+    if (
+      this.panel &&
+      this.panel.scoreSheet
+    ) {
+      if (this.$refs['scoreSheet']) {
+        this.$refs['scoreSheet'].loaded();
+      }
+      this.tabs.unshift({
+        ref: 'scoreSheet',
+        title: 'Score sheet',
+      });
+      this.activeTab = 'scoreSheet';
+    }
   },
   destroyed() {
     this.$store.dispatch('panel/unbind');
@@ -287,7 +405,13 @@ export default {
   },
   methods: {
     async savePanel(data) {
-      await this.$store.dispatch('panel/update', { id: this.panelId, data: data } );
+      const saveData = { ...data };
+      saveData.exercise = {
+        id: this.exercise.id,
+        name: this.exercise.name,
+        referenceNumber: this.exercise.referenceNumber,
+      };
+      await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );
       this.activeTab = 'applications';
     },
     async deletePanel() {
@@ -309,11 +433,11 @@ export default {
       await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );
       this.isEditingPanellists = false;
     },
-    openModal(modalRef){
-      this.$refs[modalRef].openModal();
-    },
-    closeModal(modalRef) {
-      this.$refs[modalRef].closeModal();
+    onChangeScoreSheet() {
+      console.log('update score sheet view');
+      if (this.$refs['scoreSheet']) {
+        this.$refs['scoreSheet'].loaded();
+      }
     },
     getTableDataApplications(params) {
       if (this.panel) {
@@ -344,12 +468,16 @@ export default {
         applicationIds: this.applications.map(application => application.id),
         applications: {},
         panellists: {},
+        capabilities: this.capabilities,
+        grades: this.grades,
+        scoreSheet: {},
       };
       this.applications.forEach(application => {
         data.applications[application.id] = {
           referenceNumber: application.application.referenceNumber,
           // TODO include fullName for non name-blind
         };
+        data.scoreSheet[application.id] = this.$store.getters['exerciseDocument/emptyScoreSheet'](this.panel.type).scoreSheet;
       });
       this.panellists.filter(panellist => this.panel.panellistIds.indexOf(panellist.id) >= 0).forEach(panellist => {
         data.panellists[panellist.id] = {
@@ -366,5 +494,11 @@ export default {
 <style scoped>
 .govuk-summary-list__key {
   vertical-align: top;
+}
+.table-cell-application {
+  width: 160px;
+}
+.table-cell-score {
+  width: 50px;
 }
 </style>

@@ -11,9 +11,10 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = collectionRef
-        .where('exerciseId', '==', params.exerciseId)
-        .where('type', '==', params.type);
+      let firestoreRef = collectionRef.where('exerciseId', '==', params.exerciseId);
+      if (params.type) {
+        firestoreRef = firestoreRef.where('type', '==', params.type);
+      }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
