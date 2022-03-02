@@ -60,6 +60,11 @@ export default {
       const data = { ...formData };
       data.type = this.type;
       data.exerciseId = this.exerciseId;
+      data.exercise = {
+        id: this.exerciseId,
+        referenceNumber: this.exercise.referenceNumber,
+        name: this.exercise.name,
+      };
       data.status = 'draft';
       await this.$store.dispatch('panel/create', data);
       this.$router.push({ name: 'exercise-tasks-panels' });

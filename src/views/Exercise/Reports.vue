@@ -28,6 +28,10 @@ export default {
           path: `${path}/diversity`,
         },
         {
+          title: 'Merit List',
+          path: `${path}/merit-list`,
+        },
+        {
           title: 'Outreach',
           path: `${path}/outreach`,
         },

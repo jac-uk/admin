@@ -50,12 +50,16 @@ export default {
   },
   computed: {
     assignedPanellists() {
-      const map = {};
-      for (const [key, value] of Object.entries(this.panel.roles)) {
-        const panellist = this.panellists.find(panellist => panellist.id === value);
-        map[key] = panellist;
+      if (this.panel.roles) {
+        const map = {};
+        for (const [key, value] of Object.entries(this.panel.roles)) {
+          const panellist = this.panellists.find(panellist => panellist.id === value);
+          map[key] = panellist;
+        }
+        return map;
+      } else {
+        return {};
       }
-      return map;
     },
   },
 };
