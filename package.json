@@ -62,7 +62,7 @@
     "clone": "^2.1.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "firebase": "^7.24.0",
+    "firebase": "^9.6.7",
     "firebase-mock": "^2.3.2",
     "jest-canvas-mock": "^2.3.1",
     "jest-extended": "^0.11.5",
@@ -71,7 +71,7 @@
     "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.44.1"
+    "webpack": "^5.69.1"
   },
   "peerDependencies": {
     "postcss": "8.2.15"
