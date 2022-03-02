@@ -108,6 +108,7 @@ export default {
           },
         };
         await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
+        this.$emit('saved');
         this.closeModal();
       }
     },

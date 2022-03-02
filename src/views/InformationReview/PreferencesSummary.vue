@@ -223,7 +223,7 @@
     </div>
 
     <div
-      v-if="exercise.additionalWorkingPreferences.length"
+      v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length"
     >
       <h2
         class="govuk-heading-l govuk-!-margin-top-6"

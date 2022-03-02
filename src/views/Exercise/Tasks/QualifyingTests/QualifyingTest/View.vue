@@ -79,7 +79,7 @@
             :to="{ name: routeNamePrefix + '-responses', params: { qualifyingTestId: this.$route.params.qualifyingTestId, status: qtStatus('COMPLETED') }}"
           >
             Completed
-          </RouterLink> / Out of Time
+          </RouterLink> / Auto-submitted
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
           >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>

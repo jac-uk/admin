@@ -36,7 +36,7 @@
           {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.status | lookup }} {{ row.isOutOfTime ? 'DNF' : '' }}
+          {{ row.status | lookup }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ formatTimeLimit(row.duration.testDurationAdjusted) }}
