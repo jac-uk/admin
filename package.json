@@ -31,7 +31,6 @@
     "@sentry/browser": "^6.4.1",
     "@sentry/integrations": "^6.4.1",
     "@vue/compiler-sfc": "^3.0.7",
-    "canvas": "^2.6.1",
     "core-js": "^2.6.12",
     "file-saver": "^2.0.5",
     "firebaseui": "^4.8.0",
@@ -41,7 +40,7 @@
     "save-file": "^2.3.1",
     "vue": "^2.6.12",
     "vue-json-pretty": "^1.7.1",
-    "vue-loader": "^15.9.2",
+    "vue-loader": "^15.9.8",
     "vue-loader-v16": "^16.0.0-beta.5.4",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
@@ -62,7 +61,7 @@
     "clone": "^2.1.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "firebase": "^8.10.1",
+    "firebase": "8.10.1",
     "firebase-mock": "^2.3.2",
     "jest-canvas-mock": "^2.3.1",
     "jest-extended": "^0.11.5",
@@ -71,7 +70,7 @@
     "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^5.69.1"
+    "webpack": "^4.44.1"
   },
   "peerDependencies": {
     "postcss": "8.2.15"
