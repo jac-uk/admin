@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { vuexfireMutations } from 'vuexfire';
+import { vuexfireMutations, firestoreOptions } from 'vuexfire';
 Vue.use(Vuex);
+firestoreOptions.wait = true;
 
 // Vuex modules
 import auth from '@/store/auth';
