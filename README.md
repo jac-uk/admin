@@ -1,6 +1,6 @@
 ## Admin
 
-This is the Vue SPA for managing exercises and candidates. By default, it deploys to `digital-staging-apply-admin`.
+This is the Vue SPA for managing exercises and candidates. By default, it deploys to `digital-platform-develop`.
 ## Clone repository onto local machine
 ```
 git clone git@github.com:jac-uk/admin.git
