@@ -150,6 +150,7 @@
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import clipboard from './helpers/clipboard';
 
 export default {
   name: 'App',
@@ -184,25 +185,14 @@ export default {
       this.$router.go('/sign-in');
     },
     async onMouseOver() {
-      if (navigator && navigator.clipboard && navigator.clipboard.readText && document.hasFocus()) {
-        const clipboardText = await navigator.clipboard.readText();
-        if (clipboardText) {
-          if (clipboardText.indexOf('JAC_CONTENT') === 0) {
-            console.log('JAC content found', clipboardText);
-            this.clipboardText = clipboardText;
-          } else {
-            this.clipboardText = '';
-          }
-        } else {
-          this.clipboardText = '';
-        }
+      await clipboard.read();
+      if (clipboard.hasData) {
+        this.clipboardText = clipboard.data.title;
       }
     },
     async emptyClipboard() {
-      if (navigator && navigator.clipboard) {
-        await navigator.clipboard.writeText('');
-        this.clipboardText = '';
-      }
+      await clipboard.empty();
+      this.clipboardText = '';
     },
   },
 };
