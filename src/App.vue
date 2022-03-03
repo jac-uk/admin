@@ -12,7 +12,7 @@
             href="/"
             class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
           >
-            JAC Digital Platform {{ hasClipboardContent }}
+            JAC Digital Platform
           </a>
           <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appVersion }}</span>
 
@@ -208,8 +208,7 @@ export default {
       this.$router.go('/sign-in');
     },
     async onMouseOver() {
-      if (navigator && navigator.clipboard && document.hasFocus()) {
-        console.log('navigator.clipboard', navigator.clipboard);
+      if (navigator && navigator.clipboard && navigator.clipboard.readText && document.hasFocus()) {
         const clipboardText = await navigator.clipboard.readText();
         if (clipboardText) {
           if (clipboardText.indexOf('JAC_CONTENT') === 0) {
