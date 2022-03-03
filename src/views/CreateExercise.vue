@@ -3,26 +3,6 @@
     <form @submit.prevent="validateAndSave">
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
-
-        <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-          <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-              Clipboard
-            </h2>
-          </div>
-          <div class="govuk-notification-banner__content">
-            <p class="govuk-notification-banner__heading">
-              You have an exercise on your clipboard. Use the button below to create a copy.
-            </p>
-            <ActionButton
-              @click.prevent="copyFromClipboard"
-              type="button"
-            >
-              Create exercise from clipboard
-            </ActionButton>
-          </div>
-        </div>
-
         <h1 class="govuk-heading-xl">
           Create an exercise
         </h1>
@@ -127,7 +107,6 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   components: {
@@ -138,7 +117,6 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     BackLink,
-    ActionButton,
   },
   extends: Form,
   data() {
@@ -162,9 +140,6 @@ export default {
         this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
       }
-    },
-    async copyFromClipboard() {
-      console.log('copy from clipboard');
     },
   },
 };

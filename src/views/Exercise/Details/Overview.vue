@@ -151,12 +151,6 @@
       >
         Unlock
       </button>
-      <ActionButton
-        v-if="isApproved"
-        @click="copyToClipboard"
-      >
-        Copy to Clipboard
-      </ActionButton>
       <br>
       <ActionButton
         v-if="isReadyForProcessing"
@@ -321,12 +315,6 @@ export default {
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
-    },
-    async copyToClipboard() {
-      console.log('copy to clipboard');
-      if (navigator && navigator.clipboard) {
-        await navigator.clipboard.writeText('JAC_CONTENT=bob');
-      }
     },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');

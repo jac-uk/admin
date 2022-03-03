@@ -1,11 +1,6 @@
 <template>
-  <div
-    class="page-container"
-    @mouseover="onMouseOver"
-  >
-    <header
-      class="govuk-width-container"
-    >
+  <div class="page-container">
+    <header class="govuk-width-container">
       <div class="jac-header clearfix">
         <div class="header-title">
           <a
@@ -148,21 +143,6 @@
         </div>
       </div>
     </footer>
-
-    <div class="clipboard-actions" v-show="hasClipboardContent">
-      <div class="govuk-width-container govuk-!-padding-4 content background-blue">
-        <a
-          href
-          class="govuk-link float-right"
-          @click.prevent="emptyClipboard"
-        >Empty clipboard</a>
-        <p class="govuk-heading-m govuk-!-margin-bottom-2">Your clipboard has content</p>
-        <p class="govuk-body govuk-!-margin-bottom-0">
-          You have exercise "JAC00001 Exercise Name" from PRODUCTION on your clipboard. <br>
-          Navigate to a draft exercise, or create a new one, and press the Paste button in order to import it.
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -176,7 +156,6 @@ export default {
   data() {
     return {
       authorisedToPerformAction: false,
-      clipboardText: '',
     };
   },
   computed: {
@@ -185,9 +164,6 @@ export default {
     },
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
-    },
-    hasClipboardContent() {
-      return this.clipboardText != '';
     },
   },
   async created() {
@@ -274,15 +250,5 @@ $jac-link-colour: #753880;
   width: 100%;
   display: block;
 };
-
-.clipboard-actions {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  > .content {
-    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.25);
-    margin-bottom: 10px;
-  }
-}
 
 </style>
