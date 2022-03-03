@@ -298,8 +298,8 @@ import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
 import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
 import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
@@ -328,17 +328,18 @@ export default {
     Modal,
     SubmissionExtension,
     Notes,
+    InformationReviewRenderer,
+    PageNotFound,
+    CharacterChecks,
+    // summaries
     PersonalDetailsSummary,
     CharacterInformationSummary,
-    PageNotFound,
     EqualityAndDiversityInformationSummary,
-    InformationReviewRenderer,
     PreferencesSummary,
     QualificationsAndMembershipsSummary,
     ExperienceSummary,
     AssessmentsSummary,
     AssessorsSummary,
-    CharacterChecks,
   },
   data() {
     return {
