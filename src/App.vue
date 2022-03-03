@@ -1,6 +1,11 @@
 <template>
-  <div class="page-container">
-    <header class="govuk-width-container">
+  <div
+    class="page-container"
+    @mouseenter="onMouseOver"
+  >
+    <header
+      class="govuk-width-container"
+    >
       <div class="jac-header clearfix">
         <div class="header-title">
           <a
@@ -9,7 +14,7 @@
           >
             JAC Digital Platform
           </a>
-          <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appVersion }}</span>
+          <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
           <nav
             v-if="isSignedIn"
@@ -143,6 +148,20 @@
         </div>
       </div>
     </footer>
+
+    <div class="clipboard-actions" v-show="hasClipboardData">
+      <div class="govuk-width-container govuk-!-padding-4 content background-blue">
+        <a
+          class="govuk-link float-right"
+          @click.prevent="emptyClipboard"
+        >Empty clipboard</a>
+        <p class="govuk-heading-m govuk-!-margin-bottom-2">Your clipboard has content</p>
+        <p class="govuk-body govuk-!-margin-bottom-0">
+          You have {{ clipboardData.type }} "{{ clipboardData.title }}" from <strong>{{ clipboardData.environment }}</strong> on your clipboard. <br>
+          Navigate to a draft exercise, or create a new one, and press the <strong>Create exercise from clipboard</strong> button in order to import it.
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -150,7 +169,6 @@
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import clipboard from './helpers/clipboard';
 
 export default {
   name: 'App',
@@ -165,6 +183,12 @@ export default {
     },
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
+    },
+    clipboardData() {
+      return this.$store.state.clipboard.data;
+    },
+    hasClipboardData() {
+      return this.$store.state.clipboard.hasData;
     },
   },
   async created() {
@@ -185,14 +209,10 @@ export default {
       this.$router.go('/sign-in');
     },
     async onMouseOver() {
-      await clipboard.read();
-      if (clipboard.hasData) {
-        this.clipboardText = clipboard.data.title;
-      }
+      await this.$store.dispatch('clipboard/read');
     },
     async emptyClipboard() {
-      await clipboard.empty();
-      this.clipboardText = '';
+      await this.$store.dispatch('clipboard/empty');
     },
   },
 };
@@ -240,5 +260,18 @@ $jac-link-colour: #753880;
   width: 100%;
   display: block;
 };
+
+.clipboard-actions {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  .govuk-link {
+    cursor: pointer;
+  }
+  > .content {
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.25);
+    margin-bottom: 10px;
+  }
+}
 
 </style>
