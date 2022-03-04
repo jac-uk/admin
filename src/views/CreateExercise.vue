@@ -4,10 +4,18 @@
       <div class="govuk-grid-column-two-thirds">
         <BackLink />
 
-        <div v-if="hasClipboardData"
-          class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div
+          v-if="hasClipboardData"
+          class="govuk-notification-banner"
+          role="region"
+          aria-labelledby="govuk-notification-banner-title"
+          data-module="govuk-notification-banner"
+        >
           <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            <h2
+              id="govuk-notification-banner-title"
+              class="govuk-notification-banner__title"
+            >
               Clipboard
             </h2>
           </div>
@@ -16,8 +24,8 @@
               You have an exercise on your clipboard. Use the button below to create a copy.
             </p>
             <ActionButton
-              @click.prevent="copyFromClipboard"
               type="button"
+              @click.prevent="copyFromClipboard"
             >
               Create exercise from clipboard
             </ActionButton>
@@ -172,8 +180,8 @@ export default {
     async copyFromClipboard() {
       const content = this.$store.state.clipboard.data.content;
       content.name = `${content.name} COPY`;
-      await this.$store.dispatch('clipboard/empty');
       await this.$store.dispatch('exerciseDocument/create', content);
+      await this.$store.dispatch('clipboard/empty');
       this.$store.dispatch('exerciseCreateJourney/start', []);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
     },

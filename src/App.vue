@@ -149,16 +149,28 @@
       </div>
     </footer>
 
-    <div class="clipboard-actions" v-show="hasClipboardData">
+    <div
+      v-show="hasClipboardData"
+      class="clipboard-actions"
+    >
       <div class="govuk-width-container govuk-!-padding-4 content background-blue">
         <a
           class="govuk-link float-right"
           @click.prevent="emptyClipboard"
         >Empty clipboard</a>
-        <p class="govuk-heading-m govuk-!-margin-bottom-2">Your clipboard has content</p>
+        <p class="govuk-heading-m govuk-!-margin-bottom-2">
+          Your clipboard has content
+        </p>
         <p class="govuk-body govuk-!-margin-bottom-0">
           You have {{ clipboardData.type }} "{{ clipboardData.title }}" from <strong>{{ clipboardData.environment }}</strong> on your clipboard. <br>
-          Navigate to a draft exercise, or create a new one, and press the <strong>Create exercise from clipboard</strong> button in order to import it.
+          Navigate to the
+          <RouterLink
+            :to="{ name: 'create-exercise' }"
+            class="govuk-link govuk-link--inverse"
+          >
+            Create Exercise
+          </RouterLink>
+          page and press the <strong>Create exercise from clipboard</strong> button in order to import it.
         </p>
       </div>
     </div>
