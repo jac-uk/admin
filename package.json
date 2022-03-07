@@ -2,6 +2,9 @@
   "name": "admin",
   "version": "0.86.0",
   "private": true,
+  "engines": {
+    "node": ">=11.0.0"
+  },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
     "serve": "vue-cli-service serve --mode develop",
