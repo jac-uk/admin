@@ -1,4 +1,5 @@
-import { auth } from '@/firebase';
+import { auth, functions } from '@/firebase';
+import { get } from 'lodash';
 
 const module = {
   namespaced: true,
@@ -15,11 +16,13 @@ const module = {
     },
   },
   actions: {
-    setCurrentUser({ state, commit }, user) {
+    async setCurrentUser({ state, commit }, user) {
       if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
-        if (state.authError) { commit('setAuthError', null); }
+        if (state.authError) {
+          commit('setAuthError', null);
+        }
         let allOk = false;
 
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
@@ -39,6 +42,11 @@ const module = {
           allOk = true;
         }
         if (allOk) {
+          let shouldEnsureEmailVerified = false;
+          if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
+            user = { ...user, emailVerified: true };
+            shouldEnsureEmailVerified = true;
+          }
           let role = 'staff';
           if (
             [ // TODO User roles!
@@ -57,6 +65,9 @@ const module = {
             displayName: user.displayName,
             role: role,
           });
+          if (shouldEnsureEmailVerified) {
+            await functions.httpsCallable('ensureEmailValidated')({});
+          }
         } else {
           auth().signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');

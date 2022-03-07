@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
 
 export default {
@@ -110,6 +111,9 @@ export default {
     isEditable() {
       return isEditable(this.exercise);
     },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
     isPublished() {
       return this.exercise.published;
     },
@@ -118,11 +122,19 @@ export default {
     },
   },
   methods: {
-    publish() {
-      this.$store.dispatch('exerciseDocument/publish');
+    async publish() {
+      await this.$store.dispatch('exerciseDocument/publish');
+      logEvent('info', 'Exercise published', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
+      });
     },
-    unPublish() {
-      this.$store.dispatch('exerciseDocument/unpublish');
+    async unPublish() {
+      await this.$store.dispatch('exerciseDocument/unpublish');
+      logEvent('info', 'Exercise unpublished', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
+      });
     },
   },
 };

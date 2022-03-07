@@ -24,7 +24,7 @@
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.status | lookup }} {{ response.isOutOfTime ? 'DNF' : '' }}
+            {{ response.status | lookup }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
             <button
               v-if="authorisedToPerformAction"
               :disabled="hasActivated"
