@@ -8,7 +8,7 @@
         Version {{ version }}
       </h3>
       <div
-        v-if="!hasValues(characterInformation)"
+        v-if="!hasValues(characterInformation) && !editable"
         class="govuk-body"
       >
         No information provided

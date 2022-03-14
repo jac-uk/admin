@@ -184,6 +184,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import { functions } from '@/firebase';
+import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
 
@@ -315,11 +316,19 @@ export default {
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
     },
-    publish() {
-      this.$store.dispatch('exerciseDocument/publish');
+    async publish() {
+      await this.$store.dispatch('exerciseDocument/publish');
+      logEvent('info', 'Exercise published', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
+      });
     },
-    unPublish() {
-      this.$store.dispatch('exerciseDocument/unpublish');
+    async unPublish() {
+      await this.$store.dispatch('exerciseDocument/unpublish');
+      logEvent('info', 'Exercise unpublished', {
+        exerciseId: this.exerciseId,
+        exerciseRef: this.exercise.referenceNumber,
+      });
     },
     async startProcessing() {
       await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });

@@ -2,6 +2,9 @@
   "name": "admin",
   "version": "0.86.0",
   "private": true,
+  "engines": {
+    "node": ">=11.0.0"
+  },
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
     "serve": "vue-cli-service serve --mode develop",
@@ -61,7 +64,7 @@
     "clone": "^2.1.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "firebase": "^7.24.0",
+    "firebase": "^8.9.0",
     "firebase-mock": "^2.3.2",
     "jest-canvas-mock": "^2.3.1",
     "jest-extended": "^0.11.5",

@@ -1,293 +1,290 @@
 <template>
-  <div>
-    <div
-      v-if="application"
-      class="govuk-grid-row"
-    >
-      <div class="govuk-grid-column-full">
-        <div
-          v-if="applications.length"
-          class="text-center"
-        >
-          <ul class="moj-pagination__list">
-            <li
-              class="moj-pagination__item  moj-pagination__item--prev"
-              @click="previousApplication"
-            >
-              <a class="moj-pagination__link govuk-link">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
-            </li>
-            <li
-              class="moj-pagination__item  moj-pagination__item--next"
-              @click="nextApplication"
-            >
-              <a class="moj-pagination__link govuk-link">Next<span class="govuk-visually-hidden"> set of pages</span></a>
-            </li>
-          </ul>
-        </div>
+  <div
+    v-if="application"
+    class="govuk-grid-row"
+  >
+    <div class="govuk-grid-column-full">
+      <div
+        v-if="applications.length"
+        class="text-center"
+      >
+        <ul class="moj-pagination__list">
+          <li
+            class="moj-pagination__item  moj-pagination__item--prev"
+            @click="previousApplication"
+          >
+            <a class="moj-pagination__link govuk-link">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+          </li>
+          <li
+            class="moj-pagination__item  moj-pagination__item--next"
+            @click="nextApplication"
+          >
+            <a class="moj-pagination__link govuk-link">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+          </li>
+        </ul>
+      </div>
 
-        <div id="panel-pack-div">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-              <span class="govuk-heading-l">
-                Application
-              </span>
-              <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
-                {{ applicationReferenceNumber }}
-              </h1>
-            </div>
-            <div class="govuk-grid-column-one-half text-right print-none">
-              <span
-                v-if="activeTab == 'full'"
-              >
-                <span
-                  class="govuk-!-margin-left-4"
-                >
-                  <button
-                    v-if="isApplied"
-                    class="govuk-button btn-unlock"
-                    @click="unlock"
-                  >
-                    Unlock
-                  </button>
-                  <button
-                    v-else
-                    class="govuk-button btn-mark-as-applied"
-                    @click="submitApplication"
-                  >
-                    Mark as applied
-                  </button>
-                </span>
-                <span
-                  class="govuk-!-margin-left-4 govuk-!-margin-right-4"
-                >
-                  <button
-                    v-if="editMode"
-                    class="govuk-button govuk-button btn-unlock"
-                    @click="toggleEdit"
-                  >
-                    Done
-                  </button>
-                  <button
-                    v-else
-                    class="govuk-button govuk-button--secondary btn-mark-as-applied"
-                    @click="toggleEdit"
-                  >
-                    Edit
-                  </button>
-                </span>
-              </span>
-              <div class="moj-button-menu">
-                <button
-                  ref="dropDownRef"
-                  class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
-                  type="button"
-                  aria-haspopup="true"
-                  :aria-expanded="dropDownExpanded.toString()"
-                  @click="toggleExpand"
-                >
-                  Actions
-                </button>
-                <div
-                  class="moj-button-menu__wrapper moj-button-menu__wrapper--right"
-                  role="menu"
-                >
-                  <button
-                    class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="downloadAsPdf"
-                  >
-                    Download As PDF
-                  </button>
-                  <button
-                    id="docDownloadButton"
-                    class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="downloadAsDoc"
-                  >
-                    Download As Doc
-                  </button>
-                  <button
-                    id="clipboard-button"
-                    class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="copyToClipboard"
-                  >
-                    Copy to clipboard
-                  </button>
-                </div>
-              </div>
-            </div>
+      <div id="panel-pack-div">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-half">
+            <span class="govuk-caption-l">Application</span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
+              {{ applicationReferenceNumber }}
+            </h1>
           </div>
 
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-              <div class="panel govuk-!-margin-bottom-7 govuk-!-padding-4 background-light-grey">
-                <span class="govuk-caption-m">
-                  Created on
-                </span>
-                <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ application.createdAt | formatDate | showAlternative("Unknown") }}
-                </h2>
-              </div>
-            </div>
-
-            <div class="govuk-grid-column-one-third">
-              <div
-                v-if="isApplied"
-                class="panel govuk-!-margin-bottom-7 background-light-grey"
+          <div class="govuk-grid-column-one-half text-right print-none">
+            <span
+              v-if="activeTab == 'full'"
+            >
+              <span
+                class="govuk-!-margin-left-4"
               >
-                <span class="govuk-caption-m">Submitted on</span>
-                <h2
-                  class="govuk-heading-m govuk-!-margin-bottom-0"
-                >
-                  {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
-                </h2>
-              </div>
-              <div
-                v-else
-                class="panel govuk-!-margin-bottom-7 background-light-grey"
-              >
-                <span class="govuk-caption-m">Status</span>
-                <h2
-                  class="govuk-heading-m govuk-!-margin-bottom-0"
-                >
-                  Draft
-                </h2>
-              </div>
-            </div>
-
-            <div class="govuk-grid-column-one-third">
-              <div class="panel govuk-!-margin-bottom-7 background-light-grey">
-                <span class="govuk-caption-m">
-                  Extension
-                </span>
                 <button
-                  v-if="application.dateExtension"
-                  @click="$refs.modalRefExtension.openModal()"
+                  v-if="isApplied"
+                  class="govuk-button btn-unlock"
+                  @click="unlock"
                 >
-                  Change
+                  Unlock
                 </button>
-                <h2
-                  v-if="application.dateExtension"
-                  class="govuk-heading-m govuk-!-margin-bottom-0"
-                >
-                  {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
-                </h2>
                 <button
                   v-else
-                  class="govuk-button govuk-!-margin-bottom-0"
-                  @click="$refs.modalRefExtension.openModal()"
+                  class="govuk-button btn-mark-as-applied"
+                  @click="submitApplication"
                 >
-                  Give Extension
+                  Mark as applied
+                </button>
+              </span>
+              <span
+                class="govuk-!-margin-left-4 govuk-!-margin-right-4"
+              >
+                <button
+                  v-if="editMode"
+                  class="govuk-button govuk-button btn-unlock"
+                  @click="toggleEdit"
+                >
+                  Done
+                </button>
+                <button
+                  v-else
+                  class="govuk-button govuk-button--secondary btn-mark-as-applied"
+                  @click="toggleEdit"
+                >
+                  Edit
+                </button>
+              </span>
+            </span>
+            <div class="moj-button-menu">
+              <button
+                ref="dropDownRef"
+                class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
+                type="button"
+                aria-haspopup="true"
+                :aria-expanded="dropDownExpanded.toString()"
+                @click="toggleExpand"
+              >
+                Actions
+              </button>
+              <div
+                class="moj-button-menu__wrapper moj-button-menu__wrapper--right"
+                role="menu"
+              >
+                <button
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsPdf"
+                >
+                  Download As PDF
+                </button>
+                <button
+                  id="docDownloadButton"
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadAsDoc"
+                >
+                  Download As Doc
+                </button>
+                <button
+                  id="clipboard-button"
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="copyToClipboard"
+                >
+                  Copy to clipboard
                 </button>
               </div>
             </div>
           </div>
+        </div>
 
-          <Modal
-            ref="modalRefExtension"
-          >
-            <component
-              :is="`SubmissionExtension`"
-              v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
-              @close="$refs.modalRefExtension.closeModal()"
-            />
-          </Modal>
-
-          <TabsList
-            class="print-none"
-            :tabs="tabs"
-            :active-tab.sync="activeTab"
-          />
-
-          <div
-            v-if="activeTab == 'full' || activeTab == 'panel'"
-            class="application-details"
-          >
-            <div v-if="application && exercise">
-              <PersonalDetailsSummary
-                :user-id="application.userId"
-                :personal-details="application.personalDetails || {}"
-                :editable="editMode"
-                @update="changePersonalDetails"
-              />
-              <CharacterInformationSummary
-                :editable="(editMode && authorisedToPerformAction)"
-                :character-information="correctCharacterInformation"
-                :version="applicationVersion"
-                @updateApplication="changeApplication"
-              />
-              <EqualityAndDiversityInformationSummary
-                :application="application"
-                :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
-                :editable="(editMode && authorisedToPerformAction)"
-                @updateApplication="changeApplication"
-              />
-              <PreferencesSummary
-                :application="application"
-                :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
-                :is-panel-view="isPanelView"
-                @updateApplication="changeApplication"
-              />
-              <QualificationsAndMembershipsSummary
-                :application="application"
-                :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
-                @updateApplication="changeApplication"
-              />
-              <ExperienceSummary
-                :application="application"
-                :exercise="exercise"
-                :editable="(editMode && authorisedToPerformAction)"
-                :is-panel-view="isPanelView"
-                @updateApplication="changeApplication"
-              />
-              <AssessorsSummary
-                :application="application"
-                :application-id="applicationId"
-                :exercise="exercise"
-                :editable="editMode"
-                :is-panel-view="isPanelView"
-              />
-              <AssessmentsSummary
-                :application="application"
-                :exercise="exercise"
-                :editable="editMode"
-                :authorised-to-perform-action="authorisedToPerformAction"
-                :is-panel-view="isPanelView"
-                @updateApplication="changeApplication"
-              />
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            <div class="panel govuk-!-margin-bottom-7 govuk-!-padding-4 background-light-grey">
+              <span class="govuk-caption-m">
+                Created on
+              </span>
+              <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
+              </h2>
             </div>
           </div>
 
-          <div v-if="activeTab == 'characterchecks'">
-            <CharacterChecks
+          <div class="govuk-grid-column-one-third">
+            <div
+              v-if="isApplied"
+              class="panel govuk-!-margin-bottom-7 background-light-grey"
+            >
+              <span class="govuk-caption-m">Submitted on</span>
+              <h2
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
+              </h2>
+            </div>
+            <div
+              v-else
+              class="panel govuk-!-margin-bottom-7 background-light-grey"
+            >
+              <span class="govuk-caption-m">Status</span>
+              <h2
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                Draft
+              </h2>
+            </div>
+          </div>
+
+          <div class="govuk-grid-column-one-third">
+            <div class="panel govuk-!-margin-bottom-7 background-light-grey">
+              <span class="govuk-caption-m">
+                Extension
+              </span>
+              <button
+                v-if="application.dateExtension"
+                @click="$refs.modalRefExtension.openModal()"
+              >
+                Change
+              </button>
+              <h2
+                v-if="application.dateExtension"
+                class="govuk-heading-m govuk-!-margin-bottom-0"
+              >
+                {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
+              </h2>
+              <button
+                v-else
+                class="govuk-button govuk-!-margin-bottom-0"
+                @click="$refs.modalRefExtension.openModal()"
+              >
+                Give Extension
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <Modal
+          ref="modalRefExtension"
+        >
+          <component
+            :is="`SubmissionExtension`"
+            v-bind="{ applicationId: applicationId, userId: application.userId, dateExtension: application.dateExtension }"
+            @close="$refs.modalRefExtension.closeModal()"
+          />
+        </Modal>
+
+        <TabsList
+          class="print-none"
+          :tabs="tabs"
+          :active-tab.sync="activeTab"
+        />
+
+        <div
+          v-if="activeTab == 'full' || activeTab == 'panel'"
+          class="application-details"
+        >
+          <div v-if="application && exercise">
+            <PersonalDetailsSummary
+              :user-id="application.userId"
+              :personal-details="application.personalDetails || {}"
+              :editable="editMode"
+              @update="changePersonalDetails"
+            />
+            <CharacterInformationSummary
+              :editable="(editMode && authorisedToPerformAction)"
+              :character-information="correctCharacterInformation"
+              :version="applicationVersion"
+              @updateApplication="changeApplication"
+            />
+            <EqualityAndDiversityInformationSummary
+              :application="application"
+              :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
+              :editable="(editMode && authorisedToPerformAction)"
+              @updateApplication="changeApplication"
+            />
+            <PreferencesSummary
               :application="application"
               :exercise="exercise"
+              :editable="(editMode && authorisedToPerformAction)"
+              :is-panel-view="isPanelView"
+              @updateApplication="changeApplication"
             />
-          </div>
-
-          <div v-if="activeTab == 'issues'">
-            No issues found
-          </div>
-
-          <div v-if="activeTab == 'agency'">
-            <AgencyReport />
-          </div>
-
-          <div v-if="activeTab == 'notes'">
-            <Notes
-              title="Notes about the Application"
-              :candidate-id="application.userId"
+            <QualificationsAndMembershipsSummary
+              :application="application"
+              :exercise="exercise"
+              :editable="(editMode && authorisedToPerformAction)"
+              @updateApplication="changeApplication"
+            />
+            <ExperienceSummary
+              :application="application"
+              :exercise="exercise"
+              :editable="(editMode && authorisedToPerformAction)"
+              :is-panel-view="isPanelView"
+              @updateApplication="changeApplication"
+            />
+            <AssessorsSummary
+              :application="application"
               :application-id="applicationId"
+              :exercise="exercise"
+              :editable="editMode"
+              :is-panel-view="isPanelView"
+            />
+            <AssessmentsSummary
+              :application="application"
+              :exercise="exercise"
+              :editable="editMode"
+              :authorised-to-perform-action="authorisedToPerformAction"
+              :is-panel-view="isPanelView"
+              @updateApplication="changeApplication"
             />
           </div>
+        </div>
+
+        <div v-if="activeTab == 'characterchecks'">
+          <CharacterChecks
+            :application="application"
+            :exercise="exercise"
+          />
+        </div>
+
+        <div v-if="activeTab == 'issues'">
+          No issues found
+        </div>
+
+        <div v-if="activeTab == 'agency'">
+          <AgencyReport />
+        </div>
+
+        <div v-if="activeTab == 'notes'">
+          <Notes
+            title="Notes about the Application"
+            :candidate-id="application.userId"
+            :application-id="applicationId"
+          />
         </div>
       </div>
     </div>
-    <div v-else>
-      <PageNotFound
-        page="Application"
-      />
-    </div>
+  </div>
+  <div v-else>
+    <PageNotFound
+      page="Application"
+    />
   </div>
 </template>
 
@@ -309,12 +306,12 @@ import QualificationsAndMembershipsSummary from '@/views/InformationReview/Quali
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
-import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PageNotFound from '@/views/Errors/PageNotFound';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import PageNotFound from '@/views/Errors/PageNotFound';
+import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
+import { logEvent } from '@/helpers/logEvent';
+import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-
 import {
   isLegal,
   isNonLegal,
@@ -622,8 +619,96 @@ export default {
     submitApplication() {
       this.$store.dispatch('application/submit');
     },
+    showMembershipOption(ref) {
+      if (this.application && this.application.professionalMemberships) {
+        return this.application.professionalMemberships.indexOf(ref) >= 0;
+      }
+      return false;
+    },
+    preferNotToSay(field) {
+      const val = 'prefer-not-to-say';
+      if (field === val) {
+        return true;
+      }
+      if (Array.isArray(field) && field.includes(val)) {
+        return true;
+      }
+      return false;
+    },
+    makeFullName(objChanged) {
+      if (objChanged.firstName && this.application.personalDetails.lastName) {
+        objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
+      }
+      if (objChanged.lastName && this.application.personalDetails.firstName) {
+        objChanged.fullName = `${this.application.personalDetails.firstName} ${objChanged.lastName}`;
+      }
+      return objChanged;
+    },
+    changeUserDetails(objChanged) {
+      if (objChanged.firstName || objChanged.lastName) {
+        objChanged = this.makeFullName(objChanged);
+      }
+
+      const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
+      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+      this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
+
+      logEvent('info', 'Application updated (personal details)', {
+        applicationId: this.applicationId,
+        candidateName: myPersonalDetails.fullName,
+        exerciseRef: this.exercise.referenceNumber,
+      });
+    },
+    doFileUpload(val, field) {
+      if (val) {
+        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
+
+        logEvent('info', 'Application updated (document uploaded)', {
+          applicationId: this.applicationId,
+          candidateName: this.application.personalDetails.fullName,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      }
+    },
+    editAssessor(AssessorNr) {
+      // this.assessorDetails = {};
+      if (AssessorNr === 1) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.firstAssessorEmail,
+          fullName: this.application.firstAssessorFullName,
+          phone: this.application.firstAssessorPhone,
+          title: this.application.firstAssessorTitle,
+        };
+      }
+      if (AssessorNr === 2) {
+        this.assessorDetails = {
+          AssessorNr: AssessorNr,
+          applicationId: this.applicationId,
+          email: this.application.secondAssessorEmail,
+          fullName: this.application.secondAssessorFullName,
+          phone: this.application.secondAssessorPhone,
+          title: this.application.secondAssessorTitle,
+        };
+      }
+      this.openModal('assessorModal');
+    },
+    editLeadershipJudgeDetails() {
+      this.openModal('modalLeadershipJudgeDetails');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
+    },
+    savedModal(modalRef) {
+      logEvent('info',  `Application updated (${modalRef})`, {
+        applicationId: this.applicationId,
+        candidateName: this.application.personalDetails.fullName,
+        exerciseRef: this.exercise.referenceNumber,
+      });
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });

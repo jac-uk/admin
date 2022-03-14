@@ -57,8 +57,8 @@ auth().onAuthStateChanged((user) => {
           await functions.httpsCallable('adminSyncUserRolePermissions')();
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
+        // console.log(error);
       });
     if (window.location.pathname == '/sign-in') {
       router.push('/');

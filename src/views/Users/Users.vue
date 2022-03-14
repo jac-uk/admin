@@ -64,11 +64,11 @@
                 @change="setUserRole(user)"
               >
                 <option
-                  v-for="(role, roleIndex) in roles"
+                  v-for="(roleItem, roleIndex) in roles"
                   :key="roleIndex"
-                  :value="role.id"
+                  :value="roleItem.id"
                 >
-                  {{ role.roleName }}
+                  {{ roleItem.roleName }}
                 </option>
               </select>
               <ActionButton
@@ -106,16 +106,16 @@
                 >
                   <!-- TODO: Sort the active class -->
                   <li
-                    v-for="(role, roleIndex) in roles"
+                    v-for="(roleItem, roleIndex) in roles"
                     :key="roleIndex"
-                    :class=" isActive(role.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
+                    :class=" isActive(roleItem.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
                   >
                     <a
                       href="#"
                       class="moj-side-navigation__item"
                       @click.prevent="viewRolePermissions(roleIndex)"
                     >
-                      {{ role.roleName }} {{ role.isDefault ? '(Default)' : '' }}
+                      {{ roleItem.roleName }} {{ roleItem.isDefault ? '(Default)' : '' }}
                     </a>
                   </li>
                 </ul>
@@ -194,21 +194,21 @@
                 >
                   Can approve exercise
                 </Checkbox>
-                
+
                 <Checkbox
                   id="canAddNotesToExercise"
                   v-model="permissions.canAddNotesToExercise"
                 >
                   Can add notes to exercise
                 </Checkbox>
-                
+
                 <Checkbox
                   id="canResetExercise"
                   v-model="permissions.canResetExercise"
                 >
                   Can reset exercise
                 </Checkbox>
-                
+
                 <Checkbox
                   id="canAmendAfterLaunch"
                   v-model="permissions.canAmendAfterLaunch"
@@ -224,7 +224,7 @@
                 >
                   Can view all candidates
                 </Checkbox>
-                
+
                 <Checkbox
                   id="canAddNotesToCandidates"
                   v-model="permissions.canAddNotesToCandidates"
