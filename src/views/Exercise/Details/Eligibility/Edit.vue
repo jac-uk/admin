@@ -277,8 +277,8 @@
           label="Retirement age"
         >
           <RadioItem
-            value="70"
-            label="70 years"
+            value="75"
+            label="75 years"
           />
           <RadioItem
             value="other"
