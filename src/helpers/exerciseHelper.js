@@ -7,7 +7,6 @@ isEditable,
 isLegal,
 isNonLegal,
 isTribunal,
-hasQualifyingTests,
 hasRelevantMemberships,
 hasStatementOfSuitability,
 hasIndependentAssessments,
@@ -31,7 +30,6 @@ export {
   isProcessing,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
-  hasQualifyingTests,
   hasRelevantMemberships,
   hasStatementOfSuitability,
   hasCoveringLetter,
@@ -106,17 +104,6 @@ function applicationCurrentStep(exercise, application) {
   let currentStep;
   switch (application._processing.stage) {
     case 'review':
-      if (hasQualifyingTests(exercise)) {
-        if (hasScenarioTest(exercise)) {
-          if (application._processing.status === 'passedScenarioTest') {
-            currentStep = 'passedTests';
-          }
-        } else {
-          if (application._processing.status === 'passedFirstTest') {
-            currentStep = 'passedTests';
-          }
-        }
-      }
       break;
     case 'shortlisted':
     case 'selected':
@@ -173,9 +160,6 @@ function exerciseStates(exercise) {
 function applicationContentSteps(data) {
   if (!data) { return []; }
   const steps = [];
-  if (hasQualifyingTests(data)) {
-    steps.push('passedTests');
-  }
   steps.push('shortlisted');
   steps.push('selected');
   steps.push('recommended');
@@ -192,18 +176,6 @@ function hasIndependentAssessments(data) {
 }
 function hasLeadershipJudgeAssessment(data) {
   return data.assessmentMethods && data.assessmentMethods.leadershipJudgeAssessment;
-}
-function hasQualifyingTests(data) {
-  if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
-  if (data.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0) return true;
-  if (data.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0) return true;
-  if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
-  return false;
-}
-function hasScenarioTest(data) {
-  if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
-  if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
-  return false;
 }
 function hasRelevantMemberships(data) {
   if (isNonLegal(data)) {

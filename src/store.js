@@ -26,11 +26,6 @@ import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
-import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
-import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
-import connectionMonitor from '@/store/connectionMonitor';
-import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
-import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 import panels from '@/store/panels';
 
 const store = new Vuex.Store({
@@ -57,11 +52,6 @@ const store = new Vuex.Store({
     candidates,
     notes,
     candidateApplications,
-    qualifyingTest,
-    qualifyingTestResponses,
-    connectionMonitor,
-    qualifyingTestReports,
-    qualifyingTestReport,
     panels,
     characterChecks,
   },

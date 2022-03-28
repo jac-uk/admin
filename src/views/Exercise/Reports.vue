@@ -44,13 +44,6 @@ export default {
           path: `${path}/reasonable-adjustments`,
         },
         {
-          title: 'Qualifying Test Reports',
-          path: `${path}/qualifying-test-reports`,
-          params: {
-            nav: '/reports/qualifying-test-reports',
-          },
-        },
-        {
           title: 'Agency',
           path: `${path}/agency`,
         },

@@ -59,7 +59,7 @@ import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
-import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
+import { isEditable, isProcessing } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -82,9 +82,6 @@ export default {
     },
     isEditable() {
       return isEditable(this.exercise);
-    },
-    hasQualifyingTests() {
-      return hasQualifyingTests(this.exercise);
     },
     isProcessing() {
       return isProcessing(this.exercise);
@@ -112,7 +109,7 @@ export default {
       if (this.exercise.applications || this.hasOpened) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
-      if (this.hasQualifyingTests || this.isProcessing) {
+      if (this.isProcessing) {
         subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
       }
       if (this.isProcessing) {
