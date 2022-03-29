@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import copyToQTFirestore from '../helpers/copyToQTFirestore';
 
 const collection = firestore.collection('applicationRecords');
 
@@ -22,6 +23,10 @@ export default {
           batch.update(ref, item.data);
         });
         await batch.commit();
+
+        data.forEach(item => {
+          copyToQTFirestore('applicationRecords', item.id);
+        });
     },
   },
   state: {
