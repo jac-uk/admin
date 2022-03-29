@@ -4,6 +4,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import clone from 'clone';
+import copyToQTFirestore from '../helpers/copyToQTFirestore';
 
 const collection = firestore.collection('applications');
 
@@ -24,14 +25,18 @@ export default {
         status: 'draft',
       };
       await ref.update(data);
+      copyToQTFirestore('applications', id);
     },
     save: async ({ state }, data) => {
-      const ref = collection.doc(state.record.id);
+      const id = state.record.id;
+      const ref = collection.doc(id);
       await ref.set(data, { merge: true });
+      copyToQTFirestore('applications', id);
     },
     update: async (context, { data, id }) => {
       const ref = collection.doc(id);
       await ref.set(data, { merge: true });
+      copyToQTFirestore('applications', id);
     },
     // NOTE: this is copied across from Candidate app. @todo work out a better way to share code (or use an api)
     submit: async ({ state, dispatch }) => {
@@ -68,6 +73,7 @@ export default {
                 referenceNumber: applicationReferenceNumber,
                 appliedAt: firebase.firestore.FieldValue.serverTimestamp(),
               });
+              copyToQTFirestore('applications', state.record.id);
               return applicationReferenceNumber;
             });
           });
@@ -78,6 +84,7 @@ export default {
       const applicationId = data.applicationId;
 
       await context.dispatch('update', { data: { status: STATUS.WITHDRAWN }, id: applicationId });
+      copyToQTFirestore('applications', applicationId);
 
       //  If IAs has started ensure relevant assessments documents are removed (soft deleted)
       context.dispatch('assessment/delete', { id: applicationId }, { root: true });
