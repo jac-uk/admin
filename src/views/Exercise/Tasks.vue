@@ -23,19 +23,6 @@ export default {
     const exercise = this.$store.state.exerciseDocument.record;
     const path = `/exercise/${exercise.id}/tasks`;
     const sideNavigation = [];
-    sideNavigation.push({
-      title: 'Qualifying Tests',
-      path: `${path}/qualifying-tests`,
-      params: {
-        nav: '/tasks/qualifying-tests', // TODO check this is needed
-      },
-    });
-    if (exercise.equalMeritSecondStageStartDate) {
-      sideNavigation.push({
-        title: 'Equal Merit Tie-breakers',
-        path: `${path}/equal-merit-tie-breakers`,
-      });
-    }
     if (isProcessing(exercise)) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
