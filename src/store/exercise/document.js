@@ -5,6 +5,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { APPLICATION_STEPS, exerciseApplicationParts, configuredApplicationParts } from '@/helpers/exerciseHelper';
+import copyToQTFirestore from '../../helpers/copyToQTFirestore';
 
 const collection = firestore.collection('exercises');
 
@@ -35,6 +36,7 @@ export default {
           return exerciseRef.id;
         });
       }).then((newId) => {
+        copyToQTFirestore('exercises', newId);
         return dispatch('bind', newId);
       });
     },
@@ -63,7 +65,9 @@ export default {
           saveData['_applicationContent'] = applicationContentAfter;
         }
       }
-      await collection.doc(state.record.id).update(saveData);
+      const id = state.record.id;
+      await collection.doc(id).update(saveData);
+      copyToQTFirestore('exercises', id);
     },
     submitForApproval: async ({ state }) => {
       const id = state.record.id;
@@ -72,6 +76,7 @@ export default {
         state: 'ready',
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     approve: async ({ state }) => {
       const id = state.record.id;
@@ -80,6 +85,7 @@ export default {
         state: 'approved',
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     unlock: async ({ state }) => {
       const id = state.record.id;
@@ -88,6 +94,7 @@ export default {
         state: 'draft',
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     publish: async ({ state }) => {
       const id = state.record.id;
@@ -96,6 +103,7 @@ export default {
         published: true,
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     unpublish: async ({ state }) => {
       const id = state.record.id;
@@ -104,6 +112,7 @@ export default {
         published: false,
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     addToFavourites: async ({ state }, userId) => {
       const id = state.record.id;
@@ -112,6 +121,7 @@ export default {
         favouriteOf: firebase.firestore.FieldValue.arrayUnion(userId),
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     removeFromFavourites: async ({ state }, userId) => {
       const id = state.record.id;
@@ -120,10 +130,13 @@ export default {
         favouriteOf: firebase.firestore.FieldValue.arrayRemove(userId),
       };
       await ref.update(data);
+      copyToQTFirestore('exercises', id);
     },
     refreshApplicationCounts: async ({ state }) => {
       if (state.record) {
-        await functions.httpsCallable('refreshApplicationCounts')({ exerciseId: state.record.id });
+        const id = state.record.id;
+        await functions.httpsCallable('refreshApplicationCounts')({ exerciseId: id });
+        copyToQTFirestore('exercises', id);
       }
     },
   },

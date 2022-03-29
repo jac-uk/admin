@@ -26,5 +26,21 @@ const firestore = firebase.firestore();
 // Other firebase exports
 const auth = firebase.auth;
 
-export { firestore, auth, functions };
+// Initialise QT Firestore
+const qtApp = firebase.initializeApp({
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,     // NOT the QT admin app
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,   // NOT the QT admin app
+  authDomain: process.env.VUE_APP_QT_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP_QT_FIREBASE_DATABASE_URL,
+  projectId: process.env.VUE_APP_QT_FIREBASE_PROJECT_ID,
+  // storageBucket: process.env.VUE_APP_QT_FIREBASE_STORAGE_BUCKET,
+  // messagingSenderId: process.env.VUE_APP_QT_FIREBASE_MESSAGING_SENDER_ID,
+  // clientID: '331668555200-k1v4oguqklfo0pdvrpdvb47mh1fgvcki.apps.googleusercontent.com',
+}, 'qtAdmin');
+const qtFirestore = qtApp.firestore();
+
+// Get the authentication service for the QT firestore
+const qtAuth = firebase.auth(qtApp);
+
+export { firestore, auth, functions, qtFirestore, qtAuth };
 export default firebase;
