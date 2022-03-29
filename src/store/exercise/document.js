@@ -132,9 +132,7 @@ export default {
   },
   getters: {
     id: (state) => {
-      if (state.record === null) return null;
-
-      return state.record.id;
+      return state.record === null ? null : state.record.id;
     },
     data: (state) => (objectToPopulate) => {
       const data = clone(state.record);
