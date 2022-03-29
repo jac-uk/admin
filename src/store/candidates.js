@@ -2,6 +2,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import copyToQTFirestore from '../helpers/copyToQTFirestore';
 
 const collection = firestore.collection('candidates');
 
@@ -62,6 +63,7 @@ export default {
     savePersonalDetails: async (context, { data, id }) => {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.set(data, { merge: true });
+      copyToQTFirestore(`candidates/${id}/documents`, 'personalDetails');
     },
   },
   mutations: {
