@@ -327,10 +327,9 @@ export default {
     Modal,
     SubmissionExtension,
     Notes,
-    InformationReviewRenderer,
     PageNotFound,
+    InformationReviewRenderer,
     CharacterChecks,
-    // summaries
     PersonalDetailsSummary,
     CharacterInformationSummary,
     EqualityAndDiversityInformationSummary,
