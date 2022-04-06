@@ -151,6 +151,12 @@
       >
         Unlock
       </button>
+      <ActionButton
+        v-if="isApproved"
+        @click="copyToClipboard"
+      >
+        Copy to Clipboard
+      </ActionButton>
       <br>
       <ActionButton
         v-if="isReadyForProcessing"
@@ -234,7 +240,7 @@ export default {
       return isApproved(this.exercise);
     },
     isProcessing() {
-      return isProcessing(this.exercise);
+      return this.isApproved && isProcessing(this.exercise);
     },
     isReadyForProcessing() {
       return this.isApproved && !this.isProcessing;
@@ -315,6 +321,15 @@ export default {
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
+    },
+    async copyToClipboard() {
+      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+      await this.$store.dispatch('clipboard/write', {
+        environment: this.$store.getters.appEnvironment,
+        type: 'exercise',
+        title: `${exercise.referenceNumber} ${exercise.name}`,
+        content: exercise,
+      });
     },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');

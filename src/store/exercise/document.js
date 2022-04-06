@@ -18,6 +18,10 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
+    getDocumentData: async (context, id) => {
+      const docRef = await collection.doc(id).get();
+      return docRef.data();
+    },
     create: async ({ rootState, dispatch }, data) => {
       const metaRef = firestore.collection('meta').doc('stats');
       return firestore.runTransaction((transaction) => {
@@ -28,9 +32,11 @@ export default {
           data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
           data.progress = { started: true };
           data.state = 'draft';
+          data.published = false;
           data._applicationVersion = 2;
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
           transaction.set(exerciseRef, data);
           return exerciseRef.id;
         });
