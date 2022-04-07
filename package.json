@@ -19,9 +19,9 @@
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
     "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
-    "deploy-service-offline:develop": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:develop-admin-app -P develop",
-    "deploy-service-offline:staging": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:staging-admin-app -P staging",
-    "deploy-service-offline:production": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:production-admin-app -P production"
+    "develop:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:develop-admin-app -P develop",
+    "staging:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:staging-admin-app -P staging",
+    "production:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:production-admin-app -P production"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
