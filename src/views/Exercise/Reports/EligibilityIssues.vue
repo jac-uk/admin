@@ -37,8 +37,12 @@
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
-        :search="['candidate.fullName']"
         :page-size="10"
+        :custom-search="{
+          placeholder: 'Search candidate names',
+          handler: candidateSearch,
+          field: 'candidate.id',
+        }"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -152,16 +156,22 @@ export default {
         .where('exercise.id', '==', this.exercise.id)
         .where('flags.eligibilityIssues', '==', true);
       firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
-      this.unsubscribe = firestoreRef
-        .onSnapshot((snap) => {
-          const applicationRecords = [];
-          snap.forEach((doc) => {
-            applicationRecords.push(vuexfireSerialize(doc));
+      if (firestoreRef) {
+        this.unsubscribe = firestoreRef
+          .onSnapshot((snap) => {
+            const applicationRecords = [];
+            snap.forEach((doc) => {
+              applicationRecords.push(vuexfireSerialize(doc));
+            });
+            this.applicationRecords = applicationRecords;
           });
-          this.applicationRecords = applicationRecords;
-        });
+      } else {
+        this.applicationRecords = [];
+      }
     },
-
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
     async gatherReportData() {
 
       this.generatingExport = true;
