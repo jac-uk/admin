@@ -73,7 +73,7 @@
     "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^4.44.1"
+    "webpack": "^5.72.0"
   },
   "peerDependencies": {
     "postcss": "8.2.15"
