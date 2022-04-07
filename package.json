@@ -22,9 +22,9 @@
     "lint-ci": "vue-cli-service lint --no-fix",
     "test": "vue-cli-service test:unit",
     "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
-    "develop:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:develop-admin-app -P develop",
-    "staging:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:staging-admin-app -P staging",
-    "production:deploy-service-offline": "rm -rf dist; mkdir dist; cp service-offline/index.html dist/index.html; firebase deploy --only hosting:production-admin-app -P production"
+    "develop:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:develop-admin-app -P develop",
+    "staging:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:staging-admin-app -P staging",
+    "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
@@ -73,7 +73,7 @@
     "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^5.72.0"
+    "webpack": "^4.44.1"
   },
   "peerDependencies": {
     "postcss": "8.2.15"
