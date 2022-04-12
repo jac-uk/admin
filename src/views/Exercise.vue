@@ -127,6 +127,7 @@ export default {
         if (this.hasPermissions([this.PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value])) {
           subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
         }
+        subNavigation.push({ path: `${path}/merit-list`, title: 'Merit List' });
       }
       return subNavigation;
     },
