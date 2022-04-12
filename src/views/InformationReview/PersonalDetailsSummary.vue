@@ -98,7 +98,7 @@
               :edit="editable"
               :application-id="userId"
               :data="hasPersonalDetails ? personalDetails.email : ''"
-              type="route"
+              type="email"
               field="email"
               @changeField="changeUserDetails"
             />

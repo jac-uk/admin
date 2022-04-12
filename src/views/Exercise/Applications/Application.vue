@@ -312,7 +312,6 @@ import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-
 import {
   isLegal,
   isNonLegal,
@@ -328,10 +327,9 @@ export default {
     Modal,
     SubmissionExtension,
     Notes,
-    InformationReviewRenderer,
     PageNotFound,
+    InformationReviewRenderer,
     CharacterChecks,
-    // summaries
     PersonalDetailsSummary,
     CharacterInformationSummary,
     EqualityAndDiversityInformationSummary,

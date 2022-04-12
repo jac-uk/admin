@@ -22,10 +22,17 @@
           class="govuk-!-padding-top-1"
         >
           <div
+            v-if="key != 'endDate' || edit"
             class="govuk-summary-list govuk-!-margin-bottom-0"
           >
             <dt
-              v-if="key != 'taskDetails' && key != 'details'"
+              v-if="key == 'startDate' && !edit"
+              class="govuk-summary-list__key"
+            >
+              Dates
+            </dt>
+            <dt
+              v-if="key != 'taskDetails' && key != 'details' && key != 'startDate' || (edit && key == 'startDate' && showDateRange)"
               class="govuk-summary-list__key"
             >
               {{ key | lookup }}
@@ -36,6 +43,7 @@
             >
               Details
             </dt>
+
             <dd
               v-else-if="key === 'taskDetails'"
               class="govuk-summary-list__value"
@@ -122,6 +130,7 @@
                 </div>
               </div>
             </dd>
+
             <dd
               v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails')"
               class="govuk-summary-list__value"
@@ -187,8 +196,9 @@
                 </div>
               </template>
             </dd>
+
             <dd
-              v-else-if="key === 'date' || key.search('Date') > 0"
+              v-else-if="key === 'date' || (key == 'startDate' && showDateRange && edit) || (key === 'endDate' && edit)"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -196,11 +206,20 @@
                 :field="field"
                 :edit="edit"
                 :index="index"
+                :display-month-year-only="displayMonthYearOnly"
                 type="date"
                 :extension="key"
                 @changeField="changeField"
               />
             </dd>
+            
+            <dd
+              v-else-if="(key == 'startDate' && showDateRange && !edit)"
+              class="govuk-summary-list__value"
+            >
+              {{ `${formattedRange(index)}` }}
+            </dd>
+
             <dd
               v-else-if="key === 'details'"
               class="govuk-summary-list__value"
@@ -215,6 +234,7 @@
                 @changeField="changeField"
               />
             </dd>
+
             <dd
               v-else-if="key != 'taskDetails'"
               class="govuk-summary-list__value"
@@ -295,6 +315,10 @@ export default {
       type: Array,
       default: () => null,
     },
+    displayMonthYearOnly: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data() {
     return {
@@ -302,6 +326,9 @@ export default {
     };
   },
   computed: {
+    showDateRange() {
+      return Object.keys(this.dataDefault).includes('startDate') && Object.keys(this.dataDefault).includes('endDate') || !this.edit;
+    },
     hasData() {
       if (this.data && this.data.length) {
         if (this.data.length === 1 && _.isEmpty(this.data[0])) {
@@ -313,6 +340,15 @@ export default {
     },
   },
   methods: {
+    formattedRange(index) {
+      let result = 'No answer provided';
+      if (this.data[index].startDate && this.data[index].endDate) {
+        result = `${this.displayDate(this.data[index].startDate)} - ${this.displayDate(this.data[index].endDate)}`;
+      } else if (this.data[index].startDate && !this.data[index].endDate) {
+        result = `${this.displayDate(this.data[index].startDate)} - Ongoing`;
+      }
+      return result;
+    },
     displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
     },
