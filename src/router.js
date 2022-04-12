@@ -50,7 +50,6 @@ import ExerciseApplication from '@/views/Exercise/Applications/Application';
 // Exercise reports
 import ExerciseReports from '@/views/Exercise/Reports';
 import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
-import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
 import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom';
 import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
 import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
@@ -65,6 +64,9 @@ import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReport
 import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
 import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
+
+// Merit list
+import ExerciseMeritList from '@/views/Exercise/MeritList';
 
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
@@ -1017,6 +1019,14 @@ const router = new Router({
           ],
         },
         {
+          path: 'merit-list',
+          component: ExerciseMeritList,
+          meta: {
+            requiresAuth: true,
+            title: 'Merit List',
+          },
+        },
+        {
           path: 'reports',
           component: ExerciseReports,
           children: [
@@ -1030,14 +1040,6 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Diversity | Exercise Reports',
-              },
-            },
-            {
-              path: 'merit-list',
-              component: ExerciseReportsMeritList,
-              meta: {
-                requiresAuth: true,
-                title: 'Merit List | Exercise Reports',
               },
             },
             {
