@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div
+      <!-- <div
         v-if="exercise"
         class="govuk-grid-row"
       >
@@ -47,12 +47,18 @@
             </h2>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div
       class="govuk-grid-column-full"
     >
+      <TabsList
+        class="print-none"
+        :tabs="tabs"
+        :active-tab.sync="activeTab"
+      />
+
       <!-- SCORE SHEET -->
       <div v-show="hasScoreSheet">
         <Table
@@ -70,8 +76,9 @@
               <th
                 v-if="emptyScoreSheet.sift"
                 scope="col"
-                :colspan="capabilities.length"
+                :colspan="showDetail.sift ? capabilities.length : 1"
                 class="govuk-table__header text-center"
+                @click="showDetail.sift = !showDetail.sift"
               >
                 Sift
               </th>
@@ -80,20 +87,21 @@
                   v-for="category in selectionCategories"
                   :key="category"
                   scope="col"
-                  :colspan="capabilities.length"
+                  :colspan="showDetail.selection[category] ? capabilities.length : 1"
                   class="govuk-table__header text-center"
+                  @click="showDetail.selection[category] = !showDetail.selection[category]"
                 >
-                  {{ category | lookup }}
+                  <span class="elipses">{{ category | lookup }}</span>
                 </th>
               </template>
             </tr>
           </template>
           <template #row="{row}">
             <TableCell class="table-cell-application">
-              {{ row.referenceNumber }}
+              <a href="#" class="govuk-link">{{ row.referenceNumber }}</a>
             </TableCell>
 
-            <template v-if="row.scoreSheet.sift">
+            <template v-if="row.scoreSheet.sift && showDetail.sift">
               <TableCell
                 v-for="(cap, index) in capabilities"
                 :key="`sift_${index}`"
@@ -102,18 +110,35 @@
                 {{ row.scoreSheet.sift.scoreSheet[cap] }}
               </TableCell>
             </template>
+            <template v-else-if="row.scoreSheet.sift && !showDetail.sift">
+              <TableCell
+                class="text-center table-cell-score"
+              >
+                {{ row.scoreSheet.sift.scoreSheet[capabilities[capabilities.length - 1]] }}
+              </TableCell>
+            </template>
 
             <template v-if="row.scoreSheet.selection">
               <template
                 v-for="category in selectionCategories"
               >
-                <TableCell
-                  v-for="(cap, index) in capabilities"
-                  :key="`${category}_${index}`"
-                  class="text-center table-cell-score"
-                >
-                  {{ row.scoreSheet.selection.scoreSheet[category][cap] }}
-                </TableCell>
+                <template v-if="showDetail.selection[category]">
+                  <TableCell
+                    v-for="(cap, index) in capabilities"
+                    :key="`${category}_${index}`"
+                    class="text-center table-cell-score"
+                  >
+                    {{ row.scoreSheet.selection.scoreSheet[category][cap] }}
+                  </TableCell>
+                </template>
+                <template v-else>
+                  <TableCell
+                    :key="category"
+                    class="text-center table-cell-score"
+                  >
+                    {{ row.scoreSheet.selection.scoreSheet[category][capabilities[capabilities.length - 1]] }}
+                  </TableCell>
+                </template>
               </template>
             </template>
           </template>
@@ -127,16 +152,46 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 
 export default {
   components: {
     Table,
     TableCell,
+    TabsList,
   },
   data() {
     return {
       panelsLoaded: false,
       scoreSheetRows: [],
+      showDetail: {
+        sift: false,
+        selection: {
+          leadership: false,
+          roleplay: false,
+          interview: false,
+          overall: false,
+        },
+      },
+      tabs: [
+        {
+          ref: 'shortlisted',
+          title: 'Shortlisted',
+        },
+        {
+          ref: 'selected',
+          title: 'Selected',
+        },
+        {
+          ref: 'recommended',
+          title: 'Recommended',
+        },
+        {
+          ref: 'handover',
+          title: 'Handover',
+        },
+      ],
+      activeTab: 'selected',
     };
   },
   computed: {
@@ -166,13 +221,20 @@ export default {
       if (!this.hasScoreSheet) return columns;
       columns.push({ title: 'Application', class: 'table-cell-application' });
       if (this.emptyScoreSheet.sift) {
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        if (this.showDetail.sift) {
+          this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        } else {
+          columns.push({ title: this.capabilities[this.capabilities.length - 1], class: 'text-center table-cell-score' });
+        }
       }
       if (this.emptyScoreSheet.selection) {
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+        this.selectionCategories.forEach(category => {
+          if (this.showDetail.selection[category]) {
+            this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+          } else {
+            columns.push({ title: this.capabilities[this.capabilities.length - 1], class: 'text-center table-cell-score' });
+          }
+        });
       }
       return columns;
     },
@@ -197,6 +259,21 @@ export default {
   destroyed() {
   },
   methods: {
+    displayedCapabilities(ref) {  // TODO this is a little bit clunky as we are hardcoding 'sift'
+      if (ref === 'sift') {
+        if (this.showDetail.sift) {
+          return this.capabilities;
+        } else {
+          return this.capabilities[this.capabilities.length - 1];
+        }
+      } else {
+        if (this.showDetail.selection[ref]) {
+          return this.capabilities;
+        } else {
+          return this.capabilities[this.capabilities.length - 1];
+        }
+      }
+    },
     onChangeScoreSheet() {
       console.log('update score sheet view');
       if (this.$refs['scoreSheet']) {
@@ -263,12 +340,16 @@ export default {
   table {
     display: block;
     overflow-x: auto;
+    overflow-y: auto;
     scroll-behavior: smooth;
     max-width: 100%;
+    max-height: 80vh;
     margin: 0 !important;
     border-spacing: 0;
     table-layout: fixed;
     border-collapse: collapse;
+    border-right: 1px solid #f3f2f1;
+    border-left: 1px solid #f3f2f1;
   }
   tbody {
     white-space: nowrap;
@@ -284,6 +365,28 @@ export default {
     position: sticky;
     left: 0;
     background-color: #f3f2f1;
+    z-index:1;
+  }
+  tr:first-child > th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+    border: 0;
+  }
+  tr:nth-child(2) > th {
+    position: sticky;
+    top: 46px;
+    background-color: #f3f2f1;
+    z-index: 2;
+  }
+  tr:first-child > th:first-child,
+  tr:nth-child(2) > th:first-child {
+    z-index: 3;
+  }
+  tr > th:last-child,
+  tr > td:last-child {
+    padding-right: 10px;
   }
   .table-cell {
     padding: 0 10px;
@@ -297,6 +400,11 @@ export default {
     padding: 0 10px;
     text-align: center;
   }
-
+  .elipses {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;  // IE 6+, FF 7+, Op 11+, Saf 1.3+, Chr 1+
+    -o-text-overflow: ellipsis;  // for Opera 9 & 10
+  }
 }
 </style>

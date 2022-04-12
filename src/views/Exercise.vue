@@ -117,6 +117,7 @@ export default {
       }
       if (this.isProcessing) {
         subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
+        subNavigation.push({ path: `${path}/merit-list`, title: 'Merit List' });
         subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
       }
       return subNavigation;
