@@ -19,7 +19,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.criminalOffences === true || edit"
+          v-if="formData.criminalOffences === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -51,7 +51,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.nonMotoringFixedPenaltyNotices === true || edit"
+          v-if="formData.nonMotoringFixedPenaltyNotices === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -83,7 +83,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.drivingDisqualificationDrinkDrugs === true || edit"
+          v-if="formData.drivingDisqualificationDrinkDrugs === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -115,7 +115,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.endorsementsOrMotoringFixedPenalties === true || edit"
+          v-if="formData.endorsementsOrMotoringFixedPenalties === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -147,7 +147,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.declaredBankruptOrIVA === true || edit"
+          v-if="formData.declaredBankruptOrIVA === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -179,7 +179,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.lateTaxReturnOrFined === true || edit"
+          v-if="formData.lateTaxReturnOrFined === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -211,7 +211,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.involvedInProfessionalMisconduct === true || edit"
+          v-if="formData.involvedInProfessionalMisconduct === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -243,7 +243,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.diciplinaryActionOrAskedToResign === true || edit"
+          v-if="formData.diciplinaryActionOrAskedToResign === true"
         >
           <hr>
           <InformationReviewSectionRenderer
@@ -275,7 +275,7 @@
           @changeField="changeCharacterFlag"
         />
         <div
-          v-if="formData.otherCharacterIssues === true || edit"
+          v-if="formData.otherCharacterIssues === true"
         >
           <hr>
           <InformationReviewSectionRenderer
