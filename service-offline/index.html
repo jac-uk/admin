@@ -1,12 +1,67 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>JAC SERVICE OFFLINE</title>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-</head>
-<body>
-  This service is currently offline.
-</body>
+<html lang="en" class="govuk-template ">
+  <head>
+    <style>
+      .govuk-header {
+        background: #fafafa !important;
+      }
+      .govuk-header__container {
+        border-bottom: 0 !important;
+      }
+    </style>
+    <title>Service Offline | Judicial Appointments Commission</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!--[if !IE 8]><!-->
+      <link rel="stylesheet" href="./stylesheets/govuk-frontend-4.0.1.min.css">
+    <!--<![endif]-->
+    <!--[if IE 8]>
+      <link rel="stylesheet" href="./stylesheets/govuk-frontend-ie8-4.0.1.min.css">
+    <![endif]-->
+  </head>
+  <body class="govuk-template__body ">
+    <script>
+      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
+        <header class="govuk-header">
+          <div class="govuk-header__container govuk-!-margin-bottom-1 govuk-width-container">
+            <div class="header-background clearfix">
+              <div class="govuk-grid-column-two-thirds organisation__margin-bottom">
+                <div class="gem-c-organisation-logo brand--ministry-of-justice">
+                  <a href="https://judicialappointments.gov.uk/">
+                    <img src="./assets/images/jac-logo.svg" alt="Judicial Appointments Commission" width="197" height="66" style="text-align: center;">
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <h1 class="govuk-heading-l">The Judicial Appointments Commission vacancy platform is currently inaccessible.</h1>
+              <h2 class="govuk-heading-m">
+                We are working to get the platform back online.
+              </h2>
+              <p class="govuk-body">
+                If you have queries about any specific roles, including about your application, please contact enquiries@judicialappointments.gov.uk.
+                <br>
+                You can access the Judicial Appointments Commission website here: 
+                <a href="https://judicialappointments.gov.uk/">
+                  https://judicialappointments.gov.uk/
+                </a>
+                <br>
+                The website has guidance on how to prepare for the selection exercise process, but information about  specific vacancies cannot currently be accessed via the website. 
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+      <footer>
+      </footer>
+    <script src="./javascript/govuk-frontend-4.0.1.min.js"></script>
+    <script>
+      window.GOVUKFrontend.initAll()
+    </script>
+  </body>
 </html>
