@@ -54,6 +54,7 @@
       <Notes
         title="Notes about the Candidate"
         :candidate-id="getUserId"
+        :can-create="hasPermission(PERMISSIONS.candidates.permissions.canAddNotesToCandidates.value)"
       />
     </div>
 
@@ -80,6 +81,7 @@ import CharacterInformationSummary from '@/views/InformationReview/CharacterInfo
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -93,6 +95,7 @@ export default {
   },
   data() {
     return {
+      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [
@@ -158,6 +161,9 @@ export default {
     this.$store.dispatch('candidates/unbindDocs');
   },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     makeFullName(obj) {
       if (obj.firstName && this.personalDetails.lastName) {
         obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;

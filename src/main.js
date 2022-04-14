@@ -39,7 +39,7 @@ Object.keys(localFilters)
   });
 
 let vueInstance = false;
-auth().onAuthStateChanged((user) => {
+auth().onAuthStateChanged(async (user) => {
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
   // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines
@@ -51,15 +51,25 @@ auth().onAuthStateChanged((user) => {
   // Bind Firebase auth state to the vuex auth state store
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
-    user.getIdTokenResult()
-      .then(async (idTokenResult) => {
-        if (idTokenResult.claims && idTokenResult.claims.r) {
-          await functions.httpsCallable('adminSyncUserRolePermissions')();
+    try {
+      const idTokenResult = await user.getIdTokenResult();
+      // Get user role
+      const userRoleId = idTokenResult.claims.r;
+      if (userRoleId) {
+        const roles = await functions.httpsCallable('adminGetUserRoles')();
+        if (roles && roles.data) {
+          const role = roles.data.find(role => role.id === userRoleId);
+          const userRole = {
+            id: role.id,
+            enabledPermissions: role.enabledPermissions,
+            roleName: role.roleName,
+          };
+          store.dispatch('auth/setUserRole', userRole);
         }
-      })
-      .catch(() => {
-        // console.log(error);
-      });
+      }
+    } catch (error) {
+      // console.error(error);
+    }
     if (window.location.pathname == '/sign-in') {
       router.push('/');
     }

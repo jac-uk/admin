@@ -5,11 +5,15 @@ const module = {
   namespaced: true,
   state: {
     currentUser: null,
+    userRole: null,
     authError: null,
   },
   mutations: {
     setCurrentUser(state, user) {
       state.currentUser = user;
+    },
+    setUserRole(state, role) {
+      state.userRole = role;
     },
     setAuthError(state, message) {
       state.authError = message;
@@ -74,6 +78,12 @@ const module = {
         }
       }
     },
+    setUserRole({ commit }, userRole) {
+      commit('setUserRole', userRole);
+    },
+    hasPermission({ state }, permission) {
+      return state.userRole.enabledPermissions.includes(permission);
+    },
   },
   getters: {
     isSignedIn(state) {
@@ -81,6 +91,9 @@ const module = {
     },
     getEmail(state) {
       return state.currentUser.email;
+    },
+    hasPermission: state => permission => {
+      return state.userRole.enabledPermissions.includes(permission);
     },
   },
 };

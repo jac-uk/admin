@@ -138,7 +138,7 @@
         Submit for Approval
       </button>
       <button
-        v-if="isReadyForApproval"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canApproveExercise.value) && isReadyForApproval"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
@@ -193,6 +193,7 @@ import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -200,6 +201,11 @@ export default {
     ActionButton,
     Modal,
     ChangeExerciseState,
+  },
+  data() {
+    return {
+      PERMISSIONS,
+    };
   },
   computed: {
     exercise() {
@@ -313,6 +319,9 @@ export default {
     },
   },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     submitForApproval() {
       this.$store.dispatch('exerciseDocument/submitForApproval');
     },

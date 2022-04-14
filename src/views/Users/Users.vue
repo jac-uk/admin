@@ -59,6 +59,7 @@
             </td>
             <td class="govuk-table__cell">
               <select
+                v-if="hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
                 v-model="user.customClaims.r"
                 class="govuk-select govuk-!-margin-right-3"
                 @change="setUserRole(user)"
@@ -72,10 +73,18 @@
                 </option>
               </select>
               <ActionButton
-                :type="user.disabled ? 'primary' : 'secondary'"
+                v-if="user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
+                type="primary"
                 @click="toggleDisableUser(user.uid, userIndex)"
               >
-                {{ user.disabled ? 'Enable user' : 'Disable user' }}
+                Enable user
+              </ActionButton>
+              <ActionButton
+                v-if="!user.disabled"
+                type="secondary"
+                @click="toggleDisableUser(user.uid, userIndex)"
+              >
+                Disable user
               </ActionButton>
             </td>
           </tr>
@@ -139,100 +148,25 @@
                 </div>
               </div>
             </div>
-            <div v-if="role">
+            <div v-if="role" ref="role">
               <h1>{{ role.roleName }}</h1>
 
-              <h2>Database</h2>
-              <div>
+              <div
+                v-for="(value, key) in PERMISSIONS"
+                :key="key"
+              >
+                <h2>{{ value.label }}</h2>
                 <Checkbox
-                  id="canCreate"
-                  v-model="permissions.canCreate"
+                  v-for="(subValue, subKey) in value.permissions"
+                  :id="subKey"
+                  :key="subKey"
+                  v-model="permissions[subKey]"
                 >
-                  Can create
-                </Checkbox>
-
-                <Checkbox
-                  id="canUpdate"
-                  v-model="permissions.canUpdate"
-                >
-                  Can update
-                </Checkbox>
-
-                <Checkbox
-                  id="canDelete"
-                  v-model="permissions.canDelete"
-                >
-                  Can delete
+                  {{ subValue.label }}
                 </Checkbox>
               </div>
-              <h2>Users</h2>
-              <div>
-                <Checkbox
-                  id="canEnableUsers"
-                  v-model="permissions.canEnableUsers"
-                >
-                  Can enable users
-                </Checkbox>
-                <Checkbox
-                  id="canChangeUserRole"
-                  v-model="permissions.canChangeUserRole"
-                >
-                  Can change user role
-                </Checkbox>
-                <Checkbox
-                  id="canEditRolePermissions"
-                  v-model="permissions.canEditRolePermissions"
-                >
-                  Can edit role permissions
-                </Checkbox>
-              </div>
-              <h2>Exercises</h2>
-              <div>
-                <Checkbox
-                  id="canApproveExercise"
-                  v-model="permissions.canApproveExercise"
-                >
-                  Can approve exercise
-                </Checkbox>
 
-                <Checkbox
-                  id="canAddNotesToExercise"
-                  v-model="permissions.canAddNotesToExercise"
-                >
-                  Can add notes to exercise
-                </Checkbox>
-
-                <Checkbox
-                  id="canResetExercise"
-                  v-model="permissions.canResetExercise"
-                >
-                  Can reset exercise
-                </Checkbox>
-
-                <Checkbox
-                  id="canAmendAfterLaunch"
-                  v-model="permissions.canAmendAfterLaunch"
-                >
-                  Can amend after launch
-                </Checkbox>
-              </div>
-              <h2>Candidates</h2>
-              <div>
-                <Checkbox
-                  id="canViewAllCandidates"
-                  v-model="permissions.canViewAllCandidates"
-                >
-                  Can view all candidates
-                </Checkbox>
-
-                <Checkbox
-                  id="canAddNotesToCandidates"
-                  v-model="permissions.canAddNotesToCandidates"
-                >
-                  Can add notes to candidates
-                </Checkbox>
-              </div>
-              <div>
+              <div v-if="hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value)">
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
@@ -308,6 +242,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -321,6 +256,7 @@ export default {
   },
   data() {
     return {
+      PERMISSIONS,
       loaded: false,
       loadFailed: false,
       users: [],
@@ -389,8 +325,20 @@ export default {
       throw e;
     }
   },
-
+  updated() {
+    const canEditRolePermissions = this.hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value);
+    if (!canEditRolePermissions) {
+      const roleRef = this.$refs.role;
+      if (roleRef) {
+        const inputs = roleRef.querySelectorAll('input');
+        inputs && inputs.forEach(input => input.disabled = true);
+      }
+    }
+  },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     async getRoles() {
       const roles = await functions.httpsCallable('adminGetUserRoles')();
       this.roles = roles.data;

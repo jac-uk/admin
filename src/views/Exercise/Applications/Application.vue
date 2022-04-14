@@ -276,6 +276,7 @@
             title="Notes about the Application"
             :candidate-id="application.userId"
             :application-id="applicationId"
+            :can-create="hasPermission(PERMISSIONS.exercises.permissions.canAddNotesToExercise.value)"
           />
         </div>
       </div>
@@ -318,6 +319,7 @@ import {
   hasStatementOfSuitability,
   hasIndependentAssessments
 } from '@/helpers/exerciseHelper';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -341,6 +343,7 @@ export default {
   },
   data() {
     return {
+      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [
@@ -513,6 +516,9 @@ export default {
     this.$store.dispatch('application/unbind');
   },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     async pageLoad() {
       this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {

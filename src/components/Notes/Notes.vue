@@ -20,6 +20,7 @@
       </h2>
 
       <button
+        v-if="canCreate"
         class="govuk-button"
         @click="btnClickAddNote"
       >
@@ -72,6 +73,10 @@ export default {
     title: {
       type: String,
       default: 'Notes',
+    },
+    canCreate: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
