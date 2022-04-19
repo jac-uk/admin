@@ -20,7 +20,7 @@ export default {
     bindApplications: firestoreAction(({ bindFirestoreRef, state }, params) => {
       let firestoreRef = firestore.collection('applicationRecords')
         .where('exercise.id', '==', params.exerciseId)
-        .where(`panelIds.${params.type}`, '==', params.panelId);
+        .where(`${params.type}.panelId`, '==', params.panelId);
       firestoreRef = tableQuery(state.applications, firestoreRef, params);
       return bindFirestoreRef('applications', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -56,7 +56,7 @@ export default {
       applicationIds.forEach(applicationId => {
         const ref = firestore.collection('applicationRecords').doc(applicationId);
         const data = {};
-        data[`panelIds.${context.state.record.type}`] = '';
+        data[`${context.state.record.type}.panelId`] = null;
         batch.update(ref, data);
       });
       await batch.commit();

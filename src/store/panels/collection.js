@@ -21,9 +21,25 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    bindApplicationsWithoutPanels: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = firestore.collection('applicationRecords')
+        .where('exercise.id', '==', params.exerciseId)
+        .where('stage', '==', params.stage)
+        .where('active', '==', true)
+        .where(`${params.type}.panelId`, '==', null);
+      if (params.status) {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+      }
+      firestoreRef = tableQuery(state.applicationsWithoutPanels, firestoreRef, params);
+      return bindFirestoreRef('applicationsWithoutPanels', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindApplicationsWithoutPanels: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('applicationsWithoutPanels');
+    }),
   },
   state: {
     records: [],
+    applicationsWithoutPanels: [],
   },
   getters: { },
 };

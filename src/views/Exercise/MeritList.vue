@@ -2,7 +2,7 @@
   <div>
     <!-- diversity header -->
     <div class="govuk-grid-column-full">
-      <div class="moj-page-header-actions">
+      <div class="moj-page-header-actions govuk-!-margin-bottom-3">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
             Merit List
@@ -54,6 +54,7 @@
       class="govuk-grid-column-full"
     >
       <TabsList
+        v-if="false"
         class="print-none"
         :tabs="tabs"
         :active-tab.sync="activeTab"
@@ -153,6 +154,7 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import { CAPABILITIES, SELECTION_CATEGORIES, emptyScoreSheet } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -199,13 +201,14 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     capabilities() {
-      return this.$store.getters['exerciseDocument/capabilities'];
+      if (!this.exercise) return [];
+      return CAPABILITIES.filter(cap => this.exercise.capabilities.indexOf(cap) >= 0);
     },
     selectionCategories() {
-      return this.$store.getters['exerciseDocument/selectionCategories'];
+      return SELECTION_CATEGORIES;
     },
     emptyScoreSheet() {
-      return this.$store.getters['exerciseDocument/emptyScoreSheet']();
+      return emptyScoreSheet({ capabilities: this.capabilities });
     },
     panels() {
       return this.$store.state.panels.records;
@@ -292,7 +295,7 @@ export default {
           if (!applicationsMap[applicationId]) {
             applicationsMap[applicationId] = {
               referenceNumber: panel.applications[applicationId].referenceNumber,
-              scoreSheet: this.$store.getters['exerciseDocument/emptyScoreSheet'](),
+              scoreSheet: emptyScoreSheet({ capabilities: this.capabilities }),
             };
           }
         });

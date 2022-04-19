@@ -3,6 +3,7 @@
     :id="id"
     @save="save"
     @cancel="cancel"
+    @delete="remove"
   >
     <TextField
       id="panel-name"
