@@ -149,32 +149,5 @@ export default {
         return data;
       }
     },
-    capabilities: () => {
-      const data = ['L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
-      return data;
-    },
-    grades: () => {
-      return ['A', 'B', 'C', 'D'];
-    },
-    selectionCategories: () => {
-      return ['leadership', 'roleplay', 'interview', 'overall'];
-    },
-    emptyScoreSheet: (state, getters) => (type) => {
-      const capabilities = getters.capabilities;
-      const fullScoreSheet = clone({
-        sift: {
-          scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-        },
-        selection: {
-          scoreSheet: {
-            leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-            roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-            interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-            overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
-           },
-        },
-      });
-      return type ? fullScoreSheet[type] : fullScoreSheet;
-    },
   },
 };

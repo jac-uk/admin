@@ -23,6 +23,11 @@ unselectedApplicationParts,
 
 export {
   APPLICATION_STEPS,
+  CAPABILITIES,
+  GRADES,
+  GRADE_VALUES,
+  SELECTION_CATEGORIES,
+  emptyScoreSheet,
   exerciseStates,
   applicationContentSteps,
   configuredApplicationContentSteps,
@@ -99,6 +104,38 @@ const APPLICATION_PARTS = [
   'selfAssessmentCompetencies',
   'additionalInfo',
 ];
+
+const CAPABILITIES = ['L', 'EJ', 'L&J', 'PQ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
+const GRADES = ['A', 'B', 'C', 'D'];
+const GRADE_VALUES = {
+  'A': 4,
+  'B': 3,
+  'C': 2,
+  'D': 1,
+};
+const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
+
+// merit list helpers
+function emptyScoreSheet({ type, selectedCapabilities }) {
+  let capabilities = CAPABILITIES;
+  if (selectedCapabilities) {
+    capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
+  }
+  const fullScoreSheet = {
+    sift: {
+      scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+    },
+    selection: {
+      scoreSheet: {
+        leadership: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+        roleplay: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+        interview: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+        overall: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),
+      },
+    },
+  };
+  return type ? fullScoreSheet[type] : fullScoreSheet;
+}
 
 // application helpers
 function applicationCurrentStep(exercise, application) {

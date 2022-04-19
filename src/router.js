@@ -41,6 +41,8 @@ import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View';
 import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit';
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit';
+import ExerciseDetailsAdditionalSettings from '@/views/Exercise/Details/AdditionalSettings/View';
+import ExerciseDetailsAdditionalSettingsEdit from '@/views/Exercise/Details/AdditionalSettings/Edit';
 
 // Appplications
 import ExerciseApplications from '@/views/Exercise/Applications';
@@ -539,6 +541,30 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Edit Application Content | Exercise Details',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'additional-settings',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-additional-settings',
+                  path: '',
+                  component: ExerciseDetailsAdditionalSettings,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Additional Settings | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-additional-settings-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsAdditionalSettingsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Additional Settings | Exercise Details',
                   },
                 },
               ],

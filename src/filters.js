@@ -69,10 +69,22 @@ const lookup = (value) => {
     'judicial': 'Judicial',
 
     // Selection categories
-    'leadership': 'Strategic Leadership Question',
-    'roleplay': 'Role Play / Situational Questions',
+    'leadership': 'Strategic Leadership Questions',
+    'roleplay': 'Role Play',
+    'situational': 'Situational Questions',
     'interview': 'Interview',
     'overall': 'Overall',
+
+    // Capabilities
+    'L': 'Leadership',
+    'EJ': 'Exercising Judgement',
+    'PBK': 'Possessing and Building Knowledge',
+    'ACI': 'Assimilating and Clarifying Information',
+    'WCO': 'Working and Communicating with Others',
+    'MWE': 'Managing Work Efficiently',
+    'OVERALL': 'Overall',
+    'L&J': 'Legal & Judicial Skills',
+    'PQ': 'Personal Qualities',
 
     // 'xxx': 'xxx',
   };

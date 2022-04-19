@@ -11,7 +11,17 @@ const PANEL_TYPES = {
   SCENARIO: 'scenario',
 };
 
+const PANEL_STATUS = {
+  // TODO include all statuses
+  DRAFT: 'draft',
+  APPROVED: 'approved',
+  PROCESSING: 'processing',
+  CREATED: 'created',
+  SUBMITTED: 'submitted',
+};
+
 export {
   ROLES,
-  PANEL_TYPES
+  PANEL_TYPES,
+  PANEL_STATUS
 };

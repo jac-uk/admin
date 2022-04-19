@@ -19,6 +19,13 @@
         </div>
         <div class="govuk-grid-column-one-half text-right print-none">
           <ActionButton
+            :disabled="canExportToGoogleDrive"
+            @click="resetPanelExport"
+            class="govuk-!-margin-right-2"
+          >
+            Reset/empty
+          </ActionButton>
+          <ActionButton
             type="primary"
             :disabled="!canExportToGoogleDrive"
             @click="exportToGoogleDrive"
@@ -230,7 +237,8 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import PanelForm from './components/AddEdit';
 import EditPanellists from './Panellists/Edit';
 import ViewPanellists from './Panellists/View';
-import { ROLES } from './Constants';
+import { ROLES, PANEL_STATUS } from './Constants';
+import { CAPABILITIES, GRADES, SELECTION_CATEGORIES, emptyScoreSheet } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -320,13 +328,14 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     capabilities() {
-      return this.$store.getters['exerciseDocument/capabilities'];
+      if (!this.exercise) return [];
+      return CAPABILITIES.filter(cap => this.exercise.capabilities.indexOf(cap) >= 0);
     },
     selectionCategories() {
-      return this.$store.getters['exerciseDocument/selectionCategories'];
+      return SELECTION_CATEGORIES;
     },
     grades() {
-      return this.$store.getters['exerciseDocument/grades'];
+      return GRADES;
     },
     panelId() {
       return this.$route.params.panelId;
@@ -354,7 +363,7 @@ export default {
       return !isDisabled;
     },
     canExportToGoogleDrive() {
-      if (this.panel && ['draft', 'created'].indexOf(this.panel.status) >= 0) {
+      if (this.panel && ['draft'].indexOf(this.panel.status) >= 0) {
         return true;
       } else {
         return false;
@@ -415,6 +424,7 @@ export default {
       this.activeTab = 'applications';
     },
     async deletePanel() {
+      console.log('delete panel');
       await this.$store.dispatch('panel/delete', this.panelId );
       this.$router.push({ name: 'exercise-tasks-panels' });
     },
@@ -462,6 +472,12 @@ export default {
     //   };
     //   await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: data });
     // },
+    async resetPanelExport() {
+      const data = {
+        status: PANEL_STATUS.DRAFT,
+      };
+      await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
+    },
     async exportToGoogleDrive() {
       console.log('export. TODO re-include export trigger');
       const data = {
@@ -471,13 +487,14 @@ export default {
         capabilities: this.capabilities,
         grades: this.grades,
         scoreSheet: {},
+        status: PANEL_STATUS.CREATED,
       };
       this.applications.forEach(application => {
         data.applications[application.id] = {
           referenceNumber: application.application.referenceNumber,
           // TODO include fullName for non name-blind
         };
-        data.scoreSheet[application.id] = this.$store.getters['exerciseDocument/emptyScoreSheet'](this.panel.type).scoreSheet;
+        data.scoreSheet[application.id] = emptyScoreSheet({ type: this.panel.type, capabilities: this.capabilities }).scoreSheet;
       });
       this.panellists.filter(panellist => this.panel.panellistIds.indexOf(panellist.id) >= 0).forEach(panellist => {
         data.panellists[panellist.id] = {
