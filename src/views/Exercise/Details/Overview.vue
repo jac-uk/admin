@@ -115,7 +115,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="!isPublished"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && !isPublished"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -123,7 +123,7 @@
         Publish on website
       </button>
       <button
-        v-if="isPublished"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && isPublished"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
@@ -145,7 +145,7 @@
         Approve
       </button>
       <button
-        v-if="isApproved"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value) && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >

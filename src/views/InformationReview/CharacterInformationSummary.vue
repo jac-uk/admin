@@ -7,6 +7,13 @@
       <h3 class="govuk-visually-hidden govuk-heading-s">
         Version {{ version }}
       </h3>
+      <button
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value) && hasValues(characterInformation) && editable"
+        class="govuk-button govuk-button--warning"
+        @click="changeCharacterInfo({})"
+      >
+        Delete
+      </button>
       <div
         v-if="!hasValues(characterInformation) && !editable"
         class="govuk-body"
@@ -42,6 +49,7 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
 import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
+import PERMISSIONS from '@/permissions';
 
 export default {
   name: 'CharacterInformationSummary',
@@ -64,6 +72,11 @@ export default {
       type: Number,
       required: true,
     },
+  }, 
+  data() {
+    return {
+      PERMISSIONS,
+    };
   },
   computed: {
     isVersion2() {
@@ -74,6 +87,9 @@ export default {
     },
   },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     hasValues(target){
       if (target !== null && target !== undefined) {
         return Object.keys(target).some(item => (item && item.length) || (item !== false && item !== true));
@@ -83,12 +99,20 @@ export default {
     },
     changeCharacterInfo(obj) {
       let myCharacterInfo;
-      if (this.isVersion2) {
-        myCharacterInfo = { ...this.characterInformation, ...obj };
-        this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
+      if (Object.keys(obj).length === 0) {
+        if (this.isVersion2) {
+          this.$emit('updateApplication', { characterInformationV2: null });
+        } else {
+          this.$emit('updateApplication', { characterInformation: null });
+        }
       } else {
-        myCharacterInfo = { ...this.characterInformation, ...obj };
-        this.$emit('updateApplication', { characterInformation: myCharacterInfo });
+        if (this.isVersion2) {
+          myCharacterInfo = { ...this.characterInformation, ...obj };
+          this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
+        } else {
+          myCharacterInfo = { ...this.characterInformation, ...obj };
+          this.$emit('updateApplication', { characterInformation: myCharacterInfo });
+        }
       }
     },
   },

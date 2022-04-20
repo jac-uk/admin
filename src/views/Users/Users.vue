@@ -61,7 +61,7 @@
               <select
                 v-if="hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
                 v-model="user.customClaims.r"
-                class="govuk-select govuk-!-margin-right-3"
+                class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
                 @change="setUserRole(user)"
               >
                 <option
@@ -75,6 +75,7 @@
               <ActionButton
                 v-if="user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
                 type="primary"
+                class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
               >
                 Enable user
@@ -82,9 +83,17 @@
               <ActionButton
                 v-if="!user.disabled"
                 type="secondary"
+                class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
               >
                 Disable user
+              </ActionButton>
+              <ActionButton
+                v-if="hasPermission(PERMISSIONS.users.permissions.canDeleteUsers.value)"
+                type="secondary"
+                @click="deleteUser(user.uid, userIndex)"
+              >
+                Delete user
               </ActionButton>
             </td>
           </tr>
@@ -346,6 +355,12 @@ export default {
     async toggleDisableUser(uid, index) {
       const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
       this.users[index].disabled = response.data.disabled;
+    },
+    async deleteUser(uid, index) {
+      const response = await functions.httpsCallable('deleteUsers')([uid]);
+      if (response && response.data.successCount) {
+        this.users.splice(index, 1);
+      }
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();

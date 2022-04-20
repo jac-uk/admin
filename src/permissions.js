@@ -23,6 +23,10 @@ const PERMISSIONS = {
         label: 'Can enable users',
         value: 'canEnableUsers',
       },
+      canDeleteUsers: {
+        label: 'Can delete users',
+        value: 'canDeleteUsers',
+      },
       canChangeUserRole: {
         label: 'Can change user role',
         value: 'canChangeUserRole',
@@ -36,6 +40,10 @@ const PERMISSIONS = {
   exercises: {
     label: 'Exercises',
     permissions: {
+      canPublishExercise: {
+        label: 'Can publish an exercise as live',
+        value: 'canPublishExercise',
+      },
       canApproveExercise: {
         label: 'Can approve exercise',
         value: 'canApproveExercise',
@@ -51,6 +59,10 @@ const PERMISSIONS = {
       canAmendAfterLaunch: {
         label: 'Can amend after launch',
         value: 'canAmendAfterLaunch',
+      },
+      canDeleteCandidateCharacterInformation: {
+        label: 'Can delete candidate character information',
+        value: 'canDeleteCandidateCharacterInformation',
       },
     },
   },
