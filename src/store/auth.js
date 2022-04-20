@@ -81,9 +81,6 @@ const module = {
     setUserRole({ commit }, userRole) {
       commit('setUserRole', userRole);
     },
-    hasPermission({ state }, permission) {
-      return state.userRole.enabledPermissions.includes(permission);
-    },
   },
   getters: {
     isSignedIn(state) {
