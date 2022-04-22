@@ -251,7 +251,7 @@
       </button>
     </span>
 
-    <span v-if="canDelete">
+    <span v-if="hasPermission('canDeleteQualifyingTest')">
       <button
         class="govuk-button govuk-button--warning govuk-!-margin-right-3"
         @click="btnDelete"
@@ -291,9 +291,6 @@ export default {
     isApproved() {
       return !this.isDraft && !this.isReadyForApproval;
     },
-    canDelete() {
-      return this.$store.state.auth.currentUser.role === 'superadmin';
-    },
     questionLabel() {
       let label = 'Question';
 
@@ -322,6 +319,9 @@ export default {
     },
   },
   methods: {
+    hasPermission(permission) {
+      return this.$store.getters['auth/hasPermission'](permission);
+    },
     submitForApproval() {
       this.$store.dispatch('qualifyingTest/submitForApproval');
       this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
