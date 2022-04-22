@@ -46,7 +46,10 @@
                   Exercises
                 </RouterLink>
               </li>
-              <li v-if="hasPermission(PERMISSIONS.candidates.permissions.canViewAllCandidates.value)" class="govuk-header__navigation-item">
+              <li
+                v-if="hasPermission('canViewAllCandidates')"
+                class="govuk-header__navigation-item"
+              >
                 <RouterLink
                   :to="{ name: 'candidates-list' }"
                   class="govuk-header__link"
@@ -181,13 +184,11 @@
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PERMISSIONS from '@/permissions';
 
 export default {
   name: 'App',
   data() {
     return {
-      PERMISSIONS,
       authorisedToPerformAction: false,
     };
   },
@@ -208,6 +209,7 @@ export default {
   async created() {
     if (this.isSignedIn) {
       await this.$store.dispatch('services/bind');
+      await this.$store.dispatch('permissions/bind');
       const email = firebase.auth().currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
@@ -215,6 +217,7 @@ export default {
   destroyed() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
+      this.$store.dispatch('permissions/unbind');
     }
   },
   methods: {

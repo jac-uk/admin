@@ -82,7 +82,7 @@
     </dl>
 
     <button
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && !isPublished"
+      v-if="hasPermission('canPublishExercise') && !isPublished"
       :disabled="!canPublish"
       class="govuk-button govuk-button--secondary"
       @click="publish"
@@ -90,7 +90,7 @@
       Publish on website
     </button>
     <button
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && isPublished"
+      v-if="hasPermission('canPublishExercise') && isPublished"
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >
@@ -102,14 +102,8 @@
 <script>
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
-import PERMISSIONS from '@/permissions';
 
 export default {
-  data() {
-    return {
-      PERMISSIONS,
-    };
-  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

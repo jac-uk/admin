@@ -276,7 +276,7 @@
             title="Notes about the Application"
             :candidate-id="application.userId"
             :application-id="applicationId"
-            :can-create="hasPermission(PERMISSIONS.exercises.permissions.canAddNotesToExercise.value)"
+            :can-create="hasPermission('canAddNotesToExercise')"
           />
         </div>
       </div>
@@ -319,7 +319,6 @@ import {
   hasStatementOfSuitability,
   hasIndependentAssessments
 } from '@/helpers/exerciseHelper';
-import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -343,7 +342,6 @@ export default {
   },
   data() {
     return {
-      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [

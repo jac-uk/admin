@@ -115,7 +115,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && !isPublished"
+        v-if="hasPermission('canPublishExercise') && !isPublished"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -123,7 +123,7 @@
         Publish on website
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && isPublished"
+        v-if="hasPermission('canPublishExercise') && isPublished"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
@@ -138,14 +138,14 @@
         Submit for Approval
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canApproveExercise.value) && isReadyForApproval"
+        v-if="hasPermission('canApproveExercise') && isReadyForApproval"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
         Approve
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value) && isApproved"
+        v-if="hasPermission('canAmendAfterLaunch') && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
@@ -193,7 +193,6 @@ import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
-import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -201,11 +200,6 @@ export default {
     ActionButton,
     Modal,
     ChangeExerciseState,
-  },
-  data() {
-    return {
-      PERMISSIONS,
-    };
   },
   computed: {
     exercise() {
