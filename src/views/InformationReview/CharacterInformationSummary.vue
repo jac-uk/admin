@@ -8,7 +8,7 @@
         Version {{ version }}
       </h3>
       <button
-        v-if="hasPermission('canDeleteCandidateCharacterInformation') && hasValues(characterInformation) && editable"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value) && hasValues(characterInformation) && editable"
         class="govuk-button govuk-button--warning"
         @click="changeCharacterInfo({})"
       >
@@ -49,6 +49,7 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
 import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
+import PERMISSIONS from '@/permissions';
 
 export default {
   name: 'CharacterInformationSummary',
@@ -72,6 +73,11 @@ export default {
       required: true,
     },
   }, 
+  data() {
+    return {
+      PERMISSIONS,
+    };
+  },
   computed: {
     isVersion2() {
       return this.version === 2;

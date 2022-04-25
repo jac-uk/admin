@@ -59,7 +59,7 @@
             </td>
             <td class="govuk-table__cell">
               <select
-                v-if="hasPermission('canChangeUserRole')"
+                v-if="hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
                 v-model="user.customClaims.r"
                 class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
                 @change="setUserRole(user)"
@@ -73,7 +73,7 @@
                 </option>
               </select>
               <ActionButton
-                v-if="user.disabled && hasPermission('canEnableUsers')"
+                v-if="user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
                 type="primary"
                 class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
@@ -89,9 +89,9 @@
                 Disable user
               </ActionButton>
               <button
-                v-if="hasPermission('canDeleteUsers')"
+                v-if="hasPermission(PERMISSIONS.users.permissions.canDeleteUsers.value)"
                 class="govuk-button govuk-button--warning"
-                @click="deleteUser(user.uid, userIndex)"
+                @click="confirmDeleteUser(userIndex)"
               >
                 Delete user
               </button>
@@ -164,21 +164,21 @@
               <h1>{{ role.roleName }}</h1>
 
               <div
-                v-for="item in allPermissions"
-                :key="item.id"
+                v-for="(value, key) in PERMISSIONS"
+                :key="key"
               >
-                <h2>{{ item.group }}</h2>
+                <h2>{{ value.label }}</h2>
                 <Checkbox
-                  v-for="permission in item.permissions"
-                  :id="permission.value"
-                  :key="permission.value"
-                  v-model="permissions[permission.value]"
+                  v-for="(subValue, subKey) in value.permissions"
+                  :id="subKey"
+                  :key="subKey"
+                  v-model="permissions[subKey]"
                 >
-                  {{ permission.label }}
+                  {{ subValue.label }}
                 </Checkbox>
               </div>
 
-              <div v-if="hasPermission('canEditRolePermissions')">
+              <div v-if="hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value)">
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
@@ -242,6 +242,26 @@
         </h2>
       </div>
     </Modal>
+    <Modal ref="modalRefDeleteUser">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Are you sure to delete user?
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <ActionButton
+          type="primary"
+          class="govuk-!-margin-right-2"
+          @click="deleteUser"
+        >
+          Delete
+        </ActionButton>
+        <button
+          class="govuk-button govuk-button--secondary"
+          @click="closeModal('modalRefDeleteUser')"
+        >
+          Cancel
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -254,6 +274,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -267,6 +288,7 @@ export default {
   },
   data() {
     return {
+      PERMISSIONS,
       loaded: false,
       loadFailed: false,
       users: [],
@@ -277,6 +299,7 @@ export default {
       rolePermissions: null,
       newRoleName: null,
       permissions: {},
+      selectedUserIndex: null,
     };
   },
   computed: {
@@ -302,20 +325,6 @@ export default {
       }
       return rolesNav;
     },
-    allPermissions() {
-      const allPermissions = this.$store.getters['permissions/allPermissions'];
-      const permissions = [];
-      // get enable permissions
-      allPermissions.forEach(group => {
-        group.permissions = group.permissions.filter(p => p.enable);
-        if (group.permissions.length) {
-          permissions.push(group);
-        }
-      });
-      // sort permissions
-      permissions.sort((a, b) => a.id - b.id);
-      return permissions;
-    },
   },
   async mounted() {
     try {
@@ -337,7 +346,7 @@ export default {
     }
   },
   updated() {
-    const canEditRolePermissions = this.hasPermission('canEditRolePermissions');
+    const canEditRolePermissions = this.hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value);
     if (!canEditRolePermissions) {
       const roleRef = this.$refs.role;
       if (roleRef) {
@@ -358,11 +367,19 @@ export default {
       const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
       this.users[index].disabled = response.data.disabled;
     },
-    async deleteUser(uid, index) {
-      const response = await functions.httpsCallable('deleteUsers')([uid]);
-      if (response && response.data.successCount) {
-        this.users.splice(index, 1);
+    confirmDeleteUser(index) {
+      this.selectedUserIndex = index;
+      this.openModal('modalRefDeleteUser');
+    },
+    async deleteUser() {
+      if (this.selectedUserIndex) {
+        const selectedUid = this.users[this.selectedUserIndex].uid;
+        const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
+        if (response && response.data.successCount) {
+          this.users.splice(this.selectedUserIndex, 1);
+        }
       }
+      this.closeModal('modalRefDeleteUser');
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
@@ -371,6 +388,7 @@ export default {
       this.rolePermissions = null;
       this.$refs[modalRef].closeModal();
       this.newRoleName = null;
+      this.selectedUserIndex = null;
     },
     async setUserRole(user) {
       this.openModal('changingRole');
@@ -380,10 +398,8 @@ export default {
     viewRolePermissions(roleIndex) {
       this.role = this.roles[roleIndex];
       // set all permissions to false
-      for (const item of this.allPermissions) {
-        for (const permission of item.permissions) {
-          this.permissions[permission.value] = false;
-        }
+      for (const permission in this.permissions) {
+        this.permissions[permission] = false;
       }
       // set the enabled permissions for the role to true
       if (this.role.enabledPermissions) {

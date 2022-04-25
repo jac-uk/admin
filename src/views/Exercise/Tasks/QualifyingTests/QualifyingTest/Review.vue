@@ -251,7 +251,7 @@
       </button>
     </span>
 
-    <span v-if="hasPermission('canDeleteQualifyingTest')">
+    <span v-if="hasPermission(PERMISSIONS.exercises.permissions.canDeleteQualifyingTest.value)">
       <button
         class="govuk-button govuk-button--warning govuk-!-margin-right-3"
         @click="btnDelete"
@@ -273,8 +273,14 @@
 <script>
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import PERMISSIONS from '@/permissions';
 
 export default {
+  data() {
+    return {
+      PERMISSIONS,
+    };
+  },
   computed: {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,

@@ -54,17 +54,14 @@ auth().onAuthStateChanged(async (user) => {
     try {
       const idTokenResult = await user.getIdTokenResult();
       // Get user role
-      const userRoleId = idTokenResult.claims.r;
+      const userRoleId = idTokenResult.claims && idTokenResult.claims.r ? idTokenResult.claims.r : null;
       if (userRoleId) {
-        const role = await functions.httpsCallable('adminGetUserRole')({ roleId: userRoleId });
-        if (role && role.data) {
-          const userRole = {
-            id: role.data.id,
-            enabledPermissions: role.data.enabledPermissions,
-            roleName: role.data.roleName,
-          };
-          store.dispatch('auth/setUserRole', userRole);
-        }
+        const res = await functions.httpsCallable('adminSyncUserRolePermissions')();
+        const userRole = {
+          roleId: userRoleId,
+          rolePermissions: res.data,
+        };
+        store.dispatch('auth/setUserRole', userRole);
       }
     } catch (error) {
       // console.error(error);

@@ -5,7 +5,6 @@ const module = {
   namespaced: true,
   state: {
     currentUser: null,
-    userRole: null,
     authError: null,
   },
   mutations: {
@@ -13,7 +12,7 @@ const module = {
       state.currentUser = user;
     },
     setUserRole(state, role) {
-      state.userRole = role;
+      state.currentUser = { ...state.currentUser, ...role };
     },
     setAuthError(state, message) {
       state.authError = message;
@@ -90,7 +89,7 @@ const module = {
       return state.currentUser.email;
     },
     hasPermission: state => permission => {
-      return state.userRole.enabledPermissions.includes(permission);
+      return state.currentUser.rolePermissions.includes(permission);
     },
   },
 };

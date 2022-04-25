@@ -54,7 +54,7 @@
       <Notes
         title="Notes about the Candidate"
         :candidate-id="getUserId"
-        :can-create="hasPermission('canAddNotesToCandidates')"
+        :can-create="hasPermission(PERMISSIONS.candidates.permissions.canAddNotesToCandidates.value)"
       />
     </div>
 
@@ -81,6 +81,7 @@ import CharacterInformationSummary from '@/views/InformationReview/CharacterInfo
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import PERMISSIONS from '@/permissions';
 
 export default {
   components: {
@@ -94,6 +95,7 @@ export default {
   },
   data() {
     return {
+      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [

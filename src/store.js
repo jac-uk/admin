@@ -6,7 +6,6 @@ firestoreOptions.wait = true;
 
 // Vuex modules
 import auth from '@/store/auth';
-import permissions from '@/store/permissions';
 import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
 import exerciseCreateJourney from '@/store/exercise/createJourney';
@@ -41,7 +40,6 @@ const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   modules: {
     auth,
-    permissions,
     services,
     exerciseCollection,
     exerciseCreateJourney,
