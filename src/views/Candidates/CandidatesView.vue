@@ -10,6 +10,7 @@
       :active-tab.sync="activeTab"
     />
     <span
+      v-if="hasPermission(PERMISSIONS.candidates.permissions.canUpdateCandidates.value)"
       class="float-right govuk-!-margin-left-4"
     >
       <button
@@ -64,7 +65,7 @@
       <Applications :candidate-id="candidateId" />
     </div>
     <div
-      v-if="activeTab === 'actions' && authorisedUser"
+      v-if="activeTab === 'actions' && authorisedUser && hasPermission(PERMISSIONS.candidates.permissions.canUpdateCandidates.value)"
     >
       <Actions :candidate-id="getUserId" />
     </div>
@@ -81,7 +82,7 @@ import CharacterInformationSummary from '@/views/InformationReview/CharacterInfo
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PERMISSIONS from '@/permissions';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -93,9 +94,9 @@ export default {
     CharacterInformationSummary,
     EqualityAndDiversity,
   },
+  extends: Permission,
   data() {
     return {
-      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [
@@ -161,9 +162,6 @@ export default {
     this.$store.dispatch('candidates/unbindDocs');
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     makeFullName(obj) {
       if (obj.firstName && this.personalDetails.lastName) {
         obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;

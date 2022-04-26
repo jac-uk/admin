@@ -7,6 +7,7 @@
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
       <button
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
         class="govuk-button govuk-!-margin-bottom-0"
         @click="createNewPanel"
       >
@@ -48,6 +49,7 @@
       >
         <template #actions>
           <button
+            v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
             class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
             :disabled="isButtonDisabled"
             @click="btnClkSelectPanel('modalRefPanel')"
@@ -98,6 +100,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SelectPanel from '@/components/ModalViews/SelectPanel';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -107,6 +110,7 @@ export default {
     Modal,
     SelectPanel,
   },
+  extends: Permission,
   props: {
     type: {
       required: true,

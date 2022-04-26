@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable"
+        v-if="isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
         class="govuk-link"
         :to="{name: 'exercise-details-summary-edit'}"
       >
@@ -102,9 +102,11 @@
 <script>
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
+import Permission from '@/components/Permission';
 import PERMISSIONS from '@/permissions';
 
 export default {
+  extends: Permission,
   data() {
     return {
       PERMISSIONS,
@@ -128,9 +130,6 @@ export default {
     },
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {

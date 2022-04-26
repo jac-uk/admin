@@ -33,7 +33,10 @@
             </h1>
           </div>
 
-          <div class="govuk-grid-column-one-half text-right print-none">
+          <div
+            v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+            class="govuk-grid-column-one-half text-right print-none"
+          >
             <span
               v-if="activeTab == 'full'"
             >
@@ -157,7 +160,7 @@
                 Extension
               </span>
               <button
-                v-if="application.dateExtension"
+                v-if="application.dateExtension && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
                 @click="$refs.modalRefExtension.openModal()"
               >
                 Change
@@ -169,7 +172,7 @@
                 {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
               </h2>
               <button
-                v-else
+                v-else-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
                 class="govuk-button govuk-!-margin-bottom-0"
                 @click="$refs.modalRefExtension.openModal()"
               >
@@ -319,7 +322,7 @@ import {
   hasStatementOfSuitability,
   hasIndependentAssessments
 } from '@/helpers/exerciseHelper';
-import PERMISSIONS from '@/permissions';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -341,9 +344,9 @@ export default {
     AssessmentsSummary,
     AssessorsSummary,
   },
+  extends: Permission,
   data() {
     return {
-      PERMISSIONS,
       authorisedToPerformAction: false,
       editMode: false,
       tabs: [
@@ -516,9 +519,6 @@ export default {
     this.$store.dispatch('application/unbind');
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     async pageLoad() {
       this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {

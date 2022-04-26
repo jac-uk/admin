@@ -14,7 +14,10 @@
             Back
           </router-link>
         </div>
-        <div class="govuk-grid-column-three-quarters">
+        <div
+          v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+          class="govuk-grid-column-three-quarters"
+        >
           <div class="float-right govuk-!-margin-0">
             <AddToFavouritesButton
               class="govuk-!-margin-bottom-0"
@@ -33,7 +36,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!hasJourney && isEditable"
+            v-if="!hasJourney && isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
             class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -60,6 +63,7 @@ import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavourit
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -67,6 +71,7 @@ export default {
     AddToFavouritesButton,
     SubNavigation,
   },
+  extends: Permission,
   data() {
     return {
       loaded: false,

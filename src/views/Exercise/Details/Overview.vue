@@ -51,6 +51,7 @@
           class="float-right"
         >
           <a
+            v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
             class="govuk-link"
             @click="changeState"
           >
@@ -130,7 +131,7 @@
         Remove from website
       </button>
       <button
-        v-if="isDraft"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isDraft"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="submitForApproval"
@@ -152,20 +153,20 @@
         Unlock
       </button>
       <ActionButton
-        v-if="isApproved"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isApproved"
         @click="copyToClipboard"
       >
         Copy to Clipboard
       </ActionButton>
       <br>
       <ActionButton
-        v-if="isReadyForProcessing"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isReadyForProcessing"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="isProcessing"
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isProcessing"
         @click="updateProcessing()"
       >
         Process late applications

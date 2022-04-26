@@ -217,42 +217,44 @@
         </Table>
       </div>
       <div v-else>
-        <select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-select govuk-!-margin-right-3"
-        >
-          <option value="">
-            Choose applications
-          </option>
-          <option
-            v-if="applicationRecordCounts.review"
-            value="review"
+        <div v-show="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)">
+          <select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-select govuk-!-margin-right-3"
           >
-            Review ({{ applicationRecordCounts.review }})
-          </option>
-          <option
-            v-if="applicationRecordCounts.shortlisted"
-            value="shortlisted"
-          >
-            Shortlisted ({{ applicationRecordCounts.shortlisted }})
-          </option>
+            <option value="">
+              Choose applications
+            </option>
+            <option
+              v-if="applicationRecordCounts.review"
+              value="review"
+            >
+              Review ({{ applicationRecordCounts.review }})
+            </option>
+            <option
+              v-if="applicationRecordCounts.shortlisted"
+              value="shortlisted"
+            >
+              Shortlisted ({{ applicationRecordCounts.shortlisted }})
+            </option>
 
-          <option
-            v-if="applicationRecordCounts.selected"
-            value="selected"
-          >
-            Selected ({{ applicationRecordCounts.selected }})
-          </option>
-        </select>
+            <option
+              v-if="applicationRecordCounts.selected"
+              value="selected"
+            >
+              Selected ({{ applicationRecordCounts.selected }})
+            </option>
+          </select>
 
-        <ActionButton
-          type="primary"
-          :disabled="!exerciseStage"
-          @click="initialiseAssessments()"
-        >
-          Start Assessments
-        </ActionButton>
+          <ActionButton
+            type="primary"
+            :disabled="!exerciseStage"
+            @click="initialiseAssessments()"
+          >
+            Start Assessments
+          </ActionButton>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -285,6 +287,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -296,6 +299,7 @@ export default {
     Modal,
     UploadAssessment,
   },
+  extends: Permission,
   data() {
     return {
       exerciseStage: '',

@@ -260,75 +260,77 @@
         status="warning"
       />
 
-      <ActionButton
-        v-if="isInitialised"
-        :disabled="!isUserAdded || !canOpenTests"
-        class="govuk-!-margin-right-3"
-        @click="btnActivate"
-      >
-        Open tests
-      </ActionButton>
+      <div v-show="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)">
+        <ActionButton
+          v-if="isInitialised"
+          :disabled="!isUserAdded || !canOpenTests"
+          class="govuk-!-margin-right-3"
+          @click="btnActivate"
+        >
+          Open tests
+        </ActionButton>
 
-      <button
-        v-if="isActivated"
-        :disabled="true"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnPause"
-      >
-        Pause
-      </button>
+        <button
+          v-if="isActivated"
+          :disabled="true"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnPause"
+        >
+          Pause
+        </button>
 
-      <button
-        v-if="isInitialised || isActivated || isPaused || isCompleted"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="btnResponses('all')"
-      >
-        Responses
-      </button>
+        <button
+          v-if="isInitialised || isActivated || isPaused || isCompleted"
+          class="govuk-button govuk-!-margin-right-3"
+          @click="btnResponses('all')"
+        >
+          Responses
+        </button>
 
-      <button
-        v-if="isInitialised || isActivated || isPaused"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnResponses('reasonable-adjustments')"
-      >
-        Reasonable Adjustments
-      </button>
+        <button
+          v-if="isInitialised || isActivated || isPaused"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnResponses('reasonable-adjustments')"
+        >
+          Reasonable Adjustments
+        </button>
 
-      <button
-        v-if="canCreateCopy"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnCreateCopy"
-      >
-        Create Mop Up Test
-      </button>
+        <button
+          v-if="canCreateCopy"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnCreateCopy"
+        >
+          Create Mop Up Test
+        </button>
 
-      <button
-        ref="btnCopyToClipboard"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnCopyToClipboard"
-      >
-        Copy QT to clipboard
-      </button>
+        <button
+          ref="btnCopyToClipboard"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnCopyToClipboard"
+        >
+          Copy QT to clipboard
+        </button>
 
-      <ActionButton
-        v-if="isInitialised"
-        type="secondary"
-        :disabled="true"
-        class="govuk-!-margin-right-3"
-        @click="btnSendInvites"
-      >
-        Send invites
-      </ActionButton>
+        <ActionButton
+          v-if="isInitialised"
+          type="secondary"
+          :disabled="true"
+          class="govuk-!-margin-right-3"
+          @click="btnSendInvites"
+        >
+          Send invites
+        </ActionButton>
 
-      <ActionButton
-        v-if="isActivated || isCompleted"
-        type="primary"
-        :disabled="isEndDatePassed"
-        class="govuk-!-margin-right-3"
-        @click="btnGetScores"
-      >
-        Close & Score
-      </ActionButton>
+        <ActionButton
+          v-if="isActivated || isCompleted"
+          type="primary"
+          :disabled="isEndDatePassed"
+          class="govuk-!-margin-right-3"
+          @click="btnGetScores"
+        >
+          Close & Score
+        </ActionButton>
+      </div>
     </div>
   </div>
 </template>
@@ -341,6 +343,7 @@ import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -348,6 +351,7 @@ export default {
     Select,
     Banner,
   },
+  extends: Permission,
   data() {
     return {
       exerciseStage: '',
