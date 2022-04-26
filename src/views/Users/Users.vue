@@ -59,9 +59,9 @@
             </td>
             <td class="govuk-table__cell">
               <select
-                v-if="hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
                 v-model="user.customClaims.r"
                 class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
+                :disabled="!hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
                 @change="setUserRole(user)"
               >
                 <option

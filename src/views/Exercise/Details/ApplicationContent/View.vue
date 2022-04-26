@@ -67,6 +67,7 @@
             class="float-right"
           >
             <a
+              v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
               class="govuk-link"
               @click="$refs['modalEditCurrentStep'].openModal()"
             >

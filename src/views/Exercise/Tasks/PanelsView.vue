@@ -17,7 +17,10 @@
             {{ panel.name }}
           </h1>
         </div>
-        <div class="govuk-grid-column-one-half text-right print-none">
+        <div
+          v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+          class="govuk-grid-column-one-half text-right print-none"
+        >
           <ActionButton
             type="primary"
             :disabled="!canExportToGoogleDrive"
@@ -73,6 +76,7 @@
     <!-- CANDIDATE LIST -->
     <div v-show="activeTab == 'candidates'">
       <button
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
         class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
         :disabled="isButtonDisabled"
         @click="removeFromPanel"
@@ -116,6 +120,7 @@
         List of Panellists
       </h2>
       <button
+        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
         class="govuk-button"
         @click="btnClickEditMember('modalRefMember', null, 'new')"
       >
@@ -131,6 +136,7 @@
           <dt class="govuk-summary-list__key" />
           <dd class="govuk-summary-list__value">
             <button
+              v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
               class="govuk-button btn-unlock"
               @click="btnClickEditMember('modalRefMember', idx, 'edit')"
             >
@@ -188,7 +194,7 @@
     <!-- END MEMBERS -->
 
     <!-- EDIT PANEL -->
-    <div v-if="activeTab === 'edit'">
+    <div v-if="activeTab === 'edit' && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)">
       <div class="govuk-grid-row">
         <form @submit.prevent="validateAndSave">
           <div class="govuk-grid-column-two-thirds">
@@ -252,6 +258,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import firebase from '@firebase/app';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -265,7 +272,7 @@ export default {
     TableCell,
     ActionButton,
   },
-  extends: Form,
+  mixins: [Form, Permission],
   data() {
     const data = {
       tabs: [
