@@ -73,7 +73,7 @@ const PERMISSIONS = {
         value: 'e7',
       },
       canCreateExercises: {
-        label: 'Can ceate exercises',
+        label: 'Can create exercises',
         value: 'e8',
       },
       canUpdateExercises: {
@@ -91,11 +91,11 @@ const PERMISSIONS = {
       },
       canUpdateCandidates: {
         label: 'Can update candidates',
-        value: 'c3',
+        value: 'c2',
       },
       canAddNotesToCandidates: {
         label: 'Can add notes to candidates',
-        value: 'c2',
+        value: 'c3',
       },
     },
   },
