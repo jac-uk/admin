@@ -35,6 +35,10 @@ const PERMISSIONS = {
         label: 'Can delete users',
         value: 'u4',
       },
+      canCreateRoles: {
+        label: 'Can create roles',
+        value: 'u5',
+      },
     },
   },
   exercises: {
@@ -68,6 +72,14 @@ const PERMISSIONS = {
         label: 'Can delete qualifying test',
         value: 'e7',
       },
+      canCreateExercises: {
+        label: 'Can ceate exercises',
+        value: 'e8',
+      },
+      canUpdateExercises: {
+        label: 'Can update exercises',
+        value: 'e9',
+      },
     },
   },
   candidates: {
@@ -77,9 +89,22 @@ const PERMISSIONS = {
         label: 'Can view all candidates',
         value: 'c1',
       },
+      canUpdateCandidates: {
+        label: 'Can update candidates',
+        value: 'c3',
+      },
       canAddNotesToCandidates: {
         label: 'Can add notes to candidates',
         value: 'c2',
+      },
+    },
+  },
+  notifications: {
+    label: 'Notifications',
+    permissions: {
+      canUpdateNotifications: {
+        label: 'Can update notifications',
+        value: 'n1',
       },
     },
   },

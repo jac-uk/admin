@@ -81,7 +81,7 @@
                 Enable user
               </ActionButton>
               <ActionButton
-                v-if="!user.disabled"
+                v-if="!user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
                 type="secondary"
                 class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
@@ -146,7 +146,9 @@
               <div class="govuk-grid-column-one-half">
                 <h1>Roles</h1>
               </div>
-              <div class="govuk-grid-column-one-half">
+              <div
+                v-if="hasPermission(PERMISSIONS.users.permissions.canCreateRoles.value)"
+                class="govuk-grid-column-one-half">
                 <div class="text-right">
                   <button
                     class="govuk-button govuk-!-margin-right-1 govuk-!-margin-top-3 govuk-!-margin-bottom-3"
@@ -274,7 +276,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import PERMISSIONS from '@/permissions';
+import Permission from '@/components/Permission';
 
 export default {
   components: {
@@ -286,9 +288,9 @@ export default {
     Checkbox,
     TextField,
   },
+  extends: Permission,
   data() {
     return {
-      PERMISSIONS,
       loaded: false,
       loadFailed: false,
       users: [],
@@ -346,7 +348,7 @@ export default {
     }
   },
   updated() {
-    const canEditRolePermissions = this.hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value);
+    const canEditRolePermissions = this.hasPermission(this.PERMISSIONS.users.permissions.canEditRolePermissions.value);
     if (!canEditRolePermissions) {
       const roleRef = this.$refs.role;
       if (roleRef) {
@@ -356,9 +358,6 @@ export default {
     }
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     async getRoles() {
       const roles = await functions.httpsCallable('adminGetUserRoles')();
       this.roles = roles.data;
@@ -398,8 +397,10 @@ export default {
     viewRolePermissions(roleIndex) {
       this.role = this.roles[roleIndex];
       // set all permissions to false
-      for (const permission in this.permissions) {
-        this.permissions[permission] = false;
+      for (const group of Object.keys(this.PERMISSIONS)) {
+        for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
+          this.permissions[p] = false;
+        }
       }
       // set the enabled permissions for the role to true
       if (this.role.enabledPermissions) {

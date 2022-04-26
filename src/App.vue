@@ -184,13 +184,13 @@
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import PERMISSIONS from '@/permissions';
+import Permission from '@/components/Permission';
 
 export default {
   name: 'App',
+  extends: Permission,
   data() {
     return {
-      PERMISSIONS,
       authorisedToPerformAction: false,
     };
   },
@@ -208,6 +208,14 @@ export default {
       return this.$store.state.clipboard.hasData;
     },
   },
+  watch: {
+    async isSignedIn() {
+      if (this.isSignedIn) {
+        const email = firebase.auth().currentUser.email;
+        this.authorisedToPerformAction = await authorisedToPerformAction(email);
+      }
+    },
+  },
   async created() {
     if (this.isSignedIn) {
       await this.$store.dispatch('services/bind');
@@ -221,9 +229,6 @@ export default {
     }
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     signOut() {
       auth().signOut();
       this.$router.go('/sign-in');
