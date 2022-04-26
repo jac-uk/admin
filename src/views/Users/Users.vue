@@ -397,15 +397,21 @@ export default {
     viewRolePermissions(roleIndex) {
       this.role = this.roles[roleIndex];
       // set all permissions to false
+      const obj = {};
       for (const group of Object.keys(this.PERMISSIONS)) {
         for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
-          this.permissions[p] = false;
+          obj[p] = false;
         }
       }
+      // make it reactive
+      this.permissions = Object.assign({}, obj);
+
       // set the enabled permissions for the role to true
       if (this.role.enabledPermissions) {
         for (const permission of this.role.enabledPermissions) {
-          this.permissions[permission] = true;
+          if (permission in this.permissions) {
+            this.permissions[permission] = true;
+          }
         }
       }
 
