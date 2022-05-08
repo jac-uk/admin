@@ -46,10 +46,27 @@ export default {
     update: async (context, { data, id }) => {
       const ref = collection.doc(id);
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.set(data, { merge: true });
+      console.log('update panel', id, data);
+      await ref.update(data);
     },
     delete: async (context, id) => {
       await collection.doc(id).delete();
+    },
+    addApplications: async (context, { panelId, type, applicationIds }) => {
+      const batch = firestore.batch();
+      applicationIds.forEach(applicationId => {
+        const ref = firestore.collection('applicationRecords').doc(applicationId);
+        const data = {};
+        data[`${type}.panelId`] = panelId;
+        batch.update(ref, data);
+      });
+      await batch.commit();
+      await context.dispatch('update', {
+        id: panelId,
+        data: {
+          applicationIds: firebase.firestore.FieldValue.arrayUnion(...applicationIds),
+        },
+      });
     },
     removeApplications: async (context, { applicationIds }) => {
       const batch = firestore.batch();
@@ -60,6 +77,12 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
+      await context.dispatch('update', {
+        id: context.state.record.id,
+        data: {
+          applicationIds: firebase.firestore.FieldValue.arrayRemove(...applicationIds),
+        },
+      });
     },
   },
   state: {

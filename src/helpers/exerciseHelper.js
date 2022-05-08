@@ -1,5 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -27,6 +28,10 @@ export {
   GRADES,
   GRADE_VALUES,
   SELECTION_CATEGORIES,
+  TASK_STATUS,
+  TASK_TYPE,
+  taskApplicationsStageAndStatus,
+  taskNextStatus,
   emptyScoreSheet,
   exerciseStates,
   applicationContentSteps,
@@ -115,12 +120,73 @@ const GRADE_VALUES = {
 };
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
 
+const TASK_STATUS = {
+  INITIALISED: 'initialised',
+  ACTIVATED: 'activated',
+  MODERATION_INITIALISED: 'moderationInitialised',
+  MODERATION_ACTIVATED: 'moderationActivated',
+  FINALISED: 'finalised',
+  COMPLETED: 'completed',
+};
+
+const TASK_TYPE = {
+  SIFT: 'sift',
+  SELECTION: 'selection',
+  SCENARIO: 'scenario',
+};
+
+function taskNextStatus(currentStatus) {
+  let nextStatus;
+  switch (currentStatus) {
+    case TASK_STATUS.INITIALISED:
+      nextStatus = TASK_STATUS.ACTIVATED;
+      break;
+    case TASK_STATUS.ACTIVATED: // skip moderation
+      // nextStatus = TASK_STATUS.MODERATION_INITIALISED;
+      nextStatus = TASK_STATUS.FINALISED;
+      break;
+    case TASK_STATUS.MODERATION_INITIALISED:
+      nextStatus = TASK_STATUS.MODERATION_ACTIVATED;
+      break;
+    case TASK_STATUS.MODERATION_ACTIVATED:
+      nextStatus = TASK_STATUS.FINALISED;
+      break;
+    case TASK_STATUS.FINALISED:
+      nextStatus = TASK_STATUS.COMPLETED;
+      break;
+    case TASK_STATUS.COMPLETED:
+      nextStatus = TASK_STATUS.COMPLETED;
+      break;
+    default:
+      nextStatus = TASK_STATUS.INITIALISED;
+  }
+  return nextStatus;
+}
+
+function taskApplicationsStageAndStatus(type) {
+  const params = {};
+  switch (type) {
+    case TASK_TYPE.SIFT:
+      params.stage = EXERCISE_STAGE.REVIEW;
+      break;
+    case TASK_TYPE.SELECTION:
+      params.stage = EXERCISE_STAGE.SELECTED;
+      break;
+    case TASK_TYPE.SCENARIO:
+      params.stage = EXERCISE_STAGE.REVIEW;
+      params.status = APPLICATION_STATUS.PASSED_FIRST_TEST;
+      break;
+  }
+  return params;
+}
+
 // merit list helpers
 function emptyScoreSheet({ type, selectedCapabilities }) {
   let capabilities = CAPABILITIES;
   if (selectedCapabilities) {
     capabilities = CAPABILITIES.filter(cap => selectedCapabilities.indexOf(cap) >= 0);
   }
+  // TODO ensure this is specific to exercise
   const fullScoreSheet = {
     sift: {
       scoreSheet: capabilities.reduce((acc, curr) => (acc[curr] = '', acc), {}),

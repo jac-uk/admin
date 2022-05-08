@@ -75,10 +75,6 @@ import ExerciseTasks from '@/views/Exercise/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
-import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/Panels/List';
-import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/Panels/New';
-import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/Panels/View';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -92,6 +88,23 @@ import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/Qual
 import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
+
+import ExerciseTask from '@/views/Exercise/Tasks/Task';
+import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
+import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
+import ExerciseTaskInitialised from '@/views/Exercise/Tasks/Task/Initialised';
+import ExerciseTaskActivated from '@/views/Exercise/Tasks/Task/Activated';
+import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
+import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
+import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
+import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
+
+// TODO REMOVE!
+import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
+import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/Panels/List';
+
+import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/Task/Panel/New';
+import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/Task/Panel/View';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
@@ -911,6 +924,107 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Panel | Exercise Tasks',
+                  },
+                },
+              ],
+            },
+            {
+              path: ':type',
+              component: ExerciseTask,
+              props: true,
+              children: [
+                {
+                  path: '',
+                  redirect: 'new',
+                },
+                {
+                  path: 'loading',
+                  component: ExerciseTaskLoading,
+                  name: 'exercise-task-loading',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Loading | Exercise task',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTaskNew,
+                  name: 'exercise-task-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'New | Exercise task',
+                  },
+                },
+                {
+                  path: 'initialised',
+                  component: ExerciseTaskInitialised,
+                  name: 'exercise-task-initialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'activated',
+                  component: ExerciseTaskActivated,
+                  name: 'exercise-task-activated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'moderation-initialised',
+                  component: ExerciseTaskModerationInitialised,
+                  name: 'exercise-task-moderationInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Moderation Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'moderation-activated',
+                  component: ExerciseTaskModerationActivated,
+                  name: 'exercise-task-moderationActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Moderation Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'finalised',
+                  component: ExerciseTaskFinalised,
+                  name: 'exercise-task-finalised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Finalised | Exercise task',
+                  },
+                },
+                {
+                  path: 'completed',
+                  component: ExerciseTaskCompleted,
+                  name: 'exercise-task-completed',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Completed | Exercise task',
+                  },
+                },
+                {
+                  path: 'panel/new',
+                  component: ExerciseTasksPanelsNew,
+                  name: 'exercise-task-panel-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Panel | Exercise Task',
+                  },
+                },
+                {
+                  path: 'panel/:panelId',
+                  component: ExerciseTasksPanelsView,
+                  name: 'exercise-task-panel',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panel | Exercise Task',
                   },
                 },
               ],

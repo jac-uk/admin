@@ -58,7 +58,7 @@ export default {
         sideNavigation.push(
           {
             title: 'Sift',
-            path: `${path}/panels/sift`,
+            path: `${path}/sift`,
           },
         );
       }
@@ -67,7 +67,7 @@ export default {
       sideNavigation.push(
         {
           title: 'Selection',
-          path: `${path}/panels/selection`,
+          path: `${path}/selection`,
         },
       );
     }
@@ -75,13 +75,19 @@ export default {
       sideNavigation.push(
         {
           title: 'Scenario',
-          path: `${path}/panels/scenario`,
+          path: `${path}/scenario`,
         }
       );
     }
+
     return {
       sideNavigation: sideNavigation,
     };
   },
+  async created() {
+    const exerciseId = this.$route.params.id;
+    await this.$store.dispatch('tasks/bind', { exerciseId: exerciseId } );
+  },
+
 };
 </script>
