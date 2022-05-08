@@ -6,6 +6,7 @@
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
             Merit List
+            {{ scoreSheetColumns }}
           </h2>
         </div>
         <div
@@ -214,14 +215,14 @@ export default {
       return this.$store.state.panels.records;
     },
     hasScoreSheet() {
-      if (this.panels && this.panels.length) {
-        if (this.panels.find(p => p.scoreSheet)) return true;
-      }
+      // if (this.panels && this.panels.length) {
+      //   if (this.panels.find(p => p.scoreSheet)) return true;
+      // }
       return false;
     },
     scoreSheetColumns() {
       const columns = [];
-      if (!this.hasScoreSheet) return columns;
+      // if (!this.hasScoreSheet) return columns;
       columns.push({ title: 'Application', class: 'table-cell-application' });
       if (this.emptyScoreSheet.sift) {
         if (this.showDetail.sift) {
@@ -362,6 +363,9 @@ export default {
   td {
       border: 1px solid #f3f2f1;
       vertical-align: middle;
+      &.v-top {
+        vertical-align: top;
+      }
   }
   tr > th:first-child,
   tr > td:first-child {

@@ -34,6 +34,8 @@ import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 
+import tasks from '@/store/tasks/collection';
+import task from '@/store/tasks/document';
 import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
@@ -69,6 +71,8 @@ const store = new Vuex.Store({
     connectionMonitor,
     qualifyingTestReports,
     qualifyingTestReport,
+    tasks,
+    task,
     panels,
     panel,
     panellists,
