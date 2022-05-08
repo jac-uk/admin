@@ -70,8 +70,7 @@ export default {
       if (user.additionalUserInfo.isNewUser) {
         this.disableNewUser(auth().currentUser.uid).then(() => {
           this.signOut();
-        }).catch((e) => {
-          console.log(e);
+        }).catch(() => {
           this.signOut();
         });
       }

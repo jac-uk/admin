@@ -5,12 +5,14 @@
         v-if="isDate"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
           :type="type"
           :index="index"
           :extension="extension"
+          :display-month-year-only="displayMonthYearOnly"
           @changeField="changeField"
         />
       </div>
@@ -20,6 +22,7 @@
       >
         <!-- Only for Personal Details section -->
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -34,6 +37,7 @@
         v-else-if="isEmail"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -48,6 +52,7 @@
         v-else-if="isMultiSelection"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -63,6 +68,7 @@
         v-else-if="isSelection"
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -79,6 +85,7 @@
       >
         <span>
           <EditableField
+            :id="field"
             :edit-mode="edit"
             :value="data"
             :field="field"
@@ -95,6 +102,7 @@
         v-else
       >
         <EditableField
+          :id="field"
           :edit-mode="edit"
           :value="data"
           :field="field"
@@ -164,7 +172,6 @@ export default {
     },
     displayMonthYearOnly: {
       type: Boolean,
-      required: false,
       default: false,
     },
   },

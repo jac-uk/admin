@@ -101,6 +101,11 @@
         :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
+        :custom-search="{
+          placeholder: 'Search candidate names',
+          handler: candidateSearch,
+          field: 'candidate.id',
+        }"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -296,14 +301,21 @@ export default {
         localParams.orderBy = 'documentId';
       }
       firestoreRef = tableQuery(this.applicationRecords, firestoreRef, localParams);
-      this.unsubscribe = firestoreRef
-        .onSnapshot((snap) => {
-          const applicationRecords = [];
-          snap.forEach((doc) => {
-            applicationRecords.push(vuexfireSerialize(doc));
+      if (firestoreRef) {
+        this.unsubscribe = firestoreRef
+          .onSnapshot((snap) => {
+            const applicationRecords = [];
+            snap.forEach((doc) => {
+              applicationRecords.push(vuexfireSerialize(doc));
+            });
+            this.applicationRecords = applicationRecords;
           });
-          this.applicationRecords = applicationRecords;
-        });
+      } else {
+        this.applicationRecords = [];
+      }    
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
   },
 };
