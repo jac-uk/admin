@@ -4,6 +4,7 @@
       {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
     </h2>
     <Table
+      v-if="tieBreakers || hasPermissions([PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value])"
       data-key="id"
       :data="qualifyingTests"
       :page-size="50"

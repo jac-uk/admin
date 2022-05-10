@@ -121,8 +121,12 @@ export default {
         subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
       }
       if (this.isProcessing) {
-        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        if (this.hasPermissions([this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value])) {
+          subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
+        }
+        if (this.hasPermissions([this.PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value])) {
+          subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        }
       }
       return subNavigation;
     },

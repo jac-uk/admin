@@ -90,7 +90,7 @@ const module = {
     },
     hasPermissions: state => permissions => {
       const rolePermissions = state.currentUser.rolePermissions;
-      return rolePermissions && Array.isArray(rolePermissions) && rolePermissions.includes(...permissions);
+      return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
   },
 };

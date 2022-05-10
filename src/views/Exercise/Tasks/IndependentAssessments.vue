@@ -4,7 +4,7 @@
       Independent Assessments
     </h1>
     <div
-      v-if="hasInitialisedAssessments"
+      v-if="hasInitialisedAssessments && hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
       class="govuk-grid-row"
     >
       <div class="govuk-grid-column-one-half">
@@ -26,7 +26,10 @@
         </div>
       </div>
     </div>
-    <dl class="govuk-summary-list">
+    <dl 
+      v-if="hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
+      class="govuk-summary-list"
+    >
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Contact date
@@ -217,7 +220,15 @@
         </Table>
       </div>
       <div v-else>
-        <div v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])">
+        <div
+          v-if="hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.applications.permissions.canReadApplications.value,
+            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+          ])"
+        >
           <select
             id="exercise-stage"
             v-model="exerciseStage"
