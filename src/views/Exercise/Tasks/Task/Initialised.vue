@@ -72,7 +72,7 @@
             type="primary"
             @click="btnActivate"
           >
-            Activate this {{ type | lookup }}
+            Activate {{ type | lookup }}
           </ActionButton>
         </div>
       </div>
@@ -185,7 +185,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
-import SelectPanel from '../Panels/components/SelectPanel';
+import SelectPanel from './Panel/components/SelectPanel';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { taskApplicationsStageAndStatus } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';

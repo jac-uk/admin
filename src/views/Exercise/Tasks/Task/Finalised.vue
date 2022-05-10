@@ -47,7 +47,7 @@
             type="primary"
             @click="btnComplete"
           >
-            Complete this {{ type | lookup }}
+            Complete {{ type | lookup }}
           </ActionButton>
         </div>
       </div>
@@ -191,8 +191,8 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
-import { PANEL_TYPES } from '../Panels/Constants';
-import { CAPABILITIES, GRADE_VALUES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { PANEL_TYPES } from './Panel/Constants';
+import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';
 
 export default {
@@ -277,8 +277,8 @@ export default {
         return {
           id: row.id,
           referenceNumber: row.ref,
-          scoreSheet: row.scores,
-          totalScore: this.getTotalScore(row.scores),
+          scoreSheet: row.scoreSheet,
+          totalScore: row.score,
           // panel: {
           //   id: row.panelId,
           //   name: this.panels.find(p => p.id === row.panelId).name,
@@ -331,21 +331,6 @@ export default {
     );
   },
   methods: {
-    getTotalScore(scoreSheet) {
-      let score = 0;
-      if (this.isSelection) {
-        this.selectionCategories.forEach(category => {
-          this.capabilities.forEach(capability => {
-            score += GRADE_VALUES[scoreSheet[category][capability]];
-          });
-        });
-      } else {
-        this.capabilities.forEach(capability => {
-          score += GRADE_VALUES[scoreSheet[capability]];
-        });
-      }
-      return score;
-    },
     btnNext,
     async btnComplete() {
       await functions.httpsCallable('completeTask')({
