@@ -332,7 +332,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
-import { PANEL_TYPES, PANEL_STATUS } from '../Panels/Constants';
+import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
 import { CAPABILITIES, GRADE_VALUES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';

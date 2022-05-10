@@ -99,12 +99,15 @@ import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/Moderat
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
-// TODO REMOVE!
-import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/Panels/List';
+// TODO remove these once we no longer need to support old code panels
+import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
+import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/xPanels/List';
+import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/xPanels/New';
+import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/xPanels/View';
+// END ////////////
 
-import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/Task/Panel/New';
-import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/Task/Panel/View';
+import ExerciseTasksPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
+import ExerciseTasksPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
@@ -1011,7 +1014,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/new',
-                  component: ExerciseTasksPanelsNew,
+                  component: ExerciseTasksPanelNew,
                   name: 'exercise-task-panel-new',
                   meta: {
                     requiresAuth: true,
@@ -1020,7 +1023,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/:panelId',
-                  component: ExerciseTasksPanelsView,
+                  component: ExerciseTasksPanelView,
                   name: 'exercise-task-panel',
                   meta: {
                     requiresAuth: true,
