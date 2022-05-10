@@ -19,7 +19,7 @@ const mockStore = {
   dispatch: jest.fn(),
   getters: {
     'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
-    'auth/hasPermission': jest.fn(() => true),
+    'auth/hasPermissions': jest.fn(() => true),
   },
   state: {
     exerciseDocument: {

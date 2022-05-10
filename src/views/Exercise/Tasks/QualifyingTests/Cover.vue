@@ -34,7 +34,7 @@
       </template>
     </Table>
 
-    <div v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)">
+    <div v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canCreateQualifyingTests.value])">
       <button
         v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
         class="govuk-button govuk-!-margin-right-3"
@@ -64,7 +64,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -72,7 +72,7 @@ export default {
     Banner,
     TableCell,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   props: {
     tieBreakers: {
       required: true,

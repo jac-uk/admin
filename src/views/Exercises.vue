@@ -18,7 +18,7 @@
             Show my favourites
           </button>
           <router-link
-            v-if="hasPermission(PERMISSIONS.exercises.permissions.canCreateExercises.value)"
+            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
             ref="linkToNewExercise"
             to="/create-exercise"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
@@ -121,14 +121,14 @@
 import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       selectedItems: [],

@@ -217,7 +217,7 @@
         </Table>
       </div>
       <div v-else>
-        <div v-show="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)">
+        <div v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])">
           <select
             id="exercise-stage"
             v-model="exerciseStage"
@@ -287,7 +287,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -299,7 +299,7 @@ export default {
     Modal,
     UploadAssessment,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       exerciseStage: '',

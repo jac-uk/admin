@@ -61,7 +61,7 @@
               <select
                 v-model="user.customClaims.r"
                 class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
-                :disabled="!hasPermission(PERMISSIONS.users.permissions.canChangeUserRole.value)"
+                :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
                 @change="setUserRole(user)"
               >
                 <option
@@ -73,7 +73,7 @@
                 </option>
               </select>
               <ActionButton
-                v-if="user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
+                v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="primary"
                 class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
@@ -81,7 +81,7 @@
                 Enable user
               </ActionButton>
               <ActionButton
-                v-if="!user.disabled && hasPermission(PERMISSIONS.users.permissions.canEnableUsers.value)"
+                v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="secondary"
                 class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
@@ -89,7 +89,7 @@
                 Disable user
               </ActionButton>
               <button
-                v-if="hasPermission(PERMISSIONS.users.permissions.canDeleteUsers.value)"
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
                 class="govuk-button govuk-button--warning"
                 @click="confirmDeleteUser(userIndex)"
               >
@@ -147,8 +147,9 @@
                 <h1>Roles</h1>
               </div>
               <div
-                v-if="hasPermission(PERMISSIONS.users.permissions.canCreateRoles.value)"
-                class="govuk-grid-column-one-half">
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateRoles.value])"
+                class="govuk-grid-column-one-half"
+              >
                 <div class="text-right">
                   <button
                     class="govuk-button govuk-!-margin-right-1 govuk-!-margin-top-3 govuk-!-margin-bottom-3"
@@ -180,7 +181,7 @@
                 </Checkbox>
               </div>
 
-              <div v-if="hasPermission(PERMISSIONS.users.permissions.canEditRolePermissions.value)">
+              <div v-if="hasPermissions([PERMISSIONS.users.permissions.canEditRolePermissions.value])">
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
@@ -276,7 +277,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -288,7 +289,7 @@ export default {
     Checkbox,
     TextField,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       loaded: false,
@@ -348,7 +349,7 @@ export default {
     }
   },
   updated() {
-    const canEditRolePermissions = this.hasPermission(this.PERMISSIONS.users.permissions.canEditRolePermissions.value);
+    const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
     if (!canEditRolePermissions) {
       const roleRef = this.$refs.role;
       if (roleRef) {

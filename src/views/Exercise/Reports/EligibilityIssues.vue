@@ -86,7 +86,7 @@
               <div class="govuk-grid-column-one-third">
                 <select
                   class="govuk-select"
-                  :disabled="!hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+                  :disabled="!hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -118,14 +118,14 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data () {
     return {
       applicationRecords: [],

@@ -51,7 +51,7 @@
           class="float-right"
         >
           <a
-            v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link"
             @click="changeState"
           >
@@ -116,7 +116,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && !isPublished"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canPublishExercise.value]) && !isPublished"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -124,14 +124,14 @@
         Publish on website
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && isPublished"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canPublishExercise.value]) && isPublished"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
         Remove from website
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isDraft"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isDraft"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="submitForApproval"
@@ -139,34 +139,34 @@
         Submit for Approval
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canApproveExercise.value) && isReadyForApproval"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canApproveExercise.value]) && isReadyForApproval"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
         Approve
       </button>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value) && isApproved"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
         Unlock
       </button>
       <ActionButton
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isApproved"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isApproved"
         @click="copyToClipboard"
       >
         Copy to Clipboard
       </ActionButton>
       <br>
       <ActionButton
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isReadyForProcessing"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isReadyForProcessing"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value) && isProcessing"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isProcessing"
         @click="updateProcessing()"
       >
         Process late applications
@@ -194,7 +194,7 @@ import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
-import PERMISSIONS from '@/permissions';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -203,11 +203,7 @@ export default {
     Modal,
     ChangeExerciseState,
   },
-  data() {
-    return {
-      PERMISSIONS,
-    };
-  },
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
@@ -320,9 +316,6 @@ export default {
     },
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     submitForApproval() {
       this.$store.dispatch('exerciseDocument/submitForApproval');
     },

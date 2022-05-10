@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-summary-edit'}"
       >
@@ -82,7 +82,7 @@
     </dl>
 
     <button
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && !isPublished"
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canPublishExercise.value]) && !isPublished"
       :disabled="!canPublish"
       class="govuk-button govuk-button--secondary"
       @click="publish"
@@ -90,7 +90,7 @@
       Publish on website
     </button>
     <button
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canPublishExercise.value) && isPublished"
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canPublishExercise.value]) && isPublished"
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >
@@ -102,16 +102,10 @@
 <script>
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
-import Permission from '@/components/Permission';
-import PERMISSIONS from '@/permissions';
+import permissionMixin from '@/permissionMixin';
 
 export default {
-  extends: Permission,
-  data() {
-    return {
-      PERMISSIONS,
-    };
-  },
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

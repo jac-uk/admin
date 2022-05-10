@@ -15,7 +15,7 @@
           </router-link>
         </div>
         <div
-          v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
           class="govuk-grid-column-three-quarters"
         >
           <div class="float-right govuk-!-margin-0">
@@ -36,7 +36,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!hasJourney && isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+            v-if="!hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -63,7 +63,7 @@ import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavourit
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -71,7 +71,7 @@ export default {
     AddToFavouritesButton,
     SubNavigation,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       loaded: false,
@@ -114,7 +114,7 @@ export default {
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
-      if (this.exercise.applications || this.hasOpened) {
+      if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
       if (this.hasQualifyingTests || this.isProcessing) {

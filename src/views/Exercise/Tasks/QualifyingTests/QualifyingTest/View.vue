@@ -117,7 +117,7 @@
     </div>
 
     <div
-      v-show="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+      v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
       class="govuk-grid-column-full govuk-!-margin-bottom-2"
     >
       <span v-if="isCreated || isSubmitted || isApproved">
@@ -344,7 +344,7 @@ import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -352,7 +352,7 @@ export default {
     Select,
     Banner,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       exerciseStage: '',

@@ -23,7 +23,7 @@
     </Table>
 
     <button
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+      v-if="hasPermissions([PERMISSIONS.qualifyingTestReports.permissions.canCreateQualifyingTestReports.value])"
       class="govuk-button govuk-!-margin-right-3"
       @click="btnCreate"
     >
@@ -35,14 +35,14 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   props: {
     tieBreakers: {
       required: true,

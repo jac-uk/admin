@@ -21,7 +21,10 @@
             class="float-right"
           >
             <ul class="govuk-header__navigation user-menu">
-              <li class="govuk-header__navigation-item">
+              <li
+                v-if="hasPermissions([PERMISSIONS.logs.permissions.canReadLogs.value])"
+                class="govuk-header__navigation-item"
+              >
                 <RouterLink
                   v-if="authorisedToPerformAction"
                   :to="{ name: 'events' }"
@@ -30,7 +33,10 @@
                   Events
                 </RouterLink>
               </li>
-              <li class="govuk-header__navigation-item">
+              <li
+                v-if="hasPermissions([PERMISSIONS.notifications.permissions.canReadNotifications.value])"
+                class="govuk-header__navigation-item"
+              >
                 <RouterLink
                   :to="{ name: 'notifications' }"
                   class="govuk-header__link"
@@ -38,7 +44,10 @@
                   Notifications
                 </RouterLink>
               </li>
-              <li class="govuk-header__navigation-item">
+              <li
+                v-if="hasPermissions([PERMISSIONS.exercises.permissions.canReadExercises.value])"
+                class="govuk-header__navigation-item"
+              >
                 <RouterLink
                   :to="{ name: 'exercises' }"
                   class="govuk-header__link"
@@ -47,7 +56,7 @@
                 </RouterLink>
               </li>
               <li
-                v-if="hasPermission(PERMISSIONS.candidates.permissions.canViewAllCandidates.value)"
+                v-if="hasPermissions([PERMISSIONS.candidates.permissions.canReadCandidates.value])"
                 class="govuk-header__navigation-item"
               >
                 <RouterLink
@@ -184,11 +193,11 @@
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'App',
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,

@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-application-content-edit'}"
       >
@@ -67,7 +67,7 @@
             class="float-right"
           >
             <a
-              v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+              v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
               class="govuk-link"
               @click="$refs['modalEditCurrentStep'].openModal()"
             >
@@ -122,14 +122,14 @@
 import { isEditable, isProcessing, applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import EditCurrentStep from './EditCurrentStep';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Modal,
     EditCurrentStep,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

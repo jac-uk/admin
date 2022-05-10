@@ -12,7 +12,7 @@
           </h1>
         </div>
         <div
-          v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+          v-if="hasPermissions([PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value])"
           class="moj-page-header-actions__actions float-right"
         >
           <div class="moj-button-menu">
@@ -89,7 +89,7 @@
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -97,7 +97,7 @@ export default {
     Table,
     TableCell,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       message: null,

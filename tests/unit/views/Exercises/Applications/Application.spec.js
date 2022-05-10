@@ -63,7 +63,7 @@ describe('@/views/Exercise/Applications/Application', () => {
           $store: {
             getters: {
               'application/data': jest.fn(() => mockApplication),
-              'auth/hasPermission': jest.fn(() => true),
+              'auth/hasPermissions': jest.fn(() => true),
             },
             state: {
               exerciseDocument: {
@@ -151,7 +151,7 @@ describe('@/views/Exercise/Applications/Application', () => {
             dispatch: jest.fn(),
             getters: {
               'application/data': jest.fn(() => mockApplication),
-              'auth/hasPermission': jest.fn(() => true),
+              'auth/hasPermissions': jest.fn(() => true),
             },
             state: {
               exerciseDocument: {

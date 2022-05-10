@@ -42,7 +42,7 @@
           </span>
         </dd>
         <dd
-          v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
           class="govuk-summary-list__actions"
         >
           <RouterLink
@@ -62,7 +62,7 @@
     />
 
     <button
-      v-if="!characterChecksEnabled && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+      v-if="!characterChecksEnabled && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
       class="govuk-button"
       @click="enableCharacterChecks()"
     >
@@ -295,7 +295,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'CharacterChecks',
@@ -308,7 +308,7 @@ export default {
     Modal,
     CharacterChecksRequests,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   data() {
     return {
       tabs: [

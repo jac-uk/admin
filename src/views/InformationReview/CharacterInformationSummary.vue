@@ -8,7 +8,7 @@
         Version {{ version }}
       </h3>
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value) && hasValues(characterInformation) && editable"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value]) && hasValues(characterInformation) && editable"
         class="govuk-button govuk-button--warning"
         @click="changeCharacterInfo({})"
       >
@@ -49,7 +49,7 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
 import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
-import PERMISSIONS from '@/permissions';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'CharacterInformationSummary',
@@ -57,6 +57,7 @@ export default {
     CharacterInformationSummaryV1,
     CharacterInformationSummaryV2,
   },
+  mixins: [permissionMixin],
   props: {
     characterInformation: {
       type: Object,
@@ -72,11 +73,6 @@ export default {
       type: Number,
       required: true,
     },
-  }, 
-  data() {
-    return {
-      PERMISSIONS,
-    };
   },
   computed: {
     isVersion2() {
@@ -87,9 +83,6 @@ export default {
     },
   },
   methods: {
-    hasPermission(permission) {
-      return this.$store.getters['auth/hasPermission'](permission);
-    },
     hasValues(target){
       if (target !== null && target !== undefined) {
         return Object.keys(target).some(item => (item && item.length) || (item !== false && item !== true));

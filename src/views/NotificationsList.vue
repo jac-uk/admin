@@ -9,7 +9,12 @@
         Notifications
       </h1>
 
-      <div v-if="hasPermission(PERMISSIONS.notifications.permissions.canUpdateNotifications.value)">
+      <div
+        v-if="hasPermissions([
+          PERMISSIONS.notifications.permissions.canUpdateNotifications.value,
+          PERMISSIONS.settings.permissions.canUpdateSettings.value
+        ])"
+      >
         <button
           v-if="isProcessing"
           class="govuk-button"
@@ -126,7 +131,10 @@
           </Checkbox>
 
           <button
-            v-if="hasPermission(PERMISSIONS.notifications.permissions.canUpdateNotifications.value)"
+            v-if="hasPermissions([
+              PERMISSIONS.notifications.permissions.canUpdateNotifications.value,
+              PERMISSIONS.settings.permissions.canUpdateSettings.value
+            ])"
             class="govuk-button"
             :disabled="!hasChanges"
           >
@@ -146,7 +154,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -157,7 +165,8 @@ export default {
     TextField,
     Checkbox,
   },
-  mixins: [Form, Permission],
+  extends: Form,
+  mixins: [permissionMixin],
   data() {
     return {
       activeTab: 'queue',
@@ -219,7 +228,7 @@ export default {
     }
   },
   updated() {
-    const canUpdateNotifications = this.hasPermission(this.PERMISSIONS.notifications.permissions.canUpdateNotifications.value);
+    const canUpdateNotifications = this.hasPermissions([this.PERMISSIONS.notifications.permissions.canUpdateNotifications.value]);
     if (!canUpdateNotifications) {
       const settingsRef = this.$refs.settings;
       if (settingsRef) {

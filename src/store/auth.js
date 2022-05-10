@@ -88,9 +88,9 @@ const module = {
     getEmail(state) {
       return state.currentUser.email;
     },
-    hasPermission: state => permission => {
+    hasPermissions: state => permissions => {
       const rolePermissions = state.currentUser.rolePermissions;
-      return rolePermissions && Array.isArray(rolePermissions) && rolePermissions.includes(permission);
+      return rolePermissions && Array.isArray(rolePermissions) && rolePermissions.includes(...permissions);
     },
   },
 };

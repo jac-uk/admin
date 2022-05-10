@@ -7,13 +7,14 @@
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
       <button
-        v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+        v-if="hasPermissions([PERMISSIONS.panels.permissions.canCreatePanels.value])"
         class="govuk-button govuk-!-margin-bottom-0"
         @click="createNewPanel"
       >
         Create New
       </button>
       <Table
+        v-if="hasPermissions([PERMISSIONS.panels.permissions.canReadPanels.value])"
         data-key="id"
         :data="panelsList"
         :page-size="50"
@@ -49,7 +50,7 @@
       >
         <template #actions>
           <button
-            v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+            v-if="hasPermissions([PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value])"
             class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
             :disabled="isButtonDisabled"
             @click="btnClkSelectPanel('modalRefPanel')"
@@ -100,7 +101,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SelectPanel from '@/components/ModalViews/SelectPanel';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -110,7 +111,7 @@ export default {
     Modal,
     SelectPanel,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   props: {
     type: {
       required: true,

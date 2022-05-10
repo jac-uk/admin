@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable && hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-downloads-edit'}"
       >
@@ -210,13 +210,13 @@
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import { mapState } from 'vuex';
 import { isEditable, hasIndependentAssessments } from '@/helpers/exerciseHelper';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     DownloadLink,
   },
-  extends: Permission,
+  mixins: [permissionMixin],
   computed: {
     ...mapState({
       userId: state => state.auth.currentUser.uid,

@@ -34,7 +34,7 @@
     </div>
 
     <button 
-      v-if="hasPermission(PERMISSIONS.exercises.permissions.canUpdateExercises.value)"
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
       class="govuk-button"
     >
       Save and continue
@@ -46,7 +46,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import Permission from '@/components/Permission';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -54,7 +54,8 @@ export default {
     RadioGroup,
     RadioItem,
   },
-  mixins: [Form, Permission],
+  extends: Form,
+  mixins: [permissionMixin],
   data(){
     const defaults = {
       characterChecks: {
@@ -74,7 +75,7 @@ export default {
     };
   },
   mounted() {
-    const canUpdateExercises = this.hasPermission(this.PERMISSIONS.exercises.permissions.canUpdateExercises.value);
+    const canUpdateExercises = this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
     if (!canUpdateExercises) {
       const radiosRef = this.$refs.radios;
       if (radiosRef) {
