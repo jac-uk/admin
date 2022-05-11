@@ -424,7 +424,6 @@ export default {
       this.activeTab = 'applications';
     },
     async deletePanel() {
-      console.log('delete panel');
       await this.$store.dispatch('panel/delete', this.panelId );
       this.$router.push({ name: 'exercise-tasks-panels' });
     },
@@ -444,7 +443,6 @@ export default {
       this.isEditingPanellists = false;
     },
     onChangeScoreSheet() {
-      console.log('update score sheet view');
       if (this.$refs['scoreSheet']) {
         this.$refs['scoreSheet'].loaded();
       }

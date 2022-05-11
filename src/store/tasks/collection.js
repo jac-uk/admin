@@ -7,7 +7,6 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, commit }, params) => {
-      console.log('tasks bind');
       commit('setLoaded', true);
       commit('setParams', params);
       const firestoreRef = firestore.collection(`exercises/${params.exerciseId}/tasks`);
@@ -18,26 +17,6 @@ export default {
       commit('setParams', {});
       return unbindFirestoreRef('records');
     }),
-    // progressTask: async ({ state, getters }, params) => {
-    //   console.log('progress task', state, params);
-
-    //   // check params
-    //   if (params.exerciseId !== state.params.exerciseId) return '';
-
-    //   const task = getters['getTask'](params.type);
-    //   console.log('task', task);
-
-    //   const currentStatus = task.status;
-    //   const nextStatus = taskNextStatus(currentStatus);
-    //   // if (nextStatus !== currentStatus) {
-    //   //   const ref = firestore.doc(`exercises/${params.exerciseId}/tasks/${params.type}`);
-    //   //   const data = {};
-    //   //   data['status'] = nextStatus;
-    //   //   data[`statusLog.${nextStatus}`] = firebase.firestore.FieldValue.serverTimestamp();
-    //   //   await ref.update(data);
-    //   // }
-    //   return nextStatus;
-    // },
   },
   mutations: {
     setLoaded(state, value) {

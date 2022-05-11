@@ -231,7 +231,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import PanelForm from './components/AddEdit';
 import EditPanellists from './Panellists/Edit';
 import ViewPanellists from './Panellists/View';
-import { ROLES } from './Constants';
+import { ROLES, PANEL_STATUS } from './Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 
 export default {
@@ -358,7 +358,7 @@ export default {
       return !isDisabled;
     },
     canExportToGoogleDrive() {
-      if (this.panel && ['draft'].indexOf(this.panel.status) >= 0) {
+      if (this.panel && [PANEL_STATUS.DRAFT, PANEL_STATUS.CREATED].indexOf(this.panel.status) >= 0) {
         return true;
       } else {
         return false;
@@ -419,7 +419,6 @@ export default {
       this.activeTab = 'applications';
     },
     async deletePanel() {
-      console.log('delete panel');
       await this.$store.dispatch('panel/delete', this.panelId );
       this.$router.push({ name: 'exercise-task-loading' });
     },
@@ -439,7 +438,6 @@ export default {
       this.isEditingPanellists = false;
     },
     onChangeScoreSheet() {
-      console.log('update score sheet view');
       if (this.$refs['scoreSheet']) {
         this.$refs['scoreSheet'].loaded();
       }
@@ -465,7 +463,7 @@ export default {
         status: 'approved',   // TODO this needs to work off of another field e.g. `exportStatus`
         'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
       };
-      await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: data });
+      await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
     },
     // async resetPanelExport() {
     //   const data = {

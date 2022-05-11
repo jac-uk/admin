@@ -46,7 +46,6 @@ export default {
     update: async (context, { data, id }) => {
       const ref = collection.doc(id);
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      console.log('update panel', id, data);
       await ref.update(data);
     },
     delete: async (context, id) => {

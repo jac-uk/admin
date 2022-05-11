@@ -39,7 +39,6 @@ export default {
   watch: {
     exercise: {
       handler: function() {
-        console.log('watch exercise', this.exercise);
         this.isExerciseLoaded();
       },
       deep: true,
@@ -47,7 +46,6 @@ export default {
     },
     task: {
       handler: function() {
-        console.log('watch task', this.task);
         this.isExerciseLoaded();
       },
       deep: true,
