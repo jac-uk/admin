@@ -384,7 +384,6 @@ export default {
     hasTaskStarted() {
       if (!this.task) return false;
       if (!this.task.startDate) return false;
-      console.log('hasTaskStarted', formatDate(this.task.startDate));
       return new Date(formatDate(this.task.startDate)) < new Date();
     },
     panels() {

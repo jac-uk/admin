@@ -58,6 +58,10 @@ export default {
         sideNavigation.push(
           {
             title: 'Sift',
+            tag: {
+              title: 'Alpha',
+              class: 'govuk-tag--blue',
+            },
             path: `${path}/sift`,
           },
         );
@@ -67,6 +71,10 @@ export default {
       sideNavigation.push(
         {
           title: 'Selection',
+          tag: {
+            title: 'Alpha',
+            class: 'govuk-tag--blue',
+          },
           path: `${path}/selection`,
         },
       );
@@ -75,6 +83,10 @@ export default {
       sideNavigation.push(
         {
           title: 'Scenario',
+          tag: {
+            title: 'Alpha',
+            class: 'govuk-tag--blue',
+          },
           path: `${path}/scenario`,
         }
       );

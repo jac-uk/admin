@@ -2,7 +2,7 @@
   <div>
     <!-- qualifications -->
     <div>
-      <h2 
+      <h2
         class="govuk-heading-l govuk-!-margin-top-6"
       >
         Qualifications
@@ -66,7 +66,7 @@
                 <dt
                   class="govuk-summary-list__key widerColumn"
                 >
-                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
+                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }}
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
@@ -79,7 +79,7 @@
                     @changeField="changeQualificationOrMembership"
                   />
                 </dd>
-              </div> 
+              </div>
 
               <template>
                 <div
@@ -422,20 +422,20 @@ export default {
         changedObj = [...changedObj, this.dataDefault];
       } else {
         changedObj = [this.dataDefault];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
 
     },
     removeQualification() {
-      
+
       let changedObj = this.application.qualifications || [];
 
       if (changedObj.length > 0){
         changedObj.splice(this.currentIndex, 1);
       } else {
         changedObj = [];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
 
@@ -443,7 +443,7 @@ export default {
 
     },
     changeQualificationOrMembership(obj) {
-      
+
       let changedObj = this.application[obj.field] || {};
 
       if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { //nested field
@@ -457,12 +457,11 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = { 
+      const updatedApplication = {
         [obj.field]: {
           ...this.application[obj.field], ...changedObj },
       };
 
-      // console.log(updatedApplication);
       this.$emit('updateApplication', updatedApplication );
 
     },

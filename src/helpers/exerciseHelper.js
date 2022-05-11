@@ -28,6 +28,7 @@ export {
   GRADES,
   GRADE_VALUES,
   SELECTION_CATEGORIES,
+  TASKS,
   TASK_STATUS,
   TASK_TYPE,
   taskApplicationsStageAndStatus,
@@ -120,6 +121,18 @@ const GRADE_VALUES = {
 };
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
 
+const TASK_TYPE = {
+  SIFT: 'sift',
+  SELECTION: 'selection',
+  SCENARIO: 'scenario',
+};
+
+const TASKS = [
+  TASK_TYPE.SIFT,
+  TASK_TYPE.SCENARIO,
+  TASK_TYPE.SELECTION,
+];
+
 const TASK_STATUS = {
   INITIALISED: 'initialised',
   ACTIVATED: 'activated',
@@ -127,12 +140,6 @@ const TASK_STATUS = {
   MODERATION_ACTIVATED: 'moderationActivated',
   FINALISED: 'finalised',
   COMPLETED: 'completed',
-};
-
-const TASK_TYPE = {
-  SIFT: 'sift',
-  SELECTION: 'selection',
-  SCENARIO: 'scenario',
 };
 
 function taskNextStatus(currentStatus) {
@@ -561,7 +568,6 @@ function isApplicationComplete(vacancy, application) {
   if (!requiredParts) return false;
   const partsToComplete = Object.keys(requiredParts).filter(part => requiredParts[part] === true);
   const incompleteParts = partsToComplete.filter(part => application.progress[part] !== true);
-  // console.log('incompleteParts', incompleteParts);
   return incompleteParts.length === 0;
 }
 

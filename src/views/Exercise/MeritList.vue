@@ -6,7 +6,6 @@
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
             Merit List
-            {{ scoreSheetColumns }}
           </h2>
         </div>
         <div
@@ -69,33 +68,21 @@
           :data="scoreSheetRows"
           :columns="scoreSheetColumns"
           :page-size="500"
-          @change="onChangeScoreSheet"
           class="merit-list"
         >
           <template #header>
             <tr class="govuk-table__row">
               <th scope="col" class="govuk-table__header table-cell-application"></th>
               <th
-                v-if="emptyScoreSheet.sift"
+                v-for="column in headerColumns"
+                :key="column.ref"
                 scope="col"
-                :colspan="showDetail.sift ? capabilities.length : 1"
-                class="govuk-table__header text-center"
-                @click="showDetail.sift = !showDetail.sift"
+                :colspan="column.colspan > 1 ? column.colspan : false"
+                class="govuk-table__header text-center expandable"
+                @click="toggleColumn(column.ref)"
               >
-                Sift
+                <span class="elipses">{{ column.ref  | lookup }}</span>
               </th>
-              <template v-if="emptyScoreSheet.selection">
-                <th
-                  v-for="category in selectionCategories"
-                  :key="category"
-                  scope="col"
-                  :colspan="showDetail.selection[category] ? capabilities.length : 1"
-                  class="govuk-table__header text-center"
-                  @click="showDetail.selection[category] = !showDetail.selection[category]"
-                >
-                  <span class="elipses">{{ category | lookup }}</span>
-                </th>
-              </template>
             </tr>
           </template>
           <template #row="{row}">
@@ -103,34 +90,38 @@
               <a href="#" class="govuk-link">{{ row.referenceNumber }}</a>
             </TableCell>
 
-            <template v-if="row.scoreSheet.sift && showDetail.sift">
+            <template v-if="row.sift && isOpen('sift')">
               <TableCell
                 v-for="(cap, index) in capabilities"
                 :key="`sift_${index}`"
                 class="text-center table-cell-score"
               >
-                {{ row.scoreSheet.sift.scoreSheet[cap] }}
+                {{ row.sift.scoreSheet[cap] }}
+                <span v-if="cap == 'OVERALL'">({{ row.sift.score }})</span>
               </TableCell>
             </template>
-            <template v-else-if="row.scoreSheet.sift && !showDetail.sift">
+            <template v-else-if="row.sift && !isOpen('sift')">
               <TableCell
                 class="text-center table-cell-score"
               >
-                {{ row.scoreSheet.sift.scoreSheet[capabilities[capabilities.length - 1]] }}
+                {{ row.sift.scoreSheet[capabilities[capabilities.length - 1]] }}
+                ({{ row.sift.score }})
               </TableCell>
             </template>
+            <td v-else :colspan="siftColumnCount"></td>
 
-            <template v-if="row.scoreSheet.selection">
+            <template v-if="row.selection">
               <template
                 v-for="category in selectionCategories"
               >
-                <template v-if="showDetail.selection[category]">
+                <template v-if="isOpen(category)">
                   <TableCell
                     v-for="(cap, index) in capabilities"
                     :key="`${category}_${index}`"
                     class="text-center table-cell-score"
                   >
-                    {{ row.scoreSheet.selection.scoreSheet[category][cap] }}
+                    {{ row.selection.scoreSheet[category][cap] }}
+                    <span v-if="cap == 'OVERALL'">({{ row.selection.scoreSheet[category].score }})</span>
                   </TableCell>
                 </template>
                 <template v-else>
@@ -138,11 +129,18 @@
                     :key="category"
                     class="text-center table-cell-score"
                   >
-                    {{ row.scoreSheet.selection.scoreSheet[category][capabilities[capabilities.length - 1]] }}
+                    {{ row.selection.scoreSheet[category]['OVERALL'] }}
+                    ({{ row.selection.scoreSheet[category].score }})
                   </TableCell>
                 </template>
               </template>
             </template>
+            <td v-else :colspan="selectionColumnCount"></td>
+
+            <TableCell class="text-center">
+              {{ row.totalScore }}
+            </TableCell>
+
           </template>
         </Table>
       </div>
@@ -155,7 +153,7 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import { CAPABILITIES, SELECTION_CATEGORIES, emptyScoreSheet } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, TASKS, TASK_TYPE, TASK_STATUS } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -165,17 +163,7 @@ export default {
   },
   data() {
     return {
-      panelsLoaded: false,
-      scoreSheetRows: [],
-      showDetail: {
-        sift: false,
-        selection: {
-          leadership: false,
-          roleplay: false,
-          interview: false,
-          overall: false,
-        },
-      },
+      openColumns: [],
       tabs: [
         {
           ref: 'shortlisted',
@@ -206,132 +194,131 @@ export default {
       return CAPABILITIES.filter(cap => this.exercise.capabilities.indexOf(cap) >= 0);
     },
     selectionCategories() {
-      return SELECTION_CATEGORIES;
+      if (!this.exercise) return [];
+      return SELECTION_CATEGORIES.filter(cap => this.exercise.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
     },
-    emptyScoreSheet() {
-      return emptyScoreSheet({ capabilities: this.capabilities });
+    tasks() {
+      return this.$store.state.tasks.records;
     },
-    panels() {
-      return this.$store.state.panels.records;
+    completedTasks() {
+      if (!this.tasks) return [];
+      const tasks = this.tasks.filter(task => task.status === TASK_STATUS.COMPLETED);
+      const completedTasks = [];
+      TASKS.forEach(type => {
+        const task = tasks.find(task => task.type === type);
+        if (task) { completedTasks.push(task); }
+      });
+      return completedTasks;
     },
     hasScoreSheet() {
-      // if (this.panels && this.panels.length) {
-      //   if (this.panels.find(p => p.scoreSheet)) return true;
-      // }
-      return false;
+      return this.completedTasks.length > 0;
+    },
+    headerColumns() {
+      const columns = [];
+      this.completedTasks.forEach(task => {
+        switch (task.type) {
+        case TASK_TYPE.SIFT:
+          columns.push({
+            ref: task.type,
+            colspan: this.isOpen(task.type) ? this.capabilities.length : 1,
+          });
+          break;
+        case TASK_TYPE.SELECTION:
+          this.selectionCategories.forEach(cat => {
+            columns.push({
+              ref: cat,
+              colspan: this.isOpen(cat) ? this.capabilities.length : 1,
+            });
+          });
+          break;
+        }
+      });
+      return columns;
+    },
+    siftColumnCount() {
+      return this.isOpen(TASK_TYPE.SIFT) ? this.capabilities.length : 1;
+    },
+    selectionColumnCount() {
+      let columnCount = 0;
+      this.selectionCategories.forEach(cat => {
+        columnCount += this.isOpen(cat) ? this.capabilities.length : 1;
+      });
+      return columnCount;
     },
     scoreSheetColumns() {
       const columns = [];
-      // if (!this.hasScoreSheet) return columns;
+      if (!this.hasScoreSheet) return columns;
       columns.push({ title: 'Application', class: 'table-cell-application' });
-      if (this.emptyScoreSheet.sift) {
-        if (this.showDetail.sift) {
-          this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-        } else {
-          columns.push({ title: this.capabilities[this.capabilities.length - 1], class: 'text-center table-cell-score' });
-        }
-      }
-      if (this.emptyScoreSheet.selection) {
-        this.selectionCategories.forEach(category => {
-          if (this.showDetail.selection[category]) {
+      this.completedTasks.forEach(task => {
+        switch (task.type) {
+        case TASK_TYPE.SIFT:
+          if (this.isOpen(TASK_TYPE.SIFT)) {
             this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
           } else {
             columns.push({ title: this.capabilities[this.capabilities.length - 1], class: 'text-center table-cell-score' });
           }
-        });
-      }
+          break;
+        case TASK_TYPE.SELECTION:
+          this.selectionCategories.forEach(category => {
+            if (this.isOpen(category)) {
+              this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
+            } else {
+              columns.push({ title: this.capabilities[this.capabilities.length - 1], class: 'text-center table-cell-score' });
+            }
+          });
+          break;
+        }
+      });
+      columns.push({ title: 'Total score', class: 'text-center' });
       return columns;
     },
-  },
-  watch: {
-    panels() {
-      if (this.panels && !this.panelsLoaded) {
-        console.log('panels loaded');
-        this.panelsLoaded = true;
-        if (this.hasScoreSheet) {
-          if (this.$refs['scoreSheet']) {
-            this.$refs['scoreSheet'].loaded();
-          }
-          this.scoreSheetRows = this.getScoreSheetRows();
-        }
-      }
-    },
-  },
-  created() {
-    this.$store.dispatch('panels/bind', { exerciseId: this.exercise.id });
-  },
-  destroyed() {
-  },
-  methods: {
-    displayedCapabilities(ref) {  // TODO this is a little bit clunky as we are hardcoding 'sift'
-      if (ref === 'sift') {
-        if (this.showDetail.sift) {
-          return this.capabilities;
-        } else {
-          return this.capabilities[this.capabilities.length - 1];
-        }
-      } else {
-        if (this.showDetail.selection[ref]) {
-          return this.capabilities;
-        } else {
-          return this.capabilities[this.capabilities.length - 1];
-        }
-      }
-    },
-    onChangeScoreSheet() {
-      console.log('update score sheet view');
-      if (this.$refs['scoreSheet']) {
-        this.$refs['scoreSheet'].loaded();
-      }
-    },
-    getScoreSheetRows() {
-      const rows = [];
-      if (!this.hasScoreSheet) return rows;
-
-      // construct (empty) applications map
-      const applicationsMap = {};
-      this.panels.forEach(panel => {
-        if (!panel.applicationIds) return;
-        panel.applicationIds.forEach(applicationId => {
-          if (!applicationsMap[applicationId]) {
-            applicationsMap[applicationId] = {
-              referenceNumber: panel.applications[applicationId].referenceNumber,
-              scoreSheet: emptyScoreSheet({ capabilities: this.capabilities }),
+    scoreSheetRows() {
+      if (!this.hasScoreSheet) return [];
+      const applicationData = {};
+      this.completedTasks.forEach(task => {
+        task.finalScores.forEach(row => {
+          if (!applicationData[row.id]) {
+            applicationData[row.id] = {
+              totalScore: 0,
             };
           }
+          applicationData[row.id].referenceNumber = row.ref;
+          applicationData[row.id][task.type] = {
+            score: row.score,
+            scoreSheet: row.scoreSheet,
+          };
+          applicationData[row.id].totalScore += row.score;
         });
       });
-
-      // populate applications map
-      this.panels.forEach(panel => {
-        if (!panel.applicationIds) return;
-        if (!panel.capabilities) return;
-        if (!panel.scoreSheet) return;
-        panel.applicationIds.forEach(applicationId => {
-          const scoreSheet = {
-            ...applicationsMap[applicationId].scoreSheet[panel.type].scoreSheet,
-            ...panel.scoreSheet[applicationId],
-          };
-          applicationsMap[applicationId].scoreSheet[panel.type].scoreSheet = scoreSheet;
-          applicationsMap[applicationId].scoreSheet[panel.type].panel = {
-            id: panel.id,
-            name: panel.name,
-          };
-          applicationsMap[applicationId].scoreSheet[panel.type].report = null;
-        });
-      });
-
-      // convert to rows
-      Object.entries(applicationsMap).forEach(([key, value]) => {
-        const row = {};
-        row.id = key;
-        row.referenceNumber = value.referenceNumber;
-        row.scoreSheet = value.scoreSheet;
-        rows.push(row);
-      });
-
+      const rows = Object.entries(applicationData).map(([id, row]) => {
+        return {
+          id: id,
+          ...row,
+        };
+      }).sort((a, b) => b.totalScore - a.totalScore);
       return rows;
     },
+  },
+  async created() {
+    await this.$store.dispatch('tasks/bind', { exerciseId: this.exercise.id } );
+  },
+  methods: {
+    toggleColumn(ref) {
+      const index = this.openColumns.indexOf(ref);
+      if (index >= 0) {
+        this.openColumns.splice(index, 1);
+      } else {
+        this.openColumns.push(ref);
+      }
+    },
+    isOpen(ref) {
+      return this.openColumns.indexOf(ref) >= 0;
+    },
+    // onChangeScoreSheet() {
+    //   if (this.$refs['scoreSheet']) {
+    //     this.$refs['scoreSheet'].loaded();
+    //   }
+    // },
     exportData() {
       console.log('export data');
     },
@@ -380,6 +367,11 @@ export default {
     background-color: white;
     z-index: 2;
     border: 0;
+    padding-left: 20px;
+    &.expandable {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
   tr:nth-child(2) > th {
     position: sticky;

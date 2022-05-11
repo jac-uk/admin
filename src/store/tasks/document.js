@@ -10,7 +10,6 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, type }) => {
-      console.log('bind task', `exercises/${exerciseId}/tasks/${type}`);
       const firestoreRef = firestore.doc(`exercises/${exerciseId}/tasks/${type}`);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -22,19 +21,6 @@ export default {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       await ref.update(data);
     },
-    // progressTask: async ({ state }) => {
-    //   const id = state.record.id;
-    //   const ref = collection.doc(id);
-    //   const currentStatus = state.record.status;
-    //   const nextStatus = taskNextStatus(currentStatus);
-    //   const saveData = {};
-    //   if (nextStatus !== currentStatus) {
-    //     saveData['status'] = nextStatus;
-    //     saveData[`statusLog.${nextStatus}`] = firebase.firestore.FieldValue.serverTimestamp();
-    //     await ref.update(saveData);
-    //   }
-    //   return nextStatus;
-    // },
   },
   state: {
     record: null,

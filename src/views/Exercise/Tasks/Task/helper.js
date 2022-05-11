@@ -20,7 +20,6 @@ function beforeRouteEnter(to, from, next) {
 }
 
 async function btnNext() {
-  console.log('btnNext called, go to loading');
   this.$router.push({
     name: 'exercise-task-loading',
     params: this.$route.params,
