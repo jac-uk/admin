@@ -158,22 +158,6 @@
         Copy to Clipboard
       </ActionButton>
       <br>
-      <button
-        v-if="isReadyForTesting"
-        class="govuk-button"
-        type="primary"
-        @click="changeNoOfTestApplications()"
-      >
-        Create test applications
-      </button>
-      <ActionButton
-        v-if="isTesting"
-        ref="createTestApplicationsBtn"
-        type="primary"
-        @click="createTestApplications()"
-      >
-        Create test applications
-      </ActionButton>
       <ActionButton
         v-if="isReadyForProcessing"
         @click="startProcessing()"
@@ -186,6 +170,22 @@
       >
         Process late applications
       </ActionButton>
+      <div v-if="!isProduction">
+        <button
+          v-if="isReadyForTesting"
+          class="govuk-button"
+          @click="changeNoOfTestApplications()"
+        >
+          Create test applications
+        </button>
+        <ActionButton
+          v-if="isTesting"
+          ref="createTestApplicationsBtn"
+          @click="createTestApplications()"
+        >
+          Create test applications
+        </ActionButton>
+      </div>
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -227,6 +227,9 @@ export default {
     ChangeNoOfTestApplications,
   },
   computed: {
+    isProduction() {
+      return this.$store.getters['isProduction'];
+    },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
@@ -274,10 +277,10 @@ export default {
       return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
     },
     isProcessing() {
-      return isProcessing(this.exercise) && this.isTested;
+      return isProcessing(this.exercise);
     },
     isReadyForProcessing() {
-      return this.isApproved && !this.isProcessing && this.isTested;
+      return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
 

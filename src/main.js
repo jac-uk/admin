@@ -12,13 +12,9 @@ import * as Integrations from '@sentry/integrations';
 import './styles/main.scss';
 
 if (process.env.NODE_ENV !== 'development') {
-  // Split the URL
-  const host = window.location.host;
-  const parts = host.split('.');
-
   Sentry.init({
     dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
-    environment: parts[0] == 'admin' ? 'production' : 'staging',
+    environment: store.getters.appEnvironment.toLowerCase(),
     release: process.env.PACKAGE_VERSION, // made available in vue.config.js
     integrations: [new Integrations.Vue({ Vue, attachProps: true })],
   });
