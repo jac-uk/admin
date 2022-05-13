@@ -7,6 +7,12 @@
     </div>
     <div class="govuk-grid-column-one-third text-right">
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.logs.permissions.canCreateLogs.value
+        ])"
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
       >
@@ -17,6 +23,11 @@
         Export Data
       </button>
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
@@ -189,6 +200,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -197,6 +209,7 @@ export default {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   data () {
     return {
       exerciseStage: 'all',

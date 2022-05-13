@@ -82,7 +82,10 @@
     </dl>
 
     <button
-      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canPublishExercise.value]) && !isPublished"
+      v-if="!isPublished && hasPermissions([
+        PERMISSIONS.exercises.permissions.canPublishExercise.value,
+        PERMISSIONS.logs.permissions.canCreateLogs.value
+      ])"
       :disabled="!canPublish"
       class="govuk-button govuk-button--secondary"
       @click="publish"
@@ -90,7 +93,10 @@
       Publish on website
     </button>
     <button
-      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canPublishExercise.value]) && isPublished"
+      v-if="isPublished && hasPermissions([
+        PERMISSIONS.exercises.permissions.canPublishExercise.value,
+        PERMISSIONS.logs.permissions.canCreateLogs.value
+      ])"
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >

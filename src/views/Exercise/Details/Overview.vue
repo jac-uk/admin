@@ -116,7 +116,11 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canPublishExercise.value]) && !isPublished"
+        v-if="!isPublished && hasPermissions([
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.exercises.permissions.canPublishExercise.value,
+          PERMISSIONS.logs.permissions.canCreateLogs.value
+        ])"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -124,7 +128,11 @@
         Publish on website
       </button>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canPublishExercise.value]) && isPublished"
+        v-if="isPublished && hasPermissions([
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.exercises.permissions.canPublishExercise.value,
+          PERMISSIONS.logs.permissions.canCreateLogs.value
+        ])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
@@ -160,13 +168,26 @@
       </ActionButton>
       <br>
       <ActionButton
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isReadyForProcessing"
+        v-if="isReadyForProcessing && hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value
+        ])"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isProcessing"
+        v-if="isProcessing && hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value,
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+        ])"
         @click="updateProcessing()"
       >
         Process late applications
@@ -360,7 +381,14 @@ export default {
     },
     refreshApplicationCounts() {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
-        this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
+        if (this.hasPermissions([
+          this.PERMISSIONS.exercises.permissions.canReadExercises.value,
+          this.PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          this.PERMISSIONS.applications.permissions.canReadApplications.value,
+          this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+        ])) {
+          this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
+        }
       }
     },
   },

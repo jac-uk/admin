@@ -137,6 +137,12 @@
       <div v-if="isApproved && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])">
         <div v-if="isDryRun">
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             :disabled="!isDryRunCandidates"
             class="govuk-!-margin-right-3"
@@ -154,6 +160,12 @@
         </div>
         <div v-else-if="isMopUp">
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
@@ -244,6 +256,12 @@
             </option>
           </Select>
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             :disabled="!exerciseStage"
             class="govuk-!-margin-right-3"
@@ -261,7 +279,12 @@
       />
 
       <ActionButton
-        v-if="isInitialised && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
+        v-if="isInitialised && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value
+        ])"
         :disabled="!isUserAdded || !canOpenTests"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
@@ -312,7 +335,12 @@
       </button>
 
       <ActionButton
-        v-if="isInitialised"
+        v-if="isInitialised && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.notifications.permissions.canCreateNotifications.value
+        ])"
         type="secondary"
         :disabled="true"
         class="govuk-!-margin-right-3"
@@ -322,7 +350,13 @@
       </ActionButton>
 
       <ActionButton
-        v-if="(isActivated || isCompleted) && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
+        v-if="(isActivated || isCompleted) && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         type="primary"
         :disabled="isEndDatePassed"
         class="govuk-!-margin-right-3"

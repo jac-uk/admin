@@ -7,6 +7,12 @@
     </div>
     <div class="govuk-grid-column-one-third text-right">
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.logs.permissions.canCreateLogs.value,
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value
+        ])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
         :disabled="generatingExport"
         @click="exportData"
@@ -17,6 +23,11 @@
         /> Export data
       </button>
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         class="govuk-button govuk-button--secondary"
         @click="refreshReport"
       >

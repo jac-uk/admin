@@ -62,7 +62,12 @@
     />
 
     <button
-      v-if="!characterChecksEnabled && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+      v-if="!characterChecksEnabled && hasPermissions([
+        PERMISSIONS.exercises.permissions.canReadExercises.value,
+        PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+        PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+        PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+      ])"
       class="govuk-button"
       @click="enableCharacterChecks()"
     >

@@ -77,21 +77,34 @@
           status="warning"
         />
         <ActionButton
-          v-if="canCancelAssessments"
+          v-if="canCancelAssessments && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+          ])"
           class="govuk-!-margin-right-3"
           @click="cancelAssessments()"
         >
           Cancel Assessments
         </ActionButton>
         <ActionButton
-          v-if="canSendRequestsToAll"
+          v-if="canSendRequestsToAll && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
           type="primary"
           @click="sendRequestsToAll()"
         >
           Send to all
         </ActionButton>
         <ActionButton
-          v-if="canSendRemindersToAll"
+          v-if="canSendRemindersToAll && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
           type="primary"
           @click="sendRemindersToAll()"
         >
@@ -151,6 +164,9 @@
                   class="moj-button-menu__wrapper"
                 >
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value
+                    ])"
                     class="moj-button-menu__item"
                     @click="testRequest(row.id)"
                   >
@@ -187,6 +203,13 @@
                   class="moj-button-menu__wrapper"
                 >
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.exercises.permissions.canReadExercises.value,
+                      PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                      PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+                      PERMISSIONS.notifications.permissions.canCreateNotifications.value
+                    ])"
                     class="moj-button-menu__item"
                     @click="resendRequest(row.id)"
                   >
@@ -194,6 +217,10 @@
                   </ActionButton>
 
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                      PERMISSIONS.notifications.permissions.canCreateNotifications.value
+                    ])"
                     class="moj-button-menu__item"
                     @click="sendReminder(row.id)"
                   >
@@ -223,10 +250,10 @@
         <div
           v-if="hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.applications.permissions.canReadApplications.value,
             PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-            PERMISSIONS.assessments.permissions.canReadAssessments.value,
-            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+            PERMISSIONS.assessments.permissions.canCreateAssessments.value
           ])"
         >
           <select
