@@ -83,9 +83,11 @@
                   <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                 </div>
               </div>
-              <div class="govuk-grid-column-one-third">
-                <select
-                  class="govuk-select"
+              <div class="govuk-grid-column-one-third text-right">
+                <Select
+                  id="issue-action"
+                  :value="issue.action || ''"
+                  @input="saveIssueAction(row, issue, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -100,7 +102,7 @@
                   <option value="discuss">
                     Discuss
                   </option>
-                </select>
+                </Select>
               </div>
             </div>
           </TableCell>
@@ -117,11 +119,13 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
   components: {
     Table,
     TableCell,
+    Select,
   },
   data () {
     return {
@@ -206,7 +210,10 @@ export default {
         }
       );
     },
-
+    async saveIssueAction(applicationRecord, issue, action) {
+      issue.action = action;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
   },
 };
 </script>
