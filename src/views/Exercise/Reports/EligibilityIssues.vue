@@ -27,6 +27,30 @@
       </button>
     </div>
 
+    <div class="govuk-grid-column-full text-right">
+      <Select
+        id="issue-action-filter"
+        v-model="issueAction"
+        class="govuk-!-margin-right-2"
+      >
+        <option value="all">
+          All issue actions
+        </option>
+        <option value="proceed">
+          Proceed
+        </option>
+        <option value="reject">
+          Reject
+        </option>
+        <option value="reject-non-declaration">
+          Reject Non-Declaration
+        </option>
+        <option value="discuss">
+          Discuss
+        </option>
+      </Select>
+    </div>
+
     <div class="govuk-grid-column-full">
       <!-- // TODO Include count for issues across whole exercise. Then display here.
       <p class="govuk-body">
@@ -68,41 +92,45 @@
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
+              <div
+                v-if="issueAction === 'all' || (issue.action && issue.action === issueAction)"
               >
-              <div class="govuk-grid-column-two-thirds">
-                <div class="issue">
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
-                </div>
-                <div
-                  v-if="issue.comments"
-                  class="jac-comments"
+                <hr
+                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                  :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
                 >
-                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="issue">
+                    <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
+                  </div>
+                  <div
+                    v-if="issue.comments"
+                    class="jac-comments"
+                  >
+                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                  </div>
                 </div>
-              </div>
-              <div class="govuk-grid-column-one-third text-right">
-                <Select
-                  id="issue-action"
-                  :value="issue.action || ''"
-                  @input="saveIssueAction(row, issue, $event)"
-                >
-                  <option value="" />
-                  <option value="proceed">
-                    Proceed
-                  </option>
-                  <option value="reject">
-                    Reject
-                  </option>
-                  <option value="reject-non-declaration">
-                    Reject Non-Declaration
-                  </option>
-                  <option value="discuss">
-                    Discuss
-                  </option>
-                </Select>
+                <div class="govuk-grid-column-one-third text-right">
+                  <Select
+                    id="issue-action"
+                    :value="issue.action || ''"
+                    @input="saveIssueAction(row, issue, $event)"
+                  >
+                    <option value="" />
+                    <option value="proceed">
+                      Proceed
+                    </option>
+                    <option value="reject">
+                      Reject
+                    </option>
+                    <option value="reject-non-declaration">
+                      Reject Non-Declaration
+                    </option>
+                    <option value="discuss">
+                      Discuss
+                    </option>
+                  </Select>
+                </div>
               </div>
             </div>
           </TableCell>
@@ -130,6 +158,7 @@ export default {
   data () {
     return {
       applicationRecords: [],
+      issueAction: 'all',
       refreshingReport: false,
       generatingExport: false,
       unsubscribe: null,
