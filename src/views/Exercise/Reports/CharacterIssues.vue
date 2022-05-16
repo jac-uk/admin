@@ -98,6 +98,9 @@
         <option value="all">
           All issue actions
         </option>
+        <option value="">
+          Unassigned
+        </option>
         <option value="proceed">
           Proceed
         </option>
@@ -155,7 +158,7 @@
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
               <div
-                v-if="issueAction === 'all' || (issue.action && issue.action === issueAction)"
+                v-if="issueAction === 'all' || ((issue.action || '') === (issueAction || ''))"
               >
                 <hr
                   class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
