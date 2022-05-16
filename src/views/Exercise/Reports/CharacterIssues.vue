@@ -154,6 +154,8 @@
               <div class="govuk-grid-column-one-third">
                 <Select
                   id="issue-action"
+                  :value="issue.action || ''"
+                  @input="saveAction(row, issue, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -312,10 +314,14 @@ export default {
           });
       } else {
         this.applicationRecords = [];
-      }    
+      }
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    async saveAction(applicationRecord, issue, action) {
+      issue.action = action;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
 };
