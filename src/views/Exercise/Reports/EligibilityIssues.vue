@@ -29,12 +29,12 @@
 
     <div class="govuk-grid-column-full text-right">
       <Select
-        id="issue-action-filter"
-        v-model="issueAction"
+        id="issue-status-filter"
+        v-model="issueStatus"
         class="govuk-!-margin-right-2"
       >
         <option value="all">
-          All issue actions
+          All issue statuses
         </option>
         <option value="">
           Unassigned
@@ -96,7 +96,7 @@
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
               <div
-                v-if="issueAction === 'all' || ((issue.action || '') === (issueAction || ''))"
+                v-if="issueStatus === 'all' || ((issue.status || '') === (issueStatus || ''))"
               >
                 <hr
                   class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
@@ -115,9 +115,9 @@
                 </div>
                 <div class="govuk-grid-column-one-third text-right">
                   <Select
-                    id="issue-action"
-                    :value="issue.action || ''"
-                    @input="saveIssueAction(row, issue, $event)"
+                    id="issue-status"
+                    :value="issue.status || ''"
+                    @input="saveIssueStatus(row, issue, $event)"
                   >
                     <option value="" />
                     <option value="proceed">
@@ -161,7 +161,7 @@ export default {
   data () {
     return {
       applicationRecords: [],
-      issueAction: 'all',
+      issueStatus: 'all',
       refreshingReport: false,
       generatingExport: false,
       unsubscribe: null,
@@ -242,8 +242,8 @@ export default {
         }
       );
     },
-    async saveIssueAction(applicationRecord, issue, action) {
-      issue.action = action;
+    async saveIssueStatus(applicationRecord, issue, status) {
+      issue.status = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
