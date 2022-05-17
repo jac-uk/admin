@@ -27,7 +27,7 @@
       </button>
     </div>
 
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-two-thirds">
       <div class="govuk-button-group">
         <Select
           id="exercise-stage"
@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div class="govuk-grid-column-one-half text-right">
+    <div class="govuk-grid-column-one-third text-right">
       <Select
         id="issue-status-filter"
         v-model="issueStatus"
