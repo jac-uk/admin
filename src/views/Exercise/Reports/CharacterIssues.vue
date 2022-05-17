@@ -1,11 +1,12 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Character Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
@@ -14,7 +15,17 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export Data
+        Export to Excel
+      </button>
+      <button
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Export to Google Doc
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
@@ -26,8 +37,7 @@
         /> Refresh
       </button>
     </div>
-
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <Select
           id="exercise-stage"
@@ -222,6 +232,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { delay } from '../../../helpers/misc';
 
 export default {
   components: {
@@ -243,6 +254,7 @@ export default {
         { title: 'Candidate' },
       ],
       downloadingReport: false,
+      exportingToGoogleDoc: false,
     };
   },
   computed: {
@@ -316,6 +328,17 @@ export default {
         filename: `${title}.xlsx`,
       });
       this.downloadingReport = false;
+    },
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+
+      await delay(5000);
+
+      this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
