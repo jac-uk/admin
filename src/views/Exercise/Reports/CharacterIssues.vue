@@ -125,7 +125,7 @@
       <Table
         ref="issuesTable"
         data-key="id"
-        :data="applicationRecords"
+        :data="filteredApplicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :custom-search="{
@@ -237,6 +237,7 @@ export default {
       issueStatus: 'all',
       availableStatuses: null,
       applicationRecords: [],
+      filteredApplicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
@@ -274,6 +275,12 @@ export default {
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
+    },
+    applicationRecords() {
+      this.filterIssueStatus();
+    },
+    issueStatus() {
+      this.filterIssueStatus();
     },
   },
   destroyed() {
@@ -354,6 +361,20 @@ export default {
     async saveIssueStatus(applicationRecord, issue, status) {
       issue.status = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    filterIssueStatus() {
+      if (this.issueStatus === 'all') {
+        this.filteredApplicationRecords = this.applicationRecords;
+      } else {
+        this.filteredApplicationRecords = [];
+        for (let i = 0; i < this.applicationRecords.length; i++) {
+          const filterIssues = this.applicationRecords[i].issues.characterIssues.filter(issue => issue.status === this.issueStatus);
+          if (filterIssues && filterIssues.length) {
+            this.applicationRecords[i].issues.eligibilityIssues = filterIssues;
+            this.filteredApplicationRecords.push(this.applicationRecords[i]);
+          }
+        }
+      }
     },
   },
 };
