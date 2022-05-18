@@ -368,7 +368,7 @@ export default {
       } else {
         this.filteredApplicationRecords = [];
         for (let i = 0; i < this.applicationRecords.length; i++) {
-          const filterIssues = this.applicationRecords[i].issues.characterIssues.filter(issue => issue.status === this.issueStatus);
+          const filterIssues = this.applicationRecords[i].issues.characterIssues.filter(issue => (!issue.status && this.issueStatus === '') || issue.status === this.issueStatus);
           if (filterIssues && filterIssues.length) {
             this.applicationRecords[i].issues.eligibilityIssues = filterIssues;
             this.filteredApplicationRecords.push(this.applicationRecords[i]);
