@@ -202,6 +202,19 @@
                     </option>
                   </Select>
                 </div>
+                <div
+                  v-if="issue.status"
+                  class="govuk-grid-column-full"
+                >
+                  <h4 class="govuk-!-margin-bottom-1">
+                    Reason for recommendation
+                  </h4>
+                  <TextareaInput
+                    id="issue-reason-for-status"
+                    :value="issue.reasonForStatus || 'blah blah blah'"
+                    @input="saveIssueReasonForStatus(row, issue, $event)"
+                  />
+                </div>
               </div>
             </div>
           </TableCell>
@@ -218,6 +231,7 @@ import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
@@ -229,6 +243,7 @@ export default {
     Select,
     Table,
     TableCell,
+    TextareaInput,
   },
   data () {
     return {
@@ -360,6 +375,10 @@ export default {
     },
     async saveIssueStatus(applicationRecord, issue, status) {
       issue.status = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueReasonForStatus(applicationRecord, issue, reasonForStatus) {
+      issue.reasonForStatus = reasonForStatus;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
