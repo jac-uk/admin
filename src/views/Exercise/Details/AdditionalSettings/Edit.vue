@@ -23,7 +23,7 @@
           id="capabilities"
           v-model="formData.capabilities"
           required
-          label="Capabilities"
+          label="Selection Criteria"
           :messages="{required: 'Please choose at least one capability'}"
         >
           <CheckboxItem
