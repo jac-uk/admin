@@ -15,7 +15,7 @@
     <div class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Capabilities
+          Selection Criteria
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
