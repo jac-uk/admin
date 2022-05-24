@@ -73,7 +73,10 @@
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
+          <TableCell
+            v-if="issueStatus === 'all' || ((row.issues.eligibilityIssuesStatus || '') === (issueStatus || ''))"
+            :title="tableColumns[0].title"
+          >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
@@ -88,6 +91,30 @@
                   View application
                 </RouterLink>
               </div>
+              <div class="govuk-grid-column-full">
+                <h4 class="govuk-!-margin-bottom-1">
+                  Recommendation
+                </h4>
+                <Select
+                  id="issue-status"
+                  :value="row.issues.eligibilityIssuesStatus || ''"
+                  @input="saveIssueStatus(row, $event)"
+                >
+                  <option value="" />
+                  <option value="proceed">
+                    Proceed
+                  </option>
+                  <option value="reject">
+                    Reject
+                  </option>
+                  <option value="reject-non-declaration">
+                    Reject Non-Declaration
+                  </option>
+                  <option value="discuss">
+                    Discuss
+                  </option>
+                </Select>
+              </div>
             </div>
 
             <div
@@ -95,44 +122,19 @@
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <div
-                v-if="issueStatus === 'all' || ((issue.status || '') === (issueStatus || ''))"
+              <hr
+                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
               >
-                <hr
-                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-                >
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="issue">
-                    <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
-                  </div>
-                  <div
-                    v-if="issue.comments"
-                    class="jac-comments"
-                  >
-                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                  </div>
+              <div class="govuk-grid-column-two-thirds">
+                <div class="issue">
+                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
                 </div>
-                <div class="govuk-grid-column-one-third text-right">
-                  <Select
-                    id="issue-status"
-                    :value="issue.status || ''"
-                    @input="saveIssueStatus(row, issue, $event)"
-                  >
-                    <option value="" />
-                    <option value="proceed">
-                      Proceed
-                    </option>
-                    <option value="reject">
-                      Reject
-                    </option>
-                    <option value="reject-non-declaration">
-                      Reject Non-Declaration
-                    </option>
-                    <option value="discuss">
-                      Discuss
-                    </option>
-                  </Select>
+                <div
+                  v-if="issue.comments"
+                  class="jac-comments"
+                >
+                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                 </div>
               </div>
             </div>
@@ -251,8 +253,8 @@ export default {
         }
       );
     },
-    async saveIssueStatus(applicationRecord, issue, status) {
-      issue.status = status;
+    async saveIssueStatus(applicationRecord, status) {
+      applicationRecord.issues.eligibilityIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
