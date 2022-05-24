@@ -137,7 +137,10 @@
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
-            <div class="govuk-grid-row">
+            <div
+              v-if="issueStatus === 'all' || ((row.issues.characterIssueStatus || '') === (issueStatus || ''))"
+              class="govuk-grid-row"
+            >
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
                   {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
@@ -151,56 +154,68 @@
                   View application
                 </RouterLink>
               </div>
+              <div class="govuk-grid-column-full">
+                <h4 class="govuk-!-margin-bottom-1">
+                  Recommendation
+                </h4>
+                <Select
+                  id="issue-status"
+                  :value="row.issues.characterIssueStatus || ''"
+                  @input="saveIssueStatus(row, $event)"
+                >
+                  <option value="" />
+                  <option value="proceed">
+                    Proceed
+                  </option>
+                  <option value="reject">
+                    Reject
+                  </option>
+                  <option value="reject-non-declaration">
+                    Reject Non-Declaration
+                  </option>
+                  <option value="discuss">
+                    Discuss
+                  </option>
+                </Select>
+              </div>
+              <div
+                v-if="row.issues.characterIssueStatus"
+                class="govuk-grid-column-full"
+              >
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
+                <TextareaInput
+                  id="reason-for-status"
+                  :value="row.issues.characterIssueStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
+                />
+              </div>
             </div>
             <div
               v-for="(issue, index) in row.issues.characterIssues"
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <div
-                v-if="issueStatus === 'all' || ((issue.status || '') === (issueStatus || ''))"
+              <hr
+                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
               >
-                <hr
-                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-                >
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="issue">
-                    <p class="govuk-body">
-                      {{ issue.summary }}
-                    </p>
-                    <EventRenderer
-                      v-if="issue.events"
-                      :events="issue.events"
-                    />
-                  </div>
-                  <div
-                    v-if="issue.comments"
-                    class="jac-comments"
-                  >
-                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                  </div>
+              <div class="govuk-grid-column-full">
+                <div class="issue">
+                  <p class="govuk-body">
+                    {{ issue.summary }}
+                  </p>
+                  <EventRenderer
+                    v-if="issue.events"
+                    :events="issue.events"
+                  />
                 </div>
-                <div class="govuk-grid-column-one-third text-right">
-                  <Select
-                    id="issue-status"
-                    :value="issue.status || ''"
-                    @input="saveIssueStatus(row, issue, $event)"
-                  >
-                    <option value="" />
-                    <option value="proceed">
-                      Proceed
-                    </option>
-                    <option value="reject">
-                      Reject
-                    </option>
-                    <option value="reject-non-declaration">
-                      Reject Non-Declaration
-                    </option>
-                    <option value="discuss">
-                      Discuss
-                    </option>
-                  </Select>
+                <div
+                  v-if="issue.comments"
+                  class="jac-comments"
+                >
+                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                 </div>
               </div>
             </div>
@@ -222,6 +237,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {
@@ -229,6 +245,7 @@ export default {
     Select,
     Table,
     TableCell,
+    TextareaInput,
   },
   data () {
     return {
@@ -358,8 +375,12 @@ export default {
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
-    async saveIssueStatus(applicationRecord, issue, status) {
-      issue.status = status;
+    async saveIssueStatus(applicationRecord, status) {
+      applicationRecord.issues.characterIssueStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.characterIssueStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
