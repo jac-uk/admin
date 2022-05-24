@@ -136,11 +136,11 @@
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
-            <div
-              v-if="issueStatus === 'all' || ((row.issues.characterIssueStatus || '') === (issueStatus || ''))"
-              class="govuk-grid-row"
-            >
+          <TableCell
+            v-if="issueStatus === 'all' || ((row.issues.characterIssueStatus || '') === (issueStatus || ''))"
+            :title="tableColumns[0].title"
+          >
+            <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
                   {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
@@ -178,6 +178,19 @@
                   </option>
                 </Select>
               </div>
+              <div
+                v-if="row.issues.characterIssueStatus"
+                class="govuk-grid-column-full"
+              >
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
+                <TextareaInput
+                  id="reason-for-status"
+                  :value="row.issues.characterIssueStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
+                />
+              </div>
             </div>
             <div
               v-for="(issue, index) in row.issues.characterIssues"
@@ -204,19 +217,6 @@
                 >
                   <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                 </div>
-                <div
-                  v-if="issue.status"
-                  class="govuk-grid-column-full"
-                >
-                  <h4 class="govuk-!-margin-bottom-1">
-                    Reason for recommendation
-                  </h4>
-                  <TextareaInput
-                    id="issue-reason-for-status"
-                    :value="issue.reasonForStatus || 'blah blah blah'"
-                    @input="saveIssueReasonForStatus(row, issue, $event)"
-                  />
-                </div>
               </div>
             </div>
           </TableCell>
@@ -238,7 +238,6 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {
@@ -380,8 +379,8 @@ export default {
       applicationRecord.issues.characterIssueStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    async saveIssueReasonForStatus(applicationRecord, issue, reasonForStatus) {
-      issue.reasonForStatus = reasonForStatus;
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.characterIssueStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
