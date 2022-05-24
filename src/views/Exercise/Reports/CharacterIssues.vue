@@ -138,7 +138,7 @@
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
             <div
-              v-if="issueStatus === 'all' || ((row.issues.characterIssueStatus || '') === (issueStatus || ''))"
+              v-if="issueStatus === 'all' || ((row.issues.characterIssuesStatus || '') === (issueStatus || ''))"
               class="govuk-grid-row"
             >
               <div class="govuk-grid-column-two-thirds">
@@ -160,7 +160,7 @@
                 </h4>
                 <Select
                   id="issue-status"
-                  :value="row.issues.characterIssueStatus || ''"
+                  :value="row.issues.characterIssuesStatus || ''"
                   @input="saveIssueStatus(row, $event)"
                 >
                   <option value="" />
@@ -363,7 +363,7 @@ export default {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
     async saveIssueStatus(applicationRecord, status) {
-      applicationRecord.issues.characterIssueStatus = status;
+      applicationRecord.issues.characterIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
