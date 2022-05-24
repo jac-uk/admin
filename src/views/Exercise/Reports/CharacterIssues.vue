@@ -178,19 +178,6 @@
                   </option>
                 </Select>
               </div>
-              <div
-                v-if="row.issues.characterIssueStatus"
-                class="govuk-grid-column-full"
-              >
-                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  Reason for recommendation
-                </h4>
-                <TextareaInput
-                  id="reason-for-status"
-                  :value="row.issues.characterIssueStatusReason"
-                  @input="saveIssueStatusReason(row, $event)"
-                />
-              </div>
             </div>
             <div
               v-for="(issue, index) in row.issues.characterIssues"
@@ -377,10 +364,6 @@ export default {
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.characterIssueStatus = status;
-      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
-    },
-    async saveIssueStatusReason(applicationRecord, reason) {
-      applicationRecord.issues.characterIssueStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
