@@ -1,11 +1,11 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Eligibility Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <div class="govuk-grid-column-two-thirds text-right">
       <button
         class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
         :disabled="generatingExport"
@@ -14,10 +14,21 @@
         <span
           v-if="generatingExport"
           class="spinner-border spinner-border-sm"
-        /> Export data
+        /> 
+        Export to Excel
       </button>
       <button
-        class="govuk-button govuk-button--secondary"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Export to Google Doc
+      </button>
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
         <span
@@ -25,6 +36,32 @@
           class="spinner-border spinner-border-sm"
         /> Refresh
       </button>
+    </div>
+
+    <div class="govuk-grid-column-full text-right">
+      <Select
+        id="issue-status-filter"
+        v-model="issueStatus"
+      >
+        <option value="all">
+          All issue statuses
+        </option>
+        <option value="">
+          Unassigned
+        </option>
+        <option value="proceed">
+          Proceed
+        </option>
+        <option value="reject">
+          Reject
+        </option>
+        <option value="reject-non-declaration">
+          Reject Non-Declaration
+        </option>
+        <option value="discuss">
+          Discuss
+        </option>
+      </Select>
     </div>
 
     <div class="govuk-grid-column-full">
@@ -35,7 +72,7 @@
       -->
       <Table
         data-key="id"
-        :data="applicationRecords"
+        :data="filteredApplicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :custom-search="{
@@ -68,39 +105,45 @@
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
+              <div
+                v-if="issueStatus === 'all' || ((issue.status || '') === (issueStatus || ''))"
               >
-              <div class="govuk-grid-column-two-thirds">
-                <div class="issue">
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
-                </div>
-                <div
-                  v-if="issue.comments"
-                  class="jac-comments"
+                <hr
+                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                  :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
                 >
-                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="issue">
+                    <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
+                  </div>
+                  <div
+                    v-if="issue.comments"
+                    class="jac-comments"
+                  >
+                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                  </div>
                 </div>
-              </div>
-              <div class="govuk-grid-column-one-third">
-                <select
-                  class="govuk-select"
-                >
-                  <option value="" />
-                  <option value="proceed">
-                    Proceed
-                  </option>
-                  <option value="reject">
-                    Reject
-                  </option>
-                  <option value="reject-non-declaration">
-                    Reject Non-Declaration
-                  </option>
-                  <option value="discuss">
-                    Discuss
-                  </option>
-                </select>
+                <div class="govuk-grid-column-one-third text-right">
+                  <Select
+                    id="issue-status"
+                    :value="issue.status || ''"
+                    @input="saveIssueStatus(row, issue, $event)"
+                  >
+                    <option value="" />
+                    <option value="proceed">
+                      Proceed
+                    </option>
+                    <option value="reject">
+                      Reject
+                    </option>
+                    <option value="reject-non-declaration">
+                      Reject Non-Declaration
+                    </option>
+                    <option value="discuss">
+                      Discuss
+                    </option>
+                  </Select>
+                </div>
               </div>
             </div>
           </TableCell>
@@ -117,26 +160,39 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
   components: {
     Table,
     TableCell,
+    Select,
   },
   data () {
     return {
       applicationRecords: [],
+      filteredApplicationRecords: [],
+      issueStatus: 'all',
       refreshingReport: false,
       generatingExport: false,
       unsubscribe: null,
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
+      exportingToGoogleDoc: false,
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+  },
+  watch: {
+    applicationRecords() {
+      this.filterIssueStatus();
+    },
+    issueStatus() {
+      this.filterIssueStatus();
     },
   },
   destroyed() {
@@ -149,6 +205,15 @@ export default {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
+    },
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+
+      this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
@@ -206,7 +271,24 @@ export default {
         }
       );
     },
-
+    async saveIssueStatus(applicationRecord, issue, status) {
+      issue.status = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    filterIssueStatus() {
+      if (this.issueStatus === 'all') {
+        this.filteredApplicationRecords = this.applicationRecords;
+      } else {
+        this.filteredApplicationRecords = [];
+        for (let i = 0; i < this.applicationRecords.length; i++) {
+          const filterIssues = this.applicationRecords[i].issues.eligibilityIssues.filter(issue => (!issue.status && this.issueStatus === '') || issue.status === this.issueStatus);
+          if (filterIssues && filterIssues.length) {
+            this.applicationRecords[i].issues.eligibilityIssues = filterIssues;
+            this.filteredApplicationRecords.push(this.applicationRecords[i]);
+          }
+        }
+      }
+    },
   },
 };
 </script>
