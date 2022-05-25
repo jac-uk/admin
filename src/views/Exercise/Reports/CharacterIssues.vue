@@ -179,7 +179,7 @@
                 </Select>
               </div>
               <div
-                v-if="row.issues.characterIssueStatus"
+                v-if="row.issues.characterIssuesStatus"
                 class="govuk-grid-column-full"
               >
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
@@ -187,7 +187,7 @@
                 </h4>
                 <TextareaInput
                   id="reason-for-status"
-                  :value="row.issues.characterIssueStatusReason"
+                  :value="row.issues.characterIssuesStatusReason"
                   @input="saveIssueStatusReason(row, $event)"
                 />
               </div>
@@ -380,7 +380,7 @@ export default {
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     async saveIssueStatusReason(applicationRecord, reason) {
-      applicationRecord.issues.characterIssueStatusReason = reason;
+      applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
