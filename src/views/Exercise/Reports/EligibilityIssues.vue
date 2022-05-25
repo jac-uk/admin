@@ -92,9 +92,9 @@
                 </RouterLink>
               </div>
               <div class="govuk-grid-column-full">
-                <h4 class="govuk-!-margin-bottom-1">
+                <p class="govuk-hint">
                   Recommendation
-                </h4>
+                </p>
                 <Select
                   id="issue-status"
                   :value="row.issues.eligibilityIssuesStatus || ''"
@@ -114,6 +114,14 @@
                     Discuss
                   </option>
                 </Select>
+                <p class="govuk-hint">
+                  Reason for Recommendation
+                </p>
+                <TextareaInput
+                  id="recommendation-reason"
+                  :value="row.issues.eligibilityIssuesReason || ''"
+                  @input="debounceInput(row, $event)"
+                />
               </div>
             </div>
 
@@ -153,12 +161,15 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import _ from 'lodash';
 
 export default {
   components: {
     Table,
     TableCell,
     Select,
+    TextareaInput,
   },
   data () {
     return {
@@ -254,7 +265,14 @@ export default {
       );
     },
     async saveIssueStatus(applicationRecord, status) {
-      applicationRecord.issues.eligibilityIssuesStatus = status;
+      applicationRecord.issues['eligibilityIssuesStatus'] = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    debounceInput: _.debounce(function(applicationRecord, reason) {
+      this.saveIssueReason(applicationRecord, reason);
+    }, 2000),
+    async saveIssueReason(applicationRecord, reason) {
+      applicationRecord.issues['eligibilityIssuesReason'] = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     filterIssueStatus() {
@@ -263,9 +281,8 @@ export default {
       } else {
         this.filteredApplicationRecords = [];
         for (let i = 0; i < this.applicationRecords.length; i++) {
-          const filterIssues = this.applicationRecords[i].issues.eligibilityIssues.filter(issue => (!issue.status && this.issueStatus === '') || issue.status === this.issueStatus);
-          if (filterIssues && filterIssues.length) {
-            this.applicationRecords[i].issues.eligibilityIssues = filterIssues;
+          const eligibilityIssuesStatus = this.applicationRecords[i].issues.eligibilityIssuesStatus;
+          if ((!eligibilityIssuesStatus && this.issueStatus === '') || eligibilityIssuesStatus === this.issueStatus) {
             this.filteredApplicationRecords.push(this.applicationRecords[i]);
           }
         }
