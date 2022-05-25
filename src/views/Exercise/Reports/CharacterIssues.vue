@@ -25,7 +25,7 @@
           v-if="exportingToGoogleDoc"
           class="spinner-border spinner-border-sm"
         />
-        Export to Google Doc
+        Generate Report
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
