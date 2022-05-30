@@ -224,9 +224,10 @@ export default {
       this.exportingToGoogleDoc = true;
       if (!this.exercise.referenceNumber) {
         this.downloadingReport = false;
-        return; //Abort if no ref
+        return; // abort if no ref
       }
 
+      await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
       this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
@@ -256,7 +257,7 @@ export default {
       this.generatingExport = true;
 
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id });
+      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
 
       this.generatingExport = false;
 
