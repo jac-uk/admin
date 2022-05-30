@@ -125,7 +125,7 @@
       <Table
         ref="issuesTable"
         data-key="id"
-        :data="filteredApplicationRecords"
+        :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :custom-search="{
@@ -137,7 +137,7 @@
       >
         <template #row="{row}">
           <TableCell
-            v-if="issueStatus === 'all' || ((row.issues.characterIssuesStatus || '') === (issueStatus || ''))"
+            v-if="issueStatus === 'all' || (row.issues.characterIssuesStatus || '') === (issueStatus || '')"
             :title="tableColumns[0].title"
           >
             <div class="govuk-grid-row">
@@ -254,7 +254,6 @@ export default {
       issueStatus: 'all',
       availableStatuses: null,
       applicationRecords: [],
-      filteredApplicationRecords: [],
       refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
@@ -292,12 +291,6 @@ export default {
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
-    },
-    applicationRecords() {
-      this.filterIssueStatus();
-    },
-    issueStatus() {
-      this.filterIssueStatus();
     },
   },
   destroyed() {
@@ -382,20 +375,6 @@ export default {
     async saveIssueStatusReason(applicationRecord, reason) {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
-    },
-    filterIssueStatus() {
-      if (this.issueStatus === 'all') {
-        this.filteredApplicationRecords = this.applicationRecords;
-      } else {
-        this.filteredApplicationRecords = [];
-        for (let i = 0; i < this.applicationRecords.length; i++) {
-          const filterIssues = this.applicationRecords[i].issues.characterIssues.filter(issue => (!issue.status && this.issueStatus === '') || issue.status === this.issueStatus);
-          if (filterIssues && filterIssues.length) {
-            this.applicationRecords[i].issues.eligibilityIssues = filterIssues;
-            this.filteredApplicationRecords.push(this.applicationRecords[i]);
-          }
-        }
-      }
     },
   },
 };
