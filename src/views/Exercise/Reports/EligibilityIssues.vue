@@ -73,7 +73,7 @@
       -->
       <Table
         data-key="id"
-        :data="filteredApplicationRecords"
+        :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :custom-search="{
@@ -84,7 +84,10 @@
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
+          <TableCell
+            v-if="issueStatus === 'all' || (row.issues.eligibilityIssuesStatus || '') === (issueStatus || '')"
+            :title="tableColumns[0].title"
+          >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
@@ -138,23 +141,19 @@
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <div
-                v-if="issueStatus === 'all' || ((issue.status || '') === (issueStatus || ''))"
+              <hr
+                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
               >
-                <hr
-                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
+              <div class="govuk-grid-column-two-thirds">
+                <div class="issue">
+                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
+                </div>
+                <div
+                  v-if="issue.comments"
+                  class="jac-comments"
                 >
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="issue">
-                    <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
-                  </div>
-                  <div
-                    v-if="issue.comments"
-                    class="jac-comments"
-                  >
-                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                  </div>
+                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                 </div>
               </div>
             </div>
@@ -186,7 +185,6 @@ export default {
   data () {
     return {
       applicationRecords: [],
-      filteredApplicationRecords: [],
       issueStatus: 'all',
       refreshingReport: false,
       generatingExport: false,
@@ -200,14 +198,6 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },
-  },
-  watch: {
-    applicationRecords() {
-      this.filterIssueStatus();
-    },
-    issueStatus() {
-      this.filterIssueStatus();
     },
   },
   destroyed() {
@@ -301,19 +291,6 @@ export default {
     async saveIssueReason(applicationRecord, reason) {
       applicationRecord.issues['eligibilityIssuesReason'] = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
-    },
-    filterIssueStatus() {
-      if (this.issueStatus === 'all') {
-        this.filteredApplicationRecords = this.applicationRecords;
-      } else {
-        this.filteredApplicationRecords = [];
-        for (let i = 0; i < this.applicationRecords.length; i++) {
-          const eligibilityIssuesStatus = this.applicationRecords[i].issues.eligibilityIssuesStatus;
-          if ((!eligibilityIssuesStatus && this.issueStatus === '') || eligibilityIssuesStatus === this.issueStatus) {
-            this.filteredApplicationRecords.push(this.applicationRecords[i]);
-          }
-        }
-      }
     },
   },
 };
