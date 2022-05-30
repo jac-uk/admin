@@ -5,9 +5,9 @@
         Eligibility Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-two-thirds text-right">
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         :disabled="generatingExport"
         @click="exportData"
       >
@@ -130,8 +130,8 @@
                 </h4>
                 <TextareaInput
                   id="recommendation-reason"
-                  :value="row.issues.eligibilityIssuesReason || ''"
-                  @input="debounceInput(row, $event)"
+                  :value="row.issues.eligibilityIssuesStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
                 />
               </div>
             </div>
@@ -173,7 +173,6 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import _ from 'lodash';
 
 export default {
   components: {
@@ -282,14 +281,11 @@ export default {
       );
     },
     async saveIssueStatus(applicationRecord, status) {
-      applicationRecord.issues['eligibilityIssuesStatus'] = status;
+      applicationRecord.issues.eligibilityIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    debounceInput: _.debounce(function(applicationRecord, reason) {
-      this.saveIssueReason(applicationRecord, reason);
-    }, 2000),
-    async saveIssueReason(applicationRecord, reason) {
-      applicationRecord.issues['eligibilityIssuesReason'] = reason;
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.eligibilityIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
