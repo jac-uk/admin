@@ -248,7 +248,6 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
-import { delay } from '../../../helpers/misc';
 
 export default {
   components: {
@@ -326,6 +325,7 @@ export default {
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
+        format: 'excel',
       });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
@@ -352,9 +352,12 @@ export default {
         this.downloadingReport = false;
         return; //Abort if no ref
       }
-
-      await delay(5000);
-
+      await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'googledoc',
+      });
       this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
