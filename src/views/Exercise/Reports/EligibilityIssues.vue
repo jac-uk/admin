@@ -99,9 +99,9 @@
                 </RouterLink>
               </div>
               <div class="govuk-grid-column-full">
-                <p class="govuk-hint">
+                <h4 class="govuk-!-margin-bottom-1">
                   Recommendation
-                </p>
+                </h4>
                 <Select
                   id="issue-status"
                   :value="row.issues.eligibilityIssuesStatus || ''"
@@ -121,9 +121,9 @@
                     Discuss
                   </option>
                 </Select>
-                <p class="govuk-hint">
-                  Reason for Recommendation
-                </p>
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
                 <TextareaInput
                   id="recommendation-reason"
                   :value="row.issues.eligibilityIssuesReason || ''"
