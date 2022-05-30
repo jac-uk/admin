@@ -100,6 +100,8 @@ import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/Moderat
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
+import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
+
 // TODO remove these once we no longer need to support old code panels
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
 import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/xPanels/List';
@@ -672,7 +674,7 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'qualifying-tests',
+              redirect: 'independent-assessments',
             },
             {
               path: 'equal-merit-tie-breakers',
@@ -938,6 +940,35 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Panel | Exercise Tasks',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'qt/:type',
+              component: ExerciseTask,
+              props: true,
+              children: [
+                {
+                  path: '',
+                  redirect: 'new',
+                },
+                {
+                  path: 'loading',
+                  component: ExerciseTaskLoading,
+                  name: 'qt-platform-loading',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Loading | Qualifying test',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: QTPlatformNew,
+                  name: 'qt-platform-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'New | Qualifying test',
                   },
                 },
               ],
