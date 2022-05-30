@@ -23,19 +23,19 @@ export default {
     const exercise = this.$store.state.exerciseDocument.record;
     const path = `/exercise/${exercise.id}/tasks`;
     const sideNavigation = [];
-    sideNavigation.push({
-      title: 'Qualifying Tests',
-      path: `${path}/qualifying-tests`,
-      params: {
-        nav: '/tasks/qualifying-tests', // TODO check this is needed
-      },
-    });
-    if (exercise.equalMeritSecondStageStartDate) {
-      sideNavigation.push({
-        title: 'Equal Merit Tie-breakers',
-        path: `${path}/equal-merit-tie-breakers`,
-      });
-    }
+    // sideNavigation.push({
+    //   title: 'Qualifying Tests',
+    //   path: `${path}/qualifying-tests`,
+    //   params: {
+    //     nav: '/tasks/qualifying-tests', // TODO check this is needed
+    //   },
+    // });
+    // if (exercise.equalMeritSecondStageStartDate) {
+    //   sideNavigation.push({
+    //     title: 'Equal Merit Tie-breakers',
+    //     path: `${path}/equal-merit-tie-breakers`,
+    //   });
+    // }
     if (isProcessing(exercise)) {
       if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
         sideNavigation.push({
@@ -51,6 +51,42 @@ export default {
       );
     }
     if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+      if (exercise.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
+        sideNavigation.push(
+          {
+            title: 'Critical Analysis Test',
+            tag: {
+              title: 'New',
+              class: 'govuk-tag--blue',
+            },
+            path: `${path}/qt/critical-analysis`,
+          },
+        );
+      }
+      if (exercise.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
+        sideNavigation.push(
+          {
+            title: 'Situational Judgement Test',
+            tag: {
+              title: 'New',
+              class: 'govuk-tag--blue',
+            },
+            path: `${path}/qt/situational-judgement`,
+          },
+        );
+      }
+      if (exercise.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
+        sideNavigation.push(
+          {
+            title: 'Scenario Test',
+            tag: {
+              title: 'New',
+              class: 'govuk-tag--blue',
+            },
+            path: `${path}/qt/scenario`,
+          },
+        );
+      }
       if (
         (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
         || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
@@ -59,7 +95,7 @@ export default {
           {
             title: 'Sift',
             tag: {
-              title: 'Alpha',
+              title: 'New',
               class: 'govuk-tag--blue',
             },
             path: `${path}/sift`,
@@ -72,25 +108,25 @@ export default {
         {
           title: 'Selection',
           tag: {
-            title: 'Alpha',
+            title: 'New',
             class: 'govuk-tag--blue',
           },
           path: `${path}/selection`,
         },
       );
     }
-    if (exercise.scenarioTestDate) {
-      sideNavigation.push(
-        {
-          title: 'Scenario',
-          tag: {
-            title: 'Alpha',
-            class: 'govuk-tag--blue',
-          },
-          path: `${path}/scenario`,
-        }
-      );
-    }
+    // if (exercise.scenarioTestDate) {
+    //   sideNavigation.push(
+    //     {
+    //       title: 'Scenario',
+    //       tag: {
+    //         title: 'Alpha',
+    //         class: 'govuk-tag--blue',
+    //       },
+    //       path: `${path}/scenario`,
+    //     }
+    //   );
+    // }
 
     return {
       sideNavigation: sideNavigation,

@@ -61,7 +61,7 @@ const lookup = (value) => {
 
     // Panel types
     'sift': 'Sift',
-    'scenario': 'Scenario responses',
+    'scenario': 'Scenario',
 
     // Panel roles
     'chair': 'Chair',
