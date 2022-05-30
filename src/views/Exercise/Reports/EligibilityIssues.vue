@@ -42,6 +42,7 @@
       <Select
         id="issue-status-filter"
         v-model="issueStatus"
+        class="govuk-!-margin-right-2"
       >
         <option value="all">
           All issue statuses
