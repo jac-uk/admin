@@ -224,7 +224,6 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {
@@ -232,7 +231,6 @@ export default {
     Select,
     Table,
     TableCell,
-    TextareaInput,
   },
   data () {
     return {
