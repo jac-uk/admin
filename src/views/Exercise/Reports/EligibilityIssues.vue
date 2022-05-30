@@ -228,7 +228,11 @@ export default {
         return; // abort if no ref
       }
 
-      await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+      try {
+        await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+      } catch (error) {
+        console.error(error);
+      }
       this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
