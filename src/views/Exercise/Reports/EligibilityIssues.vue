@@ -125,6 +125,11 @@
                     Discuss
                   </option>
                 </Select>
+              </div>
+              <div
+                v-if="row.issues.eligibilityIssuesStatus"
+                class="govuk-grid-column-full"
+              >
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                   Reason for recommendation
                 </h4>
