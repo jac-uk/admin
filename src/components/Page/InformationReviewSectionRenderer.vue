@@ -9,7 +9,7 @@
         class="govuk-!-margin-bottom-6"
       >
         <button
-          v-if="edit"
+          v-if="edit && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value])"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
           @click="openModal(index)"
         >
@@ -283,6 +283,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -290,6 +291,7 @@ export default {
     Modal,
     ModalInner,
   },
+  mixins: [permissionMixin],
   props: {
     edit: {
       type: [Boolean, Function, Promise],

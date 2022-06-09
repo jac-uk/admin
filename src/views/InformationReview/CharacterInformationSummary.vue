@@ -7,13 +7,6 @@
       <h3 class="govuk-visually-hidden govuk-heading-s">
         Version {{ version }}
       </h3>
-      <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value]) && hasValues(characterInformation) && editable"
-        class="govuk-button govuk-button--warning"
-        @click="changeCharacterInfo({})"
-      >
-        Delete
-      </button>
       <div
         v-if="!hasValues(characterInformation) && !editable"
         class="govuk-body"
@@ -49,7 +42,6 @@
 <script>
 import CharacterInformationSummaryV1 from '@/views/InformationReview/CharacterInformationSummaryV1.vue';
 import CharacterInformationSummaryV2 from '@/views/InformationReview/CharacterInformationSummaryV2.vue';
-import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'CharacterInformationSummary',
@@ -57,7 +49,6 @@ export default {
     CharacterInformationSummaryV1,
     CharacterInformationSummaryV2,
   },
-  mixins: [permissionMixin],
   props: {
     characterInformation: {
       type: Object,
@@ -92,20 +83,12 @@ export default {
     },
     changeCharacterInfo(obj) {
       let myCharacterInfo;
-      if (Object.keys(obj).length === 0) {
-        if (this.isVersion2) {
-          this.$emit('updateApplication', { characterInformationV2: null });
-        } else {
-          this.$emit('updateApplication', { characterInformation: null });
-        }
+      if (this.isVersion2) {
+        myCharacterInfo = { ...this.characterInformation, ...obj };
+        this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
       } else {
-        if (this.isVersion2) {
-          myCharacterInfo = { ...this.characterInformation, ...obj };
-          this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
-        } else {
-          myCharacterInfo = { ...this.characterInformation, ...obj };
-          this.$emit('updateApplication', { characterInformation: myCharacterInfo });
-        }
+        myCharacterInfo = { ...this.characterInformation, ...obj };
+        this.$emit('updateApplication', { characterInformation: myCharacterInfo });
       }
     },
   },
