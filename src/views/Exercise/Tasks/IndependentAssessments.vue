@@ -230,6 +230,11 @@
               </div>
               <div class="moj-button-menu__wrapper">
                 <button
+                  v-if="hasPermissions([
+                    PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                    PERMISSIONS.assessments.permissions.canCreateAssessments.value,
+                    PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+                  ])"
                   class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
                   @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
                 >
