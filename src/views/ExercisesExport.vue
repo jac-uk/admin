@@ -16,8 +16,7 @@
           v-if="hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.logs.permissions.canCreateLogs.value
+            PERMISSIONS.applications.permissions.canReadApplications.value
           ])"
           class="govuk-button"
         >

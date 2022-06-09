@@ -118,8 +118,7 @@
       <button
         v-if="!isPublished && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-          PERMISSIONS.exercises.permissions.canPublishExercise.value,
-          PERMISSIONS.logs.permissions.canCreateLogs.value
+          PERMISSIONS.exercises.permissions.canPublishExercise.value
         ])"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -131,7 +130,6 @@
         v-if="isPublished && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.exercises.permissions.canPublishExercise.value,
-          PERMISSIONS.logs.permissions.canCreateLogs.value
         ])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"

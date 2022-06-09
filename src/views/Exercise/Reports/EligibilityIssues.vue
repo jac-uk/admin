@@ -9,7 +9,6 @@
       <button
         v-if="hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.logs.permissions.canCreateLogs.value,
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"

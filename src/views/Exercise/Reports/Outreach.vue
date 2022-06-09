@@ -39,8 +39,7 @@
                 v-if="hasPermissions([
                   PERMISSIONS.applications.permissions.canReadApplications.value,
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-                  PERMISSIONS.exercises.permissions.canReadExercises.value,
-                  PERMISSIONS.logs.permissions.canCreateLogs.value
+                  PERMISSIONS.exercises.permissions.canReadExercises.value
                 ])"
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action"
                 data-module="govuk-button"

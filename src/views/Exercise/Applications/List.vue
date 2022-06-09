@@ -16,7 +16,6 @@
             <button
               v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
-                PERMISSIONS.logs.permissions.canCreateLogs.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"

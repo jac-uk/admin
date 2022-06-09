@@ -30,8 +30,7 @@
                   PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value,
                   PERMISSIONS.qualifyingTestReports.permissions.canUpdateQualifyingTestReports.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
-                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-                  PERMISSIONS.logs.permissions.canCreateLogs.value
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 @click="btnGenerateReport"
