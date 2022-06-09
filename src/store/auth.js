@@ -50,23 +50,12 @@ const module = {
             user = { ...user, emailVerified: true };
             shouldEnsureEmailVerified = true;
           }
-          let role = 'staff';
-          if (
-            [ // TODO User roles!
-              'warren.searle@judicialappointments.digital',
-              'tom.russell@judicialappointments.digital',
-              'andrew.isaac@judicialappointments.digital',
-              'blaise.buckland@judicialappointments.digital',
-            ].indexOf((user.email).toLowerCase() >= 0)
-          ) {
-            role = 'superadmin';
-          }
+          
           commit('setCurrentUser', {
             uid: user.uid,
             email: user.email,
             emailVerified: user.emailVerified,
             displayName: user.displayName,
-            role: role,
           });
           if (shouldEnsureEmailVerified) {
             await functions.httpsCallable('ensureEmailValidated')({});
