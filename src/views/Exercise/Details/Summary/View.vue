@@ -194,4 +194,7 @@ export default {
 .capitalize {
   text-transform: capitalize;
 }
+.govuk-link {
+  cursor: pointer;
+}
 </style>
