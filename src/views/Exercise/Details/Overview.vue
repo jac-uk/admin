@@ -217,6 +217,7 @@ import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   components: {
@@ -262,7 +263,11 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      return this.exercise && this.exercise.state && this.exercise.state === 'ready';
+      const returnReadyForApproval = this.exercise 
+        && this.exercise.state 
+        && this.exercise.state === 'ready'
+        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
+      return returnReadyForApproval;
     },
     isApproved() {
       return isApproved(this.exercise);
