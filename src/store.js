@@ -17,6 +17,7 @@ import assessments from '@/store/assessments';
 import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
 import events from '@/store/events';
+import clipboard from '@/store/clipboard';
 
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
@@ -48,6 +49,7 @@ const store = new Vuex.Store({
     assessment,
     assessments,
     events,
+    clipboard,
     notifications,
     invitations,
     stageReview,
@@ -76,6 +78,22 @@ const store = new Vuex.Store({
   getters: {
     appVersion: (state) => {
       return state.packageVersion;
+    },
+    appEnvironment: () => {
+      const projectId = process.env.VUE_APP_FIREBASE_PROJECT_ID;
+      if (projectId.indexOf('-develop') >= 0) {
+        return 'DEVELOP';
+      }
+      if (projectId.indexOf('-staging') >= 0) {
+        return 'STAGING';
+      }
+      if (projectId.indexOf('-production') >= 0) {
+        return 'PRODUCTION';
+      }
+      return '';
+    },
+    isProduction: (state, getters) => {
+      return getters.appEnvironment === 'PRODUCTION';
     },
   },
 });
