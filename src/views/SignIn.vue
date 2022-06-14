@@ -71,7 +71,6 @@ export default {
         this.disableNewUser(auth().currentUser.uid).then(() => {
           this.signOut();
         }).catch(() => {
-          // console.log(e);
           this.signOut();
         });
       }

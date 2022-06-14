@@ -151,6 +151,12 @@
       >
         Unlock
       </button>
+      <ActionButton
+        v-if="isApproved"
+        @click="copyToClipboard"
+      >
+        Copy to Clipboard
+      </ActionButton>
       <br>
       <ActionButton
         v-if="isReadyForProcessing"
@@ -164,6 +170,22 @@
       >
         Process late applications
       </ActionButton>
+      <div v-if="!isProduction">
+        <button
+          v-if="isReadyForTesting"
+          class="govuk-button"
+          @click="changeNoOfTestApplications()"
+        >
+          Create test applications
+        </button>
+        <ActionButton
+          v-if="isTesting"
+          ref="createTestApplicationsBtn"
+          @click="createTestApplications()"
+        >
+          Create test applications
+        </ActionButton>
+      </div>
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -171,6 +193,13 @@
       <ChangeExerciseState
         :state="exercise.state"
         @close="$refs['modalChangeExerciseState'].closeModal()"
+      />
+    </Modal>
+    <Modal ref="modalChangeNoOfTestApplications">
+      <ChangeNoOfTestApplications
+        :no-of-test-applications="1"
+        @close="cancelChangeNoOfTestApplications()"
+        @confirmed="confirmedNoOfTestApplications()"
       />
     </Modal>
   </div>
@@ -183,6 +212,7 @@ import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline'
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
+import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
@@ -194,8 +224,12 @@ export default {
     ActionButton,
     Modal,
     ChangeExerciseState,
+    ChangeNoOfTestApplications,
   },
   computed: {
+    isProduction() {
+      return this.$store.getters['isProduction'];
+    },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
@@ -232,6 +266,15 @@ export default {
     },
     isApproved() {
       return isApproved(this.exercise);
+    },
+    isTesting() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
+    },
+    isTested() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
+    },
+    isReadyForTesting() {
+      return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
     },
     isProcessing() {
       return isProcessing(this.exercise);
@@ -316,6 +359,15 @@ export default {
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
     },
+    async copyToClipboard() {
+      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+      await this.$store.dispatch('clipboard/write', {
+        environment: this.$store.getters.appEnvironment,
+        type: 'exercise',
+        title: `${exercise.referenceNumber} ${exercise.name}`,
+        content: exercise,
+      });
+    },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {
@@ -344,6 +396,25 @@ export default {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
         this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
       }
+    },
+    changeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].openModal();
+      this.$store.dispatch('exerciseDocument/testing');
+    },
+    cancelChangeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$store.dispatch('exerciseDocument/isReadyForTest');
+    },
+    confirmedNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$refs['createTestApplicationsBtn'].$el.click();
+    },
+    async createTestApplications() {
+      const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
+      if (!noOfTestApplications) return;
+      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
+      this.$store.dispatch('exerciseDocument/tested');
+      this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
     },
   },
 };

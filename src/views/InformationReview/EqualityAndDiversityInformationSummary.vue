@@ -582,6 +582,7 @@
       class="govuk-body"
     >
       No information provided
+      <hr>
     </span>
   </div>
 </template>
@@ -649,6 +650,9 @@ export default {
           return true;
         }
         if (Array.isArray(field) && field.includes(item)) {
+          return true;
+        }
+        if (field.hasOwnProperty(item)){
           return true;
         }
       }
