@@ -257,7 +257,7 @@
       <div v-if="hasMemberships || editable">
         <!-- professionalMemberships -->
         <dl
-          v-if="application.professionalMemberships || editable"
+          v-if="exercise.memberships.length || application.professionalMemberships || editable"
         >
           <div
             class="govuk-summary-list govuk-!-margin-bottom-0"
@@ -411,7 +411,6 @@
                 />
               </dd>
             </div>
-
             <div
               v-if="showMembershipOption('general-medical-council')"
               class="govuk-summary-list__row"
@@ -740,8 +739,8 @@
         class="govuk-body"
       >
         No answers provided
+        <hr>
       </div>
-      <hr>
     </div>
   </div>
 </template>
@@ -805,7 +804,9 @@ export default {
       return hasRelevantMemberships(this.exercise);
     },
     hasMemberships() {
-      if (this.application.memberships) {
+      if (this.exercise.memberships) {
+        return this.exercise.memberships.length;
+      } else if (this.application.memberships) {
         return Object.keys(this.application.memberships).length;
       } else if (this.application.professionalMemberships) {
         return this.application.professionalMemberships;
@@ -854,6 +855,8 @@ export default {
     showMembershipOption(ref) {
       if (this.application && this.application.professionalMemberships) {
         return this.application.professionalMemberships.indexOf(ref) >= 0;
+      } else if (this.exercise.memberships) {
+        return this.exercise.memberships.indexOf(ref) >= 0;
       }
       return false;
     },
