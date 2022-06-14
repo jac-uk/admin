@@ -254,7 +254,7 @@
       >
         Memberships
       </h2>
-      <div v-if="Object.keys(application.memberships).length || application.professionalMemberships || editable">
+      <div v-if="hasMemberships || editable">
         <!-- professionalMemberships -->
         <dl
           v-if="application.professionalMemberships || editable"
@@ -741,6 +741,7 @@
       >
         No answers provided
       </div>
+      <hr>
     </div>
   </div>
 </template>
@@ -788,7 +789,11 @@ export default {
   },
   computed: {
     applicationHasQualifications() {
-      return this.application.qualifications && Object.values(this.application.qualifications).length > 0;
+      if (this.application.qualifications) {
+        return Object.values(this.application.qualifications).length > 0;
+      } else {
+        return false;
+      }
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -798,6 +803,15 @@ export default {
     },
     hasRelevantMemberships() {
       return hasRelevantMemberships(this.exercise);
+    },
+    hasMemberships() {
+      if (this.application.memberships) {
+        return Object.keys(this.application.memberships).length;
+      } else if (this.application.professionalMemberships) {
+        return this.application.professionalMemberships;
+      } else {
+        return false;
+      }
     },
     isNonLegal() {
       return isNonLegal(this.exercise);
