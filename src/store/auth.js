@@ -33,6 +33,7 @@ const module = {
           'tom.russell@judicialappointments.digital',
           'andrew.isaac@judicialappointments.digital',
           'blaise.buckland@judicialappointments.digital',
+          'lisias.loback@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
           'rita.kumi.ampofo@justice.gov.uk',
