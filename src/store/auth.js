@@ -36,6 +36,7 @@ const module = {
           'lisa.grant@justice.gov.uk',
           'wincen.lowe@justice.gov.uk',
           'molly.meadows@justice.gov.uk',
+          'katharine.hanley@judicialappointments.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
