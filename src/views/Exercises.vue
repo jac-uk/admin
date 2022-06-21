@@ -41,7 +41,10 @@
         >
           All exercises
         </h1>
-        <form @submit.prevent="checkForm">
+        <form
+          class="exercises-table"
+          @submit.prevent="checkForm"
+        >
           <Table
             ref="exercisesTable"
             data-key="id"
@@ -201,3 +204,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.exercises-table input[type="search"] {
+  margin-left: 3px;
+}
+</style>
