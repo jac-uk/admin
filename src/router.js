@@ -100,7 +100,11 @@ import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/Moderat
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
+import QTPlatformLoading from '@/views/Exercise/Tasks/QTPlatform/Loading';
 import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
+import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
+import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
+import QTPlatformFinalised from '@/views/Exercise/Tasks/QTPlatform/Finalised';
 
 // TODO remove these once we no longer need to support old code panels
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
@@ -955,7 +959,7 @@ const router = new Router({
                 },
                 {
                   path: 'loading',
-                  component: ExerciseTaskLoading,
+                  component: QTPlatformLoading,
                   name: 'qt-platform-loading',
                   meta: {
                     requiresAuth: true,
@@ -969,6 +973,33 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'New | Qualifying test',
+                  },
+                },
+                {
+                  path: 'initialised',
+                  component: QTPlatformInitialised,
+                  name: 'qt-platform-initialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Initialised | Qualifying test',
+                  },
+                },
+                {
+                  path: 'activated',
+                  component: QTPlatformActivated,
+                  name: 'qt-platform-activated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Activated | Qualifying test',
+                  },
+                },
+                {
+                  path: 'finalised',
+                  component: QTPlatformFinalised,
+                  name: 'qt-platform-finalised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Finalised | Qualifying test',
                   },
                 },
               ],
