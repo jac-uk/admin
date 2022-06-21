@@ -4,96 +4,56 @@
       {{ type | lookup }} test
     </h1>
 
-    <div v-if="task">
-      <p class="govuk-body-l">
-        This test is on the
-        <a
-          :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.testId}`"
-          target="_blank"
-        >
-          QT Platform
-        </a>
-      </p>
-      <div class="govuk-grid-row">
+    <p class="govuk-body-l">
+      Please check the following details before creating a test on the QT Platform
+    </p>
 
-        <div class="govuk-grid-column-one-half">
-          <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <div class="govuk-caption-m">
-              Applications
-            </div>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ exercise._applicationRecords.review }}
-            </h2>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
+          <div class="govuk-caption-m">
+            Start
           </div>
-        </div>
-
-        <div class="govuk-grid-column-one-half">
-          <ActionButton
-            class="govuk-!-margin-bottom-0"
-            type="primary"
-            :disabled="true"
+          <h2
+            class="govuk-heading-m govuk-!-margin-bottom-0"
           >
-            Add candidates
-          </ActionButton>
+            {{ startDate | formatDate('datetime') }}
+          </h2>
         </div>
-
       </div>
 
-    </div>
-
-    <div v-else>
-      <p class="govuk-body-l">Please check the following details before creating a test on the QT Platform</p>
-
-      <div class="govuk-grid-row">
-
-        <div class="govuk-grid-column-one-half">
-          <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <div class="govuk-caption-m">
-              Start
-            </div>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ startDate | formatDate('datetime') }}
-            </h2>
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
+          <div class="govuk-caption-m">
+            End
           </div>
+          <h2
+            class="govuk-heading-m govuk-!-margin-bottom-0"
+          >
+            {{ endDate | formatDate('datetime') }}
+          </h2>
         </div>
-
-        <div class="govuk-grid-column-one-half">
-          <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <div class="govuk-caption-m">
-              End
-            </div>
-            <h2
-              class="govuk-heading-m govuk-!-margin-bottom-0"
-            >
-              {{ endDate | formatDate('datetime') }}
-            </h2>
-          </div>
-        </div>
-
       </div>
-
-      <ActionButton
-        class="govuk-!-margin-bottom-0"
-        type="primary"
-        @click="createQT"
-      >
-        Create on QT Platform
-      </ActionButton>
     </div>
 
+    <ActionButton
+      class="govuk-!-margin-bottom-0"
+      type="primary"
+      @click="createQT"
+    >
+      Create on QT Platform
+    </ActionButton>
   </div>
 </template>
 
 <script>
+import { beforeRouteEnter, btnNext } from './helper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  beforeRouteEnter: beforeRouteEnter,
   components: {
     ActionButton,
   },
@@ -118,6 +78,7 @@ export default {
     },
   },
   methods: {
+    btnNext,
     async createQT() {
       const response = await functions.httpsCallable('createQualifyingTest')({
         exerciseId: this.exercise.id,
@@ -130,7 +91,7 @@ export default {
         },
       });
       if (response && response.data && response.data.success) {
-        console.log('successfully created, redirect to loading / task', response.data.testId);
+        this.btnNext();
       }
     },
     getTimelineDate(exercise, qtType, dateType) {
