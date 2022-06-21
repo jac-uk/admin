@@ -63,6 +63,11 @@
             ]"
             multi-select
             :selection.sync="selectedItems"
+            :custom-search="{
+              placeholder: 'Search exercise names',
+              handler: exerciseSearch,
+              field: 'name',
+            }"
             @change="getTableData"
           >
             <template #actions>
@@ -187,6 +192,11 @@ export default {
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
+    },
+    exerciseSearch(searchTerm) {
+      return new Promise(resolve => {
+        resolve([searchTerm, searchTerm.toLowerCase(), searchTerm.toUpperCase()]);
+      });
     },
   },
 };
