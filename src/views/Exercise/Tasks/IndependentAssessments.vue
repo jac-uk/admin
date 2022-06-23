@@ -296,6 +296,10 @@ export default {
     Modal,
     UploadAssessment,
   },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+    next();
+  },
   data() {
     return {
       exerciseStage: '',
@@ -378,10 +382,6 @@ export default {
       const assessorId = this.assessorId;
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
     },
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
-    next();
   },
   methods: {
     async initialiseAssessments() {

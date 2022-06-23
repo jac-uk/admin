@@ -60,10 +60,7 @@
       "error",
       2
     ],
-    "space-before-function-paren": [
-      "error",
-      "never"
-    ],
+    "space-before-function-paren": "off",
     "no-prototype-builtins": "off",
     "vue/no-mutating-props": "off",
     "vue/no-lone-template": "off",

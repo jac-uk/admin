@@ -20,6 +20,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
 
+  setupFiles: ['<rootDir>/tests/unit/setup.js'],
+
   setupFilesAfterEnv: ['jest-extended'],
 
   snapshotSerializers: [

@@ -90,11 +90,11 @@
                 role="menu"
               >
                 <button
-                    class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="downloadPage"
-                  >
-                    Download Page
-                  </button>
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadPage"
+                >
+                  Download Page
+                </button>
                 <button
                   id="docDownloadButton"
                   class="govuk-button govuk-button--secondary drop-down-button"
