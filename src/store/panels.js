@@ -11,7 +11,7 @@ const collectionRef = firestore.collection('panels');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
       // eslint-disable-next-line no-console
       // console.log('bind panels', params);
       let firestoreRef = collectionRef
@@ -23,7 +23,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    create: async (context, data ) => {
+    create: async (context, data) => {
       // eslint-disable-next-line no-console
       // console.log('store create', data);
       await collectionRef.add(data);
@@ -89,7 +89,7 @@ export default {
       if (returnObj.length > 0) {
         return clone(returnObj[0]);
       } else {
-        return;
+
       }
     },
     isSift: () => (url) => {

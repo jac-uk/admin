@@ -30,7 +30,7 @@ const createTestSubject = () => {
     store,
     localVue,
     stubs: {
-      'RouterLink': true,
+      RouterLink: true,
     },
   });
 };

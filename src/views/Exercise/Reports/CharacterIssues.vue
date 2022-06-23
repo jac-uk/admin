@@ -212,10 +212,10 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationRecordCounts() {
+    applicationRecordCounts () {
       return applicationRecordCounts(this.exercise);
     },
   },
@@ -223,7 +223,7 @@ export default {
     exerciseStage: function (valueNow) {
       // populate the status dropdown, for the chosen stage
       if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []);
       } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
         this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
       } else if (valueNow === EXERCISE_STAGE.SELECTED) {
@@ -236,28 +236,28 @@ export default {
       // reset the status dropdown to 'All'
       this.candidateStatus = 'all';
 
-      this.$refs['issuesTable'].reload();
+      this.$refs.issuesTable.reload();
     },
-    candidateStatus: function() {
-      this.$refs['issuesTable'].reload();
+    candidateStatus: function () {
+      this.$refs.issuesTable.reload();
     },
   },
-  destroyed() {
+  destroyed () {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport() {
+    async refreshReport () {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    async downloadReport() {
+    async downloadReport () {
       this.downloadingReport = true;
       if (!this.exercise.referenceNumber) {
         this.downloadingReport = false;
-        return; //Abort if no ref
+        return; // Abort if no ref
       }
       const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
         exerciseId: this.exercise.id,
@@ -268,7 +268,7 @@ export default {
       const data = [];
       if (reportData.data.rows.length === 0) {
         this.downloadingReport = false;
-        return; //Abort if no applications or data.
+        return; // Abort if no applications or data.
       }
       data.push(reportData.data.headers.map(header => header.title));
       // get rows
@@ -283,7 +283,7 @@ export default {
       });
       this.downloadingReport = false;
     },
-    getTableData(params) {
+    getTableData (params) {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
@@ -312,9 +312,9 @@ export default {
           });
       } else {
         this.applicationRecords = [];
-      }    
+      }
     },
-    async candidateSearch(searchTerm) {
+    async candidateSearch (searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
   },

@@ -18,21 +18,21 @@ export default {
       required: true,
     },
   },
-  data() {
+  data () {
     return {
       active: false,
     };
   },
   methods: {
-    dragOver(ev) {
+    dragOver (ev) {
       ev.preventDefault();
       this.active = true;
     },
-    dragLeave(ev) {
+    dragLeave (ev) {
       ev.preventDefault();
       this.active = false;
     },
-    drop(ev) {
+    drop (ev) {
       this.$emit('drop', {
         data: JSON.parse(ev.dataTransfer.getData('text')),
         id: this.id,

@@ -68,5 +68,5 @@ const empty = async () => {
 };
 
 const hasData = () => {
-  return data.type ? true : false;
+  return !!data.type;
 };

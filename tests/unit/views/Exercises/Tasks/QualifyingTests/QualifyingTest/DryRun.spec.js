@@ -7,13 +7,13 @@ const mockTestQuestions = {
     {
       type: 'critical-analysis',
       details: 'I am the first question',
-        options: [
+      options: [
         'I am the first option',
         'I am the second option',
         'I am the third option',
         'I am the fourth option',
       ],
-      'correct': 0,
+      correct: 0,
     },
   ],
 };
@@ -73,19 +73,18 @@ describe('DryRun.vue', () => {
 
   describe('methods', () => {
     describe('formatEmails', () => {
-
       beforeEach(() => {
         wrapper.vm.$store.dispatch.mockClear();
       });
 
       it('removes duplicates', () => {
-          wrapper.setData({
-            invitedEmailsText: 'user123@test.com\nuser987@test.com\nuser987@test.com',
-          });
+        wrapper.setData({
+          invitedEmailsText: 'user123@test.com\nuser987@test.com\nuser987@test.com',
+        });
         expect(wrapper.vm.$data.invitedEmailsText).toBe('user123@test.com\nuser987@test.com\nuser987@test.com');
         wrapper.vm.formatEmails();
         expect(wrapper.exists()).toBe(true);
-        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com','user987@test.com']);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com', 'user987@test.com']);
       });
 
       it('trims white space', () => {
@@ -115,13 +114,11 @@ describe('DryRun.vue', () => {
         expect(wrapper.vm.$data.invitedEmailsText).toBe('user123@test.com\nUSER234@test.com\n user7564@test.com \nuser7564@test.com');
         wrapper.vm.formatEmails();
         expect(wrapper.exists()).toBe(true);
-        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com','user234@test.com','user7564@test.com']);
+        expect(wrapper.vm.qualifyingTest.invitedEmails).toStrictEqual(['user123@test.com', 'user234@test.com', 'user7564@test.com']);
       });
-
     });
 
     describe('save', () => {
-
       beforeEach(() => {
         wrapper.vm.$store.dispatch.mockClear();
         wrapper.setData({
@@ -138,11 +135,11 @@ describe('DryRun.vue', () => {
 
       it('with the expected save payload', () => {
         const dispatchedPayload = wrapper.vm.$store.dispatch.mock.calls[0][1].invitedEmails;
-        expect(dispatchedPayload).toEqual(expect.objectContaining(['test123@test.com','test234@test.com','user7564@test.com']));
+        expect(dispatchedPayload).toEqual(expect.objectContaining(['test123@test.com', 'test234@test.com', 'user7564@test.com']));
       });
 
       it('navigates to the QT dry run set up page', () => {
-        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ 'name': 'qualifying-test-review' });
+        expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'qualifying-test-review' });
       });
     });
   });

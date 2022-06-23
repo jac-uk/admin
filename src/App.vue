@@ -180,50 +180,50 @@
 <script>
 import { auth } from '@/firebase';
 import firebase from '@firebase/app';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 
 export default {
   name: 'App',
-  data() {
+  data () {
     return {
       authorisedToPerformAction: false,
     };
   },
   computed: {
-    isSignedIn() {
+    isSignedIn () {
       return this.$store.getters['auth/isSignedIn'];
     },
-    userName() {
+    userName () {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
     },
-    clipboardData() {
+    clipboardData () {
       return this.$store.state.clipboard.data;
     },
-    hasClipboardData() {
+    hasClipboardData () {
       return this.$store.state.clipboard.hasData;
     },
   },
-  async created() {
+  async created () {
     if (this.isSignedIn) {
       await this.$store.dispatch('services/bind');
       const email = firebase.auth().currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
   },
-  destroyed() {
+  destroyed () {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
     }
   },
   methods: {
-    signOut() {
+    signOut () {
       auth().signOut();
       this.$router.go('/sign-in');
     },
-    async onMouseOver() {
+    async onMouseOver () {
       await this.$store.dispatch('clipboard/read');
     },
-    async emptyClipboard() {
+    async emptyClipboard () {
       await this.$store.dispatch('clipboard/empty');
     },
   },

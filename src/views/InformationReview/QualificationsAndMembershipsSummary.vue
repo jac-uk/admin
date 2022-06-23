@@ -2,7 +2,7 @@
   <div>
     <!-- qualifications -->
     <div>
-      <h2 
+      <h2
         class="govuk-heading-l govuk-!-margin-top-6"
       >
         Qualifications
@@ -66,7 +66,7 @@
                 <dt
                   class="govuk-summary-list__key widerColumn"
                 >
-                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
+                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }}
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
@@ -79,7 +79,7 @@
                     @changeField="changeQualificationOrMembership"
                   />
                 </dd>
-              </div> 
+              </div>
 
               <template>
                 <div
@@ -360,7 +360,7 @@ export default {
       default: false,
     },
   },
-  data() {
+  data () {
     return {
       dataDefault: {
         type: null,
@@ -374,34 +374,34 @@ export default {
     };
   },
   computed: {
-    applicationHasQualifications() {
+    applicationHasQualifications () {
       return this.application.qualifications && Object.values(this.application.qualifications).length > 0;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    hasRelevantMemberships() {
+    hasRelevantMemberships () {
       return hasRelevantMemberships(this.exercise);
     },
-    isNonLegal() {
+    isNonLegal () {
       return isNonLegal(this.exercise);
     },
-    otherMemberships() {
+    otherMemberships () {
       if (Array.isArray(this.exercise.otherMemberships)) {
         return this.exercise.otherMemberships.filter(membership => this.exercise.memberships.includes(membership.value));
       }
       return null;
     },
-    scheduleApplies(){
+    scheduleApplies () {
       return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
         (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
     },
   },
   methods: {
-    fieldContains(field, item) {
+    fieldContains (field, item) {
       if (field && item) {
         if (field === item) {
           return true;
@@ -409,47 +409,43 @@ export default {
         if (Array.isArray(field) && field.includes(item)) {
           return true;
         }
-        if (field.hasOwnProperty(item)){
+        if (field.hasOwnProperty(item)) {
           return true;
         }
       }
       return false;
     },
-    showMembershipOption(ref) {
+    showMembershipOption (ref) {
       return this.exercise.memberships.indexOf(ref) >= 0;
     },
-    addQualification() {
+    addQualification () {
       let changedObj = this.application.qualifications || [];
 
-      if (changedObj.length){
+      if (changedObj.length) {
         changedObj = [...changedObj, this.dataDefault];
       } else {
         changedObj = [this.dataDefault];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
-
     },
-    removeQualification() {
-      
+    removeQualification () {
       let changedObj = this.application.qualifications || [];
 
-      if (changedObj.length > 0){
+      if (changedObj.length > 0) {
         changedObj.splice(this.currentIndex, 1);
       } else {
         changedObj = [];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
 
       this.$refs.removeModal.closeModal();
-
     },
-    changeQualificationOrMembership(obj) {
-      
+    changeQualificationOrMembership (obj) {
       let changedObj = this.application[obj.field] || {};
 
-      if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { //nested field
+      if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { // nested field
         if (!changedObj[obj.index]) {
           changedObj = {
             [obj.index]: {},
@@ -460,20 +456,18 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = { 
-        [obj.field]: {
-          ...this.application[obj.field], ...changedObj },
+      const updatedApplication = {
+        [obj.field]: { ...this.application[obj.field], ...changedObj },
       };
 
       // console.log(updatedApplication);
-      this.$emit('updateApplication', updatedApplication );
-
+      this.$emit('updateApplication', updatedApplication);
     },
-    closeModal() {
+    closeModal () {
       this.currentIndex = null;
       this.$refs.removeModal.closeModal();
     },
-    openModal(index) {
+    openModal (index) {
       this.currentIndex = index;
       this.$refs.removeModal.openModal();
     },

@@ -215,7 +215,7 @@ import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
 
 export default {
@@ -227,64 +227,64 @@ export default {
     ChangeNoOfTestApplications,
   },
   computed: {
-    isProduction() {
-      return this.$store.getters['isProduction'];
+    isProduction () {
+      return this.$store.getters.isProduction;
     },
-    exercise() {
+    exercise () {
       return this.$store.getters['exerciseDocument/data']();
     },
-    exerciseId() {
+    exerciseId () {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
-    applicationCounts() {
+    applicationCounts () {
       return applicationCounts(this.exercise);
     },
-    draftApplications() {
+    draftApplications () {
       return this.applicationCounts.draft || 0;
     },
-    appliedApplications() {
+    appliedApplications () {
       return this.applicationCounts.applied || 0;
     },
-    totalApplications() {
+    totalApplications () {
       return this.applicationCounts._total || 0;
     },
-    isPublished() {
+    isPublished () {
       return this.exercise.published;
     },
-    canPublish() {
+    canPublish () {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
     },
-    isDraft() {
+    isDraft () {
       // returns true unless exercise has a state that other than draft
       if (this.exercise && this.exercise.state && this.exercise.state !== 'draft') {
         return false;
       }
       return true;
     },
-    isReadyForApproval() {
+    isReadyForApproval () {
       return this.exercise && this.exercise.state && this.exercise.state === 'ready';
     },
-    isApproved() {
+    isApproved () {
       return isApproved(this.exercise);
     },
-    isTesting() {
+    isTesting () {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
     },
-    isTested() {
+    isTested () {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
     },
-    isReadyForTesting() {
+    isReadyForTesting () {
       return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
     },
-    isProcessing() {
+    isProcessing () {
       return isProcessing(this.exercise);
     },
-    isReadyForProcessing() {
+    isReadyForProcessing () {
       return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
 
-    hasOpened() {
+    hasOpened () {
       if (this.exercise) {
         switch (this.exercise.state) {
         case 'draft':
@@ -298,68 +298,68 @@ export default {
       }
       return false;
     },
-    timeline() {
+    timeline () {
       const timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline, 2);
     },
-    exerciseProgress() {
+    exerciseProgress () {
       if (this.exercise && this.exercise.progress) {
         return this.exercise.progress;
       } else {
         return {};
       }
     },
-    approvalProgress() {
+    approvalProgress () {
       if (this.exercise && this.exercise.approval) {
         return this.exercise.approval;
       } else {
         return {};
       }
     },
-    taskList() {
+    taskList () {
       const data = [];
       if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
         if (this.exerciseProgress) {
-          data.push({ title: 'Website listing', id: 'exercise-details-summary', done: this.exerciseProgress.vacancySummary, approved: this.approvalProgress['vacancySummary'] });
-          data.push({ title: 'Vacancy information', id: 'exercise-details-vacancy', done: this.exerciseProgress.vacancyInformation, approved: this.approvalProgress['vacancyInformation'] });
-          data.push({ title: 'Contacts', id: 'exercise-details-contacts', done: this.exerciseProgress.contacts, approved: this.approvalProgress['contacts'] });
-          data.push({ title: 'Timeline', id: 'exercise-details-timeline', done: this.exerciseProgress.timeline, approved: this.approvalProgress['timeline'] });
-          data.push({ title: 'Shortlisting', id: 'exercise-details-shortlisting', done: this.exerciseProgress.shortlisting, approved: this.approvalProgress['shortlisting'] });
-          data.push({ title: 'Eligibility information', id: 'exercise-details-eligibility', done: this.exerciseProgress.eligibility, approved: this.approvalProgress['eligibility'] });
-          data.push({ title: 'Working preferences', id: 'exercise-details-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress['workingPreferences'] });
-          data.push({ title: 'Assessment options', id: 'exercise-details-assessments', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress['assessmentOptions'] });
-          data.push({ title: 'Exercise downloads', id: 'exercise-details-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress['downloads'] });
+          data.push({ title: 'Website listing', id: 'exercise-details-summary', done: this.exerciseProgress.vacancySummary, approved: this.approvalProgress.vacancySummary });
+          data.push({ title: 'Vacancy information', id: 'exercise-details-vacancy', done: this.exerciseProgress.vacancyInformation, approved: this.approvalProgress.vacancyInformation });
+          data.push({ title: 'Contacts', id: 'exercise-details-contacts', done: this.exerciseProgress.contacts, approved: this.approvalProgress.contacts });
+          data.push({ title: 'Timeline', id: 'exercise-details-timeline', done: this.exerciseProgress.timeline, approved: this.approvalProgress.timeline });
+          data.push({ title: 'Shortlisting', id: 'exercise-details-shortlisting', done: this.exerciseProgress.shortlisting, approved: this.approvalProgress.shortlisting });
+          data.push({ title: 'Eligibility information', id: 'exercise-details-eligibility', done: this.exerciseProgress.eligibility, approved: this.approvalProgress.eligibility });
+          data.push({ title: 'Working preferences', id: 'exercise-details-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress.workingPreferences });
+          data.push({ title: 'Assessment options', id: 'exercise-details-assessments', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress.assessmentOptions });
+          data.push({ title: 'Exercise downloads', id: 'exercise-details-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress.downloads });
           if (this.exercise.inviteOnly) {
-            data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-details-invitations' , done: this.exerciseProgress.invitations, approved: this.approvalProgress['invitations'] });
+            data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-details-invitations', done: this.exerciseProgress.invitations, approved: this.approvalProgress.invitations });
           }
         }
       }
       return data;
     },
-    isReadyToSubmit() {
-      return this.exerciseProgress
-        && this.exerciseProgress.vacancySummary
-        && this.exerciseProgress.vacancyInformation
-        && this.exerciseProgress.contacts
-        && this.exerciseProgress.timeline
-        && this.exerciseProgress.shortlisting
-        && this.exerciseProgress.eligibility
-        && this.exerciseProgress.workingPreferences
-        && this.exerciseProgress.assessmentOptions
-        && this.exerciseProgress.downloads;
+    isReadyToSubmit () {
+      return this.exerciseProgress &&
+        this.exerciseProgress.vacancySummary &&
+        this.exerciseProgress.vacancyInformation &&
+        this.exerciseProgress.contacts &&
+        this.exerciseProgress.timeline &&
+        this.exerciseProgress.shortlisting &&
+        this.exerciseProgress.eligibility &&
+        this.exerciseProgress.workingPreferences &&
+        this.exerciseProgress.assessmentOptions &&
+        this.exerciseProgress.downloads;
     },
   },
   methods: {
-    submitForApproval() {
+    submitForApproval () {
       this.$store.dispatch('exerciseDocument/submitForApproval');
     },
-    approve() {
+    approve () {
       this.$store.dispatch('exerciseDocument/approve');
     },
-    unlock() {
+    unlock () {
       this.$store.dispatch('exerciseDocument/unlock');
     },
-    async copyToClipboard() {
+    async copyToClipboard () {
       const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
       await this.$store.dispatch('clipboard/write', {
         environment: this.$store.getters.appEnvironment,
@@ -368,48 +368,48 @@ export default {
         content: exercise,
       });
     },
-    async publish() {
+    async publish () {
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {
         exerciseId: this.exerciseId,
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    async unPublish() {
+    async unPublish () {
       await this.$store.dispatch('exerciseDocument/unpublish');
       logEvent('info', 'Exercise unpublished', {
         exerciseId: this.exerciseId,
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    async startProcessing() {
+    async startProcessing () {
       await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
     },
-    async updateProcessing() {
+    async updateProcessing () {
       // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
       await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
     },
-    changeState() {
-      this.$refs['modalChangeExerciseState'].openModal();
+    changeState () {
+      this.$refs.modalChangeExerciseState.openModal();
     },
-    refreshApplicationCounts() {
+    refreshApplicationCounts () {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
         this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
       }
     },
-    changeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].openModal();
+    changeNoOfTestApplications () {
+      this.$refs.modalChangeNoOfTestApplications.openModal();
       this.$store.dispatch('exerciseDocument/testing');
     },
-    cancelChangeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+    cancelChangeNoOfTestApplications () {
+      this.$refs.modalChangeNoOfTestApplications.closeModal();
       this.$store.dispatch('exerciseDocument/isReadyForTest');
     },
-    confirmedNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
-      this.$refs['createTestApplicationsBtn'].$el.click();
+    confirmedNoOfTestApplications () {
+      this.$refs.modalChangeNoOfTestApplications.closeModal();
+      this.$refs.createTestApplicationsBtn.$el.click();
     },
-    async createTestApplications() {
+    async createTestApplications () {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
       if (!noOfTestApplications) return;
       await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });

@@ -12,7 +12,7 @@ const collectionRef = firestore.collection('applicationRecords');
 export default {
   namespaced: true,
   getters: {
-    availableStatuses() {
+    availableStatuses () {
       return [
         APPLICATION_STATUS.REJECTED_BY_CHARACTER,
         APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
@@ -23,7 +23,7 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.RECOMMENDED)
@@ -34,7 +34,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status, nextStage, empApplied } ) => {
+    updateStatus: async (context, { status, nextStage, empApplied }) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.RECOMMENDED;
 
       const data = {
@@ -42,16 +42,16 @@ export default {
       };
 
       if (status) {
-        data['status'] = status;
+        data.status = status;
       }
 
-      if (empApplied != null){
+      if (empApplied != null) {
         data['flags.empApplied'] = empApplied;
       }
 
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
-      selectedItems.map( item => {
+      selectedItems.map(item => {
         const ref = collectionRef.doc(item);
         batch.update(ref, data);
       });
@@ -74,9 +74,8 @@ export default {
       ) {
         context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
       }
-
     },
-    storeItems: ( context, { items }) => {
+    storeItems: (context, { items }) => {
       context.commit('changeSelectedItems', items);
     },
     getMessages: (context) => {
@@ -91,10 +90,10 @@ export default {
     selectedItems: [],
   },
   mutations: {
-    message(state, msg) {
+    message (state, msg) {
       state.message = msg;
     },
-    changeSelectedItems(state, items) {
+    changeSelectedItems (state, items) {
       state.selectedItems = items;
     },
   },

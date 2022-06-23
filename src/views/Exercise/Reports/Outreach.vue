@@ -153,7 +153,7 @@ export default {
     TabsList,
     Stat,
   },
-  data() {
+  data () {
     return {
       report: null,
       refreshingReport: false,
@@ -188,13 +188,13 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    showTabs() {
-      return this.report && this.report.shortlisted;  // .shortlisted indicates we have stages reports
+    showTabs () {
+      return this.report && this.report.shortlisted; // .shortlisted indicates we have stages reports
     },
-    activeTabTitle() {
+    activeTabTitle () {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
         if (this.tabs[i].ref === this.activeTab) {
           return this.tabs[i].title;
@@ -203,7 +203,7 @@ export default {
       return '';
     },
   },
-  created() {
+  created () {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
       .onSnapshot((snap) => {
         if (snap.exists) {
@@ -211,18 +211,18 @@ export default {
         }
       });
   },
-  destroyed() {
+  destroyed () {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport() {
+    async refreshReport () {
       this.refreshingReport = true;
       await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    gatherReportData(stage) {
+    gatherReportData (stage) {
       const data = [];
       let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
       if (stage) {
@@ -245,7 +245,7 @@ export default {
       });
       return data;
     },
-    exportData(stage) {
+    exportData (stage) {
       let title = 'Diversity Report';
       if (stage) {
         title = `${title} - ${stage}`;
@@ -262,10 +262,10 @@ export default {
         }
       );
     },
-    reduceReport(obj) {
+    reduceReport (obj) {
       const returnObj = {};
       let keys = Object.keys(obj);
-      keys = keys.filter( item => !item.startsWith('total'));
+      keys = keys.filter(item => !item.startsWith('total'));
       keys.map(item => {
         returnObj[item] = obj[item];
       });

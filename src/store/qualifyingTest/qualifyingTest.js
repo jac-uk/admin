@@ -86,8 +86,8 @@ export default {
     },
     getCompletedQTs: (state) => {
       return state.records.filter(qualifyingTest => {
-        return qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED
-          && qualifyingTest.mode !== QUALIFYING_TEST.MODE.MOP_UP;
+        return qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED &&
+          qualifyingTest.mode !== QUALIFYING_TEST.MODE.MOP_UP;
       });
     },
     getActivatedQTs: (state) => {

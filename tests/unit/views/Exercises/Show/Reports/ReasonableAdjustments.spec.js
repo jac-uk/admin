@@ -59,25 +59,21 @@ describe('@/views/Exercise/Show/Reports/ReasonableAdjustments', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
-    
+
     it('contains a <h2>', () => {
       expect(wrapper.find('h2')).toBeTruthy();
     });
-
   });
 
   describe('computed properties', () => {
-
     describe('exercise', () => {
       it('returns record object from state', () => {
         expect(wrapper.vm.exercise).toEqual(mockExercise);
       });
     });
-
   });
   describe('methods', () => {
     describe('exportData()', () => {
-
       it('is a function', () => {
         expect(typeof wrapper.vm.exportData).toBe('function');
       });

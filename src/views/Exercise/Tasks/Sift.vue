@@ -14,7 +14,7 @@ export default {
   components: {
     PanelPack,
   },
-  data() {
+  data () {
     return {
       sift: null,
     };
@@ -23,7 +23,7 @@ export default {
 
   },
   methods: {
-    
+
   },
 };
 </script>

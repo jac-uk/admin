@@ -75,7 +75,7 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data () {
     return {
       tableColumns: [
         { title: 'Title', sort: 'title', default: true },
@@ -85,10 +85,10 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    warningMessage() {
+    warningMessage () {
       let msg = 'Please add';
       if (!this.exercise.exercisePhoneNumber) {
         msg = `${msg} an exercise phone number`;
@@ -103,7 +103,7 @@ export default {
       msg += this.tieBreakers ? 'an equal merit tie-breaker' : 'a qualifying test';
       return msg;
     },
-    qualifyingTests() {
+    qualifyingTests () {
       const qtList = this.$store.state.qualifyingTest.records;
       // For the Tie-breakers page we want to show tests where isTieBreaker == true
       // For the Qualifying Tests page we want to show tests where isTieBreaker == false
@@ -115,31 +115,31 @@ export default {
         return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
     },
-    exerciseId() {
+    exerciseId () {
       return this.$route.params.id;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    btnCreate() {
+    btnCreate () {
       this.$router.push({ name: `${this.routeNamePrefix}-new` });
     },
-    btnCreateFromClipboard() {
+    btnCreateFromClipboard () {
       this.$router.push({ name: 'qualifying-test-new-from-clipboard' });
     },
-    getViewName(qualifyingTest) {
+    getViewName (qualifyingTest) {
       if (
-        qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED
-        || qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED
+        qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED ||
+        qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED
       ) {
         return `${this.routeNamePrefix}-review`;
       } else {
         return `${this.routeNamePrefix}-view`;
       }
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'qualifyingTest/bindQTs',
         {

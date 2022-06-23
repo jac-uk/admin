@@ -11,11 +11,11 @@ export default {
       if (state.isFavourites === null) { commit('updateFavourites', true); }
       if (state.isFavourites) {
         firestoreRef = firestore
-        .collection('exercises')
-        .where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid);
+          .collection('exercises')
+          .where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid);
       } else {
         firestoreRef = firestore
-        .collection('exercises');
+          .collection('exercises');
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -36,10 +36,10 @@ export default {
     },
   },
   mutations: {
-    updateFavourites(state, isFavourites) {
+    updateFavourites (state, isFavourites) {
       state.isFavourites = isFavourites;
     },
-    selectedItems(state, items) {
+    selectedItems (state, items) {
       state.selectedItems = items;
     },
   },

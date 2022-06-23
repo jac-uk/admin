@@ -19,13 +19,13 @@ export default {
     SideNavigation,
   },
   computed: {
-    sideNavigation() {
+    sideNavigation () {
       const exercise = this.$store.state.exerciseDocument.record;
       const path = `/exercise/${exercise.id}/applications`;
       let draft = 0;
       let applied = 0;
       let withdrawn = 0;
-      if (exercise._applications){
+      if (exercise._applications) {
         draft = exercise._applications.draft || 0;
         applied = exercise._applications.applied || 0;
         withdrawn = exercise._applications.withdrawn || 0;

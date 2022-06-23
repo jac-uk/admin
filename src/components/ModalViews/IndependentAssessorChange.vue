@@ -76,7 +76,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data () {
     return {
       email: null,
       fullName: null,
@@ -85,25 +85,25 @@ export default {
     };
   },
   computed: {
-    userId() {
+    userId () {
       const assessorId = this.$attrs.assessor.id;
-      return assessorId ? assessorId : this.$attrs.uuid;
+      return assessorId || this.$attrs.uuid;
     },
   },
-  created() {
+  created () {
     this.email = this.$attrs.email;
     this.fullName = this.$attrs.fullName;
     this.phone = this.$attrs.phone;
     this.title = this.$attrs.title;
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.$emit('confirmed');
     },
-    async save() {
+    async save () {
       await this.validate();
       if (this.isValid()) {
         let data = {};

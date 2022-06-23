@@ -63,19 +63,19 @@ export default {
       default: '',
     },
   },
-  data() {
+  data () {
     return {
       processing: false,
     };
   },
   computed: {
-    numberOfCandidates() {
+    numberOfCandidates () {
       return this.selectedItems.length;
     },
-    typeOfEmail() {
+    typeOfEmail () {
       return this.type;
     },
-    buttonText() {
+    buttonText () {
       if (this.processing === true) {
         return 'Processing...';
       }
@@ -83,21 +83,21 @@ export default {
     },
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async updateApplicationRecord(status) {
+    async updateApplicationRecord (status) {
       await this.$store.dispatch('characterChecks/updateStatus', {
         selectedItems: this.selectedItems,
         newStatus: status,
       });
     },
-    async send() {
+    async send () {
       try {
         this.processing = true;
         const response = await functions.httpsCallable('sendCharacterCheckRequests')({

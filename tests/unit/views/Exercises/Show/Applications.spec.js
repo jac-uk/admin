@@ -137,11 +137,10 @@ describe('@/views/Exercise/Show/Applications', () => {
   describe('methods', () => {
     let wrapper;
     beforeEach(() => {
-       wrapper = createTestSubject();
+      wrapper = createTestSubject();
     });
 
     describe('exportContacts()', () => {
-
       it('is a function', () => {
         expect(typeof wrapper.vm.exportContacts).toBe('function');
       });

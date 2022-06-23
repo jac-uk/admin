@@ -135,22 +135,22 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
   },
-  destroyed() {
+  destroyed () {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport() {
+    async refreshReport () {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    getTableData(params) {
+    getTableData (params) {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
@@ -169,11 +169,10 @@ export default {
         this.applicationRecords = [];
       }
     },
-    async candidateSearch(searchTerm) {
+    async candidateSearch (searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
-    async gatherReportData() {
-
+    async gatherReportData () {
       this.generatingExport = true;
 
       // fetch data
@@ -193,7 +192,7 @@ export default {
 
       return reportData;
     },
-    async exportData() {
+    async exportData () {
       const title = 'Eligibility Issues';
       const xlsxData = await this.gatherReportData();
 

@@ -96,7 +96,7 @@ export default {
     CheckboxItem,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       newSelectedStatus: null,
       confirmedSave: false,
@@ -106,39 +106,39 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageSelected.records;
     },
-    availableStatuses() {
+    availableStatuses () {
       return this.$store.getters['stageSelected/availableStatuses'];
     },
-    itemsToChange() {
+    itemsToChange () {
       const selectedItems = this.$store.state.stageSelected.selectedItems;
       return selectedItems;
     },
-    warningMessage() {
+    warningMessage () {
       return 'This application has issues';
     },
   },
-  created() {
+  created () {
     // on refresh if there's no IDs to change => redirect to the list
     if (this.itemsToChange.length === 0) {
       this.$router.push({ name: 'exercise-stages-selected-list' });
     }
   },
   methods: {
-    itemsHaveIssues() {
+    itemsHaveIssues () {
       const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
       return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
-    confirm(){
+    confirm () {
       this.confirmedSave = true;
     },
-    cancel(){
+    cancel () {
       this.showWarning = false;
     },
-    async save() {
-      if (!this.confirmedSave && this.itemsHaveIssues()){
+    async save () {
+      if (!this.confirmedSave && this.itemsHaveIssues()) {
         this.showWarning = true;
       } else {
         let stageValue = EXERCISE_STAGE.SELECTED;

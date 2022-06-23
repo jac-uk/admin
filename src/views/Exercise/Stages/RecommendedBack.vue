@@ -37,16 +37,16 @@ export default {
     RadioItem,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       newSelectedStatus: null,
     };
   },
   computed: {
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    availableStatuses() {
+    availableStatuses () {
       const myStatus = [
         DEFAULT.YES,
         DEFAULT.NO,
@@ -55,7 +55,7 @@ export default {
     },
   },
   methods: {
-    async save() {
+    async save () {
       let stageValue = EXERCISE_STAGE.RECOMMENDED;
       if (this.newSelectedStatus === DEFAULT.YES) {
         stageValue = EXERCISE_STAGE.SELECTED;

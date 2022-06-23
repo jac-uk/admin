@@ -155,7 +155,7 @@ export default {
       default: '',
     },
   },
-  data() {
+  data () {
     const defaults = {
       question: {
         details: '',
@@ -173,16 +173,16 @@ export default {
     };
   },
   computed: {
-    isCriticalAnalysis() {
-      return this.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS ? true : false;
+    isCriticalAnalysis () {
+      return this.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
     },
-    isScenario() {
-      return this.type === QUALIFYING_TEST.TYPE.SCENARIO ? true : false;
+    isScenario () {
+      return this.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
-    isSituationalJudgement() {
-      return this.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? true : false;
+    isSituationalJudgement () {
+      return this.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
-    typeName() {
+    typeName () {
       return this.isScenario ? 'question' : 'answer option';
     },
   },

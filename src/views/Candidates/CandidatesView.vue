@@ -79,7 +79,7 @@ import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSum
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 
 export default {
   components: {
@@ -91,7 +91,7 @@ export default {
     CharacterInformationSummary,
     EqualityAndDiversity,
   },
-  data() {
+  data () {
     return {
       authorisedToPerformAction: false,
       editMode: false,
@@ -118,47 +118,47 @@ export default {
     };
   },
   computed: {
-    authorisedUser(){
+    authorisedUser () {
       return this.authorisedToPerformAction;
     },
-    candidateRecord() {
+    candidateRecord () {
       return this.$store.state.candidates.record;
     },
-    personalDetails() {
+    personalDetails () {
       const localDocs = this.$store.state.candidates.personalDetails;
       return localDocs || {};
     },
-    characterInformation() {
+    characterInformation () {
       const localDocs = this.$store.state.candidates.characterInformation;
       return localDocs || {};
     },
-    characterInformationVersion() {
+    characterInformationVersion () {
       return this.characterInformation._versionNumber ? this.characterInformation._versionNumber : 1;
     },
-    equalityAndDiversity() {
+    equalityAndDiversity () {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
     },
-    myFullName() {
+    myFullName () {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecord.fullName;
     },
-    getUserId() {
+    getUserId () {
       return this.$route.params.id || '';
     },
   },
-  async created() {
+  async created () {
     this.candidateId = this.getUserId;
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
     const email = firebase.auth().currentUser.email;
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
-  destroyed() {
+  destroyed () {
     this.$store.dispatch('candidates/unbindDoc');
     this.$store.dispatch('candidates/unbindDocs');
   },
   methods: {
-    makeFullName(obj) {
+    makeFullName (obj) {
       if (obj.firstName && this.personalDetails.lastName) {
         obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
       }
@@ -167,11 +167,11 @@ export default {
       }
       return obj;
     },
-    updateCandidate(obj) {
+    updateCandidate (obj) {
       this.makeFullName(obj);
       this.$store.dispatch('candidates/savePersonalDetails', { data: obj, id: this.candidateId });
     },
-    toggleEdit(){
+    toggleEdit () {
       this.editMode = !this.editMode;
     },
   },

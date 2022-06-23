@@ -56,33 +56,33 @@
 import { isEditable } from '@/helpers/exerciseHelper';
 
 export default {
-  data() {
+  data () {
     return {
       invitationsSent: false,
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    invitations() {
+    invitations () {
       return this.$store.state.invitations.records;
     },
   },
-  created() {
+  created () {
     this.$store.dispatch('invitations/bind', { exerciseId: this.exercise.id });
   },
   methods: {
-    tagClass(status){
+    tagClass (status) {
       let result = 'govuk-tag';
-      if (status === 'invited'){
+      if (status === 'invited') {
         result += '--yellow';
-      } else if (status === 'accepted'){
+      } else if (status === 'accepted') {
         result += '--green';
-      } else if (status === 'rejected'){
+      } else if (status === 'rejected') {
         result += '--red';
       }
       return result;

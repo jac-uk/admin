@@ -10,7 +10,7 @@ const collectionRef = firestore.collection('applicationRecords');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
+    bind: firestoreAction(({ bindFirestoreRef, state }, params) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
         .where('active', '==', true);
@@ -29,11 +29,11 @@ export default {
         firestoreRef = tableQuery(state.checksNotRequestedRecords, firestoreRef, params);
         return bindFirestoreRef('checksNotRequestedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
-        if (params.completed === true) {
-          firestoreRef = firestoreRef.where('characterChecks.status', '==', 'completed');
-          firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
-          return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
-        }
+      if (params.completed === true) {
+        firestoreRef = firestoreRef.where('characterChecks.status', '==', 'completed');
+        firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
+        return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('checksRequestedRecords');
@@ -41,7 +41,7 @@ export default {
       unbindFirestoreRef('checksCompletedRecords');
       return true;
     }),
-    updateStatus: async ( context, { selectedItems, newStatus } ) => {
+    updateStatus: async (context, { selectedItems, newStatus }) => {
       let field = '';
       const existingStatus = 'requested';
 

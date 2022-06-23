@@ -105,7 +105,7 @@ xdescribe('@/views/Exercise/Edit', () => {
       it('calls router replace method with the name of error page', () => {
         wrapper.vm.redirectToErrorPage();
         expect(mockRouter.replace).toHaveBeenCalled();
-        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ 'name': 'exercise-not-found' });
+        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ name: 'exercise-not-found' });
       });
     });
   });

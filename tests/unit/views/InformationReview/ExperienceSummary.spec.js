@@ -1,8 +1,11 @@
+import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
 };
@@ -28,9 +31,6 @@ const mockProps = {
   application: mockApplication,
   exercise: mockExercise,
 };
-
-import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
   let wrapper;
@@ -59,11 +59,9 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('changeUserDetails', () => {
       expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
-    
+
     it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { experience: 'test', userId: '0123456' } );
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual({ experience: 'test', userId: '0123456' });
     });
-
   });
-
 });

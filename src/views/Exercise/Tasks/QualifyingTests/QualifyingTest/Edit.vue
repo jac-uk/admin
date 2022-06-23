@@ -88,7 +88,7 @@ export default {
     RepeatableFields,
   },
   extends: Form,
-  data(){
+  data () {
     const exercise = this.$store.getters['exerciseDocument/data']();
     const data = this.$store.getters['qualifyingTest/data']();
 
@@ -112,28 +112,28 @@ export default {
     };
   },
   computed: {
-    testTypes() {
+    testTypes () {
       return QUALIFYING_TEST.TYPE;
     },
-    isTieBreaker() {
+    isTieBreaker () {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
-    minDate() {
+    minDate () {
       return this.isTieBreaker ? this.getEMZDate(this.exercise, 'Start') : null;
     },
-    maxDate() {
+    maxDate () {
       return this.isTieBreaker ? this.getEMZDate(this.exercise, 'End') : null;
     },
   },
   methods: {
-    async save() {
+    async save () {
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: `${this.routeNamePrefix}-question-builder` });
     },
-    getTimelineDate(exercise, qtType, dateType) {
+    getTimelineDate (exercise, qtType, dateType) {
       if (!exercise.shortlistingMethods) {
         return;
       }
@@ -163,12 +163,11 @@ export default {
 
       return datetime;
     },
-    getEMZDate(exercise, dateType) {
+    getEMZDate (exercise, dateType) {
       const date = exercise[`equalMeritSecondStage${dateType}Date`];
       if (date instanceof Date) {
         return new Date(date.getTime());
       }
-      return;
     },
   },
 };

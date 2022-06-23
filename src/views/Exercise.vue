@@ -67,7 +67,7 @@ export default {
     AddToFavouritesButton,
     SubNavigation,
   },
-  data() {
+  data () {
     return {
       loaded: false,
       loadFailed: false,
@@ -77,34 +77,34 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    hasQualifyingTests() {
+    hasQualifyingTests () {
       return hasQualifyingTests(this.exercise);
     },
-    isProcessing() {
+    isProcessing () {
       return isProcessing(this.exercise);
     },
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
-    exerciseName() {
-      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
+    exerciseName () {
+      return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0, 79)}..`;
     },
-    isInFavourites() {
+    isInFavourites () {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
     },
-    hasOpened() {
+    hasOpened () {
       if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {
         return true;
       }
       return false;
     },
-    subNavigation() {
+    subNavigation () {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
@@ -121,7 +121,7 @@ export default {
       }
       return subNavigation;
     },
-    goBack() {
+    goBack () {
       if (this.$route.name === 'exercise-overview') {
         return {
           name: 'exercises',
@@ -136,14 +136,13 @@ export default {
       }
     },
   },
-  mounted() {
+  mounted () {
     const id = this.$route.params.id;
     this.$store.dispatch('exerciseDocument/bind', id)
       .then((data) => {
         if (data === null) {
           this.redirectToErrorPage();
-        }
-        else {
+        } else {
           this.loaded = true;
         }
       }).catch((e) => {
@@ -152,10 +151,10 @@ export default {
       });
   },
   methods: {
-    redirectToErrorPage() {
+    redirectToErrorPage () {
       this.$router.replace({ name: 'exercise-not-found' });
     },
-    updateFavourites() {
+    updateFavourites () {
       if (this.isInFavourites) {
         this.$store.dispatch('exerciseDocument/removeFromFavourites', this.userId);
       } else {

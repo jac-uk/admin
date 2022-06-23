@@ -93,7 +93,7 @@ export default {
     Table,
     TableCell,
   },
-  data() {
+  data () {
     return {
       message: null,
       selectedItems: [],
@@ -107,35 +107,35 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageReview.records;
     },
-    totalApplicationRecords() {
+    totalApplicationRecords () {
       return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.review) || 0;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-    availableStatuses() {
+    availableStatuses () {
       const shortlistingMethods = this.exercise.shortlistingMethods;
       const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
-      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod) ;
+      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod);
     },
   },
-  async created() {
+  async created () {
     this.message = await this.$store.dispatch('stageReview/getMessages');
     this.selectedItems = this.$store.state.stageReview.selectedItems;
   },
   methods: {
-    checkForm() {
+    checkForm () {
       this.$store.dispatch('stageReview/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-review-edit' });
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'stageReview/bind',
         {
@@ -144,7 +144,7 @@ export default {
         }
       );
     },
-    async candidateSearch(searchTerm) {
+    async candidateSearch (searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
   },

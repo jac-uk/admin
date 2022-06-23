@@ -30,13 +30,13 @@ import { isEditable } from '@/helpers/exerciseHelper';
 
 export default {
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    assessmentMethods() {
+    assessmentMethods () {
       const assessmentMethods = [];
       if (this.exercise && this.exercise.assessmentMethods) {
         if (this.exercise.assessmentMethods.independentAssessments) {

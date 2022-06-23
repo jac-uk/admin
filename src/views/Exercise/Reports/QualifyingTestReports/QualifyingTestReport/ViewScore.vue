@@ -206,40 +206,40 @@ export default {
     SetStatus,
     Modal,
   },
-  data() {
+  data () {
     return {
       selectedItems: [],
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    qualifyingTestReportId() {
+    qualifyingTestReportId () {
       return this.$route.params.qualifyingTestReportId;
     },
-    qualifyingTestReport() {
+    qualifyingTestReport () {
       return this.$store.getters['qualifyingTestReport/data'];
     },
-    score() {
+    score () {
       return this.$route.params.score;
     },
-    scoreData() {
+    scoreData () {
       const data = this.qualifyingTestReport.rawData.filter(row => row.score === this.score).map(row => {
         row.id = row.application.id;
         return row;
       });
       return data;
     },
-    scoreReport() {
+    scoreReport () {
       const report = this.qualifyingTestReport.report.filter(row => row.score === this.score)[0];
       return report;
     },
-    aboveScoreReport() {
+    aboveScoreReport () {
       const report = this.qualifyingTestReport.report.filter(row => row.score === this.score + 1)[0];
       return report;
     },
-    columns() {
+    columns () {
       const data = [];
       data.push({ title: 'Application' });
       this.qualifyingTestReport.qualifyingTests.forEach(test => {
@@ -251,31 +251,31 @@ export default {
       data.push({ title: 'Disability' });
       return data;
     },
-    tieBreakers() {
+    tieBreakers () {
       return this.qualifyingTestReport.tieBreakers;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    clearSelectedItems() {
+    clearSelectedItems () {
       this.selectedItems = [];
     },
-    setStatus() {
+    setStatus () {
       this.openModal('SetStatusModal');
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.$refs[modalRef].closeModal();
       this.selectedItems = [];
     },
-    gotoView() {
+    gotoView () {
       this.$router.push({ name: `${this.routeNamePrefix}-report-view`, params: { qualifyingTestReportId: this.qualifyingTestReportId } });
     },
-    checkForm() {
+    checkForm () {
       // console.log('save selection');
     },
   },

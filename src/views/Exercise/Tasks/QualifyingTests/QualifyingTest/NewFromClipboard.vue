@@ -49,7 +49,7 @@ export default {
     Checkbox,
   },
   extends: Form,
-  data(){
+  data () {
     const exercise = this.$store.state.exerciseDocument.record;
 
     const defaults = {
@@ -73,12 +73,12 @@ export default {
     };
   },
   computed: {
-    testTypes() {
+    testTypes () {
       return QUALIFYING_TEST.TYPE;
     },
   },
   methods: {
-    async save() {
+    async save () {
       const data = { ...this.qualifyingTest, ...JSON.parse(this.copiedTest) };
       if (this.isDryRun) {
         data.mode = QUALIFYING_TEST.MODE.DRY_RUN;

@@ -1,8 +1,11 @@
+import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
   selectionCriteriaAnswers: [],
@@ -17,7 +20,7 @@ const mockProps = {
 const mockStore = {
   dispatch: jest.fn(),
   getters: {
-    'application/update': jest.fn((obj) => { return { ...mockApplication.selectionCriteriaAnswers, ...obj }; } ),
+    'application/update': jest.fn((obj) => { return { ...mockApplication.selectionCriteriaAnswers, ...obj }; }),
   },
   state: {
     exerciseDocument: {
@@ -32,26 +35,21 @@ const mockStore = {
   },
 };
 
-import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
-
 describe('@/views/Exercise/Applications/Application', () => {
   let wrapper;
   beforeAll(() => {
     wrapper = createTestSubject(AssessmentsSummary, {
       propsData: mockProps,
       mocks: {
-          $store: mockStore,
-        },
-        stubs: [],
-      });
+        $store: mockStore,
+      },
+      stubs: [],
     });
-    describe('template', () => {
-
+  });
+  describe('template', () => {
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
     });
-
   });
 
   describe('methods', () => {
@@ -61,18 +59,17 @@ describe('@/views/Exercise/Applications/Application', () => {
         change: true,
         index: 0,
         extension: 'answer',
-    };
+      };
       wrapper.vm.changeAssessmentInfo(obj);
     });
 
     it('changeUserDetails', () => {
       expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
-    
-    it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { selectionCriteriaAnswers: { 0: { answer: true } } });
-    });
 
+    it('dispatches formatted change', () => {
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual({ selectionCriteriaAnswers: { 0: { answer: true } } });
+    });
   });
 });
 

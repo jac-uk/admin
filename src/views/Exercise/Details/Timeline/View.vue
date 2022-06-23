@@ -28,13 +28,13 @@ export default {
     Timeline,
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    timeline() {
+    timeline () {
       const timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline);
     },

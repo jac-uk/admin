@@ -41,13 +41,13 @@ export default {
     },
   },
   computed: {
-    selectionDayIdStart() {
+    selectionDayIdStart () {
       return `selection_start_${this.index}`;
     },
-    selectionDayIdEnd() {
+    selectionDayIdEnd () {
       return `selection_end_${this.index}`;
     },
-    selectionDayIdLocation() {
+    selectionDayIdLocation () {
       return `selection_location_${this.index}`;
     },
   },

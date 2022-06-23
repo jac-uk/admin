@@ -45,10 +45,10 @@ export default {
     BackLink,
   },
   extends: Form,
-  data() {
+  data () {
     const invitations = this.$store.state.invitations.records;
     const invitedEmailsText = [];
-    invitations.forEach(invite=>{
+    invitations.forEach(invite => {
       invitedEmailsText.push(invite.candidate.email);
     });
     return {
@@ -56,12 +56,12 @@ export default {
     };
   },
   computed: {
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save(isValid) {
+    async save (isValid) {
       await this.$store.dispatch('invitations/addInvites', {
         emails: this.formatEmails(),
       });
@@ -70,7 +70,7 @@ export default {
       });
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-invitations'));
     },
-    formatEmails() {
+    formatEmails () {
       const formattedEmails = [];
       this.invitedEmailsText.split('\n').forEach(email => {
         const emailAddress = email.trim().toLowerCase();

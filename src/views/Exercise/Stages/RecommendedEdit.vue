@@ -93,7 +93,7 @@ export default {
     CheckboxItem,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       newSelectedStatus: null,
       showWarning: false,
@@ -103,42 +103,42 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageRecommended.records;
     },
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    availableStatuses() {
+    availableStatuses () {
       return this.$store.getters['stageRecommended/availableStatuses'];
     },
-    itemsToChange() {
+    itemsToChange () {
       const selectedItems = this.$store.state.stageRecommended.selectedItems;
       return selectedItems;
     },
-    warningMessage() {
+    warningMessage () {
       return (this.itemsWithIssues() > 1) ? `${this.itemsWithIssues()} candidates have issues` : '1 candidate has issues';
     },
   },
-  created() {
+  created () {
     // on refresh if there's no IDs to change => redirect to the list
     if (this.itemsToChange.length === 0) {
       this.$router.push({ name: 'exercise-stages-recommended-list' });
     }
   },
   methods: {
-    itemsWithIssues() {
+    itemsWithIssues () {
       const selectedApplications = this.applicationRecords.filter(item => this.itemsToChange.indexOf(item.application.id) >= 0);
       return selectedApplications.filter(item => item.flags.eligibilityIssues || item.flags.characterIssues).length;
     },
-    confirm(){
+    confirm () {
       this.confirmedSave = true;
     },
-    cancel(){
+    cancel () {
       this.showWarning = false;
     },
-    async save() {
-      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT && !this.confirmedSave){
+    async save () {
+      if (this.itemsWithIssues() && this.newSelectedStatus === APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT && !this.confirmedSave) {
         this.showWarning = true;
       } else {
         let stageValue = EXERCISE_STAGE.RECOMMENDED;
@@ -153,7 +153,7 @@ export default {
         if (this.editEmpApplied[0]) {
           data.empApplied = this.empApplied;
         }
-        await this.$store.dispatch('stageRecommended/updateStatus', data );
+        await this.$store.dispatch('stageRecommended/updateStatus', data);
         this.$router.push({ name: 'exercise-stages-recommended-list' });
       }
     },

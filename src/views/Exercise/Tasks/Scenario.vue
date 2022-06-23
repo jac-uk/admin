@@ -14,7 +14,7 @@ export default {
   components: {
     PanelPack,
   },
-  data() {
+  data () {
     return {
       scenario: null,
     };

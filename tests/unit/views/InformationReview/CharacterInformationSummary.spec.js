@@ -1,3 +1,6 @@
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
 };
 
@@ -18,7 +21,7 @@ const mockProps = {
 const mockStore = {
   dispatch: jest.fn(),
   getters: {
-    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
+    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; }),
   },
   state: {
     exerciseDocument: {
@@ -33,9 +36,6 @@ const mockStore = {
   },
 };
 
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
-
 describe('@/views/Exercise/Applications/Application', () => {
   let wrapper;
   beforeAll(() => {
@@ -47,11 +47,11 @@ describe('@/views/Exercise/Applications/Application', () => {
       stubs: [],
     });
   });
-  
+
   it('renders the component', () => {
     expect(wrapper.exists()).toBe(true);
   });
-  
+
   describe('methods', () => {
     beforeAll(() => {
       const obj = {
@@ -63,10 +63,9 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('changeUserDetails', () => {
       expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
-    
-    it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { characterInformationV2: { _versionNumber: 2, furtherInformationDetails: 'test' } } );
-    });
 
+    it('dispatches formatted change', () => {
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual({ characterInformationV2: { _versionNumber: 2, furtherInformationDetails: 'test' } });
+    });
   });
 });

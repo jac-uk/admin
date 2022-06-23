@@ -1,8 +1,11 @@
+import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
 };
@@ -12,9 +15,6 @@ const mockProps = {
   application: mockApplication,
   exercise: mockExercise,
 };
-
-import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
@@ -47,6 +47,5 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
     });
-
   });
 });

@@ -13,7 +13,6 @@ xdescribe('store/auth', () => {
 
   // test mutations
   describe('mutations', () => {
-
     describe('setCurrentUser', () => {
       it('sets currentUser in the state', () => {
         const data = { uid: '12345', email: 'test@test.com' };
@@ -21,7 +20,6 @@ xdescribe('store/auth', () => {
         expect(state.currentUser).toBe(data);
       });
     });
-
   });
 
   // test actions
@@ -37,7 +35,6 @@ xdescribe('store/auth', () => {
     });
 
     describe('setCurrentUser', () => {
-
       describe('when user is not signed in', () => {
         it('runs setCurrentUser mutation with null', () => {
           actions.setCurrentUser(context, null);
@@ -67,9 +64,7 @@ xdescribe('store/auth', () => {
 
   // test getters
   describe('getters', () => {
-
     describe('isSignedIn', () => {
-
       describe('when user is not signed in', () => {
         it('returns false', () => {
           expect(getters.isSignedIn(state)).toBe(false);

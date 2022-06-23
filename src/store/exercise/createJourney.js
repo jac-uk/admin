@@ -33,32 +33,32 @@ export default {
     currentPage: null,
   },
   mutations: {
-    setJourney(state, journey) {
+    setJourney (state, journey) {
       state.journey = journey;
       state.currentPage = null;
     },
-    setCurrentPage(state, page) {
-      if (state.currentPage) {  // remove existing page from journey
+    setCurrentPage (state, page) {
+      if (state.currentPage) { // remove existing page from journey
         state.journey = state.journey.filter(item => item !== state.currentPage);
       }
       state.currentPage = page;
-      if (state.journey.length > 0 && state.journey.indexOf(state.currentPage) < 0) {  // end the journey if we have navigated away
+      if (state.journey.length > 0 && state.journey.indexOf(state.currentPage) < 0) { // end the journey if we have navigated away
         state.journey = [];
       }
     },
   },
   actions: {
-    start({ commit }, pages) {
+    start ({ commit }, pages) {
       // Sort the selected pages into the correct order for the journey
       const journey = completeJourneyInOrder.filter((page) => {
         return pages.indexOf(page) !== -1;
       });
       commit('setJourney', journey);
     },
-    end({ commit }) {
+    end ({ commit }) {
       commit('setJourney', []);
     },
-    setCurrentRoute({ commit }, name) {
+    setCurrentRoute ({ commit }, name) {
       // Trim routeNamePrefix off the beginning of the route name
       if (name.indexOf(routeNamePrefix) === 0) {
         name = name.slice(routeNamePrefix.length);
@@ -70,10 +70,10 @@ export default {
     },
   },
   getters: {
-    currentPageIndex(state) {
+    currentPageIndex (state) {
       return state.journey.indexOf(state.currentPage);
     },
-    nextPageIndex(state, getters) {
+    nextPageIndex (state, getters) {
       const currentIndex = getters.currentPageIndex;
       const journeyLength = state.journey.length;
       if ((currentIndex + 1) < journeyLength) {
@@ -98,7 +98,7 @@ export default {
       const name = state.journey[pageIndex];
       return routeLocation(routeNamePrefix + name + routeNameSuffix, id);
     },
-    hasJourney(state) {
+    hasJourney (state) {
       return state.journey.length > 0;
     },
   },

@@ -7,17 +7,15 @@ const mockContext = {
   dispatch: jest.fn(),
 };
 
-jest.spyOn(authUsers,'authorisedToPerformAction').mockImplementation((email) => {
+jest.spyOn(authUsers, 'authorisedToPerformAction').mockImplementation((email) => {
   return email === 'test@test.com';
 });
 
 describe('store/qualifyingTestResponses', () => {
   describe('Scenario Test', () => {
-
     describe('actions', () => {
-
       describe('moveTest', () => {
-        beforeEach(()=>{
+        beforeEach(() => {
           mockContext.dispatch.mockClear();
         });
 
@@ -28,7 +26,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         describe('without responses on qtResponse Object', () => {
-          beforeEach(()=>{
+          beforeEach(() => {
             mockScenarioQualifyingTestResponse.responses = [];
           });
           it('dispatches empty array', async () => {
@@ -38,7 +36,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         describe('with responses on qtResponse Object', () => {
-          beforeEach(()=>{
+          beforeEach(() => {
             mockScenarioQualifyingTestResponse.responses = mockScenarioResponses;
           });
           it('dispatches given responses array', async () => {
@@ -46,7 +44,6 @@ describe('store/qualifyingTestResponses', () => {
             expect(mockContext.dispatch.mock.calls[0][1].data.responses).toBe(mockScenarioResponses);
           });
         });
-
       });
 
       describe('canReset', () => {
@@ -55,7 +52,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is not authorised to reset candidate test', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'user@test.com',
             },
@@ -75,7 +72,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is authorised to reset and field isOutOfTime doesn`t exist', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
             },
@@ -100,7 +97,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('isOutOfTime field is updated if exists and equals to true', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
             },
@@ -126,7 +123,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('isOutOfTime field is not updated if exists and equals to false', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
             },
@@ -150,7 +147,6 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.data.status).toBe('activated');
           expect(updateCallData.data.isOutOfTime).toBeUndefined();
         });
-
       });
 
       describe('canMarkAsCompleted', () => {
@@ -159,7 +155,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is not authorised to mark candidate test as completed', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'user@test.com',
             },
@@ -175,7 +171,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is authorised to mark candidate test as completed', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
+          jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
             },
@@ -193,9 +189,7 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.id).toBe('1');
           expect(updateCallData.data.status).toBe('completed');
         });
-
       });
     });
-
   });
 });

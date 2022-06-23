@@ -18,7 +18,7 @@
         required
       />
       <span v-if="cutOffScore">
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -116,7 +116,7 @@ export default {
     TextField,
     ErrorSummary,
   },
-  data() {
+  data () {
     return {
       cutOffScore: null,
       cutOffPassStatus: null,
@@ -127,15 +127,15 @@ export default {
     };
   },
   computed: {
-    applicationIds() {
+    applicationIds () {
       return this.$attrs['application-ids'];
     },
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    async save() {
+    async save () {
       this.errors = [];
       this.processing = true;
       try {

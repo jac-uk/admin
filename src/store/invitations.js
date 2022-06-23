@@ -25,7 +25,7 @@ export default {
         const emailsToAdd = emails;
         if (emailsToAdd.length) {
           // Delete emails from database that were removed by the user
-          context.state.records.forEach (async (r) => {
+          context.state.records.forEach(async (r) => {
             const toBeAdded = emailsToAdd.find(email => email === r.candidate.email);
             if (!toBeAdded) {
               const ref = firestore.collection('invitations').doc(r.id);
@@ -42,9 +42,9 @@ export default {
               },
               candidate: {
                 email: email,
-                id: null,  // populated when candidate updates the invite
+                id: null, // populated when candidate updates the invite
               },
-              status: 'created',  // 'created' | 'invited' | 'accepted' | 'rejected'
+              status: 'created', // 'created' | 'invited' | 'accepted' | 'rejected'
               statusLog: {
                 created: firebase.firestore.FieldValue.serverTimestamp(),
                 invited: null, // populated when email invite has been sent (out of scope right now)

@@ -2,13 +2,13 @@
   <div class="govuk-!-margin-bottom-4">
     <div class="govuk-!-margin-bottom-4">
       <h2 class="govuk-heading-l govuk-!-padding-top-6">
-        Personal details 
+        Personal details
         <span
           v-if="!isCandidateView"
           class="govuk-hint print-none"
         >
           <!-- vv this isnt true at the moment vv -->
-          <!-- Any changes made here will also update the candidate information.  --> 
+          <!-- Any changes made here will also update the candidate information.  -->
           <!-- ^^ this isnt true at the moment ^^ have updated the line below describe fucntionaility -->
           Any changes made here will only update the application information.
         </span>
@@ -37,7 +37,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -105,7 +105,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -121,7 +121,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -191,12 +191,12 @@
           </dd>
         </div>
       </dl>
-  
-      <dl 
+
+      <dl
         v-if="personalDetails && personalDetails.reasonableAdjustments === true"
         class="govuk-summary-list govuk-!-margin-bottom-0"
       >
-        <div 
+        <div
           class="govuk-summary-list__row "
         >
           <dt :class="requiredStyle">
@@ -211,11 +211,11 @@
               field="reasonableAdjustmentsDetails"
               @changeField="changeUserDetails"
             />
-          </dd> 
+          </dd>
         </div>
       </dl>
-    </div> 
-  </div> 
+    </div>
+  </div>
 </template>
 
 <script>
@@ -248,24 +248,24 @@ export default {
       default: false,
     },
   },
-  data() {
+  data () {
     return {
       hasPersonalDetails: !!this.personalDetails,
     };
   },
   computed: {
-    requiredStyle() {
+    requiredStyle () {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    isCandidateView() {
+    isCandidateView () {
       return this.$route.name === 'candidates-view';
     },
   },
   methods: {
-    makeFullName(obj) {
+    makeFullName (obj) {
       if (obj.firstName && this.personalDetails.lastName) {
         obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
       }
@@ -274,13 +274,13 @@ export default {
       }
       return obj;
     },
-    changeUserDetails(obj) {
+    changeUserDetails (obj) {
       if (obj.firstName || obj.lastName) {
         obj = this.makeFullName(obj);
       }
       const myPersonalDetails = { ...this.personalDetails, ...obj };
 
-      this.$emit('update', myPersonalDetails );
+      this.$emit('update', myPersonalDetails);
     },
   },
 };

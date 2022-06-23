@@ -88,7 +88,7 @@ export default {
     Table,
     TableCell,
   },
-  data() {
+  data () {
     return {
       message: null,
       selectedItems: [],
@@ -102,33 +102,33 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageSelected.records;
     },
-    totalApplicationRecords() {
+    totalApplicationRecords () {
       return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.selected) || 0;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
   },
-  async created() {
+  async created () {
     this.message = await this.$store.dispatch('stageSelected/getMessages');
   },
   methods: {
-    moveBack() {
+    moveBack () {
       this.$store.dispatch('stageSelected/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-selected-back' });
     },
-    setStatus() {
+    setStatus () {
       this.$store.dispatch('stageSelected/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-selected-edit' });
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'stageSelected/bind',
         {

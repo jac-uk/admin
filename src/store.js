@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-Vue.use(Vuex);
-firestoreOptions.wait = true;
 
 // Vuex modules
 import auth from '@/store/auth';
@@ -34,6 +32,8 @@ import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 import panels from '@/store/panels';
+Vue.use(Vuex);
+firestoreOptions.wait = true;
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)

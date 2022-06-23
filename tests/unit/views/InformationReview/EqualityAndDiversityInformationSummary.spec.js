@@ -1,8 +1,11 @@
+import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
   equalityAndDiversitySurvey: {
@@ -35,41 +38,36 @@ const mockProps = {
   equalityAndDiversitySurvey: mockApplication.equalityAndDiversitySurvey,
 };
 
-import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
-
 describe('@/views/Exercise/Applications/Application', () => {
-    let wrapper;
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(EqualityAndDiversityInformationSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+
+  it('renders the component', () => {
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  describe('methods', () => {
     beforeAll(() => {
-      wrapper = createTestSubject(EqualityAndDiversityInformationSummary, {
-        propsData: mockProps,
-        mocks: {
-          $store: mockStore,
-        },
-        stubs: [],
-      });
+      const obj = {
+        professionalBackground: 'barrister',
+      };
+      wrapper.vm.changeEqualityAndDiversityInformation(obj);
     });
 
-    it('renders the component', () => {
-      expect(wrapper.exists()).toBe(true);
+    it('changeUserDetails', () => {
+      expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
 
-    describe('methods', () => {
-      beforeAll(() => {
-        const obj = {
-          professionalBackground: 'barrister',
-        };
-        wrapper.vm.changeEqualityAndDiversityInformation(obj);
-      });
-  
-      it('changeUserDetails', () => {
-        expect(wrapper.emitted().updateApplication).toBeTruthy();
-      });
-
-      it('dispatches formatted change', () => {
-        expect(wrapper.emitted().updateApplication[0][0]).toEqual( { equalityAndDiversitySurvey: { professionalBackground: 'barrister' } });
-      });
-  
+    it('dispatches formatted change', () => {
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual({ equalityAndDiversitySurvey: { professionalBackground: 'barrister' } });
     });
-
+  });
 });

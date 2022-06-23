@@ -98,16 +98,16 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-//import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+// import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   components: {
     Table,
     TableCell,
-    //ActionButton,
+    // ActionButton,
   },
-  data() {
+  data () {
     return {
       report: null,
       refreshingReport: false,
@@ -124,17 +124,17 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    exerciseType() {
+    exerciseType () {
       return this.exercise.typeOfExercise;
     },
-    totalApplicationRecords() {
+    totalApplicationRecords () {
       return this.report ? this.report.totalApplications : 0;
     },
-    hasReportData() {
+    hasReportData () {
       return this.report && this.report.headers;
     },
   },
-  created() {
+  created () {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/handover`)
       .onSnapshot((snap) => {
         if (snap.exists) {
@@ -142,16 +142,16 @@ export default {
         }
       });
   },
-  destroyed() {
+  destroyed () {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async transferHandoverData() {
+    async transferHandoverData () {
       await functions.httpsCallable('transferHandoverData')({ exerciseId: this.exercise.id });
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'stageHandover/bind',
         {
@@ -161,12 +161,12 @@ export default {
         }
       );
     },
-    async refreshReport() {
+    async refreshReport () {
       this.refreshingReport = true;
       await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    gatherReportData() {
+    gatherReportData () {
       const reportData = [];
 
       // get headers
@@ -179,7 +179,7 @@ export default {
 
       return reportData;
     },
-    async exportData() {
+    async exportData () {
       const title = 'Handover Report';
       const data = this.gatherReportData();
 

@@ -37,33 +37,33 @@ export default {
   components: {
     FileUpload,
   },
-  data() {
+  data () {
     return {
       fileName: this.$attrs.fileRef,
       uuid: this.$attrs.uuid,
     };
   },
   computed: {
-    userId() {
+    userId () {
       const assessorId = this.$attrs.assessor.id;
-      return assessorId ? assessorId : this.$attrs.uuid;
+      return assessorId || this.$attrs.uuid;
     },
-    buildFileFolder() {
+    buildFileFolder () {
       return `/exercise/${this.$attrs.exercise.id}/application/${this.$attrs.application.id}/jac/`;
     },
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.$emit('confirmed');
     },
-    changeFileName(val) {
+    changeFileName (val) {
       this.fileName = val;
       this.save();
     },
-    async save() {
+    async save () {
       const assessment = {
         id: this.$attrs.id,
         status: 'completed',

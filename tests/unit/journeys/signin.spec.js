@@ -38,7 +38,7 @@ xdescribe('Sign in journey', () => {
   let store;
 
   beforeEach(() => {
-  const localVue = createLocalVue();
+    const localVue = createLocalVue();
     localVue.use(Router);
     localVue.use(Vuex);
 
@@ -66,7 +66,7 @@ xdescribe('Sign in journey', () => {
     });
 
     describe.each(routes)('when they visit page %s', (routeName) => {
-      it('loads sign in page',() => {
+      it('loads sign in page', () => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe('/sign-in');
       });
@@ -93,7 +93,7 @@ xdescribe('Sign in journey', () => {
     });
 
     describe.each(routes)('when they visit page %s', (routeName, routePath) => {
-      it(`loads ${routePath}`,() => {
+      it(`loads ${routePath}`, () => {
         router.push({ name: routeName, params: { id } });
         expect(subject.vm.$route.path).toBe(routePath);
       });

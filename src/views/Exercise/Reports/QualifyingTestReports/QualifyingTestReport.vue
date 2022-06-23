@@ -14,30 +14,30 @@ export default {
   components: {
     LoadingMessage,
   },
-  data() {
+  data () {
     return {
       loaded: false,
       loadFailed: false,
     };
   },
   computed: {
-    qualifyingTestReportId() {
+    qualifyingTestReportId () {
       return this.$route.params.qualifyingTestReportId;
     },
   },
   watch: {
-    '$route.params.qualifyingTestReportId'() {
+    '$route.params.qualifyingTestReportId' () {
       this.loadPage();
     },
   },
-  mounted() {
+  mounted () {
     this.loadPage();
   },
-  destroyed() {
+  destroyed () {
     this.$store.dispatch('qualifyingTestReport/unbind');
   },
   methods: {
-    async loadPage() {
+    async loadPage () {
       this.loaded = false;
       await this.$store.dispatch('qualifyingTestReport/bind', this.qualifyingTestReportId);
       this.loaded = true;

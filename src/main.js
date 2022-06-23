@@ -21,7 +21,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 Vue.config.productionTip = false;
-Vue.use( CKEditor );
+Vue.use(CKEditor);
 
 // Register global filters
 Object.keys(filters)

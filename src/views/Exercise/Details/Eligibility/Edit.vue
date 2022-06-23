@@ -303,7 +303,7 @@
   </div>
 </template>
 
- <script>
+<script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
@@ -366,7 +366,7 @@ export default {
     RepeatableFields,
   },
   extends: Form,
-  data(){
+  data () {
     const defaults = {
       postQualificationExperience: null,
       otherYears: null,
@@ -396,19 +396,19 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isLegal() {
+    isLegal () {
       return isLegal(this.exercise);
     },
-    isNonLegal() {
+    isNonLegal () {
       return isNonLegal(this.exercise);
     },
-    isTribunal() {
+    isTribunal () {
       return isTribunal(this.exercise);
     },
-    memberships() {
+    memberships () {
       if (Array.isArray(this.formData.otherMemberships)) {
         return [
           ...fixedFields.memberships,
@@ -417,12 +417,12 @@ export default {
       }
       return fixedFields.memberships;
     },
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   watch: {
-    memberships(newMemberships, oldMemberships) {
+    memberships (newMemberships, oldMemberships) {
       // @NOTE remove deleted custom membership from selected
       if (Array.isArray(this.formData.memberships) && oldMemberships.length > newMemberships.length) {
         const removedMembership = findRemoved(oldMemberships, newMemberships);
@@ -434,8 +434,8 @@ export default {
     },
   },
   methods: {
-    async save(isValid) {
-      this.formData['progress.eligibility'] = isValid ? true : false;
+    async save (isValid) {
+      this.formData['progress.eligibility'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-eligibility'));
     },

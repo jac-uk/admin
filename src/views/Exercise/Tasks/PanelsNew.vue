@@ -56,7 +56,7 @@ export default {
     DateInput,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       name: null,
       dateFrom: null,
@@ -64,20 +64,20 @@ export default {
     };
   },
   computed: {
-    isSift() {
+    isSift () {
       // TODO: add this from store panel.js
       const route = this.$route.fullPath.includes('/tasks/sift/');
       return route;
     },
-    isSelectionDay() {
+    isSelectionDay () {
       // TODO: add this from store panel.js
       const route = this.$route.fullPath.includes('/tasks/selection/');
       return route;
     },
-    isScenario() {
+    isScenario () {
       return this.$route.fullPath.includes('/tasks/scenario/');
     },
-    title() {
+    title () {
       let returnTitle = 'New Panel for';
       if (this.isSift) {
         returnTitle = `${returnTitle} Sift`;
@@ -90,7 +90,7 @@ export default {
       }
       return returnTitle;
     },
-    type() {
+    type () {
       let returnType = '';
       if (this.isSift) {
         returnType = 'sift';
@@ -103,12 +103,12 @@ export default {
       }
       return returnType;
     },
-    exerciseId() {
+    exerciseId () {
       return this.$route.params.id;
     },
   },
   methods: {
-    async save(isValid) {
+    async save (isValid) {
       if (isValid) {
         const data = {
           name: this.name,
@@ -126,7 +126,7 @@ export default {
         });
       }
     },
-    cancel() {
+    cancel () {
       this.$router.push({
         name: `exercise-tasks-${this.type}`,
       });

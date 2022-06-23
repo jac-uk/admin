@@ -85,8 +85,8 @@ xdescribe('Page titles', () => {
   });
 
   describe.each(routes)('%s', (routeName, routeTitle) => {
-     beforeEach(() => {
-       store.dispatch('auth/setCurrentUser', user);
+    beforeEach(() => {
+      store.dispatch('auth/setCurrentUser', user);
       router.push({ name: routeName, params: { id: 123 } });
     });
 

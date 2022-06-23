@@ -29,7 +29,7 @@ export default {
       type: Number,
     },
   },
-  data() {
+  data () {
     return {
       patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
     };

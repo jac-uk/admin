@@ -15,13 +15,13 @@ const mockTestQuestions = {
     {
       type: 'critical-analysis',
       details: 'I am the first question',
-        options: [
+      options: [
         'I am the first option',
         'I am the second option',
         'I am the third option',
         'I am the fourth option',
       ],
-      'correct': 0,
+      correct: 0,
     },
   ],
 };
@@ -103,7 +103,6 @@ const mockQualifyingTestResponses = {
 };
 
 xdescribe('@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review', () => {
-
   describe('component instance', () => {
     let wrapper;
 
@@ -124,8 +123,6 @@ xdescribe('@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review', () => 
         expect(wrapper.exists()).toBe(true);
       });
     });
-
   });
-
 });
 

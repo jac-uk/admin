@@ -20,13 +20,12 @@ export default {
       if (firestoreRef) {
         await bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
       }
-      return;
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
     save: async (context, { data, id }) => {
-      const isUpdate = id ? true : false;
+      const isUpdate = !!id;
       if (isUpdate) {
         data.lastUpdatedBy = {
           userId: context.rootState.auth.currentUser.uid,

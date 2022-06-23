@@ -50,23 +50,23 @@ export default {
     TextField,
     DateInput,
   },
-  data() {
+  data () {
     return {
       dateExtension: null,
       dateExtensionReason: null,
     };
   },
-  created() {
+  created () {
     this.dateExtension = this.$attrs.dateExtension;
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.$emit('confirmed');
     },
-    async save() {
+    async save () {
       const data = {
         dateExtension: this.dateExtension,
       };

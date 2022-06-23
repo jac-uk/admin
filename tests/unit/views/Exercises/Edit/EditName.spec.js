@@ -89,7 +89,7 @@ xdescribe('@/views/Exercise/Edit/EditName', () => {
       });
 
       it('navigates to the Details overview page', () => {
-        expect(mockRouter.push).toHaveBeenCalledWith({ 'name': 'exercise-show-overview' });
+        expect(mockRouter.push).toHaveBeenCalledWith({ name: 'exercise-show-overview' });
       });
     });
   });

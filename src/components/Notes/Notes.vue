@@ -74,38 +74,38 @@ export default {
       default: 'Notes',
     },
   },
-  data() {
+  data () {
     return {
       notesAction: null,
       noteSelectedObj: null,
     };
   },
   computed: {
-    isList() {
+    isList () {
       return this.notesAction === STEPS.list || this.notesAction === null;
     },
-    isNew() {
+    isNew () {
       return this.notesAction === STEPS.new;
     },
-    isUpdate() {
+    isUpdate () {
       return this.notesAction === STEPS.update;
     },
-    isDelete() {
+    isDelete () {
       return this.notesAction === STEPS.delete;
     },
-    notesList() {
+    notesList () {
       const localNotes = this.$store.state.notes.records;
       return localNotes || [];
     },
   },
-  created() {
+  created () {
     const data = {};
     data.candidateId = this.candidateId || null;
     data.applicationId = this.applicationId || null;
-    this.$store.dispatch('notes/bind', data );
+    this.$store.dispatch('notes/bind', data);
   },
   methods: {
-    btnClickAddNote() {
+    btnClickAddNote () {
       const data = {};
       if (this.candidateId) {
         data.candidate = {
@@ -118,15 +118,15 @@ export default {
       this.noteSelectedObj = data;
       this.notesAction = STEPS.new;
     },
-    changeAction(action) {
+    changeAction (action) {
       this.notesAction = action;
       this.noteSelectedObj = null;
     },
-    deleteNoteAction(item) {
+    deleteNoteAction (item) {
       this.noteSelectedObj = this.notesList.filter(note => note.id === item.id)[0];
       this.notesAction = STEPS.delete;
     },
-    editNoteAction(item) {
+    editNoteAction (item) {
       this.noteSelectedObj = this.notesList.filter(note => note.id === item.id)[0];
       this.notesAction = STEPS.update;
     },

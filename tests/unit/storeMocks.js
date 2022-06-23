@@ -103,7 +103,7 @@ const mockScenarioQualifyingTest = {
           },
         ],
       },
-    ], 
+    ],
   },
   title: 'lots of Scenarios example',
   type: 'scenario',

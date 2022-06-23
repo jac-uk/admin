@@ -32,7 +32,7 @@ export default {
     },
   },
   computed: {
-    uniqueId() {
+    uniqueId () {
       return `${this.id}_${this.index}`;
     },
   },

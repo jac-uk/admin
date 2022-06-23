@@ -19,10 +19,10 @@ export default {
       return unbindFirestoreRef('record');
     }),
     save: async ({ state }, data) => {
-      if (data.id == null && state.record == null){
+      if (data.id == null && state.record == null) {
         throw 'State null and no ID passed';
       }
-      if (!data.submittedDate){
+      if (!data.submittedDate) {
         data.submittedDate = firebase.firestore.FieldValue.serverTimestamp();
       }
       data.updatedDate = firebase.firestore.FieldValue.serverTimestamp();

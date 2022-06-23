@@ -12,7 +12,6 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-
       const isSearchAdjustment = params.searchStatus === 'reasonable-adjustments';
       const isSearchStarted = params.searchStatus === QUALIFYING_TEST.STATUS.STARTED;
       const isSearchInProgress = params.searchStatus === QUALIFYING_TEST.STATUS.PROGRESS;
@@ -53,7 +52,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    bindRecord: firestoreAction(({ bindFirestoreRef }, { id } ) => {
+    bindRecord: firestoreAction(({ bindFirestoreRef }, { id }) => {
       const firestoreRef = collectionRef.doc(id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -79,7 +78,7 @@ export default {
         status: QUALIFYING_TEST_RESPONSE.STATUS.DELETED,
         lastUpdated: timestamp,
         statusLog: {
-          'deleted': timestamp,
+          deleted: timestamp,
         },
       };
       // eslint-disable-next-line no-unused-vars
@@ -89,7 +88,7 @@ export default {
         .then(async snapshot => {
           snapshot.forEach(response => {
             const ref = firestore.collection('qualifyingTestResponses').doc(response.id);
-            batch.set(ref, data, { merge: true } );
+            batch.set(ref, data, { merge: true });
           });
           await batch.commit();
         });
@@ -123,7 +122,7 @@ export default {
       if (canReset) {
         const rec = context.state.record;
         const data = {
-          'status': 'activated',
+          status: 'activated',
           'statusLog.reset': timestamp,
         };
         if (rec.isOutOfTime === true) {
@@ -138,14 +137,14 @@ export default {
       if (canMarkAsCompleted) {
         const rec = context.state.record;
         const data = {
-          'status': 'completed',
+          status: 'completed',
         };
         await context.dispatch('update', { data: data, id: rec.id });
       }
     },
   },
   mutations: {
-    records(state, data) {
+    records (state, data) {
       state.records = data;
     },
   },

@@ -2,30 +2,26 @@
   "name": "admin",
   "version": "0.89.1",
   "private": true,
-  "engines": {
-    "node": "16.14.0",
-    "npm": "8.5.0"
-  },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "serve": "vue-cli-service serve --mode develop",
     "build": "vue-cli-service build --mode develop;",
-    "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
-    "staging:serve": "vue-cli-service serve --mode staging",
-    "production:serve": "vue-cli-service serve --mode production",
-    "build-develop": "vue-cli-service build --mode develop",
-    "build-staging": "vue-cli-service build --mode staging",
-    "build-production": "vue-cli-service build --mode production",
-    "deploy-develop": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
-    "deploy-staging": "vue-cli-service build --mode staging; firebase deploy --only hosting:staging-admin-app -P staging",
-    "deploy-production": "vue-cli-service build --mode production; firebase deploy --only hosting:production-admin-app -P production",
     "lint": "vue-cli-service lint",
-    "lint-ci": "vue-cli-service lint --no-fix",
-    "test": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit",
+    "deploy": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
+    "build-develop": "vue-cli-service build --mode develop",
+    "build-production": "vue-cli-service build --mode production",
+    "build-staging": "vue-cli-service build --mode staging",
+    "deploy-develop": "vue-cli-service build --mode develop; firebase deploy --only hosting:develop-admin-app -P develop",
+    "deploy-production": "vue-cli-service build --mode production; firebase deploy --only hosting:production-admin-app -P production",
+    "deploy-staging": "vue-cli-service build --mode staging; firebase deploy --only hosting:staging-admin-app -P staging",
     "develop:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:develop-admin-app -P develop",
+    "lint-ci": "vue-cli-service lint --no-fix",
+    "preinstall": "npx npm-force-resolutions",
+    "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production",
+    "production:serve": "vue-cli-service serve --mode production",
     "staging:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:staging-admin-app -P staging",
-    "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production"
+    "staging:serve": "vue-cli-service serve --mode staging",
+    "test": "vue-cli-service test:unit",
+    "test-ci": "vue-cli-service test:unit --ci --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
@@ -53,8 +49,19 @@
     "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "7.15.8",
+    "@vue/babel-preset-app": "^5.0.6",
+    "@vue/cli-plugin-eslint": "^5",
+    "@vue/cli-service": "^4.5.18",
+    "@vue/eslint-config-standard": "^5.1.2",
     "bufferutil": "^4.0.3",
     "clone": "^2.1.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^7.20.0",
     "firebase": "8.10.1",
     "firebase-mock": "^2.3.2",
     "jest-canvas-mock": "^2.3.1",
@@ -66,8 +73,9 @@
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.73.0"
   },
-  "peerDependencies": {
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.5.0"
   },
-  "resolutions": {
-  }
+  "resolutions": {}
 }

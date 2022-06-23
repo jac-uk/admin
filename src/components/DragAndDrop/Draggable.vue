@@ -17,7 +17,7 @@ export default {
     },
   },
   methods: {
-    drag(ev) {
+    drag (ev) {
       ev.dataTransfer.setData('text', JSON.stringify(this.data));
     },
   },

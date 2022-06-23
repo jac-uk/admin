@@ -41,14 +41,13 @@ const createTestSubject = () => {
       $store: mockStore,
     },
     stubs: {
-      'RouterView': true,
-      'RouterLink': true,
+      RouterView: true,
+      RouterLink: true,
     },
   });
 };
 
 xdescribe('@/views/Exercise/Show', () => {
-
   beforeEach(() => {
     mockStore.dispatch.mockClear();
   });
@@ -111,7 +110,7 @@ xdescribe('@/views/Exercise/Show', () => {
         const wrapper = createTestSubject();
         wrapper.vm.redirectToErrorPage();
         expect(mockRouter.replace).toHaveBeenCalled();
-        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ 'name': 'exercise-not-found' });
+        expect(mockRouter.replace.mock.calls[0][0]).toEqual({ name: 'exercise-not-found' });
       });
     });
   });

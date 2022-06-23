@@ -12,7 +12,7 @@ const collectionRef = firestore.collection('applicationRecords');
 export default {
   namespaced: true,
   getters: {
-    availableStatuses: () => (arrShortlistingMethods, arrOtherShortlistingMethods)  => {
+    availableStatuses: () => (arrShortlistingMethods, arrOtherShortlistingMethods) => {
       const arrToReturn = [];
 
       // telephone-assessment
@@ -88,7 +88,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async ( context, { status, nextStage, empApplied } ) => {
+    updateStatus: async (context, { status, nextStage, empApplied }) => {
       const stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
@@ -98,7 +98,7 @@ export default {
       };
 
       if (status) {
-        data['status'] = status;
+        data.status = status;
       }
 
       if (nextStage[0]) {
@@ -111,14 +111,14 @@ export default {
 
       const selectedItems = context.state.selectedItems;
       const batch = firestore.batch();
-      selectedItems.map( item => {
+      selectedItems.map(item => {
         const ref = collectionRef.doc(item);
         batch.update(ref, data);
       });
       await batch.commit();
 
       if (status === APPLICATION_STATUS.WITHDREW_APPLICATION) {
-        selectedItems.map( async item => {
+        selectedItems.map(async item => {
           // call withdraw applicationstore
           await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
         });
@@ -138,9 +138,8 @@ export default {
       ) {
         context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
       }
-
     },
-    storeItems: ( context, { items }) => {
+    storeItems: (context, { items }) => {
       context.commit('changeSelectedItems', items);
     },
     getMessages: (context) => {
@@ -155,13 +154,13 @@ export default {
     selectedItems: [],
   },
   mutations: {
-    message(state, msg) {
+    message (state, msg) {
       state.message = msg;
     },
-    changeSelectedItems(state, items) {
+    changeSelectedItems (state, items) {
       state.selectedItems = items;
     },
-    records(state, data) {
+    records (state, data) {
       state.records = data;
     },
   },

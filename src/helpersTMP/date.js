@@ -48,7 +48,7 @@ const parseEstimatedDate = (value) => {
     return value;
   }
 
-  if (typeof value != 'string') {
+  if (typeof value !== 'string') {
     return;
   }
   const parts = value.split('-');

@@ -23,16 +23,16 @@ export default {
   },
 
   computed: {
-    requiredStyle() {
+    requiredStyle () {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
   },
 
   methods: {
-    changeCharacterFlag(obj) {
+    changeCharacterFlag (obj) {
       this.$emit('changeInfo', obj);
     },
-    emptyObject(items){
+    emptyObject (items) {
       const obj = {};
       if (items.some(item => item === 'title')) {
         obj.title = '';
@@ -51,10 +51,10 @@ export default {
       }
       return obj;
     },
-    addInfo(obj) {
+    addInfo (obj) {
       let changedObj = this.formData[obj.field] || {};
-      
-      if (changedObj.length > 0){
+
+      if (changedObj.length > 0) {
         changedObj = [...changedObj, obj.change];
       } else {
         changedObj = [obj.change];
@@ -64,8 +64,8 @@ export default {
 
       this.$emit('changeInfo', changedObj);
     },
-    
-    changeInfo(obj) {
+
+    changeInfo (obj) {
       let changedObj = this.formData[obj.field] || {};
 
       changedObj[obj.index][obj.extension] = obj.change;
@@ -73,21 +73,19 @@ export default {
       changedObj = { [obj.field]: changedObj };
 
       this.$emit('changeInfo', changedObj);
-
     },
-    removeInfo(obj) {
+    removeInfo (obj) {
       let changedObj = this.formData[obj.field] || {};
 
-      if (changedObj.length > 0){
+      if (changedObj.length > 0) {
         changedObj.splice(obj.index, 1);
       } else {
         changedObj = [];
-      } 
+      }
 
       changedObj = { [obj.field]: changedObj };
 
       this.$emit('changeInfo', changedObj);
-
     },
   },
 };

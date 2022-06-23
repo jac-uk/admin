@@ -72,9 +72,9 @@ const createTestSubject = () => {
       $router: mockRouter,
     },
     stubs: {
-      'BackLink': true,
-      'RouterLink': true,
-      'ErrorSummary': true,
+      BackLink: true,
+      RouterLink: true,
+      ErrorSummary: true,
     },
     propsData: mockProps,
   });

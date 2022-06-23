@@ -88,7 +88,7 @@ export default {
     Table,
     TableCell,
   },
-  data() {
+  data () {
     return {
       message: null,
       selectedItems: [],
@@ -102,16 +102,16 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageShortlisted.records;
     },
-    totalApplicationRecords() {
+    totalApplicationRecords () {
       return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.shortlisted) || 0;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
@@ -130,19 +130,19 @@ export default {
       },
     },
   },
-  async created() {
+  async created () {
     this.message = await this.$store.dispatch('stageShortlisted/getMessages');
   },
   methods: {
-    moveBack() {
+    moveBack () {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-shortlisted-back' });
     },
-    setStatus() {
+    setStatus () {
       this.$store.dispatch('stageShortlisted/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-shortlisted-edit' });
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'stageShortlisted/bind',
         {

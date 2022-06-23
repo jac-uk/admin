@@ -13,5 +13,4 @@ xdescribe('views/Exercise/Reports', () => {
 
     expect(wrapper.exists()).toBe(true);
   });
-
 });

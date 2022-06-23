@@ -81,7 +81,7 @@ export default {
     Table,
     TableCell,
   },
-  data() {
+  data () {
     return {
       message: null,
       selectedItems: [],
@@ -95,32 +95,32 @@ export default {
     };
   },
   computed: {
-    applicationRecords() {
+    applicationRecords () {
       return this.$store.state.stageHandover.records;
     },
-    totalApplicationRecords() {
+    totalApplicationRecords () {
       return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.handover) || 0;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
   },
-  async created() {
+  async created () {
     this.message = await this.$store.dispatch('stageHandover/getMessages');
   },
   methods: {
-    moveBack() {
+    moveBack () {
       this.$store.dispatch('stageHandover/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-handover-back' });
     },
-    updatePage(pageChanged){
+    updatePage (pageChanged) {
       this.page = pageChanged;
     },
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'stageHandover/bind',
         {

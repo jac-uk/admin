@@ -157,14 +157,14 @@
       </h2>
 
       <dl class="govuk-summary-list">
-        <div 
+        <div
           v-if="exercise.welshRequirementType.some((req) => req === 'welsh-administration-questions')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
             Applying for a Welsh post
           </dt>
-          
+
           <dd
             class="govuk-summary-list__value"
           >
@@ -260,7 +260,7 @@
                 @changeField="changePreferences"
               />
             </dd>
-            
+
             <dd
               v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
               class="govuk-summary-list__value"
@@ -335,12 +335,12 @@ export default {
     },
   },
   computed: {
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
   },
   methods: {
-    additionalWorkingPreferenceAnswer(index) {
+    additionalWorkingPreferenceAnswer (index) {
       let result = null;
       if (this.application.additionalWorkingPreferences) {
         if (this.application.additionalWorkingPreferences[index]) {
@@ -349,10 +349,10 @@ export default {
       }
       return result;
     },
-    hasWelshPosts(requirement) {
+    hasWelshPosts (requirement) {
       return this.exercise.welshRequirementType.some((req) => req === requirement);
     },
-    changePreferences(obj) {
+    changePreferences (obj) {
       let changedObj = this.application[obj.field] || [];
 
       if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
@@ -371,12 +371,12 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = { 
+      const updatedApplication = {
         ...this.application,
-        ...changedObj ,
+        ...changedObj,
       };
 
-      this.$emit('updateApplication', updatedApplication );
+      this.$emit('updateApplication', updatedApplication);
     },
   },
 };

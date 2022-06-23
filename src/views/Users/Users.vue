@@ -319,7 +319,7 @@ export default {
     Checkbox,
     TextField,
   },
-  data() {
+  data () {
     return {
       loaded: false,
       loadFailed: false,
@@ -347,7 +347,7 @@ export default {
     };
   },
   computed: {
-    tabs() {
+    tabs () {
       return [
         {
           ref: 'users',
@@ -359,7 +359,7 @@ export default {
         },
       ];
     },
-    rolesNav() {
+    rolesNav () {
       const rolesNav = [];
       for (const role of this.roles) {
         rolesNav.push({
@@ -370,13 +370,13 @@ export default {
       return rolesNav;
     },
   },
-  async mounted() {
+  async mounted () {
     try {
       await this.getRoles();
       const users = await functions.httpsCallable('adminGetUsers')();
       this.users = users.data;
       for (const user of this.users) {
-        //TODO: add default role logic
+        // TODO: add default role logic
         if (!user.customClaims) {
           user.customClaims = {
             r: 'not set',
@@ -391,28 +391,28 @@ export default {
   },
 
   methods: {
-    async getRoles() {
+    async getRoles () {
       const roles = await functions.httpsCallable('adminGetUserRoles')();
       this.roles = roles.data;
     },
-    async toggleDisableUser(uid, index) {
+    async toggleDisableUser (uid, index) {
       const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
       this.users[index].disabled = response.data.disabled;
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.rolePermissions = null;
       this.$refs[modalRef].closeModal();
       this.newRoleName = null;
     },
-    async setUserRole(user) {
+    async setUserRole (user) {
       this.openModal('changingRole');
       await functions.httpsCallable('adminSetUserRole')({ userId: user.uid, roleId: user.customClaims.r });
       this.closeModal('changingRole');
     },
-    viewRolePermissions(roleIndex) {
+    viewRolePermissions (roleIndex) {
       this.role = this.roles[roleIndex];
       // set all permissions to false
       for (const permission in this.permissions) {
@@ -424,17 +424,16 @@ export default {
           this.permissions[permission] = true;
         }
       }
-
     },
-    async createUserRole() {
-      //TODO: enforce unique role name
+    async createUserRole () {
+      // TODO: enforce unique role name
       const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.newRoleName });
       await this.getRoles();
-      //this.role = Array.filter((role) => { return role.id === response.data.id; });
+      // this.role = Array.filter((role) => { return role.id === response.data.id; });
       this.role = this.roles.filter((role) => { return role.id === response.data.id; })[0];
       this.closeModal('modalRef');
     },
-    async saveRole() {
+    async saveRole () {
       this.role.enabledPermissions = [];
       for (const permission in this.permissions) {
         if (this.permissions[permission]) {
@@ -444,16 +443,16 @@ export default {
       await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.role.id, enabledPermissions: this.role.enabledPermissions });
       return true;
     },
-    async setDefaultRole() {
+    async setDefaultRole () {
       await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
       await this.getRoles();
       this.role.isDefault = true;
       return true;
     },
-    openCreateRoleModal() {
+    openCreateRoleModal () {
       this.openModal('modalRef');
     },
-    isActive(roleId) {
+    isActive (roleId) {
       if (this.role) {
         return roleId === this.role.id;
       } else {

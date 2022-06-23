@@ -219,19 +219,19 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    exerciseId() {
+    exerciseId () {
       return this.exercise.id;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    hasIndependentAssessments() {
+    hasIndependentAssessments () {
       return hasIndependentAssessments(this.exercise);
     },
-    showPensionsInformation() {
+    showPensionsInformation () {
       if (
         this.exercise &&
         this.exercise.downloads &&
@@ -243,7 +243,7 @@ export default {
         return false;
       }
     },
-    showCompetencyFramework() {
+    showCompetencyFramework () {
       if (
         this.exercise &&
         this.exercise.downloads &&
@@ -255,7 +255,7 @@ export default {
         return false;
       }
     },
-    showSkillsAndAbilitiesCriteria() {
+    showSkillsAndAbilitiesCriteria () {
       if (
         this.exercise &&
         this.exercise.downloads &&
@@ -267,7 +267,7 @@ export default {
         return false;
       }
     },
-    showWelshTranslation() {
+    showWelshTranslation () {
       if (
         this.exercise &&
         this.exercise.downloads &&

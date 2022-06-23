@@ -61,7 +61,7 @@ export default {
     RepeatableFields,
   },
   extends: Form,
-  data() {
+  data () {
     const defaults = {
       testQuestions: {
         introduction: null,
@@ -91,22 +91,22 @@ export default {
     };
   },
   computed: {
-    isScenario() {
-      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO ? true : false;
+    isScenario () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
-    typeName() {
+    typeName () {
       return this.isScenario ? 'scenario' : 'question';
     },
-    isTieBreaker() {
+    isTieBreaker () {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    async save(isValid) {
-      if (isValid){
+    async save (isValid) {
+      if (isValid) {
         if (this.activeTab === 'code') { this.qualifyingTest.testQuestions = JSON.parse(this.testQuestionsJson); }
         if (this.qualifyingTest.testQuestions && this.qualifyingTest.testQuestions.questions.length) {
           switch (this.qualifyingTest.type) {

@@ -11,7 +11,7 @@
         :errors="errors"
       />
       <span>
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -91,11 +91,11 @@ export default {
     ErrorSummary,
   },
   filters: {
-    lookup: function(value) {
+    lookup: function (value) {
       return lookup(value);
     },
   },
-  data() {
+  data () {
     return {
       applicationStatus: null,
       processing: false,
@@ -104,15 +104,15 @@ export default {
     };
   },
   computed: {
-    applicationIds() {
+    applicationIds () {
       return this.$attrs['selected-items'];
     },
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    async save() {
+    async save () {
       this.errors = [];
       this.processing = true;
       try {

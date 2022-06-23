@@ -18,7 +18,7 @@ export default {
     SideNavigation,
   },
   computed: {
-    sideNavigation() {
+    sideNavigation () {
       const exercise = this.$store.state.exerciseDocument.record;
       const path = `/exercise/${exercise.id}/stages`;
       let review = 0;
@@ -26,7 +26,7 @@ export default {
       let selected = 0;
       let recommended = 0;
       let handover = 0;
-      if (exercise._applicationRecords){
+      if (exercise._applicationRecords) {
         review = exercise._applicationRecords.review || 0;
         shortlisted = exercise._applicationRecords.shortlisted || 0;
         selected = exercise._applicationRecords.selected || 0;

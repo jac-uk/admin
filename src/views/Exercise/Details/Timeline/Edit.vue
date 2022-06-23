@@ -354,7 +354,7 @@ export default {
     BackLink,
   },
   extends: Form,
-  data(){
+  data () {
     const defaults = {
       applicationOpenDate: null,
       applicationCloseDate: null,
@@ -401,43 +401,43 @@ export default {
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    hasIndependentAssessments() {
+    hasIndependentAssessments () {
       return hasIndependentAssessments(this.exercise);
     },
-    hasScenarioQT() {
+    hasScenarioQT () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('scenario-test-qualifying-test');
     },
-    hasSituationalJudgementQT() {
+    hasSituationalJudgementQT () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('situational-judgement-qualifying-test');
     },
-    hasCriticalAnalysisQT() {
+    hasCriticalAnalysisQT () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('critical-analysis-qualifying-test');
     },
-    hasPaperSift() {
+    hasPaperSift () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('paper-sift');
     },
-    hasNameBlindSift() {
+    hasNameBlindSift () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('name-blind-paper-sift');
     },
-    hasTelephoneAssessment() {
+    hasTelephoneAssessment () {
       return this.exercise && this.exercise.shortlistingMethods && this.exercise.shortlistingMethods.includes('telephone-assessment');
     },
-    assessmentsInitialised() {
+    assessmentsInitialised () {
       return this.exercise && this.exercise.assessments && this.exercise.assessments.initialised && this.exercise.assessments.initialised > 0;
     },
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
-    iaHardLimitTime() {
+    iaHardLimitTime () {
       return this.exercise.independentAssessmentsHardLimitDate ? formatDate(this.exercise.independentAssessmentsHardLimitDate, 'time') : false;
     },
   },
   methods: {
-    async save(isValid) {
-      this.formData['progress.timeline'] = isValid ? true : false;
+    async save (isValid) {
+      this.formData['progress.timeline'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-timeline'));
     },

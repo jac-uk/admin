@@ -113,7 +113,7 @@ export default {
       type: String,
     },
   },
-  data() {
+  data () {
     return {
       activeTab: 'panels',
       selectedItems: [],
@@ -129,7 +129,7 @@ export default {
     };
   },
   computed: {
-    tabs(){
+    tabs () {
       return [
         {
           ref: 'panels',
@@ -141,15 +141,15 @@ export default {
         },
       ];
     },
-    exerciseId() {
+    exerciseId () {
       return this.$route.params.id;
     },
-    panelsList() {
+    panelsList () {
       // eslint-disable-next-line no-console
       // console.log('panelsList', this.$store.state.panels.records);
       return this.$store.state.panels.records;
     },
-    candidatesList() {
+    candidatesList () {
       // eslint-disable-next-line no-console
       // console.log('panelsList', this.$store.state);
       let records = [];
@@ -164,28 +164,28 @@ export default {
       }
       return records;
     },
-    isSift() {
-      const routeFullPath = this.$route.fullPath ;
+    isSift () {
+      const routeFullPath = this.$route.fullPath;
       const route = this.$store.getters['panels/isSift'](routeFullPath);
       return route;
     },
-    isSelectionDay() {
-      const routeFullPath = this.$route.fullPath ;
+    isSelectionDay () {
+      const routeFullPath = this.$route.fullPath;
       const route = this.$store.getters['panels/isSelectionDay'](routeFullPath);
       return route;
     },
-    isScenario() {
-      const routeFullPath = this.$route.fullPath ;
+    isScenario () {
+      const routeFullPath = this.$route.fullPath;
       const route = this.$store.getters['panels/isScenario'](routeFullPath);
       return route;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
   },
   methods: {
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch(
         'panels/bind',
         {
@@ -195,7 +195,7 @@ export default {
         }
       );
     },
-    getTableDataCandidates(params) {
+    getTableDataCandidates (params) {
       if (this.isSift) {
         this.$store.dispatch(
           'stageReview/bind',
@@ -225,7 +225,7 @@ export default {
         );
       }
     },
-    getPanelName(candidate) {
+    getPanelName (candidate) {
       if (!candidate.panelIds) {
         return '';
       }
@@ -236,7 +236,7 @@ export default {
       const panel = this.panelsList.find(p => p.id === panelId);
       return panel ? panel.name : '';
     },
-    createNewPanel() {
+    createNewPanel () {
       let routeName = '';
       if (this.type === 'sift') {
         routeName = 'exercise-tasks-sift-new';
@@ -247,16 +247,16 @@ export default {
       }
       this.$router.push({ name: routeName });
     },
-    btnClkSelectPanel(modal) {
+    btnClkSelectPanel (modal) {
       this.openModal(modal);
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    async selectPanel(panel) {
+    async selectPanel (panel) {
       const records = [];
       this.candidatesList.forEach(async (c) => {
         if (this.selectedItems.includes(c.id)) {

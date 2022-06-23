@@ -84,7 +84,7 @@ export default {
     CheckboxItem,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       newSelectedStatus: null,
       nextStageStatus: null,
@@ -94,27 +94,27 @@ export default {
     };
   },
   computed: {
-    availableStatuses() {
+    availableStatuses () {
       const shortlistingMethods = this.exercise.shortlistingMethods;
       const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
-      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod) ;
+      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod);
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    itemsToChange() {
+    itemsToChange () {
       const selectedItems = this.$store.state.stageReview.selectedItems;
       return selectedItems;
     },
   },
-  created() {
+  created () {
     // on refresh if there's no IDs to change => redirect to the list
     if (this.itemsToChange.length === 0) {
       this.$router.push({ name: 'exercise-stages-review-list' });
     }
   },
   methods: {
-    async save() {
+    async save () {
       const data = {
         status: this.newSelectedStatus,
         nextStage: this.nextStageStatus,

@@ -117,7 +117,7 @@ export default {
     SetCutOffScore,
     Modal,
   },
-  data() {
+  data () {
     return {
       tableColumns: [
         { title: 'Rank' },
@@ -132,32 +132,32 @@ export default {
     };
   },
   computed: {
-    qualifyingTestReportId() {
+    qualifyingTestReportId () {
       return this.$route.params.qualifyingTestReportId;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    qualifyingTestReport() {
+    qualifyingTestReport () {
       return this.$store.getters['qualifyingTestReport/data'];
     },
-    hasReportData() {
+    hasReportData () {
       return this.qualifyingTestReport.report && this.qualifyingTestReport.report.length;
     },
-    maxScore() {
+    maxScore () {
       let score = 0;
       this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
         score += qualifyingTest.maxScore;
       });
       return score;
     },
-    tieBreakers() {
+    tieBreakers () {
       return this.qualifyingTestReport.tieBreakers;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
-    applicationIds() {
+    applicationIds () {
       const ids = [];
       this.qualifyingTestReport.rawData.forEach(data => {
         ids.push({
@@ -169,16 +169,16 @@ export default {
     },
   },
   methods: {
-    setCutOffScore() {
+    setCutOffScore () {
       this.openModal('SetCutOffScoreModal');
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    btnEdit() {
+    btnEdit () {
       this.$router.push({
         name: `${this.routeNamePrefix}-report-edit`,
         params: {
@@ -186,10 +186,10 @@ export default {
         },
       });
     },
-    async btnGenerateReport() {
+    async btnGenerateReport () {
       await functions.httpsCallable('generateQualifyingTestReport')({ qualifyingTestReportId: this.qualifyingTestReportId });
     },
-    gatherReportData() {
+    gatherReportData () {
       const headers = [];
       headers.push('Ref');
       // 'Name',
@@ -238,7 +238,7 @@ export default {
         ...data,
       ];
     },
-    downloadData() {
+    downloadData () {
       const title = `${this.tieBreakers ? 'Equal Merit Tie-breaker' : 'Qualifying Test'} Report`;
       const data = this.gatherReportData();
       downloadXLSX(

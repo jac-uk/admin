@@ -104,21 +104,21 @@ export default {
   },
   extends: Form,
   computed: {
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationContentList() {
+    applicationContentList () {
       return applicationContentList(this.exercise);
     },
-    unselectedApplicationParts() {
+    unselectedApplicationParts () {
       return unselectedApplicationParts(this.exercise);
     },
   },
   methods: {
-    async onDrop(droppedItem) {
+    async onDrop (droppedItem) {
       if (droppedItem && droppedItem.id !== droppedItem.data.step) {
         const saveData = {};
         if (droppedItem.id !== 'empty') {
@@ -130,7 +130,7 @@ export default {
         await this.$store.dispatch('exerciseDocument/save', saveData);
       }
     },
-    nextPage() {
+    nextPage () {
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
     },
   },

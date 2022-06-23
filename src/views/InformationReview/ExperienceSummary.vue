@@ -268,32 +268,32 @@ export default {
       default: false,
     },
   },
-  data() {
+  data () {
     return {
       currentIndex: null,
     };
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    isLegal() {
+    isLegal () {
       return isLegal(this.exercise);
     },
-    isNonLegal() {
+    isNonLegal () {
       return isNonLegal(this.exercise);
     },
-    emptyMembershipObject() {
+    emptyMembershipObject () {
       return {
         date: new Date(),
         number: '',
         information: '',
       };
     },
-    emptyEmploymentGapObject() {
+    emptyEmploymentGapObject () {
       const model = {
         details: '',
         startDate: new Date(),
@@ -304,7 +304,7 @@ export default {
       }
       return model;
     },
-    emptyExperienceObject() {
+    emptyExperienceObject () {
       return {
         orgBusinessName: '',
         jobTitle: '',
@@ -319,7 +319,7 @@ export default {
         },
       };
     },
-    emptyNonLegalExperienceObject() {
+    emptyNonLegalExperienceObject () {
       return {
         orgBusinessName: '',
         jobTitle: '',
@@ -329,51 +329,48 @@ export default {
     },
   },
   methods: {
-    emitUpdate(update) {
-      this.$emit('updateApplication', update );
+    emitUpdate (update) {
+      this.$emit('updateApplication', update);
     },
-    formatUpdate(field, changedObj) {
+    formatUpdate (field, changedObj) {
       if (field) {
         this.emitUpdate({ ...this.application, ...{ [field]: changedObj } });
       } else {
         this.emitUpdate({ ...this.application, ...changedObj });
       }
     },
-    addInfo(obj) {
+    addInfo (obj) {
       let changedObj = this.application[obj.field] || {};
 
-      if (changedObj.length > 0){
+      if (changedObj.length > 0) {
         changedObj = [...changedObj, obj.change];
       } else {
         changedObj = [obj.change];
       }
 
       this.formatUpdate(obj.field, changedObj);
-
     },
-    removeInfo(obj) {
+    removeInfo (obj) {
       let changedObj = this.application[obj.field] || {};
 
       this.application[obj.field];
 
-      if (changedObj.length > 0){
+      if (changedObj.length > 0) {
         changedObj.splice(obj.index, 1);
       } else {
         changedObj = [];
       }
 
       this.formatUpdate(obj.field, changedObj);
-
     },
-    changeTaskDetails(obj) {
+    changeTaskDetails (obj) {
       const changedObj = this.application[obj.field] || {};
 
       changedObj[obj.index].taskDetails[obj.extension] = obj.change;
 
       this.formatUpdate(obj.field, changedObj);
-
     },
-    changeInfo(obj) {
+    changeInfo (obj) {
       let changedObj = this.application[obj.field] || {};
 
       if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) { // extension ie. field[index].extension

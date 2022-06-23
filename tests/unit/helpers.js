@@ -35,7 +35,7 @@ const mocks = {
         },
       },
       application: {
-        record: { 
+        record: {
           progress: { started: true },
         },
       },
@@ -59,7 +59,7 @@ const mocks = {
       'vacancy/getCloseDate': new Date(),
       'vacancy/id': jest.fn(),
       'application/data': jest.fn(),
-      'vacancies/bind': jest.fn(), //see views/vacancies.spec.js
+      'vacancies/bind': jest.fn(), // see views/vacancies.spec.js
       'qualifyingTest/data': jest.fn(),
     },
   },

@@ -19,13 +19,13 @@ export default {
     SideNavigation,
   },
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
-    sideNavigation() {
+    sideNavigation () {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}/details`;
       const sideNavigation = [
@@ -83,9 +83,9 @@ export default {
     },
   },
   watch: {
-    '$route': {
+    $route: {
       immediate: true,
-      handler(newRoute) {
+      handler (newRoute) {
         this.$store.dispatch('exerciseCreateJourney/setCurrentRoute', newRoute.name);
       },
     },

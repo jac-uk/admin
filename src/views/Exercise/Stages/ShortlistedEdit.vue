@@ -77,7 +77,7 @@ export default {
     CheckboxItem,
   },
   extends: Form,
-  data() {
+  data () {
     return {
       newSelectedStatus: null,
       empApplied: null,
@@ -85,15 +85,15 @@ export default {
     };
   },
   computed: {
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    availableStatuses() {
+    availableStatuses () {
       return this.$store.getters['stageShortlisted/availableStatuses'];
     },
   },
   methods: {
-    async save() {
+    async save () {
       let stageValue = EXERCISE_STAGE.SHORTLISTED;
       if (this.newSelectedStatus === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
         stageValue = EXERCISE_STAGE.SELECTED;
@@ -105,7 +105,7 @@ export default {
       if (this.editEmpApplied[0]) {
         data.empApplied = this.empApplied;
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', data );
+      await this.$store.dispatch('stageShortlisted/updateStatus', data);
       this.$router.push({ name: 'exercise-stages-shortlisted-list' });
     },
   },

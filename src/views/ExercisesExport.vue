@@ -34,17 +34,17 @@ export default {
   },
   extends: Form,
   computed: {
-    selectedItems() {
+    selectedItems () {
       return this.$store.state.exerciseCollection.selectedItems;
     },
   },
-  created() {
+  created () {
     if (this.selectedItems.length === 0) {
       this.$router.push({ name: 'exercises' });
     }
   },
   methods: {
-    async save() {
+    async save () {
       const response = await functions.httpsCallable('exportExerciseData')({ exerciseIds: this.selectedItems });
       const data = response.data;
       const xlsxData = [];

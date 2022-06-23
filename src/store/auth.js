@@ -8,15 +8,15 @@ const module = {
     authError: null,
   },
   mutations: {
-    setCurrentUser(state, user) {
+    setCurrentUser (state, user) {
       state.currentUser = user;
     },
-    setAuthError(state, message) {
+    setAuthError (state, message) {
       state.authError = message;
     },
   },
   actions: {
-    async setCurrentUser({ state, commit }, user) {
+    async setCurrentUser ({ state, commit }, user) {
       if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
@@ -78,10 +78,10 @@ const module = {
     },
   },
   getters: {
-    isSignedIn(state) {
+    isSignedIn (state) {
       return (state.currentUser !== null);
     },
-    getEmail(state) {
+    getEmail (state) {
       return state.currentUser.email;
     },
   },

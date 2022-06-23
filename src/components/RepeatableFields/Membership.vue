@@ -32,7 +32,7 @@ export default {
     row: {
       required: true,
       type: Object,
-      default() {
+      default () {
         return {
           label: '',
           value: '',
@@ -49,18 +49,18 @@ export default {
       default: '',
     },
   },
-  data() {
+  data () {
     return {
       editable: true,
     };
   },
-  created() {
+  created () {
     if (this.row.label) {
       this.editable = false;
     }
   },
   methods: {
-    updateValue(value) {
+    updateValue (value) {
       // @TODO when we move lookup to db, we should add these to lookup
       this.row.value = slugify(value);
     },

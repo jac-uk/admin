@@ -150,14 +150,14 @@
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
             class="govuk-!-padding-1"
           >
-            <strong> 
+            <strong>
               Most appropriate:
-            </strong> 
-            {{ testQuestion.options[testQuestion.mostAppropriate].answer }} 
+            </strong>
+            {{ testQuestion.options[testQuestion.mostAppropriate].answer }}
             <br>
-            <strong> 
+            <strong>
               Least appropriate:
-            </strong> 
+            </strong>
             {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
@@ -279,22 +279,22 @@ export default {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,
     }),
-    isDraft() {
+    isDraft () {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
     },
-    isDryRun() {
+    isDryRun () {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
     },
-    isReadyForApproval() {
+    isReadyForApproval () {
       return this.qualifyingTest && this.qualifyingTest.status && this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
     },
-    isApproved() {
+    isApproved () {
       return !this.isDraft && !this.isReadyForApproval;
     },
-    canDelete() {
+    canDelete () {
       return this.$store.state.auth.currentUser.role === 'superadmin';
     },
-    questionLabel() {
+    questionLabel () {
       let label = 'Question';
 
       if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
@@ -302,39 +302,39 @@ export default {
       }
       return label;
     },
-    qualifyingTestId() {
+    qualifyingTestId () {
       return this.$route.params.qualifyingTestId;
     },
-    isCriticalAnalysis() {
-      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS ? true : false;
+    isCriticalAnalysis () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
     },
-    isScenario() {
-      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO ? true : false;
+    isScenario () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
-    isSituationalJudgement() {
-      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT ? true : false;
+    isSituationalJudgement () {
+      return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
-    isTieBreaker() {
+    isTieBreaker () {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    submitForApproval() {
+    submitForApproval () {
       this.$store.dispatch('qualifyingTest/submitForApproval');
       this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    approve() {
+    approve () {
       this.$store.dispatch('qualifyingTest/approve');
       // #799 On Approval of the QT send back to the dashboard
       this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    btnGoBack() {
+    btnGoBack () {
       this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    btnDelete() {
+    btnDelete () {
       this.$store.dispatch('qualifyingTest/delete');
       this.$router.push({ name: `exercise-tasks-${this.routeNamePrefix}s` });
     },

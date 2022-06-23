@@ -132,7 +132,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
-  data() {
+  data () {
     return {
       report: null,
       refreshingReport: false,
@@ -142,11 +142,11 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    hasReportData() {
+    hasReportData () {
       return this.report && this.report.headers;
     },
   },
-  created() {
+  created () {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
       .onSnapshot((snap) => {
@@ -155,18 +155,18 @@ export default {
         }
       });
   },
-  destroyed() {
+  destroyed () {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport() {
+    async refreshReport () {
       this.refreshingReport = true;
       await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    gatherReportData() {
+    gatherReportData () {
       const reportData = [];
 
       // get headers
@@ -179,7 +179,7 @@ export default {
 
       return reportData;
     },
-    exportData() {
+    exportData () {
       const title = 'Reasonable Adjustments Report';
       const data = this.gatherReportData();
 

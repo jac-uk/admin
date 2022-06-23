@@ -47,19 +47,19 @@ export default {
       default: null,
     },
   },
-  data() {
+  data () {
     return {
       date: null,
       body: null,
       isUpdate: false,
     };
   },
-  async created() {
+  async created () {
     this.body = this.note.body;
-    this.isUpdate =  this.note.body ? true : false;
+    this.isUpdate = !!this.note.body;
   },
   methods: {
-    async save() {
+    async save () {
       const data = { ...this.note };
       const date = Date.now();
       data.body = this.body;

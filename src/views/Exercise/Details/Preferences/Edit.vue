@@ -139,7 +139,7 @@ export default {
     RadioItem,
   },
   extends: Form,
-  data() {
+  data () {
     const defaults = {
       locationQuestion: null,
       locationQuestionType: 'single-choice',
@@ -159,13 +159,13 @@ export default {
     };
   },
   computed: {
-    hasJourney() {
+    hasJourney () {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save(isValid) {
-      this.formData['progress.workingPreferences'] = isValid ? true : false;
+    async save (isValid) {
+      this.formData['progress.workingPreferences'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-preferences'));
     },

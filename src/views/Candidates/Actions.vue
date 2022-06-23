@@ -65,7 +65,7 @@
 <script>
 import firebase from '@firebase/app';
 import { functions } from '@/firebase';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
@@ -83,7 +83,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data () {
     return {
       authorisedToPerformAction: false,
       currentEmailAddress: 'unknown',
@@ -94,11 +94,11 @@ export default {
     };
   },
   computed: {
-    currentEmail() {
+    currentEmail () {
       return this.currentEmailAddress;
     },
   },
-  async created() {
+  async created () {
     const email = firebase.auth().currentUser.email;
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
     if (this.authorisedToPerformAction) {
@@ -106,22 +106,20 @@ export default {
     }
   },
   methods: {
-    async getCurrentEmailAddress() {
+    async getCurrentEmailAddress () {
       try {
-        const response = await functions.httpsCallable('getUserEmailByID')({
-          candidateId: this.candidateId });
+        const response = await functions.httpsCallable('getUserEmailByID')({ candidateId: this.candidateId });
 
         if (response.data === false) {
           this.setMessage('Current email address could not be retrieved.', 'warning');
         } else {
           this.currentEmailAddress = response.data;
         }
-      }
-      catch (error) {
+      } catch (error) {
         this.setMessage('Failed to perform action.', 'warning');
       }
     },
-    async save() {
+    async save () {
       this.validate();
       if (this.isValid()) {
         if (this.authorisedToPerformAction) {
@@ -129,7 +127,8 @@ export default {
           try {
             const response = await functions.httpsCallable('updateEmailAddress')({
               currentEmailAddress: this.currentEmailAddress,
-              newEmailAddress: this.newEmailAddress });
+              newEmailAddress: this.newEmailAddress,
+            });
 
             if (response.data === false) {
               this.setMessage('Failed to update email address.', 'warning');
@@ -137,23 +136,22 @@ export default {
               this.setMessage('Email address was updated.', 'success');
               this.currentEmailAddress = response.data;
             }
-          }
-          catch (error) {
+          } catch (error) {
             this.setMessage('Failed to perform action.', 'warning');
           }
           this.$refs.form.reset();
           setTimeout(() => {
             this.submitted = false;
-          },5000);
+          }, 5000);
           setTimeout(() => {
             this.status = null;
-          },5000);
+          }, 5000);
         } else {
           this.setMessage('Unauthorised to perform action.', 'warning');
         }
       }
     },
-    setMessage(message, status) {
+    setMessage (message, status) {
       this.status = status;
       this.message = message;
     },

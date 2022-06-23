@@ -105,31 +105,31 @@ import { isEditable } from '@/helpers/exerciseHelper';
 
 export default {
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    exerciseId() {
+    exerciseId () {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
-    isPublished() {
+    isPublished () {
       return this.exercise.published;
     },
-    canPublish() {
+    canPublish () {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
     },
   },
   methods: {
-    async publish() {
+    async publish () {
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {
         exerciseId: this.exerciseId,
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    async unPublish() {
+    async unPublish () {
       await this.$store.dispatch('exerciseDocument/unpublish');
       logEvent('info', 'Exercise unpublished', {
         exerciseId: this.exerciseId,

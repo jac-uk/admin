@@ -79,7 +79,7 @@
 <script>
 import { functions } from '@/firebase';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-//import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+// import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
@@ -87,7 +87,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 export default {
   name: 'UserRolePermissions',
   components: {
-    //Checkbox,
+    // Checkbox,
     Table,
     TableCell,
     TextField,
@@ -179,7 +179,7 @@ export default {
       ],
     },
   },
-  data() {
+  data () {
     return {
       roleName: null,
       tableColumns: [
@@ -189,15 +189,15 @@ export default {
   },
 
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    async createUserRole() {
-      //TODO: enforce unique role name
+    async createUserRole () {
+      // TODO: enforce unique role name
       const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.roleName });
       this.roleId = response.data.id;
     },
-    async saveUserRole() {
+    async saveUserRole () {
       const response = await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.roleId, permissions: this.permissions });
       return response;
     },

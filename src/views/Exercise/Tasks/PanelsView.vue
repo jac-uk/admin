@@ -266,7 +266,7 @@ export default {
     ActionButton,
   },
   extends: Form,
-  data() {
+  data () {
     const data = {
       tabs: [
         {
@@ -302,61 +302,61 @@ export default {
     return data;
   },
   computed: {
-    panelId() {
+    panelId () {
       return this.$route.params.panelId;
     },
-    panel(){
+    panel () {
       return this.$store.getters['panels/getPanel'](this.panelId);
     },
-    isSift() {
+    isSift () {
       return this.panel.type === 'sift';
     },
-    isSelectionDay() {
+    isSelectionDay () {
       return this.panel.type === 'selection';
     },
-    isScenario() {
+    isScenario () {
       return this.panel.type === 'scenario';
     },
-    typeName() {
+    typeName () {
       if (this.panel && this.panel.type) {
         return this.panel.type.charAt(0).toUpperCase() + this.panel.type.slice(1);
       }
       return '';
     },
-    candidatesList() {
+    candidatesList () {
       return this.$store.state.panels.panelApplications;
     },
-    isButtonDisabled() {
+    isButtonDisabled () {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-    canExportToGoogleDrive() {
+    canExportToGoogleDrive () {
       if (this.panel && ['draft', 'created'].indexOf(this.panel.status) >= 0) {
         return true;
       } else {
         return false;
       }
     },
-    isProcessing() {
+    isProcessing () {
       return this.panel && this.panel.status === 'processing';
     },
-    processingTotal() {
+    processingTotal () {
       if (this.panel && this.panel.applicationsMap) {
         return Object.keys(this.panel.applicationsMap).length;
       }
       return 0;
     },
-    processingRemaining() {
+    processingRemaining () {
       if (this.panel && this.panel.processing && this.panel.processing.queue) {
         return this.panel.processing.queue.length;
       }
       return 0;
     },
-    processingProgress() {
+    processingProgress () {
       return this.processingTotal - this.processingRemaining;
     },
   },
-  created() {
+  created () {
     // Redirect if page Reload
     if (!this.panel) {
       let nextRoute = '';
@@ -373,15 +373,15 @@ export default {
     }
   },
   methods: {
-    async save(isValid) {
+    async save (isValid) {
       if (isValid) {
         await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: this.formData });
         this.activeTab = 'members';
       }
     },
-    btnClickEditMember(modal, idx, action) {
+    btnClickEditMember (modal, idx, action) {
       // eslint-disable-next-line no-console
-      //console.log('btnClickEditMember', idx, action);
+      // console.log('btnClickEditMember', idx, action);
       this.memberDetails = {};
       if (idx !== null) {
         this.memberDetails = { ...this.panel.members[idx] };
@@ -392,13 +392,13 @@ export default {
 
       this.openModal(modal);
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    getTableDataCandidates(params) {
+    getTableDataCandidates (params) {
       if (this.panel) {
         this.$store.dispatch(
           'panels/bindPanelApplications',
@@ -411,15 +411,15 @@ export default {
         );
       }
     },
-    async removeFromPanel() {
+    async removeFromPanel () {
       await this.$store.dispatch('panels/removePanelApplications', { panelType: this.panel.type, applicationIds: this.selectedItems });
     },
-    async deletePanel(){
+    async deletePanel () {
       const redirectTo = `exercise-tasks-${this.panel.type}`;
-      await this.$store.dispatch('panels/deletePanel', this.panelId );
+      await this.$store.dispatch('panels/deletePanel', this.panelId);
       this.$router.push({ name: redirectTo });
     },
-    async exportToGoogleDrive() {
+    async exportToGoogleDrive () {
       const data = {
         status: 'approved',
         'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),

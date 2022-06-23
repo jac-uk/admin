@@ -25,7 +25,7 @@ export default {
     }),
   },
   mutations: {
-    records(state, data) {
+    records (state, data) {
       state.records = data;
     },
   },

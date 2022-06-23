@@ -90,11 +90,11 @@
                 role="menu"
               >
                 <button
-                    class="govuk-button govuk-button--secondary drop-down-button"
-                    @click="downloadPage"
-                  >
-                    Download Page
-                  </button>
+                  class="govuk-button govuk-button--secondary drop-down-button"
+                  @click="downloadPage"
+                >
+                  Download Page
+                </button>
                 <button
                   id="docDownloadButton"
                   class="govuk-button govuk-button--secondary drop-down-button"
@@ -292,7 +292,7 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
+import htmlDocx from 'html-docx-js/dist/html-docx'; // has to be imported from dist folder
 import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
@@ -309,7 +309,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import { authorisedToPerformAction } from '@/helpers/authUsers';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import {
   isLegal,
@@ -338,7 +338,7 @@ export default {
     AssessmentsSummary,
     AssessorsSummary,
   },
-  data() {
+  data () {
     return {
       authorisedToPerformAction: false,
       editMode: false,
@@ -373,56 +373,56 @@ export default {
     };
   },
   computed: {
-    editable() {
+    editable () {
       return this.editMode && this.authorisedToPerformAction;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isLegal() {
+    isLegal () {
       return isLegal(this.exercise);
     },
-    isNonLegal() {
+    isNonLegal () {
       return isNonLegal(this.exercise);
     },
-    correctCharacterInformation() {
+    correctCharacterInformation () {
       if (this.applicationVersion === 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
       }
     },
-    hasStatementOfSuitability() {
+    hasStatementOfSuitability () {
       return hasStatementOfSuitability(this.exercise);
     },
-    hasIndependentAssessments() {
+    hasIndependentAssessments () {
       return hasIndependentAssessments(this.exercise);
     },
-    applicationVersion() {
+    applicationVersion () {
       return this.exercise._applicationVersion || 1;
     },
-    applications() {
+    applications () {
       return this.$store.state.applications.records;
     },
-    application() {
+    application () {
       return this.$store.getters['application/data']();
     },
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    exerciseId() {
+    exerciseId () {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
-    applicationReferenceNumber() {
+    applicationReferenceNumber () {
       return this.$store.state.application.record ? this.$store.state.application.record.referenceNumber : null;
     },
-    isPanelView() {
+    isPanelView () {
       return this.activeTab === 'panel';
     },
-    generateFilename() {
+    generateFilename () {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
-    ethnicGroupDetails() {
+    ethnicGroupDetails () {
       switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
       case 'other-asian':
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupAsianDetails;
@@ -436,7 +436,7 @@ export default {
         return this.application.equalityAndDiversitySurvey.otherEthnicGroupDetails;
       }
     },
-    isApplied() {
+    isApplied () {
       if (this.application) {
         switch (this.application.status) {
         case 'applied':
@@ -447,7 +447,7 @@ export default {
       }
       return false;
     },
-    otherMemberships() {
+    otherMemberships () {
       // @NOTE this is a bit ugly as we can't just lookup label
       const selected = {};
 
@@ -465,14 +465,14 @@ export default {
 
       return selected;
     },
-    title() {
+    title () {
       let title = this.application.personalDetails.title;
       if (!title) {
         title = '';
       }
       return title;
     },
-    firstName() {
+    firstName () {
       let firstName = this.application.personalDetails.firstName;
       const fullName = this.application.personalDetails.fullName;
       if (!firstName) {
@@ -485,7 +485,7 @@ export default {
       }
       return firstName;
     },
-    lastName() {
+    lastName () {
       let lastName = this.application.personalDetails.lastName;
       const fullName = this.application.personalDetails.fullName;
       if (!lastName) {
@@ -500,29 +500,29 @@ export default {
     },
   },
   watch: {
-    '$route.params.applicationId'() {
+    '$route.params.applicationId' () {
       this.pageLoad();
     },
   },
-  created() {
+  created () {
     this.pageLoad();
     this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
   },
-  destroyed() {
+  destroyed () {
     this.$store.dispatch('application/unbind');
   },
   methods: {
-    async pageLoad() {
+    async pageLoad () {
       this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {
         this.activeTab = this.$route.params.tab;
       }
-      if (this.$route.hash) {  // @TODO move this to within TabsList component
+      if (this.$route.hash) { // @TODO move this to within TabsList component
         this.activeTab = this.$route.hash.substring(1);
       }
       if (this.applicationId && (!this.application || this.$store.state.application.record.id !== this.applicationId)) {
         await this.$store.dispatch('application/bind', this.applicationId);
-        if (this.$route.name === 'exercise-application') {  // redirect so the status side navigation is highlighted
+        if (this.$route.name === 'exercise-application') { // redirect so the status side navigation is highlighted
           this.$router.replace({
             name: 'exercise-applications-application',
             params: { applicationId: this.applicationId, status: this.application.status },
@@ -530,7 +530,7 @@ export default {
         }
       }
     },
-    nextApplication() {
+    nextApplication () {
       if (this.applications && this.applications.length) {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
@@ -545,7 +545,7 @@ export default {
         }
       }
     },
-    previousApplication() {
+    previousApplication () {
       if (this.applications && this.applications.length) {
         for (let i = 0, len = this.applications.length; i < len; ++i) {
           if (this.applications[i].id === this.applicationId) {
@@ -560,16 +560,16 @@ export default {
         }
       }
     },
-    toggleExpand(){
+    toggleExpand () {
       this.dropDownExpanded = !this.dropDownExpanded;
     },
-    toggleEdit(){
+    toggleEdit () {
       this.editMode = !this.editMode;
     },
-    downloadPage() {
+    downloadPage () {
       window.print();
     },
-    returnPrintReadyPanelPack(){
+    returnPrintReadyPanelPack () {
       const htmlCollection = (document.querySelector('#panel-pack-div'));
       const virtualDiv = document.createElement('div');
       virtualDiv.innerHTML = htmlCollection.innerHTML;
@@ -577,7 +577,7 @@ export default {
       printNoneEls.forEach(e => e.remove());
       return virtualDiv;
     },
-    copyToClipboard() {
+    copyToClipboard () {
       const panelPack = this.returnPrintReadyPanelPack();
       const el = document.createElement('textarea');
       el.value = panelPack.textContent.split('  ').join('\n');
@@ -588,27 +588,27 @@ export default {
       document.querySelector('#clipboard-button').innerText = 'Copied';
       setTimeout(() => {
         document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
-      },3000);
+      }, 3000);
     },
-    downloadAsDoc() {
+    downloadAsDoc () {
       const fileName = this.generateFilename;
       const content = this.returnPrintReadyPanelPack().outerHTML;
       const converted = htmlDocx.asBlob(content);
       saveAs(converted, `${fileName}.docx`);
     },
-    unlock() {
+    unlock () {
       this.$store.dispatch('application/unlock');
     },
-    submitApplication() {
+    submitApplication () {
       this.$store.dispatch('application/submit');
     },
-    showMembershipOption(ref) {
+    showMembershipOption (ref) {
       if (this.application && this.application.professionalMemberships) {
         return this.application.professionalMemberships.indexOf(ref) >= 0;
       }
       return false;
     },
-    preferNotToSay(field) {
+    preferNotToSay (field) {
       const val = 'prefer-not-to-say';
       if (field === val) {
         return true;
@@ -618,7 +618,7 @@ export default {
       }
       return false;
     },
-    makeFullName(objChanged) {
+    makeFullName (objChanged) {
       if (objChanged.firstName && this.application.personalDetails.lastName) {
         objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
       }
@@ -627,7 +627,7 @@ export default {
       }
       return objChanged;
     },
-    changeUserDetails(objChanged) {
+    changeUserDetails (objChanged) {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
@@ -642,7 +642,7 @@ export default {
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    doFileUpload(val, field) {
+    doFileUpload (val, field) {
       if (val) {
         this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
 
@@ -653,7 +653,7 @@ export default {
         });
       }
     },
-    editAssessor(AssessorNr) {
+    editAssessor (AssessorNr) {
       // this.assessorDetails = {};
       if (AssessorNr === 1) {
         this.assessorDetails = {
@@ -677,26 +677,26 @@ export default {
       }
       this.openModal('assessorModal');
     },
-    editLeadershipJudgeDetails() {
+    editLeadershipJudgeDetails () {
       this.openModal('modalLeadershipJudgeDetails');
     },
-    openModal(modalRef){
+    openModal (modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal(modalRef) {
+    closeModal (modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    savedModal(modalRef) {
-      logEvent('info',  `Application updated (${modalRef})`, {
+    savedModal (modalRef) {
+      logEvent('info', `Application updated (${modalRef})`, {
         applicationId: this.applicationId,
         candidateName: this.application.personalDetails.fullName,
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    changeApplication(obj) {
+    changeApplication (obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
     },
-    changePersonalDetails(obj) {
+    changePersonalDetails (obj) {
       this.changeApplication({ personalDetails: obj });
     },
   },

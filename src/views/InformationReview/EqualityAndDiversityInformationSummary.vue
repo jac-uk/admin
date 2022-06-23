@@ -613,22 +613,22 @@ export default {
     },
   },
   computed: {
-    applicationId() {
+    applicationId () {
       return this.$route.params.applicationId;
     },
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isLegal() {
+    isLegal () {
       return isLegal(this.exercise);
     },
-    hasEthnicGroupDetails() {
+    hasEthnicGroupDetails () {
       return this.application &&
         this.equalityAndDiversitySurvey &&
         this.equalityAndDiversitySurvey.ethnicGroup &&
         this.equalityAndDiversitySurvey.ethnicGroup.startsWith('other-');
     },
-    ethnicGroupDetails() {
+    ethnicGroupDetails () {
       switch (this.equalityAndDiversitySurvey.ethnicGroup) {
       case 'other-asian':
         return 'otherEthnicGroupAsianDetails';
@@ -644,7 +644,7 @@ export default {
     },
   },
   methods: {
-    fieldContains(field, item) {
+    fieldContains (field, item) {
       if (field && item) {
         if (field === item) {
           return true;
@@ -652,13 +652,13 @@ export default {
         if (Array.isArray(field) && field.includes(item)) {
           return true;
         }
-        if (field.hasOwnProperty(item)){
+        if (field.hasOwnProperty(item)) {
           return true;
         }
       }
       return false;
     },
-    changeEqualityAndDiversityInformation(obj) {
+    changeEqualityAndDiversityInformation (obj) {
       const myEqualityAndDiversityInfo = { ...this.application.equalityAndDiversitySurvey, ...obj };
       this.$emit('updateApplication', { equalityAndDiversitySurvey: myEqualityAndDiversityInfo });
     },

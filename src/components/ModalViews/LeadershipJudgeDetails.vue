@@ -76,7 +76,7 @@ export default {
       required: true,
     },
   },
-  data() {
+  data () {
     return {
       email: null,
       fullName: null,
@@ -84,20 +84,20 @@ export default {
       title: null,
     };
   },
-  created() {
+  created () {
     this.email = this.$attrs.email;
     this.fullName = this.$attrs.fullName;
     this.phone = this.$attrs.phone;
     this.title = this.$attrs.title;
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.$emit('confirmed');
     },
-    async save(isValid) {
+    async save (isValid) {
       if (isValid()) {
         const data = {
           leadershipJudgeDetails: {

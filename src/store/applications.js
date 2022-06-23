@@ -33,7 +33,7 @@ export default {
     records: [],
   },
   mutations: {
-    records(state, data) {
+    records (state, data) {
       state.records = data;
     },
   },
@@ -41,7 +41,7 @@ export default {
     getById: (state) => (applicationId) => {
       return getById(state.records, applicationId);
     },
-    reasonableAdjustments(state) {
+    reasonableAdjustments (state) {
       return reasonableAdjustmentsReport(state.records);
     },
   },

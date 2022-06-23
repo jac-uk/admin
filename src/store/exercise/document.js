@@ -1,6 +1,5 @@
 import firebase from '@firebase/app';
-import { firestore } from '@/firebase';
-import { functions } from '@/firebase';
+import { firestore, functions } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
@@ -11,7 +10,7 @@ const collection = firestore.collection('exercises');
 export default {
   namespaced: true,
   mutations: {
-    setNoOfTestApplications(state, noOfTestApplications) {
+    setNoOfTestApplications (state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
   },
@@ -34,7 +33,7 @@ export default {
           const newExercisesCount = metaDoc.data().exercisesCount + 1;
           const exerciseRef = firestore.collection('exercises').doc();
           transaction.update(metaRef, { exercisesCount: newExercisesCount });
-          data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
+          data.referenceNumber = `JAC${(100000 + newExercisesCount).toString().substr(1)}`;
           data.progress = { started: true };
           data.state = 'draft';
           data.published = false;
@@ -51,7 +50,7 @@ export default {
     },
     save: async ({ state }, data) => {
       const saveData = clone(data);
-      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) { // recalculate applicationContent (if necessary)
         const applicationParts = exerciseApplicationParts(state.record, data);
         const existingApplicationParts = configuredApplicationParts(state.record);
         const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
@@ -71,7 +70,7 @@ export default {
           if (applicationContentBefore._currentStep) {
             applicationContentAfter._currentStep = applicationContentBefore._currentStep;
           }
-          saveData['_applicationContent'] = applicationContentAfter;
+          saveData._applicationContent = applicationContentAfter;
         }
       }
       await collection.doc(state.record.id).update(saveData);
@@ -167,11 +166,11 @@ export default {
       const exercise = state.record;
       await functions.httpsCallable('createTestApplications')({ exerciseId: exercise.id, noOfTestApplications });
     },
-    changeNoOfTestApplications({ commit }, noOfTestApplications) {
+    changeNoOfTestApplications ({ commit }, noOfTestApplications) {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
   },
-  state: {  
+  state: {
     record: null,
     noOfTestApplications: 0,
   },

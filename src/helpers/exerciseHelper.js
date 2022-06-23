@@ -1,4 +1,4 @@
-/*eslint func-style: ["error", "declaration"]*/
+/* eslint func-style: ["error", "declaration"] */
 import clone from 'clone';
 
 /** Used in Admin:-
@@ -101,7 +101,7 @@ const APPLICATION_PARTS = [
 ];
 
 // application helpers
-function applicationCurrentStep(exercise, application) {
+function applicationCurrentStep (exercise, application) {
   if (!application._processing) { return null; }
   let currentStep;
   switch (application._processing.stage) {
@@ -130,7 +130,7 @@ function applicationCurrentStep(exercise, application) {
 }
 
 // exercise helpers
-function isEditable(data) {
+function isEditable (data) {
   if (data === null) return false;
   switch (data.state) {
     case 'draft':
@@ -140,7 +140,7 @@ function isEditable(data) {
       return false;
   }
 }
-function isApproved(data) {
+function isApproved (data) {
   if (!data) return false;
   switch (data.state) {
     case 'draft':
@@ -150,17 +150,17 @@ function isApproved(data) {
       return true;
   }
 }
-function isProcessing(exercise) {
+function isProcessing (exercise) {
   if (!exercise) { return false; }
-  return exercise._applicationRecords ? true : false;
+  return !!exercise._applicationRecords;
 }
-function applicationCounts(exercise) {
+function applicationCounts (exercise) {
   return exercise && exercise._applications ? exercise._applications : {};
 }
-function applicationRecordCounts(exercise) {
+function applicationRecordCounts (exercise) {
   return isProcessing(exercise) ? exercise._applicationRecords : {};
 }
-function exerciseStates(exercise) {
+function exerciseStates (exercise) {
   if (!exercise) { return []; }
   const states = [];
   states.push('shortlisting');
@@ -170,7 +170,7 @@ function exerciseStates(exercise) {
   states.push('handover');
   return states;
 }
-function applicationContentSteps(data) {
+function applicationContentSteps (data) {
   if (!data) { return []; }
   const steps = [];
   if (hasQualifyingTests(data)) {
@@ -181,31 +181,31 @@ function applicationContentSteps(data) {
   steps.push('recommended');
   return steps;
 }
-function configuredApplicationContentSteps(exercise) {
+function configuredApplicationContentSteps (exercise) {
   if (!exercise) { return []; }
   if (!exercise._applicationContent) { return []; }
   return applicationContentSteps(exercise)
     .filter(step => Object.values(exercise._applicationContent[step]).filter(value => value === true).length);
 }
-function hasIndependentAssessments(data) {
+function hasIndependentAssessments (data) {
   return !(data.assessmentMethods && data.assessmentMethods.independentAssessments === false);
 }
-function hasLeadershipJudgeAssessment(data) {
+function hasLeadershipJudgeAssessment (data) {
   return data.assessmentMethods && data.assessmentMethods.leadershipJudgeAssessment;
 }
-function hasQualifyingTests(data) {
+function hasQualifyingTests (data) {
   if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
   if (data.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0) return true;
   if (data.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0) return true;
   if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
   return false;
 }
-function hasScenarioTest(data) {
+function hasScenarioTest (data) {
   if (!data.shortlistingMethods || data.shortlistingMethods.length === 0) return false;
   if (data.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0) return true;
   return false;
 }
-function hasRelevantMemberships(data) {
+function hasRelevantMemberships (data) {
   if (isNonLegal(data)) {
     if (data.memberships && data.memberships.length) {
       if (data.memberships.indexOf('none') === -1) {
@@ -215,7 +215,7 @@ function hasRelevantMemberships(data) {
   }
   return false;
 }
-function hasStatementOfSuitability(data) {
+function hasStatementOfSuitability (data) {
   switch (data.assessmentOptions) {
     case 'statement-of-suitability-with-competencies':
     case 'statement-of-suitability-with-skills-and-abilities':
@@ -227,7 +227,7 @@ function hasStatementOfSuitability(data) {
       return false;
   }
 }
-function hasCoveringLetter(data) {
+function hasCoveringLetter (data) {
   switch (data.assessmentOptions) {
     case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
     case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
@@ -239,7 +239,7 @@ function hasCoveringLetter(data) {
   }
 }
 
-function hasCV(data) {
+function hasCV (data) {
   switch (data.assessmentOptions) {
     case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
     case 'self-assessment-with-competencies-and-cv':
@@ -250,7 +250,7 @@ function hasCV(data) {
       return false;
   }
 }
-function hasStatementOfEligibility(data) {
+function hasStatementOfEligibility (data) {
   switch (data.assessmentOptions) {
     case 'statement-of-eligibility':
       return !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
@@ -258,7 +258,7 @@ function hasStatementOfEligibility(data) {
       return false;
   }
 }
-function hasSelfAssessment(data) {
+function hasSelfAssessment (data) {
   switch (data.assessmentOptions) {
     case 'self-assessment-with-competencies':
     case 'self-assessment-with-competencies-and-cv':
@@ -269,16 +269,16 @@ function hasSelfAssessment(data) {
       return false;
   }
 }
-function isLegal(data) {
+function isLegal (data) {
   return data.typeOfExercise === 'legal' || data.typeOfExercise === 'leadership';
 }
-function isNonLegal(data) {
+function isNonLegal (data) {
   return data.typeOfExercise === 'non-legal' || data.typeOfExercise === 'leadership-non-legal';
 }
-function isTribunal(data) {
+function isTribunal (data) {
   return data.isCourtOrTribunal === 'tribunal';
 }
-function currentState(data) { // default to registration
+function currentState (data) { // default to registration
   if (data._applicationContent && data._applicationContent._currentStep) {
     if (APPLICATION_STEPS.indexOf(data._applicationContent._currentStep.step) >= 0) {
       return data._applicationContent._currentStep.step;
@@ -286,7 +286,7 @@ function currentState(data) { // default to registration
   }
   return 'registration';
 }
-function applicationContentList(data) {  // returns applicationContent map as an array
+function applicationContentList (data) { // returns applicationContent map as an array
   const applicationContentList = [];
   if (data && data._applicationContent) {
     const steps = ['registration'].concat(applicationContentSteps(data));
@@ -313,9 +313,9 @@ function applicationContentList(data) {  // returns applicationContent map as an
   return applicationContentList;
 }
 
-function exerciseApplicationParts(data, newValues) {
+function exerciseApplicationParts (data, newValues) {
   const exercise = clone(data);
-  if (newValues) {  // override exercise values with passed in data
+  if (newValues) { // override exercise values with passed in data
     Object.keys(newValues).forEach(key => {
       exercise[key] = newValues[key];
     });
@@ -381,14 +381,14 @@ function exerciseApplicationParts(data, newValues) {
   return applicationParts;
 }
 
-function applicationPartsMap(data) {
+function applicationPartsMap (data) {
   const applicationParts = exerciseApplicationParts(data);
   const applicationPartsMap = {};
   applicationParts.forEach(part => applicationPartsMap[part] = true);
   return applicationPartsMap;
 }
 
-function selectedApplicationParts(data) {
+function selectedApplicationParts (data) {
   let selectedParts = [];
   if (data && data._applicationContent) {
     Object.entries(data._applicationContent).forEach((keyValue) => {
@@ -397,12 +397,12 @@ function selectedApplicationParts(data) {
   }
   return selectedParts;
 }
-function unselectedApplicationParts(data) {
+function unselectedApplicationParts (data) {
   const availableParts = exerciseApplicationParts(data);
   const selectedParts = selectedApplicationParts(data);
   return availableParts.filter((el) => !selectedParts.includes(el));
 }
-function configuredApplicationParts(data) {
+function configuredApplicationParts (data) {
   let configuredParts = [];
   if (data && data._applicationContent) {
     Object.entries(data._applicationContent).forEach((keyValue) => {
@@ -413,7 +413,7 @@ function configuredApplicationParts(data) {
 }
 
 // application parts up to and including current stage
-function applicationParts(data) {
+function applicationParts (data) {
   if (data._applicationContent) {
     const applicationContent = applicationContentList(data);
     const applicationParts = {};
@@ -430,29 +430,29 @@ function applicationParts(data) {
   return {};
 }
 // application parts in current stage (n.b. returns registration by default)
-function currentApplicationParts(data) {
+function currentApplicationParts (data) {
   if (data._applicationContent) {
     return data._applicationContent[currentState(data)];
   }
   return [];
 }
 // are there application parts in current stage (not registration)
-function isMoreInformationNeeded(exercise, application) {
+function isMoreInformationNeeded (exercise, application) {
   if (exercise._applicationContent && exercise._applicationContent._currentStep && exercise._applicationContent._currentStep.step) {
     if (
-      exercise._applicationContent._currentStep.step !== 'registration'
-      && APPLICATION_STEPS.indexOf(exercise._applicationContent._currentStep.step) >= 0
-      && Object.keys(currentApplicationParts(exercise)).length
-      && exercise._applicationContent._currentStep.start <= new Date()
-      && exercise._applicationContent._currentStep.end >= new Date()
-      && applicationCurrentStep(exercise, application) === exercise._applicationContent._currentStep.step
+      exercise._applicationContent._currentStep.step !== 'registration' &&
+      APPLICATION_STEPS.indexOf(exercise._applicationContent._currentStep.step) >= 0 &&
+      Object.keys(currentApplicationParts(exercise)).length &&
+      exercise._applicationContent._currentStep.start <= new Date() &&
+      exercise._applicationContent._currentStep.end >= new Date() &&
+      applicationCurrentStep(exercise, application) === exercise._applicationContent._currentStep.step
     ) {
       return true;
     }
   }
   return false;
 }
-function isApplicationComplete(vacancy, application) {
+function isApplicationComplete (vacancy, application) {
   if (!(application && application.progress)) return false;
   const requiredParts = applicationParts(vacancy);
   if (!requiredParts) return false;
@@ -463,7 +463,7 @@ function isApplicationComplete(vacancy, application) {
 }
 
 // does the exercise have an application process configured
-function hasApplicationProcess(exercise) {
+function hasApplicationProcess (exercise) {
   if (!exercise) { return false; }
   const applicationSteps = configuredApplicationContentSteps(exercise);
   return applicationSteps.length >= 1;

@@ -45,7 +45,7 @@ export default {
     Table,
     TableCell,
   },
-  data() {
+  data () {
     return {
       tableColumns: [
         { title: 'Name', sort: 'fullName' },
@@ -55,18 +55,18 @@ export default {
     };
   },
   computed: {
-    tableData() {
+    tableData () {
       return this.$store.state.candidates.records;
     },
   },
   methods: {
-    getTableData(params) {
+    getTableData (params) {
       this.$store.dispatch('candidates/bind', params);
     },
-    async candidateSearch(searchTerm) {
+    async candidateSearch (searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
-    countApplications(candidate) {
+    countApplications (candidate) {
       if (candidate && candidate.computed && candidate.computed.totalApplications) {
         return candidate.computed.totalApplications;
       } else {

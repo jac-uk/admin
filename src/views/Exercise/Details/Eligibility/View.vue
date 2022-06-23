@@ -204,22 +204,22 @@ import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseH
 
 export default {
   computed: {
-    exercise() {
+    exercise () {
       return this.$store.state.exerciseDocument.record;
     },
-    isEditable() {
+    isEditable () {
       return isEditable(this.exercise);
     },
-    isLegal() {
+    isLegal () {
       return isLegal(this.exercise);
     },
-    isNonLegal() {
+    isNonLegal () {
       return isNonLegal(this.exercise);
     },
-    isTribunal() {
+    isTribunal () {
       return isTribunal(this.exercise);
     },
-    memberships() {
+    memberships () {
       // @NOTE this is needed because we don't have the custom memberships in lookup
       const memberships = [];
 

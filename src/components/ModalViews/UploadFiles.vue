@@ -53,7 +53,7 @@ export default {
     FileUpload,
     TextField,
   },
-  data() {
+  data () {
     return {
       fileName: this.$attrs.fileRef,
       uuid: this.$attrs.uuid,
@@ -61,27 +61,27 @@ export default {
     };
   },
   computed: {
-    buildFileFolder() {
+    buildFileFolder () {
       return `/exercise/${this.$attrs.exerciseId}`;
     },
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('close');
     },
-    confirmModal() {
+    confirmModal () {
       this.$emit('confirmed');
     },
-    changeFileName(val) {
+    changeFileName (val) {
       this.fileName = val;
       this.save('');
     },
-    getNumericalFileName() {
+    getNumericalFileName () {
       const dateNow = new Date();
       const dateToNumber = `${dateNow.getFullYear()}${dateNow.getMonth() + 1}${dateNow.getUTCDate()}${dateNow.getHours()}${dateNow.getMinutes()}${dateNow.getSeconds()}`;
       return dateToNumber;
     },
-    async save(action) {
+    async save (action) {
       let originalData = this.$attrs.data[this.$attrs.id] || null;
       if (this.$attrs.fileRef) {
         originalData = this.deleteUpload(originalData);
@@ -95,7 +95,7 @@ export default {
       }
       await this.prepareToSave(originalData, extraData);
     },
-    async deleteUpload(obj) {
+    async deleteUpload (obj) {
       const originalDataItem = obj.filter(item => item.file === this.$attrs.fileRef)[0];
       const index = obj.indexOf(originalDataItem);
       if (index > -1) {
@@ -104,7 +104,7 @@ export default {
       await this.deleteFile(this.$attrs.filePath, originalDataItem.file);
       return Promise.resolve(obj);
     },
-    deleteFile(path, filename) {
+    deleteFile (path, filename) {
       const deleteRef = firebase.storage().ref(`${path}/${filename}`);
       deleteRef.delete().then(() => {
         // File deleted successfully
@@ -114,7 +114,7 @@ export default {
         console.log('error deleting a file:', error);
       });
     },
-    async prepareToSave(origDataPromise, extraObj) {
+    async prepareToSave (origDataPromise, extraObj) {
       if (origDataPromise == null || (origDataPromise && origDataPromise[0] !== undefined)) {
         await this.saveDirectToFirebase(origDataPromise, extraObj);
       } else {
@@ -125,7 +125,7 @@ export default {
         );
       }
     },
-    async saveDirectToFirebase(obj, extraObj) {
+    async saveDirectToFirebase (obj, extraObj) {
       const data = {};
       data.downloads = {};
       data.downloads = this.$attrs.data;

@@ -52,8 +52,8 @@ const lookup = (value) => {
     endDate: 'End Date',
 
     // emp flags
-    'gender': 'Gender',
-    'ethnicity': 'Ethnicity',
+    gender: 'Gender',
+    ethnicity: 'Ethnicity',
 
     // PAJE answers
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',

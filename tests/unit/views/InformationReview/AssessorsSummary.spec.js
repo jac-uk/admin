@@ -1,8 +1,11 @@
+import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplicationId = '012345';
 
 const mockApplication = {
@@ -15,9 +18,6 @@ const mockProps = {
   exercise: mockExercise,
   applicationId: mockApplicationId,
 };
-
-import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
-import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
@@ -50,6 +50,5 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
     });
-
   });
 });

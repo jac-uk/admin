@@ -34,7 +34,7 @@
         </div>
       </dd>
     </div>
-    
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has received a non-motoring penalty notice in the last 4 years
@@ -223,10 +223,10 @@
             @removeField="removeInfo"
             @addField="addInfo"
           />
-        </div> 
+        </div>
       </dd>
     </div>
-    
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has ever been subject to complaints or disciplinary action, or been asked to resign from a position

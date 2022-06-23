@@ -51,31 +51,31 @@ export default {
       type: Boolean,
     },
   },
-  data(){
+  data () {
     return {
       qualifyingTestIds: [],
     };
   },
   computed: {
-    exerciseId() {
+    exerciseId () {
       return this.$route.params.id;
     },
-    qualifyingTests() {
+    qualifyingTests () {
       return this.$store.getters['qualifyingTest/getCompletedQTs'].filter(row => {
         return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
     },
-    routeNamePrefix() {
+    routeNamePrefix () {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
-  created() {
+  created () {
     if (this.$store.state.qualifyingTest.records.length === 0) {
       this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
     }
   },
   methods: {
-    async save() {
+    async save () {
       if (this.qualifyingTestIds.length) {
         const qualifyingTests = [];
         this.qualifyingTestIds.forEach(id => {
