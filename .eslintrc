@@ -59,10 +59,25 @@
     "vue/script-indent": [
       "error",
       2
-    ]
+    ],
+    "no-prototype-builtins": "off",
+    "vue/no-mutating-props": "off",
+    "vue/no-lone-template": "off",
+    "no-empty": "warn"
   },
   "parserOptions": {
     "parser": "@babel/eslint-parser",
     "ecmaVersion": 2020
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
