@@ -22,7 +22,7 @@
     "staging:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:staging-admin-app -P staging",
     "staging:serve": "vue-cli-service serve --mode staging",
     "test": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci"
+    "test-ci": "vue-cli-service test:unit --ci --runInBand --silent views/Exercises/Show/Applications.spec.js"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
