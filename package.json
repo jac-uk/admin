@@ -74,11 +74,11 @@
     "sass-loader": "^10.2.0",
     "utf-8-validate": "^5.0.4",
     "vue-template-compiler": "^2.6.12",
-    "webpack": "^5.73.0"
+    "webpack": "^4.44.1"
   },
   "engines": {
-    "node": "16.14.0",
-    "npm": "8.5.0"
+    "node": "v16.14.0",
+    "npm": "^8.3.0"
   },
   "resolutions": {}
 }
