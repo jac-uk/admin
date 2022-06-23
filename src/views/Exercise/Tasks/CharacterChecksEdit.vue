@@ -49,7 +49,7 @@ export default {
     RadioItem,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       characterChecks: {
         HMRC: null,
@@ -68,7 +68,7 @@ export default {
     };
   },
   methods: {
-    async save (isValid) {
+    async save(isValid) {
       if (isValid) {
         await this.$store.dispatch('exerciseDocument/save', this.exercise);
         this.$router.push({ name: 'exercise-tasks-character-checks' });

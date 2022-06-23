@@ -40,18 +40,18 @@
 import { auth, functions } from '@/firebase';
 
 export default {
-  data: function () {
+  data: function() {
     return {
       signInError: null,
       showGoogleLogin: false,
     };
   },
   computed: {
-    authError () {
+    authError() {
       return this.$store.state.auth.authError || this.signInError;
     },
   },
-  created () {
+  created() {
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Escape') {
         this.showGoogleLogin = true;
@@ -59,14 +59,14 @@ export default {
     });
   },
   methods: {
-    async disableNewUser (uid) {
+    async disableNewUser(uid) {
       await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
       this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
     },
-    signOut () {
+    signOut() {
       auth().signOut();
     },
-    checkIfNewUser (user) {
+    checkIfNewUser(user) {
       if (user.additionalUserInfo.isNewUser) {
         this.disableNewUser(auth().currentUser.uid).then(() => {
           this.signOut();
@@ -75,7 +75,7 @@ export default {
         });
       }
     },
-    loginWithGoogle () {
+    loginWithGoogle() {
       const provider = new auth.GoogleAuthProvider();
       auth().signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);
@@ -83,7 +83,7 @@ export default {
         this.signInError = err.message;
       });
     },
-    loginWithMicrosoft () {
+    loginWithMicrosoft() {
       const provider = new auth.OAuthProvider('microsoft.com');
       auth().signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);

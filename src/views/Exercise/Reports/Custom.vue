@@ -314,7 +314,7 @@ export default {
     LoadingMessage,
     Banner,
   },
-  data () {
+  data() {
     return {
       type: 'showData',
       data: null,
@@ -493,35 +493,35 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
   },
   watch: {
     columns: {
-      handler: function () {
+      handler: function() {
         this.getApplicationRecords();
       },
       deep: true,
     },
     type: {
-      handler: function () {
+      handler: function() {
         this.getApplicationRecords();
       },
       deep: true,
     },
     whereClauses: {
-      handler: function () {
+      handler: function() {
         this.getApplicationRecords();
       },
       deep: true,
     },
   },
-  created () {
+  created() {
     this.getReports();
   },
   methods: {
-    async getApplicationRecords () {
+    async getApplicationRecords() {
       this.isLoading = true;
       this.data = null;
       if (this.columns.length > 0) {
@@ -534,17 +534,17 @@ export default {
       }
       this.isLoading = false;
     },
-    selectColumn (event) {
+    selectColumn(event) {
       if (!_.includes(this.columns, event.target.value)) {
         this.columns.push(event.target.value);
       }
       this.selectedColumn = '';
     },
-    removeColumn (event) {
+    removeColumn(event) {
       const index = event.target.getAttribute('data-index');
       this.columns.splice(index, 1);
     },
-    addWhereClause (column, operator, value) {
+    addWhereClause(column, operator, value) {
       this.whereClauses.push(
         {
           column: column,
@@ -553,11 +553,11 @@ export default {
         }
       );
     },
-    removeWhereClause (event) {
+    removeWhereClause(event) {
       const index = event.target.getAttribute('data-index');
       this.whereClauses.splice(index, 1);
     },
-    openModal (modalRef) {
+    openModal(modalRef) {
       if (this.columns.length === 0) {
         clearTimeout(this.warningTimeout);
         this.warnings = 'You have select no columns to save the report';
@@ -566,11 +566,11 @@ export default {
       }
       this.$refs[modalRef].openModal();
     },
-    closeModal (modalRef) {
+    closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
       this.customReportName = null;
     },
-    async saveReport () {
+    async saveReport() {
       if (this.customReports.map(r => r.name).includes(this.customReportName)) {
         this.closeModal('modalRefSaveReport');
         clearTimeout(this.warningTimeout);
@@ -587,16 +587,16 @@ export default {
       this.closeModal('modalRefSaveReport');
       this.openModal('modalRefReportSaved');
     },
-    async getReports () {
+    async getReports() {
       const reports = await functions.httpsCallable('customReport')({});
       this.customReports = reports.data;
     },
-    selectReport (event) {
+    selectReport(event) {
       const report = this.customReports[event.target.value];
       this.columns = report.columns;
       this.whereClauses = report.whereClauses;
     },
-    downloadReport () {
+    downloadReport() {
       const header = [...this.columns].map(col => this.keys[col].label);
       const csv = [[...header]];
       for (let i = 0; i < this.data.data.length; i++) {

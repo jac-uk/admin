@@ -6,7 +6,7 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
+    bind: firestoreAction(async({ bindFirestoreRef, state, commit }, params) => {
       let firestoreRef = firestore
         .collection('assessments')
         .where('exercise.id', '==', params.exerciseId);
@@ -25,7 +25,7 @@ export default {
     }),
   },
   mutations: {
-    records (state, data) {
+    records(state, data) {
       state.records = data;
     },
   },

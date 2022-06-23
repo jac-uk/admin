@@ -7,7 +7,7 @@ import 'firebase/database';
 export default {
   namespaced: true,
   actions: {
-    bind: async (context, params) => {
+    bind: async(context, params) => {
       firebase.database()
         .ref(`qualifyingTest/${params.qualifyingTestId}/userStatus/${params.candidateId}`)
         .on('value', snap => {
@@ -41,7 +41,7 @@ export default {
     },
   },
   mutations: {
-    setRecords (state, records) {
+    setRecords(state, records) {
       state.records = records;
     },
   },

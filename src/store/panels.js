@@ -23,12 +23,12 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    create: async (context, data) => {
+    create: async(context, data) => {
       // eslint-disable-next-line no-console
       // console.log('store create', data);
       await collectionRef.add(data);
     },
-    updateMembers: async (context, data) => {
+    updateMembers: async(context, data) => {
       const panel = context.getters.getPanel(data.id);
       // eslint-disable-next-line no-console
       // console.log('updateMembers panel  ', { panel });
@@ -48,10 +48,10 @@ export default {
         members: members,
       }, { merge: true });
     },
-    updatePanel: async (context, params) => {
+    updatePanel: async(context, params) => {
       return await collectionRef.doc(params.id).update(params.data);
     },
-    deletePanel: async (context, id) => {
+    deletePanel: async(context, id) => {
       await collectionRef.doc(id).delete();
       // @TODO@ - ?also empty google drive folder, if it has been created?
       return true;
@@ -66,7 +66,7 @@ export default {
     unbindPanelApplications: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('panelApplications');
     }),
-    removePanelApplications: async (context, { panelType, applicationIds }) => {
+    removePanelApplications: async(context, { panelType, applicationIds }) => {
       const batch = firestore.batch();
       applicationIds.forEach(applicationId => {
         const ref = firestore.collection('applicationRecords').doc(applicationId);

@@ -7,7 +7,7 @@ const collection = firestore.collection('notes');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId, applicationId }) => {
+    bind: firestoreAction(async({ bindFirestoreRef }, { candidateId, applicationId }) => {
       let firestoreRef = collection;
       if (candidateId) {
         firestoreRef = firestoreRef
@@ -24,7 +24,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    save: async (context, { data, id }) => {
+    save: async(context, { data, id }) => {
       const isUpdate = !!id;
       if (isUpdate) {
         data.lastUpdatedBy = {
@@ -44,7 +44,7 @@ export default {
         await collection.add(data);
       }
     },
-    delete: async (context, { id }) => {
+    delete: async(context, { id }) => {
       const ref = firestore
         .collection('notes').doc(id);
       await ref.delete();

@@ -63,26 +63,26 @@ export default {
       required: true,
     },
   },
-  data () {
+  data() {
     return {
       formData: {
         noOfTestApplications: 1,
       },
     };
   },
-  created () {
+  created() {
     this.formData.state = this.state;
   },
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    confirmModal () {
+    confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async save () {
+    async save() {
       if (this.formData.noOfTestApplications === 0) return;
       this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', this.formData.noOfTestApplications);
       this.confirmModal();

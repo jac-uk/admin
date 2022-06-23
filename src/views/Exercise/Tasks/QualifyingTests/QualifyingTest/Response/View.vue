@@ -497,7 +497,7 @@ export default {
     QuestionDuration,
     ActionButton,
   },
-  data () {
+  data() {
     return {
       moveToTest: '',
       isEditingTestDate: false,
@@ -507,7 +507,7 @@ export default {
     };
   },
   computed: {
-    tabs () {
+    tabs() {
       const tabsList = [];
       if (this.response) {
         tabsList.push({
@@ -535,15 +535,15 @@ export default {
       }
       return tabsList;
     },
-    responseId () {
+    responseId() {
       const id = this.$route.params.responseId;
       return id;
     },
-    response () {
+    response() {
       const qtList = this.$store.state.qualifyingTestResponses.record;
       return qtList;
     },
-    responses () {
+    responses() {
       let responses = [];
       if (this.response.responses && this.response.responses.length) {
         responses = this.response.responses;
@@ -566,14 +566,14 @@ export default {
       }
       return responses;
     },
-    qualifyingTest () {
+    qualifyingTest() {
       const qtList = this.$store.state.qualifyingTest.record;
       return qtList;
     },
-    qualifyingTests () {
+    qualifyingTests() {
       return this.$store.state.qualifyingTest.records;
     },
-    relatedTests () {
+    relatedTests() {
       if (this.qualifyingTests) {
         if (this.qualifyingTest && this.qualifyingTest.relationship && this.qualifyingTest.relationship.copiedFrom) {
           return this.qualifyingTests.filter(item => {
@@ -589,13 +589,13 @@ export default {
         return [];
       }
     },
-    hasRelatedTests () {
+    hasRelatedTests() {
       return this.relatedTests && this.relatedTests.length;
     },
-    candidate () {
+    candidate() {
       return this.response ? this.response.candidate : null;
     },
-    questionLabel () {
+    questionLabel() {
       let label = 'Question';
 
       if (this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO) {
@@ -603,7 +603,7 @@ export default {
       }
       return label;
     },
-    questions () {
+    questions() {
       let returnQuestions = [];
       // merge the two objects;
       if (this.response.testQuestions.questions) {
@@ -617,7 +617,7 @@ export default {
       }
       return returnQuestions;
     },
-    timeTaken () {
+    timeTaken() {
       let diff = 0;
       if (this.response.statusLog.completed && this.response.statusLog.started) {
         diff = this.response.statusLog.completed - this.response.statusLog.started;
@@ -629,41 +629,41 @@ export default {
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
     },
-    isCriticalAnalysis () {
+    isCriticalAnalysis() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS;
     },
-    isSituationalJudgment () {
+    isSituationalJudgment() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT;
     },
-    isScenario () {
+    isScenario() {
       return this.qualifyingTest.type === QUALIFYING_TEST.TYPE.SCENARIO;
     },
-    hasActivated () {
+    hasActivated() {
       return this.response.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
-    hasStarted () {
+    hasStarted() {
       return !!this.response;
     },
-    hasCompleted () {
+    hasCompleted() {
       return this.response && this.response.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
-    logs () {
+    logs() {
       return this.$store.state.connectionMonitor.records;
     },
-    isTieBreaker () {
+    isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
-    initialServerOffset () {
+    initialServerOffset() {
       if (this.response && this.response.client && this.response.statusLog) {
         const offset = this.response.statusLog.started - this.response.client.timestamp;
         return offset;
       }
       return false;
     },
-    latestServerOffset () {
+    latestServerOffset() {
       if (this.response && this.response.lastUpdated && this.response.lastUpdatedClientTime) {
         const offset = this.response.lastUpdated - this.response.lastUpdatedClientTime;
         return offset;
@@ -672,7 +672,7 @@ export default {
     },
   },
   watch: {
-    activeTab: async function (newActiveTab) {
+    activeTab: async function(newActiveTab) {
       if (newActiveTab === 'logs') {
         const candidateId = this.candidate.id;
         const qualifyingTestId = this.$route.params.qualifyingTestId;
@@ -683,27 +683,27 @@ export default {
       }
     },
   },
-  async created () {
+  async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
     const email = firebase.auth().currentUser.email;
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
-    confirmReset () {
+    confirmReset() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
         this.$refs.confirmResetModal.closeModal();
       }
     },
-    resetTest () {
+    resetTest() {
       this.$refs.confirmResetModal.openModal();
     },
-    markAsCompleted () {
+    markAsCompleted() {
       if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
         this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
       }
     },
-    actionReasonableAdjustment (obj, duration, id) {
+    actionReasonableAdjustment(obj, duration, id) {
       const reasonableAdjustment = Number(obj.reasonableAdjustment);
       const calculation = reasonableAdjustment + Number(duration.testDuration);
       const returnObj = {
@@ -716,7 +716,7 @@ export default {
       };
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
-    actionReasonableAdjustmentJustification (obj, id) {
+    actionReasonableAdjustmentJustification(obj, id) {
       const returnObj = {
         duration: {
           ...this.response.duration,
@@ -725,7 +725,7 @@ export default {
       };
       this.$store.dispatch('qualifyingTestResponses/updateRA', { data: returnObj, id: id });
     },
-    checkSelected (index, rightAnswer, selectedAnswer) {
+    checkSelected(index, rightAnswer, selectedAnswer) {
       let returnClass = '';
       const isSelectedAnswer = index === selectedAnswer;
       const isRightAnswer = index === rightAnswer;
@@ -745,7 +745,7 @@ export default {
 
       return returnClass;
     },
-    checkSelectedSituationalJudgement (index, rightAnswer, selectedAnswer) {
+    checkSelectedSituationalJudgement(index, rightAnswer, selectedAnswer) {
       // eslint-disable-next-line no-console
       // console.log('checkSelectedSituationalJudgement', index, rightAnswer, selectedAnswer);
       let returnClass = '';
@@ -771,7 +771,7 @@ export default {
 
       return returnClass;
     },
-    async btnMoveTest () {
+    async btnMoveTest() {
       if (this.moveToTest) {
         const destinationTest = this.qualifyingTests.find(item => item.id === this.moveToTest);
         await this.$store.dispatch('qualifyingTestResponses/moveTest', { qualifyingTest: destinationTest, qualifyingTestResponse: this.response });
@@ -785,10 +785,10 @@ export default {
         });
       }
     },
-    btnEditTestDate () {
+    btnEditTestDate() {
       this.isEditingTestDate = true;
     },
-    timeDifference (log) {
+    timeDifference(log) {
       if (log.offline === undefined) {
         return 'ONLINE';
       } else {
@@ -796,16 +796,16 @@ export default {
         return new Date(minDate).toISOString().substr(11, 8);
       }
     },
-    differenceInTime (index, date) {
+    differenceInTime(index, date) {
       const date2 = this.dateCalculate === null ? date : this.dateCalculate;
       const minDate = date - date2;
       this.dateCalculate = date;
       return index === 0 ? '00:00:00' : new Date(minDate).toISOString().substr(11, 8);
     },
-    differenceInMills (entry1, entry2) {
+    differenceInMills(entry1, entry2) {
       return (entry1 - entry2);
     },
-    timeOffline (index) {
+    timeOffline(index) {
       const thisTimeOffline = this.logs[index] && this.logs[index].offline;
       const nextIndex = index + 1 >= this.logs.length ? this.logs.length : index + 1;
       const nextTimeOnline = this.logs[nextIndex] && this.logs[nextIndex].online;
@@ -816,7 +816,7 @@ export default {
         return new Date(timeOffline).toISOString().substr(11, 8);
       }
     },
-    sortHistory () {
+    sortHistory() {
       let ordered = {};
       if (this.response.history) {
         ordered = Object.keys(this.response.history).sort()
@@ -830,7 +830,7 @@ export default {
       }
       return ordered;
     },
-    historyCount (value, index) {
+    historyCount(value, index) {
       let timeSaved = {};
       if (this.response.history) {
         timeSaved = Object.keys(this.response.history)
@@ -841,7 +841,7 @@ export default {
       const amountTimeSaved = Object.keys(timeSaved).length;
       return amountTimeSaved;
     },
-    amountOfTimeOnQuestion (index) {
+    amountOfTimeOnQuestion(index) {
       let millisecs = 0;
       if (this.response.history) {
         Object.keys(this.response.questionSession).map(key => {
@@ -854,7 +854,7 @@ export default {
       }
       return new Date(millisecs).toISOString().substr(11, 8);
     },
-    amountOfTimeVisitedQuestion (index) {
+    amountOfTimeVisitedQuestion(index) {
       let counter = 0;
       if (this.response.history) {
         Object.keys(this.response.history).map(key => {
@@ -866,7 +866,7 @@ export default {
       }
       return counter;
     },
-    lastUpdatedQuestion (index) {
+    lastUpdatedQuestion(index) {
       let latestTimestamp;
       if (this.response.history) {
         Object.keys(this.response.history).map(key => {

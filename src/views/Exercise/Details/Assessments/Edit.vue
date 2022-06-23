@@ -111,7 +111,7 @@ export default {
     Checkbox,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       assessmentOptions: null,
       // TODO: `assessmentMethods` will eventually replace `assessmentOptions`
@@ -131,12 +131,12 @@ export default {
     };
   },
   computed: {
-    hasJourney () {
+    hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save (isValid) {
+    async save(isValid) {
       this.formData['progress.assessmentOptions'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-assessments'));

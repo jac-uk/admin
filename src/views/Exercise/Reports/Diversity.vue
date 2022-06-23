@@ -491,7 +491,7 @@ export default {
     TabsList,
     Stat,
   },
-  data () {
+  data() {
     return {
       diversity: null,
       refreshingReport: false,
@@ -526,13 +526,13 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    showTabs () {
+    showTabs() {
       return this.diversity && this.diversity.shortlisted; // .shortlisted indicates we have stages reports
     },
-    activeTabTitle () {
+    activeTabTitle() {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
         if (this.tabs[i].ref === this.activeTab) {
           return this.tabs[i].title;
@@ -541,7 +541,7 @@ export default {
       return '';
     },
   },
-  created () {
+  created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
       .onSnapshot((snap) => {
         if (snap.exists) {
@@ -549,18 +549,18 @@ export default {
         }
       });
   },
-  destroyed () {
+  destroyed() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport () {
+    async refreshReport() {
       this.refreshingReport = true;
       await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    gatherReportData (stage) {
+    gatherReportData(stage) {
       const data = [];
       let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
       if (stage) {
@@ -583,7 +583,7 @@ export default {
       });
       return data;
     },
-    exportData (stage) {
+    exportData(stage) {
       let title = 'Diversity Report';
       if (stage) {
         title = `${title} - ${stage}`;

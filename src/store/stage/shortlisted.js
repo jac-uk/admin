@@ -10,7 +10,7 @@ const collectionRef = firestore.collection('applicationRecords');
 export default {
   namespaced: true,
   getters: {
-    availableStatuses () {
+    availableStatuses() {
       return [
         APPLICATION_STATUS.INVITED_TO_SELECTION_DAY,
         APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
@@ -30,7 +30,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async (context, { status, nextStage, empApplied }) => {
+    updateStatus: async(context, { status, nextStage, empApplied }) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.SHORTLISTED;
 
       const data = {
@@ -94,10 +94,10 @@ export default {
     selectedItems: [],
   },
   mutations: {
-    message (state, msg) {
+    message(state, msg) {
       state.message = msg;
     },
-    changeSelectedItems (state, items) {
+    changeSelectedItems(state, items) {
       state.selectedItems = items;
     },
   },

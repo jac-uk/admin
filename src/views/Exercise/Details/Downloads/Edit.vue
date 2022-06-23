@@ -118,7 +118,7 @@ export default {
     UploadFiles,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       downloads: {
         jobDescriptions: [],
@@ -145,19 +145,19 @@ export default {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
     }),
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    exerciseId () {
+    exerciseId() {
       return this.exercise.id;
     },
-    hasIndependentAssessments () {
+    hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
     },
-    uploadPath () {
+    uploadPath() {
       return `/exercise/${this.exerciseId}`;
     },
-    uploadList () {
+    uploadList() {
       const data = [];
 
       data.push({
@@ -228,12 +228,12 @@ export default {
 
       return data;
     },
-    hasJourney () {
+    hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save () {
+    async save() {
       this.validate();
       if (this.isValid()) {
         this.formData['progress.downloads'] = true;
@@ -241,7 +241,7 @@ export default {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-show-downloads'));
       }
     },
-    modalUploadOpen (obj) {
+    modalUploadOpen(obj) {
       this.validateUI(obj.id, false);
       this.uploadProps = {
         ...obj,
@@ -251,10 +251,10 @@ export default {
       };
       this.$refs.modalRef.openModal();
     },
-    modalUploadClose () {
+    modalUploadClose() {
       this.$refs.modalRef.closeModal();
     },
-    async submitForm (action) {
+    async submitForm(action) {
       this.validateDownloads();
       const noErrors = this.errors.length === 0;
       if (noErrors) {
@@ -267,7 +267,7 @@ export default {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-downloads'));
       }
     },
-    validateDownloads () {
+    validateDownloads() {
       this.errors = [];
       this.validateItem('jobDescriptions');
       this.validateItem('termsAndConditions');
@@ -284,7 +284,7 @@ export default {
       // govuk-form-group--error
       // <span id="candidate-assessement-forms_0--title-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Please enter a value for Title of file </span>
     },
-    validateItem (downloadId) {
+    validateItem(downloadId) {
       const isValid = this.formData.downloads[downloadId] && this.formData.downloads[downloadId].length > 0;
       if (!isValid) {
         this.errors.push({ id: downloadId, message: `Please add ${this.getDownloadTitle(downloadId)}` });
@@ -292,11 +292,11 @@ export default {
       }
       return isValid;
     },
-    getDownloadTitle (downloadId) {
+    getDownloadTitle(downloadId) {
       const theList = this.uploadList.filter(item => item.id === downloadId)[0];
       return theList ? theList.title : '';
     },
-    validateUI (downloadId, add) {
+    validateUI(downloadId, add) {
       const wrapperCssClass = this.$refs[`${downloadId}-group`][0].classList;
       const itemCssClass = this.$refs[`${downloadId}-error`][0].classList;
       if (add) {

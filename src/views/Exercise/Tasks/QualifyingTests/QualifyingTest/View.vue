@@ -348,7 +348,7 @@ export default {
     Select,
     Banner,
   },
-  data () {
+  data() {
     return {
       exerciseStage: '',
       candidateStatus: 'all',
@@ -356,66 +356,66 @@ export default {
     };
   },
   computed: {
-    exerciseId () {
+    exerciseId() {
       return this.$route.params.id;
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isProcessing () {
+    isProcessing() {
       return isProcessing(this.exercise);
     },
-    applicationRecordCounts () {
+    applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
-    qualifyingTestId () {
+    qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
-    qualifyingTest () {
+    qualifyingTest() {
       return this.$store.state.qualifyingTest.record;
     },
-    hasCounts () {
+    hasCounts() {
       return this.qualifyingTest.counts && this.qualifyingTest.counts.initialised;
     },
-    isCreated () {
+    isCreated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.CREATED;
     },
-    isSubmitted () {
+    isSubmitted() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.SUBMITTED;
     },
-    isApproved () {
+    isApproved() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.APPROVED;
     },
-    isDryRun () {
+    isDryRun() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'dry-run';
     },
-    isDryRunCandidates () {
+    isDryRunCandidates() {
       return this.qualifyingTest && this.qualifyingTest.invitedEmails && this.qualifyingTest.invitedEmails.length > 0;
     },
-    isMopUp () {
+    isMopUp() {
       return this.qualifyingTest && this.qualifyingTest.mode && this.qualifyingTest.mode === 'mop-up';
     },
-    isInitialised () {
+    isInitialised() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.INITIALISED;
     },
-    isUserAdded () {
+    isUserAdded() {
       return this.qualifyingTest.counts.initialised > 0;
     },
-    isActivated () {
+    isActivated() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.ACTIVATED;
     },
-    isPaused () {
+    isPaused() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.PAUSED;
     },
-    isCompleted () {
+    isCompleted() {
       return this.qualifyingTest.status === QUALIFYING_TEST.STATUS.COMPLETED;
     },
-    isEndDatePassed () {
+    isEndDatePassed() {
       const today = new Date();
       const endDate = new Date(this.qualifyingTest.endDate);
       return isDateGreaterThan(endDate, today);
     },
-    canCreateCopy () {
+    canCreateCopy() {
       return !this.isMopUp && (
         this.isInitialised ||
         this.isActivated ||
@@ -423,28 +423,28 @@ export default {
         this.isCompleted
       );
     },
-    canOpenTests () {
+    canOpenTests() {
       // do not allow QTs or tie-breakers to be opened until they have been initialised
       // also, do not allow tie-breakers to be opened if there are open QTs for this exercise
       return this.isInitialised && !(this.isTieBreaker && this.exerciseHasOpenQTs);
     },
-    exerciseHasOpenQTs () {
+    exerciseHasOpenQTs() {
       const qtList = this.$store.getters['qualifyingTest/getActivatedQTs'].filter(row => {
         return !row.isTieBreaker;
       });
       return qtList.length > 0;
     },
-    hasEMPCandidates () {
+    hasEMPCandidates() {
       const appRecs = this.applicationRecordCounts;
       return appRecs.reviewEMP || appRecs.shortlistedEMP || appRecs.selectedEMP;
     },
-    isTieBreaker () {
+    isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
-    testQuestionsJson () {
+    testQuestionsJson() {
       const {
         additionalInstructions,
         feedbackSurvey,
@@ -474,7 +474,7 @@ export default {
     },
   },
   watch: {
-    exerciseStage: function (valueNow, valueBefore) {
+    exerciseStage: function(valueNow, valueBefore) {
       if (valueNow !== valueBefore) {
         this.availableStatuses = [];
       }
@@ -489,22 +489,22 @@ export default {
       }
     },
   },
-  created () {
+  created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
       this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
     }
   },
   methods: {
-    btnEdit () {
+    btnEdit() {
       this.$router.push({ name: `${this.routeNamePrefix}-edit`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    btnReview () {
+    btnReview() {
       this.$router.push({ name: `${this.routeNamePrefix}-review`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    async btnSendInvites () {
+    async btnSendInvites() {
       await functions.httpsCallable('sendQualifyingTestReminders')({ qualifyingTestId: this.qualifyingTestId });
     },
-    async btnInitialise () {
+    async btnInitialise() {
       const data = { qualifyingTestId: this.qualifyingTestId };
       if (!this.isDryRun) {
         data.stage = this.exerciseStage;
@@ -514,17 +514,17 @@ export default {
       }
       await functions.httpsCallable('initialiseQualifyingTest')(data);
     },
-    async btnActivate () {
+    async btnActivate() {
       await functions.httpsCallable('activateQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
-    async btnGetScores () {
+    async btnGetScores() {
       await functions.httpsCallable('scoreQualifyingTest')({ qualifyingTestId: this.qualifyingTestId });
     },
-    btnPause () {
+    btnPause() {
       // eslint-disable-next-line no-console
       // console.log('Button clicked: PAUSE');
     },
-    btnResponses (status) {
+    btnResponses(status) {
       const route = {
         name: `${this.routeNamePrefix}-responses`,
         params: {
@@ -534,10 +534,10 @@ export default {
       };
       this.$router.push(route);
     },
-    qtStatus (status) {
+    qtStatus(status) {
       return QUALIFYING_TEST.STATUS[status];
     },
-    async btnCreateCopy () {
+    async btnCreateCopy() {
       const newTestId = await this.$store.dispatch('qualifyingTest/copy');
       this.$router.push({
         name: `${this.routeNamePrefix}-edit`,
@@ -546,7 +546,7 @@ export default {
         },
       });
     },
-    btnCopyToClipboard () {
+    btnCopyToClipboard() {
       this.$refs.btnCopyToClipboard.innerText = 'Copying to clipboard ...';
       this.$refs.btnCopyToClipboard.disabled = 'disabled';
       const el = document.createElement('textarea');

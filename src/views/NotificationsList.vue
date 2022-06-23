@@ -153,7 +153,7 @@ export default {
     Checkbox,
   },
   extends: Form,
-  data () {
+  data() {
     return {
       activeTab: 'queue',
       formData: {
@@ -170,7 +170,7 @@ export default {
     };
   },
   computed: {
-    tabs () {
+    tabs() {
       return [
         {
           ref: 'queue',
@@ -186,19 +186,19 @@ export default {
         },
       ];
     },
-    notificationsQueue () {
+    notificationsQueue() {
       return this.$store.state.notifications.queue;
     },
-    notificationsSent () {
+    notificationsSent() {
       return this.$store.state.notifications.sent;
     },
-    notificationsSettings () {
+    notificationsSettings() {
       return this.$store.getters['services/getNotificationSettings'];
     },
-    isProcessing () {
+    isProcessing() {
       return this.notificationsSettings && this.notificationsSettings.isProcessing;
     },
-    hasChanges () {
+    hasChanges() {
       return this.notificationsSettings && (
         this.formData.delayInMinutes !== this.notificationsSettings.delayInMinutes ||
         this.formData.defaultMailbox !== this.notificationsSettings.defaultMailbox ||
@@ -206,7 +206,7 @@ export default {
       );
     },
   },
-  created () {
+  created() {
     if (this.notificationsSettings) {
       this.formData.delayInMinutes = this.notificationsSettings.delayInMinutes;
       this.formData.defaultMailbox = this.notificationsSettings.defaultMailbox;
@@ -214,22 +214,22 @@ export default {
     }
   },
   methods: {
-    startProcessing () {
+    startProcessing() {
       this.$store.dispatch('services/notificationsStart');
     },
-    stopProcessing () {
+    stopProcessing() {
       this.$store.dispatch('services/notificationsStop');
     },
-    async save () {
+    async save() {
       await this.$store.dispatch('services/saveNotificationsSettings', this.formData);
     },
-    getQueueData (params) {
+    getQueueData(params) {
       this.$store.dispatch(
         'notifications/bindQueue',
         params
       );
     },
-    getSentData (params) {
+    getSentData(params) {
       this.$store.dispatch(
         'notifications/bindSent',
         params

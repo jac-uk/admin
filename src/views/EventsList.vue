@@ -119,7 +119,7 @@ export default {
     VueJsonPretty,
   },
   extends: Form,
-  data () {
+  data() {
     return {
       activeTab: 'info',
       formData: {
@@ -136,7 +136,7 @@ export default {
     };
   },
   computed: {
-    tabs () {
+    tabs() {
       return [
         {
           ref: 'info',
@@ -152,33 +152,33 @@ export default {
         },
       ];
     },
-    info () {
+    info() {
       return this.$store.state.events.info;
     },
-    warnings () {
+    warnings() {
       return this.$store.state.events.warnings;
     },
-    errorEvents () {
+    errorEvents() {
       return this.$store.state.events.errors;
     },
   },
-  mounted () {
+  mounted() {
     // if we try and close all elements straight away it doesn't work, so wait 1 second
     window.setTimeout(() => {
       this.closeAllDetailsElements();
     }, 1000);
   },
   methods: {
-    getInfoData (params) {
+    getInfoData(params) {
       this.$store.dispatch('events/bindInfo', params);
     },
-    getWarningsData (params) {
+    getWarningsData(params) {
       this.$store.dispatch('events/bindWarnings', params);
     },
-    getErrorsData (params) {
+    getErrorsData(params) {
       this.$store.dispatch('events/bindErrors', params);
     },
-    closeAllDetailsElements () {
+    closeAllDetailsElements() {
       const allDetailsElements = document.getElementsByClassName('vjs-tree__brackets');
       for (let i = 0; i < allDetailsElements.length; i++) {
         const e = allDetailsElements[i];

@@ -14,30 +14,30 @@ export default {
   components: {
     LoadingMessage,
   },
-  data () {
+  data() {
     return {
       loaded: false,
       loadFailed: false,
     };
   },
   computed: {
-    qualifyingTestId () {
+    qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
   },
   watch: {
-    '$route.params.qualifyingTestId' () {
+    '$route.params.qualifyingTestId'() {
       this.loadPage();
     },
   },
-  mounted () {
+  mounted() {
     this.loadPage();
   },
-  destroyed () {
+  destroyed() {
     this.$store.dispatch('qualifyingTest/unbind');
   },
   methods: {
-    loadPage () {
+    loadPage() {
       this.loaded = false;
       this.$store.dispatch('qualifyingTest/bind', this.qualifyingTestId)
         .then((data) => {
@@ -51,7 +51,7 @@ export default {
           throw e;
         });
     },
-    redirectToPage () {
+    redirectToPage() {
       // this.$router.replace({ name: 'page-not-found' });
       // TODO: If the requested test is an Equal Merit tie-breaker redirects to the EM tie-breakers page
       // else redirect to the QTs page

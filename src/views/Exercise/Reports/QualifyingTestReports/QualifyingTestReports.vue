@@ -46,7 +46,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     return {
       tableColumns: [
         { title: 'Title' },
@@ -54,26 +54,26 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    qualifyingTestReports () {
+    qualifyingTestReports() {
       return this.$store.getters['qualifyingTestReports/data'].filter(row => {
         return this.tieBreakers == (row.tieBreakers == true); // to cater for the tieBreakers field being absent
       });
     },
-    exerciseId () {
+    exerciseId() {
       return this.$route.params.id;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    btnCreate () {
+    btnCreate() {
       this.$router.push({ name: `${this.routeNamePrefix}-report-create` });
     },
-    getTableData (params) {
+    getTableData(params) {
       this.$store.dispatch(
         'qualifyingTestReports/bind',
         {

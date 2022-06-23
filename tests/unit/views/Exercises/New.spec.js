@@ -78,7 +78,7 @@ xdescribe('views/Exercise/New', () => {
         });
       });
 
-      it('dispatches `exerciseDocument/create` Vuex action with the expected save payload', async () => {
+      it('dispatches `exerciseDocument/create` Vuex action with the expected save payload', async() => {
         await wrapper.vm.save();
         const expectedPayload = {
           name: 'Example exercise title',
@@ -97,7 +97,7 @@ xdescribe('views/Exercise/New', () => {
           });
         });
 
-        it('begins the create journey by dispatching `exerciseCreateJourney/start` with the selected pages', async () => {
+        it('begins the create journey by dispatching `exerciseCreateJourney/start` with the selected pages', async() => {
           await wrapper.vm.save();
           const expectedPayload = ['contacts', 'timeline', 'vacancy'];
           const [action, payload] = mockStore.dispatch.mock.calls[1];
@@ -113,7 +113,7 @@ xdescribe('views/Exercise/New', () => {
           });
         });
 
-        it('clears the create journey by dispatching `exerciseCreateJourney/start` with an empty array', async () => {
+        it('clears the create journey by dispatching `exerciseCreateJourney/start` with an empty array', async() => {
           await wrapper.vm.save();
           const [action, payload] = mockStore.dispatch.mock.calls[1];
           expect(action).toBe('exerciseCreateJourney/start');
@@ -121,7 +121,7 @@ xdescribe('views/Exercise/New', () => {
         });
       });
 
-      it('navigates to the next page of the create journey', async () => {
+      it('navigates to the next page of the create journey', async() => {
         await wrapper.vm.save();
         expect(mockRouter.push).toHaveBeenCalledWith(mockStore.getters['exerciseCreateJourney/nextPage']);
       });

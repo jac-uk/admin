@@ -75,7 +75,7 @@ export default {
       type: Number,
     },
   },
-  data () {
+  data() {
     return {
       repeatableFields: {
         Answer,

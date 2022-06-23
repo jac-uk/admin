@@ -19,7 +19,7 @@ export default {
   components: {
     SideNavigation,
   },
-  data () {
+  data() {
     const exercise = this.$store.state.exerciseDocument.record;
     const path = `/exercise/${exercise.id}/tasks`;
     const sideNavigation = [];

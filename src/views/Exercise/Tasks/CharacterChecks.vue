@@ -304,7 +304,7 @@ export default {
     Modal,
     CharacterChecksRequests,
   },
-  data () {
+  data() {
     return {
       tabs: [
         {
@@ -345,35 +345,35 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    exerciseMailbox () {
+    exerciseMailbox() {
       return this.exercise.exerciseMailbox;
     },
-    exerciseManagerName () {
+    exerciseManagerName() {
       return this.exercise.emailSignatureName;
     },
-    dueDate () {
+    dueDate() {
       const date = this.exercise.characterChecksReturnDate;
       return formatDate(date);
     },
-    applicationRecordsCharacterChecksRequested () {
+    applicationRecordsCharacterChecksRequested() {
       return this.$store.state.characterChecks.checksRequestedRecords;
     },
-    applicationRecordsCharacterChecksNotRequested () {
+    applicationRecordsCharacterChecksNotRequested() {
       return this.$store.state.characterChecks.checksNotRequestedRecords;
     },
-    applicationRecordsCharacterChecksCompleted () {
+    applicationRecordsCharacterChecksCompleted() {
       return this.$store.state.characterChecks.checksCompletedRecords;
     },
-    hmrcCheckRequired () {
+    hmrcCheckRequired() {
       return this.exercise.characterChecks.HMRC;
     },
-    characterChecksEnabled () {
+    characterChecksEnabled() {
       return (this.exercise.characterChecksEnabled && this.exercise.characterChecksEnabled === true);
     },
-    buttonText () {
+    buttonText() {
       if (this.processing === true) {
         return 'Processing...';
       }
@@ -381,27 +381,27 @@ export default {
     },
   },
   watch: {
-    activeTab () {
+    activeTab() {
       this.resetSelectedItems();
     },
   },
-  async created () {
+  async created() {
     if (!(this.exercise.characterChecks && typeof this.exercise.characterChecks.HMRC === 'boolean')) {
       this.$router.push({ name: 'exercise-tasks-character-checks-edit' });
     }
   },
   methods: {
-    openModal (modalRef) {
+    openModal(modalRef) {
       this.$refs[modalRef].openModal();
     },
-    closeModal (modalRef) {
+    closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    enableCharacterChecksStatus (value, status) {
+    enableCharacterChecksStatus(value, status) {
       this.characterChecksMessage = value;
       this.characterChecksStatus = status;
     },
-    setMessage (value, type, status) {
+    setMessage(value, type, status) {
       if (value === true) {
         this.status = status;
         this.message = `Sent ${type}(s) to ${this.selectedItems.length} candidate(s).`;
@@ -413,10 +413,10 @@ export default {
         this.message = '';
       }, 20000);
     },
-    getDate (value) {
+    getDate(value) {
       return formatDate(value);
     },
-    getApplicationRecordsCharacterChecksNotRequested (params) {
+    getApplicationRecordsCharacterChecksNotRequested(params) {
       this.$store.dispatch(
         'characterChecks/bind',
         {
@@ -426,7 +426,7 @@ export default {
         }
       );
     },
-    getApplicationRecordsCharacterChecksRequested (params) {
+    getApplicationRecordsCharacterChecksRequested(params) {
       this.$store.dispatch(
         'characterChecks/bind',
         {
@@ -436,7 +436,7 @@ export default {
         }
       );
     },
-    getApplicationRecordsCharacterChecksCompleted (params) {
+    getApplicationRecordsCharacterChecksCompleted(params) {
       this.$store.dispatch(
         'characterChecks/bind',
         {
@@ -446,10 +446,10 @@ export default {
         }
       );
     },
-    resetSelectedItems () {
+    resetSelectedItems() {
       this.selectedItems = [];
     },
-    async enableCharacterChecks () {
+    async enableCharacterChecks() {
       try {
         this.processing = true;
         const response = await functions.httpsCallable('enableCharacterChecks')({

@@ -12,16 +12,16 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    saveNotificationsSettings: async (context, data) => {
+    saveNotificationsSettings: async(context, data) => {
       const ref = firestore.doc('settings/services');
       await ref.update({ notifications: data });
     },
-    notificationsStart () {
+    notificationsStart() {
       return firestore.doc('settings/services').update({
         'notifications.isProcessing': true,
       });
     },
-    notificationsStop () {
+    notificationsStop() {
       return firestore.doc('settings/services').update({
         'notifications.isProcessing': false,
       });

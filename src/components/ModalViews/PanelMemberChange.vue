@@ -75,7 +75,7 @@ export default {
   components: {
     TextField,
   },
-  data () {
+  data() {
     return {
       email: null,
       fullName: null,
@@ -84,7 +84,7 @@ export default {
       action: null,
     };
   },
-  created () {
+  created() {
     this.email = this.$attrs.email;
     this.fullName = this.$attrs.fullName;
     this.phone = this.$attrs.phone;
@@ -92,17 +92,17 @@ export default {
     this.action = this.$attrs.action;
   },
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    confirmModal () {
+    confirmModal() {
       this.$emit('confirmed');
     },
-    deleteAction () {
+    deleteAction() {
       this.action = 'delete';
       this.save();
     },
-    async save () {
+    async save() {
       const data = {
         id: this.$attrs.id,
         idx: this.$attrs.idx,

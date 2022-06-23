@@ -624,7 +624,7 @@ export default {
   },
   extends: CharacterSummary,
   computed: {
-    signedDeclaration () {
+    signedDeclaration() {
       if (this.formData.declaration1 === true &&
         this.formData.declaration2 === true &&
         this.formData.declaration3 === true) {

@@ -312,35 +312,35 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       assessorDetails: {},
     };
   },
   computed: {
-    applicantProvidedFirstAssessor () {
+    applicantProvidedFirstAssessor() {
       const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
       return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
     },
-    applicantProvidedSecondAssessor () {
+    applicantProvidedSecondAssessor() {
       const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
       return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    hasLeadershipJudgeAssessment () {
+    hasLeadershipJudgeAssessment() {
       return hasLeadershipJudgeAssessment(this.exercise);
     },
-    hasIndependentAssessments () {
+    hasIndependentAssessments() {
       return hasIndependentAssessments(this.exercise);
     },
   },
   methods: {
-    closeModal (modal) {
+    closeModal(modal) {
       this.$refs[modal].closeModal();
     },
-    editAssessor (AssessorNr) {
+    editAssessor(AssessorNr) {
       if (AssessorNr === 1) {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
@@ -363,7 +363,7 @@ export default {
       }
       this.$refs.modalRef.openModal();
     },
-    editLeadershipJudgeDetails () {
+    editLeadershipJudgeDetails() {
       this.$refs.modalLeadershipJudgeDetails.openModal();
     },
   },

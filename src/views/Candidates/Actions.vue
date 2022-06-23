@@ -83,7 +83,7 @@ export default {
       required: true,
     },
   },
-  data () {
+  data() {
     return {
       authorisedToPerformAction: false,
       currentEmailAddress: 'unknown',
@@ -94,11 +94,11 @@ export default {
     };
   },
   computed: {
-    currentEmail () {
+    currentEmail() {
       return this.currentEmailAddress;
     },
   },
-  async created () {
+  async created() {
     const email = firebase.auth().currentUser.email;
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
     if (this.authorisedToPerformAction) {
@@ -106,7 +106,7 @@ export default {
     }
   },
   methods: {
-    async getCurrentEmailAddress () {
+    async getCurrentEmailAddress() {
       try {
         const response = await functions.httpsCallable('getUserEmailByID')({ candidateId: this.candidateId });
 
@@ -119,7 +119,7 @@ export default {
         this.setMessage('Failed to perform action.', 'warning');
       }
     },
-    async save () {
+    async save() {
       this.validate();
       if (this.isValid()) {
         if (this.authorisedToPerformAction) {
@@ -151,7 +151,7 @@ export default {
         }
       }
     },
-    setMessage (message, status) {
+    setMessage(message, status) {
       this.status = status;
       this.message = message;
     },

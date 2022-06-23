@@ -58,7 +58,7 @@ export default {
       default: null,
     },
   },
-  data () {
+  data() {
     return {
       deleted: [
         'Yes',
@@ -68,7 +68,7 @@ export default {
     };
   },
   methods: {
-    async save () {
+    async save() {
       this.validate();
       if (this.isValid()) {
         if (this.selected === 'Yes') {

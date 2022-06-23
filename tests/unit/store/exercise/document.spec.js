@@ -48,7 +48,7 @@ xdescribe('store/exercise/single', () => {
 
     describe('create', () => {
       let mockDispatch;
-      beforeEach(async () => {
+      beforeEach(async() => {
         mockDispatch = jest.fn();
         const doc = firestore.collection('meta').doc('stats');
         await doc.set({
@@ -80,13 +80,13 @@ xdescribe('store/exercise/single', () => {
       describe('the Promise', () => {
         const collection = firestore.collection('exercises');
 
-        it('creates a new document in the Firestore collection `exercises`', async () => {
+        it('creates a new document in the Firestore collection `exercises`', async() => {
           expect((await collection.get()).size).toBe(0);
           await create();
           expect((await collection.get()).size).toBe(1);
         });
 
-        it('the document data matches the supplied `data` object', async () => {
+        it('the document data matches the supplied `data` object', async() => {
           await create();
           const doc = (await collection.get()).docs[0];
           const expectedData = {
@@ -97,7 +97,7 @@ xdescribe('store/exercise/single', () => {
           expect(doc.data()).toEqual(expectedData);
         });
 
-        it('binds the newly created document', async () => {
+        it('binds the newly created document', async() => {
           await create();
           const doc = (await collection.get()).docs[0];
           expect(mockDispatch).toHaveBeenCalledWith('bind', doc.id);
@@ -106,7 +106,7 @@ xdescribe('store/exercise/single', () => {
     });
 
     describe('save', () => {
-      beforeEach(async () => {
+      beforeEach(async() => {
         const doc = firestore.collection('exercises').doc('001');
         await doc.set({
           name: 'Example exercise',
@@ -136,7 +136,7 @@ xdescribe('store/exercise/single', () => {
         expect(save()).toBeInstanceOf(Promise);
       });
 
-      it('updates the bound Firestore document with the supplied data', async () => {
+      it('updates the bound Firestore document with the supplied data', async() => {
         await save();
 
         const docSnapshot = await firestore.collection('exercises').doc('001').get();

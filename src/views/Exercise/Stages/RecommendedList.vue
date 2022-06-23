@@ -88,7 +88,7 @@ export default {
     Table,
     TableCell,
   },
-  data () {
+  data() {
     return {
       message: null,
       selectedItems: [],
@@ -102,37 +102,37 @@ export default {
     };
   },
   computed: {
-    applicationRecords () {
+    applicationRecords() {
       const records = this.$store.state.stageRecommended.records;
       return records;
     },
-    totalApplicationRecords () {
+    totalApplicationRecords() {
       return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.recommended) || 0;
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled () {
+    isButtonDisabled() {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
   },
-  async created () {
+  async created() {
     this.message = await this.$store.dispatch('stageRecommended/getMessages');
   },
   methods: {
-    checkForm () {
+    checkForm() {
 
     },
-    moveBack () {
+    moveBack() {
       this.$store.dispatch('stageRecommended/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-recommended-back' });
     },
-    setStatus () {
+    setStatus() {
       this.$store.dispatch('stageRecommended/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercise-stages-recommended-edit' });
     },
-    getTableData (params) {
+    getTableData(params) {
       this.$store.dispatch(
         'stageRecommended/bind',
         {

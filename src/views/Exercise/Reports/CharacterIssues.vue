@@ -197,7 +197,7 @@ export default {
     Table,
     TableCell,
   },
-  data () {
+  data() {
     return {
       exerciseStage: 'all',
       candidateStatus: 'all',
@@ -212,15 +212,15 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationRecordCounts () {
+    applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
   },
   watch: {
-    exerciseStage: function (valueNow) {
+    exerciseStage: function(valueNow) {
       // populate the status dropdown, for the chosen stage
       if (valueNow === EXERCISE_STAGE.REVIEW) {
         this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []);
@@ -238,22 +238,22 @@ export default {
 
       this.$refs.issuesTable.reload();
     },
-    candidateStatus: function () {
+    candidateStatus: function() {
       this.$refs.issuesTable.reload();
     },
   },
-  destroyed () {
+  destroyed() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport () {
+    async refreshReport() {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    async downloadReport () {
+    async downloadReport() {
       this.downloadingReport = true;
       if (!this.exercise.referenceNumber) {
         this.downloadingReport = false;
@@ -283,7 +283,7 @@ export default {
       });
       this.downloadingReport = false;
     },
-    getTableData (params) {
+    getTableData(params) {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
@@ -314,7 +314,7 @@ export default {
         this.applicationRecords = [];
       }
     },
-    async candidateSearch (searchTerm) {
+    async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
   },

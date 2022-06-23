@@ -435,15 +435,15 @@ export default {
     },
   },
   computed: {
-    characterChecksConsentFormCompleted () {
+    characterChecksConsentFormCompleted() {
       return this.application.characterChecks && this.application.characterChecks.consent;
     },
-    hmrcCheckRequired () {
+    hmrcCheckRequired() {
       return this.exercise.characterChecks.HMRC;
     },
   },
   methods: {
-    getDate (value) {
+    getDate(value) {
       return formatDate(value);
     },
   },

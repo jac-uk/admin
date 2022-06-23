@@ -335,12 +335,12 @@ export default {
     },
   },
   computed: {
-    applicationId () {
+    applicationId() {
       return this.$route.params.applicationId;
     },
   },
   methods: {
-    additionalWorkingPreferenceAnswer (index) {
+    additionalWorkingPreferenceAnswer(index) {
       let result = null;
       if (this.application.additionalWorkingPreferences) {
         if (this.application.additionalWorkingPreferences[index]) {
@@ -349,10 +349,10 @@ export default {
       }
       return result;
     },
-    hasWelshPosts (requirement) {
+    hasWelshPosts(requirement) {
       return this.exercise.welshRequirementType.some((req) => req === requirement);
     },
-    changePreferences (obj) {
+    changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
       if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {

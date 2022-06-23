@@ -8,7 +8,7 @@ const collection = firestore.collection('candidates');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
+    bind: firestoreAction(async({ bindFirestoreRef, state, commit }, params) => {
       const firestoreRef = await tableQuery(state.records, collection, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -19,7 +19,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    search: async (context, { searchTerm, exerciseId }) => {
+    search: async(context, { searchTerm, exerciseId }) => {
       const results = [];
       if (searchTerm) {
         let query = collection.where('computed.search', 'array-contains', searchTerm.toLowerCase());
@@ -47,23 +47,23 @@ export default {
     unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    bindDocs: firestoreAction(async ({ bindFirestoreRef }, id) => {
+    bindDocs: firestoreAction(async({ bindFirestoreRef }, id) => {
       await bindFirestoreRef('personalDetails', collection.doc(`${id}/documents/personalDetails`), { serialize: vuexfireSerialize });
       await bindFirestoreRef('characterInformation', collection.doc(id).collection('documents').doc('characterInformation'), { serialize: vuexfireSerialize });
       await bindFirestoreRef('equalityAndDiversitySurvey', collection.doc(id).collection('documents').doc('equalityAndDiversitySurvey'), { serialize: vuexfireSerialize });
     }),
-    unbindDocs: firestoreAction(async ({ unbindFirestoreRef }) => {
+    unbindDocs: firestoreAction(async({ unbindFirestoreRef }) => {
       await unbindFirestoreRef('personalDetails');
       await unbindFirestoreRef('characterInformation');
       await unbindFirestoreRef('equalityAndDiversitySurvey');
     }),
-    savePersonalDetails: async (context, { data, id }) => {
+    savePersonalDetails: async(context, { data, id }) => {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.set(data, { merge: true });
     },
   },
   mutations: {
-    records (state, data) {
+    records(state, data) {
       state.records = data;
     },
   },

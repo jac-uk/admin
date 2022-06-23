@@ -296,11 +296,11 @@ export default {
     Modal,
     UploadAssessment,
   },
-  beforeRouteUpdate (to, from, next) {
+  beforeRouteUpdate(to, from, next) {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
     next();
   },
-  data () {
+  data() {
     return {
       exerciseStage: '',
       uploadAsssessmentProps: {},
@@ -315,13 +315,13 @@ export default {
     };
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationRecordCounts () {
+    applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
-    warningMessage () {
+    warningMessage() {
       let msg = 'Please add';
       if (!this.exercise.exercisePhoneNumber) {
         msg = `${msg} an exercise phone number`;
@@ -335,48 +335,48 @@ export default {
       msg = `${msg} before sending IA requests`;
       return msg;
     },
-    assessments () {
+    assessments() {
       return this.$store.state.assessments.records;
     },
-    assessmentsSent () {
+    assessmentsSent() {
       if (this.exercise.assessments && this.exercise.assessments.sent) {
         return this.exercise.assessments.sent;
       }
 
       return 0;
     },
-    assessmentsCompleted () {
+    assessmentsCompleted() {
       if (this.exercise.assessments && this.exercise.assessments.completed) {
         return this.exercise.assessments.completed;
       }
 
       return 0;
     },
-    status () {
+    status() {
       return this.$route.params.status;
     },
-    contactOverdue () {
+    contactOverdue() {
       return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
     },
-    hasInitialisedAssessments () {
+    hasInitialisedAssessments() {
       return this.exercise.assessments && this.exercise.assessments.initialised;
     },
-    hasStartedSending () {
+    hasStartedSending() {
       return this.exercise.assessments && this.exercise.assessments.sent;
     },
-    onStaging () {
+    onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
     },
-    canCancelAssessments () {
+    canCancelAssessments() {
       return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
     },
-    canSendRequestsToAll () {
+    canSendRequestsToAll() {
       return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
     },
-    canSendRemindersToAll () {
+    canSendRemindersToAll() {
       return this.hasInitialisedAssessments && (this.exercise.assessments && this.exercise.assessments.sent);
     },
-    uploadPath () {
+    uploadPath() {
       const exerciseId = this.exercise.id;
       const applicationId = this.assessment.application.id;
       const assessorId = this.assessorId;
@@ -384,32 +384,32 @@ export default {
     },
   },
   methods: {
-    async initialiseAssessments () {
+    async initialiseAssessments() {
       if (!this.exerciseStage) {
         return false;
       }
       await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
     },
-    async cancelAssessments () {
+    async cancelAssessments() {
       await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id });
     },
-    async sendRequestsToAll () {
+    async sendRequestsToAll() {
       const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
       this.processSendAssessmentResult(result);
     },
-    async sendRemindersToAll () {
+    async sendRemindersToAll() {
       const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id });
       this.processSendAssessmentResult(result);
     },
-    async resendRequest (assessmentId) {
+    async resendRequest(assessmentId) {
       const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId: assessmentId, resend: true });
       this.processSendAssessmentResult(result);
     },
-    async sendReminder (assessmentId) {
+    async sendReminder(assessmentId) {
       const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId: assessmentId });
       this.processSendAssessmentResult(result);
     },
-    async processSendAssessmentResult (result) {
+    async processSendAssessmentResult(result) {
       if (result.data.errors) {
         const csvAssessors = result.data.errors.map(err => `(${err.applicationRef}) ${err.assessor.fullName} - ${err.assessor.email}`)
           .join(', \n');
@@ -419,10 +419,10 @@ export default {
         this.sendErrors = '';
       }
     },
-    async testRequest (assessmentId) {
+    async testRequest(assessmentId) {
       await functions.httpsCallable('testAssessmentNotification')({ assessmentId: assessmentId, notificationType: 'request' });
     },
-    lateIASubmission (assessment) {
+    lateIASubmission(assessment) {
       // Not submitted and late
       if (assessment.status != 'completed' && !isDateInFuture(assessment.dueDate)) {
         return true;
@@ -434,14 +434,14 @@ export default {
       }
       return false;
     },
-    unapprovedLateSubmission (assessment) {
+    unapprovedLateSubmission(assessment) {
       if (!this.lateIASubmission(assessment)) {
         return false;
       }
 
       return assessment.approved != true;
     },
-    async approveLateSubmission (assessment) {
+    async approveLateSubmission(assessment) {
       if (!this.unapprovedLateSubmission(assessment)) {
         return false;
       }
@@ -449,14 +449,14 @@ export default {
 
       await this.$store.dispatch('assessment/save', assessment);
     },
-    modalUploadOpen (obj) {
+    modalUploadOpen(obj) {
       this.uploadAsssessmentProps = obj;
       this.$refs.modalRef.openModal();
     },
-    modalUploadClose () {
+    modalUploadClose() {
       this.$refs.modalRef.closeModal();
     },
-    getTableData (params) {
+    getTableData(params) {
       this.$store.dispatch(
         'assessments/bind',
         {
@@ -465,7 +465,7 @@ export default {
         }
       );
     },
-    async candidateSearch (searchTerm) {
+    async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
   },

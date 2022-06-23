@@ -563,41 +563,41 @@ export default {
     FinancialMattersAgencyReport,
   },
   computed: {
-    application () {
+    application() {
       return this.$store.state.application.record;
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isVersion2 () {
+    isVersion2() {
       if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
         return true;
       }
       return false;
     },
-    sra () {
+    sra() {
       const qualifications = this.application.qualifications || [];
 
       return qualifications.find((qualification) => qualification.type === 'solicitor');
     },
-    bsb () {
+    bsb() {
       const qualifications = this.application.qualifications || [];
 
       return qualifications.find((qualification) => qualification.type === 'barrister');
     },
-    hasJCIOCheck () {
+    hasJCIOCheck() {
       return this.application.feePaidOrSalariedJudge;
     },
-    hasHMRCCheck () {
+    hasHMRCCheck() {
       return this.application.personalDetails.hasVATNumbers;
     },
-    hasGMCCheck () {
+    hasGMCCheck() {
       return !!this.application.generalMedicalCouncilNumber;
     },
-    hasRICSCheck () {
+    hasRICSCheck() {
       return !!this.application.royalInstitutionCharteredSurveyorsNumber;
     },
-    hasFinancialIssues () {
+    hasFinancialIssues() {
       return !!(this.application.characterInformationV2 &&
         (this.application.characterInformationV2.bankruptcies ||
           this.application.characterInformationV2.ivas ||

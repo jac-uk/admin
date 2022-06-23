@@ -431,7 +431,7 @@ export default {
     BackLink,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       typeOfExercise: null,
       isCourtOrTribunal: null,
@@ -460,12 +460,12 @@ export default {
     };
   },
   computed: {
-    hasJourney () {
+    hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save (isValid) {
+    async save(isValid) {
       this.formData['progress.vacancyInformation'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-vacancy'));

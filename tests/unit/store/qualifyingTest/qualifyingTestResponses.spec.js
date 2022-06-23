@@ -19,7 +19,7 @@ describe('store/qualifyingTestResponses', () => {
           mockContext.dispatch.mockClear();
         });
 
-        it('removes Test Questions', async () => {
+        it('removes Test Questions', async() => {
           expect(mockScenarioQualifyingTestResponse.testQuestions).toEqual(expect.anything()); // create separate mock for TQuestions and test
           await qualifyingTestResponses.actions.moveTest(mockContext, { qualifyingTest: mockScenarioQualifyingTest, qualifyingTestResponse: mockScenarioQualifyingTestResponse });
           expect(mockContext.dispatch.mock.calls[0][1].data.testQuestions).not.toBe(expect.anything());
@@ -29,7 +29,7 @@ describe('store/qualifyingTestResponses', () => {
           beforeEach(() => {
             mockScenarioQualifyingTestResponse.responses = [];
           });
-          it('dispatches empty array', async () => {
+          it('dispatches empty array', async() => {
             await qualifyingTestResponses.actions.moveTest(mockContext, { qualifyingTest: mockScenarioQualifyingTest, qualifyingTestResponse: mockScenarioQualifyingTestResponse });
             expect(mockContext.dispatch.mock.calls[0][1].data.responses.length).toBe(0);
           });
@@ -39,7 +39,7 @@ describe('store/qualifyingTestResponses', () => {
           beforeEach(() => {
             mockScenarioQualifyingTestResponse.responses = mockScenarioResponses;
           });
-          it('dispatches given responses array', async () => {
+          it('dispatches given responses array', async() => {
             await qualifyingTestResponses.actions.moveTest(mockContext, { qualifyingTest: mockScenarioQualifyingTest, qualifyingTestResponse: mockScenarioQualifyingTestResponse });
             expect(mockContext.dispatch.mock.calls[0][1].data.responses).toBe(mockScenarioResponses);
           });
@@ -51,7 +51,7 @@ describe('store/qualifyingTestResponses', () => {
           mockContext.dispatch.mockClear();
         });
 
-        it('user is not authorised to reset candidate test', async () => {
+        it('user is not authorised to reset candidate test', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'user@test.com',
@@ -71,7 +71,7 @@ describe('store/qualifyingTestResponses', () => {
           expect(mockContext.dispatch.mock.calls.length).toBe(0);
         });
 
-        it('user is authorised to reset and field isOutOfTime doesn`t exist', async () => {
+        it('user is authorised to reset and field isOutOfTime doesn`t exist', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
@@ -96,7 +96,7 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.data.isOutOfTime).toBeUndefined();
         });
 
-        it('isOutOfTime field is updated if exists and equals to true', async () => {
+        it('isOutOfTime field is updated if exists and equals to true', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
@@ -122,7 +122,7 @@ describe('store/qualifyingTestResponses', () => {
           expect(updateCallData.data.isOutOfTime).toBe(false);
         });
 
-        it('isOutOfTime field is not updated if exists and equals to false', async () => {
+        it('isOutOfTime field is not updated if exists and equals to false', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',
@@ -154,7 +154,7 @@ describe('store/qualifyingTestResponses', () => {
           mockContext.dispatch.mockClear();
         });
 
-        it('user is not authorised to mark candidate test as completed', async () => {
+        it('user is not authorised to mark candidate test as completed', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'user@test.com',
@@ -170,7 +170,7 @@ describe('store/qualifyingTestResponses', () => {
           expect(mockContext.dispatch.mock.calls.length).toBe(0);
         });
 
-        it('user is authorised to mark candidate test as completed', async () => {
+        it('user is authorised to mark candidate test as completed', async() => {
           jest.spyOn(firebase, 'auth').mockImplementation(() => ({
             currentUser: {
               email: 'test@test.com',

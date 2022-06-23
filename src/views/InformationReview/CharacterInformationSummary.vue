@@ -66,22 +66,22 @@ export default {
     },
   },
   computed: {
-    isVersion2 () {
+    isVersion2() {
       return this.version === 2;
     },
-    applicationId () {
+    applicationId() {
       return this.$route.params.applicationId;
     },
   },
   methods: {
-    hasValues (target) {
+    hasValues(target) {
       if (target !== null && target !== undefined) {
         return Object.keys(target).some(item => (item && item.length) || (item !== false && item !== true));
       } else {
         return false;
       }
     },
-    changeCharacterInfo (obj) {
+    changeCharacterInfo(obj) {
       let myCharacterInfo;
       if (this.isVersion2) {
         myCharacterInfo = { ...this.characterInformation, ...obj };

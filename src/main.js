@@ -48,7 +48,7 @@ auth().onAuthStateChanged((user) => {
   store.dispatch('auth/setCurrentUser', user);
   if (store.getters['auth/isSignedIn']) {
     user.getIdTokenResult()
-      .then(async (idTokenResult) => {
+      .then(async(idTokenResult) => {
         if (idTokenResult.claims && idTokenResult.claims.r) {
           await functions.httpsCallable('adminSyncUserRolePermissions')();
         }

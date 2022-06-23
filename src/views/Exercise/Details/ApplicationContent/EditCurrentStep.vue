@@ -80,7 +80,7 @@ export default {
       required: true,
     },
   },
-  data () {
+  data() {
     return {
       formData: {
         step: 'registration',
@@ -90,7 +90,7 @@ export default {
       steps: configuredApplicationContentSteps(this.exercise),
     };
   },
-  created () {
+  created() {
     if (this.exercise && this.exercise._applicationContent && this.exercise._applicationContent._currentStep) {
       this.formData.step = this.exercise._applicationContent._currentStep.step;
       this.formData.start = this.exercise._applicationContent._currentStep.start;
@@ -98,10 +98,10 @@ export default {
     }
   },
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    async save () {
+    async save() {
       const saveData = {};
       saveData['_applicationContent._currentStep'] = this.formData;
       await this.$store.dispatch('exerciseDocument/save', saveData);

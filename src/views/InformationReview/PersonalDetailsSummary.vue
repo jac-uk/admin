@@ -248,24 +248,24 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       hasPersonalDetails: !!this.personalDetails,
     };
   },
   computed: {
-    requiredStyle () {
+    requiredStyle() {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
     },
-    applicationId () {
+    applicationId() {
       return this.$route.params.applicationId;
     },
-    isCandidateView () {
+    isCandidateView() {
       return this.$route.name === 'candidates-view';
     },
   },
   methods: {
-    makeFullName (obj) {
+    makeFullName(obj) {
       if (obj.firstName && this.personalDetails.lastName) {
         obj.fullName = `${obj.firstName} ${this.personalDetails.lastName}`;
       }
@@ -274,7 +274,7 @@ export default {
       }
       return obj;
     },
-    changeUserDetails (obj) {
+    changeUserDetails(obj) {
       if (obj.firstName || obj.lastName) {
         obj = this.makeFullName(obj);
       }

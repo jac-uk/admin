@@ -37,7 +37,7 @@ export default {
     TextareaInput,
   },
   extends: Form,
-  data () {
+  data() {
     const data = this.$store.getters['qualifyingTest/data']();
 
     const defaults = {
@@ -52,20 +52,20 @@ export default {
     };
   },
   computed: {
-    isTieBreaker () {
+    isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    async save () {
+    async save() {
       this.formatEmails();
       await this.$store.dispatch('qualifyingTest/save', this.qualifyingTest);
       this.$router.push({ name: `${this.routeNamePrefix}-review` });
     },
-    formatEmails () {
+    formatEmails() {
       this.qualifyingTest.invitedEmails = [];
       this.invitedEmailsText.split('\n').forEach(email => {
         const emailAddress = email.trim().toLowerCase();

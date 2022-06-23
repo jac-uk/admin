@@ -50,7 +50,7 @@ export default {
       default: null,
     },
   },
-  data () {
+  data() {
     return {
       tableColumns: [
         { title: 'Date' },
@@ -59,10 +59,10 @@ export default {
     };
   },
   methods: {
-    editNote (id) {
+    editNote(id) {
       this.$emit('editNote', { id: id });
     },
-    deleteNote (id) {
+    deleteNote(id) {
       this.$emit('deleteNote', { id: id });
     },
   },

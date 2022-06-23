@@ -36,7 +36,7 @@ export default {
     BackLink,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       name: null,
     };
@@ -46,7 +46,7 @@ export default {
     };
   },
   methods: {
-    async save (isValid) {
+    async save(isValid) {
       this.formData['progress.started'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push({ name: 'exercise-overview' });

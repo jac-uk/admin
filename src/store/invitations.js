@@ -19,13 +19,13 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    addInvites: async (context, { emails }) => {
+    addInvites: async(context, { emails }) => {
       const exercise = context.rootState.exerciseDocument.record;
       if (emails && emails.length && exercise && exercise.id) {
         const emailsToAdd = emails;
         if (emailsToAdd.length) {
           // Delete emails from database that were removed by the user
-          context.state.records.forEach(async (r) => {
+          context.state.records.forEach(async(r) => {
             const toBeAdded = emailsToAdd.find(email => email === r.candidate.email);
             if (!toBeAdded) {
               const ref = firestore.collection('invitations').doc(r.id);

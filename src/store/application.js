@@ -17,7 +17,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    unlock: async ({ state }) => {
+    unlock: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -25,16 +25,16 @@ export default {
       };
       await ref.update(data);
     },
-    save: async ({ state }, data) => {
+    save: async({ state }, data) => {
       const ref = collection.doc(state.record.id);
       await ref.set(data, { merge: true });
     },
-    update: async (context, { data, id }) => {
+    update: async(context, { data, id }) => {
       const ref = collection.doc(id);
       await ref.set(data, { merge: true });
     },
     // NOTE: this is copied across from Candidate app. @todo work out a better way to share code (or use an api)
-    submit: async ({ state, dispatch }) => {
+    submit: async({ state, dispatch }) => {
       if (state.record) {
         if (state.record.referenceNumber) {
           const data = {
@@ -74,7 +74,7 @@ export default {
         }
       }
     },
-    withdraw: async (context, data) => {
+    withdraw: async(context, data) => {
       const applicationId = data.applicationId;
 
       await context.dispatch('update', { data: { status: STATUS.WITHDRAWN }, id: applicationId });

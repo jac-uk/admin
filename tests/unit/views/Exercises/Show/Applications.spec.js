@@ -145,13 +145,13 @@ describe('@/views/Exercise/Show/Applications', () => {
         expect(typeof wrapper.vm.exportContacts).toBe('function');
       });
 
-      it('calls gatherReportData', async () => {
+      it('calls gatherReportData', async() => {
         wrapper.vm.gatherReportData = jest.fn();
         await wrapper.vm.gatherReportData();
         expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
 
-      it('calls downloadXLSX', async () => {
+      it('calls downloadXLSX', async() => {
         const mockReport = 'mock report';
         const mockTitle = 'Contacts';
 

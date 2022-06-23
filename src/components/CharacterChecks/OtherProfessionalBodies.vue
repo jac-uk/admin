@@ -184,7 +184,7 @@ export default {
     },
   },
   computed: {
-    otherMemberships () {
+    otherMemberships() {
       const selected = {};
       if (this.application.professionalMemberships) {
         this.application.professionalMemberships.forEach(membership => {
@@ -201,7 +201,7 @@ export default {
     },
   },
   methods: {
-    showMembershipOption (ref) {
+    showMembershipOption(ref) {
       if (this.application && this.application.professionalMemberships) {
         return this.application.professionalMemberships.indexOf(ref) >= 0;
       }

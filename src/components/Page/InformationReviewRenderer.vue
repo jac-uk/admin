@@ -175,37 +175,37 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       filters: filters,
     };
   },
   computed: {
-    isDate () {
+    isDate() {
       // return this.$props.data instanceof Date;
       return this.$props.type === 'date';
     },
-    isEmail () {
+    isEmail() {
       return this.$props.type === 'email';
     },
-    isSelection () {
+    isSelection() {
       return this.$props.type === 'selection';
     },
-    isMultiSelection () {
+    isMultiSelection() {
       return this.$props.type === 'multi-selection';
     },
-    isRankedSelection () {
+    isRankedSelection() {
       return this.$props.type === 'ranked-selection';
     },
-    isRouted () {
+    isRouted() {
       return this.$props.type === 'route';
     },
   },
   methods: {
-    displayDate (date) {
+    displayDate(date) {
       return this.displayMonthYearOnly ? filters.formatDate(date, 'month') : filters.formatDate(date);
     },
-    changeField (obj) {
+    changeField(obj) {
       this.$emit('changeField', obj);
     },
   },

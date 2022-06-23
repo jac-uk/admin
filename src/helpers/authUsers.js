@@ -6,7 +6,7 @@ const authorisedUsers = [
   'halcyon@judicialappointments.digital',
 ];
 
-const authorisedToPerformAction = async (email) => {
+const authorisedToPerformAction = async(email) => {
   return authorisedUsers.includes(email);
 };
 

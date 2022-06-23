@@ -128,19 +128,19 @@ export default {
     EditCurrentStep,
   },
   computed: {
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationContentList () {
+    applicationContentList() {
       return applicationContentList(this.exercise);
     },
-    isEditable () {
+    isEditable() {
       return isEditable(this.exercise);
     },
-    isProcessing () {
+    isProcessing() {
       return isProcessing(this.exercise);
     },
-    unselectedApplicationParts () {
+    unselectedApplicationParts() {
       return unselectedApplicationParts(this.exercise);
     },
   },

@@ -25,7 +25,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async (context, { nextStage }) => {
+    updateStatus: async(context, { nextStage }) => {
       const moveToNextStage = nextStage !== EXERCISE_STAGE.HANDOVER;
 
       const data = {
@@ -63,10 +63,10 @@ export default {
     selectedItems: [],
   },
   mutations: {
-    message (state, msg) {
+    message(state, msg) {
       state.message = msg;
     },
-    changeSelectedItems (state, items) {
+    changeSelectedItems(state, items) {
       state.selectedItems = items;
     },
   },

@@ -468,7 +468,7 @@ export default {
   components: {
     TabsList,
   },
-  data () {
+  data() {
     return {
       report: null,
       refreshingReport: false,
@@ -508,33 +508,33 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    activeTabDetails () {
+    activeTabDetails() {
       const activeTab = this.tabs.find((tab) => tab.ref === this.activeTab);
       return activeTab;
     },
-    sraRows () {
+    sraRows() {
       return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
-    bsbRows () {
+    bsbRows() {
       return this.report ? this.report.rows.filter((e) => e.bsbDate) : [];
     },
-    jcioRows () {
+    jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
     },
-    hmrcRows () {
+    hmrcRows() {
       return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
     },
-    gmcRows () {
+    gmcRows() {
       return this.report ? this.report.rows.filter((e) => e.gmcDate) : [];
     },
-    riscRows () {
+    riscRows() {
       return this.report ? this.report.rows.filter((e) => e.riscDate) : [];
     },
-    hasReportData () {
+    hasReportData() {
       return this.report && this.report.headers;
     },
   },
-  created () {
+  created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/agency`)
       .onSnapshot((snap) => {
         if (snap.exists) {
@@ -542,18 +542,18 @@ export default {
         }
       });
   },
-  destroyed () {
+  destroyed() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
   },
   methods: {
-    async refreshReport () {
+    async refreshReport() {
       this.refreshingReport = true;
       await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
     },
-    gatherReportData () {
+    gatherReportData() {
       const reportData = [];
 
       // get headers
@@ -566,7 +566,7 @@ export default {
 
       return reportData;
     },
-    exportData () {
+    exportData() {
       const title = 'Agency Report';
       const data = this.gatherReportData();
 

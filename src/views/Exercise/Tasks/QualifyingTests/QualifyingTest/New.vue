@@ -62,7 +62,7 @@ export default {
       type: Boolean,
     },
   },
-  data () {
+  data() {
     const exercise = this.$store.state.exerciseDocument.record;
 
     const defaults = {
@@ -86,15 +86,15 @@ export default {
     };
   },
   computed: {
-    testTypes () {
+    testTypes() {
       return this.isTieBreaker ? [QUALIFYING_TEST.TYPE.SCENARIO] : QUALIFYING_TEST.TYPE;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    async save () {
+    async save() {
       if (this.isDryRun) {
         this.qualifyingTest.mode = QUALIFYING_TEST.MODE.DRY_RUN;
       }

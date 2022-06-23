@@ -36,10 +36,10 @@ export default {
     },
   },
   mutations: {
-    updateFavourites (state, isFavourites) {
+    updateFavourites(state, isFavourites) {
       state.isFavourites = isFavourites;
     },
-    selectedItems (state, items) {
+    selectedItems(state, items) {
       state.selectedItems = items;
     },
   },

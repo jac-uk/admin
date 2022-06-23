@@ -18,7 +18,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    save: async ({ state }, data) => {
+    save: async({ state }, data) => {
       if (data.id == null && state.record == null) {
         throw 'State null and no ID passed';
       }
@@ -45,7 +45,7 @@ export default {
         });
       return collectionRef;
     },
-    update: async (context, { data, AssessorNr, id }) => {
+    update: async(context, { data, AssessorNr, id }) => {
       let returnData = {};
       if (AssessorNr == 1) {
         returnData = {

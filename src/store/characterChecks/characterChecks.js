@@ -41,7 +41,7 @@ export default {
       unbindFirestoreRef('checksCompletedRecords');
       return true;
     }),
-    updateStatus: async (context, { selectedItems, newStatus }) => {
+    updateStatus: async(context, { selectedItems, newStatus }) => {
       let field = '';
       const existingStatus = 'requested';
 

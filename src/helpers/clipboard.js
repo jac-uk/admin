@@ -9,7 +9,7 @@ export {
 
 const data = {};
 
-const read = async () => {
+const read = async() => {
   if (navigator && navigator.clipboard && navigator.clipboard.readText && document.hasFocus()) {
     const clipboardText = await navigator.clipboard.readText();
     if (clipboardText) {
@@ -46,7 +46,7 @@ const fromJACString = (JACString) => {
   });
 };
 
-const write = async (environment, type, title, content) => {
+const write = async(environment, type, title, content) => {
   if (navigator && navigator.clipboard) {
     await navigator.clipboard.writeText(toJACString(environment, type, title, content));
     setData(environment, type, title, content);
@@ -60,7 +60,7 @@ const setData = (environment, type, title, content) => {
   data.content = content || '';
 };
 
-const empty = async () => {
+const empty = async() => {
   if (navigator && navigator.clipboard) {
     await navigator.clipboard.writeText('');
     setData();

@@ -62,24 +62,24 @@ export default {
       type: Array,
     },
   },
-  data () {
+  data() {
     return {
       panelList: null,
       selectedPanel: null,
       selected: '',
     };
   },
-  created () {
+  created() {
     this.panelList = this.$props.panels;
   },
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    confirmModal () {
+    confirmModal() {
       this.$emit('confirmed');
     },
-    async save () {
+    async save() {
       if (this.selected !== '') {
         this.closeModal();
         this.$emit('selected', this.selected);

@@ -108,7 +108,7 @@ export default {
     Checkbox,
   },
   extends: Form,
-  data () {
+  data() {
     const defaults = {
       name: null,
       estimatedLaunchDate: null,
@@ -126,10 +126,10 @@ export default {
   },
   computed: {
     launchDate: {
-      get () {
+      get() {
         return this.parseDate(this.formData.estimatedLaunchDate);
       },
-      set (val) {
+      set(val) {
         if (!val || !(val instanceof Date)) {
           return;
         }
@@ -142,32 +142,32 @@ export default {
         this.formData.estimatedLaunchDate = dateString;
       },
     },
-    type () {
+    type() {
       if (this.setDay) {
         return 'date';
       }
       return 'month';
     },
-    toggleLabel () {
+    toggleLabel() {
       if (this.setDay) {
         return 'Remove launch day';
       }
       return 'Add launch day';
     },
-    hasJourney () {
+    hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
   },
   methods: {
-    async save (isValid) {
+    async save(isValid) {
       this.formData['progress.vacancySummary'] = !!isValid;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-summary'));
     },
-    toggleDay () {
+    toggleDay() {
       this.setDay = !this.setDay;
     },
-    parseDate (value) {
+    parseDate(value) {
       if (value instanceof Date) {
         return value;
       }

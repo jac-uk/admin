@@ -65,7 +65,7 @@ export default {
     Table,
     TableCell,
   },
-  data () {
+  data() {
     const qualifyingTest = this.$store.state.qualifyingTest.record;
     const tableColumns = [];
     if (qualifyingTest.mode === 'dry-run') {
@@ -85,36 +85,36 @@ export default {
     };
   },
   computed: {
-    exerciseId () {
+    exerciseId() {
       return this.$route.params.id;
     },
-    equalityAndDiversity () {
+    equalityAndDiversity() {
       const localDocs = this.$store.state.candidates.equalityAndDiversitySurvey;
       return localDocs || {};
     },
-    responses () {
+    responses() {
       const responsesList = this.$store.state.qualifyingTestResponses.records;
       return responsesList;
     },
-    qualifyingTest () {
+    qualifyingTest() {
       const record = this.$store.state.qualifyingTest.record;
       return record;
     },
-    qualifyingTestId () {
+    qualifyingTestId() {
       return this.$route.params.qualifyingTestId;
     },
-    searchStatus () {
+    searchStatus() {
       return this.$route.params.status;
     },
-    isTieBreaker () {
+    isTieBreaker() {
       return this.qualifyingTest.isTieBreaker;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.isTieBreaker ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
   methods: {
-    async gatherExportData () {
+    async gatherExportData() {
       // fetch data
       const response = await functions.httpsCallable('exportQualifyingTestResponses')({ qualifyingTestId: this.qualifyingTest.id });
 
@@ -130,7 +130,7 @@ export default {
 
       return reportData;
     },
-    async downloadResponses () {
+    async downloadResponses() {
       const xlsxData = await this.gatherExportData();
 
       downloadXLSX(
@@ -142,10 +142,10 @@ export default {
         }
       );
     },
-    isReasonableAdjustment (needAdjustment) {
+    isReasonableAdjustment(needAdjustment) {
       return needAdjustment;
     },
-    formatTimeLimit (timeLimit) {
+    formatTimeLimit(timeLimit) {
       // TODO
       // Function to format the time limit
       // If activated ...
@@ -153,7 +153,7 @@ export default {
       // If completed
       return `${timeLimit} min`;
     },
-    getTableData (params) {
+    getTableData(params) {
       return this.$store.dispatch(
         'qualifyingTestResponses/bind',
         {
@@ -163,10 +163,10 @@ export default {
         }
       );
     },
-    goToQualifyingTest () {
+    goToQualifyingTest() {
       this.$router.push({ name: `${this.routeNamePrefix}-view`, params: { qualifyingTestId: this.qualifyingTestId } });
     },
-    typeInitials (string) {
+    typeInitials(string) {
       let result;
       const strArray = string.split('-');
       if (strArray.length === 1) {
@@ -176,7 +176,7 @@ export default {
       }
       return result.toUpperCase();
     },
-    timeTaken (response) {
+    timeTaken(response) {
       let diff = 0;
       if (response.statusLog.completed && response.statusLog.started) {
         diff = response.statusLog.completed - response.statusLog.started;
@@ -188,7 +188,7 @@ export default {
       const returnTimeTaken = `${hh}:${mm}:${ss}`;
       return returnTimeTaken;
     },
-    async candidateSearch (searchTerm) {
+    async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exerciseId });
     },
   },

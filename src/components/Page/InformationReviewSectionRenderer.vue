@@ -320,16 +320,16 @@ export default {
       default: () => false,
     },
   },
-  data () {
+  data() {
     return {
       currentIndex: null,
     };
   },
   computed: {
-    showDateRange () {
+    showDateRange() {
       return Object.keys(this.dataDefault).includes('startDate') && Object.keys(this.dataDefault).includes('endDate') || !this.edit;
     },
-    hasData () {
+    hasData() {
       if (this.data && this.data.length) {
         if (this.data.length === 1 && _.isEmpty(this.data[0])) {
           return false; // ignore array containing empty object e.g. `[{}]`
@@ -340,7 +340,7 @@ export default {
     },
   },
   methods: {
-    formattedRange (index) {
+    formattedRange(index) {
       let result = 'No answer provided';
       if (this.data[index].startDate && this.data[index].endDate) {
         result = `${this.displayDate(this.data[index].startDate)} - ${this.displayDate(this.data[index].endDate)}`;
@@ -349,34 +349,34 @@ export default {
       }
       return result;
     },
-    displayDate (date) {
+    displayDate(date) {
       return this.displayMonthYearOnly ? formatDate(date, 'month') : formatDate(date);
     },
-    changeField (obj) {
+    changeField(obj) {
       this.$emit('changeField', obj);
     },
-    changeTaskDetail (obj) {
+    changeTaskDetail(obj) {
       this.$emit('changeTaskDetails', { ...obj, ...{ taskDetails: true } });
     },
-    addField () {
+    addField() {
       this.$emit('addField', {
         field: this.field,
         index: (this.data ? this.data.length : 0),
         change: this.dataDefault,
       });
     },
-    removeField () {
+    removeField() {
       this.$emit('removeField', {
         field: this.field,
         index: this.currentIndex,
       });
       this.closeModal();
     },
-    closeModal () {
+    closeModal() {
       this.currentIndex = null;
       this.$refs.removeModal.closeModal();
     },
-    openModal (index) {
+    openModal(index) {
       this.currentIndex = index;
       this.$refs.removeModal.openModal();
     },

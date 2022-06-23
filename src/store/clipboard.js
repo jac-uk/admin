@@ -36,7 +36,7 @@ const module = {
     hasData: false,
   },
   mutations: {
-    setData (state, data) {
+    setData(state, data) {
       state.data.environment = data.environment || '';
       state.data.type = data.type || '';
       state.data.title = data.title || '';
@@ -45,7 +45,7 @@ const module = {
     },
   },
   actions: {
-    async read ({ commit }) {
+    async read({ commit }) {
       if (navigator && navigator.clipboard && navigator.clipboard.readText && document.hasFocus()) {
         const clipboardText = await navigator.clipboard.readText();
         if (clipboardText) {
@@ -59,13 +59,13 @@ const module = {
         }
       }
     },
-    async write ({ commit }, data) {
+    async write({ commit }, data) {
       if (navigator && navigator.clipboard) {
         await navigator.clipboard.writeText(toJACString(data));
         commit('setData', data);
       }
     },
-    async empty ({ commit }) {
+    async empty({ commit }) {
       if (navigator && navigator.clipboard) {
         await navigator.clipboard.writeText('');
         commit('setData', {});

@@ -126,7 +126,7 @@ export default {
     Table,
     TableCell,
   },
-  data () {
+  data() {
     return {
       selectedItems: [],
       exerciseStates: ['draft', 'ready', 'approved'],
@@ -148,11 +148,11 @@ export default {
       'records',
       'isFavourites',
     ]),
-    isButtonDisabled () {
+    isButtonDisabled() {
       const hasSelection = this.selectedItems && this.selectedItems.length;
       return !hasSelection;
     },
-    tableData () {
+    tableData() {
       return this.records.map(row => {
         const data = { ...row };
         data.id = row.id;
@@ -162,29 +162,29 @@ export default {
     },
   },
   watch: {
-    isFavourites () {
+    isFavourites() {
       if (this.$refs.exercisesTable) {
         this.$refs.exercisesTable.reload();
       }
     },
   },
-  destroyed () {
+  destroyed() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   methods: {
-    showMyFavourites () {
+    showMyFavourites() {
       this.$store.dispatch('exerciseCollection/showFavourites');
     },
-    showAll () {
+    showAll() {
       this.$store.dispatch('exerciseCollection/showAll');
     },
-    getTableData (params) {
+    getTableData(params) {
       this.$store.dispatch(
         'exerciseCollection/bind',
         params
       );
     },
-    checkForm () {
+    checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
     },

@@ -11,7 +11,7 @@ const collectionRef = firestore.collection('qualifyingTestResponses');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
+    bind: firestoreAction(async({ bindFirestoreRef, state, commit }, params) => {
       const isSearchAdjustment = params.searchStatus === 'reasonable-adjustments';
       const isSearchStarted = params.searchStatus === QUALIFYING_TEST.STATUS.STARTED;
       const isSearchInProgress = params.searchStatus === QUALIFYING_TEST.STATUS.PROGRESS;
@@ -59,15 +59,15 @@ export default {
     unbindRecord: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    create: async (context, { data }) => {
+    create: async(context, { data }) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collectionRef.add(data);
     },
-    update: async (context, { data, id }) => {
+    update: async(context, { data, id }) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collectionRef.doc(id).update(data);
     },
-    updateRA: async (context, { data, id }) => {
+    updateRA: async(context, { data, id }) => {
       // Update Reasonable Adjustments
       await context.dispatch('update', { data: data, id: id });
     },
@@ -93,7 +93,7 @@ export default {
           await batch.commit();
         });
     },
-    moveTest: async (context, { qualifyingTest, qualifyingTestResponse }) => {
+    moveTest: async(context, { qualifyingTest, qualifyingTestResponse }) => {
       const qtData = {
         id: qualifyingTest.id,
         type: qualifyingTest.type,
@@ -115,7 +115,7 @@ export default {
 
       await context.dispatch('update', { data: data, id: qualifyingTestResponse.id });
     },
-    resetTest: async (context) => {
+    resetTest: async(context) => {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const email = firebase.auth().currentUser.email;
       const canReset = await authorisedToPerformAction(email);
@@ -131,7 +131,7 @@ export default {
         await context.dispatch('update', { data: data, id: rec.id });
       }
     },
-    markAsCompleted: async (context) => {
+    markAsCompleted: async(context) => {
       const email = firebase.auth().currentUser.email;
       const canMarkAsCompleted = await authorisedToPerformAction(email);
       if (canMarkAsCompleted) {
@@ -144,7 +144,7 @@ export default {
     },
   },
   mutations: {
-    records (state, data) {
+    records(state, data) {
       state.records = data;
     },
   },

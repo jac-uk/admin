@@ -133,13 +133,13 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
         expect(wrapper.vm.save).toBeFunction();
       });
 
-      it('calls validate()', async () => {
+      it('calls validate()', async() => {
         await wrapper.vm.save();
 
         expect(wrapper.vm.validate).toHaveBeenCalled();
       });
 
-      it('if not valid, does nothing', async () => {
+      it('if not valid, does nothing', async() => {
         mockSave.mockClear();
         wrapper.vm.isValid.mockReturnValue(false);
 
@@ -151,7 +151,7 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
       });
 
       describe('if valid', () => {
-        it('updates progress', async () => {
+        it('updates progress', async() => {
           wrapper.vm.isValid.mockReturnValue(true);
 
           await wrapper.vm.save();
@@ -159,7 +159,7 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
           expect(wrapper.vm.exercise.progress.downloads).toBeTrue();
         });
 
-        it('saves the exercise and returns to preview page', async () => {
+        it('saves the exercise and returns to preview page', async() => {
           wrapper.vm.isValid.mockReturnValue(true);
 
           await wrapper.vm.save();

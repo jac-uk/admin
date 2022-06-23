@@ -27,7 +27,7 @@ export default {
     unbindQTs: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    create: async (state, data) => {
+    create: async(state, data) => {
       data.created = firebase.firestore.FieldValue.serverTimestamp();
       data.status = QUALIFYING_TEST.STATUS.CREATED;
       data.lastUpdated = null;
@@ -35,23 +35,23 @@ export default {
       const doc = await collection.add(data);
       return doc.id;
     },
-    save: async ({ state }, data) => {
+    save: async({ state }, data) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collection.doc(state.record.id).update(data);
     },
-    submitForApproval: async ({ state }) => {
+    submitForApproval: async({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.SUBMITTED,
       };
       await collection.doc(state.record.id).update(data);
     },
-    approve: async ({ state }) => {
+    approve: async({ state }) => {
       const data = {
         status: QUALIFYING_TEST.STATUS.APPROVED,
       };
       await collection.doc(state.record.id).update(data);
     },
-    copy: async (context) => {
+    copy: async(context) => {
       const qualifyingTest = context.state.record;
       const data = context.getters.data();
       data.title += ' copy';
@@ -64,7 +64,7 @@ export default {
       const newId = await context.dispatch('create', data);
       return newId;
     },
-    delete: async ({ state }) => {
+    delete: async({ state }) => {
       await collection.doc(state.record.id).delete();
     },
   },

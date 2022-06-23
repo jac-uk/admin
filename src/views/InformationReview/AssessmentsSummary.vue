@@ -258,59 +258,59 @@ export default {
       default: false,
     },
   },
-  data () {
+  data() {
     return {
       assessorDetails: {},
     };
   },
   computed: {
-    hasStatementOfSuitability () {
+    hasStatementOfSuitability() {
       return hasStatementOfSuitability(this.exercise);
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    hasSelfAssessment () {
+    hasSelfAssessment() {
       return hasSelfAssessment(this.exercise);
     },
-    hasCV () {
+    hasCV() {
       return hasCV(this.exercise);
     },
-    hasCoveringLetter () {
+    hasCoveringLetter() {
       return hasCoveringLetter(this.exercise);
     },
-    emptyASCObject () {
+    emptyASCObject() {
       return {
         title: '',
         answer: false,
       };
     },
-    uploadPath () {
+    uploadPath() {
       return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
     },
-    userId () {
+    userId() {
       return this.$store.state.auth.currentUser.uid;
     },
-    applicationId () {
+    applicationId() {
       return this.$route.params.applicationId;
     },
   },
   methods: {
-    hasAscAnswerDetails (index) {
+    hasAscAnswerDetails(index) {
       if (this.application.selectionCriteriaAnswers) {
         if (this.application.selectionCriteriaAnswers[index]) {
           return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answerDetails');
         }
       }
     },
-    hasAscAnswers (index) {
+    hasAscAnswers(index) {
       if (this.application.selectionCriteriaAnswers) {
         if (this.application.selectionCriteriaAnswers[index]) {
           return this.application.selectionCriteriaAnswers[index].hasOwnProperty('answer');
         }
       }
     },
-    changeAssessmentInfo (obj) {
+    changeAssessmentInfo(obj) {
       let changedObj = this.application[obj.field] || [];
 
       if (!changedObj[obj.index]) {
@@ -325,7 +325,7 @@ export default {
 
       this.$emit('updateApplication', { [obj.field]: changedObj });
     },
-    doFileUpload (val, field) {
+    doFileUpload(val, field) {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }

@@ -150,7 +150,7 @@ export default {
     ActionButton,
   },
   extends: Form,
-  data () {
+  data() {
     return {
       exerciseName: null,
       addMoreInfo: null,
@@ -158,12 +158,12 @@ export default {
     };
   },
   computed: {
-    hasClipboardData () {
+    hasClipboardData() {
       return this.$store.state.clipboard.hasData;
     },
   },
   methods: {
-    async save () {
+    async save() {
       this.validate();
       if (this.isValid()) {
         const data = {
@@ -177,7 +177,7 @@ export default {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
       }
     },
-    async copyFromClipboard () {
+    async copyFromClipboard() {
       const content = this.$store.state.clipboard.data.content;
       content.name = `${content.name} COPY`;
       await this.$store.dispatch('exerciseDocument/create', content);

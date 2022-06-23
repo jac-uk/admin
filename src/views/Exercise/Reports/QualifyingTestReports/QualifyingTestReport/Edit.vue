@@ -68,7 +68,7 @@ export default {
     Select,
   },
   extends: Form,
-  data () {
+  data() {
     const selectedIds = [];
     const qualifyingTestReport = this.$store.getters['qualifyingTestReport/data'];
     if (qualifyingTestReport && qualifyingTestReport.qualifyingTests && qualifyingTestReport.qualifyingTests.length) {
@@ -86,37 +86,37 @@ export default {
     };
   },
   computed: {
-    exerciseId () {
+    exerciseId() {
       return this.$route.params.id;
     },
-    qualifyingTestReportId () {
+    qualifyingTestReportId() {
       return this.$route.params.qualifyingTestReportId;
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    qualifyingTests () {
+    qualifyingTests() {
       return this.$store.getters['qualifyingTest/getCompletedQTs'].filter(row => {
         return this.tieBreakers == (row.isTieBreaker == true); // to cater for the isTieBreaker field being absent
       });
     },
-    qualifyingTestReport () {
+    qualifyingTestReport() {
       return this.$store.getters['qualifyingTestReport/data'];
     },
-    tieBreakers () {
+    tieBreakers() {
       return this.qualifyingTestReport.tieBreakers;
     },
-    routeNamePrefix () {
+    routeNamePrefix() {
       return this.tieBreakers ? 'equal-merit-tie-breaker' : 'qualifying-test';
     },
   },
-  created () {
+  created() {
     if (this.$store.state.qualifyingTest.records.length === 0) {
       this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exerciseId });
     }
   },
   methods: {
-    async save () {
+    async save() {
       if (this.qualifyingTestIds.length) {
         const qualifyingTests = [];
         this.qualifyingTestIds.forEach(id => {

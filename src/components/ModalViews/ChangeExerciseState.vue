@@ -65,7 +65,7 @@ export default {
       required: true,
     },
   },
-  data () {
+  data() {
     const exercise = this.$store.state.exerciseDocument.record;
     return {
       formData: {
@@ -74,19 +74,19 @@ export default {
       exerciseStates: exerciseStates(exercise),
     };
   },
-  created () {
+  created() {
     this.formData.state = this.state;
   },
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    confirmModal () {
+    confirmModal() {
       this.modalOpen = false;
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async save () {
+    async save() {
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.closeModal();
     },

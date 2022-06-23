@@ -179,7 +179,7 @@ export default {
       ],
     },
   },
-  data () {
+  data() {
     return {
       roleName: null,
       tableColumns: [
@@ -189,15 +189,15 @@ export default {
   },
 
   methods: {
-    closeModal () {
+    closeModal() {
       this.$emit('close');
     },
-    async createUserRole () {
+    async createUserRole() {
       // TODO: enforce unique role name
       const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.roleName });
       this.roleId = response.data.id;
     },
-    async saveUserRole () {
+    async saveUserRole() {
       const response = await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.roleId, permissions: this.permissions });
       return response;
     },

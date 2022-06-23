@@ -18,7 +18,7 @@ export default {
     SideNavigation,
   },
   computed: {
-    sideNavigation () {
+    sideNavigation() {
       const exercise = this.$store.state.exerciseDocument.record;
       const path = `/exercise/${exercise.id}/stages`;
       let review = 0;

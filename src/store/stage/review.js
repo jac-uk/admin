@@ -70,7 +70,7 @@ export default {
     },
   },
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
+    bind: firestoreAction(async({ bindFirestoreRef, state, commit }, params) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.REVIEW)
@@ -88,7 +88,7 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    updateStatus: async (context, { status, nextStage, empApplied }) => {
+    updateStatus: async(context, { status, nextStage, empApplied }) => {
       const stageValue = EXERCISE_STAGE.REVIEW; // initial value: 'review'
 
       // CHECKBOX SELECTED TO MOVE TO NEXT STAGE: SHORTLISTED
@@ -154,13 +154,13 @@ export default {
     selectedItems: [],
   },
   mutations: {
-    message (state, msg) {
+    message(state, msg) {
       state.message = msg;
     },
-    changeSelectedItems (state, items) {
+    changeSelectedItems(state, items) {
       state.selectedItems = items;
     },
-    records (state, data) {
+    records(state, data) {
       state.records = data;
     },
   },

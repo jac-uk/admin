@@ -10,7 +10,7 @@ const collection = firestore.collection('exercises');
 export default {
   namespaced: true,
   mutations: {
-    setNoOfTestApplications (state, noOfTestApplications) {
+    setNoOfTestApplications(state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
   },
@@ -22,11 +22,11 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    getDocumentData: async (context, id) => {
+    getDocumentData: async(context, id) => {
       const docRef = await collection.doc(id).get();
       return docRef.data();
     },
-    create: async ({ rootState, dispatch }, data) => {
+    create: async({ rootState, dispatch }, data) => {
       const metaRef = firestore.collection('meta').doc('stats');
       return firestore.runTransaction((transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
@@ -48,7 +48,7 @@ export default {
         return dispatch('bind', newId);
       });
     },
-    save: async ({ state }, data) => {
+    save: async({ state }, data) => {
       const saveData = clone(data);
       if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) { // recalculate applicationContent (if necessary)
         const applicationParts = exerciseApplicationParts(state.record, data);
@@ -75,7 +75,7 @@ export default {
       }
       await collection.doc(state.record.id).update(saveData);
     },
-    submitForApproval: async ({ state }) => {
+    submitForApproval: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -83,7 +83,7 @@ export default {
       };
       await ref.update(data);
     },
-    approve: async ({ state }) => {
+    approve: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -91,7 +91,7 @@ export default {
       };
       await ref.update(data);
     },
-    isReadyForTest: async ({ state }) => {
+    isReadyForTest: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -99,7 +99,7 @@ export default {
       };
       await ref.update(data);
     },
-    testing: async ({ state }) => {
+    testing: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -107,7 +107,7 @@ export default {
       };
       await ref.update(data);
     },
-    tested: async ({ state }) => {
+    tested: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -115,7 +115,7 @@ export default {
       };
       await ref.update(data);
     },
-    unlock: async ({ state }) => {
+    unlock: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -124,7 +124,7 @@ export default {
       };
       await ref.update(data);
     },
-    publish: async ({ state }) => {
+    publish: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -132,7 +132,7 @@ export default {
       };
       await ref.update(data);
     },
-    unpublish: async ({ state }) => {
+    unpublish: async({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -141,7 +141,7 @@ export default {
       };
       await ref.update(data);
     },
-    addToFavourites: async ({ state }, userId) => {
+    addToFavourites: async({ state }, userId) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -149,7 +149,7 @@ export default {
       };
       await ref.update(data);
     },
-    removeFromFavourites: async ({ state }, userId) => {
+    removeFromFavourites: async({ state }, userId) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
@@ -157,16 +157,16 @@ export default {
       };
       await ref.update(data);
     },
-    refreshApplicationCounts: async ({ state }) => {
+    refreshApplicationCounts: async({ state }) => {
       if (state.record) {
         await functions.httpsCallable('refreshApplicationCounts')({ exerciseId: state.record.id });
       }
     },
-    createTestApplications: async ({ state }, noOfTestApplications) => {
+    createTestApplications: async({ state }, noOfTestApplications) => {
       const exercise = state.record;
       await functions.httpsCallable('createTestApplications')({ exerciseId: exercise.id, noOfTestApplications });
     },
-    changeNoOfTestApplications ({ commit }, noOfTestApplications) {
+    changeNoOfTestApplications({ commit }, noOfTestApplications) {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
   },

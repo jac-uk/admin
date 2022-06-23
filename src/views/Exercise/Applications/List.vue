@@ -83,7 +83,7 @@ export default {
     },
   },
   computed: {
-    tableColumns () {
+    tableColumns() {
       const cols = [];
       cols.push({ title: 'Reference number' });
       if (this.status === 'draft') {
@@ -94,15 +94,15 @@ export default {
       cols.push({ title: 'Status' });
       return cols;
     },
-    exercise () {
+    exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applications () {
+    applications() {
       return this.$store.state.applications.records;
     },
   },
   methods: {
-    getTableData (params) {
+    getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
         {
@@ -112,7 +112,7 @@ export default {
         }
       );
     },
-    async gatherReportData () {
+    async gatherReportData() {
       const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
       const reportData = [];
       reportData.push(response.data.headers.map(header => header));
@@ -121,7 +121,7 @@ export default {
       });
       return reportData;
     },
-    async exportContacts () {
+    async exportContacts() {
       const title = 'Contacts';
       const xlsxData = await this.gatherReportData();
       downloadXLSX(
@@ -133,7 +133,7 @@ export default {
         }
       );
     },
-    async candidateSearch (searchTerm) {
+    async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
   },
