@@ -39,6 +39,13 @@
               >
                 Save Report
               </button>
+              <button
+                class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
+                :disabled="isLoading || !data"
+                @click="downloadReport"
+              >
+                Download Report
+              </button>
             </div>
           </div>
         </div>
@@ -203,12 +210,6 @@
             </tr>
           </tbody>
         </table>
-        <button
-          class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-          @click="downloadReport"
-        >
-          Download Report
-        </button>
       </div>
       <div
         v-if="data && type === 'count'"
