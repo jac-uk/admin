@@ -411,6 +411,7 @@
                 />
               </dd>
             </div>
+
             <div
               v-if="showMembershipOption('general-medical-council')"
               class="govuk-summary-list__row"
@@ -675,13 +676,16 @@
               </dd>
             </div>
 
+            {{  }}
+
             <div
-              v-for="(membership, key) in otherMemberships"
+              v-for="(membership, key) in exercise.otherMemberships"
               :key="key"
               class="govuk-summary-list__row"
             >
               <dt class="govuk-summary-list__key widerColumn">
                 {{ membership.label }}
+                <!-- {{ application.memberships[membership.label] }}  -->
               </dt>
               <dd class="govuk-summary-list__value">
                 <h5
@@ -691,7 +695,7 @@
                   Date
                 </h5>
                 <InformationReviewRenderer
-                  :data="membership.date"
+                  :data="application.memberships[membership.label].date || null"
                   :edit="editable"
                   :index="membership.label"
                   extension="date"
@@ -706,7 +710,7 @@
                   Number
                 </h5>
                 <InformationReviewRenderer
-                  :data="membership.number"
+                  :data="application.memberships[membership.label].number"
                   :edit="editable"
                   :index="membership.label"
                   extension="number"
@@ -721,7 +725,7 @@
                   Information
                 </h5>
                 <InformationReviewRenderer
-                  :data="membership.information"
+                  :data="application.memberships[membership.label].information"
                   :edit="editable"
                   :index="membership.label"
                   extension="information"
