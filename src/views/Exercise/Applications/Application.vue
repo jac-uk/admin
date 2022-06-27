@@ -200,7 +200,6 @@
           class="application-details"
         >
           <div v-if="application && exercise">
-            <!--
             <PersonalDetailsSummary
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
@@ -226,14 +225,12 @@
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
-            -->
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
               :editable="(editMode && authorisedToPerformAction)"
               @updateApplication="changeApplication"
             />
-            <!---
             <ExperienceSummary
               :application="application"
               :exercise="exercise"
@@ -256,7 +253,6 @@
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
-            --->
           </div>
         </div>
 
@@ -301,14 +297,14 @@ import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-// import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-// import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-// import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
-// import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
+import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
+import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
 import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
-// import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
-// import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
-// import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
+import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
+import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
+import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
@@ -333,14 +329,14 @@ export default {
     PageNotFound,
     InformationReviewRenderer,
     CharacterChecks,
-    // PersonalDetailsSummary,
-    // CharacterInformationSummary,
-    // EqualityAndDiversityInformationSummary,
-    // PreferencesSummary,
+    PersonalDetailsSummary,
+    CharacterInformationSummary,
+    EqualityAndDiversityInformationSummary,
+    PreferencesSummary,
     QualificationsAndMembershipsSummary,
-    // ExperienceSummary,
-    // AssessmentsSummary,
-    // AssessorsSummary,
+    ExperienceSummary,
+    AssessmentsSummary,
+    AssessorsSummary,
   },
   data() {
     return {
