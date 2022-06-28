@@ -490,6 +490,7 @@ export default {
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
         jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
         locationPreferences: { label: 'Location Preferences', type: String },
+        additionalWorkingPreferences: { label: 'Additional Working Preferences', type: String },
       },
     };
   },
@@ -519,6 +520,9 @@ export default {
     },
   },
   created() {
+    if (this.exercise.additionalWorkingPreferences) {
+      this.groups[1].keys.push('additionalWorkingPreferences');
+    }
     this.getReports();
   },
   methods: {

@@ -17,9 +17,9 @@ const config = {
 };
 const functions = firebase.initializeApp(config).functions('europe-west2');
 
-if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
+// if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
   functions.useEmulator('localhost', '5000');
-}
+// }
 
 // Initialise Firestore
 const firestore = firebase.firestore();
