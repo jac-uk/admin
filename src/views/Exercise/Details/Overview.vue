@@ -139,6 +139,7 @@
       </button>
       <button
         v-if="isReadyForApproval"
+        :disabled="!isReadyForApprovalFromAdvertType"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
@@ -186,6 +187,9 @@
           Create test applications
         </ActionButton>
       </div>
+      <p v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType">
+        You can only approve exercises with the advertType "{{ advertTypeFull | lookup }}" or "{{ advertTypeExternal | lookup }}".
+      </p>
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -265,9 +269,13 @@ export default {
     isReadyForApproval() {
       const returnReadyForApproval = this.exercise 
         && this.exercise.state 
-        && this.exercise.state === 'ready'
-        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
+        && this.exercise.state === 'ready';
       return returnReadyForApproval;
+    },
+    isReadyForApprovalFromAdvertType() {
+      const returnReady = this.exercise 
+        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
+      return returnReady;
     },
     isApproved() {
       return isApproved(this.exercise);
@@ -353,6 +361,12 @@ export default {
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
     },
+    advertTypeFull() {
+      return ADVERT_TYPES.FULL;
+    },
+    advertTypeExternal() {
+      return ADVERT_TYPES.EXTERNAL;
+    }
   },
   methods: {
     submitForApproval() {

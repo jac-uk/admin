@@ -57,8 +57,8 @@
           Advert type
         </dt>
         <dd class="govuk-summary-list__value editable-field">
-          <span class="capitalize">
-            {{ advertType }}
+          <span>
+            {{ advertType | lookup }}
           </span>
           <span>
             <a
