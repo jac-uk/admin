@@ -29,7 +29,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
-    "@jac-uk/jac-kit": "0.0.49",
+    "@jac-uk/jac-kit": "0.1.1",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/browser": "^6.4.1",
     "@sentry/integrations": "^6.4.1",
