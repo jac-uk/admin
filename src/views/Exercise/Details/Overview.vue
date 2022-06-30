@@ -187,9 +187,10 @@
           Create test applications
         </ActionButton>
       </div>
-      <p v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType">
-        You can only approve exercises with the advertType "{{ advertTypeFull | lookup }}" or "{{ advertTypeExternal | lookup }}".
-      </p>
+      <Banner
+        v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType"
+        :message="approveErrorMessage"
+      />
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -215,6 +216,8 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
@@ -228,6 +231,7 @@ export default {
     Timeline,
     ActionButton,
     Modal,
+    Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
   },
@@ -296,7 +300,6 @@ export default {
       return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
-
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
@@ -361,12 +364,10 @@ export default {
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
     },
-    advertTypeFull() {
-      return ADVERT_TYPES.FULL;
+    approveErrorMessage() {
+      const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
+      return msg; 
     },
-    advertTypeExternal() {
-      return ADVERT_TYPES.EXTERNAL;
-    }
   },
   methods: {
     submitForApproval() {
