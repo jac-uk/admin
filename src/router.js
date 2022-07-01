@@ -105,6 +105,7 @@ import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
 import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
 import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
 import QTPlatformFinalised from '@/views/Exercise/Tasks/QTPlatform/Finalised';
+import QTPlatformCompleted from '@/views/Exercise/Tasks/QTPlatform/Completed';
 
 // TODO remove these once we no longer need to support old code panels
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
@@ -1000,6 +1001,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Finalised | Qualifying test',
+                  },
+                },
+                {
+                  path: 'completed',
+                  component: QTPlatformCompleted,
+                  name: 'qt-platform-completed',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Completed | Qualifying test',
                   },
                 },
               ],

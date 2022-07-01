@@ -41,6 +41,12 @@ const lookup = (value) => {
     shortlisted: 'Shortlisted',
     selected: 'Selected',
     recommended: 'Recommended',
+    passedCA: 'Passed CA',
+    failedCA: 'Failed CA',
+    passedSJ: 'Passed SJ',
+    failedSJ: 'Failed SJ',
+    passedScenario: 'Passed Scenario Test',
+    failedScenario: 'Failed Scenario Test',
 
     // Editable Application helpers
     date: 'Date',
