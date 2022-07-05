@@ -676,7 +676,7 @@
               </dd>
             </div>
 
-            {{  }}
+            {{ }}
 
             <div
               v-for="(membership, key) in exercise.otherMemberships"
