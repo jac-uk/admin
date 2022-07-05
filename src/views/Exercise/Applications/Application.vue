@@ -297,8 +297,8 @@ import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
 import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
 import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
@@ -410,9 +410,6 @@ export default {
     applicationId() {
       return this.$route.params.applicationId;
     },
-    exerciseId() {
-      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
-    },
     applicationReferenceNumber() {
       return this.$store.state.application.record ? this.$store.state.application.record.referenceNumber : null;
     },
@@ -421,20 +418,6 @@ export default {
     },
     generateFilename() {
       return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
-    },
-    ethnicGroupDetails() {
-      switch (this.application.equalityAndDiversitySurvey.ethnicGroup) {
-      case 'other-asian':
-        return this.application.equalityAndDiversitySurvey.otherEthnicGroupAsianDetails;
-      case 'other-white':
-        return this.application.equalityAndDiversitySurvey.otherEthnicGroupWhiteDetails;
-      case 'other-black':
-        return this.application.equalityAndDiversitySurvey.otherEthnicGroupBlackDetails;
-      case 'other-mixed':
-        return this.application.equalityAndDiversitySurvey.otherEthnicGroupMixedDetails;
-      default:
-        return this.application.equalityAndDiversitySurvey.otherEthnicGroupDetails;
-      }
     },
     isApplied() {
       if (this.application) {
@@ -446,24 +429,6 @@ export default {
         }
       }
       return false;
-    },
-    otherMemberships() {
-      // @NOTE this is a bit ugly as we can't just lookup label
-      const selected = {};
-
-      if (this.application.professionalMemberships) {
-        this.application.professionalMemberships.forEach(membership => {
-          if (this.application.memberships[membership]) {
-            const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
-            selected[membership] = {
-              ...this.application.memberships[membership],
-              label: otherMembership.label,
-            };
-          }
-        });
-      }
-
-      return selected;
     },
     title() {
       let title = this.application.personalDetails.title;
@@ -602,22 +567,6 @@ export default {
     submitApplication() {
       this.$store.dispatch('application/submit');
     },
-    showMembershipOption(ref) {
-      if (this.application && this.application.professionalMemberships) {
-        return this.application.professionalMemberships.indexOf(ref) >= 0;
-      }
-      return false;
-    },
-    preferNotToSay(field) {
-      const val = 'prefer-not-to-say';
-      if (field === val) {
-        return true;
-      }
-      if (Array.isArray(field) && field.includes(val)) {
-        return true;
-      }
-      return false;
-    },
     makeFullName(objChanged) {
       if (objChanged.firstName && this.application.personalDetails.lastName) {
         objChanged.fullName = `${objChanged.firstName} ${this.application.personalDetails.lastName}`;
@@ -642,56 +591,11 @@ export default {
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    doFileUpload(val, field) {
-      if (val) {
-        this.$store.dispatch('application/update', { data: { [field]: val }, id: this.applicationId });
-
-        logEvent('info', 'Application updated (document uploaded)', {
-          applicationId: this.applicationId,
-          candidateName: this.application.personalDetails.fullName,
-          exerciseRef: this.exercise.referenceNumber,
-        });
-      }
-    },
-    editAssessor(AssessorNr) {
-      // this.assessorDetails = {};
-      if (AssessorNr === 1) {
-        this.assessorDetails = {
-          AssessorNr: AssessorNr,
-          applicationId: this.applicationId,
-          email: this.application.firstAssessorEmail,
-          fullName: this.application.firstAssessorFullName,
-          phone: this.application.firstAssessorPhone,
-          title: this.application.firstAssessorTitle,
-        };
-      }
-      if (AssessorNr === 2) {
-        this.assessorDetails = {
-          AssessorNr: AssessorNr,
-          applicationId: this.applicationId,
-          email: this.application.secondAssessorEmail,
-          fullName: this.application.secondAssessorFullName,
-          phone: this.application.secondAssessorPhone,
-          title: this.application.secondAssessorTitle,
-        };
-      }
-      this.openModal('assessorModal');
-    },
-    editLeadershipJudgeDetails() {
-      this.openModal('modalLeadershipJudgeDetails');
-    },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
-    },
-    savedModal(modalRef) {
-      logEvent('info',  `Application updated (${modalRef})`, {
-        applicationId: this.applicationId,
-        candidateName: this.application.personalDetails.fullName,
-        exerciseRef: this.exercise.referenceNumber,
-      });
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
