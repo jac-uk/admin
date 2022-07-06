@@ -379,12 +379,11 @@
           />
         </RadioGroup>
 
-        <TextareaInput
+        <RichTextInput
           id="role-summary"
           v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
-          rows="2"
           required
         />
 
