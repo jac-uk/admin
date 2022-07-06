@@ -471,7 +471,6 @@ export default {
         '_processing.stage': { label: 'Stage', type: String },
         'personalDetails.phone': { label: 'Phone', type: String },
         'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String },
-        'personalDetails.firstName': { label: 'first name', type: String },
         'personalDetails.reasonableAdjustmentsDetails': { label: 'reasonable adjustments details', type: String },
         'personalDetails.email': { label: 'Email', type: String },
         'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
@@ -479,7 +478,8 @@ export default {
         'personalDetails.title': { label: 'Title', type: String },
         'personalDetails.citizenship': { label: 'Citizenship', type: String },
         'personalDetails.lastName': { label: 'Last Name', type: String },
-        'personalDetails.fullName': { label: 'Full name', type: String },
+        'personalDetails.firstName': { label: 'First Name', type: String },
+        'personalDetails.fullName': { label: 'Full Name', type: String },
         qualifications: { label: 'Qualifications', type: 'Array of objects' },
         skillsAquisitionDetails: { label: 'Skills aquisition details', type: String },
         feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
@@ -490,7 +490,6 @@ export default {
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
         jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
         locationPreferences: { label: 'Location Preferences', type: String },
-        additionalWorkingPreferences: { label: 'Additional Working Preferences', type: String },
       },
     };
   },
@@ -521,7 +520,10 @@ export default {
   },
   created() {
     if (this.exercise.additionalWorkingPreferences) {
-      this.groups[1].keys.push('additionalWorkingPreferences');
+      this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+        this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
+        this.keys[`additionalWorkingPreferences ${i}`] = { label: `additionalWorkingPreferences ${i + 1}`, type: String };
+      });
     }
     this.getReports();
   },
