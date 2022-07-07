@@ -20,6 +20,7 @@ import invitations from '@/store/invitations';
 import events from '@/store/events';
 import clipboard from '@/store/clipboard';
 
+import applicationRecords from '@/store/applicationRecords';
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
@@ -62,6 +63,7 @@ const store = new Vuex.Store({
     clipboard,
     notifications,
     invitations,
+    applicationRecords,
     stageReview,
     stageSelected,
     stageHandover,

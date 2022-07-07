@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
+import { EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
@@ -73,7 +73,7 @@ export default {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
-        .where('stage', '==', EXERCISE_STAGE.REVIEW)
+        .where('stage', '==', EXERCISE_STAGE.APPLIED)
         .where('active', '==', true);
       if (params.status) {
         firestoreRef = firestoreRef.where('status', '==', params.status);

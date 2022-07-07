@@ -6,7 +6,7 @@
     <RadioGroup
       id="selected-status"
       v-model="newSelectedStatus"
-      label="Update status (TBC)"
+      label="Update status"
       hint=""
       required
     >
@@ -38,12 +38,8 @@
           }"
         >
           <RadioItem
-            value="gender"
-            label="Yes - EMP has been Applied on basis of gender"
-          />
-          <RadioItem
-            value="ethnicity"
-            label="Yes - EMP has been Applied on basis of ethnicity"
+            :value="true"
+            label="Yes - EMP has been Applied"
           />
           <RadioItem
             :value="false"
@@ -52,7 +48,6 @@
         </RadioGroup>
       </CheckboxItem>
     </CheckboxGroup>
-
     <button class="govuk-button">
       Save and continue
     </button>
@@ -64,9 +59,9 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import { availableStatuses, getNextStage } from '../../../helpers/exerciseHelper';
 
 export default {
   components: {
@@ -80,33 +75,45 @@ export default {
   data() {
     return {
       newSelectedStatus: null,
-      empApplied: null,
       editEmpApplied: null,
+      empApplied: null,
     };
   },
   computed: {
-    applicationId() {
-      return this.$route.params.applicationId;
+    stage() {
+      return this.$route.params.stage;
+    },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
     },
     availableStatuses() {
-      return this.$store.getters['stageShortlisted/availableStatuses'];
+      const statuses = availableStatuses(this.exercise, this.stage);
+      return statuses;
     },
+    itemsToChange() {
+      const selectedItems = this.$store.state.applicationRecords.selectedItems;
+      return selectedItems;
+    },
+  },
+  created() {
+    // on refresh if there's no IDs to change => redirect to the list
+    if (this.itemsToChange.length === 0) {
+      this.$router.push({ name: 'exercise-stages-list' });
+    }
   },
   methods: {
     async save() {
-      let stageValue = EXERCISE_STAGE.SHORTLISTED;
-      if (this.newSelectedStatus === APPLICATION_STATUS.INVITED_TO_SELECTION_DAY) {
-        stageValue = EXERCISE_STAGE.SELECTED;
+      const nextStage = getNextStage(this.exercise, this.stage, this.newSelectedStatus);
+      const data = {};
+      data.status = this.newSelectedStatus;
+      if (nextStage !== this.stage) {
+        data.stage = nextStage;
       }
-      const data = {
-        status: this.newSelectedStatus,
-        nextStage: stageValue,
-      };
       if (this.editEmpApplied[0]) {
-        data.empApplied = this.empApplied;
+        data['flags.empApplied'] = this.empApplied;
       }
-      await this.$store.dispatch('stageShortlisted/updateStatus', data );
-      this.$router.push({ name: 'exercise-stages-shortlisted-list' });
+      await this.$store.dispatch('applicationRecords/updateStatus', data);
+      this.$router.push({ name: 'exercise-stages-list', params: { stage: this.stage } });
     },
   },
 };

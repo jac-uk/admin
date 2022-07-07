@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -103,6 +103,32 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.BASIC] = 'Basic';
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
+
+  lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
+  lookup[EXERCISE_STAGE.SHORTLISTED] = 'Shortlisted';
+  lookup[EXERCISE_STAGE.SELECTABLE] = 'Selectable';
+  lookup[EXERCISE_STAGE.RECOMMENDED] = 'Recommended';
+  lookup[EXERCISE_STAGE.HANDOVER] = 'Handover';
+
+  lookup[APPLICATION_STATUS.PASSED_NOT_RECOMMENDED] = 'Passed but not recommended to SCC';
+  lookup[APPLICATION_STATUS.PASSED_RECOMMENDED] = 'Passed and recommended to SCC';
+  lookup[APPLICATION_STATUS.QUALIFYING_TEST_FAILED] = 'Failed qualifying test';
+  lookup[APPLICATION_STATUS.QUALIFYING_TEST_PASSED] = 'Passed qualifying test';
+  lookup[APPLICATION_STATUS.RECOMMENDED_FUTURE] = 'Recommended for future appointment';
+  lookup[APPLICATION_STATUS.RECOMMENDED_IMMEDIATE] = 'Recommended for immediate appointment';
+  lookup[APPLICATION_STATUS.RECONSIDER] = 'SCC to reconsider';
+  lookup[APPLICATION_STATUS.REJECTED_CHARACTER] = 'Rejected on character';
+  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL] = 'Rejected as ineligible (ASC)';
+  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Rejected as ineligible (statutory requirements)';
+  lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
+  lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
+  lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP second stage assessment';
+  lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection';
+  lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection';
+  lookup[APPLICATION_STATUS.SELECTION_PASSED] = 'Passed selection';
+  lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
+  lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
+  lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
 
   returnValue = lookup[value];
 

@@ -123,19 +123,9 @@ import ExerciseTasksPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
-import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
-import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit';
-import ExerciseStagesSelectedList from '@/views/Exercise/Stages/SelectedList';
-import ExerciseStagesSelectedEdit from '@/views/Exercise/Stages/SelectedEdit';
-import ExerciseStagesSelectedBack from '@/views/Exercise/Stages/SelectedBack';
-import ExerciseStagesRecommendedList from '@/views/Exercise/Stages/RecommendedList';
-import ExerciseStagesRecommendedEdit from '@/views/Exercise/Stages/RecommendedEdit';
-import ExerciseStagesRecommendedBack from '@/views/Exercise/Stages/RecommendedBack';
-import ExerciseStagesHandoverList from '@/views/Exercise/Stages/HandoverList';
-import ExerciseStagesHandoverBack from '@/views/Exercise/Stages/HandoverBack';
-import ExerciseStagesShortlistedList from '@/views/Exercise/Stages/ShortlistedList';
-import ExerciseStagesShortlistedEdit from '@/views/Exercise/Stages/ShortlistedEdit';
-import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBack';
+import ExerciseStagesList from '@/views/Exercise/Stages/List';
+import ExerciseStagesEdit from '@/views/Exercise/Stages/Edit';
+import ExerciseStagesBack from '@/views/Exercise/Stages/Back';
 
 // Candidates
 import Candidates from '@/views/Candidates/Candidates';
@@ -1157,123 +1147,33 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'review',
+              redirect: 'applied',
             },
             {
-              path: 'review',
-              component: ExerciseStagesReviewList,
-              name: 'exercise-stages-review-list',
+              path: ':stage',
+              component: ExerciseStagesList,
+              name: 'exercise-stages-list',
               meta: {
                 requiresAuth: true,
-                title: 'Review | Exercise Stages',
+                title: 'List | Exercise Stage',
               },
             },
             {
-              path: 'review/edit',
-              component: ExerciseStagesReviewEdit,
-              name: 'exercise-stages-review-edit',
+              path: ':stage/edit',
+              component: ExerciseStagesEdit,
+              name: 'exercise-stages-edit',
               meta: {
                 requiresAuth: true,
-                title: 'Edit Review | Exercise Stages',
+                title: 'Edit | Exercise Stage',
               },
             },
             {
-              path: 'selected',
-              component: ExerciseStagesSelectedList,
-              name: 'exercise-stages-selected-list',
+              path: ':stage/back',
+              component: ExerciseStagesBack,
+              name: 'exercise-stages-back',
               meta: {
                 requiresAuth: true,
-                title: 'Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'selected/edit',
-              component: ExerciseStagesSelectedEdit,
-              name: 'exercise-stages-selected-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'selected/back',
-              component: ExerciseStagesSelectedBack,
-              name: 'exercise-stages-selected-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended',
-              component: ExerciseStagesRecommendedList,
-              name: 'exercise-stages-recommended-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended/edit',
-              component: ExerciseStagesRecommendedEdit,
-              name: 'exercise-stages-recommended-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended/back',
-              component: ExerciseStagesRecommendedBack,
-              name: 'exercise-stages-recommended-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'handover',
-              component: ExerciseStagesHandoverList,
-              name: 'exercise-stages-handover-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Handover | Exercise Stages',
-              },
-            },
-            {
-              path: 'handover/back',
-              component: ExerciseStagesHandoverBack,
-              name: 'exercise-stages-handover-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Handover | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted',
-              component: ExerciseStagesShortlistedList,
-              name: 'exercise-stages-shortlisted-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Shortlisted | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted/edit',
-              component: ExerciseStagesShortlistedEdit,
-              name: 'exercise-stages-shortlisted-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Shortlisted | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted/back',
-              component: ExerciseStagesShortlistedBack,
-              name: 'exercise-stages-shortlisted-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Shortlisted | Exercise Stages',
+                title: 'Move Back | Exercise Stages',
               },
             },
           ],

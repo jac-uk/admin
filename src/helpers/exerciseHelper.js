@@ -1,7 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES } from '@/helpers/constants';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -20,7 +19,7 @@ hasSelfAssessment,
 exerciseApplicationParts,
 configuredApplicationParts,
 applicationContentList,
-unselectedApplicationParts,
+unselectedApplicationParts
 */
 
 export {
@@ -67,7 +66,11 @@ export {
   isApplicationComplete,
   hasApplicationProcess,
   applicationCounts,
-  applicationRecordCounts
+  applicationRecordCounts,
+  availableStages,
+  availableStatuses,
+  getPreviousStage,
+  getNextStage
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -587,4 +590,142 @@ function hasApplicationProcess(exercise) {
   if (!exercise) { return false; }
   const applicationSteps = configuredApplicationContentSteps(exercise);
   return applicationSteps.length >= 1;
+}
+
+function availableStages(exercise) {
+  const stages = [];
+  if (!exercise) return stages;
+  stages.push(EXERCISE_STAGE.APPLIED);
+  stages.push(EXERCISE_STAGE.SHORTLISTED);
+  stages.push(EXERCISE_STAGE.SELECTABLE);
+  stages.push(EXERCISE_STAGE.RECOMMENDED);
+  stages.push(EXERCISE_STAGE.HANDOVER);
+  return stages;
+}
+
+function getPreviousStage(exercise, currentStage) {
+  switch (currentStage) {
+  case EXERCISE_STAGE.APPLIED:
+    return '';
+  case EXERCISE_STAGE.SHORTLISTED:
+    return EXERCISE_STAGE.APPLIED;
+  case EXERCISE_STAGE.SELECTABLE:
+    return EXERCISE_STAGE.SHORTLISTED;
+  case EXERCISE_STAGE.RECOMMENDED:
+    return EXERCISE_STAGE.SELECTABLE;
+  case EXERCISE_STAGE.HANDOVER:
+    return EXERCISE_STAGE.RECOMMENDED;
+  }
+}
+
+function getNextStage(exercise, currentStage, newStatus) {
+  switch (currentStage) {
+  case EXERCISE_STAGE.APPLIED:  // TODO make this specific to exercise
+    if (newStatus === APPLICATION_STATUS.SIFT_PASSED) return EXERCISE_STAGE.SHORTLISTED;
+    break;
+  case EXERCISE_STAGE.SHORTLISTED:
+    if (newStatus === APPLICATION_STATUS.SELECTION_PASSED) return EXERCISE_STAGE.SELECTABLE;
+    break;
+  case EXERCISE_STAGE.SELECTABLE:
+    if (newStatus === APPLICATION_STATUS.PASSED_RECOMMENDED) return EXERCISE_STAGE.RECOMMENDED;
+    break;
+  case EXERCISE_STAGE.RECOMMENDED:
+    if (newStatus === APPLICATION_STATUS.RECOMMENDED_IMMEDIATE) return EXERCISE_STAGE.HANDOVER;
+    if (newStatus === APPLICATION_STATUS.RECOMMENDED_FUTURE) return EXERCISE_STAGE.HANDOVER;
+    break;
+  }
+  return currentStage;
+}
+
+function availableStatuses(exercise, stage) {
+  let statuses = [];
+  switch (stage) {
+  case EXERCISE_STAGE.APPLIED:
+    statuses = [  // TODO make this specific to exercise
+      ...shortlistingStatuses(exercise),
+      APPLICATION_STATUS.SELECTION_INVITED,
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+      APPLICATION_STATUS.REJECTED_CHARACTER,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  case EXERCISE_STAGE.SHORTLISTED:
+    statuses = [
+      APPLICATION_STATUS.SELECTION_PASSED,
+      APPLICATION_STATUS.SELECTION_FAILED,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  case EXERCISE_STAGE.SELECTABLE:
+    statuses = [
+      APPLICATION_STATUS.PASSED_RECOMMENDED,
+      APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  case EXERCISE_STAGE.RECOMMENDED:
+    statuses = [
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+      APPLICATION_STATUS.REJECTED_CHARACTER,
+      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+      APPLICATION_STATUS.RECOMMENDED_FUTURE,
+      APPLICATION_STATUS.RECONSIDER,
+      APPLICATION_STATUS.SECOND_STAGE_INVITED,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  case EXERCISE_STAGE.HANDOVER:
+    statuses = [
+      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+      APPLICATION_STATUS.RECOMMENDED_FUTURE,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  default:
+    statuses = [  // TODO make this specific to exercise
+      ...shortlistingStatuses(exercise),
+      APPLICATION_STATUS.SELECTION_INVITED,
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+      APPLICATION_STATUS.REJECTED_CHARACTER,
+      APPLICATION_STATUS.SELECTION_PASSED,
+      APPLICATION_STATUS.SELECTION_FAILED,
+      APPLICATION_STATUS.PASSED_RECOMMENDED,
+      APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
+      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+      APPLICATION_STATUS.RECOMMENDED_FUTURE,
+      APPLICATION_STATUS.RECONSIDER,
+      APPLICATION_STATUS.SECOND_STAGE_INVITED,
+      APPLICATION_STATUS.WITHDRAWN,
+    ];
+    return statuses;
+  }
+}
+
+function shortlistingStatuses(exercise) {
+  const statuses = [];
+  if (exercise && exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+    if (
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 ||
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
+    ) {
+      statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
+      statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
+    }
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST) >= 0) {
+      statuses.push(APPLICATION_STATUS.SCENARIO_TEST_PASSED);
+      statuses.push(APPLICATION_STATUS.SCENARIO_TEST_FAILED);
+    }
+    if (
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.NAME_BLIND_PAPER_SIFT) >= 0 ||
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0
+    ) {
+      statuses.push(APPLICATION_STATUS.SIFT_PASSED);
+      statuses.push(APPLICATION_STATUS.SIFT_FAILED);
+    }
+    // TODO support telephone assessment & other (if still needed)
+  }
+  return statuses;
 }
