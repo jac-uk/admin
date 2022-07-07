@@ -4,10 +4,20 @@
       {{ type | lookup }} test
     </h1>
 
-    <p v-if="hasApplicationsWithoutStatus" class="govuk-body-l">Please choose a status for each application.</p>
-    <p v-else class="govuk-body-l">{{ type | lookup }} test can now be completed. All applications will be updated with
+    <p
+      v-if="hasApplicationsWithoutStatus"
+      class="govuk-body-l"
+    >
+      Please choose a status for each application.
+    </p>
+    <p
+      v-else
+      class="govuk-body-l"
+    >
+      {{ type | lookup }} test can now be completed. All applications will be updated with
       their new
-      status.</p>
+      status.
+    </p>
 
     <!-- STATS -->
     <div class="govuk-grid-row">
@@ -21,7 +31,10 @@
           </h2>
         </div>
       </div>
-      <div v-if="hasApplicationsWithoutStatus" class="govuk-grid-column-one-half">
+      <div
+        v-if="hasApplicationsWithoutStatus"
+        class="govuk-grid-column-one-half"
+      >
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <p class="govuk-body govuk-!-margin-bottom-0">
             Status not yet assigned
@@ -31,12 +44,19 @@
           </h2>
         </div>
       </div>
-      <div v-else class="govuk-grid-column-one-half">
+      <div
+        v-else
+        class="govuk-grid-column-one-half"
+      >
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <p class="govuk-body govuk-!-margin-bottom-4">
             Next step
           </p>
-          <ActionButton class="govuk-!-margin-bottom-1" type="primary" @click="btnComplete">
+          <ActionButton
+            class="govuk-!-margin-bottom-1"
+            type="primary"
+            @click="btnComplete"
+          >
             Complete {{ type | lookup }} test
           </ActionButton>
         </div>
@@ -45,8 +65,15 @@
     <!-- END STATS -->
 
     <!-- START: SCORE SHEET -->
-    <Table ref="scoreSheet" data-key="id" :data="scoreSheetRows" :columns="scoreSheetColumns" :page-size="500"
-      local-data class="merit-list">
+    <Table
+      ref="scoreSheet"
+      data-key="id"
+      :data="scoreSheetRows"
+      :columns="scoreSheetColumns"
+      :page-size="500"
+      local-data
+      class="merit-list"
+    >
       <template #row="{row}">
         <TableCell class="table-cell-application">
           {{ row.referenceNumber }}
@@ -55,9 +82,17 @@
           {{ row.score }}
         </TableCell>
         <TableCell class="govuk-!-padding-0 v-top">
-          <Select :id="`status-${row.id}`" class="govuk-!-margin-bottom-0"
-            :value="(task.outcome && task.outcome[row.id]) || ''" @input="updateStatus(row.id, $event)">
-            <option v-for="status in statuses" :key="status" :value="status">
+          <Select
+            :id="`status-${row.id}`"
+            class="govuk-!-margin-bottom-0"
+            :value="(task.outcome && task.outcome[row.id]) || ''"
+            @input="updateStatus(row.id, $event)"
+          >
+            <option
+              v-for="status in statuses"
+              :key="status"
+              :value="status"
+            >
               {{ status | lookup }}
             </option>
           </Select>
@@ -78,13 +113,13 @@ import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { functions } from '@/firebase';
 
 export default {
-  beforeRouteEnter: beforeRouteEnter,
   components: {
     Table,
     TableCell,
     Select,
     ActionButton,
   },
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,

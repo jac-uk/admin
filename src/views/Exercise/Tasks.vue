@@ -60,7 +60,7 @@ export default {
               class: 'govuk-tag--blue',
             },
             path: `${path}/qt/critical-analysis`,
-          },
+          }
         );
       }
       if (exercise.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
@@ -72,7 +72,7 @@ export default {
               class: 'govuk-tag--blue',
             },
             path: `${path}/qt/situational-judgement`,
-          },
+          }
         );
       }
       if (exercise.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
@@ -84,7 +84,7 @@ export default {
               class: 'govuk-tag--blue',
             },
             path: `${path}/qt/scenario`,
-          },
+          }
         );
       }
       if (

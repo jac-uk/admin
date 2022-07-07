@@ -2,7 +2,9 @@
   <div>
     <h1>Moderation Activated</h1>
     [ view and agree final scores ]
-    <button @click="btnNext">Next</button>
+    <button @click="btnNext">
+      Next
+    </button>
   </div>
 </template>
 

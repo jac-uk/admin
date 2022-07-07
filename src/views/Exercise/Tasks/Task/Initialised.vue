@@ -3,9 +3,24 @@
     <h1 class="govuk-heading-l">
       {{ type | lookup }}
     </h1>
-    <p v-if="hasApplicationsWithoutPanels" class="govuk-body-l">Please create panels and allocate applications to those panels.</p>
-    <p v-else-if="hasPanelsWithoutPanellists" class="govuk-body-l">Please ensure all panels have panellists.</p>
-    <p v-else class="govuk-body-l">All applications have been assigned to panels. You may now activate this {{ type | lookup }}.</p>
+    <p
+      v-if="hasApplicationsWithoutPanels"
+      class="govuk-body-l"
+    >
+      Please create panels and allocate applications to those panels.
+    </p>
+    <p
+      v-else-if="hasPanelsWithoutPanellists"
+      class="govuk-body-l"
+    >
+      Please ensure all panels have panellists.
+    </p>
+    <p
+      v-else
+      class="govuk-body-l"
+    >
+      All applications have been assigned to panels. You may now activate this {{ type | lookup }}.
+    </p>
 
     <!-- STATS -->
     <div class="govuk-grid-row">
@@ -191,7 +206,6 @@ import { taskApplicationsStageAndStatus } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';
 
 export default {
-  beforeRouteEnter: beforeRouteEnter,
   components: {
     Table,
     TableCell,
@@ -201,6 +215,7 @@ export default {
     SelectPanel,
     ActionButton,
   },
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,

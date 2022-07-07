@@ -4,8 +4,18 @@
       {{ type | lookup }}
     </h1>
 
-    <p v-if="hasApplicationsWithoutStatus" class="govuk-body-l">Please choose a status for each application.</p>
-    <p v-else class="govuk-body-l">{{ type | lookup }} can now be completed. All applications will be assigned their new status.</p>
+    <p
+      v-if="hasApplicationsWithoutStatus"
+      class="govuk-body-l"
+    >
+      Please choose a status for each application.
+    </p>
+    <p
+      v-else
+      class="govuk-body-l"
+    >
+      {{ type | lookup }} can now be completed. All applications will be assigned their new status.
+    </p>
 
     <!-- STATS -->
     <div class="govuk-grid-row">
@@ -61,7 +71,6 @@
 
     <!-- START: OVERVIEW -->
     <div v-show="activeTab == 'overview'">
-
       <!-- START: STATUS -->
       <div
         class="govuk-grid-row"
@@ -93,7 +102,6 @@
         </div>
       </div>
       <!-- END: STATUS -->
-
     </div>
     <!-- END: OVERVIEW -->
 
@@ -108,9 +116,15 @@
         local-data
         class="merit-list"
       >
-        <template #header v-if="isSelection">
+        <template
+          v-if="isSelection"
+          #header
+        >
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header table-cell-application"></th>
+            <th
+              scope="col"
+              class="govuk-table__header table-cell-application"
+            />
             <th
               v-for="category in selectionCategories"
               :key="category"
@@ -120,8 +134,14 @@
             >
               {{ category | lookup }}
             </th>
-            <th scope="col" class="govuk-table__header text-center"></th>
-            <th scope="col" class="govuk-table__header text-center"></th>
+            <th
+              scope="col"
+              class="govuk-table__header text-center"
+            />
+            <th
+              scope="col"
+              class="govuk-table__header text-center"
+            />
           </tr>
         </template>
         <template #row="{row}">
@@ -174,12 +194,10 @@
               </option>
             </Select>
           </TableCell>
-
         </template>
       </Table>
     </div>
     <!-- END: SCORE SHEET -->
-
   </div>
 </template>
 

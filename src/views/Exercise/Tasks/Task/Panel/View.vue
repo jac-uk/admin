@@ -78,12 +78,18 @@
         :data="scoreSheetRows"
         :columns="scoreSheetColumns"
         :page-size="500"
-        @change="onChangeScoreSheet"
         class="merit-list"
+        @change="onChangeScoreSheet"
       >
-        <template #header v-if="panel.type == 'selection'">
+        <template
+          v-if="panel.type == 'selection'"
+          #header
+        >
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header table-cell-application"></th>
+            <th
+              scope="col"
+              class="govuk-table__header table-cell-application"
+            />
             <th
               v-for="category in selectionCategories"
               :key="category"
@@ -125,7 +131,6 @@
           </template>
         </template>
       </Table>
-
     </div>
 
     <!-- APPLICATIONS LIST -->

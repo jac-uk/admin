@@ -4,10 +4,11 @@
       {{ type | lookup }}
     </h1>
 
-    <p class="govuk-body-l">Please check the following details before continuing</p>
+    <p class="govuk-body-l">
+      Please check the following details before continuing
+    </p>
 
     <div class="govuk-grid-row">
-
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
           <div class="govuk-caption-m">
@@ -53,7 +54,6 @@
           </div>
         </div>
       </template>
-
     </div>
 
     <ActionButton
@@ -64,7 +64,6 @@
     >
       Continue
     </ActionButton>
-
   </div>
 </template>
 
@@ -74,10 +73,10 @@ import { taskApplicationsStageAndStatus, TASK_TYPE } from '@/helpers/exerciseHel
 import { functions } from '@/firebase';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 export default {
-  beforeRouteEnter: beforeRouteEnter,
   components: {
     ActionButton,
   },
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,
