@@ -5,13 +5,13 @@
     />
     <RadioGroup
       id="selected-status"
-      v-model="newSelectedStatus"
-      label="Move back to the 'selected' stage?"
+      v-model="moveBack"
+      :label="`Move back to the '${lookup(previousStage)}' stage?`"
       hint=""
       required
     >
       <RadioItem
-        v-for="item in availableStatuses"
+        v-for="item in choices"
         :key="item"
         :value="item"
         :label="item | lookup"
@@ -28,7 +28,9 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import { DEFAULT, EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
+import { DEFAULT } from '@jac-uk/jac-kit/helpers/constants';
+import { getPreviousStage } from '../../../helpers/exerciseHelper';
+import { lookup } from '../../../filters';
 
 export default {
   components: {
@@ -39,32 +41,33 @@ export default {
   extends: Form,
   data() {
     return {
-      newSelectedStatus: null,
+      moveBack: null,
+      choices: [
+        DEFAULT.YES,
+        DEFAULT.NO,
+      ],
     };
   },
   computed: {
-    applicationId() {
-      return this.$route.params.applicationId;
+    stage() {
+      return this.$route.params.stage;
     },
-    availableStatuses() {
-      const myStatus = [
-        DEFAULT.YES,
-        DEFAULT.NO,
-      ];
-      return myStatus;
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    previousStage() {
+      return getPreviousStage(this.exercise, this.stage);
     },
   },
   methods: {
+    lookup,
     async save() {
-      let stageValue = EXERCISE_STAGE.RECOMMENDED;
-      if (this.newSelectedStatus === DEFAULT.YES) {
-        stageValue = EXERCISE_STAGE.SELECTED;
-        await this.$store.dispatch('stageRecommended/updateStatus', {
-          applicationId: this.applicationId,
-          nextStage: stageValue,
+      if (this.moveBack === DEFAULT.YES) {
+        await this.$store.dispatch('applicationRecords/updateStatus', {
+          stage: this.previousStage,
         });
       }
-      this.$router.push({ name: 'exercise-stages-recommended-list' });
+      this.$router.push({ name: 'exercise-stages-list' });
     },
   },
 };

@@ -8,35 +8,54 @@
       <div class="moj-page-header-actions govuk-!-margin-bottom-2">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
-            Review ({{ totalApplicationRecords }})
+            {{ stage | lookup }} ({{ totalApplicationRecords }})
           </h1>
         </div>
         <div class="moj-page-header-actions__actions float-right">
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
+                v-if="canGoBack"
+                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+                :disabled="!hasItems"
+                @click.prevent="moveBack()"
+              >
+                Move back to ...
+              </button>
+              <button
+                v-if="canSetStatus"
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                :disabled="isButtonDisabled"
+                :disabled="!hasItems"
               >
                 Set status
               </button>
+              <Select
+                id="page-size"
+                v-model="pageSize"
+                required
+                class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-0"
+              >
+                <option
+                  v-for="size in pageSizes"
+                  :key="size"
+                  :value="size"
+                >
+                  {{ size }}
+                </option>
+              </Select>
             </div>
           </div>
         </div>
       </div>
-      <p
-        v-if="!applicationRecords.length"
-        class="govuk-body"
-      >
-        No Applications
-      </p>
       <Table
+        ref="tableRef"
+        :key="stage"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
         multi-select
         :selection.sync="selectedItems"
-        :page-size="50"
+        :page-size="pageSize"
         :custom-search="{
           placeholder: 'Search candidate names',
           handler: candidateSearch,
@@ -78,6 +97,12 @@
           </TableCell>
         </template>
       </Table>
+      <p
+        v-if="!applicationRecords.length"
+        class="govuk-body govuk-!-margin-top-4"
+      >
+        No Applications
+      </p>
     </form>
   </div>
 </template>
@@ -86,12 +111,16 @@
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { availableStatuses, getPreviousStage } from '../../../helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '../../../helpers/constants';
 
 export default {
   components: {
     Banner,
     Table,
     TableCell,
+    Select,
   },
   data() {
     return {
@@ -104,42 +133,77 @@ export default {
         { title: 'Status' },
         { title: 'EMP' },
       ],
+      pageSize: 50,
+      pageSizes: [10, 50, 100, 250, 500],
     };
   },
   computed: {
-    applicationRecords() {
-      return this.$store.state.stageReview.records;
-    },
-    totalApplicationRecords() {
-      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords.review) || 0;
+    stage() {
+      return this.$route.params.stage;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isButtonDisabled() {
-      const isDisabled = this.selectedItems && this.selectedItems.length;
-      return !isDisabled;
+    applicationRecords() {
+      return this.$store.state.applicationRecords.records;
+    },
+    totalApplicationRecords() {
+      return (this.exercise && this.exercise._applicationRecords && this.exercise._applicationRecords[this.stage]) || 0;
+    },
+    hasItems() {
+      return this.selectedItems && this.selectedItems.length;
+    },
+    canGoBack() {
+      return this.previousStage ? true : false;
+    },
+    canSetStatus() {
+      return this.stage !== EXERCISE_STAGE.HANDOVER;
     },
     availableStatuses() {
-      const shortlistingMethods = this.exercise.shortlistingMethods;
-      const otherShortlistingMethod = this.exercise.otherShortlistingMethod || [];
-      return this.$store.getters['stageReview/availableStatuses'](shortlistingMethods, otherShortlistingMethod) ;
+      const statuses = availableStatuses(this.exercise, this.stage);
+      return statuses;
+    },
+    previousStage() {
+      return getPreviousStage(this.exercise, this.stage);
+    },
+  },
+  watch: {
+    async stage(newVal, oldVal) {
+      if (newVal != oldVal) {
+        this.message = await this.$store.dispatch('applicationRecords/getMessages');
+        this.selectedItems = [];
+        this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });
+        this.setPageTitle();
+      }
+    },
+    async pageSize() {
+      await this.$nextTick();
+      this.$refs['tableRef'].reload();
     },
   },
   async created() {
-    this.message = await this.$store.dispatch('stageReview/getMessages');
-    this.selectedItems = this.$store.state.stageReview.selectedItems;
+    this.message = await this.$store.dispatch('applicationRecords/getMessages');
+    this.selectedItems = this.$store.state.applicationRecords.selectedItems;
+    this.setPageTitle();
   },
   methods: {
+    setPageTitle() {
+      document.title = `${this.$options.filters.lookup(this.stage)} | Exercise Stage | JAC Digital Platform`;
+    },
+    moveBack() {
+      this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-back' });
+    },
     checkForm() {
-      this.$store.dispatch('stageReview/storeItems', { items: this.selectedItems });
-      this.$router.push({ name: 'exercise-stages-review-edit' });
+      this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });
+      this.$router.push({ name: 'exercise-stages-edit' });
     },
     getTableData(params) {
       this.$store.dispatch(
-        'stageReview/bind',
+        'applicationRecords/bind',
         {
           exerciseId: this.exercise.id,
+          stage: this.stage,
           ...params,
         }
       );
