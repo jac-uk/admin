@@ -2,7 +2,7 @@
   <div>
     <!-- qualifications -->
     <div>
-      <h2 
+      <h2
         class="govuk-heading-l govuk-!-margin-top-6"
       >
         Qualifications
@@ -64,11 +64,11 @@
               <dt
                 class="govuk-summary-list__key widerColumn"
               >
-                {{ qualification.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
+                {{ qualification.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }}
               </dt>
               <dd class="govuk-summary-list__value">
                 <InformationReviewRenderer
-                  :data="application.qualifications[index].date"
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
                   field="qualifications"
                   extension="date"
                   :index="index"
@@ -77,7 +77,7 @@
                   @changeField="changeQualificationOrMembership"
                 />
               </dd>
-            </div> 
+            </div>
 
             <template>
               <div
@@ -193,25 +193,6 @@
             />
           </dd>
         </div>
-
-        <div
-          v-if="exercise.appliedSchedule == 'schedule-2-d'"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key widerColumn">
-            Are you applying under Schedule 2(d)?
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <InformationReviewRenderer
-              :data="application.applyingUnderSchedule2d"
-              field="applyingUnderSchedule2d"
-              :edit="editable"
-              :options="[true, false]"
-              type="selection"
-              @changeField="changeQualificationOrMembership"
-            />
-          </dd>
-        </div>
       </dl>
 
       <dl
@@ -246,7 +227,7 @@
       </dl>
     </div>
     <!-- memberships + professional Memberships -->
-    <div 
+    <div
       v-if="hasRelevantMemberships"
     >
       <h2
@@ -262,7 +243,7 @@
           <div
             class="govuk-summary-list govuk-!-margin-bottom-0"
           >
-            <div 
+            <div
               v-if="showMembershipOption('chartered-association-of-building-engineers')"
               class="govuk-summary-list__row"
             >
@@ -676,8 +657,6 @@
               </dd>
             </div>
 
-            {{ }}
-
             <div
               v-for="(membership, key) in exercise.otherMemberships"
               :key="key"
@@ -695,7 +674,7 @@
                   Date
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.memberships[membership.label].date || null"
+                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].date : null"
                   :edit="editable"
                   :index="membership.label"
                   extension="date"
@@ -710,7 +689,7 @@
                   Number
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.memberships[membership.label].number"
+                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].number : null"
                   :edit="editable"
                   :index="membership.label"
                   extension="number"
@@ -725,7 +704,7 @@
                   Information
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.memberships[membership.label].information"
+                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].information : null"
                   :edit="editable"
                   :index="membership.label"
                   extension="information"
@@ -733,7 +712,7 @@
                   field="memberships"
                   @changeField="changeQualificationOrMembership"
                 />
-              </dd> 
+              </dd>
             </div>
           </div>
         </dl>
@@ -874,20 +853,20 @@ export default {
         changedObj = [...changedObj, this.dataDefault];
       } else {
         changedObj = [this.dataDefault];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
 
     },
     removeQualification() {
-      
+
       let changedObj = this.application.qualifications || [];
 
       if (changedObj.length > 0){
         changedObj.splice(this.currentIndex, 1);
       } else {
         changedObj = [];
-      } 
+      }
 
       this.$emit('updateApplication', { qualifications: changedObj });
 
@@ -895,7 +874,7 @@ export default {
 
     },
     changeQualificationOrMembership(obj) {
-      
+
       let changedObj = this.application[obj.field] || {};
 
       if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { //nested field
@@ -909,11 +888,11 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = { 
+      const updatedApplication = {
         [obj.field]: {
           ...this.application[obj.field], ...changedObj },
       };
-      
+
       this.$emit('updateApplication', updatedApplication);
 
     },
