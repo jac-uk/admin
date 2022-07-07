@@ -103,6 +103,9 @@ const store = new Vuex.Store({
       }
       return '';
     },
+    isProduction: (state, getters) => {
+      return getters.appEnvironment === 'PRODUCTION';
+    },
   },
 });
 

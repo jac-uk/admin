@@ -74,6 +74,22 @@
           required
         />
 
+        <Select
+          id="advert-type"
+          v-model="formData.advertType"
+          label="Advert Type"
+          hint="Type of advert when published."
+          required
+        >
+          <option
+            v-for="exerciseAdvertType in exerciseAdvertTypes"
+            :key="exerciseAdvertType"
+            :value="exerciseAdvertType"
+          >
+            {{ exerciseAdvertType | lookup }}
+          </option>
+        </Select>
+
         <TextField
           id="subscriber-alerts-url"
           v-model="formData.subscriberAlertsUrl"
@@ -95,6 +111,9 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
+import { ADVERT_TYPES } from '@/helpers/constants';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
@@ -104,6 +123,7 @@ export default {
     TextField,
     TextareaInput,
     DateInput,
+    Select,
     BackLink,
     Checkbox,
   },
@@ -117,11 +137,13 @@ export default {
       roleSummary: null,
       roleSummaryWelsh: null,
       subscriberAlertsUrl: null,
+      advertType: ADVERT_TYPES.FULL,
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData: formData,
       setDay: false,
+      exerciseAdvertTypes: exerciseAdvertTypes({}),
     };
   },
   computed: {

@@ -47,7 +47,7 @@ export default {
         {
           title: 'Character Checks',
           path: `${path}/character-checks`,
-        },
+        }
       );
     }
     if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
@@ -99,7 +99,7 @@ export default {
               class: 'govuk-tag--blue',
             },
             path: `${path}/sift`,
-          },
+          }
         );
       }
     }
@@ -112,7 +112,7 @@ export default {
             class: 'govuk-tag--blue',
           },
           path: `${path}/selection`,
-        },
+        }
       );
     }
     // if (exercise.scenarioTestDate) {

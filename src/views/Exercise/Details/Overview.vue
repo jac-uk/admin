@@ -139,6 +139,7 @@
       </button>
       <button
         v-if="isReadyForApproval"
+        :disabled="!isReadyForApprovalFromAdvertType"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
@@ -158,22 +159,6 @@
         Copy to Clipboard
       </ActionButton>
       <br>
-      <button
-        v-if="isReadyForTesting"
-        class="govuk-button"
-        type="primary"
-        @click="changeNoOfTestApplications()"
-      >
-        Create test applications
-      </button>
-      <ActionButton
-        v-if="isTesting"
-        ref="createTestApplicationsBtn"
-        type="primary"
-        @click="createTestApplications()"
-      >
-        Create test applications
-      </ActionButton>
       <ActionButton
         v-if="isReadyForProcessing"
         @click="startProcessing()"
@@ -186,6 +171,26 @@
       >
         Process late applications
       </ActionButton>
+      <div v-if="!isProduction">
+        <button
+          v-if="isReadyForTesting"
+          class="govuk-button"
+          @click="changeNoOfTestApplications()"
+        >
+          Create test applications
+        </button>
+        <ActionButton
+          v-if="isTesting"
+          ref="createTestApplicationsBtn"
+          @click="createTestApplications()"
+        >
+          Create test applications
+        </ActionButton>
+      </div>
+      <Banner
+        v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType"
+        :message="approveErrorMessage"
+      />
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -211,22 +216,29 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   components: {
     Timeline,
     ActionButton,
     Modal,
+    Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
   },
   computed: {
+    isProduction() {
+      return this.$store.getters['isProduction'];
+    },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
     },
@@ -259,7 +271,15 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      return this.exercise && this.exercise.state && this.exercise.state === 'ready';
+      const returnReadyForApproval = this.exercise 
+        && this.exercise.state 
+        && this.exercise.state === 'ready';
+      return returnReadyForApproval;
+    },
+    isReadyForApprovalFromAdvertType() {
+      const returnReady = this.exercise 
+        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
+      return returnReady;
     },
     isApproved() {
       return isApproved(this.exercise);
@@ -274,13 +294,12 @@ export default {
       return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
     },
     isProcessing() {
-      return isProcessing(this.exercise) && this.isTested;
+      return isProcessing(this.exercise);
     },
     isReadyForProcessing() {
-      return this.isApproved && !this.isProcessing && this.isTested;
+      return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
-
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
@@ -344,6 +363,10 @@ export default {
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
+    },
+    approveErrorMessage() {
+      const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
+      return msg; 
     },
   },
   methods: {
