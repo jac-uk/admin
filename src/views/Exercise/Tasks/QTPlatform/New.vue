@@ -53,10 +53,10 @@ import { functions } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
-  beforeRouteEnter: beforeRouteEnter,
   components: {
     ActionButton,
   },
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,

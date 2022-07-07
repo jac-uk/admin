@@ -45,10 +45,10 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 
 export default {
-  beforeRouteEnter: beforeRouteEnter,
   components: {
     ActionButton,
   },
+  beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
       required: true,

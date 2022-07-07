@@ -72,7 +72,10 @@
         >
           <template #header>
             <tr class="govuk-table__row">
-              <th scope="col" class="govuk-table__header table-cell-application"></th>
+              <th
+                scope="col"
+                class="govuk-table__header table-cell-application"
+              />
               <th
                 v-for="column in headerColumns"
                 :key="column.ref"
@@ -81,13 +84,16 @@
                 class="govuk-table__header text-center expandable"
                 @click="toggleColumn(column.ref)"
               >
-                <span class="elipses">{{ column.ref  | lookup }}</span>
+                <span class="elipses">{{ column.ref | lookup }}</span>
               </th>
             </tr>
           </template>
           <template #row="{row}">
             <TableCell class="table-cell-application">
-              <a href="#" class="govuk-link">{{ row.referenceNumber }}</a>
+              <a
+                href="#"
+                class="govuk-link"
+              >{{ row.referenceNumber }}</a>
             </TableCell>
 
             <template v-if="row.sift && isOpen('sift')">
@@ -108,7 +114,10 @@
                 ({{ row.sift.score }})
               </TableCell>
             </template>
-            <td v-else :colspan="siftColumnCount"></td>
+            <td
+              v-else
+              :colspan="siftColumnCount"
+            />
 
             <template v-if="row.selection">
               <template
@@ -135,12 +144,14 @@
                 </template>
               </template>
             </template>
-            <td v-else :colspan="selectionColumnCount"></td>
+            <td
+              v-else
+              :colspan="selectionColumnCount"
+            />
 
             <TableCell class="text-center">
               {{ row.totalScore }}
             </TableCell>
-
           </template>
         </Table>
       </div>

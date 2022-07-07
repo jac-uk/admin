@@ -23,7 +23,11 @@
             @click="navigate"
           >
             {{ page.title }}
-            <strong v-if="page.tag" class="govuk-tag govuk-tag-s" :class="page.tag.class">{{ page.tag.title }}</strong>
+            <strong
+              v-if="page.tag"
+              class="govuk-tag govuk-tag-s"
+              :class="page.tag.class"
+            >{{ page.tag.title }}</strong>
           </a>
         </li>
       </router-link>

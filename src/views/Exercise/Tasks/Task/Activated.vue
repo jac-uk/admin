@@ -29,7 +29,10 @@
       All panels have provided scores.
     </p>
 
-    <div v-if="hasAllPanelsCompleted" class="govuk-grid-row">
+    <div
+      v-if="hasAllPanelsCompleted"
+      class="govuk-grid-row"
+    >
       <div class="govuk-grid-column-two-thirds">
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <p class="govuk-body govuk-!-margin-bottom-0">
@@ -65,7 +68,6 @@
 
     <!-- OVERVIEW -->
     <div v-show="activeTab == 'overview'">
-
       <div class="govuk-grid-row">
         <div
           class="govuk-grid-column-full"
@@ -137,7 +139,8 @@
                 <TableCell
                   v-for="panel in panels"
                   :key="panel.id"
-                  :title="panel.name">
+                  :title="panel.name"
+                >
                   <span v-if="stats.overallGradesByPanel[panel.id]">
                     {{ stats.overallGradesByPanel[panel.id][row] }}
                   </span>
@@ -152,7 +155,8 @@
                   <TableCell
                     v-for="panel in panels"
                     :key="panel.id"
-                    :title="panel.name">
+                    :title="panel.name"
+                  >
                     <span v-if="stats.overallGradesByPanel[panel.id]">
                       {{ stats.overallGradesByPanel[panel.id].count }}
                     </span>
@@ -212,11 +216,12 @@
               :columns="panelNamesAsColumns"
               local-data
             >
-              <template #row="{row}">
+              <template #row>
                 <TableCell
                   v-for="panel in panels"
                   :key="panel.id"
-                  :title="panel.name">
+                  :title="panel.name"
+                >
                   <span v-if="stats.overallScoreByPanel[panel.id]">
                     {{ stats.overallScoreByPanel[panel.id].average }}
                   </span>
@@ -228,7 +233,6 @@
         </div>
       </div>
       <!-- END: SCORES -->
-
     </div>
     <!-- // END OVERVIEW -->
 
@@ -243,10 +247,19 @@
         local-data
         class="merit-list"
       >
-        <template #header v-if="isSelection">
+        <template
+          v-if="isSelection"
+          #header
+        >
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header table-cell-application"></th>
-            <th scope="col" class="govuk-table__header table-cell"></th>
+            <th
+              scope="col"
+              class="govuk-table__header table-cell-application"
+            />
+            <th
+              scope="col"
+              class="govuk-table__header table-cell"
+            />
             <th
               v-for="category in selectionCategories"
               :key="category"
@@ -321,7 +334,6 @@
       </Table>
     </div>
     <!-- // END SCORE SHEET -->
-
   </div>
 </template>
 
