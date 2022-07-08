@@ -47,7 +47,7 @@ export default {
         {
           title: 'Character Checks',
           path: `${path}/character-checks`,
-        },
+        }
       );
     }
     if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
@@ -59,7 +59,7 @@ export default {
           {
             title: 'Sift',
             path: `${path}/sift`,
-          },
+          }
         );
       }
     }
@@ -68,7 +68,7 @@ export default {
         {
           title: 'Selection day',
           path: `${path}/selection`,
-        },
+        }
       );
     }
     if (exercise.scenarioTestDate) {

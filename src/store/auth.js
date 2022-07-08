@@ -36,9 +36,10 @@ const module = {
           'lisias.loback@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
-          'rita.kumi.ampofo@justice.gov.uk',
           'wincen.lowe@justice.gov.uk',
+          'lisias.loback@judicialappointments.digital',
           'molly.meadows@justice.gov.uk',
+          'katharine.hanley@judicialappointments.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -55,6 +56,7 @@ const module = {
               'tom.russell@judicialappointments.digital',
               'andrew.isaac@judicialappointments.digital',
               'blaise.buckland@judicialappointments.digital',
+              'lisias.loback@judicialappointments.digital',
             ].indexOf((user.email).toLowerCase() >= 0)
           ) {
             role = 'superadmin';
