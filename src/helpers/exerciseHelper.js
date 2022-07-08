@@ -1,5 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -24,6 +25,7 @@ unselectedApplicationParts,
 export {
   APPLICATION_STEPS,
   exerciseStates,
+  exerciseAdvertTypes,
   applicationContentSteps,
   configuredApplicationContentSteps,
   isEditable,
@@ -169,6 +171,15 @@ function exerciseStates(exercise) {
   states.push('recommended');
   states.push('handover');
   return states;
+}
+function exerciseAdvertTypes(exercise) {
+  if (!exercise) { return []; }
+  const advertTypes = [];
+
+  Object.keys(ADVERT_TYPES).map(item => {
+    advertTypes.push(ADVERT_TYPES[item]);
+  });
+  return advertTypes;
 }
 function applicationContentSteps(data) {
   if (!data) { return []; }
