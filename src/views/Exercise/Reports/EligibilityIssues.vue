@@ -1,23 +1,34 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Eligibility Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         :disabled="generatingExport"
         @click="exportData"
       >
         <span
           v-if="generatingExport"
           class="spinner-border spinner-border-sm"
-        /> Export data
+        />
+        Export to Excel
       </button>
       <button
-        class="govuk-button govuk-button--secondary"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Generate Report
+      </button>
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
         <span
@@ -115,6 +126,19 @@
                   </option>
                 </Select>
               </div>
+              <div
+                v-if="row.issues.eligibilityIssuesStatus"
+                class="govuk-grid-column-full"
+              >
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
+                <TextareaInput
+                  id="recommendation-reason"
+                  :value="row.issues.eligibilityIssuesStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
+                />
+              </div>
             </div>
 
             <div
@@ -153,12 +177,14 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
   components: {
     Table,
     TableCell,
     Select,
+    TextareaInput,
   },
   data () {
     return {
@@ -170,6 +196,7 @@ export default {
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
+      exportingToGoogleDoc: false,
     };
   },
   computed: {
@@ -187,6 +214,20 @@ export default {
       this.refreshingReport = true;
       await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       this.refreshingReport = false;
+    },
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; // abort if no ref
+      }
+
+      try {
+        await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+      } catch (error) {
+        console.error(error);
+      }
+      this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
@@ -215,7 +256,7 @@ export default {
       this.generatingExport = true;
 
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id });
+      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
 
       this.generatingExport = false;
 
@@ -246,6 +287,10 @@ export default {
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.eligibilityIssuesStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.eligibilityIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
