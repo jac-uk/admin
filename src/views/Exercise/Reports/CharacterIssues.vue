@@ -1,11 +1,12 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Character Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
@@ -14,7 +15,17 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export Data
+        Export to Excel
+      </button>
+      <button
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Generate Report
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
@@ -26,8 +37,7 @@
         /> Refresh
       </button>
     </div>
-
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <Select
           id="exercise-stage"
@@ -178,6 +188,19 @@
                   </option>
                 </Select>
               </div>
+              <div
+                v-if="row.issues.characterIssuesStatus"
+                class="govuk-grid-column-full"
+              >
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
+                <TextareaInput
+                  id="reason-for-status"
+                  :value="row.issues.characterIssuesStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
+                />
+              </div>
             </div>
             <div
               v-for="(issue, index) in row.issues.characterIssues"
@@ -220,6 +243,7 @@ import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
@@ -231,6 +255,7 @@ export default {
     Select,
     Table,
     TableCell,
+    TextareaInput,
   },
   data () {
     return {
@@ -245,6 +270,7 @@ export default {
         { title: 'Candidate' },
       ],
       downloadingReport: false,
+      exportingToGoogleDoc: false,
     };
   },
   computed: {
@@ -299,6 +325,7 @@ export default {
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
+        format: 'excel',
       });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
@@ -318,6 +345,20 @@ export default {
         filename: `${title}.xlsx`,
       });
       this.downloadingReport = false;
+    },
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+      await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'googledoc',
+      });
+      this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
@@ -355,6 +396,10 @@ export default {
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.characterIssuesStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
