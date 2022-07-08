@@ -1,11 +1,12 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Character Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
@@ -14,7 +15,17 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export Data
+        Export to Excel
+      </button>
+      <button
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Generate Report
       </button>
       <button
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
@@ -26,8 +37,7 @@
         /> Refresh
       </button>
     </div>
-
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <Select
           id="exercise-stage"
@@ -260,6 +270,7 @@ export default {
         { title: 'Candidate' },
       ],
       downloadingReport: false,
+      exportingToGoogleDoc: false,
     };
   },
   computed: {
@@ -314,6 +325,7 @@ export default {
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
+        format: 'excel',
       });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
@@ -333,6 +345,20 @@ export default {
         filename: `${title}.xlsx`,
       });
       this.downloadingReport = false;
+    },
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+      await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'googledoc',
+      });
+      this.exportingToGoogleDoc = false;
     },
     getTableData(params) {
       let firestoreRef = firestore
