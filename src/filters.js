@@ -1,4 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -61,6 +62,11 @@ const lookup = (value) => {
 
     // 'xxx': 'xxx',
   };
+
+  lookup[ADVERT_TYPES.LISTING] = 'Listing';
+  lookup[ADVERT_TYPES.BASIC] = 'Basic';
+  lookup[ADVERT_TYPES.FULL] = 'Full';
+  lookup[ADVERT_TYPES.EXTERNAL] = 'External';
 
   returnValue = lookup[value];
 
