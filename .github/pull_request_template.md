@@ -3,7 +3,6 @@
 - [ ] Include primary ticket number in title - e.g. "#123 New styling for widget" - and any additional tickets in description
 - [ ] Fill in the details below and delete as appropriate
 - [ ] Be proactive in getting your work approved 💪
-- [ ] Delete this checklist when you've completed it
 
 ---
 ## What's included?

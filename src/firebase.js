@@ -18,16 +18,16 @@ const config = {
 const functions = firebase.initializeApp(config).functions('europe-west2');
 
 if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
-  functions.useEmulator('localhost', '5000');
+  functions.useEmulator('http://localhost', '5001');
 }
 
 // Initialise Firestore
 const firestore = firebase.firestore();
 
 // App check
-let appCheck; 
+const appCheck = firebase.appCheck();
 if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
-  appCheck = firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+  appCheck.activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
 }
 
 // Other firebase exports

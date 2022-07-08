@@ -181,7 +181,7 @@ export default {
     getTableData(params) {
       this.$store.dispatch(
         'exerciseCollection/bind',
-        params
+        params,
       );
     },
     checkForm() {

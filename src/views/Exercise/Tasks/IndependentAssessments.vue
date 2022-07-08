@@ -83,14 +83,14 @@
         <ActionButton
           v-if="canSendRequestsToAll"
           type="primary"
-          @click="openModal('modalRefRequests', 'allRequests', null, sendRequestsToAll)"
+          @click="sendRequestsToAll()"
         >
           Send to all
         </ActionButton>
         <ActionButton
           v-if="canSendRemindersToAll"
           type="primary"
-          @click="openModal('modalRefRequests', 'allReminders', null, sendRemindersToAll)"
+          @click="sendRemindersToAll()"
         >
           Send reminders
         </ActionButton>
@@ -149,7 +149,7 @@
                 >
                   <ActionButton
                     class="moj-button-menu__item"
-                    @click="openModal('modalRefRequests', 'testRequest', row.id, testRequest)"
+                    @click="testRequest(row.id)"
                   >
                     Test Request
                   </ActionButton>
@@ -185,14 +185,14 @@
                 >
                   <ActionButton
                     class="moj-button-menu__item"
-                    @click="openModal('modalRefRequests', 'request', row.id, resendRequest)"
+                    @click="resendRequest(row.id)"
                   >
                     Request
                   </ActionButton>
 
                   <ActionButton
                     class="moj-button-menu__item"
-                    @click="openModal('modalRefRequests', 'reminder', row.id, sendReminder)"
+                    @click="sendReminder(row.id)"
                   >
                     Reminder
                   </ActionButton>
@@ -271,16 +271,6 @@
         @close="modalUploadClose"
       />
     </Modal>
-
-    <Modal ref="modalRefRequests">
-      <component
-        :is="`IndependentAssessmentsRequests`"
-        :type="modalType"
-        :params="modalParams"
-        @close="closeModal('modalRefRequests')"
-        @ok="modalCallback"
-      />
-    </Modal>
   </div>
 </template>
 
@@ -294,7 +284,6 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests'; 
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
@@ -306,11 +295,6 @@ export default {
     DownloadLink,
     Modal,
     UploadAssessment,
-    IndependentAssessmentsRequests,
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
-    next();
   },
   data() {
     return {
@@ -324,9 +308,6 @@ export default {
         { title: 'Actions' },
       ],
       sendErrors: '',
-      modalType: '',
-      modalParams: null,
-      modalCallback: null,
     };
   },
   computed: {
@@ -398,6 +379,10 @@ export default {
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
     },
   },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+    next();
+  },
   methods: {
     async initialiseAssessments() {
       if (!this.exerciseStage) {
@@ -463,18 +448,6 @@ export default {
       assessment.approved = true;
 
       await this.$store.dispatch('assessment/save', assessment);
-    },
-    openModal(modalRef, type, params, callback){
-      this.$refs[modalRef].openModal();
-      this.modalType = type;
-      this.modalParams = params;
-      this.modalCallback = callback;
-    },
-    closeModal(modalRef) {
-      this.$refs[modalRef].closeModal();
-      this.modalType = '';
-      this.modalParams = null;
-      this.modalCallback = null;
     },
     modalUploadOpen(obj) {
       this.uploadAsssessmentProps = obj;

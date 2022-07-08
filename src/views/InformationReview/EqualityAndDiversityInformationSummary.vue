@@ -652,9 +652,6 @@ export default {
         if (Array.isArray(field) && field.includes(item)) {
           return true;
         }
-        if (field.hasOwnProperty(item)){
-          return true;
-        }
       }
       return false;
     },

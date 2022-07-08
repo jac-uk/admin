@@ -7,94 +7,52 @@
       >
         Qualifications
       </h2>
-      <div v-if="applicationHasQualifications">
-        <dl
-          v-for="(qualification, index) in application.qualifications"
-          :key="qualification.name"
-        >
-          <button
-            v-if="editable"
-            class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
-            @click="openModal(index)"
+      <div>
+        <div>
+          <dl
+            v-for="(item, index) in application.qualifications"
+            :key="item.name"
           >
-            Remove
-          </button>
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Qualification
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].type"
-                  field="qualifications"
-                  extension="type"
-                  :index="index"
-                  :edit="editable"
-                  :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
-                  type="selection"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div>
-
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Location
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].location"
-                  field="qualifications"
-                  extension="location"
-                  :index="index"
-                  :edit="editable"
-                  :options="['england-wales', 'northern-ireland', 'scotland']"
-                  type="selection"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div>
-            <div
-              v-if="qualification.hasOwnProperty('date') || editable"
-              class="govuk-summary-list__row"
+            <button
+              v-if="editable"
+              class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
+              @click="openModal(index)"
             >
-              <dt
-                class="govuk-summary-list__key widerColumn"
-              >
-                {{ qualification.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <InformationReviewRenderer
-                  :data="application.qualifications[index].date"
-                  field="qualifications"
-                  extension="date"
-                  :index="index"
-                  :edit="editable"
-                  type="date"
-                  @changeField="changeQualificationOrMembership"
-                />
-              </dd>
-            </div> 
-
-            <template>
-              <div
-                v-if="qualification.type === 'barrister' && ((qualification.qualificationNotComplete && qualification.details) || editable)"
-                class="govuk-summary-list__row"
-              >
+              Remove
+            </button>
+            <div
+              class="govuk-summary-list govuk-!-margin-bottom-5"
+            >
+              <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key widerColumn">
-                  Has not completed pupillage
+                  Qualification
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].qualificationNotComplete"
+                    :data="application.qualifications[index].type"
                     field="qualifications"
-                    extension="qualificationNotComplete"
+                    extension="type"
                     :index="index"
                     :edit="editable"
-                    :options="[true, false]"
+                    :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
+                    type="selection"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key widerColumn">
+                  Location
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications[index].location"
+                    field="qualifications"
+                    extension="location"
+                    :index="index"
+                    :edit="editable"
+                    :options="['england-wales', 'northern-ireland', 'scotland']"
                     type="selection"
                     @changeField="changeQualificationOrMembership"
                   />
@@ -102,26 +60,71 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && (qualification.qualificationNotComplete === true)"
+                v-if="item.date || editable"
                 class="govuk-summary-list__row"
               >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Did not complete pupillage notes
+                <dt
+                  class="govuk-summary-list__key widerColumn"
+                >
+                  {{ item.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }} 
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].details"
+                    :data="application.qualifications[index].date"
                     field="qualifications"
-                    extension="details"
+                    extension="date"
                     :index="index"
                     :edit="editable"
+                    type="date"
                     @changeField="changeQualificationOrMembership"
                   />
                 </dd>
-              </div>
-            </template>
-          </div>
-        </dl>
+              </div> 
+
+              <template>
+                <div
+                  v-if="item.type === 'barrister' && ((item.qualificationNotComplete && item.details) || editable)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key widerColumn">
+                    Has not completed pupillage
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <InformationReviewRenderer
+                      :data="application.qualifications[index].qualificationNotComplete"
+                      field="qualifications"
+                      extension="qualificationNotComplete"
+                      :index="index"
+                      :edit="editable"
+                      :options="[true, false]"
+                      type="selection"
+                      @changeField="changeQualificationOrMembership"
+                    />
+                  </dd>
+                </div>
+
+                <div
+                  v-if="item.type === 'barrister' && (item.qualificationNotComplete === true)"
+                  class="govuk-summary-list__row"
+                >
+                  <dt class="govuk-summary-list__key widerColumn">
+                    Did not complete pupillage notes
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <InformationReviewRenderer
+                      :data="application.qualifications[index].details"
+                      field="qualifications"
+                      extension="details"
+                      :index="index"
+                      :edit="editable"
+                      @changeField="changeQualificationOrMembership"
+                    />
+                  </dd>
+                </div>
+              </template>
+            </div>
+          </dl>
+        </div>
       </div>
       <div
         class="govuk-body"
@@ -130,7 +133,6 @@
           v-if="!applicationHasQualifications"
         >
           No answers provided
-          <hr>
         </div>
         <button
           v-if="editable"
@@ -150,6 +152,7 @@
         />
       </Modal>
     </div>
+
     <!-- applied schedules -->
     <div>
       <dl
@@ -245,31 +248,31 @@
         </dd>
       </dl>
     </div>
-    <!-- memberships + professional Memberships -->
-    <div 
+
+    <!-- memberships -->
+    <div
       v-if="hasRelevantMemberships"
+      class="govuk-!-margin-top-9"
     >
-      <h2
-        class="govuk-heading-l govuk-!-margin-top-6"
-      >
+      <h2 class="govuk-heading-l">
         Memberships
       </h2>
-      <div v-if="hasMemberships || editable">
-        <!-- professionalMemberships -->
+      <div>
         <dl
-          v-if="exercise.memberships.length || application.professionalMemberships || editable"
+          v-if="application.memberships"
+          class="govuk-summary-list govuk-!-margin-bottom-8"
         >
           <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
+            v-for="(membership, key) in exercise.memberships"
+            :key="key"
+            class="govuk-summary-list__row"
           >
-            <div 
-              v-if="showMembershipOption('chartered-association-of-building-engineers')"
-              class="govuk-summary-list__row"
-            >
+            <div v-if="fieldContains(application.memberships, membership) || editable">
               <dt class="govuk-summary-list__key widerColumn">
-                Chartered Association of Building Engineers
+                {{ membership }}
               </dt>
               <dd class="govuk-summary-list__value">
+                {{ application.memberships }}
                 <h5
                   v-if="editable"
                   class="govuk-hint govuk-!-margin-1"
@@ -277,445 +280,26 @@
                   Date
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.charteredAssociationBuildingEngineersDate"
-                  :edit="editable"
-                  type="date"
-                  field="charteredAssociationBuildingEngineersDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredAssociationBuildingEngineersNumber"
-                  :edit="editable"
-                  type="text"
-                  field="charteredAssociationBuildingEngineersNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredAssociationBuildingEngineersInformation"
-                  :edit="editable"
-                  type="text"
-                  field="charteredAssociationBuildingEngineersInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('chartered-institute-of-building')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                Chartered Institue of Building
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteBuildingDate"
-                  :edit="editable"
-                  type="date"
-                  field="charteredInstituteBuildingDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteBuildingNumber"
-                  :edit="editable"
-                  type="text"
-                  field="charteredInstituteBuildingNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteBuildingInformation"
-                  :edit="editable"
-                  type="text"
-                  field="charteredInstituteBuildingInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('chartered-institute-of-environmental-health')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                Chartered Institute of Environmental Health
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteEnvironmentalHealthDate"
-                  :edit="editable"
-                  type="date"
-                  field="charteredInstituteEnvironmentalHealthDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteEnvironmentalHealthNumber"
-                  :edit="editable"
-                  type="text"
-                  field="charteredInstituteEnvironmentalHealthNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.charteredInstituteEnvironmentalHealthInformation"
-                  :edit="editable"
-                  type="text"
-                  field="charteredInstituteEnvironmentalHealthInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('general-medical-council')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                General Medical Council
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.generalMedicalCouncilDate"
-                  :edit="editable"
-                  type="date"
-                  field="generalMedicalCouncilDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.generalMedicalCouncilNumber"
-                  :edit="editable"
-                  type="text"
-                  field="generalMedicalCouncilNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.generalMedicalCouncilInformation"
-                  :edit="editable"
-                  type="text"
-                  field="generalMedicalCouncilInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-                <ul
-                  v-if="application.generalMedicalCouncilConditional"
-                  class="govuk-list"
-                >
-                  <p class="govuk-hint">
-                    Conditions
-                  </p>
-                  <li
-                    v-if="(application.generalMedicalCouncilConditionalStartDate
-                      && application.generalMedicalCouncilConditionalEndDate) && !editable"
-                  >
-                    {{ application.generalMedicalCouncilConditionalStartDate | formatDate }}
-                    to {{ application.generalMedicalCouncilConditionalEndDate | formatDate }}
-                  </li>
-                  <li
-                    v-if="(application.generalMedicalCouncilConditionalStartDate
-                      && !application.generalMedicalCouncilConditionalEndDate) && !editable"
-                  >
-                    {{ application.generalMedicalCouncilConditionalStartDate | formatDate }} — current
-                  </li>
-                  <li
-                    v-if="editable"
-                  >
-                    <h5
-                      class="govuk-hint govuk-!-margin-1"
-                    >
-                      Start Date
-                    </h5>
-                    <InformationReviewRenderer
-                      :data="application.generalMedicalCouncilConditionalStartDate"
-                      :edit="editable"
-                      type="date"
-                      field="generalMedicalCouncilConditionalStartDate"
-                      @changeField="changeProfessionalMembership"
-                    />
-                    <h5
-                      class="govuk-hint govuk-!-margin-1"
-                    >
-                      End Date
-                    </h5>
-                    <InformationReviewRenderer
-                      :data="application.generalMedicalCouncilConditionalEndDate"
-                      :edit="editable"
-                      type="date"
-                      field="generalMedicalCouncilConditionalEndDate"
-                      @changeField="changeProfessionalMembership"
-                    />
-                  </li>
-                  <li>
-                    <h5
-                      v-if="editable"
-                      class="govuk-hint govuk-!-margin-1"
-                    >
-                      Details
-                    </h5>
-                    <InformationReviewRenderer
-                      :data="application.generalMedicalCouncilConditionalDetails"
-                      :edit="editable"
-                      type="text"
-                      field="generalMedicalCouncilConditionalDetails"
-                      @changeField="changeProfessionalMembership"
-                    />
-                  </li>
-                </ul>
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('royal-college-of-psychiatrists')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                Royal College of Psychiatrists
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalCollegeOfPsychiatristsDate"
-                  :edit="editable"
-                  type="date"
-                  field="royalCollegeOfPsychiatristsDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalCollegeOfPsychiatristsNumber"
-                  :edit="editable"
-                  type="text"
-                  field="royalCollegeOfPsychiatristsNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalCollegeOfPsychiatristsInformation"
-                  :edit="editable"
-                  type="text"
-                  field="royalCollegeOfPsychiatristsInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('royal-institution-of-chartered-surveyors')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                Royal Institution of Chartered Surveyors
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstitutionCharteredSurveyorsDate"
-                  :edit="editable"
-                  type="date"
-                  field="royalInstitutionCharteredSurveyorsDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstitutionCharteredSurveyorsNumber"
-                  :edit="editable"
-                  type="text"
-                  field="royalInstitutionCharteredSurveyorsNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstitutionCharteredSurveyorsInformation"
-                  :edit="editable"
-                  type="text"
-                  field="royalInstitutionCharteredSurveyorsInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            <div
-              v-if="showMembershipOption('royal-institute-of-british-architects')"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key">
-                Royal Institute of British Architects
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstituteBritishArchitectsDate"
-                  :edit="editable"
-                  type="date"
-                  field="royalInstituteBritishArchitectsDate"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Number
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstituteBritishArchitectsNumber"
-                  :edit="editable"
-                  type="text"
-                  field="royalInstituteBritishArchitectsNumber"
-                  @changeField="changeProfessionalMembership"
-                />
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Information
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.royalInstituteBritishArchitectsInformation"
-                  :edit="editable"
-                  type="text"
-                  field="royalInstituteBritishArchitectsInformation"
-                  @changeField="changeProfessionalMembership"
-                />
-              </dd>
-            </div>
-
-            {{ }}
-
-            <div
-              v-for="(membership, key) in exercise.otherMemberships"
-              :key="key"
-              class="govuk-summary-list__row"
-            >
-              <dt class="govuk-summary-list__key widerColumn">
-                {{ membership.label }}
-                <!-- {{ application.memberships[membership.label] }}  -->
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <h5
-                  v-if="editable"
-                  class="govuk-hint govuk-!-margin-1"
-                >
-                  Date
-                </h5>
-                <InformationReviewRenderer
-                  :data="application.memberships[membership.label].date || null"
-                  :edit="editable"
-                  :index="membership.label"
+                  :data="hasMemberships ? application.memberships[membership].date : null"
+                  field="memberships"
                   extension="date"
+                  :index="membership.value"
+                  :edit="editable"
                   type="date"
-                  field="memberships"
                   @changeField="changeQualificationOrMembership"
                 />
                 <h5
                   v-if="editable"
                   class="govuk-hint govuk-!-margin-1"
                 >
-                  Number
+                  Membership Number
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.memberships[membership.label].number"
-                  :edit="editable"
-                  :index="membership.label"
-                  extension="number"
-                  type="text"
+                  :data="hasMemberships ? application.memberships[membership.value].number : null"
                   field="memberships"
+                  extension="number"
+                  :index="membership.value"
+                  :edit="editable"
                   @changeField="changeQualificationOrMembership"
                 />
                 <h5
@@ -725,25 +309,23 @@
                   Information
                 </h5>
                 <InformationReviewRenderer
-                  :data="application.memberships[membership.label].information"
-                  :edit="editable"
-                  :index="membership.label"
-                  extension="information"
-                  type="text"
+                  :data="hasMemberships ? application.memberships[membership.value].information : null"
                   field="memberships"
+                  extension="information"
+                  :index="membership.value"
+                  :edit="editable"
                   @changeField="changeQualificationOrMembership"
                 />
-              </dd> 
+              </dd>
             </div>
           </div>
         </dl>
-      </div>
-      <div
-        v-else
-        class="govuk-body"
-      >
-        No answers provided
-        <hr>
+        <dl
+          v-else
+          class="govuk-body"
+        >
+          No answers provided
+        </dl>
       </div>
     </div>
   </div>
@@ -787,16 +369,13 @@ export default {
         qualificationNotComplete: null,
         details: null,
       },
+      hasMemberships: !!this.application.memberships,
       currentIndex: null,
     };
   },
   computed: {
     applicationHasQualifications() {
-      if (this.application.qualifications) {
-        return Object.values(this.application.qualifications).length > 0;
-      } else {
-        return false;
-      }
+      return this.application.qualifications && Object.values(this.application.qualifications).length > 0;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -807,37 +386,14 @@ export default {
     hasRelevantMemberships() {
       return hasRelevantMemberships(this.exercise);
     },
-    hasMemberships() {
-      if (this.exercise.memberships) {
-        return this.exercise.memberships.length;
-      } else if (this.application.memberships) {
-        return Object.keys(this.application.memberships).length;
-      } else if (this.application.professionalMemberships) {
-        return this.application.professionalMemberships;
-      } else {
-        return false;
-      }
-    },
     isNonLegal() {
       return isNonLegal(this.exercise);
     },
     otherMemberships() {
-      // @NOTE this is a bit ugly as we can't just lookup label
-      const selected = {};
-
-      if (this.application.professionalMemberships) {
-        this.application.professionalMemberships.forEach(membership => {
-          if (this.application.memberships[membership]) {
-            const otherMembership = this.exercise.otherMemberships.find(m => m.value === membership);
-            selected[membership] = {
-              ...this.application.memberships[membership],
-              label: otherMembership.label,
-            };
-          }
-        });
+      if (Array.isArray(this.exercise.otherMemberships)) {
+        return this.exercise.otherMemberships.filter(membership => this.exercise.memberships.includes(membership.value));
       }
-
-      return selected;
+      return null;
     },
     scheduleApplies(){
       return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
@@ -853,19 +409,11 @@ export default {
         if (Array.isArray(field) && field.includes(item)) {
           return true;
         }
-        if (field.hasOwnProperty(item)){
-          return true;
-        }
       }
       return false;
     },
     showMembershipOption(ref) {
-      if (this.application && this.application.professionalMemberships) {
-        return this.application.professionalMemberships.indexOf(ref) >= 0;
-      } else if (this.exercise.memberships) {
-        return this.exercise.memberships.indexOf(ref) >= 0;
-      }
-      return false;
+      return this.exercise.memberships.indexOf(ref) >= 0;
     },
     addQualification() {
       let changedObj = this.application.qualifications || [];
@@ -913,12 +461,10 @@ export default {
         [obj.field]: {
           ...this.application[obj.field], ...changedObj },
       };
-      
-      this.$emit('updateApplication', updatedApplication);
 
-    },
-    changeProfessionalMembership(obj) {
-      this.$emit('updateApplication', obj);
+      // console.log(updatedApplication);
+      this.$emit('updateApplication', updatedApplication );
+
     },
     closeModal() {
       this.currentIndex = null;

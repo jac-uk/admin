@@ -54,24 +54,6 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Advert type
-        </dt>
-        <dd class="govuk-summary-list__value editable-field">
-          <span>
-            {{ advertType | lookup }}
-          </span>
-          <span>
-            <a
-              class="govuk-link govuk-!-font-size-14"
-              @click="changeAdvertType"
-            >
-              Change
-            </a>
-          </span>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
           Are there Welsh posts?
         </dt>
         <dd class="govuk-summary-list__value">
@@ -114,29 +96,14 @@
     >
       Remove from website
     </button>
-    <Modal
-      ref="modalChangeExerciseAdvertType"
-    >
-      <ChangeExerciseAdvertType
-        :advert-type="exercise.advertType"
-        @close="$refs['modalChangeExerciseAdvertType'].closeModal()"
-      />
-    </Modal>
   </div>
 </template>
 
 <script>
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
-import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
-  components: {
-    Modal,
-    ChangeExerciseAdvertType,
-  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -152,9 +119,6 @@ export default {
     },
     canPublish() {
       return this.exercise.progress && this.exercise.progress.vacancySummary;
-    },
-    advertType() {
-      return this.exercise.advertType ? this.exercise.advertType : ADVERT_TYPES.FULL;
     },
   },
   methods: {
@@ -172,9 +136,6 @@ export default {
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    changeAdvertType() {
-      this.$refs['modalChangeExerciseAdvertType'].openModal();
-    },
   },
 };
 </script>
@@ -186,15 +147,5 @@ export default {
   @include govuk-media-query($from: tablet) {
     width: auto;
   }
-}
-.editable-field {
-  display: flex;
-  justify-content: space-between;
-}
-.capitalize {
-  text-transform: capitalize;
-}
-.govuk-link {
-  cursor: pointer;
 }
 </style>

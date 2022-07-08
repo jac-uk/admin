@@ -139,7 +139,6 @@
       </button>
       <button
         v-if="isReadyForApproval"
-        :disabled="!isReadyForApprovalFromAdvertType"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
@@ -187,10 +186,6 @@
           Create test applications
         </ActionButton>
       </div>
-      <Banner
-        v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType"
-        :message="approveErrorMessage"
-      />
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -216,22 +211,18 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
-import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   components: {
     Timeline,
     ActionButton,
     Modal,
-    Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
   },
@@ -271,15 +262,7 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      const returnReadyForApproval = this.exercise 
-        && this.exercise.state 
-        && this.exercise.state === 'ready';
-      return returnReadyForApproval;
-    },
-    isReadyForApprovalFromAdvertType() {
-      const returnReady = this.exercise 
-        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
-      return returnReady;
+      return this.exercise && this.exercise.state && this.exercise.state === 'ready';
     },
     isApproved() {
       return isApproved(this.exercise);
@@ -300,6 +283,7 @@ export default {
       return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
+
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
@@ -363,10 +347,6 @@ export default {
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
-    },
-    approveErrorMessage() {
-      const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
-      return msg; 
     },
   },
   methods: {
