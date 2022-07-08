@@ -76,6 +76,8 @@
         :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
+        :page-item-type="'number'"
+        :total="total"
         :custom-search="{
           placeholder: 'Search candidate names',
           handler: candidateSearch,
@@ -174,7 +176,7 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
@@ -197,6 +199,7 @@ export default {
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
       exportingToGoogleDoc: false,
+      total: null,
     };
   },
   computed: {
@@ -229,12 +232,14 @@ export default {
       }
       this.exportingToGoogleDoc = false;
     },
-    getTableData(params) {
+    async getTableData(params) {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
         .where('flags.eligibilityIssues', '==', true);
-      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, params);
+      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
+      firestoreRef = res.queryRef;
+      this.total = res.total;
       if (firestoreRef) {
         this.unsubscribe = firestoreRef
           .onSnapshot((snap) => {

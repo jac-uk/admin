@@ -600,10 +600,10 @@ export default {
     hasFinancialIssues() {
       return !!(this.application.characterInformationV2 &&
         (this.application.characterInformationV2.bankruptcies
-        || this.application.characterInformationV2.ivas
-        || this.application.characterInformationV2.lateTaxReturns
-        || this.application.characterInformationV2.lateVatReturns
-        || this.application.characterInformationV2.hmrcFines));
+          || this.application.characterInformationV2.ivas
+          || this.application.characterInformationV2.lateTaxReturns
+          || this.application.characterInformationV2.lateVatReturns
+          || this.application.characterInformationV2.hmrcFines));
     },
   },
 };
