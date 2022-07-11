@@ -384,7 +384,7 @@ export default {
         {
           ref: 'characterchecks',
           title: 'Character checks',
-        },
+        }
       );
       return tabs;
     },

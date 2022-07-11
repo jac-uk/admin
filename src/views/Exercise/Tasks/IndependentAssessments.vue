@@ -354,11 +354,11 @@ export default {
     UploadAssessment,
     IndependentAssessmentsRequests,
   },
+  mixins: [permissionMixin],
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
     next();
   },
-  mixins: [permissionMixin],
   data() {
     return {
       exerciseStage: '',
