@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
+
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 import EmptyRouterView from '@/components/EmptyRouterView';

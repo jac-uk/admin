@@ -60,12 +60,6 @@
         </TableCell>
       </template>
     </Table>
-    <p
-      v-if="!applications.length"
-      class="govuk-body"
-    >
-      No applications found.
-    </p>
   </div>
 </template>
 

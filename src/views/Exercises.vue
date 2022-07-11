@@ -42,7 +42,10 @@
         >
           All exercises
         </h1>
-        <form @submit.prevent="checkForm">
+        <form
+          class="exercises-table"
+          @submit.prevent="checkForm"
+        >
           <Table
             ref="exercisesTable"
             data-key="id"
@@ -64,6 +67,11 @@
             ]"
             multi-select
             :selection.sync="selectedItems"
+            :custom-search="{
+              placeholder: 'Search exercise names',
+              handler: exerciseSearch,
+              field: 'name',
+            }"
             @change="getTableData"
           >
             <template #actions>
@@ -184,13 +192,24 @@ export default {
     getTableData(params) {
       this.$store.dispatch(
         'exerciseCollection/bind',
-        params,
+        params
       );
     },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
     },
+    exerciseSearch(searchTerm) {
+      return new Promise(resolve => {
+        resolve([searchTerm, searchTerm.toLowerCase(), searchTerm.toUpperCase()]);
+      });
+    },
   },
 };
 </script>
+
+<style>
+.exercises-table input[type="search"] {
+  margin-left: 3px;
+}
+</style>

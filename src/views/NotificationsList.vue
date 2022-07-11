@@ -250,13 +250,13 @@ export default {
     getQueueData(params) {
       this.$store.dispatch(
         'notifications/bindQueue',
-        params,
+        params
       );
     },
     getSentData(params) {
       this.$store.dispatch(
         'notifications/bindSent',
-        params,
+        params
       );
     },
   },

@@ -38,9 +38,10 @@ const module = {
           'blaise.buckland@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
-          'rita.kumi.ampofo@justice.gov.uk',
           'wincen.lowe@justice.gov.uk',
+          'lisias.loback@judicialappointments.digital',
           'molly.meadows@justice.gov.uk',
+          'katharine.hanley@judicialappointments.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
