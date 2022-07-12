@@ -63,13 +63,12 @@
           required
         />
 
-        <TextareaInput
+        <RichTextInput
           v-if="formData.welshPosts"
           id="role-summary-welsh"
           v-model="formData.roleSummaryWelsh"
           label="Role summary (Welsh)"
           hint="Fersywn Cymraeg"
-          rows="2"
           required
         />
 
@@ -108,7 +107,6 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
@@ -121,7 +119,6 @@ export default {
   components: {
     ErrorSummary,
     TextField,
-    TextareaInput,
     RichTextInput,
     DateInput,
     Select,

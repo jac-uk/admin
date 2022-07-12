@@ -91,7 +91,12 @@
           Role summary (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.roleSummaryWelsh }}
+          <!-- eslint-disable -->
+          <div
+            class="govuk-body"
+            v-html="exercise.roleSummaryWelsh"
+          />
+          <!-- eslint-enable -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
