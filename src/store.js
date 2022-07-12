@@ -5,6 +5,7 @@ Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
+import ui from '@/store/ui';
 import auth from '@/store/auth';
 import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
@@ -41,10 +42,13 @@ import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
 
+import exerciseDiversity from '@/store/exercise/diversity/document';
+
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
+    ui,
     auth,
     services,
     exerciseCollection,
@@ -78,6 +82,7 @@ const store = new Vuex.Store({
     panellists,
     panellist,
     characterChecks,
+    exerciseDiversity,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

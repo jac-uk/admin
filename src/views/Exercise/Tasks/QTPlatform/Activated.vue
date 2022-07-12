@@ -20,7 +20,7 @@
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"
           >
-            {{ task.participants.length }}
+            {{ task.applications.length }}
           </h2>
         </div>
       </div>

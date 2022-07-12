@@ -97,6 +97,8 @@ import ExerciseTaskActivated from '@/views/Exercise/Tasks/Task/Activated';
 import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
 import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
+import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
+import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
 import QTPlatformLoading from '@/views/Exercise/Tasks/QTPlatform/Loading';
@@ -104,6 +106,8 @@ import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
 import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
 import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
 import QTPlatformFinalised from '@/views/Exercise/Tasks/QTPlatform/Finalised';
+import QTPlatformFinalisedList from '@/views/Exercise/Tasks/QTPlatform/Finalised/List';
+import QTPlatformFinalisedViewScore from '@/views/Exercise/Tasks/QTPlatform/Finalised/View';
 import QTPlatformCompleted from '@/views/Exercise/Tasks/QTPlatform/Completed';
 
 // TODO remove these once we no longer need to support old code panels
@@ -986,11 +990,26 @@ const router = new Router({
                 {
                   path: 'finalised',
                   component: QTPlatformFinalised,
-                  name: 'qt-platform-finalised',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Finalised | Qualifying test',
-                  },
+                  children: [
+                    {
+                      path: '',
+                      name: 'qt-platform-finalised',
+                      component: QTPlatformFinalisedList,
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Finalised | Exercise task',
+                      },
+                    },
+                    {
+                      path: ':score',
+                      component: QTPlatformFinalisedViewScore,
+                      name: 'qt-platform-finalised-score',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'ViewScore | Finalised | Exercise task',
+                      },
+                    },
+                  ],
                 },
                 {
                   path: 'completed',
@@ -1069,11 +1088,26 @@ const router = new Router({
                 {
                   path: 'finalised',
                   component: ExerciseTaskFinalised,
-                  name: 'exercise-task-finalised',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Finalised | Exercise task',
-                  },
+                  children: [
+                    {
+                      path: '',
+                      name: 'exercise-task-finalised',
+                      component: ExerciseTaskFinalisedList,
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Finalised | Exercise task',
+                      },
+                    },
+                    {
+                      path: ':score',
+                      component: ExerciseTaskFinalisedViewScore,
+                      name: 'exercise-task-finalised-score',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'ViewScore | Finalised | Exercise task',
+                      },
+                    },
+                  ],
                 },
                 {
                   path: 'completed',

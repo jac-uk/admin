@@ -26,3 +26,20 @@
 .v-top {
   vertical-align: top;
 }
+
+.full-screen {
+  .print-none,
+  header,
+  footer,
+  .title-bar-exercise,
+  .sub-navigation {
+    display: none;
+  }
+  .print-full-width {
+    width: 100%;
+  }
+  .govuk-width-container {
+    max-width: none;
+    padding: 20px !important;
+  }
+}

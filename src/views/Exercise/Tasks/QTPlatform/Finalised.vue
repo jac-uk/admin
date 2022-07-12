@@ -1,123 +1,84 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ type | lookup }} test
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l">
+          {{ type | lookup }}
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-half text-right">
+        <button
+          class="govuk-button govuk-!-margin-right-2"
+          :class="{ 'govuk-button--secondary': task.passMark }"
+          type="button"
+          @click="$refs['setPassMarkModal'].openModal()"
+        >
+          <span v-if="task.passMark">Pass mark {{ task.passMark }}</span>
+          <span v-else>Set pass mark</span>
+        </button>
+        <ActionButton
+          v-if="task.passMark"
+          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+          type="primary"
+          @click="btnComplete"
+        >
+          Complete
+        </ActionButton>
+        <FullScreenButton />
+      </div>
+    </div>
 
     <p
-      v-if="hasApplicationsWithoutStatus"
-      class="govuk-body-l"
+      v-if="!task.passMark"
+      class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      Please choose a status for each application.
+      Please set a pass mark.
     </p>
     <p
       v-else
-      class="govuk-body-l"
+      class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      {{ type | lookup }} test can now be completed. All applications will be updated with
-      their new
-      status.
+      {{ type | lookup }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
 
-    <!-- STATS -->
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-0">
-            Applications
-          </p>
-          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            {{ task.participants.length }}
-          </h2>
-        </div>
-      </div>
-      <div
-        v-if="hasApplicationsWithoutStatus"
-        class="govuk-grid-column-one-half"
-      >
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-0">
-            Status not yet assigned
-          </p>
-          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            {{ totalApplicationsWithoutStatus }}
-          </h2>
-        </div>
-      </div>
-      <div
-        v-else
-        class="govuk-grid-column-one-half"
-      >
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-4">
-            Next step
-          </p>
-          <ActionButton
-            class="govuk-!-margin-bottom-1"
-            type="primary"
-            @click="btnComplete"
-          >
-            Complete {{ type | lookup }} test
-          </ActionButton>
-        </div>
-      </div>
-    </div>
-    <!-- END STATS -->
+    <RouterView
+      :exercise-id="exercise.id"
+      :type="type"
+      :scores="scores"
+    />
 
-    <!-- START: SCORE SHEET -->
-    <Table
-      ref="scoreSheet"
-      data-key="id"
-      :data="scoreSheetRows"
-      :columns="scoreSheetColumns"
-      :page-size="500"
-      local-data
-      class="merit-list"
-    >
-      <template #row="{row}">
-        <TableCell class="table-cell-application">
-          {{ row.referenceNumber }}
-        </TableCell>
-        <TableCell class="text-right">
-          {{ row.score }}
-        </TableCell>
-        <TableCell class="govuk-!-padding-0 v-top">
-          <Select
-            :id="`status-${row.id}`"
-            class="govuk-!-margin-bottom-0"
-            :value="(task.outcome && task.outcome[row.id]) || ''"
-            @input="updateStatus(row.id, $event)"
-          >
-            <option
-              v-for="status in statuses"
-              :key="status"
-              :value="status"
-            >
-              {{ status | lookup }}
-            </option>
-          </Select>
-        </TableCell>
-      </template>
-    </Table>
-    <!-- END: SCORE SHEET -->
+    <Modal ref="setPassMarkModal">
+      <TitleBar>
+        Set pass mark
+      </TitleBar>
+      <SetPassMark
+        class="govuk-!-margin-6"
+        :scores="scores"
+        :data="{ passMark: task.passMark }"
+        @save="setPassMark"
+        @cancel="$refs['setPassMarkModal'].closeModal()"
+      />
+    </Modal>
+
   </div>
 </template>
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { functions } from '@/firebase';
+import FullScreenButton from '@/components/Page/FullScreenButton';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import TitleBar from '@/components/Page/TitleBar';
+import SetPassMark from './Finalised/SetPassMark';
 
 export default {
   components: {
-    Table,
-    TableCell,
-    Select,
     ActionButton,
+    FullScreenButton,
+    Modal,
+    TitleBar,
+    SetPassMark,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -133,50 +94,88 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
-    statuses() {
-      switch (this.type) {
-      case QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS:
-        return ['passedCA', 'failedCA'];
-      case QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT:
-        return ['passedSJ', 'failedSJ'];
-      case QUALIFYING_TEST.TYPE.SCENARIO:
-        return ['passedScenario', 'failedScenario'];
-      }
-      return [`passed-${this.type}`, `failed-${this.type}`];
+    exerciseDiversity() {
+      return this.$store.state.exerciseDiversity.record;
     },
-    scoreSheetRows() {
-      return this.task.participants.map(row => {
+    scores() {
+      if (!this.task) return [];
+      if (!this.exerciseDiversity) return [];
+      if (!this.task.finalScores) return [];
+      console.log('got data');
+      // group scores
+      const scoreMap = {};
+      this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
+        if (!scoreMap[scoreData.score]) {
+          scoreMap[scoreData.score] = {
+            count: 0,
+            rank: 0,
+            diversity: {
+              female: 0,
+              bame: 0,
+              solicitor: 0,
+              disability: 0,
+            },
+            cumulativeDiversity: {
+              female: 0,
+              bame: 0,
+              solicitor: 0,
+              disability: 0,
+            },
+          };
+        }
+        scoreMap[scoreData.score].count += 1;
+        if (this.exerciseDiversity[scoreData.id].gender === 'female') scoreMap[scoreData.score].diversity.female += 1;
+        if (this.exerciseDiversity[scoreData.id].ethnicity === 'bame') scoreMap[scoreData.score].diversity.bame += 1;
+        if (this.exerciseDiversity[scoreData.id].professionalBackground.indexOf('solicitor') >= 0) scoreMap[scoreData.score].diversity.solicitor += 1;
+        if (this.exerciseDiversity[scoreData.id].disability === 'yes') scoreMap[scoreData.score].diversity.disability += 1;
+      });
+      console.log('scoreMap', scoreMap);
+
+      // add rank and cumulative diversity
+      const scoresInDescendingOrder = Object.keys(scoreMap).sort((a, b) => b - a);
+      let prevScore;
+      scoresInDescendingOrder.forEach(score => {
+        if (prevScore) {
+          scoreMap[score].rank = scoreMap[prevScore].rank + scoreMap[prevScore].count;
+          scoreMap[score].cumulativeDiversity.female = scoreMap[prevScore].cumulativeDiversity.female;
+          scoreMap[score].cumulativeDiversity.bame = scoreMap[prevScore].cumulativeDiversity.bame;
+          scoreMap[score].cumulativeDiversity.solicitor = scoreMap[prevScore].cumulativeDiversity.solicitor;
+          scoreMap[score].cumulativeDiversity.disability = scoreMap[prevScore].cumulativeDiversity.disability;
+        } else {
+          scoreMap[score].rank = 1;
+        }
+        scoreMap[score].cumulativeDiversity.female += scoreMap[score].diversity.female;
+        scoreMap[score].cumulativeDiversity.bame += scoreMap[score].diversity.bame;
+        scoreMap[score].cumulativeDiversity.solicitor += scoreMap[score].diversity.solicitor;
+        scoreMap[score].cumulativeDiversity.disability += scoreMap[score].diversity.disability;
+        prevScore = score;
+      });
+
+      console.log('scoresInDescendingOrder', scoresInDescendingOrder);
+
+      // return
+      return scoresInDescendingOrder.map(score => {
         return {
-          id: row.srcId,
-          referenceNumber: row.ref,
-          email: row.email,
-          fullName: row.fullName,
-          score: this.task.scores[row.srcId] || 0,
+          score: parseInt(score),
+          ...scoreMap[score],
         };
-      }).sort((a, b) => b.score - a.score);
+      });
     },
-    scoreSheetColumns() {
-      const columns = [];
-      columns.push({ title: 'Application', class: 'table-cell-application' });
-      columns.push({ title: 'Score', class: 'text-center table-cell-score' });
-      columns.push({ title: 'Status', class: 'text-center' });
-      return columns;
-    },
-    totalApplications() {
-      return this.task.participants.length;
-    },
-    totalApplicationsWithStatus() {
+    totalPassed() {
+      if (!this.scores.length) return 0;
       if (!this.task) return 0;
-      if (!this.task.outcome) return 0;
-      const applicationIdsWithStatus = Object.keys(this.task.outcome);
-      return applicationIdsWithStatus.length;
+      if (!this.task.passMark) return 0;
+      const scoreData = this.scores.find(scoreData => scoreData.score === this.task.passMark);
+      return scoreData.rank + scoreData.count - 1;
     },
-    totalApplicationsWithoutStatus() {
-      return this.totalApplications - this.totalApplicationsWithStatus;
+    totalFailed() {
+      if (!this.task) return 0;
+      if (!this.task.passMark) return 0;
+      return this.task.finalScores.length - this.totalPassed;
     },
-    hasApplicationsWithoutStatus() {
-      return this.totalApplicationsWithoutStatus !== 0;
-    },
+  },
+  async created() {
+    await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   methods: {
     btnNext,
@@ -185,12 +184,14 @@ export default {
         exerciseId: this.exercise.id,
         type: this.type,
       });
+      this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
     },
-    async updateStatus(applicationId, status) {
-      const saveData = {};
-      saveData[`outcome.${applicationId}`] = status;
-      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: saveData });
+    async setPassMark(data) {
+      if (data) {
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseInt(data.passMark) } } );
+        this.$refs['setPassMarkModal'].closeModal();
+      }
     },
   },
 };

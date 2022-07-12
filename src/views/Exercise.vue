@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="govuk-grid-row clearfix govuk-!-margin-bottom-2">
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">
             {{ exercise.referenceNumber }}
@@ -41,7 +41,7 @@
           </router-link>
         </div>
       </div>
-      <div class="govuk-grid-row">
+      <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full">
           <SubNavigation
             v-if="!hasJourney && subNavigation.length > 1"
