@@ -241,6 +241,28 @@
                 </div>
               </div>
             </div>
+            <div
+              v-for="(ar, index) in getOtherCharacterIssues(row.candidate.id)"
+              :key="`${row.candidate.id}-${index}`"
+            >
+              <hr
+                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+              >
+              <p><strong>{{ ar.exercise.name }}</strong></p>
+              <div
+                v-for="(issue, subIndex) in ar.issues.characterIssues"
+                :key="`${index}-${subIndex}`"
+                class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+              >
+                <div class="govuk-grid-column-full">
+                  <div class="issue">
+                    <p class="govuk-body">
+                      {{ issue.summary }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </TableCell>
         </template>
       </Table>
@@ -286,6 +308,7 @@ export default {
       downloadingReport: false,
       exportingToGoogleDoc: false,
       total: null,
+      otherApplicationRecords: [],
     };
   },
   computed: {
@@ -317,6 +340,9 @@ export default {
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
+    },
+    applicationRecords: function() {
+      this.getOtherApplicationRecords(this.applicationRecords);
     },
   },
   destroyed() {
@@ -418,6 +444,35 @@ export default {
     async saveIssueStatusReason(applicationRecord, reason) {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async getOtherApplicationRecords(applicationRecords) {
+      if (!applicationRecords || !applicationRecords.length) {
+        this.otherApplicationRecords = [];
+      }
+      
+      for (let i = 0; i < applicationRecords.length; i++) {
+        const record = applicationRecords[i];
+        const firestoreRef = firestore
+          .collection('applicationRecords')
+          .where('exercise.id', '!=', record.exercise.id)
+          .where('candidate.id', '==', record.candidate.id)
+          .where('flags.characterIssues', '==', true);
+        const snapshot = await firestoreRef.get();
+        const otherRecords = [];
+        snapshot.forEach(doc => {
+          otherRecords.push(doc.data());
+        });
+        if (otherRecords.length) {
+          this.otherApplicationRecords.push({
+            candidateId: record.candidate.id,
+            otherRecords,
+          });
+        }
+      }
+    },
+    getOtherCharacterIssues(candidateId) {
+      const record = this.otherApplicationRecords.find(item => item.candidateId === candidateId);
+      return record ? record.otherRecords : [];
     },
   },
 };
