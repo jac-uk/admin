@@ -64,7 +64,7 @@ export default {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     totalApplications() {
-      return this.task.participants.length;
+      return this.task.applications.length;
     },
   },
 };
