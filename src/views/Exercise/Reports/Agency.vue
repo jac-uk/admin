@@ -21,6 +21,10 @@
               Export data
             </button>
             <button
+              v-if="hasPermissions([
+                PERMISSIONS.applications.permissions.canReadApplications.value,
+                PERMISSIONS.exercises.permissions.canReadExercises.value
+              ])"
               class="govuk-button moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
               @click="refreshReport"
@@ -463,11 +467,13 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     TabsList,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       report: null,

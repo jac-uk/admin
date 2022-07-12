@@ -4,6 +4,7 @@
       {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
     </h2>
     <Table
+      v-if="tieBreakers || hasPermissions([PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value])"
       data-key="id"
       :data="qualifyingTests"
       :page-size="50"
@@ -34,25 +35,27 @@
       </template>
     </Table>
 
-    <button
-      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-      class="govuk-button govuk-!-margin-right-3"
-      @click="btnCreate"
-    >
-      Create New
-    </button>
-    <button
-      v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-      @click="btnCreateFromClipboard"
-    >
-      Create New from Clipboard
-    </button>
-    <div v-else>
-      <Banner
-        :message="warningMessage"
-        status="warning"
-      />
+    <div v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canCreateQualifyingTests.value])">
+      <button
+        v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
+        class="govuk-button govuk-!-margin-right-3"
+        @click="btnCreate"
+      >
+        Create New
+      </button>
+      <button
+        v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="btnCreateFromClipboard"
+      >
+        Create New from Clipboard
+      </button>
+      <div v-else>
+        <Banner
+          :message="warningMessage"
+          status="warning"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -62,6 +65,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -69,6 +73,7 @@ export default {
     Banner,
     TableCell,
   },
+  mixins: [permissionMixin],
   props: {
     tieBreakers: {
       required: true,

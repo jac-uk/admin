@@ -7,6 +7,11 @@
     </div>
     <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value
+        ])"
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         :disabled="generatingExport"
         @click="exportData"
@@ -18,6 +23,11 @@
         Export to Excel
       </button>
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="exportToGoogleDoc"
       >
@@ -178,6 +188,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
@@ -188,6 +199,7 @@ export default {
     Select,
     TextareaInput,
   },
+  mixins: [permissionMixin],
   data () {
     return {
       applicationRecords: [],

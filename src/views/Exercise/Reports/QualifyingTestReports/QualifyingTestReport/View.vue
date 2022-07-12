@@ -26,6 +26,12 @@
                 Edit
               </button>
               <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value,
+                  PERMISSIONS.qualifyingTestReports.permissions.canUpdateQualifyingTestReports.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
+                ])"
                 class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
                 @click="btnGenerateReport"
               >
@@ -108,6 +114,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import SetCutOffScore from '@/components/ModalViews/SetCutOffScore';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -117,6 +124,7 @@ export default {
     SetCutOffScore,
     Modal,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       tableColumns: [

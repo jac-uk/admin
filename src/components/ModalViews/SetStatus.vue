@@ -44,6 +44,9 @@
       </span>
       <div>
         <button
+          v-if="hasPermissions([
+            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+          ])"
           class="govuk-button govuk-!-margin-right-3"
           @click="save"
         >
@@ -84,6 +87,7 @@
 import { functions } from '@/firebase';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'SetStatus',
@@ -95,6 +99,7 @@ export default {
       return lookup(value);
     },
   },
+  mixins: [permissionMixin],
   data() {
     return {
       applicationStatus: null,

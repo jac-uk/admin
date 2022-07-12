@@ -1,7 +1,12 @@
 <template>
   <div>
     <!-- diversity header -->
-    <div class="govuk-grid-column-full">
+    <div
+      v-if="hasPermissions([
+        PERMISSIONS.applications.permissions.canReadApplications.value
+      ])"
+      class="govuk-grid-column-full"
+    >
       <div class="moj-page-header-actions">
         <div class="moj-page-header-actions__title">
           <h2 class="govuk-heading-l">
@@ -306,6 +311,7 @@ import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -314,6 +320,7 @@ export default {
     LoadingMessage,
     Banner,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       type: 'showData',

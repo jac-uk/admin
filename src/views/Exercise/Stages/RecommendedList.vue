@@ -11,7 +11,10 @@
             Recommended ({{ totalApplicationRecords }})
           </h1>
         </div>
-        <div class="moj-page-header-actions__actions float-right">
+        <div
+          v-if="hasPermissions([PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value])"
+          class="moj-page-header-actions__actions float-right"
+        >
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
@@ -81,6 +84,7 @@
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -88,6 +92,7 @@ export default {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       message: null,

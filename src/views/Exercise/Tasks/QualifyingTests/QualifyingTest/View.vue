@@ -117,7 +117,7 @@
     </div>
 
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
-      <span v-if="isCreated || isSubmitted || isApproved">
+      <span v-if="(isCreated || isSubmitted || isApproved) && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])">
         <button
           :disabled="false"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -134,9 +134,15 @@
         </button>
       </span>
 
-      <div v-if="isApproved">
+      <div v-if="isApproved && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])">
         <div v-if="isDryRun">
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             :disabled="!isDryRunCandidates"
             class="govuk-!-margin-right-3"
@@ -154,6 +160,12 @@
         </div>
         <div v-else-if="isMopUp">
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             class="govuk-!-margin-right-3"
             @click="btnInitialise"
@@ -244,6 +256,12 @@
             </option>
           </Select>
           <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+              PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+              PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+              PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+            ])"
             type="primary"
             :disabled="!exerciseStage"
             class="govuk-!-margin-right-3"
@@ -255,13 +273,18 @@
       </div>
 
       <Banner
-        v-if="isTieBreaker && exerciseHasOpenQTs"
+        v-if="isTieBreaker && exerciseHasOpenQTs && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
         message="You cannot open this tie-breaker test yet as there are still qualifying tests open for this exercise"
         status="warning"
       />
 
       <ActionButton
-        v-if="isInitialised"
+        v-if="isInitialised && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value
+        ])"
         :disabled="!isUserAdded || !canOpenTests"
         class="govuk-!-margin-right-3"
         @click="btnActivate"
@@ -270,7 +293,7 @@
       </ActionButton>
 
       <button
-        v-if="isActivated"
+        v-if="isActivated && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
         :disabled="true"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnPause"
@@ -279,7 +302,7 @@
       </button>
 
       <button
-        v-if="isInitialised || isActivated || isPaused || isCompleted"
+        v-if="(isInitialised || isActivated || isPaused || isCompleted) && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value])"
         class="govuk-button govuk-!-margin-right-3"
         @click="btnResponses('all')"
       >
@@ -287,7 +310,7 @@
       </button>
 
       <button
-        v-if="isInitialised || isActivated || isPaused"
+        v-if="(isInitialised || isActivated || isPaused) && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnResponses('reasonable-adjustments')"
       >
@@ -295,7 +318,7 @@
       </button>
 
       <button
-        v-if="canCreateCopy"
+        v-if="canCreateCopy && hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnCreateCopy"
       >
@@ -303,6 +326,7 @@
       </button>
 
       <button
+        v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value])"
         ref="btnCopyToClipboard"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="btnCopyToClipboard"
@@ -311,7 +335,12 @@
       </button>
 
       <ActionButton
-        v-if="isInitialised"
+        v-if="isInitialised && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.notifications.permissions.canCreateNotifications.value
+        ])"
         type="secondary"
         :disabled="true"
         class="govuk-!-margin-right-3"
@@ -321,7 +350,13 @@
       </ActionButton>
 
       <ActionButton
-        v-if="isActivated || isCompleted"
+        v-if="(isActivated || isCompleted) && hasPermissions([
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTests.permissions.canUpdateQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         type="primary"
         :disabled="isEndDatePassed"
         class="govuk-!-margin-right-3"
@@ -341,6 +376,7 @@ import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -348,6 +384,7 @@ export default {
     Select,
     Banner,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       exerciseStage: '',
