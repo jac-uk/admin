@@ -241,6 +241,7 @@
                 </div>
               </div>
             </div>
+
             <div
               v-for="(ar, index) in getOtherCharacterIssues(row.candidate.id)"
               :key="`${row.candidate.id}-${index}`"
@@ -248,17 +249,43 @@
               <hr
                 class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
               >
-              <p><strong>{{ ar.exercise.name }}</strong></p>
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
+                    {{ ar.exercise.name }}
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-third text-right">
+                  <a
+                    :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                    class="govuk-link print-none"
+                    target="_blank"
+                  >
+                    View application
+                  </a>
+                </div>
+              </div>
               <div
                 v-for="(issue, subIndex) in ar.issues.characterIssues"
                 :key="`${index}-${subIndex}`"
-                class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
               >
+                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
                 <div class="govuk-grid-column-full">
                   <div class="issue">
                     <p class="govuk-body">
                       {{ issue.summary }}
                     </p>
+                    <EventRenderer
+                      v-if="issue.events"
+                      :events="issue.events"
+                    />
+                  </div>
+                  <div
+                    v-if="issue.comments"
+                    class="jac-comments"
+                  >
+                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
                   </div>
                 </div>
               </div>
