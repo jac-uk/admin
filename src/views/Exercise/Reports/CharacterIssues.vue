@@ -172,6 +172,7 @@
                 <RouterLink
                   :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' } }"
                   class="govuk-link print-none"
+                  target="_blank"
                 >
                   View application
                 </RouterLink>
