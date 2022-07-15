@@ -14,7 +14,10 @@
             Back
           </router-link>
         </div>
-        <div class="govuk-grid-column-three-quarters">
+        <div
+          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+          class="govuk-grid-column-three-quarters"
+        >
           <div class="float-right govuk-!-margin-0">
             <AddToFavouritesButton
               class="govuk-!-margin-bottom-0"
@@ -33,7 +36,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!hasJourney && isEditable"
+            v-if="!hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -60,6 +63,7 @@ import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavourit
 import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -67,6 +71,7 @@ export default {
     AddToFavouritesButton,
     SubNavigation,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       loaded: false,
@@ -109,15 +114,19 @@ export default {
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
       subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
-      if (this.exercise.applications || this.hasOpened) {
+      if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
       if (this.hasQualifyingTests || this.isProcessing) {
         subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
       }
       if (this.isProcessing) {
-        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        if (this.hasPermissions([this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value])) {
+          subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
+        }
+        if (this.hasPermissions([this.PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value])) {
+          subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
+        }
       }
       return subNavigation;
     },

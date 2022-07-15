@@ -4,7 +4,7 @@
       Independent Assessments
     </h1>
     <div
-      v-if="hasInitialisedAssessments"
+      v-if="hasInitialisedAssessments && hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
       class="govuk-grid-row"
     >
       <div class="govuk-grid-column-one-half">
@@ -26,7 +26,10 @@
         </div>
       </div>
     </div>
-    <dl class="govuk-summary-list">
+    <dl 
+      v-if="hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
+      class="govuk-summary-list"
+    >
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Contact date
@@ -74,23 +77,36 @@
           status="warning"
         />
         <ActionButton
-          v-if="canCancelAssessments"
+          v-if="canCancelAssessments && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+          ])"
           class="govuk-!-margin-right-3"
           @click="cancelAssessments()"
         >
           Cancel Assessments
         </ActionButton>
         <ActionButton
-          v-if="canSendRequestsToAll"
+          v-if="canSendRequestsToAll && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
           type="primary"
-          @click="sendRequestsToAll()"
+          @click="openModal('modalRefRequests', 'allRequests', null, sendRequestsToAll)"
         >
           Send to all
         </ActionButton>
         <ActionButton
-          v-if="canSendRemindersToAll"
+          v-if="canSendRemindersToAll && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
           type="primary"
-          @click="sendRemindersToAll()"
+          @click="openModal('modalRefRequests', 'allReminders', null, sendRemindersToAll)"
         >
           Send reminders
         </ActionButton>
@@ -148,8 +164,11 @@
                   class="moj-button-menu__wrapper"
                 >
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value
+                    ])"
                     class="moj-button-menu__item"
-                    @click="testRequest(row.id)"
+                    @click="openModal('modalRefRequests', 'testRequest', row.id, testRequest)"
                   >
                     Test Request
                   </ActionButton>
@@ -184,15 +203,26 @@
                   class="moj-button-menu__wrapper"
                 >
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.exercises.permissions.canReadExercises.value,
+                      PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                      PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+                      PERMISSIONS.notifications.permissions.canCreateNotifications.value
+                    ])"
                     class="moj-button-menu__item"
-                    @click="resendRequest(row.id)"
+                    @click="openModal('modalRefRequests', 'request', row.id, resendRequest)"
                   >
                     Request
                   </ActionButton>
 
                   <ActionButton
+                    v-if="hasPermissions([
+                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                      PERMISSIONS.notifications.permissions.canCreateNotifications.value
+                    ])"
                     class="moj-button-menu__item"
-                    @click="sendReminder(row.id)"
+                    @click="openModal('modalRefRequests', 'reminder', row.id, sendReminder)"
                   >
                     Reminder
                   </ActionButton>
@@ -200,6 +230,11 @@
               </div>
               <div class="moj-button-menu__wrapper">
                 <button
+                  v-if="hasPermissions([
+                    PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                    PERMISSIONS.assessments.permissions.canCreateAssessments.value,
+                    PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+                  ])"
                   class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
                   @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
                 >
@@ -217,42 +252,52 @@
         </Table>
       </div>
       <div v-else>
-        <select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-select govuk-!-margin-right-3"
+        <div
+          v-if="hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.applications.permissions.canReadApplications.value,
+            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+            PERMISSIONS.assessments.permissions.canCreateAssessments.value
+          ])"
         >
-          <option value="">
-            Choose applications
-          </option>
-          <option
-            v-if="applicationRecordCounts.review"
-            value="review"
+          <select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-select govuk-!-margin-right-3"
           >
-            Review ({{ applicationRecordCounts.review }})
-          </option>
-          <option
-            v-if="applicationRecordCounts.shortlisted"
-            value="shortlisted"
-          >
-            Shortlisted ({{ applicationRecordCounts.shortlisted }})
-          </option>
+            <option value="">
+              Choose applications
+            </option>
+            <option
+              v-if="applicationRecordCounts.review"
+              value="review"
+            >
+              Review ({{ applicationRecordCounts.review }})
+            </option>
+            <option
+              v-if="applicationRecordCounts.shortlisted"
+              value="shortlisted"
+            >
+              Shortlisted ({{ applicationRecordCounts.shortlisted }})
+            </option>
 
-          <option
-            v-if="applicationRecordCounts.selected"
-            value="selected"
-          >
-            Selected ({{ applicationRecordCounts.selected }})
-          </option>
-        </select>
+            <option
+              v-if="applicationRecordCounts.selected"
+              value="selected"
+            >
+              Selected ({{ applicationRecordCounts.selected }})
+            </option>
+          </select>
 
-        <ActionButton
-          type="primary"
-          :disabled="!exerciseStage"
-          @click="initialiseAssessments()"
-        >
-          Start Assessments
-        </ActionButton>
+          <ActionButton
+            type="primary"
+            :disabled="!exerciseStage"
+            @click="initialiseAssessments()"
+          >
+            Start Assessments
+          </ActionButton>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -271,6 +316,16 @@
         @close="modalUploadClose"
       />
     </Modal>
+
+    <Modal ref="modalRefRequests">
+      <component
+        :is="`IndependentAssessmentsRequests`"
+        :type="modalType"
+        :params="modalParams"
+        @close="closeModal('modalRefRequests')"
+        @ok="modalCallback"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -284,7 +339,9 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests'; 
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -295,6 +352,12 @@ export default {
     DownloadLink,
     Modal,
     UploadAssessment,
+    IndependentAssessmentsRequests,
+  },
+  mixins: [permissionMixin],
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+    next();
   },
   data() {
     return {
@@ -308,6 +371,9 @@ export default {
         { title: 'Actions' },
       ],
       sendErrors: '',
+      modalType: '',
+      modalParams: null,
+      modalCallback: null,
     };
   },
   computed: {
@@ -379,10 +445,6 @@ export default {
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
     },
   },
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
-    next();
-  },
   methods: {
     async initialiseAssessments() {
       if (!this.exerciseStage) {
@@ -448,6 +510,18 @@ export default {
       assessment.approved = true;
 
       await this.$store.dispatch('assessment/save', assessment);
+    },
+    openModal(modalRef, type, params, callback){
+      this.$refs[modalRef].openModal();
+      this.modalType = type;
+      this.modalParams = params;
+      this.modalCallback = callback;
+    },
+    closeModal(modalRef) {
+      this.$refs[modalRef].closeModal();
+      this.modalType = '';
+      this.modalParams = null;
+      this.modalCallback = null;
     },
     modalUploadOpen(obj) {
       this.uploadAsssessmentProps = obj;

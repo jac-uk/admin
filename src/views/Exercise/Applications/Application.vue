@@ -33,7 +33,10 @@
             </h1>
           </div>
 
-          <div class="govuk-grid-column-one-half text-right print-none">
+          <div
+            v-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
+            class="govuk-grid-column-one-half text-right print-none"
+          >
             <span
               v-if="activeTab == 'full'"
             >
@@ -157,7 +160,7 @@
                 Extension
               </span>
               <button
-                v-if="application.dateExtension"
+                v-if="application.dateExtension && hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
                 @click="$refs.modalRefExtension.openModal()"
               >
                 Change
@@ -169,7 +172,7 @@
                 {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
               </h2>
               <button
-                v-else
+                v-else-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value, PERMISSIONS.notes.permissions.canCreateNotes.value])"
                 class="govuk-button govuk-!-margin-bottom-0"
                 @click="$refs.modalRefExtension.openModal()"
               >
@@ -276,6 +279,7 @@
             title="Notes about the Application"
             :candidate-id="application.userId"
             :application-id="applicationId"
+            :can-create="hasPermissions([PERMISSIONS.notes.permissions.canCreateNotes.value])"
           />
         </div>
       </div>
@@ -317,6 +321,7 @@ import {
   hasStatementOfSuitability,
   hasIndependentAssessments
 } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -338,23 +343,36 @@ export default {
     AssessmentsSummary,
     AssessorsSummary,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,
       editMode: false,
-      tabs: [
+      activeTab: 'full',
+      dropDownExpanded: false,
+    };
+  },
+  computed: {
+    tabs() {
+      const tabs = [
         {
           ref: 'full',
           title: 'Full information',
         },
-        {
+      ];
+      if (this.hasPermissions([this.PERMISSIONS.notes.permissions.canReadNotes.value])) {
+        tabs.push({
           ref: 'notes',
           title: 'Notes',
-        },
-        {
+        });
+      }
+      if (this.hasPermissions([this.PERMISSIONS.panels.permissions.canReadPanels.value])) {
+        tabs.push({
           ref: 'panel',
           title: 'Panel pack',
-        },
+        });
+      }
+      tabs.push(
         {
           ref: 'issues',
           title: 'Issues',
@@ -366,13 +384,10 @@ export default {
         {
           ref: 'characterchecks',
           title: 'Character checks',
-        },
-      ],
-      activeTab: 'full',
-      dropDownExpanded: false,
-    };
-  },
-  computed: {
+        }
+      );
+      return tabs;
+    },
     editable() {
       return this.editMode && this.authorisedToPerformAction;
     },

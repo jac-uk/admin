@@ -18,6 +18,7 @@
             Show my favourites
           </button>
           <router-link
+            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
             ref="linkToNewExercise"
             to="/create-exercise"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
@@ -41,7 +42,10 @@
         >
           All exercises
         </h1>
-        <form @submit.prevent="checkForm">
+        <form
+          class="exercises-table"
+          @submit.prevent="checkForm"
+        >
           <Table
             ref="exercisesTable"
             data-key="id"
@@ -63,6 +67,11 @@
             ]"
             multi-select
             :selection.sync="selectedItems"
+            :custom-search="{
+              placeholder: 'Search exercise names',
+              handler: exerciseSearch,
+              field: 'name',
+            }"
             @change="getTableData"
           >
             <template #actions>
@@ -120,12 +129,14 @@
 import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       selectedItems: [],
@@ -181,13 +192,24 @@ export default {
     getTableData(params) {
       this.$store.dispatch(
         'exerciseCollection/bind',
-        params,
+        params
       );
     },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
     },
+    exerciseSearch(searchTerm) {
+      return new Promise(resolve => {
+        resolve([searchTerm, searchTerm.toLowerCase(), searchTerm.toUpperCase()]);
+      });
+    },
   },
 };
 </script>
+
+<style>
+.exercises-table input[type="search"] {
+  margin-left: 3px;
+}
+</style>
