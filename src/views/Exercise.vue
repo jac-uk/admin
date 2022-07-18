@@ -114,6 +114,7 @@ export default {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
+      subNavigation.push({ path: `${path}/dashboard`, title: 'Dashboard' });
       subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
