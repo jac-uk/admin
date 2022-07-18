@@ -21,7 +21,7 @@
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"
           >
-            {{ exercise._applicationRecords.review }}
+            {{ exercise._applicationRecords.applied }}
           </h2>
         </div>
       </div>

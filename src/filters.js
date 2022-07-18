@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -93,9 +93,6 @@ const lookup = (value) => {
     'L&J': 'Legal & Judicial Skills',
     'PQ': 'Personal Qualities',
 
-    'critical-analysisPassed': 'Passed CA',
-    'critical-analysisFailed': 'Failed CA',
-
     // 'xxx': 'xxx',
   };
 
@@ -129,6 +126,13 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
+
+  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}`] = 'Critical Analysis';
+  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Passed`] = 'Passed CA';
+  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Failed`] = 'Failed CA';
+  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement';
+  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
+  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
 
   returnValue = lookup[value];
 

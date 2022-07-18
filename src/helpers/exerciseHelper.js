@@ -1,6 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE } from '@/helpers/constants';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -126,15 +126,11 @@ const GRADE_VALUES = {
 };
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
 
-const TASK_TYPE = {
-  SIFT: 'sift',
-  SELECTION: 'selection',
-  SCENARIO: 'scenario',
-};
-
 const TASKS = [
-  TASK_TYPE.SIFT,
+  TASK_TYPE.CRITICAL_ANALYSIS,
+  TASK_TYPE.SITUATIONAL_JUDGEMENT,
   TASK_TYPE.SCENARIO,
+  TASK_TYPE.SIFT,
   TASK_TYPE.SELECTION,
 ];
 

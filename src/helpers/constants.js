@@ -46,10 +46,19 @@ const APPLICATION_STATUS = {
   SECOND_STAGE_INVITED: 'secondStageInvited',
 };
 
+const TASK_TYPE = {
+  SIFT: 'sift',
+  SELECTION: 'selection',
+  SCENARIO: 'scenario',
+  CRITICAL_ANALYSIS: 'criticalAnalysis',
+  SITUATIONAL_JUDGEMENT: 'situationalJudgement',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
   APPLICATION_STATUS,
+  TASK_TYPE,
   SHORTLISTING,
   QUALIFYING_TEST,
   QUALIFYING_TEST_RESPONSE,

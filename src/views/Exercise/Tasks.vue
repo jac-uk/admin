@@ -13,7 +13,7 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
-import { isProcessing } from '@/helpers/exerciseHelper';
+import { isProcessing, TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -59,7 +59,7 @@ export default {
               title: 'New',
               class: 'govuk-tag--blue',
             },
-            path: `${path}/qt/critical-analysis`,
+            path: `${path}/qt/${TASK_TYPE.CRITICAL_ANALYSIS}`,
           }
         );
       }
@@ -71,7 +71,7 @@ export default {
               title: 'New',
               class: 'govuk-tag--blue',
             },
-            path: `${path}/qt/situational-judgement`,
+            path: `${path}/qt/${TASK_TYPE.SITUATIONAL_JUDGEMENT}`,
           }
         );
       }
@@ -83,7 +83,7 @@ export default {
               title: 'New',
               class: 'govuk-tag--blue',
             },
-            path: `${path}/qt/scenario`,
+            path: `${path}/qt/${TASK_TYPE.SCENARIO}`,
           }
         );
       }

@@ -50,7 +50,7 @@
 import { beforeRouteEnter, btnNext } from './helper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
-import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { TASK_TYPE } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -94,19 +94,19 @@ export default {
         this.btnNext();
       }
     },
-    getTimelineDate(exercise, qtType, dateType) {
+    getTimelineDate(exercise, taskType, dateType) {
       if (!exercise.shortlistingMethods) {
         return;
       }
 
       let fieldName;
-      if (qtType === QUALIFYING_TEST.TYPE.SCENARIO && exercise.shortlistingMethods.includes('scenario-test-qualifying-test')) {
+      if (taskType === TASK_TYPE.SCENARIO && exercise.shortlistingMethods.includes('scenario-test-qualifying-test')) {
         fieldName = 'scenarioTest';
       }
-      if (qtType === QUALIFYING_TEST.TYPE.SITUATIONAL_JUDGEMENT && exercise.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
+      if (taskType === TASK_TYPE.SITUATIONAL_JUDGEMENT && exercise.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
         fieldName = 'situationalJudgementTest';
       }
-      if (qtType === QUALIFYING_TEST.TYPE.CRITICAL_ANALYSIS && exercise.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
+      if (taskType === TASK_TYPE.CRITICAL_ANALYSIS && exercise.shortlistingMethods.includes('critical-analysis-qualifying-test')) {
         fieldName = 'criticalAnalysisTest';
       }
 

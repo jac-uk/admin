@@ -20,6 +20,7 @@
               >
                 Export data
               </button>
+              <FullScreenButton />
             </div>
           </div>
         </div>
@@ -77,6 +78,10 @@
                 class="govuk-table__header table-cell-application"
               />
               <th
+                scope="col"
+                class="govuk-table__header"
+              />
+              <th
                 v-for="column in headerColumns"
                 :key="column.ref"
                 scope="col"
@@ -95,6 +100,14 @@
                 class="govuk-link"
               >{{ row.referenceNumber }}</a>
             </TableCell>
+
+            <template if="row['critical-analysis']">
+              <TableCell
+                class="text-center table-cell-score"
+              >
+                {{ row['critical-analysis'].score }}
+              </TableCell>
+            </template>
 
             <template v-if="row.sift && isOpen('sift')">
               <TableCell
@@ -164,6 +177,7 @@
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import FullScreenButton from '@/components/Page/FullScreenButton';
 import { CAPABILITIES, SELECTION_CATEGORIES, TASKS, TASK_TYPE, TASK_STATUS } from '@/helpers/exerciseHelper';
 
 export default {
@@ -171,6 +185,7 @@ export default {
     Table,
     TableCell,
     TabsList,
+    FullScreenButton,
   },
   data() {
     return {
@@ -209,6 +224,7 @@ export default {
       return SELECTION_CATEGORIES.filter(cap => this.exercise.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
     },
     tasks() {
+      console.log('tasks', this.$store.state.tasks.records);
       return this.$store.state.tasks.records;
     },
     completedTasks() {
@@ -228,6 +244,14 @@ export default {
       const columns = [];
       this.completedTasks.forEach(task => {
         switch (task.type) {
+        case TASK_TYPE.CRITICAL_ANALYSIS:
+          //   columns.push({
+          //     ref: task.type,
+          //     colspan: 1,
+          //   });
+          //   break;
+          columns.push();
+          break;
         case TASK_TYPE.SIFT:
           columns.push({
             ref: task.type,
@@ -262,6 +286,9 @@ export default {
       columns.push({ title: 'Application', class: 'table-cell-application' });
       this.completedTasks.forEach(task => {
         switch (task.type) {
+        case TASK_TYPE.CRITICAL_ANALYSIS:
+          columns.push({ title: 'CA', class: 'text-center table-cell-score' });
+          break;
         case TASK_TYPE.SIFT:
           if (this.isOpen(TASK_TYPE.SIFT)) {
             this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
@@ -307,6 +334,7 @@ export default {
           ...row,
         };
       }).sort((a, b) => b.totalScore - a.totalScore);
+      console.log('rows', rows);
       return rows;
     },
   },
