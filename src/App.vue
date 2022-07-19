@@ -286,4 +286,15 @@ $jac-link-colour: #753880;
   }
 }
 
+/* customize nested ordered list (1.1, 1.2) */
+.custom-ordered-list ol {
+  counter-reset: item;
+}
+.custom-ordered-list li {
+  display: block;
+}
+.custom-ordered-list li::before {
+  counter-increment: item;
+  content: counters(item, '.') '. ';
+}
 </style>
