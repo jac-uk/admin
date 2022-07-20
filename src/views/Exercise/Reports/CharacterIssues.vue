@@ -214,79 +214,107 @@
                   @input="saveIssueStatusReason(row, $event)"
                 />
               </div>
-            </div>
-            <div
-              v-for="(issue, index) in row.issues.characterIssues"
-              :key="index"
-              class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
-            >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-              >
-              <div class="govuk-grid-column-full">
-                <div class="issue">
-                  <p class="govuk-body">
-                    {{ issue.summary }}
-                  </p>
-                  <EventRenderer
-                    v-if="issue.events"
-                    :events="issue.events"
-                  />
-                </div>
-                <div
-                  v-if="issue.comments"
-                  class="jac-comments"
+
+              <div class="govuk-grid-column-two-thirds">
+                <a href="#" class="govuk-link print-none" @click.prevent="toggleIssues(row.id)">
+                  View all issues<span class="icon-expand" :class="open[row.id] ? 'open' : 'close'">
+                    <img src="@/assets/expand.svg" />
+                  </span>
+                </a>
+              </div>
+              <div class="govuk-grid-column-one-third">
+                Offence category
+                <Select
+                  id="issue-offence-category"
+                  :value="row.issues.characterIssuesOffenceCategory || ''"
+                  @input="saveIssueOffenceCategory(row, $event)"
+                  class="offence-category"
                 >
-                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                </div>
+                  <option value="" />
+                  <option value="Single criminal offences">
+                    Single criminal offences
+                  </option>
+                  <option value="Multiple criminal offences">
+                    Multiple criminal offences
+                  </option>
+                  <option value="Single motoring offences">
+                    Single motoring offences
+                  </option>
+                  <option value="Multiple motoring offences">
+                    Multiple motoring offences
+                  </option>
+                  <option value="Single financial offences">
+                    Single financial offences
+                  </option>
+                  <option value="Multiple financial offences">
+                    Multiple financial offences
+                  </option>
+                  <option value="Single professional conduct offences">
+                    Single professional conduct offences
+                  </option>
+                  <option value="Multiple professional conduct offences">
+                    Multiple professional conduct offences
+                  </option>
+                  <option value="Single other matters">
+                    Single other matters
+                  </option>
+                  <option value="Multiple other matters">
+                    Multiple other matters
+                  </option>
+                  <option value="Mixed">
+                    Mixed
+                  </option>
+                </Select>
               </div>
             </div>
 
-            <div
-              v-for="(ar, index) in getOtherCharacterIssues(row.candidate.id)"
-              :key="`${row.candidate.id}-${index}`"
-            >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-              >
-              <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
-                    {{ ar.exercise.name }}
-                  </div>
-                </div>
-                <div class="govuk-grid-column-one-third text-right">
-                  <a
-                    :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
-                    class="govuk-link print-none"
-                    target="_blank"
-                  >
-                    View application
-                  </a>
-                </div>
-              </div>
+            <div v-if="open[row.id]">
               <div
-                v-for="(issue, subIndex) in ar.issues.characterIssues"
-                :key="`${index}-${subIndex}`"
-                class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                v-for="(ar, index) in getOtherCharacterIssues(row.candidate.id)"
+                :key="`${row.candidate.id}-${index}`"
               >
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
-                <div class="govuk-grid-column-full">
-                  <div class="issue">
-                    <p class="govuk-body">
-                      {{ issue.summary }}
-                    </p>
-                    <EventRenderer
-                      v-if="issue.events"
-                      :events="issue.events"
-                    />
+                <hr
+                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                >
+                <p class="govuk-hint">Exercise - {{ ar.exercise.referenceNumber }}</p>
+                <div class="govuk-grid-row">
+                  <div class="govuk-grid-column-two-thirds">
+                    <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
+                      {{ ar.exercise.name }}
+                    </div>
                   </div>
-                  <div
-                    v-if="issue.comments"
-                    class="jac-comments"
-                  >
-                    <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                  <div class="govuk-grid-column-one-third text-right">
+                    <a
+                      :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                      class="govuk-link print-none"
+                      target="_blank"
+                    >
+                      View application
+                    </a>
+                  </div>
+                </div>
+                <div
+                  v-for="(issue, subIndex) in ar.issues.characterIssues"
+                  :key="`${index}-${subIndex}`"
+                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                >
+                  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
+                  <div class="govuk-grid-column-full">
+                    <div class="issue">
+                      <p class="govuk-body">
+                        {{ issue.summary }}
+                      </p>
+                      <EventRenderer
+                        v-if="issue.events"
+                        :events="issue.events"
+                      />
+                    </div>
+                    <div
+                      v-if="issue.comments"
+                      class="jac-comments"
+                    >
+                      <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -337,6 +365,7 @@ export default {
       exportingToGoogleDoc: false,
       total: null,
       otherApplicationRecords: [],
+      open: [],
     };
   },
   computed: {
@@ -473,6 +502,14 @@ export default {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    toggleIssues(id) {
+      this.open[id] = this.open[id] === undefined ? true : !this.open[id];
+      this.open = Object.assign({}, this.open);
+    },
+    async saveIssueOffenceCategory(applicationRecord, category) {
+      applicationRecord.issues.characterIssuesOffenceCategory = category;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
     async getOtherApplicationRecords(applicationRecords) {
       if (!applicationRecords || !applicationRecords.length) {
         this.otherApplicationRecords = [];
@@ -482,13 +519,17 @@ export default {
         const record = applicationRecords[i];
         const firestoreRef = firestore
           .collection('applicationRecords')
-          .where('exercise.id', '!=', record.exercise.id)
           .where('candidate.id', '==', record.candidate.id)
           .where('flags.characterIssues', '==', true);
         const snapshot = await firestoreRef.get();
         const otherRecords = [];
         snapshot.forEach(doc => {
-          otherRecords.push(doc.data());
+          const data = doc.data();
+          if (data.exercise.id === record.exercise.id) {
+            otherRecords.unshift(data); // put current exercise first
+          } else {
+            otherRecords.push(data);
+          }
         });
         if (otherRecords.length) {
           this.otherApplicationRecords.push({
@@ -505,3 +546,21 @@ export default {
   },
 };
 </script>
+
+<style>
+.icon-expand {
+  display: inline-block;
+  margin-left: 14px;
+  transition: transform 0.5s;
+}
+.icon-expand.open {
+  transform: rotate(0deg);
+}
+.icon-expand.close {
+  transform: rotate(180deg);
+}
+
+.offence-category select {
+  width: 100%;
+}
+</style>
