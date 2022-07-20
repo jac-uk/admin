@@ -302,6 +302,7 @@
               id="yes-salary-details"
               v-model="formData.yesSalaryDetails"
               label="Detail of salaried part-time working (SPTW)"
+              :required="formData.isSPTWOffered"
             />
           </RadioItem>
           <RadioItem
