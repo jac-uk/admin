@@ -12,7 +12,7 @@
             href="/"
             class="govuk-link govuk-link--no-visited-state govuk-!-font-size-24 govuk-!-font-weight-bold"
           >
-            JAC Digital Platform
+            JAC Digital Platform - Foyez preview
           </a>
           <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
