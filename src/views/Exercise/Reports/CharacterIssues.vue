@@ -231,32 +231,32 @@
                   class="offence-category"
                 >
                   <option value="" />
-                  <option value="Single criminal offences">
-                    Single criminal offences
+                  <option value="Single criminal offence">
+                    Single criminal offence
                   </option>
                   <option value="Multiple criminal offences">
                     Multiple criminal offences
                   </option>
-                  <option value="Single motoring offences">
-                    Single motoring offences
+                  <option value="Single motoring offence">
+                    Single motoring offence
                   </option>
                   <option value="Multiple motoring offences">
                     Multiple motoring offences
                   </option>
-                  <option value="Single financial offences">
-                    Single financial offences
+                  <option value="Single financial offence">
+                    Single financial offence
                   </option>
                   <option value="Multiple financial offences">
                     Multiple financial offences
                   </option>
-                  <option value="Single professional conduct offences">
-                    Single professional conduct offences
+                  <option value="Single professional conduct">
+                    Single professional conduct
                   </option>
-                  <option value="Multiple professional conduct offences">
-                    Multiple professional conduct offences
+                  <option value="Multiple professional conducts">
+                    Multiple professional conducts
                   </option>
-                  <option value="Single other matters">
-                    Single other matters
+                  <option value="Single other matter">
+                    Single other matter
                   </option>
                   <option value="Multiple other matters">
                     Multiple other matters
