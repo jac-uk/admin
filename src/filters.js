@@ -133,6 +133,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'Qualifying Test';
 
   returnValue = lookup[value];
 

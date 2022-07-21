@@ -93,8 +93,10 @@ import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import ExerciseTask from '@/views/Exercise/Tasks/Task';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
-import ExerciseTaskInitialised from '@/views/Exercise/Tasks/Task/Initialised';
-import ExerciseTaskActivated from '@/views/Exercise/Tasks/Task/Activated';
+import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised';
+import ExerciseTaskTestActivated from '@/views/Exercise/Tasks/Task/TestActivated';
+import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsInitialised';
+import ExerciseTaskPanelsActivated from '@/views/Exercise/Tasks/Task/PanelsActivated';
 import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
 import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
@@ -104,8 +106,8 @@ import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
 import QTPlatformLoading from '@/views/Exercise/Tasks/QTPlatform/Loading';
 import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
-import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
-import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
+// import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
+// import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
 import QTPlatformFinalised from '@/views/Exercise/Tasks/QTPlatform/Finalised';
 import QTPlatformFinalisedList from '@/views/Exercise/Tasks/QTPlatform/Finalised/List';
 import QTPlatformFinalisedViewScore from '@/views/Exercise/Tasks/QTPlatform/Finalised/View';
@@ -970,24 +972,24 @@ const router = new Router({
                     title: 'New | Qualifying test',
                   },
                 },
-                {
-                  path: 'initialised',
-                  component: QTPlatformInitialised,
-                  name: 'qt-platform-initialised',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Initialised | Qualifying test',
-                  },
-                },
-                {
-                  path: 'activated',
-                  component: QTPlatformActivated,
-                  name: 'qt-platform-activated',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Activated | Qualifying test',
-                  },
-                },
+                // {
+                //   path: 'initialised',
+                //   component: QTPlatformInitialised,
+                //   name: 'qt-platform-initialised',
+                //   meta: {
+                //     requiresAuth: true,
+                //     title: 'Initialised | Qualifying test',
+                //   },
+                // },
+                // {
+                //   path: 'activated',
+                //   component: QTPlatformActivated,
+                //   name: 'qt-platform-activated',
+                //   meta: {
+                //     requiresAuth: true,
+                //     title: 'Activated | Qualifying test',
+                //   },
+                // },
                 {
                   path: 'finalised',
                   component: QTPlatformFinalised,
@@ -1051,21 +1053,39 @@ const router = new Router({
                   },
                 },
                 {
-                  path: 'initialised',
-                  component: ExerciseTaskInitialised,
-                  name: 'exercise-task-initialised',
+                  path: 'test-initialised',
+                  component: ExerciseTaskTestInitialised,
+                  name: 'exercise-task-testInitialised',
                   meta: {
                     requiresAuth: true,
-                    title: 'Initialised | Exercise task',
+                    title: 'Test Initialised | Exercise task',
                   },
                 },
                 {
-                  path: 'activated',
-                  component: ExerciseTaskActivated,
-                  name: 'exercise-task-activated',
+                  path: 'test-activated',
+                  component: ExerciseTaskTestActivated,
+                  name: 'exercise-task-testActivated',
                   meta: {
                     requiresAuth: true,
-                    title: 'Activated | Exercise task',
+                    title: 'Test Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'panels-initialised',
+                  component: ExerciseTaskPanelsInitialised,
+                  name: 'exercise-task-panelsInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panels Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'panels-activated',
+                  component: ExerciseTaskPanelsActivated,
+                  name: 'exercise-task-panelsActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panels Activated | Exercise task',
                   },
                 },
                 {

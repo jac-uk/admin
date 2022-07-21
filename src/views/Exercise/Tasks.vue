@@ -63,7 +63,7 @@ export default {
           }
         );
       }
-      if (exercise.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
+      if (exercise.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0 && exercise.situationalJudgementTestDate) {
         sideNavigation.push(
           {
             title: 'Situational Judgement Test',
@@ -75,7 +75,22 @@ export default {
           }
         );
       }
-      if (exercise.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate) {
+      if (
+        exercise.shortlistingMethods.indexOf('critical-analysis-qualifying-test') >= 0 && exercise.criticalAnalysisTestDate
+        && exercise.shortlistingMethods.indexOf('situational-judgement-qualifying-test') >= 0 && exercise.situationalJudgementTestDate
+      ) {
+        sideNavigation.push(
+          {
+            title: 'Qualifying Test',
+            tag: {
+              title: 'New',
+              class: 'govuk-tag--blue',
+            },
+            path: `${path}/qualifyingTest`,
+          }
+        );
+      }
+      if (exercise.shortlistingMethods.indexOf('scenario-test-qualifying-test') >= 0 && exercise.scenarioTestDate) {
         sideNavigation.push(
           {
             title: 'Scenario Test',
@@ -83,7 +98,7 @@ export default {
               title: 'New',
               class: 'govuk-tag--blue',
             },
-            path: `${path}/qt/${TASK_TYPE.SCENARIO}`,
+            path: `${path}/${TASK_TYPE.SCENARIO}`,
           }
         );
       }

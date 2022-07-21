@@ -52,6 +52,7 @@ const TASK_TYPE = {
   SCENARIO: 'scenario',
   CRITICAL_ANALYSIS: 'criticalAnalysis',
   SITUATIONAL_JUDGEMENT: 'situationalJudgement',
+  QUALIFYING_TEST: 'qualifyingTest',
 };
 
 export {

@@ -34,8 +34,14 @@
           {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
         </TableCell>
         <TableCell :title="tableColumns[7].title">
-          <strong v-if="task.passMark && task.passMark <= row.score" class="govuk-tag govuk-tag--green">PASS</strong>
-          <strong v-if="task.passMark && task.passMark > row.score" class="govuk-tag govuk-tag--red">FAIL</strong>
+          <strong
+            v-if="task.passMark && task.passMark <= row.score"
+            class="govuk-tag govuk-tag--green"
+          >PASS</strong>
+          <strong
+            v-if="task.passMark && task.passMark > row.score"
+            class="govuk-tag govuk-tag--red"
+          >FAIL</strong>
         </TableCell>
       </template>
     </Table>

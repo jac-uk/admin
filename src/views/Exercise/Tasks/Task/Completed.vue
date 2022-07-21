@@ -23,9 +23,6 @@
         class="govuk-grid-column-one-half"
       >
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-          <p class="govuk-body govuk-!-margin-bottom-2">
-            Status after sift
-          </p>
           <Table
             data-key="id"
             :data="Object.entries(task._stats.totalForEachOutcome)"

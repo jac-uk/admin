@@ -59,7 +59,6 @@
         @cancel="$refs['setPassMarkModal'].closeModal()"
       />
     </Modal>
-
   </div>
 </template>
 

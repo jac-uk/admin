@@ -77,20 +77,26 @@
                 scope="col"
                 class="govuk-table__header table-cell-application"
               />
-              <th
-                scope="col"
-                class="govuk-table__header"
-              />
-              <th
-                v-for="column in headerColumns"
-                :key="column.ref"
-                scope="col"
-                :colspan="column.colspan > 1 ? column.colspan : false"
-                class="govuk-table__header text-center expandable"
-                @click="toggleColumn(column.ref)"
-              >
-                <span class="elipses">{{ column.ref | lookup }}</span>
-              </th>
+              <template v-for="column in headerColumns">
+                <template v-if="column.expandable">
+                  <th
+                    :key="column.ref"
+                    scope="col"
+                    :colspan="column.colspan > 1 ? column.colspan : false"
+                    class="govuk-table__header text-center expandable"
+                    @click="toggleColumn(column.ref)"
+                  >
+                    <span class="elipses">{{ column.ref | lookup }}</span>
+                  </th>
+                </template>
+                <template v-else>
+                  <th
+                    :key="column.ref"
+                    scope="col"
+                    class="govuk-table__header"
+                  />
+                </template>
+              </template>
             </tr>
           </template>
           <template #row="{row}">
@@ -101,11 +107,19 @@
               >{{ row.referenceNumber }}</a>
             </TableCell>
 
-            <template if="row['critical-analysis']">
+            <template if="row.criticalAnalysis">
               <TableCell
                 class="text-center table-cell-score"
               >
-                {{ row['critical-analysis'].score }}
+                {{ row.criticalAnalysis.score }}
+              </TableCell>
+            </template>
+
+            <template if="row.situationalJudgement">
+              <TableCell
+                class="text-center table-cell-score"
+              >
+                {{ row.situationalJudgement.score }}
               </TableCell>
             </template>
 
@@ -232,7 +246,7 @@ export default {
       const tasks = this.tasks.filter(task => task.status === TASK_STATUS.COMPLETED);
       const completedTasks = [];
       TASKS.forEach(type => {
-        const task = tasks.find(task => task.type === type);
+        const task = tasks.find(task => task.id === type);
         if (task) { completedTasks.push(task); }
       });
       return completedTasks;
@@ -243,18 +257,17 @@ export default {
     headerColumns() {
       const columns = [];
       this.completedTasks.forEach(task => {
-        switch (task.type) {
+        switch (task.id) {
         case TASK_TYPE.CRITICAL_ANALYSIS:
-          //   columns.push({
-          //     ref: task.type,
-          //     colspan: 1,
-          //   });
-          //   break;
-          columns.push();
+        case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+          columns.push({
+            ref: task.id,
+          });
           break;
         case TASK_TYPE.SIFT:
           columns.push({
-            ref: task.type,
+            ref: task.id,
+            expandable: true,
             colspan: this.isOpen(task.type) ? this.capabilities.length : 1,
           });
           break;
@@ -262,6 +275,7 @@ export default {
           this.selectionCategories.forEach(cat => {
             columns.push({
               ref: cat,
+              expandable: true,
               colspan: this.isOpen(cat) ? this.capabilities.length : 1,
             });
           });
@@ -285,9 +299,12 @@ export default {
       if (!this.hasScoreSheet) return columns;
       columns.push({ title: 'Application', class: 'table-cell-application' });
       this.completedTasks.forEach(task => {
-        switch (task.type) {
+        switch (task.id) {
         case TASK_TYPE.CRITICAL_ANALYSIS:
           columns.push({ title: 'CA', class: 'text-center table-cell-score' });
+          break;
+        case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+          columns.push({ title: 'SJ', class: 'text-center table-cell-score' });
           break;
         case TASK_TYPE.SIFT:
           if (this.isOpen(TASK_TYPE.SIFT)) {
@@ -313,6 +330,7 @@ export default {
     scoreSheetRows() {
       if (!this.hasScoreSheet) return [];
       const applicationData = {};
+      console.log('rows', this.completedTasks);
       this.completedTasks.forEach(task => {
         task.finalScores.forEach(row => {
           if (!applicationData[row.id]) {
@@ -321,9 +339,10 @@ export default {
             };
           }
           applicationData[row.id].referenceNumber = row.ref;
-          applicationData[row.id][task.type] = {
+          console.log('task id', task.id);
+          applicationData[row.id][task.id] = {
             score: row.score,
-            scoreSheet: row.scoreSheet,
+            scoreSheet: row.scoreSheet ? row.scoreSheet : null,
           };
           applicationData[row.id].totalScore += row.score;
         });

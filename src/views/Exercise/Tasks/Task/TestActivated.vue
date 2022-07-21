@@ -4,24 +4,25 @@
       {{ type | lookup }} test
     </h1>
     <p class="govuk-body-l">
-      This test is being prepared on the
+      This test is hosted on the
       <a
         :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.testId}`"
         target="_blank"
       >
-        QT Platform
-      </a>
+        QT Platform</a>.
+      <span v-if="isScenario">When completed you may continue.</span>
+      <span v-else>When completed you may import scores.</span>
     </p>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
           <div class="govuk-caption-m">
-            Applications
+            Participants
           </div>
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"
           >
-            {{ exercise._applicationRecords.applied }}
+            {{ task.applications.length }}
           </h2>
         </div>
       </div>
@@ -30,9 +31,9 @@
         <ActionButton
           class="govuk-!-margin-bottom-0"
           type="primary"
-          @click="updateQualifyingTestParticipants"
+          @click="updateQualifyingTestScores"
         >
-          Set up test participants
+          Import scores
         </ActionButton>
       </div>
     </div>
@@ -43,6 +44,7 @@
 import { beforeRouteEnter, btnNext } from './helper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
+import { TASK_TYPE } from '@/helpers/constants';
 
 export default {
   components: {
@@ -62,11 +64,14 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
+    isScenario() {
+      return this.type === TASK_TYPE.SCENARIO;
+    },
   },
   methods: {
     btnNext,
-    async updateQualifyingTestParticipants() {
-      const response = await functions.httpsCallable('updateQualifyingTestParticipants')({
+    async updateQualifyingTestScores() {
+      const response = await functions.httpsCallable('updateQualifyingTestScores')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

@@ -143,6 +143,7 @@ const TASK_STATUS = {
   COMPLETED: 'completed',
 };
 
+// TODO - this is not currently used. Use it or lose it :)
 function taskNextStatus(currentStatus) {
   let nextStatus;
   switch (currentStatus) {
@@ -175,13 +176,13 @@ function taskApplicationsStageAndStatus(type) {
   const params = {};
   switch (type) {
     case TASK_TYPE.SIFT:
-      params.stage = EXERCISE_STAGE.REVIEW;
+      params.stage = EXERCISE_STAGE.APPLIED;
       break;
     case TASK_TYPE.SELECTION:
       params.stage = EXERCISE_STAGE.SELECTED;
       break;
     case TASK_TYPE.SCENARIO:
-      params.stage = EXERCISE_STAGE.REVIEW;
+      params.stage = EXERCISE_STAGE.APPLIED;
       params.status = APPLICATION_STATUS.PASSED_FIRST_TEST;
       break;
   }
