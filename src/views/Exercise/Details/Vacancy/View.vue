@@ -86,7 +86,14 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <p v-if="exercise.isSPTWOffered === true">
-            Yes<span v-if="exercise.yesSalaryDetails"> - {{ exercise.yesSalaryDetails }}</span>
+            Yes
+            <span v-if="exercise.yesSalaryDetails">
+              - {{ exercise.yesSalaryDetails }}
+            </span>
+            <Banner
+              status="warning"
+              message="Caution! - No details for SPTW have been added"
+            />
           </p>
           <p v-else-if="exercise.isSPTWOffered === false">
             No<span v-if="exercise.noSalaryDetails"> - {{ exercise.noSalaryDetails }}</span>
@@ -163,8 +170,12 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 
 export default {
+  components: {
+    Banner,
+  },
   mixins: [permissionMixin],
   computed: {
     exercise() {
