@@ -91,12 +91,14 @@
               - {{ exercise.yesSalaryDetails }}
             </span>
             <Banner
+              v-else
               status="warning"
               message="Caution! - No details for SPTW have been added"
             />
           </p>
           <p v-else-if="exercise.isSPTWOffered === false">
-            No<span v-if="exercise.noSalaryDetails"> - {{ exercise.noSalaryDetails }}</span>
+            No
+            <span v-if="exercise.noSalaryDetails"> - {{ exercise.noSalaryDetails }}</span>
           </p>
         </dd>
       </div>
