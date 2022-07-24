@@ -9,18 +9,21 @@
           Total applications
         </span>
         <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="hard-coded">1000</span>
+          <span class="">{{ applicationCounts._total }}</span>
         </h2>
+        <span class="govuk-caption-s color-middle">
+          <span class="">Last Updated: {{ applicationCounts._lastUpdated | formatDate('datetime') }}</span>
+        </span>
       </div>
       <div class="panel govuk-!-margin-bottom-9">
         <span class="govuk-caption-m">
           Number of vacancies
         </span>
         <span class="govuk-caption-s color-middle">
-          <span class="hard-coded-border">Immediate start (s87)</span>
+          <span class="">Immediate start (s87)</span>
         </span>
         <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="hard-coded">Up to five</span>
+          <span class="">Up to {{ exercise.immediateStart }}</span>
         </h2>
       </div>
     </div>
@@ -28,7 +31,7 @@
       <div class="panel govuk-!-margin-bottom-4">
         <span class="govuk-caption-m">Type of exercise</span>
         <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="hard-coded">Legal</span>
+          <span class="capitalize">{{ exercise.typeOfExercise }}</span>
         </h2>
       </div>
       <div class="panel govuk-!-margin-bottom-9">
@@ -493,5 +496,9 @@ $govuk-brand-colour:	#1d70b8;
 .value-m {
   font-size: 24px;
   font-weight: bold;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 </style>
