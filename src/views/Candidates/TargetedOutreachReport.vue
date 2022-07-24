@@ -152,7 +152,7 @@ export default {
     async search() {
       this.searching = true;
       const data = {
-        data: this.nins.split(/[\n,]/), // split on new line or comma
+        nationalInsuranceNumbers: this.nins.split(/[\n,]/), // split on new line or comma
       };
       const returnData = await functions.httpsCallable('targetedOutreachReport')(data);
       this.results = returnData.data;
