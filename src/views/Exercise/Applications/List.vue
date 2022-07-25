@@ -53,7 +53,12 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.personalDetails && row.personalDetails.fullName }}
+          <RouterLink
+            :to="{ name: 'candidates-view', params: { id: row.userId } }"
+            target="_blank"
+          >
+            {{ row.personalDetails && row.personalDetails.fullName }}
+          </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ row.status | lookup }}
