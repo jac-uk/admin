@@ -88,7 +88,7 @@
           Cancel Assessments
         </ActionButton>
         <ActionButton
-          v-if="canSendRequestsToAll && hasPermissions([
+          v-if="canSendRequests && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
@@ -96,17 +96,28 @@
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
           type="primary"
-          @click="openModal('modalRefRequests', 'allRequests', null, sendRequestsToAll)"
+          @click="openModal(
+            'modalRefRequests', 
+            isSelectedAll ? 'allRequests' : 'requests',
+            isSelectedAll ? null : selectedItems,
+            sendRequests
+          )"
         >
           Send to all
         </ActionButton>
         <ActionButton
-          v-if="canSendRemindersToAll && hasPermissions([
+          v-if="canSendReminders && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
           type="primary"
-          @click="openModal('modalRefRequests', 'allReminders', null, sendRemindersToAll)"
+          :disabled="!selectedItems.length"
+          @click="openModal(
+            'modalRefRequests', 
+            isSelectedAll ? 'allReminders' : 'reminders',
+            isSelectedAll ? null : selectedItems,
+            sendReminders
+          )"
         >
           Send reminders
         </ActionButton>
@@ -116,6 +127,8 @@
           :data="assessments"
           :page-size="50"
           :columns="tableColumns"
+          multi-select
+          :selection.sync="selectedItems"
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
@@ -374,6 +387,7 @@ export default {
       modalType: '',
       modalParams: null,
       modalCallback: null,
+      selectedItems: [],
     };
   },
   computed: {
@@ -432,10 +446,10 @@ export default {
     canCancelAssessments() {
       return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
     },
-    canSendRequestsToAll() {
+    canSendRequests() {
       return this.hasInitialisedAssessments && !(this.exercise.assessments && this.exercise.assessments.sent);
     },
-    canSendRemindersToAll() {
+    canSendReminders() {
       return this.hasInitialisedAssessments && (this.exercise.assessments && this.exercise.assessments.sent);
     },
     uploadPath() {
@@ -443,6 +457,9 @@ export default {
       const applicationId = this.assessment.application.id;
       const assessorId = this.assessorId;
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
+    },
+    isSelectedAll() {
+      return this.assessments.length === this.selectedItems.length;
     },
   },
   methods: {
@@ -455,12 +472,14 @@ export default {
     async cancelAssessments() {
       await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id });
     },
-    async sendRequestsToAll() {
-      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id });
+    async sendRequests(assessmentIds) {
+      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentIds });
+      this.resetSelectedItems();
       this.processSendAssessmentResult(result);
     },
-    async sendRemindersToAll() {
-      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id });
+    async sendReminders(assessmentIds) {
+      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentIds });
+      this.resetSelectedItems();
       this.processSendAssessmentResult(result);
     },
     async resendRequest(assessmentId) {
@@ -541,6 +560,9 @@ export default {
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
+    },
+    resetSelectedItems() {
+      this.selectedItems = [];
     },
   },
 };
