@@ -96,14 +96,9 @@
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
           type="primary"
-          @click="openModal(
-            'modalRefRequests', 
-            isSelectedAll ? 'allRequests' : 'requests',
-            isSelectedAll ? null : selectedItems,
-            sendRequests
-          )"
+          @click="openModal('modalRefRequests', 'requests', selectedItems, sendRequests)"
         >
-          Send to all
+          Send requests
         </ActionButton>
         <ActionButton
           v-if="canSendReminders && hasPermissions([
@@ -112,12 +107,7 @@
           ])"
           type="primary"
           :disabled="!selectedItems.length"
-          @click="openModal(
-            'modalRefRequests', 
-            isSelectedAll ? 'allReminders' : 'reminders',
-            isSelectedAll ? null : selectedItems,
-            sendReminders
-          )"
+          @click="openModal('modalRefRequests', 'reminders', selectedItems, sendReminders)"
         >
           Send reminders
         </ActionButton>
@@ -457,9 +447,6 @@ export default {
       const applicationId = this.assessment.application.id;
       const assessorId = this.assessorId;
       return `/exercise/${exerciseId}/application/${applicationId}/assessor/${assessorId}`;
-    },
-    isSelectedAll() {
-      return this.assessments.length === this.selectedItems.length;
     },
   },
   methods: {

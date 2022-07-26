@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Independent Assessments Requests
+      Independent Assessments {{ typeOfEmail }}
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -55,9 +55,9 @@ export default {
     typeOfEmail() {
       let str = '';
 
-      if (this.type === 'allRequests' || this.type === 'requests' || this.type === 'request') {
+      if (this.type === 'requests' || this.type === 'request') {
         str += 'request';
-      } else if (this.type === 'allReminders' || this.type === 'reminders' || this.type === 'reminder') {
+      } else if (this.type === 'reminders' || this.type === 'reminder') {
         str += 'reminder';
       } else if (this.type === 'testRequest') {
         str += 'test request';
@@ -68,9 +68,7 @@ export default {
     numberOfCandidates() {
       let str = '';
 
-      if (this.type === 'allRequests' || this.type === 'allReminders') {
-        str += 'all';
-      } else if (this.type === 'requests' || this.type === 'reminders') {
+      if (this.type === 'requests' || this.type === 'reminders') {
         str += this.params.length.toString();
       } else if (this.type === 'testRequest' || this.type === 'request' || this.type === 'reminder') {
         str += '1';
@@ -84,11 +82,11 @@ export default {
       }
 
       let str = '';
-      if (this.type === 'allRequests' || this.type === 'requests' || this.type === 'request') {
+      if (this.type === 'requests' || this.type === 'request') {
         str += 'request';
       } else if (this.type === 'testRequest') {
         str += 'test request';
-      } else if (this.type === 'allReminders' || this.type === 'reminders' || this.type === 'reminder') {
+      } else if (this.type === 'reminders' || this.type === 'reminder') {
         str += 'reminder';
       }
       return `I confirm, please send ${str}`;
