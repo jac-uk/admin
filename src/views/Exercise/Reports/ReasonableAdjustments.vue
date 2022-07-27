@@ -49,7 +49,7 @@
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.totalApplications }}
+            {{ report.totalApplications.toLocaleString('en-GB') }}
           </h2>
         </div>
       </div>
@@ -59,7 +59,7 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.rows.length }}
+            {{ report.rows.length.toLocaleString('en-GB') }}
           </h2>
         </div>
       </div>

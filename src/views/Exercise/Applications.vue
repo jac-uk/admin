@@ -32,15 +32,15 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Draft (${draft})`,
+          title: `Draft (${draft.toLocaleString('en-GB')})`,
           path: `${path}/draft`,
         },
         {
-          title: `Applied (${applied})`,
+          title: `Applied (${applied.toLocaleString('en-GB')})`,
           path: `${path}/applied`,
         },
         {
-          title: `Withdrawn (${withdrawn})`,
+          title: `Withdrawn (${withdrawn.toLocaleString('en-GB')})`,
           path: `${path}/withdrawn`,
         },
       ];

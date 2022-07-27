@@ -35,23 +35,23 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Review (${review})`,
+          title: `Review (${review.toLocaleString('en-GB')})`,
           path: `${path}/review`,
         },
         {
-          title: `Shortlisted (${shortlisted})`,
+          title: `Shortlisted (${shortlisted.toLocaleString('en-GB')})`,
           path: `${path}/shortlisted`,
         },
         {
-          title: `Selected (${selected})`,
+          title: `Selected (${selected.toLocaleString('en-GB')})`,
           path: `${path}/selected`,
         },
         {
-          title: `Recommended (${recommended})`,
+          title: `Recommended (${recommended.toLocaleString('en-GB')})`,
           path: `${path}/recommended`,
         },
         {
-          title: `Handover (${handover})`,
+          title: `Handover (${handover.toLocaleString('en-GB')})`,
           path: `${path}/handover`,
         },
       ];

@@ -12,7 +12,7 @@
           Immediate start (S87)
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ exercise.immediateStart }}</span>
+          >{{ exercise.immediateStart.toLocaleString('en-GB') }}</span>
         </p>
       </div>
 
@@ -30,13 +30,13 @@
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Draft
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ draftApplications }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ draftApplications.toLocaleString('en-GB') }}</span>
             </p>
           </div>
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Applied
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ appliedApplications }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ appliedApplications.toLocaleString('en-GB') }}</span>
             </p>
           </div>
         </div>

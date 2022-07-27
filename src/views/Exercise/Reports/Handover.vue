@@ -54,7 +54,7 @@
             Approved for immediate appointment
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ totalApplicationRecords }}
+            {{ totalApplicationRecords.toLocaleString('en-GB') }}
           </h2>
         </div>
       </div>

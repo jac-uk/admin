@@ -13,7 +13,7 @@
             Sent
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsSent }}
+            {{ assessmentsSent.toLocaleString('en-GB') }}
           </h2>
         </div>
       </div>
@@ -21,7 +21,7 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Completed</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsCompleted }}
+            {{ assessmentsCompleted.toLocaleString('en-GB') }}
           </h2>
         </div>
       </div>
@@ -273,20 +273,20 @@
               v-if="applicationRecordCounts.review"
               value="review"
             >
-              Review ({{ applicationRecordCounts.review }})
+              Review ({{ applicationRecordCounts.review.toLocaleString('en-GB') }})
             </option>
             <option
               v-if="applicationRecordCounts.shortlisted"
               value="shortlisted"
             >
-              Shortlisted ({{ applicationRecordCounts.shortlisted }})
+              Shortlisted ({{ applicationRecordCounts.shortlisted.toLocaleString('en-GB') }})
             </option>
 
             <option
               v-if="applicationRecordCounts.selected"
               value="selected"
             >
-              Selected ({{ applicationRecordCounts.selected }})
+              Selected ({{ applicationRecordCounts.selected.toLocaleString('en-GB') }})
             </option>
           </select>
 
