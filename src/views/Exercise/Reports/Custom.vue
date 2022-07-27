@@ -251,7 +251,7 @@
                 <td
                   class="govuk-table__cell govuk-table__cell--numeric"
                 >
-                  {{ row }}
+                  {{ row.toLocaleString('en-GB') }}
                 </td>
               </tr>
             </tbody>
