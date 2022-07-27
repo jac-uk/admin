@@ -38,12 +38,17 @@
         <span class="govuk-caption-m">
           Timeline - where we are
         </span>
-        <span class="govuk-caption-s color-middle">
-          <span class="hard-coded-border">Return date for independent assessments</span>
-        </span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="hard-coded">25 May 2022</span>
-        </h2>
+        <div
+          v-for="(time, index) in timeline"
+          :key="index"
+        >
+          <span class="govuk-caption-s color-middle">
+            <span class="">{{ time.entry }}</span>
+          </span>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+            <span class="">{{ time.dateString }}</span>
+          </h2>
+        </div>
       </div>
     </div>
 
@@ -316,7 +321,7 @@ export default {
     },
     timeline() {
       const timeline = exerciseTimeline(this.exercise);
-      return createTimeline(timeline, 2);
+      return createTimeline(timeline);
     },
     exerciseProgress() {
       if (this.exercise && this.exercise.progress) {
