@@ -48,6 +48,7 @@
           <RouterLink
             class="govuk-link"
             :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: status }}"
+            target="_blank"
           >
             {{ row.referenceNumber | showAlternative(row.id) }}
           </RouterLink>
