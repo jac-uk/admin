@@ -191,6 +191,12 @@
       >
         Process late applications
       </ActionButton>
+      <button
+        class="govuk-button govuk-button--warning govuk-!-margin-left-3"
+        @click="archive()"
+      >
+        Archive exercise
+      </button>
       <div v-if="!isProduction">
         <button
           v-if="isReadyForTesting"
@@ -293,13 +299,13 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      const returnReadyForApproval = this.exercise 
-        && this.exercise.state 
+      const returnReadyForApproval = this.exercise
+        && this.exercise.state
         && this.exercise.state === 'ready';
       return returnReadyForApproval;
     },
     isReadyForApprovalFromAdvertType() {
-      const returnReady = this.exercise 
+      const returnReady = this.exercise
         && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
       return returnReady;
     },
@@ -388,7 +394,7 @@ export default {
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
-      return msg; 
+      return msg;
     },
   },
   methods: {
@@ -397,6 +403,9 @@ export default {
     },
     approve() {
       this.$store.dispatch('exerciseDocument/approve');
+    },
+    archive() {
+      this.$store.dispatch('exerciseDocument/archive');
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');

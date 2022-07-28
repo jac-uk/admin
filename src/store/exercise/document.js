@@ -84,6 +84,14 @@ export default {
       };
       await ref.update(data);
     },
+    archive: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: 'archived',
+      };
+      await ref.update(data);
+    },
     approve: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -171,7 +179,7 @@ export default {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
   },
-  state: {  
+  state: {
     record: null,
     noOfTestApplications: 0,
   },

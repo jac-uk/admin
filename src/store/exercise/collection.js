@@ -30,11 +30,18 @@ export default {
       commit('updateFavourites', false);
       dispatch('bind');
     },
+    showArchived: ({ commit, dispatch }) => {
+      commit('updateFavourites', false);
+      dispatch('bind');
+    },
     storeItems: (context, { items }) => {
       context.commit('selectedItems', items);
     },
   },
   mutations: {
+    updateArchived(state, isArchived) {
+      state.isArchived = isArchived;
+    },
     updateFavourites(state, isFavourites) {
       state.isFavourites = isFavourites;
     },
@@ -45,6 +52,7 @@ export default {
   state: {
     records: [],
     isFavourites: false,
+    isArchived: false,
     selectedItems: [],
   },
 };
