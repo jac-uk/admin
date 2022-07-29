@@ -24,14 +24,16 @@ export default {
     }),
     showFavourites: ({ commit, dispatch }) => {
       commit('updateFavourites', true);
+      commit('updateArchived', false);
       dispatch('bind');
     },
     showAll: ({ commit, dispatch }) => {
       commit('updateFavourites', false);
+      commit('updateArchived', false);
       dispatch('bind');
     },
     showArchived: ({ commit, dispatch }) => {
-      commit('updateFavourites', false);
+      commit('updateArchived', true);
       dispatch('bind');
     },
     storeItems: (context, { items }) => {

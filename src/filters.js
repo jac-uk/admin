@@ -29,7 +29,7 @@ const lookup = (value) => {
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
 
-    // exercise states
+    // exercise stages
     registration: 'Registration',
     shortlisting: 'Shortlisting',
     selection: 'Selection',
@@ -61,6 +61,7 @@ const lookup = (value) => {
     'online-only': 'Yes - online resources only',
 
     // 'xxx': 'xxx',
+    archived: 'Archived',
   };
 
   lookup[ADVERT_TYPES.LISTING] = 'Listing';

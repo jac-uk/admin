@@ -30,6 +30,7 @@ export {
   configuredApplicationContentSteps,
   isEditable,
   isApproved,
+  isArchived,
   isProcessing,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
@@ -137,6 +138,15 @@ function isEditable(data) {
   switch (data.state) {
     case 'draft':
     case 'ready':
+      return true;
+    default:
+      return false;
+  }
+}
+function isArchived(data) {
+  if (!data) return false;
+  switch (data.state) {
+    case 'archived':
       return true;
     default:
       return false;

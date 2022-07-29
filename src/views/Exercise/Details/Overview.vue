@@ -6,7 +6,7 @@
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
-          Number of vacancies
+          Number of vacancies {{ isArchived }}
         </h2>
         <p class="govuk-body">
           Immediate start (S87)
@@ -44,8 +44,10 @@
     </div>
 
     <div class="govuk-grid-column-one-half">
-      <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
-        <span v-if="isPublished">Published</span>
+      <div :class="`govuk-!-margin-bottom-6 govuk-!-padding-3 ${isArchived ? 'background-red' : 'background-blue'}`">
+        <span v-if="isPublished">
+          Published
+        </span>
         <div
           v-if="isApproved"
           class="float-right"
@@ -61,7 +63,9 @@
         <span
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
-        >{{ exercise.state | lookup }}</span>
+        >
+          {{ exercise.state | lookup }}
+        </span>
         <span
           v-else
           class="display-block govuk-!-font-size-27"
@@ -104,7 +108,9 @@
                 v-if="task.done"
                 :id="`${task.id}-completed`"
                 class="govuk-tag"
-              >Done</strong>
+              >
+                Done
+              </strong>
               <span
                 v-else
                 :id="`${task.id}-completed`"
@@ -191,11 +197,21 @@
       >
         Process late applications
       </ActionButton>
+      <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
+      <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
       <button
-        class="govuk-button govuk-button--warning govuk-!-margin-left-3"
+        v-if="!isArchived"
+        class="govuk-button govuk-!-margin-left-3"
         @click="archive()"
       >
         Archive exercise
+      </button>
+      <button
+        v-else-if="isArchived"
+        class="govuk-button govuk-!-margin-left-3 govuk-button--warning"
+        @click="unarchive()"
+      >
+        Unarchive exercise
       </button>
       <div v-if="!isProduction">
         <button
@@ -249,7 +265,7 @@ import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestAp
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import { isArchived, isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
@@ -312,6 +328,9 @@ export default {
     isApproved() {
       return isApproved(this.exercise);
     },
+    isArchived() {
+      return isArchived(this.exercise);
+    },
     isTesting() {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
     },
@@ -335,6 +354,7 @@ export default {
         case 'ready':
         case 'approved':
         case 'pre-launch':
+        case 'archived':
           return false;
         default:
           return true;
@@ -404,8 +424,16 @@ export default {
     approve() {
       this.$store.dispatch('exerciseDocument/approve');
     },
+    unarchive() {
+      //   this.$store.dispatch('exerciseDocument/unarchive');
+    },
     archive() {
+      // // console.log(this.isArchived);
+      // if (this.isArchived) {
+      //   this.$store.dispatch('exerciseDocument/unarchive');
+      // } else {
       this.$store.dispatch('exerciseDocument/archive');
+      // }
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
@@ -481,6 +509,10 @@ export default {
 <style scoped>
 .background-blue .govuk-link {
   cursor: pointer;
-
 }
+.background-red {
+  background-color: rgb(200, 30, 30);
+  cursor: pointer;
+}
+
 </style>

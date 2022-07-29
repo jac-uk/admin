@@ -8,7 +8,7 @@
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
             @click="showAll"
           >
-            View all live exercises
+            View live exercises
           </button>
           <button
             v-else
@@ -20,7 +20,7 @@
           <button
             v-if="isArchived"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-            @click="showArchived"
+            @click="showAll"
           >
             View live exercises
           </button>
@@ -57,10 +57,16 @@
           Favourite exercises
         </h1>
         <h1
+          v-else-if="isArchived"
+          class="govuk-heading-xl"
+        >
+          Archived exercises
+        </h1>
+        <h1
           v-else
           class="govuk-heading-xl"
         >
-          All exercises
+          Live exercises
         </h1>
         <form
           class="exercises-table"

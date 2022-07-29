@@ -84,14 +84,6 @@ export default {
       };
       await ref.update(data);
     },
-    archive: async ({ state }) => {
-      const id = state.record.id;
-      const ref = collection.doc(id);
-      const data = {
-        state: 'archived',
-      };
-      await ref.update(data);
-    },
     approve: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -147,6 +139,22 @@ export default {
       const data = {
         published: false,
         testingState: null,
+      };
+      await ref.update(data);
+    },
+    unarchive: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: 'ready',
+      };
+      await ref.update(data);
+    },
+    archive: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: ' archived',
       };
       await ref.update(data);
     },
