@@ -134,6 +134,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'Qualifying Test';
+  lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed Scenario';
+  lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed Scenario';
 
   returnValue = lookup[value];
 

@@ -69,7 +69,7 @@ import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestRep
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
 
 // Merit list
-import ExerciseMeritList from '@/views/Exercise/MeritList';
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
 
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
@@ -670,13 +670,13 @@ const router = new Router({
           ],
         },
         {
-          path: 'tasks',
+          path: 'tasks/:stage',
           component: ExerciseTasks,
           children: [
-            {
-              path: '',
-              redirect: 'independent-assessments',
-            },
+            // {
+            //   path: '',
+            //   redirect: 'independent-assessments',
+            // },
             {
               path: 'equal-merit-tie-breakers',
               component: QualifyingTestsCover,
@@ -1199,20 +1199,20 @@ const router = new Router({
           ],
         },
         {
-          path: 'merit-list',
-          component: ExerciseMeritList,
-          meta: {
-            requiresAuth: true,
-            title: 'Merit List',
-          },
-        },
-        {
           path: 'reports',
           component: ExerciseReports,
           children: [
             {
               path: '',
-              redirect: 'diversity',
+              redirect: 'merit-list',
+            },
+            {
+              path: 'merit-list',
+              component: ExerciseReportsMeritList,
+              meta: {
+                requiresAuth: true,
+                title: 'Merit List',
+              },
             },
             {
               path: 'diversity',

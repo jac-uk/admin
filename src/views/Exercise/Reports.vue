@@ -24,6 +24,10 @@ export default {
     return {
       sideNavigation: [
         {
+          title: 'Merit List',
+          path: `${path}/merit-list`,
+        },
+        {
           title: 'Diversity',
           path: `${path}/diversity`,
         },

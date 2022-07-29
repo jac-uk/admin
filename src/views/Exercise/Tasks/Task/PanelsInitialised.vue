@@ -87,7 +87,7 @@
             type="primary"
             @click="btnActivate"
           >
-            Activate {{ type | lookup }}
+            Activate
           </ActionButton>
         </div>
       </div>
@@ -202,7 +202,6 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import SelectPanel from './Panel/components/SelectPanel';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import { taskApplicationsStageAndStatus } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';
 
 export default {
@@ -304,7 +303,7 @@ export default {
         {
           exerciseId: this.exercise.id,
           type: this.type,
-          ...taskApplicationsStageAndStatus(this.type),
+          status: this.task.applicationStatus,
           ...params,
         }
       );

@@ -11,7 +11,7 @@
         :errors="errors"
       />
       <span>
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -27,17 +27,11 @@
             <option value="">
               Select a status
             </option>
-            <option value="passedFirstTest">
-              Passed First Test
+            <option value="pass">
+              Pass
             </option>
-            <option value="passedScenarioTest">
-              Passed Scenario Test
-            </option>
-            <option value="failedFirstTest">
-              Failed First Test
-            </option>
-            <option value="failedScenarioTest">
-              Failed Scenario Test
+            <option value="fail">
+              Fail
             </option>
           </select>
         </div>
@@ -84,7 +78,7 @@
 </template>
 
 <script>
-import { functions } from '@/firebase';
+// import { functions } from '@/firebase';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import permissionMixin from '@/permissionMixin';
@@ -121,10 +115,10 @@ export default {
       this.errors = [];
       this.processing = true;
       try {
-        await functions.httpsCallable('updateStatus')({
-          applicationIds: this.applicationIds,
-          applicationStatus: this.applicationStatus,
-        });
+        // await functions.httpsCallable('updateStatus')({
+        //   applicationIds: this.applicationIds,
+        //   applicationStatus: this.applicationStatus,
+        // });
         this.processing = false;
         this.complete = true;
       } catch (e) {

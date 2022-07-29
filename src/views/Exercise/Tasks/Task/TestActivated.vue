@@ -10,8 +10,7 @@
         target="_blank"
       >
         QT Platform</a>.
-      <span v-if="isScenario">When completed you may continue.</span>
-      <span v-else>When completed you may import scores.</span>
+      When completed you may continue.
     </p>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
@@ -31,9 +30,9 @@
         <ActionButton
           class="govuk-!-margin-bottom-0"
           type="primary"
-          @click="updateQualifyingTestScores"
+          @click="btnContinue"
         >
-          Import scores
+          Continue
         </ActionButton>
       </div>
     </div>
@@ -70,7 +69,7 @@ export default {
   },
   methods: {
     btnNext,
-    async updateQualifyingTestScores() {
+    async btnContinue() {
       const response = await functions.httpsCallable('updateQualifyingTestScores')({
         exerciseId: this.exercise.id,
         type: this.type,

@@ -8,13 +8,13 @@
       v-if="!hasTaskStarted"
       class="govuk-body-l"
     >
-      {{ type | lookup }} will open on {{ task.startDate | formatDate }}
+      {{ type | lookup }} scoring will start on {{ task.startDate | formatDate }}
     </p>
     <p
       v-else-if="!hasAllPanelsCompleted"
       class="govuk-body-l"
     >
-      {{ type | lookup }} is open and receiving data from Panels
+      {{ type | lookup }} scoring has started and panels are providing scores.
     </p>
     <p
       v-else-if="isModerationRequired"
@@ -113,7 +113,7 @@
 
       <!-- START: GRADES -->
       <div
-        v-if="hasAllPanelsCompleted"
+        v-if="hasAllPanelsCompleted && task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -194,7 +194,7 @@
 
       <!-- START: SCORES -->
       <div
-        v-if="hasAllPanelsCompleted"
+        v-if="hasAllPanelsCompleted && task.grades"
         class="govuk-grid-row"
       >
         <div
@@ -241,14 +241,14 @@
       <Table
         ref="scoreSheet"
         data-key="id"
-        :data="scoreSheetRows"
-        :columns="scoreSheetColumns"
+        :data="tableData"
+        :columns="tableColumns"
         :page-size="500"
         local-data
         class="merit-list"
       >
         <template
-          v-if="isSelection"
+          v-if="scoreSheetHeaders.length"
           #header
         >
           <tr class="govuk-table__row">
@@ -261,14 +261,19 @@
               class="govuk-table__header table-cell"
             />
             <th
-              v-for="category in selectionCategories"
-              :key="category"
+              v-for="header in scoreSheetHeaders"
+              :key="header.ref"
               scope="col"
-              :colspan="capabilities.length"
+              :colspan="header.colspan"
               class="govuk-table__header text-center"
             >
-              {{ category | lookup }}
+              {{ header.ref | lookup }}
             </th>
+            <th
+              v-if="isModerationRequired"
+              scope="col"
+              class="govuk-table__header table-cell"
+            />
           </tr>
         </template>
         <template #row="{row}">
@@ -284,28 +289,24 @@
             </RouterLink>
           </TableCell>
 
-          <template v-if="isSift">
-            <TableCell
-              v-for="(cap, index) in capabilities"
-              :key="`sift_${index}`"
-              class="text-center table-cell-score"
-            >
-              {{ row.scoreSheet[cap] }}
-            </TableCell>
-          </template>
-
-          <template v-if="isSelection">
-            <template
-              v-for="category in selectionCategories"
-            >
+          <template
+            v-for="(item, index) in task.markingScheme"
+          >
+            <template v-if="item.type === 'group'">
               <TableCell
-                v-for="(cap, index) in capabilities"
-                :key="`${category}_${index}`"
+                v-for="(child, childIndex) in item.children"
+                :key="`${type}_${index}_${childIndex}`"
                 class="text-center table-cell-score"
               >
-                <span v-if="row.scoreSheet[category]">
-                  {{ row.scoreSheet[category][cap] }}
-                </span>
+                {{ row.scoreSheet[item.ref][child.ref] }}
+              </TableCell>
+            </template>
+            <template v-else>
+              <TableCell
+                :key="`${type}_${index}`"
+                class="text-center table-cell-score"
+              >
+                {{ row.scoreSheet[item.ref] }}
               </TableCell>
             </template>
           </template>
@@ -347,7 +348,6 @@ import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
 import { CAPABILITIES, GRADE_VALUES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { functions } from '@/firebase';
-import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
   components: {
@@ -390,13 +390,16 @@ export default {
     isSelection() {
       return this.type === PANEL_TYPES.SELECTION;
     },
+    isScenario() {
+      return this.type === PANEL_TYPES.SCENARIO;
+    },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     hasTaskStarted() {
       if (!this.task) return false;
       if (!this.task.startDate) return false;
-      return new Date(formatDate(this.task.startDate)) < new Date();
+      return this.task.startDate < new Date();
     },
     panels() {
       if (!this.task) return [];
@@ -420,14 +423,16 @@ export default {
     },
     capabilities() {
       if (!this.task) return [];
+      if (!this.task.capabilities) return [];
       return CAPABILITIES.filter(cap => this.task.capabilities.indexOf(cap) >= 0);  // Using CAPABILITIES to ensure display order of selected capabilities
     },
     selectionCategories() {
       if (!this.task) return [];
+      if (!this.task.selectionCategories) return [];
       return SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
     },
     grades() {
-      return this.task ? this.task.grades : [];
+      return this.task && this.task.grades ? this.task.grades : [];
     },
     statuses() {
       return this.$store.getters['stageReview/availableStatuses'](SHORTLISTING.NAME_BLIND_PAPER_SIFT, []);
@@ -436,11 +441,58 @@ export default {
       if (!this.panels) return [];
       return this.panels.map(panel => { return { title: panel.name }; });
     },
-    scoreSheetRows() {
+    scoreSheetHeaders() {
+      const headers = [];
+      if (!this.task) return headers;
+      if (!this.task.markingScheme) return headers;
+      let columns = 0;
+      this.task.markingScheme.forEach(item => {
+        if (item.type === 'group') {
+          if (columns > 0) {
+            headers.push({
+              ref: '',
+              colspan: columns,
+            });
+            columns = 0;
+          }
+          headers.push({
+            ref: item.ref,
+            colspan: item.children.length,
+          });
+        } else {
+          columns += 1;
+        }
+      });
+      return headers;
+    },
+    scoreSheetColumns() {
+      const columns = [];
+      if (!this.task) return columns;
+      if (!this.task.markingScheme) return columns;
+      this.task.markingScheme.forEach(item => {
+        if (item.type === 'group') {
+          item.children.forEach(child => columns.push(child));
+        } else {
+          columns.push(item);
+        }
+      });
+      return columns;
+    },
+    tableColumns() {
+      const columns = [];
+      columns.push({ title: 'Application', class: 'table-cell-application' });
+      columns.push({ title: 'Panel', class: 'table-cell' });
+      this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'text-center table-cell-score' }));
+      if (this.isModerationRequired) {
+        columns.push({ title: 'Moderation?', class: 'text-center' });
+      }
+      // columns.push({ title: 'Report', class: 'text-center' });
+      return columns;
+    },
+    tableData() {
       const rows = [];
       this.panels.forEach(panel => {
         if (!panel.applicationIds) return;
-        if (!panel.capabilities) return;
         if (!panel.scoreSheet) return;
         panel.applicationIds.forEach(applicationId => {
           const row = {
@@ -460,22 +512,6 @@ export default {
       });
       return rows;
     },
-    scoreSheetColumns() {
-      const columns = [];
-      columns.push({ title: 'Application', class: 'table-cell-application' });
-      columns.push({ title: 'Panel', class: 'table-cell' });
-      if (this.isSift) {
-        this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
-      }
-      if (this.isSelection) {
-        this.selectionCategories.forEach(() => this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' })));
-      }
-      if (this.isModerationRequired) {
-        columns.push({ title: 'Moderation?', class: 'text-center' });
-      }
-      // columns.push({ title: 'Report', class: 'text-center' });
-      return columns;
-    },
     stats() {
       const data = {};
       const relevantPanels = this.panels.filter(panel => (panel.status !== PANEL_STATUS.DRAFT && panel.applicationIds));  // TODO ensure this comes from task
@@ -490,7 +526,7 @@ export default {
       if (this.capabilities && this.capabilities.indexOf('OVERALL')) {
         data.overallGradesByPanel = {};
         data.overallGrades = {};
-        this.task.grades.forEach(grade => data.overallGrades[grade] = 0);
+        this.grades.forEach(grade => data.overallGrades[grade] = 0);
         data.overallScoreByPanel = {};
         data.overallScore = { count: 0, total: 0, average: 0 };
       }
@@ -502,7 +538,7 @@ export default {
         if (data.overallGradesByPanel) {
           data.overallGradesByPanel[panel.id] = { count: 0 };
           data.overallScoreByPanel[panel.id] = { count: 0, total: 0, average: 0 };
-          this.task.grades.forEach(grade => {
+          this.grades.forEach(grade => {
             if (this.isSelection) {
               data.overallGradesByPanel[panel.id][grade] = panel.applicationIds.map(applicationId => panel.scoreSheet[applicationId].overall.OVERALL).filter(item => item === grade).length;
             } else {

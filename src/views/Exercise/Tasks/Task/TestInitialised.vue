@@ -6,7 +6,7 @@
     <p class="govuk-body-l">
       This test is being prepared on the
       <a
-        :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.testId}`"
+        :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.test.id}`"
         target="_blank"
       >
         QT Platform
@@ -43,7 +43,6 @@
 import { beforeRouteEnter, btnNext } from './helper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
-import { TASK_TYPE } from '@/helpers/constants';
 
 export default {
   components: {
@@ -64,13 +63,7 @@ export default {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     totalApplications() {
-      if (this.type === TASK_TYPE.SCENARIO) {
-        const QT = this.$store.getters['tasks/getTask'](TASK_TYPE.QUALIFYING_TEST);
-        if (QT && QT._stats && QT._stats.totalForEachOutcome) {
-          return QT._stats.totalForEachOutcome.qualifyingTestPassed;
-        }
-      }
-      return this.exercise._applicationRecords.applied;
+      return this.task._stats.totalApplications;
     },
   },
   methods: {

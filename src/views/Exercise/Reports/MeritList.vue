@@ -264,6 +264,21 @@ export default {
             ref: task.id,
           });
           break;
+        case TASK_TYPE.SCENARIO:
+          task.markingScheme.forEach(item => {
+            if (item.type === 'group') {
+              columns.push({
+                ref: item.ref,
+                expandable: true,
+                colspan: item.children.length,
+              });
+            } else {
+              columns.push({
+                ref: item.ref,
+              });
+            }
+          });
+          break;
         case TASK_TYPE.SIFT:
           columns.push({
             ref: task.id,
@@ -282,6 +297,7 @@ export default {
           break;
         }
       });
+      console.log('header columns', columns);
       return columns;
     },
     siftColumnCount() {
@@ -305,6 +321,15 @@ export default {
           break;
         case TASK_TYPE.SITUATIONAL_JUDGEMENT:
           columns.push({ title: 'SJ', class: 'text-center table-cell-score' });
+          break;
+        case TASK_TYPE.SCENARIO:
+          task.markingScheme.forEach(item => {
+            if (item.type === 'group') {
+              item.children.forEach(child => columns.push({ title: child.ref, class: 'text-center table-cell-score' }));
+            } else {
+              columns.push({ title: item.ref, class: 'text-center table-cell-score' });
+            }
+          });
           break;
         case TASK_TYPE.SIFT:
           if (this.isOpen(TASK_TYPE.SIFT)) {

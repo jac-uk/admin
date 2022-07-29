@@ -117,17 +117,11 @@ export default {
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
-      if (this.hasQualifyingTests || this.isProcessing) {
-        subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
-      }
       if (this.isProcessing) {
-        if (this.hasPermissions([this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value])) {
-          subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        }
-        if (this.hasPermissions([this.PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value])) {
-          subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
-        }
-        subNavigation.push({ path: `${path}/merit-list`, title: 'Merit List' });
+        subNavigation.push({ path: `${path}/tasks/shortlisting`, title: 'Shortlisting' });
+        subNavigation.push({ path: `${path}/tasks/selection`, title: 'Selection' });
+        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
+        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
       }
       return subNavigation;
     },

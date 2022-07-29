@@ -1,6 +1,8 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
 import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE } from '@/helpers/constants';
+import exerciseTimeline from '../helpersTMP/Timeline/exerciseTimeline';
+import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
 /** Used in Admin:-
 APPLICATION_STEPS,
@@ -31,7 +33,11 @@ export {
   TASKS,
   TASK_STATUS,
   TASK_TYPE,
-  taskApplicationsStageAndStatus,
+  STAGE_TASKS,
+  getTimelineTasks,
+  getTaskTypes,
+  taskEntryStatus,
+  previousTaskType,
   taskNextStatus,
   emptyScoreSheet,
   exerciseStates,
@@ -143,6 +149,18 @@ const TASK_STATUS = {
   COMPLETED: 'completed',
 };
 
+const STAGE_TASKS = {
+  shortlisting: [
+    TASK_TYPE.CRITICAL_ANALYSIS,
+    TASK_TYPE.SITUATIONAL_JUDGEMENT,
+    TASK_TYPE.SCENARIO,
+    TASK_TYPE.SIFT,
+  ],
+  selection: [
+    TASK_TYPE.SELECTION,
+  ],
+};
+
 // TODO - this is not currently used. Use it or lose it :)
 function taskNextStatus(currentStatus) {
   let nextStatus;
@@ -172,21 +190,64 @@ function taskNextStatus(currentStatus) {
   return nextStatus;
 }
 
-function taskApplicationsStageAndStatus(type) {
-  const params = {};
-  switch (type) {
-    case TASK_TYPE.SIFT:
-      params.stage = EXERCISE_STAGE.APPLIED;
-      break;
-    case TASK_TYPE.SELECTION:
-      params.stage = EXERCISE_STAGE.SELECTED;
-      break;
-    case TASK_TYPE.SCENARIO:
-      params.stage = EXERCISE_STAGE.APPLIED;
-      params.status = APPLICATION_STATUS.PASSED_FIRST_TEST;
-      break;
+/**
+ * get task types in sequence
+ *  - look at exercise shortlisting and timeline
+ *  - return array of tasks
+ * get previous task
+ * get next task
+ * get outcome statuses
+ */
+
+function getTimelineTasks(exercise, taskType) {
+  const timeline = createTimeline(exerciseTimeline(exercise));
+  const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
+  return timelineTasks;
+}
+
+function getTaskTypes(exercise, stage) {
+  console.log('get task types', stage);
+  let taskTypes = getTimelineTasks(exercise).map(item => item.taskType).filter((value, index, thisArray) => thisArray.indexOf(value) === index);
+  if (stage) {
+    taskTypes = taskTypes.filter(taskType => STAGE_TASKS[stage].indexOf(taskType) >= 0);
   }
-  return params;
+  const indexCA = taskTypes.indexOf(TASK_TYPE.CRITICAL_ANALYSIS);
+  const indexSJ = taskTypes.indexOf(TASK_TYPE.SITUATIONAL_JUDGEMENT);
+  if (indexCA >= 0 && indexSJ >= 0) {
+    const indexQT = Math.max(indexCA, indexSJ);
+    taskTypes.splice(indexQT + 1, 0, TASK_TYPE.QUALIFYING_TEST);
+  }
+  return taskTypes;
+}
+
+function previousTaskType(exercise, type) {
+  let prevTaskType = '';
+  if (!exercise) return prevTaskType;
+  const taskTypes = getTaskTypes(exercise);
+  const currentIndex = taskTypes.indexOf(type);
+  if (currentIndex > 0) {
+    if ([TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT, TASK_TYPE.QUALIFYING_TEST].indexOf(type) >= 0) {
+      for (let i = currentIndex; i >= 0; --i) {
+        if ([TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT, TASK_TYPE.QUALIFYING_TEST].indexOf(taskTypes[i]) < 0) {
+          prevTaskType = taskTypes[i];
+          break;
+        }
+      }
+    } else {
+      prevTaskType = taskTypes[currentIndex - 1];
+    }
+  }
+  return prevTaskType;
+}
+
+function taskEntryStatus(exercise, type) {
+  let status = '';
+  if (!exercise) return status;
+  const prevTaskType = previousTaskType(exercise, type);
+  if (prevTaskType) {
+    status = `${prevTaskType}Passed`;
+  }
+  return status;
 }
 
 // merit list helpers

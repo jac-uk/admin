@@ -22,7 +22,7 @@
           type="primary"
           @click="btnComplete"
         >
-          Complete {{ type | lookup }}
+          Complete
         </ActionButton>
         <FullScreenButton />
       </div>
