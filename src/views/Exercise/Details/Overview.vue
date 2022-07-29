@@ -6,7 +6,7 @@
         class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3"
       >
         <h2 class="govuk-heading-l">
-          Number of vacancies {{ isArchived }}
+          Number of vacancies
         </h2>
         <p class="govuk-body">
           Immediate start (S87)
@@ -64,7 +64,8 @@
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
         >
-          {{ exercise.state | lookup }}
+          <!-- {{ exercise.state | lookup }} -->
+          {{ exercise.state }}
         </span>
         <span
           v-else
@@ -200,18 +201,10 @@
       <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
       <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
       <button
-        v-if="!isArchived"
-        class="govuk-button govuk-!-margin-left-3"
+        :class="`govuk-button govuk-!-margin-left-3 ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="archive()"
       >
-        Archive exercise
-      </button>
-      <button
-        v-else-if="isArchived"
-        class="govuk-button govuk-!-margin-left-3 govuk-button--warning"
-        @click="unarchive()"
-      >
-        Unarchive exercise
+        {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
       </button>
       <div v-if="!isProduction">
         <button
@@ -424,16 +417,20 @@ export default {
     approve() {
       this.$store.dispatch('exerciseDocument/approve');
     },
-    unarchive() {
-      //   this.$store.dispatch('exerciseDocument/unarchive');
-    },
     archive() {
-      // // console.log(this.isArchived);
-      // if (this.isArchived) {
-      //   this.$store.dispatch('exerciseDocument/unarchive');
-      // } else {
-      this.$store.dispatch('exerciseDocument/archive');
-      // }
+      if (this.isArchived) {
+        this.$store.dispatch('exerciseDocument/unarchive');
+        logEvent('info', 'Exercise unarchived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      } else {
+        this.$store.dispatch('exerciseDocument/archive');
+        logEvent('info', 'Exercise archived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      }
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');

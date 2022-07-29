@@ -154,7 +154,7 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
-        state: ' archived',
+        state: 'archived',
       };
       await ref.update(data);
     },

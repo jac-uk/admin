@@ -144,6 +144,7 @@ function isEditable(data) {
   }
 }
 function isArchived(data) {
+  console.log(data.state);
   if (!data) return false;
   switch (data.state) {
     case 'archived':
