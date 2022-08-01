@@ -290,10 +290,10 @@ $jac-link-colour: #753880;
 .custom-ordered-list ol {
   counter-reset: item;
 }
-.custom-ordered-list li {
+.custom-ordered-list ol li {
   display: block;
 }
-.custom-ordered-list li::before {
+.custom-ordered-list ol li::before {
   counter-increment: item;
   content: counters(item, '.') '. ';
 }
