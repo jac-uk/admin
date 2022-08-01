@@ -12,9 +12,15 @@ export default {
         firestoreRef = firestore
         .collection('exercises')
         .where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid);
+      } else if (state.isArchived) {
+        firestoreRef = firestore
+        .collection('exercises')
+        .where('state', '==', 'archived');
       } else {
         firestoreRef = firestore
-        .collection('exercises');
+        .collection('exercises')
+        .where('state', '!=', 'archived')
+        .orderBy('state');
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -33,6 +39,7 @@ export default {
       dispatch('bind');
     },
     showArchived: ({ commit, dispatch }) => {
+      commit('updateFavourites', false);
       commit('updateArchived', true);
       dispatch('bind');
     },

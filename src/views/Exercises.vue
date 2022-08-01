@@ -168,7 +168,7 @@ export default {
   data() {
     return {
       selectedItems: [],
-      exerciseStates: ['draft', 'ready', 'approved'],
+      exerciseStates: ['draft', 'ready', 'approved', 'archived', 'review'],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
@@ -227,6 +227,7 @@ export default {
       this.$store.dispatch('exerciseCollection/showArchived');
     },
     getTableData(params) {
+      console.log(params);
       this.$store.dispatch(
         'exerciseCollection/bind',
         params
