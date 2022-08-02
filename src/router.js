@@ -111,6 +111,7 @@ import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBa
 import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
+import TargetedOutreachReport from '@/views/Candidates/TargetedOutreachReport';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -206,6 +207,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             title: 'Candidate | View',
+          },
+        },
+        {
+          path: 'targeted-outreach-report',
+          component: TargetedOutreachReport,
+          name: 'targeted-outreach-report',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidates | Targeted Oureach Report',
           },
         },
       ],
