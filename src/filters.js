@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, OFFENCE_CATEGORY } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -67,6 +67,19 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.BASIC] = 'Basic';
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
+
+  // character issues offence category
+  lookup[OFFENCE_CATEGORY.SINGLE_CRIMINAL_OFFENCE] = 'Single criminal offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_CRIMINAL_OFFENCES] = 'Multiple criminal offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_MOTORING_OFFENCE] = 'Single motoring offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_MOTORING_OFFENCES] = 'Multiple motoring offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_FINANCIAL_OFFENCE] = 'Single financial offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_FINANCIAL_OFFENCES] = 'Multiple financial offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_PROFESSIONAL_CONDUCT] = 'Single professional conduct';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_PROFESSIONAL_CONDUCTS] = 'Multiple professional conducts';
+  lookup[OFFENCE_CATEGORY.SINGLE_OTHER_MATTER] = 'Single other matter';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_OTHER_MATTERS] = 'Multiple other matters';
+  lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
 
   returnValue = lookup[value];
 

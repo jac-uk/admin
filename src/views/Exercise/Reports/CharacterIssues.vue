@@ -216,9 +216,16 @@
               </div>
 
               <div class="govuk-grid-column-two-thirds">
-                <a href="#" class="govuk-link print-none" @click.prevent="toggleIssues(row.id)">
-                  View all issues<span class="icon-expand" :class="open[row.id] ? 'open' : 'close'">
-                    <img src="@/assets/expand.svg" />
+                <a
+                  href="#"
+                  class="govuk-link print-none"
+                  @click.prevent="toggleIssues(row.id)"
+                >
+                  View all issues<span
+                    class="icon-expand"
+                    :class="open[row.id] ? 'open' : 'close'"
+                  >
+                    <img src="@/assets/expand.svg">
                   </span>
                 </a>
               </div>
@@ -227,42 +234,16 @@
                 <Select
                   id="issue-offence-category"
                   :value="row.issues.characterIssuesOffenceCategory || ''"
-                  @input="saveIssueOffenceCategory(row, $event)"
                   class="offence-category"
+                  @input="saveIssueOffenceCategory(row, $event)"
                 >
                   <option value="" />
-                  <option value="Single criminal offence">
-                    Single criminal offence
-                  </option>
-                  <option value="Multiple criminal offences">
-                    Multiple criminal offences
-                  </option>
-                  <option value="Single motoring offence">
-                    Single motoring offence
-                  </option>
-                  <option value="Multiple motoring offences">
-                    Multiple motoring offences
-                  </option>
-                  <option value="Single financial offence">
-                    Single financial offence
-                  </option>
-                  <option value="Multiple financial offences">
-                    Multiple financial offences
-                  </option>
-                  <option value="Single professional conduct">
-                    Single professional conduct
-                  </option>
-                  <option value="Multiple professional conducts">
-                    Multiple professional conducts
-                  </option>
-                  <option value="Single other matter">
-                    Single other matter
-                  </option>
-                  <option value="Multiple other matters">
-                    Multiple other matters
-                  </option>
-                  <option value="Mixed">
-                    Mixed
+                  <option
+                    v-for="value in offenceCategory"
+                    :key="value"
+                    :value="value"
+                  >
+                    {{ value | lookup }}  
                   </option>
                 </Select>
               </div>
@@ -339,6 +320,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { OFFENCE_CATEGORY } from '@/helpers/constants';
 
 export default {
   components: {
@@ -366,6 +348,7 @@ export default {
       total: null,
       otherApplicationRecords: [],
       open: [],
+      offenceCategory: OFFENCE_CATEGORY,
     };
   },
   computed: {
