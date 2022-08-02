@@ -13,6 +13,7 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
+import { formatNumber } from '@/filters';
 
 export default {
   components: {
@@ -32,15 +33,15 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Draft (${draft.toLocaleString('en-GB')})`,
+          title: `Draft (${formatNumber(draft)})`,
           path: `${path}/draft`,
         },
         {
-          title: `Applied (${applied.toLocaleString('en-GB')})`,
+          title: `Applied (${formatNumber(applied)})`,
           path: `${path}/applied`,
         },
         {
-          title: `Withdrawn (${withdrawn.toLocaleString('en-GB')})`,
+          title: `Withdrawn (${formatNumber(withdrawn)})`,
           path: `${path}/withdrawn`,
         },
       ];

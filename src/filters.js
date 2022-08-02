@@ -81,6 +81,11 @@ const lookup = (value) => {
   return returnValue;
 };
 
+const formatNumber = (value) => {
+  return typeof value === 'number' ? value.toLocaleString('en-GB') : value;
+};
+
 export {
-  lookup
+  lookup,
+  formatNumber
 };

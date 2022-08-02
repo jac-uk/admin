@@ -115,7 +115,7 @@
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[4].title"
               >
-                {{ row.applicationsCount.toLocaleString('en-GB') }}
+                {{ row.applicationsCount | formatNumber }}
               </TableCell>
             </template>
           </Table>
