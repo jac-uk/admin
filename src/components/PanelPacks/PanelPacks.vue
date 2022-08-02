@@ -25,6 +25,7 @@
           <TableCell :title="tableColumns[0].title">
             <RouterLink
               :to="{ name: `exercise-tasks-${row.type}-view`, params: { panelId: row.id } }"
+              target="_blank"
             >
               {{ row.name }}
             </RouterLink>
@@ -63,6 +64,7 @@
           <TableCell :title="tableColumnsCandidates[0].title">
             <RouterLink
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+              target="_blank"
             >
               {{ row.application.referenceNumber }}
             </RouterLink>
@@ -70,6 +72,7 @@
           <TableCell :title="tableColumnsCandidates[1].title">
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+              target="_blank"
             >
               {{ row.candidate.fullName }}
             </RouterLink>
