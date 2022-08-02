@@ -201,6 +201,7 @@
       <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
       <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
       <button
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         :class="`govuk-button govuk-!-margin-left-3 ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="archive()"
       >

@@ -61,7 +61,7 @@ const lookup = (value) => {
     'online-only': 'Yes - online resources only',
 
     // 'xxx': 'xxx',
-    archived: 'archived',
+    archived: 'Archived',
   };
 
   lookup[ADVERT_TYPES.LISTING] = 'Listing';
