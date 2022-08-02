@@ -34,7 +34,7 @@
           v-if="isFavourites"
           class="govuk-heading-xl"
         >
-          Your exercises
+          Favourite exercises
         </h1>
         <h1
           v-else
