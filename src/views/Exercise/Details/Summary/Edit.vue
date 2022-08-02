@@ -60,7 +60,7 @@
           v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
-          class="custom-ordered-list"
+          class="custom-html"
           required
         />
 
@@ -70,7 +70,7 @@
           v-model="formData.roleSummaryWelsh"
           label="Role summary (Welsh)"
           hint="Fersywn Cymraeg"
-          class="custom-ordered-list"
+          class="custom-html"
           required
         />
 

@@ -287,13 +287,13 @@ $jac-link-colour: #753880;
 }
 
 /* customize nested ordered list (1.1, 1.2) */
-.custom-ordered-list ol {
+.custom-html ol {
   counter-reset: item;
 }
-.custom-ordered-list ol li {
+.custom-html ol li {
   display: block;
 }
-.custom-ordered-list ol li::before {
+.custom-html ol li::before {
   counter-increment: item;
   content: counters(item, '.') '. ';
 }

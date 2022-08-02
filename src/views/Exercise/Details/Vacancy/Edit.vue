@@ -384,7 +384,7 @@
           v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
-          class="custom-ordered-list"
+          class="custom-html"
           required
         />
 
@@ -393,7 +393,7 @@
           v-model="formData.aboutTheRole"
           label="About the role"
           hint="Add information about this role for the information page."
-          class="custom-ordered-list"
+          class="custom-html"
           required
         />
 

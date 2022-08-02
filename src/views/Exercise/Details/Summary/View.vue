@@ -51,7 +51,7 @@
         <dd class="govuk-summary-list__value">
           <!-- eslint-disable -->
           <div
-            class="govuk-body custom-ordered-list"
+            class="govuk-body custom-html"
             v-html="exercise.roleSummary"
           />
           <!-- eslint-enable -->
@@ -93,7 +93,7 @@
         <dd class="govuk-summary-list__value">
           <!-- eslint-disable -->
           <div
-            class="govuk-body custom-ordered-list"
+            class="govuk-body custom-html"
             v-html="exercise.roleSummaryWelsh"
           />
           <!-- eslint-enable -->
