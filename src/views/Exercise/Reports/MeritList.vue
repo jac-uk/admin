@@ -123,6 +123,10 @@
               </TableCell>
             </template>
 
+            <!-- <template v-if="row.scenario">
+              <td colspan="5" />
+            </template> -->
+
             <template v-if="row.sift && isOpen('sift')">
               <TableCell
                 v-for="(cap, index) in capabilities"
@@ -370,6 +374,7 @@ export default {
             scoreSheet: row.scoreSheet ? row.scoreSheet : null,
           };
           applicationData[row.id].totalScore += row.score;
+          if (task.markingScheme) applicationData[row.id][task.id].markingScheme = task.markingScheme;
         });
       });
       const rows = Object.entries(applicationData).map(([id, row]) => {
