@@ -72,17 +72,6 @@
       <div
         v-if="hasInitialisedAssessments"
       >
-        <ActionButton
-          v-if="hasPermissions([
-            PERMISSIONS.assessments.permissions.canReadAssessments.value,
-            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-            PERMISSIONS.exercises.permissions.canUpdateExercises.value
-          ])"
-          @click="cancelAssessments()"
-        >
-          Cancel Assessments
-        </ActionButton>
-
         <TabsList
           ref="tabs"
           class="print-none"
@@ -90,10 +79,7 @@
           :active-tab.sync="activeTab"
         />
 
-        <div
-          v-if="activeTab == 'notrequested'"
-          class="application-details"
-        >
+        <div v-if="activeTab == 'notrequested'">
           <Banner
             :message="sendErrors"
             status="warning"
@@ -118,11 +104,22 @@
             v-if="hasPermissions([
               PERMISSIONS.assessments.permissions.canReadAssessments.value
             ])"
-            class="moj-button-menu__item"
+            class="moj-button-menu__item govuk-!-margin-right-3"
             :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'testRequest', selectedItems, testRequest)"
+            @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'request' }, testRequest)"
           >
             Test Request
+          </ActionButton>
+          <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.assessments.permissions.canReadAssessments.value,
+              PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
+              PERMISSIONS.exercises.permissions.canUpdateExercises.value
+            ])"
+            :disabled="!selectedItems.length"
+            @click="openModal('modalRefRequests', 'cancel', selectedItems, cancelAssessments)"
+          >
+            Cancel Assessments
           </ActionButton>
 
           <Table
@@ -186,14 +183,12 @@
           </Table>
         </div>
 
-        <div
-          v-else-if="activeTab == 'requested'"
-          class="application-details"
-        >
+        <div v-else-if="activeTab == 'requested'">
           <Banner
             :message="sendErrors"
             status="warning"
           />
+
           <ActionButton
             v-if="hasPermissions([
               PERMISSIONS.assessments.permissions.canReadAssessments.value,
@@ -205,6 +200,16 @@
             @click="openModal('modalRefRequests', 'reminders', selectedItems, sendReminders)"
           >
             Send reminders
+          </ActionButton>
+          <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.assessments.permissions.canReadAssessments.value
+            ])"
+            class="moj-button-menu__item govuk-!-margin-right-3"
+            :disabled="!selectedItems.length"
+            @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
+          >
+            Test Reminder
           </ActionButton>
 
           <Table
@@ -281,14 +286,12 @@
           </Table>
         </div>
 
-        <div
-          v-else-if="activeTab == 'completed'"
-          class="application-details"
-        >
+        <div v-else-if="activeTab == 'completed'">
           <Banner
             :message="sendErrors"
             status="warning"
           />
+
           <Table
             key="completed"
             data-key="id"
@@ -353,7 +356,7 @@
                       :exercise-id="exercise.id"
                       :application-id="row.application.id"
                       :assessor-id="row.assessor.id"
-                      title="Download assessment"
+                      title="Download"
                       type="button"
                     />
                     <ActionButton
@@ -364,27 +367,92 @@
                     >
                       Approve late submission
                     </ActionButton>
+
+                    <button
+                      v-if="hasPermissions([
+                        PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                        PERMISSIONS.assessments.permissions.canCreateAssessments.value,
+                        PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+                      ])"
+                      class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
+                      @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
+                    >
+                      {{ row.fileRef ? 'Replace' : 'Upload' }}
+                    </button>
                   </div>
                 </div>
-                <div class="moj-button-menu__wrapper">
+              </TableCell>
+            </template>
+          </Table>
+        </div>
+
+        <div v-else-if="activeTab == 'cancelled'">
+          <Banner
+            :message="sendErrors"
+            status="warning"
+          />
+
+          <Table
+            key="cancelled"
+            data-key="id"
+            :data="assessmentsCancelledRecords"
+            :page-size="50"
+            :columns="tableColumns"
+            multi-select
+            :selection.sync="selectedItems"
+            :custom-search="{
+              placeholder: 'Search candidate names',
+              handler: candidateSearch,
+              field: 'userId',
+            }"
+            @change="getAssessmentsCancelled"
+          >
+            <template #row="{row}">
+              <TableCell :title="tableColumns[0].title">
+                <RouterLink
+                  class="govuk-link"
+                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
+                >
+                  {{ row.application.referenceNumber }}
+                </RouterLink>
+              </TableCell>
+              <TableCell :title="tableColumns[1].title">
+                <RouterLink
+                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                >
+                  {{ row.candidate.fullName }}
+                </RouterLink>
+              </TableCell>
+              <TableCell :title="tableColumns[2].title">
+                <a
+                  :href="`mailto:${row.assessor.email}`"
+                  class="govuk-link govuk-link--no-visited-state"
+                  target="_blank"
+                >
+                  {{ row.assessor.fullName }}
+                </a>
+              </TableCell>
+              <TableCell :title="tableColumns[3].title">
+                {{ row.status | lookup }}
+                <strong
+                  v-if="lateIASubmission(row)"
+                  class="govuk-tag govuk-tag--red"
+                >
+                  Late
+                </strong>
+              </TableCell>
+              <TableCell :title="tableColumns[4].title">
+                <div class="moj-button-menu">
                   <button
                     v-if="hasPermissions([
-                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
-                      PERMISSIONS.assessments.permissions.canCreateAssessments.value,
                       PERMISSIONS.assessments.permissions.canUpdateAssessments.value
                     ])"
                     class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
-                    @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
+                    @click="draftCancelledAssessment(row)"
                   >
-                    {{ row.fileRef ? 'Replace' : 'Upload' }}
+                    Draft
                   </button>
                 </div>
-                <a
-                  v-if="onStaging"
-                  target="_blank"
-                  :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
-                  class="govuk-link"
-                >Test the assessments app</a>
               </TableCell>
             </template>
           </Table>
@@ -518,6 +586,10 @@ export default {
           ref: 'completed',
           title: 'Completed',
         },
+        {
+          ref: 'cancelled',
+          title: 'Cancelled',
+        },
       ],
       activeTab: 'notrequested',
       tableColumns: [
@@ -563,6 +635,9 @@ export default {
     },
     assessmentsCompletedRecords() {
       return this.$store.state.assessments.assessmentsCompletedRecords;
+    },
+    assessmentsCancelledRecords() {
+      return this.$store.state.assessments.assessmentsCancelledRecords;
     },
     assessmentsSent() {
       if (this.exercise.assessments && this.exercise.assessments.sent){
@@ -615,8 +690,9 @@ export default {
       }
       await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
     },
-    async cancelAssessments() {
-      await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id });
+    async cancelAssessments(assessmentIds) {
+      this.resetSelectedItems();
+      await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id, assessmentIds });
     },
     async sendRequests(assessmentIds) {
       this.resetSelectedItems();
@@ -646,12 +722,9 @@ export default {
         this.sendErrors = '';
       }
     },
-    async testRequest(assessmentIds) {
-      for (let i = 0; i < assessmentIds.length; i++) {
-        const assessmentId = assessmentIds[i];
-        console.log('send', assessmentId);
-        // await functions.httpsCallable('testAssessmentNotification')({ assessmentId, notificationType: 'request' });
-      }
+    async testRequest({ assessmentIds, notificationType }) {
+      this.resetSelectedItems();
+      await functions.httpsCallable('testAssessmentNotification')({ assessmentIds, notificationType });
     },
     lateIASubmission(assessment){
       // Not submitted and late
@@ -729,6 +802,16 @@ export default {
         }
       );
     },
+    getAssessmentsCancelled(params) {
+      this.$store.dispatch(
+        'assessments/bind',
+        {
+          exerciseId: this.exercise.id,
+          status: 'cancelled',
+          ...params,
+        }
+      );
+    },
     getTableData(params) {
       this.$store.dispatch(
         'assessments/bind',
@@ -743,6 +826,10 @@ export default {
     },
     resetSelectedItems() {
       this.selectedItems = [];
+    },
+    async draftCancelledAssessment(assessment) {
+      assessment.status = 'draft';
+      await this.$store.dispatch('assessment/save', assessment);
     },
   },
 };

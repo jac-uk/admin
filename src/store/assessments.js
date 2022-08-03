@@ -27,12 +27,17 @@ export default {
         firestoreRef = firestoreRef.where('status', '==', params.status);
         firestoreRef = await tableQuery(state.assessmentsCompletedRecords, firestoreRef, params);
         return bindFirestoreRef('assessmentsCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
+      } else if (params.status === 'cancelled') {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = await tableQuery(state.assessmentsCompletedRecords, firestoreRef, params);
+        return bindFirestoreRef('assessmentsCancelledRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('assessmentsNotRequestedRecords');
       unbindFirestoreRef('assessmentsRequestedRecords');
       unbindFirestoreRef('assessmentsCompletedRecords');
+      unbindFirestoreRef('assessmentsCancelledRecords');
       return true;
     }),
   },
@@ -40,5 +45,6 @@ export default {
     assessmentsNotRequestedRecords: [],
     assessmentsRequestedRecords: [],
     assessmentsCompletedRecords: [],
+    assessmentsCancelledRecords: [],
   },
 };

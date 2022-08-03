@@ -8,7 +8,17 @@
         <form
           ref="formRef"
         >
-          <div class="govuk-!-margin-bottom-5">
+          <div
+            v-if="isCancel"
+            class="govuk-!-margin-bottom-5"
+          >
+            <span class="govuk-body-m">Before proceeding, please confirm that you wish to cancel the assessments of </span>
+            <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
+          </div>
+          <div
+            v-else
+            class="govuk-!-margin-bottom-5"
+          >
             <span class="govuk-body-m">Before proceeding, please confirm that you wish to send a {{ typeOfEmail }} to </span>
             <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
             <span class="govuk-body-m">and the email template contains all required information</span>
@@ -61,16 +71,21 @@ export default {
         str += 'reminder';
       } else if (this.type === 'testRequest') {
         str += 'test request';
+      } else if (this.type === 'cancel') {
+        str += 'cancel';
       }
 
       return str;
     },
+    isCancel() {
+      return this.type === 'cancel';
+    },
     numberOfCandidates() {
       let str = '';
 
-      if (this.type === 'requests' || this.type === 'reminders') {
+      if (this.type === 'requests' || this.type === 'reminders' || this.type === 'cancel' || this.type === 'testRequest') {
         str += this.params.length.toString();
-      } else if (this.type === 'testRequest' || this.type === 'request' || this.type === 'reminder') {
+      } else if (this.type === 'request' || this.type === 'reminder') {
         str += '1';
       }
 
@@ -79,6 +94,10 @@ export default {
     buttonText() {
       if (this.processing === true) {
         return 'Processing...';
+      }
+
+      if (this.type === 'cancel') {
+        return 'I confirm, please cancel';
       }
 
       let str = '';
