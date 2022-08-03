@@ -66,6 +66,7 @@
           <TableCell :title="tableColumns[1].title">
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+              target="_blank"
             >
               {{ row.candidate.fullName }}
             </RouterLink>

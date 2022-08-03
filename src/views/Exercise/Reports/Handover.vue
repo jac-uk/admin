@@ -74,6 +74,7 @@
       :data="report.rows"
       :columns="tableColumns"
       :page-size="1000"
+      local-data
       @change="getTableData"
     >
       <template #row="{row}">
