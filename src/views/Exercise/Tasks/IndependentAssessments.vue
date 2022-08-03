@@ -149,6 +149,7 @@
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
                   :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                  target="_blank"
                 >
                   {{ row.candidate.fullName }}
                 </RouterLink>
@@ -239,6 +240,7 @@
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
                   :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                  target="_blank"
                 >
                   {{ row.candidate.fullName }}
                 </RouterLink>
@@ -319,6 +321,7 @@
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
                   :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                  target="_blank"
                 >
                   {{ row.candidate.fullName }}
                 </RouterLink>
@@ -327,7 +330,6 @@
                 <a
                   :href="`mailto:${row.assessor.email}`"
                   class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
                 >
                   {{ row.assessor.fullName }}
                 </a>
@@ -419,6 +421,7 @@
               <TableCell :title="tableColumns[1].title">
                 <RouterLink
                   :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                  target="_blank"
                 >
                   {{ row.candidate.fullName }}
                 </RouterLink>
