@@ -141,7 +141,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               {{ row.stage }}
@@ -217,7 +222,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[2].title">
               {{ row.stage }}
@@ -272,7 +282,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               {{ row.stage }}
