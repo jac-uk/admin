@@ -25,7 +25,6 @@
           <TableCell :title="tableColumns[0].title">
             <RouterLink
               :to="{ name: `exercise-tasks-${row.type}-view`, params: { panelId: row.id } }"
-              target="_blank"
             >
               {{ row.name }}
             </RouterLink>
