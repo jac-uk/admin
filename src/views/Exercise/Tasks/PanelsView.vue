@@ -430,6 +430,15 @@ export default {
       this.$router.push({ name: redirectTo });
     },
     async exportToGoogleDrive() {
+      const googleSettings = this.$store.state.services.record.google;
+      if (googleSettings) {
+        await firebase.functions.httpsCallable('exportToGoogleDrive')({
+          driveId: googleSettings.driveId,
+          rootFolderId: googleSettings.rootFolderId,
+          exerciseId: this.panel.exerciseId,
+          panelId: this.panelId,
+        });
+      }
       const data = {
         status: 'approved',
         'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
