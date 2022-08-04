@@ -200,10 +200,18 @@
       </ActionButton>
       <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
       <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
+      <Modal
+        ref="archiveModal"
+      >
+        <ModalInner
+          @close="closeArchiveModal"
+          @confirmed="archive"
+        />
+      </Modal>
       <button
         v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         :class="`govuk-button govuk-!-margin-left-3 ${!isArchived ? 'govuk-button--warning' : ''}`"
-        @click="archive()"
+        @click="openArchiveModal"
       >
         {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
       </button>
@@ -252,6 +260,7 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
@@ -268,6 +277,7 @@ export default {
     Timeline,
     ActionButton,
     Modal,
+    ModalInner,
     Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
@@ -432,6 +442,7 @@ export default {
           exerciseRef: this.exercise.referenceNumber,
         });
       }
+      this.$refs.archiveModal.closeModal();
     },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
@@ -492,6 +503,12 @@ export default {
     confirmedNoOfTestApplications() {
       this.$refs['modalChangeNoOfTestApplications'].closeModal();
       this.$refs['createTestApplicationsBtn'].$el.click();
+    },
+    openArchiveModal() {
+      this.$refs.archiveModal.openModal();
+    },
+    closeArchiveModal() {
+      this.$refs.archiveModal.closeModal();
     },
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
