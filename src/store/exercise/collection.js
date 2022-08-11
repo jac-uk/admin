@@ -19,8 +19,12 @@ export default {
       } else {
         firestoreRef = firestore
         .collection('exercises')
-        .where('state', '!=', 'archived')
-        .orderBy('state');
+        .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
+      }
+      if (params) {
+        if (params.orderBy) {
+          firestoreRef.orderBy(params.orderBy);
+        }
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });

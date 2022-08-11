@@ -156,19 +156,17 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
-// import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
   components: {
     Table,
     TableCell,
-    // Select,
   },
   mixins: [permissionMixin],
   data() {
     return {
       selectedItems: [],
-      exerciseStates: ['draft', 'ready', 'approved', 'archived', 'review'],
+      exerciseStates: ['draft', 'ready', 'approved'],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
@@ -227,7 +225,6 @@ export default {
       this.$store.dispatch('exerciseCollection/showArchived');
     },
     getTableData(params) {
-      console.log(params);
       this.$store.dispatch(
         'exerciseCollection/bind',
         params

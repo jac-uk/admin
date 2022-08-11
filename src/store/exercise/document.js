@@ -146,7 +146,8 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
-        state: 'ready',
+        state: state.record.hasOwnProperty('stateBeforeArchive') ? state.record.stateBeforeArchive : 'ready',
+        stateBeforeArchive: null,
       };
       await ref.update(data);
     },
@@ -154,8 +155,9 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
-        state: 'archived',
-      };
+          state: 'archived',
+          stateBeforeArchive: state.record.state,
+        };
       await ref.update(data);
     },
     addToFavourites: async ({ state }, userId) => {
