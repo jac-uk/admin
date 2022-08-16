@@ -14,24 +14,29 @@
       Will a HMRC check be required?
     </p>
 
-    <RadioGroup
-      id="character-checks-hmrc"
-      v-model="exercise.characterChecks.HMRC"
-      label="HMRC check"
-      required
+    <div ref="radios">
+      <RadioGroup
+        id="character-checks-hmrc"
+        v-model="exercise.characterChecks.HMRC"
+        label="HMRC check"
+        required
+      >
+        <RadioItem
+          :value="true"
+          label="Yes"
+        />
+  
+        <RadioItem
+          :value="false"
+          label="No"
+        />
+      </RadioGroup>
+    </div>
+
+    <button 
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+      class="govuk-button"
     >
-      <RadioItem
-        :value="true"
-        label="Yes"
-      />
-
-      <RadioItem
-        :value="false"
-        label="No"
-      />
-    </RadioGroup>
-
-    <button class="govuk-button">
       Save and continue
     </button>
   </form>
@@ -41,6 +46,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -49,6 +55,7 @@ export default {
     RadioItem,
   },
   extends: Form,
+  mixins: [permissionMixin],
   data(){
     const defaults = {
       characterChecks: {
@@ -66,6 +73,16 @@ export default {
     return {
       exercise: exercise,
     };
+  },
+  mounted() {
+    const canUpdateExercises = this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
+    if (!canUpdateExercises) {
+      const radiosRef = this.$refs.radios;
+      if (radiosRef) {
+        const inputs = radiosRef.querySelectorAll('input');
+        inputs && inputs.forEach(input => input.disabled = true);
+      }
+    }
   },
   methods: {
     async save(isValid) {

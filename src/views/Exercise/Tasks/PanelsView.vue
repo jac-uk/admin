@@ -17,7 +17,10 @@
             {{ panel.name }}
           </h1>
         </div>
-        <div class="govuk-grid-column-one-half text-right print-none">
+        <div
+          v-if="hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])"
+          class="govuk-grid-column-one-half text-right print-none"
+        >
           <ActionButton
             type="primary"
             :disabled="!canExportToGoogleDrive"
@@ -73,6 +76,7 @@
     <!-- CANDIDATE LIST -->
     <div v-show="activeTab == 'candidates'">
       <button
+        v-if="hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])"
         class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
         :disabled="isButtonDisabled"
         @click="removeFromPanel"
@@ -116,6 +120,7 @@
         List of Panellists
       </h2>
       <button
+        v-if="hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])"
         class="govuk-button"
         @click="btnClickEditMember('modalRefMember', null, 'new')"
       >
@@ -131,6 +136,7 @@
           <dt class="govuk-summary-list__key" />
           <dd class="govuk-summary-list__value">
             <button
+              v-if="hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])"
               class="govuk-button btn-unlock"
               @click="btnClickEditMember('modalRefMember', idx, 'edit')"
             >
@@ -188,7 +194,7 @@
     <!-- END MEMBERS -->
 
     <!-- EDIT PANEL -->
-    <div v-if="activeTab === 'edit'">
+    <div v-if="activeTab === 'edit' && hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])">
       <div class="govuk-grid-row">
         <form @submit.prevent="validateAndSave">
           <div class="govuk-grid-column-two-thirds">
@@ -221,11 +227,13 @@
             />
 
             <button
+              v-if="hasPermissions([PERMISSIONS.panels.permissions.canUpdatePanels.value])"
               class="govuk-button"
             >
               Confirm changes
             </button>
             <button
+              v-if="hasPermissions([PERMISSIONS.panels.permissions.canDeletePanels.value])"
               class="float-right govuk-button govuk-button--warning"
               type="button"
               @click="deletePanel()"
@@ -252,6 +260,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import firebase from '@firebase/app';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -266,6 +275,7 @@ export default {
     ActionButton,
   },
   extends: Form,
+  mixins: [permissionMixin],
   data() {
     const data = {
       tabs: [

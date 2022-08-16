@@ -9,21 +9,28 @@
         Notifications
       </h1>
 
-      <button
-        v-if="isProcessing"
-        class="govuk-button"
-        @click="stopProcessing()"
+      <div
+        v-if="hasPermissions([
+          PERMISSIONS.notifications.permissions.canUpdateNotifications.value,
+          PERMISSIONS.settings.permissions.canUpdateSettings.value
+        ])"
       >
-        Stop
-      </button>
+        <button
+          v-if="isProcessing"
+          class="govuk-button"
+          @click="stopProcessing()"
+        >
+          Stop
+        </button>
 
-      <button
-        v-else
-        class="govuk-button"
-        @click="startProcessing()"
-      >
-        Start
-      </button>
+        <button
+          v-else
+          class="govuk-button"
+          @click="startProcessing()"
+        >
+          Start
+        </button>
+      </div>
     </div>
 
     <TabsList
@@ -86,6 +93,7 @@
 
     <div
       v-if="activeTab === 'settings'"
+      ref="settings"
       class="govuk-grid-row"
     >
       <form @submit.prevent="validateAndSave">
@@ -123,6 +131,10 @@
           </Checkbox>
 
           <button
+            v-if="hasPermissions([
+              PERMISSIONS.notifications.permissions.canUpdateNotifications.value,
+              PERMISSIONS.settings.permissions.canUpdateSettings.value
+            ])"
             class="govuk-button"
             :disabled="!hasChanges"
           >
@@ -142,6 +154,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -153,6 +166,7 @@ export default {
     Checkbox,
   },
   extends: Form,
+  mixins: [permissionMixin],
   data() {
     return {
       activeTab: 'queue',
@@ -213,6 +227,16 @@ export default {
       this.formData.sendToRecipient = this.notificationsSettings.sendToRecipient;
     }
   },
+  updated() {
+    const canUpdateNotifications = this.hasPermissions([this.PERMISSIONS.notifications.permissions.canUpdateNotifications.value]);
+    if (!canUpdateNotifications) {
+      const settingsRef = this.$refs.settings;
+      if (settingsRef) {
+        const inputs = settingsRef.querySelectorAll('input');
+        inputs && inputs.forEach(input => input.disabled = true);
+      }
+    }
+  },
   methods: {
     startProcessing() {
       this.$store.dispatch('services/notificationsStart');
@@ -226,13 +250,13 @@ export default {
     getQueueData(params) {
       this.$store.dispatch(
         'notifications/bindQueue',
-        params,
+        params
       );
     },
     getSentData(params) {
       this.$store.dispatch(
         'notifications/bindSent',
-        params,
+        params
       );
     },
   },

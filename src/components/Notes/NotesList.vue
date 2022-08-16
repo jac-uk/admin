@@ -1,5 +1,6 @@
 <template>
   <Table
+    v-if="hasPermissions([PERMISSIONS.notes.permissions.canReadNotes.value])"
     data-key="notes"
     :data="notes"
     :columns="tableColumns"
@@ -15,6 +16,7 @@
           </span>
           <span class="edit-links">
             <a
+              v-if="hasPermissions([PERMISSIONS.notes.permissions.canUpdateNotes.value])"
               href="#"
               class="govuk-link"
               @click.prevent="editNote(row.id)"
@@ -22,6 +24,7 @@
               Edit
             </a>
             <a
+              v-if="hasPermissions([PERMISSIONS.notes.permissions.canDeleteNotes.value])"
               href="#"
               class="govuk-link"
               @click.prevent="deleteNote(row.id)"
@@ -38,12 +41,14 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   props: {
     notes: {
       type: Array,

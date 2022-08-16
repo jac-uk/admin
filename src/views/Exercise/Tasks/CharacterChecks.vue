@@ -41,7 +41,10 @@
             {{ hmrcCheckRequired | toYesNo }}
           </span>
         </dd>
-        <dd class="govuk-summary-list__actions">
+        <dd
+          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+          class="govuk-summary-list__actions"
+        >
           <RouterLink
             class="govuk-link govuk-body-m change-link"
             style="display:inline-block;"
@@ -59,7 +62,12 @@
     />
 
     <button
-      v-if="!characterChecksEnabled"
+      v-if="!characterChecksEnabled && hasPermissions([
+        PERMISSIONS.exercises.permissions.canReadExercises.value,
+        PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+        PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+        PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+      ])"
       class="govuk-button"
       @click="enableCharacterChecks()"
     >
@@ -132,7 +140,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               {{ row.stage }}
@@ -207,7 +220,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[2].title">
               {{ row.stage }}
@@ -261,7 +279,12 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[1].title">
-              {{ row.candidate.fullName }}
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               {{ row.stage }}
@@ -292,6 +315,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'CharacterChecks',
@@ -304,6 +328,7 @@ export default {
     Modal,
     CharacterChecksRequests,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       tabs: [

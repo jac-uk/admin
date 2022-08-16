@@ -51,6 +51,7 @@
           class="float-right"
         >
           <a
+            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link"
             @click="changeState"
           >
@@ -115,7 +116,10 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="!isPublished"
+        v-if="!isPublished && hasPermissions([
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.exercises.permissions.canPublishExercise.value
+        ])"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -123,14 +127,17 @@
         Publish on website
       </button>
       <button
-        v-if="isPublished"
+        v-if="isPublished && hasPermissions([
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.exercises.permissions.canPublishExercise.value,
+        ])"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
         Remove from website
       </button>
       <button
-        v-if="isDraft"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isDraft"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="submitForApproval"
@@ -138,34 +145,48 @@
         Submit for Approval
       </button>
       <button
-        v-if="isReadyForApproval"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canApproveExercise.value]) && isReadyForApproval"
+        :disabled="!isReadyForApprovalFromAdvertType"
         class="govuk-button govuk-!-margin-right-3"
         @click="approve"
       >
         Approve
       </button>
       <button
-        v-if="isApproved"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
         Unlock
       </button>
       <ActionButton
-        v-if="isApproved"
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isApproved"
         @click="copyToClipboard"
       >
         Copy to Clipboard
       </ActionButton>
       <br>
       <ActionButton
-        v-if="isReadyForProcessing"
+        v-if="isReadyForProcessing && hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value
+        ])"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="isProcessing"
+        v-if="isProcessing && hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value,
+          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+          PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
+        ])"
         @click="updateProcessing()"
       >
         Process late applications
@@ -186,6 +207,10 @@
           Create test applications
         </ActionButton>
       </div>
+      <Banner
+        v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType"
+        :message="approveErrorMessage"
+      />
     </div>
     <Modal
       ref="modalChangeExerciseState"
@@ -211,21 +236,27 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
 import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   components: {
     Timeline,
     ActionButton,
     Modal,
+    Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
   },
+  mixins: [permissionMixin],
   computed: {
     isProduction() {
       return this.$store.getters['isProduction'];
@@ -262,7 +293,15 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      return this.exercise && this.exercise.state && this.exercise.state === 'ready';
+      const returnReadyForApproval = this.exercise 
+        && this.exercise.state 
+        && this.exercise.state === 'ready';
+      return returnReadyForApproval;
+    },
+    isReadyForApprovalFromAdvertType() {
+      const returnReady = this.exercise 
+        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
+      return returnReady;
     },
     isApproved() {
       return isApproved(this.exercise);
@@ -283,7 +322,6 @@ export default {
       return this.isApproved && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
-
     hasOpened() {
       if (this.exercise) {
         switch (this.exercise.state) {
@@ -348,6 +386,10 @@ export default {
         && this.exerciseProgress.assessmentOptions
         && this.exerciseProgress.downloads;
     },
+    approveErrorMessage() {
+      const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
+      return msg; 
+    },
   },
   methods: {
     submitForApproval() {
@@ -394,7 +436,14 @@ export default {
     },
     refreshApplicationCounts() {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
-        this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
+        if (this.hasPermissions([
+          this.PERMISSIONS.exercises.permissions.canReadExercises.value,
+          this.PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+          this.PERMISSIONS.applications.permissions.canReadApplications.value,
+          this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+        ])) {
+          this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
+        }
       }
     },
     changeNoOfTestApplications() {

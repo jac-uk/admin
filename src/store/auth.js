@@ -11,6 +11,9 @@ const module = {
     setCurrentUser(state, user) {
       state.currentUser = user;
     },
+    setUserRole(state, role) {
+      state.currentUser = { ...state.currentUser, ...role };
+    },
     setAuthError(state, message) {
       state.authError = message;
     },
@@ -35,10 +38,10 @@ const module = {
           'blaise.buckland@judicialappointments.digital',
           'julian.sandler@justice.gov.uk',
           'lisa.grant@justice.gov.uk',
-          'rita.kumi.ampofo@justice.gov.uk',
           'wincen.lowe@justice.gov.uk',
           'lisias.loback@judicialappointments.digital',
           'molly.meadows@justice.gov.uk',
+          'katharine.hanley@judicialappointments.gov.uk',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -48,24 +51,12 @@ const module = {
             user = { ...user, emailVerified: true };
             shouldEnsureEmailVerified = true;
           }
-          let role = 'staff';
-          if (
-            [ // TODO User roles!
-              'warren.searle@judicialappointments.digital',
-              'tom.russell@judicialappointments.digital',
-              'andrew.isaac@judicialappointments.digital',
-              'blaise.buckland@judicialappointments.digital',
-              'lisias.loback@judicialappointments.digital',
-            ].indexOf((user.email).toLowerCase() >= 0)
-          ) {
-            role = 'superadmin';
-          }
+          
           commit('setCurrentUser', {
             uid: user.uid,
             email: user.email,
             emailVerified: user.emailVerified,
             displayName: user.displayName,
-            role: role,
           });
           if (shouldEnsureEmailVerified) {
             await functions.httpsCallable('ensureEmailValidated')({});
@@ -76,6 +67,9 @@ const module = {
         }
       }
     },
+    setUserRole({ commit }, userRole) {
+      commit('setUserRole', userRole);
+    },
   },
   getters: {
     isSignedIn(state) {
@@ -83,6 +77,10 @@ const module = {
     },
     getEmail(state) {
       return state.currentUser.email;
+    },
+    hasPermissions: state => permissions => {
+      const rolePermissions = state.currentUser.rolePermissions;
+      return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
   },
 };

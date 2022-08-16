@@ -1,12 +1,18 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-one-third">
       <h1 class="govuk-heading-l">
         Character Issues
       </h1>
     </div>
-    <div class="govuk-grid-column-one-third text-right">
+    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
+    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
       <button
+        v-if="hasPermissions([
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.exercises.permissions.canReadExercises.value
+        ])"
         class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
       >
@@ -14,9 +20,24 @@
           v-if="downloadingReport"
           class="spinner-border spinner-border-sm"
         />
-        Export Data
+        Export to Excel
       </button>
       <button
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        @click="exportToGoogleDoc"
+      >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
+        Generate Report
+      </button>
+      <button
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+        ])"
         class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
@@ -26,8 +47,7 @@
         /> Refresh
       </button>
     </div>
-
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <Select
           id="exercise-stage"
@@ -89,6 +109,33 @@
       </div>
     </div>
 
+    <div class="govuk-grid-column-one-third text-right">
+      <Select
+        id="issue-status-filter"
+        v-model="issueStatus"
+        class="govuk-!-margin-right-2"
+      >
+        <option value="all">
+          All issue statuses
+        </option>
+        <option value="">
+          Unassigned
+        </option>
+        <option value="proceed">
+          Proceed
+        </option>
+        <option value="reject">
+          Reject
+        </option>
+        <option value="reject-non-declaration">
+          Reject Non-Declaration
+        </option>
+        <option value="discuss">
+          Discuss
+        </option>
+      </Select>
+    </div>
+
     <div class="govuk-grid-column-full">
       <!-- // TODO Include count for character issues across whole exercise. Then display here.
       <p class="govuk-body">
@@ -101,6 +148,8 @@
         :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
+        :page-item-type="'number'"
+        :total="total"
         :custom-search="{
           placeholder: 'Search candidate names',
           handler: candidateSearch,
@@ -109,7 +158,10 @@
         @change="getTableData"
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
+          <TableCell
+            v-if="issueStatus === 'all' || (row.issues.characterIssuesStatus || '') === (issueStatus || '')"
+            :title="tableColumns[0].title"
+          >
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
@@ -124,36 +176,14 @@
                   View application
                 </RouterLink>
               </div>
-            </div>
-            <div
-              v-for="(issue, index) in row.issues.characterIssues"
-              :key="index"
-              class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
-            >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-              >
-              <div class="govuk-grid-column-two-thirds">
-                <div class="issue">
-                  <p class="govuk-body">
-                    {{ issue.summary }}
-                  </p>
-                  <EventRenderer
-                    v-if="issue.events"
-                    :events="issue.events"
-                  />
-                </div>
-                <div
-                  v-if="issue.comments"
-                  class="jac-comments"
-                >
-                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                </div>
-              </div>
-              <div class="govuk-grid-column-one-third">
+              <div class="govuk-grid-column-full">
+                <h4 class="govuk-!-margin-bottom-1">
+                  Recommendation
+                </h4>
                 <Select
-                  id="issue-action"
+                  id="issue-status"
+                  :value="row.issues.characterIssuesStatus || ''"
+                  @input="saveIssueStatus(row, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -170,6 +200,46 @@
                   </option>
                 </Select>
               </div>
+              <div
+                v-if="row.issues.characterIssuesStatus"
+                class="govuk-grid-column-full"
+              >
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Reason for recommendation
+                </h4>
+                <TextareaInput
+                  id="reason-for-status"
+                  :value="row.issues.characterIssuesStatusReason"
+                  @input="saveIssueStatusReason(row, $event)"
+                />
+              </div>
+            </div>
+            <div
+              v-for="(issue, index) in row.issues.characterIssues"
+              :key="index"
+              class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+            >
+              <hr
+                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
+              >
+              <div class="govuk-grid-column-full">
+                <div class="issue">
+                  <p class="govuk-body">
+                    {{ issue.summary }}
+                  </p>
+                  <EventRenderer
+                    v-if="issue.events"
+                    :events="issue.events"
+                  />
+                </div>
+                <div
+                  v-if="issue.comments"
+                  class="jac-comments"
+                >
+                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                </div>
+              </div>
             </div>
           </TableCell>
         </template>
@@ -184,11 +254,13 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -196,11 +268,14 @@ export default {
     Select,
     Table,
     TableCell,
+    TextareaInput,
   },
+  mixins: [permissionMixin],
   data () {
     return {
       exerciseStage: 'all',
       candidateStatus: 'all',
+      issueStatus: 'all',
       availableStatuses: null,
       applicationRecords: [],
       refreshingReport: false,
@@ -209,6 +284,8 @@ export default {
         { title: 'Candidate' },
       ],
       downloadingReport: false,
+      exportingToGoogleDoc: false,
+      total: null,
     };
   },
   computed: {
@@ -263,6 +340,7 @@ export default {
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
+        format: 'excel',
       });
       const title = `Character Check Report - ${this.exercise.referenceNumber}`;
       const data = [];
@@ -283,7 +361,21 @@ export default {
       });
       this.downloadingReport = false;
     },
-    getTableData(params) {
+    async exportToGoogleDoc() {
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
+      }
+      await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'googledoc',
+      });
+      this.exportingToGoogleDoc = false;
+    },
+    async getTableData(params) {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
@@ -300,7 +392,9 @@ export default {
         firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
         localParams.orderBy = 'documentId';
       }
-      firestoreRef = tableQuery(this.applicationRecords, firestoreRef, localParams);
+      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
+      firestoreRef = res.queryRef;
+      this.total = res.total;
       if (firestoreRef) {
         this.unsubscribe = firestoreRef
           .onSnapshot((snap) => {
@@ -312,10 +406,18 @@ export default {
           });
       } else {
         this.applicationRecords = [];
-      }    
+      }
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    async saveIssueStatus(applicationRecord, status) {
+      applicationRecord.issues.characterIssuesStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueStatusReason(applicationRecord, reason) {
+      applicationRecord.issues.characterIssuesStatusReason = reason;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
 };

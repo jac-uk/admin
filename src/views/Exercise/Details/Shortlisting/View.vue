@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-shortlisting-edit'}"
       >
@@ -34,8 +34,10 @@
 
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 
 export default {
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

@@ -6,9 +6,8 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ rootState, state, commit, bindFirestoreRef }, params) => {
+    bind: firestoreAction(({ rootState, state, bindFirestoreRef }, params) => {
       let firestoreRef;
-      if (state.isFavourites === null) { commit('updateFavourites', true); }
       if (state.isFavourites) {
         firestoreRef = firestore
         .collection('exercises')
@@ -45,7 +44,7 @@ export default {
   },
   state: {
     records: [],
-    isFavourites: null,
+    isFavourites: false,
     selectedItems: [],
   },
 };
