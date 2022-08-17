@@ -180,6 +180,7 @@
         :page-size="50"
         :columns="tableColumns"
         @change="getTableData"
+        local-data
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
