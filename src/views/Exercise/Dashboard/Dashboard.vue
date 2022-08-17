@@ -39,15 +39,24 @@
           Timeline - where we are
         </span>
         <div
-          v-for="(time, index) in timeline"
-          :key="index"
+          ref="carrousel"
+          class="carrousel"
         >
-          <span class="govuk-caption-s color-middle">
-            <span class="">{{ time.entry }}</span>
-          </span>
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            <span class="">{{ time.dateString }}</span>
-          </h2>
+          <div
+            v-for="(time, index) in timeline"
+            :key="index"
+          >
+            <span class="govuk-caption-s color-middle">
+              <span class="">{{ time.entry }}</span>
+            </span>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+              <span class="">{{ time.dateString }}</span>
+            </h2>
+          </div>
+          <div class="carrousel_arrows">
+            <button :disabled="timelineSelected <= 0" @click="btnPrevious">&lt;</button>
+            <button :disabled="timelineSelected >= (timelineTotal - 1)" @click="btnNext">&gt;</button>
+          </div>
         </div>
       </div>
     </div>
@@ -238,6 +247,8 @@ export default {
         { title: 'All gender', sort: 'name', direction: 'asc', default: true },
         { title: 'Status' },
       ],
+      timelineSelected: 0,
+      timelineTotal: 0,
     };
   },
   computed: {
@@ -405,7 +416,43 @@ export default {
       ];
     },
   },
+  mounted() {
+    console.log('created');
+    this.carouselChooseItemToShow(this.timeline);
+  },
   methods: {
+    carouselChooseItemToShow(timeline) {
+      // choose the firtst item to show
+      let timeItemToShow = 0;
+      if (timeline) {
+        timeline.map((time, index) => {
+          // console.log(index, time);
+          if (time.date < Date.now()) {
+            timeItemToShow = index;
+          }
+        });
+      } else {
+        timeItemToShow = 0;
+      }
+      this.timelineSelected = timeItemToShow;
+      this.timelineTotal = this.timeline.length;
+      console.log('timeItemToShow: ', timeItemToShow);
+      this.carouselShowItem(this.timelineSelected);
+    },
+    carouselShowItem(id) {
+      const carrouselRef = this.$refs.carrousel;
+      // console.log('carrousel ref: ', carrouselRef);
+      this.carrouselClean(carrouselRef);
+      const carrouselRefSelected = carrouselRef.querySelectorAll('div')[id];
+      // console.log('carrousel ref selected: ', carrouselRefSelected);
+      carrouselRefSelected.classList.add('carrousel__item-visible');
+    },
+    carrouselClean(obj) {
+      const carrouselNodes = obj.querySelectorAll('div');
+      [...carrouselNodes].map(el => {
+        el.classList.remove('carrousel__item-visible');
+      });
+    },
     submitForApproval() {
       this.$store.dispatch('exerciseDocument/submitForApproval');
     },
@@ -475,6 +522,26 @@ export default {
     getTableData(params) {
       return params;
     },
+    btnNext() {
+      console.log('next', this.timelineSelected);
+      if (this.timelineSelected >= (this.timelineTotal - 1)) {
+        this.timelineSelected = this.timelineTotal - 1;
+      } else {
+        this.timelineSelected = this.timelineSelected + 1;
+        console.log('next val', this.timelineSelected);
+      }
+      this.carouselShowItem(this.timelineSelected);
+    },
+    btnPrevious() {
+      console.log('previous', this.timelineSelected);
+      if (this.timelineSelected <= 0) {
+        this.timelineSelected = 0;
+      } else {
+        this.timelineSelected = this.timelineSelected - 1;
+        console.log('previous val', this.timelineSelected);
+      }
+      this.carouselShowItem(this.timelineSelected);
+    },
   },
 };
 </script>
@@ -505,5 +572,22 @@ $govuk-brand-colour:	#1d70b8;
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.carrousel {
+  position: relative;
+}
+
+.carrousel div {
+  display: none;
+}
+.carrousel .carrousel_arrows {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.carrousel div.carrousel__item-visible {
+  display: block;
 }
 </style>
