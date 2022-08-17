@@ -123,7 +123,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="!isPublished && hasPermissions([
+        v-if="!isPublished && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.exercises.permissions.canPublishExercise.value
         ])"
@@ -134,7 +134,7 @@
         Publish on website
       </button>
       <button
-        v-if="isPublished && hasPermissions([
+        v-if="isPublished && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.exercises.permissions.canPublishExercise.value,
         ])"
@@ -160,7 +160,7 @@
         Approve
       </button>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
+        v-if="!isArchived && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
@@ -174,19 +174,20 @@
       </ActionButton>
       <br>
       <ActionButton
-        v-if="isReadyForProcessing && hasPermissions([
+        v-if="isReadyForProcessing && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value
         ])"
+        class="govuk-!-margin-right-3"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="isProcessing && hasPermissions([
+        v-if="isProcessing && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
@@ -194,6 +195,7 @@
           PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
           PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
         ])"
+        class="govuk-!-margin-right-3"
         @click="updateProcessing()"
       >
         Process late applications
@@ -210,14 +212,14 @@
       </Modal>
       <button
         v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-        :class="`govuk-button govuk-!-margin-left-3 ${!isArchived ? 'govuk-button--warning' : ''}`"
+        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="openArchiveModal"
       >
         {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
       </button>
       <div v-if="!isProduction">
         <button
-          v-if="isReadyForTesting"
+          v-if="isReadyForTesting && !isArchived"
           class="govuk-button"
           @click="changeNoOfTestApplications()"
         >
