@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-vacancy-edit'}"
       >
@@ -163,12 +163,14 @@
 
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
   components: {
     CustomHTML,
   },
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

@@ -14,6 +14,10 @@
       >{{ qualifyingTest.mode | lookup }}</span>
     </h3>
     <button
+      v-if="hasPermissions([
+        PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
+        PERMISSIONS.qualifyingTestResponses.permissions.canReadQualifyingTestResponses.value
+      ])"
       class="govuk-button govuk-!-margin-left-3 float-right"
       @click="downloadResponses"
     >
@@ -59,12 +63,14 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   data() {
     const qualifyingTest = this.$store.state.qualifyingTest.record;
     const tableColumns = [];

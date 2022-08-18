@@ -39,6 +39,12 @@ const store = new Vuex.Store({
         data: jest.fn().mockReturnValue(mockExercise),
       },
     },
+    auth: {
+      namespaced: true,
+      getters: {
+        hasPermissions: () => () => true,
+      },
+    },
   },
 });
 

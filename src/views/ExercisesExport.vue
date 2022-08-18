@@ -12,7 +12,14 @@
         <ErrorSummary
           :errors="errors"
         />
-        <button class="govuk-button">
+        <button
+          v-if="hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+            PERMISSIONS.applications.permissions.canReadApplications.value
+          ])"
+          class="govuk-button"
+        >
           Download XLSX
         </button>
       </form>
@@ -26,6 +33,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -33,6 +41,7 @@ export default {
     BackLink,
   },
   extends: Form,
+  mixins: [permissionMixin],
   computed: {
     selectedItems() {
       return this.$store.state.exerciseCollection.selectedItems;

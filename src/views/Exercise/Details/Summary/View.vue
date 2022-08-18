@@ -2,7 +2,7 @@
   <div>
     <div class="text-right">
       <router-link
-        v-if="isEditable"
+        v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
         :to="{name: 'exercise-details-summary-edit'}"
       >
@@ -106,7 +106,9 @@
     </dl>
 
     <button
-      v-if="!isPublished"
+      v-if="!isPublished && hasPermissions([
+        PERMISSIONS.exercises.permissions.canPublishExercise.value
+      ])"
       :disabled="!canPublish"
       class="govuk-button govuk-button--secondary"
       @click="publish"
@@ -114,7 +116,9 @@
       Publish on website
     </button>
     <button
-      v-if="isPublished"
+      v-if="isPublished && hasPermissions([
+        PERMISSIONS.exercises.permissions.canPublishExercise.value
+      ])"
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >
@@ -134,6 +138,7 @@
 <script>
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
+import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
 import { ADVERT_TYPES } from '@/helpers/constants';
@@ -145,6 +150,7 @@ export default {
     ChangeExerciseAdvertType,
     CustomHTML,
   },
+  mixins: [permissionMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

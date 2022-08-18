@@ -26,7 +26,7 @@
           <dd class="govuk-summary-list__value">
             {{ response.status | lookup }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
             <button
-              v-if="authorisedToPerformAction"
+              v-if="authorisedToPerformAction && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
               :disabled="hasActivated"
               type="secondary"
               class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1"
@@ -35,7 +35,7 @@
               Reset
             </button>
             <ActionButton
-              v-if="authorisedToPerformAction"
+              v-if="authorisedToPerformAction && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
@@ -70,6 +70,7 @@
                 </option>
               </Select>
               <button
+                v-if="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
                 class="govuk-button"
                 :disabled="!moveToTest"
                 @click="btnMoveTest"
@@ -82,6 +83,7 @@
               class="float-right"
             >
               <a
+                v-if="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
                 href="#"
                 class="govuk-link print-none"
                 @click.prevent="btnEditTestDate"
@@ -147,7 +149,7 @@
                   <EditableField
                     :value="response.duration.reasonableAdjustment"
                     field="reasonableAdjustment"
-                    :edit-mode="true"
+                    :edit-mode="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
                     @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
                   />
                   {{ response.candidate.reasonableAdjustmentsDetails }}
@@ -164,7 +166,7 @@
                   <EditableField
                     :value="response.duration.reasonableAdjustmentsJustification"
                     field="reasonableAdjustmentsJustification"
-                    :edit-mode="true"
+                    :edit-mode="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
                     type="textarea"
                     @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
@@ -489,6 +491,7 @@ import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
@@ -501,6 +504,7 @@ export default {
     ActionButton,
     CustomHTML,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       moveToTest: '',

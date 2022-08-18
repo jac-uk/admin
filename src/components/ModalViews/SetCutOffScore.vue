@@ -69,6 +69,10 @@
       </span>
       <div>
         <button
+          v-if="hasPermissions([
+            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+          ])"
           class="govuk-button govuk-!-margin-right-3"
           @click="save"
         >
@@ -109,6 +113,7 @@
 import { functions } from '@/firebase';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'SetCutOffScore',
@@ -116,6 +121,7 @@ export default {
     TextField,
     ErrorSummary,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       cutOffScore: null,
