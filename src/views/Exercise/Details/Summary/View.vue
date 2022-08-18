@@ -49,12 +49,10 @@
           Role summary
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            class="govuk-body custom-html"
-            v-html="exercise.roleSummary"
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummary"
           />
-          <!-- eslint-enable -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -91,12 +89,10 @@
           Role summary (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            class="govuk-body custom-html"
-            v-html="exercise.roleSummaryWelsh"
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummaryWelsh"
           />
-          <!-- eslint-enable -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -141,11 +137,13 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
 import { ADVERT_TYPES } from '@/helpers/constants';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   components: {
     Modal,
     ChangeExerciseAdvertType,
+    CustomHTML,
   },
   computed: {
     exercise() {

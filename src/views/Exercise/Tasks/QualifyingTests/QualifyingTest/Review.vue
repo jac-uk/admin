@@ -177,11 +177,9 @@
               <strong>
                 {{ document.title }}
               </strong>
-              <!-- eslint-disable -->
-                <p
-                  v-html="document.content"
-                />
-                <!-- eslint-enable -->
+              <CustomHTML
+                :value="document.content"
+              />
               <hr>
             </div>
             <ol>
@@ -273,8 +271,12 @@
 <script>
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  components: {
+    CustomHTML,
+  },
   computed: {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,

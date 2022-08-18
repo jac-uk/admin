@@ -140,12 +140,10 @@
           Role summary
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            class="govuk-body custom-html"
-            v-html="exercise.roleSummary"
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummary"
           />
-          <!-- eslint-enable -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -153,12 +151,10 @@
           About the role
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
-            class="govuk-body custom-html"
-            v-html="exercise.aboutTheRole"
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.aboutTheRole"
           />
-          <!-- eslint-enable -->
         </dd>
       </div>
     </dl>
@@ -167,8 +163,12 @@
 
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  components: {
+    CustomHTML,
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

@@ -84,11 +84,9 @@
               >
                 {{ criterion.title }}
               </p>
-              <!-- eslint-disable -->
-              <p
-                v-html="criterion.text"
+              <CustomHTML
+                :value="criterion.text"
               />
-              <!-- eslint-enable -->
               <p
                 v-if="criterion.wordLimit"
                 class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1"
@@ -201,8 +199,12 @@
 
 <script>
 import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  components: {
+    CustomHTML,
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;

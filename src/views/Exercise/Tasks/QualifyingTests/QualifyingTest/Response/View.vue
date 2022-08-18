@@ -254,9 +254,11 @@
                     :key="docIndex"
                   >
                     <dt>{{ document.title }}</dt>
-                    <!-- eslint-disable -->
-                    <dd v-html="document.content" />
-                    <!-- eslint-enable -->
+                    <dd>
+                      <CustomHTML
+                        :value="document.content"
+                      />
+                    </dd>
                   </dl>
                 </div>
                 <div
@@ -487,6 +489,7 @@ import QuestionDuration from '@/components/Micro/QuestionDuration';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   components: {
@@ -496,6 +499,7 @@ export default {
     Modal,
     QuestionDuration,
     ActionButton,
+    CustomHTML,
   },
   data() {
     return {
