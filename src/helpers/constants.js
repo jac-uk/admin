@@ -16,6 +16,19 @@ const ADVERT_TYPES = {
   EXTERNAL: 'external',
 };
 
+const INDEPENDENT_ASSESSMENTS_STATUS = {
+  DRAFT: 'draft',
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+  DECLINED: 'declined',
+};
+const ASSESSOR_TYPES = {
+  PROFESSIONAL: 'professional',
+  JUDICIAL: 'judicial',
+  PERSONAL: 'personal',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
@@ -24,5 +37,7 @@ export {
   QUALIFYING_TEST,
   QUALIFYING_TEST_RESPONSE,
   ADVERT_TYPES,
-  DEFAULT
+  DEFAULT,
+  INDEPENDENT_ASSESSMENTS_STATUS,
+  ASSESSOR_TYPES
 };
