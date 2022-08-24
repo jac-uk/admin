@@ -185,15 +185,19 @@
     </div>
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <ActionButton
-        class="govuk-!-margin-right-3 hard-coded hard-coded-border"
-        @click="exportData"
+        class="govuk-!-margin-right-3"
+        @click="exportData()"
       >
         Export Data
       </ActionButton>
       <button
-        class="govuk-button govuk-!-margin-right-3 hard-coded hard-coded-border"
-        @click="refresh"
+        class="govuk-button govuk-!-margin-right-3"
+        @click="refreshReport"
       >
+        <span
+          v-if="refreshingReport"
+          class="spinner-border spinner-border-sm"
+        />
         Refresh
       </button>
     </div>
@@ -209,7 +213,7 @@
           :key="type"
           :value="type"
         >
-          {{ type }}
+          {{ type | lookup }}
         </option>
       </Select>
       <GChart
@@ -223,21 +227,23 @@
       />
       <Table
         data-key="id"
-        :data="chartGender"
+        :data="chartDetail"
         :page-size="50"
         :columns="tableColumns"
         local-data
-        @change="getTableData"
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
-            {{ row.name }}
+            {{ row.name | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.status }}
+            {{ row.val.total }} ({{ row.val.percent | formatNumber(2) }}%)
           </TableCell>
         </template>
       </Table>
+      <p class="govuk-caption-s color-middle">
+        <span class="">Diversity Report Last Updated: {{ reportCreatedAt | formatDate('datetime') }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -254,10 +260,9 @@ import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { GChart } from 'vue-google-charts/legacy';
-import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
-import { ADVERT_TYPES, EXERCISE_STAGE } from '@/helpers/constants';
+import { applicationCounts } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '@/helpers/constants';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 
 export default {
   components: {
@@ -293,19 +298,19 @@ export default {
         },
       ],
       activeTab: 'applied',
-      tableColumns: [
-        { title: 'All gender', sort: 'name', direction: 'asc', default: true },
-        { title: 'Status' },
-      ],
       timelineSelected: 0,
       timelineTotal: 0,
       diversityReport: 'gender',
       report: null,
+      refreshingReport: false,
     };
   },
   computed: {
-    isProduction() {
-      return this.$store.getters['isProduction'];
+    tableColumns() {
+      return [
+        { title: `${lookup(this.diversityReport)} (${lookup(this.activeTab)})` },
+        { title: 'Total (Percentage)' },
+      ];
     },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
@@ -316,125 +321,9 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
-    draftApplications() {
-      return this.applicationCounts.draft || 0;
-    },
-    appliedApplications() {
-      return this.applicationCounts.applied || 0;
-    },
-    totalApplications() {
-      return this.applicationCounts._total || 0;
-    },
-    isPublished() {
-      return this.exercise.published;
-    },
-    canPublish() {
-      return this.exercise.progress && this.exercise.progress.vacancySummary;
-    },
-    isDraft() {
-      // returns true unless exercise has a state that other than draft
-      if (this.exercise && this.exercise.state && this.exercise.state !== 'draft') {
-        return false;
-      }
-      return true;
-    },
-    isReadyForApproval() {
-      const returnReadyForApproval = this.exercise
-        && this.exercise.state
-        && this.exercise.state === 'ready';
-      return returnReadyForApproval;
-    },
-    isReadyForApprovalFromAdvertType() {
-      const returnReady = this.exercise
-        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
-      return returnReady;
-    },
-    isApproved() {
-      return isApproved(this.exercise);
-    },
-    isTesting() {
-      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
-    },
-    isTested() {
-      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
-    },
-    isReadyForTesting() {
-      return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
-    },
-    isProcessing() {
-      return isProcessing(this.exercise);
-    },
-    isReadyForProcessing() {
-      return this.isApproved && !this.isProcessing;
-      // @TODO perhaps also check that exercise has closed
-    },
-    hasOpened() {
-      if (this.exercise) {
-        switch (this.exercise.state) {
-        case 'draft':
-        case 'ready':
-        case 'approved':
-        case 'pre-launch':
-          return false;
-        default:
-          return true;
-        }
-      }
-      return false;
-    },
     timeline() {
       const timeline = exerciseTimeline(this.exercise);
       return createTimeline(timeline);
-    },
-    exerciseProgress() {
-      if (this.exercise && this.exercise.progress) {
-        return this.exercise.progress;
-      } else {
-        return {};
-      }
-    },
-    approvalProgress() {
-      if (this.exercise && this.exercise.approval) {
-        return this.exercise.approval;
-      } else {
-        return {};
-      }
-    },
-    taskList() {
-      const data = [];
-      if (!this.exercise.state || this.exercise.state === 'draft' || this.exercise.state === 'ready') {
-        if (this.exerciseProgress) {
-          data.push({ title: 'Website listing', id: 'exercise-details-summary', done: this.exerciseProgress.vacancySummary, approved: this.approvalProgress['vacancySummary'] });
-          data.push({ title: 'Vacancy information', id: 'exercise-details-vacancy', done: this.exerciseProgress.vacancyInformation, approved: this.approvalProgress['vacancyInformation'] });
-          data.push({ title: 'Contacts', id: 'exercise-details-contacts', done: this.exerciseProgress.contacts, approved: this.approvalProgress['contacts'] });
-          data.push({ title: 'Timeline', id: 'exercise-details-timeline', done: this.exerciseProgress.timeline, approved: this.approvalProgress['timeline'] });
-          data.push({ title: 'Shortlisting', id: 'exercise-details-shortlisting', done: this.exerciseProgress.shortlisting, approved: this.approvalProgress['shortlisting'] });
-          data.push({ title: 'Eligibility information', id: 'exercise-details-eligibility', done: this.exerciseProgress.eligibility, approved: this.approvalProgress['eligibility'] });
-          data.push({ title: 'Working preferences', id: 'exercise-details-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress['workingPreferences'] });
-          data.push({ title: 'Assessment options', id: 'exercise-details-assessments', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress['assessmentOptions'] });
-          data.push({ title: 'Exercise downloads', id: 'exercise-details-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress['downloads'] });
-          if (this.exercise.inviteOnly) {
-            data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-details-invitations' , done: this.exerciseProgress.invitations, approved: this.approvalProgress['invitations'] });
-          }
-        }
-      }
-      return data;
-    },
-    isReadyToSubmit() {
-      return this.exerciseProgress
-        && this.exerciseProgress.vacancySummary
-        && this.exerciseProgress.vacancyInformation
-        && this.exerciseProgress.contacts
-        && this.exerciseProgress.timeline
-        && this.exerciseProgress.shortlisting
-        && this.exerciseProgress.eligibility
-        && this.exerciseProgress.workingPreferences
-        && this.exerciseProgress.assessmentOptions
-        && this.exerciseProgress.downloads;
-    },
-    approveErrorMessage() {
-      const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
-      return msg;
     },
     diversityReportType() {
       let dataTitles = [];
@@ -450,16 +339,21 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[EXERCISE_STAGE.APPLIED][this.diversityReport];
-        const dataKeys = Object.keys(dataApplied);
-        dataTitles = dataKeys.filter(item => item !== 'total');
+        const dataKeys = Object.keys(dataApplied).filter(item => item !== 'total');
+        dataTitles = dataKeys.reduce((ret, item) => {
+          if (item !== 'total') {
+            ret.push(lookup(item));
+          }
+          return ret;
+        }, []);
 
         returnChart = [
           ['All', ...dataTitles],
-          ['Applied', ...this.getDataTotal(EXERCISE_STAGE.APPLIED, dataTitles)],
-          ['Shorlisted', ...this.getDataTotal(EXERCISE_STAGE.SHORTLISTED, dataTitles)],
-          ['Selected', ...this.getDataTotal(EXERCISE_STAGE.SELECTED, dataTitles)],
-          ['Recommended', ...this.getDataTotal(EXERCISE_STAGE.RECOMMENDED, dataTitles)],
-          ['Handover', ...this.getDataTotal(EXERCISE_STAGE.HANDOVER, dataTitles)],
+          ['Applied', ...this.getDataTotal(EXERCISE_STAGE.APPLIED, dataKeys)],
+          ['Shorlisted', ...this.getDataTotal(EXERCISE_STAGE.SHORTLISTED, dataKeys)],
+          ['Selected', ...this.getDataTotal(EXERCISE_STAGE.SELECTED, dataKeys)],
+          ['Recommended', ...this.getDataTotal(EXERCISE_STAGE.RECOMMENDED, dataKeys)],
+          ['Handover', ...this.getDataTotal(EXERCISE_STAGE.HANDOVER, dataKeys)],
         ];
       }
 
@@ -473,30 +367,25 @@ export default {
         height: 300,
       };
     },
-    chartGender () {
-      return [
-        {
-          id: 1234567,
-          name: 'Américo Luiz Vieira',
-          status: 'odd',
-        },
-        {
-          id: 1234568,
-          name: 'Sebastião Amaro Louback',
-          status: 'odd',
-        },
-      ];
+    chartDetail () {
+      // this.activeTab
+      let returnChart = [];
+      if (this.report) {
+        const dataApplied = this.report[this.activeTab][this.diversityReport];
+        returnChart = Object.keys(dataApplied).reduce((ret, item) => {
+          if (item !== 'total') {
+            ret.push({ 'name': item, 'val': dataApplied[item] });
+          }
+          return ret;
+        }, []);
+      }
+      return returnChart;
     },
-  },
-
-  watch: {
-    diversityReport: function(val, oldval) {
-      console.log('diversity reports changed', val, oldval);
-      console.log('report', this.report);
+    reportCreatedAt() {
+      return this.report && this.report.createdAt;
     },
   },
   created() {
-    console.log('created', this.exerciseId);
     this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
       .onSnapshot((snap) => {
         if (snap.exists) {
@@ -513,6 +402,11 @@ export default {
     this.carouselChooseItemToShow(this.timeline);
   },
   methods: {
+    async refreshReport() {
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+      this.refreshingReport = false;
+    },
     getDataTotal(stage, titles) {
       const dataApplied = this.report[stage][this.diversityReport];
       const dataTotal = titles.reduce((ret, val) => {
@@ -549,94 +443,54 @@ export default {
         el.classList.remove('carrousel__item-visible');
       });
     },
-    submitForApproval() {
-      this.$store.dispatch('exerciseDocument/submitForApproval');
-    },
-    approve() {
-      this.$store.dispatch('exerciseDocument/approve');
-    },
-    refresh() {
-      // this.$store.dispatch('exerciseDocument/unlock');
-    },
-    async exportData() {
-      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
-      await this.$store.dispatch('clipboard/write', {
-        environment: this.$store.getters.appEnvironment,
-        type: 'exercise',
-        title: `${exercise.referenceNumber} ${exercise.name}`,
-        content: exercise,
-      });
-    },
-    async publish() {
-      await this.$store.dispatch('exerciseDocument/publish');
-      logEvent('info', 'Exercise published', {
-        exerciseId: this.exerciseId,
-        exerciseRef: this.exercise.referenceNumber,
-      });
-    },
-    async unPublish() {
-      await this.$store.dispatch('exerciseDocument/unpublish');
-      logEvent('info', 'Exercise unpublished', {
-        exerciseId: this.exerciseId,
-        exerciseRef: this.exercise.referenceNumber,
-      });
-    },
-    async startProcessing() {
-      await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
-    },
-    async updateProcessing() {
-      // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
-      await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
-    },
-    changeState() {
-      this.$refs['modalChangeExerciseState'].openModal();
-    },
-    refreshApplicationCounts() {
-      if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
-        this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
-      }
-    },
-    changeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].openModal();
-      this.$store.dispatch('exerciseDocument/testing');
-    },
-    cancelChangeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
-      this.$store.dispatch('exerciseDocument/isReadyForTest');
-    },
-    confirmedNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
-      this.$refs['createTestApplicationsBtn'].$el.click();
-    },
-    async createTestApplications() {
-      const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
-      if (!noOfTestApplications) return;
-      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
-      this.$store.dispatch('exerciseDocument/tested');
-      this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
-    },
-    getTableData(params) {
-      return params;
-    },
     btnNext() {
-      console.log('next', this.timelineSelected);
       if (this.timelineSelected >= (this.timelineTotal - 1)) {
         this.timelineSelected = this.timelineTotal - 1;
       } else {
         this.timelineSelected = this.timelineSelected + 1;
-        console.log('next val', this.timelineSelected);
       }
       this.carouselShowItem(this.timelineSelected);
     },
     btnPrevious() {
-      console.log('previous', this.timelineSelected);
       if (this.timelineSelected <= 0) {
         this.timelineSelected = 0;
       } else {
         this.timelineSelected = this.timelineSelected - 1;
-        console.log('previous val', this.timelineSelected);
       }
       this.carouselShowItem(this.timelineSelected);
+    },
+    gatherReportData() {
+      const data = [];
+      const stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      data.push(['Statistic'].concat(stages));
+      Object.keys(this.report.applied).forEach((report) => {
+        Object.keys(this.report.applied[report]).forEach((stat) => {
+          const columns = [];
+          columns.push(`${report}:${stat}`);
+          stages.forEach((stage) => {
+            if (stat === 'total') {
+              columns.push(this.report[stage][report][stat]);
+            } else {
+              columns.push(this.report[stage][report][stat].total);
+            }
+          });
+          data.push(columns);
+        });
+      });
+      return data;
+    },
+    exportData() {
+      let title = 'Diversity Report';
+      const data = this.gatherReportData();
+
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };
