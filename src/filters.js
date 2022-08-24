@@ -53,8 +53,21 @@ const lookup = (value) => {
     endDate: 'End Date',
 
     // emp flags
-    'gender': 'Gender',
-    'ethnicity': 'Ethnicity',
+    gender: 'Gender',
+    ethnicity: 'Ethnicity',
+    professionalBackground: 'Professional Background',
+    emp: 'EMP',
+    socialMobility: 'Social Mobility',
+    disability: 'Disability',
+
+    // Diversity report
+    preferNotToSay: 'Prefer not to say',
+    noAnswer: 'No answer',
+    genderNeutral: 'Gender neutral',
+    firstGenerationUniversity: 'First generation at University',
+    attendedUKStateSchool: 'Attended UK state school',
+    white: 'White',
+    bame: 'Black, Asian and minority ethnic',
 
     // PAJE answers
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
