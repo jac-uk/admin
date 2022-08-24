@@ -480,7 +480,7 @@ export default {
       return data;
     },
     exportData() {
-      let title = 'Diversity Report';
+      const title = 'Diversity Report';
       const data = this.gatherReportData();
 
       downloadXLSX(
