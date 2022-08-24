@@ -66,7 +66,7 @@ export default {
     async savePanel(formData) {
       const data = { ...formData };
       data.type = this.type;
-      data.exerciseId = this.exerciseId;
+      data.exerciseId = this.exerciseId;  // TODO remove this as it is redundant
       data.exercise = {
         id: this.exerciseId,
         referenceNumber: this.exercise.referenceNumber,

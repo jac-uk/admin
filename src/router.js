@@ -93,6 +93,8 @@ import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import ExerciseTask from '@/views/Exercise/Tasks/Task';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
+import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised';
+import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated';
 import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised';
 import ExerciseTaskTestActivated from '@/views/Exercise/Tasks/Task/TestActivated';
 import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsInitialised';
@@ -1050,6 +1052,24 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'New | Exercise task',
+                  },
+                },
+                {
+                  path: 'data-initialised',
+                  component: ExerciseTaskDataInitialised,
+                  name: 'exercise-task-dataInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Data Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'data-activated',
+                  component: ExerciseTaskDataActivated,
+                  name: 'exercise-task-dataActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Data Activated | Exercise task',
                   },
                 },
                 {

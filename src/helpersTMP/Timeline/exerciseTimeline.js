@@ -100,6 +100,7 @@ const exerciseTimeline = (data) => {
           entry: 'Shortlisting outcome',
           date: data.shortlistingOutcomeDate,
           dateString: getDateString(data.shortlistingOutcomeDate, 'month'),
+          taskType: TASK_TYPE.SHORTLISTING_OUTCOME,
         }
       );
     }
@@ -194,6 +195,7 @@ const exerciseTimeline = (data) => {
           entry: 'JAC Contacts Independent Assessors',
           date: data.contactIndependentAssessors,
           dateString: getDateString(data.contactIndependentAssessors),
+          // TODO make this a task
         }
       );
     }
@@ -234,6 +236,7 @@ const exerciseTimeline = (data) => {
         entry: 'Character Checks',
         date: data.characterChecksDate,
         dateString: getDateString(data.characterChecksDate),
+        // TODO make this a task
       }
     );
   }
@@ -254,6 +257,7 @@ const exerciseTimeline = (data) => {
         entry: 'Statutory consultation',
         date: data.statutoryConsultationDate,
         dateString: getDateString(data.statutoryConsultationDate),
+        taskType: TASK_TYPE.STATUTORY_CONSULTATION,
       }
     );
   }
@@ -275,6 +279,7 @@ const exerciseTimeline = (data) => {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
         dateString: getDateString(data.finalOutcome),
+        taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
   }

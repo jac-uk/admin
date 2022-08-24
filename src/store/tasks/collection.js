@@ -1,7 +1,6 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-//import { taskNextStatus } from '@/helpers/exerciseHelper';
 
 export default {
   namespaced: true,

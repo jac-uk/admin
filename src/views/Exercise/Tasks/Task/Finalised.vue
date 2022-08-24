@@ -99,9 +99,6 @@ export default {
     scores() {
       if (!this.task) return [];
       if (!this.exerciseDiversity) return [];
-
-      // TODO update to use `.applications` and `.scoresMap` instead of `.finalScores`
-
       if (!this.task.finalScores) return [];
       // group scores
       const scoreMap = {};

@@ -27,10 +27,7 @@ unselectedApplicationParts
 export {
   APPLICATION_STEPS,
   CAPABILITIES,
-  GRADES,
-  GRADE_VALUES,
   SELECTION_CATEGORIES,
-  TASKS,
   TASK_STATUS,
   TASK_TYPE,
   STAGE_TASKS,
@@ -38,7 +35,6 @@ export {
   getTaskTypes,
   taskEntryStatus,
   previousTaskType,
-  taskNextStatus,
   emptyScoreSheet,
   exerciseStates,
   exerciseAdvertTypes,
@@ -126,73 +122,40 @@ const APPLICATION_PARTS = [
   'additionalInfo',
 ];
 
-const CAPABILITIES = ['L', 'EJ', 'L&J', 'PQ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
-const GRADES = ['A', 'B', 'C', 'D'];
-const GRADE_VALUES = {
-  'A': 4,
-  'B': 3,
-  'C': 2,
-  'D': 1,
-};
+const CAPABILITIES = ['L&J', 'PQ', 'L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
-
-const TASKS = [
-  TASK_TYPE.CRITICAL_ANALYSIS,
-  TASK_TYPE.SITUATIONAL_JUDGEMENT,
-  TASK_TYPE.SCENARIO,
-  TASK_TYPE.SIFT,
-  TASK_TYPE.SELECTION,
-];
-
-const TASK_STATUS = {
-  INITIALISED: 'initialised',
-  ACTIVATED: 'activated',
-  MODERATION_INITIALISED: 'moderationInitialised',
-  MODERATION_ACTIVATED: 'moderationActivated',
-  FINALISED: 'finalised',
-  COMPLETED: 'completed',
-};
 
 const STAGE_TASKS = {
   shortlisting: [
     TASK_TYPE.CRITICAL_ANALYSIS,
     TASK_TYPE.SITUATIONAL_JUDGEMENT,
     TASK_TYPE.SCENARIO,
+    TASK_TYPE.TELEPHONE_ASSESSMENT,
     TASK_TYPE.SIFT,
+    TASK_TYPE.ELIGIBILITY_SCC,
+    TASK_TYPE.SHORTLISTING_OUTCOME,
   ],
   selection: [
     TASK_TYPE.SELECTION,
+    TASK_TYPE.STATUTORY_CONSULTATION,
+    TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
+    TASK_TYPE.SELECTION_OUTCOME,
   ],
 };
 
-// TODO - this is not currently used. Use it or lose it :)
-function taskNextStatus(currentStatus) {
-  let nextStatus;
-  switch (currentStatus) {
-    case TASK_STATUS.INITIALISED:
-      nextStatus = TASK_STATUS.ACTIVATED;
-      break;
-    case TASK_STATUS.ACTIVATED: // skip moderation
-      // nextStatus = TASK_STATUS.MODERATION_INITIALISED;
-      nextStatus = TASK_STATUS.FINALISED;
-      break;
-    case TASK_STATUS.MODERATION_INITIALISED:
-      nextStatus = TASK_STATUS.MODERATION_ACTIVATED;
-      break;
-    case TASK_STATUS.MODERATION_ACTIVATED:
-      nextStatus = TASK_STATUS.FINALISED;
-      break;
-    case TASK_STATUS.FINALISED:
-      nextStatus = TASK_STATUS.COMPLETED;
-      break;
-    case TASK_STATUS.COMPLETED:
-      nextStatus = TASK_STATUS.COMPLETED;
-      break;
-    default:
-      nextStatus = TASK_STATUS.INITIALISED;
-  }
-  return nextStatus;
-}
+const TASK_STATUS = {
+  DATA_INITIALISED: 'dataInitialised',
+  DATA_ACTIVATED: 'dataActivated',
+  TEST_INITIALISED: 'testInitialised',
+  TEST_ACTIVATED: 'testActivated',
+  PANELS_INITIALISED: 'panelsInitialised',
+  PANELS_ACTIVATED: 'panelsActivated',
+  MODERATION_INITIALISED: 'moderationInitialised',
+  MODERATION_ACTIVATED: 'moderationActivated',
+  FINALISED: 'finalised',
+  CHECKS: 'checks',
+  COMPLETED: 'completed',
+};
 
 /**
  * get task types in sequence
@@ -210,7 +173,6 @@ function getTimelineTasks(exercise, taskType) {
 }
 
 function getTaskTypes(exercise, stage) {
-  console.log('get task types', stage);
   let taskTypes = getTimelineTasks(exercise).map(item => item.taskType).filter((value, index, thisArray) => thisArray.indexOf(value) === index);
   if (stage) {
     taskTypes = taskTypes.filter(taskType => STAGE_TASKS[stage].indexOf(taskType) >= 0);

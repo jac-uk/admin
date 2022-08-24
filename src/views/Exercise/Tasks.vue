@@ -13,7 +13,7 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
-import { isProcessing, getTaskTypes } from '@/helpers/exerciseHelper';
+import { isProcessing, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
 import { lookup } from '@/filters';
 
 export default {
@@ -41,35 +41,45 @@ export default {
               path: `${path}/independent-assessments`,
             });
           }
-          sideNavigation.push(
-            {
-              title: 'Character Checks',
-              path: `${path}/character-checks`,
-            }
-          );
         }
         getTaskTypes(exercise, stage).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
           sideNavigation.push(
             {
               title: lookup(taskType),
-              tag: {
-                title: 'New',
-                class: 'govuk-tag--blue',
-              },
+              tag: tag,
               path: `${path}/${taskType}`,
             }
           );
         });
         break;
       case 'selection':
+        sideNavigation.push(
+          {
+            title: 'Character Checks',
+            path: `${path}/character-checks`,
+          }
+        );
         getTaskTypes(exercise, stage).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
           sideNavigation.push(
             {
               title: lookup(taskType),
-              tag: {
-                title: 'New',
-                class: 'govuk-tag--blue',
-              },
+              tag: tag,
               path: `${path}/${taskType}`,
             }
           );

@@ -136,6 +136,19 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'Qualifying Test';
   lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed Scenario';
   lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed Scenario';
+  lookup[TASK_TYPE.TELEPHONE_ASSESSMENT] = 'Telephone Assessment';
+  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Passed`] = 'Passed Telephone Assessment';
+  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Failed`] = 'Failed Telephone Assessment';
+  lookup[TASK_TYPE.ELIGIBILITY_SCC] = 'Eligibility SCC';
+  lookup[`${TASK_TYPE.ELIGIBILITY_SCC}Passed`] = 'Passed Eligibility SCC';
+  lookup[`${TASK_TYPE.ELIGIBILITY_SCC}Failed`] = 'Failed Eligibility SCC';
+  lookup[TASK_TYPE.CHARACTER_AND_SELECTION_SCC] = 'Character and Selection SCC';
+  lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Passed`] = 'Passed Character and Selection SCC';
+  lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Failed`] = 'Failed Character and Selection SCC';
+  lookup[TASK_TYPE.STATUTORY_CONSULTATION] = 'Statutory Consultation';
+  lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
+  lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
 
   returnValue = lookup[value];
 

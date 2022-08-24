@@ -53,6 +53,13 @@ const TASK_TYPE = {
   CRITICAL_ANALYSIS: 'criticalAnalysis',
   SITUATIONAL_JUDGEMENT: 'situationalJudgement',
   QUALIFYING_TEST: 'qualifyingTest',
+  TELEPHONE_ASSESSMENT: 'telephoneAssessment',
+  ELIGIBILITY_SCC: 'eligibilitySCC',
+  CHARACTER_AND_SELECTION_SCC: 'characterAndSelectionSCC',
+  STATUTORY_CONSULTATION: 'statutoryConsultation',
+  SHORTLISTING_OUTCOME: 'shortlistingOutcome',
+  WELSH_ASSESSMENT: 'welshAssessment',
+  SELECTION_OUTCOME: 'selectionOutcome',
 };
 
 export {

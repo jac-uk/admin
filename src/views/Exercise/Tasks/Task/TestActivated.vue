@@ -6,7 +6,7 @@
     <p class="govuk-body-l">
       This test is hosted on the
       <a
-        :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.testId}`"
+        :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.test.id}`"
         target="_blank"
       >
         QT Platform</a>.

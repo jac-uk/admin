@@ -22,14 +22,15 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindApplicationsWithoutPanels: firestoreAction(({ bindFirestoreRef, state }, params) => {
+      console.log('params', params);
       let firestoreRef = firestore.collection('applicationRecords')
         .where('exercise.id', '==', params.exerciseId)
         .where('active', '==', true)
         .where(`${params.type}.panelId`, '==', null);
-      if (params.hasOwnProperty('stage')) {
+      if (params.hasOwnProperty('stage') && params.stage) {
         firestoreRef = firestoreRef.where('stage', '==', params.stage);
       }
-      if (params.hasOwnProperty('status')) {
+      if (params.hasOwnProperty('status') && params.status) {
         firestoreRef = firestoreRef.where('status', '==', params.status);
       }
       firestoreRef = tableQuery(state.applicationsWithoutPanels, firestoreRef, params);

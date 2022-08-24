@@ -2,7 +2,6 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-// import { taskNextStatus } from '@/helpers/exerciseHelper';
 
 // TODO delete this. it is not being used!
 

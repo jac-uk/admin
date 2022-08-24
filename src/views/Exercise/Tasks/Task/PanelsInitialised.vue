@@ -303,7 +303,7 @@ export default {
         {
           exerciseId: this.exercise.id,
           type: this.type,
-          status: this.task.applicationStatus,
+          status: this.task.applicationEntryStatus,
           ...params,
         }
       );

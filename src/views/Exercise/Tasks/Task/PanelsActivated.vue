@@ -311,6 +311,10 @@
             </template>
           </template>
 
+          <TableCell class="table-cell table-cell-score">
+            {{ row.score }}
+          </TableCell>
+
           <TableCell
             v-if="isModerationRequired"
             class="govuk-!-padding-0 v-top"
@@ -346,7 +350,8 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
-import { CAPABILITIES, GRADE_VALUES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
 import { functions } from '@/firebase';
 
 export default {
@@ -483,6 +488,7 @@ export default {
       columns.push({ title: 'Application', class: 'table-cell-application' });
       columns.push({ title: 'Panel', class: 'table-cell' });
       this.scoreSheetColumns.forEach(column => columns.push({ title: column.ref, class: 'text-center table-cell-score' }));
+      columns.push({ title: 'Score', class: 'table-cell table-cell-score' });
       if (this.isModerationRequired) {
         columns.push({ title: 'Moderation?', class: 'text-center' });
       }
@@ -504,6 +510,7 @@ export default {
             id: applicationId,
             referenceNumber: panel.applications[applicationId].referenceNumber,
             scoreSheet: panel.scoreSheet[applicationId],
+            score: getScoreSheetTotal(this.task.markingScheme, panel.scoreSheet[applicationId]),
             report: panel.reports ? panel.reports[applicationId] : null,
             outcome: panel.outcome,
           };
