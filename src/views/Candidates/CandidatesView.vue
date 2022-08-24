@@ -10,6 +10,7 @@
       :active-tab.sync="activeTab"
     />
     <span
+      v-if="hasPermissions([PERMISSIONS.candidates.permissions.canUpdateCandidates.value])"
       class="float-right govuk-!-margin-left-4"
     >
       <button
@@ -54,6 +55,7 @@
       <Notes
         title="Notes about the Candidate"
         :candidate-id="getUserId"
+        :can-create="hasPermissions([PERMISSIONS.notes.permissions.canCreateNotes.value])"
       />
     </div>
 
@@ -80,6 +82,7 @@ import CharacterInformationSummary from '@/views/InformationReview/CharacterInfo
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -91,33 +94,40 @@ export default {
     CharacterInformationSummary,
     EqualityAndDiversity,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,
       editMode: false,
-      tabs: [
-        {
-          ref: 'details',
-          title: 'Details',
-        },
-        {
-          ref: 'notes',
-          title: 'Notes',
-        },
-        {
-          ref: 'applications',
-          title: 'Applications',
-        },
-        {
-          ref: 'actions',
-          title: 'Actions',
-        },
-      ],
       activeTab: 'details',
       candidateId: '',
     };
   },
   computed: {
+    tabs() {
+      const tabs = [
+        {
+          ref: 'details',
+          title: 'Details',
+        },
+      ];
+      if (this.hasPermissions([this.PERMISSIONS.notes.permissions.canReadNotes.value]))
+        tabs.push({
+          ref: 'notes',
+          title: 'Notes',
+        });
+      if (this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value]))
+        tabs.push({
+          ref: 'applications',
+          title: 'Applications',
+        });
+      if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canUpdateCandidates.value]))
+        tabs.push({
+          ref: 'actions',
+          title: 'Actions',
+        });
+      return tabs;
+    },
     authorisedUser(){
       return this.authorisedToPerformAction;
     },

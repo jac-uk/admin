@@ -14,6 +14,11 @@
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
           <button
+            v-if="hasPermissions([
+              PERMISSIONS.applications.permissions.canReadApplications.value,
+              PERMISSIONS.applications.permissions.canUpdateApplications.value,
+              PERMISSIONS.notifications.permissions.canCreateNotifications.value
+            ])"
             class="govuk-button govuk-!-margin-right-3 govuk-!-top-3"
             @click.prevent="send"
           >
@@ -33,9 +38,11 @@
 
 <script>
 import { functions } from '@/firebase';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'CharacterChecksRequests',
+  mixins: [permissionMixin],
   props: {
     selectedItems: {
       type: Array,

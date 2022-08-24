@@ -14,6 +14,10 @@
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
+              v-if="hasPermissions([
+                PERMISSIONS.exercises.permissions.canReadExercises.value,
+                PERMISSIONS.applications.permissions.canReadApplications.value
+              ])"
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
               @click="exportContacts()"
@@ -44,12 +48,18 @@
           <RouterLink
             class="govuk-link"
             :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: status }}"
+            target="_blank"
           >
             {{ row.referenceNumber | showAlternative(row.id) }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.personalDetails && row.personalDetails.fullName }}
+          <RouterLink
+            :to="{ name: 'candidates-view', params: { id: row.userId } }"
+            target="_blank"
+          >
+            {{ row.personalDetails && row.personalDetails.fullName }}
+          </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ row.status | lookup }}
@@ -64,12 +74,14 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
     Table,
     TableCell,
   },
+  mixins: [permissionMixin],
   props: {
     status: {
       type: String,

@@ -21,6 +21,11 @@
               Export data
             </button>
             <button
+              v-if="hasPermissions([
+                PERMISSIONS.exercises.permissions.canReadExercises.value,
+                PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                PERMISSIONS.applications.permissions.canReadApplications.value
+              ])"
               class="govuk-button moj-button-menu__item moj-page-header-actions__action"
               data-module="govuk-button"
               @click="refreshReport"
@@ -69,6 +74,7 @@
       :data="report.rows"
       :columns="tableColumns"
       :page-size="1000"
+      local-data
       @change="getTableData"
     >
       <template #row="{row}">
@@ -100,6 +106,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 //import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -107,6 +114,7 @@ export default {
     TableCell,
     //ActionButton,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       report: null,

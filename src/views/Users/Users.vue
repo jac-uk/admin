@@ -60,7 +60,8 @@
             <td class="govuk-table__cell">
               <select
                 v-model="user.customClaims.r"
-                class="govuk-select govuk-!-margin-right-3"
+                class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
+                :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
                 @change="setUserRole(user)"
               >
                 <option
@@ -72,11 +73,28 @@
                 </option>
               </select>
               <ActionButton
-                :type="user.disabled ? 'primary' : 'secondary'"
+                v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                type="primary"
+                class="govuk-!-margin-right-2"
                 @click="toggleDisableUser(user.uid, userIndex)"
               >
-                {{ user.disabled ? 'Enable user' : 'Disable user' }}
+                Enable user
               </ActionButton>
+              <ActionButton
+                v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                type="secondary"
+                class="govuk-!-margin-right-2"
+                @click="toggleDisableUser(user.uid, userIndex)"
+              >
+                Disable user
+              </ActionButton>
+              <button
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
+                class="govuk-button govuk-button--warning"
+                @click="confirmDeleteUser(userIndex)"
+              >
+                Delete user
+              </button>
             </td>
           </tr>
         </Table>
@@ -128,7 +146,10 @@
               <div class="govuk-grid-column-one-half">
                 <h1>Roles</h1>
               </div>
-              <div class="govuk-grid-column-one-half">
+              <div
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateRoles.value])"
+                class="govuk-grid-column-one-half"
+              >
                 <div class="text-right">
                   <button
                     class="govuk-button govuk-!-margin-right-1 govuk-!-margin-top-3 govuk-!-margin-bottom-3"
@@ -139,100 +160,28 @@
                 </div>
               </div>
             </div>
-            <div v-if="role">
+            <div
+              v-if="role"
+              ref="role"
+            >
               <h1>{{ role.roleName }}</h1>
 
-              <h2>Database</h2>
-              <div>
+              <div
+                v-for="(value, key) in PERMISSIONS"
+                :key="key"
+              >
+                <h2>{{ value.label }}</h2>
                 <Checkbox
-                  id="canCreate"
-                  v-model="permissions.canCreate"
+                  v-for="(subValue, subKey) in value.permissions"
+                  :id="subKey"
+                  :key="subKey"
+                  v-model="permissions[subKey]"
                 >
-                  Can create
-                </Checkbox>
-
-                <Checkbox
-                  id="canUpdate"
-                  v-model="permissions.canUpdate"
-                >
-                  Can update
-                </Checkbox>
-
-                <Checkbox
-                  id="canDelete"
-                  v-model="permissions.canDelete"
-                >
-                  Can delete
+                  {{ subValue.label }}
                 </Checkbox>
               </div>
-              <h2>Users</h2>
-              <div>
-                <Checkbox
-                  id="canEnableUsers"
-                  v-model="permissions.canEnableUsers"
-                >
-                  Can enable users
-                </Checkbox>
-                <Checkbox
-                  id="canChangeUserRole"
-                  v-model="permissions.canChangeUserRole"
-                >
-                  Can change user role
-                </Checkbox>
-                <Checkbox
-                  id="canEditRolePermissions"
-                  v-model="permissions.canEditRolePermissions"
-                >
-                  Can edit role permissions
-                </Checkbox>
-              </div>
-              <h2>Exercises</h2>
-              <div>
-                <Checkbox
-                  id="canApproveExercise"
-                  v-model="permissions.canApproveExercise"
-                >
-                  Can approve exercise
-                </Checkbox>
 
-                <Checkbox
-                  id="canAddNotesToExercise"
-                  v-model="permissions.canAddNotesToExercise"
-                >
-                  Can add notes to exercise
-                </Checkbox>
-
-                <Checkbox
-                  id="canResetExercise"
-                  v-model="permissions.canResetExercise"
-                >
-                  Can reset exercise
-                </Checkbox>
-
-                <Checkbox
-                  id="canAmendAfterLaunch"
-                  v-model="permissions.canAmendAfterLaunch"
-                >
-                  Can amend after launch
-                </Checkbox>
-              </div>
-              <h2>Candidates</h2>
-              <div>
-                <Checkbox
-                  id="canViewAllCandidates"
-                  v-model="permissions.canViewAllCandidates"
-                >
-                  Can view all candidates
-                </Checkbox>
-
-                <Checkbox
-                  id="canAddNotesToCandidates"
-                  v-model="permissions.canAddNotesToCandidates"
-                >
-                  Can add notes to candidates
-                </Checkbox>
-              </div>
-              <div>
+              <div v-if="hasPermissions([PERMISSIONS.users.permissions.canEditRolePermissions.value])">
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
@@ -296,6 +245,26 @@
         </h2>
       </div>
     </Modal>
+    <Modal ref="modalRefDeleteUser">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Are you sure to delete user?
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <ActionButton
+          type="primary"
+          class="govuk-!-margin-right-2"
+          @click="deleteUser"
+        >
+          Delete
+        </ActionButton>
+        <button
+          class="govuk-button govuk-button--secondary"
+          @click="closeModal('modalRefDeleteUser')"
+        >
+          Cancel
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -308,6 +277,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -319,6 +289,7 @@ export default {
     Checkbox,
     TextField,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       loaded: false,
@@ -330,20 +301,8 @@ export default {
       role: null,
       rolePermissions: null,
       newRoleName: null,
-      permissions: {
-        canCreate: false,
-        canUpdate: false,
-        canDelete: false,
-        canEnableUsers: false,
-        canChangeUserRole: false,
-        canEditRolePermissions: false,
-        canApproveExercise: false,
-        canAddNotesToExercise: false,
-        canResetExercise: false,
-        canAmendAfterLaunch: false,
-        canViewAllCandidates: false,
-        canAddNotesToCandidates: false,
-      },
+      permissions: {},
+      selectedUserIndex: null,
     };
   },
   computed: {
@@ -389,7 +348,16 @@ export default {
       throw e;
     }
   },
-
+  updated() {
+    const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
+    if (!canEditRolePermissions) {
+      const roleRef = this.$refs.role;
+      if (roleRef) {
+        const inputs = roleRef.querySelectorAll('input');
+        inputs && inputs.forEach(input => input.disabled = true);
+      }
+    }
+  },
   methods: {
     async getRoles() {
       const roles = await functions.httpsCallable('adminGetUserRoles')();
@@ -399,6 +367,20 @@ export default {
       const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
       this.users[index].disabled = response.data.disabled;
     },
+    confirmDeleteUser(index) {
+      this.selectedUserIndex = index;
+      this.openModal('modalRefDeleteUser');
+    },
+    async deleteUser() {
+      if (this.selectedUserIndex) {
+        const selectedUid = this.users[this.selectedUserIndex].uid;
+        const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
+        if (response && response.data.successCount) {
+          this.users.splice(this.selectedUserIndex, 1);
+        }
+      }
+      this.closeModal('modalRefDeleteUser');
+    },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
@@ -406,6 +388,7 @@ export default {
       this.rolePermissions = null;
       this.$refs[modalRef].closeModal();
       this.newRoleName = null;
+      this.selectedUserIndex = null;
     },
     async setUserRole(user) {
       this.openModal('changingRole');
@@ -415,13 +398,21 @@ export default {
     viewRolePermissions(roleIndex) {
       this.role = this.roles[roleIndex];
       // set all permissions to false
-      for (const permission in this.permissions) {
-        this.permissions[permission] = false;
+      const obj = {};
+      for (const group of Object.keys(this.PERMISSIONS)) {
+        for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
+          obj[p] = false;
+        }
       }
+      // make it reactive
+      this.permissions = Object.assign({}, obj);
+
       // set the enabled permissions for the role to true
       if (this.role.enabledPermissions) {
         for (const permission of this.role.enabledPermissions) {
-          this.permissions[permission] = true;
+          if (permission in this.permissions) {
+            this.permissions[permission] = true;
+          }
         }
       }
 

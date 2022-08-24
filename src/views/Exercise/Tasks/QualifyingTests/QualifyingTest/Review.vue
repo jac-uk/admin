@@ -251,7 +251,7 @@
       </button>
     </span>
 
-    <span v-if="canDelete">
+    <span v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canDeleteQualifyingTests.value])">
       <button
         class="govuk-button govuk-button--warning govuk-!-margin-right-3"
         @click="btnDelete"
@@ -273,8 +273,10 @@
 <script>
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import permissionMixin from '@/permissionMixin';
 
 export default {
+  mixins: [permissionMixin],
   computed: {
     ...mapState({
       qualifyingTest: state => state.qualifyingTest.record,
@@ -290,9 +292,6 @@ export default {
     },
     isApproved() {
       return !this.isDraft && !this.isReadyForApproval;
-    },
-    canDelete() {
-      return this.$store.state.auth.currentUser.role === 'superadmin';
     },
     questionLabel() {
       let label = 'Question';
