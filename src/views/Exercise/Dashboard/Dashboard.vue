@@ -1,7 +1,9 @@
 <template>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-l">Overview</h2>
+      <h2 class="govuk-heading-l">
+        Overview
+      </h2>
     </div>
     <div class="govuk-grid-column-one-half">
       <div class="panel govuk-!-margin-bottom-4">
@@ -54,19 +56,39 @@
             </h2>
           </div>
           <div class="carrousel_arrows">
-            <button :disabled="timelineSelected <= 0" @click="btnPrevious">&lt;</button>
-            <button :disabled="timelineSelected >= (timelineTotal - 1)" @click="btnNext">&gt;</button>
+            <button
+              :disabled="timelineSelected <= 0"
+              @click="btnPrevious"
+            >
+              &lt;
+            </button>
+            <button
+              :disabled="timelineSelected >= (timelineTotal - 1)"
+              @click="btnNext"
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-l">Distribution of scores</h2>
+    <div
+      v-if="false"
+      class="govuk-grid-column-full"
+    >
+      <h2 class="govuk-heading-l">
+        Distribution of scores
+      </h2>
     </div>
-    <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-9">
+    <div
+      v-if="false"
+      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
+    >
       <div class="panel">
-        <h3 class="govuk-heading-m">Qualifying Test</h3>
+        <h3 class="govuk-heading-m">
+          Qualifying Test
+        </h3>
         <div class="govuk-body">
           <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
             48%
@@ -91,9 +113,14 @@
         </div>
       </div>
     </div>
-    <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-9">
+    <div
+      v-if="false"
+      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
+    >
       <div class="panel">
-        <h3 class="govuk-heading-m">Scenario Test</h3>
+        <h3 class="govuk-heading-m">
+          Scenario Test
+        </h3>
         <div class="govuk-body">
           <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
             34%
@@ -118,9 +145,14 @@
         </div>
       </div>
     </div>
-    <div class="govuk-grid-column-one-third  govuk-!-margin-bottom-9">
+    <div
+      v-if="false"
+      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
+    >
       <div class="panel">
-        <h3 class="govuk-heading-m">Selection Day</h3>
+        <h3 class="govuk-heading-m">
+          Selection Day
+        </h3>
         <div class="govuk-body">
           <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
             14%
@@ -147,7 +179,9 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-l">Candidate Breakdown at Each Stage</h2>
+      <h2 class="govuk-heading-l">
+        Candidate Breakdown at Each Stage
+      </h2>
     </div>
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <ActionButton
@@ -165,26 +199,39 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      <TabsList
-        :tabs="tabs"
-        :active-tab.sync="activeTab"
-      />
+      <Select
+        id="diversityReport"
+        v-model="diversityReport"
+        required
+      >
+        <option
+          v-for="type in diversityReportType"
+          :key="type"
+          :value="type"
+        >
+          {{ type }}
+        </option>
+      </Select>
       <GChart
         type="ComboChart"
         :data="chartData"
         :options="chartOptions"
+      />
+      <TabsList
+        :tabs="tabs"
+        :active-tab.sync="activeTab"
       />
       <Table
         data-key="id"
         :data="chartGender"
         :page-size="50"
         :columns="tableColumns"
-        @change="getTableData"
         local-data
+        @change="getTableData"
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
-              {{ row.name }}
+            {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
             {{ row.status }}
@@ -192,7 +239,6 @@
         </template>
       </Table>
     </div>
-
   </div>
 </template>
 
@@ -203,13 +249,15 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { lookup } from '@/filters';
-import { functions } from '@/firebase';
+import { firestore, functions } from '@/firebase';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { GChart } from 'vue-google-charts/legacy';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   components: {
@@ -218,38 +266,41 @@ export default {
     TabsList,
     Table,
     TableCell,
+    Select,
   },
   data() {
     return {
       tabs: [
         {
-          ref: 'gender',
-          title: 'Gender',
+          ref: 'applied',
+          title: 'Applied',
         },
         {
-          ref: 'ethnicity',
-          title: 'Ethnicity',
+          ref: 'shortlisted',
+          title: 'Shortlisted',
         },
         {
-          ref: 'current-legal-role',
-          title: 'Current Legal Role',
+          ref: 'selected',
+          title: 'Selected',
         },
         {
-          ref: 'disability',
-          title: 'Disability',
+          ref: 'recommended',
+          title: 'Recommended',
         },
         {
-          ref: 'social-mobility',
-          title: 'Social Mobility',
+          ref: 'handover',
+          title: 'Handover',
         },
       ],
-      activeTab: 'gender',
+      activeTab: 'applied',
       tableColumns: [
         { title: 'All gender', sort: 'name', direction: 'asc', default: true },
         { title: 'Status' },
       ],
       timelineSelected: 0,
       timelineTotal: 0,
+      diversityReport: 'gender',
+      report: null,
     };
   },
   computed: {
@@ -385,20 +436,40 @@ export default {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
       return msg;
     },
+    diversityReportType() {
+      let dataTitles = [];
+      if (this.report) {
+        const dataApplied = this.report[EXERCISE_STAGE.APPLIED];
+        const dataKeys = Object.keys(dataApplied);
+        dataTitles = dataKeys.filter(item => item !== 'totalApplications');
+      }
+      return dataTitles;
+    },
     chartData() {
-      return [
-        ['Total Candidates', 'All', 'Male', 'Female', 'Other', 'Average'],
-        ['Total Candidates', 1000, 524, 457, 2, 256],
-        ['Qualifying Test', 477, 251, 224, 2, 156],
-        ['Scenario Test', 162, 79, 81, 2, 300],
-        ['Selection Day', 50, 23, 25, 2, 1],
-      ];
+      let dataTitles = [];
+      let returnChart = [];
+      if (this.report) {
+        const dataApplied = this.report[EXERCISE_STAGE.APPLIED][this.diversityReport];
+        const dataKeys = Object.keys(dataApplied);
+        dataTitles = dataKeys.filter(item => item !== 'total');
+
+        returnChart = [
+          ['All', ...dataTitles],
+          ['Applied', ...this.getDataTotal(EXERCISE_STAGE.APPLIED, dataTitles)],
+          ['Shorlisted', ...this.getDataTotal(EXERCISE_STAGE.SHORTLISTED, dataTitles)],
+          ['Selected', ...this.getDataTotal(EXERCISE_STAGE.SELECTED, dataTitles)],
+          ['Recommended', ...this.getDataTotal(EXERCISE_STAGE.RECOMMENDED, dataTitles)],
+          ['Handover', ...this.getDataTotal(EXERCISE_STAGE.HANDOVER, dataTitles)],
+        ];
+      }
+
+      return returnChart;
     },
     chartOptions() {
       return {
         vAxis: { title: 'Applicant (number)' },
         seriesType: 'bars',
-        series: { 4: { type: 'line' } },
+        // series: { 4: { type: 'line' } },
         height: 300,
       };
     },
@@ -417,18 +488,45 @@ export default {
       ];
     },
   },
+
+  watch: {
+    diversityReport: function(val, oldval) {
+      console.log('diversity reports changed', val, oldval);
+      console.log('report', this.report);
+    },
+  },
+  created() {
+    console.log('created', this.exerciseId);
+    this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
+      .onSnapshot((snap) => {
+        if (snap.exists) {
+          this.report = vuexfireSerialize(snap);
+        }
+      });
+  },
+  destroyed() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  },
   mounted() {
-    console.log('created');
     this.carouselChooseItemToShow(this.timeline);
   },
   methods: {
+    getDataTotal(stage, titles) {
+      const dataApplied = this.report[stage][this.diversityReport];
+      const dataTotal = titles.reduce((ret, val) => {
+        ret.push(dataApplied[val].total);
+        return ret;
+      }, []);
+      return dataTotal;
+    },
     carouselChooseItemToShow(timeline) {
       // choose the firtst item to show
       let timeItemToShow = 0;
       if (timeline) {
         timeline.map((time, index) => {
-          // console.log(index, time);
-          if (time.date < Date.now()) {
+          if (time.date <= Date.now()) {
             timeItemToShow = index;
           }
         });
@@ -437,15 +535,12 @@ export default {
       }
       this.timelineSelected = timeItemToShow;
       this.timelineTotal = this.timeline.length;
-      console.log('timeItemToShow: ', timeItemToShow);
       this.carouselShowItem(this.timelineSelected);
     },
     carouselShowItem(id) {
       const carrouselRef = this.$refs.carrousel;
-      // console.log('carrousel ref: ', carrouselRef);
-      this.carrouselClean(carrouselRef);
+      this.carrouselClean(carrouselRef); // remove previous selected
       const carrouselRefSelected = carrouselRef.querySelectorAll('div')[id];
-      // console.log('carrousel ref selected: ', carrouselRefSelected);
       carrouselRefSelected.classList.add('carrousel__item-visible');
     },
     carrouselClean(obj) {
