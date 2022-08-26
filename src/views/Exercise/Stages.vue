@@ -13,6 +13,8 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
+import { formatNumber } from '@/filters';
+
 export default {
   components: {
     SideNavigation,
@@ -35,23 +37,23 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Review (${review})`,
+          title: `Review (${formatNumber(review)})`,
           path: `${path}/review`,
         },
         {
-          title: `Shortlisted (${shortlisted})`,
+          title: `Shortlisted (${formatNumber(shortlisted)})`,
           path: `${path}/shortlisted`,
         },
         {
-          title: `Selected (${selected})`,
+          title: `Selected (${formatNumber(selected)})`,
           path: `${path}/selected`,
         },
         {
-          title: `Recommended (${recommended})`,
+          title: `Recommended (${formatNumber(recommended)})`,
           path: `${path}/recommended`,
         },
         {
-          title: `Handover (${handover})`,
+          title: `Handover (${formatNumber(handover)})`,
           path: `${path}/handover`,
         },
       ];

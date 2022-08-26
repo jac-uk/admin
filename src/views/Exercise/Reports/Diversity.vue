@@ -65,7 +65,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ diversity.totalApplications }}
+              {{ diversity.totalApplications | formatNumber }}
             </h2>
           </div>
         </div>
