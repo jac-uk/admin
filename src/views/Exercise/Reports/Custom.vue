@@ -168,7 +168,7 @@
         <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
           Only show records where:
         </h2>
-        
+
         <div
           v-for="(whereClause, whereClauseIndex) in whereClauses"
           :key="whereClauseIndex"
@@ -528,10 +528,12 @@ export default {
   created() {
     if (this.exercise.additionalWorkingPreferences) {
       this.exercise.additionalWorkingPreferences.forEach((question, i) => {
-        this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
-        this.keys[`additionalWorkingPreferences ${i}`] = { label: `additionalWorkingPreferences ${i + 1}`, type: String };
+        this.groups[1].keys.push(this.exercise.additionalWorkingPreferences[i].question);
+        this.keys[this.exercise.additionalWorkingPreferences[i].question] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
       });
     }
+    this.keys.jurisdictionPreferences.label = this.exercise.jurisdictionQuestion ? this.exercise.jurisdictionQuestion : 'Jurisdiction Preferences';
+    this.keys.locationPreferences.label = this.exercise.locationQuestion ? this.exercise.locationQuestion : 'Location Preferences';
     this.getReports();
   },
   methods: {
