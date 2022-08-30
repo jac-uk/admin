@@ -38,7 +38,6 @@
           <button
             class="govuk-button govuk-!-margin-right-3 govuk-!-top-3"
             @click.prevent="send"
-            :disabled="isCancel && !reason"
           >
             {{ buttonText }}
           </button>
