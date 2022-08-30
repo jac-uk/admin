@@ -49,7 +49,7 @@ const APPLICATION_STATUS = {
 const TASK_TYPE = {
   SIFT: 'sift',
   SELECTION: 'selection',
-  SCENARIO: 'scenario',
+  SCENARIO: 'scenarioTest',
   CRITICAL_ANALYSIS: 'criticalAnalysis',
   SITUATIONAL_JUDGEMENT: 'situationalJudgement',
   QUALIFYING_TEST: 'qualifyingTest',

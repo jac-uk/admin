@@ -152,6 +152,7 @@ const TASK_STATUS = {
   PANELS_ACTIVATED: 'panelsActivated',
   MODERATION_INITIALISED: 'moderationInitialised',
   MODERATION_ACTIVATED: 'moderationActivated',
+  STATUS_CHANGES: 'statusChanges',
   FINALISED: 'finalised',
   CHECKS: 'checks',
   COMPLETED: 'completed',

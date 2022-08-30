@@ -101,6 +101,7 @@ import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsIni
 import ExerciseTaskPanelsActivated from '@/views/Exercise/Tasks/Task/PanelsActivated';
 import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
 import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
+import ExerciseTaskStatusChanges from '@/views/Exercise/Tasks/Task/StatusChanges';
 import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
 import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
@@ -1124,6 +1125,15 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Moderation Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'status-changes',
+                  component: ExerciseTaskStatusChanges,
+                  name: 'exercise-task-statusChanges',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Status Changes | Exercise task',
                   },
                 },
                 {
