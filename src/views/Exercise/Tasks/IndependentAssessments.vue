@@ -218,7 +218,7 @@
             :disabled="!selectedItems.length"
             @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
           >
-            Cancel assessments
+            Cancel
           </ActionButton>
           <ActionButton
             v-if="hasPermissions([
@@ -327,7 +327,7 @@
             :disabled="!selectedItems.length"
             @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
           >
-            Cancel assessments
+            Cancel
           </ActionButton>
           <ActionButton
             v-if="hasPermissions([
@@ -456,6 +456,17 @@
             :message="sendErrors"
             status="warning"
           />
+
+          <ActionButton
+            v-if="hasPermissions([
+              PERMISSIONS.assessments.permissions.canReadAssessments.value,
+              PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+            ])"
+            :disabled="!selectedItems.length"
+            @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
+          >
+            Reset
+          </ActionButton>
 
           <Table
             key="cancelled"
@@ -716,7 +727,7 @@ export default {
       },
       {
         ref: 'declined',
-        title: 'Declined by assessor',
+        title: 'Declined',
       },
     ];
 
