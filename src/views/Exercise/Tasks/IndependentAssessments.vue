@@ -79,521 +79,203 @@
           :active-tab.sync="activeTab"
         />
 
-        <div v-if="activeTab == 'notrequested'">
-          <Banner
-            :message="sendErrors"
-            status="warning"
-          />
+        <Banner
+          :message="sendErrors"
+          status="warning"
+        />
 
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.exercises.permissions.canReadExercises.value,
-              PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
-              PERMISSIONS.notifications.permissions.canCreateNotifications.value
-            ])"
-            type="primary"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'request', { assessmentIds: selectedItems }, sendRequests)"
-          >
-            Send requests
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
-          >
-            Test request
-          </ActionButton>
+        <ActionButton
+          v-if="isNotRequested && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
+          type="primary"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'request', { assessmentIds: selectedItems }, sendRequests)"
+        >
+          Send requests
+        </ActionButton>
+        <ActionButton
+          v-if="isNotRequested && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
+        >
+          Test request
+        </ActionButton>
+        <ActionButton
+          v-if="isRequested && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.notifications.permissions.canCreateNotifications.value
+          ])"
+          type="primary"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'reminder', { assessmentIds: selectedItems }, sendReminders)"
+        >
+          Send reminders
+        </ActionButton>
+        <ActionButton
+          v-if="isRequested && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'testReminder', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
+        >
+          Test reminder
+        </ActionButton>
+        <ActionButton
+          v-if="(isRequested || isCompleted) && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
+            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
+        >
+          Cancel
+        </ActionButton>
+        <ActionButton
+          v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
+        >
+          Reset
+        </ActionButton>
+        <ActionButton
+          v-if="isCompleted && hasPermissions([
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="openModal('modalRefRequests', 'delete', { assessmentIds: selectedItems, status: 'pending' }, resetAssessments)"
+        >
+          Delete
+        </ActionButton>
 
-          <Table
-            key="notrequested"
-            data-key="id"
-            :data="assessmentsNotRequestedRecords"
-            :page-size="50"
-            :columns="tableColumns"
-            multi-select
-            :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search candidate names',
-              handler: candidateSearch,
-              field: 'userId',
-            }"
-            :filters="filters"
-            @change="getAssessmentsNotRequested"
-          >
-            <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
-                >
-                  {{ row.application.referenceNumber }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[1].title">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                  target="_blank"
-                >
-                  {{ row.candidate.fullName }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                {{ row.assessor.type | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                <a
-                  :href="`mailto:${row.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ row.assessor.fullName }}
-                </a>
-              </TableCell>
-              <TableCell :title="tableColumns[3].title">
-                {{ row.status | lookup }}
-                <strong
-                  v-if="lateIASubmission(row)"
-                  class="govuk-tag govuk-tag--red"
-                >
-                  Late
-                </strong>
-              </TableCell>
-              <TableCell
-                v-if="onStaging"
-                :title="tableColumns[4].title"
+        <Table
+          :key="activeTab"
+          data-key="id"
+          :data="records"
+          :page-size="50"
+          :columns="tableColumns"
+          multi-select
+          :selection.sync="selectedItems"
+          :custom-search="{
+            placeholder: 'Search candidate names',
+            handler: candidateSearch,
+            field: 'userId',
+          }"
+          :filters="filters"
+          @change="getTableData"
+        >
+          <template #row="{row}">
+            <TableCell :title="tableColumns[0].title">
+              <RouterLink
+                class="govuk-link"
+                :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
               >
-                <a
-                  target="_blank"
-                  :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
-                  class="govuk-link"
-                >Test the assessments app</a>
-              </TableCell>
-            </template>
-          </Table>
-        </div>
-
-        <div v-else-if="activeTab == 'requested'">
-          <Banner
-            :message="sendErrors"
-            status="warning"
-          />
-
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.notifications.permissions.canCreateNotifications.value
-            ])"
-            type="primary"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'reminder', { assessmentIds: selectedItems }, sendReminders)"
-          >
-            Send reminders
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'testReminder', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
-          >
-            Test reminder
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
-              PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-              PERMISSIONS.exercises.permissions.canUpdateExercises.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
-          >
-            Cancel
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-            ])"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
-          >
-            Reset
-          </ActionButton>
-
-          <Table
-            key="requested"
-            data-key="id"
-            :data="assessmentsRequestedRecords"
-            :page-size="50"
-            :columns="tableColumns"
-            multi-select
-            :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search candidate names',
-              handler: candidateSearch,
-              field: 'userId',
-            }"
-            :filters="filters"
-            @change="getAssessmentsRequested"
-          >
-            <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
-                >
-                  {{ row.application.referenceNumber }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[1].title">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                  target="_blank"
-                >
-                  {{ row.candidate.fullName }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                {{ row.assessor.type | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                <a
-                  :href="`mailto:${row.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ row.assessor.fullName }}
-                </a>
-              </TableCell>
-              <TableCell :title="tableColumns[3].title">
-                {{ row.status | lookup }}
-                <strong
-                  v-if="lateIASubmission(row)"
-                  class="govuk-tag govuk-tag--red"
-                >
-                  Late
-                </strong>
-              </TableCell>
-              <TableCell :title="tableColumns[4].title">
-                <div class="moj-button-menu__wrapper">
-                  <button
-                    v-if="hasPermissions([
-                      PERMISSIONS.assessments.permissions.canReadAssessments.value,
-                      PERMISSIONS.assessments.permissions.canCreateAssessments.value,
-                      PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-                    ])"
-                    class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
-                    @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
-                  >
-                    {{ row.fileRef ? 'Replace' : 'Upload' }}
-                  </button>
-                </div>
-                <a
-                  v-if="onStaging"
-                  target="_blank"
-                  :href="`https://assessments-staging.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
-                  class="govuk-link"
-                >Test the assessments app</a>
-              </TableCell>
-            </template>
-          </Table>
-        </div>
-
-        <div v-else-if="activeTab == 'completed'">
-          <Banner
-            :message="sendErrors"
-            status="warning"
-          />
-
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
-              PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-              PERMISSIONS.exercises.permissions.canUpdateExercises.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
-          >
-            Cancel
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canDeleteAssessments.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
-          >
-            Reset
-          </ActionButton>
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-              PERMISSIONS.exercises.permissions.canUpdateExercises.value
-            ])"
-            class="govuk-!-margin-right-3"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'delete', { assessmentIds: selectedItems, status: 'pending' }, resetAssessments)"
-          >
-            Delete
-          </ActionButton>
-
-          <Table
-            key="completed"
-            data-key="id"
-            :data="assessmentsCompletedRecords"
-            :page-size="50"
-            :columns="tableColumns"
-            multi-select
-            :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search candidate names',
-              handler: candidateSearch,
-              field: 'userId',
-            }"
-            :filters="filters"
-            @change="getAssessmentsCompleted"
-          >
-            <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
-                >
-                  {{ row.application.referenceNumber }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[1].title">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                  target="_blank"
-                >
-                  {{ row.candidate.fullName }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                {{ row.assessor.type | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                <a
-                  :href="`mailto:${row.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                >
-                  {{ row.assessor.fullName }}
-                </a>
-              </TableCell>
-              <TableCell :title="tableColumns[3].title">
-                {{ row.status | lookup }}
-                <strong
-                  v-if="lateIASubmission(row)"
-                  class="govuk-tag govuk-tag--red"
-                >
-                  Late
-                </strong>
-              </TableCell>
-              <TableCell :title="tableColumns[4].title">
-                <div class="moj-button-menu">
-                  <div
-                    v-if="row.status === 'completed'"
-                    class="moj-button-menu__wrapper"
-                  >
-                    <DownloadLink
-                      v-if="row.fileRef && !unapprovedLateSubmission(row)"
-                      v-model="row.fileRef"
-                      class="moj-button-menu__item"
-                      :file-name="row.fileRef"
-                      :file-path="row.filePath"
-                      :exercise-id="exercise.id"
-                      :application-id="row.application.id"
-                      :assessor-id="row.assessor.id"
-                      title="Download"
-                      type="button"
-                    />
-                    <ActionButton
-                      v-if="unapprovedLateSubmission(row)"
-                      class="moj-button-menu__item"
-                      type="primary"
-                      @click="approveLateSubmission(row)"
-                    >
-                      Approve late submission
-                    </ActionButton>
-
-                    <button
-                      v-if="hasPermissions([
-                        PERMISSIONS.assessments.permissions.canReadAssessments.value,
-                        PERMISSIONS.assessments.permissions.canCreateAssessments.value,
-                        PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-                      ])"
-                      class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
-                      @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
-                    >
-                      {{ row.fileRef ? 'Replace' : 'Upload' }}
-                    </button>
-                  </div>
-                </div>
-              </TableCell>
-            </template>
-          </Table>
-        </div>
-
-        <div v-else-if="activeTab == 'cancelled'">
-          <Banner
-            :message="sendErrors"
-            status="warning"
-          />
-
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-            ])"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
-          >
-            Reset
-          </ActionButton>
-
-          <Table
-            key="cancelled"
-            data-key="id"
-            :data="assessmentsCancelledRecords"
-            :page-size="50"
-            :columns="tableColumns"
-            multi-select
-            :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search candidate names',
-              handler: candidateSearch,
-              field: 'userId',
-            }"
-            :filters="filters"
-            @change="getAssessmentsCancelled"
-          >
-            <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
-                >
-                  {{ row.application.referenceNumber }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[1].title">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                  target="_blank"
-                >
-                  {{ row.candidate.fullName }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                {{ row.assessor.type | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                <a
-                  :href="`mailto:${row.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ row.assessor.fullName }}
-                </a>
-              </TableCell>
-              <TableCell :title="tableColumns[3].title">
-                {{ row.status | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[4].title">
+                {{ row.application.referenceNumber }}
+              </RouterLink>
+            </TableCell>
+            <TableCell :title="tableColumns[1].title">
+              <RouterLink
+                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+                target="_blank"
+              >
+                {{ row.candidate.fullName }}
+              </RouterLink>
+            </TableCell>
+            <TableCell :title="tableColumns[2].title">
+              {{ row.assessor.type | lookup }}
+            </TableCell>
+            <TableCell :title="tableColumns[2].title">
+              <a
+                :href="`mailto:${row.assessor.email}`"
+                class="govuk-link govuk-link--no-visited-state"
+                target="_blank"
+              >
+                {{ row.assessor.fullName }}
+              </a>
+            </TableCell>
+            <TableCell :title="tableColumns[3].title">
+              {{ row.status | lookup }}
+              <strong
+                v-if="lateIASubmission(row)"
+                class="govuk-tag govuk-tag--red"
+              >
+                Late
+              </strong>
+            </TableCell>
+            <TableCell v-if="isCancelled" :title="tableColumns[4].title">
                 {{ row.cancelReason }}
               </TableCell>
-            </template>
-          </Table>
-        </div>
-
-        <div v-else-if="activeTab == 'declined'">
-          <Banner
-            :message="sendErrors"
-            status="warning"
-          />
-
-          <ActionButton
-            v-if="hasPermissions([
-              PERMISSIONS.assessments.permissions.canReadAssessments.value,
-              PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-            ])"
-            :disabled="!selectedItems.length"
-            @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
-          >
-            Reset
-          </ActionButton>
-
-          <Table
-            key="declined"
-            data-key="id"
-            :data="assessmentsDeclinedRecords"
-            :page-size="50"
-            :columns="tableColumns"
-            multi-select
-            :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search candidate names',
-              handler: candidateSearch,
-              field: 'userId',
-            }"
-            :filters="filters"
-            @change="getAssessmentsDeclined"
-          >
-            <template #row="{row}">
-              <TableCell :title="tableColumns[0].title">
-                <RouterLink
-                  class="govuk-link"
-                  :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
-                >
-                  {{ row.application.referenceNumber }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[1].title">
-                <RouterLink
-                  :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                  target="_blank"
-                >
-                  {{ row.candidate.fullName }}
-                </RouterLink>
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                {{ row.assessor.type | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[2].title">
-                <a
-                  :href="`mailto:${row.assessor.email}`"
-                  class="govuk-link govuk-link--no-visited-state"
-                  target="_blank"
-                >
-                  {{ row.assessor.fullName }}
-                </a>
-              </TableCell>
-              <TableCell :title="tableColumns[3].title">
-                {{ row.status | lookup }}
-              </TableCell>
-              <TableCell :title="tableColumns[4].title">
+              <TableCell v-if="isDeclined" :title="tableColumns[4].title">
                 {{ row.declineReason }}
               </TableCell>
-            </template>
-          </Table>
-        </div>
+            <TableCell :title="tableColumns[5].title">
+              <div>
+                <a
+                  v-if="isNotRequested || isRequested"
+                  target="_blank"
+                  :href="`https://assessments-develop.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
+                  style="display: block; line-height: 40px; white-space: nowrap;"
+                >
+                  Test the assessments app
+                </a>
+
+                <ActionButton
+                  v-if="isRequested && unapprovedLateSubmission(row)"
+                  class="moj-button-menu__item"
+                  type="primary"
+                  @click="approveLateSubmission(row)"
+                >
+                  Approve late submission
+                </ActionButton>
+
+                <button
+                  v-if="(isRequested || isCompleted) && hasPermissions([
+                    PERMISSIONS.assessments.permissions.canReadAssessments.value,
+                    PERMISSIONS.assessments.permissions.canCreateAssessments.value,
+                    PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+                  ])"
+                  class="moj-button-menu__item govuk-button govuk-button--secondary info-btn--independent-asssessment--upload"
+                  @click="modalUploadOpen({ id: row.id, uuid: $store.state.auth.currentUser.uid, ...row })"
+                >
+                  {{ row.fileRef ? 'Replace' : 'Upload' }}
+                </button>
+
+                <DownloadLink
+                  v-if="isCompleted && row.fileRef && !unapprovedLateSubmission(row)"
+                  v-model="row.fileRef"
+                  class="moj-button-menu__item"
+                  :file-name="row.fileRef"
+                  :file-path="row.filePath"
+                  :exercise-id="exercise.id"
+                  :application-id="row.application.id"
+                  :assessor-id="row.assessor.id"
+                  title="Download"
+                  type="button"
+                />
+              </div>
+            </TableCell>
+          </template>
+        </Table>
       </div>
 
       <div v-else>
@@ -704,7 +386,10 @@ export default {
   },
   mixins: [permissionMixin],
   beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { exerciseId: this.exercise.id });
+    this.$store.dispatch('assessments/bind', { 
+      exerciseId: this.exercise.id,
+      status: this.getStatus(),
+    });
     next();
   },
   data() {
@@ -761,9 +446,7 @@ export default {
         { title: 'Status' },
       ];
       
-      if (!this.onStaging && this.activeTab === 'notrequested') {
-        return tableColumns;
-      } else if (this.activeTab === 'cancelled' || this.activeTab === 'declined') {
+      if (this.isCancelled || this.isDeclined) {
         return [
           ...tableColumns,
           { title: 'Reason' },
@@ -795,20 +478,35 @@ export default {
       msg = `${msg} before sending IA requests`;
       return msg;
     },
-    assessmentsNotRequestedRecords() {
-      return this.$store.state.assessments.assessmentsNotRequestedRecords;
+    isNotRequested() {
+      return this.activeTab === 'notrequested';
     },
-    assessmentsRequestedRecords() {
-      return this.$store.state.assessments.assessmentsRequestedRecords;
+    isRequested() {
+      return this.activeTab === 'requested';
     },
-    assessmentsCompletedRecords() {
-      return this.$store.state.assessments.assessmentsCompletedRecords;
+    isCompleted() {
+      return this.activeTab === 'completed';
     },
-    assessmentsCancelledRecords() {
-      return this.$store.state.assessments.assessmentsCancelledRecords;
+    isCancelled() {
+      return this.activeTab === 'cancelled';
     },
-    assessmentsDeclinedRecords() {
-      return this.$store.state.assessments.assessmentsDeclinedRecords;
+    isDeclined() {
+      return this.activeTab === 'declined';
+    },
+    records() {
+      if (this.isNotRequested) {
+        return this.$store.state.assessments.assessmentsNotRequestedRecords;
+      } else if (this.isRequested) {
+        return this.$store.state.assessments.assessmentsRequestedRecords;
+      } else if (this.isCompleted) {
+        return this.$store.state.assessments.assessmentsCompletedRecords;
+      } else if (this.isCancelled) {
+        return this.$store.state.assessments.assessmentsCancelledRecords;
+      } else if (this.isDeclined) {
+        return this.$store.state.assessments.assessmentsDeclinedRecords;
+      } else {
+        return [];
+      }
     },
     assessmentsSent() {
       if (this.exercise.assessments && this.exercise.assessments.sent){
@@ -828,7 +526,7 @@ export default {
       return this.$route.params.status;
     },
     contactOverdue() {
-      return !this.assessmentsNotRequestedRecords.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
+      return this.isNotRequested && !this.records.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
     },
     hasInitialisedAssessments() {
       return this.exercise.assessments && this.exercise.assessments.initialised;
@@ -935,74 +633,33 @@ export default {
     modalUploadClose() {
       this.$refs.modalRef.closeModal();
     },
-    getAssessmentsNotRequested(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          status: 'draft',
-          ...params,
-        }
-      );
-    },
-    getAssessmentsRequested(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          status: 'pending',
-          ...params,
-        }
-      );
-    },
-    getAssessmentsCompleted(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          status: 'completed',
-          ...params,
-        }
-      );
-    },
-    getAssessmentsCancelled(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          status: 'cancelled',
-          ...params,
-        }
-      );
-    },
-    getAssessmentsDeclined(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          status: 'declined',
-          ...params,
-        }
-      );
+    getStatus() {
+      let status = '';
+      if (this.isNotRequested) {
+        status = 'draft';
+      } else if (this.isRequested) {
+        status = 'pending';
+      } else if (this.isCompleted) {
+        status = 'completed';
+      } else if (this.isCancelled) {
+        status = 'cancelled';
+      } else if (this.isDeclined) {
+        status = 'declined';
+      }
+      return status;
     },
     getTableData(params) {
-      this.$store.dispatch(
-        'assessments/bind',
-        {
-          exerciseId: this.exercise.id,
-          ...params,
-        }
-      );
+      this.$store.dispatch('assessments/bind', {
+        exerciseId: this.exercise.id,
+        status: this.getStatus(),
+        ...params,
+      });
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
     resetSelectedItems() {
       this.selectedItems = [];
-    },
-    async draftCancelledAssessment(assessment) {
-      assessment.status = 'draft';
-      await this.$store.dispatch('assessment/save', assessment);
     },
   },
 };
