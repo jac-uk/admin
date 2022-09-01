@@ -362,13 +362,6 @@ export default {
           ],
         },
         {
-          name: 'Working Preferences',
-          keys: [
-            'jurisdictionPreferences',
-            'locationPreferences',
-          ],
-        },
-        {
           name: 'Welsh',
           keys: [
             'applyingForWelshPost',
@@ -495,8 +488,8 @@ export default {
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
         quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
-        jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
-        locationPreferences: { label: 'Location Preferences', type: String },
+        // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
+        // locationPreferences: { label: 'Location Preferences', type: String },
       },
     };
   },
@@ -532,8 +525,17 @@ export default {
         this.keys[this.exercise.additionalWorkingPreferences[i].question] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
       });
     }
-    this.keys.jurisdictionPreferences.label = this.exercise.jurisdictionQuestion ? this.exercise.jurisdictionQuestion : 'Jurisdiction Preferences';
-    this.keys.locationPreferences.label = this.exercise.locationQuestion ? this.exercise.locationQuestion : 'Location Preferences';
+    if (this.exercise.jurisdictionQuestion || this.exercise.locationQuestion) {
+      this.groups.splice(1, 0, { name: 'Working Preferences', keys: [] });
+      if (this.exercise.jurisdictionQuestion) {
+        this.groups[1].keys.push('jurisdictionPreferences');
+        this.keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
+      }
+      if (this.exercise.locationQuestion) {
+        this.groups[1].keys.push('locationPreferences');
+        this.keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
+      }
+    }
     this.getReports();
   },
   methods: {
