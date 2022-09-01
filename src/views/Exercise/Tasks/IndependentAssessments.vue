@@ -133,10 +133,10 @@
         </ActionButton>
         <ActionButton
           v-if="(isRequested || isCompleted) && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
-            PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
-            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
@@ -146,6 +146,8 @@
         </ActionButton>
         <ActionButton
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
@@ -157,9 +159,10 @@
         </ActionButton>
         <ActionButton
           v-if="isCompleted && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
-            PERMISSIONS.assessments.permissions.canDeleteAssessments.value,
-            PERMISSIONS.exercises.permissions.canUpdateExercises.value
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
