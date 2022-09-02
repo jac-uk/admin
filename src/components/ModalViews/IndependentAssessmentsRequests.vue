@@ -25,7 +25,10 @@
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
 
-          <div v-if="isCancel" style="text-align: left;">
+          <div
+            v-if="isCancel"
+            style="text-align: left;"
+          >
             <span class="govuk-body-m">Cancel reason:</span>
             <TextField
               id="reason"

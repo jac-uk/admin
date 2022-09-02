@@ -225,12 +225,18 @@
                 Late
               </strong>
             </TableCell>
-            <TableCell v-if="isCancelled" :title="tableColumns[4].title">
-                {{ row.cancelReason }}
-              </TableCell>
-              <TableCell v-if="isDeclined" :title="tableColumns[4].title">
-                {{ row.declineReason }}
-              </TableCell>
+            <TableCell
+              v-if="isCancelled"
+              :title="tableColumns[4].title"
+            >
+              {{ row.cancelReason }}
+            </TableCell>
+            <TableCell
+              v-if="isDeclined"
+              :title="tableColumns[4].title"
+            >
+              {{ row.declineReason }}
+            </TableCell>
             <TableCell :title="tableColumns[5].title">
               <div>
                 <a
