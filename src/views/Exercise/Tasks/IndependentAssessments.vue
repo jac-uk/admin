@@ -458,9 +458,9 @@ export default {
       const tableColumns = [
         { title: 'Reference number', sort: 'application.referenceNumber' },
         { title: 'Candidate name', sort: 'candidate.fullName', default: true },
-        { title: 'Assessor type', sort: 'assessor.type' },
+        { title: 'Assessor type' },
         { title: 'Assessor', sort: 'assessor.fullName' },
-        { title: 'Status', sort: 'status' },
+        { title: 'Status' },
       ];
       
       if (this.isCancelled || this.isDeclined) {
