@@ -35,6 +35,10 @@ export default {
         firestoreRef = firestoreRef.where('status', '==', params.status);
         firestoreRef = await tableQuery(state.assessmentsDeclinedRecords, firestoreRef, params);
         return bindFirestoreRef('assessmentsDeclinedRecords', firestoreRef, { serialize: vuexfireSerialize });
+      } else if (params.status === 'deleted') {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = await tableQuery(state.assessmentsDeletedRecords, firestoreRef, params);
+        return bindFirestoreRef('assessmentsDeletedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -43,6 +47,7 @@ export default {
       unbindFirestoreRef('assessmentsCompletedRecords');
       unbindFirestoreRef('assessmentsCancelledRecords');
       unbindFirestoreRef('assessmentsDeclinedRecords');
+      unbindFirestoreRef('assessmentsDeletedRecords');
       return true;
     }),
   },
@@ -52,5 +57,6 @@ export default {
     assessmentsCompletedRecords: [],
     assessmentsCancelledRecords: [],
     assessmentsDeclinedRecords: [],
+    assessmentsDeletedRecords: [],
   },
 };

@@ -73,6 +73,7 @@ const lookup = (value) => {
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.COMPLETED] = 'Completed';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.CANCELLED] = 'Cancelled';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DECLINED] = 'Declined';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.DELETED] = 'Deleted';
 
   lookup[ASSESSOR_TYPES.PROFESSIONAL] = 'Professional assessor';
   lookup[ASSESSOR_TYPES.JUDICIAL] = 'Judicial assessor';

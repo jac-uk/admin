@@ -132,19 +132,6 @@
           Test reminder
         </ActionButton>
         <ActionButton
-          v-if="(isRequested || isCompleted) && hasPermissions([
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-            PERMISSIONS.assessments.permissions.canReadAssessments.value,
-            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
-          ])"
-          class="govuk-!-margin-right-3"
-          :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
-        >
-          Cancel
-        </ActionButton>
-        <ActionButton
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
@@ -158,7 +145,7 @@
           Reset
         </ActionButton>
         <ActionButton
-          v-if="isCompleted && hasPermissions([
+          v-if="(isRequested || isCompleted) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
@@ -166,7 +153,24 @@
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests', 'delete', { assessmentIds: selectedItems, status: 'pending' }, resetAssessments)"
+          @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
+        >
+          Cancel
+        </ActionButton>
+        <ActionButton
+          v-if="(isNotRequested || isRequested || isCompleted) && hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+            PERMISSIONS.assessments.permissions.canReadAssessments.value,
+            PERMISSIONS.assessments.permissions.canUpdateAssessments.value
+          ])"
+          class="govuk-!-margin-right-3"
+          :disabled="!selectedItems.length"
+          @click="
+            openModal(
+              'modalRefRequests',
+              'delete',
+              { assessmentIds: selectedItems, status: isNotRequested || isRequested ? 'deleted' : 'pending' }, resetAssessments)"
         >
           Delete
         </ActionButton>
@@ -237,12 +241,12 @@
             >
               {{ row.declineReason }}
             </TableCell>
-            <TableCell :title="tableColumns[5].title">
+            <TableCell v-if="!isDeleted" :title="tableColumns[5].title">
               <div>
                 <a
-                  v-if="isNotRequested || isRequested"
+                  v-if="(isNotRequested || isRequested) && testAssessmentUrl"
                   target="_blank"
-                  :href="`https://assessments-develop.judicialappointments.digital/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
+                  :href="`${testAssessmentUrl}/sign-in?email=${row.assessor.email}&ref=assessments/${row.id}`"
                   style="display: block; line-height: 40px; white-space: nowrap;"
                 >
                   Test the assessments app
@@ -423,6 +427,10 @@ export default {
         ref: 'declined',
         title: 'Declined',
       },
+      {
+        ref: 'deleted',
+        title: 'Deleted',
+      },
     ];
 
     return {
@@ -448,11 +456,11 @@ export default {
   computed: {
     tableColumns() {
       const tableColumns = [
-        { title: 'Reference number' },
+        { title: 'Reference number', sort: 'application.referenceNumber' },
         { title: 'Candidate name', sort: 'candidate.fullName', default: true },
-        { title: 'Assessor type' },
-        { title: 'Assessor' },
-        { title: 'Status' },
+        { title: 'Assessor type', sort: 'assessor.type' },
+        { title: 'Assessor', sort: 'assessor.fullName' },
+        { title: 'Status', sort: 'status' },
       ];
       
       if (this.isCancelled || this.isDeclined) {
@@ -460,6 +468,8 @@ export default {
           ...tableColumns,
           { title: 'Reason' },
         ];
+      } else if (this.isDeleted) {
+        return tableColumns;
       } else {
         return [
           ...tableColumns,
@@ -502,6 +512,9 @@ export default {
     isDeclined() {
       return this.activeTab === 'declined';
     },
+    isDeleted() {
+      return this.activeTab === 'deleted';
+    },
     records() {
       if (this.isNotRequested) {
         return this.$store.state.assessments.assessmentsNotRequestedRecords;
@@ -513,6 +526,8 @@ export default {
         return this.$store.state.assessments.assessmentsCancelledRecords;
       } else if (this.isDeclined) {
         return this.$store.state.assessments.assessmentsDeclinedRecords;
+      } else if (this.isDeleted) {
+        return this.$store.state.assessments.assessmentsDeletedRecords;
       } else {
         return [];
       }
@@ -539,6 +554,17 @@ export default {
     },
     hasInitialisedAssessments() {
       return this.exercise.assessments && this.exercise.assessments.initialised;
+    },
+    testAssessmentUrl() {
+      if (this.onDevelop) {
+        return 'https://assessments-develop.judicialappointments.digital';
+      } else if (this.onStaging) {
+        return 'https://assessments-staging.judicialappointments.digital';
+      }
+      return '';
+    },
+    onDevelop() {
+      return process.env.NODE_ENV === 'development';
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
@@ -654,6 +680,8 @@ export default {
         status = 'cancelled';
       } else if (this.isDeclined) {
         status = 'declined';
+      } else if (this.isDeleted) {
+        status = 'deleted';
       }
       return status;
     },

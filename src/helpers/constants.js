@@ -22,6 +22,7 @@ const INDEPENDENT_ASSESSMENTS_STATUS = {
   COMPLETED: 'completed',
   CANCELLED: 'cancelled',
   DECLINED: 'declined',
+  DELETED: 'deleted',
 };
 const ASSESSOR_TYPES = {
   PROFESSIONAL: 'professional',
