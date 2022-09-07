@@ -48,7 +48,7 @@
         :custom-search="{
           placeholder: 'Search candidate names',
           handler: candidateSearch,
-          field: 'candidate.id',
+          field: 'candidate.name',
         }"
         @change="getTableDataCandidates"
       >
