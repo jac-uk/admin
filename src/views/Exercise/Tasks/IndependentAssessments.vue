@@ -241,7 +241,10 @@
             >
               {{ row.declineReason }}
             </TableCell>
-            <TableCell v-if="!isDeleted" :title="tableColumns[5].title">
+            <TableCell
+              v-if="!isDeleted"
+              :title="tableColumns[5].title"
+            >
               <div>
                 <a
                   v-if="(isNotRequested || isRequested) && testAssessmentUrl"
@@ -564,7 +567,7 @@ export default {
       return '';
     },
     onDevelop() {
-      return process.env.NODE_ENV === 'development';
+      return window.location.href.indexOf('admin-develop') > 0 || process.env.NODE_ENV === 'development';
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
