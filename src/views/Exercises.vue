@@ -66,7 +66,6 @@
               },
             ]"
             :search="['name']"
-            :search-placeholder="`Tom is amazing!`"
             multi-select
             :selection.sync="selectedItems"
             @change="getTableData"
