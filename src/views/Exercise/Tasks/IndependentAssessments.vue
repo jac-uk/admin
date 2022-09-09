@@ -256,7 +256,7 @@
                 </a>
 
                 <ActionButton
-                  v-if="isRequested && unapprovedLateSubmission(row)"
+                  v-if="isCompleted && unapprovedLateSubmission(row)"
                   class="moj-button-menu__item"
                   type="primary"
                   @click="approveLateSubmission(row)"
@@ -553,7 +553,7 @@ export default {
       return this.$route.params.status;
     },
     contactOverdue() {
-      return this.isNotRequested && !this.records.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
+      return !isDateInFuture(this.exercise.contactIndependentAssessors);
     },
     hasInitialisedAssessments() {
       return this.exercise.assessments && this.exercise.assessments.initialised;
