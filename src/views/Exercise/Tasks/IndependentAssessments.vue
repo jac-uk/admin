@@ -181,7 +181,7 @@
           :data="records"
           :page-size="50"
           :columns="tableColumns"
-          multi-select
+          :multi-select="!isDeleted"
           :selection.sync="selectedItems"
           :custom-search="{
             placeholder: 'Search candidate names',
