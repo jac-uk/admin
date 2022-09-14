@@ -22,7 +22,6 @@ export default {
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
-      console.log(params);
       let firestoreRef = collectionRef
         .where('exercise.id', '==', params.exerciseId)
         .where('stage', '==', EXERCISE_STAGE.SELECTED)
