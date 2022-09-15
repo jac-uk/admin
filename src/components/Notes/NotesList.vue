@@ -4,6 +4,7 @@
     data-key="notes"
     :data="notes"
     :columns="tableColumns"
+    local-data
   >
     <template #row="{row}">
       <TableCell :title="tableColumns[0].title">
