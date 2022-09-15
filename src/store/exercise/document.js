@@ -35,7 +35,7 @@ export default {
           const exerciseRef = firestore.collection('exercises').doc();
           transaction.update(metaRef, { exercisesCount: newExercisesCount });
           data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
-          data.progress = { started: true };
+          data.progress = data.progress || { started: true };
           data.state = 'draft';
           data.published = false;
           data._applicationVersion = 2;
@@ -171,7 +171,7 @@ export default {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
   },
-  state: {  
+  state: {
     record: null,
     noOfTestApplications: 0,
   },
