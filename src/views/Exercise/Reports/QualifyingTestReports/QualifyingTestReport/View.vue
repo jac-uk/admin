@@ -117,6 +117,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'QualifyingTestReportView',
   components: {
     ActionButton,
     Table,

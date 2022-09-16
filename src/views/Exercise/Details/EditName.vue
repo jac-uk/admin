@@ -31,6 +31,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
+  name: 'EditName',
   components: {
     TextField,
     BackLink,

@@ -324,6 +324,7 @@ import {
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Application',
   components: {
     TabsList,
     AgencyReport,

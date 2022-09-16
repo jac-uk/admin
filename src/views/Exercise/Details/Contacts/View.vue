@@ -182,6 +182,7 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ContactsView',
   mixins: [permissionMixin],
   computed: {
     exercise() {

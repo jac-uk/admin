@@ -92,6 +92,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 
 export default {
+  name: 'TargetedOutreachReport',
   components: {
     TextArea,
     ErrorSummary,

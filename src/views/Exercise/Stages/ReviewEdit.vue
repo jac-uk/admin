@@ -76,6 +76,7 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'ReviewEdit',
   components: {
     ErrorSummary,
     RadioGroup,

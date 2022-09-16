@@ -248,6 +248,7 @@ import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
+  name: 'Overview',
   components: {
     Timeline,
     ActionButton,
@@ -293,13 +294,13 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      const returnReadyForApproval = this.exercise 
-        && this.exercise.state 
+      const returnReadyForApproval = this.exercise
+        && this.exercise.state
         && this.exercise.state === 'ready';
       return returnReadyForApproval;
     },
     isReadyForApprovalFromAdvertType() {
-      const returnReady = this.exercise 
+      const returnReady = this.exercise
         && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
       return returnReady;
     },
@@ -388,7 +389,7 @@ export default {
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
-      return msg; 
+      return msg;
     },
   },
   methods: {

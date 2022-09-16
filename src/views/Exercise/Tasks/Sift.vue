@@ -11,6 +11,7 @@
 import PanelPack from '@/components/PanelPacks/PanelPacks';
 
 export default {
+  name: 'Sift',
   components: {
     PanelPack,
   },
@@ -23,7 +24,7 @@ export default {
 
   },
   methods: {
-    
+
   },
 };
 </script>

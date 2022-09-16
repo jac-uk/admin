@@ -58,6 +58,7 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'InvitationsView',
   mixins: [permissionMixin],
   data() {
     return {

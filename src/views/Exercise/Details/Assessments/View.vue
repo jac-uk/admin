@@ -30,6 +30,7 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'AssessmentsView',
   mixins: [permissionMixin],
   computed: {
     exercise() {

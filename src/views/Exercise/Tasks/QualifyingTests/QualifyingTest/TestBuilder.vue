@@ -55,6 +55,7 @@ import QualifyingTestQuestion from '@/components/RepeatableFields/QualifyingTest
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'TestBuilder',
   components: {
     TabsList,
     TextareaInput,

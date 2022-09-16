@@ -58,7 +58,7 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
 import Answer from '@/components/RepeatableFields/Answer';
 
 export default {
-  name: 'SelectionCriterion',
+  name: 'WorkingPreferenceQuestion',
   components: {
     TextField,
     RepeatableFields,

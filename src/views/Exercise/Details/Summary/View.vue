@@ -138,6 +138,7 @@ import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdve
 import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
+  name: 'SummaryView',
   components: {
     Modal,
     ChangeExerciseAdvertType,

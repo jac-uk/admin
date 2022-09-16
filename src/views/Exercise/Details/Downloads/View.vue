@@ -213,6 +213,7 @@ import { isEditable, hasIndependentAssessments } from '@/helpers/exerciseHelper'
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'DownloadsView',
   components: {
     DownloadLink,
   },

@@ -125,6 +125,7 @@ import EditCurrentStep from './EditCurrentStep';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ApplicationContentView',
   components: {
     Modal,
     EditCurrentStep,

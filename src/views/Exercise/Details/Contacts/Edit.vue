@@ -186,6 +186,7 @@ import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissi
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
+  name: 'ContactsEdit',
   components: {
     ErrorSummary,
     TextField,

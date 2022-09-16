@@ -30,6 +30,7 @@
 
 <script>
 export default {
+  name: 'SideNavigation',
   props: {
     pages: {
       required: true,

@@ -31,6 +31,7 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
 import { DEFAULT, EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'ShortlistedBack',
   components: {
     ErrorSummary,
     RadioGroup,

@@ -11,6 +11,7 @@
 import PanelPack from '@/components/PanelPacks/PanelPacks';
 
 export default {
+  name: 'SelectionDays',
   components: {
     PanelPack,
   },

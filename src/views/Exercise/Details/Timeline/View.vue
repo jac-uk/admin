@@ -25,6 +25,7 @@ import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'TimelineView',
   components: {
     Timeline,
   },

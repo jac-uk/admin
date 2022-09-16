@@ -137,6 +137,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ReasonableAdjustments',
   mixins: [permissionMixin],
   data() {
     return {

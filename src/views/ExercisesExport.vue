@@ -36,6 +36,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ExercisesExport',
   components: {
     ErrorSummary,
     BackLink,

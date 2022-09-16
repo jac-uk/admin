@@ -66,6 +66,7 @@ import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exercise
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ExerciseView',
   components: {
     LoadingMessage,
     AddToFavouritesButton,

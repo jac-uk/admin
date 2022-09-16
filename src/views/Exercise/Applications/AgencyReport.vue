@@ -559,6 +559,7 @@
 import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport';
 
 export default {
+  name: 'AgencyReport',
   components: {
     FinancialMattersAgencyReport,
   },

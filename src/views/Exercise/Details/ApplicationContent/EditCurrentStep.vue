@@ -67,7 +67,7 @@ import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import { configuredApplicationContentSteps } from '@/helpers/exerciseHelper';
 
 export default {
-  name: 'PanelMemberChange',
+  name: 'EditCurrentStep',
   components: {
     Select,
     DateInput,

@@ -204,6 +204,7 @@ import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseH
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'EligibilityView',
   mixins: [permissionMixin],
   computed: {
     exercise() {

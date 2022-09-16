@@ -93,6 +93,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ReviewList',
   components: {
     Banner,
     Table,

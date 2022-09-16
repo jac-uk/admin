@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <dl 
+    <dl
       v-if="hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
       class="govuk-summary-list"
     >
@@ -340,11 +340,12 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests'; 
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'IndependentAssessments',
   components: {
     Table,
     TableCell,

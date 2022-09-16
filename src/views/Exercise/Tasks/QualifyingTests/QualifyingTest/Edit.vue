@@ -81,6 +81,7 @@ import QTAdditionalInstruction from '@/components/RepeatableFields/QualifyingTes
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'QualifyingTestEdit',
   components: {
     ErrorSummary,
     TextField,

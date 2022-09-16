@@ -263,6 +263,7 @@ import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CharacterIssues',
   components: {
     EventRenderer,
     Select,

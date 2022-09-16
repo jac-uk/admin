@@ -69,6 +69,7 @@ import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 
 export default {
+  name: 'ShortlistedEdit',
   components: {
     ErrorSummary,
     RadioGroup,

@@ -118,6 +118,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 
 export default {
+  name: 'SummaryEdit',
   components: {
     ErrorSummary,
     TextField,

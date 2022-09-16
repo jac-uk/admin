@@ -29,6 +29,7 @@
 
 <script>
 export default {
+  name: 'SubNavigation',
   props: {
     pages: {
       required: true,

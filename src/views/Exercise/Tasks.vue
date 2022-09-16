@@ -16,6 +16,7 @@ import SideNavigation from '@/components/Navigation/SideNavigation';
 import { isProcessing } from '@/helpers/exerciseHelper';
 
 export default {
+  name: 'Tasks',
   components: {
     SideNavigation,
   },

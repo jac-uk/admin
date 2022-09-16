@@ -32,6 +32,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
+  name: 'DryRun',
   components: {
     ErrorSummary,
     TextareaInput,

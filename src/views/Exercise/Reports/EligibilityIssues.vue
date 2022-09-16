@@ -193,6 +193,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 
 export default {
+  name: 'EligibilityIssues',
   components: {
     Table,
     TableCell,

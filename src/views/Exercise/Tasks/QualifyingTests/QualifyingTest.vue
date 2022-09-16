@@ -11,6 +11,7 @@
 <script>
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
 export default {
+  name: 'QualifyingTest',
   components: {
     LoadingMessage,
   },
