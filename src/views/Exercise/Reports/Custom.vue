@@ -251,7 +251,7 @@
                 <td
                   class="govuk-table__cell govuk-table__cell--numeric"
                 >
-                  {{ row }}
+                  {{ row | formatNumber }}
                 </td>
               </tr>
             </tbody>

@@ -72,7 +72,7 @@
           </RouterLink>
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.initialised }} / {{ qualifyingTest.counts.activated }}</span>
+          >{{ qualifyingTest.counts.initialised | formatNumber }} / {{ qualifyingTest.counts.activated | formatNumber }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -82,7 +82,7 @@
           </RouterLink> / Auto-submitted
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.completed }} / {{ qualifyingTest.counts.outOfTime }}</span>
+          >{{ qualifyingTest.counts.completed | formatNumber }} / {{ qualifyingTest.counts.outOfTime | formatNumber }}</span>
         </p>
       </div>
     </div>
@@ -103,7 +103,7 @@
           >
             Started
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.started }}</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.started | formatNumber }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -111,7 +111,7 @@
           >
             In Progress
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.inProgress }}</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.inProgress | formatNumber }}</span>
         </p>
       </div>
     </div>
@@ -187,19 +187,19 @@
                 v-if="applicationRecordCounts.review"
                 value="review"
               >
-                Review ({{ applicationRecordCounts.review }})
+                Review ({{ applicationRecordCounts.review | formatNumber }})
               </option>
               <option
                 v-if="applicationRecordCounts.shortlisted"
                 value="shortlisted"
               >
-                Shortlisted ({{ applicationRecordCounts.shortlisted }})
+                Shortlisted ({{ applicationRecordCounts.shortlisted | formatNumber }})
               </option>
               <option
                 v-if="applicationRecordCounts.selected"
                 value="selected"
               >
-                Selected ({{ applicationRecordCounts.selected }})
+                Selected ({{ applicationRecordCounts.selected | formatNumber }})
               </option>
             </Select>
             <Select
@@ -214,19 +214,19 @@
                 v-if="applicationRecordCounts.reviewEMP"
                 value="review"
               >
-                Review ({{ applicationRecordCounts.reviewEMP }})
+                Review ({{ applicationRecordCounts.reviewEMP | formatNumber }})
               </option>
               <option
                 v-if="applicationRecordCounts.shortlistedEMP"
                 value="shortlisted"
               >
-                Shortlisted ({{ applicationRecordCounts.shortlistedEMP }})
+                Shortlisted ({{ applicationRecordCounts.shortlistedEMP | formatNumber }})
               </option>
               <option
                 v-if="applicationRecordCounts.selectedEMP"
                 value="selected"
               >
-                Selected ({{ applicationRecordCounts.selectedEMP }})
+                Selected ({{ applicationRecordCounts.selectedEMP | formatNumber }})
               </option>
             </Select>
           </div>

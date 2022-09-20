@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { lookup } from '../../filters';
+import { lookup, formatNumber } from '../../filters';
 import SideNavigation from '@/components/Navigation/SideNavigation';
 import { availableStages } from '../../helpers/exerciseHelper';
 
@@ -29,7 +29,7 @@ export default {
       stages.forEach(stage => {
         const count = (exercise._applicationRecords && exercise._applicationRecords[stage]) || 0;
         sideNavigation.push({
-          title: `${lookup(stage)} (${count})`, // TODO get label
+          title: `${lookup(stage)} (${formatNumber(count)})`, // TODO get label
           path: `${path}/${stage}`,
         });
       });

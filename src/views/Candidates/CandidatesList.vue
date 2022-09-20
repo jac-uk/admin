@@ -41,7 +41,7 @@
           {{ new Date(row.created) | formatDate('long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ countApplications(row) }}
+          {{ countApplications(row) | formatNumber }}
         </TableCell>
       </template>
     </Table>
