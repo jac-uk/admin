@@ -142,6 +142,24 @@ export default {
       };
       await ref.update(data);
     },
+    unarchive: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+        state: state.record.hasOwnProperty('stateBeforeArchive') ? state.record.stateBeforeArchive : 'ready',
+        stateBeforeArchive: null,
+      };
+      await ref.update(data);
+    },
+    archive: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      const data = {
+          state: 'archived',
+          stateBeforeArchive: state.record.state,
+        };
+      await ref.update(data);
+    },
     addToFavourites: async ({ state }, userId) => {
       const id = state.record.id;
       const ref = collection.doc(id);
@@ -171,7 +189,7 @@ export default {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
   },
-  state: {  
+  state: {
     record: null,
     noOfTestApplications: 0,
   },
