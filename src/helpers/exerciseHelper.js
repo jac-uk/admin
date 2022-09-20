@@ -678,9 +678,10 @@ function availableStatuses(exercise, stage) {
   let statuses = [];
   switch (stage) {
   case EXERCISE_STAGE.APPLIED:
-    statuses = [  // TODO make this specific to exercise
+    statuses = [
       ...shortlistingStatuses(exercise),
-      APPLICATION_STATUS.SELECTION_INVITED,
+      // APPLICATION_STATUS.SELECTION_INVITED,
+      APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
       APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
       APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
       APPLICATION_STATUS.REJECTED_CHARACTER,
@@ -744,8 +745,16 @@ function availableStatuses(exercise, stage) {
 function shortlistingStatuses(exercise) {
   const statuses = [];
   if (exercise && exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0) {
+      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_PASSED);
+      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_FAILED);
+    }
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0) {
+      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_PASSED);
+      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_FAILED);
+    }
     if (
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 ||
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 &&
       exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
     ) {
       statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
@@ -762,7 +771,10 @@ function shortlistingStatuses(exercise) {
       statuses.push(APPLICATION_STATUS.SIFT_PASSED);
       statuses.push(APPLICATION_STATUS.SIFT_FAILED);
     }
-    // TODO support telephone assessment & other (if still needed)
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.TELEPHONE_ASSESSMENT) >= 0) {
+      statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_PASSED);
+      statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_FAILED);
+    }
   }
   return statuses;
 }

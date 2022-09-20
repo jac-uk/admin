@@ -14,6 +14,7 @@
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
 import { isProcessing, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
+import { TASK_TYPE } from '@/helpers/constants';
 import { lookup } from '@/filters';
 
 export default {
@@ -59,6 +60,12 @@ export default {
             }
           );
         });
+        sideNavigation.push(
+          {
+            title: lookup(TASK_TYPE.SHORTLISTING_OUTCOME),
+            path: `${path}/${TASK_TYPE.SHORTLISTING_OUTCOME}`,
+          }
+        );
         break;
       case 'selection':
         sideNavigation.push(
@@ -84,6 +91,12 @@ export default {
             }
           );
         });
+        sideNavigation.push(
+          {
+            title: lookup(TASK_TYPE.SELECTION_OUTCOME),
+            path: `${path}/${TASK_TYPE.SELECTION_OUTCOME}`,
+          }
+        );
         break;
       }
       return sideNavigation;

@@ -70,7 +70,7 @@ export default {
   methods: {
     btnNext,
     async btnContinue() {
-      const response = await functions.httpsCallable('updateQualifyingTestScores')({
+      const response = await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

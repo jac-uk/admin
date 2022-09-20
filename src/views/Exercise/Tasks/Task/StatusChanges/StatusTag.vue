@@ -13,10 +13,6 @@ export default {
       type: Array,
       required: true,
     },
-    failStatuses: {
-      type: Array,
-      required: true,
-    },
     status: {
       type: String,
       required: true,
@@ -34,3 +30,9 @@ export default {
 };
 
 </script>
+
+<style lang="scss">
+.govuk-tage--red {
+  color: govuk-colour("red") !important;
+}
+</style>

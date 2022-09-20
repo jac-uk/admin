@@ -279,19 +279,22 @@ export default {
       if (!this.hasScoreSheet) return [];
       const applicationData = {};
       this.completedTasks.forEach(task => {
-        task.finalScores.forEach(row => {
-          if (!applicationData[row.id]) {
-            applicationData[row.id] = {
-              totalScore: 0,
+        if (task.finalScores) {
+          task.finalScores.forEach(row => {
+            if (!applicationData[row.id]) {
+              applicationData[row.id] = {
+                totalScore: 0,
+              };
+            }
+            applicationData[row.id].referenceNumber = row.ref;
+            applicationData[row.id][task.id] = {
+              score: row.score,
+              scoreSheet: row.scoreSheet ? row.scoreSheet : null,
             };
-          }
-          applicationData[row.id].referenceNumber = row.ref;
-          applicationData[row.id][task.id] = {
-            score: row.score,
-            scoreSheet: row.scoreSheet ? row.scoreSheet : null,
-          };
-          applicationData[row.id].totalScore += row.score;
-        });
+            applicationData[row.id].totalScore += row.score;
+          });
+        // } else if (task.outcomeMap) {
+        }
       });
       const rows = Object.entries(applicationData).map(([id, row]) => {
         return {

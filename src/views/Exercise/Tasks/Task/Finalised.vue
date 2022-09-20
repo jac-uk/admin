@@ -121,6 +121,8 @@ export default {
             },
           };
         }
+        console.log('scoreData.id', scoreData.id);
+        console.log('this.exerciseDiversity', this.exerciseDiversity);
         scoreMap[scoreData.score].count += 1;
         if (this.exerciseDiversity[scoreData.id].gender === 'female') scoreMap[scoreData.score].diversity.female += 1;
         if (this.exerciseDiversity[scoreData.id].ethnicity === 'bame') scoreMap[scoreData.score].diversity.bame += 1;
@@ -175,7 +177,7 @@ export default {
   methods: {
     btnNext,
     async btnComplete() {
-      await functions.httpsCallable('completeTask')({
+      await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

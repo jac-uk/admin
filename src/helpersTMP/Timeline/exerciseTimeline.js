@@ -100,7 +100,7 @@ const exerciseTimeline = (data) => {
           entry: 'Shortlisting outcome',
           date: data.shortlistingOutcomeDate,
           dateString: getDateString(data.shortlistingOutcomeDate, 'month'),
-          taskType: TASK_TYPE.SHORTLISTING_OUTCOME,
+          // taskType: TASK_TYPE.SHORTLISTING_OUTCOME,
         }
       );
     }
@@ -279,7 +279,7 @@ const exerciseTimeline = (data) => {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
         dateString: getDateString(data.finalOutcome),
-        taskType: TASK_TYPE.SELECTION_OUTCOME,
+        // taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
   }

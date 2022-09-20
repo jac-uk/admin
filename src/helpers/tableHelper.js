@@ -4,6 +4,17 @@ export {
   getTableData
 };
 
+function getValueAtPath(data, path) {
+  if (path.indexOf('.') >= 0) {
+    const parts = path.split('.');
+    let value = data;
+    parts.forEach(part => value = value[part]);
+    return value;
+  } else {
+    return data[path];
+  }
+}
+
 function getTableData(rows, columns, state) {
   let returnData = JSON.parse(JSON.stringify(rows));
   if (state.searchTerm) {
@@ -12,7 +23,7 @@ function getTableData(rows, columns, state) {
       let isMatch = false;
       columns.forEach(column => {
         if (column.sort) {  // making use of `sort` field for the searchable fields
-          if (row[column.sort].toLowerCase().indexOf(searchTerm) >= 0) isMatch = true;
+          if (getValueAtPath(row, column.sort).toLowerCase().indexOf(searchTerm) >= 0) isMatch = true;
         }
       });
       return isMatch;

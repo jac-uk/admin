@@ -1,9 +1,14 @@
 <template>
-  <p
-    class="govuk-body-l"
-  >
-    Please complete Critical Analysis and Situational Judgement tests before continuing
-  </p>
+  <div>
+    <h1 class="govuk-heading-l">
+      {{ type | lookup }}
+    </h1>
+    <p
+      class="govuk-body-l"
+    >
+      Please complete Critical Analysis and Situational Judgement tests
+    </p>
+  </div>
 </template>
 
 <script>

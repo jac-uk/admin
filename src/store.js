@@ -42,6 +42,7 @@ import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
+import checks from '@/store/checks/collection';
 
 import exerciseDiversity from '@/store/exercise/diversity/document';
 
@@ -83,6 +84,7 @@ const store = new Vuex.Store({
     panel,
     panellists,
     panellist,
+    checks,
     characterChecks,
     exerciseDiversity,
   },

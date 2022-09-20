@@ -1,138 +1,135 @@
 <template>
-<div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-three-quarters">
-      <h1 class="govuk-heading-l">
-        {{ type | lookup }}
-      </h1>
-    </div>
-    <div class="govuk-grid-column-one-quarter text-right">
-      <FullScreenButton />
-    </div>
-  </div>
-
-  <p
-    v-if="hasApplicationsWithoutStatus"
-    class="govuk-body-l"
-  >
-    Please set the new status of each application.
-  </p>
-  <p
-    v-else
-    class="govuk-body-l govuk-!-margin-bottom-4"
-  >
-    {{ type | lookup }} can now be completed. {{ totalApplications }} applications will be updated.
-  </p>
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
-      <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-        <p class="govuk-body govuk-!-margin-bottom-0">
-          Applications
-          <span class="govuk-caption-m">Total</span>
-        </p>
-        <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-          {{ totalApplications }}
-        </h2>
+  <div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-l">
+          {{ type | lookup }}
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter text-right">
+        <FullScreenButton />
       </div>
     </div>
-    <div
+
+    <p
       v-if="hasApplicationsWithoutStatus"
-      class="govuk-grid-column-one-half"
+      class="govuk-body-l"
     >
-      <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-        <p class="govuk-body govuk-!-margin-bottom-0">
-          Applications
-          <span class="govuk-caption-m">Status not yet assigned</span>
-        </p>
-        <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-          {{ applicationsWithoutStatus.length }}
-        </h2>
-      </div>
-    </div>
-    <div
+      Please set the new status of each application.
+    </p>
+    <p
       v-else
-      class="govuk-grid-column-one-half"
+      class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
-        <p class="govuk-body govuk-!-margin-bottom-4">
-          Next step
-        </p>
-        <ActionButton
-          class="govuk-!-margin-bottom-1"
-          type="primary"
-          @click="btnComplete"
-        >
-          Complete
-        </ActionButton>
+      {{ type | lookup }} can now be completed. {{ totalApplications }} applications will be updated.
+    </p>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            Applications
+            <span class="govuk-caption-m">Total</span>
+          </p>
+          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
+            {{ totalApplications }}
+          </h2>
+        </div>
+      </div>
+      <div
+        v-if="hasApplicationsWithoutStatus"
+        class="govuk-grid-column-one-half"
+      >
+        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            Applications
+            <span class="govuk-caption-m">Status not yet assigned</span>
+          </p>
+          <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
+            {{ applicationsWithoutStatus.length }}
+          </h2>
+        </div>
+      </div>
+      <div
+        v-else
+        class="govuk-grid-column-one-half"
+      >
+        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+          <p class="govuk-body govuk-!-margin-bottom-4">
+            Next step
+          </p>
+          <ActionButton
+            class="govuk-!-margin-bottom-1"
+            type="primary"
+            @click="btnComplete"
+          >
+            Complete
+          </ActionButton>
+        </div>
       </div>
     </div>
-  </div>
 
-  <Table
-    data-key="id"
-    :data="filteredApplications"
-    :columns="tableColumns"
-    multi-select
-    :selection.sync="selectedItems"
-    :custom-search="{
-      placeholder: 'Search candidate name or reference number',
-      handler: searchHandler,
-      field: 'candidate.id',
-    }"
-    :filters="[
-      {
-        title: 'Status',
-        field: 'status',
-        type: 'checkbox',
-        options: availableStatuses.concat(['']),
-      },
-    ]"
-    @change="updateTableState"
-    local-data
-  >
-    <template #actions>
-      <button
-        class="govuk-button govuk-!-margin-bottom-3"
-        @click="$refs['setStatusModal'].openModal()"
-        :disabled="!hasSelectedItems"
-      >
+    <Table
+      data-key="id"
+      :data="filteredApplications"
+      :columns="tableColumns"
+      multi-select
+      :selection.sync="selectedItems"
+      :custom-search="{
+        placeholder: 'Search candidate name or reference number',
+        handler: searchHandler,
+        field: 'candidate.id',
+      }"
+      :filters="[
+        {
+          title: 'Status',
+          field: 'status',
+          type: 'checkbox',
+          options: availableStatuses.concat(['']),
+        },
+      ]"
+      local-data
+      @change="updateTableState"
+    >
+      <template #actions>
+        <button
+          class="govuk-button govuk-!-margin-bottom-3"
+          :disabled="!hasSelectedItems"
+          @click="$refs['setStatusModal'].openModal()"
+        >
+          Set status
+        </button>
+      </template>
+      <template #row="{row}">
+        <TableCell :title="tableColumns[0].title">
+          {{ row.ref }}
+        </TableCell>
+        <TableCell :title="tableColumns[1].title">
+          {{ row.fullName }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
+          <StatusTag
+            v-if="task.outcomeMap[row.id]"
+            :pass-statuses="task.applicationPassStatuses"
+            :status="task.outcomeMap[row.id]"
+          />
+          <span v-else />
+        </TableCell>
+      </template>
+    </Table>
+
+    <Modal ref="setStatusModal">
+      <TitleBar>
         Set status
-      </button>
-
-    </template>
-    <template #row="{row}">
-      <TableCell :title="tableColumns[0].title">
-        {{ row.ref }}
-      </TableCell>
-      <TableCell :title="tableColumns[1].title">
-        {{ row.fullName }}
-      </TableCell>
-      <TableCell :title="tableColumns[2].title">
-        <StatusTag
-          v-if="task.outcomeMap[row.id]"
-          :pass-statuses="task.applicationPassStatuses"
-          :fail-statuses="task.applicationFailStatuses"
-          :status="task.outcomeMap[row.id]"
-        />
-        <span v-else></span>
-      </TableCell>
-    </template>
-  </Table>
-
-  <Modal ref="setStatusModal">
-    <TitleBar>
-      Set status
-    </TitleBar>
-    <SetStatusForm
-      class="govuk-!-margin-6"
-      :statuses="availableStatuses"
-      @save="setStatus"
-      @cancel="$refs['setStatusModal'].closeModal()"
-    />
-  </Modal>
-
-</div>
+      </TitleBar>
+      <SetStatusForm
+        class="govuk-!-margin-6"
+        :statuses="availableStatuses"
+        @save="setStatus"
+        @cancel="$refs['setStatusModal'].closeModal()"
+      />
+    </Modal>
+  </div>
 </template>
 
 <script>

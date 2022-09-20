@@ -1,14 +1,14 @@
 <template>
   <div class="govuk-!-margin-bottom-4">
     <div class="govuk-!-margin-bottom-4">
-      <h2 class="govuk-heading-l govuk-!-padding-top-6">
-        Personal details 
+      <h2 class="govuk-heading-l govuk-!-padding-top-4">
+        Personal details
         <span
           v-if="!isCandidateView"
           class="govuk-hint print-none"
         >
           <!-- vv this isnt true at the moment vv -->
-          <!-- Any changes made here will also update the candidate information.  --> 
+          <!-- Any changes made here will also update the candidate information.  -->
           <!-- ^^ this isnt true at the moment ^^ have updated the line below describe fucntionaility -->
           Any changes made here will only update the application information.
         </span>
@@ -37,7 +37,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -105,7 +105,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -121,7 +121,7 @@
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -191,12 +191,12 @@
           </dd>
         </div>
       </dl>
-  
-      <dl 
+
+      <dl
         v-if="personalDetails && personalDetails.reasonableAdjustments === true"
         class="govuk-summary-list govuk-!-margin-bottom-0"
       >
-        <div 
+        <div
           class="govuk-summary-list__row "
         >
           <dt :class="requiredStyle">
@@ -211,11 +211,11 @@
               field="reasonableAdjustmentsDetails"
               @changeField="changeUserDetails"
             />
-          </dd> 
+          </dd>
         </div>
       </dl>
-    </div> 
-  </div> 
+    </div>
+  </div>
 </template>
 
 <script>

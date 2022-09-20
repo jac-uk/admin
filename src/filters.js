@@ -133,7 +133,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'Qualifying Test';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'CA + SJ Scoring';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
   lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed scenario test';
   lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed scenario test';
@@ -147,6 +147,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Passed`] = 'Passed character and selection SCC';
   lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Failed`] = 'Failed character and selection SCC';
   lookup[TASK_TYPE.STATUTORY_CONSULTATION] = 'Statutory Consultation';
+  lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Passed`] = 'Passed statutory consultation';
+  lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Failed`] = 'Failed statutory consultation';
   lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';

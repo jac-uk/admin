@@ -580,7 +580,7 @@ export default {
   methods: {
     btnNext,
     async btnFinalise() {
-      await functions.httpsCallable('finaliseTask')({
+      await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

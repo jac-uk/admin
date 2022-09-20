@@ -30,7 +30,7 @@
         <ActionButton
           class="govuk-!-margin-bottom-0"
           type="primary"
-          @click="updateQualifyingTestParticipants"
+          @click="updateTask"
         >
           Set up test participants
         </ActionButton>
@@ -68,8 +68,8 @@ export default {
   },
   methods: {
     btnNext,
-    async updateQualifyingTestParticipants() {
-      const response = await functions.httpsCallable('updateQualifyingTestParticipants')({
+    async updateTask() {
+      const response = await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

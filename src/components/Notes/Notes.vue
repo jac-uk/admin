@@ -1,6 +1,6 @@
 <template>
   <div
-    class="govuk-!-margin-top-9 notes"
+    class="govuk-!-margin-top-4 notes"
   >
     <NotesNew
       v-if="isNew || isUpdate"

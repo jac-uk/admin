@@ -281,7 +281,7 @@ export default {
   methods: {
     btnNext,
     async btnActivate() {
-      await functions.httpsCallable('activateTask')({
+      await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });
