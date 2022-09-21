@@ -19,6 +19,10 @@
   color: white;
 }
 
+.text--error {
+  color: $govuk-error-colour;
+}
+
 * {
   box-sizing: border-box;
 }

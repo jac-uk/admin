@@ -34,6 +34,7 @@
         >
           Continue
         </ActionButton>
+        <div v-if="errorMessage" class="govuk-body govuk-!-margin-top-2 text--error">{{ errorMessage }}</div>
       </div>
     </div>
   </div>
@@ -56,6 +57,11 @@ export default {
       type: String,
     },
   },
+  data() {
+    return {
+      errorMessage: '',
+    };
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -70,12 +76,22 @@ export default {
   methods: {
     btnNext,
     async btnContinue() {
+      this.errorMessage = '';
       const response = await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });
-      if (response && response.data && response.data.success) {
-        this.btnNext();
+      if (response && response.data) {
+        if (response.data.success) {
+          this.btnNext();
+          return true;
+        } else {
+          this.errorMessage = response.data.message;
+          return false;
+        }
+      } else {
+        this.errorMessage = 'Sorry, an error occured';
+        return false;
       }
     },
   },

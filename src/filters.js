@@ -134,6 +134,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'CA + SJ Scoring';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed CA + SJ';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed CA + SJ';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
   lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed scenario test';
   lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed scenario test';
