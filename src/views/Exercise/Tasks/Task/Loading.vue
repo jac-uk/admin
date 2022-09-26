@@ -57,7 +57,7 @@ export default {
       if (this.exercise) {
         const expectedRouteName = getExpectedRouteName(this.type);
         if (expectedRouteName !== this.$route.name) {
-          this.$router.push({
+          return this.$router.push({
             name: expectedRouteName,
             params: this.params,
           });

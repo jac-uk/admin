@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { beforeRouteEnter } from './helper';
+import { beforeRouteEnter, getExpectedRouteName } from './helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import defaultView from './New/default';
 import qualifyingTest from './New/qualifyingTest';
@@ -27,6 +27,15 @@ export default {
       required: true,
       type: String,
     },
+  },
+  created() {
+    const task = this.$store.getters['tasks/getTask'](this.type);
+    if (task && task.status) {
+      this.$router.replace({
+        name: getExpectedRouteName(this.type),
+        params: this.$route.params,
+      });
+    }
   },
   computed: {
     newView() {
