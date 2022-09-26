@@ -18,6 +18,7 @@
         class="print-full-width"
       >
         <button
+          v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
           class="govuk-button"
           @click="openCreateUserModal"
         >
