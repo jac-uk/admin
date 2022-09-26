@@ -17,6 +17,12 @@
         v-show="activeTab == 'users'"
         class="print-full-width"
       >
+        <button
+          class="govuk-button"
+          @click="openCreateUserModal"
+        >
+          Create
+        </button>
         <h2>List of admin users</h2>
         <Table class="govuk-table">
           <tr class="govuk-table__row">
@@ -62,7 +68,7 @@
                 v-model="user.customClaims.r"
                 class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
                 :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
-                @change="setUserRole(user)"
+                @change="handleRoleChange(user)"
               >
                 <option
                   v-for="(roleItem, roleIndex) in roles"
@@ -265,6 +271,80 @@
         </button>
       </div>
     </Modal>
+
+    <Modal ref="modalRefCreateUser">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Create a new user
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <div
+          class="govuk-grid-column-full"
+          style="text-align: left;"
+        >
+          <TextField
+            id="email"
+            v-model="newUserEmail"
+            label="Email"
+            hint="The email must be a JAC email address."
+            type="email"
+            required
+          />
+          <p
+            v-if="isDuplicateEmail"
+            class="govuk-error-message"
+          >
+            Duplicate Email
+          </p>
+          <p
+            v-if="isNotJACEmail"
+            class="govuk-error-message"
+          >
+            Please use a JAC email address
+          </p>
+
+          <TextField
+            id="password"
+            v-model="newUserPassword"
+            label="Password"
+            hint="The password must be a string with at least 6 characters."
+            type="password"
+            required
+          />
+
+          <div class="govuk-form-group">
+            <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
+            <select
+              id="role"
+              v-model="newUserRole"
+              class="govuk-select"
+              style="width: 100%;"
+            >
+              <option
+                v-for="(roleItem, roleIndex) in roles"
+                :key="roleIndex"
+                :value="roleItem.id"
+              >
+                {{ roleItem.roleName }}
+              </option>
+            </select>
+          </div>
+        </div>
+        
+        <button
+          class="govuk-button govuk-!-margin-right-3"
+          :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
+          @click="createUser"
+        >
+          Save
+        </button>
+        <button
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="closeCreateUserModal"
+        >
+          Cancel
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -303,6 +383,9 @@ export default {
       newRoleName: null,
       permissions: {},
       selectedUserIndex: null,
+      newUserEmail: '',
+      newUserPassword: '',
+      newUserRole: '',
     };
   },
   computed: {
@@ -318,6 +401,19 @@ export default {
         },
       ];
     },
+    isDuplicateEmail() {
+      return this.users.map(user => user.email).includes(this.newUserEmail);
+    },
+    isNotJACEmail() {
+      return this.newUserEmail && !this.newUserEmail.match(/(.*@judicialappointments.gov.uk)/);
+    },
+    isValidPassword() {
+      return this.newUserPassword.length >= 6;
+    },
+    defaultUserRole() {
+      const role = this.roles.find(r => r.isDefault);
+      return role ? role.id : '';
+    },
     rolesNav() {
       const rolesNav = [];
       for (const role of this.roles) {
@@ -330,23 +426,8 @@ export default {
     },
   },
   async mounted() {
-    try {
-      await this.getRoles();
-      const users = await functions.httpsCallable('adminGetUsers')();
-      this.users = users.data;
-      for (const user of this.users) {
-        //TODO: add default role logic
-        if (!user.customClaims) {
-          user.customClaims = {
-            r: 'not set',
-          };
-        }
-      }
-      this.loaded = true;
-    } catch (e) {
-      this.loadFailed = true;
-      throw e;
-    }
+    await this.getUsers();
+    await this.getRoles();
   },
   updated() {
     const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
@@ -359,6 +440,24 @@ export default {
     }
   },
   methods: {
+    async getUsers() {
+      try {
+        const users = await functions.httpsCallable('adminGetUsers')();
+        this.users = users.data;
+        for (const user of this.users) {
+          //TODO: add default role logic
+          if (!user.customClaims) {
+            user.customClaims = {
+              r: 'not set',
+            };
+          }
+        }
+        this.loaded = true;
+      } catch (e) {
+        this.loadFailed = true;
+        throw e;
+      }
+    },
     async getRoles() {
       const roles = await functions.httpsCallable('adminGetUserRoles')();
       this.roles = roles.data;
@@ -390,10 +489,41 @@ export default {
       this.newRoleName = null;
       this.selectedUserIndex = null;
     },
-    async setUserRole(user) {
+    openCreateUserModal() {
+      this.openModal('modalRefCreateUser');
+      this.newUserRole = this.defaultUserRole;
+    },
+    closeCreateUserModal() {
+      this.closeModal('modalRefCreateUser');
+      this.resetNewUser();
+    },
+    resetNewUser() {
+      this.newUserEmail = '';
+      this.newUserPassword = '';
+      this.newUserRole = '';
+    },
+    async createUser() {
+      try {
+        const res = await functions.httpsCallable('createUser')({
+          email: this.newUserEmail,
+          password: this.newUserPassword, // need to pass password to create new user
+        });
+        if (res && res.data && 'uid' in res.data) {
+          await this.setUserRole(res.data.uid, this.newUserRole);
+          await this.getUsers();
+          this.closeCreateUserModal();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async handleRoleChange(user) {
       this.openModal('changingRole');
-      await functions.httpsCallable('adminSetUserRole')({ userId: user.uid, roleId: user.customClaims.r });
+      await this.setUserRole(user.uid, user.customClaims.r);
       this.closeModal('changingRole');
+    },
+    async setUserRole(userId, roleId) {
+      await functions.httpsCallable('adminSetUserRole')({ userId, roleId });
     },
     viewRolePermissions(roleIndex) {
       this.role = this.roles[roleIndex];
