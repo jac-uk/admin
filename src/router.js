@@ -107,15 +107,6 @@ import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/Lis
 import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
 
-import QTPlatformLoading from '@/views/Exercise/Tasks/QTPlatform/Loading';
-import QTPlatformNew from '@/views/Exercise/Tasks/QTPlatform/New';
-// import QTPlatformInitialised from '@/views/Exercise/Tasks/QTPlatform/Initialised';
-// import QTPlatformActivated from '@/views/Exercise/Tasks/QTPlatform/Activated';
-import QTPlatformFinalised from '@/views/Exercise/Tasks/QTPlatform/Finalised';
-import QTPlatformFinalisedList from '@/views/Exercise/Tasks/QTPlatform/Finalised/List';
-import QTPlatformFinalisedViewScore from '@/views/Exercise/Tasks/QTPlatform/Finalised/View';
-import QTPlatformCompleted from '@/views/Exercise/Tasks/QTPlatform/Completed';
-
 // TODO remove these once we no longer need to support old code panels
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
 import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/xPanels/List';
@@ -944,86 +935,6 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Panel | Exercise Tasks',
-                  },
-                },
-              ],
-            },
-            {
-              path: 'qt/:type',
-              component: ExerciseTask,
-              props: true,
-              children: [
-                {
-                  path: '',
-                  redirect: 'new',
-                },
-                {
-                  path: 'loading',
-                  component: QTPlatformLoading,
-                  name: 'qt-platform-loading',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Loading | Qualifying test',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: QTPlatformNew,
-                  name: 'qt-platform-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'New | Qualifying test',
-                  },
-                },
-                // {
-                //   path: 'initialised',
-                //   component: QTPlatformInitialised,
-                //   name: 'qt-platform-initialised',
-                //   meta: {
-                //     requiresAuth: true,
-                //     title: 'Initialised | Qualifying test',
-                //   },
-                // },
-                // {
-                //   path: 'activated',
-                //   component: QTPlatformActivated,
-                //   name: 'qt-platform-activated',
-                //   meta: {
-                //     requiresAuth: true,
-                //     title: 'Activated | Qualifying test',
-                //   },
-                // },
-                {
-                  path: 'finalised',
-                  component: QTPlatformFinalised,
-                  children: [
-                    {
-                      path: '',
-                      name: 'qt-platform-finalised',
-                      component: QTPlatformFinalisedList,
-                      meta: {
-                        requiresAuth: true,
-                        title: 'Finalised | Exercise task',
-                      },
-                    },
-                    {
-                      path: ':score',
-                      component: QTPlatformFinalisedViewScore,
-                      name: 'qt-platform-finalised-score',
-                      meta: {
-                        requiresAuth: true,
-                        title: 'ViewScore | Finalised | Exercise task',
-                      },
-                    },
-                  ],
-                },
-                {
-                  path: 'completed',
-                  component: QTPlatformCompleted,
-                  name: 'qt-platform-completed',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Completed | Qualifying test',
                   },
                 },
               ],
