@@ -1,6 +1,7 @@
 <template>
   <div
     class="page-container"
+    :class="{ 'full-screen': fullScreen }"
     @mouseenter="onMouseOver"
   >
     <header
@@ -215,6 +216,9 @@ export default {
     },
     hasClipboardData() {
       return this.$store.state.clipboard.hasData;
+    },
+    fullScreen() {
+      return this.$store.state.ui.fullScreen;
     },
   },
   watch: {

@@ -5,6 +5,7 @@ Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
+import ui from '@/store/ui';
 import auth from '@/store/auth';
 import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
@@ -33,12 +34,23 @@ import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestRespon
 import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
+
+import tasks from '@/store/tasks/collection';
+import task from '@/store/tasks/document';
 import panels from '@/store/panels';
+// NEW: import panels from '@/store/panels/collection';
+import panel from '@/store/panels/document';
+import panellists from '@/store/panellists/collection';
+import panellist from '@/store/panellists/document';
+import checks from '@/store/checks/collection';
+
+import exerciseDiversity from '@/store/exercise/diversity/document';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
+    ui,
     auth,
     services,
     exerciseCollection,
@@ -65,8 +77,15 @@ const store = new Vuex.Store({
     connectionMonitor,
     qualifyingTestReports,
     qualifyingTestReport,
+    tasks,
+    task,
     panels,
+    panel,
+    panellists,
+    panellist,
+    checks,
     characterChecks,
+    exerciseDiversity,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

@@ -91,6 +91,26 @@ import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/Quali
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 
+// Exercise task
+import ExerciseTask from '@/views/Exercise/Tasks/Task';
+import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
+import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
+import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised';
+import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated';
+import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised';
+import ExerciseTaskTestActivated from '@/views/Exercise/Tasks/Task/TestActivated';
+import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsInitialised';
+import ExerciseTaskPanelsActivated from '@/views/Exercise/Tasks/Task/PanelsActivated';
+import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
+import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
+import ExerciseTaskStatusChanges from '@/views/Exercise/Tasks/Task/StatusChanges';
+import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
+import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
+import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
+import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
+import ExerciseTaskPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
+import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
+
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
 import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
@@ -932,6 +952,167 @@ const router = new Router({
                   meta: {
                     requiresAuth: true,
                     title: 'Scenario Response Panel | Exercise Tasks',
+                  },
+                },
+              ],
+            },
+            {
+              path: ':type',
+              component: ExerciseTask,
+              props: true,
+              children: [
+                {
+                  path: '',
+                  redirect: 'new',
+                },
+                {
+                  path: 'loading',
+                  component: ExerciseTaskLoading,
+                  name: 'exercise-task-loading',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Loading | Exercise task',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseTaskNew,
+                  name: 'exercise-task-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'New | Exercise task',
+                  },
+                },
+                {
+                  path: 'data-initialised',
+                  component: ExerciseTaskDataInitialised,
+                  name: 'exercise-task-dataInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Data Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'data-activated',
+                  component: ExerciseTaskDataActivated,
+                  name: 'exercise-task-dataActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Data Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'test-initialised',
+                  component: ExerciseTaskTestInitialised,
+                  name: 'exercise-task-testInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Test Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'test-activated',
+                  component: ExerciseTaskTestActivated,
+                  name: 'exercise-task-testActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Test Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'panels-initialised',
+                  component: ExerciseTaskPanelsInitialised,
+                  name: 'exercise-task-panelsInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panels Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'panels-activated',
+                  component: ExerciseTaskPanelsActivated,
+                  name: 'exercise-task-panelsActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panels Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'moderation-initialised',
+                  component: ExerciseTaskModerationInitialised,
+                  name: 'exercise-task-moderationInitialised',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Moderation Initialised | Exercise task',
+                  },
+                },
+                {
+                  path: 'moderation-activated',
+                  component: ExerciseTaskModerationActivated,
+                  name: 'exercise-task-moderationActivated',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Moderation Activated | Exercise task',
+                  },
+                },
+                {
+                  path: 'status-changes',
+                  component: ExerciseTaskStatusChanges,
+                  name: 'exercise-task-statusChanges',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Status Changes | Exercise task',
+                  },
+                },
+                {
+                  path: 'finalised',
+                  component: ExerciseTaskFinalised,
+                  children: [
+                    {
+                      path: '',
+                      name: 'exercise-task-finalised',
+                      component: ExerciseTaskFinalisedList,
+                      meta: {
+                        requiresAuth: true,
+                        title: 'Finalised | Exercise task',
+                      },
+                    },
+                    {
+                      path: ':score',
+                      component: ExerciseTaskFinalisedViewScore,
+                      name: 'exercise-task-finalised-score',
+                      meta: {
+                        requiresAuth: true,
+                        title: 'ViewScore | Finalised | Exercise task',
+                      },
+                    },
+                  ],
+                },
+                {
+                  path: 'completed',
+                  component: ExerciseTaskCompleted,
+                  name: 'exercise-task-completed',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Completed | Exercise task',
+                  },
+                },
+                {
+                  path: 'panel/new',
+                  component: ExerciseTaskPanelNew,
+                  name: 'exercise-task-panel-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Panel | Exercise Task',
+                  },
+                },
+                {
+                  path: 'panel/:panelId',
+                  component: ExerciseTaskPanelView,
+                  name: 'exercise-task-panel',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Panel | Exercise Task',
                   },
                 },
               ],
