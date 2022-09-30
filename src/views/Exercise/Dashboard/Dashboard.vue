@@ -63,13 +63,19 @@
               :disabled="timelineSelected <= 0"
               @click="btnPrevious"
             >
-              &lt;
+              <img
+                alt="Sign in with Google"
+                src="@/assets/DirectionLeft.png"
+              >
             </button>
             <button
               :disabled="timelineSelected >= (timelineTotal - 1)"
               @click="btnNext"
             >
-              &gt;
+              <img
+                alt="Sign in with Google"
+                src="@/assets/DirectionRight.png"
+              >
             </button>
           </div>
         </div>
@@ -550,6 +556,15 @@ $govuk-brand-colour:	#1d70b8;
   position: absolute;
   bottom: 0;
   right: 0;
+}
+.carrousel .carrousel_arrows button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.carrousel .carrousel_arrows button[disabled] {
+  cursor: default;
+  filter: brightness(2);
 }
 .carrousel div.carrousel__item-visible {
   display: block;
