@@ -35,6 +35,9 @@
         <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
           <span class="capitalize">{{ exercise.typeOfExercise }}</span>
         </h2>
+        <span class="govuk-caption-s color-middle">
+          <span class="vh">&nbsp;</span>
+        </span>
       </div>
       <div class="panel govuk-!-margin-bottom-9">
         <span class="govuk-caption-m">
@@ -49,10 +52,10 @@
             :key="index"
           >
             <span class="govuk-caption-s color-middle">
-              <span class="">{{ time.entry }}</span>
+              <span class="long-text">{{ time.entry }}</span>
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              <span class="">{{ time.dateString }}</span>
+              <span class="long-text long-text-margin">{{ time.dateString }}</span>
             </h2>
           </div>
           <div class="carrousel_arrows">
@@ -551,4 +554,17 @@ $govuk-brand-colour:	#1d70b8;
 .carrousel div.carrousel__item-visible {
   display: block;
 }
+.long-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.long-text-margin {
+  margin-right: 50px;
+}
+.vh {
+  visibility: hidden;
+}
+
 </style>
