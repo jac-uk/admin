@@ -64,6 +64,7 @@ import SubNavigation from '@/components/Navigation/SubNavigation';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { applicationCounts } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
@@ -109,11 +110,16 @@ export default {
       }
       return false;
     },
+    applicationCounts() {
+      return applicationCounts(this.exercise);
+    },
     subNavigation() {
       if (!this.exercise) { return []; }
       const path = `/exercise/${this.exercise.id}`;
       const subNavigation = [];
-      subNavigation.push({ path: `${path}/dashboard`, title: 'Dashboard' });
+      if (this.applicationCounts._total) {
+        subNavigation.push({ path: `${path}/dashboard`, title: 'Dashboard' });
+      }
       subNavigation.push({ path: `${path}/details`, title: 'Exercise' });
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
