@@ -185,6 +185,7 @@
     </div>
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <ActionButton
+        v-if="report"
         class="govuk-!-margin-right-3"
         @click="exportData()"
       >
@@ -202,7 +203,10 @@
       </button>
     </div>
 
-    <div class="govuk-grid-column-full">
+    <div
+      v-if="report"
+      class="govuk-grid-column-full"
+    >
       <Select
         id="diversityReport"
         v-model="diversityReport"
@@ -263,6 +267,7 @@ import { GChart } from 'vue-google-charts/legacy';
 import { applicationCounts } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import router from '@/router';
 
 export default {
   components: {
@@ -386,12 +391,16 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
-      .onSnapshot((snap) => {
-        if (snap.exists) {
-          this.report = vuexfireSerialize(snap);
-        }
-      });
+    if (this.applicationCounts._total) {
+      this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
+        .onSnapshot((snap) => {
+          if (snap.exists) {
+            this.report = vuexfireSerialize(snap);
+          }
+        });
+    } else {
+      router.push('details');
+    }
   },
   destroyed() {
     if (this.unsubscribe) {
@@ -404,7 +413,9 @@ export default {
   methods: {
     async refreshReport() {
       this.refreshingReport = true;
-      await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+      if (this.applicationCounts._total) {
+        await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+      }
       this.refreshingReport = false;
     },
     getDataTotal(stage, titles) {
