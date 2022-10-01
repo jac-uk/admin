@@ -434,7 +434,6 @@ export default {
         ret.push(dataApplied[val].total);
         return ret;
       }, []);
-      console.log('dataTotal', dataTotal);
       return dataTotal;
     },
     carouselChooseItemToShow(timeline) {
