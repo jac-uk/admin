@@ -376,7 +376,7 @@ export default {
     },
     chartOptions() {
       return {
-        vAxis: { title: 'Applicant (number)' },
+        vAxis: { title: 'Applicant (number)', format: '#,###' },
         seriesType: 'bars',
         // series: { 4: { type: 'line' } },
         height: 300,
