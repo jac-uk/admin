@@ -354,9 +354,10 @@ export default {
       if (this.report) {
         const dataApplied = this.report[EXERCISE_STAGE.APPLIED][this.diversityReport];
         const dataKeys = Object.keys(dataApplied).filter(item => item !== 'total');
-        dataTitles = dataKeys.reduce((ret, item) => {
+        dataTitles = dataKeys.reduce((ret, item, currentIndex) => {
           if (item !== 'total') {
-            ret.push(lookup(item));
+            ret.push(`${currentIndex + 1}. ${lookup(item)}`);
+            // ret.push(lookup(item));
           }
           return ret;
         }, []);
@@ -388,7 +389,7 @@ export default {
         const dataApplied = this.report[this.activeTab][this.diversityReport];
         returnChart = Object.keys(dataApplied).reduce((ret, item) => {
           if (item !== 'total') {
-            ret.push({ 'name': item, 'val': dataApplied[item] });
+            ret.push({ 'name': item, 'val': dataApplied[item], idx: ret.length });
           }
           return ret;
         }, []);
@@ -433,6 +434,7 @@ export default {
         ret.push(dataApplied[val].total);
         return ret;
       }, []);
+      console.log('dataTotal', dataTotal);
       return dataTotal;
     },
     carouselChooseItemToShow(timeline) {
