@@ -44,8 +44,10 @@
     </div>
 
     <div class="govuk-grid-column-one-half">
-      <div class="background-blue govuk-!-margin-bottom-6 govuk-!-padding-3">
-        <span v-if="isPublished">Published</span>
+      <div :class="`govuk-!-margin-bottom-6 govuk-!-padding-3 ${isArchived ? 'background-red' : 'background-blue'}`">
+        <span v-if="isPublished">
+          Published
+        </span>
         <div
           v-if="isApproved"
           class="float-right"
@@ -61,7 +63,10 @@
         <span
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
-        >{{ exercise.state | lookup }}</span>
+        >
+          <!-- {{ exercise.state | lookup }} -->
+          {{ exercise.state }}
+        </span>
         <span
           v-else
           class="display-block govuk-!-font-size-27"
@@ -104,7 +109,9 @@
                 v-if="task.done"
                 :id="`${task.id}-completed`"
                 class="govuk-tag"
-              >Done</strong>
+              >
+                Done
+              </strong>
               <span
                 v-else
                 :id="`${task.id}-completed`"
@@ -116,7 +123,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="!isPublished && hasPermissions([
+        v-if="!isPublished && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.exercises.permissions.canPublishExercise.value
         ])"
@@ -127,7 +134,7 @@
         Publish on website
       </button>
       <button
-        v-if="isPublished && hasPermissions([
+        v-if="isPublished && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.exercises.permissions.canPublishExercise.value,
         ])"
@@ -153,7 +160,7 @@
         Approve
       </button>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
+        v-if="!isArchived && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
@@ -167,19 +174,20 @@
       </ActionButton>
       <br>
       <ActionButton
-        v-if="isReadyForProcessing && hasPermissions([
+        v-if="isReadyForProcessing && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value
         ])"
+        class="govuk-!-margin-right-3"
         @click="startProcessing()"
       >
         Begin processing applications
       </ActionButton>
       <ActionButton
-        v-if="isProcessing && hasPermissions([
+        v-if="isProcessing && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
@@ -187,13 +195,31 @@
           PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
           PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
         ])"
+        class="govuk-!-margin-right-3"
         @click="updateProcessing()"
       >
         Process late applications
       </ActionButton>
+      <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
+      <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
+      <Modal
+        ref="archiveModal"
+      >
+        <ModalInner
+          @close="closeArchiveModal"
+          @confirmed="archive"
+        />
+      </Modal>
+      <button
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
+        @click="openArchiveModal"
+      >
+        {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
+      </button>
       <div v-if="!isProduction">
         <button
-          v-if="isReadyForTesting"
+          v-if="isReadyForTesting && !isArchived"
           class="govuk-button"
           @click="changeNoOfTestApplications()"
         >
@@ -236,6 +262,7 @@ import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { lookup } from '@/filters';
 import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
@@ -243,7 +270,7 @@ import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestAp
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import { isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import { isArchived, isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
@@ -253,6 +280,7 @@ export default {
     Timeline,
     ActionButton,
     Modal,
+    ModalInner,
     Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
@@ -307,6 +335,9 @@ export default {
     isApproved() {
       return isApproved(this.exercise);
     },
+    isArchived() {
+      return isArchived(this.exercise);
+    },
     isTesting() {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
     },
@@ -330,6 +361,7 @@ export default {
         case 'ready':
         case 'approved':
         case 'pre-launch':
+        case 'archived':
           return false;
         default:
           return true;
@@ -399,6 +431,22 @@ export default {
     approve() {
       this.$store.dispatch('exerciseDocument/approve');
     },
+    archive() {
+      if (this.isArchived) {
+        this.$store.dispatch('exerciseDocument/unarchive');
+        logEvent('info', 'Exercise unarchived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      } else {
+        this.$store.dispatch('exerciseDocument/archive');
+        logEvent('info', 'Exercise archived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      }
+      this.$refs.archiveModal.closeModal();
+    },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
     },
@@ -459,6 +507,12 @@ export default {
       this.$refs['modalChangeNoOfTestApplications'].closeModal();
       this.$refs['createTestApplicationsBtn'].$el.click();
     },
+    openArchiveModal() {
+      this.$refs.archiveModal.openModal();
+    },
+    closeArchiveModal() {
+      this.$refs.archiveModal.closeModal();
+    },
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
       if (!noOfTestApplications) return;
@@ -473,6 +527,10 @@ export default {
 <style scoped>
 .background-blue .govuk-link {
   cursor: pointer;
-
 }
+.background-red {
+  background-color: rgb(200, 30, 30);
+  cursor: pointer;
+}
+
 </style>

@@ -8,7 +8,7 @@
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
             @click="showAll"
           >
-            View all exercises
+            View live exercises
           </button>
           <button
             v-else
@@ -17,11 +17,31 @@
           >
             Show my favourites
           </button>
+          <button
+            v-if="isArchived"
+            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
+            @click="showAll"
+          >
+            View live exercises
+          </button>
+          <button
+            v-else
+            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
+            @click="showArchived"
+          >
+            View archived exercises
+          </button>
+          <br>
+          <!-- <Select hint="label">
+            <option>
+              bb
+            </option>
+          </Select> -->
           <router-link
             v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
             ref="linkToNewExercise"
             to="/create-exercise"
-            class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
+            class="govuk-button govuk-!-margin-3 govuk-!-margin-bottom-0"
           >
             Create an exercise
           </router-link>
@@ -37,10 +57,16 @@
           Favourite exercises
         </h1>
         <h1
+          v-else-if="isArchived"
+          class="govuk-heading-xl"
+        >
+          Archived exercises
+        </h1>
+        <h1
           v-else
           class="govuk-heading-xl"
         >
-          All exercises
+          Live exercises
         </h1>
         <form
           class="exercises-table"
@@ -159,6 +185,7 @@ export default {
     ...mapState('exerciseCollection', [
       'records',
       'isFavourites',
+      'isArchived',
     ]),
     isButtonDisabled() {
       const hasSelection = this.selectedItems && this.selectedItems.length;
@@ -179,6 +206,11 @@ export default {
         this.$refs['exercisesTable'].reload();
       }
     },
+    isArchived() {
+      if (this.$refs['exercisesTable']) {
+        this.$refs['exercisesTable'].reload();
+      }
+    },
   },
   destroyed() {
     this.$store.dispatch('exerciseCollection/unbind');
@@ -189,6 +221,9 @@ export default {
     },
     showAll() {
       this.$store.dispatch('exerciseCollection/showAll');
+    },
+    showArchived() {
+      this.$store.dispatch('exerciseCollection/showArchived');
     },
     getTableData(params) {
       this.$store.dispatch(

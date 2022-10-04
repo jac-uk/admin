@@ -254,7 +254,7 @@
       </div>
       <div v-else>
         <div
-          v-if="hasPermissions([
+          v-if="!isArchived && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.applications.permissions.canReadApplications.value,
@@ -341,7 +341,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
 import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -418,6 +418,9 @@ export default {
     },
     status() {
       return this.$route.params.status;
+    },
+    isArchived() {
+      return isArchived(this.exercise);
     },
     contactOverdue() {
       return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);
