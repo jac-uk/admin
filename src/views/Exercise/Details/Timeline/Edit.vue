@@ -274,7 +274,7 @@
           id="statutory-consultation-date"
           v-model="formData.statutoryConsultationDate"
           label="Statutory Consultation date"
-          required
+          :required="!exercise.statutoryConsultationWaived"
         />
 
         <h2 class="govuk-heading-l">
