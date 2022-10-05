@@ -141,6 +141,18 @@
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[4].title"
               >
+                {{ row.state | lookup }}
+              </TableCell>
+              <TableCell
+                class="govuk-table__cell--numeric"
+                :title="tableColumns[5].title"
+              >
+                {{ row.published ? 'Yes' : 'No' }}
+              </TableCell>
+              <TableCell
+                class="govuk-table__cell--numeric"
+                :title="tableColumns[6].title"
+              >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
             </template>
@@ -172,6 +184,8 @@ export default {
         { title: 'Name', sort: 'name' },
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
+        { title: 'Status', sort: 'state' },
+        { title: 'Published', sort: 'published' },
         {
           title: 'Applications count',
           sort: '_applications._total',
