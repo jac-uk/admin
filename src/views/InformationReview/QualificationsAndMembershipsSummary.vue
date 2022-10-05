@@ -58,13 +58,11 @@
               </dd>
             </div>
             <div
-              v-if="qualification.hasOwnProperty('date') || editable"
+              v-if="qualification.type !== 'barrister' && (qualification.hasOwnProperty('date') || editable)"
               class="govuk-summary-list__row"
             >
-              <dt
-                class="govuk-summary-list__key widerColumn"
-              >
-                {{ qualification.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }}
+              <dt class="govuk-summary-list__key widerColumn">
+                Date qualified
               </dt>
               <dd class="govuk-summary-list__value">
                 <InformationReviewRenderer
@@ -81,6 +79,27 @@
 
             <template>
               <div
+                v-if="qualification.type === 'barrister' && (qualification.calledToTheBarDate || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt
+                  class="govuk-summary-list__key widerColumn"
+                >
+                  Date called to the Bar
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToTheBarDate : null"
+                    field="qualifications"
+                    extension="date"
+                    :index="index"
+                    :edit="editable"
+                    type="date"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+              <div
                 v-if="qualification.type === 'barrister' && ((qualification.qualificationNotComplete && qualification.details) || editable)"
                 class="govuk-summary-list__row"
               >
@@ -96,6 +115,26 @@
                     :edit="editable"
                     :options="[true, false]"
                     type="selection"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div
+                v-if="qualification.type === 'barrister' && ((!qualification.qualificationNotComplete && qualification.hasOwnProperty('date')) || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Date completed pupillage
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
+                    field="qualifications"
+                    extension="date"
+                    :index="index"
+                    :edit="editable"
+                    type="date"
                     @changeField="changeQualificationOrMembership"
                   />
                 </dd>
