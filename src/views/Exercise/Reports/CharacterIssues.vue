@@ -257,7 +257,9 @@
                 <hr
                   class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
                 >
-                <p class="govuk-hint">Exercise - {{ ar.exercise.referenceNumber }}</p>
+                <p class="govuk-hint">
+                  Exercise - {{ ar.exercise.referenceNumber }}
+                </p>
                 <div class="govuk-grid-row">
                   <div class="govuk-grid-column-two-thirds">
                     <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
