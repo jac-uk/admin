@@ -492,6 +492,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ExerciseView',
   components: {
     EditableField,
     Select,

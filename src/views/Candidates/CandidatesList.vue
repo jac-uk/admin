@@ -53,6 +53,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
+  name: 'CandidatesView',
   components: {
     Table,
     TableCell,

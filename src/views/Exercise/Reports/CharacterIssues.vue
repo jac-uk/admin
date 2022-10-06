@@ -323,6 +323,7 @@ import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
 
 export default {
+  name: 'CharacterIssues',
   components: {
     EventRenderer,
     Select,

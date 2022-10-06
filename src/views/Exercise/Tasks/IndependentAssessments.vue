@@ -345,6 +345,7 @@ import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'IndependentAssessments',
   components: {
     Table,
     TableCell,

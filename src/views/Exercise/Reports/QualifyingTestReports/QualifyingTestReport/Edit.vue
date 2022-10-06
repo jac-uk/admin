@@ -61,6 +61,7 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
+  name: 'QualifyingTestReportEdit',
   components: {
     ErrorSummary,
     CheckboxGroup,

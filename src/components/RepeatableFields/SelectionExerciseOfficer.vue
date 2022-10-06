@@ -16,6 +16,7 @@
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 
 export default {
+  name: 'SelectionExerciseOfficer',
   components: {
     TextField,
   },
