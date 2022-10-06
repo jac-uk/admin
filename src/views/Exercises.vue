@@ -86,6 +86,12 @@
                 options: exerciseStates,
               },
               {
+                title: 'Published',
+                field: 'published',
+                type: 'checkbox',
+                options: publishStates,
+              },
+              {
                 type: 'dateRange',
                 field: 'applicationOpenDate',
                 title: 'Open date',
@@ -179,6 +185,7 @@ export default {
     return {
       selectedItems: [],
       exerciseStates: ['draft', 'ready', 'approved'],
+      publishStates: [true, false],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },

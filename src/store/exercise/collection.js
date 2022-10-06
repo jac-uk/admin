@@ -19,7 +19,8 @@ export default {
       } else {
         firestoreRef = firestore
         .collection('exercises')
-        .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
+        .where('state', '!=', 'archived')
+        .orderBy('state'); // must use 'state' as first argument to orderBy() since we have a where filter  on field 'state'
       }
       if (params) {
         if (params.orderBy) {
