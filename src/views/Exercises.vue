@@ -191,7 +191,7 @@ export default {
         { title: 'Name', sort: 'name' },
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
-        { title: 'Status', sort: 'state' },
+        { title: 'Status' },
         { title: 'Published', sort: 'published' },
         {
           title: 'Applications count',
