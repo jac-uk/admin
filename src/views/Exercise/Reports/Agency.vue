@@ -464,6 +464,8 @@
 <script>
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
+import XLSXPopulate from 'xlsx-populate';
+import { save } from 'save-file';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
@@ -574,16 +576,95 @@ export default {
     },
     exportData() {
       const title = 'Agency Report';
-      const data = this.gatherReportData();
+      if (this.activeTab === 'acro') {
+        this.downloadACRO(
+          this.report,
+          {
+            title: `${this.exercise.referenceNumber} ${title}`,
+            sheetName: title,
+            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          }
+        );
+      } else {
+        const data = this.gatherReportData();
+        downloadXLSX(
+          data,
+          {
+            title: `${this.exercise.referenceNumber} ${title}`,
+            sheetName: title,
+            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          }
+        );
+      }
+    },
+    async downloadACRO(reportData, options) {
+      const headers = [
+        { title: '*Agency Reference', ref: '' },
+        { title: '*Reason for Request', ref: '' },
+        { title: 'If Other please specify', ref: '' },
+        { title: 'Current or proposed role/profession of the subject within the agency', ref: '' },
+        { title: 'Supervised or Unsupervised access', ref: '' },
+        { title: 'Is this check for a company', ref: '' },
+        { title: 'Title', ref: 'title' },
+        { title: '*Surname or Company Name', ref: 'lastName' },
+        { title: 'Previous Surname (include maiden names and any other names changed by deed poll)', ref: '' },
+        { title: '*Forename', ref: 'firstName' },
+        { title: 'Middle Name', ref: '' },
+        { title: 'Any Other Names used:', ref: 'otherNames' },
+        { title: '*Date of birth (DD/MM/YYYY)', ref: 'dateOfBirth' },
+        { title: 'Place of Birth (Town)', ref: '' },
+        { title: 'Place of Birth (County)', ref: 'placeOfBirth' },
+        { title: 'Nationality (if more than one, please state all)', ref: '' },
+        { title: 'Gender', ref: 'gender' },
+        { title: 'Present Address', ref: 'currentAddress' },
+        { title: 'Previous Address', ref: 'previousAddresses' },
+        { title: 'Occupation', ref: '' },
+        { title: 'National Insurance Number', ref: 'nationalInsuranceNumber' },
+        { title: 'Passport Number', ref: '' },
+        { title: 'Drivers Licence Number', ref: '' },
+        { title: 'Has the applicant ever been arrested / convicted of an offence?', ref: '' },
+        { title: 'If answered yes above to if the subject has ever been arrested/convicted, please provide details of the dates and offences etc.', ref: '' },
+        { title: 'Trace/No Trace', ref: '' },
+        { title: 'Further Information Required', ref: '' },
+        { title: 'ACRO URN', ref: '' },
+      ];
+      const data = [];
+      // get headers
+      data.push(headers.map(header => header.title));
+      // get rows
+      reportData.rows.forEach((row) => {
+        data.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
 
-      downloadXLSX(
-        data,
-        {
-          title: `${this.exercise.referenceNumber} ${title}`,
-          sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-        }
-      );
+      const workbook = await XLSXPopulate.fromBlankAsync();
+      workbook.property({
+        Title: options.title,
+        Author: 'JAC',
+      });
+      const sheet = workbook.sheet(0);
+
+      /* NOTE:
+      Sheet name length should not be more than 31 and not contain special characters
+      */
+      sheet.name(options.sheetName.replace(/[^\w\s-]/gi, '').substring(0, 30));
+
+      sheet.range('A1:AB4').style({ bold: true, fill: 'DDEBF7' });
+      sheet.range('A5:Y5')
+        .merged(true)
+        .value('This information is used by ACRO when performing PNC Checks. If the field is not relevant to your Agency please leave this blank anything marked with * must be provided.')
+        .style({ bold: true, fill: 'FFF2CC', horizontalAlignment: 'center', border: true });
+      sheet.range('Z5:AB5')
+        .merged(true)
+        .value('ACRO USE ONLY')
+        .style({ fontColor: 'ff0000', bold: true, fill: 'FFC000', horizontalAlignment: 'center', border: true });
+
+      sheet.cell('A6').value(data);
+      sheet.range('A6:S6').style({ bold: true, fill: 'F4B084', horizontalAlignment: 'center', border: true });
+      sheet.range('T6:Y6').style({ bold: true, fill: 'C6E0B4', horizontalAlignment: 'center', border: true });
+      sheet.range('Z6:AB6').style({ bold: true, fill: 'FFC000', horizontalAlignment: 'center', border: true });
+
+      const blob = await workbook.outputAsync();
+      await save(blob, options.fileName);
     },
   },
 };
