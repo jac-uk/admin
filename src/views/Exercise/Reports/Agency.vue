@@ -464,7 +464,7 @@
 <script>
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
-import XLSXPopulate from 'xlsx-populate';
+import XlsxPopulate from 'xlsx-populate';
 import { save } from 'save-file';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -636,35 +636,20 @@ export default {
         data.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
-      const workbook = await XLSXPopulate.fromBlankAsync();
-      workbook.property({
-        Title: options.title,
-        Author: 'JAC',
-      });
-      const sheet = workbook.sheet(0);
-
-      /* NOTE:
-      Sheet name length should not be more than 31 and not contain special characters
-      */
-      sheet.name(options.sheetName.replace(/[^\w\s-]/gi, '').substring(0, 30));
-
-      sheet.range('A1:AB4').style({ bold: true, fill: 'DDEBF7' });
-      sheet.range('A5:Y5')
-        .merged(true)
-        .value('This information is used by ACRO when performing PNC Checks. If the field is not relevant to your Agency please leave this blank anything marked with * must be provided.')
-        .style({ bold: true, fill: 'FFF2CC', horizontalAlignment: 'center', border: true });
-      sheet.range('Z5:AB5')
-        .merged(true)
-        .value('ACRO USE ONLY')
-        .style({ fontColor: 'ff0000', bold: true, fill: 'FFC000', horizontalAlignment: 'center', border: true });
-
-      sheet.cell('A6').value(data);
-      sheet.range('A6:S6').style({ bold: true, fill: 'F4B084', horizontalAlignment: 'center', border: true });
-      sheet.range('T6:Y6').style({ bold: true, fill: 'C6E0B4', horizontalAlignment: 'center', border: true });
-      sheet.range('Z6:AB6').style({ bold: true, fill: 'FFC000', horizontalAlignment: 'center', border: true });
-
-      const blob = await workbook.outputAsync();
-      await save(blob, options.fileName);
+      // get ACRO form
+      try {
+        const res = await fetch('/acro_form.xlsx');
+        const arrayBuffer = await res.arrayBuffer();
+        XlsxPopulate.fromDataAsync(arrayBuffer)
+          .then(async (workbook) => {
+            const sheet = workbook.sheet(0);
+            sheet.cell('A6').value(data);
+            const blob = await workbook.outputAsync();
+            await save(blob, options.fileName);
+          });
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };
