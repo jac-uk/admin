@@ -20,7 +20,7 @@ export default {
         firestoreRef = firestore
         .collection('exercises')
         .where('state', '!=', 'archived')
-        .orderBy('state'); // must use 'state' as first argument to orderBy() since we have a where filter  on field 'state'
+        .orderBy('state'); // must use 'state' as first argument to orderBy() since we have a where filter on field 'state'
       }
       if (params) {
         if (params.orderBy) {
