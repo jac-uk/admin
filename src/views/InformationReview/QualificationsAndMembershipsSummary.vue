@@ -91,7 +91,7 @@
                   <InformationReviewRenderer
                     :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToTheBarDate : null"
                     field="qualifications"
-                    extension="date"
+                    extension="calledToTheBarDate"
                     :index="index"
                     :edit="editable"
                     type="date"
@@ -121,7 +121,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && ((!qualification.qualificationNotComplete && qualification.hasOwnProperty('date')) || editable)"
+                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && (qualification.hasOwnProperty('date') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -184,7 +184,7 @@
         ref="removeModal"
       >
         <ModalInner
-          @closed="closeModal"
+          @close="closeModal"
           @confirmed="removeQualification"
         />
       </Modal>
@@ -803,6 +803,7 @@ export default {
         location: null,
         date: null,
         qualificationNotComplete: null,
+        qualificationNotCompleteReason: null,
         details: null,
       },
       currentIndex: null,
@@ -888,8 +889,10 @@ export default {
     addQualification() {
       let changedObj = this.application.qualifications || [];
 
-      if (changedObj.length){
+      if (changedObj && Array.isArray(changedObj) && changedObj.length) {
         changedObj = [...changedObj, this.dataDefault];
+      } else if (changedObj && typeof changedObj === 'object' && Object.values(changedObj).length) {
+        changedObj = [...Object.values(changedObj), this.dataDefault];
       } else {
         changedObj = [this.dataDefault];
       }
