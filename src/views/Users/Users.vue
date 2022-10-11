@@ -406,7 +406,7 @@ export default {
       return this.users.map(user => user.email).includes(this.newUserEmail);
     },
     isNotJACEmail() {
-      return this.newUserEmail && !this.newUserEmail.match(/(.*@judicialappointments.gov.uk)/);
+      return this.newUserEmail && !this.newUserEmail.match(/@judicialappointments.(digital|gov.uk)$/);
     },
     isValidPassword() {
       return this.newUserPassword.length >= 6;
