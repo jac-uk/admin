@@ -19,14 +19,20 @@ export default {
       } else {
         firestoreRef = firestore
         .collection('exercises')
-        .where('state', '!=', 'archived')
-        .orderBy('state'); // must use 'state' as first argument to orderBy() since we have a where filter on field 'state'
-      }
-      if (params) {
+        .where('state', '!=', 'archived');
+
+        // must use 'state' as first argument to orderBy() since we have a where filter on field 'state'
         if (params.orderBy) {
-          firestoreRef.orderBy(params.orderBy);
+          if (Array.isArray(params.orderBy)) {
+            params.orderBy = ['state', ...params.orderBy];
+          } else {
+            params.orderBy = ['state', params.orderBy];
+          }
+        } else {
+          params.orderBy = 'state';
         }
       }
+
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
