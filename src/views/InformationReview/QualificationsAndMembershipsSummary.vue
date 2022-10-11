@@ -100,7 +100,7 @@
                 </dd>
               </div>
               <div
-                v-if="qualification.type === 'barrister' && ((qualification.qualificationNotComplete && qualification.details) || editable)"
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('qualificationNotComplete') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -121,7 +121,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && (qualification.hasOwnProperty('date') || editable)"
+                v-if="qualification.type === 'barrister' && qualification.qualificationNotComplete && (qualification.hasOwnProperty('date') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -141,7 +141,28 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && (qualification.qualificationNotComplete === true)"
+                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && (qualification.hasOwnProperty('qualificationNotComplete') || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Reason for being exempt from pupillage
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    type="selection"
+                    :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
+                    :data="application.qualifications[index].qualificationNotCompleteReason"
+                    field="qualifications"
+                    extension="qualificationNotCompleteReason"
+                    :index="index"
+                    :edit="editable"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div
+                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && qualification.qualificationNotCompleteReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -771,6 +792,7 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import { NOT_COMPLETE_PUPILLAGE_REASONS } from '@jac-uk/jac-kit/helpers/constants';
 
 import {
   hasRelevantMemberships,
@@ -798,6 +820,7 @@ export default {
   },
   data() {
     return {
+      NOT_COMPLETE_PUPILLAGE_REASONS,
       dataDefault: {
         type: null,
         location: null,
