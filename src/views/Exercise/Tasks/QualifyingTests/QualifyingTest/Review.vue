@@ -150,14 +150,14 @@
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
             class="govuk-!-padding-1"
           >
-            <strong> 
+            <strong>
               Most appropriate:
-            </strong> 
-            {{ testQuestion.options[testQuestion.mostAppropriate].answer }} 
+            </strong>
+            {{ testQuestion.options[testQuestion.mostAppropriate].answer }}
             <br>
-            <strong> 
+            <strong>
               Least appropriate:
-            </strong> 
+            </strong>
             {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
@@ -275,6 +275,7 @@ import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  name: 'QualifyingTestReview',
   components: {
     CustomHTML,
   },

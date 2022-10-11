@@ -145,6 +145,7 @@ import { ADVERT_TYPES } from '@/helpers/constants';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  name: 'SummaryView',
   components: {
     Modal,
     ChangeExerciseAdvertType,

@@ -203,6 +203,7 @@ import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  name: 'EligibilityView',
   components: {
     CustomHTML,
   },

@@ -495,6 +495,7 @@ import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  name: 'ExerciseView',
   components: {
     EditableField,
     Select,

@@ -54,7 +54,7 @@
             Approved for immediate appointment
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ totalApplicationRecords }}
+            {{ totalApplicationRecords | formatNumber }}
           </h2>
         </div>
       </div>
@@ -109,6 +109,7 @@ import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'HandoverReport',
   components: {
     Table,
     TableCell,

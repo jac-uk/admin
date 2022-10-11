@@ -43,6 +43,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'NewFromClipboard',
   components: {
     ErrorSummary,
     TextareaInput,

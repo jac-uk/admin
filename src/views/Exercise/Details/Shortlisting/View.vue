@@ -37,6 +37,7 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ShortlistingView',
   mixins: [permissionMixin],
   computed: {
     exercise() {

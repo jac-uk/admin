@@ -212,7 +212,7 @@
                 @changeField="changeField"
               />
             </dd>
-            
+
             <dd
               v-else-if="(key == 'startDate' && showDateRange && !edit)"
               class="govuk-summary-list__value"
@@ -286,6 +286,7 @@ import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'InformationReviewSectionRenderer',
   components: {
     InformationReviewRenderer,
     Modal,
