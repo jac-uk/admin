@@ -55,22 +55,22 @@
           hint="If this exercise has any posts in Wales you should tick this box. You then need to complete the Role Summary (Welsh)."
         />
 
-        <TextareaInput
+        <RichTextInput
           id="role-summary"
           v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
-          rows="2"
+          class="custom-html"
           required
         />
 
-        <TextareaInput
+        <RichTextInput
           v-if="formData.welshPosts"
           id="role-summary-welsh"
           v-model="formData.roleSummaryWelsh"
           label="Role summary (Welsh)"
           hint="Fersywn Cymraeg"
-          rows="2"
+          class="custom-html"
           required
         />
 
@@ -109,7 +109,7 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
@@ -122,7 +122,7 @@ export default {
   components: {
     ErrorSummary,
     TextField,
-    TextareaInput,
+    RichTextInput,
     DateInput,
     Select,
     BackLink,

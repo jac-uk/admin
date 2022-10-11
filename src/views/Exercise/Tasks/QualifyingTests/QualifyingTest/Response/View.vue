@@ -256,9 +256,11 @@
                     :key="docIndex"
                   >
                     <dt>{{ document.title }}</dt>
-                    <!-- eslint-disable -->
-                    <dd v-html="document.content" />
-                    <!-- eslint-enable -->
+                    <dd>
+                      <CustomHTML
+                        :value="document.content"
+                      />
+                    </dd>
                   </dl>
                 </div>
                 <div
@@ -490,6 +492,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import permissionMixin from '@/permissionMixin';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   name: 'ExerciseView',
@@ -500,6 +503,7 @@ export default {
     Modal,
     QuestionDuration,
     ActionButton,
+    CustomHTML,
   },
   mixins: [permissionMixin],
   data() {

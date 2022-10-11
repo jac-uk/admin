@@ -140,7 +140,10 @@
           Role summary
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.roleSummary }}
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummary"
+          />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -148,12 +151,10 @@
           About the role
         </dt>
         <dd class="govuk-summary-list__value">
-          <!-- eslint-disable -->
-          <div
+          <CustomHTML
             class="govuk-body"
-            v-html="exercise.aboutTheRole"
+            :value="exercise.aboutTheRole"
           />
-          <!-- eslint-enable -->
         </dd>
       </div>
     </dl>
@@ -163,9 +164,13 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   name: 'VacancyView',
+  components: {
+    CustomHTML,
+  },
   mixins: [permissionMixin],
   computed: {
     exercise() {

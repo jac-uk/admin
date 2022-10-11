@@ -49,7 +49,10 @@
           Role summary
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.roleSummary }}
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummary"
+          />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -86,7 +89,10 @@
           Role summary (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.roleSummaryWelsh }}
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummaryWelsh"
+          />
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -136,12 +142,14 @@ import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
 import { ADVERT_TYPES } from '@/helpers/constants';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   name: 'SummaryView',
   components: {
     Modal,
     ChangeExerciseAdvertType,
+    CustomHTML,
   },
   mixins: [permissionMixin],
   computed: {

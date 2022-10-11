@@ -177,11 +177,9 @@
               <strong>
                 {{ document.title }}
               </strong>
-              <!-- eslint-disable -->
-                <p
-                  v-html="document.content"
-                />
-                <!-- eslint-enable -->
+              <CustomHTML
+                :value="document.content"
+              />
               <hr>
             </div>
             <ol>
@@ -274,9 +272,13 @@
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
   name: 'QualifyingTestReview',
+  components: {
+    CustomHTML,
+  },
   mixins: [permissionMixin],
   computed: {
     ...mapState({
