@@ -464,8 +464,6 @@
 <script>
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
-import XlsxPopulate from 'xlsx-populate';
-import { save } from 'save-file';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
@@ -574,30 +572,8 @@ export default {
 
       return reportData;
     },
-    exportData() {
-      const title = 'Agency Report';
-      if (this.activeTab === 'acro') {
-        this.downloadACRO(
-          this.report,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
-        );
-      } else {
-        const data = this.gatherReportData();
-        downloadXLSX(
-          data,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
-        );
-      }
-    },
-    async downloadACRO(reportData, options) {
+    gatherACROReportData() {
+      const reportData = [];
       const headers = [
         { title: '*Agency Reference', ref: '' },
         { title: '*Reason for Request', ref: '' },
@@ -628,26 +604,27 @@ export default {
         { title: 'Further Information Required', ref: '' },
         { title: 'ACRO URN', ref: '' },
       ];
-      const data = [];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
       // get rows
-      reportData.rows.forEach((row) => {
-        data.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
-      // get ACRO form
-      try {
-        const res = await fetch('/acro_form.xlsx');
-        const arrayBuffer = await res.arrayBuffer();
-        XlsxPopulate.fromDataAsync(arrayBuffer)
-          .then(async (workbook) => {
-            const sheet = workbook.sheet(0);
-            sheet.cell('A7').value(data);
-            const blob = await workbook.outputAsync();
-            await save(blob, options.fileName);
-          });
-      } catch (error) {
-        console.error(error);
-      }
+      return reportData;
+    },
+    exportData() {
+      const title = 'Agency Report';
+      const data = this.activeTab === 'acro' ? this.gatherACROReportData() : this.gatherReportData() ;
+      downloadXLSX(
+        data,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
   },
 };
