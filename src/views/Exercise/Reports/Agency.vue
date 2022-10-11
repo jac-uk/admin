@@ -629,8 +629,6 @@ export default {
         { title: 'ACRO URN', ref: '' },
       ];
       const data = [];
-      // get headers
-      data.push(headers.map(header => header.title));
       // get rows
       reportData.rows.forEach((row) => {
         data.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
@@ -643,7 +641,7 @@ export default {
         XlsxPopulate.fromDataAsync(arrayBuffer)
           .then(async (workbook) => {
             const sheet = workbook.sheet(0);
-            sheet.cell('A6').value(data);
+            sheet.cell('A7').value(data);
             const blob = await workbook.outputAsync();
             await save(blob, options.fileName);
           });
