@@ -12,6 +12,7 @@
       />
 
       <CheckboxGroup
+        v-if="qualifyingTests.length"
         id="qualifyingTest-type"
         v-model="qualifyingTestIds"
         label="Tests in report"
@@ -24,6 +25,12 @@
           :label="qualifyingTest.title"
         />
       </CheckboxGroup>
+      <p
+        v-else
+        class="govuk-body"
+      >
+        No Completed tests
+      </p>
 
       <button class="govuk-button">
         Save and continue

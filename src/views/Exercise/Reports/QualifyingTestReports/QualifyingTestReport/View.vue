@@ -63,6 +63,7 @@
         data-key="score"
         :data="qualifyingTestReport.report"
         :columns="tableColumns"
+        local-data
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
@@ -93,6 +94,12 @@
           </TableCell>
         </template>
       </Table>
+      <p
+        v-else
+        class="govuk-body"
+      >
+        No Data - Please click refresh
+      </p>
     </div>
     <Modal
       ref="SetCutOffScoreModal"
@@ -168,12 +175,14 @@ export default {
     },
     applicationIds() {
       const ids = [];
-      this.qualifyingTestReport.rawData.forEach(data => {
-        ids.push({
-          applicationId: data.application.id,
-          score: data.score,
+      if (this.qualifyingTestReport.rawData) {
+        this.qualifyingTestReport.rawData.forEach(data => {
+          ids.push({
+            applicationId: (data.application ? data.application.id : 'error: no application id found'),
+            score: data.score,
+          });
         });
-      });
+      }
       return ids;
     },
   },
@@ -215,32 +224,36 @@ export default {
       headers.push('Solicitor');
       headers.push('Disability');
 
-      const data = this.qualifyingTestReport.rawData.map(row => {
-        const mapData = [];
-        mapData.push();
-        mapData.push(row.application.referenceNumber);
-        // row.candidate.fullName,
-        // '', // row.candidate.email,
-        this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
-          mapData.push(row.qualifyingTests[qualifyingTest.id].status);
-          mapData.push(row.qualifyingTests[qualifyingTest.id].score);
+      let data;
+
+      if (this.qualifyingTestReport.rawData) {
+        data = this.qualifyingTestReport.rawData.map(row => {
+          const mapData = [];
+          mapData.push();
+          mapData.push(row.application.referenceNumber);
+          // row.candidate.fullName,
+          // '', // row.candidate.email,
+          this.qualifyingTestReport.qualifyingTests.forEach(qualifyingTest => {
+            mapData.push(row.qualifyingTests[qualifyingTest.id].status);
+            mapData.push(row.qualifyingTests[qualifyingTest.id].score);
+          });
+          mapData.push(row.score);
+          mapData.push((100 * (row.score / this.maxScore)).toFixed(2));
+          mapData.push(row.rank);
+          if (row.diversity) {
+            mapData.push(row.diversity.female);
+            mapData.push(row.diversity.bame);
+            mapData.push(row.diversity.solicitor);
+            mapData.push(row.diversity.disability);
+          } else {
+            mapData.push('');
+            mapData.push('');
+            mapData.push('');
+            mapData.push('');
+          }
+          return mapData;
         });
-        mapData.push(row.score);
-        mapData.push((100 * (row.score / this.maxScore)).toFixed(2));
-        mapData.push(row.rank);
-        if (row.diversity) {
-          mapData.push(row.diversity.female);
-          mapData.push(row.diversity.bame);
-          mapData.push(row.diversity.solicitor);
-          mapData.push(row.diversity.disability);
-        } else {
-          mapData.push('');
-          mapData.push('');
-          mapData.push('');
-          mapData.push('');
-        }
-        return mapData;
-      });
+      }
 
       return [
         headers,
