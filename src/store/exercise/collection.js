@@ -6,16 +6,25 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ rootState, state, commit, bindFirestoreRef }, params) => {
+    bind: firestoreAction(({ rootState, state, bindFirestoreRef }, params) => {
       let firestoreRef;
-      if (state.isFavourites === null) { commit('updateFavourites', true); }
       if (state.isFavourites) {
         firestoreRef = firestore
         .collection('exercises')
         .where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid);
+      } else if (state.isArchived) {
+        firestoreRef = firestore
+        .collection('exercises')
+        .where('state', '==', 'archived');
       } else {
         firestoreRef = firestore
-        .collection('exercises');
+        .collection('exercises')
+        .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
+      }
+      if (params) {
+        if (params.orderBy) {
+          firestoreRef.orderBy(params.orderBy);
+        }
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -25,10 +34,17 @@ export default {
     }),
     showFavourites: ({ commit, dispatch }) => {
       commit('updateFavourites', true);
+      commit('updateArchived', false);
       dispatch('bind');
     },
     showAll: ({ commit, dispatch }) => {
       commit('updateFavourites', false);
+      commit('updateArchived', false);
+      dispatch('bind');
+    },
+    showArchived: ({ commit, dispatch }) => {
+      commit('updateFavourites', false);
+      commit('updateArchived', true);
       dispatch('bind');
     },
     storeItems: (context, { items }) => {
@@ -36,6 +52,9 @@ export default {
     },
   },
   mutations: {
+    updateArchived(state, isArchived) {
+      state.isArchived = isArchived;
+    },
     updateFavourites(state, isFavourites) {
       state.isFavourites = isFavourites;
     },
@@ -45,7 +64,8 @@ export default {
   },
   state: {
     records: [],
-    isFavourites: null,
+    isFavourites: false,
+    isArchived: false,
     selectedItems: [],
   },
 };

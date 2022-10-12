@@ -157,6 +157,7 @@ import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'NotificationsList',
   components: {
     Table,
     TableCell,

@@ -43,7 +43,7 @@ jobs:
           echo "VUE_APP_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
-        run: npm run build-${{ env.environment }}
+        run: npm run ${{ env.environment }}:build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

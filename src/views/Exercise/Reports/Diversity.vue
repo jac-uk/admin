@@ -65,7 +65,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ diversity.totalApplications }}
+              {{ diversity.totalApplications | formatNumber }}
             </h2>
           </div>
         </div>
@@ -429,7 +429,7 @@
               </th>
             </tr>
           </thead>
-          <tbody 
+          <tbody
             v-if="diversity[activeTab].emp"
             class="govuk-table__body"
           >
@@ -493,6 +493,7 @@ import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Diversity',
   components: {
     TabsList,
     Stat,

@@ -45,7 +45,11 @@
         multi-select
         :selection.sync="selectedItems"
         :page-size="50"
-        :search="['candidate.fullName']"
+        :custom-search="{
+          placeholder: 'Search candidate names',
+          handler: candidateSearch,
+          field: 'candidate.id',
+        }"
         @change="getTableDataCandidates"
       >
         <template #actions>
@@ -63,6 +67,7 @@
           <TableCell :title="tableColumnsCandidates[0].title">
             <RouterLink
               :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+              target="_blank"
             >
               {{ row.application.referenceNumber }}
             </RouterLink>
@@ -70,6 +75,7 @@
           <TableCell :title="tableColumnsCandidates[1].title">
             <RouterLink
               :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+              target="_blank"
             >
               {{ row.candidate.fullName }}
             </RouterLink>
@@ -104,6 +110,7 @@ import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'PanelPacks',
   components: {
     Table,
     TableCell,
@@ -279,6 +286,9 @@ export default {
         }
       });
       await this.$store.dispatch('candidateApplications/update', records);
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exerciseId });
     },
   },
 };

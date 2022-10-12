@@ -53,7 +53,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { exerciseStates } from '@/helpers/exerciseHelper';
 
 export default {
-  name: 'PanelMemberChange',
+  name: 'ChangeExerciseState',
   components: {
     Select,
     ErrorSummary,

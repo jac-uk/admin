@@ -303,7 +303,7 @@
   </div>
 </template>
 
- <script>
+<script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';

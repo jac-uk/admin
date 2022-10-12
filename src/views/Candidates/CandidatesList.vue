@@ -1,10 +1,22 @@
 <template>
   <div>
-    <h1
-      class="govuk-heading-xl govuk-!-margin-bottom-6"
-    >
-      Candidates
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1
+          class="govuk-heading-xl govuk-!-margin-bottom-6"
+        >
+          Candidates
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+        <router-link
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
+          :to="{name: 'targeted-outreach-report'}"
+        >
+          Targeted Outreach Report
+        </router-link>
+      </div>
+    </div>
     <Table
       data-key="id"
       :data="tableData"
@@ -29,7 +41,7 @@
           {{ new Date(row.created) | formatDate('long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ countApplications(row) }}
+          {{ countApplications(row) | formatNumber }}
         </TableCell>
       </template>
     </Table>
@@ -41,6 +53,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
+  name: 'CandidatesView',
   components: {
     Table,
     TableCell,

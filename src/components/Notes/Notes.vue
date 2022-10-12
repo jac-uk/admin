@@ -56,6 +56,7 @@ const STEPS = {
 };
 
 export default {
+  name: 'Notes',
   components: {
     NotesNew,
     NotesList,
