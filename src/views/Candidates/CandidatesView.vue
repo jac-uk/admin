@@ -85,6 +85,7 @@ import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CandidatesView',
   components: {
     TabsList,
     Notes,

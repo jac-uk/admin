@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, OFFENCE_CATEGORY } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -29,7 +29,7 @@ const lookup = (value) => {
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
 
-    // exercise states
+    // exercise stages
     registration: 'Registration',
     shortlisting: 'Shortlisting',
     selection: 'Selection',
@@ -61,12 +61,26 @@ const lookup = (value) => {
     'online-only': 'Yes - online resources only',
 
     // 'xxx': 'xxx',
+    archived: 'Archived',
   };
 
   lookup[ADVERT_TYPES.LISTING] = 'Listing';
   lookup[ADVERT_TYPES.BASIC] = 'Basic';
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
+
+  // character issues offence category
+  lookup[OFFENCE_CATEGORY.SINGLE_CRIMINAL_OFFENCE] = 'Single criminal offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_CRIMINAL_OFFENCES] = 'Multiple criminal offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_MOTORING_OFFENCE] = 'Single motoring offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_MOTORING_OFFENCES] = 'Multiple motoring offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_FINANCIAL_OFFENCE] = 'Single financial offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_FINANCIAL_OFFENCES] = 'Multiple financial offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_PROFESSIONAL_CONDUCT] = 'Single professional conduct';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_PROFESSIONAL_CONDUCTS] = 'Multiple professional conducts';
+  lookup[OFFENCE_CATEGORY.SINGLE_OTHER_MATTER] = 'Single other matter';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_OTHER_MATTERS] = 'Multiple other matters';
+  lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
 
   returnValue = lookup[value];
 
@@ -81,6 +95,11 @@ const lookup = (value) => {
   return returnValue;
 };
 
+const formatNumber = (value) => {
+  return typeof value === 'number' ? value.toLocaleString('en-GB') : value;
+};
+
 export {
-  lookup
+  lookup,
+  formatNumber
 };

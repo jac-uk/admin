@@ -49,7 +49,7 @@
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.totalApplications }}
+            {{ report.totalApplications | formatNumber }}
           </h2>
         </div>
       </div>
@@ -59,7 +59,7 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.rows.length }}
+            {{ report.rows.length | formatNumber }}
           </h2>
         </div>
       </div>
@@ -137,6 +137,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ReasonableAdjustments',
   mixins: [permissionMixin],
   data() {
     return {

@@ -13,7 +13,7 @@
             Sent
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsSent }}
+            {{ assessmentsSent | formatNumber }}
           </h2>
         </div>
       </div>
@@ -21,12 +21,12 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Completed</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsCompleted }}
+            {{ assessmentsCompleted | formatNumber }}
           </h2>
         </div>
       </div>
     </div>
-    <dl 
+    <dl
       v-if="hasPermissions([PERMISSIONS.assessments.permissions.canReadAssessments.value])"
       class="govuk-summary-list"
     >
@@ -254,7 +254,7 @@
       </div>
       <div v-else>
         <div
-          v-if="hasPermissions([
+          v-if="!isArchived && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.applications.permissions.canReadApplications.value,
@@ -274,20 +274,20 @@
               v-if="applicationRecordCounts.review"
               value="review"
             >
-              Review ({{ applicationRecordCounts.review }})
+              Review ({{ applicationRecordCounts.review | formatNumber }})
             </option>
             <option
               v-if="applicationRecordCounts.shortlisted"
               value="shortlisted"
             >
-              Shortlisted ({{ applicationRecordCounts.shortlisted }})
+              Shortlisted ({{ applicationRecordCounts.shortlisted | formatNumber }})
             </option>
 
             <option
               v-if="applicationRecordCounts.selected"
               value="selected"
             >
-              Selected ({{ applicationRecordCounts.selected }})
+              Selected ({{ applicationRecordCounts.selected | formatNumber }})
             </option>
           </select>
 
@@ -340,11 +340,12 @@ import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests'; 
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
+import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'IndependentAssessments',
   components: {
     Table,
     TableCell,
@@ -417,6 +418,9 @@ export default {
     },
     status() {
       return this.$route.params.status;
+    },
+    isArchived() {
+      return isArchived(this.exercise);
     },
     contactOverdue() {
       return !this.assessments.length && !isDateInFuture(this.exercise.contactIndependentAssessors);

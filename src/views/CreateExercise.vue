@@ -139,6 +139,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
+  name: 'CreateExercise',
   components: {
     ErrorSummary,
     TextField,

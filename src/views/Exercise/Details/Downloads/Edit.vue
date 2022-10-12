@@ -110,6 +110,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadFiles from '@/components/ModalViews/UploadFiles';
 
 export default {
+  name: 'DownloadsEdit',
   components: {
     BackLink,
     ErrorSummary,
