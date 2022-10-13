@@ -9,7 +9,7 @@ import {
   DEFAULT
 } from '@jac-uk/jac-kit/helpers/constants';
 
-const ADVERT_TYPES = {
+let ADVERT_TYPES = {
   LISTING: 'listing',
   BASIC: 'basic',
   FULL: 'full',
