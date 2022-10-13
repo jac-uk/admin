@@ -1,18 +1,43 @@
 <template>
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Independent Assessments Requests
+      Independent Assessments {{ typeOfEmail }}
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
         <form
           ref="formRef"
         >
-          <div class="govuk-!-margin-bottom-5">
+          <div
+            v-if="isCancel || isReset || isDelete"
+            class="govuk-!-margin-bottom-5"
+            :style="isCancel ? 'text-align: left' : ''"
+          >
+            <span class="govuk-body-m">Before proceeding, please confirm that you wish to {{ type }} the assessments of </span>
+            <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
+          </div>
+          <div
+            v-else
+            class="govuk-!-margin-bottom-5"
+          >
             <span class="govuk-body-m">Before proceeding, please confirm that you wish to send a {{ typeOfEmail }} to </span>
             <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
+
+          <div
+            v-if="isCancel"
+            style="text-align: left;"
+          >
+            <span class="govuk-body-m">Cancel reason:</span>
+            <TextField
+              id="reason"
+              v-model="reason"
+              label=""
+              required
+            />
+          </div>
+
           <button
             class="govuk-button govuk-!-margin-right-3 govuk-!-top-3"
             @click.prevent="send"
@@ -32,8 +57,13 @@
 </template>
 
 <script>
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+
 export default {
   name: 'IndependentAssessmentsRequests',
+  components: {
+    TextField,
+  },
   props: {
     type: {
       type: String,
@@ -49,47 +79,62 @@ export default {
   data() {
     return {
       processing: false,
+      reason: '',
     };
   },
   computed: {
     typeOfEmail() {
       let str = '';
 
-      if (this.type === 'allRequests' || this.type === 'request') {
+      if (this.type === 'request') {
         str += 'request';
-      } else if (this.type === 'allReminders' || this.type === 'reminder') {
+      } else if (this.type === 'reminder') {
         str += 'reminder';
       } else if (this.type === 'testRequest') {
         str += 'test request';
+      } else if (this.type === 'testReminder') {
+        str += 'test reminder';
+      } else if (this.type === 'cancel') {
+        str += 'cancel';
+      } else if (this.type === 'reset') {
+        str += 'reset';
+      } else if (this.type === 'delete') {
+        str += 'delete';
       }
 
       return str;
+    }, 
+    isCancel() {
+      return this.type === 'cancel';
     },
+    isReset() {
+      return this.type === 'reset';
+    },
+    isDelete() {
+      return this.type === 'delete';
+    },  
     numberOfCandidates() {
-      let str = '';
-
-      if (this.type === 'allRequests' || this.type === 'allReminders') {
-        str += 'all';
-      } else if (this.type === 'testRequest' || this.type === 'request' || this.type === 'reminder') {
-        str += '1';
-      }
-
-      return str;
+      return this.params.assessmentIds.length;
     },
     buttonText() {
       if (this.processing === true) {
         return 'Processing...';
       }
 
-      let str = '';
-      if (this.type === 'allRequests' || this.type === 'request') {
-        str += 'request';
+      let str = 'I confirm, please ';
+      if (this.type === 'request') {
+        str += 'send request';
+      } else if (this.type === 'reminder') {
+        str += 'send reminder';
       } else if (this.type === 'testRequest') {
-        str += 'test request';
-      } else if (this.type === 'allReminders' || this.type === 'reminder') {
-        str += 'reminder';
+        str += 'send test request';
+      } else if (this.type === 'testReminder') {
+        str += 'send test reminder';
+      } else if (['cancel', 'reset', 'delete'].includes(this.type)) {
+        return 'Ok';
       }
-      return `I confirm, please send ${str}`;
+
+      return str;
     },
   },
   methods: {
@@ -103,7 +148,11 @@ export default {
     },
     send() {
       this.processing = true;
-      this.$emit('ok', this.params);
+      if (this.isCancel) {
+        this.$emit('ok', { ...this.params, cancelReason: this.reason });
+      } else {
+        this.$emit('ok', this.params);
+      }
       this.processing = false;
       this.closeModal();
     },
