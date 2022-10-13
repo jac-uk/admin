@@ -15,6 +15,7 @@
       />
 
       <CheckboxGroup
+        v-if="qualifyingTests.length"
         id="qualifyingTest-type"
         v-model="qualifyingTestIds"
         label="Tests in report"
@@ -61,6 +62,7 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
+  name: 'QualifyingTestReportEdit',
   components: {
     ErrorSummary,
     CheckboxGroup,

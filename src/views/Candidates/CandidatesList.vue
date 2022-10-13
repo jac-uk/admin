@@ -41,7 +41,7 @@
           {{ new Date(row.created) | formatDate('long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ countApplications(row) }}
+          {{ countApplications(row) | formatNumber }}
         </TableCell>
       </template>
     </Table>
@@ -53,6 +53,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 
 export default {
+  name: 'CandidatesView',
   components: {
     Table,
     TableCell,

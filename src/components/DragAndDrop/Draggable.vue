@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: 'Draggable',
   props: {
     data: {
       type: Object,
