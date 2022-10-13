@@ -17,7 +17,7 @@
     "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production",
     "test": "vue-cli-service test",
     "test:unit": "vue-cli-service test:unit",
-    "test-ci": "vue-cli-service test:unit --ci --runInBand --silent",
+    "test-ci": "vue-cli-service test:unit --ci --runInBand --silent --forceExit",
     "lint": "vue-cli-service lint",
     "lint-ci": "vue-cli-service lint --no-fix"
   },

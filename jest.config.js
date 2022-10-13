@@ -12,6 +12,8 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
 
+  bail: true,
+
   transformIgnorePatterns: [
     '/node_modules/(?!@jac-uk)',
   ],
@@ -19,8 +21,6 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-
-  setupFiles: ['<rootDir>/tests/unit/setup.js'],
 
   setupFilesAfterEnv: ['jest-extended'],
 
