@@ -68,6 +68,7 @@ import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTe
 
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
+// import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
@@ -620,6 +621,11 @@ const router = new Router({
             {
               path: '',
               redirect: 'qualifying-tests',
+              // component: ExerciseTasksIndex,
+              // meta: {
+              //   requiresAuth: true,
+              //   title: 'Exercise Tasks',
+              // },
             },
             {
               path: 'equal-merit-tie-breakers',

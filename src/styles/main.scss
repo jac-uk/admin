@@ -6,3 +6,7 @@
 @import "print";
 
 @import "@jac-uk/jac-kit/helpers/css/global.scss";
+
+.text--error {
+  color: $govuk-error-colour;
+}

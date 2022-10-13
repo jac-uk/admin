@@ -13,75 +13,103 @@
 
 <script>
 import SideNavigation from '@/components/Navigation/SideNavigation';
-import { isProcessing } from '@/helpers/exerciseHelper';
+import { isProcessing, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
+import { lookup } from '@/filters';
 
 export default {
   components: {
     SideNavigation,
   },
-  data() {
-    const exercise = this.$store.state.exerciseDocument.record;
-    const path = `/exercise/${exercise.id}/tasks`;
-    const sideNavigation = [];
-    sideNavigation.push({
-      title: 'Qualifying Tests',
-      path: `${path}/qualifying-tests`,
-      params: {
-        nav: '/tasks/qualifying-tests', // TODO check this is needed
-      },
-    });
-    if (exercise.equalMeritSecondStageStartDate) {
-      sideNavigation.push({
-        title: 'Equal Merit Tie-breakers',
-        path: `${path}/equal-merit-tie-breakers`,
-      });
-    }
-    if (isProcessing(exercise)) {
-      if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    sideNavigation() {
+      const exercise = this.exercise;
+      const path = `/exercise/${exercise.id}/tasks`;
+      const sideNavigation = [];
+      if (exercise._useQTPlatform) {  // temporary flag to allow trial of new QT platform
+        getTaskTypes(exercise).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
+          sideNavigation.push(
+            {
+              title: lookup(taskType),
+              tag: tag,
+              path: `${path}/${taskType}`,
+            }
+          );
+        });
+      } else {
         sideNavigation.push({
-          title: 'Independent Assessments',
-          path: `${path}/independent-assessments`,
+          title: 'Qualifying Tests',
+          path: `${path}/qualifying-tests`,
+          params: {
+            nav: '/tasks/qualifying-tests', // TODO check this is needed
+          },
         });
       }
-      sideNavigation.push(
-        {
-          title: 'Character Checks',
-          path: `${path}/character-checks`,
+      if (exercise.equalMeritSecondStageStartDate) {
+        sideNavigation.push({
+          title: 'Equal Merit Tie-breakers',
+          path: `${path}/equal-merit-tie-breakers`,
+        });
+      }
+      if (isProcessing(exercise)) {
+        if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
+          sideNavigation.push({
+            title: 'Independent Assessments',
+            path: `${path}/independent-assessments`,
+          });
         }
-      );
-    }
-    if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
-      if (
-        (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
-        || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
-      ) {
         sideNavigation.push(
           {
-            title: 'Sift',
-            path: `${path}/sift`,
+            title: 'Character Checks',
+            path: `${path}/character-checks`,
           }
         );
       }
-    }
-    if (exercise.selectionDays) {
-      sideNavigation.push(
-        {
-          title: 'Selection day',
-          path: `${path}/selection`,
+      if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+        if (
+          (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+          || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+        ) {
+          sideNavigation.push(
+            {
+              title: 'Sift',
+              path: `${path}/sift`,
+            }
+          );
         }
-      );
-    }
-    if (exercise.scenarioTestDate) {
-      sideNavigation.push(
-        {
-          title: 'Scenario Responses',
-          path: `${path}/scenario`,
-        }
-      );
-    }
-    return {
-      sideNavigation: sideNavigation,
-    };
+      }
+      if (exercise.selectionDays) {
+        sideNavigation.push(
+          {
+            title: 'Selection day',
+            path: `${path}/selection`,
+          }
+        );
+      }
+      if (exercise.scenarioTestDate) {
+        sideNavigation.push(
+          {
+            title: 'Scenario Responses',
+            path: `${path}/scenario`,
+          }
+        );
+      }
+      return sideNavigation;
+    },
+  },
+  async created() {
+    const exerciseId = this.$route.params.id;
+    await this.$store.dispatch('tasks/bind', { exerciseId: exerciseId } );
   },
 };
 </script>
