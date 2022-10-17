@@ -519,21 +519,23 @@ export default {
     },
   },
   created() {
-    if (this.exercise.additionalWorkingPreferences) {
-      this.exercise.additionalWorkingPreferences.forEach((question, i) => {
-        this.groups[1].keys.push(this.exercise.additionalWorkingPreferences[i].question);
-        this.keys[this.exercise.additionalWorkingPreferences[i].question] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
-      });
-    }
+    // if report can include working prefs answers, add them under working prefs title
     if (this.exercise.jurisdictionQuestion || this.exercise.locationQuestion) {
       this.groups.splice(1, 0, { name: 'Working Preferences', keys: [] });
+      const workingPrefsIndex = this.groups.findIndex((group) => group.name === 'Working Preferences');
       if (this.exercise.jurisdictionQuestion) {
-        this.groups[1].keys.push('jurisdictionPreferences');
+        this.groups[workingPrefsIndex].keys.push('jurisdictionPreferences');
         this.keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
       }
       if (this.exercise.locationQuestion) {
-        this.groups[1].keys.push('locationPreferences');
+        this.groups[workingPrefsIndex].keys.push('locationPreferences');
         this.keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
+      }
+      if (this.exercise.additionalWorkingPreferences) {
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
+          this.keys[`additionalWorkingPreferences ${i}`] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
+        });
       }
     }
     this.getReports();
@@ -559,10 +561,8 @@ export default {
       this.selectedColumn = '';
     },
     removeColumn(event) {
-
       const index = event.target.getAttribute('data-index');
       this.columns.splice(index, 1);
-
     },
     addWhereClause(column, operator, value) {
       this.whereClauses.push(
