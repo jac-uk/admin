@@ -5,6 +5,7 @@ import store from '@/store';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 import { auth, functions } from '@/firebase';
 import * as localFilters from '@/filters';
+import VueDOMPurifyHTML from 'vue-dompurify-html';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/browser';
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV !== 'development') {
 
 Vue.config.productionTip = false;
 Vue.use( CKEditor );
+Vue.use(VueDOMPurifyHTML);
 
 // Register global filters
 Object.keys(filters)

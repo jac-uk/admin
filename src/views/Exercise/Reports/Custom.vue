@@ -252,7 +252,7 @@
                 <td
                   class="govuk-table__cell govuk-table__cell--numeric"
                 >
-                  {{ row }}
+                  {{ row | formatNumber }}
                 </td>
               </tr>
             </tbody>
@@ -315,6 +315,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CustomReport',
   components: {
     Modal,
     draggable,

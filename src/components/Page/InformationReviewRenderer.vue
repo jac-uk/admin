@@ -121,6 +121,7 @@ import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
+  name: 'InformationReviewRenderer',
   components: {
     EditableField,
   },

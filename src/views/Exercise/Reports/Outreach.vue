@@ -65,7 +65,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ report.totalApplications }}
+              {{ report.totalApplications | formatNumber }}
             </h2>
           </div>
         </div>
@@ -155,6 +155,7 @@ import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Outreach',
   components: {
     TabsList,
     Stat,

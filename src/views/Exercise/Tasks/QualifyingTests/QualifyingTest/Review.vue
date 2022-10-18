@@ -150,14 +150,14 @@
             v-if="isSituationalJudgement && testQuestion.mostAppropriate >= 0 && testQuestion.leastAppropriate >= 0"
             class="govuk-!-padding-1"
           >
-            <strong> 
+            <strong>
               Most appropriate:
-            </strong> 
-            {{ testQuestion.options[testQuestion.mostAppropriate].answer }} 
+            </strong>
+            {{ testQuestion.options[testQuestion.mostAppropriate].answer }}
             <br>
-            <strong> 
+            <strong>
               Least appropriate:
-            </strong> 
+            </strong>
             {{ testQuestion.options[testQuestion.leastAppropriate].answer }}
           </div>
           <div
@@ -177,11 +177,9 @@
               <strong>
                 {{ document.title }}
               </strong>
-              <!-- eslint-disable -->
-                <p
-                  v-html="document.content"
-                />
-                <!-- eslint-enable -->
+              <CustomHTML
+                :value="document.content"
+              />
               <hr>
             </div>
             <ol>
@@ -274,8 +272,13 @@
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
+import CustomHTML from '@/components/CustomHTML';
 
 export default {
+  name: 'QualifyingTestReview',
+  components: {
+    CustomHTML,
+  },
   mixins: [permissionMixin],
   computed: {
     ...mapState({
