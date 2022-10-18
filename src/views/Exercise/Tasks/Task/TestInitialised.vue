@@ -30,6 +30,7 @@
       <button
         type="button"
         class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+        @click="copyToClipboard(`https://qt-develop.judicialappointments.digital/${task.test.id}`)"
       >
         Copy URL to clipboard
       </button>
@@ -73,6 +74,11 @@ export default {
       });
       if (response && response.data && response.data.success) {
         this.btnNext();
+      }
+    },
+    async copyToClipboard(text) {
+      if (navigator && navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
       }
     },
   },
