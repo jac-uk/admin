@@ -28,6 +28,7 @@ const ASSESSOR_TYPES = {
   PROFESSIONAL: 'professional',
   JUDICIAL: 'judicial',
   PERSONAL: 'personal',
+};
 
 const OFFENCE_CATEGORY = {
   SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
