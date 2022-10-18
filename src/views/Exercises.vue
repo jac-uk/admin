@@ -85,13 +85,9 @@
                 title: 'Open date',
               },
             ]"
+            :search="['name']"
             multi-select
             :selection.sync="selectedItems"
-            :custom-search="{
-              placeholder: 'Search exercise names',
-              handler: exerciseSearch,
-              field: 'name',
-            }"
             @change="getTableData"
           >
             <template #actions>
@@ -158,6 +154,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Exercises',
   components: {
     Table,
     TableCell,
@@ -235,13 +232,7 @@ export default {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
     },
-    exerciseSearch(searchTerm) {
-      return new Promise(resolve => {
-        resolve([searchTerm, searchTerm.toLowerCase(), searchTerm.toUpperCase()]);
-      });
-    },
     getExerciseStatus(exercise) {
-      console.log(exercise.state);
       let status = '';
        
       if (exercise.state === 'archived') {

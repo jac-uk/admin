@@ -36,6 +36,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 
 export default {
+  name: 'NotesNew',
   components: {
     TextArea,
     ErrorSummary,

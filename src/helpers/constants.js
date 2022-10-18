@@ -16,6 +16,21 @@ const ADVERT_TYPES = {
   EXTERNAL: 'external',
 };
 
+const INDEPENDENT_ASSESSMENTS_STATUS = {
+  DRAFT: 'draft',
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+  DECLINED: 'declined',
+  DELETED: 'deleted',
+};
+
+const ASSESSOR_TYPES = {
+  PROFESSIONAL: 'professional',
+  JUDICIAL: 'judicial',
+  PERSONAL: 'personal',
+};
+
 const OFFENCE_CATEGORY = {
   SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
   MULTIPLE_CRIMINAL_OFFENCES: 'multipleCriminalOffences',
@@ -39,5 +54,7 @@ export {
   QUALIFYING_TEST_RESPONSE,
   ADVERT_TYPES,
   DEFAULT,
+  INDEPENDENT_ASSESSMENTS_STATUS,
+  ASSESSOR_TYPES,
   OFFENCE_CATEGORY
 };

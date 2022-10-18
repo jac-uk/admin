@@ -50,6 +50,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
 
 export default {
+  name: 'PanelsNew',
   components: {
     ErrorSummary,
     TextField,

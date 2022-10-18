@@ -2,7 +2,7 @@ const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
   selectionCriteriaAnswers: [],
@@ -12,6 +12,7 @@ const mockProps = {
   editable: false,
   application: mockApplication,
   exercise: mockExercise,
+  authorisedToPerformAction: true,
 };
 
 const mockStore = {
@@ -68,7 +69,7 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('changeUserDetails', () => {
       expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
-    
+
     it('dispatches formatted change', () => {
       expect(wrapper.emitted().updateApplication[0][0]).toEqual( { selectionCriteriaAnswers: { 0: { answer: true } } });
     });

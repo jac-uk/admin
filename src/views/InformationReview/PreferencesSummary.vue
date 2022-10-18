@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="!isPanelView && exercise.yesSalaryDetails"
+      v-if="!isPanelView && exercise.isSPTWOffered"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -9,11 +9,24 @@
       </h2>
       <dl class="govuk-summary-list">
         <dt class="govuk-summary-list__key widerColumn">
-          {{ exercise.yesSalaryDetails }}
+          Salaried part-time work (SPTW) - {{ exercise.yesSalaryDetails }}
+          <Banner
+            v-if="!exercise.yesSalaryDetails"
+            status="warning"
+            message="No SPTW details were provided when setting up this exercise"
+          />
         </dt>
         <dd
           class="govuk-summary-list__value"
         >
+          <InformationReviewRenderer
+            :data="application.interestedInPartTime"
+            field="interestedInPartTime"
+            :edit="editable"
+            type="selection"
+            :options="[true, false]"
+            @changeField="changePreferences"
+          />
           <InformationReviewRenderer
             :data="application.partTimeWorkingPreferencesDetails"
             field="partTimeWorkingPreferencesDetails"
@@ -157,14 +170,14 @@
       </h2>
 
       <dl class="govuk-summary-list">
-        <div 
+        <div
           v-if="exercise.welshRequirementType.some((req) => req === 'welsh-administration-questions')"
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key widerColumn">
             Applying for a Welsh post
           </dt>
-          
+
           <dd
             class="govuk-summary-list__value"
           >
@@ -260,7 +273,7 @@
                 @changeField="changePreferences"
               />
             </dd>
-            
+
             <dd
               v-if="exercise.additionalWorkingPreferences[index].questionType === 'multiple-choice'"
               class="govuk-summary-list__value"
@@ -307,11 +320,13 @@
 </template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 
 export default {
   name: 'PreferencesSummary',
   components: {
     InformationReviewRenderer,
+    Banner,
   },
   props: {
     application: {
@@ -371,7 +386,7 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = { 
+      const updatedApplication = {
         ...this.application,
         ...changedObj ,
       };

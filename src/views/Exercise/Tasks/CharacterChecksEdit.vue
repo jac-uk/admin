@@ -25,7 +25,7 @@
           :value="true"
           label="Yes"
         />
-  
+
         <RadioItem
           :value="false"
           label="No"
@@ -33,7 +33,7 @@
       </RadioGroup>
     </div>
 
-    <button 
+    <button
       v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
       class="govuk-button"
     >
@@ -49,6 +49,7 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CharacterChecksEdit',
   components: {
     ErrorSummary,
     RadioGroup,

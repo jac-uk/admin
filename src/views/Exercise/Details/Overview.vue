@@ -275,6 +275,7 @@ import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
+  name: 'Overview',
   components: {
     Timeline,
     ActionButton,

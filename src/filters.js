@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, OFFENCE_CATEGORY } from '@/helpers/constants';
+import { ADVERT_TYPES, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -68,6 +68,17 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.BASIC] = 'Basic';
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
+
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.PENDING] = 'Pending';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.COMPLETED] = 'Completed';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.CANCELLED] = 'Cancelled';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.DECLINED] = 'Declined';
+  lookup[INDEPENDENT_ASSESSMENTS_STATUS.DELETED] = 'Deleted';
+
+  lookup[ASSESSOR_TYPES.PROFESSIONAL] = 'Professional assessor';
+  lookup[ASSESSOR_TYPES.JUDICIAL] = 'Judicial assessor';
+  lookup[ASSESSOR_TYPES.PERSONAL] = 'Personal assessor';
 
   // character issues offence category
   lookup[OFFENCE_CATEGORY.SINGLE_CRIMINAL_OFFENCE] = 'Single criminal offence';
