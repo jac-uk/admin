@@ -42,7 +42,7 @@ xdescribe('@/views/Exercise/Edit/EditName', () => {
     });
 
     it('contains a <h1>', () => {
-      expect(wrapper.contains('h1')).toBe(true);
+      expect(wrapper.find('h1')).toBe(true);
     });
 
     it('contains a <form>', () => {
