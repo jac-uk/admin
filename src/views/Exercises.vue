@@ -127,10 +127,7 @@
                   {{ row.applicationCloseDate | formatDate }}
                 </RouterLink>
               </TableCell>
-              <TableCell
-                class="govuk-table__cell--numeric"
-                :title="tableColumns[4].title"
-              >
+              <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
               <TableCell
