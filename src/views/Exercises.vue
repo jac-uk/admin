@@ -80,18 +80,6 @@
             :columns="tableColumns"
             :filters="[
               {
-                title: 'State',
-                field: 'state',
-                type: 'checkbox',
-                options: exerciseStates,
-              },
-              {
-                title: 'Published',
-                field: 'published',
-                type: 'checkbox',
-                options: publishStates,
-              },
-              {
                 type: 'dateRange',
                 field: 'applicationOpenDate',
                 title: 'Open date',
@@ -147,17 +135,11 @@
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[4].title"
               >
-                {{ row.state | lookup }}
+                {{ getExerciseStatus(row) }}
               </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[5].title"
-              >
-                {{ row.published ? 'Yes' : 'No' }}
-              </TableCell>
-              <TableCell
-                class="govuk-table__cell--numeric"
-                :title="tableColumns[6].title"
               >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
@@ -185,14 +167,12 @@ export default {
     return {
       selectedItems: [],
       exerciseStates: ['draft', 'ready', 'approved'],
-      publishStates: [true, false],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
-        { title: 'Published' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -259,6 +239,22 @@ export default {
       return new Promise(resolve => {
         resolve([searchTerm, searchTerm.toLowerCase(), searchTerm.toUpperCase()]);
       });
+    },
+    getExerciseStatus(exercise) {
+      console.log(exercise.state);
+      let status = '';
+       
+      if (exercise.state === 'archived') {
+        status += 'Archived';
+      } else if (exercise.state === 'draft') {
+        status += 'Draft';
+      } else {
+        status += 'Live';
+      }
+
+      status += exercise.published ? ' (Published)' : ' (Unpublished)';
+
+      return status;
     },
   },
 };
