@@ -163,7 +163,6 @@ export default {
   data() {
     return {
       selectedItems: [],
-      exerciseStates: ['draft', 'ready', 'approved'],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
