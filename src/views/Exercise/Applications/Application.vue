@@ -99,13 +99,6 @@
                   Download Page
                 </button>
                 <button
-                  id="docDownloadButton"
-                  class="govuk-button govuk-button--secondary drop-down-button"
-                  @click="downloadAsDoc"
-                >
-                  Download As Doc
-                </button>
-                <button
                   id="clipboard-button"
                   class="govuk-button govuk-button--secondary drop-down-button"
                   @click="copyToClipboard"
@@ -296,8 +289,6 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
-import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
@@ -431,9 +422,6 @@ export default {
     },
     isPanelView() {
       return this.activeTab === 'panel';
-    },
-    generateFilename() {
-      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     isApplied() {
       if (this.application) {
@@ -570,12 +558,6 @@ export default {
       setTimeout(() => {
         document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
       },3000);
-    },
-    downloadAsDoc() {
-      const fileName = this.generateFilename;
-      const content = this.returnPrintReadyPanelPack().outerHTML;
-      const converted = htmlDocx.asBlob(content);
-      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');
