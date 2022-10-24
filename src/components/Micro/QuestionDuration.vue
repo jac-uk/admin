@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: 'QuestionDuration',
   props: {
     start: {
       type: Date,

@@ -17,6 +17,7 @@ import { isProcessing, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelpe
 import { lookup } from '@/filters';
 
 export default {
+  name: 'Tasks',
   components: {
     SideNavigation,
   },

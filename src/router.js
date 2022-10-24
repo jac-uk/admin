@@ -1314,6 +1314,7 @@ const router = new Router({
               children: [
                 {
                   path: '',
+                  name: 'qualifying-test-reports',
                   component: ExerciseReportsQualifyingTestReports,
                   props: {
                     tieBreakers: false,

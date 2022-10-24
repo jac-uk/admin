@@ -106,6 +106,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Cover',
   components: {
     Table,
     Banner,
