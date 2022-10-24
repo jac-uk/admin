@@ -371,6 +371,9 @@ function exerciseApplicationParts(data, newValues) {
   }
   if (isNonLegal(exercise)) {
     applicationParts.push('relevantQualifications');
+    if (exercise.previousJudicialExperienceApply) {
+      applicationParts.push('judicialExperience');
+    }
     if (hasRelevantMemberships(exercise)) {
       applicationParts.push('relevantMemberships');
     }
