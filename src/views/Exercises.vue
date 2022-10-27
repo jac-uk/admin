@@ -238,9 +238,6 @@ export default {
       } else {
         status += 'Live';
       }
-
-      status += exercise.published ? ' (Published)' : ' (Unpublished)';
-
       return status;
     },
   },
