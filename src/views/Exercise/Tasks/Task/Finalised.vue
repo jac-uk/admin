@@ -13,11 +13,11 @@
           type="button"
           @click="$refs['setPassMarkModal'].openModal()"
         >
-          <span v-if="task.passMark">Pass mark {{ task.passMark }}</span>
+          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark }}</span>
           <span v-else>Set pass mark</span>
         </button>
         <ActionButton
-          v-if="task.passMark"
+          v-if="task.passMark >= 0"
           class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
           type="primary"
           @click="btnComplete"
@@ -64,6 +64,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 import FullScreenButton from '@/components/Page/FullScreenButton';
@@ -94,12 +95,13 @@ export default {
       return this.$store.getters['tasks/getTask'](this.type);
     },
     exerciseDiversity() {
-      return this.$store.state.exerciseDiversity.record;
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
     },
     scores() {
       if (!this.task) return [];
       if (!this.exerciseDiversity) return [];
       if (!this.task.finalScores) return [];
+
       // group scores
       const scoreMap = {};
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
@@ -121,13 +123,14 @@ export default {
             },
           };
         }
-        console.log('scoreData.id', scoreData.id);
-        console.log('this.exerciseDiversity', this.exerciseDiversity);
         scoreMap[scoreData.score].count += 1;
-        if (this.exerciseDiversity[scoreData.id].gender === 'female') scoreMap[scoreData.score].diversity.female += 1;
-        if (this.exerciseDiversity[scoreData.id].ethnicity === 'bame') scoreMap[scoreData.score].diversity.bame += 1;
-        if (this.exerciseDiversity[scoreData.id].professionalBackground.indexOf('solicitor') >= 0) scoreMap[scoreData.score].diversity.solicitor += 1;
-        if (this.exerciseDiversity[scoreData.id].disability === 'yes') scoreMap[scoreData.score].diversity.disability += 1;
+        const ref = scoreData.ref.split('-')[1];
+        if (this.exerciseDiversity[ref]) {
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)) scoreMap[scoreData.score].diversity.female += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)) scoreMap[scoreData.score].diversity.bame += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)) scoreMap[scoreData.score].diversity.solicitor += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)) scoreMap[scoreData.score].diversity.disability += 1;
+        }
       });
 
       // add rank and cumulative diversity
@@ -175,6 +178,7 @@ export default {
     await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   methods: {
+    hasDiversityCharacteristic,
     btnNext,
     async btnComplete() {
       await functions.httpsCallable('updateTask')({

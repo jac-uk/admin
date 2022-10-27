@@ -7,6 +7,43 @@
 
 @import "@jac-uk/jac-kit/helpers/css/global.scss";
 
+
+// global styles and overrides
+.modal {
+  max-height: 90%;
+  overflow: auto;
+  text-align: left;
+}
+
+.text--inverse {
+  color: white;
+}
+
 .text--error {
   color: $govuk-error-colour;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.v-top {
+  vertical-align: top;
+}
+
+.full-screen {
+  .print-none,
+  header,
+  footer,
+  .title-bar-exercise,
+  .sub-navigation {
+    display: none;
+  }
+  .print-full-width {
+    width: 100%;
+  }
+  .govuk-width-container {
+    max-width: none;
+    padding: 20px !important;
+  }
 }

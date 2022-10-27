@@ -92,7 +92,7 @@ export default {
           return prevTask._stats.totalForEachOutcome[taskEntryStatus(this.exercise, this.type)];
         }
       } else {
-        return this.exercise._applicationRecords.applied || 0;
+        return this.exercise._applicationRecords.review || 0;
       }
       return 0;
     },

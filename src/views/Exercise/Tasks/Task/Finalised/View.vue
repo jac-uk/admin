@@ -223,6 +223,7 @@ import SetStatus from '@/components/ModalViews/SetStatus';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import { PANEL_TYPES } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 
 export default {
   components: {
@@ -285,7 +286,7 @@ export default {
       return columns;
     },
     exerciseDiversity() {
-      return this.$store.state.exerciseDiversity.record;
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
     },
     currentIndex() {
       return this.scores.findIndex(scoreData => scoreData.score == this.score);
@@ -311,18 +312,23 @@ export default {
       if (!this.exerciseDiversity) return [];
 
       return this.task.finalScores.filter(scoreData => scoreData.score == this.score).map(scoreData => {
-        return {
+        const data = {
           id: scoreData.id,
           ref: scoreData.ref,
           score: scoreData.score,
           scoreSheet: scoreData.scoreSheet,
-          diversity: {
-            female: this.exerciseDiversity[scoreData.id].gender === 'female',
-            bame: this.exerciseDiversity[scoreData.id].ethnicity === 'bame',
-            solicitor: this.exerciseDiversity[scoreData.id].professionalBackground.indexOf('solicitor') >= 0,
-            disability: this.exerciseDiversity[scoreData.id].disability === 'yes',
-          },
+          diversity: {},
         };
+        const ref = scoreData.ref.split('-')[1];
+        if (this.exerciseDiversity[ref]) {
+          data.diversity = {
+            female: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE),
+            bame: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME),
+            solicitor: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR),
+            disability: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED),
+          };
+        }
+        return data;
       }).sort((a, b) => b - a);
     },
   },
@@ -332,6 +338,7 @@ export default {
     },
   },
   methods: {
+    hasDiversityCharacteristic,
     toggleShowDetail() {
       this.showDetail = !this.showDetail;
     },
