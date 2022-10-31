@@ -41,6 +41,8 @@
         field: 'userId',
       }"
       :page-size="50"
+      :page-item-type="'number'"
+      :total="total"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -107,9 +109,12 @@ export default {
     applications() {
       return this.$store.state.applications.records;
     },
+    total() {
+      return this.$store.state.applications.total;
+    },
   },
   methods: {
-    getTableData(params) {
+    async getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
         {

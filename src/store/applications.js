@@ -1,7 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 export default {
   namespaced: true,
@@ -17,7 +17,9 @@ export default {
         firestoreRef = firestoreRef.where('characterChecks.declaration', '==', params.characterChecks);
       }
 
-      firestoreRef = await tableQuery(state.records, firestoreRef, params);
+      const res = await tableAsyncQuery(state.records, firestoreRef, params, null);
+      firestoreRef = res.queryRef;
+      commit('total', res.total);
 
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -31,10 +33,14 @@ export default {
   },
   state: {
     records: [],
+    total: 0,
   },
   mutations: {
     records(state, data) {
       state.records = data;
+    },
+    total(state, data) {
+      state.total = data;
     },
   },
   getters: {
