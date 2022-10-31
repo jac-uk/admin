@@ -59,6 +59,24 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
+            Middle name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.middleName || ''"
+              type="route"
+              field="middleName"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
             Last name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -68,6 +86,60 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Suffix
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.suffix || ''"
+              type="route"
+              field="suffix"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Maiden name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.maidenName || ''"
+              type="route"
+              field="maidenName"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Professional name 
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.professionalName || ''"
+              type="route"
+              field="professionalName"
               @changeField="changeUserDetails"
             />
           </dd>
