@@ -66,7 +66,6 @@
               :edit="editable"
               :application-id="userId"
               :data="personalDetails.middleName || ''"
-              type="route"
               field="middleName"
               @changeField="changeUserDetails"
             />
@@ -102,7 +101,6 @@
               :edit="editable"
               :application-id="userId"
               :data="personalDetails.suffix || ''"
-              type="route"
               field="suffix"
               @changeField="changeUserDetails"
             />
@@ -120,7 +118,6 @@
               :edit="editable"
               :application-id="userId"
               :data="personalDetails.maidenName || ''"
-              type="route"
               field="maidenName"
               @changeField="changeUserDetails"
             />
@@ -138,7 +135,6 @@
               :edit="editable"
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
-              type="route"
               field="professionalName"
               @changeField="changeUserDetails"
             />
