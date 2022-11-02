@@ -202,6 +202,28 @@
           </ul>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Statutory Consultation Guidance Letter
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="!showStatutoryConsultationGuidanceLetter">
+            No files uploaded
+          </span>
+          <ul class="govuk-list">
+            <li
+              v-for="file in exercise.downloads.statutoryConsultationGuidanceLetter"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+        </dd>
+      </div>
     </dl>
   </div>
 </template>
@@ -276,6 +298,18 @@ export default {
         this.exercise.downloads &&
         this.exercise.downloads.welshTranslation &&
         this.exercise.downloads.welshTranslation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showStatutoryConsultationGuidanceLetter() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.statutoryConsultationGuidanceLetter &&
+        this.exercise.downloads.statutoryConsultationGuidanceLetter.length
       ) {
         return true;
       } else {
