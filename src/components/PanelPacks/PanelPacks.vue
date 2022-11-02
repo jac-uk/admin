@@ -45,7 +45,11 @@
         multi-select
         :selection.sync="selectedItems"
         :page-size="50"
-        :search="['candidate.fullName']"
+        :custom-search="{
+          placeholder: 'Search candidate names',
+          handler: candidateSearch,
+          field: 'candidate.id',
+        }"
         @change="getTableDataCandidates"
       >
         <template #actions>
@@ -106,6 +110,7 @@ import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'PanelPacks',
   components: {
     Table,
     TableCell,
@@ -281,6 +286,9 @@ export default {
         }
       });
       await this.$store.dispatch('candidateApplications/update', records);
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exerciseId });
     },
   },
 };

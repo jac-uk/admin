@@ -77,6 +77,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'ApplicationsList',
   components: {
     Table,
     TableCell,

@@ -7,10 +7,12 @@ module.exports = {
   ],
 
   transform: {
-    '^.+\\.vue$': 'vue-jest',
+    '^.+\\.vue$': '@vue/vue2-jest',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
     '^.+\\.jsx?$': 'babel-jest',
   },
+
+  bail: true,
 
   transformIgnorePatterns: [
     '/node_modules/(?!@jac-uk)',
@@ -19,8 +21,6 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-
-  setupFiles: ['<rootDir>/tests/unit/setup.js'],
 
   setupFilesAfterEnv: ['jest-extended'],
 

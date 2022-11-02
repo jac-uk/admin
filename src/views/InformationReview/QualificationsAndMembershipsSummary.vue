@@ -298,7 +298,7 @@
               class="govuk-summary-list__row"
             >
               <dt class="govuk-summary-list__key">
-                Chartered Institue of Building
+                Chartered Institute of Building
               </dt>
               <dd class="govuk-summary-list__value">
                 <h5
@@ -664,7 +664,6 @@
             >
               <dt class="govuk-summary-list__key widerColumn">
                 {{ membership.label }}
-                <!-- {{ application.memberships[membership.label] }}  -->
               </dt>
               <dd class="govuk-summary-list__value">
                 <h5
@@ -674,9 +673,9 @@
                   Date
                 </h5>
                 <InformationReviewRenderer
-                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].date : null"
+                  :data="(application.memberships.hasOwnProperty(membership.value)) ? application.memberships[membership.value].date : null"
                   :edit="editable"
-                  :index="membership.label"
+                  :index="membership.value"
                   extension="date"
                   type="date"
                   field="memberships"
@@ -689,9 +688,9 @@
                   Number
                 </h5>
                 <InformationReviewRenderer
-                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].number : null"
+                  :data="(application.memberships.hasOwnProperty(membership.value)) ? application.memberships[membership.value].number : null"
                   :edit="editable"
-                  :index="membership.label"
+                  :index="membership.value"
                   extension="number"
                   type="text"
                   field="memberships"
@@ -704,9 +703,9 @@
                   Information
                 </h5>
                 <InformationReviewRenderer
-                  :data="(application.memberships && application.memberships.hasOwnProperty(membership.label)) ? application.memberships[membership.label].information : null"
+                  :data="application.memberships.hasOwnProperty(membership.value) ? application.memberships[membership.value].information : null"
                   :edit="editable"
-                  :index="membership.label"
+                  :index="membership.value"
                   extension="information"
                   type="text"
                   field="memberships"

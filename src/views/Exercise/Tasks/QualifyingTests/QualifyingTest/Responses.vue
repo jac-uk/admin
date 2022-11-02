@@ -66,6 +66,7 @@ import * as filters from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Responses',
   components: {
     Table,
     TableCell,

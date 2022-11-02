@@ -4,6 +4,7 @@
     data-key="notes"
     :data="notes"
     :columns="tableColumns"
+    local-data
   >
     <template #row="{row}">
       <TableCell :title="tableColumns[0].title">
@@ -44,6 +45,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'NotesList',
   components: {
     Table,
     TableCell,

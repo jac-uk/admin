@@ -379,6 +379,7 @@ import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper'
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'QualifyingTestView',
   components: {
     ActionButton,
     Select,

@@ -11,7 +11,19 @@ module.exports = {
           PACKAGE_VERSION: `"${version}"`,
         },
       }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+        Buffer: ['buffer', 'Buffer'],
+      }),
     ],
+    resolve: {
+      fallback: {
+        'crypto': false,
+        'fs': false,
+        'stream': require.resolve('stream-browserify'),
+        'buffer': require.resolve('buffer/'),
+      },
+    },
   },
   css: {
     loaderOptions: {

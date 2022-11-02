@@ -263,6 +263,7 @@ import firebase from '@firebase/app';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'PanelsView',
   components: {
     TabsList,
     ErrorSummary,

@@ -155,6 +155,7 @@ import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Outreach',
   components: {
     TabsList,
     Stat,

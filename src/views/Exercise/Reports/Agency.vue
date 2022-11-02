@@ -470,6 +470,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Agency',
   components: {
     TabsList,
   },
@@ -572,10 +573,51 @@ export default {
 
       return reportData;
     },
+    gatherACROReportData() {
+      const reportData = [];
+      const headers = [
+        { title: '*Agency Reference', ref: '' },
+        { title: '*Reason for Request', ref: '' },
+        { title: 'If Other please specify', ref: '' },
+        { title: 'Current or proposed role/profession of the subject within the agency', ref: '' },
+        { title: 'Supervised or Unsupervised access', ref: '' },
+        { title: 'Is this check for a company', ref: '' },
+        { title: 'Title', ref: 'title' },
+        { title: '*Surname or Company Name', ref: 'lastName' },
+        { title: 'Previous Surname (include maiden names and any other names changed by deed poll)', ref: '' },
+        { title: '*Forename', ref: 'firstName' },
+        { title: 'Middle Name', ref: '' },
+        { title: 'Any Other Names used:', ref: 'otherNames' },
+        { title: '*Date of birth (DD/MM/YYYY)', ref: 'dateOfBirth' },
+        { title: 'Place of Birth (Town)', ref: '' },
+        { title: 'Place of Birth (County)', ref: 'placeOfBirth' },
+        { title: 'Nationality (if more than one, please state all)', ref: '' },
+        { title: 'Gender', ref: 'gender' },
+        { title: 'Present Address', ref: 'currentAddress' },
+        { title: 'Previous Address', ref: 'previousAddresses' },
+        { title: 'Occupation', ref: '' },
+        { title: 'National Insurance Number', ref: 'nationalInsuranceNumber' },
+        { title: 'Passport Number', ref: '' },
+        { title: 'Drivers Licence Number', ref: '' },
+        { title: 'Has the applicant ever been arrested / convicted of an offence?', ref: '' },
+        { title: 'If answered yes above to if the subject has ever been arrested/convicted, please provide details of the dates and offences etc.', ref: '' },
+        { title: 'Trace/No Trace', ref: '' },
+        { title: 'Further Information Required', ref: '' },
+        { title: 'ACRO URN', ref: '' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
     exportData() {
       const title = 'Agency Report';
-      const data = this.gatherReportData();
-
+      const data = this.activeTab === 'acro' ? this.gatherACROReportData() : this.gatherReportData() ;
       downloadXLSX(
         data,
         {
