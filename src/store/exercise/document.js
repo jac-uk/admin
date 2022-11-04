@@ -188,6 +188,10 @@ export default {
     changeNoOfTestApplications({ commit }, noOfTestApplications) {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
+    update: async (context, { data, id }) => {
+      const ref = collection.doc(id);
+      await ref.set(data, { merge: true });
+    },
   },
   state: {
     record: null,

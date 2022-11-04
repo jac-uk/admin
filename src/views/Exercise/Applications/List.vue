@@ -27,6 +27,27 @@
           </div>
         </div>
       </div>
+
+      <div
+        v-if="status === 'draft'"
+        class="moj-page-header-actions__actions float-right"
+      >
+        <div class="moj-button-menu">
+          <div class="moj-button-menu__wrapper">
+            <button
+              v-if="hasPermissions([
+                PERMISSIONS.exercises.permissions.canReadExercises.value,
+                PERMISSIONS.applications.permissions.canReadApplications.value
+              ])"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="lateApplicationPopUp()"
+            >
+              Late Application
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <Table
@@ -66,21 +87,139 @@
         </TableCell>
       </template>
     </Table>
+    <Modal ref="modalLateApplication">
+      <div class="late-application">
+        <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+          Request a Late Application to a Closed Exercise
+        </div>
+        <div class="modal__content govuk-!-margin-6">
+          <div class="govuk-grid-row">
+            <div v-if="positiveCandidate === null || positiveCandidate === false">
+              <div class="govuk-inset-text">
+                Check that the user has an account on the system
+              </div>
+              <ErrorSummary
+                :errors="errors"
+              />
+              <form
+                ref="formRef"
+                @submit.prevent="submitForm"
+              >
+                <div class="govuk-form-group">
+                  <div class="form-row">
+                    <label
+                      class="govuk-label"
+                      for="late-application-name"
+                    >
+                      Candidate Name
+                    </label>
+                    <input
+                      id="late-application-name"
+                      v-model="formData.fullName"
+                      class="govuk-input"
+                      name="late-application-name"
+                      type="text"
+                    >
+                  </div>
+                  <div class="form-row">
+                    <label
+                      class="govuk-label"
+                      for="late-application-email"
+                    >
+                      Candidate Email
+                    </label>
+                    <input
+                      id="late-application-email"
+                      v-model="formData.email"
+                      class="govuk-input"
+                      name="late-application-email"
+                      type="email"
+                    >
+                  </div>
+                  <div class="form-row">
+                    <label
+                      class="govuk-label"
+                      for="late-application-reason"
+                    >
+                      Reason for allowing a late application
+                    </label>
+                    <input
+                      id="late-application-reason"
+                      v-model="formData.reason"
+                      class="govuk-input"
+                      name="late-application-reason"
+                      type="text"
+                    >
+                  </div>
+                  <div class="form-row">
+                    <label
+                      class="govuk-label"
+                      for="late-application-sl"
+                    >
+                      Senior Leadership Name
+                    </label>
+                    <select
+                      id="late-application-sl"
+                      v-model="formData.seniorLeadership"
+                      class="govuk-select"
+                      name="late-application-sl"
+                    >
+                      <option>Select a Senior Leadership Name</option>
+                      <option value="Andrew">Andrew</option>
+                      <option value="Mark" selected>Mark</option>
+                      <option value="Tom">Tom</option>
+                    </select>
+                  </div>
+                </div>
+                <button
+                  class="govuk-button govuk-!-margin-right-3"
+                  @click="submitForm"
+                >
+                  Submit
+                </button>
+                <button
+                  class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+                  @click="closeModal('modalLateApplication')"
+                >
+                  Cancel
+                </button>
+              </form>
+            </div>
+            <div v-if="positiveCandidate">
+              <p>Your request has been sent to the Leadership Team.</p>
+              <p>You will receive an answer soon.</p>
+              <p>
+                <button
+                  class="govuk-button govuk-button--secondary"
+                  @click="closeModal('modalLateApplication')"
+                >
+                  Close
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'ApplicationsList',
   components: {
+    Modal,
     Table,
     TableCell,
+    ErrorSummary,
   },
   mixins: [permissionMixin],
   props: {
@@ -89,7 +228,17 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      positiveCandidate: null,
+      formData: {},
+      errors: [],
+    };
+  },
   computed: {
+    exerciseId() {
+      return this.$route.params.id;
+    },
     tableColumns() {
       const cols = [];
       cols.push({ title: 'Reference number' });
@@ -143,6 +292,80 @@ export default {
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
     },
+    lateApplicationPopUp() {
+      this.formData.exerciseId = this.exerciseId;
+      this.openModal('modalLateApplication');
+    },
+    openModal(modalRef){
+      this.$refs[modalRef].openModal();
+    },
+    closeModal(modalRef) {
+      this.formData = {};
+      this.positiveCandidate = null;
+      this.errors = [];
+      this.$refs[modalRef].closeModal();
+    },
+    async submitForm() {
+      // this.closeModal('modalLateApplication');
+      // const candidatesSearch = await this.candidateSearch(this.formData.email);
+      await functions.httpsCallable('getUserByEmail')({ email: this.formData.email })
+        .then(
+          (result) => {
+            // console.log('then', result.data);
+            const resultsData = result.data;
+            if (resultsData.uid) {
+              // console.log('positive');
+              this.positiveCandidate = true;
+              this.processRequestLateApplication(resultsData);
+            } else {
+              // console.log('negative');
+              this.positiveCandidate = false;
+              this.errors = [{ id: 'email', message: 'The user doesn\'t exist on the system' }];
+            }
+          },
+          (error) => {
+            this.positiveCandidate = false;
+            this.errors = [{ id: 'error', message: error }];
+          }
+        );
+    },
+    async processRequestLateApplication(dataAuth) {
+      // console.log('processRequestLateApplication', this.exercise.id, this.formData, dataAuth);
+      const prepareData = {
+        lateApplicationRequests: {
+          [dataAuth.uid]: {
+            ...dataAuth,
+            ...this.formData,
+          },
+        },
+      };
+      // console.log('processRequestLateApplication prepareData', prepareData);
+      await this.$store.dispatch('exerciseDocument/update', { data: prepareData, id: this.exercise.id })
+        .then(
+          (result) => {
+            console.log('promise positive', result);
+          },
+          (error) => {
+            this.positiveCandidate = false;
+            this.errors = [{ id: 'email', message: error }];
+            console.log('promise negative', error);
+          }
+        );
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+  .modal .late-application .govuk-form-group,
+  .modal .late-application .govuk-inset-text {
+    text-align: left;
+  }
+  .late-application .modal__title {
+    color: govuk-colour("white");
+  }
+  .form-row {
+    margin-bottom: 1em;
+  }
+</style>
