@@ -100,17 +100,17 @@
                 </dd>
               </div>
               <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('qualificationNotComplete') || editable)"
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('qualificationComplete') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
-                  Has not completed pupillage
+                  Has completed pupillage
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].qualificationNotComplete"
+                    :data="application.qualifications[index].qualificationComplete"
                     field="qualifications"
-                    extension="qualificationNotComplete"
+                    extension="qualificationComplete"
                     :index="index"
                     :edit="editable"
                     :options="[true, false]"
@@ -121,7 +121,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && qualification.qualificationNotComplete && (qualification.hasOwnProperty('date') || editable)"
+                v-if="qualification.type === 'barrister' && qualification.qualificationComplete && (qualification.hasOwnProperty('date') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -141,7 +141,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && (qualification.hasOwnProperty('qualificationNotComplete') || editable)"
+                v-if="qualification.type === 'barrister' && !qualification.qualificationComplete && (qualification.hasOwnProperty('qualificationNotCompleteReason') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -162,7 +162,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && !qualification.qualificationNotComplete && qualification.qualificationNotCompleteReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
+                v-if="qualification.type === 'barrister' && !qualification.qualificationComplete && qualification.qualificationNotCompleteReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -825,7 +825,7 @@ export default {
         type: null,
         location: null,
         date: null,
-        qualificationNotComplete: null,
+        qualificationComplete: null,
         qualificationNotCompleteReason: null,
         details: null,
       },
