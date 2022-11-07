@@ -68,6 +68,7 @@
         >
           Live exercises
         </h1>
+        <Messages type="lateApplicationRequests" />
         <form
           class="exercises-table"
           @submit.prevent="checkForm"
@@ -149,12 +150,14 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
+import Messages from '@/components/Messages';
 
 export default {
   name: 'Exercises',
   components: {
     Table,
     TableCell,
+    Messages,
   },
   mixins: [permissionMixin],
   data() {

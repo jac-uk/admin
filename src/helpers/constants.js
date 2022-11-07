@@ -45,6 +45,12 @@ const OFFENCE_CATEGORY = {
   MIXED: 'mixed',
 };
 
+const MESSAGES_STATUS = {
+  NEW: 'new',
+  READ: 'read',
+  CLOSED: 'closed',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
@@ -56,7 +62,8 @@ export {
   DEFAULT,
   INDEPENDENT_ASSESSMENTS_STATUS,
   ASSESSOR_TYPES,
-  OFFENCE_CATEGORY
+  OFFENCE_CATEGORY,
+  MESSAGES_STATUS
 };
 
 // end

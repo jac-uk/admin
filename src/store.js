@@ -27,6 +27,7 @@ import stageShortlisted from '@/store/stage/shortlisted';
 import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
+import messages from '@/store/messages';
 import candidateApplications from '@/store/candidateApplications';
 import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
@@ -59,6 +60,7 @@ const store = new Vuex.Store({
     stageShortlisted,
     candidates,
     notes,
+    messages,
     candidateApplications,
     qualifyingTest,
     qualifyingTestResponses,

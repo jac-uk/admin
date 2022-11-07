@@ -212,6 +212,7 @@ import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import permissionMixin from '@/permissionMixin';
+import { MESSAGES_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'ApplicationsList',
@@ -314,11 +315,11 @@ export default {
             // console.log('then', result.data);
             const resultsData = result.data;
             if (resultsData.uid) {
-              // console.log('positive');
+              // console.log('submitForm positive');
               this.positiveCandidate = true;
               this.processRequestLateApplication(resultsData);
             } else {
-              // console.log('negative');
+              // console.log('submitForm negative');
               this.positiveCandidate = false;
               this.errors = [{ id: 'email', message: 'The user doesn\'t exist on the system' }];
             }
@@ -332,23 +333,25 @@ export default {
     async processRequestLateApplication(dataAuth) {
       // console.log('processRequestLateApplication', this.exercise.id, this.formData, dataAuth);
       const prepareData = {
+        type: 'lateApplicationRequests',
+        status: MESSAGES_STATUS.NEW,
         lateApplicationRequests: {
-          [dataAuth.uid]: {
-            ...dataAuth,
-            ...this.formData,
-          },
+          exerciseId: this.exercise.id,
+          exerciseName: this.exercise.exerciseName,
+          ...dataAuth,
+          ...this.formData,
         },
       };
       // console.log('processRequestLateApplication prepareData', prepareData);
-      await this.$store.dispatch('exerciseDocument/update', { data: prepareData, id: this.exercise.id })
+      await this.$store.dispatch('messages/save', { data: prepareData })
         .then(
           (result) => {
-            console.log('promise positive', result);
+            console.log('processRequestLateApplication promise positive', result);
           },
           (error) => {
             this.positiveCandidate = false;
             this.errors = [{ id: 'email', message: error }];
-            console.log('promise negative', error);
+            console.log('processRequestLateApplication promise negative', error);
           }
         );
     },
