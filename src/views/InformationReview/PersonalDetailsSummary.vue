@@ -59,14 +59,14 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
-            Middle name
+            Middle name(s)
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :edit="editable"
               :application-id="userId"
-              :data="personalDetails.middleName || ''"
-              field="middleName"
+              :data="personalDetails.middleNames || ''"
+              field="middleNames"
               @changeField="changeUserDetails"
             />
           </dd>
@@ -111,14 +111,14 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
-            Maiden name
+            Previous known name(s)
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :edit="editable"
               :application-id="userId"
-              :data="personalDetails.maidenName || ''"
-              field="maidenName"
+              :data="personalDetails.previousNames || ''"
+              field="previousNames"
               @changeField="changeUserDetails"
             />
           </dd>
