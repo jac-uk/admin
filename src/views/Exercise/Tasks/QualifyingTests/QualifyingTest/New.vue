@@ -49,6 +49,7 @@ import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
+  name: 'QualifyingTestNew',
   components: {
     ErrorSummary,
     RadioGroup,

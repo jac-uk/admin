@@ -161,7 +161,7 @@
         <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
           Only show records where:
         </h2>
-        
+
         <div
           v-for="(whereClause, whereClauseIndex) in whereClauses"
           :key="whereClauseIndex"
@@ -314,6 +314,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CustomReport',
   components: {
     Modal,
     draggable,

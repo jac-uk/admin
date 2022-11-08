@@ -302,6 +302,7 @@
               id="yes-salary-details"
               v-model="formData.yesSalaryDetails"
               label="Detail of salaried part-time working (SPTW)"
+              :required="formData.isSPTWOffered"
             />
           </RadioItem>
           <RadioItem
@@ -379,12 +380,12 @@
           />
         </RadioGroup>
 
-        <TextareaInput
+        <RichTextInput
           id="role-summary"
           v-model="formData.roleSummary"
           label="Role summary"
           hint="Short summary of the role for the vacancies listing page."
-          rows="2"
+          class="custom-html"
           required
         />
 
@@ -393,6 +394,7 @@
           v-model="formData.aboutTheRole"
           label="About the role"
           hint="Add information about this role for the information page."
+          class="custom-html"
           required
         />
 

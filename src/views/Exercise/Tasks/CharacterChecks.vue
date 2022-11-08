@@ -114,6 +114,7 @@
         </ActionButton>
 
         <Table
+          key="notrequested"
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
@@ -194,6 +195,7 @@
         </ActionButton>
 
         <Table
+          key="requested"
           data-key="id"
           :data="applicationRecordsCharacterChecksRequested"
           :columns="tableColumnsCharacterChecksRequested"
@@ -253,6 +255,7 @@
         v-if="activeTab == 'completed'"
       >
         <Table
+          key="completed"
           data-key="id"
           :data="applicationRecordsCharacterChecksCompleted"
           :columns="tableColumns"

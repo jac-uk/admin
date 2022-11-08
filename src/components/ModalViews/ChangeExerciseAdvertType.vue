@@ -54,7 +54,7 @@ import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
-  name: 'PanelMemberChange',
+  name: 'ChangeExerciseAdvertType',
   components: {
     Select,
     ErrorSummary,

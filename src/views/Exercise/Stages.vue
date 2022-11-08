@@ -16,6 +16,7 @@ import SideNavigation from '@/components/Navigation/SideNavigation';
 import { formatNumber } from '@/filters';
 
 export default {
+  name: 'Stages',
   components: {
     SideNavigation,
   },

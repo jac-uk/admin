@@ -39,6 +39,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 
 export default {
+  name: 'InvitationsEdit',
   components: {
     ErrorSummary,
     TextareaInput,

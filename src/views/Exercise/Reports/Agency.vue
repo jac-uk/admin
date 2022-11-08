@@ -470,6 +470,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Agency',
   components: {
     TabsList,
   },
