@@ -6,10 +6,10 @@
       </div>
       <div class="modal__content govuk-!-margin-6">
         <div class="govuk-grid-row">
+          <ErrorSummary
+            :errors="errors"
+          />
           <div v-if="state === 'start'">
-            <ErrorSummary
-              :errors="errors"
-            />
             <p>
               You received a request to approve a late application for the candidate:
             </p>
@@ -43,6 +43,17 @@
           <div v-if="state === 'approve' ">
             <p>Your approved late application is being processed:</p>
             <p class="govuk-!-font-weight-bold" v-html="userDetails()" />
+          </div>
+          <div v-if="state === 'reject' ">
+            <div class="govuk-heading-m">
+              Reject a late application
+            </div>
+            <p class="" v-html="userDetails()" />
+          </div>
+          <div v-if="state === 'rejected' ">
+            <p>You rejected a late application:</p>
+            <p class="govuk-!-font-weight-bold" v-html="userDetails()" />
+            <p>{{ messageToShow() && messageToShow().reason }}</p>
           </div>
           <p>
             <button
@@ -151,6 +162,6 @@ export default {
 
 <style>
   .late-application .modal__title {
-    color: govuk-colour("white");
+    color: #ffffff;
   }
 </style>
