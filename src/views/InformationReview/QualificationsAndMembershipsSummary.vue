@@ -79,7 +79,7 @@
 
             <template>
               <div
-                v-if="qualification.type === 'barrister' && (qualification.calledToTheBarDate || editable)"
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt
@@ -89,9 +89,9 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToTheBarDate : null"
+                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
                     field="qualifications"
-                    extension="calledToTheBarDate"
+                    extension="calledToBarDate"
                     :index="index"
                     :edit="editable"
                     type="date"
