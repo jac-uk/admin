@@ -15,6 +15,7 @@
       />
 
       <CheckboxGroup
+        v-if="qualifyingTests.length"
         id="qualifyingTest-type"
         v-model="qualifyingTestIds"
         label="Tests in report"
