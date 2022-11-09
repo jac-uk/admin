@@ -8,13 +8,24 @@
       </div>
 
       <div
-        v-if="status === 'applied'"
+        v-if="status === 'draft' || status === 'applied'"
         class="moj-page-header-actions__actions float-right"
       >
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
-              v-if="hasPermissions([
+              v-if="status === 'draft' && hasPermissions([
+                PERMISSIONS.exercises.permissions.canReadExercises.value,
+                PERMISSIONS.applications.permissions.canReadApplications.value
+              ])"
+              class="govuk-button govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="sendApplicationReminders()"
+            >
+              Send reminders
+            </button>
+            <button
+              v-if="status === 'applied' && hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
@@ -127,6 +138,9 @@ export default {
         reportData.push(Object.values(row).map(cell => cell));
       });
       return reportData;
+    },
+    async sendApplicationReminders() {
+      await functions.httpsCallable('sendApplicationReminders')({ exerciseId: this.exercise.id });
     },
     async exportContacts() {
       const title = 'Contacts';
