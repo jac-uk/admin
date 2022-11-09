@@ -65,7 +65,7 @@
       <Applications :candidate-id="candidateId" />
     </div>
     <div
-      v-if="activeTab === 'actions' && authorisedUser"
+      v-if="activeTab === 'actions'"
     >
       <Actions :candidate-id="getUserId" />
     </div>
@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Notes from '@/components/Notes/Notes';
 import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
@@ -81,10 +80,10 @@ import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSum
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
 import Actions from '@/views/Candidates/Actions';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'CandidatesView',
   components: {
     TabsList,
     Notes,
@@ -97,7 +96,6 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      authorisedToPerformAction: false,
       editMode: false,
       activeTab: 'details',
       candidateId: '',
@@ -128,9 +126,6 @@ export default {
         });
       return tabs;
     },
-    authorisedUser(){
-      return this.authorisedToPerformAction;
-    },
     candidateRecord() {
       return this.$store.state.candidates.record;
     },
@@ -160,8 +155,6 @@ export default {
     this.candidateId = this.getUserId;
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
-    const email = firebase.auth().currentUser.email;
-    this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   destroyed() {
     this.$store.dispatch('candidates/unbindDoc');

@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  name: 'Droppable',
   props: {
     id: {
       type: String,

@@ -35,9 +35,14 @@ const formatDate = (date, type) => {
   }
 
   const month = date.toLocaleString('en-GB', { month: 'long' });
+  const hour = date.toLocaleString('en-GB', { hour: 'numeric', hour12: true }).toLowerCase();
 
   if (type && type === 'month') {
     return `${month} ${date.getFullYear()}`;
+  }
+
+  if (type && type === 'hour') {
+    return `${hour} on ${date.getDate()} ${month} ${date.getFullYear()}`;
   }
 
   return `${date.getDate()} ${month} ${date.getFullYear()}`;

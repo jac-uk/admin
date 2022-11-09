@@ -110,6 +110,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import UploadFiles from '@/components/ModalViews/UploadFiles';
 
 export default {
+  name: 'DownloadsEdit',
   components: {
     BackLink,
     ErrorSummary,
@@ -129,6 +130,7 @@ export default {
         independentAssessors: [],
         candidateAssessementForms: [],
         welshTranslation: [],
+        statutoryConsultationGuidanceLetter: [],
         otherDownloads: [],
       },
     };
@@ -216,6 +218,13 @@ export default {
         title: 'Welsh Translation',
         id: 'welshTranslation',
         name: 'welsh-translation',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Statutory Consultation Guidance Letter',
+        id: 'statutoryConsultationGuidanceLetter',
+        name: 'statutory-consultation-guidance-letter',
         mandatory: false,
       });
 

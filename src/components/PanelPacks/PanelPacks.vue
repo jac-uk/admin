@@ -110,6 +110,7 @@ import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'PanelPacks',
   components: {
     Table,
     TableCell,

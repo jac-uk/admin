@@ -200,6 +200,7 @@ import SetStatus from '@/components/ModalViews/SetStatus';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
+  name: 'ViewScore',
   components: {
     Table,
     TableCell,

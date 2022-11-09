@@ -33,12 +33,9 @@
             </h1>
           </div>
 
-          <div
-            v-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
-            class="govuk-grid-column-one-half text-right print-none"
-          >
+          <div class="govuk-grid-column-one-half text-right print-none">
             <span
-              v-if="activeTab == 'full'"
+              v-if="activeTab == 'full' && hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
             >
               <span
                 class="govuk-!-margin-left-4"
@@ -97,13 +94,6 @@
                   @click="downloadPage"
                 >
                   Download Page
-                </button>
-                <button
-                  id="docDownloadButton"
-                  class="govuk-button govuk-button--secondary drop-down-button"
-                  @click="downloadAsDoc"
-                >
-                  Download As Doc
                 </button>
                 <button
                   id="clipboard-button"
@@ -206,11 +196,11 @@
             <PersonalDetailsSummary
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
-              :editable="editMode"
+              :editable="editable"
               @update="changePersonalDetails"
             />
             <CharacterInformationSummary
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :character-information="correctCharacterInformation"
               :version="applicationVersion"
               @updateApplication="changeApplication"
@@ -218,26 +208,26 @@
             <EqualityAndDiversityInformationSummary
               :application="application"
               :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               @updateApplication="changeApplication"
             />
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               @updateApplication="changeApplication"
             />
             <ExperienceSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
@@ -245,14 +235,14 @@
               :application="application"
               :application-id="applicationId"
               :exercise="exercise"
-              :editable="editMode"
+              :editable="editable"
               :is-panel-view="isPanelView"
             />
             <AssessmentsSummary
               :application="application"
               :exercise="exercise"
-              :editable="editMode"
-              :authorised-to-perform-action="authorisedToPerformAction"
+              :editable="editable"
+              :authorised-to-perform-action="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
@@ -296,8 +286,6 @@
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import htmlDocx from 'html-docx-js/dist/html-docx'; //has to be imported from dist folder
-import { saveAs } from 'file-saver';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
@@ -313,7 +301,6 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import {
   isLegal,
@@ -324,6 +311,7 @@ import {
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Application',
   components: {
     TabsList,
     AgencyReport,
@@ -346,7 +334,6 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      authorisedToPerformAction: false,
       editMode: false,
       activeTab: 'full',
       dropDownExpanded: false,
@@ -389,7 +376,7 @@ export default {
       return tabs;
     },
     editable() {
-      return this.editMode && this.authorisedToPerformAction;
+      return this.editMode && this.hasPermissions([this.PERMISSIONS.applications.permissions.canUpdateApplications.value]);
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -430,9 +417,6 @@ export default {
     },
     isPanelView() {
       return this.activeTab === 'panel';
-    },
-    generateFilename() {
-      return this.applicationReferenceNumber ? this.applicationReferenceNumber : 'judicial-appointments-application';
     },
     isApplied() {
       if (this.application) {
@@ -493,7 +477,6 @@ export default {
   },
   methods: {
     async pageLoad() {
-      this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {
         this.activeTab = this.$route.params.tab;
       }
@@ -569,12 +552,6 @@ export default {
       setTimeout(() => {
         document.querySelector('#clipboard-button').innerText = 'Copy to clipboard';
       },3000);
-    },
-    downloadAsDoc() {
-      const fileName = this.generateFilename;
-      const content = this.returnPrintReadyPanelPack().outerHTML;
-      const converted = htmlDocx.asBlob(content);
-      saveAs(converted, `${fileName}.docx`);
     },
     unlock() {
       this.$store.dispatch('application/unlock');

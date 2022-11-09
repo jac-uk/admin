@@ -429,7 +429,7 @@
               </th>
             </tr>
           </thead>
-          <tbody 
+          <tbody
             v-if="diversity[activeTab].emp"
             class="govuk-table__body"
           >
@@ -493,6 +493,7 @@ import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Diversity',
   components: {
     TabsList,
     Stat,

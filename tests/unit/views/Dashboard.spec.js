@@ -46,7 +46,7 @@ xdescribe('views/Exercises', () => {
     });
 
     it('contains a <h1> element', () => {
-      expect(wrapper.contains('h1')).toBe(true);
+      expect(wrapper.find('h1')).toBe(true);
     });
   });
 
