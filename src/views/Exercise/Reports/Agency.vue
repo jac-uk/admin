@@ -615,9 +615,45 @@ export default {
 
       return reportData;
     },
+    gatherHMRCReportData() {
+      const reportData = [];
+      const headers = [
+        { title: 'Our Ref', ref: '' },
+        { title: 'NI NO', ref: 'nationalInsuranceNumber' },
+        { title: 'Surname', ref: 'lastName' },
+        { title: 'Forename(s)', ref: 'firstName' },
+        { title: 'D.O.B', ref: 'dateOfBirth' },
+        { title: 'VAT Reg', ref: 'hmrcVATNumbers' },
+        { title: 'Issues declared by candidate', ref: '' },
+        { title: 'Outstanding Income Tax Returns', ref: '' },
+        { title: 'Income Tax Debt', ref: '' },
+        { title: 'Ongoing Income Tax Enquiries', ref: '' },
+        { title: 'Outstanding VAT Debt', ref: '' },
+        { title: 'Ongoing VAT Enquiry', ref: '' },
+        { title: 'CENTAUR Information', ref: '' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
     exportData() {
       const title = 'Agency Report';
-      const data = this.activeTab === 'acro' ? this.gatherACROReportData() : this.gatherReportData() ;
+      let data = null;
+
+      if (this.activeTab === 'acro') {
+        data = this.gatherACROReportData();
+      } else if (this.activeTab === 'hmrc') {
+        data = this.gatherHMRCReportData();
+      } else {
+        data = this.gatherReportData();
+      }
+
       downloadXLSX(
         data,
         {
