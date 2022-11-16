@@ -370,6 +370,10 @@ function exerciseApplicationParts(data, newValues) {
     applicationParts.push('reasonableLengthOfService');
   }
   if (isNonLegal(exercise)) {
+    applicationParts.push('relevantQualifications');
+    if (exercise.previousJudicialExperienceApply) {
+      applicationParts.push('judicialExperience');
+    }
     if (hasRelevantMemberships(exercise)) {
       applicationParts.push('relevantMemberships');
     }
