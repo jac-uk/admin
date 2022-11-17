@@ -148,6 +148,11 @@ export default {
     actionReject() {
       this.state = 'reject';
       console.log('actionReject', this.state);
+      this.actionsToReject();
+    },
+    actionsToReject() {
+      // actiosn when rejecting the late application
+      // create a new message for the user?
     },
     userDetails() {
       const userDetails = this.messageToShow();
