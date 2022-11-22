@@ -132,6 +132,15 @@
         @close="$refs['modalChangeExerciseAdvertType'].closeModal()"
       />
     </Modal>
+    <ListingPreview
+      :exercise="exercise"
+    />
+    <div
+      class="govuk-!-margin-top-4"
+    />
+    <DetailPreview
+      :exercise="exercise"
+    />
   </div>
 </template>
 
@@ -143,6 +152,8 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
 import { ADVERT_TYPES } from '@/helpers/constants';
 import CustomHTML from '@/components/CustomHTML';
+import ListingPreview from '@/components/Previews/ListingPreview.vue';
+import DetailPreview from '@/components/Previews/DetailPreview.vue';
 
 export default {
   name: 'SummaryView',
@@ -150,6 +161,8 @@ export default {
     Modal,
     ChangeExerciseAdvertType,
     CustomHTML,
+    ListingPreview,
+    DetailPreview,
   },
   mixins: [permissionMixin],
   computed: {
@@ -166,13 +179,17 @@ export default {
       return this.exercise.published;
     },
     canPublish() {
-      return this.exercise.progress && this.exercise.progress.vacancySummary;
+      return this.exercise.progress && this.exercise.progress.exerciseSummary;
     },
     advertType() {
       return this.exercise.advertType ? this.exercise.advertType : ADVERT_TYPES.FULL;
     },
   },
   methods: {
+    isAdvertTypeListing(value) {
+      const returnValue = value && value === ADVERT_TYPES.LISTING;
+      return returnValue;
+    },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {
