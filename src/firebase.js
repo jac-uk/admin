@@ -37,5 +37,5 @@ if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
   firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
 }
 
-export { firestore, auth, functions, Timestamp };
+export { firestore, auth, functions, storage, Timestamp };
 export default firebase;
