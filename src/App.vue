@@ -225,13 +225,9 @@ export default {
     },
   },
   async created() {
-    console.log('created', this.isSignedIn);
     if (this.isSignedIn) {
-      console.log('is signed in');
       await this.$store.dispatch('services/bind');
-      console.log('bound');
       const email = auth.currentUser.email;
-      console.log('email', email);
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
   },
