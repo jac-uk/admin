@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
+import 'firebase/storage';
 // import 'firebase/database';
 import 'firebase/app-check';
 
@@ -19,6 +20,7 @@ const config = {
 const functions = firebase.initializeApp(config).functions('europe-west2');
 const firestore = firebase.firestore();
 const auth = firebase.auth();
+const storage = firebase.storage();
 // const database = firebase.database();
 const Timestamp = firebase.firestore.Timestamp;
 
@@ -27,6 +29,7 @@ if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULAT
   firestore.useEmulator('localhost', 8080);
   functions.useEmulator('localhost', 5001);
   auth.useEmulator('http://localhost:9099');
+  storage.useEmulator('localhost', 9199);
   // database.useEmulator('localhost', 9000);
 }
 // App check
