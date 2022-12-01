@@ -3,7 +3,7 @@
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
-      Candidate: {{ myFullName }}
+      Candidate: {{ myFullName }} {{ isHandledSensitively ? '*' : '' }}
     </h1>
     <TabsList
       :tabs="tabs"
@@ -13,20 +13,29 @@
       v-if="hasPermissions([PERMISSIONS.candidates.permissions.canUpdateCandidates.value])"
       class="float-right govuk-!-margin-left-4"
     >
+      <template v-if="activeTab === 'details'">
+        <button
+          v-if="editMode"
+          class="govuk-button govuk-button btn-unlock"
+          @click="toggleEdit"
+        >
+          Done
+        </button>
+        <button
+          v-else
+          class="govuk-button govuk-button--secondary btn-mark-as-applied"
+          @click="toggleEdit"
+        >
+          Edit
+        </button>
+      </template>
       <button
-        v-if="editMode"
-        class="govuk-button govuk-button btn-unlock"
-        @click="toggleEdit"
-      >
-        Done
-      </button>
-      <button
-        v-else
-        class="govuk-button govuk-button--secondary btn-mark-as-applied"
-        @click="toggleEdit"
-      >
-        Edit
-      </button>
+          v-if="activeTab === 'notes' && candidateRecord"
+          class="govuk-button govuk-button--secondary"
+          @click="toggleHandledSensitively"
+        >
+        {{ candidateRecord.isHandledSensitively ? 'Un-Flag Candidate' : 'Flag Candidate' }}
+        </button>
     </span>
 
     <div
@@ -147,6 +156,9 @@ export default {
     myFullName() {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecord.fullName;
     },
+    isHandledSensitively() {
+      return this.candidateRecord && this.candidateRecord.isHandledSensitively;
+    },
     getUserId() {
       return this.$route.params.id || '';
     },
@@ -176,6 +188,11 @@ export default {
     },
     toggleEdit(){
       this.editMode = !this.editMode;
+    },
+    toggleHandledSensitively() {
+      this.$store.dispatch('candidates/save', {
+        isHandledSensitively: !this.isHandledSensitively,
+      });
     },
   },
 };

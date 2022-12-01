@@ -230,7 +230,7 @@ export default {
     },
     getExerciseStatus(exercise) {
       let status = '';
-       
+
       if (exercise.state === 'archived') {
         status += 'Archived';
       } else if (exercise.state === 'draft') {

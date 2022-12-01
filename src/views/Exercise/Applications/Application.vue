@@ -29,7 +29,7 @@
           <div class="govuk-grid-column-one-half">
             <span class="govuk-caption-l">Application</span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
-              {{ applicationReferenceNumber }}
+              {{ applicationReferenceNumber }} {{ candidateRecord && candidateRecord.isHandledSensitively ? '*' : '' }}
             </h1>
           </div>
 
@@ -381,6 +381,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    candidateRecord() {
+      return this.$store.state.candidates.record;
+    },
     isLegal() {
       return isLegal(this.exercise);
     },
@@ -462,6 +465,9 @@ export default {
       }
       return lastName;
     },
+    candidateId() {
+      return this.application ? this.application.userId : null;
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -474,6 +480,7 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('application/unbind');
+    this.$store.dispatch('candidates/unbindDoc');
   },
   methods: {
     async pageLoad() {
@@ -490,6 +497,9 @@ export default {
             name: 'exercise-applications-application',
             params: { applicationId: this.applicationId, status: this.application.status },
           });
+        }
+        if (this.candidateId) {
+          await this.$store.dispatch('candidates/bindDoc', this.candidateId);
         }
       }
     },
