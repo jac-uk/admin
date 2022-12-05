@@ -100,7 +100,7 @@
                 </dd>
               </div>
               <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('qualificationComplete') || editable)"
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -108,9 +108,9 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].qualificationComplete"
+                    :data="application.qualifications[index].completedPupillage"
                     field="qualifications"
-                    extension="qualificationComplete"
+                    extension="completedPupillage"
                     :index="index"
                     :edit="editable"
                     :options="[true, false]"
@@ -121,7 +121,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && qualification.qualificationComplete && (qualification.hasOwnProperty('date') || editable)"
+                v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -141,7 +141,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && !qualification.qualificationComplete && (qualification.hasOwnProperty('qualificationNotCompleteReason') || editable)"
+                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -151,9 +151,9 @@
                   <InformationReviewRenderer
                     type="selection"
                     :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
-                    :data="application.qualifications[index].qualificationNotCompleteReason"
+                    :data="application.qualifications[index].notCompletePupillageReason"
                     field="qualifications"
-                    extension="qualificationNotCompleteReason"
+                    extension="notCompletePupillageReason"
                     :index="index"
                     :edit="editable"
                     @changeField="changeQualificationOrMembership"
@@ -162,7 +162,7 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && !qualification.qualificationComplete && qualification.qualificationNotCompleteReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
+                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -824,8 +824,8 @@ export default {
         type: null,
         location: null,
         date: null,
-        qualificationComplete: null,
-        qualificationNotCompleteReason: null,
+        completedPupillage: null,
+        notCompletePupillageReason: null,
         details: null,
       },
       currentIndex: null,
