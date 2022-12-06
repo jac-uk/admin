@@ -1,4 +1,3 @@
-import firebase from '@firebase/app';
 import { auth } from '@/firebase';
 import * as authUsers from '@/helpers/authUsers';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
