@@ -1,4 +1,5 @@
 import firebase from '@firebase/app';
+import { auth } from '@/firebase';
 import * as authUsers from '@/helpers/authUsers';
 import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
 import { mockScenarioResponses, mockScenarioQualifyingTest, mockScenarioQualifyingTestResponse } from '../../storeMocks';
@@ -8,7 +9,20 @@ const mockContext = {
 };
 
 jest.spyOn(authUsers,'authorisedToPerformAction').mockImplementation((email) => {
-  return email === 'test@test.com';
+  return email === 'authorised@test.com';
+});
+
+jest.mock('@/firebase', () => {
+  return {
+    auth: {
+      currentUser: {
+        email: 'authorised@test.com',
+      },
+    },
+    firestore: {
+      collection: jest.fn(),
+    },
+  };
 });
 
 describe('store/qualifyingTestResponses', () => {
@@ -55,11 +69,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is not authorised to reset candidate test', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'user@test.com',
-            },
-          }));
+          auth.currentUser.email = 'not.authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
@@ -75,11 +85,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is authorised to reset and field isOutOfTime doesn`t exist', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'test@test.com',
-            },
-          }));
+          auth.currentUser.email = 'authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
@@ -100,11 +106,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('isOutOfTime field is updated if exists and equals to true', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'test@test.com',
-            },
-          }));
+          auth.currentUser.email = 'authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
@@ -126,11 +128,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('isOutOfTime field is not updated if exists and equals to false', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'test@test.com',
-            },
-          }));
+          auth.currentUser.email = 'authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
@@ -159,11 +157,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is not authorised to mark candidate test as completed', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'user@test.com',
-            },
-          }));
+          auth.currentUser.email = 'not.authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
@@ -175,11 +169,7 @@ describe('store/qualifyingTestResponses', () => {
         });
 
         it('user is authorised to mark candidate test as completed', async () => {
-          jest.spyOn(firebase,'auth').mockImplementation(() => ({
-            currentUser: {
-              email: 'test@test.com',
-            },
-          }));
+          auth.currentUser.email = 'authorised@test.com';
           mockContext.state = {
             record: {
               id: '1',
