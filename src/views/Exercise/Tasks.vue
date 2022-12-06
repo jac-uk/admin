@@ -80,6 +80,12 @@ export default {
         }
       );
     }
+    sideNavigation.push(
+      {
+        title: 'Feedback',
+        path: `${path}/feedback`,
+      }
+    );
     return {
       sideNavigation: sideNavigation,
     };
