@@ -53,7 +53,7 @@ const mockProps = {
   activeTab: 'panel',
 };
 
-describe('@/views/Exercise/Applications/Application', () => {
+xdescribe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
     beforeAll(() => {
