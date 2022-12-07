@@ -30,12 +30,12 @@
         </button>
       </template>
       <button
-          v-if="activeTab === 'notes' && candidateRecord"
-          class="govuk-button govuk-button--secondary"
-          @click="toggleHandledSensitively"
-        >
+        v-if="activeTab === 'notes' && candidateRecord"
+        class="govuk-button govuk-button--secondary"
+        @click="toggleHandledSensitively"
+      >
         {{ candidateRecord.isHandledSensitively ? 'Un-Flag Candidate' : 'Flag Candidate' }}
-        </button>
+      </button>
     </span>
 
     <div
