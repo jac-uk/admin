@@ -188,6 +188,11 @@ export default {
     changeNoOfTestApplications({ commit }, noOfTestApplications) {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
+    delete: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      await ref.delete();
+    },
   },
   state: {
     record: null,

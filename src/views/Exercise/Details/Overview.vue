@@ -210,12 +210,30 @@
           @confirmed="archive"
         />
       </Modal>
+      <Modal
+        ref="deleteModal"
+      >
+        <ModalInner
+          @close="closeDeleteModal"
+          @confirmed="remove"
+          title="Delete Exercise"
+          message="Are you sure you want to delete this exercise?"
+        />
+      </Modal>
       <button
         v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
+        :class="`govuk-button govuk-!-margin-right-3 ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="openArchiveModal"
       >
         {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
+      </button>
+      <button
+        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value])"
+        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
+        @click="openDeleteModal"
+        :disabled="!isDraft"
+      >
+        Delete exercise
       </button>
       <div v-if="!isProduction">
         <button
@@ -447,6 +465,12 @@ export default {
       }
       this.$refs.archiveModal.closeModal();
     },
+    remove() {
+      // Redirect THEN delete so not breaking any references in the component
+      this.$router.push({ name: 'exercises' }).then(() => {
+        this.$store.dispatch('exerciseDocument/delete');
+      });
+    },
     unlock() {
       this.$store.dispatch('exerciseDocument/unlock');
     },
@@ -512,6 +536,12 @@ export default {
     },
     closeArchiveModal() {
       this.$refs.archiveModal.closeModal();
+    },
+    openDeleteModal() {
+      this.$refs.deleteModal.openModal();
+    },
+    closeDeleteModal() {
+      this.$refs.deleteModal.closeModal();
     },
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
