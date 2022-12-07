@@ -53,7 +53,7 @@ const mockProps = {
   activeTab: 'panel',
 };
 
-xdescribe('@/views/Exercise/Applications/Application', () => {
+describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
     beforeAll(() => {
@@ -75,6 +75,9 @@ xdescribe('@/views/Exercise/Applications/Application', () => {
               },
               exerciseDocument: {
                 record: mockExercise,
+              },
+              candidates: {
+                record: {},
               },
               applications: {
                 records: [mockApplication],
@@ -169,6 +172,9 @@ xdescribe('@/views/Exercise/Applications/Application', () => {
               },
               exerciseDocument: {
                 record: mockExercise,
+              },
+              candidates: {
+                record: {},
               },
               applications: {
                 records: [mockApplication],
