@@ -1,4 +1,5 @@
 const authorisedUsers = [
+  'drie@judicialappointments.digital',
   'digitalteam@judicialappointments.digital',
   'warren.searle@judicialappointments.digital',
   'tom.russell@judicialappointments.digital',
