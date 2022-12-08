@@ -232,7 +232,10 @@
           <span v-if="!showOtherDownloads">
             No files uploaded
           </span>
-          <ul class="govuk-list">
+          <ul
+            v-else
+            class="govuk-list"
+          >
             <li
               v-for="file in exercise.downloads.otherDownloads"
               :key="file.file"
