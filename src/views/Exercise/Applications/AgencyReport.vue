@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div v-if="application && application.personalDetails">
     <h2 class="govuk-heading-l">
       ACRO
     </h2>
 
-    <dl class="govuk-summary-list">
+    <dl
+      class="govuk-summary-list"
+    >
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Full Name
