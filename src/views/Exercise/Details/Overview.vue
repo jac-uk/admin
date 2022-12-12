@@ -1,5 +1,8 @@
 <template>
   <div class="govuk-grid-row">
+
+    <ApprovalProcess />
+
     <div class="govuk-grid-column-one-half">
       <div
         v-if="exercise.immediateStart"
@@ -53,7 +56,7 @@
           class="float-right"
         >
           <a
-            v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+            v-if="canUpdateExercises"
             class="govuk-link"
             @click="changeState"
           >
@@ -123,10 +126,7 @@
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
       <button
-        v-if="!isPublished && !isArchived && hasPermissions([
-          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-          PERMISSIONS.exercises.permissions.canPublishExercise.value
-        ])"
+        v-if="!isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
         :disabled="!canPublish"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="publish"
@@ -134,30 +134,19 @@
         Publish on website
       </button>
       <button
-        v-if="isPublished && !isArchived && hasPermissions([
-          PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-          PERMISSIONS.exercises.permissions.canPublishExercise.value,
-        ])"
+        v-if="isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
         Remove from website
       </button>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isDraft"
+        v-if="canUpdateExercises && isDraft"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
-        @click="submitForApproval"
+        @click="openApprovalModal"
       >
         Submit for Approval
-      </button>
-      <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canApproveExercise.value]) && isReadyForApproval"
-        :disabled="!isReadyForApprovalFromAdvertType"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="approve"
-      >
-        Approve
       </button>
       <button
         v-if="!isArchived && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
@@ -167,7 +156,7 @@
         Unlock
       </button>
       <ActionButton
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]) && isApproved"
+        v-if="canUpdateExercises && isApproved"
         @click="copyToClipboard"
       >
         Copy to Clipboard
@@ -211,7 +200,7 @@
         />
       </Modal>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+        v-if="canUpdateExercises"
         :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="openArchiveModal"
       >
@@ -253,6 +242,14 @@
         @confirmed="confirmedNoOfTestApplications()"
       />
     </Modal>
+    <Modal
+        ref="approvalModal"
+      >
+      <ExercisePreApprovalTaskList
+        @close="closeApprovalModal"
+        @confirmed="submitForApproval"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -270,9 +267,11 @@ import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestAp
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import { isArchived, isApproved, isProcessing, applicationCounts } from '@/helpers/exerciseHelper';
+import { isArchived, isApproved, isProcessing, applicationCounts, isReadyForApproval, isApprovalRejected, isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
+import ExercisePreApprovalTaskList from '@/components/ModalViews/ExercisePreApprovalTaskList.vue';
+import ApprovalProcess from '@/views/Exercise/Details/Overview/ApprovalProcess.vue';
 
 export default {
   name: 'Overview',
@@ -284,9 +283,20 @@ export default {
     Banner,
     ChangeExerciseState,
     ChangeNoOfTestApplications,
+    ExercisePreApprovalTaskList,
+    ApprovalProcess,
   },
   mixins: [permissionMixin],
   computed: {
+    canUpdateExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
+    },
+    canApproveExercise() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canApproveExercise.value]);
+    },
+    canPublishExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canPublishExercise.value]);
+    },
     isProduction() {
       return this.$store.getters['isProduction'];
     },
@@ -322,15 +332,13 @@ export default {
       return true;
     },
     isReadyForApproval() {
-      const returnReadyForApproval = this.exercise
-        && this.exercise.state
-        && this.exercise.state === 'ready';
-      return returnReadyForApproval;
+      return isReadyForApproval(this.exercise);
     },
     isReadyForApprovalFromAdvertType() {
-      const returnReady = this.exercise
-        && (!this.exercise.advertType || this.exercise.advertType === ADVERT_TYPES.FULL || this.exercise.advertType === ADVERT_TYPES.EXTERNAL);
-      return returnReady;
+      return isReadyForApprovalFromAdvertType(this.exercise);
+    },
+    isApprovalRejected() {
+      return isApprovalRejected(this.exercise);
     },
     isApproved() {
       return isApproved(this.exercise);
@@ -425,11 +433,9 @@ export default {
     },
   },
   methods: {
-    submitForApproval() {
-      this.$store.dispatch('exerciseDocument/submitForApproval');
-    },
-    approve() {
-      this.$store.dispatch('exerciseDocument/approve');
+    async submitForApproval() {
+      await this.$store.dispatch('exerciseDocument/submitForApproval');
+      this.closeApprovalModal();
     },
     archive() {
       if (this.isArchived) {
@@ -512,6 +518,12 @@ export default {
     },
     closeArchiveModal() {
       this.$refs.archiveModal.closeModal();
+    },
+    openApprovalModal() {
+      this.$refs.approvalModal.openModal();
+    },
+    closeApprovalModal() {
+      this.$refs.approvalModal.closeModal();
     },
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
