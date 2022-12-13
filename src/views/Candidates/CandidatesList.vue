@@ -26,7 +26,7 @@
         {
           type: 'singleCheckbox',
           field: 'isHandledSensitively',
-          inputLabel: 'show sensitive candidates only'
+          inputLabel: 'Show flagged candidates only'
         },
       ]"
       :custom-search="{
