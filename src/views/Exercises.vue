@@ -31,17 +31,11 @@
           >
             View archived exercises
           </button>
-          <br>
-          <!-- <Select hint="label">
-            <option>
-              bb
-            </option>
-          </Select> -->
           <router-link
             v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
             ref="linkToNewExercise"
             to="/create-exercise"
-            class="govuk-button govuk-!-margin-3 govuk-!-margin-bottom-0"
+            class="govuk-button govuk-!-margin-bottom-0"
           >
             Create an exercise
           </router-link>
@@ -104,7 +98,7 @@
                 @click="openArchiveModal"
                 type="button"
               >
-              {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
+              {{ isArchived ? 'Unarchive' : 'Archive' }}
               </button>
             </template>
             <template #row="{row}">
