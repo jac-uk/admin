@@ -58,13 +58,11 @@
               </dd>
             </div>
             <div
-              v-if="qualification.hasOwnProperty('date') || editable"
+              v-if="qualification.type !== 'barrister' && (qualification.hasOwnProperty('date') || editable)"
               class="govuk-summary-list__row"
             >
-              <dt
-                class="govuk-summary-list__key widerColumn"
-              >
-                {{ qualification.type === 'barrister' ? 'Date completed pupillage' : 'Date qualified' }}
+              <dt class="govuk-summary-list__key widerColumn">
+                Date qualified
               </dt>
               <dd class="govuk-summary-list__value">
                 <InformationReviewRenderer
@@ -81,17 +79,38 @@
 
             <template>
               <div
-                v-if="qualification.type === 'barrister' && ((qualification.qualificationNotComplete && qualification.details) || editable)"
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
                 class="govuk-summary-list__row"
               >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Has not completed pupillage
+                <dt
+                  class="govuk-summary-list__key widerColumn"
+                >
+                  Date called to the Bar
                 </dt>
                 <dd class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="application.qualifications[index].qualificationNotComplete"
+                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
                     field="qualifications"
-                    extension="qualificationNotComplete"
+                    extension="calledToBarDate"
+                    :index="index"
+                    :edit="editable"
+                    type="date"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+              <div
+                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Has completed pupillage
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications[index].completedPupillage"
+                    field="qualifications"
+                    extension="completedPupillage"
                     :index="index"
                     :edit="editable"
                     :options="[true, false]"
@@ -102,7 +121,48 @@
               </div>
 
               <div
-                v-if="qualification.type === 'barrister' && (qualification.qualificationNotComplete === true)"
+                v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Date completed pupillage
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
+                    field="qualifications"
+                    extension="date"
+                    :index="index"
+                    :edit="editable"
+                    type="date"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div
+                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Reason for being exempt from pupillage
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    type="selection"
+                    :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
+                    :data="application.qualifications[index].notCompletePupillageReason"
+                    field="qualifications"
+                    extension="notCompletePupillageReason"
+                    :index="index"
+                    :edit="editable"
+                    @changeField="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+
+              <div
+                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
                 class="govuk-summary-list__row"
               >
                 <dt class="govuk-summary-list__key widerColumn">
@@ -145,7 +205,7 @@
         ref="removeModal"
       >
         <ModalInner
-          @closed="closeModal"
+          @close="closeModal"
           @confirmed="removeQualification"
         />
       </Modal>
@@ -731,6 +791,7 @@
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import { NOT_COMPLETE_PUPILLAGE_REASONS } from '@jac-uk/jac-kit/helpers/constants';
 
 import {
   hasRelevantMemberships,
@@ -758,11 +819,13 @@ export default {
   },
   data() {
     return {
+      NOT_COMPLETE_PUPILLAGE_REASONS,
       dataDefault: {
         type: null,
         location: null,
         date: null,
-        qualificationNotComplete: null,
+        completedPupillage: null,
+        notCompletePupillageReason: null,
         details: null,
       },
       currentIndex: null,
@@ -848,8 +911,10 @@ export default {
     addQualification() {
       let changedObj = this.application.qualifications || [];
 
-      if (changedObj.length){
+      if (changedObj && Array.isArray(changedObj) && changedObj.length) {
         changedObj = [...changedObj, this.dataDefault];
+      } else if (changedObj && typeof changedObj === 'object' && Object.values(changedObj).length) {
+        changedObj = [...Object.values(changedObj), this.dataDefault];
       } else {
         changedObj = [this.dataDefault];
       }
