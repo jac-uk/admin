@@ -47,7 +47,7 @@
                 field="selectionCriteriaAnswers"
                 type="textarea"
                 @changeField="changeAssessmentInfo"
-              /> 
+              />
             </div>
           </dd>
         </div>
@@ -92,7 +92,7 @@
                 ref="suitability-statement"
                 v-model="application.uploadedSuitabilityStatement"
                 name="suitability-statement"
-                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                :path="uploadPath"
                 @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
               />
             </div>
@@ -132,7 +132,7 @@
                 ref="self-assessment"
                 v-model="application.uploadedSelfAssessment"
                 name="self-assessment"
-                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                :path="uploadPath"
                 @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
               />
             </div>
@@ -174,6 +174,7 @@
                 v-model="application.uploadedCV"
                 name="cv"
                 :path="uploadPath"
+                @input="val => doFileUpload(val, 'uploadedCV')"
               />
             </div>
           </dd>
@@ -213,7 +214,7 @@
                 ref="covering-letter-upload"
                 v-model="application.uploadedCoveringLetter"
                 name="covering-letter"
-                :path="`/exercise/${exercise.id}/user/${application.userId}`"
+                :path="uploadPath"
                 @input="val => doFileUpload(val, 'uploadedCoveringLetter')"
               />
             </div>
