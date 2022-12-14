@@ -229,11 +229,8 @@
           Other Downloads
         </dt>
         <dd class="govuk-summary-list__value">
-          <span v-if="!showOtherDownloads">
-            No files uploaded
-          </span>
           <ul
-            v-else
+            v-if="hasOtherDownloads"
             class="govuk-list"
           >
             <li
@@ -247,6 +244,9 @@
               />
             </li>
           </ul>
+          <span v-else>
+            No files uploaded
+          </span>
         </dd>
       </div>
     </dl>
@@ -341,7 +341,7 @@ export default {
         return false;
       }
     },
-    showOtherDownloads() {
+    hasOtherDownloads() {
       if (
         this.exercise &&
         this.exercise.downloads &&
