@@ -952,10 +952,18 @@ export default {
         changedObj = obj;
       }
 
-      const updatedApplication = {
-        [obj.field]: {
-          ...this.application[obj.field], ...changedObj },
-      };
+      let updatedApplication = null;
+      // check if field is array
+      if (Array.isArray(this.application[obj.field])) {
+        updatedApplication = {
+          [obj.field]: changedObj,
+        };
+      } else {
+        updatedApplication = {
+          [obj.field]: {
+            ...this.application[obj.field], ...changedObj },
+        };
+      }
 
       this.$emit('updateApplication', updatedApplication);
 
