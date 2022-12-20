@@ -6,6 +6,7 @@ const authorisedUsers = [
   'andrew.isaac@judicialappointments.digital',
   'blaise.buckland@judicialappointments.digital',
   'halcyon@judicialappointments.digital',
+  'lisias.loback@judicialappointments.digital',
 ];
 
 const authorisedToPerformAction = async (email) => {
