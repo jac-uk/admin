@@ -1,5 +1,5 @@
 import firebase from '@firebase/app';
-import { firestore } from '@/firebase';
+import { auth, firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
@@ -118,7 +118,7 @@ export default {
     },
     resetTest: async (context) => {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const email = firebase.auth().currentUser.email;
+      const email = auth.currentUser.email;
       const canReset = await authorisedToPerformAction(email);
       if (canReset) {
         const rec = context.state.record;
@@ -133,7 +133,7 @@ export default {
       }
     },
     markAsCompleted: async (context) => {
-      const email = firebase.auth().currentUser.email;
+      const email = auth.currentUser.email;
       const canMarkAsCompleted = await authorisedToPerformAction(email);
       if (canMarkAsCompleted) {
         const rec = context.state.record;

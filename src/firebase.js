@@ -1,8 +1,10 @@
 import firebase from 'firebase/app';
-import 'firebase/app-check';
-import 'firebase/functions';
-import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/functions';
+import 'firebase/storage';
+import 'firebase/database';
+import 'firebase/app-check';
 
 // Configure and initialise Firebase
 // Config variables are pulled from the environment at build time
@@ -16,22 +18,24 @@ const config = {
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
 const functions = firebase.initializeApp(config).functions('europe-west2');
-
-if (process.env.VUE_APP_USE_FUNCTIONS_EMULATOR === 'true') {
-  functions.useEmulator('localhost', '5000');
-}
-
-// Initialise Firestore
 const firestore = firebase.firestore();
+const auth = firebase.auth();
+const storage = firebase.storage();
+const database = firebase.database();
+const Timestamp = firebase.firestore.Timestamp;
 
+// Local emulator
+if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULATORS == 'true') {
+  firestore.useEmulator('localhost', 8080);
+  functions.useEmulator('localhost', 5001);
+  auth.useEmulator('http://localhost:9099');
+  storage.useEmulator('localhost', 9199);
+  database.useEmulator('localhost', 9000);
+}
 // App check
-let appCheck;
 if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
-  appCheck = firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+  firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
 }
 
-// Other firebase exports
-const auth = firebase.auth;
-
-export { firestore, auth, functions, appCheck };
+export { firestore, auth, functions, storage, database, Timestamp };
 export default firebase;
