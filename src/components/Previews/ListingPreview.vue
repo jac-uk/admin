@@ -10,11 +10,13 @@
       class="listing-box"
     >
       <div v-if="!exercise.inviteOnly">
-        <div
-          class="govuk-heading-m govuk-!-font-weight-bold"
+        <a
+          class="govuk-heading-m govuk-!-font-weight-bold govuk-link"
+          href
+          @click.prevent
         >
           {{ exercise.name }}
-        </div>
+        </a>
         <p>
           <span
             class="govuk-body govuk-!-font-weight-bold"
@@ -94,6 +96,7 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'ListingPreview',
   props: {

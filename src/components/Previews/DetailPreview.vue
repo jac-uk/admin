@@ -113,44 +113,19 @@
   </div>
 </template>
 <script>
-import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
-import createTimeline from '@/helpersTMP/Timeline/createTimeline';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
-
-const ADVERT_TYPES = {
-  LISTING: 'listing',
-  BASIC: 'basic',
-  FULL: 'full',
-  EXTERNAL: 'external',
-};
+import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
 
 export default {
   name: 'DetailPreview',
   components: {
     Timeline,
   },
+  mixins: [exerciseMixin],
   props: {
     exercise: {
       type: Object,
       default: null,
-    },
-  },
-  computed: {
-    timeline() {
-      const timeline = exerciseTimeline(this.exercise);
-      return createTimeline(timeline);
-    },
-    showNumberOfVacancies() {
-      return this.advertTypeFull || this.advertType === ADVERT_TYPES.BASIC ? true : false;
-    },
-    showLocation() {
-      return this.advertTypeFull || this.advertType === ADVERT_TYPES.BASIC ? true : false;
-    },
-    advertType() {
-      return this.exercise.advertType ? this.exercise.advertType : ADVERT_TYPES.FULL;
-    },
-    advertTypeFull() {
-      return this.advertType === ADVERT_TYPES.FULL;
     },
   },
 };

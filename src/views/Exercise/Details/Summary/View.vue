@@ -21,14 +21,14 @@
         </dt>
         <dd class="govuk-summary-list__value">
           {{ exercise.name }}
-          <span
+          <!-- <span
             v-if="exercise.inviteOnly"
           >
             -
             <b>
               Invite only exercise
             </b>
-          </span>
+          </span> -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -133,12 +133,11 @@
       />
     </Modal>
     <ListingPreview
+      class="govuk-!-margin-bottom-4"
       :exercise="exercise"
     />
-    <div
-      class="govuk-!-margin-top-4"
-    />
     <DetailPreview
+      v-if="advertType !== 'listing'"
       :exercise="exercise"
     />
   </div>
@@ -154,6 +153,7 @@ import { ADVERT_TYPES } from '@/helpers/constants';
 import CustomHTML from '@/components/CustomHTML';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
+import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
 
 export default {
   name: 'SummaryView',
@@ -164,7 +164,7 @@ export default {
     ListingPreview,
     DetailPreview,
   },
-  mixins: [permissionMixin],
+  mixins: [permissionMixin, exerciseMixin],
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -180,9 +180,6 @@ export default {
     },
     canPublish() {
       return this.exercise.progress && this.exercise.progress.exerciseSummary;
-    },
-    advertType() {
-      return this.exercise.advertType ? this.exercise.advertType : ADVERT_TYPES.FULL;
     },
   },
   methods: {
