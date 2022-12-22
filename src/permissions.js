@@ -67,6 +67,10 @@ const PERMISSIONS = {
         label: 'Can delete candidate character information',
         value: 'e9',
       },
+      canSendApplicationReminders: {
+        label: 'Can send application reminders',
+        value: 'e10',
+      },
     },
   },
   candidates: {

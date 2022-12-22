@@ -46,16 +46,18 @@ const module = {
   },
   actions: {
     async read({ commit }) {
-      if (navigator && navigator.clipboard && navigator.clipboard.readText && document.hasFocus()) {
-        const clipboardText = await navigator.clipboard.readText();
-        if (clipboardText) {
-          if (clipboardText.indexOf('JAC_CONTENT') >= 0) {
-            commit('setData', fromJACString(clipboardText));
+      if (document.hasFocus()) {
+        if (navigator && navigator.clipboard && navigator.clipboard.readText) {
+          const clipboardText = await navigator.clipboard.readText();
+          if (clipboardText) {
+            if (clipboardText.indexOf('JAC_CONTENT') >= 0) {
+              commit('setData', fromJACString(clipboardText));
+            } else {
+              commit('setData', {});
+            }
           } else {
             commit('setData', {});
           }
-        } else {
-          commit('setData', {});
         }
       }
     },
