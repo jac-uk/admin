@@ -224,6 +224,31 @@
           </ul>
         </dd>
       </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other Downloads
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul
+            v-if="hasOtherDownloads"
+            class="govuk-list"
+          >
+            <li
+              v-for="file in exercise.downloads.otherDownloads"
+              :key="file.file"
+            >
+              <DownloadLink
+                :file-name="file.file"
+                :title="file.title"
+                :exercise-id="exerciseId"
+              />
+            </li>
+          </ul>
+          <span v-else>
+            No files uploaded
+          </span>
+        </dd>
+      </div>
     </dl>
   </div>
 </template>
@@ -310,6 +335,18 @@ export default {
         this.exercise.downloads &&
         this.exercise.downloads.statutoryConsultationGuidanceLetter &&
         this.exercise.downloads.statutoryConsultationGuidanceLetter.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    hasOtherDownloads() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.otherDownloads &&
+        this.exercise.downloads.otherDownloads.length
       ) {
         return true;
       } else {

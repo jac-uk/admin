@@ -45,7 +45,7 @@
                   class="govuk-button btn-unlock"
                   @click="unlock"
                 >
-                  Unlock
+                  Move to Draft
                 </button>
                 <button
                   v-else
