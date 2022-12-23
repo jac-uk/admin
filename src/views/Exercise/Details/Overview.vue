@@ -215,7 +215,7 @@
       >
         <ModalInner
           @close="closeDeleteModal"
-          @confirmed="remove"
+          @confirmed="confirmDelete"
           title="Delete Exercise"
           message="Are you sure you want to delete this exercise?"
         />
@@ -228,7 +228,7 @@
         {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
       </button>
       <button
-        v-if="hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value])"
+        v-if="isDraft && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value])"
         :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="openDeleteModal"
         :disabled="!isDraft"
@@ -465,7 +465,8 @@ export default {
       }
       this.$refs.archiveModal.closeModal();
     },
-    remove() {
+    confirmDelete() {
+      this.closeDeleteModal();
       // Redirect THEN delete so not breaking any references in the component
       this.$router.push({ name: 'exercises' }).then(() => {
         this.$store.dispatch('exerciseDocument/delete');
