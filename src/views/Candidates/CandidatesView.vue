@@ -30,7 +30,7 @@
         </button>
       </template>
       <button
-        v-if="activeTab === 'notes' && candidateRecord"
+        v-if="activeTab === 'notes' && candidateRecord && hasPermissions([PERMISSIONS.candidates.permissions.canFlagToHandleSensitively.value])"
         class="govuk-button govuk-button--secondary"
         @click="toggleHandledSensitively"
       >
