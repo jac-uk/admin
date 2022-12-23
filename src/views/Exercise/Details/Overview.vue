@@ -153,7 +153,7 @@
         class="govuk-button govuk-!-margin-right-3"
         @click="unlock"
       >
-        Unlock
+        Set to Draft
       </button>
       <ActionButton
         v-if="canUpdateExercises && isApproved"
