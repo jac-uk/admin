@@ -102,7 +102,8 @@
           :exercise="{...exercise, ...formData }"
         />
         <DetailPreview
-          v-if="advertType !== 'listing'"
+          v-if="{...exercise, ...formData }.advertType !== 'listing'"
+          class="govuk-!-margin-bottom-4"
           :exercise="{...exercise, ...formData }"
         />
 
@@ -168,7 +169,7 @@ export default {
     },
     launchDate: {
       get() {
-        return this.parseDate(this.formData.estimatedLaunchDate);
+        return this.parseDate({ ...this.exercise, ...this.formData }.estimatedLaunchDate);
       },
       set(val) {
         if (!val || !(val instanceof Date)){
