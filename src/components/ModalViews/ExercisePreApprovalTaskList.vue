@@ -2,7 +2,7 @@
   <div>
     <div class="modal__title text-left govuk-!-padding-2 background-blue">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        Exercise Task Checklist
+        Submit for Approval
       </h2>
     </div>
     <div class="modal__content govuk-!-margin-6">
@@ -10,7 +10,9 @@
         <div class="govuk-inset-text">
           Please check that the following tasks are completed before submitting for approval.
         </div>
-        <p class="govuk-body">List of tasks to complete:</p>
+        <p class="govuk-body">
+          List of tasks to complete:
+        </p>
         <ul class="govuk-list govuk-list--bullet">
           <li>Task to complete 1</li>
           <li>Task to complete 2</li>
@@ -21,17 +23,17 @@
         </ul>
         <button
           type="button"
-          class="govuk-button govuk-!-margin-right-3"
-          @click="confirmModal"
-        >
-          Submit for Approval
-        </button>
-        <button
-          type="button"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           @click="closeModal"
         >
           Cancel
+        </button>
+        <button
+          type="button"
+          class="govuk-button"
+          @click="confirmModal"
+        >
+          Submit for Approval
         </button>
       </div>
     </div>

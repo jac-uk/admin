@@ -1,6 +1,5 @@
 <template>
   <div class="govuk-grid-row">
-
     <ApprovalProcess />
 
     <div class="govuk-grid-column-one-half">
@@ -243,8 +242,8 @@
       />
     </Modal>
     <Modal
-        ref="approvalModal"
-      >
+      ref="approvalModal"
+    >
       <ExercisePreApprovalTaskList
         @close="closeApprovalModal"
         @confirmed="submitForApproval"

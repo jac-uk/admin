@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
       <strong class="govuk-warning-text__text">
         <span class="govuk-warning-text__assistive">Warning</span>
         Your are rejecting an exercise
@@ -14,17 +17,17 @@
     />
     <div>
       <button
-        class="govuk-button govuk-button--warning govuk-!-margin-right-3"
-        @click="confirmReject"
-        :disabled="!isValid"
-      >
-        Reject
-      </button>
-      <button
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="$emit('setApprovalDecision', null)"
       >
         Cancel
+      </button>
+      <button
+        class="govuk-button govuk-button--warning"
+        :disabled="!isValid"
+        @click="confirmReject"
+      >
+        Reject
       </button>
     </div>
   </div>

@@ -1,6 +1,9 @@
 <template>
   <div class="govuk-warning-text">
-    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <span
+      class="govuk-warning-text__icon"
+      aria-hidden="true"
+    >!</span>
     <strong class="govuk-warning-text__text">
       <span class="govuk-warning-text__assistive">Warning</span>
       This exercise is waiting for your approval
@@ -9,17 +12,17 @@
     <div>
       <button
         :disabled="!isReadyForApprovalFromAdvertType"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="approve"
-      >
-        Approve
-      </button>
-      <button
-        :disabled="!isReadyForApprovalFromAdvertType"
         class="govuk-button govuk-button--warning govuk-!-margin-right-3"
         @click="$emit('setApprovalDecision', false)"
       >
         Reject
+      </button>
+      <button
+        :disabled="!isReadyForApprovalFromAdvertType"
+        class="govuk-button"
+        @click="approve"
+      >
+        Approve
       </button>
     </div>
   </div>

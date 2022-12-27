@@ -2,67 +2,41 @@
   <div class="govuk-!-margin-right-3 govuk-!-margin-left-3">
 
     <template v-if="isReadyForApproval">
+      <RejectionForm
+        v-if="canApproveExercise && approvalDecision === false"
+        @setApprovalDecision="setApprovalDecision"
+      />
 
-      <template v-if="canApproveExercise">
+      <ApproveReject
+        v-else-if="canApproveExercise && approvalDecision === null"
+        @setApprovalDecision="setApprovalDecision"
+      />
 
-        <template v-if="(approvalDecision === false)">
-
-          <RejectionForm
-            @setApprovalDecision="setApprovalDecision"
-           />
-
-        </template>
-        <template v-else-if="(approvalDecision === null)">
-
-          <ApproveReject
-            @setApprovalDecision="setApprovalDecision"
-          />
-
-        </template>
-
-      </template>
-
-      <template v-else-if="canUpdateExercises">
-
-        <ApprovalCheckMessage />
-
-      </template>
+      <ApprovalCheckMessage
+        v-else-if="canUpdateExercises"
+      />
     </template>
 
     <template v-else-if="isApprovalRejected">
+      <SimpleBannerDetails
+        v-if="canApproveExercise"
+        title="This exercise was rejected by you."
+      >
+        {{ exercise.rejection_reason }}
+      </SimpleBannerDetails>
 
-      <template v-if="canApproveExercise">
-
-        <SimpleBannerDetails
-          title="This exercise was rejected by you."
-        >
-          {{ exercise.rejection_reason }}
-        </SimpleBannerDetails>
-
-      </template>
-
-      <template v-else-if="canUpdateExercises">
-
-        <WarningDetails
-          title="This exercise was not approved by the SLs. Please resubmit for approval."
-        >
-          {{ exercise.rejection_reason }}
-        </WarningDetails>
-
-      </template>
-
+      <WarningDetails
+        v-else-if="canUpdateExercises"
+        title="This exercise was not approved by senior leaders. Please resubmit for approval."
+      >
+        {{ exercise.rejection_reason }}
+      </WarningDetails>
     </template>
 
-    <template v-else-if="isApproved">
-
-      <template v-if="canApproveExercise">
-
-        <SimpleBanner
-          text="This exercise was approved by you."
-        />
-
-      </template>
-    </template>
+    <SimpleBanner
+      v-else-if="canApproveExercise && isApproved"
+      text="This exercise was approved by you."
+    />
 
   </div>
 </template>
