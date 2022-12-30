@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.93.0",
+  "version": "0.94.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -24,10 +24,10 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
-    "@jac-uk/jac-kit": "^0.1.6",
+    "@jac-uk/jac-kit": "^0.1.8",
     "@ministryofjustice/frontend": "0.2.4",
-    "@sentry/browser": "^6.4.1",
-    "@sentry/integrations": "^6.4.1",
+    "@sentry/tracing": "^7.13.0",
+    "@sentry/vue": "^7.13.0",
     "@vue/compiler-sfc": "^3.0.7",
     "buffer": "^6.0.3",
     "firebaseui": "^4.8.0",

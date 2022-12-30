@@ -482,7 +482,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { auth } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
@@ -694,7 +694,7 @@ export default {
   },
   async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
-    const email = firebase.auth().currentUser.email;
+    const email = auth.currentUser.email;
     this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
@@ -852,7 +852,7 @@ export default {
     },
     amountOfTimeOnQuestion(index) {
       let millisecs = 0;
-      if (this.response.history) {
+      if (this.response.questionSession) {
         Object.keys(this.response.questionSession).map(key => {
           const item = this.response.questionSession[key];
           if (item.question === index) {

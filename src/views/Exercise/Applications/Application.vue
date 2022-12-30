@@ -33,12 +33,9 @@
             </h1>
           </div>
 
-          <div
-            v-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
-            class="govuk-grid-column-one-half text-right print-none"
-          >
+          <div class="govuk-grid-column-one-half text-right print-none">
             <span
-              v-if="activeTab == 'full'"
+              v-if="activeTab == 'full' && hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value])"
             >
               <span
                 class="govuk-!-margin-left-4"
@@ -48,7 +45,7 @@
                   class="govuk-button btn-unlock"
                   @click="unlock"
                 >
-                  Unlock
+                  Move to Draft
                 </button>
                 <button
                   v-else
@@ -199,11 +196,11 @@
             <PersonalDetailsSummary
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
-              :editable="editMode"
+              :editable="editable"
               @update="changePersonalDetails"
             />
             <CharacterInformationSummary
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :character-information="correctCharacterInformation"
               :version="applicationVersion"
               @updateApplication="changeApplication"
@@ -211,26 +208,26 @@
             <EqualityAndDiversityInformationSummary
               :application="application"
               :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               @updateApplication="changeApplication"
             />
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               @updateApplication="changeApplication"
             />
             <ExperienceSummary
               :application="application"
               :exercise="exercise"
-              :editable="(editMode && authorisedToPerformAction)"
+              :editable="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
@@ -238,14 +235,14 @@
               :application="application"
               :application-id="applicationId"
               :exercise="exercise"
-              :editable="editMode"
+              :editable="editable"
               :is-panel-view="isPanelView"
             />
             <AssessmentsSummary
               :application="application"
               :exercise="exercise"
-              :editable="editMode"
-              :authorised-to-perform-action="authorisedToPerformAction"
+              :editable="editable"
+              :authorised-to-perform-action="editable"
               :is-panel-view="isPanelView"
               @updateApplication="changeApplication"
             />
@@ -304,7 +301,6 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import PageNotFound from '@/views/Errors/PageNotFound';
 import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
 import {
   isLegal,
@@ -338,7 +334,6 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      authorisedToPerformAction: false,
       editMode: false,
       activeTab: 'full',
       dropDownExpanded: false,
@@ -381,7 +376,7 @@ export default {
       return tabs;
     },
     editable() {
-      return this.editMode && this.authorisedToPerformAction;
+      return this.editMode && this.hasPermissions([this.PERMISSIONS.applications.permissions.canUpdateApplications.value]);
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -482,7 +477,6 @@ export default {
   },
   methods: {
     async pageLoad() {
-      this.authorisedToPerformAction = await authorisedToPerformAction(this.$store.state.auth.currentUser.email);
       if (this.$route.params.tab) {
         this.activeTab = this.$route.params.tab;
       }

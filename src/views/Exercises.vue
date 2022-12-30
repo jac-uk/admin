@@ -80,12 +80,6 @@
             :columns="tableColumns"
             :filters="[
               {
-                title: 'State',
-                field: 'state',
-                type: 'checkbox',
-                options: exerciseStates,
-              },
-              {
                 type: 'dateRange',
                 field: 'applicationOpenDate',
                 title: 'Open date',
@@ -133,9 +127,12 @@
                   {{ row.applicationCloseDate | formatDate }}
                 </RouterLink>
               </TableCell>
+              <TableCell :title="tableColumns[4].title">
+                {{ getExerciseStatus(row) }}
+              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[4].title"
+                :title="tableColumns[5].title"
               >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
@@ -163,12 +160,12 @@ export default {
   data() {
     return {
       selectedItems: [],
-      exerciseStates: ['draft', 'ready', 'approved'],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
+        { title: 'Status' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -230,6 +227,18 @@ export default {
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
+    },
+    getExerciseStatus(exercise) {
+      let status = '';
+       
+      if (exercise.state === 'archived') {
+        status += 'Archived';
+      } else if (exercise.state === 'draft') {
+        status += 'Draft';
+      } else {
+        status += 'Live';
+      }
+      return status;
     },
   },
 };

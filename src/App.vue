@@ -192,7 +192,6 @@
 
 <script>
 import { auth } from '@/firebase';
-import firebase from '@firebase/app';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 
@@ -224,7 +223,7 @@ export default {
   watch: {
     async isSignedIn() {
       if (this.isSignedIn) {
-        const email = firebase.auth().currentUser.email;
+        const email = auth.currentUser.email;
         this.authorisedToPerformAction = await authorisedToPerformAction(email);
       }
     },
@@ -232,7 +231,7 @@ export default {
   async created() {
     if (this.isSignedIn) {
       await this.$store.dispatch('services/bind');
-      const email = firebase.auth().currentUser.email;
+      const email = auth.currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
     }
   },
@@ -243,7 +242,7 @@ export default {
   },
   methods: {
     signOut() {
-      auth().signOut();
+      auth.signOut();
       this.$router.go('/sign-in');
     },
     async onMouseOver() {
