@@ -41,8 +41,7 @@
         field: 'userId',
       }"
       :page-size="50"
-      :page-item-type="'number'"
-      :total="total"
+      :page-item-type="'uppercase-letter'"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -108,9 +107,6 @@ export default {
     },
     applications() {
       return this.$store.state.applications.records;
-    },
-    total() {
-      return this.$store.state.applications.total;
     },
   },
   methods: {
