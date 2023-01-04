@@ -14,10 +14,10 @@
           <span class="">{{ applicationCounts._total }}</span>
         </h2>
         <span class="govuk-caption-s color-middle">
-          <span class="">Last Updated: {{ applicationCounts._lastUpdated | formatDate('datetime') }}</span>
+          <span class="long-text">Last Updated: {{ applicationCounts._lastUpdated | formatDate('datetime') }}</span>
         </span>
       </div>
-      <div class="panel govuk-!-margin-bottom-9">
+      <div class="panel govuk-!-margin-bottom-4">
         <span class="govuk-caption-m">
           Number of vacancies
         </span>
@@ -28,19 +28,27 @@
           <span class="">Up to {{ exercise.immediateStart }}</span>
         </h2>
       </div>
+      <div class="panel govuk-!-margin-bottom-9">
+        <span class="govuk-caption-m long-text">Selection Exercise Manager</span>
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+          <span class="capitalize long-text">{{ exercise.selectionExerciseManager[0].name }}</span>
+        </h2>
+      </div>
     </div>
     <div class="govuk-grid-column-one-half">
       <div class="panel govuk-!-margin-bottom-4">
         <span class="govuk-caption-m">Type of exercise</span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-0 long-text">
           <span class="capitalize">{{ exercise.typeOfExercise }}</span>
+          <span class="capitalize" v-if="exercise.appointmentType">, {{ exercise.appointmentType | lookup }}</span>
+          <span class="capitalize" v-if="exercise.isCourtOrTribunal">, {{ exercise.isCourtOrTribunal | lookup }}</span>
         </h2>
         <span class="govuk-caption-s color-middle">
           <span class="vh">&nbsp;</span>
         </span>
       </div>
-      <div class="panel govuk-!-margin-bottom-9">
-        <span class="govuk-caption-m">
+      <div class="panel govuk-!-margin-bottom-4">
+        <span class="govuk-caption-m long-text">
           Timeline - where we are
         </span>
         <div
@@ -79,6 +87,12 @@
             </button>
           </div>
         </div>
+      </div>
+      <div class="panel govuk-!-margin-bottom-9">
+        <span class="govuk-caption-m long-text">Assigned Comissioner</span>
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+          <span class="capitalize long-text">{{ exercise.assignedCommissioner[0].name }}</span>
+        </h2>
       </div>
     </div>
 
@@ -246,8 +260,8 @@
         local-data
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
-            {{ row.name | lookup }}
+          <TableCell :title="tableColumns[0].title" class="long-text">
+            {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
             {{ row.val.total }} ({{ row.val.percent | formatNumber(2) }}%)
@@ -322,7 +336,7 @@ export default {
   computed: {
     tableColumns() {
       return [
-        { title: `${lookup(this.diversityReport)} (${lookup(this.activeTab)})` },
+        { title: `${lookup(this.diversityReport)} (${lookup(this.activeTab)} ${this.getTotalCandidates(this.diversityReport, this.activeTab)} candidates)` },
         { title: 'Total (Percentage)' },
       ];
     },
@@ -353,12 +367,11 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[EXERCISE_STAGE.APPLIED][this.diversityReport];
-        const dataKeys = Object.keys(dataApplied).filter(item => item !== 'total');
-        dataTitles = dataKeys.reduce((ret, item, currentIndex) => {
-          if (item !== 'total') {
-            ret.push(`${currentIndex + 1}. ${lookup(item)}`);
-            // ret.push(lookup(item));
-          }
+        // console.log('dataApplied', dataApplied);
+        // const dataKeys = Object.keys(dataApplied).filter(item => item !== 'total');
+        const dataKeys = this.getOrderedKeys(dataApplied);
+        dataTitles = dataKeys.reduce((ret, [item], currentIndex) => {
+          ret.push(`${currentIndex + 1}. ${lookup(item)}`);
           return ret;
         }, []);
 
@@ -376,7 +389,7 @@ export default {
     },
     chartOptions() {
       return {
-        vAxis: { title: 'Applicant (number)', format: '#,###' },
+        vAxis: { title: 'Applicant (percentage)', format: '#,###' },
         seriesType: 'bars',
         // series: { 4: { type: 'line' } },
         height: 300,
@@ -387,12 +400,9 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.diversityReport];
-        returnChart = Object.keys(dataApplied).reduce((ret, item) => {
-          if (item !== 'total') {
-            ret.push({ 'name': item, 'val': dataApplied[item], idx: ret.length });
-          }
-          return ret;
-        }, []);
+        returnChart = this.getOrderedKeys(dataApplied).map(([item]) => {
+          return { 'name': `${lookup(item)}`, 'val': dataApplied[item] };
+        });
       }
       return returnChart;
     },
@@ -421,6 +431,24 @@ export default {
     this.carouselChooseItemToShow(this.timeline);
   },
   methods: {
+    getTotalCandidates(diversity, tab) {
+      if (this.report) {
+        const dataApplied = this.report[tab][diversity];
+        return dataApplied.total;
+      }
+    },
+    getOrderedKeys(obj) {
+      const keysWithoutTotal = Object.entries(obj).filter(line => {
+        return line[0] !== 'total';
+      })
+        .sort(([,a],[,b]) => {
+          return b.total - a.total;
+        })
+        .reduce((acc, [k]) => {
+          return ([...acc, [k]]) ;
+        }, []);
+      return keysWithoutTotal;
+    },
     async refreshReport() {
       this.refreshingReport = true;
       if (this.applicationCounts._total) {
@@ -431,7 +459,7 @@ export default {
     getDataTotal(stage, titles) {
       const dataApplied = this.report[stage][this.diversityReport];
       const dataTotal = titles.reduce((ret, val) => {
-        ret.push(dataApplied[val].total);
+        ret.push(dataApplied[val].percent); //total
         return ret;
       }, []);
       return dataTotal;
