@@ -32,6 +32,7 @@ export {
   isApproved,
   isArchived,
   isProcessing,
+  isClosed,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
   hasQualifyingTests,
@@ -57,7 +58,8 @@ export {
   isApplicationComplete,
   hasApplicationProcess,
   applicationCounts,
-  applicationRecordCounts
+  applicationRecordCounts,
+  getSeniorSelectionMgrs
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -165,6 +167,10 @@ function isApproved(data) {
 function isProcessing(exercise) {
   if (!exercise) { return false; }
   return exercise._applicationRecords ? true : false;
+}
+function isClosed(exercise) {
+  if (!exercise) { return false; }
+  return isApproved && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
 }
 function applicationCounts(exercise) {
   return exercise && exercise._applications ? exercise._applications : {};
@@ -492,4 +498,18 @@ function hasApplicationProcess(exercise) {
   if (!exercise) { return false; }
   const applicationSteps = configuredApplicationContentSteps(exercise);
   return applicationSteps.length >= 1;
+}
+
+function getSeniorSelectionMgrs(exercise) {
+  const emails = [];
+  for (const emailObj of exercise.selectionExerciseManager) {
+    emails.push(emailObj.name);
+  }
+  for (const emailObj of exercise.selectionExerciseOfficer) {
+    emails.push(emailObj.name);
+  }
+  for (const emailObj of exercise.seniorSelectionExerciseManager) {
+    emails.push(emailObj.name);
+  }
+  return emails;
 }

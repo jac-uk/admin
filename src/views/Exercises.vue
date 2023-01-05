@@ -141,6 +141,17 @@
         </form>
       </div>
     </div>
+
+    <Message
+      v-if="canApproveLateApplications"
+      type="lateApplicationRequest"
+    />
+
+    <Message
+      v-else-if="canRequestLateApplications"
+      type="lateApplicationResponse"
+    />
+
   </div>
 </template>
 
@@ -149,12 +160,14 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
+import Message from '@/components/Message';
 
 export default {
   name: 'Exercises',
   components: {
     Table,
     TableCell,
+    Message,
   },
   mixins: [permissionMixin],
   data() {
@@ -191,6 +204,12 @@ export default {
         data.applicationsCount = (row._applications && row._applications._total) || 0;
         return data;
       });
+    },
+    canApproveLateApplications() {
+      return this.hasPermissions([this.PERMISSIONS.applications.permissions.canApproveLateApplications.value]);
+    },
+    canRequestLateApplications() {
+      return this.hasPermissions([this.PERMISSIONS.applications.permissions.canRequestLateApplications.value]);
     },
   },
   watch: {
@@ -230,7 +249,7 @@ export default {
     },
     getExerciseStatus(exercise) {
       let status = '';
-       
+
       if (exercise.state === 'archived') {
         status += 'Archived';
       } else if (exercise.state === 'draft') {

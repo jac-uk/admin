@@ -43,6 +43,7 @@ const module = {
           'lisias.loback@judicialappointments.digital',
           'molly.meadows@justice.gov.uk',
           'katharine.hanley@judicialappointments.gov.uk',
+          'adam-senior-leaders@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
@@ -82,6 +83,9 @@ const module = {
     hasPermissions: state => permissions => {
       const rolePermissions = state.currentUser ? state.currentUser.rolePermissions : null;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
+    },
+    getDisplayName(state) {
+      return state.currentUser.displayName;
     },
   },
 };
