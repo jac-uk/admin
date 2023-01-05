@@ -1,41 +1,39 @@
 <template>
   <div class="late-application">
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Request a Late Application to a Closed Exercise
-      </div>
-      <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
-        <div class="govuk-grid-row">
+    <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+      Request a Late Application to a Closed Exercise
+    </div>
+    <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
+      <div class="govuk-grid-row">
+        <LoadingMessage
+          v-if="isLoading"
+          :load-failed="loadFailed"
+        />
 
-          <LoadingMessage
-            v-if="isLoading"
-            :load-failed="loadFailed"
-          />
-
-          <div v-else-if="currentApprovedMessage">
-            <p>
-              The draft application for exercise: {{ currentApprovedMessage.lateApplicationResponse.exerciseName }}
-            </p>
-            <p>
-              Was created for: {{ currentApprovedMessage.lateApplicationResponse.candidateName }}
-            </p>
-            <p>Please copy the email address to communicate the extension: {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}</p>
-            <button
-                class="govuk-button govuk-!-margin-right-3"
-                @click="openDraftApplication"
-              >
-              Open Application
-            </button>
-            <button
-              class="govuk-button govuk-button--warning govuk-!-margin-right-3"
-              @click="close"
-            >
-              Close
-            </button>
-          </div>
-
+        <div v-else-if="currentApprovedMessage">
+          <p>
+            The draft application for exercise: {{ currentApprovedMessage.lateApplicationResponse.exerciseName }}
+          </p>
+          <p>
+            Was created for: {{ currentApprovedMessage.lateApplicationResponse.candidateName }}
+          </p>
+          <p>Please copy the email address to communicate the extension: {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}</p>
+          <button
+            class="govuk-button govuk-!-margin-right-3"
+            @click="openDraftApplication"
+          >
+            Open Application
+          </button>
+          <button
+            class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+            @click="close"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
+  </div>
 </template>
 <script>
 

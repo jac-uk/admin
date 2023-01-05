@@ -1,88 +1,89 @@
 <template>
   <div class="late-application">
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Request a Late Application to a Closed Exercise
-      </div>
-      <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
-        <div class="govuk-grid-row">
-
-          <div v-if="showRejectionForm">
-            <ErrorSummary
-              :errors="errors"
-            />
-            <form @submit.prevent="validateAndSave">
-              <p>
-                <TextArea
-                  id="rejection-reason"
-                  v-model="rejectionReason"
-                  class="govuk-!-margin-top-7"
-                  label="Rejection Reason"
-                  required
-                />
-              </p>
-              <button
-                type="button"
-                class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-                @click="cancelReject"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="govuk-button govuk-button--warning"
-              >
-                Reject
-              </button>
-            </form>
-          </div>
-          <div v-else-if="showApprovalConfirmation">
+    <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+      Request a Late Application to a Closed Exercise
+    </div>
+    <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
+      <div class="govuk-grid-row">
+        <div v-if="showRejectionForm">
+          <ErrorSummary
+            :errors="errors"
+          />
+          <form @submit.prevent="validateAndSave">
             <p>
-              You approved a late application for the candidate:
-            </p>
-            <p class="govuk-!-font-weight-bold" v-if="approvedRequestMessage">
-              {{ approvedRequestMessage.lateApplicationRequest.candidateName }}<br />
-              {{ approvedRequestMessage.lateApplicationRequest.candidateEmail }}<br />
-              {{ approvedRequestMessage.lateApplicationRequest.exerciseName }}
+              <TextArea
+                id="rejection-reason"
+                v-model="rejectionReason"
+                class="govuk-!-margin-top-7"
+                label="Rejection Reason"
+                required
+              />
             </p>
             <button
-                type="button"
-                class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-                @click="closeIfNoMoreMessages"
-              >
-                Close
-              </button>
-          </div>
-          <div v-else>
-            <p>
-              You received a request to approve a late application for the candidate:
+              type="button"
+              class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+              @click="cancelReject"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="govuk-button govuk-button--warning"
+            >
+              Reject
+            </button>
+          </form>
+        </div>
+        <div v-else-if="showApprovalConfirmation">
+          <p>
+            You approved a late application for the candidate:
+          </p>
+          <p
+            v-if="approvedRequestMessage"
+            class="govuk-!-font-weight-bold"
+          >
+            {{ approvedRequestMessage.lateApplicationRequest.candidateName }}<br>
+            {{ approvedRequestMessage.lateApplicationRequest.candidateEmail }}<br>
+            {{ approvedRequestMessage.lateApplicationRequest.exerciseName }}
+          </p>
+          <button
+            type="button"
+            class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+            @click="closeIfNoMoreMessages"
+          >
+            Close
+          </button>
+        </div>
+        <div v-else>
+          <p>
+            You received a request to approve a late application for the candidate:
+          </p>
+          <template v-if="currentRequestMessage">
+            <p class="govuk-!-font-weight-bold">
+              {{ currentRequestMessage.lateApplicationRequest.candidateName }}<br>
+              {{ currentRequestMessage.lateApplicationRequest.candidateEmail }}<br>
+              {{ currentRequestMessage.lateApplicationRequest.exerciseName }}
             </p>
-            <template v-if="currentRequestMessage">
-              <p class="govuk-!-font-weight-bold">
-                {{ currentRequestMessage.lateApplicationRequest.candidateName }}<br />
-                {{ currentRequestMessage.lateApplicationRequest.candidateEmail }}<br />
-                {{ currentRequestMessage.lateApplicationRequest.exerciseName }}
-              </p>
-              <p>
-                {{ currentRequestMessage.lateApplicationRequest.reason }}
-              </p>
-              <button
-                class="govuk-button govuk-!-margin-right-3"
-                @click="approve"
-              >
-                Approve
-              </button>
-              <button
-                class="govuk-button govuk-button--warning govuk-!-margin-right-3"
-                @click="reject"
-              >
-                Reject
-              </button>
-            </template>
-
-          </div>
+            <p>
+              {{ currentRequestMessage.lateApplicationRequest.reason }}
+            </p>
+            <button
+              class="govuk-button govuk-!-margin-right-3"
+              @click="approve"
+            >
+              Approve
+            </button>
+            <button
+              class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+              @click="reject"
+            >
+              Reject
+            </button>
+          </template>
         </div>
       </div>
     </div>
+  </div>
 </template>
 <script>
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';

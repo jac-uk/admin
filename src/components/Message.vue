@@ -1,6 +1,9 @@
 <template>
   <Modal ref="messageModal">
-    <component :is="messageComponent" @close="closeModal('messageModal')"></component>
+    <component
+      :is="messageComponent"
+      @close="closeModal('messageModal')"
+    />
   </Modal>
 </template>
 

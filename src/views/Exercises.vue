@@ -151,7 +151,6 @@
       v-else-if="canRequestLateApplications"
       type="lateApplicationResponse"
     />
-
   </div>
 </template>
 
