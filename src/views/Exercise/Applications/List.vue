@@ -40,7 +40,7 @@
         handler: candidateSearch,
         field: 'userId',
       }"
-      :page-size="50"
+      :page-size="0"
       :page-item-type="'uppercase-letter'"
       @change="getTableData"
     >
