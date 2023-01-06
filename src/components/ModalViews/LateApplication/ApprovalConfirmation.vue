@@ -19,16 +19,16 @@
           </p>
           <p>Please copy the email address to communicate the extension: {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}</p>
           <button
-            class="govuk-button govuk-!-margin-right-3"
-            @click="openDraftApplication"
-          >
-            Open Application
-          </button>
-          <button
             class="govuk-button govuk-button--warning govuk-!-margin-right-3"
             @click="close"
           >
             Close
+          </button>
+          <button
+            class="govuk-button"
+            @click="openDraftApplication"
+          >
+            Open Application
           </button>
         </div>
       </div>

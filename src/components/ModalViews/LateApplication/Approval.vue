@@ -68,16 +68,16 @@
               {{ currentRequestMessage.lateApplicationRequest.reason }}
             </p>
             <button
-              class="govuk-button govuk-!-margin-right-3"
-              @click="approve"
-            >
-              Approve
-            </button>
-            <button
               class="govuk-button govuk-button--warning govuk-!-margin-right-3"
               @click="reject"
             >
               Reject
+            </button>
+            <button
+              class="govuk-button"
+              @click="approve"
+            >
+              Approve
             </button>
           </template>
         </div>
