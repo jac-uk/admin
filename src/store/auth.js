@@ -31,7 +31,6 @@ const module = {
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
-          'digitalteam@judicialappointments.digital',
           'warren.searle@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
@@ -43,7 +42,10 @@ const module = {
           'lisias.loback@judicialappointments.digital',
           'molly.meadows@justice.gov.uk',
           'katharine.hanley@judicialappointments.gov.uk',
-          'adam-senior-leaders@judicialappointments.digital',
+          'digitalteam@judicialappointments.digital',
+          'seniorleader@judicialappointments.digital',
+          'jacstaff@judicialappointments.digital',
+          'readonly@judicialappointments.digital',
         ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
