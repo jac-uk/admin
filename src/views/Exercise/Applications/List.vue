@@ -94,11 +94,7 @@ export default {
     tableColumns() {
       const cols = [];
       cols.push({ title: 'Reference number' });
-      if (this.status === 'draft') {
-        cols.push({ title: 'Name', sort: 'documentId', default: true });
-      } else {
-        cols.push({ title: 'Name', sort: 'personalDetails.fullName', default: true });
-      }
+      cols.push({ title: 'Name', sort: 'personalDetails.fullName', default: true });
       cols.push({ title: 'Status' });
       return cols;
     },
@@ -110,7 +106,7 @@ export default {
     },
   },
   methods: {
-    async getTableData(params) {
+    getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
         {
