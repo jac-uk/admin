@@ -214,10 +214,10 @@
         ref="deleteModal"
       >
         <ModalInner
-          @close="closeDeleteModal"
-          @confirmed="confirmDelete"
           title="Delete Exercise"
           message="Are you sure you want to delete this exercise?"
+          @close="closeDeleteModal"
+          @confirmed="confirmDelete"
         />
       </Modal>
       <button
@@ -230,8 +230,8 @@
       <button
         v-if="isDraft && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value])"
         :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
-        @click="openDeleteModal"
         :disabled="!isDraft"
+        @click="openDeleteModal"
       >
         Delete exercise
       </button>
