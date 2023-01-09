@@ -93,7 +93,7 @@ const PERMISSIONS = {
         value: 'c4',
       },
       canFlagToHandleSensitively: {
-        label: 'Can flag candidate to handle sensitively',
+        label: 'Can flag candidates',
         value: 'c5',
       },
     },
