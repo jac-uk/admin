@@ -95,10 +95,10 @@
                 v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]))"
                 class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
                 :disabled="isButtonDisabled"
-                @click="openArchiveModal"
                 type="button"
+                @click="openArchiveModal"
               >
-              {{ isArchived ? 'Unarchive' : 'Archive' }}
+                {{ isArchived ? 'Unarchive' : 'Archive' }}
               </button>
             </template>
             <template #row="{row}">
@@ -145,13 +145,13 @@
       </div>
     </div>
     <Modal
-        ref="archiveModal"
-      >
+      ref="archiveModal"
+    >
       <ModalInner
-        @close="closeArchiveModal"
-        @confirmed="toggleArchive"
         :title="archiveModalTitle"
         :message="archiveModalMessage"
+        @close="closeArchiveModal"
+        @confirmed="toggleArchive"
       />
     </Modal>
   </div>
