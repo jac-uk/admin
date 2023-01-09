@@ -199,7 +199,7 @@
         />
       </Modal>
       <button
-        v-if="canUpdateExercises"
+        v-if="canArchiveExercises"
         :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
         @click="openArchiveModal"
       >
@@ -287,6 +287,9 @@ export default {
   },
   mixins: [permissionMixin],
   computed: {
+    canArchiveExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
     },
