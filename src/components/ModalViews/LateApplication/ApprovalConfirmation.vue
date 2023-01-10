@@ -12,9 +12,9 @@
 
         <div v-else-if="currentApprovedMessage">
           <p class="govuk-body">
-            An application has been created for the following candidate: <br/><br/>
-            <strong>{{ currentApprovedMessage.lateApplicationResponse.exerciseName }}</strong><br/>
-            {{ currentApprovedMessage.lateApplicationResponse.candidateName }}<br/>
+            An application has been created for the following candidate: <br><br>
+            <strong>{{ currentApprovedMessage.lateApplicationResponse.exerciseName }}</strong><br>
+            {{ currentApprovedMessage.lateApplicationResponse.candidateName }}<br>
             {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}
           </p>
           <p class="govuk-body">
