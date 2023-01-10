@@ -1,29 +1,31 @@
 <template>
-  <div class="govuk-warning-text">
-    <span
-      class="govuk-warning-text__icon"
-      aria-hidden="true"
-    >!</span>
-    <strong class="govuk-warning-text__text">
-      <span class="govuk-warning-text__assistive">Warning</span>
-      This exercise is waiting for your approval
-    </strong>
-    <p>Please verify the content of the exercise and Approve or Reject.</p>
-    <div>
-      <button
-        :disabled="!isReadyForApprovalFromAdvertType"
-        class="govuk-button govuk-button--warning govuk-!-margin-right-3"
-        @click="$emit('setApprovalDecision', false)"
-      >
-        Reject
-      </button>
-      <button
-        :disabled="!isReadyForApprovalFromAdvertType"
-        class="govuk-button"
-        @click="approve"
-      >
-        Approve
-      </button>
+  <div class="background-light-grey govuk-!-margin-bottom-4 govuk-!-padding-4">
+    <div class="govuk-warning-text govuk-!-margin-0">
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        This exercise is waiting for your approval
+      </strong>
+      <p>Please verify the content of the exercise and Approve or Reject.</p>
+      <div>
+        <button
+          :disabled="!isReadyForApprovalFromAdvertType"
+          class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+          @click="$emit('setApprovalDecision', false)"
+        >
+          Reject
+        </button>
+        <button
+          :disabled="!isReadyForApprovalFromAdvertType"
+          class="govuk-button"
+          @click="approve"
+        >
+          Approve
+        </button>
+      </div>
     </div>
   </div>
 </template>
