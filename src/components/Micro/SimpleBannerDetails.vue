@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-  name: 'WarningDetails',
+  name: 'SimpleBannerDetails',
   props: {
     title: {
       type: String,

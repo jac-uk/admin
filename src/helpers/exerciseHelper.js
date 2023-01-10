@@ -146,7 +146,7 @@ function isReadyForApprovalFromAdvertType(data) {
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
-  return data.state === 'draft' && data.rejection_reason;
+  return data.state === 'draft' && data._approval && data._approval.status === 'rejected';
 }
 function isEditable(data) {
   if (data === null) return false;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background-light-grey govuk-!-padding-left-4 govuk-!-padding-right-4 govuk-!-padding-top-4 govuk-!-margin-bottom-3">
     <div class="govuk-warning-text">
       <span
         class="govuk-warning-text__icon"

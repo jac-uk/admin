@@ -271,7 +271,7 @@ import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
 import ExercisePreApprovalTaskList from '@/components/ModalViews/ExercisePreApprovalTaskList.vue';
 import ApprovalProcess from '@/views/Exercise/Details/Overview/ApprovalProcess.vue';
-
+import { mapState } from 'vuex';
 export default {
   name: 'Overview',
   components: {
@@ -287,6 +287,10 @@ export default {
   },
   mixins: [permissionMixin],
   computed: {
+    ...mapState({
+      userId: state => state.auth.currentUser.uid,
+      displayName: state => state.auth.currentUser.displayName,
+    }),
     canArchiveExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
     },
@@ -436,7 +440,11 @@ export default {
   },
   methods: {
     async submitForApproval() {
-      await this.$store.dispatch('exerciseDocument/submitForApproval');
+      await this.$store.dispatch('exerciseDocument/updateApprovalProcess', {
+        userId: this.userId,
+        userName: this.displayName,
+        decision: 'requested',
+      });
       this.closeApprovalModal();
     },
     archive() {

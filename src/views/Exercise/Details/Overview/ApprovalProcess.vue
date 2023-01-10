@@ -2,40 +2,45 @@
   <div class="govuk-!-margin-right-3 govuk-!-margin-left-3">
 
     <template v-if="isReadyForApproval">
+
       <RejectionForm
-        v-if="canApproveExercise && approvalDecision === false"
-        @setApprovalDecision="setApprovalDecision"
+        v-if="canApproveExercise && showRejectionForm"
+        @confirmReject="confirmReject"
+        @cancelReject="cancelReject"
       />
 
       <ApproveReject
-        v-else-if="canApproveExercise && approvalDecision === null"
-        @setApprovalDecision="setApprovalDecision"
+        v-else-if="canApproveExercise"
+        @reject="reject"
       />
 
       <ApprovalCheckMessage
         v-else-if="canUpdateExercises"
       />
+
     </template>
 
     <template v-else-if="isApprovalRejected">
+
       <SimpleBannerDetails
         v-if="canApproveExercise"
-        title="This exercise was rejected by you."
+        :title="rejectionText"
       >
-        {{ exercise.rejection_reason }}
+        {{ rejectionReason }}
       </SimpleBannerDetails>
 
       <WarningDetails
         v-else-if="canUpdateExercises"
         title="This exercise was not approved by senior leaders. Please resubmit for approval."
       >
-        {{ exercise.rejection_reason }}
+        {{ rejectionReason }}
       </WarningDetails>
+
     </template>
 
     <SimpleBanner
       v-else-if="canApproveExercise && isApproved"
-      text="This exercise was approved by you."
+      :text="approvalText"
     />
 
   </div>
@@ -49,6 +54,7 @@ import WarningDetails from '@/components/Micro/WarningDetails';
 import SimpleBanner from '@/components/Micro/SimpleBanner';
 import SimpleBannerDetails from '@/components/Micro/SimpleBannerDetails';
 import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm';
+import { mapGetters } from 'vuex';
 export default {
   name: 'ApprovalProcess',
   components: {
@@ -62,10 +68,31 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      approvalDecision: null,   // null|false|true
+      showRejectionForm: false,
     };
   },
   computed: {
+    ...mapGetters({
+      getApproval: 'exerciseDocument/_approval',
+    }),
+    rejectionReason() {
+      const approval = this.getApproval;
+      return (approval && approval.rejected) ? approval.rejected.message : '';
+    },
+    approver() {
+      const approval = this.getApproval;
+      return (approval && this.isApproved) ? approval.approved.user.name : '';
+    },
+    rejecter() {
+      const approval = this.getApproval;
+      return (approval && this.isApprovalRejected) ? approval.rejected.user.name : '';
+    },
+    approvalText() {
+      return `This exercise was approved by ${this.approver}`;
+    },
+    rejectionText() {
+      return `This exercise was rejected by ${this.rejecter}`;
+    },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
     },
@@ -86,8 +113,14 @@ export default {
     },
   },
   methods: {
-    setApprovalDecision(decision) {
-      this.approvalDecision = decision;
+    reject() {
+      this.showRejectionForm = true;
+    },
+    cancelReject() {
+      this.showRejectionForm = false;
+    },
+    confirmReject() {
+      this.showRejectionForm = false;
     },
   },
 };
