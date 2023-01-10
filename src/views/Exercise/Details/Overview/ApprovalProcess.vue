@@ -54,7 +54,7 @@ import WarningDetails from '@/components/Micro/WarningDetails';
 import SimpleBanner from '@/components/Micro/SimpleBanner';
 import SimpleBannerDetails from '@/components/Micro/SimpleBannerDetails';
 import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'ApprovalProcess',
   components: {
@@ -72,6 +72,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userId: state => state.auth.currentUser.uid,
+    }),
     ...mapGetters({
       getApproval: 'exerciseDocument/_approval',
     }),
@@ -81,7 +84,11 @@ export default {
     },
     approver() {
       const approval = this.getApproval;
-      return (approval && this.isApproved) ? approval.approved.user.name : '';
+      if (approval && this.isApproved) {
+        const approverIsAuth = this.userId === approval.approved.user.id;
+        return approverIsAuth ? 'you' : approval.approved.user.name;
+      }
+      return '';
     },
     rejecter() {
       const approval = this.getApproval;
