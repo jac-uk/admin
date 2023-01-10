@@ -1,7 +1,7 @@
 <template>
   <div class="late-application">
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Request a Late Application to a Closed Exercise
+      Late Application Request
     </div>
     <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -35,16 +35,16 @@
           </form>
         </div>
         <div v-else-if="showApprovalConfirmation">
-          <p>
+          <p class="govuk-body">
             You approved a late application for the candidate:
           </p>
           <p
             v-if="approvedRequestMessage"
-            class="govuk-!-font-weight-bold"
+            class="govuk-body"
           >
+            <strong>{{ approvedRequestMessage.lateApplicationRequest.exerciseName }}</strong><br>
             {{ approvedRequestMessage.lateApplicationRequest.candidateName }}<br>
             {{ approvedRequestMessage.lateApplicationRequest.candidateEmail }}<br>
-            {{ approvedRequestMessage.lateApplicationRequest.exerciseName }}
           </p>
           <button
             type="button"
@@ -55,16 +55,16 @@
           </button>
         </div>
         <div v-else>
-          <p>
-            You received a request to approve a late application for the candidate:
+          <p class="govuk-body">
+            You have received a request to approve a late application for the following candidate:
           </p>
           <template v-if="currentRequestMessage">
-            <p class="govuk-!-font-weight-bold">
+            <p class="govuk-body">
+              <strong>{{ currentRequestMessage.lateApplicationRequest.exerciseName }}</strong><br>
               {{ currentRequestMessage.lateApplicationRequest.candidateName }}<br>
               {{ currentRequestMessage.lateApplicationRequest.candidateEmail }}<br>
-              {{ currentRequestMessage.lateApplicationRequest.exerciseName }}
             </p>
-            <p>
+            <p class="govuk-body">
               {{ currentRequestMessage.lateApplicationRequest.reason }}
             </p>
             <button

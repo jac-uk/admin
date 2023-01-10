@@ -96,4 +96,7 @@ export default {
     padding: 0;
     margin: 0;
   }
+  .modal__title {
+    color: #ffffff;
+  }
 </style>

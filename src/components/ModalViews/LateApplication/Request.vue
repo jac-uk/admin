@@ -1,7 +1,7 @@
 <template>
   <div class="late-application">
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Request a Late Application to a Closed Exercise
+      Request a Late Application
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -68,10 +68,10 @@ export default {
   data() {
     return {
       formData: {
-        email: 'tester+1@test.com',
-        fullName: 'omar tester',
-        reason: 'reason is a good one',
-        seniorLeadership: 'Andrew', // @TODO: DO WE NEED THIS (OR SEND TO WHOLE TEAM??) - Warren said send to whole team
+        email: '',
+        fullName: '',
+        reason: '',
+        seniorLeadership: '', // @TODO: DO WE NEED THIS (OR SEND TO WHOLE TEAM??) - Warren said send to whole team
       },
       errors: [],
     };
@@ -135,7 +135,7 @@ export default {
           }];
         }
         else if (this.hasLateApplicationRequest) {
-          this.errors = [{ id: 'error', message: 'The late application request has already been created for this candidate.' }];
+          this.errors = [{ id: 'error', message: 'An application request has already been created for this candidate.' }];
         }
         else {
           this.$store.dispatch(

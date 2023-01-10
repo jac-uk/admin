@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Request a Late Application to a Closed Exercise
+      Request a Late Application
     </div>
     <div class="modal__message govuk-body-l modal__content govuk-!-padding-4">
-      <p>
+      <p class="govuk-body">
         Your request has been sent to the leadership team.
       </p>
-      <p>
+      <p class="govuk-body">
         You will recieve an answer soon.
       </p>
       <p>
@@ -31,3 +31,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .modal__title {
+    color: govuk-colour("white");
+  }
+</style>

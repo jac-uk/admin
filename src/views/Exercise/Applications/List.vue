@@ -35,25 +35,15 @@
             >
               Export contacts
             </button>
+            <button
+              v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="openModal"
+            >
+              Late Application
+            </button>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-if="status === 'draft'"
-      class="moj-page-header-actions__actions float-right"
-    >
-      <div class="moj-button-menu">
-        <div class="moj-button-menu__wrapper">
-          <button
-            v-if="isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
-            class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-            data-module="govuk-button"
-            @click="openModal"
-          >
-            Late Application
-          </button>
         </div>
       </div>
     </div>

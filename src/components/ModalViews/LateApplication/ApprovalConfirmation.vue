@@ -1,7 +1,7 @@
 <template>
   <div class="late-application">
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Request a Late Application to a Closed Exercise
+      Late Application Request
     </div>
     <div class="modal__message govuk-body-l modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -11,15 +11,17 @@
         />
 
         <div v-else-if="currentApprovedMessage">
-          <p>
-            The draft application for exercise: {{ currentApprovedMessage.lateApplicationResponse.exerciseName }}
+          <p class="govuk-body">
+            An application has been created for the following candidate: <br/><br/>
+            <strong>{{ currentApprovedMessage.lateApplicationResponse.exerciseName }}</strong><br/>
+            {{ currentApprovedMessage.lateApplicationResponse.candidateName }}<br/>
+            {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}
           </p>
-          <p>
-            Was created for: {{ currentApprovedMessage.lateApplicationResponse.candidateName }}
+          <p class="govuk-body">
+            Please update the application with an extension deadline and inform the candidate.
           </p>
-          <p>Please copy the email address to communicate the extension: {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}</p>
           <button
-            class="govuk-button govuk-button--warning govuk-!-margin-right-3"
+            class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
             @click="close"
           >
             Close

@@ -22,7 +22,7 @@ export default class extends MessageBase {
                 exerciseName: data.exercise.name,
                 exerciseRef: data.exercise.referenceNumber,
                 exerciseCloseDate: data.exercise.applicationCloseDate,
-                replyTo: [data.exercise.exerciseMailbox],
+                replyTo: [data.exercise.exerciseMailbox, data.requester.email],
                 reason: data.reason,
                 candidateId: data.candidate.id,
                 candidateName: data.candidate.fullName,
