@@ -87,7 +87,7 @@
                 >
                   Sign out
                 </a>
-              <!-- <span
+                <!-- <span
                 v-if="isSignedIn"
                 class="app-c-topic-list__item nostyle"
               >

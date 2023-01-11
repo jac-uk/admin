@@ -1,8 +1,6 @@
 <template>
   <div class="govuk-!-margin-right-3 govuk-!-margin-left-3">
-
     <template v-if="isReadyForApproval">
-
       <RejectionForm
         v-if="canApproveExercise && showRejectionForm"
         @confirmReject="confirmReject"
@@ -17,11 +15,9 @@
       <ApprovalCheckMessage
         v-else-if="canUpdateExercises"
       />
-
     </template>
 
     <template v-else-if="isApprovalRejected">
-
       <SimpleBannerDetails
         v-if="canApproveExercise"
         :title="rejectionText"
@@ -35,14 +31,12 @@
       >
         {{ rejectionReason }}
       </WarningDetails>
-
     </template>
 
     <SimpleBanner
       v-else-if="canApproveExercise && isApproved"
       :text="approvalText"
     />
-
   </div>
 </template>
 <script>
