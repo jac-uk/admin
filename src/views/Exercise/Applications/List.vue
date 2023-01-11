@@ -94,7 +94,7 @@ export default {
     tableColumns() {
       const cols = [];
       cols.push({ title: 'Reference number' });
-      cols.push({ title: 'Name', sort: 'personalDetails.fullName', default: true });
+      cols.push({ title: 'Name', sort: '_sort.fullNameUC', default: true });
       cols.push({ title: 'Status' });
       return cols;
     },
