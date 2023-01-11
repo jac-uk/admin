@@ -59,6 +59,23 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
+            Middle name(s)
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.middleNames || ''"
+              field="middleNames"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
             Last name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -68,6 +85,57 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Suffix
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.suffix || ''"
+              field="suffix"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Previous known name(s)
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.previousNames || ''"
+              field="previousNames"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Professional name 
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.professionalName || ''"
+              field="professionalName"
               @changeField="changeUserDetails"
             />
           </dd>

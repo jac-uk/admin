@@ -8,16 +8,21 @@ import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
+import * as Sentry from '@sentry/vue';
+import { BrowserTracing } from '@sentry/tracing';
 import './styles/main.scss';
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
+    Vue,
     dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
     environment: store.getters.appEnvironment.toLowerCase(),
     release: process.env.PACKAGE_VERSION, // made available in vue.config.js
-    integrations: [new Integrations.Vue({ Vue, attachProps: true })],
+    integrations: [
+      new BrowserTracing({
+        routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      }),
+    ],
   });
 }
 
@@ -37,7 +42,7 @@ Object.keys(localFilters)
   });
 
 let vueInstance = false;
-auth().onAuthStateChanged(async (user) => {
+auth.onAuthStateChanged(async (user) => {
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
   // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines

@@ -44,6 +44,13 @@
               >
                 Save Report
               </button>
+              <button
+                class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
+                :disabled="isLoading || !data"
+                @click="downloadReport"
+              >
+                Download Report
+              </button>
             </div>
           </div>
         </div>
@@ -208,12 +215,6 @@
             </tr>
           </tbody>
         </table>
-        <button
-          class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-          @click="downloadReport"
-        >
-          Download Report
-        </button>
       </div>
       <div
         v-if="data && type === 'count'"
@@ -343,11 +344,15 @@ export default {
             'personalDetails.dateOfBirth',
             'personalDetails.title',
             'personalDetails.citizenship',
+            'personalDetails.firstName',
+            'personalDetails.middleNames',
             'personalDetails.lastName',
             'personalDetails.fullName',
+            'personalDetails.suffix',
+            'personalDetails.previousNames',
+            'personalDetails.professionalName',
             'personalDetails.phone',
             'personalDetails.nationalInsuranceNumber',
-            'personalDetails.firstName',
             'personalDetails.reasonableAdjustmentsDetails',
             'personalDetails.email',
             'personalDetails.reasonableAdjustments',
@@ -359,13 +364,6 @@ export default {
             'applyingUnderSchedule2Three',
             '_processing.status',
             '_processing.stage',
-          ],
-        },
-        {
-          name: 'Working Preferences',
-          keys: [
-            'jurisdictionPreferences',
-            'locationPreferences',
           ],
         },
         {
@@ -478,15 +476,19 @@ export default {
         '_processing.stage': { label: 'Stage', type: String },
         'personalDetails.phone': { label: 'Phone', type: String },
         'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String },
-        'personalDetails.firstName': { label: 'first name', type: String },
         'personalDetails.reasonableAdjustmentsDetails': { label: 'reasonable adjustments details', type: String },
         'personalDetails.email': { label: 'Email', type: String },
         'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
         'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date },
         'personalDetails.title': { label: 'Title', type: String },
         'personalDetails.citizenship': { label: 'Citizenship', type: String },
+        'personalDetails.firstName': { label: 'First Name', type: String },
+        'personalDetails.middleNames': { label: 'Middle name(s)', type: String },
         'personalDetails.lastName': { label: 'Last Name', type: String },
-        'personalDetails.fullName': { label: 'Full name', type: String },
+        'personalDetails.fullName': { label: 'Full Name', type: String },
+        'personalDetails.suffix': { label: 'Suffix', type: String },
+        'personalDetails.previousNames': { label: 'Previously known name(s)', type: String },
+        'personalDetails.professionalName': { label: 'Professional name', type: String },
         qualifications: { label: 'Qualifications', type: 'Array of objects' },
         skillsAquisitionDetails: { label: 'Skills aquisition details', type: String },
         feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
@@ -495,8 +497,8 @@ export default {
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
         quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
         quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
-        jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
-        locationPreferences: { label: 'Location Preferences', type: String },
+        // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
+        // locationPreferences: { label: 'Location Preferences', type: String },
       },
     };
   },
@@ -526,6 +528,25 @@ export default {
     },
   },
   created() {
+    // if report can include working prefs answers, add them under working prefs title
+    if (this.exercise.jurisdictionQuestion || this.exercise.locationQuestion) {
+      this.groups.splice(1, 0, { name: 'Working Preferences', keys: [] });
+      const workingPrefsIndex = this.groups.findIndex((group) => group.name === 'Working Preferences');
+      if (this.exercise.jurisdictionQuestion) {
+        this.groups[workingPrefsIndex].keys.push('jurisdictionPreferences');
+        this.keys['jurisdictionPreferences'] = { label: this.exercise.jurisdictionQuestion, type: String };
+      }
+      if (this.exercise.locationQuestion) {
+        this.groups[workingPrefsIndex].keys.push('locationPreferences');
+        this.keys['locationPreferences'] = { label: this.exercise.locationQuestion, type: String };
+      }
+      if (this.exercise.additionalWorkingPreferences) {
+        this.exercise.additionalWorkingPreferences.forEach((question, i) => {
+          this.groups[1].keys.push(`additionalWorkingPreferences ${i}`);
+          this.keys[`additionalWorkingPreferences ${i}`] = { label: this.exercise.additionalWorkingPreferences[i].question, type: String };
+        });
+      }
+    }
     this.getReports();
   },
   methods: {
@@ -549,10 +570,8 @@ export default {
       this.selectedColumn = '';
     },
     removeColumn(event) {
-
       const index = event.target.getAttribute('data-index');
       this.columns.splice(index, 1);
-
     },
     addWhereClause(column, operator, value) {
       this.whereClauses.push(

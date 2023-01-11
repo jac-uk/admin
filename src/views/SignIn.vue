@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import firebase from 'firebase/app';
 import { auth, functions } from '@/firebase';
 
 export default {
@@ -64,11 +65,11 @@ export default {
       this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
     },
     signOut() {
-      auth().signOut();
+      auth.signOut();
     },
     checkIfNewUser(user) {
       if (user.additionalUserInfo.isNewUser) {
-        this.disableNewUser(auth().currentUser.uid).then(() => {
+        this.disableNewUser(auth.currentUser.uid).then(() => {
           this.signOut();
         }).catch(() => {
           this.signOut();
@@ -76,16 +77,16 @@ export default {
       }
     },
     loginWithGoogle() {
-      const provider = new auth.GoogleAuthProvider();
-      auth().signInWithPopup(provider).then((user) => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);
       }).catch(err => {
         this.signInError = err.message;
       });
     },
     loginWithMicrosoft() {
-      const provider = new auth.OAuthProvider('microsoft.com');
-      auth().signInWithPopup(provider).then((user) => {
+      const provider = new firebase.auth.OAuthProvider('microsoft.com');
+      auth.signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);
       }).catch(err => {
         this.signInError = err.message;

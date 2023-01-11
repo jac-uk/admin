@@ -63,12 +63,11 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
 import { functions } from '@/firebase';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'Actions',
@@ -77,6 +76,7 @@ export default {
     Banner,
   },
   extends: Form,
+  mixins: [permissionMixin],
   props: {
     candidateId: {
       type: String,
@@ -85,7 +85,6 @@ export default {
   },
   data() {
     return {
-      authorisedToPerformAction: false,
       currentEmailAddress: 'unknown',
       newEmailAddress: null,
       message: '',
@@ -99,11 +98,7 @@ export default {
     },
   },
   async created() {
-    const email = firebase.auth().currentUser.email;
-    this.authorisedToPerformAction = await authorisedToPerformAction(email);
-    if (this.authorisedToPerformAction) {
-      this.getCurrentEmailAddress(this.candidateId);
-    }
+    this.getCurrentEmailAddress(this.candidateId);
   },
   methods: {
     async getCurrentEmailAddress() {
@@ -124,7 +119,7 @@ export default {
     async save() {
       this.validate();
       if (this.isValid()) {
-        if (this.authorisedToPerformAction) {
+        if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canUpdateCandidates.value])) {
           this.submitted = true;
           try {
             const response = await functions.httpsCallable('updateEmailAddress')({

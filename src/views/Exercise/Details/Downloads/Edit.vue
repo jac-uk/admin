@@ -130,6 +130,7 @@ export default {
         independentAssessors: [],
         candidateAssessementForms: [],
         welshTranslation: [],
+        statutoryConsultationGuidanceLetter: [],
         otherDownloads: [],
       },
     };
@@ -217,6 +218,13 @@ export default {
         title: 'Welsh Translation',
         id: 'welshTranslation',
         name: 'welsh-translation',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Statutory Consultation Guidance Letter',
+        id: 'statutoryConsultationGuidanceLetter',
+        name: 'statutory-consultation-guidance-letter',
         mandatory: false,
       });
 

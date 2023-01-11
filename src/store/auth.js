@@ -31,6 +31,7 @@ const module = {
         if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
           allOk = true;
         } else if ([
+          'digitalteam@judicialappointments.digital',
           'warren.searle@judicialappointments.digital',
           'halcyon@judicialappointments.digital',
           'tom.russell@judicialappointments.digital',
@@ -51,7 +52,7 @@ const module = {
             user = { ...user, emailVerified: true };
             shouldEnsureEmailVerified = true;
           }
-          
+
           commit('setCurrentUser', {
             uid: user.uid,
             email: user.email,
@@ -62,7 +63,7 @@ const module = {
             await functions.httpsCallable('ensureEmailValidated')({});
           }
         } else {
-          auth().signOut();
+          auth.signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
         }
       }
@@ -79,7 +80,7 @@ const module = {
       return state.currentUser.email;
     },
     hasPermissions: state => permissions => {
-      const rolePermissions = state.currentUser.rolePermissions;
+      const rolePermissions = state.currentUser ? state.currentUser.rolePermissions : null;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
   },

@@ -8,13 +8,24 @@
       </div>
 
       <div
-        v-if="status === 'applied'"
+        v-if="status === 'draft' || status === 'applied'"
         class="moj-page-header-actions__actions float-right"
       >
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
-              v-if="hasPermissions([
+              v-if="status === 'draft' && hasPermissions([
+                PERMISSIONS.exercises.permissions.canSendApplicationReminders.value,
+              ])"
+              class="govuk-button govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              :disabled="!applications || !applications.length"
+              @click="openApplicationReminderModal"
+            >
+              Send reminders
+            </button>
+            <button
+              v-if="status === 'applied' && hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
@@ -67,12 +78,23 @@
         </TableCell>
       </template>
     </Table>
+
+    <Modal
+      ref="applicationReminderModal"
+    >
+      <ModalInner
+        @close="closeApplicationReminderModal"
+        @confirmed="sendApplicationReminders"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
@@ -82,6 +104,8 @@ export default {
   components: {
     Table,
     TableCell,
+    Modal,
+    ModalInner,
   },
   mixins: [permissionMixin],
   props: {
@@ -125,6 +149,16 @@ export default {
       });
       return reportData;
     },
+    async sendApplicationReminders() {
+      if (this.applications && this.applications.length) {
+        try {
+          await functions.httpsCallable('sendApplicationReminders')({ exerciseId: this.exercise.id });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      this.closeApplicationReminderModal();
+    },
     async exportContacts() {
       const title = 'Contacts';
       const xlsxData = await this.gatherReportData();
@@ -139,6 +173,12 @@ export default {
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });
+    },
+    openApplicationReminderModal() {
+      this.$refs.applicationReminderModal.openModal();
+    },
+    closeApplicationReminderModal() {
+      this.$refs.applicationReminderModal.closeModal();
     },
   },
 };
