@@ -92,7 +92,7 @@ const PERMISSIONS = {
         label: 'Can delete candidates',
         value: 'c4',
       },
-      canFlagToHandleSensitively: {
+      canFlagCandidates: {
         label: 'Can flag candidates',
         value: 'c5',
       },

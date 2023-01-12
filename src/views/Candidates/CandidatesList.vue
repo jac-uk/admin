@@ -25,7 +25,7 @@
       :filters="[
         {
           type: 'singleCheckbox',
-          field: 'isHandledSensitively',
+          field: 'isFlaggedCandidate',
           inputLabel: 'Show flagged candidates only'
         },
       ]"
@@ -42,7 +42,7 @@
             :to="{ name: 'candidates-view', params: { id: row.id } }"
           >
             {{ row.fullName | showAlternative(row.id) }}
-            <span v-if="row.isHandledSensitively">*</span>
+            <span v-if="row.isFlaggedCandidate">*</span>
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">

@@ -29,7 +29,7 @@
           <div class="govuk-grid-column-one-half">
             <span class="govuk-caption-l">Application</span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
-              {{ applicationReferenceNumber }} {{ candidateRecord && candidateRecord.isHandledSensitively ? '*' : '' }}
+              {{ applicationReferenceNumber }} {{ candidateRecord && candidateRecord.isFlaggedCandidate ? '*' : '' }}
             </h1>
           </div>
 

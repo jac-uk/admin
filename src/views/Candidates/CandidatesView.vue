@@ -3,7 +3,7 @@
     <h1
       class="govuk-heading-xl govuk-!-margin-bottom-6"
     >
-      Candidate: {{ myFullName }} {{ isHandledSensitively ? '*' : '' }}
+      Candidate: {{ myFullName }} {{ isFlaggedCandidate ? '*' : '' }}
     </h1>
     <TabsList
       :tabs="tabs"
@@ -30,11 +30,11 @@
         </button>
       </template>
       <button
-        v-if="activeTab === 'notes' && candidateRecord && hasPermissions([PERMISSIONS.candidates.permissions.canFlagToHandleSensitively.value])"
+        v-if="activeTab === 'notes' && candidateRecord && hasPermissions([PERMISSIONS.candidates.permissions.canFlagCandidates.value])"
         class="govuk-button govuk-button--secondary"
-        @click="toggleHandledSensitively"
+        @click="toggleFlaggedCandidate"
       >
-        {{ candidateRecord.isHandledSensitively ? 'Un-Flag Candidate' : 'Flag Candidate' }}
+        {{ candidateRecord.isFlaggedCandidate ? 'Un-Flag Candidate' : 'Flag Candidate' }}
       </button>
     </span>
 
@@ -156,8 +156,8 @@ export default {
     myFullName() {
       return this.personalDetails ? this.personalDetails.fullName : this.candidateRecord.fullName;
     },
-    isHandledSensitively() {
-      return this.candidateRecord && this.candidateRecord.isHandledSensitively;
+    isFlaggedCandidate() {
+      return this.candidateRecord && this.candidateRecord.isFlaggedCandidate;
     },
     getUserId() {
       return this.$route.params.id || '';
@@ -189,9 +189,9 @@ export default {
     toggleEdit(){
       this.editMode = !this.editMode;
     },
-    toggleHandledSensitively() {
+    toggleFlaggedCandidate() {
       this.$store.dispatch('candidates/save', {
-        isHandledSensitively: !this.isHandledSensitively,
+        isFlaggedCandidate: !this.isFlaggedCandidate,
       });
     },
   },
