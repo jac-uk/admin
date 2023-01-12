@@ -60,7 +60,7 @@ const store = new Vuex.Store({
     invitations,
     lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
     lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
-    messageBase,
+    messageBase: new messageBase().getModule(),
     notes,
     notifications,
     panels,

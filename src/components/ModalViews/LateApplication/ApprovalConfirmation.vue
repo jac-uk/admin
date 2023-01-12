@@ -10,12 +10,12 @@
           :load-failed="loadFailed"
         />
 
-        <div v-else-if="currentApprovedMessage">
+        <div v-else-if="message">
           <p class="govuk-body">
             An application has been created for the following candidate: <br><br>
-            <strong>{{ currentApprovedMessage.lateApplicationResponse.exerciseName }}</strong><br>
-            {{ currentApprovedMessage.lateApplicationResponse.candidateName }}<br>
-            {{ currentApprovedMessage.lateApplicationResponse.candidateEmail }}
+            <strong>{{ message.lateApplicationResponse.exerciseName }}</strong><br>
+            {{ message.lateApplicationResponse.candidateName }}<br>
+            {{ message.lateApplicationResponse.candidateEmail }}
           </p>
           <p class="govuk-body">
             Please update the application with an extension deadline and inform the candidate.
@@ -46,6 +46,12 @@ export default {
   components: {
     LoadingMessage,
   },
+  props: {
+    message: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       isLoading: false,
@@ -53,46 +59,49 @@ export default {
     };
   },
   computed: {
-    approvedMessages() {
-      return this.responseMessages.filter(item => {
-        return item.lateApplicationResponse.decision && item.lateApplicationResponse.decision === 'approved';
-      });
-    },
-    responseMessages() {
-      return this.$store.getters['lateApplicationResponseMsg/getMessages'];
-    },
-    currentApprovedMessage() {
-      return this.approvedMessages.length ? this.approvedMessages[0] : null;
-    },
+    // approvedMessages() {
+    //   return this.responseMessages.filter(item => {
+    //     return item.lateApplicationResponse.decision && item.lateApplicationResponse.decision === 'approved';
+    //   });
+    // },
+    // responseMessages() {
+    //   return this.$store.getters['lateApplicationResponseMsg/getMessages'];
+    // },
+    // currentApprovedMessage() {
+    //   return this.approvedMessages.length ? this.approvedMessages[0] : null;
+    // },
+    // messageId() {
+    //   if (this.currentApprovedMessage) {
+    //     return this.currentApprovedMessage.id;
+    //   }
+    //   return null;
+    // },
     messageId() {
-      if (this.currentApprovedMessage) {
-        return this.currentApprovedMessage.id;
-      }
-      return null;
+      return this.message.id;
     },
     applicationId() {
-      if (this.currentApprovedMessage) {
-        return this.currentApprovedMessage.lateApplicationResponse.applicationId;
+      if (this.message) {
+        return this.message.lateApplicationResponse.applicationId;
       }
       return null;
     },
     exerciseId() {
-      if (this.currentApprovedMessage) {
-        return this.currentApprovedMessage.lateApplicationResponse.exerciseId;
+      if (this.message) {
+        return this.message.lateApplicationResponse.exerciseId;
       }
       return null;
     },
     reason() {
-      if (this.currentApprovedMessage) {
-        return this.currentApprovedMessage.lateApplicationResponse.reason;
+      if (this.message) {
+        return this.message.lateApplicationResponse.reason;
       }
       return '';
     },
   },
   methods: {
-    markResponseMessageAsRead() {
-      return this.$store.dispatch('lateApplicationResponseMsg/markAsRead', this.messageId);
-    },
+    // markResponseMessageAsRead() {
+    //   return this.$store.dispatch('lateApplicationResponseMsg/markAsRead', this.messageId);
+    // },
     openDraftApplication() {
       const route = this.$router.resolve({
         name: 'exercise-applications-application',
@@ -109,22 +118,29 @@ export default {
       this.isLoading = true;
       setTimeout(async () => {
         try {
-          await this.markResponseMessageAsRead();
-          this.closeIfNoMoreMessages();
+          //await this.markResponseMessageAsRead();
+
+          console.log('Calling markAsRead from ApprovalConfirmation');
+
+          this.$emit('read', true);
+
+          //this.closeIfNoMoreMessages();
+          this.isLoading = false;
+          //this.$emit('close');
         }
         catch (e) {
           this.loadFailed = true;
         }
       }, 2000);
     },
-    closeIfNoMoreMessages() {
-      if (this.approvedMessages.length === 0) {
-        this.$emit('close');
-      }
-      else {
-        this.isLoading = false;
-      }
-    },
+    // closeIfNoMoreMessages() {
+    //   if (this.approvedMessages.length === 0) {
+    //     this.$emit('close');
+    //   }
+    //   else {
+    //     this.isLoading = false;
+    //   }
+    // },
   },
 };
 </script>

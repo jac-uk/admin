@@ -511,5 +511,8 @@ function getSeniorSelectionMgrs(exercise) {
   for (const emailObj of exercise.seniorSelectionExerciseManager) {
     emails.push(emailObj.name);
   }
-  return emails;
+  // Get unique entries
+  return emails.filter((item, pos) => {
+    return emails.indexOf(item) === pos;
+  });
 }

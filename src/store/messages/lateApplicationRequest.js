@@ -8,6 +8,11 @@ export default class extends MessageBase {
     return {
       ...super.actions(),
       create: async (context, data) => {
+        const toArr = [data.exercise.exerciseMailbox, data.requester.email];
+        // Get unique entries in the 'to' array of email addresses
+        const uniqueToArr = toArr.filter((item, pos) => {
+          return toArr.indexOf(item) === pos;
+        });
         await super.actions().save(context, {
           data: {
             status: 'created',
@@ -22,7 +27,7 @@ export default class extends MessageBase {
                 exerciseName: data.exercise.name,
                 exerciseRef: data.exercise.referenceNumber,
                 exerciseCloseDate: data.exercise.applicationCloseDate,
-                replyTo: [data.exercise.exerciseMailbox, data.requester.email],
+                replyTo: uniqueToArr,
                 reason: data.reason,
                 candidateId: data.candidate.id,
                 candidateName: data.candidate.fullName,

@@ -1,13 +1,9 @@
 <template>
   <Modal ref="messageModal">
-    <!-- <component
-      :is="messageComponent"
-      @close="closeModal('messageModal')"
-    /> -->
     <component
       :is="messageComponent"
       :message="currentMessage"
-      @close="closeIfNoMoreMessages"
+      @close="close"
       @read="markMessageAsRead"
     />
   </Modal>
@@ -28,13 +24,6 @@ export default {
   },
   mixins: [permissionMixin],
   props: {
-
-    // @TODO: Once working wont need to pass in the type anymore!
-
-    // type: {
-    //   type: String,
-    //   required: true,
-    // },
     retrieveMsgLimit: {  // If set to zero then retrieve all
       type: Number,
       default: 0,
@@ -42,83 +31,42 @@ export default {
   },
   data() {
     return {
-      //messageComponent: null,
-      //moduleNamespace: null,
+      messageComponent: '',
     };
   },
-  computed: {
-    messageComponent() {
-      // this.messageComponent = 'Approval';
-      // this.messageComponent = 'ApprovalConfirmation';
-      if (this.currentMessage) {
-        if (this.currentMessage.type === 'lateApplicationRequest') {
-          return 'Approval';
+  watch: {
+    // Need to use a watch below as we want fine control of when the messages modal closes, ie not when the list of messages
+    // run out (so we don't use a computed property)
+    currentMessage(newMessage) {
+      if (newMessage) {
+        if (newMessage.type === 'lateApplicationRequest') {
+          this.messageComponent = 'Approval';
         }
-        else if (this.currentMessage.type === 'lateApplicationResponse') {
-          return 'ApprovalConfirmation';
+        else if (newMessage.type === 'lateApplicationResponse') {
+          this.messageComponent = 'ApprovalConfirmation';
         }
       }
-      return '';
     },
-    // @TODO: May not be needed!!
-    // moduleNamespace() {
-    //   // this.moduleNamespace = 'lateApplicationRequestMsg';
-    //   // this.moduleNamespace = 'lateApplicationResponseMsg';
-    //   if (this.currentMessage.type === 'lateApplicationRequest') {
-    //     return 'lateApplicationRequestMsg';
-    //   }
-    //   else if (this.currentMessage.type === 'lateApplicationResponse') {
-    //     return 'lateApplicationResponseMsg';
-    //   }
-    //   return '';
-    // },
-
+  },
+  computed: {
     messages() {
       return this.$store.state.messageBase.records;
     },
     hasMessages() {
       return this.messages.length > 0;
     },
-
     currentMessage() {
       return this.hasMessages ? this.messages[0] : null;
     },
-
     currentMessageId() {
       if (this.hasMessages) {
         return this.currentMessage.id;
       }
       return null;
     },
-
   },
   async created() {
     const additionalParams = [];
-    // if (this.type === 'lateApplicationRequest') {
-    //   this.messageComponent = 'Approval';
-    //   this.moduleNamespace = 'lateApplicationRequestMsg';
-    // }
-    // else if (this.type === 'lateApplicationResponse') {
-    //   this.messageComponent = 'ApprovalConfirmation';
-    //   this.moduleNamespace = 'lateApplicationResponseMsg';
-
-    //   // @TODO: CHANGE BELOW!!
-
-    //   additionalParams.push([
-    //     'lateApplicationResponse.decision', '==', 'approved',
-    //   ]);
-    // }
-    // if (this.moduleNamespace) {
-    //   await this.getMessages(additionalParams)
-    //     .then(
-    //       () => {
-    //         if (this.hasMessages) {
-    //           this.openModal('messageModal');
-    //         }
-    //       }
-    //     );
-    // }
-
     await this.getMessages(additionalParams)
       .then(
         () => {
@@ -129,21 +77,13 @@ export default {
       );
   },
 
-  // @TODO: WANT THIS COMPONENT TO BE RENAMED TO MESSAGES.VUE
-  // - IT NEEDS TO LOAD A DIFFERENT COMPONENT AS WE LOOP THROUGH THE MESSAGES!!! - SO messageComponent NEEDS TO CHANGE BASED ON THE
-  // CURRENT MESSAGE INSTEAD OF IN CREATED!
-  //    - SO NEED MORE OF THE LOGIC IN HERE THAN IN THE CHILD, THE CHILD SHOULD ONLY BE RESPONSIBLE FOR STUFF SPECIFIC TO IT'S TYPE
-  //    OF MSG
-  //    - EMIT EVENTS TO THIS COMPONENT FROM THE CHILD!!
-  //  - Note that to get the message just displaying anytime we wont be able to rely on the 'created' hook in here so google
-  // another solution
-
   // @TODO: ensure child component...
-  // - Put the Message component into App.vue
+  // *** Could try making currentMessage something which is set in the watch as well so we are in control of when it is unloaded
+  // hence dont nec need the penultimate thing!!
+  // - Put the Message component into App.vue and try to get a watcher working (else get it working with the onSnapshot listener, if
+  // struggling then get help from Warren!!)
+  // - Check response messages display ok for the admins, and ensure they see a rejection message as well as the current approval one!
   // - Ensure unique emails in Repsonse mail as well
-  // - uses the 'message' passed to it
-  // - emits when markAsRead (doesnt need to emit the message id as the parent knows it already from currentMessage!)
-  // - comment out any computed props/methods that are no longer used!
 
   methods: {
     async getMessages(additionalParams) {
@@ -160,46 +100,32 @@ export default {
       if (this.retrieveMsgLimit) {
         data.limit = this.retrieveMsgLimit;
       }
-      //return await this.$store.dispatch(`${this.moduleNamespace}/bind`, data);
       return await this.$store.dispatch('messageBase/bind', data);
     },
-
-    async markMessageAsRead() {
-      console.log('!!!!!! Calling markMessageAsRead in Messages !!!!!!!!', this.currentMessageId);
-      //return this.$store.dispatch('lateApplicationRequestMsg/markAsRead', this.messageId);
+    async markMessageAsRead(closeIfPenultimate) {
+      if (closeIfPenultimate) {
+        this.closeIfPenultimateMessage();
+      }
       await this.$store.dispatch('messageBase/markAsRead', this.currentMessageId);
-      this.closeIfNoMoreMessages();
     },
-
     openModal(modalRef){
       if (this.$refs[modalRef]) {
         this.$refs[modalRef].openModal();
       }
     },
-
-    closeModal(modalRef) {
-      this.$refs[modalRef].closeModal();
+    closeModal() {
+      this.$refs['messageModal'].closeModal();
     },
-    //  @close="closeModal('messageModal')"
-
-    async closeIfNoMoreMessages() {
-      console.log('closeIfNoMoreMessages?');
-      if (this.messages.length === 0) {
-        console.log('YES');
-
-        //this.$emit('close');
-        this.$refs['messageModal'].closeModal();
-      }
-      else {
-
-        console.log('NO');
-
-        // @TODO: THIS NEEDS TO BE IN THE CHILD!!
-
-        //this.reset();
+    closeIfPenultimateMessage() {
+      if (this.messages.length === 1) {
+        this.closeModal();
       }
     },
-
+    close(closeIfNoMoreMessages) {
+      if (closeIfNoMoreMessages && this.messages.length === 0) {
+        this.closeModal();
+      }
+    },
   },
 };
 </script>

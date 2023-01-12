@@ -49,7 +49,7 @@
           <button
             type="button"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-            @click="closeIfNoMoreMessages"
+            @click="close"
           >
             Close
           </button>
@@ -58,14 +58,14 @@
           <p class="govuk-body">
             You have received a request to approve a late application for the following candidate:
           </p>
-          <template v-if="currentRequestMessage">
+          <template v-if="message">
             <p class="govuk-body">
-              <strong>{{ currentRequestMessage.lateApplicationRequest.exerciseName }}</strong><br>
-              {{ currentRequestMessage.lateApplicationRequest.candidateName }}<br>
-              {{ currentRequestMessage.lateApplicationRequest.candidateEmail }}<br>
+              <strong>{{ message.lateApplicationRequest.exerciseName }}</strong><br>
+              {{ message.lateApplicationRequest.candidateName }}<br>
+              {{ message.lateApplicationRequest.candidateEmail }}<br>
             </p>
             <p class="govuk-body">
-              {{ currentRequestMessage.lateApplicationRequest.reason }}
+              {{ message.lateApplicationRequest.reason }}
             </p>
             <button
               class="govuk-button govuk-button--warning govuk-!-margin-right-3"
@@ -98,6 +98,11 @@ export default {
     TextArea,
   },
   extends: Form,
+  props: {
+    message: {
+      type: Object,
+    },
+  },
   data() {
     return {
       errors: [],
@@ -108,33 +113,21 @@ export default {
     };
   },
   computed: {
-    requestMessages() {
-      return this.$store.getters['lateApplicationRequestMsg/getMessages'];
-    },
-    currentRequestMessage() {
-      return this.requestMessages.length ? this.requestMessages[0] : null;
-    },
     messageId() {
-      if (this.currentRequestMessage) {
-        return this.currentRequestMessage.id;
-      }
-      return null;
+      return this.message.id;
     },
     applicationId() {
       return this.$store.state.application.record ? this.$store.state.application.record.id : null;
     },
   },
   methods: {
-    markRequestMessageAsRead() {
-      return this.$store.dispatch('lateApplicationRequestMsg/markAsRead', this.messageId);
-    },
     createResponseMessage(d) {
       const data = {
         requester: {
           fullName: this.$store.getters['auth/getDisplayName'],
           email: this.$store.getters['auth/getEmail'],
         },
-        requestMessage: this.currentRequestMessage,
+        requestMessage: this.message,
         decision: d.decision ? 'approved' : 'rejected',
       };
       if (d.rejectionReason) {
@@ -148,30 +141,28 @@ export default {
     async createDraftApplication() {
       return this.$store.dispatch(
         'application/createDraft', {
-          exerciseId: this.currentRequestMessage.lateApplicationRequest.exerciseId,
-          exerciseName: this.currentRequestMessage.lateApplicationRequest.exerciseName,
-          exerciseRef: this.currentRequestMessage.lateApplicationRequest.exerciseRef,
-          candidateId: this.currentRequestMessage.lateApplicationRequest.candidateId,
-          candidateEmail: this.currentRequestMessage.lateApplicationRequest.candidateEmail,
-          candidateFullname: this.currentRequestMessage.lateApplicationRequest.candidateName,
+          exerciseId: this.message.lateApplicationRequest.exerciseId,
+          exerciseName: this.message.lateApplicationRequest.exerciseName,
+          exerciseRef: this.message.lateApplicationRequest.exerciseRef,
+          candidateId: this.message.lateApplicationRequest.candidateId,
+          candidateEmail: this.message.lateApplicationRequest.candidateEmail,
+          candidateFullname: this.message.lateApplicationRequest.candidateName,
         }
       );
     },
     async approve() {
       // Store the request msg details in an object so they can be redisplayed once the request message status has changed
-      this.approvedRequestMessage = clone(this.currentRequestMessage);
-
+      this.approvedRequestMessage = clone(this.message);
       await this.createDraftApplication();
       await this.createResponseMessage({
         decision: true,
         applicationId: this.applicationId,
       });
-
       // Reset the application record otherwise subsequent draft applications wont get created
       await this.$store.dispatch('application/unbind');
-
       this.showApprovalConfirmation = true;
-      await this.markRequestMessageAsRead();
+      // We send a false flag below to prevent the modal from closing as there is a confirmation msg being displayed first!
+      this.$emit('read', false);
     },
     async reject() {
       this.showRejectionForm = true;
@@ -185,9 +176,7 @@ export default {
         decision: false,
         rejectionReason: this.rejectionReason,
       });
-
-      await this.markRequestMessageAsRead();
-      this.closeIfNoMoreMessages();
+      this.$emit('read', true);
       this.reset();
     },
     reset() {
@@ -195,13 +184,9 @@ export default {
       this.showRejectionForm = false;
       this.rejectionReason = '';
     },
-    async closeIfNoMoreMessages() {
-      if (this.requestMessages.length === 0) {
-        this.$emit('close');
-      }
-      else {
-        this.reset();
-      }
+    close() {
+      this.$emit('close', true);
+      this.reset();
     },
   },
 };

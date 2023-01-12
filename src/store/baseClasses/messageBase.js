@@ -19,6 +19,11 @@ export default class {
   actions() {
     return {
       bind: firestoreAction(({ bindFirestoreRef }, { params, limit }) => {
+
+        console.log('messageBase/bind');
+        console.log('params', params);
+        console.log('limit', limit);
+
         let firestoreRef = this.collection;
         for (const param of params) {
           const field = param[0];
@@ -72,6 +77,20 @@ export default class {
       delete: async (context, { id }) => {
         const ref = this.collection.doc(id);
         await ref.delete();
+      },
+      markAsRead: async (context, id) => {
+        await context.dispatch('save', {
+          data: {
+            status: 'read',
+          },
+          id: id,
+        });
+        // await super.actions().save(context, {
+        //   data: {
+        //     status: 'read',
+        //   },
+        //   id: id,
+        // });
       },
     };
   }
