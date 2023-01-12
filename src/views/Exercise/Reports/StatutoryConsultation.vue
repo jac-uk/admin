@@ -38,50 +38,6 @@
         </div>
       </div>
     </div>
-
-    <div class="govuk-grid-column-two-thirds clearfix">
-      <div class="govuk-button-group">
-        <Select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-!-margin-right-2"
-        >
-          <option value="all">
-            All applications
-          </option>
-          <option
-            v-if="applicationRecordCounts.review"
-            value="review"
-          >
-            Review
-          </option>
-          <option
-            v-if="applicationRecordCounts.shortlisted"
-            value="shortlisted"
-          >
-            Shortlisted
-          </option>
-          <option
-            v-if="applicationRecordCounts.selected"
-            value="selected"
-          >
-            Selected
-          </option>
-          <option
-            v-if="applicationRecordCounts.recommended"
-            value="recommended"
-          >
-            Recommended
-          </option>
-          <option
-            v-if="applicationRecordCounts.handover"
-            value="handover"
-          >
-            Handover
-          </option>
-        </Select>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -91,18 +47,12 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'StatutoryConsultation',
-  components: {
-    Select,
-  },
   mixins: [permissionMixin],
   data() {
     return {
-      exerciseStage: 'all',
       report: null,
       refreshingReport: false,
     };
@@ -111,9 +61,6 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
-    applicationRecordCounts() {
-      return applicationRecordCounts(this.exercise);
-    },
     hasReportData() {
       return this.report && this.report.headers;
     },
