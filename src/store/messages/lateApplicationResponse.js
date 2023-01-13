@@ -50,16 +50,6 @@ export default class extends MessageBase {
       },
     };
   }
-  getters() {
-    return {
-      ...super.getters(),
-      getMessages(state) {
-        return state.records.filter(item => {
-          return item.type === 'lateApplicationResponse';
-        });
-      },
-    };
-  }
   state() {
     return {
       ...super.state(),

@@ -19,11 +19,6 @@ export default class {
   actions() {
     return {
       bind: firestoreAction(({ bindFirestoreRef }, { params, limit }) => {
-
-        console.log('messageBase/bind');
-        console.log('params', params);
-        console.log('limit', limit);
-
         let firestoreRef = this.collection;
         for (const param of params) {
           const field = param[0];
@@ -31,6 +26,7 @@ export default class {
           const val = param[2];
           firestoreRef = firestoreRef.where(field, operator, val);
         }
+        firestoreRef = firestoreRef.orderBy('createdAt');
         if (limit) {
           firestoreRef = firestoreRef.limit(limit);
         }
@@ -41,8 +37,8 @@ export default class {
       }),
       save: async (context, { data, id }) => {
         const isUpdate = id ? true : false;
-
         if (isUpdate) {
+          data.lastUpdatedAt = firebase.firestore.FieldValue.serverTimestamp();
           data.lastUpdatedBy = {
             userId: context.rootState.auth.currentUser.uid,
             displayName: context.rootState.auth.currentUser.displayName,
@@ -54,6 +50,7 @@ export default class {
             data[`statusLog.${status}`] = firebase.firestore.FieldValue.serverTimestamp();
           }
         } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
           data.createdBy = {
             userId: context.rootState.auth.currentUser.uid,
             displayName: context.rootState.auth.currentUser.displayName,
@@ -85,12 +82,6 @@ export default class {
           },
           id: id,
         });
-        // await super.actions().save(context, {
-        //   data: {
-        //     status: 'read',
-        //   },
-        //   id: id,
-        // });
       },
     };
   }

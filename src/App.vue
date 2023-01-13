@@ -186,6 +186,9 @@
         </p>
       </div>
     </div>
+
+    <Messages />
+
   </div>
 </template>
 
@@ -193,10 +196,13 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-
+import Messages from '@/components/Messages';
 export default {
   name: 'App',
   mixins: [permissionMixin],
+  components: {
+    Messages,
+  },
   data() {
     return {
       authorisedToPerformAction: false,
@@ -221,6 +227,7 @@ export default {
       if (this.isSignedIn) {
         const email = auth.currentUser.email;
         this.authorisedToPerformAction = await authorisedToPerformAction(email);
+        await this.getMessages();
       }
     },
   },
@@ -246,6 +253,19 @@ export default {
     },
     async emptyClipboard() {
       await this.$store.dispatch('clipboard/empty');
+    },
+    async getMessages() {
+      const authEmail = this.$store.getters['auth/getEmail'];
+      if (authEmail) {
+        const params = [
+          ['to', 'array-contains', authEmail],
+          ['status', '==', 'created'],
+        ];
+        const data = {
+          params: params,
+        };
+        return await this.$store.dispatch('messageBase/bind', data);
+      }
     },
   },
 };

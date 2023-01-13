@@ -141,19 +141,6 @@
         </form>
       </div>
     </div>
-
-    <!-- <Message
-      v-if="canApproveLateApplications"
-      type="lateApplicationRequest"
-    />
-
-    <Message
-      v-else-if="canRequestLateApplications"
-      type="lateApplicationResponse"
-    /> -->
-
-    <Messages />
-
   </div>
 </template>
 
@@ -162,13 +149,11 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
-import Messages from '@/components/Messages';
 export default {
   name: 'Exercises',
   components: {
     Table,
     TableCell,
-    Messages,
   },
   mixins: [permissionMixin],
   data() {

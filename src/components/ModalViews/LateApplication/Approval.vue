@@ -191,9 +191,3 @@ export default {
   },
 };
 </script>
-
-<style>
-  .late-application .modal__title {
-    color: #ffffff;
-  }
-</style>

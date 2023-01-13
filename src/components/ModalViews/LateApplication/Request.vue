@@ -165,9 +165,11 @@ export default {
   .modal .late-application .govuk-inset-text {
     text-align: left;
   }
+  /*
   .late-application .modal__title {
-    color: govuk-colour("white");
+    color: #ffffff;
   }
+  */
   .form-row {
     margin-bottom: 1em;
   }
