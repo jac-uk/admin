@@ -26,6 +26,23 @@ export default {
       messageComponent: '',
     };
   },
+  computed: {
+    messages() {
+      return this.$store.state.messageBase.records;
+    },
+    hasMessages() {
+      return this.messages.length > 0;
+    },
+    currentMessage() {
+      return this.hasMessages ? this.messages[0] : null;
+    },
+    currentMessageId() {
+      if (this.hasMessages) {
+        return this.currentMessage.id;
+      }
+      return null;
+    },
+  },
   watch: {
     // Need to use a watch below as we want fine control of when the messages modal closes, ie not when the list of messages
     // run out (so we don't use a computed property)
@@ -44,23 +61,6 @@ export default {
       if (!this.$refs['messageModal'].modalOpen && this.messages.length) {
         this.$refs['messageModal'].openModal();
       }
-    },
-  },
-  computed: {
-    messages() {
-      return this.$store.state.messageBase.records;
-    },
-    hasMessages() {
-      return this.messages.length > 0;
-    },
-    currentMessage() {
-      return this.hasMessages ? this.messages[0] : null;
-    },
-    currentMessageId() {
-      if (this.hasMessages) {
-        return this.currentMessage.id;
-      }
-      return null;
     },
   },
   methods: {

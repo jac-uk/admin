@@ -188,7 +188,6 @@
     </div>
 
     <Messages />
-
   </div>
 </template>
 
@@ -199,10 +198,10 @@ import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages';
 export default {
   name: 'App',
-  mixins: [permissionMixin],
   components: {
     Messages,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       authorisedToPerformAction: false,

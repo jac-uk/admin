@@ -8,13 +8,13 @@
         <div if="message">
           <template v-if="decision === 'rejected'">
             <p class="govuk-body">
-              An application has been rejected for the following candidate: <br /><br />
-              <strong>{{ message.lateApplicationResponse.exerciseName }}</strong><br />
+              An application has been rejected for the following candidate: <br><br>
+              <strong>{{ message.lateApplicationResponse.exerciseName }}</strong><br>
               {{ message.lateApplicationResponse.candidateName }}<br>
               {{ message.lateApplicationResponse.candidateEmail }}
             </p>
             <p class="govuk-body">
-              For the following reason: <br /><br />
+              For the following reason: <br><br>
               {{ rejectionReason }}
             </p>
             <button
