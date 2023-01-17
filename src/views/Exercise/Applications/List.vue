@@ -59,7 +59,8 @@
         handler: candidateSearch,
         field: 'userId',
       }"
-      :page-size="50"
+      :page-size="0"
+      :page-item-type="'uppercase-letter'"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -132,11 +133,7 @@ export default {
     tableColumns() {
       const cols = [];
       cols.push({ title: 'Reference number' });
-      if (this.status === 'draft') {
-        cols.push({ title: 'Name', sort: 'documentId', default: true });
-      } else {
-        cols.push({ title: 'Name', sort: 'personalDetails.fullName', default: true });
-      }
+      cols.push({ title: 'Name', sort: '_sort.fullNameUC', default: true });
       cols.push({ title: 'Status' });
       return cols;
     },
