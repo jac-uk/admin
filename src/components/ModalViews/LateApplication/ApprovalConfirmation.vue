@@ -107,6 +107,7 @@ export default {
         },
         query: { reason: this.reason },
       });
+      this.$emit('read', true);
       window.open(route.href, '_blank');
     },
     async close() {

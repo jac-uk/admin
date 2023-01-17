@@ -1,7 +1,6 @@
 'use strict';
 
 import MessageBase from '@/store/baseClasses/messageBase';
-import { getSeniorSelectionMgrs } from '@/helpers/exerciseHelper';
 
 export default class extends MessageBase {
   actions() {
@@ -13,11 +12,17 @@ export default class extends MessageBase {
         const uniqueToArr = toArr.filter((item, pos) => {
           return toArr.indexOf(item) === pos;
         });
+        // Get email recipients from settings
+        const emails = context.rootGetters['services/getEmails']('seniorLeaders');
+        if (!emails) {
+          console.error('Error retrieving emails for senior leaders');
+          return false;
+        }
         await super.actions().save(context, {
           data: {
             status: 'created',
             type: 'lateApplicationRequest',
-            to: getSeniorSelectionMgrs(data.exercise),
+            to: emails,
             from: {
               name: data.requester.fullName,
               email: data.requester.email,
