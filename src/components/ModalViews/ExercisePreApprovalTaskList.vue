@@ -7,19 +7,13 @@
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div style="text-align: left;">
-        <div class="govuk-inset-text">
-          Please check that the following tasks are completed before submitting for approval.
-        </div>
         <p class="govuk-body">
-          List of tasks to complete:
+          Please make sure all of the following tasks are completed before submitting for approval.
         </p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>Task to complete 1</li>
-          <li>Task to complete 2</li>
-          <li>Task to complete 3</li>
-          <li>Task to complete 4</li>
-          <li>Task to complete 5</li>
-          <li>Task to complete 6</li>
+          <li>Has the information page and application form (if relevant) been cleared by the JAC Policy and Diversity Teams?</li>
+          <li>Has the information page and application form (if relevant) been cleared by the JAC Digital Team?</li>
+          <li>Has the information page and application form (if relevant) been cleared by the Head of Operations and Digital?</li>
         </ul>
         <button
           type="button"
