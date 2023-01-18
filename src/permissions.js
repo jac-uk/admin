@@ -222,6 +222,14 @@ const PERMISSIONS = {
         label: 'Can delete applications',
         value: 'a4',
       },
+      canRequestLateApplications: {
+        label: 'Can request late applications',
+        value: 'a5',
+      },
+      canApproveLateApplications: {
+        label: 'Can approve late applications',
+        value: 'a6',
+      },
     },
   },
   applicationRecords: {
