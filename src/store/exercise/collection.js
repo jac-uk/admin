@@ -2,6 +2,7 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import { logEvent } from '@/helpers/logEvent';
 
 export default {
   namespaced: true,
@@ -48,7 +49,47 @@ export default {
       dispatch('bind');
     },
     storeItems: (context, { items }) => {
-      context.commit('selectedItems', items);
+      context.commit('setSelectedItems', items);
+    },
+    unarchive: async ({ commit, state }) => {
+      const loggingData = {
+        exerciseIds: [],
+        exerciseRefs: [],
+      };
+      const batch = firestore.batch();
+      state.selectedItems.forEach( id => {
+        const ref = firestore.collection('exercises').doc(id);
+        const record = state.records.find(record => record.id === id);
+        batch.update(ref, {
+          state: record.hasOwnProperty('stateBeforeArchive') ? record.stateBeforeArchive : 'ready',
+          stateBeforeArchive: null,
+        });
+        loggingData.exerciseIds.push(id);
+        loggingData.exerciseRefs.push(record.referenceNumber);
+      });
+      await batch.commit();
+      commit('resetSelectedItems');
+      logEvent('info', 'Exercises archived', loggingData);
+    },
+    archive: async ({ commit, state }) => {
+      const loggingData = {
+        exerciseIds: [],
+        exerciseRefs: [],
+      };
+      const batch = firestore.batch();
+      state.selectedItems.forEach( id => {
+        const ref = firestore.collection('exercises').doc(id);
+        const record = state.records.find(record => record.id === id);
+        batch.update(ref, {
+          state: 'archived',
+          stateBeforeArchive: record.state,
+        });
+        loggingData.exerciseIds.push(id);
+        loggingData.exerciseRefs.push(record.referenceNumber);
+      });
+      await batch.commit();
+      commit('resetSelectedItems');
+      logEvent('info', 'Exercises archived', loggingData);
     },
   },
   mutations: {
@@ -58,8 +99,11 @@ export default {
     updateFavourites(state, isFavourites) {
       state.isFavourites = isFavourites;
     },
-    selectedItems(state, items) {
+    setSelectedItems(state, items) {
       state.selectedItems = items;
+    },
+    resetSelectedItems(state) {
+      state.selectedItems = [];
     },
   },
   state: {

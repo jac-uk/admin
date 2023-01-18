@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.95.0",
+  "version": "0.96.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
-    "@jac-uk/jac-kit": "^0.1.9",
+    "@jac-uk/jac-kit": "^0.1.11",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.13.0",
     "@sentry/vue": "^7.13.0",
@@ -40,6 +40,7 @@
     "vue-json-pretty": "^1.7.1",
     "vue-loader": "^17.0.0",
     "vue-loader-v16": "^16.0.0-beta.5.4",
+    "vue-pluralize": "^0.0.2",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
     "vuex": "^3.6.2",

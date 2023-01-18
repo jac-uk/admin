@@ -59,6 +59,7 @@ import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/Reaso
 import ExerciseReportsQualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
 import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency';
 import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover';
+import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation';
 import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create';
 import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport';
 import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
@@ -1258,6 +1259,14 @@ const router = new Router({
                 title: 'Handover | Exercise Reports',
               },
             },
+            {
+              path: 'statutory-consultation',
+              component: ExerciseReportsStatutoryConsultation,
+              meta: {
+                requiresAuth: true,
+                title: 'Statutory Consultation | Exercise Reports',
+              },
+            },  
           ],
         },
       ],

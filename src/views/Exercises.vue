@@ -31,17 +31,11 @@
           >
             View archived exercises
           </button>
-          <br>
-          <!-- <Select hint="label">
-            <option>
-              bb
-            </option>
-          </Select> -->
           <router-link
             v-if="hasPermissions([PERMISSIONS.exercises.permissions.canCreateExercises.value])"
             ref="linkToNewExercise"
             to="/create-exercise"
-            class="govuk-button govuk-!-margin-3 govuk-!-margin-bottom-0"
+            class="govuk-button govuk-!-margin-bottom-0"
           >
             Create an exercise
           </router-link>
@@ -97,6 +91,15 @@
               >
                 Export data
               </button>
+              <button
+                v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]))"
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
+                :disabled="isButtonDisabled"
+                type="button"
+                @click="openArchiveModal"
+              >
+                {{ isArchived ? 'Unarchive' : 'Archive' }}
+              </button>
             </template>
             <template #row="{row}">
               <TableCell :title="tableColumns[0].title">
@@ -141,6 +144,16 @@
         </form>
       </div>
     </div>
+    <Modal
+      ref="archiveModal"
+    >
+      <ModalInner
+        :title="archiveModalTitle"
+        :message="archiveModalMessage"
+        @close="closeArchiveModal"
+        @confirmed="toggleArchive"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -149,17 +162,20 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 
 export default {
   name: 'Exercises',
   components: {
     Table,
     TableCell,
+    Modal,
+    ModalInner,
   },
   mixins: [permissionMixin],
   data() {
     return {
-      selectedItems: [],
       tableColumns: [
         { title: 'Reference number', sort: 'referenceNumber', direction: 'desc', default: true },
         { title: 'Name', sort: 'name' },
@@ -180,6 +196,14 @@ export default {
       'isFavourites',
       'isArchived',
     ]),
+    selectedItems: {
+      get: function() {
+        return this.$store.state.exerciseCollection.selectedItems;
+      },
+      set: function(val) {
+        this.$store.commit('exerciseCollection/setSelectedItems', val);
+      },
+    },
     isButtonDisabled() {
       const hasSelection = this.selectedItems && this.selectedItems.length;
       return !hasSelection;
@@ -191,6 +215,14 @@ export default {
         data.applicationsCount = (row._applications && row._applications._total) || 0;
         return data;
       });
+    },
+    archiveModalTitle() {
+      const archiveVerb = (this.isArchived) ? 'Unarchive' : 'Archive';
+      return `${archiveVerb} Exercises`;
+    },
+    archiveModalMessage() {
+      const archiveVerb = (this.isArchived) ? 'unarchive' : 'archive';
+      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${this.$pluralize('exercises', this.selectedItems.length)}?`;
     },
   },
   watch: {
@@ -239,6 +271,20 @@ export default {
         status += 'Live';
       }
       return status;
+    },
+    toggleArchive() {
+      if (this.isArchived) {
+        this.$store.dispatch('exerciseCollection/unarchive');
+      } else {
+        this.$store.dispatch('exerciseCollection/archive');
+      }
+      this.$refs.archiveModal.closeModal();
+    },
+    openArchiveModal() {
+      this.$refs.archiveModal.openModal();
+    },
+    closeArchiveModal() {
+      this.$refs.archiveModal.closeModal();
     },
   },
 };
