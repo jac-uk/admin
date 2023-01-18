@@ -80,6 +80,14 @@ export default {
         }
       );
     }
+
+    sideNavigation.push(
+      {
+        title: 'Handover Checks',
+        path: `${path}/handover-checks`,
+      }
+    );
+
     return {
       sideNavigation: sideNavigation,
     };
