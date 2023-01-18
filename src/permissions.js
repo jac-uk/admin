@@ -379,6 +379,27 @@ const PERMISSIONS = {
       },
     },
   },
+  messages: {
+    label: 'Messages',
+    permissions: {
+      canReadMessages: {
+        label: 'Can read messages',
+        value: 'msg1',
+      },
+      canCreateMessages: {
+        label: 'Can create messages',
+        value: 'msg2',
+      },
+      canUpdateMessages: {
+        label: 'Can update messages',
+        value: 'msg3',
+      },
+      canDeleteMessages: {
+        label: 'Can delete messages',
+        value: 'msg4',
+      },
+    },
+  },
 };
 
 export default PERMISSIONS;
