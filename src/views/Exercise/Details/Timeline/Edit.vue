@@ -327,6 +327,22 @@
           required
         />
 
+        <h2 class="govuk-heading-l">
+          Handover Checks
+        </h2>
+        <DateInput
+          id="handover-checks-date"
+          v-model="formData.handoverChecksDate"
+          label="Handover Checks request date"
+          required
+        />
+        <DateInput
+          id="handover-checks-return-date"
+          v-model="formData.handoverChecksReturnDate"
+          label="Handover Checks return date"
+          required
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>

@@ -297,6 +297,26 @@ const exerciseTimeline = (data) => {
     );
   }
 
+  if (data.handoverChecksDate) {
+    timeline.push(
+      {
+        entry: 'Handover Checks',
+        date: data.handoverChecksDate,
+        dateString: getDateString(data.handoverChecksDate),
+      }
+    );
+  }
+
+  if (data.handoverChecksReturnDate) {
+    timeline.push(
+      {
+        entry: 'Handover Checks return',
+        date: data.handoverChecksReturnDate,
+        dateString: getDateString(data.handoverChecksReturnDate),
+      }
+    );
+  }
+
   return timeline;
 };
 
