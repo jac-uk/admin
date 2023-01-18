@@ -92,6 +92,10 @@ const PERMISSIONS = {
         label: 'Can delete candidates',
         value: 'c4',
       },
+      canFlagCandidates: {
+        label: 'Can flag candidates',
+        value: 'c5',
+      },
     },
   },
   notifications: {
