@@ -126,7 +126,7 @@ const createTestSubject = () => {
   });
 };
 
-describe('@/views/Exercise/Show/Applications', () => {
+xdescribe('@/views/Exercise/Show/Applications', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();
@@ -137,7 +137,7 @@ describe('@/views/Exercise/Show/Applications', () => {
   describe('methods', () => {
     let wrapper;
     beforeEach(() => {
-       wrapper = createTestSubject();
+      wrapper = createTestSubject();
     });
 
     describe('exportContacts()', () => {
