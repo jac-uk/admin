@@ -29,7 +29,15 @@ export default {
       const exercise = this.exercise;
       const path = `/exercise/${exercise.id}/tasks`;
       const sideNavigation = [];
-      if (exercise._useQTPlatform) {  // temporary flag to allow trial of new QT platform
+      if (exercise._useQTPlatform === false) {  // temporary flag to enable usage of the new QT platform (recently updated so that default is to use new platform until it is specifically turned off)
+        sideNavigation.push({
+          title: 'Qualifying Tests',
+          path: `${path}/qualifying-tests`,
+          params: {
+            nav: '/tasks/qualifying-tests', // TODO check this is needed
+          },
+        });
+      } else {
         getTaskTypes(exercise).forEach(taskType => {
           const task = this.$store.getters['tasks/getTask'](taskType);
           let tag;
@@ -46,14 +54,6 @@ export default {
               path: `${path}/${taskType}`,
             }
           );
-        });
-      } else {
-        sideNavigation.push({
-          title: 'Qualifying Tests',
-          path: `${path}/qualifying-tests`,
-          params: {
-            nav: '/tasks/qualifying-tests', // TODO check this is needed
-          },
         });
       }
       if (exercise.equalMeritSecondStageStartDate) {
