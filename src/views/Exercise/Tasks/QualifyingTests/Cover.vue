@@ -1,7 +1,13 @@
 <template>
   <div>
-    <div class="moj-page-header-actions govuk-!-margin-bottom-0">
-      <div class="moj-page-header-actions__title">
+    <div
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canApproveExercise.value])"
+      class="moj-page-header-actions govuk-!-margin-bottom-0"
+    >
+      <div
+        v-if="exercise._useQTPlatform === false"
+        class="moj-page-header-actions__title"
+      >
         <h2 class="govuk-heading-l">
           {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
         </h2>
@@ -35,7 +41,7 @@
 
     <div v-if="exercise._useQTPlatform">
       <p class="govuk-body">
-        Please choose a QT from the side navigation.
+        Please choose a link from the side navigation.
       </p>
     </div>
 
