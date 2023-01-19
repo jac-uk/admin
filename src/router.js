@@ -71,7 +71,6 @@ import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTe
 import ExerciseTasks from '@/views/Exercise/Tasks';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
@@ -720,15 +719,6 @@ const router = new Router({
               },
             },
             {
-              path: 'character-checks/edit',
-              component: ExerciseTasksCharacterChecksEdit,
-              name: 'exercise-tasks-character-checks-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Character Checks | Exercise Tasks',
-              },
-            },
-            {
               path: 'qualifying-tests',
               component: QualifyingTests,
               props: {
@@ -1266,7 +1256,7 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
               },
-            },  
+            },
           ],
         },
       ],
