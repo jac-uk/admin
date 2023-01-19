@@ -41,7 +41,7 @@
             {{ hmrcCheckRequired | toYesNo }}
           </span>
         </dd>
-        <dd
+        <!-- <dd
           v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
           class="govuk-summary-list__actions"
         >
@@ -52,7 +52,7 @@
           >
             Change
           </RouterLink>
-        </dd>
+        </dd> -->
       </div>
     </dl>
 
