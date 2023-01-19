@@ -27,6 +27,7 @@
             data-key="id"
             :data="Object.entries(task._stats.totalForEachOutcome)"
             :columns="[{ title: 'Status' }, { title: 'Total' }]"
+            :page-size="50"
             local-data
           >
             <template #row="{row}">
