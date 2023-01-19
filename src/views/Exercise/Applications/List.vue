@@ -39,9 +39,8 @@
         </div>
       </div>
     </div>
-
     <Table
-      :key="status"
+      :key="tableStatus"
       ref="applicationsTable"
       data-key="id"
       :data="applications"
@@ -51,8 +50,9 @@
         handler: candidateSearch,
         field: 'userId',
       }"
-      :page-size="0"
-      :page-item-type="'uppercase-letter'"
+      :page-item-type="paginationType"
+      :page-size="pageSize"
+      :total="exercise._applications[status]"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -78,7 +78,12 @@
         </TableCell>
       </template>
     </Table>
-
+    <button
+      class="govuk-button govuk-button moj-button-menu__item moj-page-header-actions__action"
+      @click="togglePagination"
+    >
+      {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
+    </button>
     <Modal
       ref="applicationReminderModal"
     >
@@ -114,6 +119,12 @@ export default {
       required: true,
     },
   },
+  data: function() {
+    return {
+      paginationType: 'uppercase-letter',
+      pageSize: 0,
+    };
+  },
   computed: {
     tableColumns() {
       const cols = [];
@@ -121,6 +132,9 @@ export default {
       cols.push({ title: 'Name', sort: '_sort.fullNameUC', default: true });
       cols.push({ title: 'Status' });
       return cols;
+    },
+    tableStatus() {
+      return this.status + this.paginationType;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -179,6 +193,10 @@ export default {
     },
     closeApplicationReminderModal() {
       this.$refs.applicationReminderModal.closeModal();
+    },
+    togglePagination() {
+      this.paginationType = this.paginationType === 'uppercase-letter' ? '' : 'uppercase-letter';
+      this.pageSize = this.paginationType === 'uppercase-letter' ? 0 : 50;
     },
   },
 };
