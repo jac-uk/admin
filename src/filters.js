@@ -93,6 +93,10 @@ const lookup = (value) => {
     'L&J': 'Legal & Judicial Skills',
     'PQ': 'Personal Qualities',
 
+    // Set pass/fail
+    'pass': 'Pass',
+    'fail': 'Fail',
+
     // 'xxx': 'xxx',
   };
 

@@ -6,7 +6,7 @@
     <p class="govuk-body-l govuk-!-margin-bottom-4">
       This test is hosted on the
       <a
-        :href="`https://qt-admin-develop.judicialappointments.digital/folder/${task.folderId}/qualifying-tests/${task.test.id}`"
+        :href="testAdminURL"
         target="_blank"
       >
         QT Platform</a>.
@@ -21,7 +21,7 @@
     </ActionButton>
     <span
       v-if="errorMessage"
-      class="govuk-body text--error"
+      class="govuk-body text--error govuk-!-display-inline-block govuk-!-margin-bottom-0 govuk-!-margin-left-2 govuk-!-padding-top-1"
     >
       {{ errorMessage }}
     </span>
@@ -32,15 +32,14 @@
       <h2
         class="govuk-heading-m govuk-!-margin-bottom-2"
       >
-        https://qt-develop.judicialappointments.digital/{{ task.test.id }}
+        {{ testURL }}
       </h2>
-      <button
-        type="button"
-        class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-        @click="copyToClipboard(`https://qt-develop.judicialappointments.digital/${task.test.id}`)"
+      <ActionButton
+        class="govuk-!-margin-bottom-0"
+        @click="copyToClipboard(testURL)"
       >
         Copy URL to clipboard
-      </button>
+      </ActionButton>
     </div>
   </div>
 </template>
@@ -77,6 +76,26 @@ export default {
     isScenario() {
       return this.type === TASK_TYPE.SCENARIO;
     },
+    testURL() {
+      let url = '';
+      if (this.$store.getters.isProduction) {
+        url = 'https://qt.judicialappointments.digital';
+      } else {
+        url = 'https://qt-develop.judicialappointments.digital';
+      }
+      url += `/${this.task.test.id}`;
+      return url;
+    },
+    testAdminURL() {
+      let url = '';
+      if (this.$store.getters.isProduction) {
+        url = 'https://qt-admin.judicialappointments.digital';
+      } else {
+        url = 'https://qt-admin-develop.judicialappointments.digital';
+      }
+      url += `/folder/${this.task.folderId}/qualifying-tests/${this.task.test.id}`;
+      return url;
+    },
   },
   methods: {
     btnNext,
@@ -103,6 +122,7 @@ export default {
       if (navigator && navigator.clipboard) {
         await navigator.clipboard.writeText(text);
       }
+      return true;
     },
   },
 };

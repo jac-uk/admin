@@ -127,10 +127,10 @@
           <div class="moj-button-menu__wrapper">
             <button
               class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-              :disabled="!selectedItems.length"
-              @click="setStatus"
+              :disabled="!passMark || !selectedItems.length"
+              @click="$refs['setPassOrFailModal'].openModal()"
             >
-              Set status
+              Change outcome
             </button>
           </div>
         </div>
@@ -189,28 +189,40 @@
             {{ row.score }}
           </div>
         </TableCell>
-        <TableCell :title="tableColumns[tableColumns.length - 4].title">
+        <TableCell :title="tableColumns[tableColumns.length - 5].title">
           {{ row.diversity.female | toYesNo }}
         </TableCell>
-        <TableCell :title="tableColumns[tableColumns.length - 3].title">
+        <TableCell :title="tableColumns[tableColumns.length - 4].title">
           {{ row.diversity.bame | toYesNo }}
         </TableCell>
-        <TableCell :title="tableColumns[tableColumns.length - 2].title">
+        <TableCell :title="tableColumns[tableColumns.length - 3].title">
           {{ row.diversity.solicitor | toYesNo }}
         </TableCell>
-        <TableCell :title="tableColumns[tableColumns.length - 1].title">
+        <TableCell :title="tableColumns[tableColumns.length - 2].title">
           {{ row.diversity.disability | toYesNo }}
+        </TableCell>
+        <TableCell :title="tableColumns[tableColumns.length - 1].title">
+          <strong
+            v-if="passMark && isPass(row)"
+            class="govuk-tag govuk-tag--green"
+          >PASS</strong>
+          <strong
+            v-else-if="passMark"
+            class="govuk-tag govuk-tag--red"
+          >FAIL</strong>
         </TableCell>
       </template>
     </Table>
 
-    <Modal
-      ref="SetStatusModal"
-    >
-      <component
-        :is="`SetStatus`"
-        :selected-items="selectedItems"
-        @close="closeModal('SetStatusModal')"
+    <Modal ref="setPassOrFailModal">
+      <TitleBar>
+        You have selected {{ selectedItems.length }} items
+      </TitleBar>
+      <SetPassOrFail
+        class="govuk-!-margin-6"
+        :items="selectedItems"
+        @save="setPassOrFail"
+        @cancel="$refs['setPassOrFailModal'].closeModal()"
       />
     </Modal>
   </div>
@@ -219,8 +231,9 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import SetStatus from '@/components/ModalViews/SetStatus';
+import SetPassOrFail from './SetPassOrFail';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import TitleBar from '@/components/Page/TitleBar';
 import { PANEL_TYPES } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
@@ -229,8 +242,9 @@ export default {
   components: {
     Table,
     TableCell,
-    SetStatus,
+    SetPassOrFail,
     Modal,
+    TitleBar,
   },
   props: {
     type: {
@@ -259,6 +273,19 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
+    passMark() {
+      return this.task && this.task.passMark || null;
+    },
+    defaultOutcome() {
+      if (this.score && this.passMark) {
+        if (this.score < this.passMark) {
+          return 'fail';
+        } else {
+          return 'pass';
+        }
+      }
+      return null;
+    },
     capabilities() {
       if (!this.task) return [];
       return CAPABILITIES.filter(cap => this.task.capabilities.indexOf(cap) >= 0);  // Using CAPABILITIES to ensure display order of selected capabilities
@@ -283,6 +310,7 @@ export default {
       columns.push({ title: 'BAME' });
       columns.push({ title: 'Solicitor' });
       columns.push({ title: 'Disability' });
+      columns.push({ title: 'Outcome' });
       return columns;
     },
     exerciseDiversity() {
@@ -339,6 +367,18 @@ export default {
   },
   methods: {
     hasDiversityCharacteristic,
+    isPass(row) {
+      if (this.task && this.task.overrides && this.task.overrides.pass && this.task.overrides.pass.indexOf(row.id) >= 0) {
+        return true;
+      }
+      if (this.task && this.task.overrides && this.task.overrides.fail && this.task.overrides.fail.indexOf(row.id) >= 0) {
+        return false;
+      }
+      if (this.task && this.task.passMark && this.task.passMark <= row.score) {
+        return true;
+      }
+      return false;
+    },
     toggleShowDetail() {
       this.showDetail = !this.showDetail;
     },
@@ -347,15 +387,24 @@ export default {
       this.selectedItems = [];
       console.log('clear selected items (after)', this.selectedItems);
     },
-    setStatus() {
-      this.openModal('SetStatusModal');
+    getOppositeOutcome(outcome) {
+      if (outcome === 'pass') return 'fail';
+      if (outcome === 'fail') return 'pass';
+      return null;
     },
-    openModal(modalRef){
-      this.$refs[modalRef].openModal();
-    },
-    closeModal(modalRef) {
-      this.$refs[modalRef].closeModal();
-      this.selectedItems = [];
+    setPassOrFail(params) {
+      this.$refs['setPassOrFailModal'].closeModal();
+      console.log('selected items', this.selectedItems);
+      console.log('selected outcome', params.outcome);
+      console.log('selected score', this.score);
+      console.log('selected pass mark', this.passMark);
+      console.log('default outcome', this.defaultOutcome);
+      if (!this.passMark) return false;
+      if (params.outcome === this.defaultOutcome) {
+        console.log('remove id from', this.getOppositeOutcome(params.outcome));
+      } else {
+        console.log('add id to', params.outcome);
+      }
     },
   },
 };

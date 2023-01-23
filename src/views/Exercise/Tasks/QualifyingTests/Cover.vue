@@ -41,7 +41,7 @@
 
     <div v-if="exercise._useQTPlatform">
       <p class="govuk-body">
-        Please choose a link from the side navigation.
+        Select a task on the left.
       </p>
     </div>
 
