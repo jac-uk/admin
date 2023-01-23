@@ -12,11 +12,14 @@ export default class extends MessageBase {
         const uniqueToArr = toArr.filter((item, pos) => {
           return toArr.indexOf(item) === pos;
         });
+
         // Get email recipients from settings
         const emails = context.rootGetters['services/getEmails']('seniorLeaders');
         if (!emails) {
-          console.error('Error retrieving emails for senior leaders');
-          return false;
+          throw {
+            id: 'error',
+            message: 'Error retrieving emails for senior leaders. Please report this to the web team.',
+          };
         }
         await super.actions().save(context, {
           data: {
@@ -37,6 +40,7 @@ export default class extends MessageBase {
                 candidateId: data.candidate.id,
                 candidateName: data.candidate.fullName,
                 candidateEmail: data.candidate.email,
+                url: data.url,
               },
           },
           id: null,

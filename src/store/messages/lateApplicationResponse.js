@@ -27,6 +27,7 @@ export default class extends MessageBase {
             candidateId: data.requestMessage.lateApplicationRequest.candidateId,
             candidateName: data.requestMessage.lateApplicationRequest.candidateName,
             candidateEmail: data.requestMessage.lateApplicationRequest.candidateEmail,
+            url: data.requestMessage.lateApplicationRequest.url,
           },
         };
         if (data.applicationId) {

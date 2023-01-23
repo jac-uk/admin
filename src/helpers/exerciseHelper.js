@@ -58,8 +58,7 @@ export {
   isApplicationComplete,
   hasApplicationProcess,
   applicationCounts,
-  applicationRecordCounts,
-  getSeniorSelectionMgrs
+  applicationRecordCounts
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -498,21 +497,4 @@ function hasApplicationProcess(exercise) {
   if (!exercise) { return false; }
   const applicationSteps = configuredApplicationContentSteps(exercise);
   return applicationSteps.length >= 1;
-}
-
-function getSeniorSelectionMgrs(exercise) {
-  const emails = [];
-  for (const emailObj of exercise.selectionExerciseManager) {
-    emails.push(emailObj.name);
-  }
-  for (const emailObj of exercise.selectionExerciseOfficer) {
-    emails.push(emailObj.name);
-  }
-  for (const emailObj of exercise.seniorSelectionExerciseManager) {
-    emails.push(emailObj.name);
-  }
-  // Get unique entries
-  return emails.filter((item, pos) => {
-    return emails.indexOf(item) === pos;
-  });
 }

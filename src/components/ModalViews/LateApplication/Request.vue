@@ -58,6 +58,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import { checkNested } from '@/helpersTMP/object';
+import ExtendedError from '@/errors/extendedError';
 export default {
   name: 'LateApplicationRequest',
   components: {
@@ -122,23 +123,34 @@ export default {
       try {
         await this.$store.dispatch('candidates/getByEmail', this.formData.email);
         if (!this.candidate) {
-          this.errors = [{ id: 'error', message: 'A candidate with that email does not exist' }];
+          throw {
+            id: 'error',
+            message: 'A candidate with that email does not exist.',
+          };
         }
         else if (this.hasAppliedForExercise) {
-          this.errors = [{
+          throw new ExtendedError({
             id: 'error',
             message: 'The candidate has already applied for the exercise.',
             routerLink: {
               link: { name: 'exercise-overview', params: { id: this.exerciseId } },
               text: 'Click here to open the exercise',
             },
-          }];
+          });
         }
         else if (this.hasLateApplicationRequest) {
-          this.errors = [{ id: 'error', message: 'An application request has already been created for this candidate.' }];
+          throw {
+            id: 'error',
+            message: 'An application request has already been created for this candidate.',
+          };
         }
         else {
-          this.$store.dispatch(
+          const route = this.$router.resolve({
+            name: 'exercise-overview',
+            params: { id: this.exerciseId },
+          });
+          const absoluteURL = new URL(route.href, window.location.origin).href;
+          await this.$store.dispatch(
             'lateApplicationRequestMsg/create', {
               exerciseId: this.exerciseId,
               exercise: this.exercise,
@@ -148,12 +160,13 @@ export default {
               },
               candidate: this.candidate,
               reason: this.formData.reason,
+              url: absoluteURL,
             });
           this.openConfirmModal();
         }
       }
       catch (error) {
-        this.errors = [{ id: 'error', message: 'There was an error retrieving data. Please report this to the web team' }];
+        this.errors.push(error);
       }
     },
   },
