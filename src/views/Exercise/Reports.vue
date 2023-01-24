@@ -59,6 +59,10 @@ export default {
           path: `${path}/handover`,
         },
         {
+          title: 'Statutory Consultation',
+          path: `${path}/statutory-consultation`,
+        },
+        {
           title: 'Custom',
           path: `${path}/custom`,
         },
