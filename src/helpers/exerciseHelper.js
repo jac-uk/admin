@@ -28,6 +28,9 @@ export {
   exerciseAdvertTypes,
   applicationContentSteps,
   configuredApplicationContentSteps,
+  isReadyForApproval,
+  isReadyForApprovalFromAdvertType,
+  isApprovalRejected,
   isEditable,
   isApproved,
   isArchived,
@@ -134,6 +137,18 @@ function applicationCurrentStep(exercise, application) {
 }
 
 // exercise helpers
+function isReadyForApproval(data) {
+  if (data === null) return false;
+  return data.state === 'ready';
+}
+function isReadyForApprovalFromAdvertType(data) {
+  if (data === null) return false;
+  return (!data.advertType || data.advertType === ADVERT_TYPES.FULL || data.advertType === ADVERT_TYPES.EXTERNAL);
+}
+function isApprovalRejected(data) {
+  if (data === null) return false;
+  return data.state === 'draft' && data._approval && data._approval.status === 'rejected';
+}
 function isEditable(data) {
   if (data === null) return false;
   switch (data.state) {
