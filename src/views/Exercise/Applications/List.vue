@@ -79,7 +79,7 @@
       </template>
     </Table>
     <button
-      class="govuk-button govuk-button moj-button-menu__item moj-page-header-actions__action"
+      class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-top-2"
       @click="togglePagination"
     >
       {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
@@ -121,7 +121,7 @@ export default {
   },
   data: function() {
     return {
-      paginationType: 'uppercase-letter',
+      paginationType: '',
       pageSize: 0,
     };
   },
