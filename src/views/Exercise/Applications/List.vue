@@ -122,7 +122,7 @@ export default {
   data: function() {
     return {
       paginationType: '',
-      pageSize: 0,
+      pageSize: 50,
     };
   },
   computed: {
