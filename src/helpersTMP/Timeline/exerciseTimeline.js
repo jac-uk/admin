@@ -47,11 +47,12 @@ const createSelectionDay = (selectionDay) => {
   return selectionDayEntry;
 };
 
-const createShortlistingMethod = (method, startDate, endDate) => {
+const createShortlistingMethod = (method, startDate, endDate, taskType) => {
   const shortlistingMethodEntry = {
     entry: `${method}`,
     date: startDate,
     dateString: null,
+    taskType: taskType,
   };
 
   const formattedStartDate = getDateString(startDate);
@@ -277,7 +278,7 @@ const exerciseTimeline = (data) => {
 
   if (data.equalMeritSecondStageStartDate) {
     timeline.push(
-      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate)
+      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate, TASK_TYPE.EMP_TIEBREAKER)
     );
   }
 

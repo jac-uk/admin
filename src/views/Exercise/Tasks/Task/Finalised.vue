@@ -160,7 +160,7 @@ export default {
       // add outcome stats
       if (this.task.passMark) {
         scoresInDescendingOrder.forEach(key => {
-          const score = parseInt(key);
+          const score = parseFloat(key);
           if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
           if (score === this.task.passMark) {
             if (this.task.overrides && this.task.overrides.fail) {
@@ -185,7 +185,7 @@ export default {
       // return
       return scoresInDescendingOrder.map(score => {
         return {
-          score: parseInt(score),
+          score: parseFloat(score),
           ...scoreMap[score],
         };
       });
@@ -227,7 +227,7 @@ export default {
     },
     async setPassMark(data) {
       if (data) {
-        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseInt(data.passMark), overrides: {} } } );
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), overrides: {} } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
     },

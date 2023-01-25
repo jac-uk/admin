@@ -56,12 +56,6 @@ export default {
           );
         });
       }
-      if (exercise.equalMeritSecondStageStartDate) {
-        sideNavigation.push({
-          title: 'Equal Merit Tie-breakers',
-          path: `${path}/equal-merit-tie-breakers`,
-        });
-      }
       if (isProcessing(exercise)) {
         if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
           sideNavigation.push({

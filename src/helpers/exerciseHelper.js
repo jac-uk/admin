@@ -191,6 +191,7 @@ function getTaskTypes(exercise, stage) {
 function previousTaskType(exercise, type) {
   let prevTaskType = '';
   if (!exercise) return prevTaskType;
+  if (type === TASK_TYPE.EMP_TIEBREAKER) return prevTaskType;  // TODO: remove this eventually: no previous task for EMP tie-breakers
   const taskTypes = getTaskTypes(exercise);
   const currentIndex = taskTypes.indexOf(type);
   if (currentIndex > 0) {
@@ -211,6 +212,7 @@ function previousTaskType(exercise, type) {
 function taskEntryStatus(exercise, type) {
   let status = '';
   if (!exercise) return status;
+  if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SECOND_STAGE_INVITED;  // TODO: remove this eventually: override entry status for EMP tie-breakers
   const prevTaskType = previousTaskType(exercise, type);
   if (prevTaskType) {
     status = `${prevTaskType}Passed`;

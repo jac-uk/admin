@@ -82,6 +82,7 @@ const TASK_TYPE = {
   SHORTLISTING_OUTCOME: 'shortlistingOutcome',
   WELSH_ASSESSMENT: 'welshAssessment',
   SELECTION_OUTCOME: 'selectionOutcome',
+  EMP_TIEBREAKER: 'empTiebreaker',
 };
 
 const INDEPENDENT_ASSESSMENTS_STATUS = {

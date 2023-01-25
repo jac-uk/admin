@@ -85,6 +85,7 @@ export default {
       if (!this.exercise) return 0;
       if (!this.exercise._applicationRecords) return 0;
       if (this.isQualifyingTest) return 0;
+      if (this.type === TASK_TYPE.EMP_TIEBREAKER) return 0; // TODO: remove this when we have support for other tasks
       const prevTaskType = previousTaskType(this.exercise, this.type);
       if (prevTaskType) {
         const prevTask = this.$store.getters['tasks/getTask'](prevTaskType);

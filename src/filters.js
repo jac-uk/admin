@@ -158,6 +158,7 @@ const lookup = (value) => {
   lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
+  lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.PENDING] = 'Pending';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.COMPLETED] = 'Completed';
