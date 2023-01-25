@@ -229,6 +229,7 @@
 </template>
 
 <script>
+import firebase from '@firebase/app';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import SetPassOrFail from './SetPassOrFail';
@@ -382,29 +383,24 @@ export default {
     toggleShowDetail() {
       this.showDetail = !this.showDetail;
     },
-    clearSelectedItems() {
-      console.log('clear selected items', this.selectedItems);
-      this.selectedItems = [];
-      console.log('clear selected items (after)', this.selectedItems);
-    },
     getOppositeOutcome(outcome) {
       if (outcome === 'pass') return 'fail';
       if (outcome === 'fail') return 'pass';
       return null;
     },
-    setPassOrFail(params) {
+    async setPassOrFail(params) {
       this.$refs['setPassOrFailModal'].closeModal();
-      console.log('selected items', this.selectedItems);
-      console.log('selected outcome', params.outcome);
-      console.log('selected score', this.score);
-      console.log('selected pass mark', this.passMark);
-      console.log('default outcome', this.defaultOutcome);
+      if (!this.selectedItems.length) return false;
       if (!this.passMark) return false;
+      const data = {};
       if (params.outcome === this.defaultOutcome) {
-        console.log('remove id from', this.getOppositeOutcome(params.outcome));
+        data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = firebase.firestore.FieldValue.arrayRemove(...this.selectedItems);
+        data[`overrides.${params.outcome}`] = [];
       } else {
-        console.log('add id to', params.outcome);
+        data[`overrides.${params.outcome}`] = firebase.firestore.FieldValue.arrayUnion(...this.selectedItems);
+        data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = [];
       }
+      await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: data } );
     },
   },
 };

@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ type | lookup }}
-    </h1>
-    <p class="govuk-body-l">
-      {{ type | lookup }} was completed on {{ task.statusLog.completed | formatDate }}.
-    </p>
+    <div class="govuk-panel govuk-panel--confirmation">
+      <div class="govuk-panel__body">
+        {{ type | lookup }} was completed on {{ task.statusLog.completed | formatDate }}.
+      </div>
+    </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">

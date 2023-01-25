@@ -121,6 +121,10 @@ export default {
               solicitor: 0,
               disability: 0,
             },
+            outcome: {
+              pass: 0,
+              fail: 0,
+            },
           };
         }
         scoreMap[scoreData.score].count += 1;
@@ -153,6 +157,31 @@ export default {
         prevScore = score;
       });
 
+      // add outcome stats
+      if (this.task.passMark) {
+        scoresInDescendingOrder.forEach(key => {
+          const score = parseInt(key);
+          if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
+          if (score === this.task.passMark) {
+            if (this.task.overrides && this.task.overrides.fail) {
+              scoreMap[score].outcome.pass = scoreMap[score].count - this.task.overrides.fail.length; // TODO should we check contents of fail (or pass) are all at this score?
+              scoreMap[score].outcome.fail = this.task.overrides.fail.length;
+            } else {
+              scoreMap[score].outcome.pass = scoreMap[score].count;
+            }
+          }
+          if (score === this.task.passMark - 1) {
+            if (this.task.overrides && this.task.overrides.pass) {
+              scoreMap[score].outcome.pass = this.task.overrides.pass.length;
+              scoreMap[score].outcome.fail = scoreMap[score].count - this.task.overrides.pass.length;
+            } else {
+              scoreMap[score].outcome.fail = scoreMap[score].count;
+            }
+          }
+          if (score < this.task.passMark - 1) { scoreMap[score].outcome.fail = scoreMap[score].count; }
+        });
+      }
+
       // return
       return scoresInDescendingOrder.map(score => {
         return {
@@ -166,7 +195,15 @@ export default {
       if (!this.task) return 0;
       if (!this.task.passMark) return 0;
       const scoreData = this.scores.find(scoreData => scoreData.score === this.task.passMark);
-      return scoreData.rank + scoreData.count - 1;
+      let total = scoreData.rank + scoreData.count - 1;
+      if (this.task.overrides) {
+        if (this.task.overrides.fail && this.task.overrides.fail.length) {
+          total = total - this.task.overrides.fail.length;
+        } else if (this.task.overrides.pass && this.task.overrides.pass.length) {
+          total = total + this.task.overrides.pass.length;
+        }
+      }
+      return total;
     },
     totalFailed() {
       if (!this.task) return 0;
@@ -190,7 +227,7 @@ export default {
     },
     async setPassMark(data) {
       if (data) {
-        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseInt(data.passMark) } } );
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseInt(data.passMark), overrides: {} } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
     },
