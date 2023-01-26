@@ -88,12 +88,18 @@
                 >
                   Sign out
                 </a>
-              <!-- <span
+                <!-- <span
                 v-if="isSignedIn"
                 class="app-c-topic-list__item nostyle"
               >
                 <b>You are now signed in as {{ userName }}</b>
               </span> -->
+                <span
+                  v-if="isSignedIn && isDevelopmentEnvironment"
+                  class="app-c-topic-list__item nostyle"
+                >
+                  <b>({{ userName }})</b>
+                </span>
               </li>
             </ul>
           </nav>
@@ -194,7 +200,6 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-
 export default {
   name: 'App',
   mixins: [permissionMixin],
@@ -204,6 +209,9 @@ export default {
     };
   },
   computed: {
+    isDevelopmentEnvironment() {
+      return this.$store.getters.isDevelop;
+    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
     },

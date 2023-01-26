@@ -114,6 +114,9 @@ const store = new Vuex.Store({
     isProduction: (state, getters) => {
       return getters.appEnvironment === 'PRODUCTION';
     },
+    isDevelop: (state, getters) => {
+      return getters.appEnvironment === 'DEVELOP';
+    },
   },
 });
 
