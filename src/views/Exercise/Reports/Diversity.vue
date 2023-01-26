@@ -206,7 +206,7 @@
                 scope="row"
                 class="govuk-table__header"
               >
-                BAME
+                Ethnic minorities
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].ethnicity.bame" />
