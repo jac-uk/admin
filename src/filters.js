@@ -97,6 +97,8 @@ const lookup = (value) => {
     'pass': 'Pass',
     'fail': 'Fail',
 
+    'other': 'Other',
+
     // 'xxx': 'xxx',
   };
 

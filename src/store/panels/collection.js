@@ -22,7 +22,6 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindApplicationsWithoutPanels: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      console.log('params', params);
       let firestoreRef = firestore.collection('applicationRecords')
         .where('exercise.id', '==', params.exerciseId)
         .where('active', '==', true)

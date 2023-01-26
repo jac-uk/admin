@@ -19,7 +19,7 @@
       v-else
       class="govuk-body-l"
     >
-      All applications have been assigned to panels. You may now activate this {{ type | lookup }}.
+      You may now activate this {{ type | lookup }}.
     </p>
 
     <!-- STATS -->

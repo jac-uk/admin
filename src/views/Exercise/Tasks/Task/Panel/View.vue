@@ -469,6 +469,7 @@ export default {
         'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
       };
       await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
+      return true;
     },
     // async resetPanelExport() {
     //   const data = {
