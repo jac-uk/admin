@@ -578,7 +578,11 @@ export default {
       Object.keys(this.diversity.applied).forEach((report) => {
         Object.keys(this.diversity.applied[report]).forEach((stat) => {
           const columns = [];
-          columns.push(`${report}:${stat}`);
+          if (stat === 'bame') {
+            columns.push(`${report}:ethnic minorities`);
+          } else {
+            columns.push(`${report}:${stat}`);
+          }
           stages.forEach((stage) => {
             if (stat === 'total') {
               columns.push(this.diversity[stage][report][stat]);
