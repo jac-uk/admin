@@ -22,7 +22,7 @@
     "lint-ci": "vue-cli-service lint --no-fix"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^10.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
     "@jac-uk/jac-kit": "^0.1.13",
     "@ministryofjustice/frontend": "0.2.4",
@@ -30,7 +30,6 @@
     "@sentry/vue": "^7.13.0",
     "@vue/compiler-sfc": "^3.0.7",
     "buffer": "^6.0.3",
-    "core-js": "^1",
     "firebaseui": "^4.8.0",
     "govuk-frontend": "^3.12.0",
     "lodash": "^4.17.21",
@@ -39,9 +38,9 @@
     "vue": "^2.6.12",
     "vue-dompurify-html": "^2.6.0",
     "vue-json-pretty": "^1.7.1",
-    "vue-loader": "^12.0.0",
+    "vue-loader": "^17.0.0",
     "vue-loader-v16": "^16.0.0-beta.5.4",
-    "vue-pluralize": "^0.0.1",
+    "vue-pluralize": "^0.0.2",
     "vue-router": "^3.5.1",
     "vuedraggable": "^2.24.3",
     "vuex": "^3.6.2",
