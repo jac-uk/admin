@@ -28,7 +28,7 @@ jobs:
           node-version: '16.15.1'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc && npm ci
-      - name: dependency check
+      - name: Dependency Check
         run: npm audit --omit=dev 
       - name: Lint
         run: npm run lint-ci
