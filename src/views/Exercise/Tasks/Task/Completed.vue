@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-panel govuk-panel--confirmation">
       <div class="govuk-panel__body">
-        {{ type | lookup }} was completed on {{ task.statusLog.completed | formatDate }}.
+        {{ type | lookup }} was completed on {{ task.statusLog.completed | formatDate }}
       </div>
     </div>
     <div class="govuk-grid-row">

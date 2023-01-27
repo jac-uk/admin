@@ -3,7 +3,9 @@
 export {
   GRADES,
   GRADE_VALUES,
-  getScoreSheetTotal
+  getScoreSheetTotal,
+  markingScheme2ScoreSheet,
+  isScoreSheetComplete
 };
 
 const MARKING_TYPE = {
@@ -45,10 +47,53 @@ function getScoreSheetItemTotal(item, scoreSheet) {
       break;
     case MARKING_TYPE.NUMBER:
       if (scoreSheet[item.ref]) {
-        return scoreSheet[item.ref];
+        return parseFloat(scoreSheet[item.ref]);
       }
       break;
     }
   }
   return 0;
+}
+
+function markingScheme2ScoreSheet(markingScheme) {
+  /**
+   * e.g.
+   * markingScheme: [
+   *  type: 'group'|'number'|'grade'
+   *  ref: String
+   *  children: []
+   * ]
+   */
+  const scoreSheet = {};
+  markingScheme.forEach(item => {
+    if (item.type === 'group') {
+      scoreSheet[item.ref] = {};
+      item.children.forEach(child => {
+        scoreSheet[item.ref][child.ref] = '';
+      });
+    } else {
+      scoreSheet[item.ref] = '';
+    }
+  });
+  return scoreSheet;
+}
+
+function isScoreSheetComplete(markingScheme, scoreSheet) {
+  if (!markingScheme) return false;
+  if (!scoreSheet) return false;
+  let isComplete = true;
+  markingScheme.forEach(item => {
+    if (item.type === MARKING_TYPE.GROUP) {
+      item.children.forEach(child => {
+        if (!scoreSheet[item.ref][child.ref]) {
+          isComplete = false;
+        }
+      });
+    } else {
+      if (!scoreSheet[item.ref]) {
+        isComplete = false;
+      }
+    }
+  });
+  return isComplete;
 }

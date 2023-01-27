@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import clone from 'clone';
 
 export default {
   namespaced: true,
@@ -29,7 +30,7 @@ export default {
     getTask: (state) => (type) => {
       if (state.records.length === 0) return null;
       const result = state.records.filter(task => task.id === type);
-      return result[0];
+      return clone(result[0]);
     },
   },
   state: {
