@@ -3,8 +3,14 @@
     <span class="govuk-caption-m">Type of exercise</span>
     <h2 class="govuk-heading-m govuk-!-margin-bottom-0 long-text">
       <span class="capitalize">{{ exercise.typeOfExercise }}</span>
-      <span class="capitalize" v-if="exercise.appointmentType">, {{ exercise.appointmentType | lookup }}</span>
-      <span class="capitalize" v-if="exercise.isCourtOrTribunal">, {{ exercise.isCourtOrTribunal | lookup }}</span>
+      <span
+        v-if="exercise.appointmentType"
+        class="capitalize"
+      >, {{ exercise.appointmentType | lookup }}</span>
+      <span
+        v-if="exercise.isCourtOrTribunal"
+        class="capitalize"
+      >, {{ exercise.isCourtOrTribunal | lookup }}</span>
     </h2>
     <span class="govuk-caption-s color-middle">
       <span class="vh">&nbsp;</span>

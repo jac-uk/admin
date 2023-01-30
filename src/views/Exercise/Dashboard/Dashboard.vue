@@ -1,6 +1,5 @@
 <template>
   <div class="govuk-grid-row">
-
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l">
         Overview
@@ -76,14 +75,14 @@
           {{ type | lookup }}
         </option>
       </Select>
-       <Chart
+      <Chart
         chart-id="app-stage-diversity-chart"
         chart-type="Bar"
         :chart-data="chartData"
         :chart-options="chartOptions"
         :make-accessible="true"
         :display-patterned-labels="true"
-       />
+      />
       <TabsList
         :tabs="tabs"
         :active-tab.sync="activeTab"
@@ -96,7 +95,10 @@
         local-data
       >
         <template #row="{row}">
-          <TableCell :title="tableColumns[0].title" class="long-text">
+          <TableCell
+            :title="tableColumns[0].title"
+            class="long-text"
+          >
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">

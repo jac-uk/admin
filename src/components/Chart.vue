@@ -3,7 +3,7 @@
     :is="chartType"
     :options="chartOptions"
     :data="mergedChartData"
- />
+  />
 </template>
 <script>
 import { getNextFromArrayWrap }  from '@/helpersTMP/array';
