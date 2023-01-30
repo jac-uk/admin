@@ -1,211 +1,44 @@
 <template>
   <div class="govuk-grid-row">
+
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-l">
         Overview
       </h2>
     </div>
+
     <div class="govuk-grid-column-one-half">
-      <div class="panel govuk-!-margin-bottom-4">
-        <span class="govuk-caption-m">
-          Total applications
-        </span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="">{{ applicationCounts._total }}</span>
-        </h2>
-        <span class="govuk-caption-s color-middle">
-          <span class="long-text">Last Updated: {{ applicationCounts._lastUpdated | formatDate('datetime') }}</span>
-        </span>
-      </div>
-      <div class="panel govuk-!-margin-bottom-4">
-        <span class="govuk-caption-m">
-          Number of vacancies
-        </span>
-        <span class="govuk-caption-s color-middle">
-          <span class="">Immediate start (s87)</span>
-        </span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="">Up to {{ exercise.immediateStart }}</span>
-        </h2>
-      </div>
-      <div class="panel govuk-!-margin-bottom-9">
-        <span class="govuk-caption-m long-text">Selection Exercise Manager</span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="capitalize long-text">{{ exercise.selectionExerciseManager[0].name }}</span>
-        </h2>
-      </div>
-    </div>
-    <div class="govuk-grid-column-one-half">
-      <div class="panel govuk-!-margin-bottom-4">
-        <span class="govuk-caption-m">Type of exercise</span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0 long-text">
-          <span class="capitalize">{{ exercise.typeOfExercise }}</span>
-          <span class="capitalize" v-if="exercise.appointmentType">, {{ exercise.appointmentType | lookup }}</span>
-          <span class="capitalize" v-if="exercise.isCourtOrTribunal">, {{ exercise.isCourtOrTribunal | lookup }}</span>
-        </h2>
-        <span class="govuk-caption-s color-middle">
-          <span class="vh">&nbsp;</span>
-        </span>
-      </div>
-      <div class="panel govuk-!-margin-bottom-4">
-        <span class="govuk-caption-m long-text">
-          Timeline - where we are
-        </span>
-        <div
-          ref="carrousel"
-          class="carrousel"
-        >
-          <div
-            v-for="(time, index) in timeline"
-            :key="index"
-          >
-            <span class="govuk-caption-s color-middle">
-              <span class="long-text">{{ time.entry }}</span>
-            </span>
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              <span class="long-text long-text-margin">{{ time.dateString }}</span>
-            </h2>
-          </div>
-          <div class="carrousel_arrows">
-            <button
-              :disabled="timelineSelected <= 0"
-              @click="btnPrevious"
-            >
-              <img
-                alt="Sign in with Google"
-                src="@/assets/DirectionLeft.png"
-              >
-            </button>
-            <button
-              :disabled="timelineSelected >= (timelineTotal - 1)"
-              @click="btnNext"
-            >
-              <img
-                alt="Sign in with Google"
-                src="@/assets/DirectionRight.png"
-              >
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="panel govuk-!-margin-bottom-9">
-        <span class="govuk-caption-m long-text">Assigned Comissioner</span>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-          <span class="capitalize long-text">{{ exercise.assignedCommissioner[0].name }}</span>
-        </h2>
-      </div>
+      <TotalApplications />
+      <NumberVacancies />
+      <SelectionExerciseManager />
     </div>
 
+    <div class="govuk-grid-column-one-half">
+      <TypeOfExercise />
+      <Timeline />
+      <AssignedCommissioner />
+    </div>
+
+    <!--
     <div
-      v-if="false"
       class="govuk-grid-column-full"
     >
       <h2 class="govuk-heading-l">
         Distribution of scores
       </h2>
     </div>
-    <div
-      v-if="false"
-      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
-    >
-      <div class="panel">
-        <h3 class="govuk-heading-m">
-          Qualifying Test
-        </h3>
-        <div class="govuk-body">
-          <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
-            48%
-          </span>
-          <span class="govuk-caption-s">pass</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates passed:</span>
-          <span class="value-m hard-coded">477</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates entered:</span>
-          <span class="value-m hard-coded">1000</span>
-        </div>
-        <div class="flex-line">
-          <div>
-            <span>Pass Mark:</span> <span class="value-m hard-coded">34</span>
-          </div>
-          <div>
-            <span>Score out of:</span> <span class="value-m hard-coded">60</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      v-if="false"
-      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
-    >
-      <div class="panel">
-        <h3 class="govuk-heading-m">
-          Scenario Test
-        </h3>
-        <div class="govuk-body">
-          <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
-            34%
-          </span>
-          <span class="govuk-caption-s">pass</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates passed:</span>
-          <span class="value-m hard-coded">162</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates entered:</span>
-          <span class="value-m hard-coded">477</span>
-        </div>
-        <div class="flex-line">
-          <div>
-            <span>Pass Mark:</span> <span class="value-m hard-coded">34</span>
-          </div>
-          <div>
-            <span>Score out of:</span> <span class="value-m hard-coded">60</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      v-if="false"
-      class="govuk-grid-column-one-third  govuk-!-margin-bottom-9"
-    >
-      <div class="panel">
-        <h3 class="govuk-heading-m">
-          Selection Day
-        </h3>
-        <div class="govuk-body">
-          <span class="govuk-!-font-size-36 color-brand govuk-!-font-weight-bold hard-coded">
-            14%
-          </span>
-          <span class="govuk-caption-s">pass</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates passed:</span>
-          <span class="value-m hard-coded">50</span>
-        </div>
-        <div class="flex-line">
-          <span>Candidates entered:</span>
-          <span class="value-m hard-coded">162</span>
-        </div>
-        <div class="flex-line">
-          <div>
-            <span>Pass Mark:</span> <span class="value-m hard-coded">34</span>
-          </div>
-          <div>
-            <span>Score out of:</span> <span class="value-m hard-coded">60</span>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <QualifyingTest />
+    <ScenarioTest />
+    <SelectionDay />
+    -->
 
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-l">
         Candidate Breakdown at Each Stage
       </h2>
     </div>
+
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <ActionButton
         v-if="report"
@@ -232,7 +65,7 @@
     >
       <Select
         id="diversityReport"
-        v-model="diversityReport"
+        v-model="selectedDiversityReportType"
         required
       >
         <option
@@ -243,11 +76,14 @@
           {{ type | lookup }}
         </option>
       </Select>
-      <GChart
-        type="ComboChart"
-        :data="chartData"
-        :options="chartOptions"
-      />
+       <Chart
+        chart-id="app-stage-diversity-chart"
+        chart-type="Bar"
+        :chart-data="chartData"
+        :chart-options="chartOptions"
+        :make-accessible="true"
+        :display-patterned-labels="true"
+       />
       <TabsList
         :tabs="tabs"
         :active-tab.sync="activeTab"
@@ -274,10 +110,7 @@
     </div>
   </div>
 </template>
-
 <script>
-import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
-import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
@@ -286,49 +119,50 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { GChart } from 'vue-google-charts/legacy';
 import { applicationCounts } from '@/helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
-
+//import QualifyingTest from './ScoresDistribution/QualifyingTest';
+//import ScenarioTest from './ScoresDistribution/ScenarioTest';
+//import SelectionDay from './ScoresDistribution/SelectionDay';
+import TotalApplications from './OverviewPanels/TotalApplications';
+import NumberVacancies from './OverviewPanels/NumberVacancies';
+import SelectionExerciseManager from './OverviewPanels/SelectionExerciseManager';
+import TypeOfExercise from './OverviewPanels/TypeOfExercise';
+import Timeline from './OverviewPanels/Timeline';
+import AssignedCommissioner from './OverviewPanels/AssignedCommissioner';
+import _keys from 'lodash/keys';
+import _has from 'lodash/has';
+import _map from 'lodash/map';
+import _filter from 'lodash/filter';
+import Chart from '@/components/Chart';
+import REPORTS from '@/reports';
 export default {
+  name: 'Dashboard',
   components: {
     ActionButton,
-    GChart,
     TabsList,
     Table,
     TableCell,
     Select,
+    //QualifyingTest,
+    //ScenarioTest,
+    //SelectionDay,
+    TotalApplications,
+    NumberVacancies,
+    SelectionExerciseManager,
+    TypeOfExercise,
+    Timeline,
+    AssignedCommissioner,
+    Chart,
   },
   data() {
     return {
-      tabs: [
-        {
-          ref: 'applied',
-          title: 'Applied',
-        },
-        {
-          ref: 'shortlisted',
-          title: 'Shortlisted',
-        },
-        {
-          ref: 'selected',
-          title: 'Selected',
-        },
-        {
-          ref: 'recommended',
-          title: 'Recommended',
-        },
-        {
-          ref: 'handover',
-          title: 'Handover',
-        },
-      ],
       activeTab: 'applied',
       timelineSelected: 0,
       timelineTotal: 0,
-      diversityReport: 'gender',
+      selectedDiversityReportType: 'gender',
       report: null,
       refreshingReport: false,
     };
@@ -336,7 +170,7 @@ export default {
   computed: {
     tableColumns() {
       return [
-        { title: `${lookup(this.diversityReport)} (${lookup(this.activeTab)} ${this.getTotalCandidates(this.diversityReport, this.activeTab)} candidates)` },
+        { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab)} candidates)` },
         { title: 'Total (Percentage)' },
       ];
     },
@@ -349,10 +183,6 @@ export default {
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
-    timeline() {
-      const timeline = exerciseTimeline(this.exercise);
-      return createTimeline(timeline);
-    },
     diversityReportType() {
       let dataTitles = [];
       if (this.report) {
@@ -362,44 +192,111 @@ export default {
       }
       return dataTitles;
     },
-    chartData() {
-      let dataTitles = [];
-      let returnChart = [];
+    tabs() {
+      let topLevel = [];
       if (this.report) {
-        const dataApplied = this.report[EXERCISE_STAGE.APPLIED][this.diversityReport];
-        // console.log('dataApplied', dataApplied);
-        // const dataKeys = Object.keys(dataApplied).filter(item => item !== 'total');
-        const dataKeys = this.getOrderedKeys(dataApplied);
-        dataTitles = dataKeys.reduce((ret, [item], currentIndex) => {
-          ret.push(`${currentIndex + 1}. ${lookup(item)}`);
-          return ret;
-        }, []);
-
-        returnChart = [
-          ['All', ...dataTitles],
-          ['Applied', ...this.getDataTotal(EXERCISE_STAGE.APPLIED, dataKeys)],
-          ['Shorlisted', ...this.getDataTotal(EXERCISE_STAGE.SHORTLISTED, dataKeys)],
-          ['Selected', ...this.getDataTotal(EXERCISE_STAGE.SELECTED, dataKeys)],
-          ['Recommended', ...this.getDataTotal(EXERCISE_STAGE.RECOMMENDED, dataKeys)],
-          ['Handover', ...this.getDataTotal(EXERCISE_STAGE.HANDOVER, dataKeys)],
-        ];
+        topLevel = _map(
+          _filter(
+            _keys(this.report), el => el !== 'totalApplications' && el !== 'createdAt'
+          ),
+          el => {
+            return {
+              ref: el,
+              title: el[0].toUpperCase() + el.slice(1),
+            };
+          }
+        );
       }
-
+      return topLevel;
+    },
+    labels() {
+      return REPORTS.ApplicationStageDiversity.labels;
+    },
+    legend() {
+      if (this.selectedDiversityReportType) {
+        // Add the count to the legend, so the items are numbered
+        const items = REPORTS.ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+        let count = 0;
+        return _map(items, item => {
+          ++count;
+          const updatedTitle = `${count}. ${item.title}`;
+          return {
+            key: item.key,
+            title: updatedTitle,
+          };
+        });
+      }
+      return [];
+    },
+    chartData() {
+      const returnChart = {
+        labels: [],
+        datasets: [],
+      };
+      if (this.selectedDiversityReportType && this.labels) {
+        const dataValues = {};
+        // Get the top level and second level key mappings from the report
+        const labelKeys = this.labels.map(o => o.key);
+        const legendKeys = this.legend.map(o => o.key);
+        // Set the labels
+        const labels = this.labels.map(o => o.title);
+        returnChart.labels = labels;
+        // Populate the data values for the selected diversity report
+        for (const labelKey of labelKeys) {
+          const element = this.report[labelKey][this.selectedDiversityReportType];
+          for (const legendKey of legendKeys) {
+            if (!_has(dataValues, legendKey)) {
+              dataValues[legendKey] = [];
+            }
+            let percentage = 0;
+            if (_has(element[legendKey], 'percent')) {
+              percentage = element[legendKey].percent;
+            }
+            dataValues[legendKey].push(percentage);
+          }
+        }
+        // Set the datasets (background colour gets passed to the Chart component separately and merged into the data)
+        for (const obj of this.legend) {
+          returnChart.datasets.push({
+            label: obj.title,
+            data: dataValues[obj.key],
+          });
+        }
+      }
       return returnChart;
     },
     chartOptions() {
       return {
-        vAxis: { title: 'Applicant (percentage)', format: '#,###' },
-        seriesType: 'bars',
-        // series: { 4: { type: 'line' } },
-        height: 300,
+        animation: false, // Ensures the chart appears immediately
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+        },
+        scales: {
+          x: {
+            display: true,
+            title: {
+              display: true,
+            },
+            grid: {
+              display: false,
+            },
+          },
+          y: {
+            display: true,
+            title: {
+              display: true,
+              text: 'Applicant %',
+            },
+          },
+        },
       };
     },
     chartDetail () {
-      // this.activeTab
       let returnChart = [];
       if (this.report) {
-        const dataApplied = this.report[this.activeTab][this.diversityReport];
+        const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
         returnChart = this.getOrderedKeys(dataApplied).map(([item]) => {
           return { 'name': `${lookup(item)}`, 'val': dataApplied[item] };
         });
@@ -426,9 +323,6 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
-  },
-  mounted() {
-    this.carouselChooseItemToShow(this.timeline);
   },
   methods: {
     getTotalCandidates(diversity, tab) {
@@ -457,56 +351,12 @@ export default {
       this.refreshingReport = false;
     },
     getDataTotal(stage, titles) {
-      const dataApplied = this.report[stage][this.diversityReport];
+      const dataApplied = this.report[stage][this.selectedDiversityReportType];
       const dataTotal = titles.reduce((ret, val) => {
         ret.push(dataApplied[val].percent); //total
         return ret;
       }, []);
       return dataTotal;
-    },
-    carouselChooseItemToShow(timeline) {
-      // choose the firtst item to show
-      let timeItemToShow = 0;
-      if (timeline) {
-        timeline.map((time, index) => {
-          if (time.date <= Date.now()) {
-            timeItemToShow = index;
-          }
-        });
-      } else {
-        timeItemToShow = 0;
-      }
-      this.timelineSelected = timeItemToShow;
-      this.timelineTotal = this.timeline.length;
-      this.carouselShowItem(this.timelineSelected);
-    },
-    carouselShowItem(id) {
-      const carrouselRef = this.$refs.carrousel;
-      this.carrouselClean(carrouselRef); // remove previous selected
-      const carrouselRefSelected = carrouselRef.querySelectorAll('div')[id];
-      carrouselRefSelected.classList.add('carrousel__item-visible');
-    },
-    carrouselClean(obj) {
-      const carrouselNodes = obj.querySelectorAll('div');
-      [...carrouselNodes].map(el => {
-        el.classList.remove('carrousel__item-visible');
-      });
-    },
-    btnNext() {
-      if (this.timelineSelected >= (this.timelineTotal - 1)) {
-        this.timelineSelected = this.timelineTotal - 1;
-      } else {
-        this.timelineSelected = this.timelineSelected + 1;
-      }
-      this.carouselShowItem(this.timelineSelected);
-    },
-    btnPrevious() {
-      if (this.timelineSelected <= 0) {
-        this.timelineSelected = 0;
-      } else {
-        this.timelineSelected = this.timelineSelected - 1;
-      }
-      this.carouselShowItem(this.timelineSelected);
     },
     gatherReportData() {
       const data = [];
@@ -531,7 +381,6 @@ export default {
     exportData() {
       const title = 'Diversity Report';
       const data = this.gatherReportData();
-
       downloadXLSX(
         data,
         {
@@ -571,32 +420,6 @@ $govuk-brand-colour:	#1d70b8;
 
 .capitalize {
   text-transform: capitalize;
-}
-
-.carrousel {
-  position: relative;
-}
-
-.carrousel div {
-  display: none;
-}
-.carrousel .carrousel_arrows {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-.carrousel .carrousel_arrows button {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-.carrousel .carrousel_arrows button[disabled] {
-  cursor: default;
-  filter: brightness(2);
-}
-.carrousel div.carrousel__item-visible {
-  display: block;
 }
 .long-text {
   white-space: nowrap;

@@ -68,6 +68,12 @@ const lookup = (value) => {
     attendedUKStateSchool: 'Attended UK state school',
     white: 'White',
     bame: 'Black, Asian and minority ethnic',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
+    applied: 'Applied',
+    no: 'No',
+    yes: 'Yes',
 
     // PAJE answers
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
