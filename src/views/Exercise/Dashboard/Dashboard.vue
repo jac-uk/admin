@@ -102,7 +102,7 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.val.total }} ({{ row.val.percent | formatNumber(2) }}%)
+            {{ row.val.percent | formatNumber(2) }}% ({{ row.val.total }})
           </TableCell>
         </template>
       </Table>
@@ -134,10 +134,8 @@ import SelectionExerciseManager from './OverviewPanels/SelectionExerciseManager'
 import TypeOfExercise from './OverviewPanels/TypeOfExercise';
 import Timeline from './OverviewPanels/Timeline';
 import AssignedCommissioner from './OverviewPanels/AssignedCommissioner';
-import _keys from 'lodash/keys';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
-import _filter from 'lodash/filter';
 import Chart from '@/components/Chart';
 import REPORTS from '@/reports';
 export default {
@@ -173,7 +171,7 @@ export default {
     tableColumns() {
       return [
         { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab)} candidates)` },
-        { title: 'Total (Percentage)' },
+        { title: 'Percentage (Total)' },
       ];
     },
     exercise() {
@@ -195,21 +193,12 @@ export default {
       return dataTitles;
     },
     tabs() {
-      let topLevel = [];
-      if (this.report) {
-        topLevel = _map(
-          _filter(
-            _keys(this.report), el => el !== 'totalApplications' && el !== 'createdAt'
-          ),
-          el => {
-            return {
-              ref: el,
-              title: el[0].toUpperCase() + el.slice(1),
-            };
-          }
-        );
-      }
-      return topLevel;
+      return _map(this.labels, item => {
+        return {
+          ref: item.key,
+          title: item.title,
+        };
+      });
     },
     labels() {
       return REPORTS.ApplicationStageDiversity.labels;
@@ -252,7 +241,7 @@ export default {
             }
             let percentage = 0;
             if (_has(element[legendKey], 'percent')) {
-              percentage = element[legendKey].percent;
+              percentage = this.$options.filters.formatNumber(element[legendKey].percent, 2);
             }
             dataValues[legendKey].push(percentage);
           }
