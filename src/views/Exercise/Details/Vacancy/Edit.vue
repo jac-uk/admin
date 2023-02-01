@@ -398,6 +398,16 @@
           required
         />
 
+        <ListingPreview
+          class="govuk-!-margin-bottom-4"
+          :exercise="{...exercise, ...formData }"
+        />
+        <DetailPreview
+          v-if="{...exercise, ...formData }.advertType !== 'listing'"
+          class="govuk-!-margin-bottom-4"
+          :exercise="{...exercise, ...formData }"
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -418,6 +428,8 @@ import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import ListingPreview from '@/components/Previews/ListingPreview.vue';
+import DetailPreview from '@/components/Previews/DetailPreview.vue';
 
 export default {
   components: {
@@ -431,6 +443,8 @@ export default {
     TextareaInput,
     RichTextInput,
     BackLink,
+    DetailPreview,
+    ListingPreview,
   },
   extends: Form,
   data() {
@@ -462,6 +476,9 @@ export default {
     };
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
