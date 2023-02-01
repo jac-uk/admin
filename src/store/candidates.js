@@ -73,6 +73,10 @@ export default {
             commit('setRecord', candidate);
           }
         });
+    },        
+    save: async ({ state }, data) => {
+      const ref = collection.doc(state.record.id);
+      await ref.set(data, { merge: true });
     },
   },
   mutations: {
