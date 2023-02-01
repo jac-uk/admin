@@ -13,12 +13,12 @@ const REPORTS = {
         title: 'Shortlisted',
       },
       {
-        key: 'recommended',
-        title: 'Recommended',
-      },
-      {
         key: 'selected',
         title: 'Selected',
+      },
+      {
+        key: 'recommended',
+        title: 'Recommended',
       },
       {
         key: 'handover',

@@ -102,7 +102,7 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.val.percent | formatNumber(2) }}% ({{ row.val.total }})
+            {{ row.val.percent | formatNumber(2) }}% ({{ row.val.total | formatNumber }})
           </TableCell>
         </template>
       </Table>
@@ -169,8 +169,9 @@ export default {
   },
   computed: {
     tableColumns() {
+      const totalCandidates = this.$options.filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
       return [
-        { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab)} candidates)` },
+        { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${totalCandidates} candidates)` },
         { title: 'Percentage (Total)' },
       ];
     },
@@ -262,6 +263,20 @@ export default {
         plugins: {
           legend: {
             position: 'right',
+          },
+          tooltip: {  // Add a % sign after each label in the tooltip
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += `${context.parsed.y}%`;
+                }
+                return label;
+              },
+            },
           },
         },
         scales: {
