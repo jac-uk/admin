@@ -81,11 +81,17 @@ const module = {
       return (state.currentUser !== null);
     },
     getEmail(state) {
-      return state.currentUser.email;
+      if (state.currentUser) {
+        return state.currentUser.email;
+      }
+      return null;
     },
     hasPermissions: state => permissions => {
       const rolePermissions = state.currentUser ? state.currentUser.rolePermissions : null;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
+    },
+    getDisplayName(state) {
+      return state.currentUser.displayName;
     },
   },
 };
