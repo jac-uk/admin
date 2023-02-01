@@ -25,6 +25,10 @@ export default {
       // TODO include merit list report
       sideNavigation: [
         {
+          title: 'Merit List',
+          path: `${path}/merit-list`,
+        },
+        {
           title: 'Diversity',
           path: `${path}/diversity`,
         },

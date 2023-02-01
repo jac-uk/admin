@@ -42,6 +42,8 @@ import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View';
 import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit';
 import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View';
 import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit';
+import ExerciseDetailsAdditionalSettings from '@/views/Exercise/Details/AdditionalSettings/View';
+import ExerciseDetailsAdditionalSettingsEdit from '@/views/Exercise/Details/AdditionalSettings/Edit';
 
 // Appplications
 import ExerciseApplications from '@/views/Exercise/Applications';
@@ -67,6 +69,9 @@ import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestRep
 import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
 
+// Merit list
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
+
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
@@ -76,9 +81,9 @@ import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterCh
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
-import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
-import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
-import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
+// import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
+// import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
+// import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -93,7 +98,6 @@ import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/Quali
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 
-// Exercise task
 import ExerciseTask from '@/views/Exercise/Tasks/Task';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
@@ -110,30 +114,33 @@ import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
 import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
-import ExerciseTaskPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
-import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
+
+// TODO remove these once we no longer need to support old code panels
+// import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
+import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/xPanels/List';
+// import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/xPanels/New';
+// import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/xPanels/View';
+// END ////////////
+
+import ExerciseTasksPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
+import ExerciseTasksPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
-import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
-import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit';
-import ExerciseStagesSelectedList from '@/views/Exercise/Stages/SelectedList';
-import ExerciseStagesSelectedEdit from '@/views/Exercise/Stages/SelectedEdit';
-import ExerciseStagesSelectedBack from '@/views/Exercise/Stages/SelectedBack';
-import ExerciseStagesRecommendedList from '@/views/Exercise/Stages/RecommendedList';
-import ExerciseStagesRecommendedEdit from '@/views/Exercise/Stages/RecommendedEdit';
-import ExerciseStagesRecommendedBack from '@/views/Exercise/Stages/RecommendedBack';
-import ExerciseStagesHandoverList from '@/views/Exercise/Stages/HandoverList';
-import ExerciseStagesHandoverBack from '@/views/Exercise/Stages/HandoverBack';
-import ExerciseStagesShortlistedList from '@/views/Exercise/Stages/ShortlistedList';
-import ExerciseStagesShortlistedEdit from '@/views/Exercise/Stages/ShortlistedEdit';
-import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBack';
+import ExerciseStagesList from '@/views/Exercise/Stages/List';
+import ExerciseStagesEdit from '@/views/Exercise/Stages/Edit';
+import ExerciseStagesBack from '@/views/Exercise/Stages/Back';
 
 // Candidates
 import Candidates from '@/views/Candidates/Candidates';
 import CandidatesList from '@/views/Candidates/CandidatesList';
 import CandidatesView from '@/views/Candidates/CandidatesView';
 import TargetedOutreachReport from '@/views/Candidates/TargetedOutreachReport';
+
+// Panellists
+import Panellists from '@/views/Panellists';
+import PanellistsList from '@/views/Panellists/List';
+import PanellistsView from '@/views/Panellists/Panellist';
 
 // Error pages
 import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
@@ -240,6 +247,31 @@ const router = new Router({
             title: 'Candidates | Targeted Oureach Report',
           },
         },
+      ],
+    },
+    {
+      path: '/panellists',
+      component: Panellists,
+      children: [
+        {
+          path: '',
+          component: PanellistsList,
+          name: 'panellists-list',
+          meta: {
+            requiresAuth: true,
+            title: 'Panellists',
+          },
+        },
+        {
+          path: 'view/:id',
+          component: PanellistsView,
+          name: 'panellists-view',
+          meta: {
+            requiresAuth: true,
+            title: 'View Panellist',
+          },
+        },
+
       ],
     },
     {
@@ -545,6 +577,30 @@ const router = new Router({
                 },
               ],
             },
+            {
+              path: 'additional-settings',
+              component: EmptyRouterView,
+              children: [
+                {
+                  name: 'exercise-details-additional-settings',
+                  path: '',
+                  component: ExerciseDetailsAdditionalSettings,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Additional Settings | Exercise Details',
+                  },
+                },
+                {
+                  name: 'exercise-details-additional-settings-edit',
+                  path: 'edit',
+                  component: ExerciseDetailsAdditionalSettingsEdit,
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Edit Additional Settings | Exercise Details',
+                  },
+                },
+              ],
+            },
           ],
         },
         {
@@ -616,18 +672,13 @@ const router = new Router({
           ],
         },
         {
-          path: 'tasks',
+          path: 'tasks/:stage',
           component: ExerciseTasks,
           children: [
-            {
-              path: '',
-              redirect: 'qualifying-tests',
-              // component: ExerciseTasksIndex,
-              // meta: {
-              //   requiresAuth: true,
-              //   title: 'Exercise Tasks',
-              // },
-            },
+            // {
+            //   path: '',
+            //   redirect: 'independent-assessments',
+            // },
             {
               path: 'equal-merit-tie-breakers',
               component: QualifyingTestsCover,
@@ -863,102 +914,35 @@ const router = new Router({
               ],
             },
             {
-              path: 'sift',
+              path: 'panels/:type',
               component: ExerciseTasksPanels,
+              props: true,
               children: [
                 {
                   path: '',
-                  component: ExerciseTasksSift,
-                  name: 'exercise-tasks-sift',
+                  component: ExerciseTasksPanelsList,
+                  name: 'exercise-tasks-panels',
                   meta: {
                     requiresAuth: true,
-                    title: 'Sift | Exercise Tasks',
+                    title: 'Panels | Exercise Tasks',
                   },
                 },
                 {
                   path: 'new',
                   component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-sift-new',
+                  name: 'exercise-tasks-panels-new',
                   meta: {
                     requiresAuth: true,
-                    title: 'Create Sift Panel | Exercise Tasks',
-                    pageName: 'exercise-tasks-sift',
+                    title: 'Create Panel | Exercise Tasks',
                   },
                 },
                 {
                   path: 'view/:panelId',
                   component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-sift-view',
+                  name: 'exercise-tasks-panels-view',
                   meta: {
                     requiresAuth: true,
-                    title: 'Sift Panel | Exercise Tasks',
-                    pageName: 'exercise-tasks-sift',
-                  },
-                },
-              ],
-            },
-            {
-              path: 'selection',
-              component: ExerciseTasksPanels,
-              children: [
-                {
-                  path: '',
-                  component: ExerciseTasksSelectionDays,
-                  name: 'exercise-tasks-selection',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Selection | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-selection-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Create Selection Panel | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'view/:panelId',
-                  component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-selection-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Selection Panel | Exercise Tasks',
-                  },
-                },
-              ],
-            },
-            {
-              path: 'scenario',
-              component: ExerciseTasksPanels,
-              children: [
-                {
-                  path: '',
-                  component: ExerciseTaskScenario,
-                  name: 'exercise-tasks-scenario',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Scenario Responses | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-scenario-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Create Scenario Response Panel | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'view/:panelId',
-                  component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-scenario-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Scenario Response Panel | Exercise Tasks',
+                    title: 'Panel | Exercise Tasks',
                   },
                 },
               ],
@@ -1106,7 +1090,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/new',
-                  component: ExerciseTaskPanelNew,
+                  component: ExerciseTasksPanelNew,
                   name: 'exercise-task-panel-new',
                   meta: {
                     requiresAuth: true,
@@ -1115,7 +1099,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/:panelId',
-                  component: ExerciseTaskPanelView,
+                  component: ExerciseTasksPanelView,
                   name: 'exercise-task-panel',
                   meta: {
                     requiresAuth: true,
@@ -1132,123 +1116,33 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'review',
+              redirect: 'applied',
             },
             {
-              path: 'review',
-              component: ExerciseStagesReviewList,
-              name: 'exercise-stages-review-list',
+              path: ':stage',
+              component: ExerciseStagesList,
+              name: 'exercise-stages-list',
               meta: {
                 requiresAuth: true,
-                title: 'Review | Exercise Stages',
+                title: 'List | Exercise Stage',
               },
             },
             {
-              path: 'review/edit',
-              component: ExerciseStagesReviewEdit,
-              name: 'exercise-stages-review-edit',
+              path: ':stage/edit',
+              component: ExerciseStagesEdit,
+              name: 'exercise-stages-edit',
               meta: {
                 requiresAuth: true,
-                title: 'Edit Review | Exercise Stages',
+                title: 'Edit | Exercise Stage',
               },
             },
             {
-              path: 'selected',
-              component: ExerciseStagesSelectedList,
-              name: 'exercise-stages-selected-list',
+              path: ':stage/back',
+              component: ExerciseStagesBack,
+              name: 'exercise-stages-back',
               meta: {
                 requiresAuth: true,
-                title: 'Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'selected/edit',
-              component: ExerciseStagesSelectedEdit,
-              name: 'exercise-stages-selected-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'selected/back',
-              component: ExerciseStagesSelectedBack,
-              name: 'exercise-stages-selected-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Selected | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended',
-              component: ExerciseStagesRecommendedList,
-              name: 'exercise-stages-recommended-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended/edit',
-              component: ExerciseStagesRecommendedEdit,
-              name: 'exercise-stages-recommended-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'recommended/back',
-              component: ExerciseStagesRecommendedBack,
-              name: 'exercise-stages-recommended-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Recommended | Exercise Stages',
-              },
-            },
-            {
-              path: 'handover',
-              component: ExerciseStagesHandoverList,
-              name: 'exercise-stages-handover-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Handover | Exercise Stages',
-              },
-            },
-            {
-              path: 'handover/back',
-              component: ExerciseStagesHandoverBack,
-              name: 'exercise-stages-handover-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Handover | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted',
-              component: ExerciseStagesShortlistedList,
-              name: 'exercise-stages-shortlisted-list',
-              meta: {
-                requiresAuth: true,
-                title: 'Shortlisted | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted/edit',
-              component: ExerciseStagesShortlistedEdit,
-              name: 'exercise-stages-shortlisted-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Shortlisted | Exercise Stages',
-              },
-            },
-            {
-              path: 'shortlisted/back',
-              component: ExerciseStagesShortlistedBack,
-              name: 'exercise-stages-shortlisted-back',
-              meta: {
-                requiresAuth: true,
-                title: 'Move Back Shortlisted | Exercise Stages',
+                title: 'Move Back | Exercise Stages',
               },
             },
           ],
@@ -1259,7 +1153,15 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'diversity',
+              redirect: 'merit-list',
+            },
+            {
+              path: 'merit-list',
+              component: ExerciseReportsMeritList,
+              meta: {
+                requiresAuth: true,
+                title: 'Merit List',
+              },
             },
             {
               path: 'diversity',
@@ -1453,7 +1355,7 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
               },
-            },  
+            },
           ],
         },
       ],

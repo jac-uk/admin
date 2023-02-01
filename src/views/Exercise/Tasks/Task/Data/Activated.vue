@@ -50,14 +50,12 @@
       <div class="govuk-button-group govuk-!-margin-bottom-6">
         <button
           class="govuk-button govuk-button-s govuk-button--secondary govuk-!-margin-bottom-0"
-          :disabled="!areAllRowsComplete"
           @click="copyToClipboard"
         >
           Copy to clipboard
         </button>
         <button
           class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-          :disabled="!areAllRowsComplete"
           @click="pasteFromClipboard"
         >
           Paste from clipboard

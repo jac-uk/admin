@@ -20,6 +20,7 @@ import invitations from '@/store/invitations';
 import events from '@/store/events';
 import clipboard from '@/store/clipboard';
 
+import applicationRecords from '@/store/applicationRecords';
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
 import stageHandover from '@/store/stage/handover';
@@ -37,8 +38,8 @@ import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
-import panels from '@/store/panels';
-// NEW: import panels from '@/store/panels/collection';
+// OLD: import panels from '@/store/panels';
+import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
@@ -64,6 +65,7 @@ const store = new Vuex.Store({
     clipboard,
     notifications,
     invitations,
+    applicationRecords,
     stageReview,
     stageSelected,
     stageHandover,
