@@ -63,6 +63,10 @@ export default {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.set(data, { merge: true });
     },
+    save: async ({ state }, data) => {
+      const ref = collection.doc(state.record.id);
+      await ref.set(data, { merge: true });
+    },
   },
   mutations: {
     records(state, data) {
