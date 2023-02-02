@@ -22,7 +22,6 @@ export default {
     const exercise = this.$store.state.exerciseDocument.record;
     const path = `/exercise/${exercise.id}/reports`;
     return {
-      // TODO include merit list report
       sideNavigation: [
         {
           title: 'Merit List',

@@ -1,6 +1,6 @@
 import {
   STATUS,
-  EXERCISE_STAGE,
+  // EXERCISE_STAGE,
   // APPLICATION_STATUS,
   SHORTLISTING,
   QUALIFYING_TEST,
@@ -16,13 +16,13 @@ const ADVERT_TYPES = {
   EXTERNAL: 'external',
 };
 
-// const EXERCISE_STAGE = {
-//   APPLIED: 'applied',
-//   SHORTLISTED: 'shortlisted',
-//   SELECTABLE: 'selectable',
-//   RECOMMENDED: 'recommended',
-//   HANDOVER: 'handover',
-// };
+const EXERCISE_STAGE = {
+  APPLIED: 'applied',
+  SHORTLISTED: 'shortlisted',
+  SELECTABLE: 'selectable',
+  RECOMMENDED: 'recommended',
+  HANDOVER: 'handover',
+};
 
 const APPLICATION_STATUS = {
   CRITICAL_ANALYSIS_PASSED: 'criticalAnalysisPassed',
