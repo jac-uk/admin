@@ -65,11 +65,104 @@
       </div>
     </div>
 
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-button-group">
+        <Select
+          id="exercise-stage"
+          v-model="exerciseStage"
+          class="govuk-!-margin-right-2"
+        >
+          <option value="all">
+            All applications
+          </option>
+          <option
+            v-if="applicationRecordCounts.review"
+            value="review"
+          >
+            Review
+          </option>
+          <option
+            v-if="applicationRecordCounts.shortlisted"
+            value="shortlisted"
+          >
+            Shortlisted
+          </option>
+          <option
+            v-if="applicationRecordCounts.selected"
+            value="selected"
+          >
+            Selected
+          </option>
+          <option
+            v-if="applicationRecordCounts.recommended"
+            value="recommended"
+          >
+            Recommended
+          </option>
+          <option
+            v-if="applicationRecordCounts.handover"
+            value="handover"
+          >
+            Handover
+          </option>
+        </Select>
+        <Select
+          v-if="availableStatuses && availableStatuses.length > 0"
+          id="availableStatuses"
+          v-model="candidateStatus"
+        >
+          <option
+            value="all"
+          >
+            All
+          </option>
+          <option
+            v-for="item in availableStatuses"
+            :key="item"
+            :value="item"
+          >
+            {{ item | lookup }}
+          </option>
+        </Select>
+      </div>
+    </div>
+
+    <div class="govuk-grid-column-full">
+      <Table
+        ref="issuesTable"
+        data-key="id"
+        :data="applicationRecords"
+        :columns="tableColumns"
+        :page-size="50"
+        :custom-search="{
+          placeholder: 'Search candidate names',
+          handler: candidateSearch,
+          field: 'candidate.id',
+        }"
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            {{ row.personalDetails.fullName }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.personalDetails.email }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.personalDetails.phone }}
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            {{ row.personalDetails.reasonableAdjustmentsDetails }}
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+
     <div
       v-if="report != null && report.rows.length"
       class="govuk-grid-column-full"
     >
-      <table class="govuk-table">
+      <!-- <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th
@@ -124,7 +217,7 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> -->
     </div>
   </div>
 </template>
@@ -133,14 +226,34 @@
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
+import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'ReasonableAdjustments',
+  components: {
+    Select,
+    Table,
+    TableCell,
+  },
   mixins: [permissionMixin],
   data() {
     return {
+      exerciseStage: 'all',
+      tableColumns: [
+        { title: 'Name', sort: 'personalDetails.fullName', default: true },
+        { title: 'Email' },
+        { title: 'Phone number' },
+        { title: 'Details' },
+      ],
+      applicationRecords: [],
+      availableStatuses: null,
       report: null,
       refreshingReport: false,
     };
@@ -149,8 +262,33 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
+    },
     hasReportData() {
       return this.report && this.report.headers;
+    },
+  },
+  watch: {
+    exerciseStage: function (valueNow) {
+      // populate the status dropdown, for the chosen stage
+      if (valueNow === EXERCISE_STAGE.REVIEW) {
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
+        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
+        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
+        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
+      } else { // handover
+        this.availableStatuses = [];
+      }
+      // reset the status dropdown to 'All'
+      // this.candidateStatus = 'all';
+
+      // this.$refs['issuesTable'].reload();
+    },
+    applicationRecords: function() {
     },
   },
   created() {
@@ -168,6 +306,31 @@ export default {
     }
   },
   methods: {
+    async getTableData(params) {
+      let firestoreRef = firestore
+        .collection('applications')
+        .where('exerciseId', '==', this.exercise.id)
+        .where('personalDetails.reasonableAdjustments', '==', true);
+      if (this.exerciseStage !== 'all') {
+        // firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+      }
+      firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
+      if (firestoreRef) {
+        this.unsubscribe = firestoreRef
+          .onSnapshot((snap) => {
+            const applicationRecords = [];
+            snap.forEach((doc) => {
+              applicationRecords.push(vuexfireSerialize(doc));
+            });
+            this.applicationRecords = applicationRecords;
+          });
+      } else {
+        this.applicationRecords = [];
+      }
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
     async refreshReport() {
       this.refreshingReport = true;
       await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
