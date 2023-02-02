@@ -21,7 +21,14 @@
             :aria-current="isActive ? 'location' : false"
             :href="href"
             @click="navigate"
-          >{{ page.title }}</a>
+          >
+            {{ page.title }}
+            <strong
+              v-if="page.tag"
+              class="govuk-tag govuk-tag-s"
+              :class="page.tag.class"
+            >{{ page.tag.title }}</strong>
+          </a>
         </li>
       </router-link>
     </ul>
@@ -30,7 +37,6 @@
 
 <script>
 export default {
-  name: 'SideNavigation',
   props: {
     pages: {
       required: true,
@@ -39,3 +45,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.govuk-tag-s {
+  font-size: .8rem;
+  line-height: .8;
+  vertical-align: middle;
+}
+
+</style>
