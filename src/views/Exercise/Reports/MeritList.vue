@@ -104,7 +104,7 @@
               <a
                 href="#"
                 class="govuk-link"
-              >{{ row.fullName }}</a>
+              >{{ row.referenceNumber }}</a>
             </TableCell>
 
             <TableCell
@@ -287,7 +287,9 @@ export default {
               };
             }
             applicationData[row.id].referenceNumber = row.ref;
-            applicationData[row.id].fullName = task.applications.find(application => application.id === row.id).fullName;
+            let fullName;
+            if (task.applications) { fullName = task.applications.find(application => application.id === row.id).fullName; }
+            if (fullName) { applicationData[row.id].fullName = fullName; }
             applicationData[row.id][task.id] = {
               score: row.score,
               scoreSheet: row.scoreSheet ? row.scoreSheet : null,
