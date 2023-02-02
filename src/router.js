@@ -123,6 +123,10 @@ import Sandbox from '@/views/Sandbox';
 // Users
 import Users from '@/views/Users/Users';
 
+// @TODO: REMOVE
+// Routes
+import Routes from '@/views/Routes';
+
 Vue.use(Router);
 
 const router = new Router({
@@ -132,6 +136,23 @@ const router = new Router({
     {
       path: '*',
       redirect: '/exercises',
+    },
+    {
+      path: '/routes',
+      name: 'routes',
+      component: Routes,
+      meta: {
+        requiresAuth: true,
+        title: 'Routes',
+      },
+      beforeEnter: (to, from, next) => {
+        if (store.getters.appEnvironment === 'DEVELOP') {
+          next();
+        }
+        else {
+          next(false);
+        }
+      },
     },
     {
       path: '/exercises',
@@ -1266,7 +1287,7 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
               },
-            },  
+            },
           ],
         },
       ],
