@@ -287,6 +287,9 @@ export default {
               };
             }
             applicationData[row.id].referenceNumber = row.ref;
+            let fullName;
+            if (task.applications) { fullName = task.applications.find(application => application.id === row.id).fullName; }
+            if (fullName) { applicationData[row.id].fullName = fullName; }
             applicationData[row.id][task.id] = {
               score: row.score,
               scoreSheet: row.scoreSheet ? row.scoreSheet : null,
