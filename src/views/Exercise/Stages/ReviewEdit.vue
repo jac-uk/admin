@@ -42,25 +42,23 @@
         <RadioGroup
           id="emp-edit-input"
           v-model="empApplied"
+          label=""
+          hint=""
           required
           :messages="{
             required: 'Please specify a value'
           }"
         >
           <RadioItem
-            value="gender"
-            label="Yes - EMP has been Applied on basis of gender"
-          />
-          <RadioItem
-            value="ethnicity"
-            label="Yes - EMP has been Applied on basis of ethnicity"
+            :value="true"
+            label="Yes - EMP has been Applied"
           />
           <RadioItem
             :value="false"
             label="No - EMP has not been Applied"
           />
         </RadioGroup>
-      </checkboxitem>
+      </CheckboxItem>
     </CheckboxGroup>
     <button class="govuk-button">
       Save and continue

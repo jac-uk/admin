@@ -56,19 +56,15 @@
           }"
         >
           <RadioItem
-            value="gender"
-            label="Yes - EMP has been Applied on basis of gender"
-          />
-          <RadioItem
-            value="ethnicity"
-            label="Yes - EMP has been Applied on basis of ethnicity"
+            :value="true"
+            label="Yes - EMP has been Applied"
           />
           <RadioItem
             :value="false"
             label="No - EMP has not been Applied"
           />
         </RadioGroup>
-      </checkboxitem>
+      </CheckboxItem>
     </CheckboxGroup>
 
     <button class="govuk-button">
