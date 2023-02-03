@@ -61,7 +61,7 @@
           />
           <RadioItem
             value="ethnicity"
-            label="Yes - EMP has been Applied on basis of ethnicityy"
+            label="Yes - EMP has been Applied on basis of ethnicity"
           />
           <RadioItem
             :value="false"
