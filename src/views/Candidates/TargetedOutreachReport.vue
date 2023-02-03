@@ -53,15 +53,17 @@
           </div>
         </fieldset>
       </form>
+    </div>
+    <div class="govuk-grid-column-full">
       <table
         v-if="!!results"
-        class="govuk-table"
+        class="govuk-table overflow-table"
       >
         <thead class="govuk-table__head">
           <th
             v-for="(column, index) in tableColumns"
             :key="index"
-            :class="(index + 1) === tableColumns.length ? 'govuk-table__cell text-left' : 'govuk-table__cell text-right'"
+            class="govuk-table__cell text-left"
           >
             {{ filters.lookup(column.title) }}
           </th>
@@ -165,3 +167,10 @@ export default {
   },
 };
 </script>
+<style>
+  .overflow-table {
+    width: 100%;
+    word-wrap:break-word;
+    table-layout: fixed;
+  }
+</style>
