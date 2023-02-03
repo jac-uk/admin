@@ -35,6 +35,7 @@ export {
   isApproved,
   isArchived,
   isProcessing,
+  isClosed,
   hasIndependentAssessments,
   hasLeadershipJudgeAssessment,
   hasQualifyingTests,
@@ -180,6 +181,10 @@ function isApproved(data) {
 function isProcessing(exercise) {
   if (!exercise) { return false; }
   return exercise._applicationRecords ? true : false;
+}
+function isClosed(exercise) {
+  if (!exercise) { return false; }
+  return isApproved && exercise.applicationCloseDate && exercise.applicationCloseDate <= new Date();
 }
 function applicationCounts(exercise) {
   return exercise && exercise._applications ? exercise._applications : {};

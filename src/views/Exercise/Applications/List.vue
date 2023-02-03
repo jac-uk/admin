@@ -35,6 +35,14 @@
             >
               Export contacts
             </button>
+            <button
+              v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="openModal"
+            >
+              Late Application
+            </button>
           </div>
         </div>
       </div>
@@ -78,12 +86,14 @@
         </TableCell>
       </template>
     </Table>
+
     <button
       class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-top-2"
       @click="togglePagination"
     >
       {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
     </button>
+
     <Modal
       ref="applicationReminderModal"
     >
@@ -92,17 +102,31 @@
         @confirmed="sendApplicationReminders"
       />
     </Modal>
+    
+    <Modal ref="lateApplicationRequestModal">
+      <LateApplicationRequest
+        @success="openConfirmationModal()"
+        @close="closeModal()"
+      />
+    </Modal>
+    <Modal ref="lateApplicationRequestConfirmModal">
+      <LateApplicationConfirmation
+        @close="closeConfirmationModal()"
+      />
+    </Modal>    
   </div>
 </template>
 
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
+import { isClosed } from '@/helpers/exerciseHelper';
+import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
+import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
 export default {
   name: 'ApplicationsList',
@@ -110,7 +134,8 @@ export default {
     Table,
     TableCell,
     Modal,
-    ModalInner,
+    LateApplicationRequest,
+    LateApplicationConfirmation,
   },
   mixins: [permissionMixin],
   props: {
@@ -142,8 +167,24 @@ export default {
     applications() {
       return this.$store.state.applications.records;
     },
+    isClosed() {
+      return isClosed(this.exercise);
+    },
   },
   methods: {
+    openModal() {
+      this.$refs.lateApplicationRequestModal.openModal();
+    },
+    closeModal() {
+      this.$refs.lateApplicationRequestModal.closeModal();
+    },
+    openConfirmationModal() {
+      this.closeModal();
+      this.$refs.lateApplicationRequestConfirmModal.openModal();
+    },
+    closeConfirmationModal() {
+      this.$refs.lateApplicationRequestConfirmModal.closeModal();
+    },
     getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
