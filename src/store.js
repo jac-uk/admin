@@ -34,46 +34,39 @@ import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 import panels from '@/store/panels';
-import messageBase from '@/store/baseClasses/messageBase';
-import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
-import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
-    // Keep these in alphabetical order for readability in Vue Chrome Extension
+    auth,
+    services,
+    exerciseCollection,
+    exerciseCreateJourney,
+    exerciseDocument,
     applications,
     application,
     assessment,
     assessments,
-    auth,
-    candidateApplications,
-    candidates,
-    characterChecks,
-    clipboard,
-    connectionMonitor,
     events,
-    exerciseCollection,
-    exerciseCreateJourney,
-    exerciseDocument,
-    invitations,
-    lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
-    lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
-    messageBase: new messageBase().getModule(),
-    notes,
+    clipboard,
     notifications,
-    panels,
-    qualifyingTest,
-    qualifyingTestResponses,
-    qualifyingTestReports,
-    qualifyingTestReport,
-    services,
+    invitations,
     stageReview,
     stageSelected,
     stageHandover,
     stageRecommended,
     stageShortlisted,
+    candidates,
+    notes,
+    candidateApplications,
+    qualifyingTest,
+    qualifyingTestResponses,
+    connectionMonitor,
+    qualifyingTestReports,
+    qualifyingTestReport,
+    panels,
+    characterChecks,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

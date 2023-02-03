@@ -34,11 +34,5 @@ export default {
     getNotificationSettings: (state) => {
       return state.record && state.record.notifications;
     },
-    getEmails: (state) => (emailType) => {
-      if (state.record && state.record.emails) {
-        return state.record.emails[emailType];
-      }
-      return null;
-    },
   },
 };

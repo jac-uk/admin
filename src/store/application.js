@@ -25,14 +25,9 @@ export default {
       };
       await ref.update(data);
     },
-    save: async ({ dispatch, state }, data) => {
-      if (state.record) {
-        const ref = collection.doc(state.record.id);
-        await ref.set(data, { merge: true });
-      } else {
-        const ref = await collection.add(data);
-        await dispatch('bind', ref.id);
-      }
+    save: async ({ state }, data) => {
+      const ref = collection.doc(state.record.id);
+      await ref.set(data, { merge: true });
     },
     update: async (context, { data, id }) => {
       const ref = collection.doc(id);
@@ -89,29 +84,6 @@ export default {
 
       // If Qualifying Tests have started ensure the relevant qualifyingTestResponse document is removed (soft deleted)
       context.dispatch('qualifyingTestResponses/delete', { id: applicationId }, { root: true });
-    },
-    createDraft: async (context, {
-       exerciseId,
-       exerciseName,
-       exerciseRef,
-       candidateId,
-       candidateEmail,
-       candidateFullname,
-    }) => {
-      const data = {
-        status: 'draft',
-        progress: { started: true },
-        personalDetails: {
-          email: candidateEmail,
-          fullName: candidateFullname,
-        },
-        userId: candidateId,
-        exerciseId: exerciseId,
-        exerciseName: exerciseName,
-        exerciseRef: exerciseRef,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-      await context.dispatch('save', data);
     },
   },
   state: {

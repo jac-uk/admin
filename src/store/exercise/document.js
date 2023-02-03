@@ -14,9 +14,6 @@ export default {
     setNoOfTestApplications(state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
-    setRecord(state, record) {
-      state.record = record;
-    },
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {

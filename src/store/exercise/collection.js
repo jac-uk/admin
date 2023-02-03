@@ -91,10 +91,6 @@ export default {
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
     },
-    getLocalById({ state }, id) {
-      // Check if the local records have the id and return the record, ie does not hit the db
-      return state.records.find(element => element.id === id);
-    },
   },
   mutations: {
     updateArchived(state, isArchived) {

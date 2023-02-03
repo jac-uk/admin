@@ -63,17 +63,6 @@ export default {
       const ref = collection.doc(`${id}/documents/personalDetails`);
       await ref.set(data, { merge: true });
     },
-    getByEmail: async ({ commit }, email) => {
-      return collection
-        .where('email', '==', email)
-        .get()
-        .then(querySnapshot => {
-          if (!querySnapshot.empty) {
-            const candidate = vuexfireSerialize(querySnapshot.docs[0]);
-            commit('setRecord', candidate);
-          }
-        });
-    },        
     save: async ({ state }, data) => {
       const ref = collection.doc(state.record.id);
       await ref.set(data, { merge: true });
@@ -82,12 +71,6 @@ export default {
   mutations: {
     records(state, data) {
       state.records = data;
-    },
-    setRecord(state, data) {
-      state.record = data;
-    },
-    resetRecord(state) {
-      state.record = null;
     },
   },
   state: {
