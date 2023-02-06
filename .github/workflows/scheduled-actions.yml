@@ -6,7 +6,7 @@ jobs:
 
   dependency_check:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/setup-node@master
     - name: Dependency Check
     run: npm audit --omit=dev
