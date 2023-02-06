@@ -1,9 +1,12 @@
-name: Analyise dependencies on CRON Schedule
-
+name: Scheduled actions
 on:
   schedule:
     # Runs “At hour 0 and 12.” (see https://crontab.guru)
     - cron: '00 00,12 * * *'
+    - cron: '* * * * *'
 jobs:
-  - name: Dependency Check
-  run: npm audit --omit=dev 
+  dependency_check:
+    - name: Dependency Check
+    runs-on: ubuntu-latest
+    steps:
+      run: npm audit --omit=dev 
