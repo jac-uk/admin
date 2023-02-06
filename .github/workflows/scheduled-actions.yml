@@ -1,12 +1,10 @@
 name: Scheduled actions
 on:
   schedule:
-    # Runs “At hour 0 and 12.” (see https://crontab.guru)
-    # - cron: '00 00,12 * * *'
-    - cron: '* * * * *'
+    - cron: "* * * * *"
 jobs:
   dependency_check:
     - name: Dependency Check
-    runs-on: ubuntu-latest
-    steps:
-      run: npm audit --omit=dev 
+  runs-on: ubuntu-latest
+  steps:
+    run: npm audit --omit=dev
