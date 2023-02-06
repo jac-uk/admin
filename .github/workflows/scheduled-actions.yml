@@ -6,6 +6,6 @@ jobs:
 
   dependency_check:
     runs-on: ubuntu-latest
-  steps:
+    steps:
     - name: Dependency Check
     run: npm audit --omit=dev
