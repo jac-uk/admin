@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Dependency Check
+      - name: Dependency Checkb
         run: npm audit --omit=dev
