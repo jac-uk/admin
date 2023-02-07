@@ -241,16 +241,11 @@
                   </div>
                   <div
                     v-if="ar.candidate.reasonableAdjustmentsDetails"
-                    class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                    class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
                   >
-                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
-                    <div class="govuk-grid-column-full">
-                      <div class="issue">
-                        <p class="govuk-body">
-                          {{ ar.candidate.reasonableAdjustmentsDetails }}
-                        </p>
-                      </div>
-                    </div>
+                    <p class="govuk-body">
+                      {{ ar.candidate.reasonableAdjustmentsDetails }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -293,7 +288,7 @@ export default {
       ],
       unsubscribe: null,
       unsubscribeReport: null,
-      open: [],
+      open: {},
       otherApplicationRecords: [],
       report: null,
       refreshingReport: false,
