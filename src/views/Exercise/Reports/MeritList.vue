@@ -48,7 +48,7 @@
           search-placeholder="Candidate name or application ref"
           local-data
           class="merit-list"
-          @change="setFilter"
+          @change="updateTableState"
         >
           <template #header>
             <tr class="govuk-table__row">
@@ -177,7 +177,7 @@ export default {
         },
       ],
       activeTab: 'selected',
-      searchTerm: '',
+      tableState: null, // Table params
     };
   },
   computed: {
@@ -305,6 +305,11 @@ export default {
         // } else if (task.outcomeMap) {
         }
       });
+
+      // Filter/Sort
+      const searchTerm = _get(this.tableState, 'searchTerm', '');
+      const orderBy = _get(this.tableState, 'orderBy', '');
+      const direction = _get(this.tableState, 'direction', '');
       const rows = Object.entries(applicationData).map(([id, row]) => {
         return {
           id: id,
@@ -314,10 +319,23 @@ export default {
         // Filter rows if the user has specified a search filter
         const fullName = _get(row, 'fullName', '');
         const referenceNumber = _get(row, 'referenceNumber', '');
-        if (!this.searchTerm || this.searchMatch(fullName) || this.searchMatch(referenceNumber)) {
+        if (!searchTerm || this.searchMatch(searchTerm, fullName) || this.searchMatch(searchTerm, referenceNumber)) {
           return row;
         }
-      }).sort((a, b) => b.totalScore - a.totalScore);
+      }).sort((a, b) => {
+        if (orderBy && direction) {
+          if (a[orderBy] < b[orderBy]) {
+            return direction === 'asc' ? -1 : 1;
+          }
+          if (a[orderBy] > b[orderBy]) {
+            return direction === 'asc' ? 1 : -1;
+          }
+        }
+        else {
+          // Default - sort by total score
+          return b.totalScore - a.totalScore;
+        }
+      });
       return rows;
     },
 
@@ -395,13 +413,11 @@ export default {
         rows.push(row);
       });
       let data = '';
-
       rows.forEach(row => data += `${row.join('\t')}\n` );
       if (navigator && navigator.clipboard) {
         await navigator.clipboard.writeText(data);
       }
     },
-
     isNumericColumn(colType) {
       switch (colType) {
       case 'qualifyingTest':
@@ -411,16 +427,15 @@ export default {
         return false;
       }
     },
-    searchMatch(source) {
+    searchMatch(searchTerm, source) {
       if (source.length) {
         const sourceStr = source.trim().toLowerCase();
-        return sourceStr.includes(this.searchTerm.trim().toLowerCase());
+        return sourceStr.includes(searchTerm.trim().toLowerCase());
       }
       return false;
     },
-    setFilter(searchObj) {
-      const searchTerm = _get(searchObj, 'searchTerm', '');
-      this.searchTerm = searchTerm;
+    updateTableState(params) {
+      this.tableState = params;
     },
     getColumnTitle(col) {
       let title;
