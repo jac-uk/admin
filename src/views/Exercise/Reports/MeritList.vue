@@ -135,7 +135,8 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import FullScreenButton from '@/components/Page/FullScreenButton';
 import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
 import { lookup } from '@/filters';
-import _get from 'lodash/get';
+import { getTableData } from '@/helpers/tableHelper';
+
 const localLookup = {};
 localLookup[TASK_TYPE.CRITICAL_ANALYSIS] = 'CA';
 localLookup[TASK_TYPE.SITUATIONAL_JUDGEMENT] = 'SJ';
@@ -302,43 +303,19 @@ export default {
             };
             applicationData[row.id].totalScore += row.score;
           });
-        // } else if (task.outcomeMap) {
         }
       });
-
-      // Filter/Sort
-      const searchTerm = _get(this.tableState, 'searchTerm', '');
-      const orderBy = _get(this.tableState, 'orderBy', '');
-      const direction = _get(this.tableState, 'direction', '');
-      const rows = Object.entries(applicationData).map(([id, row]) => {
+      const data = Object.entries(applicationData).map(([id, row]) => {
         return {
           id: id,
           ...row,
         };
-      }).filter(row => {
-        // Filter rows if the user has specified a search filter
-        const fullName = _get(row, 'fullName', '');
-        const referenceNumber = _get(row, 'referenceNumber', '');
-        if (!searchTerm || this.searchMatch(searchTerm, fullName) || this.searchMatch(searchTerm, referenceNumber)) {
-          return row;
-        }
-      }).sort((a, b) => {
-        if (orderBy && direction) {
-          if (a[orderBy] < b[orderBy]) {
-            return direction === 'asc' ? -1 : 1;
-          }
-          if (a[orderBy] > b[orderBy]) {
-            return direction === 'asc' ? 1 : -1;
-          }
-        }
-        else {
-          // Default - sort by total score
-          return b.totalScore - a.totalScore;
-        }
       });
-      return rows;
+      if (!this.tableState) {
+        return data;
+      }
+      return getTableData(data, this.tableColumns, this.tableState);
     },
-
     scoreSheetColumnsNew() {
       const columns = [];
       let parent = null;
