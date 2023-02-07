@@ -14,41 +14,16 @@
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
               <button
-                class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-                data-module="govuk-button"
-                @click="exportData()"
+                class="govuk-button govuk-button-s govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-right-3"
+                @click="copyToClipboard"
               >
-                Export data
+                Copy to clipboard
               </button>
               <FullScreenButton />
             </div>
           </div>
         </div>
       </div>
-
-      <!-- <div
-        v-if="exercise"
-        class="govuk-grid-row"
-      >
-        <div class="govuk-grid-column-one-half">
-          <div class="panel govuk-!-margin-bottom-9">
-            <span class="govuk-caption-m">
-              Total applications
-            </span>
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ exercise._applications.applied }}
-            </h2>
-          </div>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <div class="panel govuk-!-margin-bottom-9">
-            <span class="govuk-caption-m">Type of exercise</span>
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ exercise.typeOfExercise | lookup }}
-            </h2>
-          </div>
-        </div>
-      </div> -->
     </div>
 
     <div
@@ -69,7 +44,11 @@
           :data="tableData"
           :columns="tableColumns"
           :page-size="500"
+          :search="['fullName', 'referenceNumber']"
+          search-placeholder="Candidate name or application ref"
+          local-data
           class="merit-list"
+          @change="setFilter"
         >
           <template #header>
             <tr class="govuk-table__row">
@@ -101,10 +80,12 @@
           </template>
           <template #row="{row}">
             <TableCell class="table-cell-application">
-              <a
-                href="#"
-                class="govuk-link"
-              >{{ row.referenceNumber }}</a>
+              <RouterLink
+                target="_blank"
+                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+              >
+                {{ row.fullName }}
+              </RouterLink>
             </TableCell>
 
             <TableCell
@@ -112,12 +93,33 @@
               :key="index"
               class="text-center table-cell-score"
             >
-              {{ getColValue(row, col) }}
+              <template v-if="isNumericColumn(col.type)">
+                {{ getColValue(row, col) | formatNumber(2) }}
+              </template>
+              <template v-else>
+                {{ getColValue(row, col) }}
+              </template>
             </TableCell>
 
             <TableCell class="text-center">
-              {{ row.totalScore }}
+              {{ row.totalScore | formatNumber(2) }}
             </TableCell>
+
+            <!-- @TODO: Integrate this in below
+            <TableCell :title="tableColumns[3].title">
+              {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            </TableCell>
+            <TableCell :title="tableColumns[4].title">
+              {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            </TableCell>
+            <TableCell :title="tableColumns[5].title">
+              {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            </TableCell>
+            <TableCell :title="tableColumns[6].title">
+              {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            </TableCell>
+            -->
+
           </template>
         </Table>
       </div>
@@ -133,13 +135,14 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import FullScreenButton from '@/components/Page/FullScreenButton';
 import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
 import { lookup } from '@/filters';
-
+import _get from 'lodash/get';
 const localLookup = {};
 localLookup[TASK_TYPE.CRITICAL_ANALYSIS] = 'CA';
 localLookup[TASK_TYPE.SITUATIONAL_JUDGEMENT] = 'SJ';
 localLookup[TASK_TYPE.QUALIFYING_TEST] = 'QT';
 
 export default {
+  name: 'MeritList',
   components: {
     Table,
     TableCell,
@@ -174,6 +177,7 @@ export default {
         },
       ],
       activeTab: 'selected',
+      searchTerm: '',
     };
   },
   computed: {
@@ -199,6 +203,7 @@ export default {
         .map(taskType => tasks.find(task => task.type === taskType));
       return completedTasks;
     },
+
     scoreSheetColumns() {
       const columns = [];
       this.completedTasks.forEach(task => {
@@ -268,7 +273,8 @@ export default {
     tableColumns() {
       const columns = [];
       if (!this.hasScoreSheet) return columns;
-      columns.push({ title: 'Application', class: 'table-cell-application' });
+      //columns.push({ title: 'Candidate', class: 'table-cell-application' });
+      columns.push({ title: 'Candidate', class: 'table-cell-application', sort: 'fullName' });
       this.scoreSheetColumns.forEach(col => {
         columns.push({ title: this.getColumnTitle(col), class: 'table-cell text-center' });
       });
@@ -304,14 +310,118 @@ export default {
           id: id,
           ...row,
         };
+      }).filter(row => {
+        // Filter rows if the user has specified a search filter
+        const fullName = _get(row, 'fullName', '');
+        const referenceNumber = _get(row, 'referenceNumber', '');
+        if (!this.searchTerm || this.searchMatch(fullName) || this.searchMatch(referenceNumber)) {
+          return row;
+        }
       }).sort((a, b) => b.totalScore - a.totalScore);
       return rows;
+    },
+
+    scoreSheetColumnsNew() {
+      const columns = [];
+      let parent = null;
+      this.completedTasks.forEach(task => {
+        if (task.markingScheme) {
+          // loop through each item and add columns
+          task.markingScheme.forEach(item => {
+            parent = item.ref;
+            if (item.type === 'group') {
+              item.children.forEach(subItem => {
+                columns.push({
+                  parent: parent,
+                  ref: subItem.ref,
+                  type: subItem.type,
+                });
+              });
+            }
+            else {
+              columns.push({
+                parent: parent,
+                ref: item.ref,
+                type: item.type,
+              });
+            }
+          });
+          columns.push({
+            parent: parent,
+            type: 'number',
+            ref: 'score',
+          });
+        }
+      });
+      return columns;
+    },
+    clipboardColumns() {
+      // @todo: Use the scoresheetColumnsNew here once you've got the data in there looking right
+      const columns = [];
+      columns.push({ title: 'ID', ref: 'id', editable: false });
+      columns.push({ title: 'Ref', ref: 'ref', editable: false });
+      columns.push({ title: 'Name', ref: 'fullName', editable: false });
+      this.scoreSheetColumnsNew.forEach(column => {
+        let title = column.ref;
+        if (column.parent) title = `${column.parent}.${column.ref}`;
+        columns.push({ title: title, editable: true, ...column });
+      });
+      return columns;
     },
   },
   async created() {
     await this.$store.dispatch('tasks/bind', { exerciseId: this.exercise.id } );
   },
   methods: {
+
+    // @TODO: WARREN CONTINUE HERE - copy to clipboard needs reworking for the data structure in here
+    async copyToClipboard() {
+      const rows = [];
+      const headers = this.clipboardColumns.map(column => column.title);
+      rows.push(headers);
+      this.task.applications.forEach(application => {
+        const row = [];
+        this.clipboardColumns.forEach(column => {
+          if (column.editable) {
+            if (column.parent) {
+              row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
+            } else {
+              row.push(this.task.scoreSheet[application.id][column.ref]);
+            }
+          } else {
+            row.push(application[column.ref]);
+          }
+        });
+        rows.push(row);
+      });
+      let data = '';
+
+      rows.forEach(row => data += `${row.join('\t')}\n` );
+      if (navigator && navigator.clipboard) {
+        await navigator.clipboard.writeText(data);
+      }
+    },
+
+    isNumericColumn(colType) {
+      switch (colType) {
+      case 'qualifyingTest':
+      case 'scenarioTest':
+        return true;
+      default:
+        return false;
+      }
+    },
+    searchMatch(source) {
+      if (source.length) {
+        const sourceStr = source.trim().toLowerCase();
+        return sourceStr.includes(this.searchTerm.trim().toLowerCase());
+      }
+      return false;
+    },
+    setFilter(searchObj) {
+      const searchTerm = _get(searchObj, 'searchTerm', '');
+      this.searchTerm = searchTerm;
+    },
     getColumnTitle(col) {
       let title;
       if (col.title) {
@@ -324,38 +434,81 @@ export default {
       if (localLookup[title]) return localLookup[title];
       return title;
     },
+
+    // @TODO: Copy and paste should use the finalScores.scoresheet
+    // - not all tasks will have a scoresheet but will have id, ref, score, pass
+    // - eg critical analysis test (we do want to be able to adjust this score)
+    // - it will only be there temporarily
+
     getColValue(row, col) {
+
+      // console.log('--getColValue, row:');
+      // console.log(row);
+      // console.log('--getColValue, col:');
+      // console.log(col);
+
       const root = row[col.type];
       if (!root) return '';
       let scoreSheet = root.scoreSheet;
+
+      // console.log('root.scoreSheet:');
+      // console.log(root.scoreSheet);
+
       if (scoreSheet) {
         if (col.path) {
           scoreSheet = scoreSheet[col.path];
+
+          // console.log('scoreSheet:');
+          // console.log(scoreSheet);
         }
         if (col.value) {
           let value = scoreSheet;
           if (col.value.indexOf('.') >= 0) {
             const valueParts = col.value.split('.');
+
+            //console.log('valueParts:', valueParts);
+
             valueParts.forEach(valuePart => {
               value = value[valuePart];
             });
+
+            //console.log('1 - value:', value);
+
           } else {
             value = value[col.value];
+
+            //console.log('2 - value:', value);
+
           }
           if (col.showScore) {
+
+            //console.log(`return ${value} (${scoreSheet.score})`);
+
             return `${value} (${scoreSheet.score})`;
           } else {
+
+            //console.log(`return value: ${value}`);
+
             return value;
           }
         } else {
           if (col.showScore) {
+
+            //console.log(`return scoreSheet.score: ${scoreSheet.score}`);
+
             return scoreSheet.score;
           }
         }
       }
       if (col.showScore) {
+
+        //console.log(`return root.score: ${root.score}`);
+
         return root.score;
       }
+
+      //console.log('return empty string');
+
       return '';
     },
     toggleColumn(ref) {
