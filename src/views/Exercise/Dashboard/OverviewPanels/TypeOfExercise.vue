@@ -2,7 +2,7 @@
   <div class="panel govuk-!-margin-bottom-4">
     <span class="govuk-caption-m">Type of exercise</span>
     <h2 class="govuk-heading-m govuk-!-margin-bottom-0 long-text">
-      <span class="capitalize">{{ exercise.typeOfExercise }}</span>
+      <span class="capitalize">{{ exercise.typeOfExercise | lookup }}</span>
       <span
         v-if="exercise.appointmentType"
         class="capitalize"
