@@ -86,7 +86,6 @@ const lookup = (value) => {
     'name': 'Name',
     // gender
     // ethnicity
-    disability: 'Disability',
     exerciseReferenceNumber: 'Exercise',
     exerciseName: 'Exercise Name',
     stage: 'Stage',
@@ -94,8 +93,6 @@ const lookup = (value) => {
     id: 'exercise id',
 
     // outreach report values
-    white: 'White',
-    bame: '"Black, Asian and minority ethnic"',
     approvedForImmediateAppointment: 'Approved For Immediate Appointment',
     passedSelection: 'Passed Selection',
 
