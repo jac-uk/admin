@@ -65,165 +65,204 @@
       </div>
     </div>
 
-    <div class="govuk-grid-column-two-thirds">
-      <div class="govuk-button-group">
-        <Select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-!-margin-right-2"
-        >
-          <option value="all">
-            All applications
-          </option>
-          <option
-            v-if="applicationRecordCounts.review"
-            value="review"
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-button-group">
+          <Select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-!-margin-right-2"
           >
-            Review
-          </option>
-          <option
-            v-if="applicationRecordCounts.shortlisted"
-            value="shortlisted"
+            <option value="all">
+              All applications
+            </option>
+            <option
+              v-if="applicationRecordCounts.review"
+              value="review"
+            >
+              Review
+            </option>
+            <option
+              v-if="applicationRecordCounts.shortlisted"
+              value="shortlisted"
+            >
+              Shortlisted
+            </option>
+            <option
+              v-if="applicationRecordCounts.selected"
+              value="selected"
+            >
+              Selected
+            </option>
+            <option
+              v-if="applicationRecordCounts.recommended"
+              value="recommended"
+            >
+              Recommended
+            </option>
+            <option
+              v-if="applicationRecordCounts.handover"
+              value="handover"
+            >
+              Handover
+            </option>
+          </Select>
+          <Select
+            v-if="availableStatuses && availableStatuses.length > 0"
+            id="availableStatuses"
+            v-model="candidateStatus"
           >
-            Shortlisted
-          </option>
-          <option
-            v-if="applicationRecordCounts.selected"
-            value="selected"
-          >
-            Selected
-          </option>
-          <option
-            v-if="applicationRecordCounts.recommended"
-            value="recommended"
-          >
-            Recommended
-          </option>
-          <option
-            v-if="applicationRecordCounts.handover"
-            value="handover"
-          >
-            Handover
-          </option>
-        </Select>
-        <Select
-          v-if="availableStatuses && availableStatuses.length > 0"
-          id="availableStatuses"
-          v-model="candidateStatus"
-        >
-          <option
-            value="all"
-          >
-            All
-          </option>
-          <option
-            v-for="item in availableStatuses"
-            :key="item"
-            :value="item"
-          >
-            {{ item | lookup }}
-          </option>
-        </Select>
+            <option
+              value="all"
+            >
+              All
+            </option>
+            <option
+              v-for="item in availableStatuses"
+              :key="item"
+              :value="item"
+            >
+              {{ item | lookup }}
+            </option>
+          </Select>
+        </div>
       </div>
-    </div>
 
-    <div class="govuk-grid-column-full">
-      <Table
-        ref="issuesTable"
-        data-key="id"
-        :data="applicationRecords"
-        :columns="tableColumns"
-        :page-size="50"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'userId',
-        }"
-        @change="getTableData"
-      >
-        <template #row="{row}">
-          <TableCell :title="tableColumns[0].title">
-            {{ row.personalDetails.fullName }}
-          </TableCell>
-          <TableCell :title="tableColumns[1].title">
-            {{ row.personalDetails.email }}
-          </TableCell>
-          <TableCell :title="tableColumns[2].title">
-            {{ row.personalDetails.phone }}
-          </TableCell>
-          <TableCell :title="tableColumns[3].title">
-            {{ row.personalDetails.reasonableAdjustmentsDetails }}
-          </TableCell>
-        </template>
-      </Table>
-    </div>
+      <div class="govuk-grid-column-full">
+        <Table
+          ref="issuesTable"
+          data-key="id"
+          :data="applicationRecords"
+          :columns="tableColumns"
+          :page-size="50"
+          :custom-search="{
+            placeholder: 'Search candidate names',
+            handler: candidateSearch,
+            field: 'candidate.id',
+          }"
+          @change="getTableData"
+        >
+          <template #row="{row}">
+            <TableCell :title="tableColumns[0].title">
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                  <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
+                    {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-third text-right">
+                  <RouterLink
+                    :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' } }"
+                    class="govuk-link print-none"
+                    target="_blank"
+                  >
+                    View application
+                  </RouterLink>
+                </div>
+                <div class="govuk-grid-column-full">
+                  <h4 class="govuk-!-margin-bottom-1">
+                    Status
+                  </h4>
+                  <Select
+                    id="reasonable-adjustments-status"
+                    :value="row.candidate.reasonableAdjustmentsStatus || ''"
+                    @input="saveReasonableAdjustmentsStatus(row, $event)"
+                  >
+                    <option value="" />
+                    <option value="approved">
+                      Approved
+                    </option>
+                    <option value="denied">
+                      Denied
+                    </option>
+                  </Select>
+                </div>
+                <div class="govuk-grid-column-full">
+                  <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                    Where the reasonable adjustments was given
+                  </h4>
+                  <Select
+                    id="reasonable-adjustments-from"
+                    :value="row.candidate.reasonableAdjustmentsFrom || ''"
+                    @input="saveReasonableAdjustmentsFrom(row, $event)"
+                  >
+                    <option value="" />
+                    <option value="qualifying-test">
+                      Qualifying Test
+                    </option>
+                    <option value="selection-day">
+                      Selection Day
+                    </option>
+                  </Select>
+                </div>
 
-    <div
-      v-if="report != null && report.rows.length"
-      class="govuk-grid-column-full"
-    >
-      <!-- <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Name
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header"
-            >
-              Email
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-table__header--numeric"
-            >
-              Phone number
-            </th>
-            <th
-              scope="col"
-              class="govuk-table__header govuk-!-width-one-third"
-            >
-              Details
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr
-            v-for="row in report.rows"
-            :key="row.name + Math.random()"
-            class="govuk-table__row"
-          >
-            <td class="govuk-table__cell">
-              {{ row.name }}
-            </td>
-            <td class="govuk-table__cell">
-              <a
-                :href="`mailto:${row.email}`"
-                class="govuk-link govuk-link--no-visited-state"
-                target="_blank"
-              >
-                {{ row.email }}
-              </a>
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ row.phone }}
-            </td>
-            <td class="govuk-table__cell">
-              {{ row.details }}
-            </td>
-          </tr>
-        </tbody>
-      </table> -->
+                <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+                  <a
+                    href="#"
+                    class="govuk-link print-none"
+                    @click.prevent="toggleReasonableAdjustmentsDetails(row.id)"
+                  >
+                    View all reasonable adjustments<span
+                      class="icon-expand"
+                      :class="open[row.id] ? 'open' : 'close'"
+                    >
+                      <img src="@/assets/expand.svg">
+                    </span>
+                  </a>
+                </div>
+              </div>
+
+              <div v-if="open[row.id]">
+                <div
+                  v-for="(ar, index) in getOtherReasonableAdjustments(row.candidate.id)"
+                  :key="`${row.candidate.id}-${index}`"
+                >
+                  <hr
+                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                  >
+                  <p class="govuk-hint">
+                    Exercise - {{ ar.exercise.referenceNumber }}
+                  </p>
+                  <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                      <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
+                        {{ ar.exercise.name }}
+                      </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third text-right">
+                      <a
+                        :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                        class="govuk-link print-none"
+                        target="_blank"
+                      >
+                        View application
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    v-if="ar.candidate.reasonableAdjustmentsDetails"
+                    class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                  >
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
+                    <div class="govuk-grid-column-full">
+                      <div class="issue">
+                        <p class="govuk-body">
+                          {{ ar.candidate.reasonableAdjustmentsDetails }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TableCell>
+          </template>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
@@ -246,22 +285,24 @@ export default {
   data() {
     return {
       exerciseStage: 'all',
-      tableColumns: [
-        { title: 'Name', sort: 'personalDetails.fullName', default: true },
-        { title: 'Email' },
-        { title: 'Phone number' },
-        { title: 'Details' },
-      ],
-      applicationRecords: [],
+      candidateStatus: 'all',
       availableStatuses: null,
+      applicationRecords: [],
+      tableColumns: [
+        { title: 'Candidate' },
+      ],
+      unsubscribe: null,
+      unsubscribeReport: null,
+      open: [],
+      otherApplicationRecords: [],
       report: null,
       refreshingReport: false,
     };
   },
   computed: {
-    ...mapState({
-      exercise: state => state.exerciseDocument.record,
-    }),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
@@ -284,16 +325,20 @@ export default {
         this.availableStatuses = [];
       }
       // reset the status dropdown to 'All'
-      // this.candidateStatus = 'all';
+      this.candidateStatus = 'all';
 
-      // this.$refs['issuesTable'].reload();
+      this.$refs['issuesTable'].reload();
+    },
+    candidateStatus: function() {
+      this.$refs['issuesTable'].reload();
     },
     applicationRecords: function() {
+      this.getOtherApplicationRecords(this.applicationRecords);
     },
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
+    this.unsubscribeReport = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
       .onSnapshot((snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
@@ -304,15 +349,27 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+    if (this.unsubscribeReport) {
+      this.unsubscribeReport();
+    }
   },
   methods: {
     async getTableData(params) {
       let firestoreRef = firestore
-        .collection('applications')
-        .where('exerciseId', '==', this.exercise.id)
-        .where('personalDetails.reasonableAdjustments', '==', true);
+        .collection('applicationRecords')
+        .where('exercise.id', '==', this.exercise.id)
+        .where('candidate.reasonableAdjustments', '==', true);
       if (this.exerciseStage !== 'all') {
-        // firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+        firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+      }
+      // intercept params so we can override without polluting the passed in object
+      const localParams = { ...params };
+      if (this.candidateStatus === 'all') {
+        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
+        localParams.orderBy = ['status', 'documentId'];
+      } else {
+        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+        localParams.orderBy = 'documentId';
       }
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
       if (firestoreRef) {
@@ -330,6 +387,51 @@ export default {
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    async saveReasonableAdjustmentsStatus(applicationRecord, status) {
+      applicationRecord.candidate.reasonableAdjustmentsStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveReasonableAdjustmentsFrom(applicationRecord, value) {
+      applicationRecord.candidate.reasonableAdjustmentsFrom = value;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    toggleReasonableAdjustmentsDetails(id) {
+      this.open[id] = this.open[id] === undefined ? true : !this.open[id];
+      this.open = Object.assign({}, this.open);
+    },
+    async getOtherApplicationRecords(applicationRecords) {
+      if (!applicationRecords || !applicationRecords.length) {
+        this.otherApplicationRecords = [];
+      }
+      
+      for (let i = 0; i < applicationRecords.length; i++) {
+        const record = applicationRecords[i];
+        const firestoreRef = firestore
+          .collection('applicationRecords')
+          .where('candidate.id', '==', record.candidate.id)
+          .where('candidate.reasonableAdjustments', '==', true);
+        const snapshot = await firestoreRef.get();
+        const otherRecords = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (data.exercise.id === record.exercise.id) {
+            otherRecords.unshift(data); // put current exercise first
+          } else {
+            otherRecords.push(data);
+          }
+        });
+        if (otherRecords.length) {
+          this.otherApplicationRecords.push({
+            candidateId: record.candidate.id,
+            otherRecords,
+          });
+        }
+      }
+    },
+    getOtherReasonableAdjustments(candidateId) {
+      const record = this.otherApplicationRecords.find(item => item.candidateId === candidateId);
+      return record ? record.otherRecords : [];
     },
     async refreshReport() {
       this.refreshingReport = true;
