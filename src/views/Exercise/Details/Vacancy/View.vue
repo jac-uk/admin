@@ -167,6 +167,18 @@
         </dd>
       </div>
     </dl>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        <ListingPreview
+          class="govuk-!-margin-bottom-4"
+          :exercise="exercise"
+        />
+        <DetailPreview
+          v-if="exercise.advertType !== 'listing'"
+          :exercise="exercise"
+        />
+      </dt>
+    </div>
   </div>
 </template>
 
@@ -175,12 +187,16 @@ import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import CustomHTML from '@/components/CustomHTML';
+import ListingPreview from '@/components/Previews/ListingPreview.vue';
+import DetailPreview from '@/components/Previews/DetailPreview.vue';
 
 export default {
   name: 'VacancyView',
   components: {
     CustomHTML,
     Banner,
+    DetailPreview,
+    ListingPreview,
   },
   mixins: [permissionMixin],
   computed: {

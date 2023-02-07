@@ -26,12 +26,12 @@
           required
         />
 
-        <Checkbox
+        <!-- <Checkbox
           id="invite-only"
           v-model="formData.inviteOnly"
           label="Invite only exercise"
           hint="When this is checked, only invited candidates will be able to apply to this exercise."
-        />
+        /> -->
 
         <DateInput
           id="estimated-launch-date"
@@ -97,6 +97,16 @@
           type="url"
         />
 
+        <ListingPreview
+          class="govuk-!-margin-bottom-4"
+          :exercise="{...exercise, ...formData }"
+        />
+        <DetailPreview
+          v-if="{...exercise, ...formData }.advertType !== 'listing'"
+          class="govuk-!-margin-bottom-4"
+          :exercise="{...exercise, ...formData }"
+        />
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -116,6 +126,9 @@ import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import ListingPreview from '@/components/Previews/ListingPreview.vue';
+import DetailPreview from '@/components/Previews/DetailPreview.vue';
+import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
 
 export default {
   name: 'SummaryEdit',
@@ -127,8 +140,11 @@ export default {
     Select,
     BackLink,
     Checkbox,
+    ListingPreview,
+    DetailPreview,
   },
   extends: Form,
+  mixins: [exerciseMixin],
   data() {
     const defaults = {
       name: null,
@@ -148,9 +164,12 @@ export default {
     };
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     launchDate: {
       get() {
-        return this.parseDate(this.formData.estimatedLaunchDate);
+        return this.parseDate({ ...this.exercise, ...this.formData }.estimatedLaunchDate);
       },
       set(val) {
         if (!val || !(val instanceof Date)){
