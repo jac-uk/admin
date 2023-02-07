@@ -119,7 +119,6 @@
               {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
             </TableCell>
             -->
-
           </template>
         </Table>
       </div>
