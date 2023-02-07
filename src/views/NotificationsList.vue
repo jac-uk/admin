@@ -39,7 +39,6 @@
         >
           Process now (single batch)
         </button>
-
       </div>
     </div>
 

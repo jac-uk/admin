@@ -42,7 +42,6 @@ import panels from '@/store/panels';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
-import checks from '@/store/checks/collection';
 
 import exerciseDiversity from '@/store/exercise/diversity/document';
 import messageBase from '@/store/baseClasses/messageBase';
@@ -67,6 +66,7 @@ const store = new Vuex.Store({
     events,
     exerciseCollection,
     exerciseCreateJourney,
+    exerciseDiversity,
     exerciseDocument,
     invitations,
     lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
@@ -74,6 +74,9 @@ const store = new Vuex.Store({
     messageBase: new messageBase().getModule(),
     notes,
     notifications,
+    panel,
+    panellist,
+    panellists,
     panels,
     qualifyingTest,
     qualifyingTestResponses,
@@ -85,6 +88,8 @@ const store = new Vuex.Store({
     stageHandover,
     stageRecommended,
     stageShortlisted,
+    task,
+    tasks,
     ui,
   },
   state: {
