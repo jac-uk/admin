@@ -147,7 +147,9 @@
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                   <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
-                    {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
+                    <span v-if="row.candidate">
+                      {{ row.candidate.fullName }}
+                    </span>
                   </div>
                 </div>
                 <div class="govuk-grid-column-one-third text-right">
@@ -196,7 +198,7 @@
                   </Select>
                 </div>
 
-                <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+                <div class="govuk-grid-column-two-thirds">
                   <a
                     href="#"
                     class="govuk-link print-none"
@@ -357,15 +359,10 @@ export default {
       if (this.exerciseStage !== 'all') {
         firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
       }
-      // intercept params so we can override without polluting the passed in object
-      const localParams = { ...params };
-      if (this.candidateStatus === 'all') {
-        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
-        localParams.orderBy = ['status', 'documentId'];
-      } else {
+      if (this.candidateStatus !== 'all') {
         firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-        localParams.orderBy = 'documentId';
       }
+      params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
       if (firestoreRef) {
         this.unsubscribe = firestoreRef
