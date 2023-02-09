@@ -5,6 +5,13 @@ on:
 
 jobs:
 
+  dependency_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency Check
+        run: npm audit --omit=dev
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +36,7 @@ jobs:
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc && npm ci
       - name: Dependency Check
-        run: npm audit --omit=dev 
+        run: npm audit --omit=dev
       - name: Lint
         run: npm run lint-ci
       - name: Test
