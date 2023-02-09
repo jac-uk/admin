@@ -57,6 +57,8 @@ export default {
     };
   },
   created() {
+    const query = this.$route?.query;
+    this.dateExtensionReason = query.reason || '';
     this.dateExtension = this.$attrs.dateExtension;
   },
   methods: {
@@ -93,5 +95,8 @@ export default {
     border: none;
     padding: 0;
     margin: 0;
+  }
+  .modal__title {
+    color: #ffffff;
   }
 </style>
