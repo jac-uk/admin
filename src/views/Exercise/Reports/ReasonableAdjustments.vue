@@ -127,6 +127,26 @@
           </Select>
         </div>
       </div>
+      <div class="govuk-grid-column-one-third text-right">
+        <Select
+          id="reasonalbe-adjustments-status-filter"
+          v-model="reasonalbeAdjustmentsStatus"
+          class="govuk-!-margin-right-2"
+        >
+          <option value="all">
+            All
+          </option>
+          <option value="">
+            Unassigned
+          </option>
+          <option value="approved">
+            Approved
+          </option>
+          <option value="denied">
+            Denied
+          </option>
+        </Select>
+      </div>
 
       <div class="govuk-grid-column-full">
         <Table
@@ -145,7 +165,10 @@
           @change="getTableData"
         >
           <template #row="{row}">
-            <TableCell :title="tableColumns[0].title">
+            <TableCell
+              v-if="reasonalbeAdjustmentsStatus === 'all' || (row.candidate.reasonableAdjustmentsStatus || '') === (reasonalbeAdjustmentsStatus || '')"
+              :title="tableColumns[0].title"
+            >
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                   <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
@@ -293,6 +316,7 @@ export default {
       exerciseStage: 'all',
       candidateStatus: 'all',
       availableStatuses: null,
+      reasonalbeAdjustmentsStatus: 'all',
       applicationRecords: [],
       tableColumns: [
         { title: 'Candidate' },
