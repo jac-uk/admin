@@ -1,8 +1,7 @@
 name: Scheduled actions
 on:
   schedule:
-    - cron: "5 * * * *"
-    - cron: "21 * * * *"
+    - cron: "30 * * * *"
 
 jobs:
   dependency_check:
