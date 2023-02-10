@@ -273,6 +273,15 @@
                     <p class="govuk-body">
                       {{ ar.candidate.reasonableAdjustmentsDetails }}
                     </p>
+                    <p class="govuk-heading-s">
+                      Status: 
+                      <span
+                        v-if="ar.candidate.reasonableAdjustmentsStatus"
+                        class="govuk-body"
+                      >
+                        {{ ar.candidate.reasonableAdjustmentsStatus | lookup }}
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
