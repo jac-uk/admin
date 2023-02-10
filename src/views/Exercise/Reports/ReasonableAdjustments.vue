@@ -227,7 +227,7 @@
                   <a
                     href="#"
                     class="govuk-link print-none"
-                    @click.prevent="toggleReasonableAdjustmentsDetails(row.id)"
+                    @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
                   >
                     View all reasonable adjustments<span
                       class="icon-expand"
@@ -367,9 +367,6 @@ export default {
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
     },
-    applicationRecords: function() {
-      this.getOtherApplicationRecords(this.applicationRecords);
-    },
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
@@ -426,37 +423,37 @@ export default {
       applicationRecord.candidate.reasonableAdjustmentsFrom = value;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    handleReasonableAdjustmentsDetailsClick(record) {
+      this.toggleReasonableAdjustmentsDetails(record.id);
+      const OtherReasonableAdjustments = this.getOtherReasonableAdjustments(record.candidate.id);
+      if (!OtherReasonableAdjustments.length) { // retrieve from other applicationRecords only when first click
+        this.getOtherApplicationRecords(record);
+      }
+    },
     toggleReasonableAdjustmentsDetails(id) {
       this.open[id] = this.open[id] === undefined ? true : !this.open[id];
       this.open = Object.assign({}, this.open);
     },
-    async getOtherApplicationRecords(applicationRecords) {
-      if (!applicationRecords || !applicationRecords.length) {
-        this.otherApplicationRecords = [];
-      }
-      
-      for (let i = 0; i < applicationRecords.length; i++) {
-        const record = applicationRecords[i];
-        const firestoreRef = firestore
-          .collection('applicationRecords')
-          .where('candidate.id', '==', record.candidate.id)
-          .where('candidate.reasonableAdjustments', '==', true);
-        const snapshot = await firestoreRef.get();
-        const otherRecords = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          if (data.exercise.id === record.exercise.id) {
-            otherRecords.unshift(data); // put current exercise first
-          } else {
-            otherRecords.push(data);
-          }
-        });
-        if (otherRecords.length) {
-          this.otherApplicationRecords.push({
-            candidateId: record.candidate.id,
-            otherRecords,
-          });
+    async getOtherApplicationRecords(record) {
+      const firestoreRef = firestore
+        .collection('applicationRecords')
+        .where('candidate.id', '==', record.candidate.id)
+        .where('candidate.reasonableAdjustments', '==', true);
+      const snapshot = await firestoreRef.get();
+      const otherRecords = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.exercise.id === record.exercise.id) {
+          otherRecords.unshift(data); // put current exercise first
+        } else {
+          otherRecords.push(data);
         }
+      });
+      if (otherRecords.length) {
+        this.otherApplicationRecords.push({
+          candidateId: record.candidate.id,
+          otherRecords,
+        });
       }
     },
     getOtherReasonableAdjustments(candidateId) {
