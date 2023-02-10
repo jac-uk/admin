@@ -42,50 +42,55 @@ import panels from '@/store/panels';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
-import checks from '@/store/checks/collection';
 
 import exerciseDiversity from '@/store/exercise/diversity/document';
+import messageBase from '@/store/baseClasses/messageBase';
+import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
+import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
-    ui,
-    auth,
-    services,
-    exerciseCollection,
-    exerciseCreateJourney,
-    exerciseDocument,
+    // Keep these in alphabetical order for readability in Vue Chrome Extension
     applications,
     application,
     assessment,
     assessments,
-    events,
+    auth,
+    candidateApplications,
+    candidates,
+    characterChecks,
     clipboard,
-    notifications,
+    connectionMonitor,
+    events,
+    exerciseCollection,
+    exerciseCreateJourney,
+    exerciseDiversity,
+    exerciseDocument,
     invitations,
+    lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
+    lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
+    messageBase: new messageBase().getModule(),
+    notes,
+    notifications,
+    panel,
+    panellist,
+    panellists,
+    panels,
+    qualifyingTest,
+    qualifyingTestResponses,
+    qualifyingTestReports,
+    qualifyingTestReport,
+    services,
     stageReview,
     stageSelected,
     stageHandover,
     stageRecommended,
     stageShortlisted,
-    candidates,
-    notes,
-    candidateApplications,
-    qualifyingTest,
-    qualifyingTestResponses,
-    connectionMonitor,
-    qualifyingTestReports,
-    qualifyingTestReport,
-    tasks,
     task,
-    panels,
-    panel,
-    panellists,
-    panellist,
-    checks,
-    characterChecks,
-    exerciseDiversity,
+    tasks,
+    ui,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

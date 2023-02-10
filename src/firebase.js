@@ -31,10 +31,11 @@ if (location.hostname === 'localhost' && process.env.VUE_APP_FIREBASE_USE_EMULAT
   auth.useEmulator('http://localhost:9099');
   storage.useEmulator('localhost', 9199);
   database.useEmulator('localhost', 9000);
-}
-// App check
-if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
-  firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+} else {
+  // App check
+  if (process.env.VUE_APP_RECAPTCHA_TOKEN) {
+    firebase.appCheck().activate(process.env.VUE_APP_RECAPTCHA_TOKEN);
+  }
 }
 
 export { firestore, auth, functions, storage, database, Timestamp };

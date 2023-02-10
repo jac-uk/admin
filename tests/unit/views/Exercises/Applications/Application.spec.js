@@ -76,6 +76,9 @@ describe('@/views/Exercise/Applications/Application', () => {
               exerciseDocument: {
                 record: mockExercise,
               },
+              candidates: {
+                record: {},
+              },
               applications: {
                 records: [mockApplication],
               },
@@ -169,6 +172,9 @@ describe('@/views/Exercise/Applications/Application', () => {
               },
               exerciseDocument: {
                 record: mockExercise,
+              },
+              candidates: {
+                record: {},
               },
               applications: {
                 records: [mockApplication],
