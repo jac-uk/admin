@@ -99,7 +99,28 @@ const lookup = (value) => {
 
     'other': 'Other',
 
+    archived: 'Archived',
+
+    // Outreach report headers
+    'NINumber': 'National Insurance Number',
+    'name': 'Name',
+    // gender
+    // ethnicity
+    disability: 'Disability',
+    exerciseReferenceNumber: 'Exercise',
+    exerciseName: 'Exercise Name',
+    stage: 'Stage',
+    status: 'Status',
+    id: 'exercise id',
+
+    // outreach report values
+    white: 'White',
+    bame: '"Black, Asian and minority ethnic"',
+    approvedForImmediateAppointment: 'Approved For Immediate Appointment',
+    passedSelection: 'Passed Selection',
+
     // 'xxx': 'xxx',
+    null: '[No Answer Provided]',
   };
 
   lookup[ADVERT_TYPES.LISTING] = 'Listing';
@@ -198,11 +219,6 @@ const lookup = (value) => {
   return returnValue;
 };
 
-const formatNumber = (value) => {
-  return typeof value === 'number' ? value.toLocaleString('en-GB') : value;
-};
-
 export {
-  lookup,
-  formatNumber
+  lookup
 };

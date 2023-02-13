@@ -30,6 +30,15 @@
         >
           Start
         </button>
+        <button
+          v-if="hasPermissions([
+            PERMISSIONS.notifications.permissions.canUpdateNotifications.value
+          ])"
+          class="govuk-button govuk-button--secondary govuk-!-margin-left-4"
+          @click="processNow()"
+        >
+          Process now (single batch)
+        </button>
       </div>
     </div>
 
@@ -155,6 +164,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import permissionMixin from '@/permissionMixin';
+import { functions } from '@/firebase';
 
 export default {
   name: 'NotificationsList',
@@ -244,6 +254,9 @@ export default {
     },
     stopProcessing() {
       this.$store.dispatch('services/notificationsStop');
+    },
+    async processNow() {
+      await functions.httpsCallable('processNotifications')();
     },
     async save() {
       await this.$store.dispatch('services/saveNotificationsSettings', this.formData);

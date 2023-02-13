@@ -193,6 +193,8 @@
         </p>
       </div>
     </div>
+
+    <Messages />
   </div>
 </template>
 
@@ -200,8 +202,12 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
+import Messages from '@/components/Messages';
 export default {
   name: 'App',
+  components: {
+    Messages,
+  },
   mixins: [permissionMixin],
   data() {
     return {
@@ -231,24 +237,28 @@ export default {
   watch: {
     async isSignedIn() {
       if (this.isSignedIn) {
-        const email = auth.currentUser.email;
-        this.authorisedToPerformAction = await authorisedToPerformAction(email);
+        this.load();
       }
     },
   },
   async created() {
     if (this.isSignedIn) {
-      await this.$store.dispatch('services/bind');
-      const email = auth.currentUser.email;
-      this.authorisedToPerformAction = await authorisedToPerformAction(email);
+      this.load();
     }
   },
   destroyed() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
+      this.$store.dispatch('messageBase/unbind');
     }
   },
   methods: {
+    async load() {
+      await this.$store.dispatch('services/bind');
+      const email = auth.currentUser.email;
+      this.authorisedToPerformAction = await authorisedToPerformAction(email);
+      await this.getMessages();
+    },
     signOut() {
       auth.signOut();
       this.$router.go('/sign-in');
@@ -258,6 +268,19 @@ export default {
     },
     async emptyClipboard() {
       await this.$store.dispatch('clipboard/empty');
+    },
+    async getMessages() {
+      const authEmail = this.$store.getters['auth/getEmail'];
+      if (authEmail) {
+        const params = [
+          ['to', 'array-contains', authEmail],
+          ['status', '==', 'created'],
+        ];
+        const data = {
+          params: params,
+        };
+        return await this.$store.dispatch('messageBase/bind', data);
+      }
     },
   },
 };
