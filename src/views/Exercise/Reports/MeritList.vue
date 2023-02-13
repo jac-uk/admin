@@ -13,12 +13,6 @@
         >
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
-              <button
-                class="govuk-button govuk-button-s govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-right-3"
-                @click="copyToClipboard"
-              >
-                Copy to clipboard
-              </button>
               <FullScreenButton />
             </div>
           </div>
@@ -49,7 +43,7 @@
           local-data
           sticky
           @change="updateTableState"
-          @clickCol=clickColumn
+          @clickCol="clickColumn"
         >
           <template #row="{row}">
             <TableCell class="table-cell-application">
@@ -257,52 +251,6 @@ export default {
       }
       return getTableData(data, this.tableColumns, this.tableState);
     },
-    scoreSheetColumnsNew() {
-      const columns = [];
-      let parent = null;
-      this.completedTasks.forEach(task => {
-        if (task.markingScheme) {
-          // loop through each item and add columns
-          task.markingScheme.forEach(item => {
-            parent = item.ref;
-            if (item.type === 'group') {
-              item.children.forEach(subItem => {
-                columns.push({
-                  parent: parent,
-                  ref: subItem.ref,
-                  type: subItem.type,
-                });
-              });
-            }
-            else {
-              columns.push({
-                parent: parent,
-                ref: item.ref,
-                type: item.type,
-              });
-            }
-          });
-          columns.push({
-            parent: parent,
-            type: 'number',
-            ref: 'score',
-          });
-        }
-      });
-      return columns;
-    },
-    clipboardColumns() {
-      const columns = [];
-      columns.push({ title: 'ID', ref: 'id', editable: false });
-      columns.push({ title: 'Ref', ref: 'ref', editable: false });
-      columns.push({ title: 'Name', ref: 'fullName', editable: false });
-      this.scoreSheetColumnsNew.forEach(column => {
-        let title = column.ref;
-        if (column.parent) title = `${column.parent}.${column.ref}`;
-        columns.push({ title: title, editable: true, ...column });
-      });
-      return columns;
-    },
   },
   async created() {
     await this.$store.dispatch('tasks/bind', { exerciseId: this.exercise.id } );
@@ -310,31 +258,6 @@ export default {
   methods: {
     clickColumn(columnRef) {
       this.toggleColumn(columnRef);
-    },
-    async copyToClipboard() {
-      const rows = [];
-      const headers = this.clipboardColumns.map(column => column.title);
-      rows.push(headers);
-      this.task.applications.forEach(application => {
-        const row = [];
-        this.clipboardColumns.forEach(column => {
-          if (column.editable) {
-            if (column.parent) {
-              row.push(this.task.scoreSheet[application.id][column.parent][column.ref]);
-            } else {
-              row.push(this.task.scoreSheet[application.id][column.ref]);
-            }
-          } else {
-            row.push(application[column.ref]);
-          }
-        });
-        rows.push(row);
-      });
-      let data = '';
-      rows.forEach(row => data += `${row.join('\t')}\n` );
-      if (navigator && navigator.clipboard) {
-        await navigator.clipboard.writeText(data);
-      }
     },
     isNumericColumn(colType) {
       switch (colType) {
