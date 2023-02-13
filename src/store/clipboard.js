@@ -47,17 +47,21 @@ const module = {
   actions: {
     async read({ commit }) {
       if (document.hasFocus()) {
-        if (navigator && navigator.clipboard && navigator.clipboard.readText) {
-          const clipboardText = await navigator.clipboard.readText();
-          if (clipboardText) {
-            if (clipboardText.indexOf('JAC_CONTENT') >= 0) {
-              commit('setData', fromJACString(clipboardText));
+        try {
+          if (navigator && navigator.clipboard && navigator.clipboard.readText) {
+            const clipboardText = await navigator.clipboard.readText();
+            if (clipboardText) {
+              if (clipboardText.indexOf('JAC_CONTENT') >= 0) {
+                commit('setData', fromJACString(clipboardText));
+              } else {
+                commit('setData', {});
+              }
             } else {
               commit('setData', {});
             }
-          } else {
-            commit('setData', {});
           }
+        } catch {
+          console.log('Error: no access to clipboard');
         }
       }
     },

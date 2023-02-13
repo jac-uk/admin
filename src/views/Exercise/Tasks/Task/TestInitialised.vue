@@ -80,7 +80,7 @@ export default {
       } else {
         url = 'https://qt-admin-develop.judicialappointments.digital';
       }
-      url += `/folder/${this.task.folderId}/qualifying-tests/${this.task.test.id}`;
+      url += `/folder/${this.task.folderId}/qualifying-tests/${this.task.test.id}/edit`;
       return url;
     },
   },
