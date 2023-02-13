@@ -61,7 +61,7 @@
           Paste from clipboard
         </button>
       </div>
-
+      
       <Table
         ref="scoreSheet"
         data-key="id"
@@ -69,7 +69,7 @@
         :columns="tableColumns"
         :page-size="500"
         local-data
-        class="score-sheet"
+        sticky
       >
         <template
           v-if="scoreSheetHeaders.length"
@@ -455,29 +455,9 @@ export default {
 .vertical-align-middle {
   vertical-align: middle;
 }
-.score-sheet {
-  table {
-    margin: 0 !important;
-  }
-  th,
-  td {
-      border: 1px solid #f3f2f1;
-      vertical-align: middle;
-  }
-  tr > th:first-child,
-  tr > td:first-child {
-    position: sticky;
-    left: 0;
-    background-color: #f3f2f1;
-  }
-  .table-cell-application {
-    min-width: 160px;
-    padding: 10px;
-  }
-  .table-cell-value {
+.table-cell-value {
     min-width: 50px;
     padding: 0 10px;
     text-align: center;
   }
-}
 </style>
