@@ -76,7 +76,6 @@ const lookup = (value) => {
     bame: 'Black, Asian and minority ethnic',
     male: 'Male',
     female: 'Female',
-    other: 'Other',
     applied: 'Applied',
     no: 'No',
     yes: 'Yes',
