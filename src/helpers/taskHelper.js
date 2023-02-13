@@ -1,6 +1,7 @@
 /*eslint func-style: ["error", "declaration"]*/
 
 export {
+  MARKING_TYPE,
   GRADES,
   GRADE_VALUES,
   getScoreSheetTotal,
@@ -12,6 +13,7 @@ const MARKING_TYPE = {
   GROUP: 'group',
   NUMBER: 'number',
   GRADE: 'grade',
+  BOOL: 'bool',
 };
 const GRADES = ['A', 'B', 'C', 'D'];
 const GRADE_VALUES = {
