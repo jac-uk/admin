@@ -63,6 +63,9 @@
               <template v-if="isNumericColumn(col.type)">
                 {{ getColValue(row, col) | formatNumber(2) }}
               </template>
+              <template v-else-if="isYesNoColumn(col.type)">
+                {{ getColValue(row, col) | toYesNo }}
+              </template>
               <template v-else>
                 {{ getColValue(row, col) }}
               </template>
@@ -114,13 +117,14 @@ import FullScreenButton from '@/components/Page/FullScreenButton';
 import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
+import { MARKING_TYPE } from '@/helpers/taskHelper';
 import { getTableData } from '@/helpers/tableHelper';
-import _startCase from 'lodash/startCase';
 
 const localLookup = {};
 localLookup[TASK_TYPE.CRITICAL_ANALYSIS] = 'CA';
 localLookup[TASK_TYPE.SITUATIONAL_JUDGEMENT] = 'SJ';
 localLookup[TASK_TYPE.QUALIFYING_TEST] = 'QT';
+localLookup[TASK_TYPE.SIFT] = 'Sift';
 
 export default {
   name: 'MeritList',
@@ -197,27 +201,33 @@ export default {
               if (this.isOpen(item.ref)) {
                 item.children.forEach(child => {
                   columns.push({
-                    type: task.id,
+                    task: task.type,
+                    type: child.type,
+                    title: child.title,
                     path: item.ref,
                     value: child.ref,
                   });
                 });
               }
               columns.push({
+                task: task.type,
                 title: 'Score',
-                type: task.id,
+                type: 'number',
                 path: item.ref,
                 showScore: true,
               });
             } else {
               columns.push({
-                type: task.id,
+                task: task.type,
+                type: item.type,
+                title: item.title,
                 value: item.ref,
               });
             }
           });
         } else {
           columns.push({
+            task: task.type,
             type: task.id,
             showScore: true,
           });
@@ -236,7 +246,7 @@ export default {
         const column = { title: this.getColumnTitle(col), class: 'table-cell text-center' };
         if (column.title.toLowerCase() === 'score') {
           const prefix = localLookup[col.path] ? localLookup[col.path] : col.path;
-          column.title = _startCase(`${prefix} ${column.title}`);
+          column.title = `${prefix} ${column.title}`;
           // Specify a click event for the column header
           column.eventParams = [col.path];
           column.emitEvent = 'clickCol';
@@ -244,7 +254,7 @@ export default {
         columns.push(column);
       });
       // Default sort by total score (initially)
-      columns.push({ title: 'Total score', sort: 'totalScore', direction: 'desc', default: true, class: 'text-center' });
+      columns.push({ title: 'Total Score', sort: 'totalScore', direction: 'desc', default: true, class: 'text-center' });
       columns.push({ title: 'Female' });
       columns.push({ title: 'BAME' });
       columns.push({ title: 'Solicitor' });
@@ -308,13 +318,10 @@ export default {
       this.toggleColumn(columnRef);
     },
     isNumericColumn(colType) {
-      switch (colType) {
-      case 'qualifyingTest':
-      case 'scenarioTest':
-        return true;
-      default:
-        return false;
-      }
+      return colType === MARKING_TYPE.NUMBER;
+    },
+    isYesNoColumn(colType) {
+      return colType === MARKING_TYPE.BOOL;
     },
     searchMatch(searchTerm, source) {
       if (source.length) {
@@ -339,7 +346,7 @@ export default {
       return title;
     },
     getColValue(row, col) {
-      const root = row[col.type];
+      const root = row[col.task];
       if (!root) return '';
       let scoreSheet = root.scoreSheet;
       if (scoreSheet) {
