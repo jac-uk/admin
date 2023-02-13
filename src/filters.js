@@ -53,8 +53,27 @@ const lookup = (value) => {
     endDate: 'End Date',
 
     // emp flags
-    'gender': 'Gender',
-    'ethnicity': 'Ethnicity',
+    gender: 'Gender',
+    ethnicity: 'Ethnicity',
+    professionalBackground: 'Professional Background',
+    emp: 'EMP',
+    socialMobility: 'Social Mobility',
+    disability: 'Disability',
+
+    // Diversity report
+    preferNotToSay: 'Prefer not to say',
+    noAnswer: 'No answer',
+    genderNeutral: 'Gender neutral',
+    firstGenerationUniversity: 'First generation at University',
+    attendedUKStateSchool: 'Attended UK state school',
+    white: 'White',
+    bame: 'Black, Asian and minority ethnic',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
+    applied: 'Applied',
+    no: 'No',
+    yes: 'Yes',
 
     // PAJE answers
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
@@ -67,7 +86,6 @@ const lookup = (value) => {
     'name': 'Name',
     // gender
     // ethnicity
-    disability: 'Disability',
     exerciseReferenceNumber: 'Exercise',
     exerciseName: 'Exercise Name',
     stage: 'Stage',
@@ -75,8 +93,6 @@ const lookup = (value) => {
     id: 'exercise id',
 
     // outreach report values
-    white: 'White',
-    bame: '"Black, Asian and minority ethnic"',
     approvedForImmediateAppointment: 'Approved For Immediate Appointment',
     passedSelection: 'Passed Selection',
 
@@ -126,11 +142,7 @@ const lookup = (value) => {
   return returnValue;
 };
 
-const formatNumber = (value) => {
-  return typeof value === 'number' ? value.toLocaleString('en-GB') : value;
+export {
+  lookup
 };
 
-export {
-  lookup,
-  formatNumber
-};

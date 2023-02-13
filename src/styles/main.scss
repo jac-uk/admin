@@ -7,6 +7,12 @@
 
 @import "@jac-uk/jac-kit/helpers/css/global.scss";
 
+.hard-coded {
+  background-color: pink;
+}
+.hard-coded-border {
+  border: 1px solid pink;
+}
 .modal__title {
   color: #ffffff;
 }
