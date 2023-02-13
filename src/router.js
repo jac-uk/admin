@@ -237,7 +237,7 @@ const router = new Router({
       ],
     },
     {
-      path: 'targeted-outreach-report',
+      path: '/targeted-outreach-report',
       component: TargetedOutreachReport,
       name: 'targeted-outreach-report',
       meta: {

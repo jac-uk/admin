@@ -71,7 +71,7 @@ import FullScreenButton from '@/components/Page/FullScreenButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import SetPassMark from './Finalised/SetPassMark';
-
+import _find from 'lodash/find';
 export default {
   components: {
     ActionButton,
@@ -107,6 +107,7 @@ export default {
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
         if (!scoreMap[scoreData.score]) {
           scoreMap[scoreData.score] = {
+            fullName: this.getFullName(scoreData.id),
             count: 0,
             rank: 0,
             diversity: {
@@ -230,6 +231,16 @@ export default {
         await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), overrides: {} } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
+    },
+    getFullName(id) {
+      let fullName = '';
+      if (this.task) {
+        const match = _find(this.task.applications, app => {
+          return app.id === id;
+        });
+        if (match) fullName = match.fullName;
+      }
+      return fullName;
     },
   },
 };
