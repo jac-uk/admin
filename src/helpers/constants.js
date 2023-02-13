@@ -9,6 +9,8 @@ import {
   DEFAULT
 } from '@jac-uk/jac-kit/helpers/constants';
 
+EXERCISE_STAGE.APPLIED = 'applied';
+
 const ADVERT_TYPES = {
   LISTING: 'listing',
   BASIC: 'basic',
