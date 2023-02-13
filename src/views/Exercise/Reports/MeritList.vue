@@ -55,7 +55,7 @@
           local-data
           sticky
           @change="updateTableState"
-          @clickCol=clickColumn
+          @clickCol="clickColumn"
         >
           <template #row="{row}">
             <TableCell class="table-cell-application">
