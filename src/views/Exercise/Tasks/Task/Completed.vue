@@ -42,8 +42,15 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row" v-if="applicationOutcomes.length">
-      <div v-if="passed.length" class="govuk-grid-column-one-half" :class="{'float-right' : failed.length === 0}">
+    <div
+      v-if="applicationOutcomes.length"
+      class="govuk-grid-row"
+    >
+      <div
+        v-if="passed.length"
+        class="govuk-grid-column-one-half"
+        :class="{'float-right' : failed.length === 0}"
+      >
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <Table
             data-key="id"
@@ -60,7 +67,11 @@
           </Table>
         </div>
       </div>
-      <div v-if="failed.length" class="govuk-grid-column-one-half" :class="{'float-right' : passed.length === 0}">
+      <div
+        v-if="failed.length"
+        class="govuk-grid-column-one-half"
+        :class="{'float-right' : passed.length === 0}"
+      >
         <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
           <Table
             data-key="id"
@@ -78,7 +89,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
