@@ -126,11 +126,18 @@ export default {
               currentEmailAddress: this.currentEmailAddress,
               newEmailAddress: this.newEmailAddress });
 
-            if (response.data === false) {
-              this.setMessage('Failed to update email address.', 'warning');
-            } else {
+            const result = response.data;
+            if (result.status === 'success') {
               this.setMessage('Email address was updated.', 'success');
-              this.currentEmailAddress = response.data;
+              this.currentEmailAddress = result.data;
+            } else {
+              if (result.data.code === 'auth/email-already-exists') {
+                this.setMessage('An account already exists with this email address. To update the candidate login email address with this email address the other account will need to be removed. Please contact the Digital Team for assistance.', 'warning');
+              } else if (result.data.code === 'auth/invalid-email') {
+                this.setMessage(result.data.message, 'warning');
+              } else {
+                this.setMessage('Failed to update email address.', 'warning');
+              }
             }
           }
           catch (error) {
