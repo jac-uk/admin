@@ -68,8 +68,35 @@
               </template>
             </TableCell>
 
-            <TableCell class="text-center">
+            <TableCell
+              :title="tableColumns[tableColumns.length - 5].title"
+              class="text-center"
+            >
               {{ row.totalScore | formatNumber(2) }}
+            </TableCell>
+            <TableCell
+              :title="tableColumns[tableColumns.length - 4].title"
+              class="text-center"
+            >
+              {{ row.diversity.female | toYesNo }}
+            </TableCell>
+            <TableCell
+              :title="tableColumns[tableColumns.length - 3].title"
+              class="text-center"
+            >
+              {{ row.diversity.bame | toYesNo }}
+            </TableCell>
+            <TableCell
+              :title="tableColumns[tableColumns.length - 2].title"
+              class="text-center"
+            >
+              {{ row.diversity.solicitor | toYesNo }}
+            </TableCell>
+            <TableCell
+              :title="tableColumns[tableColumns.length - 1].title"
+              class="text-center"
+            >
+              {{ row.diversity.disability | toYesNo }}
             </TableCell>
           </template>
         </Table>
@@ -85,6 +112,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import FullScreenButton from '@/components/Page/FullScreenButton';
 import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
 import { getTableData } from '@/helpers/tableHelper';
 import _startCase from 'lodash/startCase';
@@ -137,6 +165,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    exerciseDiversity() {
+      return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
+    },
     tasks() {
       return this.$store.state.tasks.records;
     },
@@ -156,7 +187,6 @@ export default {
         .map(taskType => tasks.find(task => task.type === taskType));
       return completedTasks;
     },
-
     scoreSheetColumns() {
       const columns = [];
       this.completedTasks.forEach(task => {
@@ -205,7 +235,7 @@ export default {
       this.scoreSheetColumns.forEach(col => {
         const column = { title: this.getColumnTitle(col), class: 'table-cell text-center' };
         if (column.title.toLowerCase() === 'score') {
-          const prefix = localLookup[col.type] ? localLookup[col.type] : col.type;
+          const prefix = localLookup[col.path] ? localLookup[col.path] : col.path;
           column.title = _startCase(`${prefix} ${column.title}`);
           // Specify a click event for the column header
           column.eventParams = [col.path];
@@ -215,10 +245,15 @@ export default {
       });
       // Default sort by total score (initially)
       columns.push({ title: 'Total score', sort: 'totalScore', direction: 'desc', default: true, class: 'text-center' });
+      columns.push({ title: 'Female' });
+      columns.push({ title: 'BAME' });
+      columns.push({ title: 'Solicitor' });
+      columns.push({ title: 'Disability' });
       return columns;
     },
     tableData() {
       if (!this.hasScoreSheet) return [];
+      if (!this.exerciseDiversity) return [];
       const applicationData = {};
       this.completedTasks.forEach(task => {
         if (task.finalScores) {
@@ -226,7 +261,18 @@ export default {
             if (!applicationData[row.id]) {
               applicationData[row.id] = {
                 totalScore: 0,
+                diversity: {},
               };
+              // TODO this code also appears on Finalised/View.vue therefore move to a helper?
+              const ref = row.ref.split('-')[1];
+              if (this.exerciseDiversity[ref]) {
+                applicationData[row.id].diversity = {
+                  female: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE),
+                  bame: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME),
+                  solicitor: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR),
+                  disability: this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED),
+                };
+              }
             }
             applicationData[row.id].referenceNumber = row.ref;
             let fullName;
@@ -254,8 +300,10 @@ export default {
   },
   async created() {
     await this.$store.dispatch('tasks/bind', { exerciseId: this.exercise.id } );
+    await this.$store.dispatch('exerciseDiversity/bind', this.exercise.id);
   },
   methods: {
+    hasDiversityCharacteristic,
     clickColumn(columnRef) {
       this.toggleColumn(columnRef);
     },
