@@ -54,20 +54,20 @@ const REPORTS = {
       ],
       emp: [
         {
-          key: 'gender',
-          title: `${lookup('gender')}`,
+          key: 'noAnswer',
+          title: `${lookup('empNoAnswer')}`,
+        },
+        {
+          key: 'applied',
+          title: `${lookup('applied')}`,
         },
         {
           key: 'ethnicity',
           title: `${lookup('ethnicity')}`,
         },
         {
-          key: 'noAnswer',
-          title: `${lookup('noAnswer')}`,
-        },
-        {
-          key: 'applied',
-          title: `${lookup('applied')}`,
+          key: 'gender',
+          title: `${lookup('gender')}`,
         },
       ],
       ethnicity: [
@@ -80,12 +80,12 @@ const REPORTS = {
           title: `${lookup('white')}`,
         },
         {
-          key: 'other',
-          title: `${lookup('other')}`,
-        },
-        {
           key: 'preferNotToSay',
           title: `${lookup('preferNotToSay')}`,
+        },
+        {
+          key: 'other',
+          title: `${lookup('other')}`,
         },
         {
           key: 'noAnswer',
@@ -94,12 +94,12 @@ const REPORTS = {
       ],
       disability: [
         {
-          key: 'no',
-          title: `${lookup('no')}`,
-        },
-        {
           key: 'yes',
           title: `${lookup('yes')}`,
+        },
+        {
+          key: 'no',
+          title: `${lookup('no')}`,
         },
         {
           key: 'preferNotToSay',
@@ -122,10 +122,6 @@ const REPORTS = {
       ],
       professionalBackground: [
         {
-          key: 'solicitor',
-          title: `${lookup('solicitor')}`,
-        },
-        {
           key: 'barrister',
           title: `${lookup('barrister')}`,
         },
@@ -134,12 +130,16 @@ const REPORTS = {
           title: `${lookup('cilex')}`,
         },
         {
-          key: 'other',
-          title: `${lookup('other')}`,
+          key: 'solicitor',
+          title: `${lookup('solicitor')}`,
         },
         {
           key: 'preferNotToSay',
           title: `${lookup('preferNotToSay')}`,
+        },
+        {
+          key: 'other',
+          title: `${lookup('other')}`,
         },
         {
           key: 'noAnswer',

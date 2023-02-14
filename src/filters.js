@@ -59,6 +59,7 @@ const lookup = (value) => {
     emp: 'EMP',
     socialMobility: 'Social Mobility',
     disability: 'Disability',
+    empNoAnswer: 'Not applied',
 
     // Diversity report
     preferNotToSay: 'Prefer not to say',

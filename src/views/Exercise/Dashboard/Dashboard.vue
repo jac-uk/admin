@@ -136,6 +136,7 @@ import Timeline from './OverviewPanels/Timeline';
 import AssignedCommissioner from './OverviewPanels/AssignedCommissioner';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
+import _find from 'lodash/find';
 import Chart from '@/components/Chart';
 import REPORTS from '@/reports';
 export default {
@@ -304,7 +305,11 @@ export default {
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
         returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
-          return { 'name': `${lookup(item)}`, 'val': dataApplied[item] };
+          const legendList = REPORTS.ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+          const legend = _find(legendList, o => {
+            return o.key === item;
+          });
+          return { 'name': `${legend.title}`, 'val': dataApplied[item] };
         });
       }
       return returnChart;
