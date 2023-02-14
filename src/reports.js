@@ -36,16 +36,16 @@ const REPORTS = {
           title: `${lookup('female')}`,
         },
         {
-          key: 'other',
-          title: `${lookup('other')}`,
-        },
-        {
           key: 'genderNeutral',
           title: `${lookup('genderNeutral')}`,
         },
         {
           key: 'preferNotToSay',
           title: `${lookup('preferNotToSay')}`,
+        },
+        {
+          key: 'other',
+          title: `${lookup('other')}`,
         },
         {
           key: 'noAnswer',

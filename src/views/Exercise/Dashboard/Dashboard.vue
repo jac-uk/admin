@@ -303,7 +303,7 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
-        returnChart = this.getOrderedKeys(dataApplied).map(([item]) => {
+        returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
           return { 'name': `${lookup(item)}`, 'val': dataApplied[item] };
         });
       }
@@ -337,17 +337,9 @@ export default {
         return dataApplied.total;
       }
     },
-    getOrderedKeys(obj) {
-      const keysWithoutTotal = Object.entries(obj).filter(line => {
-        return line[0] !== 'total';
-      })
-        .sort(([,a],[,b]) => {
-          return b.total - a.total;
-        })
-        .reduce((acc, [k]) => {
-          return ([...acc, [k]]) ;
-        }, []);
-      return keysWithoutTotal;
+    getOrderedKeys(selectedDiversityReportType) {
+      const list = REPORTS.ApplicationStageDiversity.legend[selectedDiversityReportType];
+      return list.map(item => item.key);
     },
     async refreshReport() {
       this.refreshingReport = true;

@@ -216,7 +216,7 @@ const router = new Router({
       ],
     },
     {
-      path: 'targeted-outreach-report',
+      path: '/targeted-outreach-report',
       component: TargetedOutreachReport,
       name: 'targeted-outreach-report',
       meta: {
@@ -1278,7 +1278,7 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
               },
-            },  
+            },
           ],
         },
       ],

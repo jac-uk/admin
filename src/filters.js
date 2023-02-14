@@ -67,7 +67,7 @@ const lookup = (value) => {
     firstGenerationUniversity: 'First generation at University',
     attendedUKStateSchool: 'Attended UK state school',
     white: 'White',
-    bame: 'Black, Asian and minority ethnic',
+    bame: 'Ethnic minorities',
     male: 'Male',
     female: 'Female',
     other: 'Other',
