@@ -122,7 +122,7 @@ import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { applicationCounts } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+//import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
 //import QualifyingTest from './ScoresDistribution/QualifyingTest';
@@ -186,13 +186,14 @@ export default {
       return applicationCounts(this.exercise);
     },
     diversityReportType() {
-      let dataTitles = [];
-      if (this.report) {
-        const dataApplied = this.report[EXERCISE_STAGE.APPLIED];
-        const dataKeys = Object.keys(dataApplied);
-        dataTitles = dataKeys.filter(item => item !== 'totalApplications');
-      }
-      return dataTitles;
+      return [
+        'gender',
+        'ethnicity',
+        'disability',
+        'professionalBackground',
+        'socialMobility',
+        'emp',
+      ];
     },
     tabs() {
       return _map(this.labels, item => {
