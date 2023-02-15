@@ -1274,7 +1274,7 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'merit-list',
+              redirect: 'diversity',
             },
             {
               path: 'diversity',
