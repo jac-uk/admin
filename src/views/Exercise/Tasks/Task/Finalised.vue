@@ -13,7 +13,7 @@
           type="button"
           @click="$refs['setPassMarkModal'].openModal()"
         >
-          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark }}</span>
+          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark | formatNumber(2) }}</span>
           <span v-else>Set pass mark</span>
         </button>
         <ActionButton

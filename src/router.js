@@ -70,6 +70,9 @@ import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestRep
 import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
 
+// Merit list
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
+
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
@@ -1464,6 +1467,14 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
+              },
+            },
+            {
+              path: 'merit-list',
+              component: ExerciseReportsMeritList,
+              meta: {
+                requiresAuth: true,
+                title: 'Merit List | Exercise Reports',
               },
             },
           ],
