@@ -5,6 +5,7 @@ Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
+import ui from '@/store/ui';
 import auth from '@/store/auth';
 import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
@@ -33,7 +34,16 @@ import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestRespon
 import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
+
+import tasks from '@/store/tasks/collection';
+import task from '@/store/tasks/document';
 import panels from '@/store/panels';
+// NEW: import panels from '@/store/panels/collection';
+import panel from '@/store/panels/document';
+import panellists from '@/store/panellists/collection';
+import panellist from '@/store/panellists/document';
+
+import exerciseDiversity from '@/store/exercise/diversity/document';
 import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
@@ -56,6 +66,7 @@ const store = new Vuex.Store({
     events,
     exerciseCollection,
     exerciseCreateJourney,
+    exerciseDiversity,
     exerciseDocument,
     invitations,
     lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
@@ -63,6 +74,9 @@ const store = new Vuex.Store({
     messageBase: new messageBase().getModule(),
     notes,
     notifications,
+    panel,
+    panellist,
+    panellists,
     panels,
     qualifyingTest,
     qualifyingTestResponses,
@@ -74,6 +88,9 @@ const store = new Vuex.Store({
     stageHandover,
     stageRecommended,
     stageShortlisted,
+    task,
+    tasks,
+    ui,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

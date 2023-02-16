@@ -1,60 +1,104 @@
 <template>
   <div>
-    <h2 class="govuk-heading-l">
-      {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
-    </h2>
-    <Table
-      v-if="tieBreakers || hasPermissions([PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value])"
-      data-key="id"
-      :data="qualifyingTests"
-      :page-size="50"
-      :columns="tableColumns"
-      @change="getTableData"
+    <div
+      v-if="hasPermissions([PERMISSIONS.exercises.permissions.canApproveExercise.value])"
+      class="moj-page-header-actions govuk-!-margin-bottom-0"
     >
-      <template #row="{row}">
-        <TableCell :title="tableColumns[0].title">
-          <RouterLink
-            class="govuk-link"
-            :to="{ name: getViewName(row), params: { qualifyingTestId: row.id } }"
-          >
-            {{ row.title | showAlternative(row.id) }}
-          </RouterLink>
-          <span
-            v-if="row.mode"
-            class="govuk-tag govuk-tag--grey govuk-!-margin-left-1"
-          >{{ row.mode | lookup }}</span>
-          <br>
-          <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
-          {{ row.type | lookup }}
-        </TableCell>
-        <TableCell :title="tableColumns[2].title">
-          {{ row.status | lookup }}
-        </TableCell>
-      </template>
-    </Table>
+      <div
+        v-if="exercise._useQTPlatform === false"
+        class="moj-page-header-actions__title"
+      >
+        <h2 class="govuk-heading-l">
+          {{ tieBreakers ? 'Equal merit tie-breakers' : 'Qualifying tests' }}
+        </h2>
+      </div>
 
-    <div v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canCreateQualifyingTests.value])">
-      <button
-        v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="btnCreate"
+      <div
+        class="moj-page-header-actions__actions float-right"
       >
-        Create New
-      </button>
-      <button
-        v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="btnCreateFromClipboard"
+        <div class="moj-button-menu">
+          <div class="moj-button-menu__wrapper">
+            <button
+              v-if="exercise._useQTPlatform"
+              type="button"
+              class="govuk-button govuk-button--secondary"
+              @click="changeQTPlatform"
+            >
+              Use the old QT Platform
+            </button>
+            <button
+              v-else
+              type="button"
+              class="govuk-button govuk-button--secondary"
+              @click="changeQTPlatform"
+            >
+              Use the new QT Platform
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="exercise._useQTPlatform">
+      <p class="govuk-body">
+        Select a task on the left.
+      </p>
+    </div>
+
+    <div v-else>
+      <Table
+        v-if="tieBreakers || hasPermissions([PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value])"
+        data-key="id"
+        :data="qualifyingTests"
+        :page-size="50"
+        :columns="tableColumns"
+        @change="getTableData"
       >
-        Create New from Clipboard
-      </button>
-      <div v-else>
-        <Banner
-          :message="warningMessage"
-          status="warning"
-        />
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              class="govuk-link"
+              :to="{ name: getViewName(row), params: { qualifyingTestId: row.id } }"
+            >
+              {{ row.title | showAlternative(row.id) }}
+            </RouterLink>
+            <span
+              v-if="row.mode"
+              class="govuk-tag govuk-tag--grey govuk-!-margin-left-1"
+            >{{ row.mode | lookup }}</span>
+            <br>
+            <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.type | lookup }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.status | lookup }}
+          </TableCell>
+        </template>
+      </Table>
+
+      <div v-if="hasPermissions([PERMISSIONS.qualifyingTests.permissions.canCreateQualifyingTests.value])">
+        <button
+          v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
+          class="govuk-button govuk-!-margin-right-3"
+          @click="btnCreate"
+        >
+          Create New
+        </button>
+        <button
+          v-if="exercise.exercisePhoneNumber && exercise.emailSignatureName"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click="btnCreateFromClipboard"
+        >
+          Create New from Clipboard
+        </button>
+        <div v-else>
+          <Banner
+            :message="warningMessage"
+            status="warning"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -153,6 +197,12 @@ export default {
           ...params,
         }
       );
+    },
+    async changeQTPlatform() {
+      const saveData = {
+        _useQTPlatform: !this.exercise._useQTPlatform,
+      };
+      await this.$store.dispatch('exerciseDocument/save', saveData);
     },
   },
 };

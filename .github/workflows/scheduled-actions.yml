@@ -1,0 +1,12 @@
+name: Scheduled actions
+on:
+  schedule:
+    - cron: "22 8 * * *"
+
+jobs:
+  dependency_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency Check
+        run: npm audit --omit=dev
