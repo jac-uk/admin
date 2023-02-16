@@ -27,7 +27,9 @@
       <div id="panel-pack-div">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
-            <span class="govuk-caption-l">Application</span>
+            <span class="govuk-caption-l">
+              {{ application._language === 'cym' ? 'Application (Welsh)' : 'Application' }}
+            </span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
               {{ applicationReferenceNumber }} {{ candidateRecord && candidateRecord.isFlaggedCandidate ? '*' : '' }}
             </h1>

@@ -8,35 +8,32 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.fullName }}
-        </TableCell>
-        <TableCell :title="tableColumns[1].title">
           {{ row.rank }}
         </TableCell>
-        <TableCell :title="tableColumns[2].title">
+        <TableCell :title="tableColumns[1].title">
           {{ row.count }}
         </TableCell>
-        <TableCell :title="tableColumns[3].title">
+        <TableCell :title="tableColumns[2].title">
           <RouterLink
             :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: row.score } }"
             class="govuk-link"
           >
-            {{ row.score }}
+            {{ row.score | formatNumber(2) }}
           </RouterLink>
         </TableCell>
-        <TableCell :title="tableColumns[4].title">
+        <TableCell :title="tableColumns[3].title">
           {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
         </TableCell>
-        <TableCell :title="tableColumns[5].title">
+        <TableCell :title="tableColumns[4].title">
           {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
         </TableCell>
-        <TableCell :title="tableColumns[6].title">
+        <TableCell :title="tableColumns[5].title">
           {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
         </TableCell>
-        <TableCell :title="tableColumns[7].title">
+        <TableCell :title="tableColumns[6].title">
           {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
         </TableCell>
-        <TableCell :title="tableColumns[8].title">
+        <TableCell :title="tableColumns[7].title">
           <div
             v-if="row.outcome.pass"
             :class="{'govuk-!-margin-bottom-2': row.outcome.fail}"
@@ -80,7 +77,6 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Candidate' },
         { title: 'Rank' },
         { title: 'Count' },
         { title: 'Score' },
