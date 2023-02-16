@@ -65,6 +65,7 @@ const lookup = (value) => {
     emp: 'EMP',
     socialMobility: 'Social Mobility',
     disability: 'Disability',
+    empNoAnswer: 'Not applied',
 
     // Diversity report
     preferNotToSay: 'Prefer not to say',
@@ -73,7 +74,7 @@ const lookup = (value) => {
     firstGenerationUniversity: 'First generation at University',
     attendedUKStateSchool: 'Attended UK state school',
     white: 'White',
-    bame: 'Black, Asian and minority ethnic',
+    bame: 'Ethnic minorities',
     male: 'Male',
     female: 'Female',
     applied: 'Applied',

@@ -61,7 +61,7 @@
           Paste from clipboard
         </button>
       </div>
-      
+
       <Table
         ref="scoreSheet"
         data-key="id"
@@ -456,8 +456,8 @@ export default {
   vertical-align: middle;
 }
 .table-cell-value {
-    min-width: 50px;
-    padding: 0 10px;
-    text-align: center;
-  }
+  min-width: 50px;
+  padding: 0 10px;
+  text-align: center;
+}
 </style>
