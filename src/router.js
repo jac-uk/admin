@@ -237,16 +237,16 @@ const router = new Router({
             title: 'Candidate | View',
           },
         },
+        {
+          path: 'reports/targeted-outreach-report',
+          component: TargetedOutreachReport,
+          name: 'targeted-outreach-report',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidates | Targeted Outreach Report',
+          },
+        },
       ],
-    },
-    {
-      path: '/targeted-outreach-report',
-      component: TargetedOutreachReport,
-      name: 'targeted-outreach-report',
-      meta: {
-        requiresAuth: true,
-        title: 'Candidates | Targeted Oureach Report',
-      },
     },
     {
       path: '/create-exercise',
