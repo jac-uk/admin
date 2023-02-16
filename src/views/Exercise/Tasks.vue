@@ -91,7 +91,7 @@ export default {
           }
         );
       }
-      if (exercise.scenarioTestDate) {
+      if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
         sideNavigation.push(
           {
             title: 'Scenario Responses',
