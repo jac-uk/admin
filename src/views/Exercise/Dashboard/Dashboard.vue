@@ -122,7 +122,7 @@ import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { applicationCounts } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+//import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
 //import QualifyingTest from './ScoresDistribution/QualifyingTest';
@@ -136,6 +136,7 @@ import Timeline from './OverviewPanels/Timeline';
 import AssignedCommissioner from './OverviewPanels/AssignedCommissioner';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
+import _find from 'lodash/find';
 import Chart from '@/components/Chart';
 import REPORTS from '@/reports';
 export default {
@@ -185,13 +186,14 @@ export default {
       return applicationCounts(this.exercise);
     },
     diversityReportType() {
-      let dataTitles = [];
-      if (this.report) {
-        const dataApplied = this.report[EXERCISE_STAGE.APPLIED];
-        const dataKeys = Object.keys(dataApplied);
-        dataTitles = dataKeys.filter(item => item !== 'totalApplications');
-      }
-      return dataTitles;
+      return [
+        'gender',
+        'ethnicity',
+        'disability',
+        'professionalBackground',
+        'socialMobility',
+        'emp',
+      ];
     },
     tabs() {
       return _map(this.labels, item => {
@@ -303,8 +305,12 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
-        returnChart = this.getOrderedKeys(dataApplied).map(([item]) => {
-          return { 'name': `${lookup(item)}`, 'val': dataApplied[item] };
+        returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
+          const legendList = REPORTS.ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+          const legend = _find(legendList, o => {
+            return o.key === item;
+          });
+          return { 'name': `${legend.title}`, 'val': dataApplied[item] };
         });
       }
       return returnChart;
@@ -337,17 +343,9 @@ export default {
         return dataApplied.total;
       }
     },
-    getOrderedKeys(obj) {
-      const keysWithoutTotal = Object.entries(obj).filter(line => {
-        return line[0] !== 'total';
-      })
-        .sort(([,a],[,b]) => {
-          return b.total - a.total;
-        })
-        .reduce((acc, [k]) => {
-          return ([...acc, [k]]) ;
-        }, []);
-      return keysWithoutTotal;
+    getOrderedKeys(selectedDiversityReportType) {
+      const list = REPORTS.ApplicationStageDiversity.legend[selectedDiversityReportType];
+      return list.map(item => item.key);
     },
     async refreshReport() {
       this.refreshingReport = true;
