@@ -135,6 +135,10 @@ const lookup = (value) => {
     approvedForImmediateAppointment: 'Approved For Immediate Appointment',
     passedSelection: 'Passed Selection',
 
+    // reasonable adjustments status
+    approved: 'Approved',
+    denied: 'Denied',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
