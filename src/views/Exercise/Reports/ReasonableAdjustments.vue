@@ -228,6 +228,11 @@
                       {{ reason | lookup }}
                     </option>
                   </Select>
+                  <TextareaInput
+                    :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
+                    :value="reasonableAdjustmentsState.note"
+                    @input="saveReasonableAdjustmentsNote(row, $event, i)"
+                  />
                 </div>
               </div>
 
@@ -237,7 +242,7 @@
                   class="print-none govuk-button govuk-!-margin-bottom-0"
                   @click="addReasonableAdjustmentsState(index)"
                 >
-                  Add
+                  Add another
                 </button>
               </div>
 
@@ -342,10 +347,12 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { debounce } from 'lodash';
 
 export default {
   name: 'ReasonableAdjustments',
@@ -353,6 +360,7 @@ export default {
     Select,
     Table,
     TableCell,
+    TextareaInput,
   },
   mixins: [permissionMixin],
   data() {
@@ -479,6 +487,11 @@ export default {
       applicationRecord.candidate.reasonableAdjustmentsStates[index].reason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    saveReasonableAdjustmentsNote: debounce(async function (applicationRecord, note, index) {
+      // use debounce
+      applicationRecord.candidate.reasonableAdjustmentsStates[index].note = note;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    }, 2000),
     addReasonableAdjustmentsState(index) {
       this.applicationRecords[index].candidate.reasonableAdjustmentsStates.push({});
     },
