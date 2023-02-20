@@ -130,20 +130,18 @@
       <div class="govuk-grid-column-one-third text-right">
         <Select
           id="reasonalbe-adjustments-status-filter"
-          v-model="reasonalbeAdjustmentsStatus"
+          v-model="filterStatus"
           class="govuk-!-margin-right-2"
         >
           <option value="all">
             All
           </option>
-          <option value="">
-            Unassigned
-          </option>
-          <option value="approved">
-            Approved
-          </option>
-          <option value="denied">
-            Denied
+          <option
+            v-for="status in reasonableAdjustmentsStatusOptions"
+            :key="status"
+            :value="status"
+          >
+            {{ status | lookup }}
           </option>
         </Select>
       </div>
@@ -164,9 +162,9 @@
           }"
           @change="getTableData"
         >
-          <template #row="{row}">
+          <template #row="{row, index}">
             <TableCell
-              v-if="reasonalbeAdjustmentsStatus === 'all' || (row.candidate.reasonableAdjustmentsStatus || '') === (reasonalbeAdjustmentsStatus || '')"
+              v-if="hasStatus(row)"
               :title="tableColumns[0].title"
             >
               <div class="govuk-grid-row">
@@ -186,63 +184,82 @@
                     View application
                   </RouterLink>
                 </div>
-                <div class="govuk-grid-column-full">
+              </div>
+
+              <div
+                v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
+                :key="i"
+                class="govuk-grid-row"
+              >
+                <div class="govuk-grid-column-one-third">
                   <h4 class="govuk-!-margin-bottom-1">
                     Status
                   </h4>
                   <Select
-                    id="reasonable-adjustments-status"
-                    :value="row.candidate.reasonableAdjustmentsStatus || ''"
-                    @input="saveReasonableAdjustmentsStatus(row, $event)"
+                    :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
+                    :value="reasonableAdjustmentsState.status || ''"
+                    @input="saveReasonableAdjustmentsStatus(row, $event, i)"
                   >
                     <option value="" />
-                    <option value="approved">
-                      Approved
-                    </option>
-                    <option value="denied">
-                      Denied
+                    <option
+                      v-for="status in reasonableAdjustmentsStatusOptions"
+                      :key="status"
+                      :value="status"
+                    >
+                      {{ status | lookup }}
                     </option>
                   </Select>
                 </div>
-                <div class="govuk-grid-column-full">
-                  <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                <div class="govuk-grid-column-two-thirds">
+                  <h4 class="govuk-!-margin-bottom-1">
                     Where the reasonable adjustments was given
                   </h4>
                   <Select
-                    id="reasonable-adjustments-from"
-                    :value="row.candidate.reasonableAdjustmentsFrom || ''"
-                    @input="saveReasonableAdjustmentsFrom(row, $event)"
+                    :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
+                    :value="reasonableAdjustmentsState.reason || ''"
+                    @input="saveReasonableAdjustmentsReason(row, $event, i)"
                   >
                     <option value="" />
-                    <option value="qualifying-test">
-                      Qualifying Test
-                    </option>
-                    <option value="selection-day">
-                      Selection Day
+                    <option
+                      v-for="reason in reasonableAdjustmentsReasonOptions"
+                      :key="reason"
+                      :value="reason"
+                    >
+                      {{ reason | lookup }}
                     </option>
                   </Select>
                 </div>
+              </div>
 
-                <div class="govuk-grid-column-two-thirds">
-                  <a
-                    href="#"
-                    class="govuk-link print-none"
-                    @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
+              <div class="text-right">
+                <button
+                  v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsReasonOptions.length"
+                  class="print-none govuk-button govuk-!-margin-bottom-0"
+                  @click="addReasonableAdjustmentsState(index)"
+                >
+                  Add
+                </button>
+              </div>
+
+              <div>
+                <a
+                  href="#"
+                  class="govuk-link print-none"
+                  @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
+                >
+                  View all reasonable adjustments<span
+                    class="icon-expand"
+                    :class="open[row.id] ? 'open' : 'close'"
                   >
-                    View all reasonable adjustments<span
-                      class="icon-expand"
-                      :class="open[row.id] ? 'open' : 'close'"
-                    >
-                      <img src="@/assets/expand.svg">
-                    </span>
-                  </a>
-                </div>
+                    <img src="@/assets/expand.svg">
+                  </span>
+                </a>
               </div>
 
               <div v-if="open[row.id]">
                 <div
-                  v-for="(ar, index) in getOtherReasonableAdjustments(row.candidate.id)"
-                  :key="`${row.candidate.id}-${index}`"
+                  v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id)"
+                  :key="`${row.candidate.id}-${i}`"
                 >
                   <hr
                     class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
@@ -273,15 +290,33 @@
                     <p class="govuk-body">
                       {{ ar.candidate.reasonableAdjustmentsDetails }}
                     </p>
-                    <p class="govuk-heading-s">
-                      Status: 
+                    <div
+                      v-for="(reasonableAdjustmentsState, idx) in ar.candidate.reasonableAdjustmentsStates"
+                      :key="idx"
+                      style="display: flex;"
+                    >
                       <span
-                        v-if="ar.candidate.reasonableAdjustmentsStatus"
-                        class="govuk-body"
+                        class="govuk-heading-s"
+                        style="flex-basis: 240px;"
                       >
-                        {{ ar.candidate.reasonableAdjustmentsStatus | lookup }}
+                        Status: 
+                        <span
+                          v-if="reasonableAdjustmentsState.status"
+                          class="govuk-body"
+                        >
+                          {{ reasonableAdjustmentsState.status | lookup }}
+                        </span>
                       </span>
-                    </p>
+                      <span class="govuk-heading-s">
+                        Reason: 
+                        <span
+                          v-if="reasonableAdjustmentsState.reason"
+                          class="govuk-body"
+                        >
+                          {{ reasonableAdjustmentsState.reason | lookup }}
+                        </span>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -321,11 +356,16 @@ export default {
   },
   mixins: [permissionMixin],
   data() {
+    const reasonableAdjustmentsStatusOptions = ['scenario-test', 'approved', 'denied'];
+    const reasonableAdjustmentsReasonOptions = ['qualifying-test', 'selection-day'];
+
     return {
       exerciseStage: 'all',
       candidateStatus: 'all',
       availableStatuses: null,
-      reasonalbeAdjustmentsStatus: 'all',
+      filterStatus: 'all',
+      reasonableAdjustmentsStatusOptions,
+      reasonableAdjustmentsReasonOptions,
       applicationRecords: [],
       tableColumns: [
         { title: 'Candidate' },
@@ -413,7 +453,10 @@ export default {
           .onSnapshot((snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
-              applicationRecords.push(vuexfireSerialize(doc));
+              const data = vuexfireSerialize(doc);
+              if (!data.candidate.reasonableAdjustmentsStates)
+                data.candidate.reasonableAdjustmentsStates = [{}];
+              applicationRecords.push(data);
             });
             this.applicationRecords = applicationRecords;
           });
@@ -424,13 +467,20 @@ export default {
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
-    async saveReasonableAdjustmentsStatus(applicationRecord, status) {
-      applicationRecord.candidate.reasonableAdjustmentsStatus = status;
+    hasStatus(applicationRecord) {
+      if (this.filterStatus === 'all') return true;
+      return applicationRecord.candidate.reasonableAdjustmentsStates.some(state => state.status === this.filterStatus);
+    },
+    async saveReasonableAdjustmentsStatus(applicationRecord, status, index) {
+      applicationRecord.candidate.reasonableAdjustmentsStates[index].status = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    async saveReasonableAdjustmentsFrom(applicationRecord, value) {
-      applicationRecord.candidate.reasonableAdjustmentsFrom = value;
+    async saveReasonableAdjustmentsReason(applicationRecord, reason, index) {
+      applicationRecord.candidate.reasonableAdjustmentsStates[index].reason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    addReasonableAdjustmentsState(index) {
+      this.applicationRecords[index].candidate.reasonableAdjustmentsStates.push({});
     },
     handleReasonableAdjustmentsDetailsClick(record) {
       this.toggleReasonableAdjustmentsDetails(record.id);
