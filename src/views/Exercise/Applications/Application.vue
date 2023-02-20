@@ -27,7 +27,9 @@
       <div id="panel-pack-div">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
-            <span class="govuk-caption-l">Application</span>
+            <span class="govuk-caption-l">
+              {{ application._language === 'cym' ? 'Application (Welsh)' : 'Application' }}
+            </span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-4">
               {{ applicationReferenceNumber }} {{ candidateRecord && candidateRecord.isFlaggedCandidate ? '*' : '' }}
             </h1>
@@ -476,7 +478,6 @@ export default {
   },
   created() {
     this.pageLoad();
-    this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
   },
   destroyed() {
     this.$store.dispatch('application/unbind');
@@ -578,13 +579,13 @@ export default {
       }
       return objChanged;
     },
-    changeUserDetails(objChanged) {
+    changePersonalDetails(objChanged) {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
 
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
-      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+      this.changeApplication({ personalDetails: myPersonalDetails });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
 
       logEvent('info', 'Application updated (personal details)', {
@@ -601,9 +602,6 @@ export default {
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
-    },
-    changePersonalDetails(obj) {
-      this.changeApplication({ personalDetails: obj });
     },
   },
 };

@@ -16,6 +16,9 @@ import Exercises from '@/views/Exercises';
 import ExercisesExport from '@/views/ExercisesExport';
 import Exercise from '@/views/Exercise';
 
+// Exercise Dashboard
+import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard';
+
 // Exercise details
 import ExerciseDetails from '@/views/Exercise/Details';
 import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview';
@@ -234,16 +237,16 @@ const router = new Router({
             title: 'Candidate | View',
           },
         },
+        {
+          path: 'reports/targeted-outreach-report',
+          component: TargetedOutreachReport,
+          name: 'targeted-outreach-report',
+          meta: {
+            requiresAuth: true,
+            title: 'Candidates | Targeted Outreach Report',
+          },
+        },
       ],
-    },
-    {
-      path: '/targeted-outreach-report',
-      component: TargetedOutreachReport,
-      name: 'targeted-outreach-report',
-      meta: {
-        requiresAuth: true,
-        title: 'Candidates | Targeted Oureach Report',
-      },
     },
     {
       path: '/create-exercise',
@@ -258,6 +261,15 @@ const router = new Router({
       path: '/exercise/:id',
       component: Exercise,
       children: [
+        {
+          path: 'dashboard',
+          component: ExerciseDashboard,
+          name: 'exercise-dashboard',
+          meta: {
+            requiresAuth: true,
+            title: 'Dashboard | Exercise Details',
+          },
+        },
         {
           path: 'details',
           component: ExerciseDetails,

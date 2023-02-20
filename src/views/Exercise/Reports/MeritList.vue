@@ -13,18 +13,6 @@
         >
           <div class="moj-button-menu">
             <div class="moj-button-menu__wrapper">
-              <button
-                class="govuk-button govuk-button-s govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-right-3"
-                @click="copyToClipboard"
-              >
-                Copy to clipboard
-              </button>
-              <button
-                class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-right-3"
-                @click="pasteFromClipboard"
-              >
-                Paste from clipboard
-              </button>
               <FullScreenButton />
             </div>
           </div>
@@ -70,7 +58,7 @@
             <TableCell
               v-for="(col, index) in scoreSheetColumns"
               :key="index"
-              class="text-right table-cell-score"
+              class="text-center table-cell-score"
             >
               <template v-if="isNumericColumn(col.type)">
                 {{ getColValue(row, col) | formatNumber(2) }}
@@ -319,53 +307,6 @@ export default {
       }
       return getTableData(data, this.tableColumns, this.tableState);
     },
-    scoreSheetColumnsNew() {
-      const columns = [];
-      let parent = null;
-      this.completedTasks.forEach(task => {
-        if (task.markingScheme) {
-          // loop through each item and add columns
-          task.markingScheme.forEach(item => {
-            parent = item.ref;
-            if (item.type === 'group') {
-              item.children.forEach(subItem => {
-                columns.push({
-                  task: task.type,
-                  parent: parent,
-                  ref: subItem.ref,
-                  type: subItem.type,
-                });
-              });
-              columns.push({
-                task: task.type,
-                parent: parent,
-                type: 'number',
-                ref: 'score',
-              });
-            } else {
-              columns.push({
-                task: task.type,
-                ref: item.ref,
-                type: item.type,
-              });
-            }
-          });
-        }
-      });
-      return columns;
-    },
-    clipboardColumns() {
-      const columns = [];
-      columns.push({ title: 'ID', ref: 'id', editable: false });
-      columns.push({ title: 'Ref', ref: 'ref', editable: false });
-      columns.push({ title: 'Name', ref: 'fullName', editable: false });
-      this.scoreSheetColumnsNew.forEach(column => {
-        let title = column.ref;
-        if (column.parent) title = `${column.parent}.${title}`;
-        columns.push({ title: title, editable: true, ...column });
-      });
-      return columns;
-    },
   },
   async created() {
     await this.$store.dispatch('tasks/bind', { exerciseId: this.exercise.id } );
@@ -375,118 +316,6 @@ export default {
     hasDiversityCharacteristic,
     clickColumn(columnRef) {
       this.toggleColumn(columnRef);
-    },
-    async copyToClipboard() {
-      const rows = [];
-      const headers = this.clipboardColumns.map(column => column.title);
-      rows.push(headers);
-      console.log('headers', headers);
-
-      // collate all data
-      const applicationData = {};
-      this.completedTasks.forEach(task => {
-        task.finalScores.forEach(item => {
-          if (!applicationData[item.id]) {
-            applicationData[item.id] = {};
-            applicationData[item.id][task.type] = {};
-          }
-          applicationData[item.id].id = item.id;
-          applicationData[item.id].ref = item.ref;
-          applicationData[item.id].fullName = item.fullName;
-          applicationData[item.id][task.type] = item.scoreSheet;
-          applicationData[item.id][task.type].score = item.score;
-          // applicationData[item.id][task.type].pass = item.pass;
-        });
-      });
-
-      // construct rows (from first task as this should have the most applications)
-      this.completedTasks[0].finalScores.forEach(item => {
-        const row = [];
-        this.clipboardColumns.forEach(column => {
-          let valueMap = applicationData[item.id];
-          if (column.task) valueMap = valueMap[column.task];
-          if (column.parent) valueMap = valueMap[column.parent];
-          console.log('column', column, valueMap[column.ref]);
-          row.push(valueMap[column.ref]);
-        });
-        rows.push(row);
-      });
-
-      let data = '';
-      rows.forEach(row => data += `${row.join('\t')}\n` );
-      if (navigator && navigator.clipboard) {
-        await navigator.clipboard.writeText(data);
-      }
-    },
-    async pasteFromClipboard() {
-      if (navigator && navigator.clipboard && navigator.clipboard.readText) {
-        const clipboardText = await navigator.clipboard.readText();
-        if (clipboardText) {
-          const rows = clipboardText.split('\n');
-
-          // check headers are all present
-          const pastedHeaders = rows[0].split('\t');
-          const missingColumns = this.clipboardColumns.filter(column => pastedHeaders.indexOf(column.title) < 0);
-          if (missingColumns.length > 0) { console.log('missing columns'); return false; }
-
-          // get data
-          const pastedDataMap = {};
-          const identIndex = 0;
-          rows.forEach((row, rowIndex) => {
-            if (row && rowIndex > 0) {
-              const cols = row.split('\t');
-              const id = cols[identIndex];
-              pastedDataMap[id] = cols;
-            }
-          });
-
-          // get editable columns
-          const editableColumns = [];
-          this.clipboardColumns.forEach(column => {
-            if (column.editable) {
-              editableColumns.push({
-                index: pastedHeaders.indexOf(column.title),
-                ...column,
-              });
-            }
-          });
-
-          let currentTask;
-          let currentScoreSheet = {};
-          editableColumns.forEach(editableColumn => {
-            if (!currentTask) currentTask = editableColumn.task;
-            if (currentTask !== editableColumn.task) {
-              // we have moved to a new task, therefore save what we've got
-              console.log('save', currentTask, currentScoreSheet);
-              // await this.saveTask(currentTask, currentScoreSheet);
-              currentScoreSheet = {};
-            }
-            rows.forEach((row, rowIndex) => {
-              if (row && rowIndex > 0) {
-                const cols = row.split('\t');
-                const id = cols[identIndex];
-                if (!currentScoreSheet[id]) currentScoreSheet[id] = {};
-                if (editableColumn.parent && !currentScoreSheet[id][editableColumn.parent]) currentScoreSheet[id][editableColumn.parent] = {};
-                if (editableColumn.parent) {
-                  currentScoreSheet[id][editableColumn.parent][editableColumn.ref] = cols[editableColumn.index];
-                } else {
-                  currentScoreSheet[id][editableColumn.ref] = cols[editableColumn.index];
-                }
-              }
-            });
-            currentTask = editableColumn.task;
-          });
-          console.log('save', currentTask, currentScoreSheet);
-          // await this.saveTask(currentTask, currentScoreSheet);  // save the last task as it won't have been saved yet
-        }
-      }
-    },
-    async saveTask(task, saveData) {
-      console.log('saveTask', task, saveData);
-      // save the current scoresheet for the current task
-      // get task.finalScores
-      // console.log('save current score sheet, in finalScores', currentScoreSheet);
-      // await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: { scoreSheet: scoreSheet } });
     },
     isNumericColumn(colType) {
       return colType === MARKING_TYPE.NUMBER;

@@ -159,7 +159,7 @@ export default {
       });
 
       // add outcome stats
-      if (this.task.passMark) {
+      if (this.task.passMark >= 0) {
         scoresInDescendingOrder.forEach(key => {
           const score = parseFloat(key);
           if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
