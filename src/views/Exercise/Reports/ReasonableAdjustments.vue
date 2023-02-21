@@ -295,33 +295,47 @@
                     <p class="govuk-body">
                       {{ ar.candidate.reasonableAdjustmentsDetails }}
                     </p>
-                    <div
-                      v-for="(reasonableAdjustmentsState, idx) in ar.candidate.reasonableAdjustmentsStates"
-                      :key="idx"
-                      style="display: flex;"
-                    >
-                      <span
-                        class="govuk-heading-s"
-                        style="flex-basis: 240px;"
+                    <ul>
+                      <li
+                        v-for="(reasonableAdjustmentsState, idx) in ar.candidate.reasonableAdjustmentsStates"
+                        :key="idx"
+                        style="display: flex;"
                       >
-                        Status: 
                         <span
-                          v-if="reasonableAdjustmentsState.status"
-                          class="govuk-body"
+                          class="govuk-heading-s"
+                          style="flex-basis: 200px;"
                         >
-                          {{ reasonableAdjustmentsState.status | lookup }}
+                          Status: 
+                          <span
+                            v-if="reasonableAdjustmentsState.status"
+                            class="govuk-body"
+                          >
+                            {{ reasonableAdjustmentsState.status | lookup }}
+                          </span>
                         </span>
-                      </span>
-                      <span class="govuk-heading-s">
-                        Reason: 
                         <span
-                          v-if="reasonableAdjustmentsState.reason"
-                          class="govuk-body"
+                          class="govuk-heading-s"
+                          style="flex-basis: 220px;"
                         >
-                          {{ reasonableAdjustmentsState.reason | lookup }}
+                          Reason: 
+                          <span
+                            v-if="reasonableAdjustmentsState.reason"
+                            class="govuk-body"
+                          >
+                            {{ reasonableAdjustmentsState.reason | lookup }}
+                          </span>
                         </span>
-                      </span>
-                    </div>
+                        <span class="govuk-heading-s">
+                          Note: 
+                          <span
+                            v-if="reasonableAdjustmentsState.note"
+                            class="govuk-body"
+                          >
+                            {{ reasonableAdjustmentsState.note }}
+                          </span>
+                        </span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
