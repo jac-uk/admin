@@ -532,7 +532,7 @@ export default {
       return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
     bsbRows() {
-      return this.report.rows;
+      return this.report ? this.report.rows : [];
     },
     jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
@@ -581,6 +581,12 @@ export default {
       });
 
       return reportData;
+    },
+    gatherBSBReportData() {
+      // Surname /	Forename(s) / BSB Number
+    },
+    gatherSRAReportData() {
+      // Surname /	Forename(s) /	SRA Number
     },
     gatherACROReportData() {
       const reportData = [];
@@ -659,6 +665,10 @@ export default {
         data = this.gatherACROReportData();
       } else if (this.activeTab === 'hmrc') {
         data = this.gatherHMRCReportData();
+      } else if (this.activeTab === 'bsb') {
+        data = this.gatherBSBReportData();
+      } else if (this.activeTab === 'sra') {
+        data = this.gatherSRAReportData();
       } else {
         data = this.gatherReportData();
       }
