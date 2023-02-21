@@ -91,12 +91,12 @@ export default {
       context.dispatch('qualifyingTestResponses/delete', { id: applicationId }, { root: true });
     },
     createDraft: async (context, {
-       exerciseId,
-       exerciseName,
-       exerciseRef,
-       candidateId,
-       candidateEmail,
-       candidateFullname,
+      exerciseId,
+      exerciseName,
+      exerciseRef,
+      candidateId,
+      candidateEmail,
+      candidateFullname,
     }) => {
       const data = {
         status: 'draft',
