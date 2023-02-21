@@ -53,16 +53,19 @@
           </div>
         </fieldset>
       </form>
+    </div>
+    <div class="govuk-grid-column-full">
       <table
         v-if="!!results"
-        class="govuk-table"
+        class="govuk-table overflow-table"
       >
         <thead class="govuk-table__head">
           <th
             v-for="(column, index) in tableColumns"
             :key="index"
+            class="govuk-table__cell text-left"
           >
-            {{ column.title }}
+            {{ filters.lookup(column.title) }}
           </th>
         </thead>
         <tbody class="govuk-table__body">
@@ -74,9 +77,9 @@
             <td
               v-for="(item, indexItem) in row"
               :key="indexItem"
-              class="govuk-table__cell text-right"
+              class="govuk-table__cell text-left"
             >
-              {{ item }}
+              {{ filters.lookup(item) }}
             </td>
           </tr>
         </tbody>
@@ -90,6 +93,7 @@ import { functions } from '@/firebase';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import * as filters from '@/filters.js';
 
 export default {
   name: 'TargetedOutreachReport',
@@ -100,6 +104,7 @@ export default {
   extends: Form,
   data() {
     return {
+      filters: filters,
       nins: '',
       results: [],
       searching: false,
@@ -129,10 +134,11 @@ export default {
   methods: {
     downloadReport() {
       const header = Object.keys(this.tableColumns).map(col => this.tableColumns[col].title);
-      const csv = [[...header]];
+      const csv = [[...header.map(col => filters.lookup(col))]];
       this.results.map(item => {
         const returnItem = header.map(h => {
-          return item[h];
+          // sanitise for commas in string which could cause separation
+          return filters.lookup(`"${item[h]}"`);
         });
         csv.push(returnItem);
       });
@@ -161,3 +167,10 @@ export default {
   },
 };
 </script>
+<style>
+  .overflow-table {
+    width: 100%;
+    word-wrap:break-word;
+    table-layout: fixed;
+  }
+</style>

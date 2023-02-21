@@ -5,6 +5,7 @@ Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
+import ui from '@/store/ui';
 import auth from '@/store/auth';
 import services from '@/store/services';
 import exerciseCollection from '@/store/exercise/collection';
@@ -33,40 +34,63 @@ import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestRespon
 import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
+
+import tasks from '@/store/tasks/collection';
+import task from '@/store/tasks/document';
 import panels from '@/store/panels';
+// NEW: import panels from '@/store/panels/collection';
+import panel from '@/store/panels/document';
+import panellists from '@/store/panellists/collection';
+import panellist from '@/store/panellists/document';
+
+import exerciseDiversity from '@/store/exercise/diversity/document';
+import messageBase from '@/store/baseClasses/messageBase';
+import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
+import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {
-    auth,
-    services,
-    exerciseCollection,
-    exerciseCreateJourney,
-    exerciseDocument,
+    // Keep these in alphabetical order for readability in Vue Chrome Extension
     applications,
     application,
     assessment,
     assessments,
-    events,
+    auth,
+    candidateApplications,
+    candidates,
+    characterChecks,
     clipboard,
-    notifications,
+    connectionMonitor,
+    events,
+    exerciseCollection,
+    exerciseCreateJourney,
+    exerciseDiversity,
+    exerciseDocument,
     invitations,
+    lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
+    lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
+    messageBase: new messageBase().getModule(),
+    notes,
+    notifications,
+    panel,
+    panellist,
+    panellists,
+    panels,
+    qualifyingTest,
+    qualifyingTestResponses,
+    qualifyingTestReports,
+    qualifyingTestReport,
+    services,
     stageReview,
     stageSelected,
     stageHandover,
     stageRecommended,
     stageShortlisted,
-    candidates,
-    notes,
-    candidateApplications,
-    qualifyingTest,
-    qualifyingTestResponses,
-    connectionMonitor,
-    qualifyingTestReports,
-    qualifyingTestReport,
-    panels,
-    characterChecks,
+    task,
+    tasks,
+    ui,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

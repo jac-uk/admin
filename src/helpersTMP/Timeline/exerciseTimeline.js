@@ -1,4 +1,5 @@
 import { isDate, formatDate } from '../date';
+import { TASK_TYPE } from '../../helpers/constants';
 
 const getDateString = (date, format) => {
   return isDate(date) ? formatDate(date, format) : null;
@@ -46,11 +47,12 @@ const createSelectionDay = (selectionDay) => {
   return selectionDayEntry;
 };
 
-const createShortlistingMethod = (method, startDate, endDate) => {
+const createShortlistingMethod = (method, startDate, endDate, taskType) => {
   const shortlistingMethodEntry = {
     entry: `${method}`,
     date: startDate,
     dateString: null,
+    taskType: taskType,
   };
 
   const formattedStartDate = getDateString(startDate);
@@ -124,6 +126,7 @@ const exerciseTimeline = (data) => {
             entry: 'Situational judgement qualifying test (QT)',
             date: getDateAndTime(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime),
             dateString: getDateAndTimeString(data.situationalJudgementTestDate, data.situationalJudgementTestStartTime, data.situationalJudgementTestEndTime),
+            taskType: TASK_TYPE.SITUATIONAL_JUDGEMENT,
           }
         );
       }
@@ -145,6 +148,7 @@ const exerciseTimeline = (data) => {
             entry: 'Critical analysis qualifying test (QT)',
             date: getDateAndTime(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime),
             dateString: getDateAndTimeString(data.criticalAnalysisTestDate, data.criticalAnalysisTestStartTime, data.criticalAnalysisTestEndTime),
+            taskType: TASK_TYPE.CRITICAL_ANALYSIS,
           }
         );
       }
@@ -166,6 +170,7 @@ const exerciseTimeline = (data) => {
             entry: 'Scenario test',
             date: getDateAndTime(data.scenarioTestDate, data.scenarioTestStartTime),
             dateString: getDateAndTimeString(data.scenarioTestDate, data.scenarioTestStartTime, data.scenarioTestEndTime),
+            taskType: TASK_TYPE.SCENARIO,
           }
         );
       }
@@ -273,7 +278,7 @@ const exerciseTimeline = (data) => {
 
   if (data.equalMeritSecondStageStartDate) {
     timeline.push(
-      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate)
+      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate, TASK_TYPE.EMP_TIEBREAKER)
     );
   }
 

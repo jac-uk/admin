@@ -140,7 +140,7 @@ export default {
         { title: 'Count' },
         { title: 'Score' },
         { title: 'Female' },
-        { title: 'BAME' },
+        { title: 'Ethnic minorities' },
         { title: 'Solicitor' },
         { title: 'Disability' },
       ],
@@ -220,7 +220,7 @@ export default {
       headers.push('%');
       headers.push('Rank');
       headers.push('Female');
-      headers.push('BAME');
+      headers.push('Ethnic minorities');
       headers.push('Solicitor');
       headers.push('Disability');
 

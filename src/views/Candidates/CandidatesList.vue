@@ -22,6 +22,13 @@
       :data="tableData"
       :page-size="50"
       :columns="tableColumns"
+      :filters="[
+        {
+          type: 'singleCheckbox',
+          field: 'isFlaggedCandidate',
+          inputLabel: 'Show flagged candidates only'
+        },
+      ]"
       :custom-search="{
         placeholder: 'Search candidate names',
         handler: candidateSearch,
@@ -35,6 +42,7 @@
             :to="{ name: 'candidates-view', params: { id: row.id } }"
           >
             {{ row.fullName | showAlternative(row.id) }}
+            <span v-if="row.isFlaggedCandidate">*</span>
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
