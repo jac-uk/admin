@@ -271,7 +271,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
-        dateString: getDateString(data.finalOutcome),
+        dateString: getDateString(data.finalOutcome, 'month'),
       }
     );
   }
