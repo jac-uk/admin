@@ -42,6 +42,7 @@
           search-placeholder="Candidate name or application ref"
           local-data
           sticky
+          class="merit-list"
           @change="updateTableState"
           @clickCol="clickColumn"
         >
@@ -393,3 +394,11 @@ export default {
   },
 };
 </script>
+
+<style type="text/css" rel="stylesheet/scss" lang="scss">
+.merit-list {
+  .moj-search {
+    max-width: 360px
+  }
+}
+</style>
