@@ -61,7 +61,6 @@
           Paste from clipboard
         </button>
       </div>
-
       <Table
         ref="scoreSheet"
         data-key="id"
