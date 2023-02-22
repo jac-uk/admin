@@ -701,7 +701,7 @@ export default {
         data,
         {
           title: `${this.exercise.referenceNumber} ${title} - ${dataTag}`,
-          sheetName: title,
+          sheetName: `${title} - ${dataTag} report`,
           fileName: `${this.exercise.referenceNumber} - ${title} - ${dataTag}.xlsx`,
         }
       );
