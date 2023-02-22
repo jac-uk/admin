@@ -524,7 +524,8 @@ export default {
       const firestoreRef = firestore
         .collection('applicationRecords')
         .where('candidate.id', '==', record.candidate.id)
-        .where('candidate.reasonableAdjustments', '==', true);
+        .where('candidate.reasonableAdjustments', '==', true)
+        .orderBy('exercise.referenceNumber', 'desc');
       const snapshot = await firestoreRef.get();
       const otherRecords = [];
       snapshot.forEach(doc => {
