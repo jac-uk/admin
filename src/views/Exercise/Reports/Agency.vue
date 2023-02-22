@@ -642,14 +642,57 @@ export default {
 
       return reportData;
     },
+    gatherBSBReportData() {
+      const reportData = [];
+      const headers = [
+        { title: 'Surname', ref: 'lastName' },
+        { title: 'Forename(s)', ref: 'firstName' },
+        { title: 'BSB Number', ref: 'bsbNumber' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
+    gatherSRAReportData() {
+      const reportData = [];
+      const headers = [
+        { title: 'Surname', ref: 'lastName' },
+        { title: 'Forename(s)', ref: 'firstName' },
+        { title: 'SRA Number', ref: 'sraNumber' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
     exportData() {
       const title = 'Agency Report';
       let data = null;
+      let dataTag;
 
       if (this.activeTab === 'acro') {
+        dataTag = 'ACRO';
         data = this.gatherACROReportData();
       } else if (this.activeTab === 'hmrc') {
+        dataTag = 'HMRC';
         data = this.gatherHMRCReportData();
+      } else if (this.activeTab === 'bsb') {
+        dataTag = 'BSB';
+        data = this.gatherBSBReportData();
+      } else if (this.activeTab === 'sra') {
+        dataTag = 'SRA';
+        data = this.gatherSRAReportData();
       } else {
         data = this.gatherReportData();
       }
@@ -657,9 +700,9 @@ export default {
       downloadXLSX(
         data,
         {
-          title: `${this.exercise.referenceNumber} ${title}`,
+          title: `${this.exercise.referenceNumber} ${title} - ${dataTag}`,
           sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          fileName: `${this.exercise.referenceNumber} - ${title} - ${dataTag}.xlsx`,
         }
       );
     },
