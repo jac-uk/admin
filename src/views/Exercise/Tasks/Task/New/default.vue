@@ -74,6 +74,7 @@ import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
+import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 
 export default {
   components: {
@@ -99,8 +100,8 @@ export default {
       return this.type === TASK_TYPE.QUALIFYING_TEST;
     },
     taskIsOverdue() {
-      console.log(this.timelineTasks);
-      return true;
+      const timelineTask = this.timelineTasks[0];
+      return !isDateInFuture(timelineTask.date);
     },
     totalApplications() {
       if (!this.exercise) return 0;
