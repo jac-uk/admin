@@ -187,63 +187,69 @@
               </div>
 
               <div
-                v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
-                :key="i"
-                class="govuk-grid-row"
+                v-if="hasPermissions([
+                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                ])"
               >
-                <div class="govuk-grid-column-one-third">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    Status
-                  </h4>
-                  <Select
-                    :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
-                    :value="reasonableAdjustmentsState.status || ''"
-                    @input="saveReasonableAdjustmentsStatus(row, $event, i)"
-                  >
-                    <option value="" />
-                    <option
-                      v-for="status in reasonableAdjustmentsStatusOptions"
-                      :key="status"
-                      :value="status"
-                    >
-                      {{ status | lookup }}
-                    </option>
-                  </Select>
-                </div>
-                <div class="govuk-grid-column-two-thirds">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    Where the reasonable adjustments was given
-                  </h4>
-                  <Select
-                    :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
-                    :value="reasonableAdjustmentsState.reason || ''"
-                    @input="saveReasonableAdjustmentsReason(row, $event, i)"
-                  >
-                    <option value="" />
-                    <option
-                      v-for="reason in reasonableAdjustmentsReasonOptions"
-                      :key="reason"
-                      :value="reason"
-                    >
-                      {{ reason | lookup }}
-                    </option>
-                  </Select>
-                  <TextareaInput
-                    :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
-                    :value="reasonableAdjustmentsState.note"
-                    @input="saveReasonableAdjustmentsNote(row, $event, i)"
-                  />
-                </div>
-              </div>
-
-              <div class="text-right">
-                <button
-                  v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsReasonOptions.length"
-                  class="print-none govuk-button govuk-!-margin-bottom-0"
-                  @click="addReasonableAdjustmentsState(index)"
+                <div
+                  v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
+                  :key="i"
+                  class="govuk-grid-row"
                 >
-                  Add another
-                </button>
+                  <div class="govuk-grid-column-one-third">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Status
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
+                      :value="reasonableAdjustmentsState.status || ''"
+                      @input="saveReasonableAdjustmentsStatus(row, $event, i)"
+                    >
+                      <option value="" />
+                      <option
+                        v-for="status in reasonableAdjustmentsStatusOptions"
+                        :key="status"
+                        :value="status"
+                      >
+                        {{ status | lookup }}
+                      </option>
+                    </Select>
+                  </div>
+                  <div class="govuk-grid-column-two-thirds">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Where the reasonable adjustments was given
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
+                      :value="reasonableAdjustmentsState.reason || ''"
+                      @input="saveReasonableAdjustmentsReason(row, $event, i)"
+                    >
+                      <option value="" />
+                      <option
+                        v-for="reason in reasonableAdjustmentsReasonOptions"
+                        :key="reason"
+                        :value="reason"
+                      >
+                        {{ reason | lookup }}
+                      </option>
+                    </Select>
+                    <TextareaInput
+                      :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
+                      :value="reasonableAdjustmentsState.note"
+                      @input="saveReasonableAdjustmentsNote(row, $event, i)"
+                    />
+                  </div>
+                </div>
+
+                <div class="text-right">
+                  <button
+                    v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsReasonOptions.length"
+                    class="print-none govuk-button govuk-!-margin-bottom-0"
+                    @click="addReasonableAdjustmentsState(index)"
+                  >
+                    Add another
+                  </button>
+                </div>
               </div>
 
               <div>
