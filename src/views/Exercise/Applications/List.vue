@@ -102,7 +102,7 @@
         @confirmed="sendApplicationReminders"
       />
     </Modal>
-    
+
     <Modal ref="lateApplicationRequestModal">
       <LateApplicationRequest
         @success="openConfirmationModal()"
@@ -113,7 +113,7 @@
       <LateApplicationConfirmation
         @close="closeConfirmationModal()"
       />
-    </Modal>    
+    </Modal>
   </div>
 </template>
 
@@ -127,6 +127,7 @@ import { isClosed } from '@/helpers/exerciseHelper';
 import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
 import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 
 export default {
   name: 'ApplicationsList',
@@ -134,6 +135,7 @@ export default {
     Table,
     TableCell,
     Modal,
+    ModalInner,
     LateApplicationRequest,
     LateApplicationConfirmation,
   },
