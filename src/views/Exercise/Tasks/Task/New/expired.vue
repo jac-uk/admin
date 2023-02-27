@@ -13,7 +13,7 @@
         This task is overdue. Please change dates on the <RouterLink
           :to="{ name: 'exercise-details-timeline' }"
           class="govuk-link"
-        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
+        >timeline</RouterLink> if you wish to carry out the task.
       </strong>
     </div>
   </div>
