@@ -11,20 +11,20 @@
     </p>
 
     <Checkbox
+      v-for="(timelineTask, index) in timelineTasks"
+      :id="`timelineTask-${index}`"
+      :key="`timelineTask-${index}`"
+      v-model="formData.timelineTasks[index]"
+    >
+      {{ timelineTask.entry }} will happen on {{ timelineTask.dateString }}
+    </Checkbox>
+
+    <Checkbox
       v-if="entryStatus"
       id="entryStatus"
       v-model="formData.entryStatus"
     >
-      Only '{{entryStatus | lookup}}' applications will be included
-    </Checkbox>
-
-    <Checkbox
-      v-for="(timelineTask, index) in timelineTasks"
-      :key="`timelineTask-${index}`"
-      :id="`timelineTask-${index}`"
-      v-model="formData.timelineTasks[index]"
-    >
-      {{timelineTask.entry}} will happen on {{timelineTask.dateString}}
+      Only '{{ entryStatus | lookup }}' applications will be included
     </Checkbox>
 
     <ActionButton
