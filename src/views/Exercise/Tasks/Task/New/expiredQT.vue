@@ -3,15 +3,16 @@
     <h1 class="govuk-heading-l">
       {{ type | lookup }}
     </h1>
-    <p
-      class="govuk-body"
+    <div
+      class="govuk-inset-text"
     >
-      It looks like the {{ type | lookup }} has already been completed. Please choose the correct test from below and continue
-    </p>
+      It looks like the {{ type | lookup }} has already been completed.
+    </div>
 
     <RadioGroup
       id="selected-qt"
       v-model="formData.selectedQT"
+      label="Please choose the completed live test"
       required
       :messages="{
         required: 'Please choose one of the following options'
@@ -24,6 +25,16 @@
         :label="qualifyingTest.title"
       />
     </RadioGroup>
+
+    <Checkbox
+      id="update-status"
+      v-model="formData.allowStatusUpdates"
+      label="Allow application status updates"
+      hint="When this is checked, this task will be allowed to update the status of applications"
+    >
+      Yes - allow this task to update application status
+    </Checkbox>
+
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
@@ -40,7 +51,9 @@
 import defaultView from './default';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
+import { TASK_QT_MAP } from '@/helpers/constants';
 import { functions } from '@/firebase';
 
 export default {
@@ -48,11 +61,13 @@ export default {
   components: {
     RadioGroup,
     RadioItem,
+    Checkbox,
   },
   data() {
     return {
       formData: {
         selectedQT: '',
+        allowStatusUpdates: true,
       },
     };
   },
@@ -62,7 +77,7 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exercise.id, type: 'scenario' });
+    this.$store.dispatch('qualifyingTest/bindQTs', { exerciseId: this.exercise.id, type: TASK_QT_MAP[this.type] });
   },
   methods: {
     async btnContinue() {
@@ -70,6 +85,7 @@ export default {
         exerciseId: this.exercise.id,
         type: this.type,
         qualifyingTestId: this.formData.selectedQT,
+        allowStatusUpdates: this.formData.allowStatusUpdates,
       };
       await functions.httpsCallable('createTaskForExistingQT')(params);
       this.btnNext();

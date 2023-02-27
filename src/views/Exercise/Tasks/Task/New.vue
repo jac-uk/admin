@@ -41,6 +41,7 @@ export default {
     },
     taskIsOverdue() {
       const timelineTask = this.timelineTasks[0];
+      if (!timelineTask) return false;
       return !isDateInFuture(timelineTask.date);
     },
     newView() {
