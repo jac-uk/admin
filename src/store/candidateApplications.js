@@ -2,14 +2,14 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
-const collection = firestore.collection('applicationRecords');
+const collection = firestore.collection('applications');
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { candidateId }) => {
       const firestoreRef = collection
-        .where('candidate.id', '==', candidateId).limit(50);
+        .where('userId', '==', candidateId).limit(50);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
