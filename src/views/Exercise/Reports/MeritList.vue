@@ -294,7 +294,7 @@ export default {
       // Default sort by total score (initially)
       columns.push({ title: 'Total Score', sort: 'totalScore', direction: 'desc', default: true, class: 'text-center' });
       columns.push({ title: 'Female' });
-      columns.push({ title: 'BAME' });
+      columns.push({ title: 'Ethnic minority' });
       columns.push({ title: 'Solicitor' });
       columns.push({ title: 'Disability' });
       return columns;
