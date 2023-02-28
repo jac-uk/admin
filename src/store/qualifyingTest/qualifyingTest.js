@@ -21,6 +21,9 @@ export default {
     bindQTs: firestoreAction(({ bindFirestoreRef, state }, params) => {
       let firestoreRef = collection
         .where('vacancy.id', '==', params.exerciseId);
+      if (params.type) {
+        firestoreRef = firestoreRef.where('type', '==', params.type);
+      }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
