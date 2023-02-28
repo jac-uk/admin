@@ -38,7 +38,6 @@
     >
       Exclude from score?
     </Checkbox>
-
   </Form>
 </template>
 

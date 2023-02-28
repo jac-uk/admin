@@ -43,7 +43,6 @@
     >
       Continue
     </ActionButton>
-
   </div>
 </template>
 
@@ -57,12 +56,12 @@ import { TASK_QT_MAP } from '@/helpers/constants';
 import { functions } from '@/firebase';
 
 export default {
-  extends: defaultView,
   components: {
     RadioGroup,
     RadioItem,
     Checkbox,
   },
+  extends: defaultView,
   data() {
     return {
       formData: {
