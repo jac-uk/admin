@@ -384,8 +384,8 @@ export default {
   },
   mixins: [permissionMixin],
   data() {
-    const reasonableAdjustmentsStatusOptions = ['scenario-test', 'approved', 'denied'];
-    const reasonableAdjustmentsReasonOptions = ['qualifying-test', 'selection-day'];
+    const reasonableAdjustmentsStatusOptions = ['approved', 'denied'];
+    const reasonableAdjustmentsReasonOptions = ['qualifying-test', 'scenario-test', 'selection-day'];
 
     return {
       exerciseStage: 'all',
