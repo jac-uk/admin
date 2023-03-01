@@ -231,7 +231,7 @@
                     v-else
                     class="govuk-table__cell"
                   >
-                    {{ 'None given' }}
+                    None given
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.bsbNumber }}
