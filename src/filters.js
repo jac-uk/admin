@@ -136,12 +136,12 @@ const lookup = (value) => {
     passedSelection: 'Passed Selection',
 
     // reasonable adjustments status
-    'scenario-test': 'Scenario Test',
     approved: 'Approved',
     denied: 'Denied',
 
     // reasonable adjustments reason
     'qualifying-test': 'Qualifying Test',
+    'scenario-test': 'Scenario Test',
     'selection-day': 'Selection Day',
 
     // 'xxx': 'xxx',
