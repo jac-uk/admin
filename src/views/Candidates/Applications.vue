@@ -11,22 +11,22 @@
     <Table
       v-if="!noApplications"
       data-key="id"
-      :data="applicationRecords"
-      :columns="[
-        { title: 'Exercise' },
-        { title: 'Outcome' },
-        { title: 'Action' },
-      ]"
+      :data="candidateApplications"
+      :columns="tableColumns"
       local-data
     >
       <template #row="{row}">
+        <!-- {{ Object.keys(row) }} -->
         <TableCell>
-          {{ row.exerciseName }}
+          <strong>
+            {{ row.exerciseRef }}
+          </strong>
+          - {{ row.exerciseName }}
         </TableCell>
         <TableCell>
-          {{ row.status | lookup }}{{ row.status && row.stage ? ' / ' : '' }}
+          {{ getStatus(row) | lookup }}{{ getStatus(row) && getStage(row) ? ' / ' : '' }}
           <strong>
-            {{ row.stage }}
+            {{ getStage(row) }}
           </strong>
         </TableCell>
         <TableCell>
@@ -60,19 +60,34 @@ export default {
       default: '',
     },
   },
+  data() {
+    return {
+      tableColumns: [
+        { title: 'Exercise', sort: 'exerciseRef', direction: 'desc' },
+        { title: 'Outcome', sort: '_processing.status', direction: 'desc', default: true },
+        { title: 'Action' },
+      ],
+    };
+  },
   computed: {
-    applicationRecords() {
+    candidateApplications() {
       const records = this.$store.state.candidateApplications.records;
       return records;
     },
     noApplications() {
-      return this.applicationRecords.length === 0;
+      return this.candidateApplications.length === 0;
     },
   },
   async created() {
     this.$store.dispatch('candidateApplications/bind', { candidateId: this.candidateId });
   },
   methods: {
+    getStage(application) {
+      return application._processing ? application._processing.stage : null;
+    },
+    getStatus(application) {
+      return application._processing ? application._processing.status : application.status;
+    },
   },
 };
 </script>
