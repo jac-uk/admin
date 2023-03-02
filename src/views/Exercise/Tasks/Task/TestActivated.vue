@@ -3,13 +3,15 @@
     <h1 class="govuk-heading-l">
       {{ type | lookup }}
     </h1>
-    <p class="govuk-body-l govuk-!-margin-bottom-4">
-      This test is hosted on the
+    <p class="govuk-body govuk-!-margin-bottom-4">
+      Please log in to the
       <a
         :href="testAdminURL"
         target="_blank"
       >
-        QT Platform</a>.
+        QT Platform</a> to run and manage the {{ type | lookup }}.
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-4">
       When the test and mop-ups have been completed you may continue.
     </p>
     <ActionButton
