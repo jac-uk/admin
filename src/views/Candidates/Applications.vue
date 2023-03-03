@@ -8,12 +8,12 @@
       </div>
     </div> -->
 
+    <!-- v-if="!noApplications" -->
     <Table
-      v-if="!noApplications"
       data-key="id"
       :data="candidateApplications"
       :columns="tableColumns"
-      local-data
+      @change="getTableData"
     >
       <template #row="{row}">
         <!-- {{ Object.keys(row) }} -->
@@ -78,10 +78,11 @@ export default {
       return this.candidateApplications.length === 0;
     },
   },
-  async created() {
-    this.$store.dispatch('candidateApplications/bind', { candidateId: this.candidateId });
-  },
   methods: {
+    getTableData(params) {
+      const queryParams = { ...params, candidateId: this.candidateId };
+      this.$store.dispatch('candidateApplications/bind', queryParams);
+    },
     getStage(application) {
       return application._processing ? application._processing.stage : null;
     },
