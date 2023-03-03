@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="moj-sub-navigation govuk-!-margin-bottom-4"
+    class="sub-navigation moj-sub-navigation govuk-!-margin-bottom-4"
     aria-label="Sub navigation"
   >
     <ul class="moj-sub-navigation__list">

@@ -105,7 +105,7 @@
       >
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
-            Oureach by exercise stage
+            Outreach by exercise stage
           </caption>
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">

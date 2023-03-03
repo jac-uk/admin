@@ -28,6 +28,10 @@ export default {
           path: `${path}/diversity`,
         },
         {
+          title: 'Merit List',
+          path: `${path}/merit-list`,
+        },
+        {
           title: 'Outreach',
           path: `${path}/outreach`,
         },
@@ -57,6 +61,10 @@ export default {
         {
           title: 'Handover',
           path: `${path}/handover`,
+        },
+        {
+          title: 'Statutory Consultation',
+          path: `${path}/statutory-consultation`,
         },
         {
           title: 'Custom',

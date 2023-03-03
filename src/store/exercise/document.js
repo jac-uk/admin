@@ -14,6 +14,9 @@ export default {
     setNoOfTestApplications(state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
+    setRecord(state, record) {
+      state.record = record;
+    },
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
@@ -76,20 +79,34 @@ export default {
       }
       await collection.doc(state.record.id).update(saveData);
     },
-    submitForApproval: async ({ state }) => {
+    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
+      const data = {};
+      const user = {
+        id: userId,
+        name: userName,
+      };
+      data['_approval.status'] = decision;
+      data[`_approval.${decision}`] = {};
+      data[`_approval.${decision}.date`] = firebase.firestore.FieldValue.serverTimestamp();
+      data[`_approval.${decision}.user`] = user;
+      switch (decision) {
+        case 'approved':
+          data['_approval.rejected'] = null;
+          data['state'] = 'approved';
+        break;
+        case 'rejected':
+          data['_approval.approved'] = null;
+          data['_approval.rejected.message'] = rejectionReason;
+          data['state'] = 'draft';
+        break;
+        default:  // 'requested'
+          data['_approval.approved'] = null;
+          data['_approval.rejected'] = null;
+          data['state'] = 'ready';
+      }
+      // Update record
       const id = state.record.id;
       const ref = collection.doc(id);
-      const data = {
-        state: 'ready',
-      };
-      await ref.update(data);
-    },
-    approve: async ({ state }) => {
-      const id = state.record.id;
-      const ref = collection.doc(id);
-      const data = {
-        state: 'approved',
-      };
       await ref.update(data);
     },
     isReadyForTest: async ({ state }) => {
@@ -122,6 +139,7 @@ export default {
       const data = {
         state: 'draft',
         testingState: null,
+        _approval: null,
       };
       await ref.update(data);
     },
@@ -188,6 +206,11 @@ export default {
     changeNoOfTestApplications({ commit }, noOfTestApplications) {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
+    delete: async ({ state }) => {
+      const id = state.record.id;
+      const ref = collection.doc(id);
+      await ref.delete();
+    },
   },
   state: {
     record: null,
@@ -213,5 +236,11 @@ export default {
       }
     },
     noOfTestApplications: state => state.noOfTestApplications,
+    _approval: (state) => {
+      if (state.record && state.record.hasOwnProperty('_approval')) {
+        return state.record._approval;
+      }
+      return null;
+    },
   },
 };

@@ -1,6 +1,7 @@
 <template>
   <div
     class="page-container"
+    :class="{ 'full-screen': fullScreen }"
     @mouseenter="onMouseOver"
   >
     <header
@@ -87,12 +88,18 @@
                 >
                   Sign out
                 </a>
-              <!-- <span
+                <!-- <span
                 v-if="isSignedIn"
                 class="app-c-topic-list__item nostyle"
               >
                 <b>You are now signed in as {{ userName }}</b>
               </span> -->
+                <span
+                  v-if="isSignedIn && isDevelopmentEnvironment"
+                  class="app-c-topic-list__item nostyle"
+                >
+                  <b>({{ userName }})</b>
+                </span>
               </li>
             </ul>
           </nav>
@@ -186,6 +193,8 @@
         </p>
       </div>
     </div>
+
+    <Messages />
   </div>
 </template>
 
@@ -193,9 +202,12 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-
+import Messages from '@/components/Messages';
 export default {
   name: 'App',
+  components: {
+    Messages,
+  },
   mixins: [permissionMixin],
   data() {
     return {
@@ -203,6 +215,9 @@ export default {
     };
   },
   computed: {
+    isDevelopmentEnvironment() {
+      return this.$store.getters.isDevelop;
+    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
     },
@@ -215,28 +230,35 @@ export default {
     hasClipboardData() {
       return this.$store.state.clipboard.hasData;
     },
+    fullScreen() {
+      return this.$store.state.ui.fullScreen;
+    },
   },
   watch: {
     async isSignedIn() {
       if (this.isSignedIn) {
-        const email = auth.currentUser.email;
-        this.authorisedToPerformAction = await authorisedToPerformAction(email);
+        this.load();
       }
     },
   },
   async created() {
     if (this.isSignedIn) {
-      await this.$store.dispatch('services/bind');
-      const email = auth.currentUser.email;
-      this.authorisedToPerformAction = await authorisedToPerformAction(email);
+      this.load();
     }
   },
   destroyed() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
+      this.$store.dispatch('messageBase/unbind');
     }
   },
   methods: {
+    async load() {
+      await this.$store.dispatch('services/bind');
+      const email = auth.currentUser.email;
+      this.authorisedToPerformAction = await authorisedToPerformAction(email);
+      await this.getMessages();
+    },
     signOut() {
       auth.signOut();
       this.$router.go('/sign-in');
@@ -246,6 +268,19 @@ export default {
     },
     async emptyClipboard() {
       await this.$store.dispatch('clipboard/empty');
+    },
+    async getMessages() {
+      const authEmail = this.$store.getters['auth/getEmail'];
+      if (authEmail) {
+        const params = [
+          ['to', 'array-contains', authEmail],
+          ['status', '==', 'created'],
+        ];
+        const data = {
+          params: params,
+        };
+        return await this.$store.dispatch('messageBase/bind', data);
+      }
     },
   },
 };
