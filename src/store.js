@@ -26,6 +26,7 @@ import stageHandover from '@/store/stage/handover';
 import stageRecommended from '@/store/stage/recommended';
 import stageShortlisted from '@/store/stage/shortlisted';
 import characterChecks from '@/store/characterChecks/characterChecks';
+import handoverChecks from '@/store/handoverChecks/handoverChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
@@ -68,6 +69,7 @@ const store = new Vuex.Store({
     exerciseCreateJourney,
     exerciseDiversity,
     exerciseDocument,
+    handoverChecks,
     invitations,
     lateApplicationRequestMsg: new LateApplicationRequestMsg().getModule(),
     lateApplicationResponseMsg: new LateApplicationResponseMsg().getModule(),
