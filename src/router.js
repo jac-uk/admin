@@ -78,6 +78,7 @@ import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import ExerciseTasksHandoverChecks from '@/views/Exercise/Tasks/HandoverChecks';
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
@@ -757,6 +758,15 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Character Checks | Exercise Tasks',
+              },
+            },
+            {
+              path: 'handover-checks',
+              component: ExerciseTasksHandoverChecks,
+              name: 'exercise-tasks-handover-checks',
+              meta: {
+                requiresAuth: true,
+                title: 'Handover Checks | Exercise Tasks',
               },
             },
             {
