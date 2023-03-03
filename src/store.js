@@ -34,7 +34,6 @@ import connectionMonitor from '@/store/connectionMonitor';
 import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
 import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 import panels from '@/store/panels';
-import handoverChecks from '@/store/handoverChecks/handoverChecks';
 
 const store = new Vuex.Store({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -68,7 +67,6 @@ const store = new Vuex.Store({
     qualifyingTestReport,
     panels,
     characterChecks,
-    handoverChecks,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

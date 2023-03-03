@@ -90,7 +90,6 @@ import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/Qual
 import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
-import ExerciseTasksHandoverChecks from '@/views/Exercise/Tasks/HandoverChecks';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
@@ -936,15 +935,6 @@ const router = new Router({
                   },
                 },
               ],
-            },
-            {
-              path: 'handover-checks',
-              component: ExerciseTasksHandoverChecks,
-              name: 'exercise-tasks-handover-checks',
-              meta: {
-                requiresAuth: true,
-                title: 'Handover Checks | Exercise Tasks',
-              },
             },
           ],
         },
