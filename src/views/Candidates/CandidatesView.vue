@@ -84,7 +84,7 @@
 <script>
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Notes from '@/components/Notes/Notes';
-import Applications from '@jac-uk/jac-kit/draftComponents/Candidates/Applications';
+import Applications from './Applications';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';

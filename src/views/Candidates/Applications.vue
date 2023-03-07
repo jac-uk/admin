@@ -1,7 +1,6 @@
 <template>
   <div>
     <Table
-      v-if="!noApplications"
       data-key="id"
       :data="candidateApplications"
       :columns="tableColumns"
@@ -30,9 +29,6 @@
         </TableCell>
       </template>
     </Table>
-    <p v-if="noApplications">
-      There are no applications
-    </p>
   </div>
 </template>
 
@@ -54,8 +50,8 @@ export default {
   data() {
     return {
       tableColumns: [
-        { title: 'Exercise', sort: 'exerciseRef', direction: 'desc' },
-        { title: 'Outcome', sort: '_processing.status', direction: 'desc', default: true },
+        { title: 'Exercise', sort: 'exerciseRef', direction: 'desc', default: true },
+        { title: 'Outcome', sort: '_processing.stage', direction: 'desc' },
         { title: 'Action' },
       ],
     };
@@ -64,9 +60,6 @@ export default {
     candidateApplications() {
       const records = this.$store.state.candidateApplications.records;
       return records;
-    },
-    noApplications() {
-      return this.candidateApplications.length === 0;
     },
   },
   methods: {
