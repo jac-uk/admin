@@ -148,7 +148,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.ref }}
+          {{ row.fullName }}
         </TableCell>
 
         <template v-if="showDetail && type == PANEL_TYPES.SIFT">
@@ -238,6 +238,8 @@ import TitleBar from '@/components/Page/TitleBar';
 import { PANEL_TYPES } from '../Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import _has from 'lodash/has';
+import _find from 'lodash/find';
 
 export default {
   components: {
@@ -288,16 +290,22 @@ export default {
       return null;
     },
     capabilities() {
-      if (!this.task) return [];
-      return CAPABILITIES.filter(cap => this.task.capabilities.indexOf(cap) >= 0);  // Using CAPABILITIES to ensure display order of selected capabilities
+      let capabilities = [];
+      if (this.task && _has(this.task, 'capabilities')) {
+        capabilities = CAPABILITIES.filter(cap => this.task.capabilities.indexOf(cap) >= 0);  // Using CAPABILITIES to ensure display order of selected capabilities
+      }
+      return capabilities;
     },
     selectionCategories() {
-      if (!this.task) return [];
-      return SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
+      let categories = [];
+      if (this.task && _has(this.task, 'selectionCategories')) {
+        categories = SELECTION_CATEGORIES.filter(cap => this.task.selectionCategories.indexOf(cap) >= 0); // Using SELECTION_CATEGORIES to ensure display order
+      }
+      return categories;
     },
     tableColumns() {
       const columns = [];
-      columns.push({ title: 'Application', class: 'table-cell-application' });
+      columns.push({ title: 'Candidate', class: 'table-cell-application' });
       if (this.showDetail) {
         if (this.type === PANEL_TYPES.SIFT) {
           this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' }));
@@ -341,9 +349,13 @@ export default {
       if (!this.exerciseDiversity) return [];
 
       return this.task.finalScores.filter(scoreData => scoreData.score == this.score).map(scoreData => {
+        const application = _find(this.task.applications, application => {
+          return application.id === scoreData.id;
+        });
         const data = {
           id: scoreData.id,
           ref: scoreData.ref,
+          fullName: application.fullName,
           score: scoreData.score,
           scoreSheet: scoreData.scoreSheet,
           diversity: {},

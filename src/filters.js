@@ -59,8 +59,27 @@ const lookup = (value) => {
     endDate: 'End Date',
 
     // emp flags
-    'gender': 'Gender',
-    'ethnicity': 'Ethnicity',
+    gender: 'Gender',
+    ethnicity: 'Ethnicity',
+    professionalBackground: 'Professional Background',
+    emp: 'EMP',
+    socialMobility: 'Social Mobility',
+    disability: 'Disability',
+    empNoAnswer: 'Not applied',
+
+    // Diversity report
+    preferNotToSay: 'Prefer not to say',
+    noAnswer: 'No answer',
+    genderNeutral: 'Gender neutral',
+    firstGenerationUniversity: 'First generation at University',
+    attendedUKStateSchool: 'Attended UK state school',
+    white: 'White',
+    bame: 'Ethnic minorities',
+    male: 'Male',
+    female: 'Female',
+    applied: 'Applied',
+    no: 'No',
+    yes: 'Yes',
 
     // PAJE answers
     'online-and-judge-led': 'Yes - online resources and judge-led discussion group course',
@@ -99,7 +118,29 @@ const lookup = (value) => {
 
     'other': 'Other',
 
+    archived: 'Archived',
+
+    // Outreach report headers
+    'NINumber': 'National Insurance Number',
+    'name': 'Name',
+    // gender
+    // ethnicity
+    exerciseReferenceNumber: 'Exercise',
+    exerciseName: 'Exercise Name',
+    stage: 'Stage',
+    status: 'Status',
+    id: 'exercise id',
+
+    // outreach report values
+    approvedForImmediateAppointment: 'Approved For Immediate Appointment',
+    passedSelection: 'Passed Selection',
+
+    // reasonable adjustments status
+    approved: 'Approved',
+    denied: 'Denied',
+
     // 'xxx': 'xxx',
+    null: '[No Answer Provided]',
   };
 
   lookup[ADVERT_TYPES.LISTING] = 'Listing';
@@ -198,11 +239,7 @@ const lookup = (value) => {
   return returnValue;
 };
 
-const formatNumber = (value) => {
-  return typeof value === 'number' ? value.toLocaleString('en-GB') : value;
+export {
+  lookup
 };
 
-export {
-  lookup,
-  formatNumber
-};

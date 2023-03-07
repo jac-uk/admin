@@ -276,7 +276,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
-        dateString: getDateString(data.finalOutcome),
+        dateString: getDateString(data.finalOutcome, 'month'),
         // taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
@@ -284,7 +284,7 @@ const exerciseTimeline = (data) => {
 
   if (data.equalMeritSecondStageStartDate) {
     timeline.push(
-      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate)
+      createShortlistingMethod('Equal merit second stage', data.equalMeritSecondStageStartDate, data.equalMeritSecondStageEndDate, TASK_TYPE.EMP_TIEBREAKER)
     );
   }
 

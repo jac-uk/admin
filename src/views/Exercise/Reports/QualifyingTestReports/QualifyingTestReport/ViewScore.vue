@@ -50,7 +50,7 @@
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Female<br></span>
                 <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.female / scoreReport.count | formatNumber(2) }}%</span>
-                <span class="govuk-caption-m">BAME<br></span>
+                <span class="govuk-caption-m">Ethnic minorities<br></span>
                 <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.bame / scoreReport.count | formatNumber(2) }}%</span>
               </div>
               <div class="govuk-grid-column-one-half">
@@ -117,7 +117,7 @@
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Female<br></span>
                 <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
-                <span class="govuk-caption-m">BAME<br></span>
+                <span class="govuk-caption-m">Ethnic minorities<br></span>
                 <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
               </div>
               <div class="govuk-grid-column-one-half">
@@ -247,7 +247,7 @@ export default {
         data.push({ title: test.title });
       });
       data.push({ title: 'Female' });
-      data.push({ title: 'BAME' });
+      data.push({ title: 'Ethnic minorities' });
       data.push({ title: 'Solicitor' });
       data.push({ title: 'Disability' });
       return data;

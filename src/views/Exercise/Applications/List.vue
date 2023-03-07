@@ -35,13 +35,20 @@
             >
               Export contacts
             </button>
+            <button
+              v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="openModal"
+            >
+              Late Application
+            </button>
           </div>
         </div>
       </div>
     </div>
-
     <Table
-      :key="status"
+      :key="tableStatus"
       ref="applicationsTable"
       data-key="id"
       :data="applications"
@@ -51,8 +58,9 @@
         handler: candidateSearch,
         field: 'userId',
       }"
-      :page-size="0"
-      :page-item-type="'uppercase-letter'"
+      :page-item-type="paginationType"
+      :page-size="pageSize"
+      :total="exercise._applications[status]"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -79,6 +87,13 @@
       </template>
     </Table>
 
+    <button
+      class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-top-2"
+      @click="togglePagination"
+    >
+      {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
+    </button>
+
     <Modal
       ref="applicationReminderModal"
     >
@@ -87,17 +102,32 @@
         @confirmed="sendApplicationReminders"
       />
     </Modal>
+
+    <Modal ref="lateApplicationRequestModal">
+      <LateApplicationRequest
+        @success="openConfirmationModal()"
+        @close="closeModal()"
+      />
+    </Modal>
+    <Modal ref="lateApplicationRequestConfirmModal">
+      <LateApplicationConfirmation
+        @close="closeConfirmationModal()"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
+import { isClosed } from '@/helpers/exerciseHelper';
+import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
+import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 
 export default {
   name: 'ApplicationsList',
@@ -106,6 +136,8 @@ export default {
     TableCell,
     Modal,
     ModalInner,
+    LateApplicationRequest,
+    LateApplicationConfirmation,
   },
   mixins: [permissionMixin],
   props: {
@@ -113,6 +145,12 @@ export default {
       type: String,
       required: true,
     },
+  },
+  data: function() {
+    return {
+      paginationType: '',
+      pageSize: 50,
+    };
   },
   computed: {
     tableColumns() {
@@ -122,14 +160,33 @@ export default {
       cols.push({ title: 'Status' });
       return cols;
     },
+    tableStatus() {
+      return this.status + this.paginationType;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
     applications() {
       return this.$store.state.applications.records;
     },
+    isClosed() {
+      return isClosed(this.exercise);
+    },
   },
   methods: {
+    openModal() {
+      this.$refs.lateApplicationRequestModal.openModal();
+    },
+    closeModal() {
+      this.$refs.lateApplicationRequestModal.closeModal();
+    },
+    openConfirmationModal() {
+      this.closeModal();
+      this.$refs.lateApplicationRequestConfirmModal.openModal();
+    },
+    closeConfirmationModal() {
+      this.$refs.lateApplicationRequestConfirmModal.closeModal();
+    },
     getTableData(params) {
       return this.$store.dispatch(
         'applications/bind',
@@ -179,6 +236,10 @@ export default {
     },
     closeApplicationReminderModal() {
       this.$refs.applicationReminderModal.closeModal();
+    },
+    togglePagination() {
+      this.paginationType = this.paginationType === 'uppercase-letter' ? '' : 'uppercase-letter';
+      this.pageSize = this.paginationType === 'uppercase-letter' ? 0 : 50;
     },
   },
 };

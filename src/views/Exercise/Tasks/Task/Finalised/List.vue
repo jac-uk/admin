@@ -18,7 +18,7 @@
             :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: row.score } }"
             class="govuk-link"
           >
-            {{ row.score }}
+            {{ row.score | formatNumber(2) }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[3].title">

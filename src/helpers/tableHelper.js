@@ -23,7 +23,8 @@ function getTableData(rows, columns, state) {
       let isMatch = false;
       columns.forEach(column => {
         if (column.sort) {  // making use of `sort` field for the searchable fields
-          if (getValueAtPath(row, column.sort).toLowerCase().indexOf(searchTerm) >= 0) isMatch = true;
+          const searchData = getValueAtPath(row, column.sort);
+          if (searchData && typeof searchData === 'string' && searchData.toLowerCase().indexOf(searchTerm) >= 0) isMatch = true;
         }
       });
       return isMatch;

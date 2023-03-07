@@ -12,12 +12,18 @@
 import { beforeRouteEnter, getExpectedRouteName } from './helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import defaultView from './New/default';
+import expired from './New/expired';
+import expiredQT from './New/expiredQT';
 import qualifyingTest from './New/qualifyingTest';
 import stageOutcome from './New/stageOutcome';
+import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
+import { getTimelineTasks } from '@/helpers/exerciseHelper';
 
 export default {
   components: {
     defaultView,
+    expired,
+    expiredQT,
     qualifyingTest,
     stageOutcome,
   },
@@ -28,6 +34,44 @@ export default {
       type: String,
     },
   },
+  computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    timelineTasks() {
+      return getTimelineTasks(this.exercise, this.type);
+    },
+    taskIsOverdue() {
+      const timelineTask = this.timelineTasks[0];
+      if (!timelineTask) return false;
+      return !isDateInFuture(timelineTask.date);
+    },
+    newView() {
+      if (this.taskIsOverdue) {
+        switch (this.type) {
+        case TASK_TYPE.SHORTLISTING_OUTCOME:
+        case TASK_TYPE.SELECTION_OUTCOME:
+          return 'stageOutcome';
+        case TASK_TYPE.CRITICAL_ANALYSIS:
+        case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+        case TASK_TYPE.SCENARIO:
+          return 'expiredQT';
+        default:
+          return 'expired';
+        }
+      } else {
+        switch (this.type) {
+        case TASK_TYPE.SHORTLISTING_OUTCOME:
+        case TASK_TYPE.SELECTION_OUTCOME:
+        return 'stageOutcome';
+        case TASK_TYPE.QUALIFYING_TEST:
+          return 'qualifyingTest';
+        default:
+          return 'defaultView';
+        }
+      }
+    },
+  },
   created() {
     const task = this.$store.getters['tasks/getTask'](this.type);
     if (task && task.status) {
@@ -36,19 +80,6 @@ export default {
         params: this.$route.params,
       });
     }
-  },
-  computed: {
-    newView() {
-      switch (this.type) {
-      case TASK_TYPE.SHORTLISTING_OUTCOME:
-      case TASK_TYPE.SELECTION_OUTCOME:
-        return 'stageOutcome';
-      case TASK_TYPE.QUALIFYING_TEST:
-        return 'qualifyingTest';
-      default:
-        return 'defaultView';
-      }
-    },
   },
 };
 </script>

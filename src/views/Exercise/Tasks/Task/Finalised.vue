@@ -13,7 +13,7 @@
           type="button"
           @click="$refs['setPassMarkModal'].openModal()"
         >
-          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark }}</span>
+          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark | formatNumber(2) }}</span>
           <span v-else>Set pass mark</span>
         </button>
         <ActionButton
@@ -71,7 +71,7 @@ import FullScreenButton from '@/components/Page/FullScreenButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import SetPassMark from './Finalised/SetPassMark';
-
+import _find from 'lodash/find';
 export default {
   components: {
     ActionButton,
@@ -107,6 +107,7 @@ export default {
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
         if (!scoreMap[scoreData.score]) {
           scoreMap[scoreData.score] = {
+            fullName: this.getFullName(scoreData.id),
             count: 0,
             rank: 0,
             diversity: {
@@ -158,7 +159,7 @@ export default {
       });
 
       // add outcome stats
-      if (this.task.passMark) {
+      if (this.task.passMark >= 0) {
         scoresInDescendingOrder.forEach(key => {
           const score = parseFloat(key);
           if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
@@ -230,6 +231,16 @@ export default {
         await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), overrides: {} } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
+    },
+    getFullName(id) {
+      let fullName = '';
+      if (this.task) {
+        const match = _find(this.task.applications, app => {
+          return app.id === id;
+        });
+        if (match) fullName = match.fullName;
+      }
+      return fullName;
     },
   },
 };

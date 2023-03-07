@@ -186,7 +186,7 @@
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
-            field: 'userId',
+            field: 'candidate.id',
           }"
           :filters="filters"
           @change="getTableData"
@@ -403,7 +403,7 @@ export default {
   },
   mixins: [permissionMixin],
   beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { 
+    this.$store.dispatch('assessments/bind', {
       exerciseId: this.exercise.id,
       status: this.getStatus(),
     });
@@ -466,7 +466,7 @@ export default {
         { title: 'Assessor', sort: 'assessor.fullName' },
         { title: 'Status' },
       ];
-      
+
       if (this.isCancelled || this.isDeclined) {
         return [
           ...tableColumns,

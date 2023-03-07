@@ -3,22 +3,24 @@
     <h1 class="govuk-heading-l">
       {{ type | lookup }}
     </h1>
-    <p class="govuk-body-l govuk-!-margin-bottom-4">
-      This test is hosted on the
+    <p class="govuk-body govuk-!-margin-bottom-4">
+      Please log in to the
       <a
         :href="testAdminURL"
         target="_blank"
       >
-        QT Platform</a>.
+        QT Platform</a> to set up the {{ type | lookup }}.
+    </p>
+    <p class="govuk-body govuk-!-margin-bottom-4">
       When all applications are ready please transfer them to the QT Platform.
     </p>
     <ActionButton
       type="primary"
       @click="updateTask"
     >
-      Transfer {{ totalApplications }} applications to the QT Platform
+      Transfer applications to the QT Platform
     </ActionButton>
-    <div class="panel govuk-!-margin-top-6 govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+    <!-- <div class="panel govuk-!-margin-top-6 govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
       <div class="govuk-caption-m">
         URL for candidates to take this test
       </div>
@@ -33,7 +35,7 @@
       >
         Copy URL to clipboard
       </ActionButton>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -80,7 +82,7 @@ export default {
       } else {
         url = 'https://qt-admin-develop.judicialappointments.digital';
       }
-      url += `/folder/${this.task.folderId}/qualifying-tests/${this.task.test.id}`;
+      url += `/folder/${this.task.folderId}/qualifying-tests/${this.task.test.id}/edit`;
       return url;
     },
   },

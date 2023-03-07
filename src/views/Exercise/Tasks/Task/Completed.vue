@@ -41,6 +41,54 @@
         </div>
       </div>
     </div>
+
+    <div
+      v-if="applicationOutcomes.length"
+      class="govuk-grid-row"
+    >
+      <div
+        v-if="passed.length"
+        class="govuk-grid-column-one-half"
+        :class="{'float-right' : failed.length === 0}"
+      >
+        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+          <Table
+            data-key="id"
+            :data="passed"
+            :columns="[{ title: 'Candidate (passed)' }]"
+            :page-size="50"
+            local-data
+          >
+            <template #row="{row}">
+              <TableCell>
+                {{ row.fullName }}
+              </TableCell>
+            </template>
+          </Table>
+        </div>
+      </div>
+      <div
+        v-if="failed.length"
+        class="govuk-grid-column-one-half"
+        :class="{'float-right' : passed.length === 0}"
+      >
+        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+          <Table
+            data-key="id"
+            :data="failed"
+            :columns="[{ title: 'Candidate (failed)' }]"
+            :page-size="50"
+            local-data
+          >
+            <template #row="{row}">
+              <TableCell>
+                {{ row.fullName }}
+              </TableCell>
+            </template>
+          </Table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,6 +96,7 @@
 import { beforeRouteEnter } from './helper';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import _has from 'lodash/has';
 export default {
   components: {
     Table,
@@ -63,6 +112,47 @@ export default {
   computed: {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    applicationOutcomes() {
+      // List of candidates with passed/failed
+      const result = {};
+      if (this.task && _has(this.task, 'applications')) {
+        const numApplications = this.task.applications.length;
+        const numFinalScores = this.task.finalScores.length;
+        if (numApplications === numFinalScores) {
+          // Use just one loop to build the data for performance reasons on large datasets
+          for (let i = 0; i < this.task.applications.length; i++) {
+            // Get data from application
+            const app = this.task.applications[i];
+            const appCandidateId = app.id;
+            const appFullname = app.fullName;
+            if (!result[appCandidateId]) {
+              result[appCandidateId] = {};
+            }
+            result[appCandidateId].fullName = appFullname;
+            result[appCandidateId].id = appCandidateId;
+            // Get data from finalScore
+            const finalScore = this.task.finalScores[i];
+            const scoreCandidateId = finalScore.id;
+            const scorePass = finalScore.pass;
+            if (!result[scoreCandidateId]) {
+              result[scoreCandidateId] = {};
+            }
+            result[scoreCandidateId].pass = scorePass;
+          }
+        }
+        else {
+          console.log('Application and final scores mismatch');
+        }
+      }
+      // Convert the object to an array
+      return Object.values(result);
+    },
+    passed() {
+      return this.applicationOutcomes.filter(o => o.pass);
+    },
+    failed() {
+      return this.applicationOutcomes.filter(o => !o.pass);
     },
   },
 };

@@ -16,6 +16,9 @@ import Exercises from '@/views/Exercises';
 import ExercisesExport from '@/views/ExercisesExport';
 import Exercise from '@/views/Exercise';
 
+// Exercise Dashboard
+import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard';
+
 // Exercise details
 import ExerciseDetails from '@/views/Exercise/Details';
 import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview';
@@ -72,12 +75,14 @@ import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTe
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
 
+// Merit list
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
+
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
@@ -98,6 +103,7 @@ import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/Quali
 import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
 import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 
+// Exercise task
 import ExerciseTask from '@/views/Exercise/Tasks/Task';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
@@ -114,16 +120,8 @@ import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
 import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
 import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
 import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
-
-// TODO remove these once we no longer need to support old code panels
-// import ExerciseTasksPanels from '@/views/Exercise/Tasks/xPanels';
-import ExerciseTasksPanelsList from '@/views/Exercise/Tasks/xPanels/List';
-// import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/xPanels/New';
-// import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/xPanels/View';
-// END ////////////
-
-import ExerciseTasksPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
-import ExerciseTasksPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
+import ExerciseTaskPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
+import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages';
@@ -239,12 +237,12 @@ const router = new Router({
           },
         },
         {
-          path: 'targeted-outreach-report',
+          path: 'reports/targeted-outreach-report',
           component: TargetedOutreachReport,
           name: 'targeted-outreach-report',
           meta: {
             requiresAuth: true,
-            title: 'Candidates | Targeted Oureach Report',
+            title: 'Candidates | Targeted Outreach Report',
           },
         },
       ],
@@ -287,6 +285,15 @@ const router = new Router({
       path: '/exercise/:id',
       component: Exercise,
       children: [
+        {
+          path: 'dashboard',
+          component: ExerciseDashboard,
+          name: 'exercise-dashboard',
+          meta: {
+            requiresAuth: true,
+            title: 'Dashboard | Exercise Details',
+          },
+        },
         {
           path: 'details',
           component: ExerciseDetails,
@@ -680,6 +687,15 @@ const router = new Router({
             //   redirect: 'independent-assessments',
             // },
             {
+              path: '',
+              redirect: 'qualifying-tests',
+              // component: ExerciseTasksIndex,
+              // meta: {
+              //   requiresAuth: true,
+              //   title: 'Exercise Tasks',
+              // },
+            },
+            {
               path: 'equal-merit-tie-breakers',
               component: QualifyingTestsCover,
               props: {
@@ -794,15 +810,6 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 title: 'Character Checks | Exercise Tasks',
-              },
-            },
-            {
-              path: 'character-checks/edit',
-              component: ExerciseTasksCharacterChecksEdit,
-              name: 'exercise-tasks-character-checks-edit',
-              meta: {
-                requiresAuth: true,
-                title: 'Edit Character Checks | Exercise Tasks',
               },
             },
             {
