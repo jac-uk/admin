@@ -345,9 +345,9 @@
         Start a new check
       </TitleBar>
       <Form
+        class="govuk-!-padding-4"
         @save="$refs['createCheck'].closeModal(); checkApplication(applications[0])"
         @cancel="$refs['createCheck'].closeModal()"
-        class="govuk-!-padding-4"
       >
         <RadioGroup
           id="check-type"
@@ -398,7 +398,10 @@
           >
             <template #row="{row}">
               <TableCell title="Check">
-                <span class="govuk-link" @click="checkApplication(applications[0])">{{ row.type }} check by {{ row.createdBy }}</span>
+                <span
+                  class="govuk-link"
+                  @click="checkApplication(applications[0])"
+                >{{ row.type }} check by {{ row.createdBy }}</span>
               </TableCell>
               <TableCell title="Status">
                 <StatusTag

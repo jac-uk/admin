@@ -75,9 +75,6 @@ import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTe
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
 
-// Merit list
-import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
-
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';

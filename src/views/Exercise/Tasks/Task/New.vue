@@ -63,7 +63,7 @@ export default {
         switch (this.type) {
         case TASK_TYPE.SHORTLISTING_OUTCOME:
         case TASK_TYPE.SELECTION_OUTCOME:
-        return 'stageOutcome';
+          return 'stageOutcome';
         case TASK_TYPE.QUALIFYING_TEST:
           return 'qualifyingTest';
         default:
