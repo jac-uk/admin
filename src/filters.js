@@ -139,6 +139,11 @@ const lookup = (value) => {
     approved: 'Approved',
     denied: 'Denied',
 
+    // reasonable adjustments reason
+    'qualifying-test': 'Qualifying Test',
+    'scenario-test': 'Scenario Test',
+    'selection-day': 'Selection Day',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
