@@ -80,12 +80,9 @@ import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
-import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
-// import ExerciseTasksSift from '@/views/Exercise/Tasks/Sift';
-// import ExerciseTasksSelectionDays from '@/views/Exercise/Tasks/SelectionDays';
-// import ExerciseTaskScenario from '@/views/Exercise/Tasks/Scenario';
+// import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
+// import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
+// import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -917,40 +914,40 @@ const router = new Router({
                 },
               ],
             },
-            {
-              path: 'panels/:type',
-              component: ExerciseTasksPanels,
-              props: true,
-              children: [
-                {
-                  path: '',
-                  component: ExerciseTasksPanelsList,
-                  name: 'exercise-tasks-panels',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Panels | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'new',
-                  component: ExerciseTasksPanelsNew,
-                  name: 'exercise-tasks-panels-new',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Create Panel | Exercise Tasks',
-                  },
-                },
-                {
-                  path: 'view/:panelId',
-                  component: ExerciseTasksPanelsView,
-                  name: 'exercise-tasks-panels-view',
-                  meta: {
-                    requiresAuth: true,
-                    title: 'Panel | Exercise Tasks',
-                  },
-                },
-              ],
-            },
+            // {
+            //   path: 'panels/:type',
+            //   component: ExerciseTasksPanels,
+            //   props: true,
+            //   children: [
+            //     {
+            //       path: '',
+            //       component: ExerciseTasksPanelsList,
+            //       name: 'exercise-tasks-panels',
+            //       meta: {
+            //         requiresAuth: true,
+            //         title: 'Panels | Exercise Tasks',
+            //       },
+            //     },
+            //     {
+            //       path: 'new',
+            //       component: ExerciseTasksPanelsNew,
+            //       name: 'exercise-tasks-panels-new',
+            //       meta: {
+            //         requiresAuth: true,
+            //         title: 'Create Panel | Exercise Tasks',
+            //       },
+            //     },
+            //     {
+            //       path: 'view/:panelId',
+            //       component: ExerciseTasksPanelsView,
+            //       name: 'exercise-tasks-panels-view',
+            //       meta: {
+            //         requiresAuth: true,
+            //         title: 'Panel | Exercise Tasks',
+            //       },
+            //     },
+            //   ],
+            // },
             {
               path: ':type',
               component: ExerciseTask,
@@ -1094,7 +1091,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/new',
-                  component: ExerciseTasksPanelNew,
+                  component: ExerciseTaskPanelNew,
                   name: 'exercise-task-panel-new',
                   meta: {
                     requiresAuth: true,
@@ -1103,7 +1100,7 @@ const router = new Router({
                 },
                 {
                   path: 'panel/:panelId',
-                  component: ExerciseTasksPanelView,
+                  component: ExerciseTaskPanelView,
                   name: 'exercise-task-panel',
                   meta: {
                     requiresAuth: true,
