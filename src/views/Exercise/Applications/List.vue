@@ -58,8 +58,8 @@
         handler: candidateSearch,
         field: 'userId',
       }"
-      :page-item-type="paginationType"
-      :page-size="pageSize"
+      page-item-type="uppercase-letter"
+      :page-size="50"
       :total="exercise._applications[status]"
       @change="getTableData"
     >
@@ -86,13 +86,6 @@
         </TableCell>
       </template>
     </Table>
-
-    <button
-      class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-top-2"
-      @click="togglePagination"
-    >
-      {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
-    </button>
 
     <Modal
       ref="applicationReminderModal"
@@ -146,12 +139,6 @@ export default {
       required: true,
     },
   },
-  data: function() {
-    return {
-      paginationType: '',
-      pageSize: 50,
-    };
-  },
   computed: {
     tableColumns() {
       const cols = [];
@@ -161,7 +148,7 @@ export default {
       return cols;
     },
     tableStatus() {
-      return this.status + this.paginationType;
+      return this.status;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -236,10 +223,6 @@ export default {
     },
     closeApplicationReminderModal() {
       this.$refs.applicationReminderModal.closeModal();
-    },
-    togglePagination() {
-      this.paginationType = this.paginationType === 'uppercase-letter' ? '' : 'uppercase-letter';
-      this.pageSize = this.paginationType === 'uppercase-letter' ? 0 : 50;
     },
   },
 };

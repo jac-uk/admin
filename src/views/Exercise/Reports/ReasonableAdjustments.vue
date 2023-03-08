@@ -150,13 +150,12 @@
 
       <div class="govuk-grid-column-full">
         <Table
-          :key="tableKey"
           ref="issuesTable"
           data-key="id"
           :data="applicationRecords"
           :columns="tableColumns"
-          :page-item-type="paginationType"
-          :page-size="pageSize"
+          page-item-type="uppercase-letter"
+          :page-size="50"
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
@@ -288,13 +287,6 @@
             </TableCell>
           </template>
         </Table>
-
-        <button
-          class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-top-2"
-          @click="togglePagination"
-        >
-          {{ paginationType === 'uppercase-letter' ? '1 2 3 4' : 'A B C D' }}
-        </button>
       </div>
     </div>
   </div>
@@ -330,8 +322,6 @@ export default {
       tableColumns: [
         { title: 'Candidate' },
       ],
-      paginationType: '',
-      pageSize: 50,
       unsubscribe: null,
       unsubscribeReport: null,
       open: {},
@@ -346,9 +336,6 @@ export default {
     },
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
-    },
-    tableKey() {
-      return `table-${this.paginationType}`;
     },
     hasReportData() {
       return this.report && this.report.headers;
@@ -468,10 +455,6 @@ export default {
     getOtherReasonableAdjustments(candidateId) {
       const record = this.otherApplicationRecords.find(item => item.candidateId === candidateId);
       return record ? record.otherRecords : [];
-    },
-    togglePagination() {
-      this.paginationType = this.paginationType === 'uppercase-letter' ? '' : 'uppercase-letter';
-      this.pageSize = this.paginationType === 'uppercase-letter' ? 0 : 50;
     },
     async refreshReport() {
       this.refreshingReport = true;
