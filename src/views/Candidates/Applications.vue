@@ -51,7 +51,7 @@ export default {
     return {
       tableColumns: [
         { title: 'Exercise', sort: 'exerciseRef', direction: 'desc', default: true },
-        { title: 'Outcome', sort: '_processing.stage', direction: 'desc' },
+        { title: 'Outcome', sort: 'status', direction: 'desc' },
         { title: 'Action' },
       ],
     };
@@ -68,6 +68,7 @@ export default {
       this.$store.dispatch('candidateApplications/bind', queryParams);
     },
     getStage(application) {
+      console.log(application._processing);
       return application._processing ? application._processing.stage : null;
     },
     getStatus(application) {
