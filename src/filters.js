@@ -144,6 +144,11 @@ const lookup = (value) => {
     percent: 'Percent',
     zScore: 'Z Score',
 
+    // reasonable adjustments reason
+    'qualifying-test': 'Qualifying Test',
+    'scenario-test': 'Scenario Test',
+    'selection-day': 'Selection Day',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
