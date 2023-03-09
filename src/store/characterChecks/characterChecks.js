@@ -15,8 +15,10 @@ export default {
         .where('exercise.id', '==', params.exerciseId)
         .where('active', '==', true);
 
-      if (params.where.length === 0) {
+      if (params.stage === 'all') {
         firestoreRef = firestoreRef.where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]);
+      } else {
+        firestoreRef = firestoreRef.where('stage', '==', params.stage);
       }
 
       if (params.requested === true) {
@@ -29,11 +31,11 @@ export default {
         firestoreRef = tableQuery(state.checksNotRequestedRecords, firestoreRef, params);
         return bindFirestoreRef('checksNotRequestedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
-        if (params.completed === true) {
-          firestoreRef = firestoreRef.where('characterChecks.status', '==', 'completed');
-          firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
-          return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
-        }
+      if (params.completed === true) {
+        firestoreRef = firestoreRef.where('characterChecks.status', '==', 'completed');
+        firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
+        return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('checksRequestedRecords');

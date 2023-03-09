@@ -58,6 +58,50 @@
         :active-tab.sync="activeTab"
       />
 
+      <div class="govuk-grid-column-two-thirds clearfix">
+        <div class="govuk-button-group">
+          <Select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-!-margin-right-2"
+          >
+            <option value="all">
+              All applications
+            </option>
+            <option
+              v-if="applicationRecordCounts.review"
+              value="review"
+            >
+              Review
+            </option>
+            <option
+              v-if="applicationRecordCounts.shortlisted"
+              value="shortlisted"
+            >
+              Shortlisted
+            </option>
+            <option
+              v-if="applicationRecordCounts.selected"
+              value="selected"
+            >
+              Selected
+            </option>
+            <option
+              v-if="applicationRecordCounts.recommended"
+              value="recommended"
+            >
+              Recommended
+            </option>
+            <option
+              v-if="applicationRecordCounts.handover"
+              value="handover"
+            >
+              Handover
+            </option>
+          </Select>
+        </div>
+      </div>
+
       <div
         v-if="activeTab == 'notrequested'"
         class="application-details"
@@ -88,56 +132,6 @@
         >
           Send requests
         </ActionButton>
-
-        <Table
-          key="notrequested"
-          data-key="id"
-          :data="applicationRecordsCharacterChecksNotRequested"
-          :columns="tableColumns"
-          :search="['candidate.fullName']"
-          multi-select
-          :selection.sync="selectedItems"
-          :page-size="50"
-          :filters="[
-            {
-              title: 'Stage',
-              field: 'stage',
-              type: 'checkbox',
-              options: exerciseStages,
-            },
-          ]"
-          @change="getApplicationRecordsCharacterChecksNotRequested"
-        >
-          <template #row="{row}">
-            <TableCell :title="tableColumns[0].title">
-              <RouterLink
-                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
-              >
-                {{ row.application.referenceNumber }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumns[1].title">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                target="_blank"
-              >
-                {{ row.candidate.fullName }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumns[2].title">
-              {{ row.stage }}
-            </TableCell>
-            <TableCell :title="tableColumns[3].title">
-              {{ row.characterChecks.status }}
-            </TableCell>
-          </template>
-        </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksNotRequested.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
       </div>
 
       <div
@@ -169,48 +163,49 @@
         >
           Send reminders
         </ActionButton>
-
-        <Table
-          key="requested"
-          data-key="id"
-          :data="applicationRecordsCharacterChecksRequested"
-          :columns="tableColumnsCharacterChecksRequested"
-          :search="['candidate.fullName']"
-          multi-select
-          :selection.sync="selectedItems"
-          :page-size="50"
-          :filters="[
-            {
-              title: 'Stage',
-              field: 'stage',
-              type: 'checkbox',
-              options: exerciseStages,
-            },
-          ]"
-          @change="getApplicationRecordsCharacterChecksRequested"
-        >
-          <template #row="{row}">
-            <TableCell :title="tableColumnsCharacterChecksRequested[0].title">
-              <RouterLink
-                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
-              >
-                {{ row.application.referenceNumber }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumnsCharacterChecksRequested[1].title">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                target="_blank"
-              >
-                {{ row.candidate.fullName }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumnsCharacterChecksRequested[2].title">
-              {{ row.stage }}
-            </TableCell>
-            <TableCell :title="tableColumnsCharacterChecksRequested[3].title">
-              {{ row.characterChecks.status }}
-            </TableCell>
+      </div>
+      <Table
+        :key="activeTab"
+        data-key="id"
+        :data="characterCheckData"
+        :columns="activeTab === 'notrequested' ? tableColumns : tableColumnsCharacterChecksRequested"
+        :search="['candidate.fullName']"
+        multi-select
+        :selection.sync="selectedItems"
+        :page-size="50"
+        :filters="[
+          {
+            title: 'Stage',
+            field: 'stage',
+            type: 'checkbox',
+            options: exerciseStages,
+          },
+        ]"
+        @change="getCharacterChecksData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            <RouterLink
+              :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
+            >
+              {{ row.application.referenceNumber }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            <RouterLink
+              :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
+              target="_blank"
+            >
+              {{ row.candidate.fullName }}
+            </RouterLink>
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.stage }}
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            {{ row.characterChecks.status }}
+          </TableCell>
+          <template v-if="activeTab !== 'notrequested'">
             <TableCell :title="tableColumnsCharacterChecksRequested[4].title">
               {{ row.characterChecks.requestedAt | formatDate }}
             </TableCell>
@@ -218,68 +213,8 @@
               {{ getDate(row.characterChecks.reminderSentAt) || 'n/a' }}
             </TableCell>
           </template>
-        </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksRequested.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
-      </div>
-
-      <div
-        v-if="activeTab == 'completed'"
-      >
-        <Table
-          key="completed"
-          data-key="id"
-          :data="applicationRecordsCharacterChecksCompleted"
-          :columns="tableColumns"
-          :search="['candidate.fullName']"
-          multi-select
-          :selection.sync="selectedItems"
-          :page-size="50"
-          :filters="[
-            {
-              title: 'Stage',
-              field: 'stage',
-              type: 'checkbox',
-              options: exerciseStages,
-            },
-          ]"
-          @change="getApplicationRecordsCharacterChecksCompleted"
-        >
-          <template #row="{row}">
-            <TableCell :title="tableColumns[0].title">
-              <RouterLink
-                :to="{ name: 'exercise-application', params: { applicationId: row.id } }"
-              >
-                {{ row.application.referenceNumber }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumns[1].title">
-              <RouterLink
-                :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-                target="_blank"
-              >
-                {{ row.candidate.fullName }}
-              </RouterLink>
-            </TableCell>
-            <TableCell :title="tableColumns[2].title">
-              {{ row.stage }}
-            </TableCell>
-            <TableCell :title="tableColumns[3].title">
-              {{ row.characterChecks.status }}
-            </TableCell>
-          </template>
-        </Table>
-        <p
-          v-if="!applicationRecordsCharacterChecksCompleted.length"
-          class="govuk-body govuk-!-margin-top-6"
-        >
-          No applications found.
-        </p>
-      </div>
+        </template>
+      </Table>
     </div>
   </div>
 </template>
@@ -290,11 +225,13 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
+import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'CharacterChecks',
@@ -303,6 +240,7 @@ export default {
     ActionButton,
     Table,
     TableCell,
+    Select,
     TabsList,
     Modal,
     CharacterChecksRequests,
@@ -327,6 +265,7 @@ export default {
       activeTab: 'notrequested',
       characterChecksStatus: null,
       characterChecksMessage: null,
+      exerciseStage: 'all',
       message: null,
       status: null,
       processing: false,
@@ -349,6 +288,19 @@ export default {
     };
   },
   computed: {
+    characterCheckData() {
+      let result;
+      if (this.activeTab === 'notrequested') {
+        result = this.applicationRecordsCharacterChecksNotRequested;
+      }
+      if (this.activeTab === 'requested') {
+        result = this.applicationRecordsCharacterChecksRequested;
+      }
+      if (this.activeTab === 'completed') {
+        result = this.applicationRecordsCharacterChecksCompleted;
+      }
+      return result;
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -374,6 +326,9 @@ export default {
     hmrcCheckRequired() {
       return this.exercise.characterChecks.HMRC;
     },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
+    },
     characterChecksEnabled() {
       return (this.exercise.characterChecksEnabled && this.exercise.characterChecksEnabled === true);
     },
@@ -385,11 +340,25 @@ export default {
     },
   },
   watch: {
+    exerciseStage: function () {
+      this.getCharacterChecksData();
+    },
     activeTab() {
       this.resetSelectedItems();
     },
   },
   methods: {
+    getCharacterChecksData() {
+      if (this.activeTab == 'notrequested') {
+        this.getApplicationRecordsCharacterChecksNotRequested();
+      }
+      if (this.activeTab == 'requested') {
+        this.getApplicationRecordsCharacterChecksRequested();
+      }
+      if (this.activeTab == 'completed') {
+        this.getApplicationRecordsCharacterChecksCompleted();
+      }
+    },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
@@ -420,6 +389,7 @@ export default {
         'characterChecks/bind',
         {
           exerciseId: this.exercise.id,
+          stage: this.exerciseStage,
           requested: false,
           ...params,
         }
@@ -430,6 +400,7 @@ export default {
         'characterChecks/bind',
         {
           exerciseId: this.exercise.id,
+          stage: this.exerciseStage,
           requested: true,
           ...params,
         }
@@ -440,6 +411,7 @@ export default {
         'characterChecks/bind',
         {
           exerciseId: this.exercise.id,
+          stage: this.exerciseStage,
           completed: true,
           ...params,
         }
