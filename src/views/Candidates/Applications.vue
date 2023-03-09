@@ -68,7 +68,6 @@ export default {
       this.$store.dispatch('candidateApplications/bind', queryParams);
     },
     getStage(application) {
-      console.log(application._processing);
       return application._processing ? application._processing.stage : null;
     },
     getStatus(application) {
