@@ -6,6 +6,12 @@ const lookup = (value) => {
   const lookup = {
     // application parts
     personalDetails: 'Personal details',
+    street: 'Street',
+    street2: 'Street 2',
+    town: 'Town or city',
+    county: 'County',
+    postcode: 'Postcode',
+    VATNumber: 'VAT number',
     characterInformation: 'Character information',
     equalityAndDiversitySurvey: 'Equality and diversity',
     partTimeWorkingPreferences: 'Set part-time working preferences',

@@ -159,6 +159,23 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
+            Other names
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.otherNames || ''"
+              field="otherNames"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
             Email address
           </dt>
           <dd class="govuk-summary-list__value">
@@ -211,6 +228,23 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
+            Place of birth
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :application-id="userId"
+              :data="personalDetails.placeOfBirth || ''"
+              field="placeOfBirth"
+              @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
             NI Number
           </dt>
           <dd class="govuk-summary-list__value">
@@ -219,6 +253,67 @@
               :data="(hasPersonalDetails ? personalDetails.nationalInsuranceNumber: '') | formatNIN "
               field="nationalInsuranceNumber"
               @changeField="changeUserDetails"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Current Address
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewSectionRenderer
+              :edit="editable"
+              :data-default="emptyAddressObject"
+              :data="currentAddress"
+              field="current"
+              :is-addable="false"
+              :is-removable="false"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Has lived at this address for more than 5 years
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :options="[true, false]"
+              type="selection"
+              :data="currentMoreThan5Years"
+              field="currentMoreThan5Years"
+              @changeField="changeInfo"
+            />
+          </dd>
+        </div>
+      </dl>
+
+      <dl
+        v-if="!currentMoreThan5Years"
+        class="govuk-summary-list govuk-!-margin-bottom-0"
+      >
+        <div class="govuk-summary-list__row">
+          <dt :class="requiredStyle">
+            Previous Addresses
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewSectionRenderer
+              :edit="editable"
+              :data-default="emptyAddressObject"
+              :data="previousAddress"
+              field="previous"
+              @changeField="changeInfo"
+              @removeField="removeInfo"
+              @addField="addInfo"
             />
           </dd>
         </div>
@@ -283,17 +378,58 @@
           </dd>
         </div>
       </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
+        <div class="govuk-summary-list__row ">
+          <dt :class="requiredStyle">
+            VAT registration number
+          </dt>
+
+          <dd class="govuk-summary-list__value">
+            <span v-if="!VATNumbers.length">No answer provided</span>
+            <div
+              v-for="(VATNumber, index) in VATNumbers"
+              :key="index"
+              class="govuk-!-margin-bottom-3"
+            >
+              <button
+                v-if="editable"
+                class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-3 float-right"
+                @click="removeVATNumber(index)"
+              >
+                Remove
+              </button>
+              <InformationReviewRenderer
+                :edit="editable"
+                :data="VATNumber"
+                field="VATNumber"
+                @changeField="(obj) => changeVATNumber(index, obj)"
+              />
+            </div>
+            <button
+              v-if="editable"
+              class="print-none govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-0 float-right"
+              @click="addVATNumber"
+            >
+              Add
+            </button>
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </template>
 
 <script>
+import { cloneDeep } from 'lodash';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
 
 export default {
   name: 'PersonalDetailsSummary',
   components: {
     InformationReviewRenderer,
+    InformationReviewSectionRenderer,
   },
   props: {
     userId: {
@@ -320,6 +456,16 @@ export default {
   data() {
     return {
       hasPersonalDetails: !!this.personalDetails,
+      emptyAddressObject: {
+        street: '',
+        street2: '',
+        town: '',
+        county: '',
+        postcode: '',
+      },
+      emptyVATNumberObject: {
+        VATNumber: '',
+      },
     };
   },
   computed: {
@@ -332,6 +478,30 @@ export default {
     isCandidateView() {
       return this.$route.name === 'candidates-view';
     },
+    hasCurrentAddress() {
+      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.current;
+    },
+    hasPreviousAddress() {
+      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous;
+    },
+    currentAddress() {
+      if (this.hasCurrentAddress) {
+        return [this.personalDetails.address.current];
+      }
+      return [this.emptyAddressObject];
+    },
+    currentMoreThan5Years() {
+      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.currentMoreThan5Years;
+    },
+    previousAddress() {
+      if (this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous) {
+        return this.personalDetails.address.previous;
+      }
+      return [];
+    },
+    VATNumbers() {
+      return this.personalDetails.VATNumbers ? this.personalDetails.VATNumbers.map(item => item.VATNumber) : [];
+    },
   },
   methods: {
     makeFullName(obj) {
@@ -342,6 +512,89 @@ export default {
         obj.fullName = `${this.personalDetails.firstName} ${obj.lastName}`;
       }
       return obj;
+    },
+    emptyObject(items){
+      const obj = {};
+      for (const key of items) {
+        obj[key] = '';
+      }
+      return obj;
+    },
+    addInfo(obj) {
+      if (obj.field == 'previous') {
+        let changeObj = [];
+        if (this.hasPreviousAddress) {
+          changeObj = [...this.previousAddress, this.emptyAddressObject];
+        } else {
+          changeObj = [this.emptyAddressObject];
+        }
+
+        this.changeUserDetails({
+          address: {
+            previous: changeObj,
+          },
+        });
+      }
+    },
+    removeInfo(obj) {
+      if (obj.field == 'previous') {
+        const changeObj = this.previousAddress.filter((_, index) => index !== obj.index);
+        this.changeUserDetails({
+          address: {
+            previous: changeObj,
+          },
+        });
+      }
+    },
+    changeInfo(obj) {
+      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) {
+        if (obj.field == 'current') {
+          const copy = cloneDeep(this.currentAddress);
+          copy[obj.index][obj.extension] = obj.change;
+          this.changeUserDetails({
+            address: {
+              current: copy[obj.index],
+            },
+          });
+        } else if (obj.field == 'previous') {
+          const copy = cloneDeep(this.previousAddress);
+          copy[obj.index][obj.extension] = obj.change;
+          this.changeUserDetails({
+            address: {
+              previous: copy,
+            },
+          });
+        } else if (obj.field == 'VATNumbers') {
+          const copy = cloneDeep(this.personalDetails.VATNumbers);
+          copy[obj.index][obj.extension] = obj.change;
+          this.changeUserDetails({
+            VATNumbers: copy,
+          });
+        }
+      } else if (obj.hasOwnProperty('currentMoreThan5Years')) {
+        this.changeUserDetails({
+          address: {
+            currentMoreThan5Years: obj['currentMoreThan5Years'],
+          },
+        });
+      }
+    },
+    addVATNumber() {
+      this.changeUserDetails({
+        VATNumbers: [...this.personalDetails.VATNumbers, this.emptyVATNumberObject],
+      });
+    },
+    changeVATNumber(index, value) {
+      this.changeUserDetails({
+        VATNumbers: this.personalDetails.VATNumbers.map((item, i) => {
+          return i === index ? value : item;
+        }),
+      });
+    },
+    removeVATNumber(index) {
+      this.changeUserDetails({
+        VATNumbers: this.personalDetails.VATNumbers.filter((_, i) => i !== index),
+      });
     },
     changeUserDetails(obj) {
       if (obj.firstName || obj.lastName) {
