@@ -139,6 +139,11 @@ const lookup = (value) => {
     approved: 'Approved',
     denied: 'Denied',
 
+    // Score Types
+    score: 'Score',
+    percent: 'Percent',
+    zScore: 'Z Score',
+
     // reasonable adjustments reason
     'qualifying-test': 'Qualifying Test',
     'scenario-test': 'Scenario Test',

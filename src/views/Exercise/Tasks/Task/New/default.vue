@@ -44,6 +44,23 @@
       </strong>
     </div>
 
+    <div
+      v-if="taskIsOverdue"
+      class="govuk-warning-text"
+    >
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        This task is overdue. Please change dates on the <RouterLink
+          :to="{ name: 'exercise-details-timeline' }"
+          class="govuk-link"
+        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
+      </strong>
+    </div>
+
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
