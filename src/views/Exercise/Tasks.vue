@@ -61,12 +61,6 @@ export default {
             }
           );
         });
-        sideNavigation.push(
-          {
-            title: lookup(TASK_TYPE.SHORTLISTING_OUTCOME),
-            path: `${path}/${TASK_TYPE.SHORTLISTING_OUTCOME}`,
-          }
-        );
         break;
       case 'selection':
         sideNavigation.push(

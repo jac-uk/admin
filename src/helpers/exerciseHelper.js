@@ -31,6 +31,9 @@ export {
   TASK_STATUS,
   TASK_TYPE,
   STAGE_TASKS,
+  getNextProcessingStage,
+  getProcessingEntryStage,
+  getProcessingExitStage,
   getTimelineTasks,
   getTaskTypes,
   taskEntryStatus,
@@ -130,23 +133,36 @@ const APPLICATION_PARTS = [
 const CAPABILITIES = ['L&J', 'PQ', 'L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
 
-const STAGE_TASKS = {
-  shortlisting: [
-    TASK_TYPE.CRITICAL_ANALYSIS,
-    TASK_TYPE.SITUATIONAL_JUDGEMENT,
-    TASK_TYPE.SCENARIO,
-    TASK_TYPE.TELEPHONE_ASSESSMENT,
-    TASK_TYPE.SIFT,
-    TASK_TYPE.ELIGIBILITY_SCC,
-    TASK_TYPE.SHORTLISTING_OUTCOME,
-  ],
-  selection: [
-    TASK_TYPE.SELECTION,
-    TASK_TYPE.STATUTORY_CONSULTATION,
-    TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
-    TASK_TYPE.SELECTION_OUTCOME,
-  ],
+const PROCESSING_STAGE = {  // could be exercise_stage and existing exercise_stage -> application_stage
+  SHORTLISTING: 'shortlisting',
+  SELECTION: 'selection',
+  RECOMMENDATION: 'recommendation',
+  HANDOVER: 'handover',
 };
+
+const PROCESSING_STAGES = [
+  PROCESSING_STAGE.SHORTLISTING,
+  PROCESSING_STAGE.SELECTION,
+  PROCESSING_STAGE.RECOMMENDATION,
+  PROCESSING_STAGE.HANDOVER,
+];
+
+const STAGE_TASKS = {};
+STAGE_TASKS[PROCESSING_STAGE.SHORTLISTING] = [
+  TASK_TYPE.CRITICAL_ANALYSIS,
+  TASK_TYPE.SITUATIONAL_JUDGEMENT,
+  TASK_TYPE.SCENARIO,
+  TASK_TYPE.TELEPHONE_ASSESSMENT,
+  TASK_TYPE.SIFT,
+  TASK_TYPE.ELIGIBILITY_SCC,
+  TASK_TYPE.SHORTLISTING_OUTCOME,
+];
+STAGE_TASKS[PROCESSING_STAGE.SELECTION] = [
+  TASK_TYPE.SELECTION,
+  TASK_TYPE.STATUTORY_CONSULTATION,
+  TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
+  TASK_TYPE.SELECTION_OUTCOME,
+];
 
 const TASK_STATUS = {
   DATA_INITIALISED: 'dataInitialised',
@@ -163,6 +179,41 @@ const TASK_STATUS = {
   COMPLETED: 'completed',
 };
 
+function getNextProcessingStage(processingStage) {
+  const currentIndex = PROCESSING_STAGES.indexOf(processingStage);
+  if (currentIndex === PROCESSING_STAGES.length) return '';
+  return PROCESSING_STAGES[currentIndex + 1];
+}
+
+function getProcessingEntryStage(exercise, processingStage) {
+  console.log('getEntryStage for exercise', exercise.referenceNumber);
+  switch (processingStage) {
+  case PROCESSING_STAGE.SHORTLISTING:
+    // TO DO check for staged applications as shortlisting may start with registration rather than applied
+    return EXERCISE_STAGE.REVIEW; // will be APPLIED
+  case PROCESSING_STAGE.SELECTION:
+    return EXERCISE_STAGE.SHORTLISTED;
+  case PROCESSING_STAGE.RECOMMENDATION:
+    return EXERCISE_STAGE.SELECTABLE;
+  case PROCESSING_STAGE.HANDOVER:
+    return EXERCISE_STAGE.RECOMMENDED;
+  }
+}
+
+function getProcessingExitStage(exercise, processingStage) {
+  console.log('getExitStage for exercise', exercise.referenceNumber);
+  switch (processingStage) {
+  case PROCESSING_STAGE.SHORTLISTING:
+    return EXERCISE_STAGE.SHORTLISTED;
+  case PROCESSING_STAGE.SELECTION:
+    return EXERCISE_STAGE.SELECTABLE;
+  case PROCESSING_STAGE.RECOMMENDATION:
+    return EXERCISE_STAGE.RECOMMENDED;
+  case PROCESSING_STAGE.HANDOVER:
+    return EXERCISE_STAGE.HANDOVER;
+  }
+}
+
 /**
  * get task types in sequence
  *  - look at exercise shortlisting and timeline
@@ -171,7 +222,6 @@ const TASK_STATUS = {
  * get next task
  * get outcome statuses
  */
-
 function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
   const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
@@ -668,7 +718,8 @@ function hasApplicationProcess(exercise) {
 function availableStages(exercise) {
   const stages = [];
   if (!exercise) return stages;
-  stages.push(EXERCISE_STAGE.APPLIED);
+  stages.push(EXERCISE_STAGE.REVIEW);
+  // stages.push(EXERCISE_STAGE.APPLIED);
   stages.push(EXERCISE_STAGE.SHORTLISTED);
   stages.push(EXERCISE_STAGE.SELECTABLE);
   stages.push(EXERCISE_STAGE.RECOMMENDED);

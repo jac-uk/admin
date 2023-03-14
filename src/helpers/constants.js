@@ -17,6 +17,7 @@ const ADVERT_TYPES = {
 };
 
 const EXERCISE_STAGE = {
+  REVIEW: 'review',
   APPLIED: 'applied',
   SHORTLISTED: 'shortlisted',
   SELECTABLE: 'selectable',

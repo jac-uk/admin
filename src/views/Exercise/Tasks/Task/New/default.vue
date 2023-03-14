@@ -16,7 +16,7 @@
       :key="`timelineTask-${index}`"
       v-model="formData.timelineTasks[index]"
     >
-      {{ timelineTask.entry }} will happen on {{ timelineTask.dateString }}
+      {{ timelineTask.entry }} will happen {{ timelineTask.dateString }}
     </Checkbox>
 
     <Checkbox

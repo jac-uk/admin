@@ -148,6 +148,7 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
 
+  lookup[EXERCISE_STAGE.REVIEW] = 'Review';
   lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
   lookup[EXERCISE_STAGE.SHORTLISTED] = 'Shortlisted';
   lookup[EXERCISE_STAGE.SELECTABLE] = 'Selectable';

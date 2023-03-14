@@ -101,6 +101,7 @@ import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import ExerciseTask from '@/views/Exercise/Tasks/Task';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
+import ExerciseTaskStageOutcome  from '@/views/Exercise/Tasks/Task/StageOutcome/Overview';
 import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised';
 import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated';
 import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised';
@@ -976,6 +977,15 @@ const router = new Router({
                   },
                 },
                 {
+                  path: 'outcome',
+                  component: ExerciseTaskStageOutcome,
+                  name: 'exercise-task-stageOutcome',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Stage Outcome | Exercise task',
+                  },
+                },
+                {
                   path: 'data-initialised',
                   component: ExerciseTaskDataInitialised,
                   name: 'exercise-task-dataInitialised',
@@ -1117,7 +1127,7 @@ const router = new Router({
           children: [
             {
               path: '',
-              redirect: 'applied',
+              redirect: 'review', // TODO change to applied
             },
             {
               path: ':stage',

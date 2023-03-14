@@ -116,7 +116,7 @@ export default {
     applicationOutcomes() {
       // List of candidates with passed/failed
       const result = {};
-      if (this.task && _has(this.task, 'applications')) {
+      if (this.task && _has(this.task, 'applications') && _has(this.task, 'finalScores')) {
         const numApplications = this.task.applications.length;
         const numFinalScores = this.task.finalScores.length;
         if (numApplications === numFinalScores) {
@@ -140,8 +140,7 @@ export default {
             }
             result[scoreCandidateId].pass = scorePass;
           }
-        }
-        else {
+        } else {
           console.log('Application and final scores mismatch');
         }
       }
