@@ -70,6 +70,7 @@ export default {
       default: '',
     },
   },
+  emits: ['close', 'confirmed', 'setmessage', 'reset'],
   data() {
     return {
       processing: false,

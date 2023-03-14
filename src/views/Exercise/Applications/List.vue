@@ -3,7 +3,7 @@
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h2 class="govuk-heading-l">
-          Applications - {{ status | lookup }}
+          Applications - {{ $filters.lookup(status) }}
         </h2>
       </div>
 
@@ -70,7 +70,7 @@
             :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: status }}"
             target="_blank"
           >
-            {{ row.referenceNumber | showAlternative(row.id) }}
+            {{ $filters.showAlternative(row.referenceNumber, row.id) }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
@@ -82,7 +82,7 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ row.status | lookup }}
+          {{ $filters.lookup(row.status) }}
         </TableCell>
       </template>
     </Table>
@@ -102,7 +102,7 @@
         @confirmed="sendApplicationReminders"
       />
     </Modal>
-    
+
     <Modal ref="lateApplicationRequestModal">
       <LateApplicationRequest
         @success="openConfirmationModal()"
@@ -113,7 +113,7 @@
       <LateApplicationConfirmation
         @close="closeConfirmationModal()"
       />
-    </Modal>    
+    </Modal>
   </div>
 </template>
 
@@ -127,6 +127,7 @@ import { isClosed } from '@/helpers/exerciseHelper';
 import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
 import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 
 export default {
   name: 'ApplicationsList',
@@ -134,6 +135,7 @@ export default {
     Table,
     TableCell,
     Modal,
+    ModalInner,
     LateApplicationRequest,
     LateApplicationConfirmation,
   },

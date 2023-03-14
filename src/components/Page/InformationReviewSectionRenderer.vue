@@ -35,7 +35,7 @@
               v-if="key != 'taskDetails' && key != 'details' && key != 'startDate' || (edit && key == 'startDate' && showDateRange)"
               class="govuk-summary-list__key"
             >
-              {{ key | lookup }}
+              {{ $filters.lookup(key) }}
             </dt>
             <dt
               v-else-if="key == 'details'"
@@ -64,7 +64,7 @@
                     type="text"
                     :data="data[index][key] ? data[index][key].location : ''"
                     :extension="'location'"
-                    @changeField="changeTaskDetail"
+                    @change-field="changeTaskDetail"
                   />
                 </div>
               </div>
@@ -84,7 +84,7 @@
                     :index="index"
                     :extension="'jurisdiction'"
                     type="text"
-                    @changeField="changeTaskDetail"
+                    @change-field="changeTaskDetail"
                   />
                 </div>
               </div>
@@ -105,7 +105,7 @@
                     :extension="'workingBasis'"
                     type="selection"
                     :options="['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
-                    @changeField="changeTaskDetail"
+                    @change-field="changeTaskDetail"
                   />
                 </div>
               </div>
@@ -125,7 +125,7 @@
                     :index="index"
                     :extension="'totalDaysInRole'"
                     type="text"
-                    @changeField="changeTaskDetail"
+                    @change-field="changeTaskDetail"
                   />
                 </div>
               </div>
@@ -144,7 +144,7 @@
                 type="multi-selection"
                 :options="taskOptions"
                 :extension="key"
-                @changeField="changeField"
+                @change-field="changeField"
               />
 
               <template v-if="data[index][key]">
@@ -159,7 +159,7 @@
                     :index="index"
                     type="text"
                     :extension="key"
-                    @changeField="changeField"
+                    @change-field="changeField"
                   />
                 </div>
               </template>
@@ -177,7 +177,7 @@
                 type="multi-selection"
                 :options="taskOptions"
                 :extension="key"
-                @changeField="changeField"
+                @change-field="changeField"
               />
               <template v-if="data[index][key]">
                 <div v-if="data[index][key].includes('other')">
@@ -191,7 +191,7 @@
                     :index="index"
                     type="text"
                     extension="otherTasks"
-                    @changeField="changeField"
+                    @change-field="changeField"
                   />
                 </div>
               </template>
@@ -209,7 +209,7 @@
                 :display-month-year-only="displayMonthYearOnly"
                 type="date"
                 :extension="key"
-                @changeField="changeField"
+                @change-field="changeField"
               />
             </dd>
 
@@ -231,7 +231,7 @@
                 :index="index"
                 type="textarea"
                 :extension="key"
-                @changeField="changeField"
+                @change-field="changeField"
               />
             </dd>
 
@@ -246,7 +246,7 @@
                 :index="index"
                 type="text"
                 :extension="key"
-                @changeField="changeField"
+                @change-field="changeField"
               />
             </dd>
           </div>
@@ -323,6 +323,7 @@ export default {
       default: () => false,
     },
   },
+  emits: ['changeField', 'changeTaskDetails', 'addField', 'removeField'],
   data() {
     return {
       currentIndex: null,

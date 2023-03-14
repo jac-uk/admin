@@ -53,6 +53,7 @@ export default {
     FileUpload,
     TextField,
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       fileName: this.$attrs.fileRef,

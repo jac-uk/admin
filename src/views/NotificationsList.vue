@@ -43,10 +43,9 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
-
     <Table
       v-show="activeTab == 'queue'"
       data-key="id"
@@ -57,7 +56,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.createdAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.createdAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.template.name }}
@@ -85,10 +84,10 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.createdAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.createdAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.sentAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.sentAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ row.template.name }}

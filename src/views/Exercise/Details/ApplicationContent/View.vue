@@ -22,7 +22,7 @@
         >
           <div v-if="state.parts.length">
             <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ state.ref | lookup }}
+              {{ $filters.lookup(state.ref) }}
             </h3>
             <p class="govuk-body">
               <span
@@ -30,7 +30,7 @@
                 :key="part"
                 class="display-block"
               >
-                {{ part | lookup }}
+                {{ $filters.lookup(part) }}
               </span>
             </p>
           </div>
@@ -50,7 +50,7 @@
               :key="part"
               class="display-block"
             >
-              {{ part | lookup }}
+              {{ $filters.lookup(part) }}
             </span>
           </p>
         </div>
@@ -76,7 +76,7 @@
           </div>
           <div v-if="exercise._applicationContent._currentStep">
             <div class="govuk-!-font-size-27">
-              {{ exercise._applicationContent._currentStep.step | lookup }}
+              {{ $filters.lookup(exercise._applicationContent._currentStep.step) }}
             </div>
             <div
               v-if="exercise._applicationContent._currentStep.start"
@@ -84,7 +84,7 @@
             >
               <span>Open for changes</span>
               <div class="govuk-!-font-size-27">
-                {{ exercise._applicationContent._currentStep.start | formatDate('long') }}
+                {{ $filters.formatDate(exercise._applicationContent._currentStep.start , 'long') }}
               </div>
             </div>
             <div
@@ -93,7 +93,7 @@
             >
               <span>Closed for changes</span>
               <div class="govuk-!-font-size-27">
-                {{ exercise._applicationContent._currentStep.end | formatDate('long') }}
+                {{ $filters.formatDate(exercise._applicationContent._currentStep.end, 'long') }}
               </div>
             </div>
           </div>

@@ -11,8 +11,8 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
 
     <Table
@@ -25,7 +25,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp , 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}
@@ -53,7 +53,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}
@@ -81,7 +81,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}

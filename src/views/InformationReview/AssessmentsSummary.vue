@@ -28,7 +28,7 @@
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
+              @change-field="changeAssessmentInfo"
             />
             <div
               v-if="hasAscAnswers(index)"
@@ -46,7 +46,7 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
-                @changeField="changeAssessmentInfo"
+                @change-field="changeAssessmentInfo"
               />
             </div>
           </dd>
@@ -259,6 +259,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       assessorDetails: {},

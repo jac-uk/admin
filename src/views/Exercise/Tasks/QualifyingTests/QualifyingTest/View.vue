@@ -6,11 +6,11 @@
         {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
       </h2>
       <h3 class="govuk-heading-l">
-        {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+        {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
         <span
           v-if="qualifyingTest.mode"
           class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-        >{{ qualifyingTest.mode | lookup }}</span>
+        >{{ $filters.lookup(qualifyingTest.mode) }}</span>
       </h3>
 
       <table class="govuk-table">
@@ -20,13 +20,13 @@
               Type
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.type | lookup }}
+              {{ $filters.lookup(qualifyingTest.type) }}
             </td>
             <th class="govuk-table__header">
               State
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.status | lookup }}
+              {{ $filters.lookup(qualifyingTest.status) }}
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -34,13 +34,13 @@
               Start Date
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.startDate | formatDate('longdatetime') }}
+              {{ $filters.formatDate(qualifyingTest.startDate, 'longdatetime') }}
             </td>
             <th class="govuk-table__header">
               End Date
             </th>
             <td class="govuk-table__cell">
-              {{ qualifyingTest.endDate | formatDate('longdatetime') }}
+              {{ $filters.formatDate(qualifyingTest.endDate, 'longdatetime') }}
             </td>
           </tr>
         </tbody>
@@ -72,7 +72,7 @@
           </RouterLink>
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.initialised | formatNumber }} / {{ qualifyingTest.counts.activated | formatNumber }}</span>
+          >{{ $filters.formatNumber(qualifyingTest.counts.initialised) }} / {{ $filters.formatNumber(qualifyingTest.counts.activated) }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -82,7 +82,7 @@
           </RouterLink> / Auto-submitted
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ qualifyingTest.counts.completed | formatNumber }} / {{ qualifyingTest.counts.outOfTime | formatNumber }}</span>
+          >{{ $filters.formatNumber(qualifyingTest.counts.completed) }} / {{ $filters.formatNumber(qualifyingTest.counts.outOfTime ) }}</span>
         </p>
       </div>
     </div>
@@ -103,7 +103,7 @@
           >
             Started
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.started | formatNumber }}</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(qualifyingTest.counts.started) }}</span>
         </p>
         <p class="govuk-body">
           <RouterLink
@@ -111,7 +111,7 @@
           >
             In Progress
           </RouterLink>
-          <span class="govuk-heading-l govuk-!-margin-top-1">{{ qualifyingTest.counts.inProgress | formatNumber }}</span>
+          <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(qualifyingTest.counts.inProgress) }}</span>
         </p>
       </div>
     </div>
@@ -187,19 +187,19 @@
                 v-if="applicationRecordCounts.review"
                 value="review"
               >
-                Review ({{ applicationRecordCounts.review | formatNumber }})
+                Review ({{ $filters.formatNumber(applicationRecordCounts.review) }})
               </option>
               <option
                 v-if="applicationRecordCounts.shortlisted"
                 value="shortlisted"
               >
-                Shortlisted ({{ applicationRecordCounts.shortlisted | formatNumber }})
+                Shortlisted ({{ $filters.formatNumber(applicationRecordCounts.shortlisted) }})
               </option>
               <option
                 v-if="applicationRecordCounts.selected"
                 value="selected"
               >
-                Selected ({{ applicationRecordCounts.selected | formatNumber }})
+                Selected ({{ $filters.formatNumber(applicationRecordCounts.selected) }})
               </option>
             </Select>
             <Select
@@ -214,19 +214,19 @@
                 v-if="applicationRecordCounts.reviewEMP"
                 value="review"
               >
-                Review ({{ applicationRecordCounts.reviewEMP | formatNumber }})
+                Review ({{ $filters.formatNumber(applicationRecordCounts.reviewEMP) }})
               </option>
               <option
                 v-if="applicationRecordCounts.shortlistedEMP"
                 value="shortlisted"
               >
-                Shortlisted ({{ applicationRecordCounts.shortlistedEMP | formatNumber }})
+                Shortlisted ({{ $filters.formatNumber(applicationRecordCounts.shortlistedEMP) }})
               </option>
               <option
                 v-if="applicationRecordCounts.selectedEMP"
                 value="selected"
               >
-                Selected ({{ applicationRecordCounts.selectedEMP | formatNumber }})
+                Selected ({{ $filters.formatNumber(applicationRecordCounts.selectedEMP) }})
               </option>
             </Select>
           </div>
@@ -252,7 +252,7 @@
               :key="item"
               :value="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </option>
           </Select>
           <ActionButton

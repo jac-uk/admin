@@ -8,7 +8,7 @@
   >
     <template #row="{row}">
       <TableCell :title="tableColumns[0].title">
-        {{ new Date(row.created) | formatDate('long') }}
+        {{ $filters.formatDate(new Date(row.created), 'long') }}
       </TableCell>
       <TableCell :title="tableColumns[1].title">
         <div class="notes__editable">
@@ -57,6 +57,7 @@ export default {
       default: null,
     },
   },
+  emits: ['editNote', 'deleteNote'],
   data(){
     return {
       tableColumns: [

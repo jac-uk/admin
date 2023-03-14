@@ -50,6 +50,7 @@ export default {
     TextField,
     DateInput,
   },
+  emits: ['close', 'confirmed', 'saved'],
   data() {
     return {
       dateExtension: null,

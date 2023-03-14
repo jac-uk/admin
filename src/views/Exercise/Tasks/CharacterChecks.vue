@@ -12,7 +12,7 @@
           <template
             v-if="exercise.characterChecks"
           >
-            {{ exercise.characterChecksDate | formatDate('long') }}
+            {{ $filters.formatDate(exercise.characterChecksDate, 'long') }}
           </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
@@ -25,7 +25,7 @@
           <template
             v-if="exercise.characterChecks"
           >
-            {{ exercise.characterChecksReturnDate | formatDate('long') }}
+            {{ $filters.formatDate(exercise.characterChecksReturnDate, 'long') }}
           </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
@@ -38,7 +38,7 @@
           <span
             v-if="exercise.characterChecks"
           >
-            {{ hmrcCheckRequired | toYesNo }}
+            {{ $filters.toYesNo(hmrcCheckRequired) }}
           </span>
         </dd>
         <dd
@@ -77,11 +77,10 @@
     <div v-if="characterChecksEnabled">
       <TabsList
         ref="tabs"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
-
       <div
         v-if="activeTab == 'notrequested'"
         class="application-details"
@@ -115,12 +114,12 @@
 
         <Table
           key="notrequested"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {
@@ -196,12 +195,12 @@
 
         <Table
           key="requested"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksRequested"
           :columns="tableColumnsCharacterChecksRequested"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {
@@ -236,7 +235,7 @@
               {{ row.characterChecks.status }}
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[4].title">
-              {{ row.characterChecks.requestedAt | formatDate }}
+              {{ $filters.formatDate(row.characterChecks.requestedAt) }}
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
               {{ getDate(row.characterChecks.reminderSentAt) || 'n/a' }}
@@ -256,12 +255,12 @@
       >
         <Table
           key="completed"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksCompleted"
           :columns="tableColumns"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {

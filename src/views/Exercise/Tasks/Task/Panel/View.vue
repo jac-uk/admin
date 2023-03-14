@@ -42,12 +42,12 @@
 
         <div class="govuk-grid-column-one-third">
           <div class="panel govuk-!-margin-bottom-9 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">{{ type | lookup }} Dates</span>
+            <span class="govuk-caption-m">{{ $filters.lookup(type) }} Dates</span>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              {{ panel.dateFrom | formatDate | showAlternative("Unknown") }} -
-              {{ panel.dateTo | formatDate | showAlternative("Unknown") }}
+              {{ $filters.showAlternative($filters.formatDate(panel.dateFrom), "Unknown") }} -
+              {{ $filters.showAlternative($filters.formatDate(panel.dateTo), "Unknown") }}
             </h2>
           </div>
         </div>
@@ -66,8 +66,8 @@
         </div>
       </div>
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       />
     </div>
 
@@ -97,7 +97,7 @@
               :colspan="capabilities.length"
               class="govuk-table__header text-center"
             >
-              {{ category | lookup }}
+              {{ $filters.lookup(category) }}
             </th>
           </tr>
         </template>
@@ -143,11 +143,11 @@
         Remove from panel
       </button>
       <Table
+        v-model:selection="selectedItems"
         data-key="id"
         :data="applications"
         :columns="tableColumnsApplications"
         multi-select
-        :selection.sync="selectedItems"
         :page-size="500"
         @change="getTableDataApplications"
       >
@@ -407,7 +407,7 @@ export default {
       this.activeTab = 'scoreSheet';
     }
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('panel/unbind');
     this.$store.dispatch('panel/unbindApplications');
     this.$store.dispatch('panel/unbindPanellists');

@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-quarter text-right">
@@ -21,7 +21,7 @@
       v-else
       class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      {{ type | lookup }} can now be completed. {{ totalApplications }} applications will be updated.
+      {{ $filters.lookup(type) }} can now be completed. {{ totalApplications }} applications will be updated.
     </p>
 
     <div class="govuk-grid-row">
@@ -70,11 +70,11 @@
     </div>
 
     <Table
+      v-model:selection="selectedItems"
       data-key="id"
       :data="filteredApplications"
       :columns="tableColumns"
       multi-select
-      :selection.sync="selectedItems"
       :custom-search="{
         placeholder: 'Search candidate name or reference number',
         handler: searchHandler,

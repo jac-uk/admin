@@ -1,8 +1,8 @@
 <template>
   <div>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
@@ -39,11 +39,11 @@
     <!-- CANDIDATES -->
     <div v-show="activeTab == 'candidates'">
       <Table
+        v-model:selection="selectedItems"
         data-key="id"
         :data="candidatesList"
         :columns="tableColumnsCandidates"
         multi-select
-        :selection.sync="selectedItems"
         :page-size="50"
         :custom-search="{
           placeholder: 'Search candidate names',

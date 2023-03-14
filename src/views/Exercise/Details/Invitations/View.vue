@@ -44,7 +44,7 @@
               scope="col"
               class="govuk-table__header govuk-table__header--numeric"
             >
-              {{ invite.statusLog[invite.status] | formatDate }}
+              {{ $filters.formatDate(invite.statusLog[invite.status]) }}
             </td>
           </div>
         </tr>

@@ -76,6 +76,7 @@ export default {
       required: true,
     },
   },
+  emits: ['close', 'confirmed', 'saved'],
   data() {
     return {
       email: null,

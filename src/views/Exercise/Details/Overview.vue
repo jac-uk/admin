@@ -14,7 +14,7 @@
           Immediate start (S87)
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ exercise.immediateStart | formatNumber }}</span>
+          >{{ $filters.formatNumber(exercise.immediateStart) }}</span>
         </p>
       </div>
 
@@ -32,13 +32,13 @@
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Draft
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ draftApplications | formatNumber }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(draftApplications) }}</span>
             </p>
           </div>
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Applied
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ appliedApplications | formatNumber }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(appliedApplications) }}</span>
             </p>
           </div>
         </div>
@@ -66,7 +66,6 @@
           v-if="exercise.state"
           class="display-block govuk-!-font-size-27"
         >
-          <!-- {{ exercise.state | lookup }} -->
           {{ exercise.state }}
         </span>
         <span

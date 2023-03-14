@@ -11,7 +11,7 @@
             v-if="diversity"
             class="govuk-body govuk-!-font-size-14"
           >
-            {{ diversity.createdAt | formatDate('longdatetime') }}
+            {{ $filters.formatDate(diversity.createdAt, 'longdatetime') }}
           </span>
         </div>
         <div
@@ -65,7 +65,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ diversity.totalApplications | formatNumber }}
+              {{ $filters.formatNumber(diversity.totalApplications) }}
             </h2>
           </div>
         </div>
@@ -73,7 +73,7 @@
           <div class="panel govuk-!-margin-bottom-9">
             <span class="govuk-caption-m">Type of exercise</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ exercise.typeOfExercise | lookup }}
+              {{ $filters.lookup(exercise.typeOfExercise) }}
             </h2>
           </div>
         </div>
@@ -87,9 +87,9 @@
     >
       <TabsList
         v-if="showTabs"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
 
       <h3 class="govuk-heading-m">
@@ -557,7 +557,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

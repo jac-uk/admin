@@ -2,13 +2,13 @@
   <div class="govuk-!-margin-bottom-4">
     <div class="govuk-!-margin-bottom-4">
       <h2 class="govuk-heading-l govuk-!-padding-top-6">
-        Personal details 
+        Personal details
         <span
           v-if="!isCandidateView"
           class="govuk-hint print-none"
         >
           <!-- vv this isnt true at the moment vv -->
-          <!-- Any changes made here will also update the candidate information.  --> 
+          <!-- Any changes made here will also update the candidate information.  -->
           <!-- ^^ this isnt true at the moment ^^ have updated the line below describe fucntionaility -->
           Any changes made here will only update the application information.
         </span>
@@ -32,12 +32,12 @@
               :edit="editable"
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -50,7 +50,7 @@
               :data="personalDetails.firstName || ''"
               type="route"
               field="firstName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -67,7 +67,7 @@
               :application-id="userId"
               :data="personalDetails.middleNames || ''"
               field="middleNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -85,7 +85,7 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -102,7 +102,7 @@
               :application-id="userId"
               :data="personalDetails.suffix || ''"
               field="suffix"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -119,7 +119,7 @@
               :application-id="userId"
               :data="personalDetails.previousNames || ''"
               field="previousNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -128,7 +128,7 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
-            Professional name 
+            Professional name
           </dt>
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
@@ -136,7 +136,7 @@
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
               field="professionalName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -168,12 +168,12 @@
               :data="hasPersonalDetails ? personalDetails.email : ''"
               type="email"
               field="email"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -184,12 +184,12 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               field="phone"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
       </dl>
-    
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
@@ -201,7 +201,7 @@
               :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
               type="date"
               field="dateOfBirth"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -215,9 +215,9 @@
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :edit="editable"
-              :data="(hasPersonalDetails ? personalDetails.nationalInsuranceNumber: '') | formatNIN "
+              :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -235,7 +235,7 @@
               :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
               type="selection"
               field="citizenship"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -254,17 +254,17 @@
               :options="[true, false]"
               type="selection"
               field="reasonableAdjustments"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
       </dl>
-  
-      <dl 
+
+      <dl
         v-if="personalDetails && personalDetails.reasonableAdjustments === true"
         class="govuk-summary-list govuk-!-margin-bottom-0"
       >
-        <div 
+        <div
           class="govuk-summary-list__row "
         >
           <dt :class="requiredStyle">
@@ -277,13 +277,13 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
               field="reasonableAdjustmentsDetails"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
-          </dd> 
+          </dd>
         </div>
       </dl>
-    </div> 
-  </div> 
+    </div>
+  </div>
 </template>
 
 <script>
@@ -316,6 +316,7 @@ export default {
       default: false,
     },
   },
+  emits: ['update'],
   data() {
     return {
       hasPersonalDetails: !!this.personalDetails,

@@ -54,7 +54,7 @@
             Approved for immediate appointment
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ totalApplicationRecords | formatNumber }}
+            {{ $filters.formatNumber(totalApplicationRecords) }}
           </h2>
         </div>
       </div>
@@ -62,7 +62,7 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Type of exercise</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ exerciseType | lookup }}
+            {{ $filters.lookup(exerciseType) }}
           </h2>
         </div>
       </div>
@@ -151,7 +151,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

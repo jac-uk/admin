@@ -37,6 +37,7 @@ export default {
   components: {
     FileUpload,
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       fileName: this.$attrs.fileRef,

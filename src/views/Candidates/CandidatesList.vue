@@ -41,15 +41,15 @@
           <RouterLink
             :to="{ name: 'candidates-view', params: { id: row.id } }"
           >
-            {{ row.fullName | showAlternative(row.id) }}
+            {{ $filters.showAlternative(row.fullName, row.id) }}
             <span v-if="row.isFlaggedCandidate">*</span>
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ new Date(row.created) | formatDate('long') }}
+          {{ $filters.formatDate(new Date(row.created), 'long') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ countApplications(row) | formatNumber }}
+          {{ $filters.formatNumber(countApplications(row)) }}
         </TableCell>
       </template>
     </Table>
@@ -59,9 +59,8 @@
 <script>
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-
 export default {
-  name: 'CandidatesView',
+  name: 'CandidatesList',
   components: {
     Table,
     TableCell,

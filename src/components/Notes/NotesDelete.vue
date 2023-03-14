@@ -13,7 +13,7 @@
         </h2>
       </legend>
       <div class="govuk-inset-text">
-        <span class="notes__delete__date">{{ Date(note.created) | formatDate('long') }}</span>
+        <span class="notes__delete__date">{{ $filters.formatDate(Date(note.created), 'long') }}</span>
         <span class="notes__delete__body">{{ note.body }}</span>
       </div>
       <ErrorSummary :errors="errors" />
@@ -58,6 +58,7 @@ export default {
       default: null,
     },
   },
+  emits: ['changeAction'],
   data() {
     return {
       deleted: [

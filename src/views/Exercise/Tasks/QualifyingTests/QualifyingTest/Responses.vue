@@ -1,17 +1,17 @@
 <template>
   <div class="govuk-grid-column-full govuk-!-margin-bottom-1">
     <h2 class="govuk-heading-m">
-      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ searchStatus | lookup }}
+      {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} responses / {{ $filters.lookup(searchStatus) }}
     </h2>
     <h3
       class="govuk-heading-l"
       @click="goToQualifyingTest"
     >
-      {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
       <span
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-      >{{ qualifyingTest.mode | lookup }}</span>
+      >{{ $filters.lookup(qualifyingTest.mode) }}</span>
     </h3>
     <button
       v-if="hasPermissions([
@@ -37,10 +37,10 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.candidate.fullName | showAlternative(row.candidate.email) | showAlternative(row.candidate.id) }}
+          {{ $filters.showAlternative($filters.showAlternative(row.candidate.fullName, row.candidate.email), row.candidate.id) }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.status | lookup }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
+          {{ $filters.lookup(row.status) }} {{ row.isOutOfTime ? '(auto-submitted)' : '' }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ formatTimeLimit(row.duration.testDurationAdjusted) }}

@@ -25,7 +25,7 @@
                 :key="step"
                 :value="step"
               >
-                {{ step | lookup }}
+                {{ $filters.lookup(step) }}
               </option>
             </Select>
             <DateInput
@@ -80,6 +80,7 @@ export default {
       required: true,
     },
   },
+  emits: ['close'],
   data() {
     return {
       formData: {

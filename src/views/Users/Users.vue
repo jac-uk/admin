@@ -9,8 +9,8 @@
       <div class="print-none">
         <h1>User Management</h1>
         <TabsList
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
         />
       </div>
       <div
@@ -25,7 +25,7 @@
           Create
         </button>
         <h2>List of admin users</h2>
-        <Table class="govuk-table">
+        <table class="govuk-table">
           <tr class="govuk-table__row">
             <th
               scope="row"
@@ -104,7 +104,7 @@
               </button>
             </td>
           </tr>
-        </Table>
+        </table>
       </div>
 
       <div
@@ -288,6 +288,7 @@
             label="Email"
             hint="The email must be a JAC email address."
             type="email"
+            autocomplete="off"
             required
           />
           <p
@@ -309,6 +310,7 @@
             label="Password"
             hint="The password must be a string with at least 6 characters."
             type="password"
+            autocomplete="off"
             required
           />
 
@@ -330,7 +332,7 @@
             </select>
           </div>
         </div>
-        
+
         <button
           class="govuk-button govuk-!-margin-right-3"
           :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "

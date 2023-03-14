@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
     <p
       v-if="hasApplicationsWithoutPanels"
@@ -19,7 +19,7 @@
       v-else
       class="govuk-body-l"
     >
-      You may now activate this {{ type | lookup }}.
+      You may now activate this {{ $filters.lookup(type) }}.
     </p>
 
     <!-- STATS -->
@@ -95,8 +95,8 @@
     <!-- END STATS -->
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
 
     <!-- PANELS -->
@@ -136,11 +136,11 @@
     <!-- APPLICATIONS -->
     <div v-show="activeTab == 'applications'">
       <Table
+        v-model:selection="selectedItems"
         data-key="id"
         :data="applicationsWithoutPanels"
         :columns="tableColumnsApplications"
         multi-select
-        :selection.sync="selectedItems"
         :page-size="50"
         :search="['candidate.fullName']"
         @change="getTableDataApplications"

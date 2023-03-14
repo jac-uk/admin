@@ -36,6 +36,7 @@
 <script>
 export default {
   name: 'ExercisePreApprovalTaskList',
+  emits: ['close', 'confirmed'],
   methods: {
     closeModal() {
       this.$emit('close');

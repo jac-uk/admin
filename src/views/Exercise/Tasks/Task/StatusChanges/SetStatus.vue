@@ -15,7 +15,7 @@
         v-for="status in statuses"
         :key="status"
         :value="status"
-        :label="status | lookup"
+        :label="$filters.lookup(status)"
       />
     </RadioGroup>
   </Form>

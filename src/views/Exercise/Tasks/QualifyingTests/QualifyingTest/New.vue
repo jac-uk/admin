@@ -21,7 +21,7 @@
           v-for="item in testTypes"
           :key="item"
           :value="item"
-          :label="item | lookup"
+          :label="$filters.lookup(item)"
         />
       </RadioGroup>
 

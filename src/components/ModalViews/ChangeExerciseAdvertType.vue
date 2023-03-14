@@ -24,7 +24,7 @@
                 :key="exerciseAdvertType"
                 :value="exerciseAdvertType"
               >
-                {{ exerciseAdvertType | lookup }}
+                {{ $filters.lookup(exerciseAdvertType) }}
               </option>
             </Select>
           </fieldset>
@@ -67,6 +67,7 @@ export default {
       default: ADVERT_TYPES.FULL,
     },
   },
+  emits: ['close', 'confirmed'],
   data() {
     const exercise = this.$store.state.exerciseDocument.record;
     return {

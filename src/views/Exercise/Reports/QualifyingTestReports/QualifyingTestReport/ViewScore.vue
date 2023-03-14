@@ -13,7 +13,7 @@
       <span
         class="govuk-body govuk-!-font-size-14"
       >
-        {{ qualifyingTestReport.lastUpdated | formatDate('longdatetime') }}
+        {{ $filters.formatDate(qualifyingTestReport.lastUpdated, 'longdatetime') }}
       </span>
 
       <div
@@ -49,15 +49,15 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Female<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.female / scoreReport.count | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.female / scoreReport.count, 2) }}%</span>
                 <span class="govuk-caption-m">Ethnic minorities<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.bame / scoreReport.count | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.bame / scoreReport.count, 2) }}%</span>
               </div>
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Solicitor<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.solicitor / scoreReport.count | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.solicitor / scoreReport.count, 2) }}%</span>
                 <span class="govuk-caption-m">Disability<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.disability / scoreReport.count | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.disability / scoreReport.count, 2) }}%</span>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@
                 <RouterLink
                   :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: score-1 } }"
                   class="moj-pagination__link govuk-link"
-                  @click.native="clearSelectedItems"
+                  @click="clearSelectedItems"
                 >
                   Lower score
                 </RouterLink>
@@ -82,7 +82,7 @@
                 <RouterLink
                   :to="{ name: `${routeNamePrefix}-report-view-score`, params: { qualifyingTestReportId: qualifyingTestReportId, score: score+1 } }"
                   class="moj-pagination__link govuk-link"
-                  @click.native="clearSelectedItems"
+                  @click="clearSelectedItems"
                 >
                   Higher score
                 </RouterLink>
@@ -116,15 +116,15 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Female<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * aboveScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1), 2) }}%</span>
                 <span class="govuk-caption-m">Ethnic minorities<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * aboveScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1), 2) }}%</span>
               </div>
               <div class="govuk-grid-column-one-half">
                 <span class="govuk-caption-m">Solicitor<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.solicitor / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * aboveScoreReport.cumulativeDiversity.solicitor / (scoreReport.rank - 1), 2) }}%</span>
                 <span class="govuk-caption-m">Disability<br></span>
-                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * aboveScoreReport.cumulativeDiversity.disability / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+                <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * aboveScoreReport.cumulativeDiversity.disability / (scoreReport.rank - 1), 2) }}%</span>
               </div>
             </div>
           </div>
@@ -146,14 +146,13 @@
           </div>
         </div>
       </div>
-
       <Table
         v-if="scoreData"
+        v-model:selection="selectedItems"
         data-key="id"
         :data="scoreData"
         :columns="columns"
         multi-select
-        :selection.sync="selectedItems"
       >
         <template #row="{row}">
           <TableCell :title="columns[0].title">
@@ -167,16 +166,16 @@
             {{ row.qualifyingTests[test.id].score }}
           </TableCell>
           <TableCell :title="columns[2].title">
-            {{ row.diversity.female | toYesNo }}
+            {{ $filters.toYesNo(row.diversity.female) }}
           </TableCell>
           <TableCell :title="columns[3].title">
-            {{ row.diversity.bame | toYesNo }}
+            {{ $filters.toYesNo(row.diversity.bame) }}
           </TableCell>
           <TableCell :title="columns[4].title">
-            {{ row.diversity.solicitor | toYesNo }}
+            {{ $filters.toYesNo(row.diversity.solicitor) }}
           </TableCell>
           <TableCell :title="columns[5].title">
-            {{ row.diversity.disability | toYesNo }}
+            {{ $filters.toYesNo(row.diversity.disability) }}
           </TableCell>
         </template>
       </Table>

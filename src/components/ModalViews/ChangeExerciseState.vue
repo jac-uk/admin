@@ -24,7 +24,7 @@
                 :key="exerciseState"
                 :value="exerciseState"
               >
-                {{ exerciseState | lookup }}
+                {{ $filters.lookup(exerciseState) }}
               </option>
             </Select>
           </fieldset>
@@ -65,6 +65,7 @@ export default {
       required: true,
     },
   },
+  emits: ['close', 'confirmed'],
   data() {
     const exercise = this.$store.state.exerciseDocument.record;
     return {

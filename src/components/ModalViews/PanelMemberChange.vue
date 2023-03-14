@@ -75,6 +75,7 @@ export default {
   components: {
     TextField,
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       email: null,

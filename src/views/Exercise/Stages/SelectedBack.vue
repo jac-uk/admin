@@ -14,7 +14,7 @@
         v-for="item in availableStatuses"
         :key="item"
         :value="item"
-        :label="item | lookup"
+        :label="$filters.lookup(item)"
       />
     </RadioGroup>
     <button class="govuk-button">

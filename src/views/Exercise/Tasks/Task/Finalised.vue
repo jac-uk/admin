@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-half text-right">
@@ -13,7 +13,7 @@
           type="button"
           @click="$refs['setPassMarkModal'].openModal()"
         >
-          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark | formatNumber(2) }}</span>
+          <span v-if="task.passMark >= 0">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
           <span v-else>Set pass mark</span>
         </button>
         <ActionButton
@@ -38,7 +38,7 @@
       v-else
       class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      {{ type | lookup }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
+      {{ $filters.lookup(type) }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
 
     <RouterView

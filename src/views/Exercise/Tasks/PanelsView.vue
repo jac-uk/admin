@@ -49,8 +49,8 @@
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              {{ panel.dateFrom | formatDate | showAlternative("Unknown") }} -
-              {{ panel.dateTo | formatDate | showAlternative("Unknown") }}
+              {{ $filters.showAlternative($filters.formatDate(panel.dateFrom), 'Unknown') }} -
+              {{ $filters.showAlternative($filters.formatDate(panel.dateTo), 'Unknown') }}
             </h2>
           </div>
         </div>
@@ -69,8 +69,8 @@
         </div>
       </div>
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       />
     </div>
     <!-- CANDIDATE LIST -->
@@ -84,11 +84,11 @@
         Remove from panel
       </button>
       <Table
+        v-model:selection="selectedItems"
         data-key="id"
         :data="candidatesList"
         :columns="tableColumnsCandidates"
         multi-select
-        :selection.sync="selectedItems"
         :page-size="500"
         @change="getTableDataCandidates"
       >

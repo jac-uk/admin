@@ -45,8 +45,8 @@
       </div>
 
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       >
         <div
           class="govuk-grid-column-full"
@@ -107,13 +107,13 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.dateOfBirth | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.dateOfBirth, 'long') }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.placeOfBirth }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.nationalInsuranceNumber | formatNIN }}
+                    {{ $filters.formatNIN(candidate.nationalInsuranceNumber) }}
                   </td>
                 </tr>
               </tbody>
@@ -166,7 +166,7 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.sraDate | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.sraDate, 'long') }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.sraNumber }}
@@ -222,7 +222,7 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.bsbDate | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.bsbDate, 'long') }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.bsbNumber }}
@@ -549,7 +549,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

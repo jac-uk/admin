@@ -116,7 +116,7 @@
                 Created on
               </span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.createdAt), 'Unknown') }}
               </h2>
             </div>
           </div>
@@ -130,7 +130,7 @@
               <h2
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.appliedAt), 'Unknown') }}
               </h2>
             </div>
             <div
@@ -161,7 +161,7 @@
                 v-if="application.dateExtension"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.dateExtension), 'Unknown') }}
               </h2>
               <button
                 v-else-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value, PERMISSIONS.notes.permissions.canCreateNotes.value])"
@@ -185,11 +185,10 @@
         </Modal>
 
         <TabsList
-          class="print-none"
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
+          class="print-none"
         />
-
         <div
           v-if="activeTab == 'full' || activeTab == 'panel'"
           class="application-details"
@@ -205,33 +204,33 @@
               :editable="editable"
               :character-information="correctCharacterInformation"
               :version="applicationVersion"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <EqualityAndDiversityInformationSummary
               :application="application"
               :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
               :editable="editable"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <ExperienceSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <AssessorsSummary
               :application="application"
@@ -246,7 +245,7 @@
               :editable="editable"
               :authorised-to-perform-action="editable"
               :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
           </div>
         </div>
@@ -478,16 +477,15 @@ export default {
   },
   created() {
     this.pageLoad();
-    this.$root.$on('changeUserDetails', (obj) => this.changeUserDetails(obj));
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('application/unbind');
     this.$store.dispatch('candidates/unbindDoc');
   },
   methods: {
     async pageLoad() {
-      if (this.$route.params.tab) {
-        this.activeTab = this.$route.params.tab;
+      if (this.$route.query.tab) {
+        this.activeTab = this.$route.query.tab;
       }
       if (this.$route.hash) {  // @TODO move this to within TabsList component
         this.activeTab = this.$route.hash.substring(1);

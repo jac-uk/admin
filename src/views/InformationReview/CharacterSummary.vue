@@ -21,7 +21,7 @@ export default {
       default: true,
     },
   },
-
+  emits: ['changeInfo'],
   computed: {
     requiredStyle() {
       return this.requiredWiderColumn ? 'govuk-summary-list__key widerColumn' : 'govuk-summary-list__key';
@@ -53,7 +53,7 @@ export default {
     },
     addInfo(obj) {
       let changedObj = this.formData[obj.field] || {};
-      
+
       if (changedObj.length > 0){
         changedObj = [...changedObj, obj.change];
       } else {
@@ -64,7 +64,7 @@ export default {
 
       this.$emit('changeInfo', changedObj);
     },
-    
+
     changeInfo(obj) {
       let changedObj = this.formData[obj.field] || {};
 
@@ -82,7 +82,7 @@ export default {
         changedObj.splice(obj.index, 1);
       } else {
         changedObj = [];
-      } 
+      }
 
       changedObj = { [obj.field]: changedObj };
 

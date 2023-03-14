@@ -13,7 +13,7 @@
           <ErrorSummary
             :errors="errors"
           />
-          
+
           <div>
             <fieldset>
               <TextField
@@ -63,6 +63,7 @@ export default {
       required: true,
     },
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       formData: {

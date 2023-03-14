@@ -32,15 +32,15 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Draft (${this.$options.filters.formatNumber(draft)})`,
+          title: `Draft (${this.$filters.formatNumber(draft)})`,
           path: `${path}/draft`,
         },
         {
-          title: `Applied (${this.$options.filters.formatNumber(applied)})`,
+          title: `Applied (${this.$filters.formatNumber(applied)})`,
           path: `${path}/applied`,
         },
         {
-          title: `Withdrawn (${this.$options.filters.formatNumber(withdrawn)})`,
+          title: `Withdrawn (${this.$filters.formatNumber(withdrawn)})`,
           path: `${path}/withdrawn`,
         },
       ];

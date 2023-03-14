@@ -13,7 +13,7 @@
             Sent
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsSent | formatNumber }}
+            {{ $filters.formatNumber(assessmentsSent) }}
           </h2>
         </div>
       </div>
@@ -21,7 +21,7 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Completed</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsCompleted | formatNumber }}
+            {{ $filters.formatNumber(assessmentsCompleted) }}
           </h2>
         </div>
       </div>
@@ -35,7 +35,7 @@
           Contact date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.contactIndependentAssessors | formatDate('long') }}
+          {{ $filters.formatDate(exercise.contactIndependentAssessors, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions">
           <strong
@@ -51,7 +51,7 @@
           Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsReturnDate | formatDate('long') }}
+          {{ $filters.formatDate(exercise.independentAssessmentsReturnDate, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -63,7 +63,7 @@
           Hard limit
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsHardLimitDate | formatDate('long') }}
+          {{ $filters.formatDate(exercise.independentAssessmentsHardLimitDate, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -74,11 +74,10 @@
       >
         <TabsList
           ref="tabs"
-          class="print-none"
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
+          class="print-none"
         />
-
         <Banner
           :message="sendErrors"
           status="warning"
@@ -174,15 +173,14 @@
         >
           Delete
         </ActionButton>
-
         <Table
           :key="activeTab"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="records"
           :page-size="50"
           :columns="tableColumns"
           :multi-select="!isDeleted"
-          :selection.sync="selectedItems"
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
@@ -209,7 +207,7 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
-              {{ row.assessor.type | lookup }}
+              {{ $filters.lookup(ow.assessor.type) }}
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               <a
@@ -221,7 +219,7 @@
               </a>
             </TableCell>
             <TableCell :title="tableColumns[3].title">
-              {{ row.status | lookup }}
+              {{ $filters.lookup(row.status) }}
               <strong
                 v-if="lateIASubmission(row)"
                 class="govuk-tag govuk-tag--red"
@@ -316,20 +314,20 @@
               v-if="applicationRecordCounts.review"
               value="review"
             >
-              Review ({{ applicationRecordCounts.review | formatNumber }})
+              Review ({{ $filters.formatNumber(applicationRecordCounts.review) }})
             </option>
             <option
               v-if="applicationRecordCounts.shortlisted"
               value="shortlisted"
             >
-              Shortlisted ({{ applicationRecordCounts.shortlisted | formatNumber }})
+              Shortlisted ({{ $filters.formatNumber(applicationRecordCounts.shortlisted) }})
             </option>
 
             <option
               v-if="applicationRecordCounts.selected"
               value="selected"
             >
-              Selected ({{ applicationRecordCounts.selected | formatNumber }})
+              Selected ({{ $filters.formatNumber(applicationRecordCounts.selected) }})
             </option>
           </select>
 
@@ -403,7 +401,7 @@ export default {
   },
   mixins: [permissionMixin],
   beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { 
+    this.$store.dispatch('assessments/bind', {
       exerciseId: this.exercise.id,
       status: this.getStatus(),
     });
@@ -466,7 +464,7 @@ export default {
         { title: 'Assessor', sort: 'assessor.fullName' },
         { title: 'Status' },
       ];
-      
+
       if (this.isCancelled || this.isDeclined) {
         return [
           ...tableColumns,

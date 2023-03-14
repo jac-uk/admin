@@ -36,7 +36,7 @@
           Date of birth
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ application.personalDetails.dateOfBirth | formatDate }}
+          {{ $filters.formatDate(application.personalDetails.dateOfBirth) }}
         </dd>
       </div>
 
@@ -57,7 +57,7 @@
           NI Number
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ application.personalDetails.nationalInsuranceNumber | formatNIN }}
+          {{ $filters.formatNIN(application.personalDetails.nationalInsuranceNumber) }}
         </dd>
       </div>
 
@@ -117,7 +117,7 @@
             class="govuk-list"
           >
             <li>
-              {{ address.startDate | formatDate }} to {{ address.endDate | formatDate }}
+              {{ $filters.formatDate(address.startDate) }} to {{ $filters.formatDate(address.endDate) }}
             </li>
             <li>
               {{ address.street }}
@@ -183,7 +183,7 @@
             Admission to the roll
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ sra.date | formatDate }}
+            {{ $filters.formatDate(sra.date) }}
           </dd>
         </div>
 
@@ -232,7 +232,7 @@
             Called to the Bar
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ bsb.date | formatDate }}
+            {{ $filters.formatDate(bsb.date) }}
           </dd>
         </div>
 
@@ -281,7 +281,7 @@
             Judicial Office
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.feePaidOrSalariedJudge | toYesNo }}
+            {{ $filters.toYesNo(application.feePaidOrSalariedJudge) }}
           </dd>
         </div>
 
@@ -340,7 +340,7 @@
             Date of birth
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.dateOfBirth | formatDate }}
+            {{ $filters.formatDate(application.personalDetails.dateOfBirth) }}
           </dd>
         </div>
 
@@ -380,7 +380,7 @@
               <div
                 class="govuk-!-font-weight-bold"
               >
-                {{ item.date | formatDate }}
+                {{ $filters.formatDate(item.date) }}
               </div>
               <div>{{ item.details }}</div>
             </dl>
@@ -439,7 +439,7 @@
             Date of membership
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.generalMedicalCouncilDate | formatDate }}
+            {{ $filters.formatDate(application.generalMedicalCouncilDate) }}
           </dd>
         </div>
 
@@ -476,14 +476,14 @@
                 v-if="application.generalMedicalCouncilConditionalStartDate
                   && application.generalMedicalCouncilConditionalEndDate"
               >
-                {{ application.generalMedicalCouncilConditionalStartDate | formatDate }}
-                to {{ application.generalMedicalCouncilConditionalEndDate | formatDate }}
+                {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }}
+                to {{ $filters.formatDate(application.generalMedicalCouncilConditionalEndDate) }}
               </li>
               <li
                 v-if="application.generalMedicalCouncilConditionalStartDate
                   && !application.generalMedicalCouncilConditionalEndDate"
               >
-                {{ application.generalMedicalCouncilConditionalStartDate | formatDate }} — current
+                {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }} — current
               </li>
               <li>
                 {{ application.generalMedicalCouncilConditionalDetails }}
@@ -528,7 +528,7 @@
             Date of membership
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.royalInstitutionCharteredSurveyorsDate | formatDate }}
+            {{ $filters.formatDate(application.royalInstitutionCharteredSurveyorsDate) }}
           </dd>
         </div>
 

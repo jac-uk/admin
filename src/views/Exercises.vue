@@ -68,6 +68,7 @@
         >
           <Table
             ref="exercisesTable"
+            v-model:selection="selectedItems"
             data-key="id"
             :data="tableData"
             :page-size="50"
@@ -81,7 +82,6 @@
             ]"
             :search="['name']"
             multi-select
-            :selection.sync="selectedItems"
             @change="getTableData"
           >
             <template #actions>
@@ -120,14 +120,14 @@
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationOpenDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationOpenDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[3].title">
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationCloseDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationCloseDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[4].title">
@@ -137,7 +137,7 @@
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[5].title"
               >
-                {{ row.applicationsCount | formatNumber }}
+                {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
             </template>
           </Table>
@@ -222,7 +222,8 @@ export default {
     },
     archiveModalMessage() {
       const archiveVerb = (this.isArchived) ? 'unarchive' : 'archive';
-      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${this.$pluralize('exercises', this.selectedItems.length)}?`;
+      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
+      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${pluralText}?`;
     },
   },
   watch: {
@@ -237,7 +238,7 @@ export default {
       }
     },
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   methods: {

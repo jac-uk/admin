@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-half">
@@ -87,7 +87,7 @@
               :colspan="header.colspan"
               class="govuk-table__header text-center"
             >
-              {{ header.ref | lookup }}
+              {{ $filters.lookup(header.ref) }}
             </th>
             <th
               scope="col"

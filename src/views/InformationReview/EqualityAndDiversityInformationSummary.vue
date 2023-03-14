@@ -17,7 +17,7 @@
           v-if="fieldContains(equalityAndDiversitySurvey, 'shareData')"
           class="govuk-summary-list__value"
         >
-          {{ equalityAndDiversitySurvey.shareData | toYesNo }}
+          {{ $filters.toYesNo(equalityAndDiversitySurvey.shareData) }}
         </dd>
         <dd
           v-else
@@ -46,7 +46,7 @@
             field="professionalBackground"
             :edit="editable"
             :data="equalityAndDiversitySurvey.professionalBackground"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -65,7 +65,7 @@
             field="otherProfessionalBackgroundDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherProfessionalBackgroundDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -92,7 +92,7 @@
             field="currentLegalRole"
             :edit="editable"
             :data="equalityAndDiversitySurvey.currentLegalRole"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -111,7 +111,7 @@
             field="otherCurrentFeePaidJudicialOfficeHolderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -130,7 +130,7 @@
             field="otherCurrentSalariedJudicialOfficeHolderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -149,7 +149,7 @@
             field="otherCurrentLegalRoleDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentLegalRoleDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -173,7 +173,7 @@
             field="feePaidJudicialRole"
             :edit="editable"
             :data="equalityAndDiversitySurvey.feePaidJudicialRole"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -192,7 +192,7 @@
             field="otherFeePaidJudicialRoleDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherFeePaidJudicialRoleDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -216,7 +216,7 @@
             field="stateOrFeeSchool"
             :edit="editable"
             :data="equalityAndDiversitySurvey.stateOrFeeSchool"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -240,7 +240,7 @@
             field="oxbridgeUni"
             :edit="editable"
             :data="equalityAndDiversitySurvey.oxbridgeUni"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -264,7 +264,7 @@
             field="firstGenerationStudent"
             :edit="editable"
             :data="equalityAndDiversitySurvey.firstGenerationStudent"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -288,7 +288,7 @@
             field="ethnicGroup"
             :edit="editable"
             :data="equalityAndDiversitySurvey.ethnicGroup"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -305,7 +305,7 @@
             :field="ethnicGroupDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey[ethnicGroupDetails]"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -327,7 +327,7 @@
             field="gender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.gender"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -344,7 +344,7 @@
             field="otherGenderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherGenderDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -366,7 +366,7 @@
             field="changedGender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.changedGender"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -383,7 +383,7 @@
             field="changedGender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.genderIdentityDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -405,7 +405,7 @@
             field="sexualOrientation"
             :edit="editable"
             :data="equalityAndDiversitySurvey.sexualOrientation"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -422,7 +422,7 @@
             field="otherSexualOrientationDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherSexualOrientationDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -444,7 +444,7 @@
             field="disability"
             :edit="editable"
             :data="equalityAndDiversitySurvey.disability"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -461,7 +461,7 @@
             field="disabilityDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.disabilityDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -483,7 +483,7 @@
             field="religionFaith"
             :edit="editable"
             :data="equalityAndDiversitySurvey.religionFaith"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -500,7 +500,7 @@
             field="otherReligionDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherReligionDetails"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -522,7 +522,7 @@
             field="attendedOutreachEvents"
             :edit="editable"
             :data="equalityAndDiversitySurvey.attendedOutreachEvents"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -547,7 +547,7 @@
             field="participatedInJudicialWorkshadowingScheme"
             :edit="editable"
             :data="equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -572,7 +572,7 @@
             field="hasTakenPAJE"
             :edit="editable"
             :data="equalityAndDiversitySurvey.hasTakenPAJE"
-            @changeField="changeEqualityAndDiversityInformation"
+            @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
@@ -612,6 +612,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   computed: {
     applicationId() {
       return this.$route.params.applicationId;

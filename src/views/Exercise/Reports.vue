@@ -19,56 +19,52 @@ export default {
     SideNavigation,
   },
   data() {
-    const exercise = this.$store.state.exerciseDocument.record;
-    const path = `/exercise/${exercise.id}/reports`;
     return {
       sideNavigation: [
         {
           title: 'Diversity',
-          path: `${path}/diversity`,
+          name: 'exercise-reports-diversity',
         },
         {
           title: 'Merit List',
-          path: `${path}/merit-list`,
+          name: 'merit-list',
         },
         {
           title: 'Outreach',
-          path: `${path}/outreach`,
+          name: 'outreach',
         },
         {
           title: 'Character Issues',
-          path: `${path}/character-issues`,
+          name: 'character-issues',
         },
         {
           title: 'Eligibility Issues',
-          path: `${path}/eligibility-issues`,
+          name: 'eligibility-issues',
         },
         {
           title: 'Reasonable Adjustments',
-          path: `${path}/reasonable-adjustments`,
+          name: 'reasonable-adjustments',
         },
         {
           title: 'Qualifying Test Reports',
-          path: `${path}/qualifying-test-reports`,
-          params: {
-            nav: '/reports/qualifying-test-reports',
-          },
+          name: 'qualifying-test-reports',
+          query: { nav: '/reports/qualifying-test-reports' },
         },
         {
           title: 'Agency',
-          path: `${path}/agency`,
+          name: 'agency',
         },
         {
           title: 'Handover',
-          path: `${path}/handover`,
+          name: 'handover',
         },
         {
           title: 'Statutory Consultation',
-          path: `${path}/statutory-consultation`,
+          name: 'statutory-consultation',
         },
         {
           title: 'Custom',
-          path: `${path}/custom`,
+          name: 'custom',
         },
       ],
     };

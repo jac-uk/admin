@@ -16,7 +16,7 @@
             class="govuk-link"
             :to="{ name: `${routeNamePrefix}-report-view`, params: { qualifyingTestReportId: row.id } }"
           >
-            {{ row.title | showAlternative(row.id) }}
+            {{ $filters.showAlternative(row.title, row.id) }}
           </RouterLink>
         </TableCell>
       </template>

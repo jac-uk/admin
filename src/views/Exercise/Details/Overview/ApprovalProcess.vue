@@ -3,8 +3,8 @@
     <template v-if="isReadyForApproval">
       <RejectionForm
         v-if="canApproveExercise && showRejectionForm"
-        @confirmReject="confirmReject"
-        @cancelReject="cancelReject"
+        @confirm-reject="confirmReject"
+        @cancel-reject="cancelReject"
       />
 
       <ApproveReject

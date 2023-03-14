@@ -40,6 +40,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'RejectionForm',
   components: { TextareaInput },
+  emits: ['cancelReject', 'confirmReject'],
   data() {
     return {
       rejectionReason: '',

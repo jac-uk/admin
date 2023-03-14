@@ -48,6 +48,7 @@ export default {
       default: null,
     },
   },
+  emits: ['changeAction'],
   data() {
     return {
       date: null,

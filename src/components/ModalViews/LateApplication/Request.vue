@@ -66,6 +66,7 @@ export default {
     ErrorSummary,
   },
   extends: Form,
+  emits: ['close', 'success'],
   data() {
     return {
       formData: {
@@ -103,7 +104,7 @@ export default {
       return false;
     },
   },
-  destroyed() {
+  unmounted() {
     this.reset();
   },
   methods: {

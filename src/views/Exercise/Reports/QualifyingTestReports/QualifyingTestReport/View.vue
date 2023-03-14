@@ -12,7 +12,7 @@
           <span
             class="govuk-body govuk-!-font-size-14"
           >
-            {{ qualifyingTestReport.lastUpdated | formatDate('longdatetime') }}
+            {{ $filters.formatDate(qualifyingTestReport.lastUpdated, 'longdatetime') }}
           </span>
         </div>
         <div class="moj-page-header-actions__actions govuk-!-margin-top-2">
@@ -81,16 +81,16 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[5].title">
-            {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[6].title">
-            {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
         </template>
       </Table>

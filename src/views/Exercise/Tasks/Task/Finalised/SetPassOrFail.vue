@@ -16,7 +16,7 @@
         :key="outcome"
         :value="outcome"
       >
-        {{ outcome | lookup }}
+        {{ $filters.lookup(outcome) }}
       </option>
     </Select>
   </Form>

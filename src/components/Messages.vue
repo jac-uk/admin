@@ -56,11 +56,14 @@ export default {
         }
       }
     },
-    messages() {
-      // Ensure modal opens when new msgs appear
-      if (!this.$refs['messageModal'].modalOpen && this.messages.length) {
-        this.$refs['messageModal'].openModal();
-      }
+    messages: {
+      deep: true,
+      handler() {
+        // Ensure modal opens when new msgs appear
+        if (!this.$refs['messageModal'].modalOpen && this.messages.length) {
+          this.$refs['messageModal'].openModal();
+        }
+      },
     },
   },
   methods: {

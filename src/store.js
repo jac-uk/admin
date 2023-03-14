@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
+
 import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
@@ -48,7 +47,8 @@ import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
-const store = new Vuex.Store({
+//const store = new Vuex.Store({
+const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
   strict: process.env.NODE_ENV !== 'production',
   modules: {

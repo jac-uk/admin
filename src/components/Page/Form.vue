@@ -55,6 +55,7 @@ export default {
       default: '',
     },
   },
+  emits: ['save', 'cancel', 'delete'],
   data() {
     return {
       formData: this.load(this.data),

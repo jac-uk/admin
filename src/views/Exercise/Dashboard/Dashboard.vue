@@ -72,7 +72,7 @@
           :key="type"
           :value="type"
         >
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </option>
       </Select>
       <Chart
@@ -84,8 +84,8 @@
         :display-patterned-labels="true"
       />
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       />
       <Table
         data-key="id"
@@ -102,12 +102,12 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.val.percent | formatNumber(2) }}% ({{ row.val.total | formatNumber }})
+            {{ $filters.formatNumber(row.val.percent, 2) }}% ({{ $filters.formatNumber(row.val.total) }})
           </TableCell>
         </template>
       </Table>
       <p class="govuk-caption-s color-middle">
-        <span class="">Diversity Report Last Updated: {{ reportCreatedAt | formatDate('datetime') }}</span>
+        <span class="">Diversity Report Last Updated: {{ $filters.formatDate(reportCreatedAt, 'datetime') }}</span>
       </p>
     </div>
   </div>
@@ -170,7 +170,7 @@ export default {
   },
   computed: {
     tableColumns() {
-      const totalCandidates = this.$options.filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
+      const totalCandidates = this.$filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
       return [
         { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${totalCandidates} candidates)` },
         { title: 'Percentage (Total)' },
@@ -244,7 +244,7 @@ export default {
             }
             let percentage = 0;
             if (_has(element[legendKey], 'percent')) {
-              percentage = this.$options.filters.formatNumber(element[legendKey].percent, 2);
+              percentage = this.$filters.formatNumber(element[legendKey].percent, 2);
             }
             dataValues[legendKey].push(percentage);
           }
@@ -331,7 +331,7 @@ export default {
       router.push('details');
     }
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

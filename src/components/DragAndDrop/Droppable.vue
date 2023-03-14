@@ -19,6 +19,7 @@ export default {
       required: true,
     },
   },
+  emits: ['drop'],
   data() {
     return {
       active: false,

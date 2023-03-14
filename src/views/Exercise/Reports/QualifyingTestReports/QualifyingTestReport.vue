@@ -33,7 +33,7 @@ export default {
   mounted() {
     this.loadPage();
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('qualifyingTestReport/unbind');
   },
   methods: {

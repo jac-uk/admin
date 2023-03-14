@@ -35,13 +35,13 @@
               v-if="exercise.salaryGrouping"
               class="govuk-body"
             >
-              {{ exercise.salaryGrouping | lookup }}
+              {{ $filters.lookup(exercise.salaryGrouping) }}
             </span>
             <span
               v-if="exercise.salary"
               class="govuk-body"
             >
-              {{ exercise.salary | formatCurrency }}
+              {{ $filters.formatCurrency(exercise.salary) }}
             </span>
           </p>
 
@@ -76,13 +76,13 @@
                 v-if="exercise.applicationOpenDate"
                 class="govuk-body"
               >
-                {{ exercise.applicationOpenDate | formatDate('datetime') }}
+                {{ $filters.formatDate(exercise.applicationOpenDate, 'datetime') }}
               </span>
               <span
                 v-else
                 class="govuk-body"
               >
-                {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
+                {{ $filters.formatEstimatedDate(exercise.estimatedLaunchDate) }}
               </span>
             </p>
             <p v-if="exercise.applicationCloseDate">
@@ -94,7 +94,7 @@
               <span
                 class="govuk-body"
               >
-                {{ exercise.applicationCloseDate | formatDate('datetime') }}
+                {{ $filters.formatDate(exercise.applicationCloseDate, 'datetime') }}
               </span>
             </p>
           </div>

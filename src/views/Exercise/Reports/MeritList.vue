@@ -25,9 +25,9 @@
     >
       <TabsList
         v-if="false"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
 
       <!-- SCORE SHEET -->
@@ -43,7 +43,7 @@
           local-data
           sticky
           @change="updateTableState"
-          @clickCol="clickColumn"
+          @click-col="clickColumn"
         >
           <template #row="{row}">
             <TableCell class="table-cell-application">
@@ -61,10 +61,10 @@
               class="text-center table-cell-score"
             >
               <template v-if="isNumericColumn(col.type)">
-                {{ getColValue(row, col) | formatNumber(2) }}
+                {{ $filters.formatNumber(getColValue(row, col), 2) }}
               </template>
               <template v-else-if="isYesNoColumn(col.type)">
-                {{ getColValue(row, col) | toYesNo }}
+                {{ $filters.toYesNo(getColValue(row, col)) }}
               </template>
               <template v-else>
                 {{ getColValue(row, col) }}
@@ -75,31 +75,31 @@
               :title="tableColumns[tableColumns.length - 5].title"
               class="text-center"
             >
-              {{ row.totalScore | formatNumber(2) }}
+              {{ $filters.formatNumber(row.totalScore, 2) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 4].title"
               class="text-center"
             >
-              {{ row.diversity.female | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.female) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 3].title"
               class="text-center"
             >
-              {{ row.diversity.bame | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.bame) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 2].title"
               class="text-center"
             >
-              {{ row.diversity.solicitor | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.solicitor) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 1].title"
               class="text-center"
             >
-              {{ row.diversity.disability | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.disability) }}
             </TableCell>
           </template>
         </Table>

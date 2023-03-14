@@ -35,7 +35,7 @@
                   :edit="editable"
                   :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
                   type="selection"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
               </dd>
             </div>
@@ -53,7 +53,7 @@
                   :edit="editable"
                   :options="['england-wales', 'northern-ireland', 'scotland']"
                   type="selection"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
               </dd>
             </div>
@@ -72,114 +72,112 @@
                   :index="index"
                   :edit="editable"
                   type="date"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
               </dd>
             </div>
 
-            <template>
-              <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
-                class="govuk-summary-list__row"
+            <div
+              v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt
+                class="govuk-summary-list__key widerColumn"
               >
-                <dt
-                  class="govuk-summary-list__key widerColumn"
-                >
-                  Date called to the Bar
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
-                    field="qualifications"
-                    extension="calledToBarDate"
-                    :index="index"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
-              <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Has completed pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications[index].completedPupillage"
-                    field="qualifications"
-                    extension="completedPupillage"
-                    :index="index"
-                    :edit="editable"
-                    :options="[true, false]"
-                    type="selection"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+                Date called to the Bar
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
+                  field="qualifications"
+                  extension="calledToBarDate"
+                  :index="index"
+                  :edit="editable"
+                  type="date"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
+            <div
+              v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Has completed pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications[index].completedPupillage"
+                  field="qualifications"
+                  extension="completedPupillage"
+                  :index="index"
+                  :edit="editable"
+                  :options="[true, false]"
+                  type="selection"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Date completed pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
-                    field="qualifications"
-                    extension="date"
-                    :index="index"
-                    :edit="editable"
-                    type="date"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+            <div
+              v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Date completed pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
+                  field="qualifications"
+                  extension="date"
+                  :index="index"
+                  :edit="editable"
+                  type="date"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Reason for being exempt from pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    type="selection"
-                    :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
-                    :data="application.qualifications[index].notCompletePupillageReason"
-                    field="qualifications"
-                    extension="notCompletePupillageReason"
-                    :index="index"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+            <div
+              v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Reason for being exempt from pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  type="selection"
+                  :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
+                  :data="application.qualifications[index].notCompletePupillageReason"
+                  field="qualifications"
+                  extension="notCompletePupillageReason"
+                  :index="index"
+                  :edit="editable"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Did not complete pupillage notes
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications[index].details"
-                    field="qualifications"
-                    extension="details"
-                    :index="index"
-                    :edit="editable"
-                    @changeField="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
-            </template>
+            <div
+              v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Did not complete pupillage notes
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications[index].details"
+                  field="qualifications"
+                  extension="details"
+                  :index="index"
+                  :edit="editable"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
           </div>
         </dl>
       </div>
@@ -230,7 +228,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
-              @changeField="changeQualificationOrMembership"
+              @change-field="changeQualificationOrMembership"
             />
           </dd>
         </div>
@@ -249,7 +247,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
-              @changeField="changeQualificationOrMembership"
+              @change-field="changeQualificationOrMembership"
             />
           </dd>
         </div>
@@ -271,7 +269,7 @@
                 :data="application.experienceUnderSchedule2Three"
                 field="experienceUnderSchedule2Three"
                 :edit="editable"
-                @changeField="changeQualificationOrMembership"
+                @change-field="changeQualificationOrMembership"
               />
             </li>
             <li v-if="exercise.appliedSchedule=='schedule-2-d'">
@@ -279,7 +277,7 @@
                 :data="application.experienceUnderSchedule2D"
                 field="experienceUnderSchedule2D"
                 :edit="editable"
-                @changeField="changeQualificationOrMembership"
+                @change-field="changeQualificationOrMembership"
               />
             </li>
           </ul>
@@ -322,7 +320,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredAssociationBuildingEngineersDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -335,7 +333,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredAssociationBuildingEngineersNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -348,7 +346,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredAssociationBuildingEngineersInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -372,7 +370,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredInstituteBuildingDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -385,7 +383,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteBuildingNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -398,7 +396,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteBuildingInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -422,7 +420,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredInstituteEnvironmentalHealthDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -435,7 +433,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteEnvironmentalHealthNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -448,7 +446,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteEnvironmentalHealthInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -472,7 +470,7 @@
                   :edit="editable"
                   type="date"
                   field="generalMedicalCouncilDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -485,7 +483,7 @@
                   :edit="editable"
                   type="text"
                   field="generalMedicalCouncilNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -498,7 +496,7 @@
                   :edit="editable"
                   type="text"
                   field="generalMedicalCouncilInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <ul
                   v-if="application.generalMedicalCouncilConditional"
@@ -511,14 +509,14 @@
                     v-if="(application.generalMedicalCouncilConditionalStartDate
                       && application.generalMedicalCouncilConditionalEndDate) && !editable"
                   >
-                    {{ application.generalMedicalCouncilConditionalStartDate | formatDate }}
-                    to {{ application.generalMedicalCouncilConditionalEndDate | formatDate }}
+                    {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }}
+                    to {{ $filters.formatDate(application.generalMedicalCouncilConditionalEndDate) }}
                   </li>
                   <li
                     v-if="(application.generalMedicalCouncilConditionalStartDate
                       && !application.generalMedicalCouncilConditionalEndDate) && !editable"
                   >
-                    {{ application.generalMedicalCouncilConditionalStartDate | formatDate }} — current
+                    {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }} — current
                   </li>
                   <li
                     v-if="editable"
@@ -533,7 +531,7 @@
                       :edit="editable"
                       type="date"
                       field="generalMedicalCouncilConditionalStartDate"
-                      @changeField="changeProfessionalMembership"
+                      @change-field="changeProfessionalMembership"
                     />
                     <h5
                       class="govuk-hint govuk-!-margin-1"
@@ -545,7 +543,7 @@
                       :edit="editable"
                       type="date"
                       field="generalMedicalCouncilConditionalEndDate"
-                      @changeField="changeProfessionalMembership"
+                      @change-field="changeProfessionalMembership"
                     />
                   </li>
                   <li>
@@ -560,7 +558,7 @@
                       :edit="editable"
                       type="text"
                       field="generalMedicalCouncilConditionalDetails"
-                      @changeField="changeProfessionalMembership"
+                      @change-field="changeProfessionalMembership"
                     />
                   </li>
                 </ul>
@@ -586,7 +584,7 @@
                   :edit="editable"
                   type="date"
                   field="royalCollegeOfPsychiatristsDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -599,7 +597,7 @@
                   :edit="editable"
                   type="text"
                   field="royalCollegeOfPsychiatristsNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -612,7 +610,7 @@
                   :edit="editable"
                   type="text"
                   field="royalCollegeOfPsychiatristsInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -636,7 +634,7 @@
                   :edit="editable"
                   type="date"
                   field="royalInstitutionCharteredSurveyorsDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -649,7 +647,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstitutionCharteredSurveyorsNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -662,7 +660,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstitutionCharteredSurveyorsInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -686,7 +684,7 @@
                   :edit="editable"
                   type="date"
                   field="royalInstituteBritishArchitectsDate"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -699,7 +697,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstituteBritishArchitectsNumber"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
                 <h5
                   v-if="editable"
@@ -712,7 +710,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstituteBritishArchitectsInformation"
-                  @changeField="changeProfessionalMembership"
+                  @change-field="changeProfessionalMembership"
                 />
               </dd>
             </div>
@@ -739,7 +737,7 @@
                   extension="date"
                   type="date"
                   field="memberships"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
                 <h5
                   v-if="editable"
@@ -754,7 +752,7 @@
                   extension="number"
                   type="text"
                   field="memberships"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
                 <h5
                   v-if="editable"
@@ -769,7 +767,7 @@
                   extension="information"
                   type="text"
                   field="memberships"
-                  @changeField="changeQualificationOrMembership"
+                  @change-field="changeQualificationOrMembership"
                 />
               </dd>
             </div>
@@ -817,6 +815,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       NOT_COMPLETE_PUPILLAGE_REASONS,

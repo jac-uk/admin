@@ -32,7 +32,7 @@
                 @drop="onDrop"
               >
                 <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ state.ref | lookup }}
+                  {{ $filters.lookup(state.ref) }}
                 </h3>
                 <p class="govuk-body">
                   <Draggable
@@ -44,7 +44,7 @@
                     }"
                     class="display-inline govuk-!-margin-right-1"
                   >
-                    {{ part | lookup }}
+                    {{ $filters.lookup(part) }}
                   </Draggable>
                 </p>
               </Droppable>
@@ -68,7 +68,7 @@
                   }"
                   class="display-block govuk-!-margin-right-1"
                 >
-                  {{ part | lookup }}
+                  {{ $filters.lookup(part) }}
                 </Draggable>
               </p>
             </Droppable>

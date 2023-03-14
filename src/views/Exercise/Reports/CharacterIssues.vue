@@ -103,7 +103,7 @@
             :key="item"
             :value="item"
           >
-            {{ item | lookup }}
+            {{ $filters.lookup(item) }}
           </option>
         </Select>
       </div>
@@ -243,7 +243,7 @@
                     :key="value"
                     :value="value"
                   >
-                    {{ value | lookup }}  
+                    {{ $filters.lookup(value) }}
                   </option>
                 </Select>
               </div>
@@ -384,11 +384,14 @@ export default {
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
     },
-    applicationRecords: function() {
-      this.getOtherApplicationRecords(this.applicationRecords);
+    applicationRecords: {
+      deep: true,
+      handler() {
+        this.getOtherApplicationRecords(this.applicationRecords);
+      },
     },
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -500,7 +503,7 @@ export default {
       if (!applicationRecords || !applicationRecords.length) {
         this.otherApplicationRecords = [];
       }
-      
+
       for (let i = 0; i < applicationRecords.length; i++) {
         const record = applicationRecords[i];
         const firestoreRef = firestore

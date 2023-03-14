@@ -40,15 +40,15 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Female<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.female / scoreReport.count | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.female / scoreReport.count, 2) }}%</span>
               <span class="govuk-caption-m">BAME<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.bame / scoreReport.count | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.bame / scoreReport.count, 2) }}%</span>
             </div>
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Solicitor<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.solicitor / scoreReport.count | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.solicitor / scoreReport.count, 2) }}%</span>
               <span class="govuk-caption-m">Disability<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.disability / scoreReport.count | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * scoreReport.diversity.disability / scoreReport.count, 2) }}%</span>
             </div>
           </div>
         </div>
@@ -79,15 +79,15 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Female<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * higherScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1), 2) }}%</span>
               <span class="govuk-caption-m">BAME<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * higherScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1), 2) }}%</span>
             </div>
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Solicitor<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.solicitor / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * higherScoreReport.cumulativeDiversity.solicitor / (scoreReport.rank - 1), 2) }}%</span>
               <span class="govuk-caption-m">Disability<br></span>
-              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.disability / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
+              <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ $filters.formatNumber(100 * higherScoreReport.cumulativeDiversity.disability / (scoreReport.rank - 1), 2) }}%</span>
             </div>
           </div>
         </div>
@@ -139,11 +139,11 @@
 
     <Table
       v-if="scoreData"
+      v-model:selection="selectedItems"
       data-key="id"
       :data="scoreData"
       :columns="tableColumns"
       multi-select
-      :selection.sync="selectedItems"
       local-data
     >
       <template #row="{row}">
@@ -190,16 +190,16 @@
           </div>
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 5].title">
-          {{ row.diversity.female | toYesNo }}
+          {{ $filters.toYesNo(row.diversity.female) }}
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 4].title">
-          {{ row.diversity.bame | toYesNo }}
+          {{ $filters.toYesNo(row.diversity.bame) }}
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 3].title">
-          {{ row.diversity.solicitor | toYesNo }}
+          {{ $filters.toYesNo(row.diversity.solicitor) }}
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 2].title">
-          {{ row.diversity.disability | toYesNo }}
+          {{ $filters.toYesNo(row.diversity.disability) }}
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 1].title">
           <strong

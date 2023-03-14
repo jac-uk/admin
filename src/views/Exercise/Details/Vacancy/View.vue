@@ -20,7 +20,7 @@
           Type of exercise
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.typeOfExercise | lookup }}
+          {{ $filters.lookup(exercise.typeOfExercise) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -28,7 +28,7 @@
           Is the vacancy for a court or tribunal?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.isCourtOrTribunal | lookup }}
+          {{ $filters.lookup(exercise.isCourtOrTribunal) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -45,7 +45,7 @@
                 {{ exercise.otherJurisdiction }}
               </span>
               <span v-else>
-                {{ item | lookup }}
+                {{ $filters.lookup(item) }}
               </span>
             </li>
           </ul>
@@ -72,12 +72,12 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.appointmentType == 'salaried'">
-            {{ exercise.appointmentType | lookup }}:
-            <span v-if="exercise.salaryGrouping">{{ exercise.salaryGrouping | lookup }}</span>
-            <span v-if="exercise.salary">{{ exercise.salary | formatCurrency }}</span>
+            {{ $filters.lookup(exercise.appointmentType) }}:
+            <span v-if="exercise.salaryGrouping">{{ $filters.lookup(exercise.salaryGrouping) }}</span>
+            <span v-if="exercise.salary">{{ $filters.formatCurrency(exercise.salary) }}</span>
           </span>
-          <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ exercise.appointmentType | lookup }}: £{{ exercise.feePaidFee }}</span>
-          <span v-else>{{ exercise.appointmentType | lookup }}</span>
+          <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ $filters.lookup(exercise.appointmentType) }}: £{{ exercise.feePaidFee }}</span>
+          <span v-else>{{ $filters.lookup(exercise.appointmentType) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -138,7 +138,7 @@
               v-for="item in exercise.welshRequirementType"
               :key="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </li>
           </ul>
           <span v-else-if="exercise.welshRequirement === false">None</span>

@@ -11,7 +11,7 @@
         :errors="errors"
       />
       <span>
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -100,6 +100,7 @@ export default {
     },
   },
   mixins: [permissionMixin],
+  emits: ['close'],
   data() {
     return {
       applicationStatus: null,

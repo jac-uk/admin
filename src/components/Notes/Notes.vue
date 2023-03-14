@@ -5,12 +5,12 @@
     <NotesNew
       v-if="isNew || isUpdate"
       :note="noteSelectedObj"
-      @changeAction="changeAction"
+      @change-action="changeAction"
     />
     <NotesDelete
       v-if="isDelete"
       :note="noteSelectedObj"
-      @changeAction="changeAction"
+      @change-action="changeAction"
     />
     <div v-if="isList">
       <h2
@@ -36,8 +36,8 @@
       <NotesList
         v-else
         :notes="notesList"
-        @deleteNote="deleteNoteAction"
-        @editNote="editNoteAction"
+        @delete-note="deleteNoteAction"
+        @edit-note="editNoteAction"
       />
     </div>
   </div>

@@ -49,7 +49,7 @@
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.totalApplications | formatNumber }}
+            {{ $filters.formatNumber(report.totalApplications) }}
           </h2>
         </div>
       </div>
@@ -59,7 +59,7 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.rows.length | formatNumber }}
+            {{ $filters.formatNumber(report.rows.length) }}
           </h2>
         </div>
       </div>
@@ -122,7 +122,7 @@
               :key="item"
               :value="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </option>
           </Select>
         </div>
@@ -179,7 +179,7 @@
                 </div>
                 <div class="govuk-grid-column-one-third text-right">
                   <RouterLink
-                    :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' } }"
+                    :to="{name: 'exercise-application', params: { applicationId: row.id }, query: { tab: 'issues' } }"
                     class="govuk-link print-none"
                     target="_blank"
                   >
@@ -274,12 +274,12 @@
                       {{ ar.candidate.reasonableAdjustmentsDetails }}
                     </p>
                     <p class="govuk-heading-s">
-                      Status: 
+                      Status:
                       <span
                         v-if="ar.candidate.reasonableAdjustmentsStatus"
                         class="govuk-body"
                       >
-                        {{ ar.candidate.reasonableAdjustmentsStatus | lookup }}
+                        {{ $filters.lookup(ar.candidate.reasonableAdjustmentsStatus) }}
                       </span>
                     </p>
                   </div>
@@ -386,7 +386,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

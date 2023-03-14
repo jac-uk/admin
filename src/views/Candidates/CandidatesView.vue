@@ -6,8 +6,8 @@
       Candidate: {{ myFullName }} {{ isFlaggedCandidate ? '*' : '' }}
     </h1>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <span
       v-if="hasPermissions([PERMISSIONS.candidates.permissions.canUpdateCandidates.value])"
@@ -42,6 +42,7 @@
       v-if="activeTab === 'details'"
     >
       <PersonalDetailsSummary
+        :user-id="candidateId"
         :personal-details="personalDetails"
         :editable="editMode"
         @update="updateCandidate"
@@ -168,7 +169,7 @@ export default {
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('candidates/unbindDoc');
     this.$store.dispatch('candidates/unbindDocs');
   },

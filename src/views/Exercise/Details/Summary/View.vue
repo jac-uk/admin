@@ -37,7 +37,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.estimatedLaunchDate">
-            {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
+            {{ $filters.formatEstimatedDate(exercise.estimatedLaunchDate) }}
           </span>
           <span v-else>
             TBC
@@ -61,7 +61,7 @@
         </dt>
         <dd class="govuk-summary-list__value editable-field">
           <span>
-            {{ advertType | lookup }}
+            {{ $filters.lookup(advertType) }}
           </span>
           <span>
             <a
@@ -78,7 +78,7 @@
           Are there Welsh posts?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.welshPosts | toYesNo }}
+          {{ $filters.toYesNo(exercise.welshPosts) }}
         </dd>
       </div>
       <div

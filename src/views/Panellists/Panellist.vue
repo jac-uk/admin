@@ -12,8 +12,8 @@
       Panellist: {{ panellist.fullName }}
     </h1>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <div
       v-if="activeTab === 'details'"
@@ -102,7 +102,7 @@ export default {
   async created() {
     this.$store.dispatch('panellist/bind', this.panellistId);
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('panellist/unbind');
   },
   methods: {

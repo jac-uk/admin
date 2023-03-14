@@ -1,8 +1,8 @@
 <template>
   <div class="govuk-grid-row">
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <form
       v-if="activeTab == 'code'"

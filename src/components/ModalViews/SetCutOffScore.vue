@@ -18,7 +18,7 @@
         required
       />
       <span v-if="cutOffScore">
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -122,6 +122,7 @@ export default {
     ErrorSummary,
   },
   mixins: [permissionMixin],
+  emits: ['close'],
   data() {
     return {
       cutOffScore: null,

@@ -86,7 +86,7 @@
             :key="exerciseAdvertType"
             :value="exerciseAdvertType"
           >
-            {{ exerciseAdvertType | lookup }}
+            {{ $filters.lookup(exerciseAdvertType) }}
           </option>
         </Select>
 

@@ -75,7 +75,7 @@
         >
           No information for First Assessor
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >
@@ -155,7 +155,7 @@
         >
           No information for Second Assessor
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >
@@ -256,7 +256,7 @@
         >
           No information for Leadership Judge
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >

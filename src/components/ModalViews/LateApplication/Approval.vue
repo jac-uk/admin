@@ -104,6 +104,7 @@ export default {
       default: null,
     },
   },
+  emits: ['read', 'close'],
   data() {
     return {
       errors: [],

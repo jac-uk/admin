@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
 
     <p
@@ -14,7 +14,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
           <div class="govuk-caption-m">
-            Applications <span v-if="entryStatus">({{ entryStatus | lookup }})</span>
+            Applications <span v-if="entryStatus">({{ $filters.lookup(entryStatus) }})</span>
           </div>
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"

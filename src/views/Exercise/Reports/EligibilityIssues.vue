@@ -164,7 +164,7 @@
               >
               <div class="govuk-grid-column-two-thirds">
                 <div class="issue">
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
+                  <span class="govuk-!-font-weight-bold">{{ $filters.lookup(issue.type) }}:</span> {{ issue.summary }}
                 </div>
                 <div
                   v-if="issue.comments"
@@ -220,7 +220,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
