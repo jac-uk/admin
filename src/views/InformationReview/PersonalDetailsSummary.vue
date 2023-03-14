@@ -297,10 +297,7 @@
         </div>
       </dl>
 
-      <dl
-        v-if="!currentMoreThan5Years"
-        class="govuk-summary-list govuk-!-margin-bottom-0"
-      >
+      <dl class="govuk-summary-list govuk-!-margin-bottom-0">
         <div class="govuk-summary-list__row">
           <dt :class="requiredStyle">
             Previous Addresses
@@ -308,7 +305,7 @@
           <dd class="govuk-summary-list__value">
             <InformationReviewSectionRenderer
               :edit="editable"
-              :data-default="emptyAddressObject"
+              :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
               @changeField="changeInfo"
@@ -454,14 +451,21 @@ export default {
     },
   },
   data() {
+    const emptyAddressObject = {
+      street: '',
+      street2: '',
+      town: '',
+      county: '',
+      postcode: '',
+    };
+
     return {
       hasPersonalDetails: !!this.personalDetails,
-      emptyAddressObject: {
-        street: '',
-        street2: '',
-        town: '',
-        county: '',
-        postcode: '',
+      emptyAddressObject,
+      emptyPreviousAddressObject: {
+        ...emptyAddressObject,
+        startDate: '',
+        endDate: '',
       },
       emptyVATNumberObject: {
         VATNumber: '',
@@ -524,9 +528,9 @@ export default {
       if (obj.field == 'previous') {
         let changeObj = [];
         if (this.hasPreviousAddress) {
-          changeObj = [...this.previousAddress, this.emptyAddressObject];
+          changeObj = [...this.previousAddress, this.emptyPreviousAddressObject];
         } else {
-          changeObj = [this.emptyAddressObject];
+          changeObj = [this.emptyPreviousAddressObject];
         }
 
         this.changeUserDetails({
