@@ -54,7 +54,7 @@
 
       <button
         type="button"
-        class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+        class="govuk-button govuk-button--secondary"
         @click="btnAdd(group)"
       >
         Add

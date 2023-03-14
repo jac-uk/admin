@@ -127,7 +127,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import FullScreenButton from '@/components/Page/FullScreenButton';
-import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
+import { TASK_TYPE, TASK_STATUS, getMeritListTaskTypes } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';
 import { MARKING_TYPE } from '@/helpers/taskHelper';
@@ -189,12 +189,7 @@ export default {
       return this.$store.state.tasks.records;
     },
     getMeritListTaskTypes() {
-      // if we have Qualifying Test then remove SJ & CA
-      let taskTypes = getTaskTypes(this.exercise);
-      if (taskTypes.indexOf(TASK_TYPE.QUALIFYING_TEST) >= 0) {
-        taskTypes = taskTypes.filter(taskType => [TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT].indexOf(taskType) < 0);
-      }
-      return taskTypes;
+      return getMeritListTaskTypes(this.exercise);
     },
     completedTasks() {
       if (!this.tasks) return [];
@@ -430,8 +425,8 @@ export default {
         const row = [];
         this.clipboardColumns.forEach(column => {
           let valueMap = applicationData[item.id];
-          if (column.task) valueMap = valueMap[column.task];
-          if (column.parent) valueMap = valueMap[column.parent];
+          if (column.task && valueMap[column.task]) valueMap = valueMap[column.task];
+          if (column.parent && valueMap[column.parent]) valueMap = valueMap[column.parent];
           row.push(valueMap[column.ref]);
         });
         rows.push(row);

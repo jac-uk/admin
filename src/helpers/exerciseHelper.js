@@ -36,6 +36,7 @@ export {
   getProcessingExitStage,
   getTimelineTasks,
   getTaskTypes,
+  getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
   emptyScoreSheet,
@@ -240,6 +241,23 @@ function getTaskTypes(exercise, stage) {
     taskTypes.splice(indexQT + 1, 0, TASK_TYPE.QUALIFYING_TEST);
   }
   return taskTypes;
+}
+
+const MERIT_LIST_TASK_TYPES = [
+  TASK_TYPE.CRITICAL_ANALYSIS,
+  TASK_TYPE.SITUATIONAL_JUDGEMENT,
+  TASK_TYPE.QUALIFYING_TEST,
+  TASK_TYPE.SCENARIO,
+  TASK_TYPE.SIFT,
+  TASK_TYPE.SELECTION,
+];
+function getMeritListTaskTypes(exercise) {
+  // if we have Qualifying Test then remove SJ & CA
+  let taskTypes = getTaskTypes(exercise);
+  if (taskTypes.indexOf(TASK_TYPE.QUALIFYING_TEST) >= 0) {
+    taskTypes = taskTypes.filter(taskType => [TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT].indexOf(taskType) < 0);
+  }
+  return taskTypes.filter(taskType => MERIT_LIST_TASK_TYPES.indexOf(taskType) >= 0);
 }
 
 function previousTaskType(exercise, type) {
@@ -732,7 +750,7 @@ function getPreviousStage(exercise, currentStage) {
   case EXERCISE_STAGE.APPLIED:
     return '';
   case EXERCISE_STAGE.SHORTLISTED:
-    return EXERCISE_STAGE.APPLIED;
+    return EXERCISE_STAGE.REVIEW; // APPLIED
   case EXERCISE_STAGE.SELECTABLE:
     return EXERCISE_STAGE.SHORTLISTED;
   case EXERCISE_STAGE.RECOMMENDED:

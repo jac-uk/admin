@@ -143,6 +143,7 @@ const lookup = (value) => {
     score: 'Score',
     percent: 'Percent',
     zScore: 'Z Score',
+    grade: 'Grade',
 
     // reasonable adjustments reason
     'qualifying-test': 'Qualifying Test',
@@ -178,9 +179,9 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
   lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP second stage assessment';
-  lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection';
-  lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection';
-  lookup[APPLICATION_STATUS.SELECTION_PASSED] = 'Passed selection';
+  lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection day';
+  lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection day';
+  lookup[APPLICATION_STATUS.SELECTION_PASSED] = 'Passed selection day';
   lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
@@ -192,8 +193,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'CA + SJ Scoring';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed CA + SJ';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed CA + SJ';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed first test';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed first test';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
   lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed scenario test';
   lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed scenario test';
@@ -210,6 +211,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Passed`] = 'Passed statutory consultation';
   lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Failed`] = 'Failed statutory consultation';
   lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
   lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
