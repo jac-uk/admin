@@ -264,17 +264,23 @@
             Current Address
           </dt>
           <dd class="govuk-summary-list__value">
-            <InformationReviewSectionRenderer
-              :edit="editable"
-              :data-default="emptyAddressObject"
-              :data="currentAddress"
-              field="current"
-              :is-addable="false"
-              :is-removable="false"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
-            />
+            <div
+              v-for="key in currentAddressFields"
+              :key="key"
+            >
+              <h5
+                v-if="editable"
+                class="govuk-hint govuk-!-margin-1"
+              >
+                {{ key | lookup }}
+              </h5>
+              <InformationReviewRenderer
+                :edit="editable"
+                :data="currentAddress[key]"
+                :field="key"
+                @changeField="changeCurrentAddress"
+              />
+            </div>
           </dd>
         </div>
       </dl>
@@ -488,11 +494,11 @@ export default {
     hasPreviousAddress() {
       return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous;
     },
+    currentAddressFields() {
+      return Object.keys(this.emptyAddressObject);
+    },
     currentAddress() {
-      if (this.hasCurrentAddress) {
-        return [this.personalDetails.address.current];
-      }
-      return [this.emptyAddressObject];
+      return this.hasCurrentAddress ? this.personalDetails.address.current : this.emptyAddressObject;
     },
     currentMoreThan5Years() {
       return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.currentMoreThan5Years;
@@ -524,6 +530,13 @@ export default {
       }
       return obj;
     },
+    changeCurrentAddress(obj) {
+      this.changeUserDetails({
+        address: {
+          current: obj,
+        },
+      });
+    },
     addInfo(obj) {
       if (obj.field == 'previous') {
         let changeObj = [];
@@ -552,27 +565,13 @@ export default {
     },
     changeInfo(obj) {
       if (obj.hasOwnProperty('change') && obj.hasOwnProperty('extension') && obj.hasOwnProperty('index')) {
-        if (obj.field == 'current') {
-          const copy = cloneDeep(this.currentAddress);
-          copy[obj.index][obj.extension] = obj.change;
-          this.changeUserDetails({
-            address: {
-              current: copy[obj.index],
-            },
-          });
-        } else if (obj.field == 'previous') {
+        if (obj.field == 'previous') {
           const copy = cloneDeep(this.previousAddress);
           copy[obj.index][obj.extension] = obj.change;
           this.changeUserDetails({
             address: {
               previous: copy,
             },
-          });
-        } else if (obj.field == 'VATNumbers') {
-          const copy = cloneDeep(this.personalDetails.VATNumbers);
-          copy[obj.index][obj.extension] = obj.change;
-          this.changeUserDetails({
-            VATNumbers: copy,
           });
         }
       } else if (obj.hasOwnProperty('currentMoreThan5Years')) {
@@ -584,21 +583,28 @@ export default {
       }
     },
     addVATNumber() {
+      const VATNumbers = this.personalDetails.VATNumbers
+        ? [...this.personalDetails.VATNumbers, this.emptyVATNumberObject]
+        : [this.emptyVATNumberObject];
       this.changeUserDetails({
-        VATNumbers: [...this.personalDetails.VATNumbers, this.emptyVATNumberObject],
+        VATNumbers,
       });
     },
     changeVATNumber(index, value) {
-      this.changeUserDetails({
-        VATNumbers: this.personalDetails.VATNumbers.map((item, i) => {
-          return i === index ? value : item;
-        }),
-      });
+      if (this.personalDetails.VATNumbers) {
+        this.changeUserDetails({
+          VATNumbers: this.personalDetails.VATNumbers.map((item, i) => {
+            return i === index ? value : item;
+          }),
+        });
+      }
     },
     removeVATNumber(index) {
-      this.changeUserDetails({
-        VATNumbers: this.personalDetails.VATNumbers.filter((_, i) => i !== index),
-      });
+      if (this.personalDetails.VATNumbers) {
+        this.changeUserDetails({
+          VATNumbers: this.personalDetails.VATNumbers.filter((_, i) => i !== index),
+        });
+      }
     },
     changeUserDetails(obj) {
       if (obj.firstName || obj.lastName) {

@@ -9,7 +9,7 @@
         class="govuk-!-margin-bottom-6"
       >
         <button
-          v-if="edit && isRemovable && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value])"
+          v-if="edit && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteCandidateCharacterInformation.value])"
           class="govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 float-right"
           @click="openModal(index)"
         >
@@ -269,7 +269,7 @@
       No answers provided
     </span>
     <button
-      v-if="edit && isAddable"
+      v-if="edit"
       class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
       @click="addField"
     >
@@ -321,14 +321,6 @@ export default {
     displayMonthYearOnly: {
       type: Boolean,
       default: () => false,
-    },
-    isAddable: {
-      type: Boolean,
-      default: true,
-    },
-    isRemovable: {
-      type: Boolean,
-      default: true,
     },
   },
   data() {

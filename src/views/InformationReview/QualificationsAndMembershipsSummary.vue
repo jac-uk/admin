@@ -180,6 +180,22 @@
                 </dd>
               </div>
             </template>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key widerColumn">
+                {{ membershipNumberLabel(qualification.type) }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].membershipNumber : null"
+                  field="qualifications"
+                  extension="membershipNumber"
+                  :index="index"
+                  :edit="editable"
+                  @changeField="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
           </div>
         </dl>
       </div>
@@ -798,6 +814,12 @@ import {
   isNonLegal
 } from '@/helpers/exerciseHelper';
 
+const membershipNumbers = {
+  barrister: 'Bar membership number',
+  solicitor: 'Solicitors Regulation Authority number',
+  default: 'Membership number',
+};
+
 export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
@@ -820,6 +842,7 @@ export default {
   data() {
     return {
       NOT_COMPLETE_PUPILLAGE_REASONS,
+      membershipNumbers,
       dataDefault: {
         type: null,
         location: null,
@@ -886,6 +909,9 @@ export default {
     },
   },
   methods: {
+    membershipNumberLabel(type) {
+      return membershipNumbers[type] || membershipNumbers.default;
+    },
     fieldContains(field, item) {
       if (field && item) {
         if (field === item) {
