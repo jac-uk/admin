@@ -5,7 +5,7 @@
       class="moj-page-header-actions govuk-!-margin-bottom-0"
     >
       <div
-        v-if="exercise._useQTPlatform === false"
+        v-if="!useNewQTPlatform"
         class="moj-page-header-actions__title"
       >
         <h2 class="govuk-heading-l">
@@ -19,7 +19,7 @@
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
             <button
-              v-if="exercise._useQTPlatform"
+              v-if="useNewQTPlatform"
               type="button"
               class="govuk-button govuk-button--secondary"
               @click="changeQTPlatform"
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div v-if="exercise._useQTPlatform">
+    <div v-if="useNewQTPlatform">
       <p class="govuk-body">
         Select a task on the left.
       </p>
@@ -138,6 +138,10 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    useNewQTPlatform() {
+      if (this.exercise && this.exercise._useQTPlatform === false) { return false; }
+      return true;
+    },
     warningMessage() {
       let msg = 'Please add';
       if (!this.exercise.exercisePhoneNumber) {
@@ -200,7 +204,7 @@ export default {
     },
     async changeQTPlatform() {
       const saveData = {
-        _useQTPlatform: !this.exercise._useQTPlatform,
+        _useQTPlatform: !this.useNewQTPlatform,
       };
       await this.$store.dispatch('exerciseDocument/save', saveData);
     },

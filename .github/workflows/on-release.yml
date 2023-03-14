@@ -42,6 +42,8 @@ jobs:
           echo "VUE_APP_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
           echo "VUE_APP_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
+      - name: Dependency Check
+        run: npm audit --omit=dev
       - name: Building the project
         run: npm run ${{ env.environment }}:build
       - uses: FirebaseExtended/action-hosting-deploy@v0

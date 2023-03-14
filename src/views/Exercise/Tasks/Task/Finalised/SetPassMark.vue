@@ -14,7 +14,7 @@
         :key="scoreData.score"
         :value="scoreData.score"
       >
-        {{ scoreData.score }} ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
+        {{ scoreData.score | formatNumber(2) }} ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
       </option>
     </Select>
   </Form>

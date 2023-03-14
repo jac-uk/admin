@@ -43,6 +43,13 @@
                 class="govuk-!-margin-left-4"
               >
                 <button
+                  v-if="isApplied && !isWithdrawn"
+                  class="govuk-button govuk-button--warning govuk-!-margin-right-2"
+                  @click="$refs.modalRefWithdrawApplication.openModal()"
+                >
+                  Withdraw Application
+                </button>
+                <button
                   v-if="isApplied"
                   class="govuk-button btn-unlock"
                   @click="unlock"
@@ -184,6 +191,17 @@
           />
         </Modal>
 
+        <Modal
+          ref="modalRefWithdrawApplication"
+        >
+          <ModalInner
+            title="Withdraw Application"
+            message="Are you sure you want to set this application as withdrawn?"
+            @close="$refs.modalRefWithdrawApplication.closeModal()"
+            @confirmed="confirmWithdraw"
+          />
+        </Modal>
+
         <TabsList
           v-model:active-tab="activeTab"
           :tabs="tabs"
@@ -288,6 +306,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import AgencyReport from './AgencyReport.vue';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
 import Notes from '@/components/Notes/Notes';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
@@ -318,6 +337,7 @@ export default {
     AgencyReport,
     EventRenderer,
     Modal,
+    ModalInner,
     SubmissionExtension,
     Notes,
     PageNotFound,
@@ -426,6 +446,17 @@ export default {
       if (this.application) {
         switch (this.application.status) {
         case 'applied':
+          return true;
+        default:
+          return false;
+        }
+      }
+      return false;
+    },
+    isWithdrawn() {
+      if (this.application) {
+        switch (this.application.status) {
+        case 'withdrawn':
           return true;
         default:
           return false;
@@ -578,13 +609,13 @@ export default {
       }
       return objChanged;
     },
-    changeUserDetails(objChanged) {
+    changePersonalDetails(objChanged) {
       if (objChanged.firstName || objChanged.lastName) {
         objChanged = this.makeFullName(objChanged);
       }
 
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
-      this.$store.dispatch('application/update', { data: { personalDetails: myPersonalDetails }, id: this.applicationId });
+      this.changeApplication({ personalDetails: myPersonalDetails });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
 
       logEvent('info', 'Application updated (personal details)', {
@@ -593,17 +624,18 @@ export default {
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    openModal(modalRef){
-      this.$refs[modalRef].openModal();
-    },
-    closeModal(modalRef) {
-      this.$refs[modalRef].closeModal();
+    // openModal(modalRef){
+    //   this.$refs[modalRef].openModal();
+    // },
+    // closeModal(modalRef) {
+    //   this.$refs[modalRef].closeModal();
+    // },
+    async confirmWithdraw() {
+      await this.$store.dispatch('application/withdraw', { applicationId: this.applicationId }, { root: true });
+      this.$refs.modalRefWithdrawApplication.closeModal();
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
-    },
-    changePersonalDetails(obj) {
-      this.changeApplication({ personalDetails: obj });
     },
   },
 };

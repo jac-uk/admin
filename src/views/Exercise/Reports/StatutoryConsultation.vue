@@ -38,21 +38,79 @@
         </div>
       </div>
     </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <Table
+          data-key="id"
+          :data="applicationRecords"
+          :columns="tableColumns"
+          page-item-type="uppercase-letter"
+          :page-size="50"
+          :custom-search="{
+            placeholder: 'Search candidate names',
+            handler: candidateSearch,
+            field: 'candidate.id',
+          }"
+          @change="getTableData"
+        >
+          <template #row="{row}">
+            <TableCell :title="tableColumns[0].title">
+              <RouterLink
+                class="govuk-link"
+                :to="{name: 'exercise-applications-application', params: { applicationId: row.id, status: 'applied' }}"
+                target="_blank"
+              >
+                {{ row.application.referenceNumber }}
+              </RouterLink>
+            </TableCell>
+            <TableCell :title="tableColumns[1].title">
+              {{ row.candidate && row.candidate.fullName }}
+            </TableCell>
+            <TableCell :title="tableColumns[2].title">
+              <TextareaInput
+                :id="`statutory-consultation-note-${row.candidate.id}`"
+                :value="row.statutoryConsultation && row.statutoryConsultation.note"
+                @input="saveStatutoryConsultationNote(row, $event)"
+              />
+            </TableCell>
+          </template>
+        </Table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { debounce } from 'lodash';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import Table from '@jac-uk/jac-kit/components/Table/Table';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'StatutoryConsultation',
+  components: {
+    Table,
+    TableCell,
+    TextareaInput,
+  },
   mixins: [permissionMixin],
   data() {
     return {
+      applicationRecords: [],
+      tableColumns: [
+        { title: 'Reference number' },
+        { title: 'Name', sort: '_sort.fullNameUC', default: true },
+        { title: 'Note' },
+      ],
+      unsubscribe: null,
+      unsubscribeReport: null,
       report: null,
       refreshingReport: false,
     };
@@ -66,7 +124,7 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/statutoryConsultation`)
+    this.unsubscribeReport = firestore.doc(`exercises/${this.exercise.id}/reports/statutoryConsultation`)
       .onSnapshot((snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
@@ -77,8 +135,41 @@ export default {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
+    if (this.unsubscribeReport) {
+      this.unsubscribeReport();
+    }
   },
   methods: {
+    async getTableData(params) {
+      let firestoreRef = firestore
+        .collection('applicationRecords')
+        .where('exercise.id', '==', this.exercise.id)
+        .where('status', '==', 'invitedToSelectionDay');
+      params.orderBy = 'candidate.fullName';
+      firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
+      if (firestoreRef) {
+        this.unsubscribe = firestoreRef
+          .onSnapshot((snap) => {
+            const applicationRecords = [];
+            snap.forEach((doc) => {
+              applicationRecords.push(vuexfireSerialize(doc));
+            });
+            this.applicationRecords = applicationRecords;
+          });
+      } else {
+        this.applicationRecords = [];
+      }
+    },
+    async candidateSearch(searchTerm) {
+      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
+    },
+    saveStatutoryConsultationNote: debounce(async function(applicationRecord, note) {
+      if (!applicationRecord.statutoryConsultation) {
+        applicationRecord.statutoryConsultation = {};
+      }
+      applicationRecord.statutoryConsultation.note = note;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    }, 2000),
     async refreshReport() {
       this.refreshingReport = true;
       try {

@@ -246,15 +246,6 @@ const routes = [
     ],
   },
   {
-    path: '/targeted-outreach-report',
-    component: TargetedOutreachReport,
-    name: 'targeted-outreach-report',
-    meta: {
-      requiresAuth: true,
-      title: 'Candidates | Targeted Oureach Report',
-    },
-  },
-  {
     path: '/create-exercise',
     component: CreateExercise,
     name: 'create-exercise',
@@ -766,15 +757,6 @@ const routes = [
             meta: {
               requiresAuth: true,
               title: 'Character Checks | Exercise Tasks',
-            },
-          },
-          {
-            path: 'character-checks/edit',
-            component: ExerciseTasksCharacterChecksEdit,
-            name: 'exercise-tasks-character-checks-edit',
-            meta: {
-              requiresAuth: true,
-              title: 'Edit Character Checks | Exercise Tasks',
             },
           },
           {

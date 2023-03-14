@@ -30,30 +30,6 @@
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          HMRC check
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <span
-            v-if="exercise.characterChecks"
-          >
-            {{ $filters.toYesNo(hmrcCheckRequired) }}
-          </span>
-        </dd>
-        <dd
-          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-          class="govuk-summary-list__actions"
-        >
-          <RouterLink
-            class="govuk-link govuk-body-m change-link"
-            style="display:inline-block;"
-            :to="{name: 'exercise-tasks-character-checks-edit'}"
-          >
-            Change
-          </RouterLink>
-        </dd>
-      </div>
     </dl>
 
     <Banner
@@ -411,11 +387,6 @@ export default {
     activeTab() {
       this.resetSelectedItems();
     },
-  },
-  async created() {
-    if (!(this.exercise.characterChecks && typeof this.exercise.characterChecks.HMRC === 'boolean')) {
-      this.$router.push({ name: 'exercise-tasks-character-checks-edit' });
-    }
   },
   methods: {
     openModal(modalRef){

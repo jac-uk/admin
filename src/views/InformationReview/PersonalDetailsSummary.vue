@@ -183,6 +183,7 @@
             <InformationReviewRenderer
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.phone : ''"
+              type="tel"
               field="phone"
               @change-field="changeUserDetails"
             />

@@ -49,6 +49,21 @@
       </div>
 
       <div
+        v-else-if="isPhone"
+      >
+        <EditableField
+          :id="field"
+          :edit-mode="edit"
+          :value="data"
+          :field="field"
+          :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
+          type="tel"
+          :extension="extension"
+          @changeField="changeField"
+        />
+      </div>
+
+      <div
         v-else-if="isMultiSelection"
       >
         <EditableField
@@ -189,6 +204,9 @@ export default {
     },
     isEmail() {
       return this.$props.type === 'email';
+    },
+    isPhone() {
+      return this.$props.type === 'tel';
     },
     isSelection() {
       return this.$props.type === 'selection';
