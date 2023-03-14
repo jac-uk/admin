@@ -256,14 +256,28 @@
         <DateInput
           id="character-checks-date"
           v-model="formData.characterChecksDate"
-          label="Character Checks request date"
+          label="Character Checks - Candidate Consent sent date"
           required
         />
 
         <DateInput
           id="character-checks-date"
           v-model="formData.characterChecksReturnDate"
-          label="Character Checks return date"
+          label="Character Checks - Candidate Consent return date"
+          required
+        />
+
+        <DateInput
+          id="character-checks-professional-date"
+          v-model="formData.characterChecksProfessionalDate"
+          label="Character Checks - Professional Checks sent date"
+          required
+        />
+
+        <DateInput
+          id="character-checks-date"
+          v-model="formData.characterChecksProfessionalReturnDate"
+          label="Character Checks - Professional Checks return date"
           required
         />
 
@@ -384,6 +398,8 @@ export default {
       selectionDays: null,
       characterChecksDate: null,
       characterChecksReturnDate: null,
+      characterChecksProfessionalDate: null,
+      characterChecksProfessionalReturnDate: null,
       statutoryConsultationDate: null,
       characterAndSCCDate: null,
       finalOutcome: null,

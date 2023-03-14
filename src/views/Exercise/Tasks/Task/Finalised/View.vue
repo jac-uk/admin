@@ -19,8 +19,8 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
               <h2 class="govuk-heading-l">
-                <span class="govuk-caption-m">Score<br></span>
-                {{ score }}
+                <span class="govuk-caption-m">{{ scoreType | lookup }}<br></span>
+                {{ score | formatNumber(2) }}
               </h2>
             </div>
             <div class="govuk-grid-column-one-third text-center">
@@ -41,7 +41,7 @@
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Female<br></span>
               <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.female / scoreReport.count | formatNumber(2) }}%</span>
-              <span class="govuk-caption-m">BAME<br></span>
+              <span class="govuk-caption-m">Ethnic Minority<br></span>
               <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * scoreReport.diversity.bame / scoreReport.count | formatNumber(2) }}%</span>
             </div>
             <div class="govuk-grid-column-one-half">
@@ -64,8 +64,8 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
               <h2 class="govuk-heading-l">
-                <span class="govuk-caption-m">Score<br></span>
-                {{ higherScoreReport.score }} <span v-if="currentIndex > 1">and above</span>
+                <span class="govuk-caption-m">{{ scoreType | lookup }}<br></span>
+                {{ higherScoreReport.score | formatNumber(2) }} <span v-if="currentIndex > 1">and above</span>
               </h2>
             </div>
             <div class="govuk-grid-column-one-third text-right">
@@ -80,7 +80,7 @@
             <div class="govuk-grid-column-one-half">
               <span class="govuk-caption-m">Female<br></span>
               <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.female / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
-              <span class="govuk-caption-m">BAME<br></span>
+              <span class="govuk-caption-m">Ethnic Minority<br></span>
               <span class="govuk-heading-m govuk-!-margin-bottom-4">{{ 100 * higherScoreReport.cumulativeDiversity.bame / (scoreReport.rank - 1) | formatNumber(2) }}%</span>
             </div>
             <div class="govuk-grid-column-one-half">
@@ -179,14 +179,14 @@
           </template>
         </template>
         <TableCell
-          :title="tableColumns[tableColumns.length - 5].title"
+          :title="tableColumns[tableColumns.length - 6].title"
           class="text-center table-cell-score"
         >
           <div
             class="show-hide-link"
             @click="toggleShowDetail"
           >
-            {{ row.score }}
+            {{ row.score | formatNumber(2) }}
           </div>
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 5].title">
@@ -258,6 +258,10 @@ export default {
       required: true,
       type: Array,
     },
+    scoreType: {
+      required: true,
+      type: String,
+    },
   },
   data() {
     return {
@@ -314,9 +318,9 @@ export default {
           this.selectionCategories.forEach(() => this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' })));
         }
       }
-      columns.push({ title: 'Score', class: 'text-center' });
+      columns.push({ title: this.$options.filters.lookup(this.scoreType), class: 'text-center' });
       columns.push({ title: 'Female' });
-      columns.push({ title: 'BAME' });
+      columns.push({ title: 'Ethnic Minority' });
       columns.push({ title: 'Solicitor' });
       columns.push({ title: 'Disability' });
       columns.push({ title: 'Outcome' });
@@ -347,8 +351,7 @@ export default {
       if (!this.task) return [];
       if (!this.task.finalScores) return [];
       if (!this.exerciseDiversity) return [];
-
-      return this.task.finalScores.filter(scoreData => scoreData.score == this.score).map(scoreData => {
+      return this.task.finalScores.filter(scoreData => scoreData[this.scoreType] == this.score).map(scoreData => {
         const application = _find(this.task.applications, application => {
           return application.id === scoreData.id;
         });
@@ -356,7 +359,7 @@ export default {
           id: scoreData.id,
           ref: scoreData.ref,
           fullName: application.fullName,
-          score: scoreData.score,
+          score: scoreData[this.scoreType],
           scoreSheet: scoreData.scoreSheet,
           diversity: {},
         };

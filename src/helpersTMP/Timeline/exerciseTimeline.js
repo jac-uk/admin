@@ -232,7 +232,7 @@ const exerciseTimeline = (data) => {
   if (data.characterChecksDate) {
     timeline.push(
       {
-        entry: 'Character Checks',
+        entry: 'Character Checks - Candidate Consent sent',
         date: data.characterChecksDate,
         dateString: getDateString(data.characterChecksDate),
       }
@@ -242,9 +242,29 @@ const exerciseTimeline = (data) => {
   if (data.characterChecksReturnDate) {
     timeline.push(
       {
-        entry: 'Character Checks return',
+        entry: 'Character Checks - Candidate Consent return',
         date: data.characterChecksReturnDate,
         dateString: getDateString(data.characterChecksReturnDate),
+      }
+    );
+  }
+
+  if (data.characterChecksProfessionalDate) {
+    timeline.push(
+      {
+        entry: 'Character Checks - Professional Checks sent',
+        date: data.characterChecksProfessionalDate,
+        dateString: getDateString(data.characterChecksProfessionalDate),
+      }
+    );
+  }
+
+  if (data.characterChecksProfessionalReturnDate) {
+    timeline.push(
+      {
+        entry: 'Character Checks - Professional Checks return',
+        date: data.characterChecksProfessionalReturnDate,
+        dateString: getDateString(data.characterChecksProfessionalReturnDate),
       }
     );
   }
