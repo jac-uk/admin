@@ -381,18 +381,18 @@
         </RadioGroup>
 
         <RichTextInput
-          id="role-summary"
+          id="brief-overview"
           v-model="formData.roleSummary"
-          label="Role summary"
+          label="Brief Overview"
           hint="Short summary of the role for the vacancies listing page."
           class="custom-html"
           required
         />
 
         <RichTextInput
-          id="about-the-role"
+          id="full-details"
           v-model="formData.aboutTheRole"
-          label="About the role"
+          label="Full Details"
           hint="Add information about this role for the information page."
           class="custom-html"
           required
