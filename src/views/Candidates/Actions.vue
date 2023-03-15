@@ -129,7 +129,7 @@ export default {
             const result = response.data;
             if (result.status === 'success') {
               this.setMessage('Email address was updated.', 'success');
-              this.currentEmailAddress = result.data;
+              this.currentEmailAddress = result.data.email;
             } else {
               if (result.data.code === 'auth/email-already-exists') {
                 this.setMessage('An account already exists with this email address. To update the candidate login email address with this email address the other account will need to be removed. Please contact the Digital Team for assistance.', 'warning');

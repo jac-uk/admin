@@ -46,7 +46,7 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Role summary
+          Brief Overview
         </dt>
         <dd class="govuk-summary-list__value">
           <CustomHTML
@@ -86,7 +86,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          Role summary (Welsh)
+          Brief Overview (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
           <CustomHTML

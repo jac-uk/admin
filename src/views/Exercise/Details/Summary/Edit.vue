@@ -52,13 +52,13 @@
           id="welsh-posts"
           v-model="formData.welshPosts"
           label="Are there Welsh posts?"
-          hint="If this exercise has any posts in Wales you should tick this box. You then need to complete the Role Summary (Welsh)."
+          hint="If this exercise has any posts in Wales you should tick this box. You then need to complete the Brief Overview (Welsh)."
         />
 
         <RichTextInput
-          id="role-summary"
+          id="brief-overview"
           v-model="formData.roleSummary"
-          label="Role summary"
+          label="Brief Overview"
           hint="Short summary of the role for the vacancies listing page."
           class="custom-html"
           required
@@ -66,9 +66,9 @@
 
         <RichTextInput
           v-if="formData.welshPosts"
-          id="role-summary-welsh"
+          id="brief-overview-welsh"
           v-model="formData.roleSummaryWelsh"
-          label="Role summary (Welsh)"
+          label="Brief Overview (Welsh)"
           hint="Fersywn Cymraeg"
           class="custom-html"
           required
