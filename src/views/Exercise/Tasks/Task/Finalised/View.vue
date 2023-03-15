@@ -19,8 +19,8 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
               <h2 class="govuk-heading-l">
-                <span class="govuk-caption-m">{{ scoreType | lookup }}<br></span>
-                {{ score | formatNumber(2) }}
+                <span class="govuk-caption-m">{{ $filters.lookup(scoreType) }}<br></span>
+                {{ $filters.formatNumber(score, 2) }}
               </h2>
             </div>
             <div class="govuk-grid-column-one-third text-center">
@@ -64,8 +64,8 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
               <h2 class="govuk-heading-l">
-                <span class="govuk-caption-m">{{ scoreType | lookup }}<br></span>
-                {{ higherScoreReport.score | formatNumber(2) }} <span v-if="currentIndex > 1">and above</span>
+                <span class="govuk-caption-m">{{ $filters.lookup(scoreType) }}<br></span>
+                {{ $filters.formatNumber(higherScoreReport.score, 2) }} <span v-if="currentIndex > 1">and above</span>
               </h2>
             </div>
             <div class="govuk-grid-column-one-third text-right">
@@ -186,7 +186,7 @@
             class="show-hide-link"
             @click="toggleShowDetail"
           >
-            {{ row.score | formatNumber(2) }}
+            {{ $filters.formatNumber(row.score, 2) }}
           </div>
         </TableCell>
         <TableCell :title="tableColumns[tableColumns.length - 5].title">

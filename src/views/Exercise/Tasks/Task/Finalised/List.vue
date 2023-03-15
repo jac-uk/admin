@@ -1,6 +1,6 @@
 <template>
   <div>
-    Ranked by {{ scoreType | lookup }}
+    Ranked by {{ $filters.lookup(scoreType) }}
     <Table
       data-key="score"
       :data="scores"

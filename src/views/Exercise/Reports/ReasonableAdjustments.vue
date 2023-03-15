@@ -141,7 +141,7 @@
             :key="status"
             :value="status"
           >
-            {{ status | lookup }}
+            {{ $filters.lookup(status) }}
           </option>
         </Select>
       </div>
@@ -210,7 +210,7 @@
                         :key="status"
                         :value="status"
                       >
-                        {{ status | lookup }}
+                        {{ $filters.lookup(status) }}
                       </option>
                     </Select>
                   </div>
@@ -229,7 +229,7 @@
                         :key="reason"
                         :value="reason"
                       >
-                        {{ reason | lookup }}
+                        {{ $filters.lookup(reason) }}
                       </option>
                     </Select>
                     <TextareaInput

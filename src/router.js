@@ -80,7 +80,7 @@ import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
+//import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
 import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
 import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
 import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';

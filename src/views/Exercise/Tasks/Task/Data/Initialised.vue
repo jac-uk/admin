@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-half">
@@ -36,10 +36,10 @@
       >
         <template #row="{row, index}">
           <TableCell>
-            {{ row.ref | lookup }}
+            {{ $filters.lookup(row.ref) }}
           </TableCell>
           <TableCell>
-            {{ row.type | lookup }}
+            {{ $filters.lookup(row.type) }}
           </TableCell>
           <TableCell>
             <ActionButton

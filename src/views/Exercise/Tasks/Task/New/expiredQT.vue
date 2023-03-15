@@ -1,12 +1,12 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
     <div
       class="govuk-inset-text"
     >
-      It looks like the {{ type | lookup }} has already been completed.
+      It looks like the {{ $filters.lookup(type) }} has already been completed.
     </div>
 
     <RadioGroup

@@ -9,7 +9,7 @@
         :href="testAdminURL"
         target="_blank"
       >
-        QT Platform</a> to run and manage the {{ type | lookup }}.
+        QT Platform</a> to run and manage the {{ $filters.lookup(type) }}.
     </p>
     <p class="govuk-body govuk-!-margin-bottom-4">
       When the test and mop-ups have been completed you may continue.

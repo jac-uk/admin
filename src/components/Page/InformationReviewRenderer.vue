@@ -59,7 +59,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           type="tel"
           :extension="extension"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
