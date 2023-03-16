@@ -178,6 +178,7 @@ export default {
       ],
     },
   },
+  emits: ['close'],
   data() {
     return {
       roleName: null,
