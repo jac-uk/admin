@@ -153,6 +153,7 @@
 
       <Table
         :key="activeTab"
+        ref="characterCheckTable"
         data-key="id"
         :data="characterCheckData"
         :columns="activeTab === 'notrequested' ? tableColumns : tableColumnsCharacterChecksRequested"
@@ -340,19 +341,17 @@ export default {
     },
   },
   watch: {
-    candidateStatus: function (newValue) {
-      console.log(newValue);
+    candidateStatus: function () {
       this.getApplicationRecordsCharacterChecks();
+      this.$refs['characterCheckTable'].reload();
     },
     exerciseStage: function () {
       this.getApplicationRecordsCharacterChecks();
+      this.$refs['characterCheckTable'].reload();
     },
     activeTab() {
       this.resetSelectedItems();
     },
-  },
-  mounted() {
-    console.log(APPLICATION_STATUS.hasOwnProperty('INVITED_TO_SELECTION_DAY'));
   },
   methods: {
     openModal(modalRef){

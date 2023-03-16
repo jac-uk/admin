@@ -41,7 +41,7 @@ const APPLICATION_STATUS = {
   TELEPHONE_ASSESSMENT_PASSED: 'telephoneAssessmentPassed',
   TELEPHONE_ASSESSMENT_FAILED: 'telephoneAssessmentFailed',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
-  SELECTION_INVITED: 'selectionInvited',
+  // SELECTION_INVITED: 'selectionInvited',
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',
   REJECTED_CHARACTER: 'rejectedCharacter',
@@ -55,7 +55,6 @@ const APPLICATION_STATUS = {
   RECONSIDER: 'reconsider',
   SECOND_STAGE_INVITED: 'secondStageInvited',
   // ///: '///',
-  PASSED_FIRST_TEST: 'passedFirstTest',
 };
 
 const APPLICATION_SUCCESS_STATUSES = [
