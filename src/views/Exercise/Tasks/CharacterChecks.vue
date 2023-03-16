@@ -58,112 +58,99 @@
         :active-tab.sync="activeTab"
       />
 
-      <div class="govuk-grid-column-two-thirds clearfix">
-        <div class="govuk-button-group">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third clearfix">
+          <div class="govuk-button-group">
+            <Select
+              id="exercise-stage"
+              v-model="exerciseStage"
+              class="govuk-!-margin-right-2"
+            >
+              <option value="all">
+                All applications
+              </option>
+              <option
+                v-if="applicationRecordCounts.shortlisted"
+                value="shortlisted"
+              >
+                Shortlisted
+              </option>
+              <option
+                v-if="applicationRecordCounts.selected"
+                value="selected"
+              >
+                Selected
+              </option>
+              <option
+                v-if="applicationRecordCounts.recommended"
+                value="recommended"
+              >
+                Recommended
+              </option>
+              <option
+                v-if="applicationRecordCounts.handover"
+                value="handover"
+              >
+                Handover
+              </option>
+            </Select>
+          </div>
+        </div>
+
+        <div class="govuk-grid-column-one-third text-right">
           <Select
-            id="exercise-stage"
-            v-model="exerciseStage"
-            class="govuk-!-margin-right-2"
+            v-if="availableStatuses && availableStatuses.length > 0"
+            id="availableStatuses"
+            v-model="candidateStatus"
           >
-            <option value="all">
-              All applications
+            <option
+              value="all"
+            >
+              All Statuses
             </option>
             <option
-              v-if="applicationRecordCounts.review"
-              value="review"
+              v-for="item in availableStatuses"
+              :key="item"
+              :value="item"
             >
-              Review
-            </option>
-            <option
-              v-if="applicationRecordCounts.shortlisted"
-              value="shortlisted"
-            >
-              Shortlisted
-            </option>
-            <option
-              v-if="applicationRecordCounts.selected"
-              value="selected"
-            >
-              Selected
-            </option>
-            <option
-              v-if="applicationRecordCounts.recommended"
-              value="recommended"
-            >
-              Recommended
-            </option>
-            <option
-              v-if="applicationRecordCounts.handover"
-              value="handover"
-            >
-              Handover
+              {{ item | lookup }}
             </option>
           </Select>
         </div>
-      </div>
 
-      <div
-        v-if="activeTab == 'notrequested'"
-        class="application-details"
-      >
-        <Banner
-          :message="message"
-          :status="status"
-        />
-
-        <Modal ref="modalRefRequests">
-          <component
-            :is="`CharacterChecksRequests`"
-            :selected-items="selectedItems"
-            :type="`request`"
-            :exercise-mailbox="exerciseMailbox"
-            :exercise-manager-name="exerciseManagerName"
-            :due-date="dueDate"
-            @close="closeModal('modalRefRequests')"
-            @setmessage="setMessage"
-            @reset="resetSelectedItems"
-          />
-        </Modal>
-
-        <ActionButton
-          type="primary"
-          :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests')"
+        <div
+          v-if="activeTab !== 'completed'"
+          class="govuk-grid-column-one-third text-right"
         >
-          Send requests
-        </ActionButton>
-      </div>
-
-      <div
-        v-if="activeTab == 'requested'"
-      >
-        <Banner
-          :message="message"
-          :status="status"
-        />
-
-        <Modal ref="modalRefRequests">
-          <component
-            :is="`CharacterChecksRequests`"
-            :selected-items="selectedItems"
-            :type="`reminder`"
-            :exercise-mailbox="exerciseMailbox"
-            :exercise-manager-name="exerciseManagerName"
-            :due-date="dueDate"
-            @close="closeModal('modalRefRequests')"
-            @setmessage="setMessage"
-            @reset="resetSelectedItems"
+          <Banner
+            :message="message"
+            :status="status"
           />
-        </Modal>
 
-        <ActionButton
-          type="primary"
-          :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests')"
-        >
-          Send reminders
-        </ActionButton>
+          <Modal ref="modalRefRequests">
+            <component
+              :is="`CharacterChecksRequests`"
+              :selected-items="selectedItems"
+              :type=" activeTab == 'requested' ? 'reminder' : 'request'"
+              :exercise-mailbox="exerciseMailbox"
+              :exercise-manager-name="exerciseManagerName"
+              :due-date="dueDate"
+              @close="closeModal('modalRefRequests')"
+              @setmessage="setMessage"
+              @reset="resetSelectedItems"
+            />
+          </Modal>
+
+          <ActionButton
+            type="primary"
+            :disabled="!selectedItems.length"
+            @click="openModal('modalRefRequests')"
+          >
+            {{ activeTab == 'requested' ? 'Send reminders' : 'Send requests' }}
+          </ActionButton>
+        </div>
       </div>
+
       <Table
         :key="activeTab"
         data-key="id"
@@ -181,7 +168,7 @@
             options: exerciseStages,
           },
         ]"
-        @change="getCharacterChecksData"
+        @change="getApplicationRecordsCharacterChecks"
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
@@ -200,16 +187,22 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[2].title">
-            {{ row.stage }}
+            {{ row.stage | lookup }}
           </TableCell>
           <TableCell :title="tableColumns[3].title">
+            {{ row.status | lookup }}
+            <strong>
+              {{ row.status }}
+            </strong>
+          </TableCell>
+          <TableCell :title="tableColumns[4].title">
             {{ row.characterChecks.status }}
           </TableCell>
           <template v-if="activeTab !== 'notrequested'">
-            <TableCell :title="tableColumnsCharacterChecksRequested[4].title">
+            <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
               {{ row.characterChecks.requestedAt | formatDate }}
             </TableCell>
-            <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
+            <TableCell :title="tableColumnsCharacterChecksRequested[6].title">
               {{ getDate(row.characterChecks.reminderSentAt) || 'n/a' }}
             </TableCell>
           </template>
@@ -231,7 +224,8 @@ import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequ
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { availableStatuses, applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'CharacterChecks',
@@ -265,6 +259,7 @@ export default {
       activeTab: 'notrequested',
       characterChecksStatus: null,
       characterChecksMessage: null,
+      candidateStatus: 'all',
       exerciseStage: 'all',
       message: null,
       status: null,
@@ -275,13 +270,15 @@ export default {
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Stage' },
+        { title: 'Application Status' },
         { title: 'Status' },
       ],
       tableColumnsCharacterChecksRequested: [
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
         { title: 'Stage' },
-        { title: 'Status' },
+        { title: 'Application Status' },
+        { title: 'Character Check Status' },
         { title: 'Date requested' },
         { title: 'Date reminder sent' },
       ],
@@ -329,6 +326,9 @@ export default {
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
+    availableStatuses() {
+      return availableStatuses(this.exercise, this.exerciseStage);
+    },
     characterChecksEnabled() {
       return (this.exercise.characterChecksEnabled && this.exercise.characterChecksEnabled === true);
     },
@@ -340,25 +340,21 @@ export default {
     },
   },
   watch: {
+    candidateStatus: function (newValue) {
+      console.log(newValue);
+      this.getApplicationRecordsCharacterChecks();
+    },
     exerciseStage: function () {
-      this.getCharacterChecksData();
+      this.getApplicationRecordsCharacterChecks();
     },
     activeTab() {
       this.resetSelectedItems();
     },
   },
+  mounted() {
+    console.log(APPLICATION_STATUS.hasOwnProperty('INVITED_TO_SELECTION_DAY'));
+  },
   methods: {
-    getCharacterChecksData() {
-      if (this.activeTab == 'notrequested') {
-        this.getApplicationRecordsCharacterChecksNotRequested();
-      }
-      if (this.activeTab == 'requested') {
-        this.getApplicationRecordsCharacterChecksRequested();
-      }
-      if (this.activeTab == 'completed') {
-        this.getApplicationRecordsCharacterChecksCompleted();
-      }
-    },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
@@ -384,36 +380,18 @@ export default {
     getDate(value) {
       return formatDate(value);
     },
-    getApplicationRecordsCharacterChecksNotRequested(params) {
+    getApplicationRecordsCharacterChecks(params) {
+      const tabDetail = this.activeTab == 'notrequested' ? { requested: false } :
+        this.activeTab == 'requested' ? { requested: true } :
+        { completed: true };
       this.$store.dispatch(
         'characterChecks/bind',
         {
           exerciseId: this.exercise.id,
           stage: this.exerciseStage,
-          requested: false,
+          status: this.candidateStatus,
           ...params,
-        }
-      );
-    },
-    getApplicationRecordsCharacterChecksRequested(params) {
-      this.$store.dispatch(
-        'characterChecks/bind',
-        {
-          exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          requested: true,
-          ...params,
-        }
-      );
-    },
-    getApplicationRecordsCharacterChecksCompleted(params) {
-      this.$store.dispatch(
-        'characterChecks/bind',
-        {
-          exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          completed: true,
-          ...params,
+          ...tabDetail,
         }
       );
     },

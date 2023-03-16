@@ -20,6 +20,9 @@ export default {
       } else {
         firestoreRef = firestoreRef.where('stage', '==', params.stage);
       }
+      if (params.status !== 'all') {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+      }
 
       if (params.requested === true) {
         firestoreRef = firestoreRef.where('characterChecks.status', '==', 'requested');

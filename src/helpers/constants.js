@@ -1,7 +1,7 @@
 import {
   STATUS,
   EXERCISE_STAGE,
-  // APPLICATION_STATUS,
+  APPLICATION_STATUS as JACKIT_APPLICATION_STATUS,
   SHORTLISTING,
   QUALIFYING_TEST,
   QUALIFYING_TEST_RESPONSE,
@@ -27,6 +27,7 @@ const ADVERT_TYPES = {
 // };
 
 const APPLICATION_STATUS = {
+  ...JACKIT_APPLICATION_STATUS,
   CRITICAL_ANALYSIS_PASSED: 'criticalAnalysisPassed',
   CRITICAL_ANALYSIS_FAILED: 'criticalAnalysisFailed',
   SITUATIONAL_JUDGEMENT_PASSED: 'situationalJudgementPassed',
@@ -40,7 +41,7 @@ const APPLICATION_STATUS = {
   TELEPHONE_ASSESSMENT_PASSED: 'telephoneAssessmentPassed',
   TELEPHONE_ASSESSMENT_FAILED: 'telephoneAssessmentFailed',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
-  // SELECTION_INVITED: 'selectionInvited',
+  SELECTION_INVITED: 'selectionInvited',
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',
   REJECTED_CHARACTER: 'rejectedCharacter',
@@ -53,6 +54,8 @@ const APPLICATION_STATUS = {
   RECOMMENDED_FUTURE: 'recommendedFuture',
   RECONSIDER: 'reconsider',
   SECOND_STAGE_INVITED: 'secondStageInvited',
+  // ///: '///',
+  PASSED_FIRST_TEST: 'passedFirstTest',
 };
 
 const APPLICATION_SUCCESS_STATUSES = [
