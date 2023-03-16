@@ -226,7 +226,6 @@ import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import { availableStatuses, applicationRecordCounts } from '@/helpers/exerciseHelper';
-import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'CharacterChecks',
