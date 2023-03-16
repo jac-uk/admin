@@ -1,4 +1,4 @@
-const fs = require('fs');
+//const fs = require('fs');
 //const packageJson = fs.readFileSync('./package.json');
 const path = require('path');
 // const version = JSON.parse(packageJson).version || 0;
