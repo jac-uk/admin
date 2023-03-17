@@ -2,17 +2,16 @@
   <div>
     <div class="modal__title text-left govuk-!-padding-2 background-blue">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        Submit for Approval
+        Submit for approval
       </h2>
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div style="text-align: left;">
-        <p
-          class="govuk-body"
-          style="padding: 15px; border-left: 10px solid #B1B4B6;"
-        >
-          Please check that the following tasks are completed before submitting for approval.
-        </p>
+        <div class="govuk-inset-text govuk-!-margin-bottom-7">
+          <p class="govuk-body">
+            Please check that the following tasks are completed before submitting for approval.
+          </p>
+        </div>
         <p class="govuk-body">
           List of tasks to complete:
         </p>
@@ -35,7 +34,7 @@
           class="govuk-button"
           @click="confirmModal"
         >
-          Submit for Approval
+          Submit for approval
         </button>
       </div>
     </div>

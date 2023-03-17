@@ -137,13 +137,15 @@ export default {
     },
     rejecter() {
       const approval = this.getApproval;
-      return (approval && this.isApprovalRejected) ? approval.rejected.user.name : '';
+      return (approval && this.isApprovalRejected) ? approval.rejected.user : '';
     },
     approvalText() {
       return `This exercise was approved by ${this.approver}.`;
     },
     rejectionText() {
-      return `This exercise was rejected by ${this.rejecter}`;
+      if (this.rejecter && this.rejecter.id === this.$store.state.auth.currentUser.uid)
+        return 'You are rejecting an exercise.';
+      return `This exercise was rejected by ${this.rejecter.name}`;
     },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);

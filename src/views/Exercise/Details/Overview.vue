@@ -96,13 +96,20 @@
       </table>
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-top-6">
+      <div
+        v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
+        class="govuk-!-margin-bottom-4"
+      >
+        Congratulations! This exercise has been approved. Now you can publish it to the website.
+      </div>
+
       <button
         v-if="canUpdateExercises && isDraft"
         :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="openApprovalModal"
       >
-        Submit for Approval
+        Submit for approval
       </button>
 
       <button
