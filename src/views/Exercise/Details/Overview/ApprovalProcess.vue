@@ -204,3 +204,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.modal__message {
+  text-align: center;
+}
+</style>
