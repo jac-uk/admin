@@ -33,7 +33,7 @@
                   extension="type"
                   :index="index"
                   :edit="editable"
-                  :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
+                  :options="qualificationOptions"
                   type="selection"
                   @changeField="changeQualificationOrMembership"
                 />
@@ -838,6 +838,9 @@ export default {
       } else {
         return false;
       }
+    },
+    qualificationOptions() {
+      return this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
