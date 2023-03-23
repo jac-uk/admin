@@ -192,9 +192,6 @@
           </TableCell>
           <TableCell :title="tableColumns[3].title">
             {{ row.status | lookup }}
-            <strong>
-              {{ row.status }}
-            </strong>
           </TableCell>
           <TableCell :title="tableColumns[4].title">
             {{ row.characterChecks.status }}
@@ -343,10 +340,12 @@ export default {
     candidateStatus: function () {
       this.getApplicationRecordsCharacterChecks();
       this.$refs['characterCheckTable'].reload();
+      this.resetSelectedItems();
     },
     exerciseStage: function () {
       this.getApplicationRecordsCharacterChecks();
       this.$refs['characterCheckTable'].reload();
+      this.resetSelectedItems();
     },
     activeTab() {
       this.resetSelectedItems();
