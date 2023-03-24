@@ -8,6 +8,20 @@
         <form @submit.prevent="validateAndSave">
           <ErrorSummary :errors="errors" />
           <fieldset>
+            <Select
+              id="assessor-type"
+              v-model="type"
+              label="Assessor type"
+              required
+            >
+              <option
+                v-for="option in assessorTypes"
+                :key="option"
+                :value="option"
+              >
+                {{ option | lookup }}
+              </option>
+            </Select>
             <TextField
               id="full-name"
               v-model="fullName"
@@ -21,14 +35,14 @@
               required
             />
             <TextField
-              id="first-assessor-email"
+              id="assessor-email"
               v-model="email"
               label="Email"
               type="email"
               required
             />
             <TextField
-              id="first-assessor-Phone"
+              id="assessor-Phone"
               v-model="phone"
               label="Phone"
               type="tel"
@@ -57,12 +71,15 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { ASSESSOR_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'IndependentAssessorChange',
   components: {
     ErrorSummary,
     TextField,
+    Select,
   },
   extends: Form,
   props: {
@@ -78,10 +95,12 @@ export default {
   },
   data() {
     return {
+      type: null,
       email: null,
       fullName: null,
       phone: null,
       title: null,
+      assessorTypes: Object.values(ASSESSOR_TYPES),
     };
   },
   computed: {
@@ -91,6 +110,7 @@ export default {
     },
   },
   created() {
+    this.type = this.$attrs.type;
     this.email = this.$attrs.email;
     this.fullName = this.$attrs.fullName;
     this.phone = this.$attrs.phone;
@@ -109,6 +129,7 @@ export default {
         let data = {};
         if (this.$attrs.AssessorNr == 1) {
           data = {
+            firstAssessorType: this.type,
             firstAssessorEmail: this.email,
             firstAssessorFullName: this.fullName,
             firstAssessorPhone: this.phone,
@@ -116,6 +137,7 @@ export default {
           };
         } else if (this.$attrs.AssessorNr == 2) {
           data = {
+            firstAssessorType: this.type,
             secondAssessorEmail: this.email,
             secondAssessorFullName: this.fullName,
             secondAssessorPhone: this.phone,
