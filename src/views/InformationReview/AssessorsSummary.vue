@@ -29,6 +29,17 @@
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
+            Type
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ application.firstAssessorType }}
+          </dd>
+        </div>
+
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
             Full name
           </dt>
           <dd class="govuk-summary-list__value">
@@ -75,7 +86,7 @@
         >
           No information for First Assessor
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >
@@ -102,6 +113,17 @@
             >
               Edit
             </button>
+          </dd>
+        </div>
+
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Type
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ application.secondAssessorType }}
           </dd>
         </div>
 
@@ -155,7 +177,7 @@
         >
           No information for Second Assessor
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >
@@ -256,7 +278,7 @@
         >
           No information for Leadership Judge
         </dt>
-        <dd 
+        <dd
           v-if="editable"
           class="govuk-summary-list__value"
         >
