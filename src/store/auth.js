@@ -47,7 +47,7 @@ const module = {
           'seniorleader@judicialappointments.digital',
           'jacstaff@judicialappointments.digital',
           'readonly@judicialappointments.digital',
-          'kiran.Annavarapu3@justice.gov.uk',
+          'kiran.annavarapu3@justice.gov.uk',
           ].indexOf((user.email).toLowerCase()) >= 0) {
           allOk = true;
         }
