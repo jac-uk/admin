@@ -1,7 +1,7 @@
 import {
   STATUS,
   EXERCISE_STAGE,
-  // APPLICATION_STATUS,
+  APPLICATION_STATUS as JACKIT_APPLICATION_STATUS,
   SHORTLISTING,
   QUALIFYING_TEST,
   QUALIFYING_TEST_RESPONSE,
@@ -27,6 +27,7 @@ const ADVERT_TYPES = {
 // };
 
 const APPLICATION_STATUS = {
+  ...JACKIT_APPLICATION_STATUS,
   CRITICAL_ANALYSIS_PASSED: 'criticalAnalysisPassed',
   CRITICAL_ANALYSIS_FAILED: 'criticalAnalysisFailed',
   SITUATIONAL_JUDGEMENT_PASSED: 'situationalJudgementPassed',
@@ -53,6 +54,7 @@ const APPLICATION_STATUS = {
   RECOMMENDED_FUTURE: 'recommendedFuture',
   RECONSIDER: 'reconsider',
   SECOND_STAGE_INVITED: 'secondStageInvited',
+  // ///: '///',
 };
 
 const APPLICATION_SUCCESS_STATUSES = [
