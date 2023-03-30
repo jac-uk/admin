@@ -32,7 +32,7 @@
             Type
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.firstAssessorType }}
+            {{ application.firstAssessorType | lookup }}
           </dd>
         </div>
 
@@ -123,7 +123,7 @@
             Type
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.secondAssessorType }}
+            {{ application.secondAssessorType | lookup}}
           </dd>
         </div>
 
