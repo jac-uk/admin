@@ -10,7 +10,7 @@
         This exercise is waiting for your approval.
       </strong>
       
-      <div style="padding-left: 45px;">
+      <div class="govuk-!-padding-left-8">
         <p>Please verify the content of the exercise and Approve or Reject.</p>
         <div>
           <button

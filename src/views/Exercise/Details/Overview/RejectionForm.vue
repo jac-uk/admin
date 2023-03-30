@@ -11,7 +11,7 @@
           You are rejecting an exercise
         </strong>
       </div>
-      <div style="padding-left: 45px;">
+      <div class="govuk-!-padding-left-8">
         <TextareaInput
           id="rejection-reason"
           hint="Please give your reason for rejection"
