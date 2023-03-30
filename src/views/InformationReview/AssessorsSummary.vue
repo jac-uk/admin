@@ -341,12 +341,12 @@ export default {
   },
   computed: {
     applicantProvidedFirstAssessor() {
-      const { firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
-      return (firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
+      const { firstAssessorType, firstAssessorEmail, firstAssessorFullName, firstAssessorPhone, firstAssessorTitle } = this.application;
+      return (firstAssessorType || firstAssessorEmail || firstAssessorFullName || firstAssessorPhone || firstAssessorTitle);
     },
     applicantProvidedSecondAssessor() {
-      const { secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
-      return (secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
+      const { secondAssessorType, secondAssessorEmail, secondAssessorFullName, secondAssessorPhone, secondAssessorTitle } = this.application;
+      return (secondAssessorType || secondAssessorEmail || secondAssessorFullName || secondAssessorPhone || secondAssessorTitle);
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -367,6 +367,7 @@ export default {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
           applicationId: this.applicationId,
+          type: this.application.firstAssessorType,
           email: this.application.firstAssessorEmail,
           fullName: this.application.firstAssessorFullName,
           phone: this.application.firstAssessorPhone,
@@ -377,6 +378,7 @@ export default {
         this.assessorDetails = {
           AssessorNr: AssessorNr,
           applicationId: this.applicationId,
+          type: this.application.secondAssessorType,
           email: this.application.secondAssessorEmail,
           fullName: this.application.secondAssessorFullName,
           phone: this.application.secondAssessorPhone,

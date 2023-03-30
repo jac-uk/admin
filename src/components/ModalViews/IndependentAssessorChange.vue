@@ -137,7 +137,7 @@ export default {
           };
         } else if (this.$attrs.AssessorNr == 2) {
           data = {
-            firstAssessorType: this.type,
+            secondAssessorType: this.type,
             secondAssessorEmail: this.email,
             secondAssessorFullName: this.fullName,
             secondAssessorPhone: this.phone,
