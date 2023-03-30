@@ -309,8 +309,10 @@ export default {
       return false;
     },
     timeline() {
-      const timeline = exerciseTimeline(this.exercise);
-      return createTimeline(timeline, 4);
+      let timeline = exerciseTimeline(this.exercise);
+      const now = new Date();
+      timeline = timeline.filter(item => item.date >= now); 
+      return createTimeline(timeline, 4); // show most relevant timeline events
     },
     exerciseProgress() {
       if (this.exercise && this.exercise.progress) {
