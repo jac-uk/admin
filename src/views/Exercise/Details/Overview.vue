@@ -310,9 +310,15 @@ export default {
     },
     timeline() {
       let timeline = exerciseTimeline(this.exercise);
+      timeline = createTimeline(timeline);
       const now = new Date();
-      timeline = timeline.filter(item => item.date >= now); 
-      return createTimeline(timeline, 4); // show most relevant timeline events
+      let mostRelevantIndex = 0;
+      timeline.forEach((item, index) => {
+        if (item.date <= now) {
+          mostRelevantIndex = index;
+        }
+      });
+      return timeline.slice(mostRelevantIndex, mostRelevantIndex + 4);
     },
     exerciseProgress() {
       if (this.exercise && this.exercise.progress) {
