@@ -221,8 +221,17 @@
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
-                  <td class="govuk-table__cell">
+                  <td
+                    v-if="candidate.bsbDate"
+                    class="govuk-table__cell"
+                  >
                     {{ candidate.bsbDate | formatDate('long') }}
+                  </td>
+                  <td
+                    v-else
+                    class="govuk-table__cell"
+                  >
+                    None given
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.bsbNumber }}
@@ -523,7 +532,7 @@ export default {
       return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
     bsbRows() {
-      return this.report ? this.report.rows.filter((e) => e.bsbDate) : [];
+      return this.report ? this.report.rows : [];
     },
     jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
