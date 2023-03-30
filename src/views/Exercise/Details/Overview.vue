@@ -210,7 +210,7 @@
       </Modal>
       <button
         v-if="canArchiveExercises"
-        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
+        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''} govuk-!-margin-right-3`"
         @click="openArchiveModal"
       >
         {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
