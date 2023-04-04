@@ -82,6 +82,9 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[2].title">
+          {{ row._language === 'cym' ? 'Yes' : 'No' }}
+        </TableCell>
+        <TableCell :title="tableColumns[3].title">
           {{ row.status | lookup }}
         </TableCell>
       </template>
@@ -144,6 +147,7 @@ export default {
       const cols = [];
       cols.push({ title: 'Reference number' });
       cols.push({ title: 'Name', sort: '_sort.fullNameUC', default: true });
+      cols.push({ title: 'Applied in Welsh' });
       cols.push({ title: 'Status' });
       return cols;
     },
