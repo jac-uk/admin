@@ -11,6 +11,7 @@ export {
 
 const MARKING_TYPE = {
   GROUP: 'group',
+  SCORE: 'score',
   NUMBER: 'number',
   GRADE: 'grade',
   BOOL: 'bool',
@@ -45,6 +46,11 @@ function getScoreSheetItemTotal(item, scoreSheet) {
     case MARKING_TYPE.GRADE:
       if (scoreSheet[item.ref] && GRADE_VALUES[scoreSheet[item.ref]]) {
         return GRADE_VALUES[scoreSheet[item.ref]];
+      }
+      break;
+    case MARKING_TYPE.SCORE:
+      if (scoreSheet[item.ref]) {
+        return parseFloat(scoreSheet[item.ref].score);
       }
       break;
     case MARKING_TYPE.NUMBER:
