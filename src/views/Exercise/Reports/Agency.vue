@@ -20,16 +20,20 @@
             >
               Export data
             </button>
-            <ActionButton
+            <button
               v-if="hasPermissions([
                 PERMISSIONS.applications.permissions.canReadApplications.value,
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
-              type="primary"
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
               @click="refreshReport"
             >
-              Refresh
-            </ActionButton>
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
+            </button>
           </div>
         </div>
       </div>
@@ -472,19 +476,18 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'Agency',
   components: {
     TabsList,
-    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       report: null,
+      refreshingReport: false,
       tabs: [
         {
           ref: 'acro',
@@ -562,12 +565,9 @@ export default {
   },
   methods: {
     async refreshReport() {
-      try {
-        await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
-        return true;
-      } catch (error) {
-        return;
-      }
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     gatherReportData() {
       const reportData = [];

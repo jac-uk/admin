@@ -24,15 +24,17 @@
             >
               Send reminders
             </button>
-            <ActionButton
+            <button
               v-if="status === 'applied' && hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              @click="exportContacts"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
+              @click="exportContacts()"
             >
               Export contacts
-            </ActionButton>
+            </button>
             <button
               v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
@@ -119,7 +121,6 @@ import LateApplicationRequest from '@/components/ModalViews/LateApplication/Requ
 import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'ApplicationsList',
@@ -130,7 +131,6 @@ export default {
     ModalInner,
     LateApplicationRequest,
     LateApplicationConfirmation,
-    ActionButton,
   },
   mixins: [permissionMixin],
   props: {
@@ -204,21 +204,16 @@ export default {
       this.closeApplicationReminderModal();
     },
     async exportContacts() {
-      try {
-        const title = 'Contacts';
-        const xlsxData = await this.gatherReportData();
-        downloadXLSX(
-          xlsxData,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
-        );
-        return true;
-      } catch (error) {
-        return;
-      }
+      const title = 'Contacts';
+      const xlsxData = await this.gatherReportData();
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });

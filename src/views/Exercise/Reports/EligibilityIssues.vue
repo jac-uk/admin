@@ -6,34 +6,46 @@
       </h1>
     </div>
     <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
+      <button
         v-if="hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"
-        class="govuk-!-margin-right-2"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+        :disabled="generatingExport"
         @click="exportData"
       >
+        <span
+          v-if="generatingExport"
+          class="spinner-border spinner-border-sm"
+        />
         Export to Excel
-      </ActionButton>
-      <ActionButton
+      </button>
+      <button
         v-if="hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
-        class="govuk-!-margin-right-2"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="exportToGoogleDoc"
       >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
         Generate Report
-      </ActionButton>
-      <ActionButton
-        type="primary"
+      </button>
+      <button
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
-        Refresh
-      </ActionButton>
+        <span
+          v-if="refreshingReport"
+          class="spinner-border spinner-border-sm"
+        /> Refresh
+      </button>
     </div>
 
     <div class="govuk-grid-column-full text-right">
@@ -179,7 +191,6 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'EligibilityIssues',
@@ -188,17 +199,19 @@ export default {
     TableCell,
     Select,
     TextareaInput,
-    ActionButton,
   },
   mixins: [permissionMixin],
   data () {
     return {
       applicationRecords: [],
       issueStatus: 'all',
+      refreshingReport: false,
+      generatingExport: false,
       unsubscribe: null,
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
+      exportingToGoogleDoc: false,
       total: null,
     };
   },
@@ -214,19 +227,23 @@ export default {
   },
   methods: {
     async refreshReport() {
-      try {
-        return await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
-      } catch (error) {
-        return;
-      }
+      this.refreshingReport = true;
+      await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     async exportToGoogleDoc() {
-      if (!this.exercise.referenceNumber) return; // abort if no ref
-      try {
-        return await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
-      } catch (error) {
-        return;
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; // abort if no ref
       }
+
+      try {
+        await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+      } catch (error) {
+        console.error(error);
+      }
+      this.exportingToGoogleDoc = false;
     },
     async getTableData(params) {
       let firestoreRef = firestore
@@ -253,8 +270,13 @@ export default {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
     async gatherReportData() {
+
+      this.generatingExport = true;
+
       // fetch data
       const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
+
+      this.generatingExport = false;
 
       const reportData = [];
 
@@ -269,22 +291,17 @@ export default {
       return reportData;
     },
     async exportData() {
-      try {
-        const title = 'Eligibility Issues';
-        const xlsxData = await this.gatherReportData();
+      const title = 'Eligibility Issues';
+      const xlsxData = await this.gatherReportData();
 
-        downloadXLSX(
-          xlsxData,
-          {
-            title: `${this.exercise.referenceNumber} ${title}`,
-            sheetName: title,
-            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-          }
-        );
-        return true;
-      } catch (error) {
-        return;
-      }
+      downloadXLSX(
+        xlsxData,
+        {
+          title: `${this.exercise.referenceNumber} ${title}`,
+          sheetName: title,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+        }
+      );
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.eligibilityIssuesStatus = status;

@@ -7,39 +7,45 @@
     </div>
     <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
     <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
+      <button
         v-if="hasPermissions([
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.exercises.permissions.canReadExercises.value
         ])"
-        class="govuk-!-margin-right-2"
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="downloadReport"
       >
+        <span
+          v-if="downloadingReport"
+          class="spinner-border spinner-border-sm"
+        />
         Export to Excel
-      </ActionButton>
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value,
-          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
-        ])"
-        class="govuk-!-margin-right-2"
+      </button>
+      <button
+        class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
         @click="exportToGoogleDoc"
       >
+        <span
+          v-if="exportingToGoogleDoc"
+          class="spinner-border spinner-border-sm"
+        />
         Generate Report
-      </ActionButton>
-      <ActionButton
+      </button>
+      <button
         v-if="hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
-        type="primary"
+        class="govuk-button moj-button-menu__item moj-page-header-actions__action"
         @click="refreshReport"
       >
-        Refresh
-      </ActionButton>
+        <span
+          v-if="refreshingReport"
+          class="spinner-border spinner-border-sm"
+        /> Refresh
+      </button>
     </div>
     <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
@@ -317,7 +323,6 @@ import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'CharacterIssues',
@@ -327,7 +332,6 @@ export default {
     Table,
     TableCell,
     TextareaInput,
-    ActionButton,
   },
   mixins: [permissionMixin],
   data () {
@@ -342,6 +346,8 @@ export default {
       tableColumns: [
         { title: 'Candidate' },
       ],
+      downloadingReport: false,
+      exportingToGoogleDoc: false,
       total: null,
       otherApplicationRecords: [],
       open: [],
@@ -394,45 +400,49 @@ export default {
       this.refreshingReport = false;
     },
     async downloadReport() {
-      if (!this.exercise.referenceNumber) return; // abort if no ref
-      try {
-        const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
-          exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          status: this.candidateStatus,
-          format: 'excel',
-        });
-        const title = `Character Check Report - ${this.exercise.referenceNumber}`;
-        const data = [];
-        if (reportData.data.rows.length === 0) return; // abort if no applications or data
-        data.push(reportData.data.headers.map(header => header.title));
-        // get rows
-        reportData.data.rows.forEach((row) => {
-          data.push(Object.values(row).map(cell => cell));
-        });
-
-        downloadXLSX(data, {
-          title,
-          sheetName: title,
-          filename: `${title}.xlsx`,
-        });
-        return true;
-      } catch (error) {
-        return;
+      this.downloadingReport = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
       }
+      const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'excel',
+      });
+      const title = `Character Check Report - ${this.exercise.referenceNumber}`;
+      const data = [];
+      if (reportData.data.rows.length === 0) {
+        this.downloadingReport = false;
+        return; //Abort if no applications or data.
+      }
+      data.push(reportData.data.headers.map(header => header.title));
+      // get rows
+      reportData.data.rows.forEach((row) => {
+        data.push(Object.values(row).map(cell => cell));
+      });
+
+      downloadXLSX(data, {
+        title,
+        sheetName: title,
+        filename: `${title}.xlsx`,
+      });
+      this.downloadingReport = false;
     },
     async exportToGoogleDoc() {
-      if (!this.exercise.referenceNumber) return; // abort if no ref
-      try {
-        return await functions.httpsCallable('exportApplicationCharacterIssues')({
-          exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          status: this.candidateStatus,
-          format: 'googledoc',
-        });
-      } catch (error) {
-        return;
+      this.exportingToGoogleDoc = true;
+      if (!this.exercise.referenceNumber) {
+        this.downloadingReport = false;
+        return; //Abort if no ref
       }
+      await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'googledoc',
+      });
+      this.exportingToGoogleDoc = false;
     },
     async getTableData(params) {
       let firestoreRef = firestore

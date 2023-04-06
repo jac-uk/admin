@@ -35,17 +35,21 @@
               >
                 Export all data
               </button>
-              <ActionButton
+              <button
                 v-if="hasPermissions([
                   PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
-                type="primary"
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+                data-module="govuk-button"
                 @click="refreshReport"
               >
-                Refresh
-              </ActionButton>
+                <span
+                  v-if="refreshingReport"
+                  class="spinner-border spinner-border-sm"
+                /> Refresh
+              </button>
             </div>
           </div>
         </div>
@@ -487,19 +491,18 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'Diversity',
   components: {
     TabsList,
     Stat,
-    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       diversity: null,
+      refreshingReport: false,
       unsubscribe: null,
       tabs: [
         {
@@ -561,11 +564,9 @@ export default {
   },
   methods: {
     async refreshReport() {
-      try {
-        return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
-      } catch (error) {
-        return;
-      }
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     gatherReportData(stage) {
       const data = [];

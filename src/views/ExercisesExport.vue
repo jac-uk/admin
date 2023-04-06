@@ -8,24 +8,29 @@
         Export Exercise Data
       </h1>
       <p>Exercises selected: {{ selectedItems.length }}</p>
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value
-        ])"
-        type="primary"
-        @click="exportData"
-      >
-        Download XLSX
-      </ActionButton>
+      <form @submit.prevent="validateAndSave">
+        <ErrorSummary
+          :errors="errors"
+        />
+        <button
+          v-if="hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+            PERMISSIONS.applications.permissions.canReadApplications.value
+          ])"
+          class="govuk-button"
+        >
+          Download XLSX
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
@@ -33,9 +38,10 @@ import permissionMixin from '@/permissionMixin';
 export default {
   name: 'ExercisesExport',
   components: {
+    ErrorSummary,
     BackLink,
-    ActionButton,
   },
+  extends: Form,
   mixins: [permissionMixin],
   computed: {
     selectedItems() {
@@ -48,32 +54,27 @@ export default {
     }
   },
   methods: {
-    async exportData() {
-      try {
-        const response = await functions.httpsCallable('exportExerciseData')({ exerciseIds: this.selectedItems });
-        const data = response.data;
-        const xlsxData = [];
-        for (let i = 0, len = data.rows.length; i < len; ++i) {
-          const row = [];
-          for (let j = 0, lenJ = data.columns.length; j < lenJ; ++j) {
-            row.push(data.rows[i][data.columns[j].ref]);
-          }
-          xlsxData.push(row);
+    async save() {
+      const response = await functions.httpsCallable('exportExerciseData')({ exerciseIds: this.selectedItems });
+      const data = response.data;
+      const xlsxData = [];
+      for (let i = 0, len = data.rows.length; i < len; ++i) {
+        const row = [];
+        for (let j = 0, lenJ = data.columns.length; j < lenJ; ++j) {
+          row.push(data.rows[i][data.columns[j].ref]);
         }
-        const xlsxHeaders = data.columns.map(column => column.title);
-        xlsxData.unshift(xlsxHeaders);
-        downloadXLSX(
-          xlsxData,
-          {
-            title: 'Exercise export',
-            sheetName: 'Exercise data',
-            fileName: 'exercise-data.xlsx',
-          }
-        );
-        return true;
-      } catch (error) {
-        return;
+        xlsxData.push(row);
       }
+      const xlsxHeaders = data.columns.map(column => column.title);
+      xlsxData.unshift(xlsxHeaders);
+      downloadXLSX(
+        xlsxData,
+        {
+          title: 'Exercise export',
+          sheetName: 'Exercise data',
+          fileName: 'exercise-data.xlsx',
+        }
+      );
     },
   },
 };

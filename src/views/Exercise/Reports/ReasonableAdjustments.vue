@@ -20,16 +20,20 @@
             >
               Export data
             </button>
-            <ActionButton
+            <button
               v-if="hasPermissions([
                 PERMISSIONS.applications.permissions.canReadApplications.value,
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
-              type="primary"
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
               @click="refreshReport"
             >
-              Refresh
-            </ActionButton>
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
+            </button>
           </div>
         </div>
       </div>
@@ -356,7 +360,6 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
@@ -370,7 +373,6 @@ export default {
     Table,
     TableCell,
     TextareaInput,
-    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
@@ -393,6 +395,7 @@ export default {
       open: {},
       otherApplicationRecords: [],
       report: null,
+      refreshingReport: false,
     };
   },
   computed: {
@@ -538,12 +541,9 @@ export default {
       return record ? record.otherRecords : [];
     },
     async refreshReport() {
-      try {
-        await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
-        return true;
-      } catch (error) {
-        return;
-      }
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     gatherReportData() {
       const reportData = [];

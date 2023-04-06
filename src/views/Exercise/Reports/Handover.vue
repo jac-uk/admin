@@ -20,18 +20,21 @@
             >
               Export data
             </button>
-
-            <ActionButton
+            <button
               v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              type="primary"
+              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
+              data-module="govuk-button"
               @click="refreshReport"
             >
-              Refresh
-            </ActionButton>
+              <span
+                v-if="refreshingReport"
+                class="spinner-border spinner-border-sm"
+              /> Refresh
+            </button>
             <!--            <ActionButton-->
             <!--              v-if="totalApplicationRecords"-->
             <!--              type="primary"-->
@@ -101,7 +104,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+//import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
@@ -110,12 +113,13 @@ export default {
   components: {
     Table,
     TableCell,
-    ActionButton,
+    //ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       report: null,
+      refreshingReport: false,
       tableColumns: [
         {
           title: 'Reference number',
@@ -167,12 +171,9 @@ export default {
       );
     },
     async refreshReport() {
-      try {
-        await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
-        return true;
-      } catch (error) {
-        return;
-      }
+      this.refreshingReport = true;
+      await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
+      this.refreshingReport = false;
     },
     gatherReportData() {
       const reportData = [];

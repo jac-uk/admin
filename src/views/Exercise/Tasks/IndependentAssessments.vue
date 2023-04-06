@@ -336,7 +336,7 @@
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
-            @click="initialiseAssessments"
+            @click="initialiseAssessments()"
           >
             Start assessments
           </ActionButton>
@@ -584,12 +584,10 @@ export default {
   },
   methods: {
     async initialiseAssessments() {
-      if (!this.exerciseStage) return;
-      try {
-        return await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
-      } catch (error) {
-        return;
+      if (!this.exerciseStage) {
+        return false;
       }
+      await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
     },
     async cancelAssessments({ assessmentIds, cancelReason }) {
       this.resetSelectedItems();
