@@ -84,7 +84,7 @@
           status="warning"
         />
 
-        <ActionButton
+        <button
           v-if="isNotRequested && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
@@ -92,45 +92,43 @@
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
-          type="primary"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'request', { assessmentIds: selectedItems }, sendRequests)"
         >
           Send requests
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isNotRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
         >
           Test request
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
-          type="primary"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'reminder', { assessmentIds: selectedItems }, sendReminders)"
         >
           Send reminders
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'testReminder', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
         >
           Test reminder
-        </ActionButton>
+        </button>
         <ActionButton
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
