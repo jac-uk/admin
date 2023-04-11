@@ -73,7 +73,10 @@
               :key="index"
               class="text-center table-cell-score"
             >
-              <template v-if="isNumericColumn(col.type)">
+              <template v-if="isScoreColumn(col.type)">
+                {{ $filters.formatNumber(getColValue(row, col).score, 2) }}
+              </template>
+              <template v-else-if="isNumericColumn(col.type)">
                 {{ $filters.formatNumber(getColValue(row, col), 2) }}
               </template>
               <template v-else-if="isYesNoColumn(col.type)">
@@ -518,6 +521,9 @@ export default {
       // get task.finalScores
       // console.log('save current score sheet, in finalScores', currentScoreSheet);
       // await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: { scoreSheet: scoreSheet } });
+    },
+    isScoreColumn(colType) {
+      return colType === MARKING_TYPE.SCORE;
     },
     isNumericColumn(colType) {
       return colType === MARKING_TYPE.NUMBER;

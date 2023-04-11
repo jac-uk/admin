@@ -33,7 +33,7 @@
                   extension="type"
                   :index="index"
                   :edit="editable"
-                  :options="['advocate-scotland', 'barrister', 'CILEx', 'solicitor']"
+                  :options="qualificationOptions"
                   type="selection"
                   @change-field="changeQualificationOrMembership"
                 />
@@ -160,18 +160,35 @@
               </dd>
             </div>
 
-            <div
-              v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
-              class="govuk-summary-list__row"
-            >
+              <div
+                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
+                class="govuk-summary-list__row"
+              >
+                <dt class="govuk-summary-list__key widerColumn">
+                  Did not complete pupillage notes
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="application.qualifications[index].details"
+                    field="qualifications"
+                    extension="details"
+                    :index="index"
+                    :edit="editable"
+                    @change-field="changeQualificationOrMembership"
+                  />
+                </dd>
+              </div>
+            </template>
+
+            <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key widerColumn">
-                Did not complete pupillage notes
+                {{ membershipNumberLabel(qualification.type) }}
               </dt>
               <dd class="govuk-summary-list__value">
                 <InformationReviewRenderer
-                  :data="application.qualifications[index].details"
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].membershipNumber : null"
                   field="qualifications"
-                  extension="details"
+                  extension="membershipNumber"
                   :index="index"
                   :edit="editable"
                   @change-field="changeQualificationOrMembership"
@@ -796,6 +813,12 @@ import {
   isNonLegal
 } from '@/helpers/exerciseHelper';
 
+const membershipNumbers = {
+  barrister: 'Bar membership number',
+  solicitor: 'Solicitors Regulation Authority number',
+  default: 'Membership number',
+};
+
 export default {
   name: 'QualificationsAndMembershipsSummary',
   components: {
@@ -819,6 +842,7 @@ export default {
   data() {
     return {
       NOT_COMPLETE_PUPILLAGE_REASONS,
+      membershipNumbers,
       dataDefault: {
         type: null,
         location: null,
@@ -837,6 +861,9 @@ export default {
       } else {
         return false;
       }
+    },
+    qualificationOptions() {
+      return this.exercise.otherQualifications ? [...['advocate-scotland', 'barrister', 'CILEx', 'solicitor'], this.exercise.otherQualifications] : ['advocate-scotland', 'barrister', 'CILEx', 'solicitor'];
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
@@ -885,6 +912,9 @@ export default {
     },
   },
   methods: {
+    membershipNumberLabel(type) {
+      return membershipNumbers[type] || membershipNumbers.default;
+    },
     fieldContains(field, item) {
       if (field && item) {
         if (field === item) {
