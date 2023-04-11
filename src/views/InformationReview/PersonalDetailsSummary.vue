@@ -167,7 +167,7 @@
               :application-id="userId"
               :data="personalDetails.otherNames || ''"
               field="otherNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -236,7 +236,7 @@
               :application-id="userId"
               :data="personalDetails.placeOfBirth || ''"
               field="placeOfBirth"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -272,13 +272,13 @@
                 v-if="editable"
                 class="govuk-hint govuk-!-margin-1"
               >
-                {{ key | lookup }}
+                {{ $filters.lookup(key) }}
               </h5>
               <InformationReviewRenderer
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
-                @changeField="changeCurrentAddress"
+                @change-field="changeCurrentAddress"
               />
             </div>
           </dd>
@@ -297,7 +297,7 @@
               type="selection"
               :data="currentMoreThan5Years"
               field="currentMoreThan5Years"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -314,7 +314,7 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
               @removeField="removeInfo"
               @addField="addInfo"
             />
@@ -406,7 +406,7 @@
                 :edit="editable"
                 :data="VATNumber"
                 field="VATNumber"
-                @changeField="(obj) => changeVATNumber(index, obj)"
+                @change-field="(obj) => changeVATNumber(index, obj)"
               />
             </div>
             <button
