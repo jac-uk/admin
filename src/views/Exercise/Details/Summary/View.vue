@@ -179,7 +179,7 @@ export default {
       return this.exercise.published;
     },
     canPublish() {
-      return this.exercise.progress && this.exercise.progress.exerciseSummary;
+      return this.exercise.progress && this.exercise.progress.vacancySummary;
     },
   },
   methods: {
