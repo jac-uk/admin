@@ -36,6 +36,7 @@ const lookup = (value) => {
     additionalInfo: 'Additional Information',
 
     // exercise states
+    draft: 'Draft',
     registration: 'Registration',
     shortlisting: 'Shortlisting',
     selection: 'Selection',

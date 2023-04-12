@@ -1,6 +1,6 @@
 <template>
-  <div class="govuk-!-margin-bottom-3 background-light-grey govuk-!-padding-left-4 govuk-!-padding-right-4 govuk-!-padding-top-4">
-    <div class="govuk-warning-text">
+  <div class="govuk-!-margin-bottom-3 background-light-grey govuk-!-padding-4">
+    <div class="govuk-warning-text govuk-!-margin-bottom-0">
       <div>
         <span
           class="govuk-warning-text__icon"
@@ -11,25 +11,27 @@
           You are rejecting an exercise
         </strong>
       </div>
-      <TextareaInput
-        id="rejection-reason"
-        hint="Please give your reason for rejection"
-        @input="validate"
-      />
-      <div>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="cancel"
-        >
-          Cancel
-        </button>
-        <button
-          class="govuk-button govuk-button--warning"
-          :disabled="!isValid"
-          @click="confirmReject"
-        >
-          Reject
-        </button>
+      <div class="govuk-!-padding-left-8">
+        <TextareaInput
+          id="rejection-reason"
+          hint="Please give your reason for rejection"
+          @input="validate"
+        />
+        <div>
+          <button
+            class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
+            @click="cancel"
+          >
+            Cancel
+          </button>
+          <button
+            class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+            :disabled="!isValid"
+            @click="confirmReject"
+          >
+            Reject
+          </button>
+        </div>
       </div>
     </div>
   </div>

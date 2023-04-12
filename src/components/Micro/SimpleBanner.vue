@@ -1,6 +1,6 @@
 <template>
   <div class="background-light-grey govuk-!-padding-4 govuk-!-margin-bottom-3">
-    <h2 class="govuk-heading-m">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
       {{ text }}
     </h2>
   </div>
