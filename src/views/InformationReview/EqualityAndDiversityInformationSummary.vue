@@ -197,77 +197,156 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
-          Attended state or fee-paying school
-        </dt>
-        <dd
-          class="govuk-summary-list__value"
-        >
-          <span
-            v-if="fieldContains(equalityAndDiversitySurvey.stateOrFeeSchool, 'prefer-not-to-say') && !editable"
-          >
-            Prefer not to say
-          </span>
-          <InformationReviewRenderer
-            v-else
-            type="selection"
-            :options="['uk-state-selective', 'uk-state-non-selective', 'uk-independent-fee', 'non-uk-educated', 'prefer-not-to-say']"
-            field="stateOrFeeSchool"
-            :edit="editable"
-            :data="equalityAndDiversitySurvey.stateOrFeeSchool"
-            @changeField="changeEqualityAndDiversityInformation"
-          />
-        </dd>
-      </div>
+      <template v-if="applicationOpenDatePost01042023">
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
-          Attended Oxbridge universities
-        </dt>
-        <dd
-          class="govuk-summary-list__value"
-        >
-          <span
-            v-if="fieldContains(equalityAndDiversitySurvey.oxbridgeUni, 'prefer-not-to-say') && !editable"
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            Occupation of main household earner
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
           >
-            Prefer not to say
-          </span>
-          <InformationReviewRenderer
-            v-else
-            type="selection"
-            :options="[true, false, 'prefer-not-to-say']"
-            field="oxbridgeUni"
-            :edit="editable"
-            :data="equalityAndDiversitySurvey.oxbridgeUni"
-            @changeField="changeEqualityAndDiversityInformation"
-          />
-        </dd>
-      </div>
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.occupationOfChildhoodEarner, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="['professional', 'manager', 'clerical', 'technical', 'manual', 'unemployed', 'small-business-owner', 'other', 'prefer-not-to-say']"
+              field="occupationOfChildhoodEarner"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.occupationOfChildhoodEarner"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key widerColumn">
-          First generation to go to university
-        </dt>
-        <dd
-          class="govuk-summary-list__value"
-        >
-          <span
-            v-if="fieldContains(equalityAndDiversitySurvey.firstGenerationStudent, 'prefer-not-to-say') && !editable"
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            Type of school attended
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
           >
-            Prefer not to say
-          </span>
-          <InformationReviewRenderer
-            v-else
-            type="selection"
-            :options="[true, false, 'non-university-educated', 'prefer-not-to-say']"
-            field="firstGenerationStudent"
-            :edit="editable"
-            :data="equalityAndDiversitySurvey.firstGenerationStudent"
-            @changeField="changeEqualityAndDiversityInformation"
-          />
-        </dd>
-      </div>
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.stateOrFeeSchool, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="['uk-state-non-selective', 'uk-state-selective', 'uk-independent-fee', 'uk-independent-fee-with-bursary', 'non-uk-educated', 'do-not-know', 'prefer-not-to-say']"
+              field="stateOrFeeSchool"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.stateOrFeeSchool"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            Either parent attended university to gain a degree
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
+          >
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.parentsAttendedUniversity, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="[true, false, 'do-not-know', 'prefer-not-to-say']"
+              field="parentsAttendedUniversity"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.parentsAttendedUniversity"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
+
+      </template>
+
+      <template v-else>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            Attended state or fee-paying school
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
+          >
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.stateOrFeeSchool, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="['uk-state-selective', 'uk-state-non-selective', 'uk-independent-fee', 'non-uk-educated', 'prefer-not-to-say']"
+              field="stateOrFeeSchool"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.stateOrFeeSchool"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            Attended Oxbridge universities
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
+          >
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.oxbridgeUni, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="[true, false, 'prefer-not-to-say']"
+              field="oxbridgeUni"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.oxbridgeUni"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key widerColumn">
+            First generation to go to university
+          </dt>
+          <dd
+            class="govuk-summary-list__value"
+          >
+            <span
+              v-if="fieldContains(equalityAndDiversitySurvey.firstGenerationStudent, 'prefer-not-to-say') && !editable"
+            >
+              Prefer not to say
+            </span>
+            <InformationReviewRenderer
+              v-else
+              type="selection"
+              :options="[true, false, 'non-university-educated', 'prefer-not-to-say']"
+              field="firstGenerationStudent"
+              :edit="editable"
+              :data="equalityAndDiversitySurvey.firstGenerationStudent"
+              @changeField="changeEqualityAndDiversityInformation"
+            />
+          </dd>
+        </div>
+      </template>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key widerColumn">
@@ -641,6 +720,9 @@ export default {
       default:
         return 'otherEthnicGroupDetails';
       }
+    },
+    applicationOpenDatePost01042023() {
+      return this.exercise.applicationOpenDate > new Date('2023-04-01');
     },
   },
   methods: {
