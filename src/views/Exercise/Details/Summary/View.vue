@@ -122,7 +122,7 @@
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >
-      Remove from website
+      Remove from apply website
     </button>
     <Modal
       ref="modalChangeExerciseAdvertType"
