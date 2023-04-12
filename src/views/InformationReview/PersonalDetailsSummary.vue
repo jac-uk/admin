@@ -315,8 +315,8 @@
               :data="previousAddress"
               field="previous"
               @change-field="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </dd>
         </div>

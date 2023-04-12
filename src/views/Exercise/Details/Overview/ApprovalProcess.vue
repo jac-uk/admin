@@ -54,7 +54,7 @@
         </a>
       </div>
       <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
-        {{ exercise.state | lookup }}
+        {{ $filters.lookup(exercise.state) }}
       </span>
       <div>
         <button

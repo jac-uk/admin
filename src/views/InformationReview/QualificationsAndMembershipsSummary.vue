@@ -839,6 +839,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       NOT_COMPLETE_PUPILLAGE_REASONS,
