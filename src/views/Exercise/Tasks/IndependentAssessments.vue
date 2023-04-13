@@ -584,7 +584,8 @@ export default {
     async initialiseAssessments() {
       if (!this.exerciseStage) return;
       try {
-        return await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
+        await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
+        return true;
       } catch (error) {
         return;
       }
