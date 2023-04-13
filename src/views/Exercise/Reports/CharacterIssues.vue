@@ -337,7 +337,6 @@ export default {
       issueStatus: 'all',
       availableStatuses: null,
       applicationRecords: [],
-      refreshingReport: false,
       unsubscribe: null,
       tableColumns: [
         { title: 'Candidate' },
@@ -389,9 +388,12 @@ export default {
   },
   methods: {
     async refreshReport() {
-      this.refreshingReport = true;
-      await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
-      this.refreshingReport = false;
+      try {
+        await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     async downloadReport() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
@@ -424,12 +426,13 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        return await functions.httpsCallable('exportApplicationCharacterIssues')({
+        await functions.httpsCallable('exportApplicationCharacterIssues')({
           exerciseId: this.exercise.id,
           stage: this.exerciseStage,
           status: this.candidateStatus,
           format: 'googledoc',
         });
+        return true;
       } catch (error) {
         return;
       }
