@@ -40,7 +40,8 @@
           id="exercise-email-signature-name"
           v-model="formData.emailSignatureName"
           label="Email signature name"
-          type="email"
+          hint="Enter Selection Exercise Manager name here"
+          type=""
           required
         />
 
