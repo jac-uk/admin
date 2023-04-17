@@ -231,7 +231,7 @@
             class="govuk-summary-list__value"
           >
             <span
-              v-if="fieldContains(equalityAndDiversitySurvey.stateOrFeeSchool, 'prefer-not-to-say') && !editable"
+              v-if="fieldContains(equalityAndDiversitySurvey.stateOrFeeSchool16, 'prefer-not-to-say') && !editable"
             >
               Prefer not to say
             </span>
@@ -239,9 +239,9 @@
               v-else
               type="selection"
               :options="['uk-state-non-selective', 'uk-state-selective', 'uk-independent-fee', 'uk-independent-fee-with-bursary', 'non-uk-educated', 'do-not-know', 'prefer-not-to-say']"
-              field="stateOrFeeSchool"
+              field="stateOrFeeSchool16"
               :edit="editable"
-              :data="equalityAndDiversitySurvey.stateOrFeeSchool"
+              :data="equalityAndDiversitySurvey.stateOrFeeSchool16"
               @changeField="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -668,6 +668,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
 import { isLegal } from '@/helpers/exerciseHelper';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'EqualityAndDiversityInformationSummary',
@@ -692,6 +693,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
     applicationId() {
       return this.$route.params.applicationId;
     },
@@ -720,9 +724,6 @@ export default {
       default:
         return 'otherEthnicGroupDetails';
       }
-    },
-    applicationOpenDatePost01042023() {
-      return this.exercise.applicationOpenDate > new Date('2023-04-01');
     },
   },
   methods: {

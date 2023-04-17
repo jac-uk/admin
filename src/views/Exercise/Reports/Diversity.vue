@@ -395,7 +395,18 @@
                 <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
+            <tr v-if="applicationOpenDatePost01042023" class="govuk-table__row">
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                Parents attended university
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
+              </td>
+            </tr>
+            <tr v-else class="govuk-table__row">
               <th
                 scope="row"
                 class="govuk-table__header"
@@ -491,6 +502,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Diversity',
@@ -534,6 +546,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },

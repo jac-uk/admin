@@ -243,5 +243,9 @@ export default {
       }
       return null;
     },
+    applicationOpenDatePost01042023: (state) => {
+      // Used to facilitate different fields after 01-04-2023
+      return state.record.applicationOpenDate > new Date('2023-04-01');
+    },
   },
 };
