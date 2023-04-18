@@ -155,6 +155,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
     isEditable() {
       return isEditable(this.exercise);
     },
