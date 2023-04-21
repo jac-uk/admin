@@ -152,6 +152,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
+import { cloneDeep } from 'lodash';
 
 export default {
   name: 'CreateExercise',
@@ -202,9 +203,16 @@ export default {
       this.$refs.modalOverrideExercise.closeModal();
     },
     async overrideExercise({ exerciseId, referenceNumber }) {
-      const content = this.$store.state.clipboard.data.content;
-      // TODO: should we override all fielfs from clipboard?
+      const content = cloneDeep(this.$store.state.clipboard.data.content);
+      // keep reference number
       content.referenceNumber = referenceNumber;
+      content.state = 'draft';
+      // TODO: should we override all fielfs from clipboard?
+      const ignoredFields = ['_applicationContent', '_applicationRecords', '_applications', '_approval', '_lateApplicationRequests'];
+      for (const field of ignoredFields) {
+        delete content[field];
+      }
+
       await this.$store.dispatch('exerciseDocument/override', { exerciseId, data: content });
       await this.$store.dispatch('clipboard/empty');
       this.$store.dispatch('exerciseCreateJourney/start', []);

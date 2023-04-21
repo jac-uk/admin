@@ -13,12 +13,20 @@
         >
           {{ errorMessage }}
         </p>
-        <TextField
-          id="reference-number"
+        <Select
+          id="draft-exercise-select"
           v-model="referenceNumber"
-          label="Reference number"
+          label=""
           required
-        />
+        >
+          <option
+            v-for="exercise in draftRecords"
+            :key="exercise.referenceNumber"
+            :value="exercise.referenceNumber"
+          >
+            {{ `${exercise.referenceNumber} ${exercise.name}` }}
+          </option>
+        </Select>
         <button
           class="govuk-button govuk-!-margin-right-3"
           :disabled="!referenceNumber"
@@ -39,18 +47,30 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import { mapState } from 'vuex';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 
 export default {
   name: 'OverrideExercise',
   components: {
-    TextField,
+    Select,
   },
   data() {
     return {
       referenceNumber: '',
       errorMessage: '',
     };
+  },
+  computed: {
+    ...mapState('exerciseCollection', [
+      'draftRecords',
+    ]),
+  },
+  mounted() {
+    this.$store.dispatch('exerciseCollection/bindDraft');
+  },
+  destroyed() {
+    this.$store.dispatch('exerciseCollection/unbindDraft');
   },
   methods: {
     closeModal() {
@@ -64,14 +84,8 @@ export default {
         return;
       }
 
-      const content = this.$store.state.clipboard.data.content;
-      if (this.referenceNumber.replace(/\s/g, '') === content.referenceNumber) {
-        this.errorMessage = 'Reference number should not be the same.';
-        return;
-      }
-  
-      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentDataByReferenceNumber', this.referenceNumber);
-      if (exercise?.id) {
+      const exercise = this.draftRecords.find(record => record.referenceNumber === this.referenceNumber);
+      if (exercise) {
         this.$emit('confirmed', { exerciseId: exercise.id, referenceNumber: this.referenceNumber });
         this.errorMessage = '';
       } else {
