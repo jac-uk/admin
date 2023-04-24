@@ -80,7 +80,7 @@ export default {
       this.errorMessage = '';
 
       if (!this.referenceNumber) {
-        this.errorMessage = 'Please enter reference number.';
+        this.errorMessage = 'Please select an exercise.';
         return;
       }
 
@@ -89,7 +89,7 @@ export default {
         this.$emit('confirmed', { exerciseId: exercise.id, referenceNumber: this.referenceNumber });
         this.errorMessage = '';
       } else {
-        this.errorMessage = 'Reference number does not exist.';
+        this.errorMessage = 'Exercise does not exist.';
       }
     },
   },
