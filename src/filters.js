@@ -197,7 +197,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement Test';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'CA + SJ Scoring';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'QT Merit List';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed CA + SJ';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed CA + SJ';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
