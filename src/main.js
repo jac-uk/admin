@@ -12,7 +12,7 @@ import VueDOMPurifyHTML from 'vue-dompurify-html';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/vue';
-import { BrowserTracing } from '@sentry/tracing';
+
 import './styles/main.scss';
 
 import mitt from 'mitt';
@@ -81,7 +81,7 @@ auth.onAuthStateChanged(async (user) => {
         environment: store.getters.appEnvironment.toLowerCase(),
         release: process.env.PACKAGE_VERSION, // made available in vue.config.js
         integrations: [
-          new BrowserTracing({
+          new Sentry.BrowserTracing({
             routingInstrumentation: Sentry.vueRouterInstrumentation(router),
           }),
         ],
