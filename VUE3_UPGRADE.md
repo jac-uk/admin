@@ -76,3 +76,13 @@ becomes:
 ```
 @change-action="changeAction"
 ```
+
++ Other than at the beginning of the component, avoid using template tags with no special directives, ie:
+
+```
+<template v-if="condition">GOOD</template>
+```
+but...
+```
+<template>BAD</template>
+```

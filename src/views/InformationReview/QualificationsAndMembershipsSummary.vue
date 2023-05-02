@@ -77,109 +77,107 @@
               </dd>
             </div>
 
-            <template>
-              <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
-                class="govuk-summary-list__row"
+            <div
+              v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('calledToBarDate') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt
+                class="govuk-summary-list__key widerColumn"
               >
-                <dt
-                  class="govuk-summary-list__key widerColumn"
-                >
-                  Date called to the Bar
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
-                    field="qualifications"
-                    extension="calledToBarDate"
-                    :index="index"
-                    :edit="editable"
-                    type="date"
-                    @change-field="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
-              <div
-                v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Has completed pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications[index].completedPupillage"
-                    field="qualifications"
-                    extension="completedPupillage"
-                    :index="index"
-                    :edit="editable"
-                    :options="[true, false]"
-                    type="selection"
-                    @change-field="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+                Date called to the Bar
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].calledToBarDate : null"
+                  field="qualifications"
+                  extension="calledToBarDate"
+                  :index="index"
+                  :edit="editable"
+                  type="date"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
+            <div
+              v-if="qualification.type === 'barrister' && (qualification.hasOwnProperty('completedPupillage') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Has completed pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications[index].completedPupillage"
+                  field="qualifications"
+                  extension="completedPupillage"
+                  :index="index"
+                  :edit="editable"
+                  :options="[true, false]"
+                  type="selection"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Date completed pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
-                    field="qualifications"
-                    extension="date"
-                    :index="index"
-                    :edit="editable"
-                    type="date"
-                    @change-field="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+            <div
+              v-if="qualification.type === 'barrister' && qualification.completedPupillage && (qualification.hasOwnProperty('date') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Date completed pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications.hasOwnProperty(index) ? application.qualifications[index].date : null"
+                  field="qualifications"
+                  extension="date"
+                  :index="index"
+                  :edit="editable"
+                  type="date"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Reason for being exempt from pupillage
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    type="selection"
-                    :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
-                    :data="application.qualifications[index].notCompletePupillageReason"
-                    field="qualifications"
-                    extension="notCompletePupillageReason"
-                    :index="index"
-                    :edit="editable"
-                    @change-field="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
+            <div
+              v-if="qualification.type === 'barrister' && !qualification.completedPupillage && (qualification.hasOwnProperty('notCompletePupillageReason') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Reason for being exempt from pupillage
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  type="selection"
+                  :options="Object.values(NOT_COMPLETE_PUPILLAGE_REASONS)"
+                  :data="application.qualifications[index].notCompletePupillageReason"
+                  field="qualifications"
+                  extension="notCompletePupillageReason"
+                  :index="index"
+                  :edit="editable"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
-              <div
-                v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
-                class="govuk-summary-list__row"
-              >
-                <dt class="govuk-summary-list__key widerColumn">
-                  Did not complete pupillage notes
-                </dt>
-                <dd class="govuk-summary-list__value">
-                  <InformationReviewRenderer
-                    :data="application.qualifications[index].details"
-                    field="qualifications"
-                    extension="details"
-                    :index="index"
-                    :edit="editable"
-                    @change-field="changeQualificationOrMembership"
-                  />
-                </dd>
-              </div>
-            </template>
+            <div
+              v-if="qualification.type === 'barrister' && !qualification.completedPupillage && qualification.notCompletePupillageReason === NOT_COMPLETE_PUPILLAGE_REASONS.OTHER && (qualification.hasOwnProperty('details') || editable)"
+              class="govuk-summary-list__row"
+            >
+              <dt class="govuk-summary-list__key widerColumn">
+                Did not complete pupillage notes
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <InformationReviewRenderer
+                  :data="application.qualifications[index].details"
+                  field="qualifications"
+                  extension="details"
+                  :index="index"
+                  :edit="editable"
+                  @change-field="changeQualificationOrMembership"
+                />
+              </dd>
+            </div>
 
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key widerColumn">

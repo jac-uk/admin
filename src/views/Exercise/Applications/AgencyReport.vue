@@ -136,379 +136,367 @@
       </div>
     </dl>
 
-    <template>
-      <h2 class="govuk-heading-l">
-        SRA
-      </h2>
+    <h2 class="govuk-heading-l">
+      SRA
+    </h2>
 
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Admission to the roll
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.formatDate(sra.date) }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Admission to the roll
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.formatDate(sra.date) }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Registration number
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ sra.membershipNumber }}
-          </dd>
-        </div>
-      </dl>
-    </template>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Registration number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ sra.membershipNumber }}
+        </dd>
+      </div>
+    </dl>
 
-    <template>
-      <h2 class="govuk-heading-l">
-        BSB
-      </h2>
+    <h2 class="govuk-heading-l">
+      BSB
+    </h2>
 
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Called to the Bar
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.formatDate(bsb.date) }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Called to the Bar
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.formatDate(bsb.date) }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Registration number
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ bsb.membershipNumber }}
-          </dd>
-        </div>
-      </dl>
-    </template>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Registration number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ bsb.membershipNumber }}
+        </dd>
+      </div>
+    </dl>
 
-    <template>
-      <h2 class="govuk-heading-l">
-        JCIO
-      </h2>
+    <h2 class="govuk-heading-l">
+      JCIO
+    </h2>
 
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Judicial Office
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.toYesNo(application.feePaidOrSalariedJudge) }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Judicial Office
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.toYesNo(application.feePaidOrSalariedJudge) }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Judicial posts
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <ul class="govuk-list govuk-!-margin-bottom-0">
-              <li
-                v-for="(item, index) in application.experience"
-                :key="index"
-              >
-                {{ item.jobTitle }}
-              </li>
-            </ul>
-          </dd>
-        </div>
-      </dl>
-    </template>
-
-    <template>
-      <h2 class="govuk-heading-l">
-        HMRC
-      </h2>
-
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Date of birth
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.formatDate(application.personalDetails.dateOfBirth) }}
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            VAT Numbers
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <ul
-              class="govuk-list govuk-!-margin-bottom-0"
-            >
-              <li
-                v-for="(item, index) in application.personalDetails.VATNumbers"
-                :key="index"
-              >
-                {{ item.VATNumber }}
-              </li>
-            </ul>
-          </dd>
-        </div>
-
-        <div
-          v-if="application.characterInformation && application.characterInformation.lateTaxReturnOrFined"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Issues declared by the candidate
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <dl
-              v-for="(item, index) in application.characterInformation.lateTaxReturnOrFinedDetails"
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Judicial posts
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list govuk-!-margin-bottom-0">
+            <li
+              v-for="(item, index) in application.experience"
               :key="index"
             >
-              <div class="govuk-!-font-weight-bold">
-                {{ $filters.formatDate(item.date) }}
-              </div>
-              <div>{{ item.details }}</div>
-            </dl>
-          </dd>
-        </div>
+              {{ item.jobTitle }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
 
-        <div
-          v-if="isVersion2 && application.characterInformationV2 && hasFinancialIssues"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Issues declared by the candidate
-          </dt>
-          <FinancialMattersAgencyReport
-            :character-information="application.characterInformationV2"
-          />
-        </div>
-      </dl>
-    </template>
+    <h2 class="govuk-heading-l">
+      HMRC
+    </h2>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Date of birth
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.formatDate(application.personalDetails.dateOfBirth) }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          VAT Numbers
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul
+            class="govuk-list govuk-!-margin-bottom-0"
+          >
+            <li
+              v-for="(item, index) in application.personalDetails.VATNumbers"
+              :key="index"
+            >
+              {{ item.VATNumber }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+
+      <div
+        v-if="application.characterInformation && application.characterInformation.lateTaxReturnOrFined"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Issues declared by the candidate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <dl
+            v-for="(item, index) in application.characterInformation.lateTaxReturnOrFinedDetails"
+            :key="index"
+          >
+            <div class="govuk-!-font-weight-bold">
+              {{ $filters.formatDate(item.date) }}
+            </div>
+            <div>{{ item.details }}</div>
+          </dl>
+        </dd>
+      </div>
+
+      <div
+        v-if="isVersion2 && application.characterInformationV2 && hasFinancialIssues"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Issues declared by the candidate
+        </dt>
+        <FinancialMattersAgencyReport
+          :character-information="application.characterInformationV2"
+        />
+      </div>
+    </dl>
 
     <h2 class="govuk-heading-l">
       Other
     </h2>
 
-    <template>
-      <h3 class="govuk-heading-m">
-        GMC
-      </h3>
+    <h3 class="govuk-heading-m">
+      GMC
+    </h3>
 
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
+      <div
+        v-if="application.personalDetails.otherNames"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Date of membership
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.formatDate(application.generalMedicalCouncilDate) }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Membership number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.generalMedicalCouncilNumber }}
+        </dd>
+      </div>
+
+      <div
+        v-if="application.generalMedicalCouncilInformation"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Comments or restrictions
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.generalMedicalCouncilInformation }}
+        </dd>
+        <dd
+          v-if="application.generalMedicalCouncilConditional"
         >
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Date of membership
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.formatDate(application.generalMedicalCouncilDate) }}
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Membership number
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.generalMedicalCouncilNumber }}
-          </dd>
-        </div>
-
-        <div
-          v-if="application.generalMedicalCouncilInformation"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Comments or restrictions
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.generalMedicalCouncilInformation }}
-          </dd>
-          <dd
+          <ul
             v-if="application.generalMedicalCouncilConditional"
+            class="govuk-list"
           >
-            <ul
-              v-if="application.generalMedicalCouncilConditional"
-              class="govuk-list"
+            <p class="govuk-hint">
+              Conditions
+            </p>
+            <li
+              v-if="application.generalMedicalCouncilConditionalStartDate
+                && application.generalMedicalCouncilConditionalEndDate"
             >
-              <p class="govuk-hint">
-                Conditions
-              </p>
-              <li
-                v-if="application.generalMedicalCouncilConditionalStartDate
-                  && application.generalMedicalCouncilConditionalEndDate"
-              >
-                {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }}
-                to {{ $filters.formatDate(application.generalMedicalCouncilConditionalEndDate) }}
-              </li>
-              <li
-                v-if="application.generalMedicalCouncilConditionalStartDate
-                  && !application.generalMedicalCouncilConditionalEndDate"
-              >
-                {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }} — current
-              </li>
-              <li>
-                {{ application.generalMedicalCouncilConditionalDetails }}
-              </li>
-            </ul>
-          </dd>
-        </div>
-      </dl>
-    </template>
+              {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }}
+              to {{ $filters.formatDate(application.generalMedicalCouncilConditionalEndDate) }}
+            </li>
+            <li
+              v-if="application.generalMedicalCouncilConditionalStartDate
+                && !application.generalMedicalCouncilConditionalEndDate"
+            >
+              {{ $filters.formatDate(application.generalMedicalCouncilConditionalStartDate) }} — current
+            </li>
+            <li>
+              {{ application.generalMedicalCouncilConditionalDetails }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
 
-    <template>
-      <h3 class="govuk-heading-m">
-        RICS
-      </h3>
+    <h3 class="govuk-heading-m">
+      RICS
+    </h3>
 
-      <dl class="govuk-summary-list">
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Full Name
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.fullName }}
-          </dd>
-        </div>
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Full Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.fullName }}
+        </dd>
+      </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Other names
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.personalDetails.otherNames }}
-          </dd>
-        </div>
+      <div
+        v-if="application.personalDetails.otherNames"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Other names
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.personalDetails.otherNames }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Date of membership
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ $filters.formatDate(application.royalInstitutionCharteredSurveyorsDate) }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Date of membership
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.formatDate(application.royalInstitutionCharteredSurveyorsDate) }}
+        </dd>
+      </div>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Membership number
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.royalInstitutionCharteredSurveyorsNumber }}
-          </dd>
-        </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Membership number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.royalInstitutionCharteredSurveyorsNumber }}
+        </dd>
+      </div>
 
-        <div
-          v-if="application.royalInstitutionCharteredSurveyorsInformation"
-          class="govuk-summary-list__row"
-        >
-          <dt class="govuk-summary-list__key">
-            Comments or restrictions
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{ application.royalInstitutionCharteredSurveyorsInformation }}
-          </dd>
-        </div>
-      </dl>
-    </template>
+      <div
+        v-if="application.royalInstitutionCharteredSurveyorsInformation"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Comments or restrictions
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ application.royalInstitutionCharteredSurveyorsInformation }}
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 

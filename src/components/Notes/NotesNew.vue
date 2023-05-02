@@ -18,7 +18,6 @@
         v-model="body"
         class="govuk-!-margin-top-7"
         label="Note"
-        :value="body"
         required
       />
       <button
@@ -34,7 +33,6 @@
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-
 export default {
   name: 'NotesNew',
   components: {
