@@ -192,14 +192,14 @@
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
-                  @click="saveRole()"
+                  @click="saveRole"
                 >
                   Save role
                 </ActionButton>
                 <ActionButton
                   type="secondary"
                   :disabled="role.isDefault"
-                  @click="setDefaultRole()"
+                  @click="setDefaultRole"
                 >
                   Set as default role
                 </ActionButton>
@@ -330,14 +330,15 @@
             </select>
           </div>
         </div>
-        
-        <button
-          class="govuk-button govuk-!-margin-right-3"
+
+        <ActionButton
+          type="primary"
+          class="govuk-!-margin-right-3"
           :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
           @click="createUser"
         >
           Save
-        </button>
+        </ActionButton>
         <button
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           @click="closeCreateUserModal"
@@ -464,8 +465,13 @@ export default {
       this.roles = roles.data;
     },
     async toggleDisableUser(uid, index) {
-      const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
-      this.users[index].disabled = response.data.disabled;
+      try {
+        const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
+        this.users[index].disabled = response.data.disabled;
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     confirmDeleteUser(index) {
       this.selectedUserIndex = index;
@@ -474,12 +480,19 @@ export default {
     async deleteUser() {
       if (this.selectedUserIndex) {
         const selectedUid = this.users[this.selectedUserIndex].uid;
-        const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
-        if (response && response.data.successCount) {
-          this.users.splice(this.selectedUserIndex, 1);
+        try {
+          const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
+          if (response && response.data.successCount) {
+            this.users.splice(this.selectedUserIndex, 1);
+            setTimeout(() => {
+              this.closeModal('modalRefDeleteUser');
+            }, 1000);
+            return true;
+          }
+        } catch (error) {
+          return;
         }
       }
-      this.closeModal('modalRefDeleteUser');
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
@@ -512,10 +525,14 @@ export default {
         if (res && res.data && 'uid' in res.data) {
           await this.setUserRole(res.data.uid, this.newUserRole);
           await this.getUsers();
-          this.closeCreateUserModal();
+          this.resetNewUser();
+          setTimeout(() => {
+            this.closeCreateUserModal();
+          }, 1000);
+          return true;
         }
       } catch (error) {
-        console.error(error);
+        return;
       }
     },
     async handleRoleChange(user) {
@@ -549,12 +566,19 @@ export default {
 
     },
     async createUserRole() {
-      //TODO: enforce unique role name
-      const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.newRoleName });
-      await this.getRoles();
-      //this.role = Array.filter((role) => { return role.id === response.data.id; });
-      this.role = this.roles.filter((role) => { return role.id === response.data.id; })[0];
-      this.closeModal('modalRef');
+      try {
+        //TODO: enforce unique role name
+        const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.newRoleName });
+        await this.getRoles();
+        //this.role = Array.filter((role) => { return role.id === response.data.id; });
+        this.role = this.roles.filter((role) => { return role.id === response.data.id; })[0];
+        setTimeout(() => {
+          this.closeModal('modalRef');
+        }, 1000);
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     async saveRole() {
       this.role.enabledPermissions = [];
@@ -563,14 +587,21 @@ export default {
           this.role.enabledPermissions.push(permission);
         }
       }
-      await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.role.id, enabledPermissions: this.role.enabledPermissions });
-      return true;
+      try {
+        return await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.role.id, enabledPermissions: this.role.enabledPermissions });
+      } catch (error) {
+        return;
+      }
     },
     async setDefaultRole() {
-      await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
-      await this.getRoles();
-      this.role.isDefault = true;
-      return true;
+      try {
+        await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
+        await this.getRoles();
+        this.role.isDefault = true;
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     openCreateRoleModal() {
       this.openModal('modalRef');
