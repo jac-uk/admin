@@ -70,7 +70,7 @@ auth.onAuthStateChanged(async (user) => {
         } else {
           const userRole = {
             roleId: userRoleId,
-            rolePermissions: res.data,
+            rolePermissions: permissions,
           };
           store.dispatch('auth/setUserRole', userRole);
         }
