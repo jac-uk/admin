@@ -24,17 +24,15 @@
             >
               Send reminders
             </button>
-            <button
+            <ActionButton
               v-if="status === 'applied' && hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
-              @click="exportContacts()"
+              @click="exportContacts"
             >
               Export contacts
-            </button>
+            </ActionButton>
             <button
               v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
               class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
@@ -82,6 +80,9 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[2].title">
+          {{ row._language === 'cym' ? 'Yes' : 'No' }}
+        </TableCell>
+        <TableCell :title="tableColumns[3].title">
           {{ $filters.lookup(row.status) }}
         </TableCell>
       </template>
@@ -121,6 +122,7 @@ import LateApplicationRequest from '@/components/ModalViews/LateApplication/Requ
 import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'ApplicationsList',
@@ -131,6 +133,7 @@ export default {
     ModalInner,
     LateApplicationRequest,
     LateApplicationConfirmation,
+    ActionButton,
   },
   mixins: [permissionMixin],
   props: {
@@ -144,6 +147,7 @@ export default {
       const cols = [];
       cols.push({ title: 'Reference number' });
       cols.push({ title: 'Name', sort: '_sort.fullNameUC', default: true });
+      cols.push({ title: 'Applied in Welsh' });
       cols.push({ title: 'Status' });
       return cols;
     },
@@ -204,16 +208,21 @@ export default {
       this.closeApplicationReminderModal();
     },
     async exportContacts() {
-      const title = 'Contacts';
-      const xlsxData = await this.gatherReportData();
-      downloadXLSX(
-        xlsxData,
-        {
-          title: `${this.exercise.referenceNumber} ${title}`,
-          sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-        }
-      );
+      try {
+        const title = 'Contacts';
+        const xlsxData = await this.gatherReportData();
+        downloadXLSX(
+          xlsxData,
+          {
+            title: `${this.exercise.referenceNumber} ${title}`,
+            sheetName: title,
+            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          }
+        );
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm, exerciseId: this.exercise.id });

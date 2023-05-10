@@ -410,10 +410,8 @@ export default {
       const data = {};
       if (params.outcome === this.defaultOutcome) {
         data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = firebase.firestore.FieldValue.arrayRemove(...this.selectedItems);
-        data[`overrides.${params.outcome}`] = [];
       } else {
         data[`overrides.${params.outcome}`] = firebase.firestore.FieldValue.arrayUnion(...this.selectedItems);
-        data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = [];
       }
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: data } );
     },

@@ -20,20 +20,17 @@
             >
               Export data
             </button>
-            <button
+
+            <ActionButton
               v-if="hasPermissions([
                 PERMISSIONS.applications.permissions.canReadApplications.value,
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
-              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
+              type="primary"
               @click="refreshReport"
             >
-              <span
-                v-if="refreshingReport"
-                class="spinner-border spinner-border-sm"
-              /> Refresh
-            </button>
+              Refresh
+            </ActionButton>
           </div>
         </div>
       </div>
@@ -90,6 +87,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 
@@ -99,6 +97,7 @@ export default {
     Table,
     TableCell,
     TextareaInput,
+    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
@@ -112,7 +111,6 @@ export default {
       unsubscribe: null,
       unsubscribeReport: null,
       report: null,
-      refreshingReport: false,
     };
   },
   computed: {
@@ -171,13 +169,12 @@ export default {
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     }, 2000),
     async refreshReport() {
-      this.refreshingReport = true;
       try {
         await functions.httpsCallable('generateStatutoryConsultationReport')({ exerciseId: this.exercise.id });
+        return true;
       } catch (error) {
-        console.error(error);
+        return;
       }
-      this.refreshingReport = false;
     },
     gatherReportData() {
       const reportData = [];

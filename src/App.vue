@@ -188,7 +188,7 @@
       </div>
     </div>
 
-    <Messages />
+    <Messages v-if="canReadMessages" />
   </div>
 </template>
 
@@ -227,6 +227,9 @@ export default {
     fullScreen() {
       return this.$store.state.ui.fullScreen;
     },
+    canReadMessages() {
+      return this.hasPermissions([this.PERMISSIONS.messages.permissions.canReadMessages.value]);
+    },
   },
   watch: {
     async isSignedIn() {
@@ -251,7 +254,9 @@ export default {
       await this.$store.dispatch('services/bind');
       const email = auth.currentUser.email;
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
-      await this.getMessages();
+      if (this.canReadMessages) {
+        await this.getMessages();
+      }
     },
     signOut() {
       auth.signOut();
