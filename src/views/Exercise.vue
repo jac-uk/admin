@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-full print-none">
           <SubNavigation
             v-if="!hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
