@@ -7,6 +7,12 @@
         </h1>
       </div>
       <div class="govuk-grid-column-one-half text-right">
+        <ActionButton
+          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+          @click="btnExport"
+        >
+          Export
+        </ActionButton>
         <button
           class="govuk-button govuk-!-margin-right-2"
           :class="{ 'govuk-button--secondary': task.passMark }"
@@ -73,6 +79,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import SetPassMark from './Finalised/SetPassMark';
 import _find from 'lodash/find';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 export default {
   components: {
     ActionButton,
@@ -106,6 +113,60 @@ export default {
     },
     hasPassMark() {
       return this.task.hasOwnProperty('passMark');
+    },
+    meritList() {
+      if (!this.task.applications) return [];
+      if (!this.task.finalScores) return [];
+      const applicationData = {};
+      this.task.applications.forEach(application => applicationData[application.id] = application);
+      return this.task.finalScores.map(scoreData => {
+        return {
+          ...applicationData[scoreData.id],
+          ...scoreData,
+        };
+      });
+    },
+    xlsxData() {
+      const rows = [];
+      const headers = [];
+      headers.push('Ref');
+      headers.push('Full name');
+      headers.push('SJT %');
+      headers.push('SJT Z');
+      headers.push('CAT %');
+      headers.push('CAT Z');
+      headers.push('Average %');
+      headers.push('Average Z');
+      headers.push('Female');
+      headers.push('Ethnic minority');
+      headers.push('Solicitor');
+      headers.push('Disabled');
+      rows.push(headers);
+      this.meritList.forEach(item => {
+        const row = [];
+        row.push(item.ref);
+        row.push(item.fullName);
+        row.push(item.scoreSheet.qualifyingTest.SJ.percent);
+        row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
+        row.push(item.scoreSheet.qualifyingTest.CA.percent);
+        row.push(item.scoreSheet.qualifyingTest.CA.zScore);
+        row.push(item.percent);
+        row.push(item.zScore);
+        const ref = item.ref.split('-')[1];
+        if (this.exerciseDiversity[ref]) {
+          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
+          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
+          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
+          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+        } else {
+          row.push();
+          row.push();
+          row.push();
+          row.push();
+        }
+        rows.push(row);
+      });
+      return rows;
     },
     scores() {
       if (!this.task) return [];
@@ -235,6 +296,17 @@ export default {
       });
       this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
+    },
+    async btnExport() {
+      await downloadXLSX(
+        this.xlsxData,
+        {
+          title: 'QT Merit List',
+          sheetName: 'QT merit list',
+          fileName: 'qt-merit-list.xlsx',
+        }
+      );
+      return true;
     },
     async setPassMark(data) {
       if (data) {
