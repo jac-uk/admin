@@ -247,6 +247,9 @@ export default {
         };
       }
     },
+    isTested() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
+    },
   },
   mounted() {
     const id = this.$route.params.id;
