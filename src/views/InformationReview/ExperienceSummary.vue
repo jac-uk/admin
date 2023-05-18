@@ -53,7 +53,7 @@
           class="govuk-summary-list__row"
         >
           <dt
-            v-if="vacancy.previousJudicialExperienceApply"
+            v-if="exercise.previousJudicialExperienceApply"
             class="govuk-summary-list__key"
           >
             Are you a fee-paid or salaried medical member?
@@ -67,7 +67,7 @@
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
-            {{ `Have you sat for at least ${vacancy.pjeDays || 30 } days?` }}
+            {{ `Have you sat for at least ${exercise.pjeDays || 30 } days?` }}
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body">
