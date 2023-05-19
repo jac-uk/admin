@@ -21,6 +21,27 @@ See: https://router.vuejs.org/guide/migration/
 
 + Empty paths, see: https://router.vuejs.org/guide/migration/#named-children-routes-with-an-empty-path-no-longer-appends-a-slash
 
++ Discarded invalid param(s), see: https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22
+
+Passing params when none are defined on the route causes the app to break. There are multiple ways of fixing this, as per the link above, but one way is as follows. Given the link below which passes a param called 'referrer' which isn't defined on the route: 
+```
+<router-link
+  class="govuk-link"
+  :to="{name: 'test', params: { referrer: 'exercise-show-overview' }}"
+>
+  Test
+</router-link>
+```
+needs to be changed to:
+```
+<router-link
+  class="govuk-link"
+  :to="{name: 'test', query: { referrer: 'exercise-show-overview' }}"
+>
+  Test
+</router-link>
+```
+
 ## Vue 3 Changes
 
 + 'destroyed' lifecycle hook becomes 'unmounted'

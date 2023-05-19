@@ -73,7 +73,7 @@
             <th class="govuk-table__header">
               <router-link
                 class="govuk-link"
-                :to="{name: task.id, params: { referrer: 'exercise-show-overview' }}"
+                :to="{name: task.id, query: { referrer: 'exercise-show-overview' }}"
               >
                 {{ task.title }}
               </router-link>
