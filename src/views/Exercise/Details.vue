@@ -46,12 +46,12 @@ export default {
           path: `${path}/contacts`,
         },
         {
-          title: 'Timeline',
-          path: `${path}/timeline`,
-        },
-        {
           title: 'Shortlisting',
           path: `${path}/shortlisting`,
+        },
+        {
+          title: 'Timeline',
+          path: `${path}/timeline`,
         },
         {
           title: 'Eligibility information',
