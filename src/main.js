@@ -21,7 +21,7 @@ const emitter = mitt();
 // Merged filters (localFilters will override filters below in event of naming collisions)
 const allFilters = Object.assign({}, filters, localFilters);
 
-const vueInstance = false;
+let vueInstance = false;
 auth.onAuthStateChanged(async (user) => {
   // check if user is a new user.
   // TODO: check if there is a better way of doing this
@@ -58,7 +58,7 @@ auth.onAuthStateChanged(async (user) => {
   if (!vueInstance) {
 
     // Root instance
-    const vueInstance = createApp(App)
+    vueInstance = createApp(App)
       .use(router)
       .use(store)
       .use(CKEditor)
