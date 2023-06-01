@@ -21,6 +21,16 @@ See: https://router.vuejs.org/guide/migration/
 
 + Empty paths, see: https://router.vuejs.org/guide/migration/#named-children-routes-with-an-empty-path-no-longer-appends-a-slash
 
++ When trying to get the current route the following no longer works:
+
+```
+router.currentRoute.name
+```
+Instead you should use useRoute() or useRouter() if the code is inside functional components such as setup(). However if it isn't then you can use:
+```
+router.currentRoute.value.name
+```
+
 + Discarded invalid param(s), see: https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22
 
 Passing params when none are defined on the route causes the app to break. There are multiple ways of fixing this, as per the link above, but one way is as follows. Given the link below which passes a param called 'referrer' which isn't defined on the route: 
@@ -76,6 +86,7 @@ formattedDate() {
   return this.$filters.formatDate(this.value, (this.displayMonthYearOnly ? 'month' : ''));
 },
 ```
++ Local filters should be removed and replaced with computed props or local methods, see: https://v3-migration.vuejs.org/breaking-changes/filters.html
 + Use 'emits' to specify any events that are emitted by the component:
 ```
 emits: ['close', 'confirmed'],
