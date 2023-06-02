@@ -29,6 +29,12 @@
             >
               Create exercise from clipboard
             </ActionButton>
+            <button
+              class="govuk-button govuk-button--secondary govuk-!-margin-left-3"
+              @click.prevent="openOverrideExerciseModal"
+            >
+              Override an exercise
+            </button>
           </div>
         </div>
 
@@ -124,6 +130,13 @@
         </button>
       </div>
     </form>
+
+    <Modal ref="modalOverrideExercise">
+      <OverrideExercise
+        @close="closeOverrideExerciseModal"
+        @confirmed="overrideExercise"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -137,6 +150,9 @@ import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
+import { cloneDeep } from 'lodash';
 
 export default {
   name: 'CreateExercise',
@@ -149,6 +165,8 @@ export default {
     CheckboxItem,
     BackLink,
     ActionButton,
+    Modal,
+    OverrideExercise,
   },
   extends: Form,
   data() {
@@ -177,6 +195,29 @@ export default {
         this.$store.dispatch('exerciseCreateJourney/start', selectedPages);
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
       }
+    },
+    openOverrideExerciseModal() {
+      this.$refs.modalOverrideExercise.openModal();
+    },
+    closeOverrideExerciseModal() {
+      this.$refs.modalOverrideExercise.closeModal();
+    },
+    async overrideExercise({ exerciseId, referenceNumber }) {
+      const content = cloneDeep(this.$store.state.clipboard.data.content);
+      // keep reference number
+      content.referenceNumber = referenceNumber;
+      content.state = 'draft';
+      // ignore fields that do not need to override
+      const ignoredFields = ['_applicationContent', '_applicationRecords', '_applications', '_approval', '_lateApplicationRequests'];
+      for (const field of ignoredFields) {
+        delete content[field];
+      }
+
+      await this.$store.dispatch('exerciseDocument/override', { exerciseId, data: content });
+      await this.$store.dispatch('clipboard/empty');
+      this.$store.dispatch('exerciseCreateJourney/start', []);
+      this.$router.push(`/exercise/${exerciseId}/dashboard`);
+      this.closeOverrideExerciseModal();
     },
     async copyFromClipboard() {
       const content = this.$store.state.clipboard.data.content;

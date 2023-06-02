@@ -275,13 +275,18 @@ export default {
       }
     },
     async copyToClipboard() {
-      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
-      await this.$store.dispatch('clipboard/write', {
-        environment: this.$store.getters.appEnvironment,
-        type: 'exercise',
-        title: `${exercise.referenceNumber} ${exercise.name}`,
-        content: exercise,
-      });
+      try {
+        const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+        await this.$store.dispatch('clipboard/write', {
+          environment: this.$store.getters.appEnvironment,
+          type: 'exercise',
+          title: `${exercise.referenceNumber} ${exercise.name}`,
+          content: exercise,
+        });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     openArchiveModal() {
       this.$refs.archiveModal.openModal();
