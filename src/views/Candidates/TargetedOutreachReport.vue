@@ -60,7 +60,7 @@
     <template
       v-if="results.length > 0"
     >
-      <FullScreenButton class="float-right govuk-!-margin-right-4" />
+      <FullScreenButton ref="fullscreenButtonRef" class="float-right govuk-!-margin-right-4" />
       <div class="govuk-grid-column-full">
         <div class="overflow-table">
           <table
@@ -158,6 +158,9 @@ export default {
       link.click();
     },
     clear() {
+      if (this.$store.state.ui.fullScreen){
+        this.$refs['fullscreenButtonRef'].exitFullScreen();
+      }
       this.results = [];
       this.nins = '';
       this.searching = false;
