@@ -19,7 +19,7 @@
 
           <nav
             v-if="isSignedIn"
-            class="float-right"
+            class="float-right print-none"
           >
             <ul class="govuk-header__navigation user-menu">
               <li

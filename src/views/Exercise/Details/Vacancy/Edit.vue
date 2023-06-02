@@ -390,9 +390,29 @@
         />
 
         <RichTextInput
+          v-if="formData.welshPosts"
+          id="brief-overview-welsh"
+          v-model="formData.roleSummaryWelsh"
+          label="Brief Overview (Welsh)"
+          hint="Fersywn Cymraeg"
+          class="custom-html"
+          required
+        />
+
+        <RichTextInput
           id="full-details"
           v-model="formData.aboutTheRole"
           label="Full Details"
+          hint="Add information about this role for the information page."
+          class="custom-html"
+          required
+        />
+
+        <RichTextInput
+          v-if="formData.welshPosts"
+          id="full-details-welsh"
+          v-model="formData.aboutTheRoleWelsh"
+          label="Full Details (Welsh)"
           hint="Add information about this role for the information page."
           class="custom-html"
           required
@@ -465,10 +485,13 @@ export default {
       otherJurisdiction: null,
       statutoryConsultationWaived: null,
       statutoryConsultationWaivedDetails: null,
+      welshPosts: null,
       welshRequirement: null,
       welshRequirementType: null,
       roleSummary: null,
+      roleSummaryWelsh: null,
       aboutTheRole: null,
+      aboutTheRoleWelsh: null,
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {

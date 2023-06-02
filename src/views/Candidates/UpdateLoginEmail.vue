@@ -72,7 +72,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import permissionMixin from '@/permissionMixin';
 
 export default {
-  name: 'Actions',
+  name: 'UpdateLoginEmail',
   components: {
     TextField,
     Banner,
