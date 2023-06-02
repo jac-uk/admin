@@ -391,18 +391,10 @@
                 <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
               </td>
             </tr>
-            <tr v-if="applicationOpenDatePost01042023" class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Parents attended university
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
-              </td>
-            </tr>
-            <tr v-else class="govuk-table__row">
+            <tr
+              v-if="applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
+              class="govuk-table__row"
+            >
               <th
                 scope="row"
                 class="govuk-table__header"
@@ -411,6 +403,20 @@
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
+              </td>
+            </tr>
+            <tr
+              v-else-if="'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
+              class="govuk-table__row"
+            >
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                Parents attended University
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
               </td>
             </tr>
           </tbody>
