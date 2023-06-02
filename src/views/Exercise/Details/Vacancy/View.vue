@@ -155,6 +155,20 @@
           />
         </dd>
       </div>
+      <div
+        v-if="exercise.welshPosts"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Brief Overview (Welsh)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummaryWelsh"
+          />
+        </dd>
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Full Details
@@ -163,6 +177,20 @@
           <CustomHTML
             class="govuk-body"
             :value="exercise.aboutTheRole"
+          />
+        </dd>
+      </div>
+      <div
+        v-if="exercise.welshPosts"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Full Details (Welsh)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.aboutTheRoleWelsh"
           />
         </dd>
       </div>
