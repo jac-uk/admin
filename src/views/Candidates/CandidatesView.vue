@@ -74,9 +74,9 @@
       <Applications :candidate-id="candidateId" />
     </div>
     <div
-      v-if="activeTab === 'actions'"
+      v-if="activeTab === 'loginEmail'"
     >
-      <Actions :candidate-id="getUserId" />
+      <UpdateLoginEmail :candidate-id="getUserId" />
     </div>
   </div>
 </template>
@@ -88,7 +88,7 @@ import Applications from './Applications';
 import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
 import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
 import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
-import Actions from '@/views/Candidates/Actions';
+import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -97,7 +97,7 @@ export default {
     TabsList,
     Notes,
     Applications,
-    Actions,
+    UpdateLoginEmail,
     PersonalDetailsSummary,
     CharacterInformationSummary,
     EqualityAndDiversity,
@@ -130,8 +130,8 @@ export default {
         });
       if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canUpdateCandidates.value]))
         tabs.push({
-          ref: 'actions',
-          title: 'Actions',
+          ref: 'loginEmail',
+          title: 'Log in Email',
         });
       return tabs;
     },
