@@ -207,7 +207,7 @@ export default {
       // keep reference number
       content.referenceNumber = referenceNumber;
       content.state = 'draft';
-      // TODO: should we override all fielfs from clipboard?
+      // ignore fields that do not need to override
       const ignoredFields = ['_applicationContent', '_applicationRecords', '_applications', '_approval', '_lateApplicationRequests'];
       for (const field of ignoredFields) {
         delete content[field];
