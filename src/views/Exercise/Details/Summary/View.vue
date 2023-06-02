@@ -46,7 +46,7 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Role summary
+          Brief Overview
         </dt>
         <dd class="govuk-summary-list__value">
           <CustomHTML
@@ -86,7 +86,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          Role summary (Welsh)
+          Brief Overview (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
           <CustomHTML
@@ -122,7 +122,7 @@
       class="govuk-button govuk-button--secondary"
       @click="unPublish"
     >
-      Remove from website
+      Remove from apply website
     </button>
     <Modal
       ref="modalChangeExerciseAdvertType"
@@ -179,7 +179,7 @@ export default {
       return this.exercise.published;
     },
     canPublish() {
-      return this.exercise.progress && this.exercise.progress.exerciseSummary;
+      return this.exercise.progress && this.exercise.progress.vacancySummary;
     },
   },
   methods: {

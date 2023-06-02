@@ -4,9 +4,7 @@
       ACRO
     </h2>
 
-    <dl
-      class="govuk-summary-list"
-    >
+    <dl class="govuk-summary-list">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Full Name
@@ -16,10 +14,7 @@
         </dd>
       </div>
 
-      <div
-        v-if="application.personalDetails.otherNames"
-        class="govuk-summary-list__row"
-      >
+      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Other names
         </dt>
@@ -28,10 +23,7 @@
         </dd>
       </div>
 
-      <div
-        v-if="application.personalDetails.dateOfBirth"
-        class="govuk-summary-list__row"
-      >
+      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Date of birth
         </dt>
@@ -40,10 +32,7 @@
         </dd>
       </div>
 
-      <div
-        v-if="application.personalDetails.placeOfBirth"
-        class="govuk-summary-list__row"
-      >
+      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Place of birth
         </dt>
@@ -101,9 +90,7 @@
         </dd>
       </div>
 
-      <div
-        class="govuk-summary-list__row"
-      >
+      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Previous Addresses
         </dt>
@@ -149,9 +136,7 @@
       </div>
     </dl>
 
-    <template
-      v-if="sra"
-    >
+    <template>
       <h2 class="govuk-heading-l">
         SRA
       </h2>
@@ -166,10 +151,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Other names
           </dt>
@@ -198,9 +180,7 @@
       </dl>
     </template>
 
-    <template
-      v-if="bsb"
-    >
+    <template>
       <h2 class="govuk-heading-l">
         BSB
       </h2>
@@ -215,10 +195,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Other names
           </dt>
@@ -247,9 +224,7 @@
       </dl>
     </template>
 
-    <template
-      v-if="hasJCIOCheck"
-    >
+    <template>
       <h2 class="govuk-heading-l">
         JCIO
       </h2>
@@ -264,10 +239,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Other names
           </dt>
@@ -303,9 +275,7 @@
       </dl>
     </template>
 
-    <template
-      v-if="hasHMRCCheck"
-    >
+    <template>
       <h2 class="govuk-heading-l">
         HMRC
       </h2>
@@ -320,10 +290,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.otherNames"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Other names
           </dt>
@@ -332,10 +299,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.dateOfBirth"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Date of birth
           </dt>
@@ -344,10 +308,7 @@
           </dd>
         </div>
 
-        <div
-          v-if="application.personalDetails.hasVATNumbers"
-          class="govuk-summary-list__row"
-        >
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             VAT Numbers
           </dt>
@@ -377,9 +338,7 @@
               v-for="(item, index) in application.characterInformation.lateTaxReturnOrFinedDetails"
               :key="index"
             >
-              <div
-                class="govuk-!-font-weight-bold"
-              >
+              <div class="govuk-!-font-weight-bold">
                 {{ item.date | formatDate }}
               </div>
               <div>{{ item.details }}</div>
@@ -405,9 +364,7 @@
       Other
     </h2>
 
-    <template
-      v-if="hasGMCCheck"
-    >
+    <template>
       <h3 class="govuk-heading-m">
         GMC
       </h3>
@@ -494,9 +451,7 @@
       </dl>
     </template>
 
-    <template
-      v-if="hasRICSCheck"
-    >
+    <template>
       <h3 class="govuk-heading-m">
         RICS
       </h3>
@@ -580,25 +535,13 @@ export default {
     },
     sra() {
       const qualifications = this.application.qualifications || [];
-
-      return qualifications.find((qualification) => qualification.type === 'solicitor');
+      const sra = qualifications.find((qualification) => qualification.type === 'solicitor');
+      return sra ? sra : {};
     },
     bsb() {
       const qualifications = this.application.qualifications || [];
-
-      return qualifications.find((qualification) => qualification.type === 'barrister');
-    },
-    hasJCIOCheck() {
-      return this.application.feePaidOrSalariedJudge;
-    },
-    hasHMRCCheck() {
-      return this.application.personalDetails.hasVATNumbers;
-    },
-    hasGMCCheck() {
-      return !!this.application.generalMedicalCouncilNumber;
-    },
-    hasRICSCheck() {
-      return !!this.application.royalInstitutionCharteredSurveyorsNumber;
+      const bsb = qualifications.find((qualification) => qualification.type === 'barrister');
+      return bsb ? bsb : {};
     },
     hasFinancialIssues() {
       return !!(this.application.characterInformationV2 &&

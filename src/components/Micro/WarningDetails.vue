@@ -1,6 +1,6 @@
 <template>
-  <div class="background-light-grey govuk-!-padding-left-4 govuk-!-padding-right-4 govuk-!-padding-top-4 govuk-!-margin-bottom-3">
-    <div class="govuk-warning-text">
+  <div class="govuk-!-margin-bottom-4">
+    <div class="govuk-warning-text govuk-!-margin-bottom-0 govuk-!-padding-bottom-0">
       <span
         class="govuk-warning-text__icon"
         aria-hidden="true"

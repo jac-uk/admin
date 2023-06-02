@@ -84,7 +84,7 @@
           status="warning"
         />
 
-        <ActionButton
+        <button
           v-if="isNotRequested && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
@@ -92,45 +92,43 @@
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value,
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
-          type="primary"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'request', { assessmentIds: selectedItems }, sendRequests)"
         >
           Send requests
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isNotRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'testRequest', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
         >
           Test request
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.notifications.permissions.canCreateNotifications.value
           ])"
-          type="primary"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'reminder', { assessmentIds: selectedItems }, sendReminders)"
         >
           Send reminders
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="isRequested && hasPermissions([
             PERMISSIONS.assessments.permissions.canReadAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'testReminder', { assessmentIds: selectedItems, notificationType: 'reminder' }, testRequest)"
         >
           Test reminder
-        </ActionButton>
+        </button>
         <ActionButton
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
@@ -186,7 +184,7 @@
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
-            field: 'userId',
+            field: 'candidate.id',
           }"
           :filters="filters"
           @change="getTableData"
@@ -336,7 +334,7 @@
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
-            @click="initialiseAssessments()"
+            @click="initialiseAssessments"
           >
             Start assessments
           </ActionButton>
@@ -403,7 +401,7 @@ export default {
   },
   mixins: [permissionMixin],
   beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', { 
+    this.$store.dispatch('assessments/bind', {
       exerciseId: this.exercise.id,
       status: this.getStatus(),
     });
@@ -466,7 +464,7 @@ export default {
         { title: 'Assessor', sort: 'assessor.fullName' },
         { title: 'Status' },
       ];
-      
+
       if (this.isCancelled || this.isDeclined) {
         return [
           ...tableColumns,
@@ -584,10 +582,13 @@ export default {
   },
   methods: {
     async initialiseAssessments() {
-      if (!this.exerciseStage) {
-        return false;
+      if (!this.exerciseStage) return;
+      try {
+        await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
+        return true;
+      } catch (error) {
+        return;
       }
-      await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
     },
     async cancelAssessments({ assessmentIds, cancelReason }) {
       this.resetSelectedItems();

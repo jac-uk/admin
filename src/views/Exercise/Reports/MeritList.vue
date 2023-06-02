@@ -73,7 +73,10 @@
               :key="index"
               class="text-center table-cell-score"
             >
-              <template v-if="isNumericColumn(col.type)">
+              <template v-if="isScoreColumn(col.type)">
+                {{ getColValue(row, col).score | formatNumber(2) }}
+              </template>
+              <template v-else-if="isNumericColumn(col.type)">
                 {{ getColValue(row, col) | formatNumber(2) }}
               </template>
               <template v-else-if="isYesNoColumn(col.type)">
@@ -294,7 +297,7 @@ export default {
       // Default sort by total score (initially)
       columns.push({ title: 'Total Score', sort: 'totalScore', direction: 'desc', default: true, class: 'text-center' });
       columns.push({ title: 'Female' });
-      columns.push({ title: 'BAME' });
+      columns.push({ title: 'Ethnic minority' });
       columns.push({ title: 'Solicitor' });
       columns.push({ title: 'Disability' });
       return columns;
@@ -518,6 +521,9 @@ export default {
       // get task.finalScores
       // console.log('save current score sheet, in finalScores', currentScoreSheet);
       // await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: { scoreSheet: scoreSheet } });
+    },
+    isScoreColumn(colType) {
+      return colType === MARKING_TYPE.SCORE;
     },
     isNumericColumn(colType) {
       return colType === MARKING_TYPE.NUMBER;

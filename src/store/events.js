@@ -7,21 +7,21 @@ export default {
   namespaced: true,
   actions: {
     bindInfo: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.queue, firestore.collection('logs/info/events'), params);
+      const firestoreRef = tableQuery(state.info, firestore.collection('logs/info/events'), params);
       return bindFirestoreRef('info', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindInfo: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('info');
     }),
     bindWarnings: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.queue, firestore.collection('logs/warnings/events'), params);
+      const firestoreRef = tableQuery(state.warnings, firestore.collection('logs/warnings/events'), params);
       return bindFirestoreRef('warnings', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindWarnings: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('warnings');
     }),
     bindErrors: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.queue, firestore.collection('logs/errors/events'), params);
+      const firestoreRef = tableQuery(state.errors, firestore.collection('logs/errors/events'), params);
       return bindFirestoreRef('errors', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindErrors: firestoreAction(({ unbindFirestoreRef }) => {

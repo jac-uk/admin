@@ -24,7 +24,7 @@
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
             <RouterLink
-              :to="{ name: `exercise-tasks-${row.type}-view`, params: { panelId: row.id } }"
+              :to="{ name: `exercise-reports-${row.type}-view`, params: { panelId: row.id } }"
             >
               {{ row.name }}
             </RouterLink>
@@ -251,11 +251,11 @@ export default {
     createNewPanel() {
       let routeName = '';
       if (this.type === 'sift') {
-        routeName = 'exercise-tasks-sift-new';
+        routeName = 'exercise-reports-sift-new';
       } else if (this.type === 'scenario') {
-        routeName = 'exercise-tasks-scenario-new';
+        routeName = 'exercise-reports-scenario-new';
       } else {
-        routeName = 'exercise-tasks-selection-new';
+        routeName = 'exercise-reports-selection-new';
       }
       this.$router.push({ name: routeName });
     },

@@ -1,5 +1,6 @@
 <template>
   <div>
+    Ranked by {{ scoreType | lookup }}
     <Table
       data-key="score"
       :data="scores"
@@ -73,15 +74,20 @@ export default {
       required: true,
       type: Array,
     },
+    scoreType: {
+      required: true,
+      type: String,
+    },
   },
   data() {
+
     return {
       tableColumns: [
         { title: 'Rank' },
         { title: 'Count' },
-        { title: 'Score' },
+        { title: this.$options.filters.lookup(this.scoreType) },
         { title: 'Female' },
-        { title: 'BAME' },
+        { title: 'Ethnic Minority' },
         { title: 'Solicitor' },
         { title: 'Disability' },
         { title: 'Outcome' },

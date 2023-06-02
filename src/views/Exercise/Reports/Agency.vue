@@ -20,20 +20,16 @@
             >
               Export data
             </button>
-            <button
+            <ActionButton
               v-if="hasPermissions([
                 PERMISSIONS.applications.permissions.canReadApplications.value,
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
-              class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-              data-module="govuk-button"
+              type="primary"
               @click="refreshReport"
             >
-              <span
-                v-if="refreshingReport"
-                class="spinner-border spinner-border-sm"
-              /> Refresh
-            </button>
+              Refresh
+            </ActionButton>
           </div>
         </div>
       </div>
@@ -221,8 +217,17 @@
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
-                  <td class="govuk-table__cell">
+                  <td
+                    v-if="candidate.bsbDate"
+                    class="govuk-table__cell"
+                  >
                     {{ candidate.bsbDate | formatDate('long') }}
+                  </td>
+                  <td
+                    v-else
+                    class="govuk-table__cell"
+                  >
+                    None given
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.bsbNumber }}
@@ -467,18 +472,19 @@ import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'Agency',
   components: {
     TabsList,
+    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       report: null,
-      refreshingReport: false,
       tabs: [
         {
           ref: 'acro',
@@ -523,7 +529,7 @@ export default {
       return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
     },
     bsbRows() {
-      return this.report ? this.report.rows.filter((e) => e.bsbDate) : [];
+      return this.report ? this.report.rows : [];
     },
     jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
@@ -556,9 +562,12 @@ export default {
   },
   methods: {
     async refreshReport() {
-      this.refreshingReport = true;
-      await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
-      this.refreshingReport = false;
+      try {
+        await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     gatherReportData() {
       const reportData = [];
@@ -642,14 +651,57 @@ export default {
 
       return reportData;
     },
+    gatherBSBReportData() {
+      const reportData = [];
+      const headers = [
+        { title: 'Surname', ref: 'lastName' },
+        { title: 'Forename(s)', ref: 'firstName' },
+        { title: 'BSB Number', ref: 'bsbNumber' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
+    gatherSRAReportData() {
+      const reportData = [];
+      const headers = [
+        { title: 'Surname', ref: 'lastName' },
+        { title: 'Forename(s)', ref: 'firstName' },
+        { title: 'SRA Number', ref: 'sraNumber' },
+      ];
+      // get headers
+      reportData.push(headers.map(header => header.title));
+
+      // get rows
+      this.report.rows.forEach((row) => {
+        reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
+      });
+
+      return reportData;
+    },
     exportData() {
       const title = 'Agency Report';
       let data = null;
+      let dataTag;
 
       if (this.activeTab === 'acro') {
+        dataTag = 'ACRO';
         data = this.gatherACROReportData();
       } else if (this.activeTab === 'hmrc') {
+        dataTag = 'HMRC';
         data = this.gatherHMRCReportData();
+      } else if (this.activeTab === 'bsb') {
+        dataTag = 'BSB';
+        data = this.gatherBSBReportData();
+      } else if (this.activeTab === 'sra') {
+        dataTag = 'SRA';
+        data = this.gatherSRAReportData();
       } else {
         data = this.gatherReportData();
       }
@@ -657,9 +709,9 @@ export default {
       downloadXLSX(
         data,
         {
-          title: `${this.exercise.referenceNumber} ${title}`,
-          sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          title: `${this.exercise.referenceNumber} ${title} - ${dataTag}`,
+          sheetName: `${title} - ${dataTag} report`,
+          fileName: `${this.exercise.referenceNumber} - ${title} - ${dataTag}.xlsx`,
         }
       );
     },

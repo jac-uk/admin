@@ -5,45 +5,66 @@
     </h1>
 
     <p
-      class="govuk-body-l"
+      class="govuk-body"
     >
-      Please check the following details before continuing
+      Please confirm the following
     </p>
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-          <div class="govuk-caption-m">
-            Applications <span v-if="entryStatus">({{ entryStatus | lookup }})</span>
-          </div>
-          <h2
-            class="govuk-heading-m govuk-!-margin-bottom-0"
-          >
-            {{ totalApplications }}
-          </h2>
-        </div>
-      </div>
+    <Checkbox
+      v-for="(timelineTask, index) in timelineTasks"
+      :id="`timelineTask-${index}`"
+      :key="`timelineTask-${index}`"
+      v-model="formData.timelineTasks[index]"
+    >
+      {{ timelineTask.entry }} will happen on {{ timelineTask.dateString }}
+    </Checkbox>
 
-      <div
-        v-for="(timelineTask, index) in timelineTasks"
-        :key="`timelineTask-${index}`"
-        class="govuk-grid-column-one-half"
-      >
-        <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-          <span class="govuk-caption-m">{{ timelineTask.entry }}</span>
-          <h2
-            class="govuk-heading-m govuk-!-margin-bottom-0"
-          >
-            {{ timelineTask.dateString }}
-          </h2>
-        </div>
-      </div>
+    <Checkbox
+      v-if="entryStatus"
+      id="entryStatus"
+      v-model="formData.entryStatus"
+    >
+      Only '{{ entryStatus | lookup }}' applications will be included
+    </Checkbox>
+
+    <div
+      v-if="taskIsOverdue"
+      class="govuk-warning-text"
+    >
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        This task is overdue. Please change dates on the <RouterLink
+          :to="{ name: 'exercise-details-timeline' }"
+          class="govuk-link"
+        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
+      </strong>
+    </div>
+
+    <div
+      v-if="taskIsOverdue"
+      class="govuk-warning-text"
+    >
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        This task is overdue. Please change dates on the <RouterLink
+          :to="{ name: 'exercise-details-timeline' }"
+          class="govuk-link"
+        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
+      </strong>
     </div>
 
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
-      :disabled="!totalApplications"
+      :disabled="!isFormCompleted"
       @click="btnInitialise"
     >
       Continue
@@ -56,17 +77,28 @@ import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { functions } from '@/firebase';
+import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 
 export default {
   components: {
     ActionButton,
+    Checkbox,
   },
   props: {
     type: {
       required: true,
       type: String,
     },
+  },
+  data() {
+    return {
+      formData: {
+        entryStatus: null,
+        timelineTasks: [],
+      },
+    };
   },
   computed: {
     exercise() {
@@ -80,6 +112,10 @@ export default {
     },
     isQualifyingTest() {
       return this.type === TASK_TYPE.QUALIFYING_TEST;
+    },
+    taskIsOverdue() {
+      const timelineTask = this.timelineTasks[0];
+      return !isDateInFuture(timelineTask.date);
     },
     totalApplications() {
       if (!this.exercise) return 0;
@@ -97,14 +133,29 @@ export default {
       }
       return 0;
     },
+    isFormCompleted() {
+      let expectedLength = 0;
+      let actualLength = 0;
+      if (this.entryStatus) {
+        expectedLength += 1;
+        if (this.formData.entryStatus === true) actualLength += 1;
+      }
+      expectedLength += this.timelineTasks.length;
+      actualLength += this.formData.timelineTasks.length;
+      return expectedLength === actualLength;
+    },
   },
   methods: {
     btnNext,
     async btnInitialise() {
-      await functions.httpsCallable('createTask')({
+      const params = {
         exerciseId: this.exercise.id,
         type: this.type,
-      });
+      };
+      if (this.taskIsOverdue) {
+        params.dataOnly = true;
+      }
+      await functions.httpsCallable('createTask')(params);
       this.btnNext();
     },
   },

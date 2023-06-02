@@ -13,11 +13,11 @@
           type="button"
           @click="$refs['setPassMarkModal'].openModal()"
         >
-          <span v-if="task.passMark >= 0">Pass mark {{ task.passMark | formatNumber(2) }}</span>
+          <span v-if="hasPassMark">Pass mark {{ task.passMark | formatNumber(2) }}</span>
           <span v-else>Set pass mark</span>
         </button>
         <ActionButton
-          v-if="task.passMark >= 0"
+          v-if="hasPassMark"
           class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
           type="primary"
           @click="btnComplete"
@@ -29,7 +29,7 @@
     </div>
 
     <p
-      v-if="!task.passMark"
+      v-if="!hasPassMark"
       class="govuk-body-l govuk-!-margin-bottom-4"
     >
       Please set a pass mark.
@@ -45,6 +45,7 @@
       :exercise-id="exercise.id"
       :type="type"
       :scores="scores"
+      :score-type="scoreType"
     />
 
     <Modal ref="setPassMarkModal">
@@ -94,8 +95,17 @@ export default {
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
+    scoreType() {
+      if (!this.task) return 'score';
+      if (this.task.scoreType) return this.task.scoreType;
+      if (this.task.finalScores[0].hasOwnProperty('percent')) return 'percent';
+      return 'score';
+    },
     exerciseDiversity() {
       return this.$store.state.exerciseDiversity.record ? this.$store.state.exerciseDiversity.record.applicationsMap : {};
+    },
+    hasPassMark() {
+      return this.task.hasOwnProperty('passMark');
     },
     scores() {
       if (!this.task) return [];
@@ -105,9 +115,9 @@ export default {
       // group scores
       const scoreMap = {};
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
-        if (!scoreMap[scoreData.score]) {
-          scoreMap[scoreData.score] = {
-            fullName: this.getFullName(scoreData.id),
+        if (!scoreMap[scoreData[this.scoreType]]) {
+          scoreMap[scoreData[this.scoreType]] = {
+            applicationIds: [],
             count: 0,
             rank: 0,
             diversity: {
@@ -128,13 +138,14 @@ export default {
             },
           };
         }
-        scoreMap[scoreData.score].count += 1;
+        scoreMap[scoreData[this.scoreType]].applicationIds.push(scoreData.id);
+        scoreMap[scoreData[this.scoreType]].count += 1;
         const ref = scoreData.ref.split('-')[1];
         if (this.exerciseDiversity[ref]) {
-          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)) scoreMap[scoreData.score].diversity.female += 1;
-          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)) scoreMap[scoreData.score].diversity.bame += 1;
-          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)) scoreMap[scoreData.score].diversity.solicitor += 1;
-          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)) scoreMap[scoreData.score].diversity.disability += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE)) scoreMap[scoreData[this.scoreType]].diversity.female += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME)) scoreMap[scoreData[this.scoreType]].diversity.bame += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR)) scoreMap[scoreData[this.scoreType]].diversity.solicitor += 1;
+          if (this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED)) scoreMap[scoreData[this.scoreType]].diversity.disability += 1;
         }
       });
 
@@ -159,27 +170,26 @@ export default {
       });
 
       // add outcome stats
-      if (this.task.passMark >= 0) {
+      if (this.task.hasOwnProperty('passMark')) {
         scoresInDescendingOrder.forEach(key => {
           const score = parseFloat(key);
-          if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
-          if (score === this.task.passMark) {
+          if (score >= this.task.passMark) {
             if (this.task.overrides && this.task.overrides.fail) {
-              scoreMap[score].outcome.pass = scoreMap[score].count - this.task.overrides.fail.length; // TODO should we check contents of fail (or pass) are all at this score?
-              scoreMap[score].outcome.fail = this.task.overrides.fail.length;
+              const failMatches = this.task.overrides.fail.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
+              scoreMap[score].outcome.fail = failMatches.length;
+              scoreMap[score].outcome.pass = scoreMap[score].count - failMatches.length;
             } else {
               scoreMap[score].outcome.pass = scoreMap[score].count;
             }
-          }
-          if (score === this.task.passMark - 1) {
+          } else {
             if (this.task.overrides && this.task.overrides.pass) {
-              scoreMap[score].outcome.pass = this.task.overrides.pass.length;
-              scoreMap[score].outcome.fail = scoreMap[score].count - this.task.overrides.pass.length;
+              const passMatches = this.task.overrides.pass.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
+              scoreMap[score].outcome.pass = passMatches.length;
+              scoreMap[score].outcome.fail = scoreMap[score].count - passMatches.length;
             } else {
               scoreMap[score].outcome.fail = scoreMap[score].count;
             }
           }
-          if (score < this.task.passMark - 1) { scoreMap[score].outcome.fail = scoreMap[score].count; }
         });
       }
 
@@ -228,7 +238,7 @@ export default {
     },
     async setPassMark(data) {
       if (data) {
-        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), overrides: {} } } );
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), scoreType: this.scoreType } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
     },

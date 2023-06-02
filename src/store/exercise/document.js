@@ -138,6 +138,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
+        published: false,
         testingState: null,
         _approval: null,
       };
