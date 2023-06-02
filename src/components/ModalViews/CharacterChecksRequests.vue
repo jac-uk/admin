@@ -13,17 +13,18 @@
             <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
-          <button
+          <ActionButton
             v-if="hasPermissions([
               PERMISSIONS.applications.permissions.canReadApplications.value,
               PERMISSIONS.applications.permissions.canUpdateApplications.value,
               PERMISSIONS.notifications.permissions.canCreateNotifications.value
             ])"
-            class="govuk-button govuk-!-margin-right-3 govuk-!-top-3"
-            @click.prevent="send"
+            type="primary"
+            class="govuk-!-margin-right-3 govuk-!-top-3"
+            @click="send"
           >
             {{ buttonText }}
-          </button>
+          </ActionButton>
           <button
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
             @click.prevent="closeModal"
@@ -39,9 +40,13 @@
 <script>
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'CharacterChecksRequests',
+  components: {
+    ActionButton,
+  },
   mixins: [permissionMixin],
   props: {
     selectedItems: {
@@ -70,11 +75,6 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      processing: false,
-    };
-  },
   computed: {
     numberOfCandidates() {
       return this.selectedItems.length;
@@ -83,9 +83,6 @@ export default {
       return this.type;
     },
     buttonText() {
-      if (this.processing === true) {
-        return 'Processing...';
-      }
       return `I confirm, please send ${this.type}`;
     },
   },
@@ -106,7 +103,6 @@ export default {
     },
     async send() {
       try {
-        this.processing = true;
         const response = await functions.httpsCallable('sendCharacterCheckRequests')({
           items: this.selectedItems,
           type: this.type,
@@ -115,10 +111,8 @@ export default {
           dueDate: this.dueDate,
         });
         if (response === false) {
-          this.processing = false;
           this.$emit('setmessage', false, 'warning');
         } else {
-          this.processing = false;
           if (this.type === 'request') {
             this.updateApplicationRecord('requested');
           }
@@ -126,6 +120,7 @@ export default {
             this.updateApplicationRecord('reminder sent');
           }
           this.$emit('setmessage', true, this.type, 'success');
+          return true;
         }
       } catch (error) {
         this.$emit('setmessage', false, this.type, 'warning');

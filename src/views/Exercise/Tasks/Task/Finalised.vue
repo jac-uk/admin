@@ -117,7 +117,7 @@ export default {
       this.task.finalScores.forEach(scoreData => { // id | panelId | ref | score | scoreSheet
         if (!scoreMap[scoreData[this.scoreType]]) {
           scoreMap[scoreData[this.scoreType]] = {
-            // fullName: this.getFullName(scoreData.id),
+            applicationIds: [],
             count: 0,
             rank: 0,
             diversity: {
@@ -138,6 +138,7 @@ export default {
             },
           };
         }
+        scoreMap[scoreData[this.scoreType]].applicationIds.push(scoreData.id);
         scoreMap[scoreData[this.scoreType]].count += 1;
         const ref = scoreData.ref.split('-')[1];
         if (this.exerciseDiversity[ref]) {
@@ -172,19 +173,19 @@ export default {
       if (this.task.hasOwnProperty('passMark')) {
         scoresInDescendingOrder.forEach(key => {
           const score = parseFloat(key);
-          if (score > this.task.passMark) { scoreMap[score].outcome.pass = scoreMap[score].count; }
-          if (score === this.task.passMark) {
+          if (score >= this.task.passMark) {
             if (this.task.overrides && this.task.overrides.fail) {
-              scoreMap[score].outcome.pass = scoreMap[score].count - this.task.overrides.fail.length; // TODO should we check contents of fail (or pass) are all at this score?
-              scoreMap[score].outcome.fail = this.task.overrides.fail.length;
+              const failMatches = this.task.overrides.fail.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
+              scoreMap[score].outcome.fail = failMatches.length;
+              scoreMap[score].outcome.pass = scoreMap[score].count - failMatches.length;
             } else {
               scoreMap[score].outcome.pass = scoreMap[score].count;
             }
-          }
-          if (score < this.task.passMark) {
+          } else {
             if (this.task.overrides && this.task.overrides.pass) {
-              scoreMap[score].outcome.pass = this.task.overrides.pass.length;
-              scoreMap[score].outcome.fail = scoreMap[score].count - this.task.overrides.pass.length;
+              const passMatches = this.task.overrides.pass.filter(id => scoreMap[score].applicationIds.indexOf(id) >= 0);
+              scoreMap[score].outcome.pass = passMatches.length;
+              scoreMap[score].outcome.fail = scoreMap[score].count - passMatches.length;
             } else {
               scoreMap[score].outcome.fail = scoreMap[score].count;
             }
@@ -237,7 +238,7 @@ export default {
     },
     async setPassMark(data) {
       if (data) {
-        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), scoreType: this.scoreType, overrides: {} } } );
+        await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: { passMark: parseFloat(data.passMark), scoreType: this.scoreType } } );
         this.$refs['setPassMarkModal'].closeModal();
       }
     },

@@ -39,23 +39,20 @@
     </div>
 
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+      <button
+        v-if="report"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="exportData"
+      >
+        Export data
+      </button>
       <ActionButton
         v-if="report"
-        class="govuk-!-margin-right-3"
-        @click="exportData()"
-      >
-        Export Data
-      </ActionButton>
-      <button
-        class="govuk-button govuk-!-margin-right-3"
+        type="primary"
         @click="refreshReport"
       >
-        <span
-          v-if="refreshingReport"
-          class="spinner-border spinner-border-sm"
-        />
         Refresh
-      </button>
+      </ActionButton>
     </div>
 
     <div
@@ -165,7 +162,6 @@ export default {
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
       report: null,
-      refreshingReport: false,
     };
   },
   computed: {
@@ -351,11 +347,14 @@ export default {
       return list.map(item => item.key);
     },
     async refreshReport() {
-      this.refreshingReport = true;
-      if (this.applicationCounts._total) {
-        await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+      try {
+        if (this.applicationCounts._total) {
+          await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+        }
+        return true;
+      } catch (error) {
+        return;
       }
-      this.refreshingReport = false;
     },
     getDataTotal(stage, titles) {
       const dataApplied = this.report[stage][this.selectedDiversityReportType];

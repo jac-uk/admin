@@ -67,16 +67,16 @@ export default {
   computed: {
     isSift() {
       // TODO: add this from store panel.js
-      const route = this.$route.fullPath.includes('/tasks/sift/');
+      const route = this.$route.fullPath.includes('/reports/sift/');
       return route;
     },
     isSelectionDay() {
       // TODO: add this from store panel.js
-      const route = this.$route.fullPath.includes('/tasks/selection/');
+      const route = this.$route.fullPath.includes('/reports/selection/');
       return route;
     },
     isScenario() {
-      return this.$route.fullPath.includes('/tasks/scenario/');
+      return this.$route.fullPath.includes('/reports/scenario/');
     },
     title() {
       let returnTitle = 'New Panel for';
@@ -123,13 +123,13 @@ export default {
         };
         await this.$store.dispatch('panels/create', data);
         this.$router.push({
-          name: `exercise-tasks-${this.type}`,
+          name: `exercise-reports-${this.type}`,
         });
       }
     },
     cancel() {
       this.$router.push({
-        name: `exercise-tasks-${this.type}`,
+        name: `exercise-reports-${this.type}`,
       });
     },
   },
