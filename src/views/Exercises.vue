@@ -171,10 +171,6 @@
 import { mapState } from 'vuex';
 
 import Table from '@jac-uk/jac-kit/components/Table/Table';
-
-// @TODO: REMOVE TESTER folder!
-//import Table from '@/components/TESTER/Table';
-
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
