@@ -78,6 +78,12 @@
                 field: 'applicationOpenDate',
                 title: 'Open date',
               },
+              {
+                title: 'Approval',
+                field: '_approval.status',
+                type: 'radio',
+                options: ['Approved', 'Rejected', 'Requested'],
+              },
             ]"
             :search="['name']"
             multi-select
@@ -133,9 +139,13 @@
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
+
+              <TableCell :title="tableColumns[5].title">
+                {{ getExerciseApprovalStatus(row) }}
+              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[5].title"
+                :title="tableColumns[6].title"
               >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
@@ -159,12 +169,18 @@
 
 <script>
 import { mapState } from 'vuex';
+
 import Table from '@jac-uk/jac-kit/components/Table/Table';
+
+// @TODO: REMOVE TESTER folder!
+//import Table from '@/components/TESTER/Table';
+
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-
+import _upperFirst from 'lodash/upperFirst';
+import _get from 'lodash/get';
 export default {
   name: 'Exercises',
   components: {
@@ -182,6 +198,7 @@ export default {
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
+        { title: 'Approval' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -271,6 +288,9 @@ export default {
         status += 'Live';
       }
       return status;
+    },
+    getExerciseApprovalStatus(exercise) {
+      return _upperFirst(_get(exercise, '_approval.status', ''));
     },
     toggleArchive() {
       if (this.isArchived) {
