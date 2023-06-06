@@ -148,9 +148,6 @@
               <TableCell :title="tableColumns[5].title">
                 {{ getExerciseApprovalStatus(row) }}
               </TableCell>
-              <TableCell :title="tableColumns[6].title">
-                {{ numExerciseLateApplicationRequests(row) }}
-              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[7].title"
@@ -202,7 +199,6 @@ export default {
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
         { title: 'Approval' },
-        { title: 'Late Applications' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -295,11 +291,6 @@ export default {
     },
     getExerciseApprovalStatus(exercise) {
       return _upperFirst(_get(exercise, '_approval.status', ''));
-    },
-    numExerciseLateApplicationRequests(exercise) {
-      return ('_lateApplicationRequests' in exercise
-        && Array.isArray(exercise._lateApplicationRequests)
-        && exercise._lateApplicationRequests.length) ? exercise._lateApplicationRequests.length : '';
     },
     toggleArchive() {
       if (this.isArchived) {
