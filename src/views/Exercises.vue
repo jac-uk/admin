@@ -84,6 +84,12 @@
                 type: 'radio',
                 options: ['Approved', 'Rejected', 'Requested'],
               },
+              {
+                type: 'singleCheckbox',
+                field: '_lateApplicationRequests',
+                inputLabel: 'Show late application requests only',
+                fieldComparator: 'arrayNotEmpty'
+              },
             ]"
             :search="['name']"
             multi-select
@@ -139,13 +145,15 @@
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
-
               <TableCell :title="tableColumns[5].title">
                 {{ getExerciseApprovalStatus(row) }}
               </TableCell>
+              <TableCell :title="tableColumns[6].title">
+                {{ numExerciseLateApplicationRequests(row) }}
+              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[6].title"
+                :title="tableColumns[7].title"
               >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
@@ -169,7 +177,6 @@
 
 <script>
 import { mapState } from 'vuex';
-
 import Table from '@jac-uk/jac-kit/components/Table/Table';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
 import permissionMixin from '@/permissionMixin';
@@ -195,6 +202,7 @@ export default {
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
         { title: 'Approval' },
+        { title: 'Late Applications' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -287,6 +295,11 @@ export default {
     },
     getExerciseApprovalStatus(exercise) {
       return _upperFirst(_get(exercise, '_approval.status', ''));
+    },
+    numExerciseLateApplicationRequests(exercise) {
+      return ('_lateApplicationRequests' in exercise
+        && Array.isArray(exercise._lateApplicationRequests)
+        && exercise._lateApplicationRequests.length) ? exercise._lateApplicationRequests.length : '';
     },
     toggleArchive() {
       if (this.isArchived) {
