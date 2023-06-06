@@ -82,7 +82,9 @@
                 title: 'Approval',
                 field: '_approval.status',
                 type: 'radio',
-                options: ['Approved', 'Rejected', 'Requested'],
+                options: ['None', 'Approved', 'Rejected', 'Requested'],
+                emptyOption: 'None',
+                defaultValue: 'None',
               },
               {
                 type: 'singleCheckbox',
@@ -150,7 +152,7 @@
               </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[7].title"
+                :title="tableColumns[6].title"
               >
                 {{ row.applicationsCount | formatNumber }}
               </TableCell>
