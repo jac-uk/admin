@@ -89,7 +89,7 @@
               {
                 type: 'singleCheckbox',
                 field: '_lateApplicationRequests',
-                inputLabel: 'Show late application requests only',
+                inputLabel: 'Exercises with late application requests',
                 fieldComparator: 'arrayNotEmpty'
               },
             ]"
