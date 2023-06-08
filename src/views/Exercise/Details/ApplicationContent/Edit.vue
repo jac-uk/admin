@@ -78,7 +78,8 @@
         <button
           type="button"
           class="govuk-button"
-          @click="nextPage"
+          @click="onSubmit"
+          :disabled="!snapshotHasChanged"
         >
           Continue
         </button>
@@ -93,8 +94,9 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
 import Draggable from '@/components/DragAndDrop/Draggable';
 import Droppable from '@/components/DragAndDrop/Droppable';
-import { applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
-
+import { applicationContentList, unselectedApplicationParts, exerciseApplicationParts, configuredApplicationParts, APPLICATION_STEPS } from '@/helpers/exerciseHelper';
+import clone from 'clone';
+import _set from 'lodash/set';
 export default {
   components: {
     ErrorSummary,
@@ -103,6 +105,18 @@ export default {
     Droppable,
   },
   extends: Form,
+  created() {
+    this.clonedExercise = clone(this.exercise);
+    this.initialSnapshot = this.createSnapshot();
+  },
+  data() {
+    return {
+      clonedExercise: null,
+      initialSnapshot: null,
+      currentSnapshot: null,
+      saveData: {},
+    };
+  },
   computed: {
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
@@ -111,27 +125,68 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     applicationContentList() {
-      return applicationContentList(this.exercise);
+      return applicationContentList(this.clonedExercise);
     },
     unselectedApplicationParts() {
-      return unselectedApplicationParts(this.exercise);
+      return unselectedApplicationParts(this.clonedExercise);
+    },
+    snapshotHasChanged() {
+      return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
     },
   },
   methods: {
     async onDrop(droppedItem) {
       if (droppedItem && droppedItem.id !== droppedItem.data.step) {
-        const saveData = {};
         if (droppedItem.id !== 'empty') {
-          saveData[`_applicationContent.${droppedItem.id}.${droppedItem.data.part}`] = true;
+          this.saveData[`_applicationContent.${droppedItem.id}.${droppedItem.data.part}`] = true;
         }
         if (droppedItem.data.step !== 'empty') {
-          saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
+          this.saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
         }
-        await this.$store.dispatch('exerciseDocument/save', saveData);
+        this.updateClonedExercise(this.saveData);
+        this.currentSnapshot = this.createSnapshot();
       }
     },
-    nextPage() {
+    updateClonedExercise(data) {
+      const exerciseSavedData = this.getExerciseSaveData(this.clonedExercise, data);
+      Object.keys(exerciseSavedData).forEach(key => {
+        _set(this.clonedExercise, key, exerciseSavedData[key]);
+      });
+    },
+    async onSubmit() {
+      await this.$store.dispatch('exerciseDocument/save', this.getExerciseSaveData(this.clonedExercise, this.saveData));
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
+    },
+    createSnapshot() {
+      return JSON.stringify(this.applicationContentList);
+    },
+    getExerciseSaveData(exercise, data) {
+      // Creates the _applicationContent if it doesnt already exist
+      const saveData = clone(data);
+      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+        const applicationParts = exerciseApplicationParts(exercise, data);
+        const existingApplicationParts = configuredApplicationParts(exercise);
+        const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
+        if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
+          const applicationContentBefore = exercise._applicationContent ? exercise._applicationContent : {};
+          const applicationContentAfter = {};
+          APPLICATION_STEPS.forEach(step => {
+            applicationContentAfter[step] = {};
+            applicationParts.forEach(part => {
+              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
+                applicationContentAfter[step][part] = applicationContentBefore[step][part];
+              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
+                applicationContentAfter[step][part] = true;
+              }
+            });
+          });
+          if (applicationContentBefore._currentStep) {
+            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
+          }
+          saveData['_applicationContent'] = applicationContentAfter;
+        }
+      }
+      return saveData;
     },
   },
 };
