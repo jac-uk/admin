@@ -78,8 +78,8 @@
         <button
           type="button"
           class="govuk-button"
-          @click="onSubmit"
           :disabled="!snapshotHasChanged"
+          @click="onSubmit"
         >
           Continue
         </button>
@@ -105,10 +105,6 @@ export default {
     Droppable,
   },
   extends: Form,
-  created() {
-    this.clonedExercise = clone(this.exercise);
-    this.initialSnapshot = this.createSnapshot();
-  },
   data() {
     return {
       clonedExercise: null,
@@ -133,6 +129,10 @@ export default {
     snapshotHasChanged() {
       return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
     },
+  },
+  created() {
+    this.clonedExercise = clone(this.exercise);
+    this.initialSnapshot = this.createSnapshot();
   },
   methods: {
     async onDrop(droppedItem) {
