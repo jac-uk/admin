@@ -5,6 +5,7 @@ import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { APPLICATION_STEPS, exerciseApplicationParts, configuredApplicationParts } from '@/helpers/exerciseHelper';
+import { logEvent } from '@/helpers/logEvent';
 
 const collection = firestore.collection('exercises');
 
@@ -210,7 +211,17 @@ export default {
     delete: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
-      await ref.delete();
+      const data = {
+        state: 'deleted',
+        stateBeforeDelete: state.record.state,
+      };
+      await ref.update(data);
+
+      const loggingData = {
+        exerciseIds: [id],
+        exerciseRefs: [state.record.referenceNumber],
+      };
+      logEvent('info', 'Exercises deleted', loggingData);
     },
   },
   state: {
