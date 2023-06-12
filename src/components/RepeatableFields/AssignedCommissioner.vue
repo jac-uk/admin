@@ -5,6 +5,7 @@
       v-model="row.name"
       type="email"
       label="Assigned commissioner"
+      hint="An email address is required."
       required
     />
     <slot name="removeButton" />

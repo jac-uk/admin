@@ -47,6 +47,53 @@
     </div>
 
     <!-- Judicial Experience -->
+    <div v-if="isJAC00164">
+      <dl class="govuk-summary-list govuk-!-margin-bottom-8">
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt
+            v-if="exercise.previousJudicialExperienceApply"
+            class="govuk-summary-list__key"
+          >
+            Are you a fee-paid or salaried medical member?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ application.feePaidOrSalariedJudge | toYesNo }}
+          </dd>
+        </div>
+        <div
+          v-if="application.feePaidOrSalariedJudge === true"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            {{ `Have you sat for at least ${exercise.pjeDays || 30 } days?` }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body">
+              {{ application.feePaidOrSalariedSatForThirtyDays | toYesNo }}
+            </p>
+            <p
+              v-if="application.feePaidOrSalariedSatForThirtyDays"
+              class="govuk-body"
+            >
+              {{ application.feePaidOrSalariedSittingDaysDetails }}
+            </p>
+          </dd>
+        </div>
+        <div
+          v-if="!application.feePaidOrSalariedJudge || !application.feePaidOrSalariedSatForThirtyDays"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            If you do not have previous experience as a Fee-paid Medical Member in the Social Entitlement Chamber, please tell us what equivalent experience and skills you have in the box below
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ application.skillsAquisitionDetails }}
+          </dd>
+        </div>
+      </dl>
+    </div>
     <div
       v-if="isLegal && exercise.previousJudicialExperienceApply"
       class="govuk-!-margin-top-9"
@@ -182,6 +229,87 @@
       </dl>
     </div>
 
+    <!-- Medical Experience for JAC00164 -->
+    <div
+      v-if="isJAC00164"
+      class="govuk-!-margin-top-9"
+    >
+      <h2 class="govuk-heading-l">
+        Experience
+      </h2>
+
+      <dl
+        class="govuk-summary-list govuk-!-margin-bottom-8"
+      >
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Fee-paid or salaried medical member
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :data="application.feePaidOrSalariedJudge"
+              :options="[true, false]"
+              :edit="editable"
+              type="selection"
+              field="feePaidOrSalariedJudge"
+              @changeField="changeInfo"
+            />
+          </dd>
+        </div>
+
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Sat for at least {{ exercise.pjeDays || 30 }} days
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :data="application.feePaidOrSalariedSatForThirtyDays"
+              :options="[true, false]"
+              :edit="editable"
+              type="selection"
+              field="feePaidOrSalariedSatForThirtyDays"
+              @changeField="changeInfo"
+            />
+            <div
+              v-if="application.feePaidOrSalariedSittingDaysDetails || editable"
+              class="govuk-body"
+            >
+              <dt class="govuk-summary-list__key">
+                Details
+              </dt>
+              <InformationReviewRenderer
+                :data="application.feePaidOrSalariedSittingDaysDetails"
+                :edit="editable"
+                field="feePaidOrSalariedSittingDaysDetails"
+                @changeField="changeInfo"
+              />
+            </div>
+          </dd>
+        </div>
+
+        <div
+          v-if="!application.feePaidOrSalariedJudge || !application.feePaidOrSalariedSatForThirtyDays"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Equivalent experience and skills
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :data="application.skillsAquisitionDetails"
+              :edit="editable"
+              field="skillsAquisitionDetails"
+              @changeField="changeInfo"
+            />
+          </dd>
+        </div>
+      </dl>
+    </div>
+
     <!-- Gaps in Employment -->
     <div
       v-if="!isNonLegal"
@@ -276,6 +404,11 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    isJAC00164() {
+      if (!this.exercise) { return false; }
+      // [develop, staging, prod]
+      return ['JAC00507','JAC00660','JAC00164'].includes(this.exercise.referenceNumber);
     },
     applicationId() {
       return this.$route.params.applicationId;

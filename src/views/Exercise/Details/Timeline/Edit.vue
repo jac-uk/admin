@@ -18,7 +18,7 @@
           :show-save-button="true"
           @save="save"
         />
-
+        <!--
         <div class="govuk_body govuk-!-margin-bottom-2">
           <p class="govuk-body-l govuk-!-margin-bottom-2">
             You can return to this page later to add or change dates.
@@ -32,7 +32,7 @@
           <span class="govuk-hint">
             This can help you plan your own key dates (opens in a new tab).
           </span>
-        </div>
+        </div> -->
 
         <h2 class="govuk-heading-l">
           Application dates

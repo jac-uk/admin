@@ -36,6 +36,7 @@ const lookup = (value) => {
     additionalInfo: 'Additional Information',
 
     // exercise states
+    draft: 'Draft',
     registration: 'Registration',
     shortlisting: 'Shortlisting',
     selection: 'Selection',
@@ -78,6 +79,7 @@ const lookup = (value) => {
     noAnswer: 'No answer',
     genderNeutral: 'Gender neutral',
     firstGenerationUniversity: 'First generation at University',
+    parentsAttendedUniversity: 'Parents attended University',
     attendedUKStateSchool: 'Attended UK state school',
     white: 'White',
     bame: 'Ethnic minorities',

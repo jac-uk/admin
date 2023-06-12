@@ -4,6 +4,7 @@
       :id="`selection_exercise_officer_${index}`"
       v-model="row.name"
       label="Selection exercise officer"
+      hint="An email address is required."
       type="email"
       required
       :pattern="patternJACEmail"

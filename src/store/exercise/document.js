@@ -30,6 +30,18 @@ export default {
       const docRef = await collection.doc(id).get();
       return docRef.data();
     },
+    getDocumentDataByReferenceNumber: async (context, referenceNumber) => {
+      let exercise = null;
+      const snap = await collection.where('referenceNumber', '==', referenceNumber).limit(1).get();
+      if (snap.empty) return null;
+
+      snap.forEach(doc => {
+        const row = doc.data();
+        row.id = doc.id;
+        exercise = row;
+      });
+      return exercise;
+    },
     create: async ({ rootState, dispatch }, data) => {
       const metaRef = firestore.collection('meta').doc('stats');
       return firestore.runTransaction((transaction) => {
@@ -51,6 +63,9 @@ export default {
       }).then((newId) => {
         return dispatch('bind', newId);
       });
+    },
+    override: async (_, { exerciseId, data }) => {
+      await collection.doc(exerciseId).update(data);
     },
     save: async ({ state }, data) => {
       const saveData = clone(data);
@@ -138,6 +153,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
+        published: false,
         testingState: null,
         _approval: null,
       };
@@ -241,6 +257,10 @@ export default {
         return state.record._approval;
       }
       return null;
+    },
+    applicationOpenDatePost01042023: (state) => {
+      // Used to facilitate different fields after 01-04-2023
+      return state.record.applicationOpenDate > new Date('2023-04-01');
     },
   },
 };
