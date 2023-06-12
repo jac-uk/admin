@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-full print-none">
           <SubNavigation
             v-if="!hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
@@ -278,13 +278,18 @@ export default {
       }
     },
     async copyToClipboard() {
-      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
-      await this.$store.dispatch('clipboard/write', {
-        environment: this.$store.getters.appEnvironment,
-        type: 'exercise',
-        title: `${exercise.referenceNumber} ${exercise.name}`,
-        content: exercise,
-      });
+      try {
+        const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+        await this.$store.dispatch('clipboard/write', {
+          environment: this.$store.getters.appEnvironment,
+          type: 'exercise',
+          title: `${exercise.referenceNumber} ${exercise.name}`,
+          content: exercise,
+        });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     openArchiveModal() {
       this.$refs.archiveModal.openModal();

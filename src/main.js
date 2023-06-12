@@ -40,11 +40,18 @@ auth.onAuthStateChanged(async (user) => {
       const userRoleId = idTokenResult.claims && idTokenResult.claims.r ? idTokenResult.claims.r : null;
       if (userRoleId) {
         const res = await functions.httpsCallable('adminSyncUserRolePermissions')();
-        const userRole = {
-          roleId: userRoleId,
-          rolePermissions: res.data,
-        };
-        store.dispatch('auth/setUserRole', userRole);
+        const permissions = res.data;
+        if (JSON.stringify(idTokenResult.claims.rp) !== JSON.stringify(permissions)) {
+          // need to sign in again as the current user token will be revoked if the permissions have been changed
+          auth.signOut();
+          window.location.href = '/';
+        } else {
+          const userRole = {
+            roleId: userRoleId,
+            rolePermissions: permissions,
+          };
+          store.dispatch('auth/setUserRole', userRole);
+        }
       }
     } catch (error) {
       // console.error(error);

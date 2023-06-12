@@ -135,7 +135,7 @@ import _has from 'lodash/has';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
 import Chart from '@/components/Chart';
-import REPORTS from '@/reports';
+import { getReports } from '@/reports';
 export default {
   name: 'Dashboard',
   components: {
@@ -178,6 +178,9 @@ export default {
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
+    applicationOpenDate() {
+      return this.exercise.applicationOpenDate;
+    },
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
@@ -200,12 +203,12 @@ export default {
       });
     },
     labels() {
-      return REPORTS.ApplicationStageDiversity.labels;
+      return getReports(this.applicationOpenDate).ApplicationStageDiversity.labels;
     },
     legend() {
       if (this.selectedDiversityReportType) {
         // Add the count to the legend, so the items are numbered
-        const items = REPORTS.ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+        const items = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
         let count = 0;
         return _map(items, item => {
           ++count;
@@ -302,7 +305,7 @@ export default {
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
         returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
-          const legendList = REPORTS.ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+          const legendList = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
           const legend = _find(legendList, o => {
             return o.key === item;
           });
@@ -340,7 +343,7 @@ export default {
       }
     },
     getOrderedKeys(selectedDiversityReportType) {
-      const list = REPORTS.ApplicationStageDiversity.legend[selectedDiversityReportType];
+      const list = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[selectedDiversityReportType];
       return list.map(item => item.key);
     },
     async refreshReport() {

@@ -8,7 +8,7 @@
         <div class="govuk-grid-column-one-half">
           <router-link
             class="govuk-back-link"
-            :to="{ name: `exercise-tasks-${panel.type}` }"
+            :to="{ name: `exercise-reports-${panel.type}` }"
           >
             Back
           </router-link>
@@ -371,12 +371,12 @@ export default {
     // Redirect if page Reload
     if (!this.panel) {
       let nextRoute = '';
-      if (this.$route.fullPath.includes('/tasks/selection/')) {
-        nextRoute = 'exercise-tasks-selection';
-      } else if (this.$route.fullPath.includes('/tasks/scenario')) {
-        nextRoute = 'exercise-tasks-scenario';
+      if (this.$route.fullPath.includes('/reports/selection/')) {
+        nextRoute = 'exercise-reports-selection';
+      } else if (this.$route.fullPath.includes('/reports/scenario')) {
+        nextRoute = 'exercise-reports-scenario';
       } else {
-        nextRoute = 'exercise-tasks-sift';
+        nextRoute = 'exercise-reports-sift';
       }
       this.$router.push({
         name: nextRoute,
@@ -426,7 +426,7 @@ export default {
       await this.$store.dispatch('panels/removePanelApplications', { panelType: this.panel.type, applicationIds: this.selectedItems });
     },
     async deletePanel(){
-      const redirectTo = `exercise-tasks-${this.panel.type}`;
+      const redirectTo = `exercise-reports-${this.panel.type}`;
       await this.$store.dispatch('panels/deletePanel', this.panelId );
       this.$router.push({ name: redirectTo });
     },

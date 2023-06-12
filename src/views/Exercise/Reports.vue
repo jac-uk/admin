@@ -18,9 +18,11 @@ export default {
   components: {
     SideNavigation,
   },
-  data() {
-    return {
-      sideNavigation: [
+  computed: {
+    sideNavigation() {
+      const exercise = this.$store.state.exerciseDocument.record;
+      const path = `/exercise/${exercise.id}/reports`;
+      const sideNavigation = [
         {
           title: 'Diversity',
           name: 'exercise-reports-diversity',
@@ -66,8 +68,40 @@ export default {
           title: 'Custom',
           name: 'custom',
         },
-      ],
-    };
+      ];
+
+      if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
+        if (
+          (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+          || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
+        ) {
+          sideNavigation.push(
+            {
+              title: 'Sift',
+              path: `${path}/sift`,
+            }
+          );
+        }
+      }
+      if (exercise.selectionDays) {
+        sideNavigation.push(
+          {
+            title: 'Selection day',
+            path: `${path}/selection`,
+          }
+        );
+      }
+      if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
+        sideNavigation.push(
+          {
+            title: 'Scenario Responses',
+            path: `${path}/scenario`,
+          }
+        );
+      }
+
+      return sideNavigation;
+    },
   },
 };
 </script>
