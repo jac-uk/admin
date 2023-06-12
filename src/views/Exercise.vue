@@ -251,6 +251,9 @@ export default {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
     },
   },
+  unmounted() {
+    this.$store.dispatch('exerciseDocument/unbind');
+  },
   mounted() {
     const id = this.$route.params.id;
     this.$store.dispatch('exerciseDocument/bind', id)

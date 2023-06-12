@@ -241,6 +241,9 @@ export default {
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
+  mounted() {
+    this.getTableData();
+  },
   methods: {
     showMyFavourites() {
       this.$store.dispatch('exerciseCollection/showFavourites');
