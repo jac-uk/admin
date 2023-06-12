@@ -7,29 +7,14 @@
         </h1>
       </div>
       <div class="govuk-grid-column-one-half text-right">
-        <ActionButton
-          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+        <button
+          v-if="isQualifyingTest"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
           @click="btnExport"
         >
           Export
-        </ActionButton>
-        <button
-          class="govuk-button govuk-!-margin-right-2"
-          :class="{ 'govuk-button--secondary': task.passMark }"
-          type="button"
-          @click="$refs['setPassMarkModal'].openModal()"
-        >
-          <span v-if="hasPassMark">Pass mark {{ task.passMark | formatNumber(2) }}</span>
-          <span v-else>Set pass mark</span>
         </button>
-        <ActionButton
-          v-if="hasPassMark"
-          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
-          type="primary"
-          @click="btnComplete"
-        >
-          Complete
-        </ActionButton>
+
         <FullScreenButton />
       </div>
     </div>
@@ -46,6 +31,24 @@
     >
       {{ type | lookup }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
+
+    <button
+      class="govuk-button govuk-!-margin-right-2"
+      :class="{ 'govuk-button--secondary': task.passMark }"
+      type="button"
+      @click="$refs['setPassMarkModal'].openModal()"
+    >
+      <span v-if="hasPassMark">Pass mark {{ task.passMark | formatNumber(2) }}</span>
+      <span v-else>Set pass mark</span>
+    </button>
+    <ActionButton
+      v-if="hasPassMark"
+      class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+      type="primary"
+      @click="btnComplete"
+    >
+      Complete
+    </ActionButton>
 
     <RouterView
       :exercise-id="exercise.id"
@@ -66,20 +69,34 @@
         @cancel="$refs['setPassMarkModal'].closeModal()"
       />
     </Modal>
+    <Modal ref="exportModal">
+      <TitleBar>
+        Export {{ type | lookup }}
+      </TitleBar>
+      <ConfigureExport
+        class="govuk-!-margin-6"
+        :types="downloadTypes"
+        @save="downloadMeritList"
+        @cancel="$refs['exportModal'].closeModal()"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { TASK_TYPE } from '@/helpers/exerciseHelper';
+import { downloadMeritList, getDownloadTypes } from '@/helpers/taskHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import { functions } from '@/firebase';
 import FullScreenButton from '@/components/Page/FullScreenButton';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import TitleBar from '@/components/Page/TitleBar';
 import SetPassMark from './Finalised/SetPassMark';
+import ConfigureExport from './Finalised/ConfigureExport';
 import _find from 'lodash/find';
-import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+
 export default {
   components: {
     ActionButton,
@@ -87,6 +104,7 @@ export default {
     Modal,
     TitleBar,
     SetPassMark,
+    ConfigureExport,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -114,59 +132,11 @@ export default {
     hasPassMark() {
       return this.task.hasOwnProperty('passMark');
     },
-    meritList() {
-      if (!this.task.applications) return [];
-      if (!this.task.finalScores) return [];
-      const applicationData = {};
-      this.task.applications.forEach(application => applicationData[application.id] = application);
-      return this.task.finalScores.map(scoreData => {
-        return {
-          ...applicationData[scoreData.id],
-          ...scoreData,
-        };
-      });
+    isQualifyingTest() {
+      return this.type === TASK_TYPE.QUALIFYING_TEST;
     },
-    xlsxData() {
-      const rows = [];
-      const headers = [];
-      headers.push('Ref');
-      headers.push('Full name');
-      headers.push('SJT %');
-      headers.push('SJT Z');
-      headers.push('CAT %');
-      headers.push('CAT Z');
-      headers.push('Average %');
-      headers.push('Average Z');
-      headers.push('Female');
-      headers.push('Ethnic minority');
-      headers.push('Solicitor');
-      headers.push('Disabled');
-      rows.push(headers);
-      this.meritList.forEach(item => {
-        const row = [];
-        row.push(item.ref);
-        row.push(item.fullName);
-        row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-        row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
-        row.push(item.scoreSheet.qualifyingTest.CA.percent);
-        row.push(item.scoreSheet.qualifyingTest.CA.zScore);
-        row.push(item.percent);
-        row.push(item.zScore);
-        const ref = item.ref.split('-')[1];
-        if (this.exerciseDiversity[ref]) {
-          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
-          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
-          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
-          row.push(this.hasDiversityCharacteristic(this.exerciseDiversity[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
-        } else {
-          row.push();
-          row.push();
-          row.push();
-          row.push();
-        }
-        rows.push(row);
-      });
-      return rows;
+    downloadTypes() {
+      return getDownloadTypes(this.task);
     },
     scores() {
       if (!this.task) return [];
@@ -297,16 +267,13 @@ export default {
       this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
     },
-    async btnExport() {
-      await downloadXLSX(
-        this.xlsxData,
-        {
-          title: 'QT Merit List',
-          sheetName: 'QT merit list',
-          fileName: 'qt-merit-list.xlsx',
-        }
-      );
-      return true;
+    btnExport() {
+      this.$refs['exportModal'].openModal();
+    },
+    downloadMeritList(saveData) {
+      const fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
+      downloadMeritList(this.task, this.exerciseDiversity, saveData.type, fileName);
+      this.$refs['exportModal'].closeModal();
     },
     async setPassMark(data) {
       if (data) {
