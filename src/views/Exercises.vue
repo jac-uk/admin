@@ -311,6 +311,7 @@ export default {
     deleteExercises() {
       this.$store.dispatch('exerciseCollection/delete');
       this.$refs.deleteModal.closeModal();
+      this.$refs['exercisesTable'].reload(); // reload table
     },
     openDeleteModal() {
       this.$refs.deleteModal.openModal();
