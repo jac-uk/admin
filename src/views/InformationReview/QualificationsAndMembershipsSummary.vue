@@ -198,6 +198,73 @@
             </div>
           </div>
         </dl>
+
+        <dl>
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key widerColumn">
+                Uploaded Pupillage Exemption Certificate
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <div v-if="application.uploadedExemptionCertificate">
+                  <DownloadLink
+                    :file-name="application.uploadedExemptionCertificate"
+                    :exercise-id="exercise.id"
+                    :user-id="application.userId"
+                    :title="application.uploadedExemptionCertificate"
+                  />
+                </div>
+                <span v-else>Not yet received</span>
+                <div v-if="editable">
+                  <FileUpload
+                    id="exemption-certificate-upload"
+                    ref="exemption-certificate"
+                    v-model="application.uploadedExemptionCertificate"
+                    name="exemption-certificate"
+                    :path="uploadPath"
+                    @input="val => doFileUpload(val, 'uploadedExemptionCertificate')"
+                  />
+                </div>
+              </dd>
+            </div>
+          </div>
+        </dl>
+
+        <dl>
+          <div
+            class="govuk-summary-list govuk-!-margin-bottom-0"
+          >
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key widerColumn">
+                Uploaded Pupillage Practicing Certificate
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <div v-if="application.uploadedPracticingCertificate">
+                  <DownloadLink
+                    :file-name="application.uploadedPracticingCertificate"
+                    :exercise-id="exercise.id"
+                    :user-id="application.userId"
+                    :title="application.uploadedPracticingCertificate"
+                  />
+                </div>
+                <span v-else>Not yet received</span>
+                <div v-if="editable">
+                  <FileUpload
+                    id="practicing-certificate-upload"
+                    ref="practicing-certificate"
+                    v-model="application.uploadedPracticingCertificate"
+                    name="practicing-certificate"
+                    :path="uploadPath"
+                    @input="val => doFileUpload(val, 'uploadedPracticingCertificate')"
+                  />
+                </div>
+              </dd>
+            </div>
+          </div>
+        </dl>
+
       </div>
       <div
         class="govuk-body"
@@ -808,11 +875,12 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import { NOT_COMPLETE_PUPILLAGE_REASONS } from '@jac-uk/jac-kit/helpers/constants';
-
 import {
   hasRelevantMemberships,
   isNonLegal
 } from '@/helpers/exerciseHelper';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
 
 const membershipNumbers = {
   barrister: 'Bar membership number',
@@ -826,6 +894,8 @@ export default {
     InformationReviewRenderer,
     Modal,
     ModalInner,
+    DownloadLink,
+    FileUpload,
   },
   props: {
     application: {
@@ -870,6 +940,9 @@ export default {
     },
     applicationId() {
       return this.$route.params.applicationId;
+    },
+    uploadPath() {
+      return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
     },
     hasRelevantMemberships() {
       return hasRelevantMemberships(this.exercise);
@@ -1007,6 +1080,11 @@ export default {
     openModal(index) {
       this.currentIndex = index;
       this.$refs.removeModal.openModal();
+    },
+    doFileUpload(val, field) {
+      if (val) {
+        this.$emit('updateApplication', { [field]: val });
+      }
     },
   },
 };
