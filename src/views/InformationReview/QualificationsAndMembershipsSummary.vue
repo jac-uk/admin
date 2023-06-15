@@ -199,71 +199,73 @@
           </div>
         </dl>
 
-        <dl>
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Uploaded Pupillage Exemption Certificate
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <div v-if="application.uploadedExemptionCertificate">
-                  <DownloadLink
-                    :file-name="application.uploadedExemptionCertificate"
-                    :exercise-id="exercise.id"
-                    :user-id="application.userId"
-                    :title="application.uploadedExemptionCertificate"
-                  />
-                </div>
-                <span v-else>Not yet received</span>
-                <div v-if="editable">
-                  <FileUpload
-                    id="exemption-certificate-upload"
-                    ref="exemption-certificate"
-                    v-model="application.uploadedExemptionCertificate"
-                    name="exemption-certificate"
-                    :path="uploadPath"
-                    @input="val => doFileUpload(val, 'uploadedExemptionCertificate')"
-                  />
-                </div>
-              </dd>
+        <template v-if="notCompletedPupillage">
+          <dl>
+            <div
+              class="govuk-summary-list govuk-!-margin-bottom-0"
+            >
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key widerColumn">
+                  Uploaded Pupillage Exemption Certificate
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <div v-if="application.uploadedExemptionCertificate">
+                    <DownloadLink
+                      :file-name="application.uploadedExemptionCertificate"
+                      :exercise-id="exercise.id"
+                      :user-id="application.userId"
+                      title="Exemption Certificate"
+                    />
+                  </div>
+                  <span v-else>Not yet received</span>
+                  <div v-if="editable">
+                    <FileUpload
+                      id="exemption-certificate-upload"
+                      ref="exemption-certificate"
+                      v-model="application.uploadedExemptionCertificate"
+                      name="exemption-certificate"
+                      :path="uploadPath"
+                      @input="val => doFileUpload(val, 'uploadedExemptionCertificate')"
+                    />
+                  </div>
+                </dd>
+              </div>
             </div>
-          </div>
-        </dl>
+          </dl>
 
-        <dl>
-          <div
-            class="govuk-summary-list govuk-!-margin-bottom-0"
-          >
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key widerColumn">
-                Uploaded Pupillage Practicing Certificate
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <div v-if="application.uploadedPracticingCertificate">
-                  <DownloadLink
-                    :file-name="application.uploadedPracticingCertificate"
-                    :exercise-id="exercise.id"
-                    :user-id="application.userId"
-                    :title="application.uploadedPracticingCertificate"
-                  />
-                </div>
-                <span v-else>Not yet received</span>
-                <div v-if="editable">
-                  <FileUpload
-                    id="practicing-certificate-upload"
-                    ref="practicing-certificate"
-                    v-model="application.uploadedPracticingCertificate"
-                    name="practicing-certificate"
-                    :path="uploadPath"
-                    @input="val => doFileUpload(val, 'uploadedPracticingCertificate')"
-                  />
-                </div>
-              </dd>
+          <dl>
+            <div
+              class="govuk-summary-list govuk-!-margin-bottom-0"
+            >
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key widerColumn">
+                  Uploaded Pupillage Practicing Certificate
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  <div v-if="application.uploadedPracticingCertificate">
+                    <DownloadLink
+                      :file-name="application.uploadedPracticingCertificate"
+                      :exercise-id="exercise.id"
+                      :user-id="application.userId"
+                      title="Practicing Certificate"
+                    />
+                  </div>
+                  <span v-else>Not yet received</span>
+                  <div v-if="editable">
+                    <FileUpload
+                      id="practicing-certificate-upload"
+                      ref="practicing-certificate"
+                      v-model="application.uploadedPracticingCertificate"
+                      name="practicing-certificate"
+                      :path="uploadPath"
+                      @input="val => doFileUpload(val, 'uploadedPracticingCertificate')"
+                    />
+                  </div>
+                </dd>
+              </div>
             </div>
-          </div>
-        </dl>
+          </dl>
+        </template>
 
       </div>
       <div
@@ -881,6 +883,7 @@ import {
 } from '@/helpers/exerciseHelper';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import _has from 'lodash/has';
 
 const membershipNumbers = {
   barrister: 'Bar membership number',
@@ -982,6 +985,17 @@ export default {
     scheduleApplies(){
       return (this.exercise.appliedSchedule == 'schedule-2-3' && this.application.applyingUnderSchedule2Three) ||
         (this.exercise.appliedSchedule == 'schedule-2-d' && this.application.applyingUnderSchedule2d);
+    },
+    notCompletedPupillage() {
+      if (_has(this.application, 'qualifications') && Array.isArray(this.application.qualifications)) {
+        const matches = this.application.qualifications.filter(qualification => {
+          return qualification.type === 'barrister'
+            && 'completedPupillage' in qualification
+            && qualification.completedPupillage === false;
+        });
+        return matches.length > 0;
+      }
+      return null;
     },
   },
   methods: {
