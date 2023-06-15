@@ -216,7 +216,6 @@ export default {
         stateBeforeDelete: state.record.state,
       };
       await ref.update(data);
-
       const loggingData = {
         exerciseIds: [id],
         exerciseRefs: [state.record.referenceNumber],
