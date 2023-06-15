@@ -32,6 +32,7 @@
               :edit="editable"
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
+              :is-asked="hasPersonalDetails && 'title' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -50,6 +51,7 @@
               :data="personalDetails.firstName || ''"
               type="route"
               field="firstName"
+              :is-asked="hasPersonalDetails && 'firstName' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -67,6 +69,7 @@
               :application-id="userId"
               :data="personalDetails.middleNames || ''"
               field="middleNames"
+              :is-asked="hasPersonalDetails && 'middleNames' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -85,6 +88,7 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
+              :is-asked="hasPersonalDetails && 'lastName' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -102,6 +106,7 @@
               :application-id="userId"
               :data="personalDetails.suffix || ''"
               field="suffix"
+              :is-asked="hasPersonalDetails && 'suffix' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -119,6 +124,7 @@
               :application-id="userId"
               :data="personalDetails.previousNames || ''"
               field="previousNames"
+              :is-asked="hasPersonalDetails && 'previousNames' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -136,6 +142,7 @@
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
               field="professionalName"
+              :is-asked="hasPersonalDetails && 'professionalName' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -167,6 +174,7 @@
               :application-id="userId"
               :data="personalDetails.otherNames || ''"
               field="otherNames"
+              :is-asked="hasPersonalDetails && 'otherNames' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -185,6 +193,7 @@
               :data="hasPersonalDetails ? personalDetails.email : ''"
               type="email"
               field="email"
+              :is-asked="hasPersonalDetails && 'email' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -202,6 +211,7 @@
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               type="tel"
               field="phone"
+              :is-asked="hasPersonalDetails && 'phone' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -219,6 +229,7 @@
               :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
               type="date"
               field="dateOfBirth"
+              :is-asked="hasPersonalDetails && 'dateOfBirth' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -236,6 +247,7 @@
               :application-id="userId"
               :data="personalDetails.placeOfBirth || ''"
               field="placeOfBirth"
+              :is-asked="'placeOfBirth' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -252,6 +264,7 @@
               :edit="editable"
               :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
+              :is-asked="hasPersonalDetails && 'nationalInsuranceNumber' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -278,6 +291,7 @@
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
+                :is-asked="hasCurrentAddress && key in personalDetails.address.current"
                 @change-field="changeCurrentAddress"
               />
             </div>
@@ -297,6 +311,7 @@
               type="selection"
               :data="currentMoreThan5Years"
               field="currentMoreThan5Years"
+              :is-asked="hasAddress && 'currentMoreThan5Years' in personalDetails.address"
               @change-field="changeInfo"
             />
           </dd>
@@ -314,6 +329,7 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
+              :is-asked="hasPreviousAddress"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -334,6 +350,7 @@
               :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
               type="selection"
               field="citizenship"
+              :is-asked="hasPersonalDetails && 'citizenship' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -353,6 +370,7 @@
               :options="[true, false]"
               type="selection"
               field="reasonableAdjustments"
+              :is-asked="hasPersonalDetails && 'reasonableAdjustments' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -376,6 +394,7 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
               field="reasonableAdjustmentsDetails"
+              :is-asked="hasPersonalDetails && 'reasonableAdjustmentsDetails' in personalDetails"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -389,7 +408,10 @@
           </dt>
 
           <dd class="govuk-summary-list__value">
-            <span v-if="!VATNumbers.length">No answer provided</span>
+            <span v-if="!VATNumbers.length">No information</span>
+            <span v-if="hasPersonalDetails && !('VATNumbers' in personalDetails)">
+              (not asked)
+            </span>
             <div
               v-for="(VATNumber, index) in VATNumbers"
               :key="index"
@@ -406,6 +428,7 @@
                 :edit="editable"
                 :data="VATNumber"
                 field="VATNumber"
+                :is-asked="hasPersonalDetails && 'VATNumbers' in personalDetails"
                 @change-field="(obj) => changeVATNumber(index, obj)"
               />
             </div>
@@ -489,11 +512,14 @@ export default {
     isCandidateView() {
       return this.$route.name === 'candidates-view';
     },
+    hasAddress() {
+      return !!(this.hasPersonalDetails && this.personalDetails.address);
+    },
     hasCurrentAddress() {
-      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.current;
+      return !!(this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.current);
     },
     hasPreviousAddress() {
-      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous;
+      return !!(this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous);
     },
     currentAddressFields() {
       return Object.keys(this.emptyAddressObject);

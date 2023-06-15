@@ -46,6 +46,7 @@
             field="professionalBackground"
             :edit="editable"
             :data="equalityAndDiversitySurvey.professionalBackground"
+            :is-asked="'professionalBackground' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -65,6 +66,7 @@
             field="otherProfessionalBackgroundDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherProfessionalBackgroundDetails"
+            :is-asked="'otherProfessionalBackgroundDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -92,6 +94,7 @@
             field="currentLegalRole"
             :edit="editable"
             :data="equalityAndDiversitySurvey.currentLegalRole"
+            :is-asked="'currentLegalRole' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -111,6 +114,7 @@
             field="otherCurrentFeePaidJudicialOfficeHolderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentFeePaidJudicialOfficeHolderDetails"
+            :is-asked="'otherCurrentFeePaidJudicialOfficeHolderDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -130,6 +134,7 @@
             field="otherCurrentSalariedJudicialOfficeHolderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentSalariedJudicialOfficeHolderDetails"
+            :is-asked="'otherCurrentSalariedJudicialOfficeHolderDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -149,6 +154,7 @@
             field="otherCurrentLegalRoleDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherCurrentLegalRoleDetails"
+            :is-asked="'otherCurrentLegalRoleDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -173,6 +179,7 @@
             field="feePaidJudicialRole"
             :edit="editable"
             :data="equalityAndDiversitySurvey.feePaidJudicialRole"
+            :is-asked="'feePaidJudicialRole' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -192,13 +199,13 @@
             field="otherFeePaidJudicialRoleDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherFeePaidJudicialRoleDetails"
+            :is-asked="'otherFeePaidJudicialRoleDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
       </div>
 
       <template v-if="applicationOpenDatePost01042023">
-
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key widerColumn">
             Occupation of main household earner
@@ -218,6 +225,7 @@
               field="occupationOfChildhoodEarner"
               :edit="editable"
               :data="equalityAndDiversitySurvey.occupationOfChildhoodEarner"
+              :is-asked="'occupationOfChildhoodEarner' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -242,6 +250,7 @@
               field="stateOrFeeSchool16"
               :edit="editable"
               :data="equalityAndDiversitySurvey.stateOrFeeSchool16"
+              :is-asked="'stateOrFeeSchool16' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -266,15 +275,14 @@
               field="parentsAttendedUniversity"
               :edit="editable"
               :data="equalityAndDiversitySurvey.parentsAttendedUniversity"
+              :is-asked="'parentsAttendedUniversity' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
         </div>
-
       </template>
 
       <template v-else>
-
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key widerColumn">
             Attended state or fee-paying school
@@ -294,6 +302,7 @@
               field="stateOrFeeSchool"
               :edit="editable"
               :data="equalityAndDiversitySurvey.stateOrFeeSchool"
+              :is-asked="'stateOrFeeSchool' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -318,6 +327,7 @@
               field="oxbridgeUni"
               :edit="editable"
               :data="equalityAndDiversitySurvey.oxbridgeUni"
+              :is-asked="'oxbridgeUni' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -342,6 +352,7 @@
               field="firstGenerationStudent"
               :edit="editable"
               :data="equalityAndDiversitySurvey.firstGenerationStudent"
+              :is-asked="'firstGenerationStudent' in equalityAndDiversitySurvey"
               @change-field="changeEqualityAndDiversityInformation"
             />
           </dd>
@@ -367,6 +378,7 @@
             field="ethnicGroup"
             :edit="editable"
             :data="equalityAndDiversitySurvey.ethnicGroup"
+            :is-asked="'ethnicGroup' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -384,6 +396,7 @@
             :field="ethnicGroupDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey[ethnicGroupDetails]"
+            :is-asked="'ethnicGroupDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -406,6 +419,7 @@
             field="gender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.gender"
+            :is-asked="'gender' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -423,6 +437,7 @@
             field="otherGenderDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherGenderDetails"
+            :is-asked="'otherGenderDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -445,6 +460,7 @@
             field="changedGender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.changedGender"
+            :is-asked="'changedGender' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -462,6 +478,7 @@
             field="changedGender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.genderIdentityDetails"
+            :is-asked="'genderIdentityDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -484,6 +501,7 @@
             field="sexualOrientation"
             :edit="editable"
             :data="equalityAndDiversitySurvey.sexualOrientation"
+            :is-asked="'sexualOrientation' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -501,6 +519,7 @@
             field="otherSexualOrientationDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherSexualOrientationDetails"
+            :is-asked="'otherSexualOrientationDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -523,6 +542,7 @@
             field="disability"
             :edit="editable"
             :data="equalityAndDiversitySurvey.disability"
+            :is-asked="'disability' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -540,6 +560,7 @@
             field="disabilityDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.disabilityDetails"
+            :is-asked="'disabilityDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -562,6 +583,7 @@
             field="religionFaith"
             :edit="editable"
             :data="equalityAndDiversitySurvey.religionFaith"
+            :is-asked="'religionFaith' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -579,6 +601,7 @@
             field="otherReligionDetails"
             :edit="editable"
             :data="equalityAndDiversitySurvey.otherReligionDetails"
+            :is-asked="'otherReligionDetails' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -601,6 +624,7 @@
             field="attendedOutreachEvents"
             :edit="editable"
             :data="equalityAndDiversitySurvey.attendedOutreachEvents"
+            :is-asked="'attendedOutreachEvents' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -626,6 +650,7 @@
             field="participatedInJudicialWorkshadowingScheme"
             :edit="editable"
             :data="equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme"
+            :is-asked="'participatedInJudicialWorkshadowingScheme' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -651,6 +676,7 @@
             field="hasTakenPAJE"
             :edit="editable"
             :data="equalityAndDiversitySurvey.hasTakenPAJE"
+            :is-asked="'hasTakenPAJE' in equalityAndDiversitySurvey"
             @change-field="changeEqualityAndDiversityInformation"
           />
         </dd>
@@ -660,7 +686,7 @@
       v-else
       class="govuk-body"
     >
-      No information provided
+      No information (not asked)
       <hr>
     </span>
   </div>

@@ -184,7 +184,7 @@
             v-else
             class="govuk-summary-list__value"
           >
-            No information provided
+            No information
           </dd>
         </div>
 
@@ -242,7 +242,7 @@
             v-else
             class="govuk-summary-list__value"
           >
-            No information provided
+            No information
           </dd>
         </div>
       </dl>
@@ -316,7 +316,7 @@
         v-else
         class="govuk-body"
       >
-        No information provided
+        No information
       </div>
 
       <div
@@ -348,7 +348,7 @@
             v-else
             class="govuk-body"
           >
-            No information provided
+            No information
           </div>
 
           <div
@@ -407,7 +407,7 @@
           v-else
           class="govuk-body"
         >
-          No information provided
+          No information
         </div>
       </dl>
     </div>

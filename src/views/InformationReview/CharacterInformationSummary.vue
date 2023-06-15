@@ -11,7 +11,7 @@
         v-if="!hasValues(characterInformation) && !editable"
         class="govuk-body"
       >
-        No information provided
+        No information (not asked)
         <hr>
       </div>
       <dl

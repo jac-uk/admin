@@ -25,6 +25,7 @@
             :edit="editable"
             type="selection"
             :options="[true, false]"
+            :is-asked="'interestedInPartTime' in application"
             @change-field="changePreferences"
           />
           <InformationReviewRenderer
@@ -32,6 +33,7 @@
             field="partTimeWorkingPreferencesDetails"
             :edit="editable"
             type="text"
+            :is-asked="'partTimeWorkingPreferencesDetails' in application"
             @change-field="changePreferences"
           />
         </dd>
@@ -63,6 +65,7 @@
             :edit="editable"
             :options="exercise.locationQuestionAnswers.map(item => item.answer)"
             type="selection"
+            :is-asked="'locationPreferences' in application"
             @change-field="changePreferences"
           />
         </dd>
@@ -76,6 +79,7 @@
             :edit="editable"
             :options="exercise.locationQuestionAnswers.map(item => item.answer)"
             type="multi-selection"
+            :is-asked="'locationPreferences' in application"
             @change-field="changePreferences"
           />
         </dd>
@@ -92,6 +96,7 @@
               :edit="editable"
               :options="exercise.locationQuestionAnswers.map(item => item.answer)"
               type="ranked-selection"
+              :is-asked="'locationPreferences' in application"
               @change-field="changePreferences"
             />
           </div>
@@ -124,6 +129,7 @@
               :edit="editable"
               :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
               type="selection"
+              :is-asked="'jurisdictionPreferences' in application"
               @change-field="changePreferences"
             />
           </dd>
@@ -137,6 +143,7 @@
               :edit="editable"
               :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
               type="multi-selection"
+              :is-asked="'jurisdictionPreferences' in application"
               @change-field="changePreferences"
             />
           </dd>
@@ -153,6 +160,7 @@
                 :edit="editable"
                 :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
                 type="ranked-selection"
+                :is-asked="'jurisdictionPreferences' in application"
                 @change-field="changePreferences"
               />
             </div>
@@ -187,6 +195,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
+              :is-asked="'applyingForWelshPost' in application"
               @change-field="changePreferences"
             />
           </dd>
@@ -208,6 +217,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
+              :is-asked="'canSpeakWelsh' in application"
               @change-field="changePreferences"
             />
           </dd>
@@ -228,6 +238,7 @@
               :edit="editable"
               :options="[false, 'read', 'write', 'both']"
               type="selection"
+              :is-asked="'canReadAndWriteWelsh' in application"
               @change-field="changePreferences"
             />
           </dd>
@@ -270,6 +281,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="selection"
+                :is-asked="'additionalWorkingPreferences' in application"
                 @change-field="changePreferences"
               />
             </dd>
@@ -285,6 +297,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="multi-selection"
+                :is-asked="'additionalWorkingPreferences' in application"
                 @change-field="changePreferences"
               />
             </dd>
@@ -300,6 +313,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="ranked-selection"
+                :is-asked="'additionalWorkingPreferences' in application"
                 @change-field="changePreferences"
               />
             </dd>
@@ -312,7 +326,7 @@
         <span
           class="govuk-body"
         >
-          No answers provided
+          No information (not asked)
         </span>
       </div>
     </div>
