@@ -59,7 +59,7 @@
             Are you a fee-paid or salaried medical member?
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.feePaidOrSalariedJudge | toYesNo }}
+            {{ $filters.toYesNo(application.feePaidOrSalariedJudge) }}
           </dd>
         </div>
         <div
@@ -71,7 +71,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body">
-              {{ application.feePaidOrSalariedSatForThirtyDays | toYesNo }}
+              {{ $filters.toYesNo(application.feePaidOrSalariedSatForThirtyDays) }}
             </p>
             <p
               v-if="application.feePaidOrSalariedSatForThirtyDays"
@@ -254,7 +254,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -272,7 +272,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
             <div
               v-if="application.feePaidOrSalariedSittingDaysDetails || editable"
@@ -285,7 +285,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </div>
           </dd>
@@ -303,7 +303,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>

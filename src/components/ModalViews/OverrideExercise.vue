@@ -55,6 +55,7 @@ export default {
   components: {
     Select,
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       referenceNumber: '',
@@ -69,7 +70,7 @@ export default {
   mounted() {
     this.$store.dispatch('exerciseCollection/bindDraft');
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('exerciseCollection/unbindDraft');
   },
   methods: {
