@@ -10,7 +10,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <template
-            v-if="exercise.characterChecks"
+            v-if="exercise.characterChecksDate"
           >
             {{ $filters.formatDate(exercise.characterChecksDate, 'long') }}
           </template>
@@ -23,7 +23,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <template
-            v-if="exercise.characterChecks"
+            v-if="exercise.characterChecksReturnDate"
           >
             {{ $filters.formatDate(exercise.characterChecksReturnDate, 'long') }}
           </template>
@@ -369,9 +369,6 @@ export default {
     },
     applicationRecordsCharacterChecksCompleted() {
       return this.$store.state.characterChecks.checksCompletedRecords;
-    },
-    hmrcCheckRequired() {
-      return this.exercise.characterChecks.HMRC;
     },
     characterChecksEnabled() {
       return (this.exercise.characterChecksEnabled && this.exercise.characterChecksEnabled === true);

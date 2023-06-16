@@ -255,6 +255,7 @@ export default {
       this.uploadProps = {
         ...obj,
         filePath: this.uploadPath,
+        fileTitle: obj.fileTitle ? obj.fileTitle : `${obj.title} - ${this.exercise.referenceNumber}`,
         data: this.formData.downloads,
         exerciseId: this.exerciseId,
       };

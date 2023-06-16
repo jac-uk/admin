@@ -33,6 +33,15 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    bindDraft: firestoreAction(({ bindFirestoreRef }) => {
+      const firestoreRef = firestore
+        .collection('exercises')
+        .where('state', '==', 'draft');
+      return bindFirestoreRef('draftRecords', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindDraft: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('draftRecords');
+    }),
     showFavourites: ({ commit, dispatch }) => {
       commit('updateFavourites', true);
       commit('updateArchived', false);
@@ -132,6 +141,7 @@ export default {
   },
   state: {
     records: [],
+    draftRecords: [],
     isFavourites: false,
     isArchived: false,
     selectedItems: [],
