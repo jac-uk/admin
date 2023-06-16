@@ -198,7 +198,6 @@
       </div>
 
       <template v-if="applicationOpenDatePost01042023">
-
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key widerColumn">
             Occupation of main household earner
@@ -270,11 +269,9 @@
             />
           </dd>
         </div>
-
       </template>
 
       <template v-else>
-
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key widerColumn">
             Attended state or fee-paying school

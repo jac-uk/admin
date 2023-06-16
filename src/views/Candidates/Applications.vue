@@ -14,7 +14,7 @@
           - {{ row.exerciseName }}
         </TableCell>
         <TableCell>
-          {{ getStatus(row) | lookup }}{{ getStatus(row) && getStage(row) ? ' / ' : '' }}
+          {{ $filters.lookup(getStatus(row)) }}{{ getStatus(row) && getStage(row) ? ' / ' : '' }}
           <strong>
             {{ getStage(row) }}
           </strong>
