@@ -224,6 +224,7 @@
                       ref="exemption-certificate"
                       v-model="application.uploadedExemptionCertificate"
                       name="exemption-certificate"
+                      :enable-delete="true"
                       :path="uploadPath"
                       @input="val => doFileUpload(val, 'uploadedExemptionCertificate')"
                     />
@@ -257,6 +258,7 @@
                       ref="practicing-certificate"
                       v-model="application.uploadedPracticingCertificate"
                       name="practicing-certificate"
+                      :enable-delete="true"
                       :path="uploadPath"
                       @input="val => doFileUpload(val, 'uploadedPracticingCertificate')"
                     />

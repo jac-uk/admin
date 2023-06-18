@@ -14,7 +14,7 @@
           v-if="fileTitle"
           :id="$attrs.id"
           v-model="fileName"
-          :name="`${$attrs.name}-${getNumericalFileName()}`"
+          :name="$attrs.name"
           :path="buildFileFolder"
           :file-path="$attrs.filePath"
           label=""
