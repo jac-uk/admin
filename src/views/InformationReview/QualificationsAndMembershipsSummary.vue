@@ -268,7 +268,6 @@
             </div>
           </dl>
         </template>
-
       </div>
       <div
         class="govuk-body"
