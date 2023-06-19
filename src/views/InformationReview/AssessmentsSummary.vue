@@ -55,7 +55,10 @@
 
       <dl v-else>
         <p class="govuk-body">
-          No answers provided
+          No information
+          <span v-if="!('selectionCriteriaAnswers' in application)">
+            (not asked)
+          </span>
         </p>
       </dl>
     </div>

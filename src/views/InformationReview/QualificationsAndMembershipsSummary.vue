@@ -203,7 +203,10 @@
         <div
           v-if="!applicationHasQualifications"
         >
-          No answers provided
+          No information
+          <span v-if="!('qualifications' in application)">
+            (not asked)
+          </span>
           <hr>
         </div>
         <button
@@ -794,7 +797,10 @@
         v-else
         class="govuk-body"
       >
-        No answers provided
+        No information
+        <span v-if="!('memberships' in application) || !('professionalMemberships' in application)">
+          (not asked)
+        </span>
         <hr>
       </div>
     </div>

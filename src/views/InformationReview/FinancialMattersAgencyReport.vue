@@ -10,6 +10,7 @@
           <InformationReviewRenderer
             :data="characterInformation.bankruptcyDetails"
             :display-month-year-only="false"
+            :is-asked="'bankruptcyDetails' in characterInformation"
           />
         </dd>
       </div>
@@ -25,6 +26,7 @@
           <InformationReviewRenderer
             :data="characterInformation.ivaDetails"
             :display-month-year-only="false"
+            :is-asked="'ivaDetails' in characterInformation"
           />
         </dd>
       </div>
@@ -40,6 +42,7 @@
           <InformationReviewRenderer
             :data="characterInformation.lateTaxReturnDetails"
             :display-month-year-only="false"
+            :is-asked="'lateTaxReturnDetails' in characterInformation"
           />
         </dd>
       </div>
@@ -55,6 +58,7 @@
           <InformationReviewRenderer
             :data="characterInformation.lateVatReturnDetails"
             :display-month-year-only="false"
+            :is-asked="'lateVatReturnDetails' in characterInformation"
           />
         </dd>
       </div>
@@ -70,6 +74,7 @@
           <InformationReviewRenderer
             :data="characterInformation.hmrcFineDetails"
             :display-month-year-only="false"
+            :is-asked="'hmrcFineDetails' in characterInformation"
           />
         </dd>
       </div>
