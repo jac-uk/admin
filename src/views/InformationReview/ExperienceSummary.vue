@@ -118,6 +118,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
+              :is-asked="'feePaidOrSalariedJudge' in application"
               @change-field="changeInfo"
             />
           </dd>
@@ -136,6 +137,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
+              :is-asked="'feePaidOrSalariedSatForThirtyDays' in application"
               @change-field="changeInfo"
             />
             <div
@@ -149,6 +151,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
+                :is-asked="'feePaidOrSalariedSittingDaysDetails' in application"
                 @change-field="changeInfo"
               />
             </div>
@@ -169,6 +172,7 @@
               :edit="editable"
               type="selection"
               field="declaredAppointmentInQuasiJudicialBody"
+              :is-asked="'declaredAppointmentInQuasiJudicialBody' in application"
               @change-field="changeInfo"
             />
           </dd>
@@ -189,6 +193,7 @@
                 :edit="editable"
                 type="selection"
                 field="quasiJudicialSatForThirtyDays"
+                :is-asked="'quasiJudicialSatForThirtyDays' in application"
                 @change-field="changeInfo"
               />
             </p>
@@ -203,6 +208,7 @@
                 :data="application.quasiJudicialSittingDaysDetails"
                 :edit="editable"
                 field="quasiJudicialSittingDaysDetails"
+                :is-asked="'quasiJudicialSittingDaysDetails' in application"
                 @change-field="changeInfo"
               />
             </div>
@@ -222,6 +228,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
+              :is-asked="'skillsAquisitionDetails' in application"
               @change-field="changeInfo"
             />
           </dd>
@@ -254,6 +261,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
+              :is-asked="'feePaidOrSalariedJudge' in application"
               @change-field="changeInfo"
             />
           </dd>
@@ -272,6 +280,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
+              :is-asked="'feePaidOrSalariedSatForThirtyDays' in application"
               @change-field="changeInfo"
             />
             <div
@@ -285,6 +294,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
+                :is-asked="'feePaidOrSalariedSittingDaysDetails' in application"
                 @change-field="changeInfo"
               />
             </div>
@@ -303,6 +313,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
+              :is-asked="'skillsAquisitionDetails' in application"
               @change-field="changeInfo"
             />
           </dd>
@@ -326,6 +337,7 @@
           :edit="editable"
           :display-month-year-only="true"
           field="employmentGaps"
+          :is-asked="'employmentGaps' in application"
           @change-field="changeInfo"
           @remove-field="removeInfo"
           @add-field="addInfo"
@@ -353,6 +365,7 @@
               :edit="editable"
               type="selection"
               field="canGiveReasonableLOS"
+              :is-asked="'canGiveReasonableLOS' in application"
               @change-field="changeInfo"
             />
             <p v-if="application.canGiveReasonableLOS == false">
@@ -360,6 +373,7 @@
                 :data="application.cantGiveReasonableLOSDetails"
                 :edit="editable"
                 field="cantGiveReasonableLOSDetails"
+                :is-asked="'cantGiveReasonableLOSDetails' in application"
                 @change-field="changeInfo"
               />
             </p>
