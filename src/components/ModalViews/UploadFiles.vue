@@ -76,11 +76,6 @@ export default {
       this.fileName = val;
       this.save('');
     },
-    getNumericalFileName() {
-      const dateNow = new Date();
-      const dateToNumber = `${dateNow.getFullYear()}${dateNow.getMonth() + 1}${dateNow.getUTCDate()}${dateNow.getHours()}${dateNow.getMinutes()}${dateNow.getSeconds()}`;
-      return dateToNumber;
-    },
     async save(action) {
       let originalData = this.$attrs.data[this.$attrs.id] || null;
       if (this.$attrs.fileRef) {
