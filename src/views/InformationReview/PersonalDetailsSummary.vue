@@ -291,7 +291,7 @@
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
-                :is-asked="hasCurrentAddress && key in personalDetails.address.current"
+                :is-asked="hasCurrentAddress"
                 @change-field="changeCurrentAddress"
               />
             </div>
@@ -329,7 +329,7 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
-              :is-asked="hasPreviousAddress"
+              :is-asked="hasAddress && personalDetails.address.currentMoreThan5Years ? true : hasPreviousAddress"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
