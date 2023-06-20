@@ -71,6 +71,12 @@ import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReport
 import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
 import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
 import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
+import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels';
+import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew';
+import ExerciseReportsPanelsView from '@/views/Exercise/Reports/PanelsView';
+import ExerciseReportsSift from '@/views/Exercise/Reports/Sift';
+import ExerciseReportsSelectionDays from '@/views/Exercise/Reports/SelectionDays';
+import ExerciseReportsScenario from '@/views/Exercise/Reports/Scenario';
 
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
@@ -80,9 +86,6 @@ import ExerciseTasks from '@/views/Exercise/Tasks';
 // import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-// import ExerciseTasksPanels from '@/views/Exercise/Tasks/Panels';
-// import ExerciseTasksPanelsNew from '@/views/Exercise/Tasks/PanelsNew';
-// import ExerciseTasksPanelsView from '@/views/Exercise/Tasks/PanelsView';
 import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
 import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
 import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
@@ -915,40 +918,6 @@ const router = new Router({
                 },
               ],
             },
-            // {
-            //   path: 'panels/:type',
-            //   component: ExerciseTasksPanels,
-            //   props: true,
-            //   children: [
-            //     {
-            //       path: '',
-            //       component: ExerciseTasksPanelsList,
-            //       name: 'exercise-tasks-panels',
-            //       meta: {
-            //         requiresAuth: true,
-            //         title: 'Panels | Exercise Tasks',
-            //       },
-            //     },
-            //     {
-            //       path: 'new',
-            //       component: ExerciseTasksPanelsNew,
-            //       name: 'exercise-tasks-panels-new',
-            //       meta: {
-            //         requiresAuth: true,
-            //         title: 'Create Panel | Exercise Tasks',
-            //       },
-            //     },
-            //     {
-            //       path: 'view/:panelId',
-            //       component: ExerciseTasksPanelsView,
-            //       name: 'exercise-tasks-panels-view',
-            //       meta: {
-            //         requiresAuth: true,
-            //         title: 'Panel | Exercise Tasks',
-            //       },
-            //     },
-            //   ],
-            // },
             {
               path: ':type',
               component: ExerciseTask,
@@ -1366,6 +1335,115 @@ const router = new Router({
                 requiresAuth: true,
                 title: 'Statutory Consultation | Exercise Reports',
               },
+            },
+            {
+              path: 'merit-list',
+              component: ExerciseReportsMeritList,
+              meta: {
+                requiresAuth: true,
+                title: 'Merit List | Exercise Reports',
+              },
+            },
+            {
+              path: 'sift',
+              component: ExerciseReportsPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseReportsSift,
+                  name: 'exercise-reports-sift',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Sift | Exercise Reports',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseReportsPanelsNew,
+                  name: 'exercise-reports-sift-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Sift Panel | Exercise Reports',
+                    pageName: 'exercise-reports-sift',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseReportsPanelsView,
+                  name: 'exercise-reports-sift-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Sift Panel | Exercise Reports',
+                    pageName: 'exercise-reports-sift',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'selection',
+              component: ExerciseReportsPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseReportsSelectionDays,
+                  name: 'exercise-reports-selection',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Selection | Exercise Reports',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseReportsPanelsNew,
+                  name: 'exercise-reports-selection-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Selection Panel | Exercise Reports',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseReportsPanelsView,
+                  name: 'exercise-reports-selection-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Selection Panel | Exercise Reports',
+                  },
+                },
+              ],
+            },
+            {
+              path: 'scenario',
+              component: ExerciseReportsPanels,
+              children: [
+                {
+                  path: '',
+                  component: ExerciseReportsScenario,
+                  name: 'exercise-reports-scenario',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Responses | Exercise Reports',
+                  },
+                },
+                {
+                  path: 'new',
+                  component: ExerciseReportsPanelsNew,
+                  name: 'exercise-reports-scenario-new',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Create Scenario Response Panel | Exercise Reports',
+                  },
+                },
+                {
+                  path: 'view/:panelId',
+                  component: ExerciseReportsPanelsView,
+                  name: 'exercise-reports-scenario-view',
+                  meta: {
+                    requiresAuth: true,
+                    title: 'Scenario Response Panel | Exercise Reports',
+                  },
+                },
+              ],
             },
           ],
         },

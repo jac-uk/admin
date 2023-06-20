@@ -35,21 +35,17 @@
               >
                 Export all data
               </button>
-              <button
+              <ActionButton
                 v-if="hasPermissions([
                   PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-                data-module="govuk-button"
+                type="primary"
                 @click="refreshReport"
               >
-                <span
-                  v-if="refreshingReport"
-                  class="spinner-border spinner-border-sm"
-                /> Refresh
-              </button>
+                Refresh
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -395,7 +391,10 @@
                 <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
+            <tr
+              v-if="applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
+              class="govuk-table__row"
+            >
               <th
                 scope="row"
                 class="govuk-table__header"
@@ -404,6 +403,20 @@
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
+              </td>
+            </tr>
+            <tr
+              v-else-if="'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
+              class="govuk-table__row"
+            >
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                Parents attended University
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
               </td>
             </tr>
           </tbody>
@@ -491,18 +504,20 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Stat from '@/components/Report/Stat';
 import permissionMixin from '@/permissionMixin';
+import { mapGetters } from 'vuex';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 
 export default {
   name: 'Diversity',
   components: {
     TabsList,
     Stat,
+    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       diversity: null,
-      refreshingReport: false,
       unsubscribe: null,
       tabs: [
         {
@@ -534,6 +549,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -564,9 +582,11 @@ export default {
   },
   methods: {
     async refreshReport() {
-      this.refreshingReport = true;
-      await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
-      this.refreshingReport = false;
+      try {
+        return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
+      } catch (error) {
+        return;
+      }
     },
     gatherReportData(stage) {
       const data = [];

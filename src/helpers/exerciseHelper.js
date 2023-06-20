@@ -361,8 +361,8 @@ function isEditable(data) {
   if (data === null) return false;
   switch (data.state) {
     case 'draft':
-    case 'ready':
       return true;
+    case 'ready':
     default:
       return false;
   }

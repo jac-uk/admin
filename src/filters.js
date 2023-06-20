@@ -6,6 +6,12 @@ const lookup = (value) => {
   const lookup = {
     // application parts
     personalDetails: 'Personal details',
+    street: 'Street',
+    street2: 'Street 2',
+    town: 'Town or city',
+    county: 'County',
+    postcode: 'Postcode',
+    VATNumber: 'VAT number',
     characterInformation: 'Character information',
     equalityAndDiversitySurvey: 'Equality and diversity',
     partTimeWorkingPreferences: 'Set part-time working preferences',
@@ -30,6 +36,7 @@ const lookup = (value) => {
     additionalInfo: 'Additional Information',
 
     // exercise states
+    draft: 'Draft',
     registration: 'Registration',
     shortlisting: 'Shortlisting',
     selection: 'Selection',
@@ -72,6 +79,7 @@ const lookup = (value) => {
     noAnswer: 'No answer',
     genderNeutral: 'Gender neutral',
     firstGenerationUniversity: 'First generation at University',
+    parentsAttendedUniversity: 'Parents attended University',
     attendedUKStateSchool: 'Attended UK state school',
     white: 'White',
     bame: 'Ethnic minorities',
@@ -192,7 +200,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement Test';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'CA + SJ Scoring';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'QT Merit List';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed first test';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed first test';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';

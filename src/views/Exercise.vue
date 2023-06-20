@@ -8,26 +8,53 @@
       <div class="govuk-grid-row print-none">
         <div class="govuk-grid-column-one-quarter">
           <router-link
-            class="govuk-back-link govuk-!-margin-top-0"
+            class="govuk-back-link govuk-!-margin-0"
             :to="goBack"
           >
             Back
           </router-link>
         </div>
+      </div>
+      <div class="govuk-grid-row govuk-!-margin-top-4">
         <div
-          v-if="hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-          class="govuk-grid-column-three-quarters"
+          class="govuk-grid-column-full"
+          style="display: flex; justify-content: space-between; align-items: center;"
         >
-          <div class="float-right govuk-!-margin-0">
-            <AddToFavouritesButton
+          <div>
+            <span
+              v-show="isInFavourites"
+              class="govuk-tag--yellow govuk-!-margin-right-3"
+              style="display: inline-block; padding: 5px 8px 4px 8px; font-weight: 700; font-size: 16px; line-height: 16px; letter-spacing: 1px;"
+            >
+              FAVOURITE
+            </span>
+            <a
+              href="#"
+              class="govuk-link print-none"
+              @click.prevent="updateFavourites"
+            >
+              {{ isInFavourites ? 'Remove from favourite' : 'Add to favourite' }}
+            </a>
+          </div>
+          <div class="print-none govuk-!-margin-0">
+            <ActionButton
+              v-if="canUpdateExercises && isApproved"
               class="govuk-!-margin-bottom-0"
-              :in-favourites="isInFavourites"
-              @click="updateFavourites"
-            />
+              @click="copyToClipboard"
+            >
+              Copy to clipboard
+            </ActionButton>
+            <button
+              v-if="canArchiveExercises"
+              class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-left-3"
+              @click="openArchiveModal"
+            >
+              {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
+            </button>
           </div>
         </div>
       </div>
-      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-bottom-2">
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">
             {{ exercise.referenceNumber }}
@@ -42,10 +69,30 @@
           >
             Edit name
           </router-link>
+
+          <div
+            v-if="!isProduction"
+            class="govuk-!-margin-top-4"
+          >
+            <button
+              v-if="isReadyForTesting && !isArchived"
+              class="govuk-button govuk-button--secondary"
+              @click="changeNoOfTestApplications()"
+            >
+              Create demo applications
+            </button>
+            <ActionButton
+              v-if="isTesting"
+              ref="createTestApplicationsBtn"
+              @click="createTestApplications()"
+            >
+              Create demo applications
+            </ActionButton>
+          </div>
         </div>
       </div>
       <div class="sub-navigation govuk-grid-row">
-        <div class="govuk-grid-column-full">
+        <div class="govuk-grid-column-full print-none">
           <SubNavigation
             v-if="!hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
@@ -53,25 +100,46 @@
         </div>
       </div>
       <RouterView />
+
+      <Modal ref="archiveModal">
+        <ModalInner
+          @close="closeArchiveModal"
+          @confirmed="archive"
+        />
+      </Modal>
+      <Modal ref="modalChangeNoOfTestApplications">
+        <ChangeNoOfTestApplications
+          :no-of-test-applications="1"
+          @close="cancelChangeNoOfTestApplications()"
+          @confirmed="confirmedNoOfTestApplications()"
+        />
+      </Modal>
     </div>
   </div>
 </template>
 
 <script>
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
 import SubNavigation from '@/components/Navigation/SubNavigation';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { mapState } from 'vuex';
-import { isEditable, hasQualifyingTests, isProcessing } from '@/helpers/exerciseHelper';
+import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import { applicationCounts } from '@/helpers/exerciseHelper';
+import { logEvent } from '@/helpers/logEvent';
+import { functions } from '@/firebase';
 
 export default {
   name: 'ExerciseView',
   components: {
     LoadingMessage,
-    AddToFavouritesButton,
     SubNavigation,
+    Modal,
+    ModalInner,
+    ActionButton,
+    ChangeNoOfTestApplications,
   },
   mixins: [permissionMixin],
   data() {
@@ -86,6 +154,9 @@ export default {
     }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
     isEditable() {
       return isEditable(this.exercise);
@@ -102,8 +173,32 @@ export default {
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
     },
+    canUpdateExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
+    },
+    canArchiveExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
+    },
+    isArchived() {
+      return isArchived(this.exercise);
+    },
+    isApproved() {
+      return isApproved(this.exercise);
+    },
+    isPublished() {
+      return this.exercise.published;
+    },
+    isReadyForTesting() {
+      return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
+    },
+    isTesting() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
+    },
+    isProduction() {
+      return this.$store.getters['isProduction'];
     },
     hasOpened() {
       if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {
@@ -173,6 +268,61 @@ export default {
       } else {
         this.$store.dispatch('exerciseDocument/addToFavourites', this.userId);
       }
+    },
+    async copyToClipboard() {
+      try {
+        const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
+        await this.$store.dispatch('clipboard/write', {
+          environment: this.$store.getters.appEnvironment,
+          type: 'exercise',
+          title: `${exercise.referenceNumber} ${exercise.name}`,
+          content: exercise,
+        });
+        return true;
+      } catch (error) {
+        return;
+      }
+    },
+    openArchiveModal() {
+      this.$refs.archiveModal.openModal();
+    },
+    closeArchiveModal() {
+      this.$refs.archiveModal.closeModal();
+    },
+    archive() {
+      if (this.isArchived) {
+        this.$store.dispatch('exerciseDocument/unarchive');
+        logEvent('info', 'Exercise unarchived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      } else {
+        this.$store.dispatch('exerciseDocument/archive');
+        logEvent('info', 'Exercise archived', {
+          exerciseId: this.exerciseId,
+          exerciseRef: this.exercise.referenceNumber,
+        });
+      }
+      this.$refs.archiveModal.closeModal();
+    },
+    changeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].openModal();
+      this.$store.dispatch('exerciseDocument/testing');
+    },
+    async createTestApplications() {
+      const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
+      if (!noOfTestApplications) return;
+      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
+      this.$store.dispatch('exerciseDocument/tested');
+      this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
+    },
+    cancelChangeNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$store.dispatch('exerciseDocument/isReadyForTest');
+    },
+    confirmedNoOfTestApplications() {
+      this.$refs['modalChangeNoOfTestApplications'].closeModal();
+      this.$refs['createTestApplicationsBtn'].$el.click();
     },
   },
 };

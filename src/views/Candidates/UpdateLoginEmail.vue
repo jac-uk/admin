@@ -50,12 +50,13 @@
             type="email"
             required
           />
-          <button
-            class="govuk-button govuk-!-margin-bottom-4"
+          <ActionButton
+            type="primary"
+            class="govuk-!-margin-bottom-4"
             @click="save"
           >
             Update
-          </button>
+          </ActionButton>
         </div>
       </div>
     </form>
@@ -67,13 +68,15 @@ import { functions } from '@/firebase';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import permissionMixin from '@/permissionMixin';
 
 export default {
-  name: 'Actions',
+  name: 'UpdateLoginEmail',
   components: {
     TextField,
     Banner,
+    ActionButton,
   },
   extends: Form,
   mixins: [permissionMixin],
@@ -118,6 +121,7 @@ export default {
     },
     async save() {
       this.validate();
+      let isSuccess = false;
       if (this.isValid()) {
         if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canUpdateCandidates.value])) {
           this.submitted = true;
@@ -129,7 +133,8 @@ export default {
             const result = response.data;
             if (result.status === 'success') {
               this.setMessage('Email address was updated.', 'success');
-              this.currentEmailAddress = result.data;
+              this.currentEmailAddress = result.data.email;
+              isSuccess = true;
             } else {
               if (result.data.code === 'auth/email-already-exists') {
                 this.setMessage('An account already exists with this email address. To update the candidate login email address with this email address the other account will need to be removed. Please contact the Digital Team for assistance.', 'warning');
@@ -154,6 +159,8 @@ export default {
           this.setMessage('Unauthorised to perform action.', 'warning');
         }
       }
+
+      return isSuccess;
     },
     setMessage(message, status) {
       this.status = status;

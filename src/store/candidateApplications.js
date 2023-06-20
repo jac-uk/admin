@@ -1,15 +1,15 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('applicationRecords');
+const collection = firestore.collection('applications');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { candidateId }) => {
-      const firestoreRef = collection
-        .where('candidate.id', '==', candidateId).limit(50);
+    bind: firestoreAction(async ({ bindFirestoreRef, state }, params) => {
+      const firestoreRef = await tableQuery(state.records, collection.where('userId', '==', params.candidateId), params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -18,7 +18,7 @@ export default {
     update: async (context, data ) => {
       const batch = firestore.batch();
         data.forEach( item => {
-          const ref = collection.doc(item.id);
+          const ref = firestore.collection('applicationRecords').doc(item.id);
           batch.update(ref, item.data);
         });
         await batch.commit();

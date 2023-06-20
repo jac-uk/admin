@@ -46,34 +46,6 @@
     </div>
 
     <div class="govuk-grid-column-one-half">
-      <div :class="`govuk-!-margin-bottom-6 govuk-!-padding-3 ${isArchived ? 'background-red' : 'background-blue'}`">
-        <span v-if="isPublished">
-          Published
-        </span>
-        <div
-          v-if="isApproved"
-          class="float-right"
-        >
-          <a
-            v-if="canUpdateExercises"
-            class="govuk-link"
-            @click="changeState"
-          >
-            Change
-          </a>
-        </div>
-        <span
-          v-if="exercise.state"
-          class="display-block govuk-!-font-size-27"
-        >
-          <!-- {{ exercise.state | lookup }} -->
-          {{ exercise.state }}
-        </span>
-        <span
-          v-else
-          class="display-block govuk-!-font-size-27"
-        >Draft</span>
-      </div>
       <Timeline :data="timeline" />
       <RouterLink
         v-if="timeline && timeline.length"
@@ -85,7 +57,7 @@
     </div>
 
     <div
-      v-if="taskList && taskList.length"
+      v-if="isDraft && taskList && taskList.length"
       class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2"
     >
       <h2 class="govuk-heading-m">
@@ -123,11 +95,27 @@
         </tbody>
       </table>
     </div>
-    <div class="govuk-grid-column-full govuk-!-margin-bottom-2">
+    <div class="govuk-grid-column-full govuk-!-margin-top-6">
+      <div
+        v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
+        class="govuk-!-margin-bottom-4"
+      >
+        Congratulations! This exercise has been approved. Now you can publish it to the website.
+      </div>
+
       <button
-        v-if="!isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
+        v-if="canUpdateExercises && isDraft"
+        :disabled="!isReadyToSubmit"
+        class="govuk-button govuk-!-margin-right-3"
+        @click="openApprovalModal"
+      >
+        Submit for approval
+      </button>
+
+      <button
+        v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
         :disabled="!canPublish"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        class="govuk-button govuk-!-margin-right-3"
         @click="publish"
       >
         Publish on website
@@ -137,30 +125,9 @@
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="unPublish"
       >
-        Remove from website
+        Remove from apply website
       </button>
-      <button
-        v-if="canUpdateExercises && isDraft"
-        :disabled="!isReadyToSubmit"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="openApprovalModal"
-      >
-        Submit for Approval
-      </button>
-      <button
-        v-if="!isArchived && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value, PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]) && isApproved"
-        class="govuk-button govuk-!-margin-right-3"
-        @click="unlock"
-      >
-        Set to Draft
-      </button>
-      <ActionButton
-        v-if="canUpdateExercises && isApproved"
-        @click="copyToClipboard"
-      >
-        Copy to Clipboard
-      </ActionButton>
-      <br>
+
       <ActionButton
         v-if="isReadyForProcessing && !isArchived && hasPermissions([
           PERMISSIONS.exercises.permissions.canReadExercises.value,
@@ -169,6 +136,7 @@
           PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
           PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value
         ])"
+        type="primary"
         class="govuk-!-margin-right-3"
         @click="startProcessing()"
       >
@@ -183,6 +151,7 @@
           PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
           PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
         ])"
+        type="primary"
         class="govuk-!-margin-right-3"
         @click="updateProcessing()"
       >
@@ -190,17 +159,8 @@
       </ActionButton>
       <!-- if exercise has [DATE] then use that date as when to show Archive button, else always show -->
       <!-- {{ exercise.hasOwnProperty('eMPOutcomeDate') ? Date.now > exercise.eMPOutcomeDate : true }} -->
-      <Modal
-        ref="archiveModal"
-      >
-        <ModalInner
-          @close="closeArchiveModal"
-          @confirmed="archive"
-        />
-      </Modal>
-      <Modal
-        ref="deleteModal"
-      >
+
+      <Modal ref="deleteModal">
         <ModalInner
           title="Delete Exercise"
           message="Are you sure you want to delete this exercise?"
@@ -208,13 +168,7 @@
           @confirmed="confirmDelete"
         />
       </Modal>
-      <button
-        v-if="canArchiveExercises"
-        :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
-        @click="openArchiveModal"
-      >
-        {{ isArchived ? 'Unarchive exercise' : 'Archive exercise' }}
-      </button>
+
       <button
         v-if="isDraft && hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value])"
         :class="`govuk-button ${!isArchived ? 'govuk-button--warning' : ''}`"
@@ -223,42 +177,11 @@
       >
         Delete exercise
       </button>
-      <div v-if="!isProduction">
-        <button
-          v-if="isReadyForTesting && !isArchived"
-          class="govuk-button"
-          @click="changeNoOfTestApplications()"
-        >
-          Create test applications
-        </button>
-        <ActionButton
-          v-if="isTesting"
-          ref="createTestApplicationsBtn"
-          @click="createTestApplications()"
-        >
-          Create test applications
-        </ActionButton>
-      </div>
       <Banner
         v-if="isReadyForApproval && !isReadyForApprovalFromAdvertType"
         :message="approveErrorMessage"
       />
     </div>
-    <Modal
-      ref="modalChangeExerciseState"
-    >
-      <ChangeExerciseState
-        :state="exercise.state"
-        @close="$refs['modalChangeExerciseState'].closeModal()"
-      />
-    </Modal>
-    <Modal ref="modalChangeNoOfTestApplications">
-      <ChangeNoOfTestApplications
-        :no-of-test-applications="1"
-        @close="cancelChangeNoOfTestApplications()"
-        @confirmed="confirmedNoOfTestApplications()"
-      />
-    </Modal>
     <Modal
       ref="approvalModal"
     >
@@ -279,8 +202,6 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
 import { lookup } from '@/filters';
-import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
-import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
@@ -298,8 +219,6 @@ export default {
     Modal,
     ModalInner,
     Banner,
-    ChangeExerciseState,
-    ChangeNoOfTestApplications,
     ExercisePreApprovalTaskList,
     ApprovalProcess,
   },
@@ -309,9 +228,6 @@ export default {
       userId: state => state.auth.currentUser.uid,
       displayName: state => state.auth.currentUser.displayName,
     }),
-    canArchiveExercises() {
-      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
-    },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
     },
@@ -320,9 +236,6 @@ export default {
     },
     canPublishExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canPublishExercise.value]);
-    },
-    isProduction() {
-      return this.$store.getters['isProduction'];
     },
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
@@ -370,20 +283,14 @@ export default {
     isArchived() {
       return isArchived(this.exercise);
     },
-    isTesting() {
-      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'testing';
-    },
     isTested() {
       return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
     },
-    isReadyForTesting() {
-      return this.isPublished && this.isApproved && !this.isTesting && !this.isTested;
-    },
     isProcessing() {
-      return isProcessing(this.exercise);
+      return this.isApproved && this.isPublished && isProcessing(this.exercise);
     },
     isReadyForProcessing() {
-      return this.isApproved && !this.isProcessing;
+      return this.isApproved && this.isPublished && !this.isProcessing;
       // @TODO perhaps also check that exercise has closed
     },
     hasOpened() {
@@ -402,8 +309,16 @@ export default {
       return false;
     },
     timeline() {
-      const timeline = exerciseTimeline(this.exercise);
-      return createTimeline(timeline, 2);
+      let timeline = exerciseTimeline(this.exercise);
+      timeline = createTimeline(timeline);
+      const now = new Date();
+      let mostRelevantIndex = 0;
+      timeline.forEach((item, index) => {
+        if (item.date <= now) {
+          mostRelevantIndex = index;
+        }
+      });
+      return timeline.slice(mostRelevantIndex, mostRelevantIndex + 4);
     },
     exerciseProgress() {
       if (this.exercise && this.exercise.progress) {
@@ -465,39 +380,11 @@ export default {
       });
       this.closeApprovalModal();
     },
-    archive() {
-      if (this.isArchived) {
-        this.$store.dispatch('exerciseDocument/unarchive');
-        logEvent('info', 'Exercise unarchived', {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        });
-      } else {
-        this.$store.dispatch('exerciseDocument/archive');
-        logEvent('info', 'Exercise archived', {
-          exerciseId: this.exerciseId,
-          exerciseRef: this.exercise.referenceNumber,
-        });
-      }
-      this.$refs.archiveModal.closeModal();
-    },
     confirmDelete() {
       this.closeDeleteModal();
       // Redirect THEN delete so not breaking any references in the component
       this.$router.push({ name: 'exercises' }).then(() => {
         this.$store.dispatch('exerciseDocument/delete');
-      });
-    },
-    unlock() {
-      this.$store.dispatch('exerciseDocument/unlock');
-    },
-    async copyToClipboard() {
-      const exercise = await this.$store.dispatch('exerciseDocument/getDocumentData', this.exerciseId);
-      await this.$store.dispatch('clipboard/write', {
-        environment: this.$store.getters.appEnvironment,
-        type: 'exercise',
-        title: `${exercise.referenceNumber} ${exercise.name}`,
-        content: exercise,
       });
     },
     async publish() {
@@ -516,13 +403,12 @@ export default {
     },
     async startProcessing() {
       await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
+      return true;
     },
     async updateProcessing() {
       // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
       await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
-    },
-    changeState() {
-      this.$refs['modalChangeExerciseState'].openModal();
+      return true;
     },
     refreshApplicationCounts() {
       if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
@@ -536,24 +422,6 @@ export default {
         }
       }
     },
-    changeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].openModal();
-      this.$store.dispatch('exerciseDocument/testing');
-    },
-    cancelChangeNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
-      this.$store.dispatch('exerciseDocument/isReadyForTest');
-    },
-    confirmedNoOfTestApplications() {
-      this.$refs['modalChangeNoOfTestApplications'].closeModal();
-      this.$refs['createTestApplicationsBtn'].$el.click();
-    },
-    openArchiveModal() {
-      this.$refs.archiveModal.openModal();
-    },
-    closeArchiveModal() {
-      this.$refs.archiveModal.closeModal();
-    },
     openApprovalModal() {
       this.$refs.approvalModal.openModal();
     },
@@ -565,13 +433,6 @@ export default {
     },
     closeDeleteModal() {
       this.$refs.deleteModal.closeModal();
-    },
-    async createTestApplications() {
-      const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
-      if (!noOfTestApplications) return;
-      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
-      this.$store.dispatch('exerciseDocument/tested');
-      this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
     },
   },
 };

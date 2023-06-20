@@ -1,5 +1,6 @@
 
 import { lookup } from '@/filters';
+import _cloneDeep from 'lodash/cloneDeep';
 
 const REPORTS = {
   ApplicationStageDiversity: {
@@ -110,14 +111,10 @@ const REPORTS = {
           title: `${lookup('noAnswer')}`,
         },
       ],
-      socialMobility: [
+      socialMobility: [   // THIS VARIES SO WILL BE APPENDED TO BEFORE BEING RETURNED
         {
           key: 'attendedUKStateSchool',
           title: `${lookup('attendedUKStateSchool')}`,
-        },
-        {
-          key: 'firstGenerationUniversity',
-          title: `${lookup('firstGenerationUniversity')}`,
         },
       ],
       professionalBackground: [
@@ -150,4 +147,27 @@ const REPORTS = {
   },
 };
 
-export default REPORTS;
+const pre04012023SocialMobility = {
+  key: 'firstGenerationUniversity',
+  title: `${lookup('firstGenerationUniversity')}`,
+};
+
+const post04012023SocialMobility = {
+  key: 'parentsAttendedUniversity',
+  title: `${lookup('parentsAttendedUniversity')}`,
+};
+
+const getReports = (applicationOpenDate) => {
+  const mergedReports = _cloneDeep(REPORTS);
+  if (applicationOpenDate > new Date('2023-04-01')) {
+    mergedReports.ApplicationStageDiversity.legend.socialMobility.push(post04012023SocialMobility);
+  }
+  else {
+    mergedReports.ApplicationStageDiversity.legend.socialMobility.push(pre04012023SocialMobility);
+  }
+  return mergedReports;
+};
+
+export {
+  getReports
+};
