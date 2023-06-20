@@ -14,7 +14,7 @@
           v-if="fileTitle"
           :id="$attrs.id"
           v-model="fileName"
-          :name="`${$attrs.name}-${getNumericalFileName()}`"
+          :name="$attrs.name"
           :path="buildFileFolder"
           :file-path="$attrs.filePath"
           label=""
@@ -76,11 +76,6 @@ export default {
     changeFileName(val) {
       this.fileName = val;
       this.save('');
-    },
-    getNumericalFileName() {
-      const dateNow = new Date();
-      const dateToNumber = `${dateNow.getFullYear()}${dateNow.getMonth() + 1}${dateNow.getUTCDate()}${dateNow.getHours()}${dateNow.getMinutes()}${dateNow.getSeconds()}`;
-      return dateToNumber;
     },
     async save(action) {
       let originalData = this.$attrs.data[this.$attrs.id] || null;
