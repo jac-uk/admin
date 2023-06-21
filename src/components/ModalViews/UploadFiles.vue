@@ -20,7 +20,7 @@
           label=""
           :types="$attrs.types"
           required
-          @input="changeFileName"
+          @update:model-value="changeFileName"
         />
       </p>
       <p>
