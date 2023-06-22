@@ -255,14 +255,12 @@
               :application-id="applicationId"
               :exercise="exercise"
               :editable="editable"
-              :is-panel-view="isPanelView"
             />
             <AssessmentsSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :authorised-to-perform-action="editable"
-              :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
           </div>
