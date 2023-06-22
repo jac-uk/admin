@@ -60,7 +60,10 @@
     <template
       v-if="results.length > 0"
     >
-      <FullScreenButton ref="fullscreenButtonRef" class="float-right govuk-!-margin-right-4" />
+      <FullScreenButton
+        ref="fullscreenButtonRef"
+        class="float-right govuk-!-margin-right-4"
+      />
       <div class="govuk-grid-column-full">
         <div class="overflow-table">
           <table

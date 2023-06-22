@@ -148,7 +148,7 @@
               <h2
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                Draft
+                {{ application.status | lookup }}
               </h2>
             </div>
           </div>
