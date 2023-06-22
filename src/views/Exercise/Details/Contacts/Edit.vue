@@ -228,6 +228,7 @@ export default {
         SelectionExerciseOfficer,
         AssignedCommissioner,
       },
+      users: [],
       //@TODO@ add pattern for mobile number
     };
   },
@@ -235,6 +236,9 @@ export default {
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
+  },
+  async mounted() {
+    await this.$store.dispatch('users/getUsers');
   },
   methods: {
     async save(isValid) {

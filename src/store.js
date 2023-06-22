@@ -18,6 +18,7 @@ import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
 import events from '@/store/events';
 import clipboard from '@/store/clipboard';
+import users from '@/store/users';
 
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
@@ -91,6 +92,7 @@ const store = createStore({
     task,
     tasks,
     ui,
+    users,
   },
   state: {
     packageVersion: process.env.PACKAGE_VERSION || '0',

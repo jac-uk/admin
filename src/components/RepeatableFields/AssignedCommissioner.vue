@@ -1,24 +1,32 @@
 <template>
   <div>
-    <TextField
+    <Select
       :id="`assigned_comissioner_${index}`"
       v-model="row.name"
-      type="email"
       label="Assigned commissioner"
       hint="An email address is required."
       required
-    />
+    >
+      <option
+        v-for="user in users"
+        :key="user.uid"
+        :value="user.email"
+      >
+        {{ user.email }}
+      </option>
+    </Select>
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'AssignedCommissioner',
   components: {
-    TextField,
+    Select,
   },
   props: {
     row: {
@@ -30,5 +38,16 @@ export default {
       type: Number,
     },
   },
+  computed: {
+    ...mapGetters({
+      users: 'users/enabledUsers',
+    }),
+  },
 };
 </script>
+
+<style>
+select[id^="assigned_comissioner"] {
+  width: 100%;
+}
+</style>
