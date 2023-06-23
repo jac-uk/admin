@@ -45,9 +45,3 @@ export default {
   },
 };
 </script>
-
-<style>
-select[id^="assigned_comissioner"] {
-  width: 100%;
-}
-</style>

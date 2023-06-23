@@ -45,9 +45,3 @@ export default {
   },
 };
 </script>
-
-<style>
-select[id^="selection_exercise_officer"] {
-  width: 100%;
-}
-</style>

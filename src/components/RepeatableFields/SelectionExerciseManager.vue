@@ -44,9 +44,3 @@ export default {
   },
 };
 </script>
-
-<style>
-select[id^="senior_selection_exercise_manager"] {
-  width: 100%;
-}
-</style>
