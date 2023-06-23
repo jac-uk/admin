@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      users: 'users/enabledUsers',
+      users: 'users/enabledMicrosoftUsers',
     }),
   },
 };
