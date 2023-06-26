@@ -186,6 +186,7 @@ export default {
           saveData['_applicationContent'] = applicationContentAfter;
         }
       }
+      this.saveData['progress.applicationProcess'] = true;
       return saveData;
     },
   },
