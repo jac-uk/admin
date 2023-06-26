@@ -96,7 +96,7 @@ export default {
       // TODO: add isSift to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/sift');
+        route = url.includes('/reports/sift');
       }
       return route;
     },
@@ -104,14 +104,14 @@ export default {
       // TODO: add isSelectionDay to PanelsNew.vue and PanelsView.vue
       let route = false;
       if (url) {
-        route = url.includes('/tasks/selection');
+        route = url.includes('/reports/selection');
       }
       return route;
     },
     isScenario: () => (url) => {
       let route = false;
       if (url) {
-        route = url.includes('/tasks/scenario');
+        route = url.includes('/reports/scenario');
       }
       return route;
     },

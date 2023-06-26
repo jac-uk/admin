@@ -18,7 +18,7 @@ export default {
     update: async (context, data ) => {
       const batch = firestore.batch();
         data.forEach( item => {
-          const ref = collection.doc(item.id);
+          const ref = firestore.collection('applicationRecords').doc(item.id);
           batch.update(ref, item.data);
         });
         await batch.commit();
