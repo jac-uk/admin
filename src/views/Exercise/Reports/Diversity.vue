@@ -152,25 +152,14 @@
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Prefer not to say
+              <th class="govuk-table__header">
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.preferNotToSay" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Other
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.other" />
+                <Stat
+                  :stat="diversity[activeTab].gender.declaration"
+                  :report-total="diversity[activeTab].gender.total"
+                />
               </td>
             </tr>
           </tbody>
@@ -220,25 +209,14 @@
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Prefer not to say
+              <th class="govuk-table__header">
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].ethnicity.preferNotToSay" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Other
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].ethnicity.other" />
+                <Stat
+                  :stat="diversity[activeTab].ethnicity.declaration"
+                  :report-total="diversity[activeTab].ethnicity.total"
+                />
               </td>
             </tr>
           </tbody>
@@ -283,10 +261,13 @@
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                Prefer not to say
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].disability.preferNotToSay" />
+                <Stat
+                  :stat="diversity[activeTab].disability.declaration"
+                  :report-total="diversity[activeTab].disability.total"
+                />
               </td>
             </tr>
           </tbody>
@@ -342,18 +323,13 @@
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                Prefer not to say
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].professionalBackground.preferNotToSay" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Other
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].professionalBackground.other" />
+                <Stat
+                  :stat="diversity[activeTab].professionalBackground.declaration"
+                  :report-total="diversity[activeTab].professionalBackground.total"
+                />
               </td>
             </tr>
           </tbody>
@@ -419,6 +395,17 @@
                 <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
               </td>
             </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="diversity[activeTab].socialMobility.declaration"
+                  :report-total="diversity[activeTab].socialMobility.total"
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -451,17 +438,6 @@
                 scope="col"
                 class="govuk-table__header"
               >
-                EMP Not applied
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.noAnswer" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
                 EMP applied
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -488,6 +464,17 @@
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].emp.gender" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="diversity[activeTab].emp.declaration"
+                  :report-total="diversity[activeTab].emp.total"
+                />
               </td>
             </tr>
           </tbody>
