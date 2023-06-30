@@ -8,12 +8,12 @@
     <div class="modal__content govuk-!-margin-6">
       <div style="text-align: left;">
         <p class="govuk-body">
-          Please make sure all of the following tasks are completed before submitting for approval.
+          Please make the information page and application form (if relevant) has been cleared by the following bodies before submitting for approval.
         </p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>Has the information page and application form (if relevant) been cleared by the JAC Policy and Diversity Teams?</li>
-          <li>Has the information page and application form (if relevant) been cleared by the JAC Digital Team?</li>
-          <li>Has the information page and application form (if relevant) been cleared by the Head of Operations and Digital?</li>
+          <li>JAC Policy and Diversity Teams</li>
+          <li>JAC Digital Team</li>
+          <li>The Head of Operations and Digital</li>
         </ul>
         <button
           type="button"
