@@ -69,7 +69,6 @@
     "no-empty": "warn"
   },
   "parserOptions": {
-    "parser": "@babel/eslint-parser",
     "ecmaVersion": 2020
   },
   "overrides": [
