@@ -228,21 +228,17 @@ export default {
   },
   watch: {
     isFavourites() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
     isArchived() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
   },
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   mounted() {
-    this.getTableData();
+    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -259,6 +255,11 @@ export default {
         'exerciseCollection/bind',
         params
       );
+    },
+    reloadTable() {
+      if (this.$refs['exercisesTable']) {
+        this.$refs['exercisesTable'].reload();
+      }
     },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
