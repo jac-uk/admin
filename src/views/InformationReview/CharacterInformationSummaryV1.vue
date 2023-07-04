@@ -16,7 +16,7 @@
           :options="[true, false]"
           type="selection"
           field="criminalOffences"
-          :is-asked="'criminalOffences' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -28,7 +28,7 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="criminalOffenceDetails"
-            :is-asked="'criminalOffenceDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -50,7 +50,7 @@
           :edit="edit"
           type="selection"
           field="nonMotoringFixedPenaltyNotices"
-          :is-asked="'nonMotoringFixedPenaltyNotices' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -62,7 +62,7 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="nonMotoringFixedPenaltyNoticesDetails"
-            :is-asked="'nonMotoringFixedPenaltyNoticesDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -84,7 +84,7 @@
           :edit="edit"
           type="selection"
           field="drivingDisqualificationDrinkDrugs"
-          :is-asked="'drivingDisqualificationDrinkDrugs' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -96,7 +96,7 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="drivingDisqualificationDrinkDrugsDetails"
-            :is-asked="'drivingDisqualificationDrinkDrugsDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -118,7 +118,7 @@
           :edit="edit"
           type="selection"
           field="endorsementsOrMotoringFixedPenalties"
-          :is-asked="'endorsementsOrMotoringFixedPenalties' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -130,7 +130,7 @@
             :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="endorsementsOrMotoringFixedPenaltiesDetails"
-            :is-asked="'endorsementsOrMotoringFixedPenaltiesDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -152,7 +152,7 @@
           :edit="edit"
           type="selection"
           field="declaredBankruptOrIVA"
-          :is-asked="'declaredBankruptOrIVA' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -164,7 +164,7 @@
             :data="formData.declaredBankruptOrIVADetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="declaredBankruptOrIVADetails"
-            :is-asked="'declaredBankruptOrIVADetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -186,7 +186,7 @@
           field="lateTaxReturnOrFined"
           :options="[true, false]"
           type="selection"
-          :is-asked="'lateTaxReturnOrFined' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -198,7 +198,7 @@
             :data="formData.lateTaxReturnOrFinedDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="lateTaxReturnOrFinedDetails"
-            :is-asked="'lateTaxReturnOrFinedDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -220,7 +220,7 @@
           :edit="edit"
           type="selection"
           field="involvedInProfessionalMisconduct"
-          :is-asked="'involvedInProfessionalMisconduct' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -232,7 +232,7 @@
             :edit="edit"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="involvedInProfessionalMisconductDetails"
-            :is-asked="'involvedInProfessionalMisconductDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -254,7 +254,7 @@
           :edit="edit"
           type="selection"
           field="diciplinaryActionOrAskedToResign"
-          :is-asked="'diciplinaryActionOrAskedToResign' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -266,7 +266,7 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="diciplinaryActionOrAskedToResignDetails"
-            :is-asked="'diciplinaryActionOrAskedToResignDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"
@@ -288,7 +288,7 @@
           :edit="edit"
           type="selection"
           field="otherCharacterIssues"
-          :is-asked="'otherCharacterIssues' in formData"
+          :is-asked="isAsked"
           @change-field="changeCharacterFlag"
         />
         <div
@@ -300,7 +300,7 @@
             :edit="edit"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="otherCharacterIssuesDetails"
-            :is-asked="'otherCharacterIssuesDetails' in formData"
+            :is-asked="isAsked"
             @change-field="changeInfo"
             @remove-field="removeInfo"
             @add-field="addInfo"

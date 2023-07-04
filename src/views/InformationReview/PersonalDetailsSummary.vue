@@ -32,7 +32,7 @@
               :edit="editable"
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
-              :is-asked="hasPersonalDetails && 'title' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -51,7 +51,7 @@
               :data="personalDetails.firstName || ''"
               type="route"
               field="firstName"
-              :is-asked="hasPersonalDetails && 'firstName' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -69,7 +69,7 @@
               :application-id="userId"
               :data="personalDetails.middleNames || ''"
               field="middleNames"
-              :is-asked="hasPersonalDetails && 'middleNames' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -88,7 +88,7 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
-              :is-asked="hasPersonalDetails && 'lastName' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -106,7 +106,7 @@
               :application-id="userId"
               :data="personalDetails.suffix || ''"
               field="suffix"
-              :is-asked="hasPersonalDetails && 'suffix' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -124,7 +124,7 @@
               :application-id="userId"
               :data="personalDetails.previousNames || ''"
               field="previousNames"
-              :is-asked="hasPersonalDetails && 'previousNames' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -142,7 +142,7 @@
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
               field="professionalName"
-              :is-asked="hasPersonalDetails && 'professionalName' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -174,7 +174,7 @@
               :application-id="userId"
               :data="personalDetails.otherNames || ''"
               field="otherNames"
-              :is-asked="hasPersonalDetails && 'otherNames' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -193,7 +193,7 @@
               :data="hasPersonalDetails ? personalDetails.email : ''"
               type="email"
               field="email"
-              :is-asked="hasPersonalDetails && 'email' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -211,7 +211,7 @@
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               type="tel"
               field="phone"
-              :is-asked="hasPersonalDetails && 'phone' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -229,7 +229,7 @@
               :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
               type="date"
               field="dateOfBirth"
-              :is-asked="hasPersonalDetails && 'dateOfBirth' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -247,7 +247,7 @@
               :application-id="userId"
               :data="personalDetails.placeOfBirth || ''"
               field="placeOfBirth"
-              :is-asked="'placeOfBirth' in personalDetails"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -264,7 +264,7 @@
               :edit="editable"
               :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
-              :is-asked="hasPersonalDetails && 'nationalInsuranceNumber' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -291,7 +291,7 @@
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
-                :is-asked="hasCurrentAddress"
+                :is-asked="isCharacterChecksAsked"
                 @change-field="changeCurrentAddress"
               />
             </div>
@@ -311,7 +311,7 @@
               type="selection"
               :data="currentMoreThan5Years"
               field="currentMoreThan5Years"
-              :is-asked="hasAddress && 'currentMoreThan5Years' in personalDetails.address"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeInfo"
             />
           </dd>
@@ -329,7 +329,7 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
-              :is-asked="hasAddress && personalDetails.address.currentMoreThan5Years ? true : hasPreviousAddress"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -350,7 +350,7 @@
               :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
               type="selection"
               field="citizenship"
-              :is-asked="hasPersonalDetails && 'citizenship' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -370,7 +370,7 @@
               :options="[true, false]"
               type="selection"
               field="reasonableAdjustments"
-              :is-asked="hasPersonalDetails && 'reasonableAdjustments' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -394,7 +394,7 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
               field="reasonableAdjustmentsDetails"
-              :is-asked="hasPersonalDetails && 'reasonableAdjustmentsDetails' in personalDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -409,7 +409,7 @@
 
           <dd class="govuk-summary-list__value">
             <span v-if="!VATNumbers.length">No information</span>
-            <span v-if="hasPersonalDetails && !('VATNumbers' in personalDetails)">
+            <span v-if="!isCharacterChecksAsked">
               (not asked)
             </span>
             <div
@@ -477,6 +477,16 @@ export default {
       type: [Boolean, Function, Promise],
       required: true,
       default: false,
+    },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    isCharacterChecksAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   emits: ['update'],

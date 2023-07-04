@@ -278,9 +278,9 @@
       class="govuk-body"
     >
       No information
-    </span>
-    <span v-if="!isAsked">
-      (not asked)
+      <span v-if="!isAsked">
+        (not asked)
+      </span>
     </span>
     <button
       v-if="edit"

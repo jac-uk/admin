@@ -638,17 +638,20 @@ function currentApplicationParts(data) {
 
 // check if application part is asked in current stage
 function isApplicationPartAsked(exercise, part) {
+  let isAsked = false;
   if (hasApplicationProcess(exercise)) {
     const parts = applicationParts(exercise);
     for (const key in parts) {
       if (key === part && parts[key]) {
-        return true;
+        isAsked = true;
       }
     }
-    return false;
   } else {
-    return true;
+    isAsked = true;
   }
+
+  console.log('isApplicationPartAsked', part, isAsked);
+  return isAsked;
 }
 
 // check if character checks of application is sent

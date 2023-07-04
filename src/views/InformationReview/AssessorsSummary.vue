@@ -85,6 +85,9 @@
           class="govuk-summary-list__key widerColumn"
         >
           No information for First Assessor
+          <span v-if="!isApplicationPartAsked('assessorsDetails')">
+            (not asked)
+          </span>
         </dt>
         <dd
           v-if="editable"
@@ -176,6 +179,9 @@
           class="govuk-summary-list__key widerColumn"
         >
           No information for Second Assessor
+          <span v-if="!isApplicationPartAsked('assessorsDetails')">
+            (not asked)
+          </span>
         </dt>
         <dd
           v-if="editable"
@@ -306,7 +312,7 @@
   </div>
 </template>
 <script>
-import { hasLeadershipJudgeAssessment, hasIndependentAssessments } from '@/helpers/exerciseHelper';
+import { hasLeadershipJudgeAssessment, hasIndependentAssessments, isApplicationPartAsked } from '@/helpers/exerciseHelper';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
 import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
@@ -389,6 +395,9 @@ export default {
     },
     editLeadershipJudgeDetails() {
       this.$refs.modalLeadershipJudgeDetails.openModal();
+    },
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
     },
   },
 };

@@ -15,7 +15,7 @@
             :options="[true, false]"
             type="selection"
             field="criminalConvictions"
-            :is-asked="'criminalConvictions' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
 
@@ -26,7 +26,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="criminalConvictionDetails"
-              :is-asked="'criminalConvictionDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -52,7 +52,7 @@
             :options="[true, false]"
             type="selection"
             field="criminalCautions"
-            :is-asked="'criminalCautions' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.criminalCautions">
@@ -62,7 +62,7 @@
               :edit="edit"
               :data-default="emptyObject(['details', 'date', 'title'])"
               field="criminalCautionDetails"
-              :is-asked="'criminalCautionDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -87,7 +87,7 @@
             :options="[true, false]"
             type="selection"
             field="fixedPenalties"
-            :is-asked="'fixedPenalties' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.fixedPenalties">
@@ -98,7 +98,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="fixedPenaltyDetails"
-              :is-asked="'fixedPenaltyDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -123,7 +123,7 @@
             :options="[true, false]"
             type="selection"
             field="drivingDisqualifications"
-            :is-asked="'drivingDisqualifications' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.drivingDisqualifications">
@@ -133,7 +133,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="drivingDisqualificationDetails"
-              :is-asked="'drivingDisqualificationDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -158,7 +158,7 @@
             :options="[true, false]"
             type="selection"
             field="recentDrivingConvictions"
-            :is-asked="'recentDrivingConvictions' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.recentDrivingConvictions">
@@ -168,7 +168,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="recentDrivingConvictionDetails"
-              :is-asked="'recentDrivingConvictionDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -193,7 +193,7 @@
             :options="[true, false]"
             type="selection"
             field="bankruptcies"
-            :is-asked="'bankruptcies' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.bankruptcies">
@@ -203,7 +203,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="bankruptcyDetails"
-              :is-asked="'bankruptcyDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -228,7 +228,7 @@
             :options="[true, false]"
             type="selection"
             field="ivas"
-            :is-asked="'ivas' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.ivas">
@@ -238,7 +238,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="ivaDetails"
-              :is-asked="'ivaDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -263,7 +263,7 @@
             :options="[true, false]"
             type="selection"
             field="lateTaxReturns"
-            :is-asked="'lateTaxReturns' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.lateTaxReturns">
@@ -273,7 +273,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="lateTaxReturnDetails"
-              :is-asked="'lateTaxReturnDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -298,7 +298,7 @@
             :options="[true, false]"
             type="selection"
             field="lateVatReturns"
-            :is-asked="'lateVatReturns' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.lateVatReturns">
@@ -308,7 +308,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="lateVatReturnDetails"
-              :is-asked="'lateVatReturnDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -333,7 +333,7 @@
             :options="[true, false]"
             type="selection"
             field="hmrcFines"
-            :is-asked="'hmrcFines' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.hmrcFines">
@@ -343,7 +343,7 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               field="hmrcFineDetails"
               :edit="edit"
-              :is-asked="'hmrcFineDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -368,7 +368,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfProfessionalMisconduct"
-            :is-asked="'subjectOfAllegationOrClaimOfProfessionalMisconduct' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfProfessionalMisconduct">
@@ -378,7 +378,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
-              :is-asked="'subjectOfAllegationOrClaimOfProfessionalMisconductDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -403,7 +403,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfNegligence"
-            :is-asked="'subjectOfAllegationOrClaimOfNegligence' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfNegligence">
@@ -413,7 +413,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfNegligenceDetails"
-              :is-asked="'subjectOfAllegationOrClaimOfNegligenceDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -438,7 +438,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfWrongfulDismissal"
-            :is-asked="'subjectOfAllegationOrClaimOfWrongfulDismissal' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfWrongfulDismissal">
@@ -448,7 +448,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
-              :is-asked="'subjectOfAllegationOrClaimOfWrongfulDismissalDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -473,7 +473,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfDiscriminationProceeding"
-            :is-asked="'subjectOfAllegationOrClaimOfDiscriminationProceeding' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfDiscriminationProceeding">
@@ -483,7 +483,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
-              :is-asked="'subjectOfAllegationOrClaimOfDiscriminationProceedingDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -508,7 +508,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfHarassmentProceeding"
-            :is-asked="'subjectOfAllegationOrClaimOfHarassmentProceeding' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfHarassmentProceeding">
@@ -518,7 +518,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
-              :is-asked="'subjectOfAllegationOrClaimOfHarassmentProceedingDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -543,7 +543,7 @@
             :options="[true, false]"
             type="selection"
             field="complaintOrDisciplinaryAction"
-            :is-asked="'complaintOrDisciplinaryAction' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.complaintOrDisciplinaryAction">
@@ -553,7 +553,7 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="complaintOrDisciplinaryActionDetails"
-              :is-asked="'complaintOrDisciplinaryActionDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -578,7 +578,7 @@
             :options="[true, false]"
             type="selection"
             field="requestedToResign"
-            :is-asked="'requestedToResign' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.requestedToResign">
@@ -588,7 +588,7 @@
               :data-default="emptyObject(['details', 'date' ])"
               :edit="edit"
               field="requestedToResignDetails"
-              :is-asked="'requestedToResignDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -613,7 +613,7 @@
             :options="[true, false]"
             type="selection"
             field="furtherInformation"
-            :is-asked="'furtherInformation' in formData"
+            :is-asked="isAsked"
             @change-field="changeCharacterFlag"
           />
           <div v-if="formData.furtherInformation">
@@ -623,7 +623,7 @@
               :data-default="emptyObject(['details', 'date'])"
               :edit="edit"
               field="furtherInformationDetails"
-              :is-asked="'furtherInformationDetails' in formData"
+              :is-asked="isAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
