@@ -73,6 +73,8 @@ export {
   unselectedApplicationParts,
   configuredApplicationParts,
   currentApplicationParts,
+  isApplicationPartAsked,
+  isCharacterChecksAsked,
   isMoreInformationNeeded,
   isApplicationComplete,
   hasApplicationProcess,
@@ -633,6 +635,27 @@ function currentApplicationParts(data) {
   }
   return [];
 }
+
+// check if application part is asked in current stage
+function isApplicationPartAsked(exercise, part) {
+  if (hasApplicationProcess(exercise)) {
+    const parts = applicationParts(exercise);
+    for (const key in parts) {
+      if (key === part && parts[key]) {
+        return true;
+      }
+    }
+    return false;
+  } else {
+    return true;
+  }
+}
+
+// check if character checks of application is sent
+function isCharacterChecksAsked(application) {
+  return application && application.characterChecks.status !== 'not requested';
+}
+
 // are there application parts in current stage (not registration)
 function isMoreInformationNeeded(exercise, application) {
   if (exercise._applicationContent && exercise._applicationContent._currentStep && exercise._applicationContent._currentStep.step) {
