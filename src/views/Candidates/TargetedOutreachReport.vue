@@ -102,10 +102,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import FullScreenButton from '@/components/Page/FullScreenButton';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import * as filters from '@/filters.js';
 
 export default {

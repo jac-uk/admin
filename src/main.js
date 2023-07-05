@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 
-import App from '@/App';
+import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 
@@ -77,16 +77,13 @@ auth.onAuthStateChanged(async (user) => {
     // Bind emitter for global events
     vueInstance.config.globalProperties.emitter = emitter;
 
-    // Root component
-    vueInstance.mount('#app');
-
     // Initialise Sentry
-    if (process.env.NODE_ENV !== 'development') {
+    if (import.meta.env.NODE_ENV !== 'development') {
       Sentry.init({
-        vueInstance,
+        app: vueInstance,
         dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
         environment: store.getters.appEnvironment.toLowerCase(),
-        release: process.env.PACKAGE_VERSION, // made available in vue.config.js
+        release: import.meta.env.PACKAGE_VERSION, // made available in vue.config.js
         integrations: [
           new Sentry.BrowserTracing({
             routingInstrumentation: Sentry.vueRouterInstrumentation(router),
@@ -94,5 +91,8 @@ auth.onAuthStateChanged(async (user) => {
         ],
       });
     }
+
+    // Root component
+    vueInstance.mount('#app');
   }
 });

@@ -193,10 +193,10 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import SetStatus from '@/components/ModalViews/SetStatus';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import SetStatus from '@/components/ModalViews/SetStatus.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 
 export default {
   name: 'ViewScore',

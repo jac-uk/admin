@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 
 export default {
   name: 'QTAdditionalInstruction',

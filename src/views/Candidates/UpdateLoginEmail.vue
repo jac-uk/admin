@@ -65,10 +65,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

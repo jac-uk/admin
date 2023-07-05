@@ -9,9 +9,9 @@
   </Modal>
 </template>
 <script>
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import Approval from '@/components/ModalViews/LateApplication/Approval';
-import ApprovalConfirmation from '@/components/ModalViews/LateApplication/ApprovalConfirmation';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import Approval from '@/components/ModalViews/LateApplication/Approval.vue';
+import ApprovalConfirmation from '@/components/ModalViews/LateApplication/ApprovalConfirmation.vue';
 import permissionMixin from '@/permissionMixin';
 export default {
   name: 'Messages',

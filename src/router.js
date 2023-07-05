@@ -7,150 +7,150 @@ import store from '@/store';
 
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 
-import EmptyRouterView from '@/components/EmptyRouterView';
+import EmptyRouterView from '@/components/EmptyRouterView.vue';
 
-import SignIn from '@/views/SignIn';
-import NotificationsList from '@/views/NotificationsList';
-import EventsList from '@/views/EventsList';
+import SignIn from '@/views/SignIn.vue';
+import NotificationsList from '@/views/NotificationsList.vue';
+import EventsList from '@/views/EventsList.vue';
 
 // Exercises
-import CreateExercise from '@/views/CreateExercise';
-import Exercises from '@/views/Exercises';
-import ExercisesExport from '@/views/ExercisesExport';
-import Exercise from '@/views/Exercise';
+import CreateExercise from '@/views/CreateExercise.vue';
+import Exercises from '@/views/Exercises.vue';
+import ExercisesExport from '@/views/ExercisesExport.vue';
+import Exercise from '@/views/Exercise.vue';
 
 // Exercise Dashboard
-import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard';
+import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard.vue';
 
 // Exercise details
-import ExerciseDetails from '@/views/Exercise/Details';
-import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview';
-import ExerciseDetailsEditName from '@/views/Exercise/Details/EditName';
-import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent/View';
-import ExerciseDetailsApplicationContentEdit from '@/views/Exercise/Details/ApplicationContent/Edit';
-import ExerciseDetailsAssessments from '@/views/Exercise/Details/Assessments/View';
-import ExerciseDetailsAssessmentsEdit from '@/views/Exercise/Details/Assessments/Edit';
-import ExerciseDetailsContacts from '@/views/Exercise/Details/Contacts/View';
-import ExerciseDetailsContactsEdit from '@/views/Exercise/Details/Contacts/Edit';
-import ExerciseDetailsDownloads from '@/views/Exercise/Details/Downloads/View';
-import ExerciseDetailsDownloadsEdit from '@/views/Exercise/Details/Downloads/Edit';
-import ExerciseDetailsEligibility from '@/views/Exercise/Details/Eligibility/View';
-import ExerciseDetailsEligibilityEdit from '@/views/Exercise/Details/Eligibility/Edit';
-import ExerciseDetailsInvitations from '@/views/Exercise/Details/Invitations/View';
-import ExerciseDetailsInvitationsEdit from '@/views/Exercise/Details/Invitations/Edit';
-import ExerciseDetailsShortlisting from '@/views/Exercise/Details/Shortlisting/View';
-import ExerciseDetailsShortlistingEdit from '@/views/Exercise/Details/Shortlisting/Edit';
-import ExerciseDetailsSummary from '@/views/Exercise/Details/Summary/View';
-import ExerciseDetailsSummaryEdit from '@/views/Exercise/Details/Summary/Edit';
-import ExerciseDetailsTimeline from '@/views/Exercise/Details/Timeline/View';
-import ExerciseDetailsTimelineEdit from '@/views/Exercise/Details/Timeline/Edit';
-import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View';
-import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit';
-import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View';
-import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit';
+import ExerciseDetails from '@/views/Exercise/Details.vue';
+import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview.vue';
+import ExerciseDetailsEditName from '@/views/Exercise/Details/EditName.vue';
+import ExerciseDetailsApplicationContent from '@/views/Exercise/Details/ApplicationContent/View.vue';
+import ExerciseDetailsApplicationContentEdit from '@/views/Exercise/Details/ApplicationContent/Edit.vue';
+import ExerciseDetailsAssessments from '@/views/Exercise/Details/Assessments/View.vue';
+import ExerciseDetailsAssessmentsEdit from '@/views/Exercise/Details/Assessments/Edit.vue';
+import ExerciseDetailsContacts from '@/views/Exercise/Details/Contacts/View.vue';
+import ExerciseDetailsContactsEdit from '@/views/Exercise/Details/Contacts/Edit.vue';
+import ExerciseDetailsDownloads from '@/views/Exercise/Details/Downloads/View.vue';
+import ExerciseDetailsDownloadsEdit from '@/views/Exercise/Details/Downloads/Edit.vue';
+import ExerciseDetailsEligibility from '@/views/Exercise/Details/Eligibility/View.vue';
+import ExerciseDetailsEligibilityEdit from '@/views/Exercise/Details/Eligibility/Edit.vue';
+import ExerciseDetailsInvitations from '@/views/Exercise/Details/Invitations/View.vue';
+import ExerciseDetailsInvitationsEdit from '@/views/Exercise/Details/Invitations/Edit.vue';
+import ExerciseDetailsShortlisting from '@/views/Exercise/Details/Shortlisting/View.vue';
+import ExerciseDetailsShortlistingEdit from '@/views/Exercise/Details/Shortlisting/Edit.vue';
+import ExerciseDetailsSummary from '@/views/Exercise/Details/Summary/View.vue';
+import ExerciseDetailsSummaryEdit from '@/views/Exercise/Details/Summary/Edit.vue';
+import ExerciseDetailsTimeline from '@/views/Exercise/Details/Timeline/View.vue';
+import ExerciseDetailsTimelineEdit from '@/views/Exercise/Details/Timeline/Edit.vue';
+import ExerciseDetailsVacancy from '@/views/Exercise/Details/Vacancy/View.vue';
+import ExerciseDetailsVacancyEdit from '@/views/Exercise/Details/Vacancy/Edit.vue';
+import ExerciseDetailsPreferences from '@/views/Exercise/Details/Preferences/View.vue';
+import ExerciseDetailsPreferencesEdit from '@/views/Exercise/Details/Preferences/Edit.vue';
 
 // Appplications
-import ExerciseApplications from '@/views/Exercise/Applications';
-import ExerciseApplicationsList from '@/views/Exercise/Applications/List';
-import ExerciseApplication from '@/views/Exercise/Applications/Application';
+import ExerciseApplications from '@/views/Exercise/Applications.vue';
+import ExerciseApplicationsList from '@/views/Exercise/Applications/List.vue';
+import ExerciseApplication from '@/views/Exercise/Applications/Application.vue';
 
 // Exercise reports
-import ExerciseReports from '@/views/Exercise/Reports';
-import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity';
-import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom';
-import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach';
-import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues';
-import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues';
-import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments';
-import ExerciseReportsQualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
-import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency';
-import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover';
-import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation';
-import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create';
-import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport';
-import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports';
-import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit';
-import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View';
-import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore';
-import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels';
-import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew';
-import ExerciseReportsPanelsView from '@/views/Exercise/Reports/PanelsView';
-import ExerciseReportsSift from '@/views/Exercise/Reports/Sift';
-import ExerciseReportsSelectionDays from '@/views/Exercise/Reports/SelectionDays';
-import ExerciseReportsScenario from '@/views/Exercise/Reports/Scenario';
+import ExerciseReports from '@/views/Exercise/Reports.vue';
+import ExerciseReportsDiversity from '@/views/Exercise/Reports/Diversity.vue';
+import ExerciseReportsCustom from '@/views/Exercise/Reports/Custom.vue';
+import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach.vue';
+import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues.vue';
+import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues.vue';
+import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments.vue';
+import ExerciseReportsQualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports.vue';
+import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency.vue';
+import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover.vue';
+import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation.vue';
+import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create.vue';
+import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport.vue';
+import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports.vue';
+import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit.vue';
+import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View.vue';
+import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore.vue';
+import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels.vue';
+import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew.vue';
+import ExerciseReportsPanelsView from '@/views/Exercise/Reports/PanelsView.vue';
+import ExerciseReportsSift from '@/views/Exercise/Reports/Sift.vue';
+import ExerciseReportsSelectionDays from '@/views/Exercise/Reports/SelectionDays.vue';
+import ExerciseReportsScenario from '@/views/Exercise/Reports/Scenario.vue';
 
 // Merit list
-import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList';
+import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList.vue';
 
 // Exercise tasks
-import ExerciseTasks from '@/views/Exercise/Tasks';
-// import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index';
-import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments';
-import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
-//import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit';
-import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover';
-import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest';
-import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New';
-import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard';
-import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit';
-import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View';
-import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder';
-import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun';
-import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review';
-import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses';
-import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response';
-import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View';
-import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover';
+import ExerciseTasks from '@/views/Exercise/Tasks.vue';
+// import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index.vue';
+import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments.vue';
+import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
+//import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit.vue';
+import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover.vue';
+import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest.vue';
+import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New.vue';
+import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard.vue';
+import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit.vue';
+import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View.vue';
+import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder.vue';
+import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun.vue';
+import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review.vue';
+import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses.vue';
+import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response.vue';
+import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View.vue';
+import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover.vue';
 // Exercise task
-import ExerciseTask from '@/views/Exercise/Tasks/Task';
-import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading';
-import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New';
-import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised';
-import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated';
-import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised';
-import ExerciseTaskTestActivated from '@/views/Exercise/Tasks/Task/TestActivated';
-import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsInitialised';
-import ExerciseTaskPanelsActivated from '@/views/Exercise/Tasks/Task/PanelsActivated';
-import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised';
-import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated';
-import ExerciseTaskStatusChanges from '@/views/Exercise/Tasks/Task/StatusChanges';
-import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised';
-import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List';
-import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View';
-import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed';
-import ExerciseTaskPanelNew from '@/views/Exercise/Tasks/Task/Panel/New';
-import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View';
+import ExerciseTask from '@/views/Exercise/Tasks/Task.vue';
+import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading.vue';
+import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New.vue';
+import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised.vue';
+import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated.vue';
+import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/TestInitialised.vue';
+import ExerciseTaskTestActivated from '@/views/Exercise/Tasks/Task/TestActivated.vue';
+import ExerciseTaskPanelsInitialised from '@/views/Exercise/Tasks/Task/PanelsInitialised.vue';
+import ExerciseTaskPanelsActivated from '@/views/Exercise/Tasks/Task/PanelsActivated.vue';
+import ExerciseTaskModerationInitialised from '@/views/Exercise/Tasks/Task/ModerationInitialised.vue';
+import ExerciseTaskModerationActivated from '@/views/Exercise/Tasks/Task/ModerationActivated.vue';
+import ExerciseTaskStatusChanges from '@/views/Exercise/Tasks/Task/StatusChanges.vue';
+import ExerciseTaskFinalised from '@/views/Exercise/Tasks/Task/Finalised.vue';
+import ExerciseTaskFinalisedList from '@/views/Exercise/Tasks/Task/Finalised/List.vue';
+import ExerciseTaskFinalisedViewScore from '@/views/Exercise/Tasks/Task/Finalised/View.vue';
+import ExerciseTaskCompleted from '@/views/Exercise/Tasks/Task/Completed.vue';
+import ExerciseTaskPanelNew from '@/views/Exercise/Tasks/Task/Panel/New.vue';
+import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View.vue';
 
 // Exercise stages
-import ExerciseStages from '@/views/Exercise/Stages';
-import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList';
-import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit';
-import ExerciseStagesSelectedList from '@/views/Exercise/Stages/SelectedList';
-import ExerciseStagesSelectedEdit from '@/views/Exercise/Stages/SelectedEdit';
-import ExerciseStagesSelectedBack from '@/views/Exercise/Stages/SelectedBack';
-import ExerciseStagesRecommendedList from '@/views/Exercise/Stages/RecommendedList';
-import ExerciseStagesRecommendedEdit from '@/views/Exercise/Stages/RecommendedEdit';
-import ExerciseStagesRecommendedBack from '@/views/Exercise/Stages/RecommendedBack';
-import ExerciseStagesHandoverList from '@/views/Exercise/Stages/HandoverList';
-import ExerciseStagesHandoverBack from '@/views/Exercise/Stages/HandoverBack';
-import ExerciseStagesShortlistedList from '@/views/Exercise/Stages/ShortlistedList';
-import ExerciseStagesShortlistedEdit from '@/views/Exercise/Stages/ShortlistedEdit';
-import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBack';
+import ExerciseStages from '@/views/Exercise/Stages.vue';
+import ExerciseStagesReviewList from '@/views/Exercise/Stages/ReviewList.vue';
+import ExerciseStagesReviewEdit from '@/views/Exercise/Stages/ReviewEdit.vue';
+import ExerciseStagesSelectedList from '@/views/Exercise/Stages/SelectedList.vue';
+import ExerciseStagesSelectedEdit from '@/views/Exercise/Stages/SelectedEdit.vue';
+import ExerciseStagesSelectedBack from '@/views/Exercise/Stages/SelectedBack.vue';
+import ExerciseStagesRecommendedList from '@/views/Exercise/Stages/RecommendedList.vue';
+import ExerciseStagesRecommendedEdit from '@/views/Exercise/Stages/RecommendedEdit.vue';
+import ExerciseStagesRecommendedBack from '@/views/Exercise/Stages/RecommendedBack.vue';
+import ExerciseStagesHandoverList from '@/views/Exercise/Stages/HandoverList.vue';
+import ExerciseStagesHandoverBack from '@/views/Exercise/Stages/HandoverBack.vue';
+import ExerciseStagesShortlistedList from '@/views/Exercise/Stages/ShortlistedList.vue';
+import ExerciseStagesShortlistedEdit from '@/views/Exercise/Stages/ShortlistedEdit.vue';
+import ExerciseStagesShortlistedBack from '@/views/Exercise/Stages/ShortlistedBack.vue';
 
 // Candidates
-import Candidates from '@/views/Candidates/Candidates';
-import CandidatesList from '@/views/Candidates/CandidatesList';
-import CandidatesView from '@/views/Candidates/CandidatesView';
-import TargetedOutreachReport from '@/views/Candidates/TargetedOutreachReport';
+import Candidates from '@/views/Candidates/Candidates.vue';
+import CandidatesList from '@/views/Candidates/CandidatesList.vue';
+import CandidatesView from '@/views/Candidates/CandidatesView.vue';
+import TargetedOutreachReport from '@/views/Candidates/TargetedOutreachReport.vue';
 
 // Error pages
-import ExerciseNotFound from '@/views/Errors/ExerciseNotFound';
-import PageNotFound from '@/views/Errors/PageNotFound';
+import ExerciseNotFound from '@/views/Errors/ExerciseNotFound.vue';
+import PageNotFound from '@/views/Errors/PageNotFound.vue';
 
-import Sandbox from '@/views/Sandbox';
+import Sandbox from '@/views/Sandbox.vue';
 
 // Users
-import Users from '@/views/Users/Users';
+import Users from '@/views/Users/Users.vue';
 
 const routes = [
   {

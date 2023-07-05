@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 
 export default {
   name: 'UploadAssessment',

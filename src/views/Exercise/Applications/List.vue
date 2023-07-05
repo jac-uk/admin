@@ -112,17 +112,17 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 import { isClosed } from '@/helpers/exerciseHelper';
-import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
-import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request.vue';
+import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'ApplicationsList',

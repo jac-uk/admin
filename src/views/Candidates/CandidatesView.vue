@@ -83,13 +83,13 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Notes from '@/components/Notes/Notes';
-import Applications from './Applications';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
-import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Notes from '@/components/Notes/Notes.vue';
+import Applications from './Applications.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity.vue';
+import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

@@ -48,7 +48,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 

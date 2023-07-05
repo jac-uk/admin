@@ -48,7 +48,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 
 export default {
   name: 'OverrideExercise',

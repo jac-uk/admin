@@ -147,10 +147,10 @@
 import { logEvent } from '@/helpers/logEvent';
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType.vue';
 import { ADVERT_TYPES } from '@/helpers/constants';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
@@ -209,6 +209,7 @@ export default {
 </script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+/*
 .govuk-summary-list__value,
 .govuk-summary-list__value:last-child,
 .govuk-summary-list__key {
@@ -216,6 +217,7 @@ export default {
     width: auto;
   }
 }
+*/
 .editable-field {
   display: flex;
   justify-content: space-between;
