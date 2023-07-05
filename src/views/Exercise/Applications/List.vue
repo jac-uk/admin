@@ -191,10 +191,29 @@ export default {
     async gatherReportData() {
       const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
       const reportData = [];
-      reportData.push(response.data.headers.map(header => header));
-      response.data.rows.forEach((row) => {
-        reportData.push(Object.values(row).map(cell => cell));
+      const { headers, rows } = response.data;
+
+      // Add headers as the first row
+      const headerRow = Object.values(headers);
+      reportData.push(headerRow);
+
+      // Iterate over each row and add data
+      rows.forEach((row) => {
+        const rowData = [];
+        for (const key in headers) {
+          if (row.hasOwnProperty(key)) {
+            if (row[key] !== '') {
+              rowData.push(row[key]);
+            } else {
+              rowData.push('No answer provided');
+            }
+          } else {
+            rowData.push('Question not asked');
+          }
+        }
+        reportData.push(rowData);
       });
+
       return reportData;
     },
     async sendApplicationReminders() {

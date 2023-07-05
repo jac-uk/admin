@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.108.0",
+  "version": "0.111.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode develop",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
-    "@jac-uk/jac-kit": "^0.1.23",
+    "@jac-uk/jac-kit": "^0.1.24",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.13.0",
     "@sentry/vue": "^7.13.0",
@@ -71,6 +71,7 @@
     "firebase-mock": "^2.3.2",
     "jest-canvas-mock": "^2.3.1",
     "jest-extended": "^0.11.5",
+    "path-browserify": "^1.0.1",
     "postcss": "8.2.15",
     "process": "^0.11.10",
     "sass": "^1.32.13",
