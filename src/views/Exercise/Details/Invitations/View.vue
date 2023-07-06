@@ -96,7 +96,6 @@ export default {
 </script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
-  /*
   .govuk-summary-list__value,
   .govuk-summary-list__value:last-child,
   .govuk-summary-list__key {
@@ -104,5 +103,4 @@ export default {
       width: auto;
     }
   }
-  */
 </style>
