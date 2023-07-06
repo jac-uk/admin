@@ -25,6 +25,37 @@
           Create
         </button>
         <h2>List of admin users</h2>
+
+        <div class="govuk-grid-row">
+          <div
+            class="govuk-grid-column-one-half"
+          >
+            <Search
+              placeholder="Search user name or email address"
+              @search="handleSearch"
+            />
+          </div>
+        </div>
+        <div class="govuk-grid-row">
+          <div
+            class="govuk-grid-column-full"
+            style="display: flex;"
+          >
+            <Checkbox
+              id="microsoft-login"
+              v-model="isMicrosoftLogin"
+            >
+              Microsoft login
+            </Checkbox>
+            <Checkbox
+              id="other-login"
+              v-model="isOtherLogin"
+            >
+              Other login
+            </Checkbox>
+          </div>
+        </div>
+
         <table class="govuk-table">
           <tr class="govuk-table__row">
             <th
@@ -46,7 +77,7 @@
             </th>
           </tr>
           <tr
-            v-for="(user, userIndex) in users"
+            v-for="(user, userIndex) in filteredUsers"
             :key="userIndex"
             class="govuk-table__row"
           >
@@ -361,6 +392,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Search from '@jac-uk/jac-kit/draftComponents/Search';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -372,6 +404,7 @@ export default {
     Modal,
     Checkbox,
     TextField,
+    Search,
   },
   mixins: [permissionMixin],
   data() {
@@ -390,6 +423,9 @@ export default {
       newUserEmail: '',
       newUserPassword: '',
       newUserRole: '',
+      searchTerm: '',
+      isMicrosoftLogin: false,
+      isOtherLogin: false,
     };
   },
   computed: {
@@ -427,6 +463,27 @@ export default {
         });
       }
       return rolesNav;
+    },
+    filteredUsers() {
+      let filteredUsers = this.users;
+      if (this.searchTerm) {
+        filteredUsers = this.users.filter((user) => {
+          return (user.displayName && user.displayName.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+            (user.email && user.email.toLowerCase().includes(this.searchTerm.toLowerCase()));
+        });
+      }
+      if (this.isMicrosoftLogin && !this.isOtherLogin) {
+        filteredUsers = filteredUsers.filter((user) => {
+          return user.providerData && user.providerData.some(provider => provider.providerId === 'microsoft.com');
+        });
+      }
+      if (!this.isMicrosoftLogin && this.isOtherLogin) {
+        filteredUsers = filteredUsers.filter((user) => {
+          return user.providerData && user.providerData.some(provider => provider.providerId !== 'microsoft.com');
+        });
+      }
+
+      return filteredUsers;
     },
   },
   mounted() {
@@ -623,6 +680,9 @@ export default {
       } else {
         return false;
       }
+    },
+    handleSearch(searchTerm) {
+      this.searchTerm = searchTerm;
     },
   },
 
