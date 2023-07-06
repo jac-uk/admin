@@ -429,9 +429,9 @@ export default {
       return rolesNav;
     },
   },
-  async mounted() {
-    await this.getUsers();
-    await this.getRoles();
+  mounted() {
+    this.getUsers();
+    this.getRoles();
   },
   updated() {
     const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
@@ -456,6 +456,15 @@ export default {
             };
           }
         }
+        this.users.sort((a, b) => {
+          // falsy value sort after anything else
+          if (!a.displayName) return 1;
+          if (!b.displayName) return -1;
+
+          if (a.displayName < b.displayName) return -1;
+          if (a.displayName > b.displayName) return 1;
+          return 0;
+        });
         this.loaded = true;
       } catch (e) {
         this.loadFailed = true;
