@@ -40,7 +40,7 @@
 <script>
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'CharacterChecksRequests',

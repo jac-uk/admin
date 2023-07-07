@@ -86,7 +86,7 @@
 <script>
 import { functions } from '@/firebase';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

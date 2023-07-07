@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 export default {
   name: 'NotesNew',
   components: {

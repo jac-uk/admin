@@ -371,17 +371,17 @@
 <script>
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
 import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';
 
 export default {
@@ -567,7 +567,7 @@ export default {
       return '';
     },
     onDevelop() {
-      return window.location.href.indexOf('admin-develop') > 0 || process.env.NODE_ENV === 'development';
+      return window.location.href.indexOf('admin-develop') > 0 || import.meta.env.NODE_ENV === 'development';
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;

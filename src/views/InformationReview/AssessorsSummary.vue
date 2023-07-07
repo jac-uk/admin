@@ -307,9 +307,9 @@
 </template>
 <script>
 import { hasLeadershipJudgeAssessment, hasIndependentAssessments } from '@/helpers/exerciseHelper';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange';
-import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import IndependentAssessorChange from '@/components/ModalViews/IndependentAssessorChange.vue';
+import LeadershipJudgeDetails from '@/components/ModalViews/LeadershipJudgeDetails.vue';
 
 export default {
   name: 'AssessorsSummary',

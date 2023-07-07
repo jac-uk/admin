@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import PanellistsForm from './components/AddEdit';
-import PanellistsView from './components/View';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import PanellistsForm from './components/AddEdit.vue';
+import PanellistsView from './components/View.vue';
 
 export default {
   components: {
