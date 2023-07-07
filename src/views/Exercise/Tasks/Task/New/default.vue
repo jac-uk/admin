@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
 
     <p
@@ -24,7 +24,7 @@
       id="entryStatus"
       v-model="formData.entryStatus"
     >
-      Only '{{ entryStatus | lookup }}' applications will be included
+      Only '{{ $filters.lookup(entryStatus) }}' applications will be included
     </Checkbox>
 
     <div
@@ -76,8 +76,8 @@
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { functions } from '@/firebase';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 

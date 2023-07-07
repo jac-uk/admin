@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import Form from '@/components/Page/Form.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 
 export default {
   name: 'SelectPanel',

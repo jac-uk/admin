@@ -437,17 +437,17 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
-import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 

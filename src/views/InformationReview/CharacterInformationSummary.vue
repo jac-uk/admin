@@ -22,7 +22,7 @@
           <CharacterInformationSummaryV2
             :form-data="characterInformation || {}"
             :edit="editable"
-            @changeInfo="changeCharacterInfo"
+            @change-info="changeCharacterInfo"
           />
         </div>
       </dl>
@@ -31,7 +31,7 @@
           <CharacterInformationSummaryV1
             :form-data="characterInformation || {}"
             :edit="editable"
-            @changeInfo="changeCharacterInfo"
+            @change-info="changeCharacterInfo"
           />
         </div>
       </dl>
@@ -65,6 +65,7 @@ export default {
       required: true,
     },
   },
+  emits: ['updateApplication'],
   computed: {
     isVersion2() {
       return this.version === 2;

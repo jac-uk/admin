@@ -32,7 +32,7 @@
                 @drop="onDrop"
               >
                 <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
-                  {{ state.ref | lookup }}
+                  {{ $filters.lookup(state.ref) }}
                 </h3>
                 <p class="govuk-body">
                   <Draggable
@@ -44,7 +44,7 @@
                     }"
                     class="display-inline govuk-!-margin-right-1"
                   >
-                    {{ part | lookup }}
+                    {{ $filters.lookup(part) }}
                   </Draggable>
                 </p>
               </Droppable>
@@ -68,7 +68,7 @@
                   }"
                   class="display-block govuk-!-margin-right-1"
                 >
-                  {{ part | lookup }}
+                  {{ $filters.lookup(part) }}
                 </Draggable>
               </p>
             </Droppable>
@@ -89,11 +89,11 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import Draggable from '@/components/DragAndDrop/Draggable';
-import Droppable from '@/components/DragAndDrop/Droppable';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import Draggable from '@/components/DragAndDrop/Draggable.vue';
+import Droppable from '@/components/DragAndDrop/Droppable.vue';
 import { applicationContentList, unselectedApplicationParts, exerciseApplicationParts, configuredApplicationParts, APPLICATION_STEPS } from '@/helpers/exerciseHelper';
 import clone from 'clone';
 import _set from 'lodash/set';

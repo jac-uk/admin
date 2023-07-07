@@ -16,7 +16,7 @@
             class="govuk-link"
             :to="{ name: `${routeNamePrefix}-report-view`, params: { qualifyingTestReportId: row.id } }"
           >
-            {{ row.title | showAlternative(row.id) }}
+            {{ $filters.showAlternative(row.title, row.id) }}
           </RouterLink>
         </TableCell>
       </template>
@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

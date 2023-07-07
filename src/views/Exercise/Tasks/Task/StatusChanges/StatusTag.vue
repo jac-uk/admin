@@ -2,7 +2,7 @@
   <strong
     class="govuk-tag"
     :class="cssClass"
-  >{{ status | lookup }}</strong>
+  >{{ $filters.lookup(status) }}</strong>
 </template>
 
 <script>

@@ -16,11 +16,13 @@
         >
           <a
             class="moj-sub-navigation__link"
-            :active="isActive"
-            :aria-current="isActive ? 'page' : false"
+            :active="isActive ? 'true' : 'false'"
+            :aria-current="isActive ? 'page' : 'false'"
             :href="href"
             @click="navigate"
-          >{{ page.title }}</a>
+          >
+            {{ page.title }}
+          </a>
         </router-link>
       </li>
     </ul>

@@ -152,7 +152,7 @@
               >
               <div class="govuk-grid-column-two-thirds">
                 <div class="issue">
-                  <span class="govuk-!-font-weight-bold">{{ issue.type | lookup }}:</span> {{ issue.summary }}
+                  <span class="govuk-!-font-weight-bold">{{ $filters.lookup(issue.type) }}:</span> {{ issue.summary }}
                 </div>
                 <div
                   v-if="issue.comments"
@@ -172,14 +172,14 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'EligibilityIssues',
@@ -207,7 +207,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

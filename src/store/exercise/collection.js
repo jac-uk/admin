@@ -65,7 +65,7 @@ export default {
     storeItems: (context, { items }) => {
       context.commit('setSelectedItems', items);
     },
-    unarchive: async ({ commit, state }) => {
+    unarchive: async ({ commit, state, dispatch }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -84,8 +84,9 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
+      dispatch('bind');
     },
-    archive: async ({ commit, state }) => {
+    archive: async ({ commit, state, dispatch }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -104,6 +105,7 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
+      dispatch('bind');
     },
     getLocalById({ state }, id) {
       // Check if the local records have the id and return the record, ie does not hit the db

@@ -62,6 +62,7 @@ export default {
       type: Array,
     },
   },
+  emits: ['close', 'confirmed', 'selected'],
   data() {
     return {
       panelList: null,

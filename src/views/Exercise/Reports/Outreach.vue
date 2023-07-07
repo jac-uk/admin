@@ -11,7 +11,7 @@
             v-if="report"
             class="govuk-body govuk-!-font-size-14"
           >
-            {{ report.createdAt | formatDate('longdatetime') }}
+            {{ $filters.formatDate(report.createdAt, 'longdatetime') }}
           </span>
         </div>
         <div
@@ -65,7 +65,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ report.totalApplications | formatNumber }}
+              {{ $filters.formatNumber(report.totalApplications) }}
             </h2>
           </div>
         </div>
@@ -73,7 +73,7 @@
           <div class="panel govuk-!-margin-bottom-9">
             <span class="govuk-caption-m">Type of exercise</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ exercise.typeOfExercise | lookup }}
+              {{ $filters.lookup(exercise.typeOfExercise) }}
             </h2>
           </div>
         </div>
@@ -87,11 +87,10 @@
     >
       <TabsList
         v-if="showTabs"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
-
       <h3 class="govuk-heading-m">
         {{ activeTabTitle }}
       </h3>
@@ -133,7 +132,7 @@
                 scope="col"
                 class="govuk-table__header"
               >
-                {{ key | lookup }}
+                {{ $filters.lookup(key) }}
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="answer" />
@@ -150,8 +149,8 @@
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Stat from '@/components/Report/Stat';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -219,7 +218,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

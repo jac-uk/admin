@@ -25,14 +25,14 @@
             :edit="editable"
             type="selection"
             :options="[true, false]"
-            @changeField="changePreferences"
+            @change-field="changePreferences"
           />
           <InformationReviewRenderer
             :data="application.partTimeWorkingPreferencesDetails"
             field="partTimeWorkingPreferencesDetails"
             :edit="editable"
             type="text"
-            @changeField="changePreferences"
+            @change-field="changePreferences"
           />
         </dd>
       </dl>
@@ -63,7 +63,7 @@
             :edit="editable"
             :options="exercise.locationQuestionAnswers.map(item => item.answer)"
             type="selection"
-            @changeField="changePreferences"
+            @change-field="changePreferences"
           />
         </dd>
         <dd
@@ -76,7 +76,7 @@
             :edit="editable"
             :options="exercise.locationQuestionAnswers.map(item => item.answer)"
             type="multi-selection"
-            @changeField="changePreferences"
+            @change-field="changePreferences"
           />
         </dd>
         <dd
@@ -92,7 +92,7 @@
               :edit="editable"
               :options="exercise.locationQuestionAnswers.map(item => item.answer)"
               type="ranked-selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </div>
         </dd>
@@ -124,7 +124,7 @@
               :edit="editable"
               :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
               type="selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </dd>
           <dd
@@ -137,7 +137,7 @@
               :edit="editable"
               :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
               type="multi-selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </dd>
           <dd
@@ -153,7 +153,7 @@
                 :edit="editable"
                 :options="exercise.jurisdictionQuestionAnswers.map(item => item.answer)"
                 type="ranked-selection"
-                @changeField="changePreferences"
+                @change-field="changePreferences"
               />
             </div>
           </dd>
@@ -187,7 +187,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </dd>
         </div>
@@ -208,7 +208,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </dd>
         </div>
@@ -228,7 +228,7 @@
               :edit="editable"
               :options="[false, 'read', 'write', 'both']"
               type="selection"
-              @changeField="changePreferences"
+              @change-field="changePreferences"
             />
           </dd>
         </div>
@@ -255,7 +255,7 @@
             <dt class="govuk-summary-list__key widerColumn">
               {{ exercise.additionalWorkingPreferences[index].question }}
               <span class="govuk-body govuk-!-font-size-19">
-                ({{ exercise.additionalWorkingPreferences[index].questionType | lookup }})
+                ({{ $filters.lookup(exercise.additionalWorkingPreferences[index].questionType) }})
               </span>
             </dt>
 
@@ -270,7 +270,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="selection"
-                @changeField="changePreferences"
+                @change-field="changePreferences"
               />
             </dd>
 
@@ -285,7 +285,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="multi-selection"
-                @changeField="changePreferences"
+                @change-field="changePreferences"
               />
             </dd>
 
@@ -300,7 +300,7 @@
                 :edit="editable"
                 :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
                 type="ranked-selection"
-                @changeField="changePreferences"
+                @change-field="changePreferences"
               />
             </dd>
           </div>
@@ -319,7 +319,7 @@
   </div>
 </template>
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 
 export default {
@@ -349,6 +349,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   computed: {
     applicationId() {
       return this.$route.params.applicationId;

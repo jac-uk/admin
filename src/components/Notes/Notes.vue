@@ -5,12 +5,12 @@
     <NotesNew
       v-if="isNew || isUpdate"
       :note="noteSelectedObj"
-      @changeAction="changeAction"
+      @change-action="changeAction"
     />
     <NotesDelete
       v-if="isDelete"
       :note="noteSelectedObj"
-      @changeAction="changeAction"
+      @change-action="changeAction"
     />
     <div v-if="isList">
       <h2
@@ -36,17 +36,17 @@
       <NotesList
         v-else
         :notes="notesList"
-        @deleteNote="deleteNoteAction"
-        @editNote="editNoteAction"
+        @delete-note="deleteNoteAction"
+        @edit-note="editNoteAction"
       />
     </div>
   </div>
 </template>
 
 <script>
-import NotesNew from '@/components/Notes/NotesNew';
-import NotesList from '@/components/Notes/NotesList';
-import NotesDelete from '@/components/Notes/NotesDelete';
+import NotesNew from '@/components/Notes/NotesNew.vue';
+import NotesList from '@/components/Notes/NotesList.vue';
+import NotesDelete from '@/components/Notes/NotesDelete.vue';
 
 const STEPS = {
   list: 'list',

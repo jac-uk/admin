@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'LeadJudge',

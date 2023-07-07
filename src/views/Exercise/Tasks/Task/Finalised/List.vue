@@ -1,6 +1,6 @@
 <template>
   <div>
-    Ranked by {{ scoreType | lookup }}
+    Ranked by {{ $filters.lookup(scoreType) }}
     <Table
       data-key="score"
       :data="scores"
@@ -19,20 +19,20 @@
             :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: row.score } }"
             class="govuk-link"
           >
-            {{ row.score | formatNumber(2) }}
+            {{ $filters.formatNumber(row.score, 2) }}
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[3].title">
-          {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          {{ $filters.formatNumber(100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)), 2) }}%
         </TableCell>
         <TableCell :title="tableColumns[4].title">
-          {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          {{ $filters.formatNumber(100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)), 2) }}%
         </TableCell>
         <TableCell :title="tableColumns[5].title">
-          {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          {{ $filters.formatNumber(100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)), 2) }}%
         </TableCell>
         <TableCell :title="tableColumns[6].title">
-          {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
+          {{ $filters.formatNumber(100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)), 2) }}%
         </TableCell>
         <TableCell :title="tableColumns[7].title">
           <div
@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
   components: {

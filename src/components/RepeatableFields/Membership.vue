@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import { slugify } from '@jac-uk/jac-kit/filters/filters';
 
 export default {
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     updateValue(value) {
-      // @TODO when we move lookup to db, we should add these to lookup
+      // @todo when we move lookup to db, we should add these to lookup
       this.row.value = slugify(value);
     },
   },

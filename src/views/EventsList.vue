@@ -11,8 +11,8 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
 
     <Table
@@ -25,7 +25,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp , 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}
@@ -53,7 +53,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}
@@ -81,7 +81,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.timestamp | formatDate('datetime') }}
+          {{ $filters.formatDate(row.timestamp, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.user ? row.user.name : null }}
@@ -104,10 +104,10 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
 

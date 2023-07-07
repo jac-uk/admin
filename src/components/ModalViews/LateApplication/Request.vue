@@ -54,9 +54,9 @@
   </div>
 </template>
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import { checkNested } from '@/helpersTMP/object';
 import ExtendedError from '@/errors/extendedError';
 export default {
@@ -66,6 +66,7 @@ export default {
     ErrorSummary,
   },
   extends: Form,
+  emits: ['close', 'success'],
   data() {
     return {
       formData: {
@@ -103,7 +104,7 @@ export default {
       return false;
     },
   },
-  destroyed() {
+  unmounted() {
     this.reset();
   },
   methods: {

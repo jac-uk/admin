@@ -32,7 +32,7 @@
               :edit="editable"
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -50,7 +50,7 @@
               :data="personalDetails.firstName || ''"
               type="route"
               field="firstName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -67,7 +67,7 @@
               :application-id="userId"
               :data="personalDetails.middleNames || ''"
               field="middleNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -85,7 +85,7 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -102,7 +102,7 @@
               :application-id="userId"
               :data="personalDetails.suffix || ''"
               field="suffix"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -119,7 +119,7 @@
               :application-id="userId"
               :data="personalDetails.previousNames || ''"
               field="previousNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -136,7 +136,7 @@
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
               field="professionalName"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -167,7 +167,7 @@
               :application-id="userId"
               :data="personalDetails.otherNames || ''"
               field="otherNames"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -185,7 +185,7 @@
               :data="hasPersonalDetails ? personalDetails.email : ''"
               type="email"
               field="email"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -202,7 +202,7 @@
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               type="tel"
               field="phone"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -219,7 +219,7 @@
               :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
               type="date"
               field="dateOfBirth"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -236,7 +236,7 @@
               :application-id="userId"
               :data="personalDetails.placeOfBirth || ''"
               field="placeOfBirth"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -250,9 +250,9 @@
           <dd class="govuk-summary-list__value">
             <InformationReviewRenderer
               :edit="editable"
-              :data="(hasPersonalDetails ? personalDetails.nationalInsuranceNumber: '') | formatNIN "
+              :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -272,13 +272,13 @@
                 v-if="editable"
                 class="govuk-hint govuk-!-margin-1"
               >
-                {{ key | lookup }}
+                {{ $filters.lookup(key) }}
               </h5>
               <InformationReviewRenderer
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
-                @changeField="changeCurrentAddress"
+                @change-field="changeCurrentAddress"
               />
             </div>
           </dd>
@@ -297,7 +297,7 @@
               type="selection"
               :data="currentMoreThan5Years"
               field="currentMoreThan5Years"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -314,9 +314,9 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </dd>
         </div>
@@ -334,7 +334,7 @@
               :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
               type="selection"
               field="citizenship"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -353,7 +353,7 @@
               :options="[true, false]"
               type="selection"
               field="reasonableAdjustments"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -376,7 +376,7 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
               field="reasonableAdjustmentsDetails"
-              @changeField="changeUserDetails"
+              @change-field="changeUserDetails"
             />
           </dd>
         </div>
@@ -406,7 +406,7 @@
                 :edit="editable"
                 :data="VATNumber"
                 field="VATNumber"
-                @changeField="(obj) => changeVATNumber(index, obj)"
+                @change-field="(obj) => changeVATNumber(index, obj)"
               />
             </div>
             <button
@@ -425,8 +425,8 @@
 
 <script>
 import { cloneDeep } from 'lodash';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
 
 export default {
   name: 'PersonalDetailsSummary',
@@ -456,6 +456,7 @@ export default {
       default: false,
     },
   },
+  emits: ['update'],
   data() {
     const emptyAddressObject = {
       street: '',

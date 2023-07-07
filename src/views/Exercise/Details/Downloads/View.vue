@@ -254,7 +254,7 @@
 </template>
 
 <script>
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import { mapState } from 'vuex';
 import { isEditable, hasIndependentAssessments } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
