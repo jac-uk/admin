@@ -28,7 +28,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      plugins: [inject({ Buffer: ['Buffer', 'Buffer'], process: 'process' })],
+      plugins: [inject({ Buffer: ['buffer', 'Buffer'], process: 'process' })],
     },
   },
   server: {
