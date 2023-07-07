@@ -20,8 +20,8 @@
     "test": "vite test:unit",
     "test:unit": "vite test:unit",
     "test-ci": "vite test:unit --ci --runInBand --silent --forceExit",
-    "lint": "vite lint",
-    "lint-ci": "vite lint --no-fix"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^36.0.1",
@@ -32,6 +32,7 @@
     "@sentry/tracing": "^7.37.2",
     "@sentry/vue": "^7.37.2",
     "@vitejs/plugin-vue": "^1.6.1",
+    "@vue/compat": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "buffer": "^6.0.3",
     "chart.js": "^4.2.1",
@@ -43,7 +44,6 @@
     "save-file": "^2.3.1",
     "stream-browserify": "^3.0.0",
     "vite": "^2.5.4",
-    "@vue/compat": "^3.1.0",
     "vue": "^3.1.0",
     "vue-chartjs": "^5.2.0",
     "vue-dompurify-html": "^3.1.2",
@@ -68,6 +68,7 @@
     "process": "^0.11.10",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
+    "vite-plugin-eslint": "^1.8.1",
     "webpack": "^5.74.0"
   },
   "engines": {
