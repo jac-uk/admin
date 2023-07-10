@@ -44,10 +44,10 @@
 
 <script>
 import firebase from '@firebase/app';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 
 export default {
   name: 'PanelsNew',

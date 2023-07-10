@@ -28,7 +28,7 @@
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
+              @change-field="changeAssessmentInfo"
             />
             <div
               v-if="hasAscAnswers(index)"
@@ -46,7 +46,7 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
-                @changeField="changeAssessmentInfo"
+                @change-field="changeAssessmentInfo"
               />
             </div>
           </dd>
@@ -231,9 +231,9 @@ import {
   hasCoveringLetter,
   hasSelfAssessment
 } from '@/helpers/exerciseHelper';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 
 export default {
   name: 'AssessmentsSummary',
@@ -259,6 +259,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       assessorDetails: {},

@@ -23,7 +23,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.charteredAssociationBuildingEngineersDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.charteredAssociationBuildingEngineersDate) }}</li>
               <li>{{ application.charteredAssociationBuildingEngineersNumber }}</li>
               <li>{{ application.charteredAssociationBuildingEngineersStatus }}</li>
             </ul>
@@ -39,7 +39,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.charteredInstituteBuildingDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.charteredInstituteBuildingDate) }}</li>
               <li>{{ application.charteredInstituteBuildingNumber }}</li>
               <li>{{ application.charteredInstituteBuildingStatus }}</li>
             </ul>
@@ -55,7 +55,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.charteredInstituteEnvironmentalHealthDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.charteredInstituteEnvironmentalHealthDate) }}</li>
               <li>{{ application.charteredInstituteEnvironmentalHealthNumber }}</li>
               <li>{{ application.charteredInstituteEnvironmentalHealthStatus }}</li>
             </ul>
@@ -71,7 +71,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.generalMedicalCouncilDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.generalMedicalCouncilDate) }}</li>
               <li>{{ application.generalMedicalCouncilNumber }}</li>
               <li>{{ application.generalMedicalCouncilStatus }}</li>
             </ul>
@@ -87,7 +87,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.royalCollegeOfPsychiatristsDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.royalCollegeOfPsychiatristsDate) }}</li>
               <li>{{ application.royalCollegeOfPsychiatristsNumber }}</li>
               <li>{{ application.royalCollegeOfPsychiatristsStatus }}</li>
             </ul>
@@ -103,7 +103,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.royalInstitutionCharteredSurveyorsDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.royalInstitutionCharteredSurveyorsDate) }}</li>
               <li>{{ application.royalInstitutionCharteredSurveyorsNumber }}</li>
               <li>{{ application.royalInstitutionCharteredSurveyorsStatus }}</li>
             </ul>
@@ -119,7 +119,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.royalInstituteBritishArchitectsDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.royalInstituteBritishArchitectsDate) }}</li>
               <li>{{ application.royalInstituteBritishArchitectsNumber }}</li>
               <li>{{ application.royalInstituteBritishArchitectsStatus }}</li>
             </ul>
@@ -135,7 +135,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ application.otherProfessionalMembershipsDate | formatDate }}</li>
+              <li>{{ $filters.formatDate(application.otherProfessionalMembershipsDate) }}</li>
               <li>{{ application.otherProfessionalMembershipsNumber }}</li>
               <li>{{ application.otherProfessionalMembershipsStatus }}</li>
             </ul>
@@ -152,7 +152,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <ul class="govuk-list">
-              <li>{{ membership.date | formatDate }}</li>
+              <li>{{ $filters.formatDate(membership.date) }}</li>
               <li>{{ membership.number }}</li>
               <li>{{ membership.status }}</li>
             </ul>

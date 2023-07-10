@@ -4,13 +4,13 @@
       v-if="start"
       class="govuk-body-s"
     >
-      First started: {{ start | formatDate('datetime') }}
+      First started: {{ $filters.formatDate(start, 'datetime') }}
     </p>
     <p
       v-if="end"
       class="govuk-body-s"
     >
-      Last updated: {{ end | formatDate('datetime') }}
+      Last updated: {{ $filters.formatDate(end, 'datetime') }}
     </p>
   </div>
 </template>

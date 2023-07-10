@@ -24,7 +24,7 @@
                 :key="exerciseAdvertType"
                 :value="exerciseAdvertType"
               >
-                {{ exerciseAdvertType | lookup }}
+                {{ $filters.lookup(exerciseAdvertType) }}
               </option>
             </Select>
           </fieldset>
@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
 
@@ -67,6 +67,7 @@ export default {
       default: ADVERT_TYPES.FULL,
     },
   },
+  emits: ['close', 'confirmed'],
   data() {
     const exercise = this.$store.state.exerciseDocument.record;
     return {

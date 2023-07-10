@@ -61,6 +61,7 @@
           label="Exercise name"
           required
         />
+
         <RadioGroup
           id="is-more-info-needed"
           v-model="addMoreInfo"

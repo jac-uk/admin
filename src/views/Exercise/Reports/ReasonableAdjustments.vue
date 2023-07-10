@@ -45,7 +45,7 @@
             Total applications
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.totalApplications | formatNumber }}
+            {{ $filters.formatNumber(report.totalApplications) }}
           </h2>
         </div>
       </div>
@@ -55,7 +55,7 @@
             Reasonable adjustments requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ report.rows.length | formatNumber }}
+            {{ $filters.formatNumber(report.rows.length) }}
           </h2>
         </div>
       </div>
@@ -118,7 +118,7 @@
               :key="item"
               :value="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </option>
           </Select>
         </div>
@@ -137,7 +137,7 @@
             :key="status"
             :value="status"
           >
-            {{ status | lookup }}
+            {{ $filters.lookup(status) }}
           </option>
         </Select>
       </div>
@@ -172,7 +172,7 @@
                 </div>
                 <div class="govuk-grid-column-one-third text-right">
                   <RouterLink
-                    :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' } }"
+                    :to="{name: 'exercise-application', params: { applicationId: row.id }, query: { tab: 'issues' } }"
                     class="govuk-link print-none"
                     target="_blank"
                   >
@@ -206,7 +206,7 @@
                         :key="status"
                         :value="status"
                       >
-                        {{ status | lookup }}
+                        {{ $filters.lookup(status) }}
                       </option>
                     </Select>
                   </div>
@@ -225,7 +225,7 @@
                         :key="reason"
                         :value="reason"
                       >
-                        {{ reason | lookup }}
+                        {{ $filters.lookup(reason) }}
                       </option>
                     </Select>
                     <TextareaInput
@@ -306,28 +306,28 @@
                           class="govuk-heading-s"
                           style="flex-basis: 200px;"
                         >
-                          Status: 
+                          Status:
                           <span
                             v-if="reasonableAdjustmentsState.status"
                             class="govuk-body"
                           >
-                            {{ reasonableAdjustmentsState.status | lookup }}
+                            {{ $filters.lookup(reasonableAdjustmentsState.status) }}
                           </span>
                         </span>
                         <span
                           class="govuk-heading-s"
                           style="flex-basis: 220px;"
                         >
-                          Reason: 
+                          Reason:
                           <span
                             v-if="reasonableAdjustmentsState.reason"
                             class="govuk-body"
                           >
-                            {{ reasonableAdjustmentsState.reason | lookup }}
+                            {{ $filters.lookup(reasonableAdjustmentsState.reason) }}
                           </span>
                         </span>
                         <span class="govuk-heading-s">
-                          Note: 
+                          Note:
                           <span
                             v-if="reasonableAdjustmentsState.note"
                             class="govuk-body"
@@ -351,12 +351,12 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
@@ -438,7 +438,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

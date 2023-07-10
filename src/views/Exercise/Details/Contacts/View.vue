@@ -106,7 +106,7 @@
               v-for="item in exercise.appropriateAuthority"
               :key="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </li>
           </ul>
         </dd>

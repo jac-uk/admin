@@ -350,13 +350,13 @@
 </template>
 <script>
 import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
-import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import SelectionDay from '@/components/RepeatableFields/SelectionDay';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
+import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import SelectionDay from '@/components/RepeatableFields/SelectionDay.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { formatDate } from '@/helpersTMP/date';
 
 export default {

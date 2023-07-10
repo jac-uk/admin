@@ -48,13 +48,14 @@
 
 <script>
 import { mapState } from 'vuex';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 
 export default {
   name: 'OverrideExercise',
   components: {
     Select,
   },
+  emits: ['close', 'confirmed'],
   data() {
     return {
       referenceNumber: '',
@@ -69,7 +70,7 @@ export default {
   mounted() {
     this.$store.dispatch('exerciseCollection/bindDraft');
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('exerciseCollection/unbindDraft');
   },
   methods: {

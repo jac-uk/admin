@@ -66,7 +66,7 @@ export {
   isApplyingForWelshPost,
   currentState,
   applicationContentList,
-  exerciseApplicationParts, // TODO review naming of applicationParts methods :)
+  exerciseApplicationParts, // @todo review naming of applicationParts methods :)
   applicationPartsMap,
   applicationParts,
   selectedApplicationParts,

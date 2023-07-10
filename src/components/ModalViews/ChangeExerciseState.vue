@@ -24,7 +24,7 @@
                 :key="exerciseState"
                 :value="exerciseState"
               >
-                {{ exerciseState | lookup }}
+                {{ $filters.lookup(exerciseState) }}
               </option>
             </Select>
           </fieldset>
@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseStates } from '@/helpers/exerciseHelper';
 
 export default {
@@ -65,6 +65,7 @@ export default {
       required: true,
     },
   },
+  emits: ['close', 'confirmed'],
   data() {
     const exercise = this.$store.state.exerciseDocument.record;
     return {

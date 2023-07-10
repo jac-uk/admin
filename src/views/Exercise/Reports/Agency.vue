@@ -41,8 +41,8 @@
       </div>
 
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       >
         <div
           class="govuk-grid-column-full"
@@ -103,13 +103,13 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.dateOfBirth | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.dateOfBirth, 'long') }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.placeOfBirth }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.nationalInsuranceNumber | formatNIN }}
+                    {{ $filters.formatNIN(candidate.nationalInsuranceNumber) }}
                   </td>
                 </tr>
               </tbody>
@@ -162,7 +162,7 @@
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
-                    {{ candidate.sraDate | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.sraDate, 'long') }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.sraNumber }}
@@ -221,7 +221,7 @@
                     v-if="candidate.bsbDate"
                     class="govuk-table__cell"
                   >
-                    {{ candidate.bsbDate | formatDate('long') }}
+                    {{ $filters.formatDate(candidate.bsbDate, 'long') }}
                   </td>
                   <td
                     v-else
@@ -471,8 +471,8 @@ import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -555,7 +555,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

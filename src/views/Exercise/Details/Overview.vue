@@ -14,7 +14,7 @@
           Immediate start (S87)
           <span
             class="display-block govuk-heading-l govuk-!-margin-top-1"
-          >{{ exercise.immediateStart | formatNumber }}</span>
+          >{{ $filters.formatNumber(exercise.immediateStart) }}</span>
         </p>
       </div>
 
@@ -32,13 +32,13 @@
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Draft
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ draftApplications | formatNumber }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(draftApplications) }}</span>
             </p>
           </div>
           <div class="govuk-grid-column-one-half">
             <p class="govuk-body">
               Applied
-              <span class="govuk-heading-l govuk-!-margin-top-1">{{ appliedApplications | formatNumber }}</span>
+              <span class="govuk-heading-l govuk-!-margin-top-1">{{ $filters.formatNumber(appliedApplications) }}</span>
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@
             <th class="govuk-table__header">
               <router-link
                 class="govuk-link"
-                :to="{name: task.id, params: { referrer: 'exercise-show-overview' }}"
+                :to="{name: task.id, query: { referrer: 'exercise-show-overview' }}"
               >
                 {{ task.title }}
               </router-link>
@@ -194,13 +194,13 @@
 </template>
 
 <script>
-import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline.vue';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { lookup } from '@/filters';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';

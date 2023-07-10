@@ -86,7 +86,7 @@
             :key="exerciseAdvertType"
             :value="exerciseAdvertType"
           >
-            {{ exerciseAdvertType | lookup }}
+            {{ $filters.lookup(exerciseAdvertType) }}
           </option>
         </Select>
 
@@ -116,16 +116,16 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
@@ -151,8 +151,8 @@ export default {
       estimatedLaunchDate: null,
       inviteOnly: false,
       welshPosts: false,
-      roleSummary: null,
-      roleSummaryWelsh: null,
+      roleSummary: '',
+      roleSummaryWelsh: '',
       subscriberAlertsUrl: null,
       advertType: ADVERT_TYPES.FULL,
     };
