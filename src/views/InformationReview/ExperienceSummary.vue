@@ -386,8 +386,8 @@
   </div>
 </template>
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
 import { isNonLegal, isLegal, isApplicationPartAsked } from '@/helpers/exerciseHelper';
 
 export default {
