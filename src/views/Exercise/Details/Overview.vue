@@ -105,7 +105,6 @@
 
       <button
         v-if="canUpdateExercises && isDraft"
-        :disabled="!isReadyToSubmit"
         class="govuk-button govuk-!-margin-right-3"
         @click="openApprovalModal"
       >
@@ -347,24 +346,13 @@ export default {
           data.push({ title: 'Working preferences', id: 'exercise-details-preferences', done: this.exerciseProgress.workingPreferences, approved: this.approvalProgress['workingPreferences'] });
           data.push({ title: 'Assessment options', id: 'exercise-details-assessments', done: this.exerciseProgress.assessmentOptions, approved: this.approvalProgress['assessmentOptions'] });
           data.push({ title: 'Exercise downloads', id: 'exercise-details-downloads', done: this.exerciseProgress.downloads, approved: this.approvalProgress['downloads'] });
+          data.push({ title: 'Application process', id: 'exercise-details-application-content', done: this.exerciseProgress.applicationProcess, approved: this.approvalProgress['applicationProcess'] });
           if (this.exercise.inviteOnly) {
             data.splice(1, 0, { title: 'Exercise invitations', id: 'exercise-details-invitations' , done: this.exerciseProgress.invitations, approved: this.approvalProgress['invitations'] });
           }
         }
       }
       return data;
-    },
-    isReadyToSubmit() {
-      return this.exerciseProgress
-        && this.exerciseProgress.vacancySummary
-        && this.exerciseProgress.vacancyInformation
-        && this.exerciseProgress.contacts
-        && this.exerciseProgress.timeline
-        && this.exerciseProgress.shortlisting
-        && this.exerciseProgress.eligibility
-        && this.exerciseProgress.workingPreferences
-        && this.exerciseProgress.assessmentOptions
-        && this.exerciseProgress.downloads;
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
