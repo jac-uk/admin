@@ -10,7 +10,6 @@ import { auth, functions } from '@/firebase';
 import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
-import CKEditor from '@ckeditor/ckeditor5-vue';
 import * as Sentry from '@sentry/vue';
 
 import './styles/main.scss';
@@ -68,7 +67,6 @@ auth.onAuthStateChanged(async (user) => {
     vueInstance = createApp(App)
       .use(router)
       .use(store)
-      .use(CKEditor)
       .use(VueDOMPurifyHTML);
 
     // Bind global filters before mounting

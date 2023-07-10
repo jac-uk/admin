@@ -151,8 +151,8 @@ export default {
       estimatedLaunchDate: null,
       inviteOnly: false,
       welshPosts: false,
-      roleSummary: null,
-      roleSummaryWelsh: null,
+      roleSummary: '',
+      roleSummaryWelsh: '',
       subscriberAlertsUrl: null,
       advertType: ADVERT_TYPES.FULL,
     };
