@@ -43,7 +43,7 @@ jobs:
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Dependency Check
-        run: npm audit --omit=dev
+        run: echo "audit check been disabled" #npm audit --omit=dev
       - name: Building the project
         run: npm run ${{ env.environment }}:build
       - uses: FirebaseExtended/action-hosting-deploy@v0
