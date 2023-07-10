@@ -11,9 +11,24 @@
           Please make the information page and application form (if relevant) has been cleared by the following bodies before submitting for approval.
         </p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>JAC Policy and Diversity Teams</li>
-          <li>JAC Digital Team</li>
-          <li>The Head of Operations and Digital</li>
+          <CheckboxGroup
+            id="approval-checklist"
+            v-model="approvalChecklist"
+            hint="Select all that apply."
+          >
+            <CheckboxItem
+              value="policy-and-viversity-teams"
+              label="JAC Policy and Diversity Teams"
+            />
+            <CheckboxItem
+              value="jac-digital-teams"
+              label="JAC Digital Team"
+            />
+            <CheckboxItem
+              value="ops-and-digital"
+              label="The Head of Operations and Digital"
+            />
+          </CheckboxGroup>
         </ul>
         <button
           type="button"
@@ -25,6 +40,7 @@
         <button
           type="button"
           class="govuk-button"
+          :disabled="!isReadyForApproval"
           @click="confirmModal"
         >
           Submit for Approval
@@ -34,9 +50,25 @@
   </div>
 </template>
 <script>
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
 export default {
   name: 'ExercisePreApprovalTaskList',
+  components: {
+    CheckboxGroup,
+    CheckboxItem,
+  },
   emits: ['close', 'confirmed'],
+  data() {
+    return {
+      approvalChecklist: null,
+    };
+  },
+  computed: {
+    isReadyForApproval() {
+      return Array.isArray(this.approvalChecklist) && this.approvalChecklist.length === 3;
+    },
+  },
   methods: {
     closeModal() {
       this.$emit('close');
