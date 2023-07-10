@@ -488,10 +488,10 @@ export default {
       welshPosts: null,
       welshRequirement: null,
       welshRequirementType: null,
-      roleSummary: null,
-      roleSummaryWelsh: null,
-      aboutTheRole: null,
-      aboutTheRoleWelsh: null,
+      roleSummary: '',
+      roleSummaryWelsh: '',
+      aboutTheRole: '',
+      aboutTheRoleWelsh: '',
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
