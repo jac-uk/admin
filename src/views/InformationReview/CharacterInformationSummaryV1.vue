@@ -312,9 +312,9 @@
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-import CharacterSummary from '@/views/InformationReview/CharacterSummary';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary.vue';
 
 export default {
   name: 'CharacterInformationSummaryV1',

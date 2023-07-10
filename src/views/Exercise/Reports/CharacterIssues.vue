@@ -306,18 +306,18 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'CharacterIssues',

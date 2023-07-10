@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
 

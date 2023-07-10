@@ -4,7 +4,6 @@ import { functions } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
-import { APPLICATION_STEPS, exerciseApplicationParts, configuredApplicationParts } from '@/helpers/exerciseHelper';
 
 const collection = firestore.collection('exercises');
 
@@ -68,31 +67,7 @@ export default {
       await collection.doc(exerciseId).update(data);
     },
     save: async ({ state }, data) => {
-      const saveData = clone(data);
-      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
-        const applicationParts = exerciseApplicationParts(state.record, data);
-        const existingApplicationParts = configuredApplicationParts(state.record);
-        const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
-        if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
-          const applicationContentBefore = state.record._applicationContent ? state.record._applicationContent : {};
-          const applicationContentAfter = {};
-          APPLICATION_STEPS.forEach(step => {
-            applicationContentAfter[step] = {};
-            applicationParts.forEach(part => {
-              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
-                applicationContentAfter[step][part] = applicationContentBefore[step][part];
-              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
-                applicationContentAfter[step][part] = true;
-              }
-            });
-          });
-          if (applicationContentBefore._currentStep) {
-            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
-          }
-          saveData['_applicationContent'] = applicationContentAfter;
-        }
-      }
-      await collection.doc(state.record.id).update(saveData);
+      await collection.doc(state.record.id).update(data);
     },
     updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
       const data = {};

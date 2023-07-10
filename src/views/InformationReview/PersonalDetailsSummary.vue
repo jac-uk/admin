@@ -448,8 +448,8 @@
 
 <script>
 import { cloneDeep } from 'lodash';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
 
 export default {
   name: 'PersonalDetailsSummary',

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import PanelForm from './components/AddEdit';
+import PanelForm from './components/AddEdit.vue';
 
 export default {
   components: {

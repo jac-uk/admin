@@ -304,26 +304,26 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import AgencyReport from './AgencyReport.vue';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
-import Notes from '@/components/Notes/Notes';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
-import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
-import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
-import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
-import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
-import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import PageNotFound from '@/views/Errors/PageNotFound';
-import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
+import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import SubmissionExtension from '@/components/ModalViews/SubmissionExtension.vue';
+import Notes from '@/components/Notes/Notes.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary.vue';
+import PreferencesSummary from '@/views/InformationReview/PreferencesSummary.vue';
+import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary.vue';
+import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
+import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
+import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import PageNotFound from '@/views/Errors/PageNotFound.vue';
+import { splitFullName } from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
-import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
 import {
   isLegal,
   isNonLegal,

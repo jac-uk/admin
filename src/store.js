@@ -50,7 +50,7 @@ import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: process.env.NODE_ENV !== 'production',
+  strict: import.meta.env.NODE_ENV !== 'production',
   modules: {
     // Keep these in alphabetical order for readability in Vue Chrome Extension
     applications,
@@ -93,7 +93,7 @@ const store = createStore({
     ui,
   },
   state: {
-    packageVersion: process.env.PACKAGE_VERSION || '0',
+    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
   mutations: {
     ...vuexfireMutations,
@@ -104,7 +104,7 @@ const store = createStore({
       return state.packageVersion;
     },
     appEnvironment: () => {
-      const projectId = process.env.VUE_APP_FIREBASE_PROJECT_ID;
+      const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';
       }

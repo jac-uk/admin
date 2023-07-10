@@ -333,7 +333,7 @@
   </div>
 </template>
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import { isApplicationPartAsked } from '@/helpers/exerciseHelper';
 

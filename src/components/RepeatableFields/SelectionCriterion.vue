@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
 
 export default {
   name: 'SelectionCriterion',

@@ -2,7 +2,7 @@
   "root": true,
   "env": {
     "node": true,
-    "es6": true,
+    "es2022": true,
     "jest": true
   },
   "extends": [
@@ -69,7 +69,6 @@
     "no-empty": "warn"
   },
   "parserOptions": {
-    "parser": "@babel/eslint-parser",
     "ecmaVersion": 2020
   },
   "overrides": [

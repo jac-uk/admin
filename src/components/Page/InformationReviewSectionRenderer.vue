@@ -293,9 +293,9 @@
 </template>
 <script>
 import _ from 'lodash';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
 

@@ -58,11 +58,11 @@
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import PanellistsForm from '@/views/Panellists/components/AddEdit';
+import Form from '@/components/Page/Form.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import PanellistsForm from '@/views/Panellists/components/AddEdit.vue';
 
 export default {
   name: 'EditPanellists',

@@ -195,13 +195,13 @@
 <script>
 // import { functions } from '@/firebase';
 import { beforeRouteEnter, btnNext } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import SelectPanel from './Panel/components/SelectPanel';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import SelectPanel from './Panel/components/SelectPanel.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 
 export default {

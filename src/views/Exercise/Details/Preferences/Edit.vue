@@ -119,15 +119,15 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import Answer from '@/components/RepeatableFields/Answer';
-import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import Answer from '@/components/RepeatableFields/Answer.vue';
+import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   components: {

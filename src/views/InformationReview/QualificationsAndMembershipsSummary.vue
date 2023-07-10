@@ -918,9 +918,9 @@
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { NOT_COMPLETE_PUPILLAGE_REASONS } from '@jac-uk/jac-kit/helpers/constants';
 import {
   hasRelevantMemberships,

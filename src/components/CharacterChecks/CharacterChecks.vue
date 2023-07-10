@@ -415,7 +415,7 @@
 </template>
 
 <script>
-import OtherProfessionalBodies from './OtherProfessionalBodies';
+import OtherProfessionalBodies from './OtherProfessionalBodies.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 
 export default {

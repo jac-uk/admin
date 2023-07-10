@@ -648,9 +648,9 @@
 </template>
 
 <script>
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import CharacterSummary from '@/views/InformationReview/CharacterSummary';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary.vue';
 
 export default {
   name: 'CharacterInformationSummaryV2',

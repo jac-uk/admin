@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput';
+import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
 
 export default {
   components: {

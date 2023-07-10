@@ -23,8 +23,13 @@ export default {
         .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
       }
       if (params) {
-        if (params.orderBy) {
-          firestoreRef.orderBy(params.orderBy);
+        // Ensure if the where clause uses an inequality that it appears as the first argument to Query.orderBy()
+        if (params.where.length) {
+          for (const w of params.where) {
+            if (['<', '<=', '!=', 'not-in', '>', '>='].includes(w.comparator)) {
+              firestoreRef = firestoreRef.orderBy(w.field);
+            }
+          }
         }
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);

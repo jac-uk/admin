@@ -344,10 +344,10 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';

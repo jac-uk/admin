@@ -272,7 +272,7 @@
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'QualifyingTestReview',
