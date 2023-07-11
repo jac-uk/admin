@@ -75,10 +75,17 @@
           </div>
         </div>
 
-        <button
+        <!-- <button
           type="button"
           class="govuk-button"
           :disabled="!snapshotHasChanged"
+          @click="onSubmit"
+        >
+          Continue
+        </button> -->
+        <button
+          type="button"
+          class="govuk-button"
           @click="onSubmit"
         >
           Continue
@@ -108,8 +115,8 @@ export default {
   data() {
     return {
       clonedExercise: null,
-      initialSnapshot: null,
-      currentSnapshot: null,
+      //initialSnapshot: null,
+      //currentSnapshot: null,
       saveData: {},
     };
   },
@@ -126,13 +133,13 @@ export default {
     unselectedApplicationParts() {
       return unselectedApplicationParts(this.clonedExercise);
     },
-    snapshotHasChanged() {
-      return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
-    },
+    // snapshotHasChanged() {
+    //   return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
+    // },
   },
   created() {
     this.clonedExercise = clone(this.exercise);
-    this.initialSnapshot = this.createSnapshot();
+    //this.initialSnapshot = this.createSnapshot();
   },
   methods: {
     async onDrop(droppedItem) {
@@ -144,7 +151,7 @@ export default {
           this.saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
         }
         this.updateClonedExercise(this.saveData);
-        this.currentSnapshot = this.createSnapshot();
+        //this.currentSnapshot = this.createSnapshot();
       }
     },
     updateClonedExercise(data) {
@@ -157,9 +164,9 @@ export default {
       await this.$store.dispatch('exerciseDocument/save', this.getExerciseSaveData(this.clonedExercise, this.saveData));
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
     },
-    createSnapshot() {
-      return JSON.stringify(this.applicationContentList);
-    },
+    // createSnapshot() {
+    //   return JSON.stringify(this.applicationContentList);
+    // },
     getExerciseSaveData(exercise, data) {
       // Creates the _applicationContent if it doesnt already exist
       const saveData = clone(data);
