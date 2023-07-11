@@ -85,7 +85,7 @@ export default {
       tableColumns: [
         { title: 'Rank' },
         { title: 'Count' },
-        { title: this.$options.filters.lookup(this.scoreType) },
+        { title: this.$filters.lookup(this.scoreType) },
         { title: 'Female' },
         { title: 'Ethnic Minority' },
         { title: 'Solicitor' },
