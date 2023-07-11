@@ -78,10 +78,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
   name: 'UserRolePermissions',

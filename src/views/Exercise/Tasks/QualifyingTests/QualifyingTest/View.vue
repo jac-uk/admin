@@ -370,11 +370,11 @@
 
 <script>
 import { functions } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { EXERCISE_STAGE, QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { isProcessing, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 

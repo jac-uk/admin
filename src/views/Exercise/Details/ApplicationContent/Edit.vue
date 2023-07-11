@@ -89,11 +89,11 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import Draggable from '@/components/DragAndDrop/Draggable';
-import Droppable from '@/components/DragAndDrop/Droppable';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import Draggable from '@/components/DragAndDrop/Draggable.vue';
+import Droppable from '@/components/DragAndDrop/Droppable.vue';
 import { applicationContentList, unselectedApplicationParts, exerciseApplicationParts, configuredApplicationParts, APPLICATION_STEPS } from '@/helpers/exerciseHelper';
 import clone from 'clone';
 import _set from 'lodash/set';

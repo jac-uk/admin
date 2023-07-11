@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 
 export default {
   components: {

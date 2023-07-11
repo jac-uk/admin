@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';

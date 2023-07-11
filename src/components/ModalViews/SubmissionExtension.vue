@@ -41,8 +41,8 @@
 
 <script>
 import firebase from '@firebase/app';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 
 export default {
   name: 'SubmissionExtension',

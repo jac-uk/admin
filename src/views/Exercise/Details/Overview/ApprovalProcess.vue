@@ -88,14 +88,14 @@
 <script>
 import permissionMixin from '@/permissionMixin';
 import { isReadyForApproval, isApprovalRejected, isApproved, isArchived } from '@/helpers/exerciseHelper';
-import ApproveReject from '@/views/Exercise/Details/Overview/ApproveReject';
-import ApprovalCheckMessage from '@/views/Exercise/Details/Overview/ApprovalCheckMessage';
-import WarningDetails from '@/components/Micro/WarningDetails';
-import SimpleBanner from '@/components/Micro/SimpleBanner';
-import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState';
+import ApproveReject from '@/views/Exercise/Details/Overview/ApproveReject.vue';
+import ApprovalCheckMessage from '@/views/Exercise/Details/Overview/ApprovalCheckMessage.vue';
+import WarningDetails from '@/components/Micro/WarningDetails.vue';
+import SimpleBanner from '@/components/Micro/SimpleBanner.vue';
+import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {

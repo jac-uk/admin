@@ -115,12 +115,12 @@
 
 <script>
 import { functions } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import SetCutOffScore from '@/components/ModalViews/SetCutOffScore';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import SetCutOffScore from '@/components/ModalViews/SetCutOffScore.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

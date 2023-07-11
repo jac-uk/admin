@@ -11,10 +11,10 @@
 <script>
 import { beforeRouteEnter, getExpectedRouteName } from './helper';
 import { TASK_TYPE } from '@/helpers/constants';
-import defaultView from './New/default';
-import expired from './New/expired';
-import expiredQT from './New/expiredQT';
-import qualifyingTest from './New/qualifyingTest';
+import defaultView from './New/default.vue';
+import expired from './New/expired.vue';
+import expiredQT from './New/expiredQT.vue';
+import qualifyingTest from './New/qualifyingTest.vue';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 import { getTimelineTasks } from '@/helpers/exerciseHelper';
 

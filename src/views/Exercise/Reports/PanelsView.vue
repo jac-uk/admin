@@ -249,16 +249,16 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import PanelMemberChange from '@/components/ModalViews/PanelMemberChange';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import PanelMemberChange from '@/components/ModalViews/PanelMemberChange.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import firebase from '@firebase/app';
 import permissionMixin from '@/permissionMixin';
 

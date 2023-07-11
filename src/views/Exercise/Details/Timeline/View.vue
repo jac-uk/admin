@@ -19,7 +19,7 @@
 
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
-import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline.vue';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@/helpersTMP/Timeline/exerciseTimeline';
 import permissionMixin from '@/permissionMixin';

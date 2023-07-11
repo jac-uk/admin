@@ -101,11 +101,11 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import SelectPanel from '@/components/ModalViews/SelectPanel';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import SelectPanel from '@/components/ModalViews/SelectPanel.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
