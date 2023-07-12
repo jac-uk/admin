@@ -4,6 +4,7 @@ import { functions } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
+import { getExerciseSaveData } from '@/helpers/exerciseHelper';
 
 const collection = firestore.collection('exercises');
 
@@ -66,8 +67,8 @@ export default {
     override: async (_, { exerciseId, data }) => {
       await collection.doc(exerciseId).update(data);
     },
-    save: async ({ state }, data) => {
-      await collection.doc(state.record.id).update(data);
+    save: async ({ state }, data) => { 
+      await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
     updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
       const data = {};
