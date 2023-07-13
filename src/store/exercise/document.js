@@ -57,7 +57,7 @@ export default {
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
           data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          transaction.set(exerciseRef, data);
+          transaction.set(exerciseRef, getExerciseSaveData(data, data));
           return exerciseRef.id;
         });
       }).then((newId) => {
