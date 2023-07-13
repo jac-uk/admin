@@ -101,7 +101,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Draggable from '@/components/DragAndDrop/Draggable.vue';
 import Droppable from '@/components/DragAndDrop/Droppable.vue';
-import { applicationContentList, unselectedApplicationParts, exerciseApplicationParts, configuredApplicationParts, APPLICATION_STEPS } from '@/helpers/exerciseHelper';
+import { applicationContentList, unselectedApplicationParts, getExerciseSaveData } from '@/helpers/exerciseHelper';
 import clone from 'clone';
 import _set from 'lodash/set';
 export default {
@@ -155,47 +155,18 @@ export default {
       }
     },
     updateClonedExercise(data) {
-      const exerciseSavedData = this.getExerciseSaveData(this.clonedExercise, data);
+      const exerciseSavedData = getExerciseSaveData(this.clonedExercise, data);
       Object.keys(exerciseSavedData).forEach(key => {
         _set(this.clonedExercise, key, exerciseSavedData[key]);
       });
     },
     async onSubmit() {
-      await this.$store.dispatch('exerciseDocument/save', this.getExerciseSaveData(this.clonedExercise, this.saveData));
+      await this.$store.dispatch('exerciseDocument/save', this.saveData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
     },
     // createSnapshot() {
     //   return JSON.stringify(this.applicationContentList);
     // },
-    getExerciseSaveData(exercise, data) {
-      // Creates the _applicationContent if it doesnt already exist
-      const saveData = clone(data);
-      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
-        const applicationParts = exerciseApplicationParts(exercise, data);
-        const existingApplicationParts = configuredApplicationParts(exercise);
-        const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
-        if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
-          const applicationContentBefore = exercise._applicationContent ? exercise._applicationContent : {};
-          const applicationContentAfter = {};
-          APPLICATION_STEPS.forEach(step => {
-            applicationContentAfter[step] = {};
-            applicationParts.forEach(part => {
-              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
-                applicationContentAfter[step][part] = applicationContentBefore[step][part];
-              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
-                applicationContentAfter[step][part] = true;
-              }
-            });
-          });
-          if (applicationContentBefore._currentStep) {
-            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
-          }
-          saveData['_applicationContent'] = applicationContentAfter;
-        }
-      }
-      this.saveData['progress.applicationProcess'] = true;
-      return saveData;
-    },
   },
 };
 </script>
