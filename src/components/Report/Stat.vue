@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="percent">{{ stat.percent | formatNumber(2) }}%</span>&nbsp;
+    <span class="percent">{{ $filters.formatNumber(stat.percent, 2) }}%</span>&nbsp;
     <span
       v-if="reportTotal"
       class="total"

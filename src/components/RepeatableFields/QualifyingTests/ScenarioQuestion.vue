@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 
 export default {
   name: 'ScenarioQuestion',

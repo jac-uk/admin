@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SideNavigation from '@/components/Navigation/SideNavigation';
+import SideNavigation from '@/components/Navigation/SideNavigation.vue';
 
 export default {
   name: 'Stages',
@@ -37,23 +37,23 @@ export default {
       }
       const sideNavigation = [
         {
-          title: `Review (${this.$options.filters.formatNumber(review)})`,
+          title: `Review (${this.$filters.formatNumber(review)})`,
           path: `${path}/review`,
         },
         {
-          title: `Shortlisted (${this.$options.filters.formatNumber(shortlisted)})`,
+          title: `Shortlisted (${this.$filters.formatNumber(shortlisted)})`,
           path: `${path}/shortlisted`,
         },
         {
-          title: `Selected (${this.$options.filters.formatNumber(selected)})`,
+          title: `Selected (${this.$filters.formatNumber(selected)})`,
           path: `${path}/selected`,
         },
         {
-          title: `Recommended (${this.$options.filters.formatNumber(recommended)})`,
+          title: `Recommended (${this.$filters.formatNumber(recommended)})`,
           path: `${path}/recommended`,
         },
         {
-          title: `Handover (${this.$options.filters.formatNumber(handover)})`,
+          title: `Handover (${this.$filters.formatNumber(handover)})`,
           path: `${path}/handover`,
         },
       ];

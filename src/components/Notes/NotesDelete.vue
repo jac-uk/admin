@@ -13,7 +13,7 @@
         </h2>
       </legend>
       <div class="govuk-inset-text">
-        <span class="notes__delete__date">{{ Date(note.created) | formatDate('long') }}</span>
+        <span class="notes__delete__date">{{ $filters.formatDate(Date(note.created), 'long') }}</span>
         <span class="notes__delete__body">{{ note.body }}</span>
       </div>
       <ErrorSummary :errors="errors" />
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 
 export default {
   components: {
@@ -58,6 +58,7 @@ export default {
       default: null,
     },
   },
+  emits: ['changeAction'],
   data() {
     return {
       deleted: [

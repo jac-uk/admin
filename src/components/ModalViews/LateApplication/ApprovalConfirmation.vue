@@ -61,6 +61,7 @@ export default {
       required: true,
     },
   },
+  emits: ['read'],
   computed: {
     messageId() {
       return this.message.id;

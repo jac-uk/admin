@@ -4,7 +4,7 @@
 
 <script>
 import { getExpectedRouteName } from './helper';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 export default {
   components: {
     LoadingMessage,

@@ -42,12 +42,12 @@
           </h2>
           <Table
             ref="exercisesTable"
+            v-model:selection="permissionGroup.enabledPermissions"
             data-key="value"
             :data="permissionGroup.permissions"
             :page-size="50"
             :columns="tableColumns"
             multi-select
-            :selection.sync="permissionGroup.enabledPermissions"
           >
             <template #row="{row}">
               <TableCell :title="tableColumns[0].title">
@@ -78,11 +78,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-//import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
   name: 'UserRolePermissions',
@@ -179,6 +178,7 @@ export default {
       ],
     },
   },
+  emits: ['close'],
   data() {
     return {
       roleName: null,

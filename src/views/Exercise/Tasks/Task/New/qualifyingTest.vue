@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
     <p
       class="govuk-body-l"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import defaultView from './default';
+import defaultView from './default.vue';
 export default {
   extends: defaultView,
 };

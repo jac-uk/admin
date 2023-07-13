@@ -13,7 +13,7 @@
             Sent
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsSent | formatNumber }}
+            {{ $filters.formatNumber(assessmentsSent) }}
           </h2>
         </div>
       </div>
@@ -21,7 +21,7 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Completed</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ assessmentsCompleted | formatNumber }}
+            {{ $filters.formatNumber(assessmentsCompleted) }}
           </h2>
         </div>
       </div>
@@ -35,7 +35,7 @@
           Contact date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.contactIndependentAssessors | formatDate('long') }}
+          {{ $filters.formatDate(exercise.contactIndependentAssessors, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions">
           <strong
@@ -51,7 +51,7 @@
           Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsReturnDate | formatDate('long') }}
+          {{ $filters.formatDate(exercise.independentAssessmentsReturnDate, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -63,7 +63,7 @@
           Hard limit
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.independentAssessmentsHardLimitDate | formatDate('long') }}
+          {{ $filters.formatDate(exercise.independentAssessmentsHardLimitDate, 'long') }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -74,11 +74,10 @@
       >
         <TabsList
           ref="tabs"
-          class="print-none"
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
+          class="print-none"
         />
-
         <Banner
           :message="sendErrors"
           status="warning"
@@ -172,15 +171,14 @@
         >
           Delete
         </ActionButton>
-
         <Table
           :key="activeTab"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="records"
           :page-size="50"
           :columns="tableColumns"
           :multi-select="!isDeleted"
-          :selection.sync="selectedItems"
           :custom-search="{
             placeholder: 'Search candidate names',
             handler: candidateSearch,
@@ -207,7 +205,7 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
-              {{ row.assessor.type | lookup }}
+              {{ $filters.lookup(ow.assessor.type) }}
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               <a
@@ -219,7 +217,7 @@
               </a>
             </TableCell>
             <TableCell :title="tableColumns[3].title">
-              {{ row.status | lookup }}
+              {{ $filters.lookup(row.status) }}
               <strong
                 v-if="lateIASubmission(row)"
                 class="govuk-tag govuk-tag--red"
@@ -314,20 +312,20 @@
               v-if="applicationRecordCounts.review"
               value="review"
             >
-              Review ({{ applicationRecordCounts.review | formatNumber }})
+              Review ({{ $filters.formatNumber(applicationRecordCounts.review) }})
             </option>
             <option
               v-if="applicationRecordCounts.shortlisted"
               value="shortlisted"
             >
-              Shortlisted ({{ applicationRecordCounts.shortlisted | formatNumber }})
+              Shortlisted ({{ $filters.formatNumber(applicationRecordCounts.shortlisted) }})
             </option>
 
             <option
               v-if="applicationRecordCounts.selected"
               value="selected"
             >
-              Selected ({{ applicationRecordCounts.selected | formatNumber }})
+              Selected ({{ $filters.formatNumber(applicationRecordCounts.selected) }})
             </option>
           </select>
 
@@ -373,17 +371,17 @@
 <script>
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
 import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';
 
 export default {
@@ -569,7 +567,7 @@ export default {
       return '';
     },
     onDevelop() {
-      return window.location.href.indexOf('admin-develop') > 0 || process.env.NODE_ENV === 'development';
+      return window.location.href.indexOf('admin-develop') > 0 || import.meta.env.NODE_ENV === 'development';
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;

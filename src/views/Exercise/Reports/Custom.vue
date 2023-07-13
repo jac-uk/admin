@@ -143,19 +143,22 @@
         <h2 class="govuk-!-margin-bottom-0 govuk-!-margin-top-0">
           Show columns:
         </h2>
+
         <draggable
+          v-if="columns.length"
           v-model="columns"
-          @click.native="removeColumn($event)"
+          item-key="getDraggableKey"
         >
-          <div
-            v-for="(column, columnIndex) in columns"
-            :key="columnIndex"
-            :data-index="columnIndex"
-            class="govuk-!-margin-right-3 moj-filter__tag"
-          >
-            {{ keys[column].label }}
-          </div>
+          <template #item="{element, index}">
+            <div
+              :data-index="index"
+              class="govuk-!-margin-right-3 moj-filter__tag"
+            >
+              {{ keys[element].label }}
+            </div>
+          </template>
         </draggable>
+
         <div class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0">
           Click to remove, drag to re-order
         </div>
@@ -252,7 +255,7 @@
                 <td
                   class="govuk-table__cell govuk-table__cell--numeric"
                 >
-                  {{ row | formatNumber }}
+                  {{ $filters.formatNumber(row) }}
                 </td>
               </tr>
             </tbody>
@@ -309,10 +312,13 @@
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import permissionMixin from '@/permissionMixin';
+
+// Prevents warnings and errors associated with using @vue/compat
+draggable.compatConfig = { MODE: 3 };
 
 export default {
   name: 'CustomReport',
@@ -639,6 +645,13 @@ export default {
       link.setAttribute('download', 'custom_report.csv');
       document.body.appendChild(link);
       link.click();
+    },
+    getDraggableKey(item) {
+      // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
+      // value to item-key
+      const i = this.columns.indexOf(item);
+      console.log(`${item}-key = ${i}`);
+      return i;
     },
   },
 };

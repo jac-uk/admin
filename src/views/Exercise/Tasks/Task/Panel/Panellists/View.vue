@@ -8,7 +8,7 @@
       class="govuk-summary-list__row"
     >
       <dt class="govuk-summary-list__key">
-        {{ role | lookup }}
+        {{ $filters.lookup(role) }}
       </dt>
       <dd
         v-if="assignedPanellists[role]"

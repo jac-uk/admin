@@ -24,6 +24,7 @@
 <script>
 export default {
   name: 'LateApplicationConfirmation',
+  emits: ['close'],
   methods: {
     closeModal() {
       this.$emit('close');

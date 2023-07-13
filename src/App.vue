@@ -88,12 +88,6 @@
                 >
                   Sign out
                 </a>
-                <!-- <span
-                v-if="isSignedIn"
-                class="app-c-topic-list__item nostyle"
-              >
-                <b>You are now signed in as {{ userName }}</b>
-              </span> -->
                 <span
                   v-if="isSignedIn && isDevelopmentEnvironment"
                   class="app-c-topic-list__item nostyle"
@@ -202,7 +196,7 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-import Messages from '@/components/Messages';
+import Messages from '@/components/Messages.vue';
 export default {
   name: 'App',
   components: {
@@ -249,7 +243,7 @@ export default {
       this.load();
     }
   },
-  destroyed() {
+  unmounted() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
       this.$store.dispatch('messageBase/unbind');

@@ -12,8 +12,8 @@
       Panellist: {{ panellist.fullName }}
     </h1>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <div
       v-if="activeTab === 'details'"
@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import PanellistsForm from './components/AddEdit';
-import PanellistsView from './components/View';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import PanellistsForm from './components/AddEdit.vue';
+import PanellistsView from './components/View.vue';
 
 export default {
   components: {
@@ -102,7 +102,7 @@ export default {
   async created() {
     this.$store.dispatch('panellist/bind', this.panellistId);
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('panellist/unbind');
   },
   methods: {

@@ -23,7 +23,7 @@
               v-for="method in methods"
               :key="method"
             >
-              {{ method | lookup }}
+              {{ $filters.lookup(method) }}
             </li>
           </ul>
         </dd>

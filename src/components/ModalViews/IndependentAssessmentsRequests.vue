@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'IndependentAssessmentsRequests',
@@ -76,6 +76,7 @@ export default {
       default: null,
     },
   },
+  emits: ['close', 'confirmed', 'ok'],
   data() {
     return {
       processing: false,
@@ -103,7 +104,7 @@ export default {
       }
 
       return str;
-    }, 
+    },
     isCancel() {
       return this.type === 'cancel';
     },
@@ -112,7 +113,7 @@ export default {
     },
     isDelete() {
       return this.type === 'delete';
-    },  
+    },
     numberOfCandidates() {
       return this.params.assessmentIds.length;
     },
