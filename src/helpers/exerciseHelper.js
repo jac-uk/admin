@@ -67,6 +67,7 @@ export {
   currentState,
   applicationContentList,
   exerciseApplicationParts, // @todo review naming of applicationParts methods :)
+  getExerciseSaveData,
   applicationPartsMap,
   applicationParts,
   selectedApplicationParts,
@@ -576,6 +577,42 @@ function exerciseApplicationParts(data, newValues) {
   }
   applicationParts.push('additionalInfo');
   return applicationParts;
+}
+
+/**
+ * getExerciseSaveData
+ * Accepts an exercise and a data object
+ * Return the data object seeded with `_applicationContent` property if it doesn't already exist in the data object
+ * This means _applicationContent will always be updated / recalculated UNLESS it has been provided in the save data (in which case we use that)
+ * Note: this code was copied from store/exercise/document.js as it is also used in views/Exercise/Details/ApplicationContent/Edit.vue
+ */
+function getExerciseSaveData(exercise, data) {
+  // Creates the _applicationContent if it doesnt already exist
+  const saveData = clone(data);
+  if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+    const applicationParts = exerciseApplicationParts(exercise, data);
+    const existingApplicationParts = configuredApplicationParts(exercise);
+    const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
+    if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
+      const applicationContentBefore = exercise._applicationContent ? exercise._applicationContent : {};
+      const applicationContentAfter = {};
+      APPLICATION_STEPS.forEach(step => {
+        applicationContentAfter[step] = {};
+        applicationParts.forEach(part => {
+          if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
+            applicationContentAfter[step][part] = applicationContentBefore[step][part];
+          } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
+            applicationContentAfter[step][part] = true;
+          }
+        });
+      });
+      if (applicationContentBefore._currentStep) {
+        applicationContentAfter._currentStep = applicationContentBefore._currentStep;
+      }
+      saveData['_applicationContent'] = applicationContentAfter;
+    }
+  }
+  return saveData;
 }
 
 function applicationPartsMap(data) {
