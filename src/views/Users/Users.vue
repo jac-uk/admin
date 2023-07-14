@@ -1,288 +1,96 @@
 <template>
   <div>
-    <!-- TODO: refactor into more logical file structure -->
-    <LoadingMessage
-      v-if="loaded === false"
-      :load-failed="loadFailed"
-    />
-    <div v-if="loaded === true">
-      <div class="print-none">
-        <h1>User Management</h1>
-        <TabsList
-          v-model:active-tab="activeTab"
-          :tabs="tabs"
-        />
-      </div>
-      <div
-        v-show="activeTab == 'users'"
-        class="print-full-width"
-      >
-        <button
-          v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
-          class="govuk-button"
-          @click="openCreateUserModal"
-        >
-          Create
-        </button>
-        <h2>List of admin users</h2>
-
-        <div class="govuk-grid-row">
-          <div
-            class="govuk-grid-column-one-half"
-          >
-            <Search
-              placeholder="Search user name or email address"
-              @search="handleSearch"
-            />
-          </div>
-        </div>
-        <div class="govuk-grid-row">
-          <div
-            class="govuk-grid-column-full"
-            style="display: flex;"
-          >
-            <Checkbox
-              id="microsoft-login"
-              v-model="isMicrosoftLogin"
-            >
-              Microsoft login
-            </Checkbox>
-            <Checkbox
-              id="other-login"
-              v-model="isOtherLogin"
-            >
-              Other login
-            </Checkbox>
-          </div>
-        </div>
-
-        <table class="govuk-table">
-          <tr class="govuk-table__row">
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              User
-            </th>
-            <th
-              scope="row"
-              class="govuk-table__header"
-            />
-
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              Role
-            </th>
-          </tr>
-          <tr
-            v-for="(user, userIndex) in filteredUsers"
-            :key="userIndex"
-            class="govuk-table__row"
-          >
-            <td class="govuk-table__cell">
-              <div class="govuk-heading-s govuk-!-margin-bottom-1">
-                {{ user.displayName }}
-              </div>
-              <div>
-                {{ user.email }}
-              </div>
-            </td>
-            <td class="govuk-table__cell">
-              <Warning
-                v-if="!user.isJACEmployee"
-                :message="'External user'"
-              />
-            </td>
-            <td class="govuk-table__cell">
-              <select
-                v-model="user.customClaims.r"
-                class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
-                :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
-                @change="handleRoleChange(user)"
-              >
-                <option
-                  v-for="(roleItem, roleIndex) in roles"
-                  :key="roleIndex"
-                  :value="roleItem.id"
-                >
-                  {{ roleItem.roleName }}
-                </option>
-              </select>
-              <ActionButton
-                v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
-                type="primary"
-                class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
-              >
-                Enable user
-              </ActionButton>
-              <ActionButton
-                v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
-                type="secondary"
-                class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
-              >
-                Disable user
-              </ActionButton>
-              <button
-                v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
-                class="govuk-button govuk-button--warning"
-                @click="confirmDeleteUser(userIndex)"
-              >
-                Delete user
-              </button>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div
-        v-show="activeTab === 'roles'"
-        class="print-full-width"
-      >
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-quarter print-none">
-            <!-- TODO: consider refactoring this -->
-            <nav
-              class="moj-side-navigation govuk-!-padding-top-0"
-              :aria-label="'side-navigation'"
-            >
-              <ul class="moj-side-navigation__list">
-                <h4
-
-                  class="moj-side-navigation__title"
-                >
-                  Roles
-                </h4>
-                <ul
-                  v-if="roles.length > 0"
-                  class="moj-side-navigation__list"
-                >
-                  <!-- TODO: Sort the active class -->
-                  <li
-                    v-for="(roleItem, roleIndex) in roles"
-                    :key="roleIndex"
-                    :class=" isActive(roleItem.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
-                  >
-                    <a
-                      href="#"
-                      class="moj-side-navigation__item"
-                      @click.prevent="viewRolePermissions(roleIndex)"
-                    >
-                      {{ roleItem.roleName }} {{ roleItem.isDefault ? '(Default)' : '' }}
-                    </a>
-                  </li>
-                </ul>
-                <span v-else>No roles</span>
-              </ul>
-            </nav>
-          </div>
-          <div class="govuk-grid-column-three-quarters print-full-width">
-            <div class="govuk-grid-row print-none">
-              <div class="govuk-grid-column-one-half">
-                <h1>Roles</h1>
-              </div>
-              <div
-                v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateRoles.value])"
-                class="govuk-grid-column-one-half"
-              >
-                <div class="text-right">
-                  <button
-                    class="govuk-button govuk-!-margin-right-1 govuk-!-margin-top-3 govuk-!-margin-bottom-3"
-                    @click="openCreateRoleModal()"
-                  >
-                    Create a new role
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="role"
-              ref="role"
-            >
-              <h1>{{ role.roleName }}</h1>
-
-              <div
-                v-for="(value, key) in PERMISSIONS"
-                :key="key"
-              >
-                <h2>{{ value.label }}</h2>
-                <Checkbox
-                  v-for="(subValue, subKey) in value.permissions"
-                  :id="subKey"
-                  :key="subKey"
-                  v-model="permissions[subKey]"
-                >
-                  {{ subValue.label }}
-                </Checkbox>
-              </div>
-
-              <div v-if="hasPermissions([PERMISSIONS.users.permissions.canEditRolePermissions.value])">
-                <ActionButton
-                  type="primary"
-                  class="govuk-!-margin-right-1"
-                  @click="saveRole"
-                >
-                  Save role
-                </ActionButton>
-                <ActionButton
-                  type="secondary"
-                  :disabled="role.isDefault"
-                  @click="setDefaultRole"
-                >
-                  Set as default role
-                </ActionButton>
-              </div>
-            </div>
-            <div v-else>
-              <h3>Select a role on the left to edit.</h3>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="print-none">
+      <h1>User Management</h1>
+      <TabsList
+        v-model:active-tab="activeTab"
+        :tabs="tabs"
+      />
     </div>
-    <Modal
-      ref="modalRef"
+
+    <div
+      v-show="activeTab == 'users'"
+      class="print-full-width"
     >
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Create a new role
-      </div>
-      <div
-        v-if="!roleId"
-        class="modal__content govuk-!-margin-6"
+      <button
+        v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
+        class="govuk-button"
+        @click="openCreateUserModal"
       >
-        <TextField
-          :id="`user_role_id`"
-          v-model="newRoleName"
-          label="User role name"
-          type="text"
-        />
-        <ActionButton
-          class="govuk-!-margin-right-1"
-          type="primary"
-          @click="createUserRole"
-        >
-          Save and set permissions
-        </ActionButton>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="closeModal('modalRef')"
-        >
-          Cancel
-        </button>
-      </div>
-    </Modal>
-    <Modal
-      ref="changingRole"
+        Create
+      </button>
+
+      <h2>List of admin users</h2>
+
+      <Table
+        ref="usersTable"
+        data-key="id"
+        :data="users"
+        :page-size="50"
+        :columns="tableColumns"
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            {{ row.name }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.email }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.roleName }}
+            <select
+              class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
+              :value="row.role.id"
+              :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
+              @change="event => handleRoleChange(event, row)"
+            >
+              <option
+                v-for="(roleItem, roleIndex) in roles"
+                :key="roleIndex"
+                :value="roleItem.id"
+              >
+                {{ roleItem.roleName }}
+              </option>
+            </select>
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            <ActionButton
+              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+              type="primary"
+              class="govuk-!-margin-right-3"
+              :click="() => enableUser(row)"
+            >
+              Enable user
+            </ActionButton>
+            <ActionButton
+              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+              type="secondary"
+              class="govuk-!-margin-right-3"
+              :click="() => disableUser(row)"
+            >
+              Disable user
+            </ActionButton>
+
+            <button
+              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
+              class="govuk-button govuk-button--warning"
+              @click="() => openDeleteUserModal(row)"
+            >
+              Delete user
+            </button>
+          </TableCell>
+        </template>
+      </Table>
+    </div>
+
+    <div
+      v-show="activeTab === 'roles'"
+      class="print-full-width"
     >
-      <div class="modal__content govuk-!-margin-6">
-        <h2>
-          Please wait...
-        </h2>
-      </div>
-    </Modal>
+      <Roles :roles="roles" />
+    </div>
+
     <Modal ref="modalRefDeleteUser">
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
         Are you sure to delete user?
@@ -291,13 +99,13 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-2"
-          @click="deleteUser"
+          :click="deleteUser"
         >
           Delete
         </ActionButton>
         <button
           class="govuk-button govuk-button--secondary"
-          @click="closeModal('modalRefDeleteUser')"
+          @click="closeDeleteUserModal"
         >
           Cancel
         </button>
@@ -315,7 +123,7 @@
         >
           <TextField
             id="email"
-            v-model="newUserEmail"
+            v-model="newUser.email"
             label="Email"
             hint="The email must be a JAC email address."
             type="email"
@@ -337,7 +145,7 @@
 
           <TextField
             id="password"
-            v-model="newUserPassword"
+            v-model="newUser.password"
             label="Password"
             hint="The password must be a string with at least 6 characters."
             type="password"
@@ -349,7 +157,7 @@
             <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
             <select
               id="role"
-              v-model="newUserRole"
+              v-model="newUser.role"
               class="govuk-select"
               style="width: 100%;"
             >
@@ -367,8 +175,8 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-3"
-          :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
-          @click="createUser"
+          :disabled="!newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword "
+          :click="createUser"
         >
           Save
         </ActionButton>
@@ -384,48 +192,43 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
-import { functions } from '@/firebase';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import Warning from '@jac-uk/jac-kit/draftComponents/Warning.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
-import Search from '@jac-uk/jac-kit/draftComponents/Search.vue';
+import Roles from './Roles.vue';
+import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Users',
   components: {
-    LoadingMessage,
+    Table,
+    TableCell,
     ActionButton,
-    Warning,
     TabsList,
     Modal,
-    Checkbox,
     TextField,
-    Search,
+    Roles,
   },
   mixins: [permissionMixin],
   data() {
     return {
-      loaded: false,
-      loadFailed: false,
-      users: [],
-      roles: [],
       activeTab: 'users',
-      roleId: null,
-      role: null,
-      rolePermissions: null,
-      newRoleName: null,
-      permissions: {},
-      selectedUserIndex: null,
-      newUserEmail: '',
-      newUserPassword: '',
-      newUserRole: '',
-      searchTerm: '',
-      isMicrosoftLogin: false,
-      isOtherLogin: false,
+      tableColumns: [
+        { title: 'Name', sort: 'name', direction: 'asc', default: true },
+        { title: 'Email' },
+        { title: 'Role' },
+        { title: 'Action' },
+      ],
+      selectedUser: null,
+      newUser: {
+        email: '',
+        password: '',
+        role: '',
+      },
     };
   },
   computed: {
@@ -441,158 +244,126 @@ export default {
         },
       ];
     },
+    users() {
+      return this.$store.state.users.records;
+    },
+    roles() {
+      return this.$store.state.roles.records;
+    },
     isDuplicateEmail() {
-      return this.users.map(user => user.email).includes(this.newUserEmail);
+      return this.users.map(user => user.email).includes(this.newUser.email);
     },
     isNotJACEmail() {
-      return this.newUserEmail && !this.newUserEmail.match(/@judicialappointments.(digital|gov.uk)$/);
+      return this.newUser.email && !this.newUser.email.match(/@judicialappointments.(digital|gov.uk)$/);
     },
     isValidPassword() {
-      return this.newUserPassword.length >= 6;
+      return this.newUser.password.length >= 6;
     },
     defaultUserRole() {
       const role = this.roles.find(r => r.isDefault);
       return role ? role.id : '';
     },
-    rolesNav() {
-      const rolesNav = [];
-      for (const role of this.roles) {
-        rolesNav.push({
-          title: role.roleName,
-          name: role.id,
-        });
-      }
-      return rolesNav;
-    },
-    filteredUsers() {
-      let filteredUsers = this.users;
-      if (this.searchTerm) {
-        filteredUsers = this.users.filter((user) => {
-          return (user.displayName && user.displayName.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-            (user.email && user.email.toLowerCase().includes(this.searchTerm.toLowerCase()));
-        });
-      }
-      if (this.isMicrosoftLogin && !this.isOtherLogin) {
-        filteredUsers = filteredUsers.filter((user) => {
-          return user.providerData && user.providerData.some(provider => provider.providerId === 'microsoft.com');
-        });
-      }
-      if (!this.isMicrosoftLogin && this.isOtherLogin) {
-        filteredUsers = filteredUsers.filter((user) => {
-          return user.providerData && user.providerData.some(provider => provider.providerId !== 'microsoft.com');
-        });
-      }
-
-      return filteredUsers;
-    },
   },
   mounted() {
-    this.getUsers();
-    this.getRoles();
-  },
-  updated() {
-    const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
-    if (!canEditRolePermissions) {
-      const roleRef = this.$refs.role;
-      if (roleRef) {
-        const inputs = roleRef.querySelectorAll('input');
-        inputs && inputs.forEach(input => input.disabled = true);
-      }
-    }
+    this.$store.dispatch('roles/bind', {
+      orderBy: 'roleName',
+      direction: 'asc',
+    });
   },
   methods: {
-    async getUsers() {
-      try {
-        const users = await functions.httpsCallable('adminGetUsers')();
-        this.users = users.data;
-        for (const user of this.users) {
-          //TODO: add default role logic
-          if (!user.customClaims) {
-            user.customClaims = {
-              r: 'not set',
-            };
-          }
-        }
-        this.users.sort((a, b) => {
-          // falsy value sort after anything else
-          if (!a.displayName) return 1;
-          if (!b.displayName) return -1;
-
-          if (a.displayName < b.displayName) return -1;
-          if (a.displayName > b.displayName) return 1;
-          return 0;
-        });
-        this.loaded = true;
-      } catch (e) {
-        this.loadFailed = true;
-        throw e;
+    getTableData(params) {
+      this.$store.dispatch('users/bind', params);
+    },
+    forceUpdateTable() {
+      if (this.$refs['usersTable']) {
+        // force update table as Table component doesn't update when data is changed after vue3 upgrade
+        this.$refs['usersTable'].$forceUpdate();
       }
     },
-    async getRoles() {
-      const roles = await functions.httpsCallable('adminGetUserRoles')();
-      this.roles = roles.data;
+    handleRoleChange(event, user) {
+      const roleId = event.target.value;
+      this.$store.dispatch('users/save', {
+        userId: user.id,
+        data: {
+          role: {
+            id: roleId,
+            isChanged: true,
+          },
+        },
+      });
     },
-    async toggleDisableUser(uid, index) {
+    async enableUser(user) {
       try {
-        const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
-        this.users[index].disabled = response.data.disabled;
+        await this.$store.dispatch('users/save', {
+          userId: user.id,
+          data: { disabled: false },
+        });
+        this.forceUpdateTable();
         return true;
       } catch (error) {
-        return;
+        return false;
       }
     },
-    confirmDeleteUser(index) {
-      this.selectedUserIndex = index;
-      this.openModal('modalRefDeleteUser');
+    async disableUser(user) {
+      try {
+        await this.$store.dispatch('users/save', {
+          userId: user.id,
+          data: {
+            disabled: true,
+          },
+        });
+        this.forceUpdateTable();
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     async deleteUser() {
-      if (this.selectedUserIndex) {
-        const selectedUid = this.users[this.selectedUserIndex].uid;
-        try {
-          const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
-          if (response && response.data.successCount) {
-            this.users.splice(this.selectedUserIndex, 1);
-            setTimeout(() => {
-              this.closeModal('modalRefDeleteUser');
-            }, 1000);
-            return true;
-          }
-        } catch (error) {
-          return;
-        }
+      if (this.selectedUser) return false;
+
+      try {
+        await this.$store.dispatch('users/delete', this.selectedUser.id);
+        return true;
+      } catch (error) {
+        return false;
       }
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
     closeModal(modalRef) {
-      this.rolePermissions = null;
       this.$refs[modalRef].closeModal();
-      this.newRoleName = null;
-      this.selectedUserIndex = null;
     },
     openCreateUserModal() {
       this.openModal('modalRefCreateUser');
-      this.newUserRole = this.defaultUserRole;
+      this.newUser.role = this.defaultUserRole;
     },
     closeCreateUserModal() {
       this.closeModal('modalRefCreateUser');
       this.resetNewUser();
     },
+    openDeleteUserModal(user) {
+      this.openModal('modalRefDeleteUser');
+      this.selectedUser = user;
+    },
+    closeDeleteUserModal() {
+      this.closeModal('modalRefDeleteUser');
+      this.selectedUser = null;
+    },
     resetNewUser() {
-      this.newUserEmail = '';
-      this.newUserPassword = '';
-      this.newUserRole = '';
+      this.newUser = {
+        email: '',
+        password: '',
+        role: '',
+      };
     },
     async createUser() {
       try {
         const res = await functions.httpsCallable('createUser')({
-          email: this.newUserEmail,
-          password: this.newUserPassword, // need to pass password to create new user
+          email: this.newUser.email,
+          password: this.newUser.password, // need to pass password to create new user
         });
         if (res && res.data && 'uid' in res.data) {
-          await this.setUserRole(res.data.uid, this.newUserRole);
-          await this.getUsers();
           this.resetNewUser();
           setTimeout(() => {
             this.closeCreateUserModal();
@@ -600,97 +371,9 @@ export default {
           return true;
         }
       } catch (error) {
-        return;
-      }
-    },
-    async handleRoleChange(user) {
-      this.openModal('changingRole');
-      await this.setUserRole(user.uid, user.customClaims.r);
-      this.closeModal('changingRole');
-    },
-    async setUserRole(userId, roleId) {
-      await functions.httpsCallable('adminSetUserRole')({ userId, roleId });
-    },
-    viewRolePermissions(roleIndex) {
-      this.role = this.roles[roleIndex];
-      // set all permissions to false
-      const obj = {};
-      for (const group of Object.keys(this.PERMISSIONS)) {
-        for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
-          obj[p] = false;
-        }
-      }
-      // make it reactive
-      this.permissions = Object.assign({}, obj);
-
-      // set the enabled permissions for the role to true
-      if (this.role.enabledPermissions) {
-        for (const permission of this.role.enabledPermissions) {
-          if (permission in this.permissions) {
-            this.permissions[permission] = true;
-          }
-        }
-      }
-
-    },
-    async createUserRole() {
-      try {
-        //TODO: enforce unique role name
-        const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.newRoleName });
-        await this.getRoles();
-        //this.role = Array.filter((role) => { return role.id === response.data.id; });
-        this.role = this.roles.filter((role) => { return role.id === response.data.id; })[0];
-        setTimeout(() => {
-          this.closeModal('modalRef');
-        }, 1000);
-        return true;
-      } catch (error) {
-        return;
-      }
-    },
-    async saveRole() {
-      this.role.enabledPermissions = [];
-      for (const permission in this.permissions) {
-        if (this.permissions[permission]) {
-          this.role.enabledPermissions.push(permission);
-        }
-      }
-      try {
-        return await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.role.id, enabledPermissions: this.role.enabledPermissions });
-      } catch (error) {
-        return;
-      }
-    },
-    async setDefaultRole() {
-      try {
-        await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
-        await this.getRoles();
-        this.role.isDefault = true;
-        return true;
-      } catch (error) {
-        return;
-      }
-    },
-    openCreateRoleModal() {
-      this.openModal('modalRef');
-    },
-    isActive(roleId) {
-      if (this.role) {
-        return roleId === this.role.id;
-      } else {
         return false;
       }
     },
-    handleSearch(searchTerm) {
-      this.searchTerm = searchTerm;
-    },
   },
-
 };
 </script>
-
-<style>
-td .govuk-warning-text {
-  margin-bottom: 0 !important;
-}
-</style>

@@ -47,6 +47,9 @@ import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
+import users from '@/store/users';
+import roles from '@/store/roles';
+
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -82,6 +85,7 @@ const store = createStore({
     qualifyingTestResponses,
     qualifyingTestReports,
     qualifyingTestReport,
+    roles,
     services,
     stageReview,
     stageSelected,
@@ -91,6 +95,7 @@ const store = createStore({
     task,
     tasks,
     ui,
+    users,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
