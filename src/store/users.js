@@ -27,7 +27,7 @@ export default {
       await ref.set(data, { merge: true });
     },
     delete: async (_, id) => {
-      await collection.doc(id).delete();
+      return await collection.doc(id).delete();
     },
   },
   mutations: {

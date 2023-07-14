@@ -73,7 +73,7 @@
             </ActionButton>
 
             <button
-              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
+              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value]) && userId !== row.id"
               class="govuk-button govuk-button--warning"
               @click="() => openDeleteUserModal(row)"
             >
@@ -122,6 +122,15 @@
           style="text-align: left;"
         >
           <TextField
+            id="name"
+            v-model="newUser.name"
+            label="Name"
+            type="text"
+            autocomplete="off"
+            required
+          />
+
+          <TextField
             id="email"
             v-model="newUser.email"
             label="Email"
@@ -131,7 +140,7 @@
             required
           />
           <p
-            v-if="isDuplicateEmail"
+            v-if="isDuplicateEmail || isExistingEmail"
             class="govuk-error-message"
           >
             Duplicate Email
@@ -157,7 +166,7 @@
             <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
             <select
               id="role"
-              v-model="newUser.role"
+              v-model="newUser.roleId"
               class="govuk-select"
               style="width: 100%;"
             >
@@ -175,7 +184,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-3"
-          :disabled="!newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword "
+          :disabled="!newUser.name || !newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword || !newUser.roleId"
           :click="createUser"
         >
           Save
@@ -227,11 +236,16 @@ export default {
       newUser: {
         email: '',
         password: '',
-        role: '',
+        name: '',
+        roleId: '',
       },
+      isExistingEmail: false,
     };
   },
   computed: {
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
     tabs() {
       return [
         {
@@ -259,7 +273,7 @@ export default {
     isValidPassword() {
       return this.newUser.password.length >= 6;
     },
-    defaultUserRole() {
+    defaultUserRoleId() {
       const role = this.roles.find(r => r.isDefault);
       return role ? role.id : '';
     },
@@ -319,10 +333,14 @@ export default {
       }
     },
     async deleteUser() {
-      if (this.selectedUser) return false;
+      if (!this.selectedUser) return false;
 
       try {
         await this.$store.dispatch('users/delete', this.selectedUser.id);
+        setTimeout(() => {
+          this.closeDeleteUserModal();
+          this.forceUpdateTable();
+        }, 1000);
         return true;
       } catch (error) {
         return false;
@@ -336,7 +354,7 @@ export default {
     },
     openCreateUserModal() {
       this.openModal('modalRefCreateUser');
-      this.newUser.role = this.defaultUserRole;
+      this.newUser.roleId = this.defaultUserRoleId;
     },
     closeCreateUserModal() {
       this.closeModal('modalRefCreateUser');
@@ -354,22 +372,28 @@ export default {
       this.newUser = {
         email: '',
         password: '',
-        role: '',
+        name: '',
+        roleId: '',
       };
     },
     async createUser() {
       try {
-        const res = await functions.httpsCallable('createUser')({
-          email: this.newUser.email,
-          password: this.newUser.password, // need to pass password to create new user
-        });
-        if (res && res.data && 'uid' in res.data) {
+        const res = await functions.httpsCallable('createUser')({ ...this.newUser });
+        const data = res.data;
+        if (data.status === 'success') {
           this.resetNewUser();
           setTimeout(() => {
             this.closeCreateUserModal();
+            this.forceUpdateTable();
           }, 1000);
           return true;
+        } else if (data.status === 'error') {
+          const errorInfo = data.data.errorInfo;
+          if (errorInfo && errorInfo.code === 'auth/email-already-exists') {
+            this.isExistingEmail = true;
+          }
         }
+        return false;
       } catch (error) {
         return false;
       }
