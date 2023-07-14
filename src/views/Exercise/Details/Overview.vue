@@ -372,11 +372,12 @@ export default {
     },
   },
   methods: {
-    async submitForApproval() {
+    async submitForApproval(note) {
       await this.$store.dispatch('exerciseDocument/updateApprovalProcess', {
         userId: this.userId,
         userName: this.displayName,
         decision: 'requested',
+        rejectionResponse: note ? note : null,
       });
       this.closeApprovalModal();
     },

@@ -67,10 +67,10 @@ export default {
     override: async (_, { exerciseId, data }) => {
       await collection.doc(exerciseId).update(data);
     },
-    save: async ({ state }, data) => { 
+    save: async ({ state }, data) => {
       await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
-    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
+    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
       const user = {
         id: userId,
@@ -92,7 +92,12 @@ export default {
         break;
         default:  // 'requested'
           data['_approval.approved'] = null;
-          data['_approval.rejected'] = null;
+          if (rejectionResponse) {
+            data['_approval.rejected.response'] = rejectionResponse;
+          }
+          else {
+            data['_approval.rejected'] = null;
+          }
           data['state'] = 'ready';
       }
       // Update record
