@@ -88,6 +88,7 @@ export default {
         case 'rejected':
           data['_approval.approved'] = null;
           data['_approval.rejected.message'] = rejectionReason;
+          data['_approval.rejected.response'] = null;
           data['state'] = 'draft';
         break;
         default:  // 'requested'
