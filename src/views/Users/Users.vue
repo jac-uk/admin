@@ -56,7 +56,7 @@
           </TableCell>
           <TableCell :title="tableColumns[3].title">
             <ActionButton
-              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
               type="primary"
               class="govuk-!-margin-right-3"
               :click="() => enableUser(row)"
@@ -64,7 +64,7 @@
               Enable user
             </ActionButton>
             <ActionButton
-              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
               type="secondary"
               class="govuk-!-margin-right-3"
               :click="() => disableUser(row)"
