@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import PanelPack from '@/components/PanelPacks/PanelPacks';
+import PanelPack from '@/components/PanelPacks/PanelPacks.vue';
 
 export default {
   name: 'Sift',

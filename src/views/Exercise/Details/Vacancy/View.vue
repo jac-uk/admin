@@ -214,7 +214,7 @@
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 

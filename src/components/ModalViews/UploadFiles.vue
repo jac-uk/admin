@@ -20,7 +20,7 @@
           label=""
           :types="$attrs.types"
           required
-          @input="changeFileName"
+          @update:model-value="changeFileName"
         />
       </p>
       <p>
@@ -44,8 +44,8 @@
 <script>
 import firebase from '@firebase/app';
 import '@firebase/storage';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'UploadFiles',

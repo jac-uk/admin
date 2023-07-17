@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { mapGetters } from 'vuex';
 
 export default {

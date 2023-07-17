@@ -105,10 +105,10 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

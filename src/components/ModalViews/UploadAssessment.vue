@@ -14,7 +14,7 @@
           :file-path="$attrs.filePath"
           label="Upload Independent Assessment file"
           required
-          @input="changeFileName"
+          @update:model-value="changeFileName"
         />
       </p>
       <p>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 
 export default {
   name: 'UploadAssessment',

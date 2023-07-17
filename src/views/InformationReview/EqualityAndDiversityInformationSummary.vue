@@ -663,7 +663,7 @@
   </div>
 </template>
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import { isLegal } from '@/helpers/exerciseHelper';
 import { mapGetters } from 'vuex';
 

@@ -113,7 +113,7 @@
   </div>
 </template>
 <script>
-import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
+import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline.vue';
 import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
 
 export default {

@@ -483,15 +483,15 @@
 <script>
 import { auth } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import QuestionDuration from '@/components/Micro/QuestionDuration';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import QuestionDuration from '@/components/Micro/QuestionDuration.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'ExerciseView',

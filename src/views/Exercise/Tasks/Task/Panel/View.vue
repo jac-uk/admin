@@ -229,13 +229,13 @@
 
 <script>
 import firebase from '@firebase/app';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import PanelForm from './components/AddEdit';
-import EditPanellists from './Panellists/Edit';
-import ViewPanellists from './Panellists/View';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import PanelForm from './components/AddEdit.vue';
+import EditPanellists from './Panellists/Edit.vue';
+import ViewPanellists from './Panellists/View.vue';
 import { ROLES, PANEL_STATUS } from './Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 

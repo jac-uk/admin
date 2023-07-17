@@ -501,7 +501,7 @@
 </template>
 
 <script>
-import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport';
+import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport.vue';
 
 export default {
   name: 'AgencyReport',

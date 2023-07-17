@@ -196,7 +196,7 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-import Messages from '@/components/Messages';
+import Messages from '@/components/Messages.vue';
 export default {
   name: 'App',
   components: {

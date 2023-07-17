@@ -312,9 +312,9 @@
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat

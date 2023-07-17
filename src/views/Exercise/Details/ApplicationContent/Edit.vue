@@ -78,7 +78,8 @@
         <button
           type="button"
           class="govuk-button"
-          @click="nextPage"
+          :disabled="!snapshotHasChanged"
+          @click="onSubmit"
         >
           Continue
         </button>
@@ -88,13 +89,14 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import Draggable from '@/components/DragAndDrop/Draggable';
-import Droppable from '@/components/DragAndDrop/Droppable';
-import { applicationContentList, unselectedApplicationParts } from '@/helpers/exerciseHelper';
-
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import Draggable from '@/components/DragAndDrop/Draggable.vue';
+import Droppable from '@/components/DragAndDrop/Droppable.vue';
+import { applicationContentList, unselectedApplicationParts, getExerciseSaveData } from '@/helpers/exerciseHelper';
+import clone from 'clone';
+import _set from 'lodash/set';
 export default {
   components: {
     ErrorSummary,
@@ -103,6 +105,14 @@ export default {
     Droppable,
   },
   extends: Form,
+  data() {
+    return {
+      clonedExercise: null,
+      initialSnapshot: null,
+      currentSnapshot: null,
+      saveData: {},
+    };
+  },
   computed: {
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
@@ -111,27 +121,44 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     applicationContentList() {
-      return applicationContentList(this.exercise);
+      return applicationContentList(this.clonedExercise);
     },
     unselectedApplicationParts() {
-      return unselectedApplicationParts(this.exercise);
+      return unselectedApplicationParts(this.clonedExercise);
     },
+    snapshotHasChanged() {
+      return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
+    },
+  },
+  created() {
+    this.clonedExercise = clone(this.exercise);
+    this.initialSnapshot = this.createSnapshot();
   },
   methods: {
     async onDrop(droppedItem) {
       if (droppedItem && droppedItem.id !== droppedItem.data.step) {
-        const saveData = {};
         if (droppedItem.id !== 'empty') {
-          saveData[`_applicationContent.${droppedItem.id}.${droppedItem.data.part}`] = true;
+          this.saveData[`_applicationContent.${droppedItem.id}.${droppedItem.data.part}`] = true;
         }
         if (droppedItem.data.step !== 'empty') {
-          saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
+          this.saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
         }
-        await this.$store.dispatch('exerciseDocument/save', saveData);
+        this.updateClonedExercise(this.saveData);
+        this.currentSnapshot = this.createSnapshot();
       }
     },
-    nextPage() {
+    updateClonedExercise(data) {
+      const exerciseSavedData = getExerciseSaveData(this.clonedExercise, data);
+      Object.keys(exerciseSavedData).forEach(key => {
+        _set(this.clonedExercise, key, exerciseSavedData[key]);
+      });
+    },
+    async onSubmit() {
+      await this.$store.dispatch('exerciseDocument/save', this.saveData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
+    },
+    createSnapshot() {
+      return JSON.stringify(this.applicationContentList);
     },
   },
 };

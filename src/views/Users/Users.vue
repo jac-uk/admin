@@ -353,14 +353,14 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import { functions } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Warning from '@jac-uk/jac-kit/draftComponents/Warning';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Warning from '@jac-uk/jac-kit/draftComponents/Warning.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

@@ -23,8 +23,13 @@ export default {
         .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
       }
       if (params) {
-        if (params.orderBy) {
-          firestoreRef.orderBy(params.orderBy);
+        // Ensure if the where clause uses an inequality that it appears as the first argument to Query.orderBy()
+        if (params.where.length) {
+          for (const w of params.where) {
+            if (['<', '<=', '!=', 'not-in', '>', '>='].includes(w.comparator)) {
+              firestoreRef = firestoreRef.orderBy(w.field);
+            }
+          }
         }
       }
       firestoreRef = tableQuery(state.records, firestoreRef, params);
@@ -60,7 +65,7 @@ export default {
     storeItems: (context, { items }) => {
       context.commit('setSelectedItems', items);
     },
-    unarchive: async ({ commit, state }) => {
+    unarchive: async ({ commit, state, dispatch }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -79,8 +84,9 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
+      dispatch('bind');
     },
-    archive: async ({ commit, state }) => {
+    archive: async ({ commit, state, dispatch }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -99,6 +105,7 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
+      dispatch('bind');
     },
     getLocalById({ state }, id) {
       // Check if the local records have the id and return the record, ie does not hit the db

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'SelectionDay',
