@@ -33,7 +33,7 @@
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                @click="btnGenerateReport"
+                :action="btnGenerateReport"
               >
                 Refresh
               </ActionButton>
