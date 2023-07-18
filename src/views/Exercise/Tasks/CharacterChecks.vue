@@ -83,7 +83,7 @@
         <ActionButton
           type="primary"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests')"
+          :action="() => openModal('modalRefRequests')"
         >
           Send requests
         </ActionButton>
@@ -164,7 +164,7 @@
         <ActionButton
           type="primary"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests')"
+          :action="() => openModal('modalRefRequests')"
         >
           Send reminders
         </ActionButton>

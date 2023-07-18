@@ -146,7 +146,7 @@
             type="primary"
             :disabled="!isDryRunCandidates"
             class="govuk-!-margin-right-3"
-            @click="btnInitialise"
+            :action="btnInitialise"
           >
             Create dry run tests
           </ActionButton>
@@ -168,7 +168,7 @@
             ])"
             type="primary"
             class="govuk-!-margin-right-3"
-            @click="btnInitialise"
+            :action="btnInitialise"
           >
             Create mop up tests
           </ActionButton>
@@ -265,7 +265,7 @@
             type="primary"
             :disabled="!exerciseStage"
             class="govuk-!-margin-right-3"
-            @click="btnInitialise"
+            :action="btnInitialise"
           >
             Create tests
           </ActionButton>
@@ -287,7 +287,7 @@
         ])"
         :disabled="!isUserAdded || !canOpenTests"
         class="govuk-!-margin-right-3"
-        @click="btnActivate"
+        :action="btnActivate"
       >
         Open tests
       </ActionButton>
@@ -344,7 +344,7 @@
         type="secondary"
         :disabled="true"
         class="govuk-!-margin-right-3"
-        @click="btnSendInvites"
+        :action="btnSendInvites"
       >
         Send invites
       </ActionButton>
@@ -360,7 +360,7 @@
         type="primary"
         :disabled="isEndDatePassed"
         class="govuk-!-margin-right-3"
-        @click="btnGetScores"
+        :action="btnGetScores"
       >
         Close & Score
       </ActionButton>

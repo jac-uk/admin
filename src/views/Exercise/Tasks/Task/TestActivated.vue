@@ -17,7 +17,7 @@
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
-      @click="btnContinue"
+      :action="btnContinue"
     >
       Continue
     </ActionButton>
@@ -38,7 +38,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        @click="copyToClipboard(testURL)"
+        :action="copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>

@@ -83,7 +83,7 @@
                 v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="primary"
                 class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
+                :action="() => toggleDisableUser(user.uid, userIndex)"
               >
                 Enable user
               </ActionButton>
@@ -91,7 +91,7 @@
                 v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="secondary"
                 class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
+                :action="() => toggleDisableUser(user.uid, userIndex)"
               >
                 Disable user
               </ActionButton>
@@ -192,14 +192,14 @@
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
-                  @click="saveRole"
+                  :action="saveRole"
                 >
                   Save role
                 </ActionButton>
                 <ActionButton
                   type="secondary"
                   :disabled="role.isDefault"
-                  @click="setDefaultRole"
+                  :action="setDefaultRole"
                 >
                   Set as default role
                 </ActionButton>
@@ -231,7 +231,7 @@
         <ActionButton
           class="govuk-!-margin-right-1"
           type="primary"
-          @click="createUserRole"
+          :action="createUserRole"
         >
           Save and set permissions
         </ActionButton>
@@ -260,7 +260,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-2"
-          @click="deleteUser"
+          :action="deleteUser"
         >
           Delete
         </ActionButton>
@@ -337,7 +337,7 @@
           type="primary"
           class="govuk-!-margin-right-3"
           :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
-          @click="createUser"
+          :action="createUser"
         >
           Save
         </ActionButton>
@@ -480,7 +480,7 @@ export default {
       this.openModal('modalRefDeleteUser');
     },
     async deleteUser() {
-      if (this.selectedUserIndex) {
+      if (this.selectedUserIndex !== null) {
         const selectedUid = this.users[this.selectedUserIndex].uid;
         try {
           const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
@@ -492,9 +492,10 @@ export default {
             return true;
           }
         } catch (error) {
-          return;
+          return false;
         }
       }
+      return false;
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();

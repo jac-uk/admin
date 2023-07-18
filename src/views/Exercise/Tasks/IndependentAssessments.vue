@@ -137,7 +137,7 @@
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
+          :action="() => openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
         >
           Reset
         </ActionButton>
@@ -150,7 +150,7 @@
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
-          @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
+          :action="() => openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
         >
           Cancel
         </ActionButton>
@@ -163,7 +163,7 @@
           ])"
           class="govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
-          @click="
+          :action="() =>
             openModal(
               'modalRefRequests',
               'delete',
@@ -255,7 +255,7 @@
                   v-if="isCompleted && unapprovedLateSubmission(row)"
                   class="moj-button-menu__item"
                   type="primary"
-                  @click="approveLateSubmission(row)"
+                  :action="() => approveLateSubmission(row)"
                 >
                   Approve late submission
                 </ActionButton>
@@ -332,7 +332,7 @@
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
-            @click="initialiseAssessments"
+            :action="initialiseAssessments"
           >
             Start assessments
           </ActionButton>

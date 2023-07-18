@@ -49,7 +49,7 @@
       <ActionButton
         v-if="report"
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>

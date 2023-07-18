@@ -42,7 +42,7 @@
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 type="primary"
-                @click="refreshReport"
+                :action="refreshReport"
               >
                 Refresh
               </ActionButton>
@@ -582,6 +582,7 @@ export default {
   },
   methods: {
     async refreshReport() {
+      console.log('refreshing report');
       try {
         return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
       } catch (error) {

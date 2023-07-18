@@ -65,7 +65,7 @@
       class="govuk-!-margin-bottom-0"
       type="primary"
       :disabled="!isFormCompleted"
-      @click="btnInitialise"
+      :action="btnInitialise"
     >
       Continue
     </ActionButton>

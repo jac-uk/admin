@@ -138,7 +138,7 @@
         ])"
         type="primary"
         class="govuk-!-margin-right-3"
-        @click="startProcessing()"
+        :action="startProcessing"
       >
         Begin processing applications
       </ActionButton>
@@ -153,7 +153,7 @@
         ])"
         type="primary"
         class="govuk-!-margin-right-3"
-        @click="updateProcessing()"
+        :action="updateProcessing"
       >
         Process late applications
       </ActionButton>
