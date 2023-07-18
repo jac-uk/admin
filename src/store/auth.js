@@ -1,5 +1,6 @@
-import { auth, functions } from '@/firebase';
+import { functions } from '@/firebase';
 import { get } from 'lodash';
+import PERMISSIONS from '../permissions';
 
 const module = {
   namespaced: true,
@@ -19,7 +20,7 @@ const module = {
     },
   },
   actions: {
-    async setCurrentUser({ state, commit }, user) {
+    async setCurrentUser({ state, commit, dispatch }, user) {
       if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
@@ -57,28 +58,55 @@ const module = {
             shouldEnsureEmailVerified = true;
           }
 
-          commit('setCurrentUser', {
-            uid: user.uid,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            displayName: user.displayName,
-          });
-          if (shouldEnsureEmailVerified) {
-            await functions.httpsCallable('ensureEmailValidated')({});
+          // get user document from firestore
+          const userDoc = await dispatch('users/get', user.uid, { root: true });
+          if (userDoc) {
+            const data = {
+              uid: userDoc.id,
+              email: userDoc.email,
+              emailVerified: userDoc.emailVerified,
+              displayName: userDoc.displayName,
+              role: userDoc.role,
+            };
+            commit('setCurrentUser', data);
+            if (shouldEnsureEmailVerified) {
+              await functions.httpsCallable('ensureEmailValidated')({});
+            }
+            return data;
           }
         } else {
-          auth.signOut();
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
         }
       }
+
+      return null;
     },
-    setUserRole({ commit }, userRole) {
-      commit('setUserRole', userRole);
+    async setUserRole({ commit, dispatch }, roleId) {
+      const role = await dispatch('roles/get', roleId, { root: true });
+      const convertedPermissions = [];
+      if (role?.enabledPermissions && role.enabledPermissions.length > 0) {
+        for (const permission of role.enabledPermissions) {
+          for (const group of Object.keys(PERMISSIONS)) {
+            for (const p of Object.keys(PERMISSIONS[group].permissions)) {
+              if (p === permission) {
+                convertedPermissions.push(PERMISSIONS[group].permissions[p].value);
+              }
+            }
+          }
+        }
+      }
+
+      commit('setUserRole', {
+        rolePermissions: convertedPermissions,
+      });
     },
   },
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
+    },
+    isRoleChanged(state) {
+      return state.currentUser?.role?.isChanged;
     },
     getEmail(state) {
       if (state.currentUser) {

@@ -32,7 +32,7 @@
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
-            {{ row.name }}
+            {{ row.displayName }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
             {{ row.email }}
@@ -122,8 +122,8 @@
           style="text-align: left;"
         >
           <TextField
-            id="name"
-            v-model="newUser.name"
+            id="displayName"
+            v-model="newUser.displayName"
             label="Name"
             type="text"
             autocomplete="off"
@@ -184,7 +184,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-3"
-          :disabled="!newUser.name || !newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword || !newUser.roleId"
+          :disabled="!newUser.displayName || !newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword || !newUser.roleId"
           :click="createUser"
         >
           Save
@@ -227,7 +227,7 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Name', sort: 'name', direction: 'asc', default: true },
+        { title: 'Name', sort: 'displayName', direction: 'asc', default: true },
         { title: 'Email' },
         { title: 'Role' },
         { title: 'Action' },
@@ -236,7 +236,7 @@ export default {
       newUser: {
         email: '',
         password: '',
-        name: '',
+        displayName: '',
         roleId: '',
       },
       isExistingEmail: false,
@@ -295,6 +295,7 @@ export default {
       }
     },
     handleRoleChange(event, user) {
+      console.log(user);
       const roleId = event.target.value;
       this.$store.dispatch('users/save', {
         userId: user.id,
@@ -372,7 +373,7 @@ export default {
       this.newUser = {
         email: '',
         password: '',
-        name: '',
+        displayName: '',
         roleId: '',
       };
     },

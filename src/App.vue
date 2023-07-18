@@ -189,17 +189,37 @@
     </div>
 
     <Messages v-if="canReadMessages" />
+
+    <Modal ref="modalRefSignOut">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Change of role
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p class="govuk-body">
+          Your role has been changed. Please sign in again.
+        </p>
+        <button
+          class="govuk-button govuk-!-margin-right-3"
+          @click="handleRoleChange"
+        >
+          Sign out
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
-import { auth } from '@/firebase';
+import { auth, functions } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import Messages from '@/components/Messages.vue';
+
 export default {
   name: 'App',
   components: {
+    Modal,
     Messages,
   },
   mixins: [permissionMixin],
@@ -212,8 +232,14 @@ export default {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
     },
+    currentUser() {
+      return this.$store.state.auth.currentUser;
+    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
+    },
+    isRoleChanged() {
+      return this.$store.getters['auth/isRoleChanged'];
     },
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
@@ -237,6 +263,14 @@ export default {
         this.load();
       }
     },
+    isRoleChanged: {
+      handler() {
+        if (this.isRoleChanged && this.$refs['modalRefSignOut']) {
+          this.$refs['modalRefSignOut'].openModal();
+        }
+      },
+      deep: true,
+    },
   },
   async created() {
     if (this.isSignedIn) {
@@ -257,6 +291,29 @@ export default {
       if (this.canReadMessages) {
         await this.getMessages();
       }
+    },
+    async handleRoleChange() {
+      if (this.currentUser) {
+        // update custom claims
+        const res = await functions.httpsCallable('adminSetUserRole')({
+          userId: this.currentUser.uid,
+          roleId: this.currentUser.role.id,
+        });
+  
+        if (res) {
+          // update user document if role is changed
+          await this.$store.dispatch('users/save', {
+            userId: this.currentUser.uid,
+            data: {
+              role: {
+                id: this.currentUser.role.id,
+                isChanged: false,
+              },
+            },
+          });
+        }
+      }
+      this.signOut();
     },
     signOut() {
       auth.signOut();

@@ -6,7 +6,7 @@ import store from '@/store';
 
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
-import { auth, functions } from '@/firebase';
+import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
@@ -31,33 +31,15 @@ auth.onAuthStateChanged(async (user) => {
   }
 
   // Bind Firebase auth state to the vuex auth state store
-  store.dispatch('auth/setCurrentUser', user);
-  if (store.getters['auth/isSignedIn']) {
-    try {
-      const idTokenResult = await user.getIdTokenResult();
-      // Get user role
-      const userRoleId = idTokenResult.claims && idTokenResult.claims.r ? idTokenResult.claims.r : null;
-      if (userRoleId) {
-        const res = await functions.httpsCallable('adminSyncUserRolePermissions')();
-        const permissions = res.data;
-        if (JSON.stringify(idTokenResult.claims.rp) !== JSON.stringify(permissions)) {
-          // need to sign in again as the current user token will be revoked if the permissions have been changed
-          auth.signOut();
-          window.location.href = '/';
-        } else {
-          const userRole = {
-            roleId: userRoleId,
-            rolePermissions: permissions,
-          };
-          store.dispatch('auth/setUserRole', userRole);
-        }
-      }
-    } catch (error) {
-      // console.error(error);
-    }
+  const userDoc = await store.dispatch('auth/setCurrentUser', user);
+  if (userDoc) {
+    store.dispatch('auth/setUserRole', userDoc.role.id);
+
     if (window.location.pathname == '/sign-in') {
       router.push('/');
     }
+  } else {
+    auth.signOut();
   }
 
   // Create the Vue instance, but only once

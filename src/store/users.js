@@ -22,6 +22,20 @@ export default {
     create: async (_, data) => {
       return await collection.add(data);
     },
+    get: async (_, userId) => {
+      try {
+        const doc = await collection.doc(userId).get();
+        if (doc.exists) {
+          return {
+            id: userId,
+            ...doc.data(),
+          };
+        }
+        return null;
+      } catch (error) {
+        return null;
+      }
+    },
     save: async (_, { userId, data }) => {
       const ref = collection.doc(userId);
       await ref.set(data, { merge: true });
