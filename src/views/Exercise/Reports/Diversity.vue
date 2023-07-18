@@ -582,7 +582,6 @@ export default {
   },
   methods: {
     async refreshReport() {
-      console.log('refreshing report');
       try {
         return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
       } catch (error) {
