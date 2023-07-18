@@ -38,7 +38,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        :action="copyToClipboard(testURL)"
+        :action="() => copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>
