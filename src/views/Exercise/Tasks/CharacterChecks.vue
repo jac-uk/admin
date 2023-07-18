@@ -83,7 +83,7 @@
         <button
           class="govuk-button"
           :disabled="!selectedItems.length"
-          @click="() => openModal('modalRefRequests')"
+          @click="openModal('modalRefRequests')"
         >
           Send requests
         </button>
@@ -164,7 +164,7 @@
         <button
           class="govuk-button"
           :disabled="!selectedItems.length"
-          @click="() => openModal('modalRefRequests')"
+          @click="openModal('modalRefRequests')"
         >
           Send reminders
         </button>
