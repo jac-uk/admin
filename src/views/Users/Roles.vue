@@ -80,14 +80,14 @@
             <ActionButton
               type="primary"
               class="govuk-!-margin-right-3"
-              :click="saveRole"
+              :action="saveRole"
             >
               Save role
             </ActionButton>
             <ActionButton
               type="secondary"
               :disabled="role.isDefault"
-              :click="setDefaultRole"
+              :action="setDefaultRole"
             >
               Set as default role
             </ActionButton>

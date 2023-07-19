@@ -59,7 +59,7 @@
               v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
               type="primary"
               class="govuk-!-margin-right-3"
-              :click="() => enableUser(row)"
+              :action="() => enableUser(row)"
             >
               Enable user
             </ActionButton>
@@ -67,7 +67,7 @@
               v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
               type="secondary"
               class="govuk-!-margin-right-3"
-              :click="() => disableUser(row)"
+              :action="() => disableUser(row)"
             >
               Disable user
             </ActionButton>
@@ -99,7 +99,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-2"
-          :click="deleteUser"
+          :action="deleteUser"
         >
           Delete
         </ActionButton>
@@ -185,7 +185,7 @@
           type="primary"
           class="govuk-!-margin-right-3"
           :disabled="!newUser.displayName || !newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword || !newUser.roleId"
-          :click="createUser"
+          :action="createUser"
         >
           Save
         </ActionButton>
