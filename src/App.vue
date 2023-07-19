@@ -307,15 +307,16 @@ export default {
           });
   
           if (res) {
-            // update user document if role is changed
+            // mark role as unchanged
+            const data = {
+              role: {
+                id: this.currentUser.role.id,
+                isChanged: false,
+              },
+            };
             await this.$store.dispatch('users/save', {
               userId: this.currentUser.uid,
-              data: {
-                role: {
-                  id: this.currentUser.role.id,
-                  isChanged: false,
-                },
-              },
+              data,
             });
           }
         }
