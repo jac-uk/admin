@@ -304,6 +304,7 @@ export default {
           const res = await functions.httpsCallable('adminSetUserRole')({
             userId: this.currentUser.uid,
             roleId: this.currentUser.role.id,
+            permissions: this.currentUser.rolePermissions,
           });
   
           if (res) {

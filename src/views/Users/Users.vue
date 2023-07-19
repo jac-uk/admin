@@ -210,6 +210,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Roles from './Roles.vue';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
+import { convertPermissions } from '@/permissions';
 
 export default {
   name: 'Users',
@@ -295,7 +296,6 @@ export default {
       }
     },
     handleRoleChange(event, user) {
-      console.log(user);
       const roleId = event.target.value;
       this.$store.dispatch('users/save', {
         userId: user.id,
@@ -379,14 +379,18 @@ export default {
     },
     async createUser() {
       try {
-        const res = await functions.httpsCallable('createUser')({ ...this.newUser });
+        const role = this.roles.find(r => r.id === this.newUser.roleId);
+        const res = await functions.httpsCallable('createUser')({
+          ...this.newUser,
+          permissions: convertPermissions(role),
+        });
         const data = res.data;
         if (data.status === 'success') {
-          this.resetNewUser();
           setTimeout(() => {
+            this.resetNewUser();
             this.closeCreateUserModal();
             this.forceUpdateTable();
-          }, 1000);
+          }, 500);
           return true;
         } else if (data.status === 'error') {
           const errorInfo = data.data.errorInfo;

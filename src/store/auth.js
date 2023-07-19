@@ -1,6 +1,6 @@
 import { functions } from '@/firebase';
 import { get } from 'lodash';
-import PERMISSIONS from '../permissions';
+import { convertPermissions } from '../permissions';
 
 const module = {
   namespaced: true,
@@ -82,21 +82,8 @@ const module = {
       return null;
     },
     async setUserRole({ commit }, role) {
-      const convertedPermissions = [];
-      if (role?.enabledPermissions && role.enabledPermissions.length > 0) {
-        for (const permission of role.enabledPermissions) {
-          for (const group of Object.keys(PERMISSIONS)) {
-            for (const p of Object.keys(PERMISSIONS[group].permissions)) {
-              if (p === permission) {
-                convertedPermissions.push(PERMISSIONS[group].permissions[p].value);
-              }
-            }
-          }
-        }
-      }
-
       commit('setUserRole', {
-        rolePermissions: convertedPermissions,
+        rolePermissions: convertPermissions(role),
       });
     },
   },
