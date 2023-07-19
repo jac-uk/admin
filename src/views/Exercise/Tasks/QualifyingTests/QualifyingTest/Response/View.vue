@@ -39,7 +39,7 @@
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
-              @click="markAsCompleted"
+              :action="markAsCompleted"
             >
               Mark as completed
             </ActionButton>
@@ -201,7 +201,7 @@
             </span>
             <ActionButton
               class="govuk-button govuk-button--warning"
-              @click="confirmReset"
+              :action="confirmReset"
             >
               Reset Test
             </ActionButton>
