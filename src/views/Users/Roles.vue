@@ -21,7 +21,7 @@
               <li
                 v-for="(roleItem, index) in roles"
                 :key="index"
-                :class=" isRoleActive(roleItem.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
+                :class="isRoleActive(roleItem.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
               >
                 <a
                   href="#"
@@ -113,7 +113,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-3"
-          :click="createRole"
+          :action="createRole"
         >
           Save and set permissions
         </ActionButton>

@@ -30,15 +30,22 @@ auth.onAuthStateChanged(async (user) => {
     user.isNewUser = true;
   }
 
+  let isAuth = false;
   // Bind Firebase auth state to the vuex auth state store
   const userDoc = await store.dispatch('auth/setCurrentUser', user);
   if (userDoc) {
-    store.dispatch('auth/setUserRole', userDoc.role.id);
+    const role = await store.dispatch('roles/get', userDoc.role.id);
+    if (role) {
+      store.dispatch('auth/setUserRole', role);
+      isAuth = true;
 
-    if (window.location.pathname == '/sign-in') {
-      router.push('/');
+      if (window.location.pathname == '/sign-in') {
+        router.push('/');
+      }
     }
-  } else {
+  }
+
+  if (!isAuth) {
     auth.signOut();
   }
 

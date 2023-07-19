@@ -81,8 +81,7 @@ const module = {
 
       return null;
     },
-    async setUserRole({ commit, dispatch }, roleId) {
-      const role = await dispatch('roles/get', roleId, { root: true });
+    async setUserRole({ commit }, role) {
       const convertedPermissions = [];
       if (role?.enabledPermissions && role.enabledPermissions.length > 0) {
         for (const permission of role.enabledPermissions) {
