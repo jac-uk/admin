@@ -85,7 +85,7 @@
           <ActionButton
             class="govuk-!-margin-bottom-1"
             type="primary"
-            @click="btnActivate"
+            :action="btnActivate"
           >
             Activate
           </ActionButton>

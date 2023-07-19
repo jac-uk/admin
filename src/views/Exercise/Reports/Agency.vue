@@ -26,7 +26,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
