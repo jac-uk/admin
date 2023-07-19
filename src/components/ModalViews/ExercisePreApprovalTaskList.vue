@@ -8,7 +8,7 @@
     <div class="modal__content govuk-!-margin-6">
       <div style="text-align: left;">
         <p class="govuk-body">
-          Please make the information page and application form (if relevant) has been cleared by the following bodies before submitting for approval.
+          Please make sure the information page and application form (if relevant) have been cleared by the following bodies before submitting for approval.
         </p>
         <ul class="govuk-list govuk-list--bullet">
           <CheckboxGroup
