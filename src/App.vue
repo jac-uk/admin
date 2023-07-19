@@ -192,18 +192,18 @@
 
     <Modal ref="modalRefSignOut">
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Change of role
+        Your role has been changed
       </div>
       <div class="modal__content govuk-!-margin-6">
         <p class="govuk-body">
-          Your role has been changed. Please sign in again.
+          Please sign in again.
         </p>
-        <button
-          class="govuk-button govuk-!-margin-right-3"
-          @click="handleRoleChange"
+        <ActionButton
+          type="primary"
+          :action="handleRoleChange"
         >
           Sign out
-        </button>
+        </ActionButton>
       </div>
     </Modal>
   </div>
@@ -214,12 +214,14 @@ import { auth, functions } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Messages from '@/components/Messages.vue';
 
 export default {
   name: 'App',
   components: {
     Modal,
+    ActionButton,
     Messages,
   },
   mixins: [permissionMixin],
@@ -263,19 +265,17 @@ export default {
         this.load();
       }
     },
-    isRoleChanged: {
-      handler() {
-        if (this.isRoleChanged && this.$refs['modalRefSignOut']) {
-          this.$refs['modalRefSignOut'].openModal();
-        }
-      },
-      deep: true,
+    isRoleChanged() {
+      this.checkRole();
     },
   },
   async created() {
     if (this.isSignedIn) {
       this.load();
     }
+  },
+  mounted() {
+    this.checkRole();
   },
   unmounted() {
     if (this.isSignedIn) {
@@ -292,28 +292,38 @@ export default {
         await this.getMessages();
       }
     },
-    async handleRoleChange() {
-      if (this.currentUser) {
-        // update custom claims
-        const res = await functions.httpsCallable('adminSetUserRole')({
-          userId: this.currentUser.uid,
-          roleId: this.currentUser.role.id,
-        });
-  
-        if (res) {
-          // update user document if role is changed
-          await this.$store.dispatch('users/save', {
-            userId: this.currentUser.uid,
-            data: {
-              role: {
-                id: this.currentUser.role.id,
-                isChanged: false,
-              },
-            },
-          });
-        }
+    checkRole() {
+      if (this.isRoleChanged && this.$refs['modalRefSignOut']) {
+        this.$refs['modalRefSignOut'].openModal();
       }
-      this.signOut();
+    },
+    async handleRoleChange() {
+      try {
+        if (this.currentUser) {
+          // update custom claims
+          const res = await functions.httpsCallable('adminSetUserRole')({
+            userId: this.currentUser.uid,
+            roleId: this.currentUser.role.id,
+          });
+  
+          if (res) {
+            // update user document if role is changed
+            await this.$store.dispatch('users/save', {
+              userId: this.currentUser.uid,
+              data: {
+                role: {
+                  id: this.currentUser.role.id,
+                  isChanged: false,
+                },
+              },
+            });
+          }
+        }
+        this.signOut();
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     signOut() {
       auth.signOut();
