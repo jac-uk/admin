@@ -119,12 +119,12 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import SubNavigation from '@/components/Navigation/SubNavigation';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import SubNavigation from '@/components/Navigation/SubNavigation.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import ChangeNoOfTestApplications from '@/components/ModalViews/ChangeNoOfTestApplications.vue';
 import { mapState } from 'vuex';
 import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isApproved, isArchived } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
@@ -242,6 +242,12 @@ export default {
         };
       }
     },
+    isTested() {
+      return this.exercise && this.exercise.testingState && this.exercise.testingState === 'tested';
+    },
+  },
+  unmounted() {
+    this.$store.dispatch('exerciseDocument/unbind');
   },
   mounted() {
     const id = this.$route.params.id;

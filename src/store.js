@@ -1,7 +1,6 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
+
 import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-Vue.use(Vuex);
 firestoreOptions.wait = true;
 
 // Vuex modules
@@ -50,9 +49,10 @@ import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
-const store = new Vuex.Store({
+//const store = new Vuex.Store({
+const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: process.env.NODE_ENV !== 'production',
+  strict: import.meta.env.NODE_ENV !== 'production',
   modules: {
     // Keep these in alphabetical order for readability in Vue Chrome Extension
     applicationRecords,
@@ -97,7 +97,7 @@ const store = new Vuex.Store({
     ui,
   },
   state: {
-    packageVersion: process.env.PACKAGE_VERSION || '0',
+    packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
   mutations: {
     ...vuexfireMutations,
@@ -108,7 +108,7 @@ const store = new Vuex.Store({
       return state.packageVersion;
     },
     appEnvironment: () => {
-      const projectId = process.env.VUE_APP_FIREBASE_PROJECT_ID;
+      const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';
       }

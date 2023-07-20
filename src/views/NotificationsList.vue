@@ -43,10 +43,9 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
-
     <Table
       v-show="activeTab == 'queue'"
       data-key="id"
@@ -57,7 +56,7 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.createdAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.createdAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
           {{ row.template.name }}
@@ -85,10 +84,10 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.createdAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.createdAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.sentAt | formatDate('datetime') }}
+          {{ $filters.formatDate(row.sentAt, 'datetime') }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           {{ row.template.name }}
@@ -156,14 +155,14 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
 import { functions } from '@/firebase';
 

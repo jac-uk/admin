@@ -51,7 +51,7 @@
             Approved for immediate appointment
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ totalApplicationRecords | formatNumber }}
+            {{ $filters.formatNumber(totalApplicationRecords) }}
           </h2>
         </div>
       </div>
@@ -59,7 +59,7 @@
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">Type of exercise</span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ exerciseType | lookup }}
+            {{ $filters.lookup(exerciseType) }}
           </h2>
         </div>
       </div>
@@ -99,9 +99,9 @@ import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
@@ -147,7 +147,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

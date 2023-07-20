@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SideNavigation from '@/components/Navigation/SideNavigation';
+import SideNavigation from '@/components/Navigation/SideNavigation.vue';
 import { isProcessing, getTaskTypes, TASK_STATUS } from '@/helpers/exerciseHelper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { lookup } from '@/filters';

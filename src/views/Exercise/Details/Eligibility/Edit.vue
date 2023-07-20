@@ -304,17 +304,17 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion';
-import Membership from '@/components/RepeatableFields/Membership';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion.vue';
+import Membership from '@/components/RepeatableFields/Membership.vue';
 import { isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
 
 const fixedFields = {

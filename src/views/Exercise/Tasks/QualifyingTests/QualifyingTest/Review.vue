@@ -4,11 +4,11 @@
       {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }}
     </h2>
     <h3 class="govuk-heading-l">
-      {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+      {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
       <span
         v-if="qualifyingTest.mode"
         class="govuk-tag govuk-tag--grey govuk-!-margin-left-2"
-      >{{ qualifyingTest.mode | lookup }}</span>
+      >{{ $filters.lookup(qualifyingTest.mode) }}</span>
     </h3>
 
     <div class="text-right">
@@ -30,7 +30,7 @@
           Type
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.type | lookup }}
+          {{ $filters.lookup(qualifyingTest.type) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -38,7 +38,7 @@
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.status | lookup }}
+          {{ $filters.lookup(qualifyingTest.status) }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -54,7 +54,7 @@
           Start date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.startDate | formatDate('datetime') }}
+          {{ $filters.formatDate(qualifyingTest.startDate, 'datetime') }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -62,7 +62,7 @@
           End date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ qualifyingTest.endDate | formatDate('datetime') }}
+          {{ $filters.formatDate(qualifyingTest.endDate, 'datetime') }}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -225,7 +225,7 @@
             Invited emails
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ qualifyingTest.invitedEmails | toCSV }}
+            {{ $filters.toCSV(qualifyingTest.invitedEmails) }}
           </dd>
         </div>
       </dl>
@@ -272,7 +272,7 @@
 import { mapState } from 'vuex';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'QualifyingTestReview',

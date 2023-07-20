@@ -12,7 +12,7 @@
           <template
             v-if="exercise.characterChecksDate"
           >
-            {{ exercise.characterChecksDate | formatDate('long') }}
+            {{ $filters.formatDate(exercise.characterChecksDate, 'long') }}
           </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
@@ -25,7 +25,7 @@
           <template
             v-if="exercise.characterChecksReturnDate"
           >
-            {{ exercise.characterChecksReturnDate | formatDate('long') }}
+            {{ $filters.formatDate(exercise.characterChecksReturnDate, 'long') }}
           </template>
         </dd>
         <dd class="govuk-summary-list__actions" />
@@ -53,11 +53,10 @@
     <div v-if="characterChecksEnabled">
       <TabsList
         ref="tabs"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
-
       <div
         v-if="activeTab == 'notrequested'"
         class="application-details"
@@ -91,12 +90,12 @@
 
         <Table
           key="notrequested"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {
@@ -172,12 +171,12 @@
 
         <Table
           key="requested"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksRequested"
           :columns="tableColumnsCharacterChecksRequested"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {
@@ -212,7 +211,7 @@
               {{ row.characterChecks.status }}
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[4].title">
-              {{ row.characterChecks.requestedAt | formatDate }}
+              {{ $filters.formatDate(row.characterChecks.requestedAt) }}
             </TableCell>
             <TableCell :title="tableColumnsCharacterChecksRequested[5].title">
               {{ getDate(row.characterChecks.reminderSentAt) || 'n/a' }}
@@ -232,12 +231,12 @@
       >
         <Table
           key="completed"
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksCompleted"
           :columns="tableColumns"
           :search="['candidate.fullName']"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :filters="[
             {
@@ -285,13 +284,13 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';

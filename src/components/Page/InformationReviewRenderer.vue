@@ -13,7 +13,7 @@
           :index="index"
           :extension="extension"
           :display-month-year-only="displayMonthYearOnly"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -29,7 +29,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           :extension="extension"
           type="route"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -44,7 +44,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           type="email"
           :extension="extension"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -59,7 +59,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           type="tel"
           :extension="extension"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -75,7 +75,7 @@
           :type="type"
           :extension="extension"
           :options="options"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -91,7 +91,7 @@
           type="selection"
           :extension="extension"
           :options="options"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
 
@@ -108,7 +108,7 @@
             :extension="extension"
             :options="options"
             type="ranked-selection"
-            @changeField="changeField"
+            @change-field="changeField"
           />
         </span>
       </div>
@@ -124,7 +124,7 @@
           :extension="extension"
           :type="type"
           :index="index"
-          @changeField="changeField"
+          @change-field="changeField"
         />
       </div>
     </div>
@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
@@ -191,6 +191,7 @@ export default {
       default: false,
     },
   },
+  emits: ['changeField'],
   data() {
     return {
       filters: filters,

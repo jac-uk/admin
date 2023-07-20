@@ -5,8 +5,9 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';
 
+const collection = firestore.collection('messages');
+
 export default class {
-  collection = firestore.collection('messages');
   state() {
     return {
       record: null,
@@ -19,7 +20,7 @@ export default class {
   actions() {
     return {
       bind: firestoreAction(({ bindFirestoreRef }, { params, limit }) => {
-        let firestoreRef = this.collection;
+        let firestoreRef = collection;
         for (const param of params) {
           const field = param[0];
           const operator = param[1];
@@ -66,13 +67,13 @@ export default class {
         }
 
         if (isUpdate) {
-          await this.collection.doc(id).update(data);
+          await collection.doc(id).update(data);
         } else {
-          await this.collection.add(data);
+          await collection.add(data);
         }
       },
       delete: async (context, { id }) => {
-        const ref = this.collection.doc(id);
+        const ref = collection.doc(id);
         await ref.delete();
       },
       markAsRead: async (context, id) => {
@@ -91,7 +92,7 @@ export default class {
   modules() {
       return {};
   }
-  getModule = () => {
+  getModule() {
     return {
         namespaced: true,
         state: this.state(),

@@ -11,7 +11,7 @@
         :errors="errors"
       />
       <span>
-        <div 
+        <div
           class="govuk-form-group"
         >
           <label
@@ -86,7 +86,7 @@
 <script>
 import { functions } from '@/firebase';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -100,6 +100,7 @@ export default {
     },
   },
   mixins: [permissionMixin],
+  emits: ['close'],
   data() {
     return {
       applicationStatus: null,

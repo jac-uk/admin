@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput';
+import Form from '@/components/Page/Form.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 
 export default {
   name: 'SelectPanel',

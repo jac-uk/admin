@@ -8,7 +8,7 @@
       <div class="moj-page-header-actions govuk-!-margin-bottom-2">
         <div class="moj-page-header-actions__title">
           <h1 class="govuk-heading-l">
-            {{ stage | lookup }} ({{ totalApplicationRecords }})
+            {{ $filters.lookup(stage) }} ({{ totalApplicationRecords }})
           </h1>
         </div>
         <div
@@ -53,11 +53,11 @@
       <Table
         ref="tableRef"
         :key="stage"
+        v-model:selection="selectedItems"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
         multi-select
-        :selection.sync="selectedItems"
         :page-size="pageSize"
         :custom-search="{
           placeholder: 'Search candidate names',
@@ -91,13 +91,13 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[2].title">
-            {{ row | candidateHasIssues }}
+            {{ $filters.candidateHasIssues(row) }}
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ row.status | lookup }}
+            {{ $filters.lookup(row.status) }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ row.flags.empApplied | toYesNo }}
+            {{ $filters.toYesNo(row.flags.empApplied) }}
           </TableCell>
         </template>
       </Table>
@@ -112,9 +112,9 @@
 </template>
 
 <script>
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { availableStatuses, getPreviousStage } from '../../../helpers/exerciseHelper';

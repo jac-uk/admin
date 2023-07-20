@@ -17,8 +17,8 @@
         >
           <a
             class="moj-side-navigation__link"
-            :active="isActive"
-            :aria-current="isActive ? 'location' : false"
+            :active="isActive ? 'true' : 'false'"
+            :aria-current="isActive ? 'location' : 'false'"
             :href="href"
             @click="navigate"
           >
