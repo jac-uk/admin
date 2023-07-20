@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$options.filters.lookup(this.type);
+      return this.$filters.lookup(this.type);
     },
   },
   created() {

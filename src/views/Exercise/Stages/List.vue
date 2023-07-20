@@ -182,10 +182,6 @@ export default {
         this.setPageTitle();
       }
     },
-    async pageSize() {
-      await this.$nextTick();
-      this.$refs['tableRef'].reload();
-    },
   },
   async created() {
     this.message = await this.$store.dispatch('applicationRecords/getMessages');
@@ -194,7 +190,7 @@ export default {
   },
   methods: {
     setPageTitle() {
-      document.title = `${this.$options.filters.lookup(this.stage)} | Exercise Stage | JAC Digital Platform`;
+      document.title = `${this.$filters.lookup(this.stage)} | Exercise Stage | JAC Digital Platform`;
     },
     moveBack() {
       this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });

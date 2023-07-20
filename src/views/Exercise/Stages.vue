@@ -28,7 +28,7 @@ export default {
       stages.forEach(stage => {
         const count = (exercise._applicationRecords && exercise._applicationRecords[stage]) || 0;
         sideNavigation.push({
-          title: `${this.$options.filters.lookup(stage)} (${this.$options.filters.formatNumber(count)})`, // TODO get label
+          title: `${this.$filters.lookup(stage)} (${this.$filters.formatNumber(count)})`, // TODO get label
           path: `${path}/${stage}`,
         });
       });

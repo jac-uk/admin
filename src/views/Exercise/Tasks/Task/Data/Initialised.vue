@@ -28,7 +28,7 @@
         data-key="ref"
         :data="group.children"
         :columns="[
-          { title: $options.filters.lookup(group.ref) },
+          { title: $filters.lookup(group.ref) },
           { title: '' },
           { title: '' },
         ]"
