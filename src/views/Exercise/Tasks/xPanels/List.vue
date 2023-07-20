@@ -1,13 +1,13 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
 
     <div>
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       />
       <!-- OVERVIEW -->
       <div v-show="activeTab == 'overview'">
@@ -25,7 +25,7 @@
             v-else
             class="govuk-body"
           >
-            Great, all applications have been assigned to their panels. You may now activate this {{ type | lookup }}.
+            Great, all applications have been assigned to their panels. You may now activate this {{ $filters.lookup(type) }}.
           </p>
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
@@ -77,7 +77,7 @@
                 <button
                   class="govuk-button govuk-!-margin-bottom-1"
                 >
-                  Activate this {{ type | lookup }}
+                  Activate this {{ $filters.lookup(type) }}
                 </button>
               </div>
             </div>
@@ -106,7 +106,7 @@
               >
                 <template #row="{row}">
                   <TableCell>
-                    {{ row[0] | lookup }}
+                    {{ $filters.lookup(row[0]) }}
                   </TableCell>
                   <TableCell>
                     {{ row[1] }}
@@ -315,7 +315,7 @@
                 :colspan="capabilities.length"
                 class="govuk-table__header text-center"
               >
-                {{ category | lookup }}
+                {{ $filters.lookup(category) }}
               </th>
             </tr>
           </template>
@@ -352,7 +352,7 @@
                     :key="status"
                     :value="status"
                   >
-                    {{ status | lookup }}
+                    {{ $filters.lookup(status) }}
                   </option>
                 </Select>
               </TableCell>
@@ -415,11 +415,11 @@
       <!-- APPLICATIONS -->
       <div v-show="activeTab == 'applications'">
         <Table
+          v-model:selection="selectedItems"
           data-key="id"
           :data="applicationsWithoutPanels"
           :columns="tableColumnsApplications"
           multi-select
-          :selection.sync="selectedItems"
           :page-size="50"
           :search="['candidate.fullName']"
           @change="getTableDataApplications"

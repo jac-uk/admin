@@ -23,7 +23,7 @@
               v-for="capability in capabilities"
               :key="capability"
             >
-              {{ capability | lookup }}
+              {{ $filters.lookup(capability) }}
             </li>
           </ul>
         </dd>
@@ -38,7 +38,7 @@
               v-for="item in selectionCategories"
               :key="item"
             >
-              {{ item | lookup }}
+              {{ $filters.lookup(item) }}
             </li>
           </ul>
         </dd>

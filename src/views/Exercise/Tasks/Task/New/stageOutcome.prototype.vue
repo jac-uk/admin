@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-quarter text-right">
@@ -12,8 +12,8 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
 
     <!-- OVERVIEW -->
@@ -71,7 +71,7 @@
           >
             <template #row="{row}">
               <TableCell title="Status">
-                {{ row.status | lookup }}
+                {{ $filters.lookup(row.status) }}
               </TableCell>
               <TableCell
                 title="Total"
@@ -133,7 +133,7 @@
           >
             <template #row="{row}">
               <TableCell title="Status">
-                {{ row.status | lookup }}
+                {{ $filters.lookup(row.status) }}
               </TableCell>
               <TableCell
                 title="Total"
@@ -287,8 +287,8 @@
           </button>
         </div>
         <TabsList
+          v-model:active-tab="applicationTab"
           :tabs="applicationTabs"
-          :active-tab.sync="applicationTab"
           class="govuk-!-margin-bottom-0"
         />
         <div
@@ -305,7 +305,7 @@
               class="govuk-summary-list__row"
             >
               <dt class="govuk-summary-list__key">
-                {{ taskType | lookup }}
+                {{ $filters.lookup(taskType) }}
               </dt>
               <dd class="govuk-summary-list__value">
                 {{ randomNumber(0, 30) }}

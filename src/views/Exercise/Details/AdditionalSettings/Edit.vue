@@ -30,7 +30,7 @@
             v-for="capability in capabilities"
             :key="capability"
             :value="capability"
-            :label="capability | lookup"
+            :label="$filters.lookup(capability)"
           />
         </CheckboxGroup>
 
@@ -45,7 +45,7 @@
             v-for="item in selectionCategories"
             :key="item"
             :value="item"
-            :label="item | lookup"
+            :label="$filters.lookup(item)"
           />
         </CheckboxGroup>
 

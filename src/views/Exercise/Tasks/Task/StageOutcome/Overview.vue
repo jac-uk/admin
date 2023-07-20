@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-quarter text-right">
@@ -18,7 +18,7 @@
     </div>
 
     <p class="govuk-body-l govuk-!-margin-bottom-4">
-      {{ type | lookup }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed to {{ nextProcessingStage | lookup }}
+      {{ $filters.lookup(type) }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed to {{ $filters.lookup(nextProcessingStage) }}
     </p>
 
     <!-- OVERVIEW -->
@@ -26,7 +26,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
           <div class="govuk-caption-m">
-            {{ entryStage | lookup }}
+            {{ $filters.lookup(entryStage) }}
           </div>
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"
@@ -38,7 +38,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
           <div class="govuk-caption-m">
-            {{ exitStage | lookup }}
+            {{ $filters.lookup(exitStage) }}
           </div>
           <h2
             class="govuk-heading-m govuk-!-margin-bottom-0"
