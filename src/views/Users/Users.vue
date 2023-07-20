@@ -341,7 +341,7 @@ export default {
         setTimeout(() => {
           this.closeDeleteUserModal();
           this.forceUpdateTable();
-        }, 1000);
+        }, 200);
         return true;
       } catch (error) {
         return false;
@@ -390,7 +390,7 @@ export default {
             this.resetNewUser();
             this.closeCreateUserModal();
             this.forceUpdateTable();
-          }, 500);
+          }, 200);
           return true;
         } else if (data.status === 'error') {
           const errorInfo = data.data.errorInfo;

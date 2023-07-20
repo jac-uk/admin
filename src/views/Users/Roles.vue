@@ -233,7 +233,7 @@ export default {
         await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
         setTimeout(() => {
           this.forceUpdate();
-        }, 1000);
+        }, 500);
         return true;
       } catch (error) {
         return false;
