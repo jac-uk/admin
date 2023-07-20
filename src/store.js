@@ -47,6 +47,8 @@ import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
+import vacancy from '@/store/vacancy';
+
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -91,6 +93,7 @@ const store = createStore({
     task,
     tasks,
     ui,
+    vacancy,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',

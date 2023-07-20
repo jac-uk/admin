@@ -67,7 +67,7 @@ export default {
     override: async (_, { exerciseId, data }) => {
       await collection.doc(exerciseId).update(data);
     },
-    save: async ({ state }, data) => { 
+    save: async ({ state }, data) => {
       await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
     updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
@@ -86,12 +86,10 @@ export default {
           data['state'] = 'approved';
         break;
         case 'rejected':
-          data['_approval.approved'] = null;
           data['_approval.rejected.message'] = rejectionReason;
           data['state'] = 'draft';
         break;
         default:  // 'requested'
-          data['_approval.approved'] = null;
           data['_approval.rejected'] = null;
           data['state'] = 'ready';
       }
@@ -129,9 +127,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
-        published: false,
         testingState: null,
-        _approval: null,
       };
       await ref.update(data);
     },
