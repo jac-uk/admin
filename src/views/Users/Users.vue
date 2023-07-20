@@ -25,9 +25,11 @@
       <Table
         ref="usersTable"
         data-key="id"
+        page-item-type="uppercase-letter"
         :data="users"
         :page-size="50"
         :columns="tableColumns"
+        :search="['displayName']"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -56,28 +58,28 @@
           </TableCell>
           <TableCell :title="tableColumns[3].title">
             <ActionButton
-              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
+              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
               type="primary"
               class="govuk-!-margin-right-3"
               :action="() => enableUser(row)"
             >
-              Enable user
+              Enable
             </ActionButton>
             <ActionButton
-              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value]) && userId !== row.id"
+              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
               type="secondary"
               class="govuk-!-margin-right-3"
               :action="() => disableUser(row)"
             >
-              Disable user
+              Disable
             </ActionButton>
 
             <button
-              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value]) && userId !== row.id"
+              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
               class="govuk-button govuk-button--warning"
               @click="() => openDeleteUserModal(row)"
             >
-              Delete user
+              Delete
             </button>
           </TableCell>
         </template>
