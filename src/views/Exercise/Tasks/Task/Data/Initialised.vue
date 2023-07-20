@@ -10,7 +10,7 @@
         <ActionButton
           class="govuk-!-margin-bottom-1"
           type="primary"
-          @click="btnContinue"
+          :action="btnContinue"
         >
           Continue
         </ActionButton>
@@ -44,7 +44,7 @@
           <TableCell>
             <ActionButton
               class="govuk-!-margin-bottom-0"
-              @click="btnRemove(group, index)"
+              :action="() => btnRemove(group, index)"
             >
               Remove
             </ActionButton>

@@ -13,7 +13,7 @@
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportData"
+        :action="exportData"
       >
         Export to Excel
       </ActionButton>
@@ -24,13 +24,13 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportToGoogleDoc"
+        :action="exportToGoogleDoc"
       >
         Generate Report
       </ActionButton>
       <ActionButton
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>

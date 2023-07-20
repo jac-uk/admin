@@ -40,7 +40,7 @@
             <ActionButton
               v-if="canUpdateExercises && isApproved"
               class="govuk-!-margin-bottom-0"
-              @click="copyToClipboard"
+              :action="copyToClipboard"
             >
               Copy to clipboard
             </ActionButton>
@@ -84,7 +84,7 @@
             <ActionButton
               v-if="isTesting"
               ref="createTestApplicationsBtn"
-              @click="createTestApplications()"
+              :action="createTestApplications"
             >
               Create demo applications
             </ActionButton>
