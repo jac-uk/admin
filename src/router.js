@@ -1066,31 +1066,33 @@ const routes = [
             redirect: { name: 'exercise-stages-list', params: { stage: 'review' } },  // TODO change to applied
           },
           {
-            path: ':stage',
+            path: ':stage/',
             component: ExerciseStagesList,
             name: 'exercise-stages-list',
             meta: {
               requiresAuth: true,
               title: 'List | Exercise Stage',
             },
-          },
-          {
-            path: ':stage/edit',
-            component: ExerciseStagesEdit,
-            name: 'exercise-stages-edit',
-            meta: {
-              requiresAuth: true,
-              title: 'Edit | Exercise Stage',
-            },
-          },
-          {
-            path: ':stage/back',
-            component: ExerciseStagesBack,
-            name: 'exercise-stages-back',
-            meta: {
-              requiresAuth: true,
-              title: 'Move Back | Exercise Stages',
-            },
+            children: [
+              {
+                path: 'edit',
+                component: ExerciseStagesEdit,
+                name: 'exercise-stages-edit',
+                meta: {
+                  requiresAuth: true,
+                  title: 'Edit | Exercise Stage',
+                },
+              },
+              {
+                path: 'back',
+                component: ExerciseStagesBack,
+                name: 'exercise-stages-back',
+                meta: {
+                  requiresAuth: true,
+                  title: 'Move Back | Exercise Stages',
+                },
+              },    
+            ],
           },
         ],
       },
