@@ -603,6 +603,7 @@ export default {
         { title: 'Nationality (if more than one, please state all)', ref: '' },
         { title: 'Gender', ref: 'gender' },
         { title: 'Present Address', ref: 'currentAddress' },
+        { title: 'Postcode', ref: 'postcode' },
         { title: 'Previous Address', ref: 'previousAddresses' },
         { title: 'Occupation', ref: '' },
         { title: 'National Insurance Number', ref: 'nationalInsuranceNumber' },
