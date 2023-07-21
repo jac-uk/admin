@@ -193,7 +193,11 @@ export default {
       // console.log('DIFFERENCES:');
       // console.log(differences);
 
-      this.getChanges();
+      //this.getChanges();
+
+      const differences = this.getDeepObjectDifferences(this.vacancy, this.exercise, ['state']);
+      console.log('DIFFERENCES:');
+      console.log(differences);
     });
 
     // @TODO: TESTING
@@ -264,91 +268,32 @@ export default {
         },
         testMissing2: 'testertoon',
       };
-      // const differences = this.getDifferencesKeys(vacancy, exercise);
+
+      // const differences = this.getDeepObjectDifferences(vacancy, exercise);
+      // console.log('DIFFERENCES:');
       // console.log(differences);
-
-      // const keysToCompare = ['testMatch1', 'testMatch2', 'testMatch3', 'testMisMatch1', 'testMisMatch2', 'testMisMatch3'];
-
-      // const differences = this.compareKeys(vacancy, exercise, keysToCompare);
-      // console.log(differences);
-
-      //const keysToIgnore = ['testMissing1'];
-
-      const differences = this.getDeepObjectDifferences(vacancy, exercise);
-      console.log('DIFFERENCES:');
-      console.log(differences);
 
     },
-    // compareObjects(obj1, obj2, currentKey, diffKeys) {
-    //   const keys1 = Object.keys(obj1 || {});
-    //   const keys2 = Object.keys(obj2 || {});
-    //   const allKeys = new Set([...keys1, ...keys2]);
 
-    //   for (const key of allKeys) {
-    //     const keyPath = currentKey ? `${currentKey}.${key}` : key;
-    //     const val1 = obj1 ? obj1[key] : undefined;
-    //     const val2 = obj2 ? obj2[key] : undefined;
-
-    //     if (typeof val1 === 'object' && typeof val2 === 'object' && !Array.isArray(val1) && !Array.isArray(val2)) {
-    //       this.compareObjects(val1, val2, keyPath, diffKeys);
-    //     } else if (JSON.stringify(val1) !== JSON.stringify(val2)) {
-    //       diffKeys.push(currentKey || key);
-    //     }
-    //   }
-    // },
-    // getDifferencesKeys(obj1, obj2) {
-    //   const diffKeys = [];
-    //   this.compareObjects(obj1, obj2, '', diffKeys);
-    //   return diffKeys;
-    // },
-
-    // compare(o1, o2, keysToCompare) {
-    //   const differences = [];
-
-    //   keysToCompare.forEach(key => {
-    //     const val1 = o1[key];
-    //     const val2 = o2[key];
-
-    //     if (val1 === null || val1 === undefined || val2 === null || val2 === undefined) {
-    //       if (val1 !== val2) {
-    //         differences.push(key);
-    //       }
-    //       return;
-    //     }
-
-    //     if (typeof val1 === 'object' && typeof val2 === 'object') {
-    //       const nestedKeys = Object.keys(val1);
-    //       const nestedDifferences = this.compare(val1, val2, nestedKeys);
-    //       if (nestedDifferences.length > 0) {
-    //         differences.push(key);
-    //       }
-    //     } else if (val1 !== val2) {
-    //       differences.push(key);
-    //     }
-    //   });
-
-    //   return differences;
-    // },
-
-    // compareKeys(o1, o2, keysToCompare) {
-    //   const differences = this.compare(o1, o2, keysToCompare);
-    //   return differences;
-    // },
-
-    getDeepObjectDifferences(obj1, obj2) {
+    getDeepObjectDifferences(obj1, obj2, keysToIgnore) {
       const differences = [];
 
-      this.compareObjects(obj1, obj2, [], differences);
+      this.compareObjects(obj1, obj2, [], differences, keysToIgnore);
       return differences;
     },
 
-    compareObjects(obj1, obj2, path = [], differences = []) {
+    compareObjects(obj1, obj2, path = [], differences = [], keysToIgnore = []) {
       for (const key in obj1) {
         if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
           const newPath = [...path, key];
 
-          if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-            this.compareObjects(obj1[key], obj2[key], newPath, differences);
+          if (keysToIgnore.includes(key) || key.charAt(0) === '_') {
+            // If the key is in the keysToIgnore array or begins with an underscaore, skip the comparison
+            continue;
+          }
+
+          if (this.isObject(obj1[key]) && this.isObject(obj2[key])) {
+            this.compareObjects(obj1[key], obj2[key], newPath, differences, keysToIgnore);
           } else if (!this.isEqual(obj1[key], obj2[key])) {
             // If the values are different, store the top-level key in the differences array
             differences.push(newPath[0]);
@@ -358,15 +303,17 @@ export default {
     },
     isEqual(value1, value2) {
       if (typeof value1 !== typeof value2) return false;
-
       if (typeof value1 === 'object') {
         // Use JSON.stringify to handle nested arrays and objects
         return JSON.stringify(value1) === JSON.stringify(value2);
       }
-
       return value1 === value2;
     },
-
+    isObject(input) {
+      return typeof input === 'object' &&
+        !Array.isArray(input) &&
+        input !== null;
+    },
   },
 };
 </script>
