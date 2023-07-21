@@ -15,7 +15,7 @@
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"
         type="primary"
-        @click="exportData"
+        :action="exportData"
       >
         Download XLSX
       </ActionButton>

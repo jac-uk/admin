@@ -21,7 +21,7 @@
           <ActionButton
             type="primary"
             :disabled="!canExportToGoogleDrive"
-            @click="exportToGoogleDrive"
+            :action="exportToGoogleDrive"
           >
             Export to google drive
           </ActionButton>

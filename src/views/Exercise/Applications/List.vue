@@ -29,7 +29,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              @click="exportContacts"
+              :action="exportContacts"
             >
               Export contacts
             </ActionButton>

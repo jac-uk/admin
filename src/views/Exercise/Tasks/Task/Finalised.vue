@@ -20,7 +20,7 @@
           v-if="hasPassMark"
           class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
           type="primary"
-          @click="btnComplete"
+          :action="btnComplete"
         >
           Complete
         </ActionButton>

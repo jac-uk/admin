@@ -21,7 +21,7 @@
             ])"
             type="primary"
             class="govuk-!-margin-right-3 govuk-!-top-3"
-            @click="send"
+            :action="send"
           >
             {{ buttonText }}
           </ActionButton>
