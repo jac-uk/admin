@@ -35,8 +35,8 @@ auth.onAuthStateChanged(async (user) => {
   const userDoc = await store.dispatch('auth/setCurrentUser', user);
   if (userDoc) {
     const role = await store.dispatch('roles/get', userDoc.role.id);
+    await store.dispatch('auth/setUserRole', role);
     if (role) {
-      store.dispatch('auth/setUserRole', role);
       isAuth = true;
 
       if (window.location.pathname == '/sign-in') {

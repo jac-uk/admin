@@ -70,9 +70,11 @@ const module = {
             };
             commit('setCurrentUser', data);
             if (shouldEnsureEmailVerified) {
-              await functions.httpsCallable('ensureEmailValidated')({});
+              await functions.httpsCallable('ensureEmailVerified')({});
             }
             return data;
+          } else {
+            commit('setAuthError', 'The user does not exist in the database');
           }
         } else {
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
@@ -82,9 +84,13 @@ const module = {
       return null;
     },
     async setUserRole({ commit }, role) {
-      commit('setUserRole', {
-        rolePermissions: convertPermissions(role),
-      });
+      if (role) {
+        commit('setUserRole', {
+          rolePermissions: convertPermissions(role),
+        });
+      } else {
+        commit('setAuthError', 'This user does not have a role');
+      }
     },
   },
   getters: {
