@@ -22,6 +22,7 @@
         <Checkbox
           v-for="method in Object.values(ASSESSMENT_METHOD)"
           :id="`assessment-method-${method}`"
+          :key="method"
           v-model="formData.assessmentMethods[method]"
         >
           {{ $filters.lookup(method) }}
