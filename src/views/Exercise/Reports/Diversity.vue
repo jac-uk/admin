@@ -140,7 +140,7 @@
                 <Stat :stat="diversity[activeTab].gender.female" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
+            <!-- <tr class="govuk-table__row">
               <th
                 scope="col"
                 class="govuk-table__header"
@@ -150,7 +150,7 @@
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="diversity[activeTab].gender.genderNeutral" />
               </td>
-            </tr>
+            </tr> -->
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Declaration total
@@ -395,7 +395,7 @@
                 <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
+            <!-- <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Declaration total
               </th>
@@ -405,7 +405,7 @@
                   :report-total="diversity[activeTab].socialMobility.total"
                 />
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
 
@@ -466,7 +466,7 @@
                 <Stat :stat="diversity[activeTab].emp.gender" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
+            <!-- <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Declaration total
               </th>
@@ -476,7 +476,7 @@
                   :report-total="diversity[activeTab].emp.total"
                 />
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
       </div>
