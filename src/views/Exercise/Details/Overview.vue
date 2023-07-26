@@ -381,12 +381,10 @@ export default {
       });
       this.closeApprovalModal();
     },
-    confirmDelete() {
+    async confirmDelete() {
       this.closeDeleteModal();
-      // Redirect THEN delete so not breaking any references in the component
-      this.$router.push({ name: 'exercises' }).then(() => {
-        this.$store.dispatch('exerciseDocument/delete');
-      });
+      await this.$store.dispatch('exerciseDocument/delete');
+      this.$router.push({ name: 'exercises' })
     },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
