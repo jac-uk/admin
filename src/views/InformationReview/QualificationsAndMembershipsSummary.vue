@@ -224,7 +224,7 @@
                       name="exemption-certificate"
                       :enable-delete="true"
                       :path="uploadPath"
-                      @input="val => doFileUpload(val, 'uploadedExemptionCertificate')"
+                      @update:model-value="val => doFileUpload(val, 'uploadedExemptionCertificate')"
                     />
                   </div>
                 </dd>
@@ -258,7 +258,7 @@
                       name="practicing-certificate"
                       :enable-delete="true"
                       :path="uploadPath"
-                      @input="val => doFileUpload(val, 'uploadedPracticingCertificate')"
+                      @update:model-value="val => doFileUpload(val, 'uploadedPracticingCertificate')"
                     />
                   </div>
                 </dd>

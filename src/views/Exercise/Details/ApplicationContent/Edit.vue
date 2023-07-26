@@ -78,7 +78,6 @@
         <button
           type="button"
           class="govuk-button"
-          :disabled="!snapshotHasChanged"
           @click="onSubmit"
         >
           Continue
@@ -108,8 +107,6 @@ export default {
   data() {
     return {
       clonedExercise: null,
-      initialSnapshot: null,
-      currentSnapshot: null,
       saveData: {},
     };
   },
@@ -126,13 +123,9 @@ export default {
     unselectedApplicationParts() {
       return unselectedApplicationParts(this.clonedExercise);
     },
-    snapshotHasChanged() {
-      return this.currentSnapshot && (this.initialSnapshot !== this.currentSnapshot);
-    },
   },
   created() {
     this.clonedExercise = clone(this.exercise);
-    this.initialSnapshot = this.createSnapshot();
   },
   methods: {
     async onDrop(droppedItem) {
@@ -144,7 +137,6 @@ export default {
           this.saveData[`_applicationContent.${droppedItem.data.step}.${droppedItem.data.part}`] = false;
         }
         this.updateClonedExercise(this.saveData);
-        this.currentSnapshot = this.createSnapshot();
       }
     },
     updateClonedExercise(data) {
@@ -156,9 +148,6 @@ export default {
     async onSubmit() {
       await this.$store.dispatch('exerciseDocument/save', this.saveData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
-    },
-    createSnapshot() {
-      return JSON.stringify(this.applicationContentList);
     },
   },
 };
