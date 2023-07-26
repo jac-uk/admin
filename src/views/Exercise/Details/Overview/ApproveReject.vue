@@ -12,15 +12,12 @@
 
       <div class="govuk-!-padding-left-8">
         <p>Please verify the content of the exercise and Approve or Reject.</p>
-
-        <!--@TODO-->
-        <div class="govuk-inset-text">
-          It can take up to 8 weeks to register a lasting power of attorney if there are no mistakes in the application.
-          <button @click="test()">
-            test
-          </button>
+        <div
+          v-if="hasChanges"
+          class="govuk-inset-text"
+        >
+          The following fields have changed: {{ formattedChanges }}
         </div>
-
         <div>
           <button
             :disabled="!isReadyForApprovalFromAdvertType"
@@ -44,108 +41,16 @@
 
 <script>
 import permissionMixin from '@/permissionMixin';
-import { isReadyForApprovalFromAdvertType, exerciseAdvertTypes } from '@/helpers/exerciseHelper';
+import { isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
 import { mapState } from 'vuex';
 import _has from 'lodash/has.js';
-import _get from 'lodash/get.js';
-
-// @TODO: UNDO THE CHANGES IN DOCUMENT.JS !!!!
-
 export default {
   name: 'ApproveReject',
   mixins: [permissionMixin],
   emits: ['reject'],
   data() {
     return {
-      vacancyFields: [
-        '_applicationContent',
-        '_applicationVersion',
-        'aboutTheRole',
-        'aboutTheRoleWelsh',
-        'additionalWorkingPreferences',
-        'advertType',
-        'applicationCloseDate',
-        'applicationOpenDate',
-        'appliedSchedule',
-        'appointmentType',
-        'aSCApply',
-        'assessmentMethods',
-        'assessmentOptions',
-        'authorisations',
-        'characterChecks',
-        'contactIndependentAssessors',
-        'criticalAnalysisTestDate',
-        'criticalAnalysisTestEndTime',
-        'criticalAnalysisTestStartTime',
-        'downloads',
-        'estimatedLaunchDate',
-        'exerciseMailbox',
-        'exercisePhoneNumber',
-        'feePaidFee',
-        'finalOutcome',
-        'futureStart',
-        'immediateStart',
-        'independentAssessmentsReturnDate',
-        'inviteOnly',
-        'isCourtOrTribunal',
-        'isSPTWOffered',
-        'jurisdiction',
-        'jurisdictionQuestion',
-        'jurisdictionQuestionAnswers',
-        'jurisdictionQuestionType',
-        'location',
-        'locationQuestion',
-        'locationQuestionAnswers',
-        'locationQuestionType',
-        'memberships',
-        'name',
-        'noSalaryDetails',
-        'otherJurisdiction',
-        'otherLOS',
-        'otherMemberships',
-        'otherQualifications',
-        'otherRetirement',
-        'otherShortlistingMethod',
-        'otherYears',
-        'pjeDays',
-        'postQualificationExperience',
-        'previousJudicialExperienceApply',
-        'qualifications',
-        'reasonableLengthService',
-        'referenceNumber',
-        'retirementAge',
-        'roleSummary',
-        'roleSummaryWelsh',
-        'salary',
-        'salaryGrouping',
-        'scenarioTestDate',
-        'scenarioTestEndTime',
-        'scenarioTestStartTime',
-        'schedule2Apply',
-        'selectionCriteria',
-        'selectionDays',
-        'selectionExerciseManagerFullName',
-        'shortlistingMethods',
-        'siftStartDate',
-        'siftEndDate',
-        'nameBlindSiftStartDate',
-        'nameBlindSiftEndDate',
-        'shortlistingOutcomeDate',
-        'situationalJudgementTestDate',
-        'situationalJudgementTestEndTime',
-        'situationalJudgementTestStartTime',
-        'state',
-        'subscriberAlertsUrl',
-        'typeOfExercise',
-        'uploadedCandidateAssessmentFormTemplate',
-        'uploadedIndependentAssessorTemplate',
-        'uploadedJobDescriptionTemplate',
-        'uploadedTermsAndConditionsTemplate',
-        'welshPosts',
-        'welshRequirement',
-        'welshRequirementType',
-        'yesSalaryDetails',
-      ],
+      changes: [],
     };
   },
   computed: {
@@ -157,51 +62,30 @@ export default {
       return this.$store.getters['exerciseDocument/data']();
     },
     exerciseId() {
-      //return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
       return this.$store.state.exerciseDocument.record.id;
     },
     isReadyForApprovalFromAdvertType() {
       return isReadyForApprovalFromAdvertType(this.exercise);
     },
     exerciseWasPreviouslyApproved() {
-      //const isPreviouslyApproved = '_approval' in dataAfter && 'approved' in dataAfter._approval && dataAfter._approval.approved;
-      //return ('_approval' in this.exercise) && ('approved' in this.exercise._approval) && (this.exercise._approval.approved);
       return _has(this.exercise, '_approval.approved.date');
     },
     vacancy() {
       return this.$store.getters['vacancy/data']();
     },
+    formattedChanges() {
+      return this.changes.map(element => {
+        return element.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>{ return str.toUpperCase(); });
+      }).join(', ');
+    },
+    hasChanges() {
+      return this.changes.length > 0;
+    },
   },
   mounted() {
-
-    // @TODO: IGNORE state and _ fields
-
     this.$store.dispatch('vacancy/bind', this.exerciseId).then(() => {
-      // Can remove the concole logs but not the parent!
-      console.log('vacancy:');
-      console.log(this.vacancy);
-
-      console.log('exercise:');
-      console.log(this.exercise);
-
-      // @TODO: Use a watch to monitor the changes, if need be
-      // const differences = this.getDifferencesKeys(this.vacancy, this.exercise);
-
-      // const differences = this.compareKeys(this.vacancy, this.exercise, this.vacancyFields);
-      // console.log(differences);
-
-      // console.log('DIFFERENCES:');
-      // console.log(differences);
-
-      //this.getChanges();
-
-      const differences = this.getDeepObjectDifferences(this.vacancy, this.exercise, ['state']);
-      console.log('DIFFERENCES:');
-      console.log(differences);
+      this.changes = this.getDeepObjectDifferences(this.vacancy, this.exercise, ['state']);
     });
-
-    // @TODO: TESTING
-    //this.getChanges();
   },
   methods: {
     async approve() {
@@ -214,84 +98,19 @@ export default {
     reject() {
       this.$emit('reject');
     },
-
-    // @TODO: REMOVE!!!
-    test() {
-      console.log(`this.exerciseWasPreviouslyApproved: ${this.exerciseWasPreviouslyApproved}`);
-      console.log('this.exercise._approval:');
-      console.log(this.exercise._approval);
-      console.log('this.exercise._approval.approved:');
-      console.log(this.exercise._approval.approved);
-
-    },
-    getChanges() {
-      const vacancy = {
-        testMatch1: 'tester',
-        testMatch2: {
-          a: 1,
-          b: 2,
-        },
-        testMatch3: {
-          a: 1,
-          b: [1, 2, 3],
-        },
-        testMisMatch1: 'tester',
-        testMisMatch2: {
-          a: 1,
-          b: 2,
-        },
-        testMisMatch3: {
-          a: 1,
-          b: [1, 2, 3],
-        },
-        testMissing1: 'tester',
-      };
-
-      const exercise = {
-        testMatch1: 'tester',
-        testMatch2: {
-          a: 1,
-          b: 2,
-        },
-        testMatch3: {
-          a: 1,
-          b: [1, 2, 3],
-        },
-        testMisMatch1: 'tester1',
-        testMisMatch2: {
-          a: 1,
-          b: 3,
-        },
-        testMisMatch3: {
-          a: 1,
-          b: [1, 2],
-        },
-        testMissing2: 'testertoon',
-      };
-
-      // const differences = this.getDeepObjectDifferences(vacancy, exercise);
-      // console.log('DIFFERENCES:');
-      // console.log(differences);
-
-    },
-
     getDeepObjectDifferences(obj1, obj2, keysToIgnore) {
       const differences = [];
-
       this.compareObjects(obj1, obj2, [], differences, keysToIgnore);
       return differences;
     },
-
     compareObjects(obj1, obj2, path = [], differences = [], keysToIgnore = []) {
       for (const key in obj1) {
         if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
           const newPath = [...path, key];
-
           if (keysToIgnore.includes(key) || key.charAt(0) === '_') {
-            // If the key is in the keysToIgnore array or begins with an underscaore, skip the comparison
+            // If the key is in the keysToIgnore array or begins with an underscore, skip the comparison
             continue;
           }
-
           if (this.isObject(obj1[key]) && this.isObject(obj2[key])) {
             this.compareObjects(obj1[key], obj2[key], newPath, differences, keysToIgnore);
           } else if (!this.isEqual(obj1[key], obj2[key])) {
