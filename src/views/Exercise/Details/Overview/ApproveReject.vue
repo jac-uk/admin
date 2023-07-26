@@ -40,6 +40,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'ApproveReject',
   mixins: [permissionMixin],
+  emits: ['reject'],
   computed: {
     ...mapState({
       userId: state => state.auth.currentUser.uid,

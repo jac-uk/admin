@@ -11,7 +11,7 @@
             v-if="diversity"
             class="govuk-body govuk-!-font-size-14"
           >
-            {{ diversity.createdAt | formatDate('longdatetime') }}
+            {{ $filters.formatDate(diversity.createdAt, 'longdatetime') }}
           </span>
         </div>
         <div
@@ -42,7 +42,7 @@
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 type="primary"
-                @click="refreshReport"
+                :action="refreshReport"
               >
                 Refresh
               </ActionButton>
@@ -61,7 +61,7 @@
               Total applications
             </span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ diversity.totalApplications | formatNumber }}
+              {{ $filters.formatNumber(diversity.totalApplications) }}
             </h2>
           </div>
         </div>
@@ -69,7 +69,7 @@
           <div class="panel govuk-!-margin-bottom-9">
             <span class="govuk-caption-m">Type of exercise</span>
             <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-              {{ exercise.typeOfExercise | lookup }}
+              {{ $filters.lookup(exercise.typeOfExercise) }}
             </h2>
           </div>
         </div>
@@ -83,9 +83,9 @@
     >
       <TabsList
         v-if="showTabs"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
 
       <h3 class="govuk-heading-m">
@@ -501,11 +501,11 @@
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Stat from '@/components/Report/Stat';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'Diversity',
@@ -575,7 +575,7 @@ export default {
         }
       });
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

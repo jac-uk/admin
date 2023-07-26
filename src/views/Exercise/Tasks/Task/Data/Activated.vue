@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-half">
@@ -38,7 +38,7 @@
             class="govuk-!-margin-bottom-1"
             type="primary"
             :disabled="!areAllRowsComplete"
-            @click="btnFinalise"
+            :action="btnFinalise"
           >
             Continue
           </ActionButton>
@@ -86,7 +86,7 @@
               :colspan="header.colspan"
               class="govuk-table__header text-center"
             >
-              {{ header.ref | lookup }}
+              {{ $filters.lookup(header.ref) }}
             </th>
             <th
               scope="col"
@@ -168,10 +168,10 @@
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import FullScreenButton from '@/components/Page/FullScreenButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import { functions } from '@/firebase';
 import clone from 'clone';
 

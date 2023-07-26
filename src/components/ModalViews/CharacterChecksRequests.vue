@@ -21,7 +21,7 @@
             ])"
             type="primary"
             class="govuk-!-margin-right-3 govuk-!-top-3"
-            @click="send"
+            :action="send"
           >
             {{ buttonText }}
           </ActionButton>
@@ -40,7 +40,7 @@
 <script>
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'CharacterChecksRequests',
@@ -74,6 +74,12 @@ export default {
       required: true,
       default: '',
     },
+  },
+  emits: ['close', 'confirmed', 'setmessage', 'reset'],
+  data() {
+    return {
+      processing: false,
+    };
   },
   computed: {
     numberOfCandidates() {

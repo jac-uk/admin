@@ -55,11 +55,11 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 
 export default {
   name: 'QualifyingTestReportEdit',

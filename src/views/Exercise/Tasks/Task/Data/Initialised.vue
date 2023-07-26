@@ -3,14 +3,14 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-half">
         <ActionButton
           class="govuk-!-margin-bottom-1"
           type="primary"
-          @click="btnContinue"
+          :action="btnContinue"
         >
           Continue
         </ActionButton>
@@ -36,15 +36,15 @@
       >
         <template #row="{row, index}">
           <TableCell>
-            {{ row.ref | lookup }}
+            {{ $filters.lookup(row.ref) }}
           </TableCell>
           <TableCell>
-            {{ row.type | lookup }}
+            {{ $filters.lookup(row.type) }}
           </TableCell>
           <TableCell>
             <ActionButton
               class="govuk-!-margin-bottom-0"
-              @click="btnRemove(group, index)"
+              :action="() => btnRemove(group, index)"
             >
               Remove
             </ActionButton>
@@ -76,12 +76,12 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import AddMarkingSchemeItem from './AddMarkingSchemeItem';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import AddMarkingSchemeItem from './AddMarkingSchemeItem.vue';
 import { functions } from '@/firebase';
 
 export default {

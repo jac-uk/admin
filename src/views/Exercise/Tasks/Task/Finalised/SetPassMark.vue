@@ -14,15 +14,15 @@
         :key="scoreData.score"
         :value="scoreData.score"
       >
-        {{ scoreData.score | formatNumber(2) }} ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
+        {{ $filters.formatNumber(scoreData.score, 2) }} ({{ scoreData.rank + scoreData.count - 1 }} with this score or higher)
       </option>
     </Select>
   </Form>
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Form from '@/components/Page/Form.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 
 export default {
   name: 'SelectPanel',

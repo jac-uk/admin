@@ -12,7 +12,7 @@
           <span
             class="govuk-body govuk-!-font-size-14"
           >
-            {{ qualifyingTestReport.lastUpdated | formatDate('longdatetime') }}
+            {{ $filters.formatDate(qualifyingTestReport.lastUpdated, 'longdatetime') }}
           </span>
         </div>
         <div class="moj-page-header-actions__actions govuk-!-margin-top-2">
@@ -33,7 +33,7 @@
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 class="moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
-                @click="btnGenerateReport"
+                :action="btnGenerateReport"
               >
                 Refresh
               </ActionButton>
@@ -81,16 +81,16 @@
             </RouterLink>
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            {{ 100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.female / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ 100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.bame / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[5].title">
-            {{ 100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.solicitor / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
           <TableCell :title="tableColumns[6].title">
-            {{ 100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)) | formatNumber(2) }}%
+            {{ $filters.formatNumber(100 * (row.cumulativeDiversity.disability / (row.rank + row.count - 1)), 2) }}%
           </TableCell>
         </template>
       </Table>
@@ -115,12 +115,12 @@
 
 <script>
 import { functions } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import SetCutOffScore from '@/components/ModalViews/SetCutOffScore';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import SetCutOffScore from '@/components/ModalViews/SetCutOffScore.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

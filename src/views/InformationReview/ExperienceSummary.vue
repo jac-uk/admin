@@ -15,9 +15,9 @@
           :data-default="emptyNonLegalExperienceObject"
           :edit="editable"
           field="experience"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
+          @change-field="changeInfo"
+          @remove-field="removeInfo"
+          @add-field="addInfo"
         />
       </div>
     </div>
@@ -38,10 +38,10 @@
           :edit="editable"
           :display-month-year-only="true"
           field="experience"
-          @changeField="changeInfo"
-          @changeTaskDetails="changeTaskDetails"
-          @removeField="removeInfo"
-          @addField="addInfo"
+          @change-field="changeInfo"
+          @change-task-details="changeTaskDetails"
+          @remove-field="removeInfo"
+          @add-field="addInfo"
         />
       </div>
     </div>
@@ -59,7 +59,7 @@
             Are you a fee-paid or salaried medical member?
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ application.feePaidOrSalariedJudge | toYesNo }}
+            {{ $filters.toYesNo(application.feePaidOrSalariedJudge) }}
           </dd>
         </div>
         <div
@@ -71,7 +71,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body">
-              {{ application.feePaidOrSalariedSatForThirtyDays | toYesNo }}
+              {{ $filters.toYesNo(application.feePaidOrSalariedSatForThirtyDays) }}
             </p>
             <p
               v-if="application.feePaidOrSalariedSatForThirtyDays"
@@ -118,7 +118,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -136,7 +136,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
             <div
               v-if="application.feePaidOrSalariedSittingDaysDetails || editable"
@@ -149,7 +149,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </div>
           </dd>
@@ -169,7 +169,7 @@
               :edit="editable"
               type="selection"
               field="declaredAppointmentInQuasiJudicialBody"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -189,7 +189,7 @@
                 :edit="editable"
                 type="selection"
                 field="quasiJudicialSatForThirtyDays"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </p>
             <div
@@ -203,7 +203,7 @@
                 :data="application.quasiJudicialSittingDaysDetails"
                 :edit="editable"
                 field="quasiJudicialSittingDaysDetails"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </div>
           </dd>
@@ -222,7 +222,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -254,7 +254,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -272,7 +272,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
             <div
               v-if="application.feePaidOrSalariedSittingDaysDetails || editable"
@@ -285,7 +285,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </div>
           </dd>
@@ -303,7 +303,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
           </dd>
         </div>
@@ -326,9 +326,9 @@
           :edit="editable"
           :display-month-year-only="true"
           field="employmentGaps"
-          @changeField="changeInfo"
-          @removeField="removeInfo"
-          @addField="addInfo"
+          @change-field="changeInfo"
+          @remove-field="removeInfo"
+          @add-field="addInfo"
         />
       </div>
     </div>
@@ -353,14 +353,14 @@
               :edit="editable"
               type="selection"
               field="canGiveReasonableLOS"
-              @changeField="changeInfo"
+              @change-field="changeInfo"
             />
             <p v-if="application.canGiveReasonableLOS == false">
               <InformationReviewRenderer
                 :data="application.cantGiveReasonableLOSDetails"
                 :edit="editable"
                 field="cantGiveReasonableLOSDetails"
-                @changeField="changeInfo"
+                @change-field="changeInfo"
               />
             </p>
           </dd>
@@ -370,8 +370,8 @@
   </div>
 </template>
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
 import { isNonLegal, isLegal } from '@/helpers/exerciseHelper';
 
 export default {
@@ -396,6 +396,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       currentIndex: null,

@@ -40,7 +40,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span v-if="exercise.schedule2DOr3Apply === true || exercise.schedule2Apply">
-            Yes: {{ exercise.appliedSchedule | lookup }}
+            Yes: {{ $filters.lookup(exercise.appliedSchedule) }}
           </span>
           <span v-else-if="exercise.schedule2DOr3Apply === false">
             No
@@ -60,7 +60,7 @@
               v-for="authorisation in exercise.authorisations"
               :key="authorisation"
             >
-              <span>{{ authorisation | lookup }}</span>
+              <span>{{ $filters.lookup(authorisation) }}</span>
             </li>
           </ul>
         </dd>
@@ -108,7 +108,7 @@
         </dt>
         <dd class="govuk-summary-list__value">
           <span>
-            {{ exercise.previousJudicialExperienceApply | toYesNo }}
+            {{ $filters.toYesNo(exercise.previousJudicialExperienceApply) }}
           </span>
         </dd>
       </div>
@@ -141,7 +141,7 @@
               :key="qualification"
             >
               <span v-if="qualification == 'other'">{{ exercise.otherQualifications }}</span>
-              <span v-else>{{ qualification | lookup }}</span>
+              <span v-else>{{ $filters.lookup(qualification) }}</span>
             </li>
           </ul>
         </dd>
@@ -160,7 +160,7 @@
               v-for="membership in memberships"
               :key="membership"
             >
-              {{ membership | lookup }}
+              {{ $filters.lookup(membership) }}
             </li>
           </ul>
         </dd>

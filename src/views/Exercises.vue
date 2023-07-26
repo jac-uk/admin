@@ -68,6 +68,7 @@
         >
           <Table
             ref="exercisesTable"
+            v-model:selection="selectedItems"
             data-key="id"
             :data="tableData"
             :page-size="50"
@@ -95,7 +96,6 @@
             ]"
             :search="['name']"
             multi-select
-            :selection.sync="selectedItems"
             @change="getTableData"
           >
             <template #actions>
@@ -134,14 +134,14 @@
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationOpenDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationOpenDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[3].title">
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationCloseDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationCloseDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[4].title">
@@ -154,7 +154,7 @@
                 class="govuk-table__cell--numeric"
                 :title="tableColumns[6].title"
               >
-                {{ row.applicationsCount | formatNumber }}
+                {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
             </template>
           </Table>
@@ -176,11 +176,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import _upperFirst from 'lodash/upperFirst';
 import _get from 'lodash/get';
 export default {
@@ -241,23 +241,23 @@ export default {
     },
     archiveModalMessage() {
       const archiveVerb = (this.isArchived) ? 'unarchive' : 'archive';
-      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${this.$pluralize('exercises', this.selectedItems.length)}?`;
+      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
+      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${pluralText}?`;
     },
   },
   watch: {
     isFavourites() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
     isArchived() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
+  },
+  mounted() {
+    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -274,6 +274,11 @@ export default {
         'exerciseCollection/bind',
         params
       );
+    },
+    reloadTable() {
+      if (this.$refs['exercisesTable']) {
+        this.$refs['exercisesTable'].reload();
+      }
     },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });

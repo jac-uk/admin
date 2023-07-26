@@ -27,13 +27,13 @@
             v-if="exercise.applicationOpenDate"
             class="govuk-body"
           >
-            {{ exercise.applicationOpenDate | formatDate('datetime') }}
+            {{ $filters.formatDate(exercise.applicationOpenDate, 'datetime') }}
           </span>
           <span
             v-else
             class="govuk-body"
           >
-            {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
+            {{ $filters.formatEstimatedDate(exercise.estimatedLaunchDate) }}
           </span>
         </p>
         <p v-if="exercise.applicationCloseDate">
@@ -45,7 +45,7 @@
           <span
             class="govuk-body"
           >
-            {{ exercise.applicationCloseDate | formatDate('datetime') }}
+            {{ $filters.formatDate(exercise.applicationCloseDate, 'datetime') }}
           </span>
         </p>
         <div
@@ -65,13 +65,13 @@
               v-if="exercise.applicationOpenDate"
               class="govuk-body"
             >
-              {{ exercise.applicationOpenDate | formatDate('datetime') }}
+              {{ $filters.formatDate(exercise.applicationOpenDate, 'datetime') }}
             </span>
             <span
               v-else
               class="govuk-body"
             >
-              {{ exercise.estimatedLaunchDate | formatEstimatedDate }}
+              {{ $filters.formatEstimatedDate(exercise.estimatedLaunchDate) }}
             </span>
           </p>
           <p v-if="exercise.applicationCloseDate">
@@ -83,7 +83,7 @@
             <span
               class="govuk-body"
             >
-              {{ exercise.applicationCloseDate | formatDate('datetime') }}
+              {{ $filters.formatDate(exercise.applicationCloseDate, 'datetime') }}
             </span>
           </p>
           <div

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
     <p class="govuk-body govuk-!-margin-bottom-4">
       Please log in to the
@@ -9,7 +9,7 @@
         :href="testAdminURL"
         target="_blank"
       >
-        QT Platform</a> to run and manage the {{ type | lookup }}.
+        QT Platform</a> to run and manage the {{ $filters.lookup(type) }}.
     </p>
     <p class="govuk-body govuk-!-margin-bottom-4">
       When the test and mop-ups have been completed you may continue.
@@ -17,7 +17,7 @@
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
-      @click="btnContinue"
+      :action="btnContinue"
     >
       Continue
     </ActionButton>
@@ -38,7 +38,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        @click="copyToClipboard(testURL)"
+        :action="() => copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>
@@ -48,7 +48,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 

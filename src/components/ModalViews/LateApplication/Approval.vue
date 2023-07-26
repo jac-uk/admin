@@ -86,9 +86,9 @@
   </div>
 </template>
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import clone from 'clone';
 
 export default {
@@ -104,6 +104,7 @@ export default {
       default: null,
     },
   },
+  emits: ['read', 'close'],
   data() {
     return {
       errors: [],

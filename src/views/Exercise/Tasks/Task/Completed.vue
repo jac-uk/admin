@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-panel govuk-panel--confirmation">
       <div class="govuk-panel__body">
-        {{ type | lookup }} was completed on {{ task.statusLog.completed | formatDate }}
+        {{ $filters.lookup(type) }} was completed on {{ $filters.formatDate(task.statusLog.completed) }}
       </div>
     </div>
     <div class="govuk-grid-row">
@@ -31,7 +31,7 @@
           >
             <template #row="{row}">
               <TableCell>
-                {{ row[0] | lookup }}
+                {{ $filters.lookup(row[0]) }}
               </TableCell>
               <TableCell>
                 {{ row[1] }}
@@ -94,8 +94,8 @@
 
 <script>
 import { beforeRouteEnter } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
 export default {
   components: {

@@ -15,7 +15,7 @@
             :options="[true, false]"
             type="selection"
             field="criminalConvictions"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
 
           <div v-if="formData.criminalConvictions">
@@ -25,9 +25,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="criminalConvictionDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -50,7 +50,7 @@
             :options="[true, false]"
             type="selection"
             field="criminalCautions"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.criminalCautions">
             <hr>
@@ -59,9 +59,9 @@
               :edit="edit"
               :data-default="emptyObject(['details', 'date', 'title'])"
               field="criminalCautionDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -83,7 +83,7 @@
             :options="[true, false]"
             type="selection"
             field="fixedPenalties"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.fixedPenalties">
             <hr>
@@ -93,9 +93,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="fixedPenaltyDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -117,7 +117,7 @@
             :options="[true, false]"
             type="selection"
             field="drivingDisqualifications"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.drivingDisqualifications">
             <hr>
@@ -126,9 +126,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="drivingDisqualificationDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -150,7 +150,7 @@
             :options="[true, false]"
             type="selection"
             field="recentDrivingConvictions"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.recentDrivingConvictions">
             <hr>
@@ -159,9 +159,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="recentDrivingConvictionDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -183,7 +183,7 @@
             :options="[true, false]"
             type="selection"
             field="bankruptcies"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.bankruptcies">
             <hr>
@@ -192,9 +192,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="bankruptcyDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -216,7 +216,7 @@
             :options="[true, false]"
             type="selection"
             field="ivas"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.ivas">
             <hr>
@@ -225,9 +225,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="ivaDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -249,7 +249,7 @@
             :options="[true, false]"
             type="selection"
             field="lateTaxReturns"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.lateTaxReturns">
             <hr>
@@ -258,9 +258,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="lateTaxReturnDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -282,7 +282,7 @@
             :options="[true, false]"
             type="selection"
             field="lateVatReturns"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.lateVatReturns">
             <hr>
@@ -291,9 +291,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               :edit="edit"
               field="lateVatReturnDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -315,7 +315,7 @@
             :options="[true, false]"
             type="selection"
             field="hmrcFines"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.hmrcFines">
             <hr>
@@ -324,9 +324,9 @@
               :data-default="emptyObject(['details', 'date', 'title'])"
               field="hmrcFineDetails"
               :edit="edit"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -348,7 +348,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfProfessionalMisconduct"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfProfessionalMisconduct">
             <hr>
@@ -357,9 +357,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfProfessionalMisconductDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -381,7 +381,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfNegligence"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfNegligence">
             <hr>
@@ -390,9 +390,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfNegligenceDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -414,7 +414,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfWrongfulDismissal"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfWrongfulDismissal">
             <hr>
@@ -423,9 +423,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfWrongfulDismissalDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -447,7 +447,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfDiscriminationProceeding"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfDiscriminationProceeding">
             <hr>
@@ -456,9 +456,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfDiscriminationProceedingDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -480,7 +480,7 @@
             :options="[true, false]"
             type="selection"
             field="subjectOfAllegationOrClaimOfHarassmentProceeding"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.subjectOfAllegationOrClaimOfHarassmentProceeding">
             <hr>
@@ -489,9 +489,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="subjectOfAllegationOrClaimOfHarassmentProceedingDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -513,7 +513,7 @@
             :options="[true, false]"
             type="selection"
             field="complaintOrDisciplinaryAction"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.complaintOrDisciplinaryAction">
             <hr>
@@ -522,9 +522,9 @@
               :data-default="emptyObject(['details','date','investigationConclusionDate','investigations'])"
               :edit="edit"
               field="complaintOrDisciplinaryActionDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -546,7 +546,7 @@
             :options="[true, false]"
             type="selection"
             field="requestedToResign"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.requestedToResign">
             <hr>
@@ -555,9 +555,9 @@
               :data-default="emptyObject(['details', 'date' ])"
               :edit="edit"
               field="requestedToResignDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -579,7 +579,7 @@
             :options="[true, false]"
             type="selection"
             field="furtherInformation"
-            @changeField="changeCharacterFlag"
+            @change-field="changeCharacterFlag"
           />
           <div v-if="formData.furtherInformation">
             <hr>
@@ -588,9 +588,9 @@
               :data-default="emptyObject(['details', 'date'])"
               :edit="edit"
               field="furtherInformationDetails"
-              @changeField="changeInfo"
-              @removeField="removeInfo"
-              @addField="addInfo"
+              @change-field="changeInfo"
+              @remove-field="removeInfo"
+              @add-field="addInfo"
             />
           </div>
         </dd>
@@ -604,7 +604,7 @@
           Signed character information declaration
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ signedDeclaration | toYesNo }}
+          {{ $filters.toYesNo(signedDeclaration) }}
         </dd>
       </div>
     </dl>
@@ -612,9 +612,9 @@
 </template>
 
 <script>
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import CharacterSummary from '@/views/InformationReview/CharacterSummary';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary.vue';
 
 export default {
   name: 'CharacterInformationSummaryV2',

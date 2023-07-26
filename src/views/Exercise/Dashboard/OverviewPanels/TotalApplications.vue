@@ -7,7 +7,7 @@
       <span class="">{{ applicationCounts._total }}</span>
     </h2>
     <span class="govuk-caption-s color-middle">
-      <span class="long-text">Last Updated: {{ applicationCounts._lastUpdated | formatDate('datetime') }}</span>
+      <span class="long-text">Last Updated: {{ $filters.formatDate(applicationCounts._lastUpdated, 'datetime') }}</span>
     </span>
   </div>
 </template>

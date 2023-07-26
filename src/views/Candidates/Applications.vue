@@ -14,7 +14,7 @@
           - {{ row.exerciseName }}
         </TableCell>
         <TableCell>
-          {{ getStatus(row) | lookup }}{{ getStatus(row) && getStage(row) ? ' / ' : '' }}
+          {{ $filters.lookup(getStatus(row)) }}{{ getStatus(row) && getStage(row) ? ' / ' : '' }}
           <strong>
             {{ getStage(row) }}
           </strong>
@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
   components: {

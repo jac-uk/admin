@@ -37,9 +37,9 @@
     >
       <TabsList
         v-if="false"
-        class="print-none"
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
+        class="print-none"
       />
 
       <!-- SCORE SHEET -->
@@ -56,7 +56,7 @@
           sticky
           class="merit-list"
           @change="updateTableState"
-          @clickCol="clickColumn"
+          @click-col="clickColumn"
         >
           <template #row="{row}">
             <TableCell class="table-cell-application">
@@ -74,13 +74,13 @@
               class="text-center table-cell-score"
             >
               <template v-if="isScoreColumn(col.type)">
-                {{ getColValue(row, col).score | formatNumber(2) }}
+                {{ $filters.formatNumber(getColValue(row, col).score, 2) }}
               </template>
               <template v-else-if="isNumericColumn(col.type)">
-                {{ getColValue(row, col) | formatNumber(2) }}
+                {{ $filters.formatNumber(getColValue(row, col), 2) }}
               </template>
               <template v-else-if="isYesNoColumn(col.type)">
-                {{ getColValue(row, col) | toYesNo }}
+                {{ $filters.toYesNo(getColValue(row, col)) }}
               </template>
               <template v-else>
                 {{ getColValue(row, col) }}
@@ -91,31 +91,31 @@
               :title="tableColumns[tableColumns.length - 5].title"
               class="text-center"
             >
-              {{ row.totalScore | formatNumber(2) }}
+              {{ $filters.formatNumber(row.totalScore, 2) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 4].title"
               class="text-center"
             >
-              {{ row.diversity.female | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.female) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 3].title"
               class="text-center"
             >
-              {{ row.diversity.bame | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.bame) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 2].title"
               class="text-center"
             >
-              {{ row.diversity.solicitor | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.solicitor) }}
             </TableCell>
             <TableCell
               :title="tableColumns[tableColumns.length - 1].title"
               class="text-center"
             >
-              {{ row.diversity.disability | toYesNo }}
+              {{ $filters.toYesNo(row.diversity.disability) }}
             </TableCell>
           </template>
         </Table>
@@ -126,10 +126,10 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import FullScreenButton from '@/components/Page/FullScreenButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import { TASK_TYPE, TASK_STATUS, getTaskTypes } from '@/helpers/exerciseHelper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { lookup } from '@/filters';

@@ -6,8 +6,8 @@
       Candidate: {{ myFullName }} {{ isFlaggedCandidate ? '*' : '' }}
     </h1>
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
     <span
       v-if="hasPermissions([PERMISSIONS.candidates.permissions.canUpdateCandidates.value])"
@@ -42,6 +42,7 @@
       v-if="activeTab === 'details'"
     >
       <PersonalDetailsSummary
+        :user-id="candidateId"
         :personal-details="personalDetails"
         :editable="editMode"
         @update="updateCandidate"
@@ -82,13 +83,13 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Notes from '@/components/Notes/Notes';
-import Applications from './Applications';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity';
-import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Notes from '@/components/Notes/Notes.vue';
+import Applications from './Applications.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import EqualityAndDiversity from '@jac-uk/jac-kit/draftComponents/Candidates/EqualityAndDiversity.vue';
+import UpdateLoginEmail from '@/views/Candidates/UpdateLoginEmail.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -168,7 +169,7 @@ export default {
     this.$store.dispatch('candidates/bindDoc', this.candidateId);
     this.$store.dispatch('candidates/bindDocs', this.candidateId);
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('candidates/unbindDoc');
     this.$store.dispatch('candidates/unbindDocs');
   },

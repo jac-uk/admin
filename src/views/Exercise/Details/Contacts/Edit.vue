@@ -171,20 +171,20 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import SeniorSelectionExerciseManager from '@/components/RepeatableFields/SeniorSelectionExerciseManager';
-import SelectionExerciseManager from '@/components/RepeatableFields/SelectionExerciseManager';
-import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';
-import LeadJudge from '@/components/RepeatableFields/LeadJudge';
-import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee';
-import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer';
-import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import SeniorSelectionExerciseManager from '@/components/RepeatableFields/SeniorSelectionExerciseManager.vue';
+import SelectionExerciseManager from '@/components/RepeatableFields/SelectionExerciseManager.vue';
+import DraftingJudge from '@/components/RepeatableFields/DraftingJudge.vue';
+import LeadJudge from '@/components/RepeatableFields/LeadJudge.vue';
+import StatutoryConsultee from '@/components/RepeatableFields/StatutoryConsultee.vue';
+import SelectionExerciseOfficer from '@/components/RepeatableFields/SelectionExerciseOfficer.vue';
+import AssignedCommissioner from '@/components/RepeatableFields/AssignedCommissioner.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   name: 'ContactsEdit',
@@ -228,6 +228,7 @@ export default {
         SelectionExerciseOfficer,
         AssignedCommissioner,
       },
+      users: [],
       //@TODO@ add pattern for mobile number
     };
   },
@@ -235,6 +236,9 @@ export default {
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
+  },
+  async mounted() {
+    await this.$store.dispatch('users/getUsers');
   },
   methods: {
     async save(isValid) {

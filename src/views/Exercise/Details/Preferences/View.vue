@@ -37,7 +37,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          {{ exercise.locationQuestionType | lookup }}
+          {{ $filters.lookup(exercise.locationQuestionType) }}
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
@@ -74,7 +74,7 @@
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
-          {{ exercise.jurisdictionQuestionType | lookup }}
+          {{ $filters.lookup(exercise.jurisdictionQuestionType) }}
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">
@@ -103,7 +103,7 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          {{ additionalWorkingPreference.questionType | lookup }}
+          {{ $filters.lookup(additionalWorkingPreference.questionType) }}
         </dt>
         <dd class="govuk-summary-list__value">
           <ul class="govuk-list">

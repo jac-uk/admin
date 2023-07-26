@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-quarter text-right">
@@ -21,7 +21,7 @@
       v-else
       class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      {{ type | lookup }} can now be completed. {{ totalApplications }} applications will be updated.
+      {{ $filters.lookup(type) }} can now be completed. {{ totalApplications }} applications will be updated.
     </p>
 
     <div class="govuk-grid-row">
@@ -61,7 +61,7 @@
           <ActionButton
             class="govuk-!-margin-bottom-1"
             type="primary"
-            @click="btnComplete"
+            :action="btnComplete"
           >
             Complete
           </ActionButton>
@@ -70,11 +70,11 @@
     </div>
 
     <Table
+      v-model:selection="selectedItems"
       data-key="id"
       :data="filteredApplications"
       :columns="tableColumns"
       multi-select
-      :selection.sync="selectedItems"
       :custom-search="{
         placeholder: 'Search candidate name or reference number',
         handler: searchHandler,
@@ -134,14 +134,14 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import FullScreenButton from '@/components/Page/FullScreenButton';
-import SetStatusForm from './StatusChanges/SetStatus';
-import StatusTag from './StatusChanges/StatusTag';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import SetStatusForm from './StatusChanges/SetStatus.vue';
+import StatusTag from './StatusChanges/StatusTag.vue';
 import { functions } from '@/firebase';
 import { getTableData } from '@/helpers/tableHelper';
 

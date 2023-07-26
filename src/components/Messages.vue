@@ -9,9 +9,9 @@
   </Modal>
 </template>
 <script>
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import Approval from '@/components/ModalViews/LateApplication/Approval';
-import ApprovalConfirmation from '@/components/ModalViews/LateApplication/ApprovalConfirmation';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import Approval from '@/components/ModalViews/LateApplication/Approval.vue';
+import ApprovalConfirmation from '@/components/ModalViews/LateApplication/ApprovalConfirmation.vue';
 import permissionMixin from '@/permissionMixin';
 export default {
   name: 'Messages',
@@ -56,11 +56,14 @@ export default {
         }
       }
     },
-    messages() {
-      // Ensure modal opens when new msgs appear
-      if (!this.$refs['messageModal'].modalOpen && this.messages.length) {
-        this.$refs['messageModal'].openModal();
-      }
+    messages: {
+      deep: true,
+      handler() {
+        // Ensure modal opens when new msgs appear
+        if (!this.$refs['messageModal'].modalOpen && this.messages.length) {
+          this.$refs['messageModal'].openModal();
+        }
+      },
     },
   },
   methods: {
