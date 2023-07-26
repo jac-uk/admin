@@ -80,13 +80,13 @@
           />
         </Modal>
 
-        <ActionButton
-          type="primary"
+        <button
+          class="govuk-button"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests')"
         >
           Send requests
-        </ActionButton>
+        </button>
 
         <Table
           key="notrequested"
@@ -161,13 +161,13 @@
           />
         </Modal>
 
-        <ActionButton
-          type="primary"
+        <button
+          class="govuk-button"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests')"
         >
           Send reminders
-        </ActionButton>
+        </button>
 
         <Table
           key="requested"
@@ -284,13 +284,12 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequests.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
@@ -299,7 +298,6 @@ export default {
   name: 'CharacterChecks',
   components: {
     Banner,
-    ActionButton,
     Table,
     TableCell,
     TabsList,

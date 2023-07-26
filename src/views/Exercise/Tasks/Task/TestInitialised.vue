@@ -16,7 +16,7 @@
     </p>
     <ActionButton
       type="primary"
-      @click="updateTask"
+      :action="updateTask"
     >
       Transfer applications to the QT Platform
     </ActionButton>
@@ -31,7 +31,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        @click="copyToClipboard(testURL)"
+        :action="() => copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>
@@ -41,7 +41,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 
 export default {

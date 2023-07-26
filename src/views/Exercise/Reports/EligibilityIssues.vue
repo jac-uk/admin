@@ -13,7 +13,7 @@
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportData"
+        :action="exportData"
       >
         Export to Excel
       </ActionButton>
@@ -24,13 +24,13 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportToGoogleDoc"
+        :action="exportToGoogleDoc"
       >
         Generate Report
       </ActionButton>
       <ActionButton
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>
@@ -172,14 +172,14 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'EligibilityIssues',

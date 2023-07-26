@@ -26,7 +26,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
@@ -471,8 +471,8 @@ import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

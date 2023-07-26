@@ -79,6 +79,20 @@
                 field: 'applicationOpenDate',
                 title: 'Open date',
               },
+              {
+                title: 'Approval',
+                field: '_approval.status',
+                type: 'radio',
+                options: ['None', 'Approved', 'Rejected', 'Requested'],
+                emptyOption: 'None',
+                defaultValue: 'None',
+              },
+              {
+                type: 'singleCheckbox',
+                field: '_lateApplicationRequests',
+                inputLabel: 'Exercises with late application requests',
+                fieldComparator: 'arrayNotEmpty'
+              },
             ]"
             :search="['name']"
             multi-select
@@ -142,9 +156,12 @@
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
+              <TableCell :title="tableColumns[5].title">
+                {{ getExerciseApprovalStatus(row) }}
+              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[5].title"
+                :title="tableColumns[6].title"
               >
                 {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
@@ -176,12 +193,13 @@
 
 <script>
 import { mapState } from 'vuex';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import _upperFirst from 'lodash/upperFirst';
+import _get from 'lodash/get';
 export default {
   name: 'Exercises',
   components: {
@@ -199,6 +217,7 @@ export default {
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
+        { title: 'Approval' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -249,21 +268,17 @@ export default {
   },
   watch: {
     isFavourites() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
     isArchived() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
   },
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
   mounted() {
-    this.getTableData();
+    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -281,6 +296,11 @@ export default {
         params
       );
     },
+    reloadTable() {
+      if (this.$refs['exercisesTable']) {
+        this.$refs['exercisesTable'].reload();
+      }
+    },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
@@ -296,6 +316,9 @@ export default {
         status += 'Live';
       }
       return status;
+    },
+    getExerciseApprovalStatus(exercise) {
+      return _upperFirst(_get(exercise, '_approval.status', ''));
     },
     toggleArchive() {
       if (this.isArchived) {

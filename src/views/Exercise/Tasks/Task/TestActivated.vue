@@ -17,7 +17,7 @@
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
-      @click="btnContinue"
+      :action="btnContinue"
     >
       Continue
     </ActionButton>
@@ -38,7 +38,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        @click="copyToClipboard(testURL)"
+        :action="() => copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>
@@ -48,7 +48,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
 

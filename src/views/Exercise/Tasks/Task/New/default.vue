@@ -65,7 +65,7 @@
       class="govuk-!-margin-bottom-0"
       type="primary"
       :disabled="!isFormCompleted"
-      @click="btnInitialise"
+      :action="btnInitialise"
     >
       Continue
     </ActionButton>
@@ -76,8 +76,8 @@
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { functions } from '@/firebase';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 

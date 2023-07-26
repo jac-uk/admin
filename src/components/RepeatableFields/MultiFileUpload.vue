@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'MultiFileUpload',

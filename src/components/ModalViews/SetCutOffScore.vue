@@ -111,8 +111,8 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

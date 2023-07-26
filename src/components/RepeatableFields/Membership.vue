@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import { slugify } from '@jac-uk/jac-kit/filters/filters';
 
 export default {

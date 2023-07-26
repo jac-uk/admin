@@ -28,14 +28,14 @@
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
             <!--            <ActionButton-->
             <!--              v-if="totalApplicationRecords"-->
             <!--              type="primary"-->
-            <!--              @click="transferHandoverData()"-->
+            <!--              :action="transferHandoverData"-->
             <!--            >-->
             <!--              Transfer Handover Data-->
             <!--            </ActionButton>-->
@@ -99,9 +99,9 @@ import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 

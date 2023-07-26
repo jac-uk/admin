@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Form from '@/components/Page/Form.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
 export default {
   name: 'SelectPanel',

@@ -20,7 +20,7 @@
           v-if="hasPassMark"
           class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
           type="primary"
-          @click="btnComplete"
+          :action="btnComplete"
         >
           Complete
         </ActionButton>
@@ -66,12 +66,12 @@
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
-import FullScreenButton from '@/components/Page/FullScreenButton';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import SetPassMark from './Finalised/SetPassMark';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import SetPassMark from './Finalised/SetPassMark.vue';
 import _find from 'lodash/find';
 export default {
   components: {

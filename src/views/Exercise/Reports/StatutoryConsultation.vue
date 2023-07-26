@@ -27,7 +27,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
@@ -83,11 +83,11 @@ import { mapState } from 'vuex';
 import { debounce } from 'lodash';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 

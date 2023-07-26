@@ -149,8 +149,8 @@
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Stat from '@/components/Report/Stat';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {

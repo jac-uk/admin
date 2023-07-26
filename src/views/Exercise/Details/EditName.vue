@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   name: 'EditName',

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import defaultView from './default';
+import defaultView from './default.vue';
 export default {
   extends: defaultView,
 };

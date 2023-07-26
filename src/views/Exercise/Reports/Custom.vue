@@ -312,9 +312,9 @@
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat
@@ -384,13 +384,15 @@ export default {
           name: 'Qualifications and Experience',
           keys: [
             'qualifications',
-            'skillsAquisitionDetails',
             'feePaidOrSalariedJudge',
             'feePaidOrSalariedSatForThirtyDays',
+            'feePaidOrSalariedSittingDaysDetails',
+            'declaredAppointmentInQuasiJudicialBody',
             'experience',
             'experienceUnderSchedule2Three',
             'quasiJudicialSittingDaysDetails',
             'quasiJudicialSatForThirtyDays',
+            'skillsAquisitionDetails',
           ],
         },
         {
@@ -496,13 +498,15 @@ export default {
         'personalDetails.previousNames': { label: 'Previously known name(s)', type: String },
         'personalDetails.professionalName': { label: 'Professional name', type: String },
         qualifications: { label: 'Qualifications', type: 'Array of objects' },
-        skillsAquisitionDetails: { label: 'Skills aquisition details', type: String },
         feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
         feePaidOrSalariedSatForThirtyDays: { label: 'Fee paid or salaried sat for thirty days?', type: Boolean },
+        feePaidOrSalariedSittingDaysDetails: { label: 'Fee paid or salaried sitting days details', type: String },
+        declaredAppointmentInQuasiJudicialBody: { label: 'Have you declared an appointment or appointments in a quasi-judicial body in this application?', type: Boolean },
+        quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
+        quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
+        skillsAquisitionDetails: { label: 'Skills acquisition details', type: String },
         experience: { label: 'Post-qualification experience', type: String },
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
-        quasiJudicialSittingDaysDetails: { label: 'Quasi judicial sitting days details', type: String },
-        quasiJudicialSatForThirtyDays: { label: 'Quasi judicial sat for thirty days?', type: Boolean },
         // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
         // locationPreferences: { label: 'Location Preferences', type: String },
       },

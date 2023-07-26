@@ -29,7 +29,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              @click="exportContacts"
+              :action="exportContacts"
             >
               Export contacts
             </ActionButton>
@@ -112,17 +112,17 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
 import { isClosed } from '@/helpers/exerciseHelper';
-import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request';
-import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import LateApplicationRequest from '@/components/ModalViews/LateApplication/Request.vue';
+import LateApplicationConfirmation from '@/components/ModalViews/LateApplication/RequestConfirmation.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'ApplicationsList',
@@ -191,10 +191,29 @@ export default {
     async gatherReportData() {
       const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
       const reportData = [];
-      reportData.push(response.data.headers.map(header => header));
-      response.data.rows.forEach((row) => {
-        reportData.push(Object.values(row).map(cell => cell));
+      const { headers, rows } = response.data;
+
+      // Add headers as the first row
+      const headerRow = Object.values(headers);
+      reportData.push(headerRow);
+
+      // Iterate over each row and add data
+      rows.forEach((row) => {
+        const rowData = [];
+        for (const key in headers) {
+          if (row.hasOwnProperty(key)) {
+            if (row[key] !== '') {
+              rowData.push(row[key]);
+            } else {
+              rowData.push('No answer provided');
+            }
+          } else {
+            rowData.push('Question not asked');
+          }
+        }
+        reportData.push(rowData);
       });
+
       return reportData;
     },
     async sendApplicationReminders() {

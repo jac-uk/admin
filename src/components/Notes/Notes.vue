@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import NotesNew from '@/components/Notes/NotesNew';
-import NotesList from '@/components/Notes/NotesList';
-import NotesDelete from '@/components/Notes/NotesDelete';
+import NotesNew from '@/components/Notes/NotesNew.vue';
+import NotesList from '@/components/Notes/NotesList.vue';
+import NotesDelete from '@/components/Notes/NotesDelete.vue';
 
 const STEPS = {
   list: 'list',

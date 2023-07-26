@@ -16,7 +16,7 @@
       <ActionButton
         class="govuk-!-margin-right-1"
         type="primary"
-        @click="createUserRole"
+        :action="createUserRole"
       >
         Save
       </ActionButton>
@@ -61,7 +61,7 @@
         <ActionButton
           type="primary"
           class="govuk-button govuk-!-margin-right-3"
-          @click="saveUserRole()"
+          :action="saveUserRole"
         >
           Save
         </ActionButton>
@@ -78,10 +78,10 @@
 
 <script>
 import { functions } from '@/firebase';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
   name: 'UserRolePermissions',
@@ -194,8 +194,13 @@ export default {
     },
     async createUserRole() {
       //TODO: enforce unique role name
-      const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.roleName });
-      this.roleId = response.data.id;
+      try {
+        const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.roleName });
+        this.roleId = response.data.id;
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     async saveUserRole() {
       const response = await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.roleId, permissions: this.permissions });

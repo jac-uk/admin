@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import { mapState } from 'vuex';
 export default {
   name: 'RejectionForm',

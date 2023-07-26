@@ -128,40 +128,40 @@
         >
           Test reminder
         </button>
-        <ActionButton
+        <button
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
         >
           Reset
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="(isRequested || isCompleted) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
         >
           Cancel
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="(isNotRequested || isRequested || isCompleted) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="
             openModal(
@@ -170,7 +170,7 @@
               { assessmentIds: selectedItems, status: isNotRequested || isRequested ? 'deleted' : 'pending' }, resetAssessments)"
         >
           Delete
-        </ActionButton>
+        </button>
         <Table
           :key="activeTab"
           v-model:selection="selectedItems"
@@ -205,7 +205,7 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
-              {{ $filters.lookup(ow.assessor.type) }}
+              {{ row.assessor.type ? $filters.lookup(row.assessor.type) : '' }}
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               <a
@@ -255,7 +255,7 @@
                   v-if="isCompleted && unapprovedLateSubmission(row)"
                   class="moj-button-menu__item"
                   type="primary"
-                  @click="approveLateSubmission(row)"
+                  :action="() => approveLateSubmission(row)"
                 >
                   Approve late submission
                 </ActionButton>
@@ -332,7 +332,7 @@
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
-            @click="initialiseAssessments"
+            :action="initialiseAssessments"
           >
             Start assessments
           </ActionButton>
@@ -371,17 +371,17 @@
 <script>
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import UploadAssessment from '@/components/ModalViews/UploadAssessment';
-import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
+import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
 import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';
 
 export default {
@@ -567,7 +567,7 @@ export default {
       return '';
     },
     onDevelop() {
-      return window.location.href.indexOf('admin-develop') > 0 || process.env.NODE_ENV === 'development';
+      return window.location.href.indexOf('admin-develop') > 0 || import.meta.env.NODE_ENV === 'development';
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;

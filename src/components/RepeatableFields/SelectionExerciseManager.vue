@@ -1,23 +1,31 @@
 <template>
   <div>
-    <TextField
-      :id="`selection_exercise_manager_${index}`"
+    <Select
+      :id="`senior_selection_exercise_manager_${index}`"
       v-model="row.name"
-      type="email"
       label="Selection exercise manager"
       hint="An email address is required."
       required
-    />
+    >
+      <option
+        v-for="user in users"
+        :key="user.uid"
+        :value="user.email"
+      >
+        {{ user.email }}
+      </option>
+    </Select>
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
-    TextField,
+    Select,
   },
   props: {
     row: {
@@ -28,6 +36,11 @@ export default {
       required: true,
       type: Number,
     },
+  },
+  computed: {
+    ...mapGetters({
+      users: 'users/enabledMicrosoftUsers',
+    }),
   },
 };
 </script>

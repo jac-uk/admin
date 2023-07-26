@@ -7,7 +7,7 @@ In order to make changes to the jac-kit being used by this project it's helpful 
 
 + Remove the jac-kit as a dependency in package.json
 + Copy an appropriate branch of the jac-kit/src/packages dir into the src directory at eg /src/jac-kit
-+ Change all references to the jac-kit in this project, eg:
++ Then change all references to the jac-kit in this project, eg:
     import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
 
     becomes: 

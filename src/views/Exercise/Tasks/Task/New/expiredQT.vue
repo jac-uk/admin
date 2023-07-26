@@ -39,7 +39,7 @@
       class="govuk-!-margin-bottom-0"
       type="primary"
       :disabled="!formData.selectedQT"
-      @click="btnContinue"
+      :action="btnContinue"
     >
       Continue
     </ActionButton>
@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import defaultView from './default';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import defaultView from './default.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import { TASK_QT_MAP } from '@/helpers/constants';
 import { functions } from '@/firebase';

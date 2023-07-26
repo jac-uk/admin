@@ -10,14 +10,14 @@
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <button
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3 moj-button-menu__item moj-page-header-actions__action"
-        :disabled="noData"
+        :disabled="noNins"
         @click="clear"
       >
         Clear
       </button>
       <button
         class="govuk-button govuk-button--primary moj-button-menu__item moj-page-header-actions__action"
-        :disabled="results.length === 0"
+        :disabled="noResults"
         @click="downloadReport"
       >
         Download Report
@@ -25,7 +25,6 @@
     </div>
     <div class="govuk-grid-column-full">
       <form
-        v-if="!ninSubmitted"
         class="govuk-form-group"
         @submit.prevent="search"
       >
@@ -51,48 +50,62 @@
           <div v-if="searching">
             Please wait while we create your report ...
           </div>
+          <div v-if="noResults">
+            No Candidates or Applications match the given National Insurance Numbers.
+            Please try again
+          </div>
         </fieldset>
       </form>
     </div>
-    <div class="govuk-grid-column-full">
-      <table
-        v-if="!!results"
-        class="govuk-table overflow-table"
-      >
-        <thead class="govuk-table__head">
-          <th
-            v-for="(column, index) in tableColumns"
-            :key="index"
-            class="govuk-table__cell text-left"
+    <template
+      v-if="results.length > 0"
+    >
+      <FullScreenButton
+        ref="fullscreenButtonRef"
+        class="float-right govuk-!-margin-right-4"
+      />
+      <div class="govuk-grid-column-full">
+        <div class="overflow-table">
+          <table
+            class="govuk-table"
           >
-            {{ filters.lookup(column.title) }}
-          </th>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr
-            v-for="(row, idx) in results"
-            :key="idx"
-            class="govuk-table__row"
-          >
-            <td
-              v-for="(item, indexItem) in row"
-              :key="indexItem"
-              class="govuk-table__cell text-left"
-            >
-              {{ filters.lookup(item) }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            <thead class="govuk-table__head">
+              <th
+                v-for="(column, index) in tableColumns"
+                :key="index"
+                class="govuk-table__cell text-left"
+              >
+                {{ filters.lookup(column.title) }}
+              </th>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr
+                v-for="(row, idx) in results"
+                :key="idx"
+                class="govuk-table__row"
+              >
+                <td
+                  v-for="(item, indexItem) in row"
+                  :key="indexItem"
+                  class="govuk-table__cell text-left"
+                >
+                  {{ filters.lookup(item) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import { functions } from '@/firebase';
-import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import * as filters from '@/filters.js';
 
 export default {
@@ -100,6 +113,7 @@ export default {
   components: {
     TextArea,
     ErrorSummary,
+    FullScreenButton,
   },
   extends: Form,
   data() {
@@ -108,17 +122,12 @@ export default {
       nins: '',
       results: [],
       searching: false,
+      noResults: false,
     };
   },
   computed: {
     noNins() {
       return this.nins.length === 0;
-    },
-    noData() {
-      return this.nins.length === 0;
-    },
-    ninSubmitted() {
-      return this.results.length > 0;
     },
     tableColumns() {
       let returnValue = [];
@@ -152,25 +161,37 @@ export default {
       link.click();
     },
     clear() {
+      if (this.$store.state.ui.fullScreen){
+        this.$refs['fullscreenButtonRef'].exitFullScreen();
+      }
       this.results = [];
       this.nins = '';
       this.searching = false;
     },
     async search() {
       this.searching = true;
+      this.noResults = false;
       const data = {
         nationalInsuranceNumbers: this.nins.split(/[\n,]/), // split on new line or comma
       };
       const returnData = await functions.httpsCallable('targetedOutreachReport')(data);
-      this.results = returnData.data;
+      if (returnData.data.length) {
+        this.results = returnData.data;
+      } else {
+        this.results = [];
+        this.noResults = true;
+      }
+      this.searching = false;
     },
   },
 };
 </script>
 <style>
   .overflow-table {
-    width: 100%;
+    overflow-x: scroll;
+    border: 1px black solid;
+    /* width: 100%;
     word-wrap:break-word;
-    table-layout: fixed;
+    table-layout: fixed; */
   }
 </style>
