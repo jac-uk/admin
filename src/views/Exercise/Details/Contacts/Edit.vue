@@ -238,7 +238,10 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('users/getUsers');
+    await this.$store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
+  },
+  async unmounted() {
+    await this.$store.dispatch('users/unbind');
   },
   methods: {
     async save(isValid) {
