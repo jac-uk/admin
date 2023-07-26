@@ -101,5 +101,5 @@ export default class {
         mutations: this.mutations(),
         modules: this.modules(),
     };
-  };
+  }
 }
