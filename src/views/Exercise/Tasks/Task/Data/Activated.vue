@@ -165,7 +165,7 @@
         title="Are you sure you wish to continue?"
         :message="confirmationMessage"
         button-text="Yes - please continue"
-        @close="$refs.modalCheckDataComplete.close()"
+        @close="$refs.modalCheckDataComplete.closeModal()"
         @confirmed="btnFinalise"
       />      
     </Modal>    
