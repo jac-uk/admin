@@ -384,7 +384,7 @@ export default {
     async confirmDelete() {
       this.closeDeleteModal();
       await this.$store.dispatch('exerciseDocument/delete');
-      this.$router.push({ name: 'exercises' })
+      this.$router.push({ name: 'exercises' });
     },
     async publish() {
       await this.$store.dispatch('exerciseDocument/publish');
