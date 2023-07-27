@@ -159,6 +159,7 @@
                 <Stat
                   :stat="diversity[activeTab].gender.declaration"
                   :report-total="diversity[activeTab].gender.total"
+                  :declaration-total="true"
                 />
               </td>
             </tr>
@@ -216,6 +217,7 @@
                 <Stat
                   :stat="diversity[activeTab].ethnicity.declaration"
                   :report-total="diversity[activeTab].ethnicity.total"
+                  :declaration-total="true"
                 />
               </td>
             </tr>
@@ -267,6 +269,7 @@
                 <Stat
                   :stat="diversity[activeTab].disability.declaration"
                   :report-total="diversity[activeTab].disability.total"
+                  :declaration-total="true"
                 />
               </td>
             </tr>
@@ -329,6 +332,7 @@
                 <Stat
                   :stat="diversity[activeTab].professionalBackground.declaration"
                   :report-total="diversity[activeTab].professionalBackground.total"
+                  :declaration-total="true"
                 />
               </td>
             </tr>
@@ -368,7 +372,7 @@
               </td>
             </tr>
             <tr
-              v-if="applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
+              v-if="!applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
               class="govuk-table__row"
             >
               <th
@@ -382,7 +386,7 @@
               </td>
             </tr>
             <tr
-              v-else-if="'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
+              v-else-if="applicationOpenDatePost01042023 && 'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
               class="govuk-table__row"
             >
               <th
@@ -403,6 +407,7 @@
                 <Stat
                   :stat="diversity[activeTab].socialMobility.declaration"
                   :report-total="diversity[activeTab].socialMobility.total"
+                  :declaration-total="true"
                 />
               </td>
             </tr> -->

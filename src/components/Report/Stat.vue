@@ -1,14 +1,15 @@
 <template>
   <div>
     <span class="percent">{{ $filters.formatNumber(stat.percent, 2) }}%</span>&nbsp;
-    <span
-      v-if="reportTotal"
-      class="total"
-    >({{ reportTotal }} out of {{ stat.total }})</span>
-    <span
-      v-else
-      class="total"
-    >({{ stat.total }})</span>
+    <template v-if="isDeclarationTotal">
+      <span
+        v-if="reportTotal && stat.total"
+        class="total"
+      >({{ reportTotal }} out of {{ stat.total }})</span>
+    </template>
+    <template v-else>
+      <span class="total">({{ stat.total }})</span>
+    </template>
   </div>
 </template>
 
@@ -22,6 +23,10 @@ export default {
     reportTotal: {  // Pass this in for the 'declaration total' field
       type: Number,
       default: 0,
+    },
+    isDeclarationTotal: {
+      type: Boolean,
+      default: false,
     },
   },
 };
