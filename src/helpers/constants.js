@@ -128,7 +128,6 @@ const ASSESSMENT_METHOD = {
   STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES: 'statementOfSuitabilityWithCompetencies',
   STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES: 'statementOfSuitabilityWithSkillsAndAbilities',
   STATEMENT_OF_ELIGIBILITY: 'statementOfEligibility',
-  NONE: 'none',
   INDEPENDENT_ASSESSMENTS: 'independentAssessments',
   LEADERSHIP_JUDGE_ASSESSMENT: 'leadershipJudgeAssessment',
 };

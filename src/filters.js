@@ -251,7 +251,6 @@ const lookup = (value) => {
   lookup[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES] = 'Statement of Suitability with competencies';
   lookup[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES] = 'Statement of Suitability with skills and abilities';
   lookup[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] = 'Statement of eligibility';
-  lookup[ASSESSMENT_METHOD.NONE] = 'None';
   lookup[ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS] = 'Independent Assessments';
   lookup[ASSESSMENT_METHOD.LEADERSHIP_JUDGE_ASSESSMENT] = 'Leadership Judge Assessment';
 
