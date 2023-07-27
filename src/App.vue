@@ -102,9 +102,6 @@
           class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container"
         >
           <p class="govuk-phase-banner__content">
-            <strong class="govuk-tag govuk-phase-banner__content__tag">
-              alpha
-            </strong>
             <span class="govuk-phase-banner__text">
               This is a new service – your <a
                 style="font-size: 16px"
