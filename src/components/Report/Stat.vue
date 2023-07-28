@@ -3,7 +3,7 @@
     <span class="percent">{{ $filters.formatNumber(stat.percent, 2) }}%</span>&nbsp;
     <template v-if="isDeclarationTotal">
       <span
-        v-if="reportTotal && stat.total"
+        v-if="reportTotal > 0 && stat.total > 0"
         class="total"
       >({{ reportTotal }} out of {{ stat.total }})</span>
     </template>
