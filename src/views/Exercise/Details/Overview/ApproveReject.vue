@@ -132,7 +132,8 @@ export default {
     isObject(input) {
       return typeof input === 'object' &&
         !Array.isArray(input) &&
-        input !== null;
+        input !== null &&
+        Object.keys(input).length > 0;  // Firestore timestamps are objects but have no keys
     },
   },
 };
