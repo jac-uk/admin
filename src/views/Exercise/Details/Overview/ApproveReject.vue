@@ -111,7 +111,7 @@ export default {
             // If the key is in the keysToIgnore array or begins with an underscore, skip the comparison
             continue;
           }
-          if (this.isObject(obj1[key]) && this.isObject(obj2[key])) {
+          if (this.isObject(obj1[key]) && this.isObject(obj2[key]) && !this.isDate(obj2[key])) {
             this.compareObjects(obj1[key], obj2[key], newPath, differences, keysToIgnore);
           } else if (!this.isEqual(obj1[key], obj2[key])) {
             // If the values are different, store the top-level key in the differences array
@@ -134,6 +134,11 @@ export default {
         !Array.isArray(input) &&
         input !== null &&
         Object.keys(input).length > 0;  // Firestore timestamps are objects but have no keys
+    },
+    isDate(input) {
+      if (Object.prototype.toString.call(input) === '[object Date]')
+        return true;
+      return false;
     },
   },
 };
