@@ -288,7 +288,7 @@ function isReadyForApprovalFromAdvertType(data) {
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
-  return data.state === 'draft' && data._approval && data._approval.status === 'rejected';
+  return ['draft', 'ready'].includes(data.state) && data._approval && data._approval.status === 'rejected';
 }
 function isEditable(data) {
   if (data === null) return false;
