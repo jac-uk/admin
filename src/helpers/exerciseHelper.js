@@ -398,31 +398,20 @@ function hasRelevantMemberships(data) {
   return false;
 }
 function hasStatementOfSuitability(data) {
-  return hasAssessmentMethod(data.assessmentMethods, [
-    ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES,
-    ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES,
-  ]);
+  return data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES] ||
+    data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES];
 }
 function hasCoveringLetter(data) {
-  return hasAssessmentMethod(data.assessmentMethods, [ASSESSMENT_METHOD.COVERING_LETTER]);
+  return data.assessmentMethods[ASSESSMENT_METHOD.COVERING_LETTER];
 }
 function hasCV(data) {
-  return hasAssessmentMethod(data.assessmentMethods, [ASSESSMENT_METHOD.CV]);
+  return data.assessmentMethods[ASSESSMENT_METHOD.CV];
 }
 function hasStatementOfEligibility(data) {
-  return hasAssessmentMethod(data.assessmentMethods, [ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY]) && !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
+  return data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] && !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
 }
 function hasSelfAssessment(data) {
-  return hasAssessmentMethod(data.assessmentMethods, [ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES]);
-}
-function hasAssessmentMethod(assessmentMethods, methods) {
-  if (!assessmentMethods) return false;
-  Object.values(assessmentMethods).forEach(method => {
-    if (methods.includes(method)) {
-      return true;
-    }
-  });
-  return false;
+  return data.assessmentMethods[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES];
 }
 
 function isLegal(data) {
