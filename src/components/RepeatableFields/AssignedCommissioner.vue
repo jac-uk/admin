@@ -8,11 +8,11 @@
       required
     >
       <option
-        v-for="user in users"
-        :key="user.uid"
-        :value="user.email"
+        v-for="email in emails"
+        :key="email"
+        :value="email"
       >
-        {{ user.email }}
+        {{ email }}
       </option>
     </Select>
     <slot name="removeButton" />
@@ -21,7 +21,6 @@
 
 <script>
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'AssignedCommissioner',
@@ -39,9 +38,9 @@ export default {
     },
   },
   computed: {
-    ...mapGetters({
-      users: 'users/enabledMicrosoftUsers',
-    }),
+    emails() {
+      return this.$store.getters['services/getEmails']('commissioners');
+    },
   },
 };
 </script>
