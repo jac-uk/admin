@@ -39,7 +39,15 @@ export default {
   },
   computed: {
     emails() {
-      return this.$store.getters['services/getEmails']('commissioners');
+      const emails = this.$store.getters['services/getEmails']('commissioners');
+      // sort emails alphabetically
+      return emails.map(e => e).sort((a, b) => {
+        a = a.toLowerCase();
+        b = b.toLowerCase();
+        if (a < b) return -1;
+        if (a > b) return 1;
+        return 0;
+      });
     },
   },
 };
