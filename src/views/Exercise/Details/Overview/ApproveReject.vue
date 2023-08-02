@@ -134,8 +134,7 @@ export default {
       return typeof input === 'object' &&
         !Array.isArray(input) &&
         input !== null &&
-        //Object.keys(input).length > 0;  // Firestore timestamps are objects but have no keys
-        !this.isDate(input);
+        !this.isDate(input);  // Ignore Firestore timestamp objects
     },
     isDate(input) {
       if (Object.prototype.toString.call(input) === '[object Date]')
