@@ -38,7 +38,7 @@
             class="govuk-!-margin-bottom-1"
             type="primary"
             :disabled="!areAllRowsComplete"
-            @click="btnFinalise"
+            :action="btnFinalise"
           >
             Continue
           </ActionButton>

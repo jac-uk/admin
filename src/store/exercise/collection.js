@@ -107,6 +107,26 @@ export default {
       logEvent('info', 'Exercises archived', loggingData);
       dispatch('bind');
     },
+    delete: async ({ commit, state }) => {
+      const loggingData = {
+        exerciseIds: [],
+        exerciseRefs: [],
+      };
+      const batch = firestore.batch();
+      state.selectedItems.forEach(id => {
+        const ref = firestore.collection('exercises').doc(id);
+        const record = state.records.find(record => record.id === id);
+        batch.update(ref, {
+          state: 'deleted',
+          stateBeforeDelete: record.state,
+        });
+        loggingData.exerciseIds.push(id);
+        loggingData.exerciseRefs.push(record.referenceNumber);
+      });
+      await batch.commit();
+      commit('resetSelectedItems');
+      logEvent('info', 'Exercises deleted', loggingData);
+    },
     getLocalById({ state }, id) {
       // Check if the local records have the id and return the record, ie does not hit the db
       return state.records.find(element => element.id === id);

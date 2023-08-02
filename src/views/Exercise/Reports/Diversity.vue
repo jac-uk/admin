@@ -42,7 +42,7 @@
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 type="primary"
-                @click="refreshReport"
+                :action="refreshReport"
               >
                 Refresh
               </ActionButton>

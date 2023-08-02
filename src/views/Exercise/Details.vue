@@ -69,13 +69,11 @@ export default {
           title: 'Exercise downloads',
           path: `${path}/downloads`,
         },
-      ];
-      if (this.exercise._applicationContent) {
-        sideNavigation.push({
+        {
           title: 'Application process',
           path: `${path}/application-content`,
-        });
-      }
+        },
+      ];
       if (this.exercise.inviteOnly) {
         sideNavigation.splice(1, 0, { title: 'Exercise invitations', path: `${path}/invitations` });
       }

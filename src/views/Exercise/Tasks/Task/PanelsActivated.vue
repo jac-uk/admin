@@ -53,7 +53,7 @@
           <ActionButton
             class="govuk-!-margin-bottom-1"
             type="primary"
-            @click="btnFinalise"
+            :action="btnFinalise"
           >
             Continue
           </ActionButton>

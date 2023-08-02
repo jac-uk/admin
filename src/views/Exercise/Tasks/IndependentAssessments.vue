@@ -128,40 +128,40 @@
         >
           Test reminder
         </button>
-        <ActionButton
+        <button
           v-if="(isRequested || isCompleted || isCancelled || isDeclined) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'reset', { assessmentIds: selectedItems, status: 'draft' }, resetAssessments)"
         >
           Reset
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="(isRequested || isCompleted) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="openModal('modalRefRequests', 'cancel', { assessmentIds: selectedItems }, cancelAssessments)"
         >
           Cancel
-        </ActionButton>
-        <ActionButton
+        </button>
+        <button
           v-if="(isNotRequested || isRequested || isCompleted) && hasPermissions([
             PERMISSIONS.exercises.permissions.canReadExercises.value,
             PERMISSIONS.exercises.permissions.canUpdateExercises.value,
             PERMISSIONS.assessments.permissions.canReadAssessments.value,
             PERMISSIONS.assessments.permissions.canUpdateAssessments.value
           ])"
-          class="govuk-!-margin-right-3"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           :disabled="!selectedItems.length"
           @click="
             openModal(
@@ -170,7 +170,7 @@
               { assessmentIds: selectedItems, status: isNotRequested || isRequested ? 'deleted' : 'pending' }, resetAssessments)"
         >
           Delete
-        </ActionButton>
+        </button>
         <Table
           :key="activeTab"
           v-model:selection="selectedItems"
@@ -205,7 +205,7 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
-              {{ $filters.lookup(ow.assessor.type) }}
+              {{ row.assessor.type ? $filters.lookup(row.assessor.type) : '' }}
             </TableCell>
             <TableCell :title="tableColumns[2].title">
               <a
@@ -255,7 +255,7 @@
                   v-if="isCompleted && unapprovedLateSubmission(row)"
                   class="moj-button-menu__item"
                   type="primary"
-                  @click="approveLateSubmission(row)"
+                  :action="() => approveLateSubmission(row)"
                 >
                   Approve late submission
                 </ActionButton>
@@ -332,7 +332,7 @@
           <ActionButton
             type="primary"
             :disabled="!exerciseStage"
-            @click="initialiseAssessments"
+            :action="initialiseAssessments"
           >
             Start assessments
           </ActionButton>
