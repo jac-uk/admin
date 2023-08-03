@@ -76,7 +76,7 @@ auth.onAuthStateChanged(async (user) => {
     vueInstance.config.globalProperties.emitter = emitter;
 
     // Initialise Sentry
-    if (import.meta.env.NODE_ENV !== 'development') {
+    if (import.meta.env.PROD) {
       Sentry.init({
         app: vueInstance,
         dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',

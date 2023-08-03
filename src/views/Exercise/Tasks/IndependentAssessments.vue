@@ -567,7 +567,7 @@ export default {
       return '';
     },
     onDevelop() {
-      return window.location.href.indexOf('admin-develop') > 0 || import.meta.env.NODE_ENV === 'development';
+      return window.location.href.indexOf('admin-develop') > 0 || import.meta.env.DEV;
     },
     onStaging() {
       return window.location.href.indexOf('admin-staging') > 0;
