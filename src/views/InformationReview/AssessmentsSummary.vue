@@ -28,7 +28,7 @@
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
-              @changeField="changeAssessmentInfo"
+              @change-field="changeAssessmentInfo"
             />
             <div
               v-if="hasAscAnswers(index)"
@@ -46,7 +46,7 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
-                @changeField="changeAssessmentInfo"
+                @change-field="changeAssessmentInfo"
               />
             </div>
           </dd>
@@ -93,7 +93,7 @@
                 v-model="application.uploadedSuitabilityStatement"
                 name="suitability-statement"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+                @update:model-value="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
               />
             </div>
           </dd>
@@ -133,7 +133,7 @@
                 v-model="application.uploadedSelfAssessment"
                 name="self-assessment"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
               />
             </div>
           </dd>
@@ -174,7 +174,7 @@
                 v-model="application.uploadedCV"
                 name="cv"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedCV')"
+                @update:model-value="val => doFileUpload(val, 'uploadedCV')"
               />
             </div>
           </dd>
@@ -215,7 +215,7 @@
                 v-model="application.uploadedCoveringLetter"
                 name="covering-letter"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedCoveringLetter')"
+                @update:model-value="val => doFileUpload(val, 'uploadedCoveringLetter')"
               />
             </div>
           </dd>
@@ -231,9 +231,9 @@ import {
   hasCoveringLetter,
   hasSelfAssessment
 } from '@/helpers/exerciseHelper';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 
 export default {
   name: 'AssessmentsSummary',
@@ -259,6 +259,7 @@ export default {
       default: false,
     },
   },
+  emits: ['updateApplication'],
   data() {
     return {
       assessorDetails: {},

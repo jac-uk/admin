@@ -4,7 +4,8 @@ import { functions } from '@/firebase';
 import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
-import { APPLICATION_STEPS, exerciseApplicationParts, configuredApplicationParts } from '@/helpers/exerciseHelper';
+import { getExerciseSaveData } from '@/helpers/exerciseHelper';
+import { logEvent } from '@/helpers/logEvent';
 
 const collection = firestore.collection('exercises');
 
@@ -57,7 +58,7 @@ export default {
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
           data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          transaction.set(exerciseRef, data);
+          transaction.set(exerciseRef, getExerciseSaveData(data, data));
           return exerciseRef.id;
         });
       }).then((newId) => {
@@ -68,31 +69,7 @@ export default {
       await collection.doc(exerciseId).update(data);
     },
     save: async ({ state }, data) => {
-      const saveData = clone(data);
-      if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
-        const applicationParts = exerciseApplicationParts(state.record, data);
-        const existingApplicationParts = configuredApplicationParts(state.record);
-        const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
-        if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
-          const applicationContentBefore = state.record._applicationContent ? state.record._applicationContent : {};
-          const applicationContentAfter = {};
-          APPLICATION_STEPS.forEach(step => {
-            applicationContentAfter[step] = {};
-            applicationParts.forEach(part => {
-              if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
-                applicationContentAfter[step][part] = applicationContentBefore[step][part];
-              } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
-                applicationContentAfter[step][part] = true;
-              }
-            });
-          });
-          if (applicationContentBefore._currentStep) {
-            applicationContentAfter._currentStep = applicationContentBefore._currentStep;
-          }
-          saveData['_applicationContent'] = applicationContentAfter;
-        }
-      }
-      await collection.doc(state.record.id).update(saveData);
+      await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
     updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
       const data = {};
@@ -110,12 +87,10 @@ export default {
           data['state'] = 'approved';
         break;
         case 'rejected':
-          data['_approval.approved'] = null;
           data['_approval.rejected.message'] = rejectionReason;
           data['state'] = 'draft';
         break;
         default:  // 'requested'
-          data['_approval.approved'] = null;
           data['_approval.rejected'] = null;
           data['state'] = 'ready';
       }
@@ -153,9 +128,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
-        published: false,
         testingState: null,
-        _approval: null,
       };
       await ref.update(data);
     },
@@ -223,9 +196,19 @@ export default {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
     delete: async ({ state }) => {
+      // soft delete exercise
+      const loggingData = {
+        exerciseIds: [state.record.id],
+        exerciseRefs: [state.record.referenceNumber],
+      };
       const id = state.record.id;
       const ref = collection.doc(id);
-      await ref.delete();
+      const data = {
+        state: 'deleted',
+        stateBeforeDelete: state.record.state,
+      };
+      await ref.update(data);
+      logEvent('info', 'Exercises deleted', loggingData);
     },
   },
   state: {

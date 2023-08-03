@@ -14,7 +14,7 @@
           PERMISSIONS.exercises.permissions.canReadExercises.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="downloadReport"
+        :action="downloadReport"
       >
         Export to Excel
       </ActionButton>
@@ -25,7 +25,7 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportToGoogleDoc"
+        :action="exportToGoogleDoc"
       >
         Generate Report
       </ActionButton>
@@ -36,7 +36,7 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>
@@ -97,7 +97,7 @@
             :key="item"
             :value="item"
           >
-            {{ item | lookup }}
+            {{ $filters.lookup(item) }}
           </option>
         </Select>
       </div>
@@ -237,7 +237,7 @@
                     :key="value"
                     :value="value"
                   >
-                    {{ value | lookup }}  
+                    {{ $filters.lookup(value) }}
                   </option>
                 </Select>
               </div>
@@ -306,18 +306,18 @@
 <script>
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput';
+import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'CharacterIssues',
@@ -377,11 +377,14 @@ export default {
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
     },
-    applicationRecords: function() {
-      this.getOtherApplicationRecords(this.applicationRecords);
+    applicationRecords: {
+      deep: true,
+      handler() {
+        this.getOtherApplicationRecords(this.applicationRecords);
+      },
     },
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -493,7 +496,7 @@ export default {
       if (!applicationRecords || !applicationRecords.length) {
         this.otherApplicationRecords = [];
       }
-      
+
       for (let i = 0; i < applicationRecords.length; i++) {
         const record = applicationRecords[i];
         const firestoreRef = firestore

@@ -1,7 +1,7 @@
 <template>
   <div
     class="draggable"
-    draggable="true"
+    :draggable="true"
     @dragstart="drag"
   >
     <slot />

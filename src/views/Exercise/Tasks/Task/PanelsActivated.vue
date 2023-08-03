@@ -1,20 +1,20 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      {{ type | lookup }}
+      {{ $filters.lookup(type) }}
     </h1>
 
     <p
       v-if="!hasTaskStarted"
       class="govuk-body-l"
     >
-      {{ type | lookup }} scoring will start on {{ task.startDate | formatDate }}
+      {{ $filters.lookup(type) }} scoring will start on {{ $filters.formatDate(task.startDate) }}
     </p>
     <p
       v-else-if="!hasAllPanelsCompleted"
       class="govuk-body-l"
     >
-      {{ type | lookup }} scoring has started and panels are providing scores.
+      {{ $filters.lookup(type) }} scoring has started and panels are providing scores.
     </p>
     <p
       v-else-if="isModerationRequired"
@@ -53,7 +53,7 @@
           <ActionButton
             class="govuk-!-margin-bottom-1"
             type="primary"
-            @click="btnFinalise"
+            :action="btnFinalise"
           >
             Continue
           </ActionButton>
@@ -62,8 +62,8 @@
     </div>
 
     <TabsList
+      v-model:active-tab="activeTab"
       :tabs="tabs"
-      :active-tab.sync="activeTab"
     />
 
     <!-- OVERVIEW -->
@@ -73,12 +73,12 @@
           class="govuk-grid-column-full"
         >
           <div class="panel govuk-!-margin-bottom-5 govuk-!-padding-4 background-light-grey">
-            <span class="govuk-caption-m">{{ type | lookup }} dates</span>
+            <span class="govuk-caption-m">{{ $filters.lookup(type) }} dates</span>
             <h2
               class="govuk-heading-m govuk-!-margin-bottom-0"
             >
-              {{ task.startDate | formatDate | showAlternative("Unknown") }} to
-              {{ task.endDate | formatDate | showAlternative("Unknown") }}
+              {{ $filters.showAlternative($filters.formatDate(task.startDate), "Unknown") }} to
+              {{ $filters.showAlternative($filters.formatDate(task.endDate), "Unknown") }}
             </h2>
           </div>
         </div>
@@ -267,7 +267,7 @@
               :colspan="header.colspan"
               class="govuk-table__header text-center"
             >
-              {{ header.ref | lookup }}
+              {{ $filters.lookup(header.ref) }}
             </th>
             <th
               v-if="isModerationRequired"
@@ -344,10 +344,10 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
 import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';

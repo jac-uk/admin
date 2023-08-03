@@ -14,7 +14,7 @@
         v-for="item in availableStatuses"
         :key="item"
         :value="item"
-        :label="item | lookup"
+        :label="$filters.lookup(item)"
       />
     </RadioGroup>
     <CheckboxGroup
@@ -71,12 +71,12 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {

@@ -9,8 +9,8 @@
       <div class="print-none">
         <h1>User Management</h1>
         <TabsList
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
         />
       </div>
       <div
@@ -25,7 +25,7 @@
           Create
         </button>
         <h2>List of admin users</h2>
-        <Table class="govuk-table">
+        <table class="govuk-table">
           <tr class="govuk-table__row">
             <th
               scope="row"
@@ -83,7 +83,7 @@
                 v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="primary"
                 class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
+                :action="() => toggleDisableUser(user.uid, userIndex)"
               >
                 Enable user
               </ActionButton>
@@ -91,7 +91,7 @@
                 v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="secondary"
                 class="govuk-!-margin-right-2"
-                @click="toggleDisableUser(user.uid, userIndex)"
+                :action="() => toggleDisableUser(user.uid, userIndex)"
               >
                 Disable user
               </ActionButton>
@@ -104,7 +104,7 @@
               </button>
             </td>
           </tr>
-        </Table>
+        </table>
       </div>
 
       <div
@@ -192,14 +192,14 @@
                 <ActionButton
                   type="primary"
                   class="govuk-!-margin-right-1"
-                  @click="saveRole"
+                  :action="saveRole"
                 >
                   Save role
                 </ActionButton>
                 <ActionButton
                   type="secondary"
                   :disabled="role.isDefault"
-                  @click="setDefaultRole"
+                  :action="setDefaultRole"
                 >
                   Set as default role
                 </ActionButton>
@@ -231,7 +231,7 @@
         <ActionButton
           class="govuk-!-margin-right-1"
           type="primary"
-          @click="createUserRole"
+          :action="createUserRole"
         >
           Save and set permissions
         </ActionButton>
@@ -260,7 +260,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-2"
-          @click="deleteUser"
+          :action="deleteUser"
         >
           Delete
         </ActionButton>
@@ -288,6 +288,7 @@
             label="Email"
             hint="The email must be a JAC email address."
             type="email"
+            autocomplete="off"
             required
           />
           <p
@@ -309,6 +310,7 @@
             label="Password"
             hint="The password must be a string with at least 6 characters."
             type="password"
+            autocomplete="off"
             required
           />
 
@@ -335,7 +337,7 @@
           type="primary"
           class="govuk-!-margin-right-3"
           :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
-          @click="createUser"
+          :action="createUser"
         >
           Save
         </ActionButton>
@@ -351,14 +353,14 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import { functions } from '@/firebase';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import Warning from '@jac-uk/jac-kit/draftComponents/Warning';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import Warning from '@jac-uk/jac-kit/draftComponents/Warning.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -478,7 +480,7 @@ export default {
       this.openModal('modalRefDeleteUser');
     },
     async deleteUser() {
-      if (this.selectedUserIndex) {
+      if (this.selectedUserIndex !== null) {
         const selectedUid = this.users[this.selectedUserIndex].uid;
         try {
           const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
@@ -490,9 +492,10 @@ export default {
             return true;
           }
         } catch (error) {
-          return;
+          return false;
         }
       }
+      return false;
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();

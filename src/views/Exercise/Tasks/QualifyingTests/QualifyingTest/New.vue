@@ -21,7 +21,7 @@
           v-for="item in testTypes"
           :key="item"
           :value="item"
-          :label="item | lookup"
+          :label="$filters.lookup(item)"
         />
       </RadioGroup>
 
@@ -41,11 +41,11 @@
 </template>
 
 <script>
-import Form from '@jac-uk/jac-kit/draftComponents/Form/Form';
-import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
+import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
+import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {

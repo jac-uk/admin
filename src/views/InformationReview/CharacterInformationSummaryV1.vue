@@ -16,7 +16,7 @@
           :options="[true, false]"
           type="selection"
           field="criminalOffences"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.criminalOffences === true"
@@ -27,14 +27,14 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="criminalOffenceDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
     </div>
-    
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has received a non-motoring penalty notice in the last 4 years
@@ -48,7 +48,7 @@
           :edit="edit"
           type="selection"
           field="nonMotoringFixedPenaltyNotices"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.nonMotoringFixedPenaltyNotices === true"
@@ -59,9 +59,9 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="nonMotoringFixedPenaltyNoticesDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -80,7 +80,7 @@
           :edit="edit"
           type="selection"
           field="drivingDisqualificationDrinkDrugs"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.drivingDisqualificationDrinkDrugs === true"
@@ -91,9 +91,9 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="drivingDisqualificationDrinkDrugsDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -112,7 +112,7 @@
           :edit="edit"
           type="selection"
           field="endorsementsOrMotoringFixedPenalties"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.endorsementsOrMotoringFixedPenalties === true"
@@ -123,9 +123,9 @@
             :data="formData.endorsementsOrMotoringFixedPenaltiesDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="endorsementsOrMotoringFixedPenaltiesDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -144,7 +144,7 @@
           :edit="edit"
           type="selection"
           field="declaredBankruptOrIVA"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.declaredBankruptOrIVA === true"
@@ -155,9 +155,9 @@
             :data="formData.declaredBankruptOrIVADetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="declaredBankruptOrIVADetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -176,7 +176,7 @@
           field="lateTaxReturnOrFined"
           :options="[true, false]"
           type="selection"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.lateTaxReturnOrFined === true"
@@ -187,9 +187,9 @@
             :data="formData.lateTaxReturnOrFinedDetails"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="lateTaxReturnOrFinedDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -208,7 +208,7 @@
           :edit="edit"
           type="selection"
           field="involvedInProfessionalMisconduct"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.involvedInProfessionalMisconduct === true"
@@ -219,14 +219,14 @@
             :edit="edit"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="involvedInProfessionalMisconductDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
-        </div> 
+        </div>
       </dd>
     </div>
-    
+
     <div class="govuk-summary-list__row">
       <dt :class="requiredStyle">
         Has ever been subject to complaints or disciplinary action, or been asked to resign from a position
@@ -240,7 +240,7 @@
           :edit="edit"
           type="selection"
           field="diciplinaryActionOrAskedToResign"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.diciplinaryActionOrAskedToResign === true"
@@ -251,9 +251,9 @@
             :data-default="emptyObject(['details', 'date', 'title'])"
             :edit="edit"
             field="diciplinaryActionOrAskedToResignDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -272,7 +272,7 @@
           :edit="edit"
           type="selection"
           field="otherCharacterIssues"
-          @changeField="changeCharacterFlag"
+          @change-field="changeCharacterFlag"
         />
         <div
           v-if="formData.otherCharacterIssues === true"
@@ -283,9 +283,9 @@
             :edit="edit"
             :data-default="emptyObject(['details', 'date', 'title'])"
             field="otherCharacterIssuesDetails"
-            @changeField="changeInfo"
-            @removeField="removeInfo"
-            @addField="addInfo"
+            @change-field="changeInfo"
+            @remove-field="removeInfo"
+            @add-field="addInfo"
           />
         </div>
       </dd>
@@ -294,9 +294,9 @@
 </template>
 
 <script>
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer';
-import CharacterSummary from '@/views/InformationReview/CharacterSummary';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
+import CharacterSummary from '@/views/InformationReview/CharacterSummary.vue';
 
 export default {
   name: 'CharacterInformationSummaryV1',

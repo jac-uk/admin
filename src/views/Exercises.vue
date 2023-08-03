@@ -68,6 +68,7 @@
         >
           <Table
             ref="exercisesTable"
+            v-model:selection="selectedItems"
             data-key="id"
             :data="tableData"
             :page-size="50"
@@ -78,10 +79,23 @@
                 field: 'applicationOpenDate',
                 title: 'Open date',
               },
+              {
+                title: 'Approval',
+                field: '_approval.status',
+                type: 'radio',
+                options: ['None', 'Approved', 'Rejected', 'Requested'],
+                emptyOption: 'None',
+                defaultValue: 'None',
+              },
+              {
+                type: 'singleCheckbox',
+                field: '_lateApplicationRequests',
+                inputLabel: 'Exercises with late application requests',
+                fieldComparator: 'arrayNotEmpty'
+              },
             ]"
             :search="['name']"
             multi-select
-            :selection.sync="selectedItems"
             @change="getTableData"
           >
             <template #actions>
@@ -99,6 +113,15 @@
                 @click="openArchiveModal"
               >
                 {{ isArchived ? 'Unarchive' : 'Archive' }}
+              </button>
+              <button
+                v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value]))"
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
+                :disabled="isButtonDisabled"
+                type="button"
+                @click="openDeleteModal"
+              >
+                Delete
               </button>
             </template>
             <template #row="{row}">
@@ -120,24 +143,27 @@
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationOpenDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationOpenDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[3].title">
                 <RouterLink
                   :to="{ name: 'exercise-dashboard', params: { id: row.id } }"
                 >
-                  {{ row.applicationCloseDate | formatDate }}
+                  {{ $filters.formatDate(row.applicationCloseDate) }}
                 </RouterLink>
               </TableCell>
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
+              <TableCell :title="tableColumns[5].title">
+                {{ getExerciseApprovalStatus(row) }}
+              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[5].title"
+                :title="tableColumns[6].title"
               >
-                {{ row.applicationsCount | formatNumber }}
+                {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
             </template>
           </Table>
@@ -154,17 +180,26 @@
         @confirmed="toggleArchive"
       />
     </Modal>
+    <Modal ref="deleteModal">
+      <ModalInner
+        title="Delete Exercises"
+        :message="deleteModalMessage"
+        @close="closeDeleteModal"
+        @confirmed="deleteExercises"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import _upperFirst from 'lodash/upperFirst';
+import _get from 'lodash/get';
 export default {
   name: 'Exercises',
   components: {
@@ -182,6 +217,7 @@ export default {
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
+        { title: 'Approval' },
         {
           title: 'Applications count',
           sort: '_applications._total',
@@ -222,23 +258,27 @@ export default {
     },
     archiveModalMessage() {
       const archiveVerb = (this.isArchived) ? 'unarchive' : 'archive';
-      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${this.$pluralize('exercises', this.selectedItems.length)}?`;
+      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
+      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${pluralText}?`;
+    },
+    deleteModalMessage() {
+      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
+      return `Are you sure you want to delete ${this.selectedItems.length} ${pluralText}?`;
     },
   },
   watch: {
     isFavourites() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
     isArchived() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
+      this.reloadTable();
     },
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
+  },
+  mounted() {
+    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -256,6 +296,11 @@ export default {
         params
       );
     },
+    reloadTable() {
+      if (this.$refs['exercisesTable']) {
+        this.$refs['exercisesTable'].reload();
+      }
+    },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
       this.$router.push({ name: 'exercises-export' });
@@ -272,6 +317,9 @@ export default {
       }
       return status;
     },
+    getExerciseApprovalStatus(exercise) {
+      return _upperFirst(_get(exercise, '_approval.status', ''));
+    },
     toggleArchive() {
       if (this.isArchived) {
         this.$store.dispatch('exerciseCollection/unarchive');
@@ -285,6 +333,17 @@ export default {
     },
     closeArchiveModal() {
       this.$refs.archiveModal.closeModal();
+    },
+    deleteExercises() {
+      this.$store.dispatch('exerciseCollection/delete');
+      this.$refs.deleteModal.closeModal();
+      this.$refs['exercisesTable'].reload(); // reload table
+    },
+    openDeleteModal() {
+      this.$refs.deleteModal.openModal();
+    },
+    closeDeleteModal() {
+      this.$refs.deleteModal.closeModal();
     },
   },
 };

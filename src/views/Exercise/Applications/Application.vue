@@ -123,7 +123,7 @@
                 Created on
               </span>
               <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-                {{ application.createdAt | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.createdAt), 'Unknown') }}
               </h2>
             </div>
           </div>
@@ -137,7 +137,7 @@
               <h2
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.appliedAt | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.appliedAt), 'Unknown') }}
               </h2>
             </div>
             <div
@@ -148,7 +148,7 @@
               <h2
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                Draft
+                {{ $filters.lookup(application.status) }}
               </h2>
             </div>
           </div>
@@ -168,7 +168,7 @@
                 v-if="application.dateExtension"
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                {{ application.dateExtension | formatDate | showAlternative("Unknown") }}
+                {{ $filters.showAlternative($filters.formatDate(application.dateExtension), 'Unknown') }}
               </h2>
               <button
                 v-else-if="hasPermissions([PERMISSIONS.applications.permissions.canUpdateApplications.value, PERMISSIONS.notes.permissions.canCreateNotes.value])"
@@ -203,11 +203,10 @@
         </Modal>
 
         <TabsList
-          class="print-none"
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
+          class="print-none"
         />
-
         <div
           v-if="activeTab == 'full' || activeTab == 'panel'"
           class="application-details"
@@ -223,48 +222,46 @@
               :editable="editable"
               :character-information="correctCharacterInformation"
               :version="applicationVersion"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <EqualityAndDiversityInformationSummary
               :application="application"
               :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
               :editable="editable"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <ExperienceSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
             <AssessorsSummary
               :application="application"
               :application-id="applicationId"
               :exercise="exercise"
               :editable="editable"
-              :is-panel-view="isPanelView"
             />
             <AssessmentsSummary
               :application="application"
               :exercise="exercise"
               :editable="editable"
               :authorised-to-perform-action="editable"
-              :is-panel-view="isPanelView"
-              @updateApplication="changeApplication"
+              @update-application="changeApplication"
             />
           </div>
         </div>
@@ -303,26 +300,26 @@
 </template>
 
 <script>
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import AgencyReport from './AgencyReport.vue';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner';
-import SubmissionExtension from '@/components/ModalViews/SubmissionExtension';
-import Notes from '@/components/Notes/Notes';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary';
-import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary';
-import PreferencesSummary from '@/views/InformationReview/PreferencesSummary';
-import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary';
-import ExperienceSummary from '@/views/InformationReview/ExperienceSummary';
-import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary';
-import AssessorsSummary from '@/views/InformationReview/AssessorsSummary';
-import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer';
-import PageNotFound from '@/views/Errors/PageNotFound';
-import splitFullName from '@jac-uk/jac-kit/helpers/splitFullName';
+import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import SubmissionExtension from '@/components/ModalViews/SubmissionExtension.vue';
+import Notes from '@/components/Notes/Notes.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import EqualityAndDiversityInformationSummary from '@/views/InformationReview/EqualityAndDiversityInformationSummary.vue';
+import PreferencesSummary from '@/views/InformationReview/PreferencesSummary.vue';
+import QualificationsAndMembershipsSummary from '@/views/InformationReview/QualificationsAndMembershipsSummary.vue';
+import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
+import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
+import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+import PageNotFound from '@/views/Errors/PageNotFound.vue';
+import { splitFullName } from '@jac-uk/jac-kit/helpers/splitFullName';
 import { logEvent } from '@/helpers/logEvent';
-import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
 import {
   isLegal,
   isNonLegal,
@@ -510,14 +507,14 @@ export default {
   created() {
     this.pageLoad();
   },
-  destroyed() {
+  unmounted() {
     this.$store.dispatch('application/unbind');
     this.$store.dispatch('candidates/unbindDoc');
   },
   methods: {
     async pageLoad() {
-      if (this.$route.params.tab) {
-        this.activeTab = this.$route.params.tab;
+      if (this.$route.query.tab) {
+        this.activeTab = this.$route.query.tab;
       }
       if (this.$route.hash) {  // @TODO move this to within TabsList component
         this.activeTab = this.$route.hash.substring(1);

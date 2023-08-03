@@ -119,13 +119,13 @@
 </template>
 
 <script>
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import Answer from '@/components/RepeatableFields/Answer';
-import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument';
-import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion';
-import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis';
-import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import Answer from '@/components/RepeatableFields/Answer.vue';
+import AdditionalDocument from '@/components/RepeatableFields/QualifyingTests/AdditionalDocument.vue';
+import ScenarioQuestion from '@/components/RepeatableFields/QualifyingTests/ScenarioQuestion.vue';
+import CriticalAnalysis from '@/components/RepeatableFields/QualifyingTests/CriticalAnalysis.vue';
+import SituationalJudgement from '@/components/RepeatableFields/QualifyingTests/SituationalJudgement.vue';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {

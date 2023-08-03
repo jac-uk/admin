@@ -15,7 +15,7 @@
     </h2>
 
     <p class="govuk-body">
-      <span class="display-block">{{ exercise.assessmentOptions | lookup }}</span>
+      <span class="display-block">{{ $filters.lookup(exercise.assessmentOptions) }}</span>
       <span
         v-for="assessmentMethod in assessmentMethods"
         :key="assessmentMethod"

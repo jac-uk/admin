@@ -4,11 +4,11 @@
       <h2 class="govuk-heading-m">
         {{ isTieBreaker ? 'Equal merit tie-breaker' : 'Qualifying test' }} response:
         <routerLink :to="{ name: `${routeNamePrefix}-view`, params: { qualifyingTestId: $route.params.qualifyingTestId } }">
-          {{ qualifyingTest.title | showAlternative(qualifyingTest.id) }}
+          {{ $filters.showAlternative(qualifyingTest.title, qualifyingTest.id) }}
         </routerLink>
       </h2>
       <h3 class="govuk-heading-l">
-        {{ candidate && candidate.fullName | showAlternative(candidate && candidate.email) | showAlternative(candidate && candidate.id) }}
+        {{ candidate && $filters.showAlternative($filters.showAlternative(candidate.fullName, candidate.email), candidate.id) }}
       </h3>
 
       <h2 class="govuk-heading-m">
@@ -24,7 +24,7 @@
             Status
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.status | lookup }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
+            {{ $filters.lookup(response.status) }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
             <button
               v-if="authorisedToPerformAction && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
               :disabled="hasActivated"
@@ -39,7 +39,7 @@
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
-              @click="markAsCompleted"
+              :action="markAsCompleted"
             >
               Mark as completed
             </ActionButton>
@@ -50,8 +50,8 @@
             Start date
           </dt>
           <dd class="govuk-summary-list__value">
-            <span v-if="response.statusLog.started">{{ response.statusLog.started | formatDate('datetime') }}</span>
-            <span v-else>{{ qualifyingTest.startDate | formatDate('datetime') }}</span>
+            <span v-if="response.statusLog.started">{{ $filters.formatDate(response.statusLog.started, 'datetime') }}</span>
+            <span v-else>{{ $filters.formatDate(qualifyingTest.startDate, 'datetime') }}</span>
             <div v-if="hasRelatedTests && isEditingTestDate">
               <Select
                 id="moveToTest"
@@ -66,7 +66,7 @@
                   :key="test.id"
                   :value="test.id"
                 >
-                  {{ test.title }} - {{ test.startDate | formatDate('datetime') }}
+                  {{ test.title }} - {{ $filters.formatDate(test.startDate, 'datetime') }}
                 </option>
               </Select>
               <button
@@ -99,7 +99,7 @@
             End date
           </dt>
           <dd class="govuk-summary-list__value">
-            {{ response.statusLog.completed | formatDate('datetime') }}
+            {{ $filters.formatDate(response.statusLog.completed, 'datetime') }}
           </dd>
         </div>
         <div
@@ -150,7 +150,7 @@
                     :value="response.duration.reasonableAdjustment"
                     field="reasonableAdjustment"
                     :edit-mode="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
-                    @changeField="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
+                    @change-field="(obj) => actionReasonableAdjustment(obj, response.duration, responseId)"
                   />
                   {{ response.candidate.reasonableAdjustmentsDetails }}
                 </td>
@@ -168,7 +168,7 @@
                     field="reasonableAdjustmentsJustification"
                     :edit-mode="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
                     type="textarea"
-                    @changeField="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
+                    @change-field="(obj) => actionReasonableAdjustmentJustification(obj, responseId)"
                   />
                 </td>
               </tr>
@@ -201,7 +201,7 @@
             </span>
             <ActionButton
               class="govuk-button govuk-button--warning"
-              @click="confirmReset"
+              :action="confirmReset"
             >
               Reset Test
             </ActionButton>
@@ -210,10 +210,9 @@
       </Modal>
       <div v-if="hasStarted">
         <TabsList
+          v-model:active-tab="activeTab"
           :tabs="tabs"
-          :active-tab.sync="activeTab"
         />
-
         <div v-if="activeTab === 'questions'">
           <h2 class="govuk-heading-m">
             Questions
@@ -430,10 +429,10 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>First started question: </td><td>{{ responses[index].started | formatDate('datetime') }}</td>
+                  <td>First started question: </td><td>{{ $filters.formatDate(responses[index].started, 'datetime') }}</td>
                 </tr>
                 <tr>
-                  <td>Last updated answer: </td><td>{{ lastUpdatedQuestion(index) | formatDate('datetime') }}</td>
+                  <td>Last updated answer: </td><td>{{ $filters.formatDate(lastUpdatedQuestion(index), 'datetime') }}</td>
                 </tr>
                 <tr>
                   <td>Amount of time on question: </td><td>{{ amountOfTimeOnQuestion(index) }}</td>
@@ -460,7 +459,7 @@
             <table>
               <tr class="log_row">
                 <td class="log_row_time">
-                  {{ log.timestamp | formatDate('datetime') }}
+                  {{ $filters.formatDate(log.timestamp, 'datetime') }}
                 </td>
                 <td class="log_row_date">
                   <span v-if="log.action">{{ log.action }} </span>
@@ -484,15 +483,15 @@
 <script>
 import { auth } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import QuestionDuration from '@/components/Micro/QuestionDuration';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import QuestionDuration from '@/components/Micro/QuestionDuration.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'ExerciseView',

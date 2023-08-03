@@ -3,7 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <h1 class="govuk-heading-l">
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="govuk-grid-column-one-half text-right">
@@ -14,7 +14,23 @@
         >
           Export
         </button>
-
+        <button
+          class="govuk-button govuk-!-margin-right-2"
+          :class="{ 'govuk-button--secondary': task.passMark }"
+          type="button"
+          @click="$refs['setPassMarkModal'].openModal()"
+        >
+          <span v-if="hasPassMark >= 0">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
+          <span v-else>Set pass mark</span>
+        </button>        
+        <ActionButton
+          v-if="hasPassMark"
+          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+          type="primary"
+          :action="btnComplete"
+        >
+          Complete
+        </ActionButton>
         <FullScreenButton />
       </div>
     </div>
@@ -29,7 +45,7 @@
       v-else
       class="govuk-body-l govuk-!-margin-bottom-4"
     >
-      {{ type | lookup }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
+      {{ $filters.lookup(type) }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
 
     <button
@@ -38,7 +54,7 @@
       type="button"
       @click="$refs['setPassMarkModal'].openModal()"
     >
-      <span v-if="hasPassMark">Pass mark {{ task.passMark | formatNumber(2) }}</span>
+      <span v-if="hasPassMark">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
       <span v-else>Set pass mark</span>
     </button>
     <ActionButton
@@ -71,7 +87,7 @@
     </Modal>
     <Modal ref="exportModal">
       <TitleBar>
-        Export {{ type | lookup }}
+        Export {{ $filters.lookup(type) }}
       </TitleBar>
       <ConfigureExport
         class="govuk-!-margin-6"
@@ -88,13 +104,13 @@ import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { TASK_TYPE } from '@/helpers/exerciseHelper';
 import { downloadMeritList, getDownloadTypes } from '@/helpers/taskHelper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
-import FullScreenButton from '@/components/Page/FullScreenButton';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import SetPassMark from './Finalised/SetPassMark';
-import ConfigureExport from './Finalised/ConfigureExport';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import SetPassMark from './Finalised/SetPassMark.vue';
+import ConfigureExport from './Finalised/ConfigureExport.vue';
 import _find from 'lodash/find';
 
 export default {

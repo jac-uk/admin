@@ -49,7 +49,7 @@
       <ActionButton
         v-if="report"
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>
@@ -69,7 +69,7 @@
           :key="type"
           :value="type"
         >
-          {{ type | lookup }}
+          {{ $filters.lookup(type) }}
         </option>
       </Select>
       <Chart
@@ -81,8 +81,8 @@
         :display-patterned-labels="true"
       />
       <TabsList
+        v-model:active-tab="activeTab"
         :tabs="tabs"
-        :active-tab.sync="activeTab"
       />
       <Table
         data-key="id"
@@ -99,22 +99,22 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.val.percent | formatNumber(2) }}% ({{ row.val.total | formatNumber }})
+            {{ $filters.formatNumber(row.val.percent, 2) }}% ({{ $filters.formatNumber(row.val.total) }})
           </TableCell>
         </template>
       </Table>
       <p class="govuk-caption-s color-middle">
-        <span class="">Diversity Report Last Updated: {{ reportCreatedAt | formatDate('datetime') }}</span>
+        <span class="">Diversity Report Last Updated: {{ $filters.formatDate(reportCreatedAt, 'datetime') }}</span>
       </p>
     </div>
   </div>
 </template>
 <script>
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -125,12 +125,12 @@ import router from '@/router';
 //import QualifyingTest from './ScoresDistribution/QualifyingTest';
 //import ScenarioTest from './ScoresDistribution/ScenarioTest';
 //import SelectionDay from './ScoresDistribution/SelectionDay';
-import TotalApplications from './OverviewPanels/TotalApplications';
-import NumberVacancies from './OverviewPanels/NumberVacancies';
-import SelectionExerciseManager from './OverviewPanels/SelectionExerciseManager';
-import TypeOfExercise from './OverviewPanels/TypeOfExercise';
-import Timeline from './OverviewPanels/Timeline';
-import AssignedCommissioner from './OverviewPanels/AssignedCommissioner';
+import TotalApplications from './OverviewPanels/TotalApplications.vue';
+import NumberVacancies from './OverviewPanels/NumberVacancies.vue';
+import SelectionExerciseManager from './OverviewPanels/SelectionExerciseManager.vue';
+import TypeOfExercise from './OverviewPanels/TypeOfExercise.vue';
+import Timeline from './OverviewPanels/Timeline.vue';
+import AssignedCommissioner from './OverviewPanels/AssignedCommissioner.vue';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
@@ -166,7 +166,7 @@ export default {
   },
   computed: {
     tableColumns() {
-      const totalCandidates = this.$options.filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
+      const totalCandidates = this.$filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
       return [
         { title: `${lookup(this.selectedDiversityReportType)} (${lookup(this.activeTab)} ${totalCandidates} candidates)` },
         { title: 'Percentage (Total)' },
@@ -243,7 +243,7 @@ export default {
             }
             let percentage = 0;
             if (_has(element[legendKey], 'percent')) {
-              percentage = this.$options.filters.formatNumber(element[legendKey].percent, 2);
+              percentage = this.$filters.formatNumber(element[legendKey].percent, 2);
             }
             dataValues[legendKey].push(percentage);
           }
@@ -330,7 +330,7 @@ export default {
       router.push('details');
     }
   },
-  destroyed() {
+  unmounted() {
     if (this.unsubscribe) {
       this.unsubscribe();
     }

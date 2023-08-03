@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="govuk-heading-l">
-      New panel for {{ type | lookup }}
+      New panel for {{ $filters.lookup(type) }}
     </h1>
     <PanelForm
       :data="defaults"
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import PanelForm from './components/AddEdit';
+import PanelForm from './components/AddEdit.vue';
 
 export default {
   components: {

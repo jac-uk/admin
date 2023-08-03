@@ -60,20 +60,20 @@
               class="govuk-link"
               :to="{ name: getViewName(row), params: { qualifyingTestId: row.id } }"
             >
-              {{ row.title | showAlternative(row.id) }}
+              {{ $filters.showAlternative(row.title, row.id) }}
             </RouterLink>
             <span
               v-if="row.mode"
               class="govuk-tag govuk-tag--grey govuk-!-margin-left-1"
-            >{{ row.mode | lookup }}</span>
+            >{{ $filters.lookup(row.mode) }}</span>
             <br>
-            <span class="govuk-body-s">{{ row.startDate | formatDate('longdatetime') }}</span>
+            <span class="govuk-body-s">{{ $filters.formatDate(row.startDate, 'longdatetime') }}</span>
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.type | lookup }}
+            {{ $filters.lookup(row.type) }}
           </TableCell>
           <TableCell :title="tableColumns[2].title">
-            {{ row.status | lookup }}
+            {{ $filters.lookup(row.status) }}
           </TableCell>
         </template>
       </Table>
@@ -105,10 +105,10 @@
 </template>
 
 <script>
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
-import Banner from '@jac-uk/jac-kit/draftComponents/Banner';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
