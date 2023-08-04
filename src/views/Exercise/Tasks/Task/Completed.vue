@@ -140,8 +140,7 @@ export default {
             }
             result[scoreCandidateId].pass = scorePass;
           }
-        }
-        else {
+        } else {
           console.log('Application and final scores mismatch');
         }
       }
