@@ -1,25 +1,32 @@
 <template>
   <div>
-    <TextField
+    <Select
       :id="`selection_exercise_officer_${index}`"
       v-model="row.name"
       label="Selection exercise officer"
       hint="An email address is required."
-      type="email"
       required
-      :pattern="patternJACEmail"
-    />
+    >
+      <option
+        v-for="user in users"
+        :key="user.uid"
+        :value="user.email"
+      >
+        {{ user.email }}
+      </option>
+    </Select>
     <slot name="removeButton" />
   </div>
 </template>
 
 <script>
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SelectionExerciseOfficer',
   components: {
-    TextField,
+    Select,
   },
   props: {
     row: {
@@ -31,10 +38,10 @@ export default {
       type: Number,
     },
   },
-  data() {
-    return {
-      patternJACEmail: { match: /@judicialappointments.(digital|gov.uk)$/, message: 'Please use a JAC email address' },
-    };
+  computed: {
+    ...mapGetters({
+      users: 'users/enabledMicrosoftUsers',
+    }),
   },
 };
 </script>

@@ -8,6 +8,13 @@
       </div>
       <div class="govuk-grid-column-one-half text-right">
         <button
+          v-if="isQualifyingTest"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-2"
+          @click="btnExport"
+        >
+          Export
+        </button>
+        <button
           class="govuk-button govuk-!-margin-right-2"
           :class="{ 'govuk-button--secondary': task.passMark }"
           type="button"
@@ -15,7 +22,7 @@
         >
           <span v-if="hasPassMark >= 0">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
           <span v-else>Set pass mark</span>
-        </button>
+        </button>        
         <ActionButton
           v-if="hasPassMark"
           class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
@@ -41,6 +48,24 @@
       {{ $filters.lookup(type) }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
 
+    <button
+      class="govuk-button govuk-!-margin-right-2"
+      :class="{ 'govuk-button--secondary': task.passMark }"
+      type="button"
+      @click="$refs['setPassMarkModal'].openModal()"
+    >
+      <span v-if="hasPassMark">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
+      <span v-else>Set pass mark</span>
+    </button>
+    <ActionButton
+      v-if="hasPassMark"
+      class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+      type="primary"
+      @click="btnComplete"
+    >
+      Complete
+    </ActionButton>
+
     <RouterView
       :exercise-id="exercise.id"
       :type="type"
@@ -60,19 +85,34 @@
         @cancel="$refs['setPassMarkModal'].closeModal()"
       />
     </Modal>
+    <Modal ref="exportModal">
+      <TitleBar>
+        Export {{ $filters.lookup(type) }}
+      </TitleBar>
+      <ConfigureExport
+        class="govuk-!-margin-6"
+        :types="downloadTypes"
+        @save="downloadMeritList"
+        @cancel="$refs['exportModal'].closeModal()"
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { TASK_TYPE } from '@/helpers/exerciseHelper';
+import { downloadMeritList, getDownloadTypes } from '@/helpers/taskHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import SetPassMark from './Finalised/SetPassMark.vue';
+import ConfigureExport from './Finalised/ConfigureExport.vue';
 import _find from 'lodash/find';
+
 export default {
   components: {
     ActionButton,
@@ -80,6 +120,7 @@ export default {
     Modal,
     TitleBar,
     SetPassMark,
+    ConfigureExport,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -106,6 +147,12 @@ export default {
     },
     hasPassMark() {
       return this.task.hasOwnProperty('passMark');
+    },
+    isQualifyingTest() {
+      return this.type === TASK_TYPE.QUALIFYING_TEST;
+    },
+    downloadTypes() {
+      return getDownloadTypes(this.task);
     },
     scores() {
       if (!this.task) return [];
@@ -235,6 +282,14 @@ export default {
       });
       this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
+    },
+    btnExport() {
+      this.$refs['exportModal'].openModal();
+    },
+    downloadMeritList(saveData) {
+      const fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
+      downloadMeritList(this.task, this.exerciseDiversity, saveData.type, fileName);
+      this.$refs['exportModal'].closeModal();
     },
     async setPassMark(data) {
       if (data) {
