@@ -318,6 +318,7 @@ export default {
             });
             return { 'name': `${legend.title}`, 'val': dataApplied[item] };
           });
+      }
       return returnChart;
     },
     reportCreatedAt() {
