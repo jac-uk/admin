@@ -31,6 +31,7 @@
     "@sentry/vue": "^7.37.2",
     "@vitejs/plugin-vue": "^1.6.1",
     "@vue/compat": "^3.1.0",
+    "@xquick-code/vuexfire": "^0.0.1",
     "autoprefixer": "^10.4.14",
     "buffer": "^6.0.3",
     "chart.js": "^4.2.1",
@@ -51,7 +52,6 @@
     "vuexfire": "^3.2.5"
   },
   "devDependencies": {
-    "vite": "^2.5.4",
     "@vue/compiler-sfc": "^3.1.0",
     "bufferutil": "^4.0.3",
     "clone": "^2.1.2",
@@ -66,6 +66,7 @@
     "process": "^0.11.10",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
+    "vite": "^2.5.4",
     "vite-plugin-eslint": "^1.8.1"
   },
   "engines": {

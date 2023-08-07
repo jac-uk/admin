@@ -1,7 +1,7 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { functions } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@xquick-code/vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { getExerciseSaveData } from '@/helpers/exerciseHelper';

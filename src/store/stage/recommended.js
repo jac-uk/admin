@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@xquick-code/vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';

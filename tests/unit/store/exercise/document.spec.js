@@ -9,7 +9,7 @@ jest.mock('@/firebase', () => {
   return { firestore };
 });
 
-jest.mock('vuexfire');
+jest.mock('@xquick-code/vuexfire');
 
 xdescribe('store/exercise/single', () => {
   describe('actions', () => {

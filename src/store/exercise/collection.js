@@ -1,8 +1,49 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@xquick-code/vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { logEvent } from '@/helpers/logEvent';
+
+// const bindFirestoreRef = (state, ref) => {
+//   const unsubscribe = ref.onSnapshot(ref => {
+//     ref.docChanges().forEach(change => {
+//       console.log(change);
+//       const { newIndex, oldIndex, doc, type } = change;
+//       console.log(newIndex, oldIndex, doc, type);
+//       const data = {
+//         id: doc.id,
+//         ...doc.data(),
+//       };
+//       if (type === 'added') {
+//         if (Array.isArray(state)) {
+//           state.splice(newIndex, 0, data);
+//           // if we want to handle references we would do it here
+//         } else {
+//           state = data;
+//         }
+//       } else if (type === 'modified') {
+//         // remove the old one first
+//         if (Array.isArray(state)) {
+//           state.splice(oldIndex, 1);
+//           // if we want to handle references we would have to unsubscribe
+//           // from old references' listeners and subscribe to the new ones
+//           this.todos.splice(newIndex, 0, data);
+//         } else {
+//           state = data;
+//         }
+//       } else if (type === 'removed') {
+//         if (Array.isArray(state)) {
+//           this.todos.splice(oldIndex, 1);
+//           // if we want to handle references we need to unsubscribe
+//           // from old references
+//         } else {
+//           state = null;
+//         }
+//       }
+//     });
+//   });
+//   return unsubscribe;
+// };
 
 export default {
   namespaced: true,
