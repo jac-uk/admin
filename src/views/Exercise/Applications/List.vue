@@ -51,12 +51,8 @@
       data-key="id"
       :data="applications"
       :columns="tableColumns"
-      :custom-search="{
-        placeholder: 'Search candidate names',
-        handler: candidateSearch,
-        field: 'userId',
-      }"
-      page-item-type="uppercase-letter"
+      search-map="_search"
+      page-item-type="number"
       :page-size="50"
       :total="exercise._applications[status]"
       @change="getTableData"
@@ -179,7 +175,7 @@ export default {
       this.$refs.lateApplicationRequestConfirmModal.closeModal();
     },
     getTableData(params) {
-      return this.$store.dispatch(
+      this.$store.dispatch(
         'applications/bind',
         {
           exerciseId: this.exercise.id,
