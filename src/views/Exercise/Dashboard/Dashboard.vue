@@ -162,6 +162,7 @@ export default {
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
       report: null,
+      ignoreKeys: ['genderNeutral', 'preferNotToSay', 'other', 'noAnswer'],
     };
   },
   computed: {
@@ -230,14 +231,17 @@ export default {
         const dataValues = {};
         // Get the top level and second level key mappings from the report
         const labelKeys = this.labels.map(o => o.key);
-        const legendKeys = this.legend.map(o => o.key);
+        const filteredLegend = this.legend.filter(o => !(this.ignoreKeys).includes(o.key));
+
         // Set the labels
         const labels = this.labels.map(o => o.title);
         returnChart.labels = labels;
+
         // Populate the data values for the selected diversity report
         for (const labelKey of labelKeys) {
           const element = this.report[labelKey][this.selectedDiversityReportType];
-          for (const legendKey of legendKeys) {
+          for (const legend of filteredLegend) {
+            const legendKey = legend.key;
             if (!_has(dataValues, legendKey)) {
               dataValues[legendKey] = [];
             }
@@ -248,8 +252,9 @@ export default {
             dataValues[legendKey].push(percentage);
           }
         }
+
         // Set the datasets (background colour gets passed to the Chart component separately and merged into the data)
-        for (const obj of this.legend) {
+        for (const obj of filteredLegend) {
           returnChart.datasets.push({
             label: obj.title,
             data: dataValues[obj.key],
@@ -304,14 +309,15 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
-        returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
-          const legendList = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
-          const legend = _find(legendList, o => {
-            return o.key === item;
+        returnChart = this.getOrderedKeys(this.selectedDiversityReportType)
+          .filter(item => !this.ignoreKeys.includes(item))
+          .map(item => {
+            const legendList = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+            const legend = _find(legendList, o => {
+              return o.key === item;
+            });
+            return { 'name': `${legend.title}`, 'val': dataApplied[item] };
           });
-          return { 'name': `${legend.title}`, 'val': dataApplied[item] };
-        });
-      }
       return returnChart;
     },
     reportCreatedAt() {

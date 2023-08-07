@@ -159,7 +159,7 @@
                 <Stat
                   :stat="diversity[activeTab].gender.declaration"
                   :report-total="diversity[activeTab].gender.total"
-                  is-declaration-total="true"
+                  :is-declaration-total="true"
                 />
               </td>
             </tr>
@@ -217,7 +217,7 @@
                 <Stat
                   :stat="diversity[activeTab].ethnicity.declaration"
                   :report-total="diversity[activeTab].ethnicity.total"
-                  is-declaration-total="true"
+                  :is-declaration-total="true"
                 />
               </td>
             </tr>
@@ -269,7 +269,7 @@
                 <Stat
                   :stat="diversity[activeTab].disability.declaration"
                   :report-total="diversity[activeTab].disability.total"
-                  is-declaration-total="true"
+                  :is-declaration-total="true"
                 />
               </td>
             </tr>
@@ -332,7 +332,7 @@
                 <Stat
                   :stat="diversity[activeTab].professionalBackground.declaration"
                   :report-total="diversity[activeTab].professionalBackground.total"
-                  is-declaration-total="true"
+                  :is-declaration-total="true"
                 />
               </td>
             </tr>
@@ -407,7 +407,7 @@
                 <Stat
                   :stat="diversity[activeTab].socialMobility.declaration"
                   :report-total="diversity[activeTab].socialMobility.total"
-                  is-declaration-total="true"
+                  :is-declaration-total="true"
                 />
               </td>
             </tr> -->
