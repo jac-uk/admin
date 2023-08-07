@@ -99,7 +99,11 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ $filters.formatNumber(row.val.percent, 2) }}% ({{ $filters.formatNumber(row.val.total) }})
+            <Stat
+              :stat="row.val"
+              :is-declaration-total="row.name === 'Declaration Total'"
+              :report-total="row.total"
+            />
           </TableCell>
         </template>
       </Table>
@@ -136,6 +140,8 @@ import _map from 'lodash/map';
 import _find from 'lodash/find';
 import Chart from '@/components/Chart';
 import { getReports } from '@/reports';
+import Stat from '@/components/Report/Stat.vue';
+
 export default {
   name: 'Dashboard',
   components: {
@@ -154,6 +160,7 @@ export default {
     Timeline,
     AssignedCommissioner,
     Chart,
+    Stat,
   },
   data() {
     return {
@@ -309,6 +316,7 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
+        const total = dataApplied.total;
         returnChart = this.getOrderedKeys(this.selectedDiversityReportType)
           .filter(item => !this.ignoreKeys.includes(item))
           .map(item => {
@@ -316,8 +324,14 @@ export default {
             const legend = _find(legendList, o => {
               return o.key === item;
             });
-            return { 'name': `${legend.title}`, 'val': dataApplied[item] };
+            return { 'name': `${legend.title}`, 'val': dataApplied[item], total: null };
           });
+        // Append declaration total
+        returnChart.push({
+          name: 'Declaration Total',
+          val: dataApplied.declaration,
+          total: total,
+        });
       }
       return returnChart;
     },
