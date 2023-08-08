@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@xquick-code/vuexfire';
+import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 const collection = firestore.collection('notes');

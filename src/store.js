@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 
-import { vuexfireMutations, firestoreOptions } from '@xquick-code/vuexfire';
+import { vuexfireMutations, firestoreOptions } from 'vuexfire';
 firestoreOptions.wait = true;
 
 // Vuex modules

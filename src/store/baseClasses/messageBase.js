@@ -1,6 +1,6 @@
 import { firestore } from '@/firebase';
 import firebase from '@firebase/app';
-import { firestoreAction } from '@xquick-code/vuexfire';
+import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';

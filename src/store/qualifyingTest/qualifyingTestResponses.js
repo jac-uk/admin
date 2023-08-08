@@ -1,6 +1,6 @@
 import firebase from '@firebase/app';
 import { auth, firestore } from '@/firebase';
-import { firestoreAction } from '@xquick-code/vuexfire';
+import { firestoreAction } from 'vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@jac-uk/jac-kit/helpers/constants';
