@@ -19,7 +19,9 @@ const firestoreAction = (action) => {
 
       return new Promise((resolve) => {
         let unsubscribe = null;
-        if (Array.isArray(state[name])) {
+
+        if ('where' in ref) {
+          // bind collection
           unsubscribe = ref.onSnapshot(ref => {
             const records = [];
             ref.forEach(doc => {
@@ -30,6 +32,7 @@ const firestoreAction = (action) => {
             resolve(records);
           });
         } else {
+          // bind document
           unsubscribe = ref.onSnapshot(snap => {
             let record = null;
             if (snap.exists) {

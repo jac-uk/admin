@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from '@/helpers/vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { logEvent } from '@/helpers/logEvent';
