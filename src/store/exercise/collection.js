@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfire';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { logEvent } from '@/helpers/logEvent';
@@ -133,6 +133,9 @@ export default {
     },
   },
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     updateArchived(state, isArchived) {
       state.isArchived = isArchived;
     },
