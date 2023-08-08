@@ -48,7 +48,8 @@
     "vue-json-pretty": "^2.2.3",
     "vue-router": "^4.1.6",
     "vuedraggable": "^4.1.0",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuexfire": "^3.2.5"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.1.0",
