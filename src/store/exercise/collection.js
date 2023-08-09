@@ -47,25 +47,22 @@ export default {
     unbindDraft: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('draftRecords');
     }),
-    showFavourites: ({ commit, dispatch }) => {
+    showFavourites: ({ commit }) => {
       commit('updateFavourites', true);
       commit('updateArchived', false);
-      dispatch('bind');
     },
-    showAll: ({ commit, dispatch }) => {
+    showAll: ({ commit }) => {
       commit('updateFavourites', false);
       commit('updateArchived', false);
-      dispatch('bind');
     },
-    showArchived: ({ commit, dispatch }) => {
+    showArchived: ({ commit }) => {
       commit('updateFavourites', false);
       commit('updateArchived', true);
-      dispatch('bind');
     },
     storeItems: (context, { items }) => {
       context.commit('setSelectedItems', items);
     },
-    unarchive: async ({ commit, state, dispatch }) => {
+    unarchive: async ({ commit, state }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -84,9 +81,8 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
-      dispatch('bind');
     },
-    archive: async ({ commit, state, dispatch }) => {
+    archive: async ({ commit, state }) => {
       const loggingData = {
         exerciseIds: [],
         exerciseRefs: [],
@@ -105,7 +101,6 @@ export default {
       await batch.commit();
       commit('resetSelectedItems');
       logEvent('info', 'Exercises archived', loggingData);
-      dispatch('bind');
     },
     delete: async ({ commit, state }) => {
       const loggingData = {
