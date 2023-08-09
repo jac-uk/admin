@@ -52,7 +52,7 @@
       :data="applications"
       :columns="tableColumns"
       search-map="_search"
-      page-item-type="number"
+      page-item-type="uppercase-letter"
       :page-size="50"
       :total="exercise._applications[status]"
       @change="getTableData"
