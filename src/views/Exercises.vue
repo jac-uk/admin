@@ -266,19 +266,8 @@ export default {
       return `Are you sure you want to delete ${this.selectedItems.length} ${pluralText}?`;
     },
   },
-  watch: {
-    isFavourites() {
-      this.reloadTable();
-    },
-    isArchived() {
-      this.reloadTable();
-    },
-  },
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
-  },
-  mounted() {
-    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -295,11 +284,6 @@ export default {
         'exerciseCollection/bind',
         params
       );
-    },
-    reloadTable() {
-      if (this.$refs['exercisesTable']) {
-        this.$refs['exercisesTable'].reload();
-      }
     },
     checkForm() {
       this.$store.dispatch('exerciseCollection/storeItems', { items: this.selectedItems });
@@ -337,7 +321,6 @@ export default {
     deleteExercises() {
       this.$store.dispatch('exerciseCollection/delete');
       this.$refs.deleteModal.closeModal();
-      this.$refs['exercisesTable'].reload(); // reload table
     },
     openDeleteModal() {
       this.$refs.deleteModal.openModal();
