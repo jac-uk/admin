@@ -86,7 +86,8 @@ export {
   availableStages,
   availableStatuses,
   getPreviousStage,
-  getNextStage
+  getNextStage,
+  getStagePassingStatuses
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -784,6 +785,7 @@ function availableStages(exercise) {
 
 function getPreviousStage(exercise, currentStage) {
   switch (currentStage) {
+  case EXERCISE_STAGE.REVIEW:
   case EXERCISE_STAGE.APPLIED:
     return '';
   case EXERCISE_STAGE.SHORTLISTED:
@@ -798,27 +800,42 @@ function getPreviousStage(exercise, currentStage) {
 }
 
 function getNextStage(exercise, currentStage, newStatus) {
-  switch (currentStage) {
-  case EXERCISE_STAGE.APPLIED:  // TODO make this specific to exercise
-    if (newStatus === APPLICATION_STATUS.SIFT_PASSED) return EXERCISE_STAGE.SHORTLISTED;
-    break;
-  case EXERCISE_STAGE.SHORTLISTED:
-    if (newStatus === APPLICATION_STATUS.SELECTION_PASSED) return EXERCISE_STAGE.SELECTABLE;
-    break;
-  case EXERCISE_STAGE.SELECTABLE:
-    if (newStatus === APPLICATION_STATUS.PASSED_RECOMMENDED) return EXERCISE_STAGE.RECOMMENDED;
-    break;
-  case EXERCISE_STAGE.RECOMMENDED:
-    if (newStatus === APPLICATION_STATUS.RECOMMENDED_IMMEDIATE) return EXERCISE_STAGE.HANDOVER;
-    if (newStatus === APPLICATION_STATUS.RECOMMENDED_FUTURE) return EXERCISE_STAGE.HANDOVER;
-    break;
+  const passingStatuses = getStagePassingStatuses(exercise, currentStage);
+  if (passingStatuses.indexOf(newStatus) >= 0) {
+    switch (currentStage) {
+    case EXERCISE_STAGE.REVIEW:
+    case EXERCISE_STAGE.APPLIED:  // TODO make this specific to exercise
+      return EXERCISE_STAGE.SHORTLISTED;
+    case EXERCISE_STAGE.SHORTLISTED:
+      return EXERCISE_STAGE.SELECTABLE;
+    case EXERCISE_STAGE.SELECTABLE:
+      return EXERCISE_STAGE.RECOMMENDED;
+    case EXERCISE_STAGE.RECOMMENDED:
+      return EXERCISE_STAGE.HANDOVER;
+    }    
   }
   return currentStage;
+}
+
+// returns an array of statuses which trigger a move to the next stage
+function getStagePassingStatuses(exercise, stage) {
+  switch (stage) {
+  case EXERCISE_STAGE.REVIEW:
+  case EXERCISE_STAGE.APPLIED:  // TODO make this specific to exercise
+    return [APPLICATION_STATUS.SHORTLISTING_PASSED];
+  case EXERCISE_STAGE.SHORTLISTED:
+    return [APPLICATION_STATUS.SELECTION_PASSED];
+  case EXERCISE_STAGE.SELECTABLE:
+    return [APPLICATION_STATUS.PASSED_RECOMMENDED];
+  case EXERCISE_STAGE.RECOMMENDED:
+    return [APPLICATION_STATUS.RECOMMENDED_IMMEDIATE, APPLICATION_STATUS.RECOMMENDED_FUTURE];
+  }
 }
 
 function availableStatuses(exercise, stage) {
   let statuses = [];
   switch (stage) {
+  case EXERCISE_STAGE.REVIEW:
   case EXERCISE_STAGE.APPLIED:
     statuses = [
       ...shortlistingStatuses(exercise),
@@ -828,6 +845,8 @@ function availableStatuses(exercise, stage) {
       APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
       APPLICATION_STATUS.REJECTED_CHARACTER,
       APPLICATION_STATUS.WITHDRAWN,
+      APPLICATION_STATUS.SHORTLISTING_PASSED,
+      APPLICATION_STATUS.SHORTLISTING_FAILED,
     ];
     return statuses;
   case EXERCISE_STAGE.SHORTLISTED:
@@ -866,7 +885,8 @@ function availableStatuses(exercise, stage) {
   default:
     statuses = [  // TODO make this specific to exercise
       ...shortlistingStatuses(exercise),
-      APPLICATION_STATUS.SELECTION_INVITED,
+      APPLICATION_STATUS.SHORTLISTING_PASSED,
+      APPLICATION_STATUS.SHORTLISTING_FAILED,
       APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
       APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
       APPLICATION_STATUS.REJECTED_CHARACTER,
@@ -887,25 +907,36 @@ function availableStatuses(exercise, stage) {
 function shortlistingStatuses(exercise) {
   const statuses = [];
   if (exercise && exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
-    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0) {
-      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_PASSED);
-      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_FAILED);
+    // one-part QT
+    if (
+      (
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 &&
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) < 0
+      ) ||
+      (
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) < 0 &&
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
+      )
+    ) {
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);  
     }
-    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0) {
-      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_PASSED);
-      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_FAILED);
-    }
+    // two-part QT
     if (
       exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 &&
       exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
     ) {
+      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_PASSED);
+      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_PASSED);
       statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
       statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
     }
+    // scenario test
     if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST) >= 0) {
       statuses.push(APPLICATION_STATUS.SCENARIO_TEST_PASSED);
       statuses.push(APPLICATION_STATUS.SCENARIO_TEST_FAILED);
     }
+    // sift
     if (
       exercise.shortlistingMethods.indexOf(SHORTLISTING.NAME_BLIND_PAPER_SIFT) >= 0 ||
       exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0
@@ -913,10 +944,12 @@ function shortlistingStatuses(exercise) {
       statuses.push(APPLICATION_STATUS.SIFT_PASSED);
       statuses.push(APPLICATION_STATUS.SIFT_FAILED);
     }
+    // telephone assessment
     if (exercise.shortlistingMethods.indexOf(SHORTLISTING.TELEPHONE_ASSESSMENT) >= 0) {
       statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_PASSED);
       statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_FAILED);
     }
+    // TODO other
   }
   return statuses;
 }

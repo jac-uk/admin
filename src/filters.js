@@ -261,7 +261,17 @@ const lookup = (value) => {
   return returnValue;
 };
 
+const pluralise = (word, quantity) => {
+  if (quantity === 1) {
+    return word;
+  } else {
+    // TODO could hardcode words from our vocabulary which don't fit the default pattern of singular->WORD, plural->WORDs. If there are any?!
+    return `${word}s`;
+  }
+};
+
 export {
-  lookup
+  lookup,
+  pluralise
 };
 

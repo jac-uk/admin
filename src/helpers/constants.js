@@ -39,6 +39,8 @@ const APPLICATION_STATUS = {
   TELEPHONE_ASSESSMENT_PASSED: 'telephoneAssessmentPassed',
   TELEPHONE_ASSESSMENT_FAILED: 'telephoneAssessmentFailed',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
+  SHORTLISTING_PASSED: 'shortlistingOutcomePassed',
+  SHORTLISTING_FAILED: 'shortlistingOutcomeFailed',
   // SELECTION_INVITED: 'selectionInvited',
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',

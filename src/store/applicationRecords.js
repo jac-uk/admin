@@ -54,9 +54,9 @@ export default {
 
       const message = [];
       if (selectedItems.length > 1) {
-        message.push(`Updated ${selectedItems.length} candidates`);
+        message.push(`Updated ${selectedItems.length} applications`);
       } else {
-        message.push(`Updated ${selectedItems.length} candidate`);
+        message.push(`Updated ${selectedItems.length} application`);
       }
       if (data.status) {
         message.push(`to status '${lookup(data.status)}'`);
@@ -66,7 +66,6 @@ export default {
         message.push(`to stage '${lookup(data.stage)}'`);
       }
       context.commit('message', message.join(' '));
-      context.commit('changeSelectedItems', []);
 
       if (
         data.stage ||

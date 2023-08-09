@@ -1,12 +1,16 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <BackLink />
+    <h1 class="govuk-heading-l">
+      Update {{ itemsToChange.length }} {{ $filters.pluralise('application', itemsToChange.length) }}
+    </h1>
     <ErrorSummary
       :errors="errors"
     />
     <RadioGroup
       id="selected-status"
       v-model="newSelectedStatus"
-      label="Update status"
+      label="New status"
       hint=""
       required
     >
@@ -65,6 +69,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { availableStatuses, getNextStage } from '../../../helpers/exerciseHelper';
 
 export default {
@@ -74,6 +79,7 @@ export default {
     RadioItem,
     CheckboxGroup,
     CheckboxItem,
+    BackLink,
   },
   extends: Form,
   data() {
@@ -102,7 +108,7 @@ export default {
   created() {
     // on refresh if there's no IDs to change => redirect to the list
     if (this.itemsToChange.length === 0) {
-      this.$router.push({ name: 'exercise-stages-list' });
+      this.$router.push({ name: 'exercise-stage-list' });
     }
   },
   methods: {
@@ -117,7 +123,7 @@ export default {
         data['flags.empApplied'] = this.empApplied;
       }
       await this.$store.dispatch('applicationRecords/updateStatus', data);
-      this.$router.push({ name: 'exercise-stages-list', params: { stage: this.stage } });
+      this.$router.push({ name: 'exercise-stage-list', params: { stage: this.stage } });
     },
   },
 };

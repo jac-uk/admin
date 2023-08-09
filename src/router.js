@@ -127,9 +127,9 @@ import ExerciseTaskPanelView from '@/views/Exercise/Tasks/Task/Panel/View.vue';
 
 // Exercise stages
 import ExerciseStages from '@/views/Exercise/Stages.vue';
-import ExerciseStagesList from '@/views/Exercise/Stages/List.vue';
-import ExerciseStagesEdit from '@/views/Exercise/Stages/Edit.vue';
-import ExerciseStagesBack from '@/views/Exercise/Stages/Back.vue';
+import ExerciseStageList from '@/views/Exercise/Stages/List.vue';
+import ExerciseStageEdit from '@/views/Exercise/Stages/Edit.vue';
+import ExerciseStageBack from '@/views/Exercise/Stages/Back.vue';
 
 // Candidates
 import Candidates from '@/views/Candidates/Candidates.vue';
@@ -1063,21 +1063,25 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: { name: 'exercise-stages-list', params: { stage: 'review' } },  // TODO change to applied
+            redirect: { name: 'exercise-stage-list', params: { stage: 'review' } },  // TODO change to applied
           },
           {
             path: ':stage/',
-            component: ExerciseStagesList,
-            name: 'exercise-stages-list',
-            meta: {
-              requiresAuth: true,
-              title: 'List | Exercise Stage',
-            },
+            component: EmptyRouterView,
             children: [
               {
+                path: '',
+                component: ExerciseStageList,
+                name: 'exercise-stage-list',
+                meta: {
+                  requiresAuth: true,
+                  title: 'List | Exercise Stage',
+                },
+              },
+              {
                 path: 'edit',
-                component: ExerciseStagesEdit,
-                name: 'exercise-stages-edit',
+                component: ExerciseStageEdit,
+                name: 'exercise-stage-edit',
                 meta: {
                   requiresAuth: true,
                   title: 'Edit | Exercise Stage',
@@ -1085,13 +1089,13 @@ const routes = [
               },
               {
                 path: 'back',
-                component: ExerciseStagesBack,
-                name: 'exercise-stages-back',
+                component: ExerciseStageBack,
+                name: 'exercise-stage-back',
                 meta: {
                   requiresAuth: true,
-                  title: 'Move Back | Exercise Stages',
+                  title: 'Move Back | Exercise Stage',
                 },
-              },    
+              },
             ],
           },
         ],

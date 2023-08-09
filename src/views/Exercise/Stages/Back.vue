@@ -1,12 +1,13 @@
 <template>
   <form @submit.prevent="validateAndSave">
+    <BackLink />
     <ErrorSummary
       :errors="errors"
     />
     <RadioGroup
       id="selected-status"
       v-model="moveBack"
-      :label="`Move back to the '${lookup(previousStage)}' stage?`"
+      :label="`Move ${itemsToChange.length} ${$filters.pluralise('application', itemsToChange.length)} back to the '${lookup(previousStage)}' stage?`"
       hint=""
       required
     >
@@ -28,6 +29,7 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { DEFAULT } from '@jac-uk/jac-kit/helpers/constants';
 import { getPreviousStage } from '../../../helpers/exerciseHelper';
 import { lookup } from '../../../filters';
@@ -37,6 +39,7 @@ export default {
     ErrorSummary,
     RadioGroup,
     RadioItem,
+    BackLink,
   },
   extends: Form,
   data() {
@@ -58,6 +61,10 @@ export default {
     previousStage() {
       return getPreviousStage(this.exercise, this.stage);
     },
+    itemsToChange() {
+      const selectedItems = this.$store.state.applicationRecords.selectedItems;
+      return selectedItems;
+    },
   },
   methods: {
     lookup,
@@ -67,7 +74,7 @@ export default {
           stage: this.previousStage,
         });
       }
-      this.$router.push({ name: 'exercise-stages-list' });
+      this.$router.push({ name: 'exercise-stage-list' });
     },
   },
 };

@@ -69,7 +69,7 @@
             title: 'Status',
             field: 'status',
             type: 'checkbox',
-            options: availableStatuses.concat(['']),
+            options: filterStatuses,
           },
         ]"
         @change="getTableData"
@@ -117,7 +117,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
-import { availableStatuses, getPreviousStage } from '../../../helpers/exerciseHelper';
+import { availableStatuses, getPreviousStage, getStagePassingStatuses } from '../../../helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '../../../helpers/constants';
 
 export default {
@@ -140,7 +140,7 @@ export default {
         { title: 'EMP' },
       ],
       pageSize: 50,
-      pageSizes: [10, 50, 100, 250, 500],
+      pageSizes: [2, 10, 50, 100, 250, 500],
     };
   },
   computed: {
@@ -172,6 +172,15 @@ export default {
     previousStage() {
       return getPreviousStage(this.exercise, this.stage);
     },
+    filterStatuses() {
+      let statuses = this.availableStatuses;
+      if (this.previousStage) {
+        statuses = statuses.concat(getStagePassingStatuses(this.exercise, this.previousStage));
+      } else {
+        statuses = statuses.concat(['']); // add blank checkbox so we can filter on no status
+      }
+      return statuses;
+    },
   },
   watch: {
     async stage(newVal, oldVal) {
@@ -194,11 +203,11 @@ export default {
     },
     moveBack() {
       this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });
-      this.$router.push({ name: 'exercise-stages-back' });
+      this.$router.push({ name: 'exercise-stage-back' });
     },
     checkForm() {
       this.$store.dispatch('applicationRecords/storeItems', { items: this.selectedItems });
-      this.$router.push({ name: 'exercise-stages-edit' });
+      this.$router.push({ name: 'exercise-stage-edit' });
     },
     getTableData(params) {
       this.$store.dispatch(
