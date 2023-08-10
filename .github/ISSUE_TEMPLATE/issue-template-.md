@@ -9,12 +9,12 @@ assignees: ''
 
 **Application Process**
 
-[Estimate / Epic / Feature]
+**[Estimate / Epic / Feature]**
 Features - Describe clearly what the functionalities would do.
 Epic - State clearly what this is mainly for in context.
 Priority / Estimate = Give an Estimate e.g 3,5 
 
-[History/context]
+**[History/context]**
 [] Provide a detailed description of the issue or task
 [] The title should reflect in this section.
 [] A clear and concise description of what you expect to happen.
@@ -76,7 +76,8 @@ Thomas Russell
 **[Screenshots / wireframes / designs / pictures]**
 [] If applicable, add screenshots to help explain the issue / task. Include screen grabs, video demo, notes etc.
 
-[Happy Story/Sad story]
+**[Happy Story**
 Happy story - Admin fills out all sections of the tasklist, see that application process is a required part of exercise configuration, and completes application process.
 
-Sad story - Admin fills out all sections of the tasklist, does not see that application process is a required part of exercise configuration, tries to submit for approval, see's that application process is needed and completes application process.
+**[Sad story]** 
+ Admin fills out all sections of the task list, but does not see that application process is a required part of the exercise configuration, when they try to submit for approval, they see that the application process is needed and complete the  application process.
