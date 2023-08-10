@@ -189,6 +189,7 @@
       <div
         v-if="data && type === 'showData'"
         class="govuk-!-margin-top-9"
+        style="overflow: auto;"
       >
         <table class="govuk-table">
           <thead class="govuk-table__head">
