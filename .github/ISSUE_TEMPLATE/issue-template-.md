@@ -7,9 +7,16 @@ assignees: ''
 
 ---
 
-**Application Process**
+**Issue Title**
+Example- Character check, Application process etc
 
-**[Estimate / Epic / Feature]**
+**[Developer sign off]**
+ (can be done in labels)]
+(Reasoning) - Needs requirements.
+Is it a solution based approach or  problem based?
+
+**[Estimate / Epic / Feature]** 
+Epic - Break down into separate tickets
 Features - Describe clearly what the functionalities would do.
 Epic - State clearly what this is mainly for in context.
 Priority / Estimate = Give an Estimate e.g 3,5 
@@ -18,6 +25,7 @@ Priority / Estimate = Give an Estimate e.g 3,5
 [] Provide a detailed description of the issue or task
 [] The title should reflect in this section.
 [] A clear and concise description of what you expect to happen.
+[] If necessary, include a link
 
 **USER STORY** 
 [User story] Use this to customise sections that applicants can see. The user story has to be clearly written in using this structure.
@@ -35,11 +43,10 @@ Use this technique to prioritise all requirements .
 Confirm that a change, update, or new feature meets the requirements of the primary user(s) - consider the following checklist:
 []Describe what is a must-have for this application process for launch and in-scope. 
 []The Application Process should appear in the Task List section and  members should tick what sections are critical or needed.
+**see example** - DOBs are standardised (format TBC) on the character check ARCO report (and anywhere else within character checks reports)
 
 **[Task list]**
-[] - Application process must appear in task list
-[] - Confirmation of application process needs to be submitted for approval
-[] - Error / signage for uncompleted application process.
+[] List out tasks to be carried out or completed
 
 **[Qualifying  a ticket]**
 Provide the following information
@@ -51,7 +58,7 @@ Provide the following information
 [] Who is the ticket/action owner.
 
 **[Definition of Done]**
-[]Review code, version control
+Use the task list to tick off what has been done
 []Testing- Regression tests, security test, performance test all conducted and passed
 []All bugs found and documented for future sprints
 []Relevant technical documentation is updated.
@@ -61,23 +68,23 @@ Provide the following information
 []Compliance - Regulatory  and legal requirements are satisfied. 
 
 **[User Testing Steps]**
-[]Go to an unfinished exercise
-[]Check that 'application process' appears in the task list
-[]Attempt to submit before application process is completed- Point out errors
-[]Ensure it is confirmed before an exercise can be approved
-[]Prioritize and address feedback
-[]UAT Sign off - Do the features meet user requirements?
-[]Review and reflect on what went well or what could be improved
+[]Go to an exercise page
+[]Check task list to carry out exercise. 
+[] Take note of errors
+[] Ensure it is confirmed before an exercise can be approved
+[] Prioritize and address feedback
+[] UAT Sign off - Do the features meet user requirements?
+[] Review and reflect on what went well or what could be improved
 [] Release and Monitor features on production environment.
 
 **[Ticket Champion]**
-Thomas Russell
+Name of who raised the Issue/ticket.
 
 **[Screenshots / wireframes / designs / pictures]**
 [] If applicable, add screenshots to help explain the issue / task. Include screen grabs, video demo, notes etc.
 
 **[Happy Story**
-Happy story - Admin fills out all sections of the tasklist, see that application process is a required part of exercise configuration, and completes application process.
+Happy story - What would this Issue resolve or improve ?
 
 **[Sad story]** 
- Admin fills out all sections of the task list, but does not see that application process is a required part of the exercise configuration, when they try to submit for approval, they see that the application process is needed and complete the  application process.
+ State what your  pain point is with this issue?
