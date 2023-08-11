@@ -136,6 +136,89 @@
           </div>
         </div>
       </div>
+
+      <div class="govuk-grid-row govuk-!-margin-top-3 govuk-!-margin-bottom-3">
+        <div class="govuk-grid-column-full">
+          <CheckboxGroup
+            id="select-status"
+            v-model="statuses"
+            label="Status"
+          >
+            <CheckboxItem
+              v-for="(status) in STATUS"
+              :key="status"
+              :value="status"
+              :label="$filters.lookup(status)"
+            />
+          </CheckboxGroup>
+        </div>
+
+        <div class="govuk-grid-column-two-thirds">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-2">
+            Stage
+          </legend>
+          <div class="govuk-button-group">
+            <select
+              v-model="selectedStage"
+              class="govuk-select govuk-!-margin-right-3"
+            >
+              <option value="all">
+                All
+              </option>
+              <option
+                v-if="applicationRecordCounts.review"
+                value="review"
+              >
+                Review
+              </option>
+              <option
+                v-if="applicationRecordCounts.shortlisted"
+                value="shortlisted"
+              >
+                Shortlisted
+              </option>
+              <option
+                v-if="applicationRecordCounts.selected"
+                value="selected"
+              >
+                Selected
+              </option>
+              <option
+                v-if="applicationRecordCounts.recommended"
+                value="recommended"
+              >
+                Recommended
+              </option>
+              <option
+                v-if="applicationRecordCounts.handover"
+                value="handover"
+              >
+                Handover
+              </option>
+            </select>
+            
+            <select
+              v-if="availableStatuses && availableStatuses.length > 0"
+              v-model="selectedStageStatus"
+              class="govuk-select govuk-!-margin-right-3"
+            >
+              <option
+                value="all"
+              >
+                All
+              </option>
+              <option
+                v-for="item in availableStatuses"
+                :key="item"
+                :value="item"
+              >
+                {{ $filters.lookup(item) }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div
         v-if="columns.length > 0"
         class="panel govuk-!-margin-bottom-3"
@@ -214,7 +297,7 @@
                 :key="columnIndex"
                 class="govuk-table__cell"
               >
-                {{ row[column] }}
+                {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
               </td>
             </tr>
           </tbody>
@@ -316,6 +399,10 @@ import _ from 'lodash';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import { EXERCISE_STAGE, STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { applicationRecordCounts } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat
@@ -328,12 +415,19 @@ export default {
     draggable,
     LoadingMessage,
     Banner,
+    CheckboxGroup,
+    CheckboxItem,
   },
   mixins: [permissionMixin],
   data() {
     return {
+      STATUS,
       type: 'showData',
       data: null,
+      statuses: [],
+      selectedStage: 'all',
+      availableStatuses: [],
+      selectedStageStatus: null,
       isLoading: null,
       loadFailed: null,
       customReports: [],
@@ -517,8 +611,43 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    applicationRecordCounts() {
+      return applicationRecordCounts(this.exercise);
+    },
+    availableStages() {
+      return Object.values(EXERCISE_STAGE).filter((stage) => this.applicationRecordCounts[stage]);
+    },
   },
   watch: {
+    statuses: {
+      handler: function() {
+        this.getApplicationRecords();
+      },
+      deep: true,
+    },
+    selectedStage: function (valueNow) {
+      // populate the status dropdown, for the chosen stage
+      if (valueNow === EXERCISE_STAGE.REVIEW) {
+        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
+      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
+        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
+        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
+      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
+        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
+      } else { // handover
+        this.availableStatuses = [];
+      }
+
+      this.selectedStageStatus = 'all';
+      this.getApplicationRecords();
+    },
+    selectedStageStatus: {
+      handler: function() {
+        this.getApplicationRecords();
+      },
+      deep: true,
+    },
     columns: {
       handler: function() {
         this.getApplicationRecords();
@@ -570,6 +699,9 @@ export default {
           columns: this.columns,
           type: this.type,
           whereClauses: this.whereClauses,
+          statuses: this.statuses,
+          stage: this.selectedStage === 'all' ? null : this.selectedStage,
+          stageStatus: this.selectedStageStatus === 'all' ? null : this.selectedStageStatus,
         });
       }
       this.isLoading = false;
@@ -657,6 +789,10 @@ export default {
       const i = this.columns.indexOf(item);
       console.log(`${item}-key = ${i}`);
       return i;
+    },
+    isUsingFilter(key) {
+      // return true if the column is a filter column
+      return ['_processing.stage', '_processing.status'].includes(key);
     },
   },
 };
