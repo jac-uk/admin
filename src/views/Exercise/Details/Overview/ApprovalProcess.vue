@@ -51,21 +51,11 @@
     />
 
     <div :class="`govuk-!-margin-bottom-4 govuk-!-padding-4 govuk-!-font-size-27 ${isArchived ? 'background-red' : 'background-blue'}`">
-      <div style="display: flex; justify-content: space-between;">
-        <span>
-          {{ isPublished ? 'Published' : 'Unpublished' }}
-        </span>
-        <a
-          v-if="isApproved && canUpdateExercises"
-          class="govuk-link"
-          style="cursor: pointer;"
-          @click="openChangeStateModal"
-        >
-          Change stage
-        </a>
-      </div>
-      <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
+      <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1 float-right">
         {{ $filters.lookup(exercise.state) }}
+      </span>
+      <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
+        {{ isPublished ? 'Published' : 'Unpublished' }}
       </span>
       <div>
         <button
