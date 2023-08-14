@@ -137,88 +137,6 @@
         </div>
       </div>
 
-      <div class="govuk-grid-row govuk-!-margin-top-3 govuk-!-margin-bottom-3">
-        <div class="govuk-grid-column-full">
-          <CheckboxGroup
-            id="select-status"
-            v-model="statuses"
-            label="Status"
-          >
-            <CheckboxItem
-              v-for="(status) in STATUS"
-              :key="status"
-              :value="status"
-              :label="$filters.lookup(status)"
-            />
-          </CheckboxGroup>
-        </div>
-
-        <div class="govuk-grid-column-two-thirds">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-2">
-            Stage
-          </legend>
-          <div class="govuk-button-group">
-            <select
-              v-model="selectedStage"
-              class="govuk-select govuk-!-margin-right-3"
-            >
-              <option value="all">
-                All
-              </option>
-              <option
-                v-if="applicationRecordCounts.review"
-                value="review"
-              >
-                Review
-              </option>
-              <option
-                v-if="applicationRecordCounts.shortlisted"
-                value="shortlisted"
-              >
-                Shortlisted
-              </option>
-              <option
-                v-if="applicationRecordCounts.selected"
-                value="selected"
-              >
-                Selected
-              </option>
-              <option
-                v-if="applicationRecordCounts.recommended"
-                value="recommended"
-              >
-                Recommended
-              </option>
-              <option
-                v-if="applicationRecordCounts.handover"
-                value="handover"
-              >
-                Handover
-              </option>
-            </select>
-            
-            <select
-              v-if="availableStatuses && availableStatuses.length > 0"
-              v-model="selectedStageStatus"
-              class="govuk-select govuk-!-margin-right-3"
-            >
-              <option
-                value="all"
-              >
-                All
-              </option>
-              <option
-                v-for="item in availableStatuses"
-                :key="item"
-                :value="item"
-              >
-                {{ $filters.lookup(item) }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div
         v-if="columns.length > 0"
         class="panel govuk-!-margin-bottom-3"
@@ -244,6 +162,88 @@
 
         <div class="govuk-hint govuk-!-margin-top-3 govuk-!-margin-bottom-0">
           Click to remove, drag to re-order
+        </div>
+
+        <div class="govuk-grid-row govuk-!-margin-top-3 govuk-!-margin-bottom-3">
+          <div class="govuk-grid-column-one-third">
+            <h2>Status</h2>
+            <CheckboxGroup
+              id="select-status"
+              v-model="statuses"
+              label=""
+            >
+              <CheckboxItem
+                v-for="(status) in STATUS"
+                :key="status"
+                :value="status"
+                :label="$filters.lookup(status)"
+              />
+            </CheckboxGroup>
+          </div>
+
+          <div class="govuk-grid-column-two-thirds">
+            <h2>Stage</h2>
+            <div class="govuk-button-group">
+              <select
+                v-model="selectedStage"
+                class="govuk-select"
+              >
+                <option value="all">
+                  All
+                </option>
+                <option
+                  v-if="applicationRecordCounts.review"
+                  value="review"
+                >
+                  Review
+                </option>
+                <option
+                  v-if="applicationRecordCounts.shortlisted"
+                  value="shortlisted"
+                >
+                  Shortlisted
+                </option>
+                <option
+                  v-if="applicationRecordCounts.selected"
+                  value="selected"
+                >
+                  Selected
+                </option>
+                <option
+                  v-if="applicationRecordCounts.recommended"
+                  value="recommended"
+                >
+                  Recommended
+                </option>
+                <option
+                  v-if="applicationRecordCounts.handover"
+                  value="handover"
+                >
+                  Handover
+                </option>
+              </select>
+            </div>
+            <div class="govuk-button-group">
+              <select
+                v-if="availableStatuses && availableStatuses.length > 0"
+                v-model="selectedStageStatus"
+                class="govuk-select"
+              >
+                <option
+                  value="all"
+                >
+                  All
+                </option>
+                <option
+                  v-for="item in availableStatuses"
+                  :key="item"
+                  :value="item"
+                >
+                  {{ $filters.lookup(item) }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
