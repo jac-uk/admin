@@ -1,6 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, ASSESSMENT_METHOD } from '@/helpers/constants';
 import exerciseTimeline from '../helpersTMP/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
@@ -400,59 +400,24 @@ function hasRelevantMemberships(data) {
   return false;
 }
 function hasStatementOfSuitability(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-competencies':
-    case 'statement-of-suitability-with-skills-and-abilities':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-    case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && (
+    data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES] ||
+    data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES]
+  );
 }
 function hasCoveringLetter(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-    case 'self-assessment-with-competencies-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.COVERING_LETTER];
 }
-
 function hasCV(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.CV];
 }
 function hasStatementOfEligibility(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-eligibility':
-      return !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] && !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
 }
 function hasSelfAssessment(data) {
-  switch (data.assessmentOptions) {
-    case 'self-assessment-with-competencies':
-    case 'self-assessment-with-competencies-and-cv':
-    case 'self-assessment-with-competencies-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES];
 }
+
 function isLegal(data) {
   return data.typeOfExercise === 'legal' || data.typeOfExercise === 'leadership';
 }
