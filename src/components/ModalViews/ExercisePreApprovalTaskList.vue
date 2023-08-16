@@ -30,6 +30,23 @@
             />
           </CheckboxGroup>
         </ul>
+        <template v-if="wasPreviouslyRejected">
+          <p>
+            <a
+              href="javascript:void(0);"
+              role="button"
+              tabindex="0"
+              @click="showNote = !showNote"
+            >{{ buttonText }}</a>
+          </p>
+          <TextArea
+            v-if="showNote"
+            id="rejection-reason-reply"
+            v-model.trim="rejectionReasonReply"
+            class="govuk-!-margin-top-7"
+            required
+          />
+        </template>
         <button
           type="button"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
@@ -52,21 +69,43 @@
 <script>
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import _has from 'lodash/has.js';
 export default {
   name: 'ExercisePreApprovalTaskList',
   components: {
     CheckboxGroup,
     CheckboxItem,
+    TextArea,
   },
   emits: ['close', 'confirmed'],
   data() {
     return {
       approvalChecklist: null,
+      showNote: false,
+      rejectionReasonReply: '',
     };
   },
   computed: {
     isReadyForApproval() {
       return Array.isArray(this.approvalChecklist) && this.approvalChecklist.length === 3;
+    },
+    exercise() {
+      return this.$store.getters['exerciseDocument/data']();
+    },
+    wasPreviouslyRejected() {
+      return _has(this.exercise, '_approval.rejected.message') && this.exercise._approval.rejected.message;
+    },
+    buttonText() {
+      return this.showNote ? 'Hide note to the approver?' : 'Add a note to the approver?';
+    },
+  },
+  watch: {
+    showNote(val) {
+      if (!val) {
+        // Reset the reply
+        this.rejectionReasonReply = '';
+      }
     },
   },
   methods: {
@@ -75,7 +114,7 @@ export default {
     },
     confirmModal() {
       this.modalOpen = false;
-      this.$emit('confirmed');
+      this.$emit('confirmed', this.rejectionReasonReply);
     },
   },
 };
