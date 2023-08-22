@@ -32,6 +32,7 @@
               :edit="editable"
               type="route"
               :data="hasPersonalDetails ? personalDetails.title : ''"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -50,6 +51,7 @@
               :data="personalDetails.firstName || ''"
               type="route"
               field="firstName"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -67,6 +69,7 @@
               :application-id="userId"
               :data="personalDetails.middleNames || ''"
               field="middleNames"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -85,6 +88,7 @@
               :data="personalDetails.lastName || ''"
               type="route"
               field="lastName"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -102,6 +106,7 @@
               :application-id="userId"
               :data="personalDetails.suffix || ''"
               field="suffix"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -119,6 +124,7 @@
               :application-id="userId"
               :data="personalDetails.previousNames || ''"
               field="previousNames"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -136,6 +142,7 @@
               :application-id="userId"
               :data="personalDetails.professionalName || ''"
               field="professionalName"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -167,6 +174,7 @@
               :application-id="userId"
               :data="personalDetails.otherNames || ''"
               field="otherNames"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -185,6 +193,7 @@
               :data="hasPersonalDetails ? personalDetails.email : ''"
               type="email"
               field="email"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -202,6 +211,7 @@
               :data="hasPersonalDetails ? personalDetails.phone : ''"
               type="tel"
               field="phone"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -219,6 +229,7 @@
               :data="hasPersonalDetails ? personalDetails.dateOfBirth : ''"
               type="date"
               field="dateOfBirth"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -236,6 +247,7 @@
               :application-id="userId"
               :data="personalDetails.placeOfBirth || ''"
               field="placeOfBirth"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -252,6 +264,7 @@
               :edit="editable"
               :data="(hasPersonalDetails ? $filters.formatNIN(personalDetails.nationalInsuranceNumber): '')"
               field="nationalInsuranceNumber"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -278,6 +291,7 @@
                 :edit="editable"
                 :data="currentAddress[key]"
                 :field="key"
+                :is-asked="isCharacterChecksAsked"
                 @change-field="changeCurrentAddress"
               />
             </div>
@@ -297,6 +311,7 @@
               type="selection"
               :data="currentMoreThan5Years"
               field="currentMoreThan5Years"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeInfo"
             />
           </dd>
@@ -314,6 +329,7 @@
               :data-default="emptyPreviousAddressObject"
               :data="previousAddress"
               field="previous"
+              :is-asked="isCharacterChecksAsked"
               @change-field="changeInfo"
               @remove-field="removeInfo"
               @add-field="addInfo"
@@ -334,6 +350,7 @@
               :options="['uk','republic-of-ireland','another-commonwealth-country','other']"
               type="selection"
               field="citizenship"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -353,6 +370,7 @@
               :options="[true, false]"
               type="selection"
               field="reasonableAdjustments"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -376,6 +394,7 @@
               :edit="editable"
               :data="hasPersonalDetails ? personalDetails.reasonableAdjustmentsDetails : ''"
               field="reasonableAdjustmentsDetails"
+              :is-asked="isAsked"
               @change-field="changeUserDetails"
             />
           </dd>
@@ -389,7 +408,10 @@
           </dt>
 
           <dd class="govuk-summary-list__value">
-            <span v-if="!VATNumbers.length">No answer provided</span>
+            <span v-if="!VATNumbers.length">No information</span>
+            <span v-if="!isCharacterChecksAsked">
+              (not asked)
+            </span>
             <div
               v-for="(VATNumber, index) in VATNumbers"
               :key="index"
@@ -406,6 +428,7 @@
                 :edit="editable"
                 :data="VATNumber"
                 field="VATNumber"
+                :is-asked="hasPersonalDetails && 'VATNumbers' in personalDetails"
                 @change-field="(obj) => changeVATNumber(index, obj)"
               />
             </div>
@@ -455,6 +478,16 @@ export default {
       required: true,
       default: false,
     },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    isCharacterChecksAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   emits: ['update'],
   data() {
@@ -489,11 +522,14 @@ export default {
     isCandidateView() {
       return this.$route.name === 'candidates-view';
     },
+    hasAddress() {
+      return !!(this.hasPersonalDetails && this.personalDetails.address);
+    },
     hasCurrentAddress() {
-      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.current;
+      return !!(this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.current);
     },
     hasPreviousAddress() {
-      return this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous;
+      return !!(this.hasPersonalDetails && this.personalDetails.address && this.personalDetails.address.previous);
     },
     currentAddressFields() {
       return Object.keys(this.emptyAddressObject);

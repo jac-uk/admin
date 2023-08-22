@@ -87,14 +87,13 @@
         >
           Send requests
         </button>
-
         <Table
           key="notrequested"
           v-model:selection="selectedItems"
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
-          :search="['candidate.fullName']"
+          search-map="_search"
           multi-select
           :page-size="50"
           :filters="[
