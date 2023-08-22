@@ -143,6 +143,16 @@ const lookup = (value) => {
     approvedForImmediateAppointment: 'Approved For Immediate Appointment',
     passedSelection: 'Passed Selection',
 
+    // Additional Information
+    twitter: 'Twitter',
+    'jac-website': 'JAC Website',
+    'professional-body-website-or-email': 'Professional body website or email (eg The Law Society)',
+    'professional-body-magazine': 'Professional body magazine',
+    'judicial-office-extranet': 'Judicial Office Extranet',
+    'judging-your-future-newsletter': 'Judging Your Future Newsletter',
+    'linked-in': 'LinkedIn',
+    'word-of-mouth': 'Word of mouth',
+
     // reasonable adjustments status
     approved: 'Approved',
     denied: 'Denied',
