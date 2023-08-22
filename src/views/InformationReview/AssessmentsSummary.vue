@@ -28,6 +28,7 @@
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
+              :is-asked="isApplicationPartAsked('statementOfSuitability')"
               @change-field="changeAssessmentInfo"
             />
             <div
@@ -46,6 +47,7 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
+                :is-asked="isApplicationPartAsked('statementOfSuitability')"
                 @change-field="changeAssessmentInfo"
               />
             </div>
@@ -55,7 +57,10 @@
 
       <dl v-else>
         <p class="govuk-body">
-          No answers provided
+          No information
+          <span v-if="!isApplicationPartAsked('statementOfSuitability')">
+            (not asked)
+          </span>
         </p>
       </dl>
     </div>
@@ -84,7 +89,12 @@
                 :title="application.uploadedSuitabilityStatement"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('statementOfSuitability')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -125,7 +135,12 @@
                 :title="application.uploadedSelfAssessment"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
+                (not asked)
+              </span>
+            </span>
             <div v-if="editable">
               <FileUpload
                 id="self-assessment-upload"
@@ -165,7 +180,12 @@
                 title="CV"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('cv')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -206,7 +226,12 @@
                 title="Covering Letter"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('coveringLetter')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -229,7 +254,8 @@ import {
   hasStatementOfSuitability,
   hasCV,
   hasCoveringLetter,
-  hasSelfAssessment
+  hasSelfAssessment,
+  isApplicationPartAsked
 } from '@/helpers/exerciseHelper';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
@@ -332,6 +358,9 @@ export default {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }
+    },
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
     },
   },
 };
