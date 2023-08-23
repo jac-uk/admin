@@ -52,10 +52,10 @@
 
     <div :class="`govuk-!-margin-bottom-4 govuk-!-padding-4 govuk-!-font-size-27 ${isArchived ? 'background-red' : 'background-blue'}`">
       <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1 float-right">
-        {{ $filters.lookup(exercise.state) }}
+        {{ isPublished ? 'Published' : 'Unpublished' }}
       </span>
       <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
-        {{ isPublished ? 'Published' : 'Unpublished' }}
+        {{ $filters.lookup(exercise.state) }}
       </span>
       <div>
         <button
