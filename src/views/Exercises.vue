@@ -94,7 +94,7 @@
                 fieldComparator: 'arrayNotEmpty'
               },
             ]"
-            :search="['name']"
+            search-map="_search"
             multi-select
             @change="getTableData"
           >

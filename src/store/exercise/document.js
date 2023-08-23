@@ -74,7 +74,7 @@ export default {
     save: async ({ state }, data) => {
       await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
-    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
+    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
       const user = {
         id: userId,
@@ -91,10 +91,17 @@ export default {
         break;
         case 'rejected':
           data['_approval.rejected.message'] = rejectionReason;
+          data['_approval.rejected.response'] = null;
           data['state'] = 'draft';
         break;
         default:  // 'requested'
-          data['_approval.rejected'] = null;
+          data['_approval.approved'] = null;
+          if (rejectionResponse) {
+            data['_approval.rejected.response'] = rejectionResponse;
+          }
+          else {
+            data['_approval.rejected'] = null;
+          }
           data['state'] = 'ready';
       }
       // Update record

@@ -15,6 +15,7 @@
           :data-default="emptyNonLegalExperienceObject"
           :edit="editable"
           field="experience"
+          :is-asked="isApplicationPartAsked('relevantExperience')"
           @change-field="changeInfo"
           @remove-field="removeInfo"
           @add-field="addInfo"
@@ -38,6 +39,7 @@
           :edit="editable"
           :display-month-year-only="true"
           field="experience"
+          :is-asked="isApplicationPartAsked('postQualificationWorkExperience')"
           @change-field="changeInfo"
           @change-task-details="changeTaskDetails"
           @remove-field="removeInfo"
@@ -118,6 +120,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
           </dd>
@@ -136,6 +139,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
             <div
@@ -149,6 +153,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
+                :is-asked="isApplicationPartAsked('judicialExperience')"
                 @change-field="changeInfo"
               />
             </div>
@@ -169,6 +174,7 @@
               :edit="editable"
               type="selection"
               field="declaredAppointmentInQuasiJudicialBody"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
           </dd>
@@ -189,6 +195,7 @@
                 :edit="editable"
                 type="selection"
                 field="quasiJudicialSatForThirtyDays"
+                :is-asked="isApplicationPartAsked('judicialExperience')"
                 @change-field="changeInfo"
               />
             </p>
@@ -203,6 +210,7 @@
                 :data="application.quasiJudicialSittingDaysDetails"
                 :edit="editable"
                 field="quasiJudicialSittingDaysDetails"
+                :is-asked="isApplicationPartAsked('judicialExperience')"
                 @change-field="changeInfo"
               />
             </div>
@@ -222,6 +230,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
           </dd>
@@ -254,6 +263,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedJudge"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
           </dd>
@@ -272,6 +282,7 @@
               :edit="editable"
               type="selection"
               field="feePaidOrSalariedSatForThirtyDays"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
             <div
@@ -285,6 +296,7 @@
                 :data="application.feePaidOrSalariedSittingDaysDetails"
                 :edit="editable"
                 field="feePaidOrSalariedSittingDaysDetails"
+                :is-asked="isApplicationPartAsked('judicialExperience')"
                 @change-field="changeInfo"
               />
             </div>
@@ -303,6 +315,7 @@
               :data="application.skillsAquisitionDetails"
               :edit="editable"
               field="skillsAquisitionDetails"
+              :is-asked="isApplicationPartAsked('judicialExperience')"
               @change-field="changeInfo"
             />
           </dd>
@@ -326,6 +339,7 @@
           :edit="editable"
           :display-month-year-only="true"
           field="employmentGaps"
+          :is-asked="isApplicationPartAsked('employmentGaps')"
           @change-field="changeInfo"
           @remove-field="removeInfo"
           @add-field="addInfo"
@@ -353,6 +367,7 @@
               :edit="editable"
               type="selection"
               field="canGiveReasonableLOS"
+              :is-asked="isApplicationPartAsked('reasonableLengthOfService')"
               @change-field="changeInfo"
             />
             <p v-if="application.canGiveReasonableLOS == false">
@@ -360,6 +375,7 @@
                 :data="application.cantGiveReasonableLOSDetails"
                 :edit="editable"
                 field="cantGiveReasonableLOSDetails"
+                :is-asked="isApplicationPartAsked('reasonableLengthOfService')"
                 @change-field="changeInfo"
               />
             </p>
@@ -372,7 +388,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
-import { isNonLegal, isLegal } from '@/helpers/exerciseHelper';
+import { isNonLegal, isLegal, isApplicationPartAsked } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'ExperienceSummary',
@@ -524,7 +540,9 @@ export default {
 
       this.formatUpdate(obj.field, changedObj);
     },
-
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
+    },
   },
 };
 </script>
