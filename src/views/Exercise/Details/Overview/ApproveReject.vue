@@ -118,12 +118,6 @@ export default {
     this.$store.dispatch('vacancy/bind', this.exerciseId).then(() => {
       this.changes = this.getDeepObjectDifferences(this.vacancy, this.exercise, ['state']);
     });
-    rejectionResponse() {
-      return _get(this.exercise, '_approval.rejected.response', null);
-    },
-    rejectionMessage() {
-      return _get(this.exercise, '_approval.rejected.message', null);
-    },
   },
   methods: {
     async approve() {
