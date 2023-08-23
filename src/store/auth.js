@@ -20,7 +20,7 @@ const module = {
     },
   },
   actions: {
-    async setCurrentUser({ state, commit, dispatch }, user) {
+    async setCurrentUser({ state, commit }, user) {
       if (user === null || (user && user.isNewUser)) {
         commit('setCurrentUser', null);
       } else {
@@ -58,24 +58,28 @@ const module = {
             shouldEnsureEmailVerified = true;
           }
 
-          // get user document from firestore
-          const userDoc = await dispatch('users/get', user.uid, { root: true });
-          if (userDoc) {
-            const data = {
-              uid: userDoc.id,
-              email: userDoc.email,
-              emailVerified: userDoc.emailVerified,
-              displayName: userDoc.displayName,
-              role: userDoc.role,
-            };
-            commit('setCurrentUser', data);
-            if (shouldEnsureEmailVerified) {
-              await functions.httpsCallable('ensureEmailVerified')({});
-            }
-            return data;
-          } else {
-            commit('setAuthError', 'The user does not exist in the database');
+          const idTokenResult = await user.getIdTokenResult();
+          // get user role
+          const roleId = idTokenResult?.claims?.r || null;
+          const permissions = idTokenResult?.claims?.rp || null;
+          const userData = {
+            uid: user.uid,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            displayName: user.displayName,
+          };
+          const role = {
+            roleId: roleId,
+            rolePermissions: permissions,
+          };
+          commit('setCurrentUser', userData);
+          commit('setUserRole', role);
+
+          if (shouldEnsureEmailVerified) {
+            await functions.httpsCallable('ensureEmailVerified')({});
           }
+
+          return userData;
         } else {
           commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
         }

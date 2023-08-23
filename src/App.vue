@@ -198,30 +198,28 @@
         <p class="govuk-body">
           Please sign in again.
         </p>
-        <ActionButton
-          type="primary"
-          :action="handleRoleChange"
+        <button
+          class="govuk-button"
+          @click="signOut"
         >
           Sign out
-        </ActionButton>
+        </button>
       </div>
     </Modal>
   </div>
 </template>
 
 <script>
-import { auth, functions } from '@/firebase';
+import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Messages from '@/components/Messages.vue';
 
 export default {
   name: 'App',
   components: {
     Modal,
-    ActionButton,
     Messages,
   },
   mixins: [permissionMixin],
@@ -295,36 +293,6 @@ export default {
     checkRole() {
       if (this.isRoleChanged && this.$refs['modalRefSignOut']) {
         this.$refs['modalRefSignOut'].openModal();
-      }
-    },
-    async handleRoleChange() {
-      try {
-        if (this.currentUser) {
-          // update custom claims
-          const res = await functions.httpsCallable('adminSetUserRole')({
-            userId: this.currentUser.uid,
-            roleId: this.currentUser.role.id,
-            permissions: this.currentUser.rolePermissions,
-          });
-  
-          if (res) {
-            // mark role as unchanged
-            const data = {
-              role: {
-                id: this.currentUser.role.id,
-                isChanged: false,
-              },
-            };
-            await this.$store.dispatch('users/save', {
-              userId: this.currentUser.uid,
-              data,
-            });
-          }
-        }
-        this.signOut();
-        return true;
-      } catch (error) {
-        return false;
       }
     },
     signOut() {
