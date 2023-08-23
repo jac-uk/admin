@@ -90,7 +90,6 @@ import SimpleBanner from '@/components/Micro/SimpleBanner.vue';
 import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
-import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { mapState, mapGetters } from 'vuex';
 
@@ -104,7 +103,6 @@ export default {
     SimpleBanner,
     Modal,
     ModalInner,
-    ChangeExerciseState,
     Banner,
   },
   mixins: [permissionMixin],
