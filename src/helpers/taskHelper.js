@@ -1,12 +1,19 @@
 /*eslint func-style: ["error", "declaration"]*/
 
+import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
+import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+
 export {
   MARKING_TYPE,
   GRADES,
   GRADE_VALUES,
+  DOWNLOAD_TYPES,
   getScoreSheetTotal,
   markingScheme2ScoreSheet,
-  isScoreSheetComplete
+  isScoreSheetComplete,
+  meritList,
+  downloadMeritList,
+  getDownloadTypes
 };
 
 const MARKING_TYPE = {
@@ -22,6 +29,19 @@ const GRADE_VALUES = {
   'B': 3,
   'C': 2,
   'D': 1,
+};
+
+const DOWNLOAD_TYPES = {
+  emp: {
+    name: 'EMP data only (can be shared with Commissioners)',
+    value: 'emp',
+    sheetName: 'EMP data - for Commissioners',
+  },
+  full: {
+    name: 'All data (internal use only)',
+    value: 'full',
+    sheetName: 'All data - staff only',
+  },
 };
 
 function getScoreSheetTotal(markingScheme, scoreSheet) {
@@ -104,4 +124,87 @@ function isScoreSheetComplete(markingScheme, scoreSheet) {
     }
   });
   return isComplete;
+}
+
+function meritList(task) {
+  if (!task.applications) return [];
+  if (!task.finalScores) return [];
+  const applicationData = {};
+  task.applications.forEach(application => applicationData[application.id] = application);
+  return task.finalScores.map(scoreData => {
+    return {
+      ...applicationData[scoreData.id],
+      ...scoreData,
+    };
+  });
+}
+
+function downloadMeritList(task, diversityData, type, fileName) {
+  switch (type) {
+  case DOWNLOAD_TYPES.full.value:
+  case DOWNLOAD_TYPES.emp.value:
+    downloadXLSX(
+      xlsxData(task, diversityData, type),
+      {
+        title: 'QT Merit List',
+        sheetName: DOWNLOAD_TYPES[type].sheetName,
+        fileName: `${fileName}.xlsx`,
+      }
+    );
+    return true;
+  default:
+    return false;
+  }
+}
+
+function xlsxData(task, diversityData, type) {  // currently only for QTs
+  const rows = [];
+  const headers = [];
+  headers.push('Ref');
+  if (type === DOWNLOAD_TYPES.full.value) {
+    headers.push('Full name');
+    headers.push('SJT %');
+    headers.push('SJT Z');
+    headers.push('CAT %');
+    headers.push('CAT Z');
+    headers.push('Average %');    
+  }
+  headers.push('Average Z');
+  headers.push('Female');
+  headers.push('Ethnic minority');
+  headers.push('Solicitor');
+  headers.push('Disabled');
+  rows.push(headers);
+  meritList(task).forEach(item => {
+    const row = [];
+    row.push(item.ref);
+    if (type === DOWNLOAD_TYPES.full.value) {
+      row.push(item.fullName);
+      row.push(item.scoreSheet.qualifyingTest.SJ.percent);
+      row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
+      row.push(item.scoreSheet.qualifyingTest.CA.percent);
+      row.push(item.scoreSheet.qualifyingTest.CA.zScore);
+      row.push(item.percent);
+    }
+    row.push(item.zScore);
+    const ref = item.ref.split('-')[1];
+    if (diversityData[ref]) {
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+    } else {
+      row.push();
+      row.push();
+      row.push();
+      row.push();
+    }
+    rows.push(row);
+  });
+  return rows;
+}
+
+function getDownloadTypes(task) {
+  if (!task) return [];
+  return Object.values(DOWNLOAD_TYPES);
 }

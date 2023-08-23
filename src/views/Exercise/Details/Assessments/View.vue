@@ -15,12 +15,13 @@
     </h2>
 
     <p class="govuk-body">
-      <span class="display-block">{{ $filters.lookup(exercise.assessmentOptions) }}</span>
       <span
         v-for="assessmentMethod in assessmentMethods"
         :key="assessmentMethod"
         class="display-block"
-      >{{ assessmentMethod }}</span>
+      >
+        {{ $filters.lookup(assessmentMethod) }}
+      </span>
     </p>
   </div>
 </template>
@@ -28,6 +29,7 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import { ASSESSMENT_METHOD } from '@/helpers/constants';
 
 export default {
   name: 'AssessmentsView',
@@ -42,12 +44,11 @@ export default {
     assessmentMethods() {
       const assessmentMethods = [];
       if (this.exercise && this.exercise.assessmentMethods) {
-        if (this.exercise.assessmentMethods.independentAssessments) {
-          assessmentMethods.push('Independent Assessments');
-        }
-        if (this.exercise.assessmentMethods.leadershipJudgeAssessment) {
-          assessmentMethods.push('Leadership Judge Assessment');
-        }
+        Object.values(ASSESSMENT_METHOD).forEach((method) => {
+          if (this.exercise.assessmentMethods[method]) {
+            assessmentMethods.push(this.$filters.lookup(method));
+          }
+        });
       }
       return assessmentMethods;
     },

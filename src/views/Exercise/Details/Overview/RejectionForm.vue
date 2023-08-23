@@ -14,8 +14,8 @@
       <div class="govuk-!-padding-left-8">
         <TextareaInput
           id="rejection-reason"
+          v-model.trim="rejectionReason"
           hint="Please give your reason for rejection"
-          @input="validate"
         />
         <div>
           <button
@@ -61,9 +61,6 @@ export default {
     },
   },
   methods: {
-    validate(val) {
-      this.rejectionReason = val;
-    },
     cancel() {
       this.$emit('cancelReject');
     },

@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 
@@ -19,6 +19,9 @@ export default {
     }),
   },
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     setLoaded(state, value) {
       state.loaded = value;
     },

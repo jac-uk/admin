@@ -11,7 +11,10 @@
         v-if="!hasValues(characterInformation) && !editable"
         class="govuk-body"
       >
-        No information provided
+        No information
+        <span v-if="!isAsked">
+          (not asked)
+        </span>
         <hr>
       </div>
       <dl
@@ -22,6 +25,7 @@
           <CharacterInformationSummaryV2
             :form-data="characterInformation || {}"
             :edit="editable"
+            :is-asked="isAsked"
             @change-info="changeCharacterInfo"
           />
         </div>
@@ -31,6 +35,7 @@
           <CharacterInformationSummaryV1
             :form-data="characterInformation || {}"
             :edit="editable"
+            :is-asked="isAsked"
             @change-info="changeCharacterInfo"
           />
         </div>
@@ -63,6 +68,11 @@ export default {
     version: {
       type: Number,
       required: true,
+    },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   emits: ['updateApplication'],

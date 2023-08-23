@@ -94,7 +94,7 @@
                 fieldComparator: 'arrayNotEmpty'
               },
             ]"
-            :search="['name']"
+            search-map="_search"
             multi-select
             @change="getTableData"
           >
@@ -276,9 +276,6 @@ export default {
   },
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
-  },
-  mounted() {
-    this.reloadTable();
   },
   methods: {
     showMyFavourites() {

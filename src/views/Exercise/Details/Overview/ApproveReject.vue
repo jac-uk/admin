@@ -11,6 +11,31 @@
       </strong>
 
       <div class="govuk-!-padding-left-8">
+        <template v-if="rejectionResponse">
+          <p>The requester has replied to the original rejection reason below:</p>
+          <div
+            id="messages"
+          >
+            <div class="moj-message-list">
+              <div
+                v-if="rejectionMessage"
+                class="moj-message-item moj-message-item--sent"
+              >
+                <div class="moj-message-item__text moj-message-item__text--sent">
+                  {{ rejectionMessage }}
+                </div>
+              </div>
+              <div
+                v-if="rejectionResponse"
+                class="moj-message-item moj-message-item--received"
+              >
+                <div class="moj-message-item__text moj-message-item__text--received">
+                  {{ rejectionResponse }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
         <p>Please verify the content of the exercise and Approve or Reject.</p>
         <div
           v-if="hasChanges"
@@ -44,6 +69,7 @@ import permissionMixin from '@/permissionMixin';
 import { isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
 import { mapState } from 'vuex';
 import _has from 'lodash/has.js';
+import _get from 'lodash/get.js';
 export default {
   name: 'ApproveReject',
   mixins: [permissionMixin],
@@ -67,6 +93,12 @@ export default {
     isReadyForApprovalFromAdvertType() {
       return isReadyForApprovalFromAdvertType(this.exercise);
     },
+    rejectionResponse() {
+      return _get(this.exercise, '_approval.rejected.response', null);
+    },
+    rejectionMessage() {
+      return _get(this.exercise, '_approval.rejected.message', null);
+    },
     exerciseWasPreviouslyApproved() {
       return _has(this.exercise, '_approval.approved.date');
     },
@@ -86,6 +118,12 @@ export default {
     this.$store.dispatch('vacancy/bind', this.exerciseId).then(() => {
       this.changes = this.getDeepObjectDifferences(this.vacancy, this.exercise, ['state']);
     });
+    rejectionResponse() {
+      return _get(this.exercise, '_approval.rejected.response', null);
+    },
+    rejectionMessage() {
+      return _get(this.exercise, '_approval.rejected.message', null);
+    },
   },
   methods: {
     async approve() {
@@ -144,3 +182,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .moj-message-item--received {
+    background-color: #fff;
+  }
+  .moj-message-list {
+    min-height: auto;
+  }
+</style>

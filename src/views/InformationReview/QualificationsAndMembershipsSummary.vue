@@ -35,6 +35,7 @@
                   :edit="editable"
                   :options="qualificationOptions"
                   type="selection"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -53,6 +54,7 @@
                   :edit="editable"
                   :options="['england-wales', 'northern-ireland', 'scotland']"
                   type="selection"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -72,6 +74,7 @@
                   :index="index"
                   :edit="editable"
                   type="date"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -94,6 +97,7 @@
                   :index="index"
                   :edit="editable"
                   type="date"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -114,6 +118,7 @@
                   :edit="editable"
                   :options="[true, false]"
                   type="selection"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -134,6 +139,7 @@
                   :index="index"
                   :edit="editable"
                   type="date"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -155,6 +161,7 @@
                   extension="notCompletePupillageReason"
                   :index="index"
                   :edit="editable"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -174,6 +181,7 @@
                   extension="details"
                   :index="index"
                   :edit="editable"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -190,6 +198,7 @@
                   extension="membershipNumber"
                   :index="index"
                   :edit="editable"
+                  :is-asked="isApplicationPartAsked('relevantQualifications')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -273,7 +282,10 @@
         <div
           v-if="!applicationHasQualifications"
         >
-          No answers provided
+          No information
+          <span v-if="!isApplicationPartAsked('relevantQualifications')">
+            (not asked)
+          </span>
           <hr>
         </div>
         <button
@@ -314,6 +326,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
+              :is-asked="isApplicationPartAsked('relevantQualifications')"
               @change-field="changeQualificationOrMembership"
             />
           </dd>
@@ -333,6 +346,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
+              :is-asked="isApplicationPartAsked('relevantQualifications')"
               @change-field="changeQualificationOrMembership"
             />
           </dd>
@@ -355,6 +369,7 @@
                 :data="application.experienceUnderSchedule2Three"
                 field="experienceUnderSchedule2Three"
                 :edit="editable"
+                :is-asked="isApplicationPartAsked('relevantQualifications')"
                 @change-field="changeQualificationOrMembership"
               />
             </li>
@@ -363,6 +378,7 @@
                 :data="application.experienceUnderSchedule2D"
                 field="experienceUnderSchedule2D"
                 :edit="editable"
+                :is-asked="isApplicationPartAsked('relevantQualifications')"
                 @change-field="changeQualificationOrMembership"
               />
             </li>
@@ -406,6 +422,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredAssociationBuildingEngineersDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -419,6 +436,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredAssociationBuildingEngineersNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -432,6 +450,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredAssociationBuildingEngineersInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -456,6 +475,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredInstituteBuildingDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -469,6 +489,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteBuildingNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -482,6 +503,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteBuildingInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -506,6 +528,7 @@
                   :edit="editable"
                   type="date"
                   field="charteredInstituteEnvironmentalHealthDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -519,6 +542,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteEnvironmentalHealthNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -532,6 +556,7 @@
                   :edit="editable"
                   type="text"
                   field="charteredInstituteEnvironmentalHealthInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -556,6 +581,7 @@
                   :edit="editable"
                   type="date"
                   field="generalMedicalCouncilDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -569,6 +595,7 @@
                   :edit="editable"
                   type="text"
                   field="generalMedicalCouncilNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -582,6 +609,7 @@
                   :edit="editable"
                   type="text"
                   field="generalMedicalCouncilInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <ul
@@ -617,6 +645,7 @@
                       :edit="editable"
                       type="date"
                       field="generalMedicalCouncilConditionalStartDate"
+                      :is-asked="isApplicationPartAsked('relevantMemberships')"
                       @change-field="changeProfessionalMembership"
                     />
                     <h5
@@ -629,6 +658,7 @@
                       :edit="editable"
                       type="date"
                       field="generalMedicalCouncilConditionalEndDate"
+                      :is-asked="isApplicationPartAsked('relevantMemberships')"
                       @change-field="changeProfessionalMembership"
                     />
                   </li>
@@ -644,6 +674,7 @@
                       :edit="editable"
                       type="text"
                       field="generalMedicalCouncilConditionalDetails"
+                      :is-asked="isApplicationPartAsked('relevantMemberships')"
                       @change-field="changeProfessionalMembership"
                     />
                   </li>
@@ -670,6 +701,7 @@
                   :edit="editable"
                   type="date"
                   field="royalCollegeOfPsychiatristsDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -683,6 +715,7 @@
                   :edit="editable"
                   type="text"
                   field="royalCollegeOfPsychiatristsNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -696,6 +729,7 @@
                   :edit="editable"
                   type="text"
                   field="royalCollegeOfPsychiatristsInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -720,6 +754,7 @@
                   :edit="editable"
                   type="date"
                   field="royalInstitutionCharteredSurveyorsDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -733,6 +768,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstitutionCharteredSurveyorsNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -746,6 +782,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstitutionCharteredSurveyorsInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -770,6 +807,7 @@
                   :edit="editable"
                   type="date"
                   field="royalInstituteBritishArchitectsDate"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -783,6 +821,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstituteBritishArchitectsNumber"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
                 <h5
@@ -796,6 +835,7 @@
                   :edit="editable"
                   type="text"
                   field="royalInstituteBritishArchitectsInformation"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeProfessionalMembership"
                 />
               </dd>
@@ -823,6 +863,7 @@
                   extension="date"
                   type="date"
                   field="memberships"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeQualificationOrMembership"
                 />
                 <h5
@@ -838,6 +879,7 @@
                   extension="number"
                   type="text"
                   field="memberships"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeQualificationOrMembership"
                 />
                 <h5
@@ -853,6 +895,7 @@
                   extension="information"
                   type="text"
                   field="memberships"
+                  :is-asked="isApplicationPartAsked('relevantMemberships')"
                   @change-field="changeQualificationOrMembership"
                 />
               </dd>
@@ -864,7 +907,10 @@
         v-else
         class="govuk-body"
       >
-        No answers provided
+        No information
+        <span v-if="!isApplicationPartAsked('relevantMemberships')">
+          (not asked)
+        </span>
         <hr>
       </div>
     </div>
@@ -878,7 +924,8 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { NOT_COMPLETE_PUPILLAGE_REASONS } from '@jac-uk/jac-kit/helpers/constants';
 import {
   hasRelevantMemberships,
-  isNonLegal
+  isNonLegal,
+  isApplicationPartAsked
 } from '@/helpers/exerciseHelper';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
@@ -1099,6 +1146,9 @@ export default {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }
+    },
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
     },
   },
 };
