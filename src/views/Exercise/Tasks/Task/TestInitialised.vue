@@ -16,7 +16,7 @@
     </p>
     <ActionButton
       type="primary"
-      @click="updateTask"
+      :action="updateTask"
     >
       Transfer applications to the QT Platform
     </ActionButton>
@@ -31,7 +31,7 @@
       </h2>
       <ActionButton
         class="govuk-!-margin-bottom-0"
-        @click="copyToClipboard(testURL)"
+        :action="() => copyToClipboard(testURL)"
       >
         Copy URL to clipboard
       </ActionButton>

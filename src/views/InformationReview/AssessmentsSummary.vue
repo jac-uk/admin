@@ -28,6 +28,7 @@
               type="selection"
               :options="[true, false]"
               field="selectionCriteriaAnswers"
+              :is-asked="isApplicationPartAsked('statementOfSuitability')"
               @change-field="changeAssessmentInfo"
             />
             <div
@@ -46,6 +47,7 @@
                 extension="answerDetails"
                 field="selectionCriteriaAnswers"
                 type="textarea"
+                :is-asked="isApplicationPartAsked('statementOfSuitability')"
                 @change-field="changeAssessmentInfo"
               />
             </div>
@@ -55,7 +57,10 @@
 
       <dl v-else>
         <p class="govuk-body">
-          No answers provided
+          No information
+          <span v-if="!isApplicationPartAsked('statementOfSuitability')">
+            (not asked)
+          </span>
         </p>
       </dl>
     </div>
@@ -84,7 +89,12 @@
                 :title="application.uploadedSuitabilityStatement"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('statementOfSuitability')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -93,7 +103,7 @@
                 v-model="application.uploadedSuitabilityStatement"
                 name="suitability-statement"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
+                @update:model-value="val => doFileUpload(val, 'uploadedSuitabilityStatement')"
               />
             </div>
           </dd>
@@ -125,7 +135,12 @@
                 :title="application.uploadedSelfAssessment"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
+                (not asked)
+              </span>
+            </span>
             <div v-if="editable">
               <FileUpload
                 id="self-assessment-upload"
@@ -133,7 +148,7 @@
                 v-model="application.uploadedSelfAssessment"
                 name="self-assessment"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedSelfAssessment')"
+                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
               />
             </div>
           </dd>
@@ -165,7 +180,12 @@
                 title="CV"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('cv')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -174,7 +194,7 @@
                 v-model="application.uploadedCV"
                 name="cv"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedCV')"
+                @update:model-value="val => doFileUpload(val, 'uploadedCV')"
               />
             </div>
           </dd>
@@ -206,7 +226,12 @@
                 title="Covering Letter"
               />
             </div>
-            <span v-else>Not yet received</span>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('coveringLetter')">
+                (not asked)
+              </span>
+            </span>
             <div>
               <FileUpload
                 v-if="editable"
@@ -215,7 +240,7 @@
                 v-model="application.uploadedCoveringLetter"
                 name="covering-letter"
                 :path="uploadPath"
-                @input="val => doFileUpload(val, 'uploadedCoveringLetter')"
+                @update:model-value="val => doFileUpload(val, 'uploadedCoveringLetter')"
               />
             </div>
           </dd>
@@ -229,7 +254,8 @@ import {
   hasStatementOfSuitability,
   hasCV,
   hasCoveringLetter,
-  hasSelfAssessment
+  hasSelfAssessment,
+  isApplicationPartAsked
 } from '@/helpers/exerciseHelper';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
@@ -332,6 +358,9 @@ export default {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }
+    },
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
     },
   },
 };

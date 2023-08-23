@@ -35,7 +35,7 @@
             PERMISSIONS.notifications.permissions.canUpdateNotifications.value
           ])"
           class="govuk-!-margin-left-4"
-          @click="processNow"
+          :action="processNow"
         >
           Process now (single batch)
         </ActionButton>

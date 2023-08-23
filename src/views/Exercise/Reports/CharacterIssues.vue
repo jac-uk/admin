@@ -14,7 +14,7 @@
           PERMISSIONS.exercises.permissions.canReadExercises.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="downloadReport"
+        :action="downloadReport"
       >
         Export to Excel
       </ActionButton>
@@ -25,7 +25,7 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         class="govuk-!-margin-right-2"
-        @click="exportToGoogleDoc"
+        :action="exportToGoogleDoc"
       >
         Generate Report
       </ActionButton>
@@ -36,7 +36,7 @@
           PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
         ])"
         type="primary"
-        @click="refreshReport"
+        :action="refreshReport"
       >
         Refresh
       </ActionButton>

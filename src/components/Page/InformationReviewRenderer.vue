@@ -13,6 +13,7 @@
           :index="index"
           :extension="extension"
           :display-month-year-only="displayMonthYearOnly"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -29,6 +30,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           :extension="extension"
           type="route"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -44,6 +46,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           type="email"
           :extension="extension"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -59,6 +62,7 @@
           :route-to="{ name: 'candidates-view', params: { id: applicationId } }"
           type="tel"
           :extension="extension"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -75,6 +79,7 @@
           :type="type"
           :extension="extension"
           :options="options"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -91,6 +96,7 @@
           type="selection"
           :extension="extension"
           :options="options"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -108,6 +114,7 @@
             :extension="extension"
             :options="options"
             type="ranked-selection"
+            :is-asked="isAsked"
             @change-field="changeField"
           />
         </span>
@@ -124,6 +131,7 @@
           :extension="extension"
           :type="type"
           :index="index"
+          :is-asked="isAsked"
           @change-field="changeField"
         />
       </div>
@@ -189,6 +197,11 @@ export default {
     displayMonthYearOnly: {
       type: Boolean,
       default: false,
+    },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   emits: ['changeField'],

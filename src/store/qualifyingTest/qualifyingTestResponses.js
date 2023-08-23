@@ -1,6 +1,6 @@
 import firebase from '@firebase/app';
 import { auth, firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@jac-uk/jac-kit/helpers/constants';
@@ -145,6 +145,9 @@ export default {
     },
   },
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     records(state, data) {
       state.records = data;
     },

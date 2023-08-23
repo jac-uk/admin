@@ -39,7 +39,7 @@
       class="govuk-!-margin-bottom-0"
       type="primary"
       :disabled="!formData.selectedQT"
-      @click="btnContinue"
+      :action="btnContinue"
     >
       Continue
     </ActionButton>

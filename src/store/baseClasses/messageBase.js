@@ -1,6 +1,6 @@
 import { firestore } from '@/firebase';
 import firebase from '@firebase/app';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';
@@ -87,7 +87,11 @@ export default class {
     };
   }
   mutations() {
-      return {};
+    return {
+      set: (state, { name, value }) => {
+        state[name] = value;
+      },
+    };
   }
   modules() {
       return {};

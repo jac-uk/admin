@@ -29,7 +29,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
-              @click="exportContacts"
+              :action="exportContacts"
             >
               Export contacts
             </ActionButton>
@@ -51,11 +51,7 @@
       data-key="id"
       :data="applications"
       :columns="tableColumns"
-      :custom-search="{
-        placeholder: 'Search candidate names',
-        handler: candidateSearch,
-        field: 'userId',
-      }"
+      search-map="_search"
       page-item-type="uppercase-letter"
       :page-size="50"
       :total="exercise._applications[status]"
@@ -179,7 +175,7 @@ export default {
       this.$refs.lateApplicationRequestConfirmModal.closeModal();
     },
     getTableData(params) {
-      return this.$store.dispatch(
+      this.$store.dispatch(
         'applications/bind',
         {
           exerciseId: this.exercise.id,

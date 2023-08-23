@@ -68,12 +68,6 @@
       </div>
     </div>
 
-    <Modal ref="changeExerciseState">
-      <ChangeExerciseState
-        :state="exercise.state"
-        @close="closeChangeStateModal"
-      />
-    </Modal>
     <Modal ref="unlockExerciseModal">
       <ModalInner
         title="Unlock to edit the exercise"
@@ -193,12 +187,6 @@ export default {
     },
     confirmReject() {
       this.showRejectionForm = false;
-    },
-    openChangeStateModal() {
-      this.$refs.changeExerciseState.openModal();
-    },
-    closeChangeStateModal() {
-      this.$refs.changeExerciseState.closeModal();
     },
     openUnlockExerciseModal() {
       this.$refs.unlockExerciseModal.openModal();

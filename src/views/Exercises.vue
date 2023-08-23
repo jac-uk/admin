@@ -94,7 +94,7 @@
                 fieldComparator: 'arrayNotEmpty'
               },
             ]"
-            :search="['name']"
+            search-map="_search"
             multi-select
             @change="getTableData"
           >
@@ -113,6 +113,15 @@
                 @click="openArchiveModal"
               >
                 {{ isArchived ? 'Unarchive' : 'Archive' }}
+              </button>
+              <button
+                v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value]))"
+                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
+                :disabled="isButtonDisabled"
+                type="button"
+                @click="openDeleteModal"
+              >
+                Delete
               </button>
             </template>
             <template #row="{row}">
@@ -169,6 +178,14 @@
         :message="archiveModalMessage"
         @close="closeArchiveModal"
         @confirmed="toggleArchive"
+      />
+    </Modal>
+    <Modal ref="deleteModal">
+      <ModalInner
+        title="Delete Exercises"
+        :message="deleteModalMessage"
+        @close="closeDeleteModal"
+        @confirmed="deleteExercises"
       />
     </Modal>
   </div>
@@ -244,6 +261,10 @@ export default {
       const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
       return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${pluralText}?`;
     },
+    deleteModalMessage() {
+      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
+      return `Are you sure you want to delete ${this.selectedItems.length} ${pluralText}?`;
+    },
   },
   watch: {
     isFavourites() {
@@ -255,9 +276,6 @@ export default {
   },
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
-  },
-  mounted() {
-    this.reloadTable();
   },
   methods: {
     showMyFavourites() {
@@ -312,6 +330,17 @@ export default {
     },
     closeArchiveModal() {
       this.$refs.archiveModal.closeModal();
+    },
+    deleteExercises() {
+      this.$store.dispatch('exerciseCollection/delete');
+      this.$refs.deleteModal.closeModal();
+      this.$refs['exercisesTable'].reload(); // reload table
+    },
+    openDeleteModal() {
+      this.$refs.deleteModal.openModal();
+    },
+    closeDeleteModal() {
+      this.$refs.deleteModal.closeModal();
     },
   },
 };
