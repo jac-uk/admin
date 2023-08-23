@@ -318,7 +318,7 @@ export default {
           this.selectionCategories.forEach(() => this.capabilities.forEach(cap => columns.push({ title: cap, class: 'text-center table-cell-score' })));
         }
       }
-      columns.push({ title: this.$options.filters.lookup(this.scoreType), class: 'text-center' });
+      columns.push({ title: this.$filters.lookup(this.scoreType), class: 'text-center' });
       columns.push({ title: 'Female' });
       columns.push({ title: 'Ethnic Minority' });
       columns.push({ title: 'Solicitor' });
