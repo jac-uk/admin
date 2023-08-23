@@ -44,14 +44,6 @@
         <span>
           {{ isPublished ? 'Published' : 'Unpublished' }}
         </span>
-        <a
-          v-if="isApproved && canUpdateExercises"
-          class="govuk-link"
-          style="cursor: pointer;"
-          @click="openChangeStateModal"
-        >
-          Change stage
-        </a>
       </div>
       <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
         {{ $filters.lookup(exercise.state) }}
@@ -67,12 +59,6 @@
       </div>
     </div>
 
-    <Modal ref="changeExerciseState">
-      <ChangeExerciseState
-        :state="exercise.state"
-        @close="closeChangeStateModal"
-      />
-    </Modal>
     <Modal ref="unlockExerciseModal">
       <ModalInner
         title="Unlock to edit the exercise"
@@ -95,7 +81,6 @@ import SimpleBanner from '@/components/Micro/SimpleBanner.vue';
 import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
-import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -108,7 +93,6 @@ export default {
     SimpleBanner,
     Modal,
     ModalInner,
-    ChangeExerciseState,
   },
   mixins: [permissionMixin],
   data() {
@@ -184,12 +168,6 @@ export default {
     },
     confirmReject() {
       this.showRejectionForm = false;
-    },
-    openChangeStateModal() {
-      this.$refs.changeExerciseState.openModal();
-    },
-    closeChangeStateModal() {
-      this.$refs.changeExerciseState.closeModal();
     },
     openUnlockExerciseModal() {
       this.$refs.unlockExerciseModal.openModal();
