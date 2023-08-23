@@ -1,15 +1,20 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { functions } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
+import { getExerciseSaveData } from '@/helpers/exerciseHelper';
+import { logEvent } from '@/helpers/logEvent';
 
 const collection = firestore.collection('exercises');
 
 export default {
   namespaced: true,
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     setNoOfTestApplications(state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
@@ -56,7 +61,7 @@ export default {
           data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
           data.createdBy = rootState.auth.currentUser.uid;
           data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          transaction.set(exerciseRef, data);
+          transaction.set(exerciseRef, getExerciseSaveData(data, data));
           return exerciseRef.id;
         });
       }).then((newId) => {
@@ -67,9 +72,9 @@ export default {
       await collection.doc(exerciseId).update(data);
     },
     save: async ({ state }, data) => {
-      await collection.doc(state.record.id).update(data);
+      await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
-    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason }) => {
+    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
       const user = {
         id: userId,
@@ -85,13 +90,18 @@ export default {
           data['state'] = 'approved';
         break;
         case 'rejected':
-          data['_approval.approved'] = null;
           data['_approval.rejected.message'] = rejectionReason;
+          data['_approval.rejected.response'] = null;
           data['state'] = 'draft';
         break;
         default:  // 'requested'
           data['_approval.approved'] = null;
-          data['_approval.rejected'] = null;
+          if (rejectionResponse) {
+            data['_approval.rejected.response'] = rejectionResponse;
+          }
+          else {
+            data['_approval.rejected'] = null;
+          }
           data['state'] = 'ready';
       }
       // Update record
@@ -128,9 +138,7 @@ export default {
       const ref = collection.doc(id);
       const data = {
         state: 'draft',
-        published: false,
         testingState: null,
-        _approval: null,
       };
       await ref.update(data);
     },
@@ -198,9 +206,19 @@ export default {
       commit('setNoOfTestApplications', noOfTestApplications);
     },
     delete: async ({ state }) => {
+      // soft delete exercise
+      const loggingData = {
+        exerciseIds: [state.record.id],
+        exerciseRefs: [state.record.referenceNumber],
+      };
       const id = state.record.id;
       const ref = collection.doc(id);
-      await ref.delete();
+      const data = {
+        state: 'deleted',
+        stateBeforeDelete: state.record.state,
+      };
+      await ref.update(data);
+      logEvent('info', 'Exercises deleted', loggingData);
     },
   },
   state: {

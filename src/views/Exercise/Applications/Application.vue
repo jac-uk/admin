@@ -148,7 +148,7 @@
               <h2
                 class="govuk-heading-m govuk-!-margin-bottom-0"
               >
-                Draft
+                {{ $filters.lookup(application.status) }}
               </h2>
             </div>
           </div>
@@ -216,18 +216,22 @@
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
               :editable="editable"
+              :is-asked="isApplicationPartAsked('personalDetails')"
+              :is-character-checks-asked="isCharacterChecksAsked"
               @update="changePersonalDetails"
             />
             <CharacterInformationSummary
               :editable="editable"
               :character-information="correctCharacterInformation"
               :version="applicationVersion"
+              :is-asked="isApplicationPartAsked('characterInformation')"
               @update-application="changeApplication"
             />
             <EqualityAndDiversityInformationSummary
               :application="application"
               :equality-and-diversity-survey="application.equalityAndDiversitySurvey || {}"
               :editable="editable"
+              :is-asked="isApplicationPartAsked('equalityAndDiversitySurvey')"
               @update-application="changeApplication"
             />
             <PreferencesSummary
@@ -324,7 +328,9 @@ import {
   isLegal,
   isNonLegal,
   hasStatementOfSuitability,
-  hasIndependentAssessments
+  hasIndependentAssessments,
+  isApplicationPartAsked,
+  isCharacterChecksAsked
 } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
@@ -498,6 +504,9 @@ export default {
     candidateId() {
       return this.application ? this.application.userId : null;
     },
+    isCharacterChecksAsked() {
+      return this.application && isCharacterChecksAsked(this.application);
+    },
   },
   watch: {
     '$route.params.applicationId'() {
@@ -634,6 +643,9 @@ export default {
     },
     changeApplication(obj) {
       this.$store.dispatch('application/update', { data: obj, id: this.applicationId });
+    },
+    isApplicationPartAsked(part) {
+      return isApplicationPartAsked(this.exercise, part);
     },
   },
 };

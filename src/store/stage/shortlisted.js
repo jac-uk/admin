@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import { lookup } from '@jac-uk/jac-kit/filters/filters';
@@ -94,6 +94,9 @@ export default {
     selectedItems: [],
   },
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     message(state, msg) {
       state.message = msg;
     },

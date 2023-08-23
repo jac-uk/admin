@@ -28,14 +28,14 @@
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
             <!--            <ActionButton-->
             <!--              v-if="totalApplicationRecords"-->
             <!--              type="primary"-->
-            <!--              @click="transferHandoverData()"-->
+            <!--              :action="transferHandoverData"-->
             <!--            >-->
             <!--              Transfer Handover Data-->
             <!--            </ActionButton>-->

@@ -1,6 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, ASSESSMENT_METHOD } from '@/helpers/constants';
 import exerciseTimeline from '../helpersTMP/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
@@ -67,12 +67,15 @@ export {
   currentState,
   applicationContentList,
   exerciseApplicationParts, // @todo review naming of applicationParts methods :)
+  getExerciseSaveData,
   applicationPartsMap,
   applicationParts,
   selectedApplicationParts,
   unselectedApplicationParts,
   configuredApplicationParts,
   currentApplicationParts,
+  isApplicationPartAsked,
+  isCharacterChecksAsked,
   isMoreInformationNeeded,
   isApplicationComplete,
   hasApplicationProcess,
@@ -287,7 +290,7 @@ function isReadyForApprovalFromAdvertType(data) {
 }
 function isApprovalRejected(data) {
   if (data === null) return false;
-  return data.state === 'draft' && data._approval && data._approval.status === 'rejected';
+  return ['draft', 'ready'].includes(data.state) && data._approval && data._approval.status === 'rejected';
 }
 function isEditable(data) {
   if (data === null) return false;
@@ -397,59 +400,24 @@ function hasRelevantMemberships(data) {
   return false;
 }
 function hasStatementOfSuitability(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-competencies':
-    case 'statement-of-suitability-with-skills-and-abilities':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-    case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && (
+    data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES] ||
+    data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES]
+  );
 }
 function hasCoveringLetter(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-skills-and-abilities-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-    case 'self-assessment-with-competencies-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.COVERING_LETTER];
 }
-
 function hasCV(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-    case 'statement-of-suitability-with-skills-and-abilities-and-cv':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.CV];
 }
 function hasStatementOfEligibility(data) {
-  switch (data.assessmentOptions) {
-    case 'statement-of-eligibility':
-      return !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] && !!(data.aSCApply && data.selectionCriteria && data.selectionCriteria.length);
 }
 function hasSelfAssessment(data) {
-  switch (data.assessmentOptions) {
-    case 'self-assessment-with-competencies':
-    case 'self-assessment-with-competencies-and-cv':
-    case 'self-assessment-with-competencies-and-covering-letter':
-    case 'self-assessment-with-competencies-and-cv-and-covering-letter':
-      return true;
-    default:
-      return false;
-  }
+  return data.assessmentMethods && data.assessmentMethods[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES];
 }
+
 function isLegal(data) {
   return data.typeOfExercise === 'legal' || data.typeOfExercise === 'leadership';
 }
@@ -578,6 +546,42 @@ function exerciseApplicationParts(data, newValues) {
   return applicationParts;
 }
 
+/**
+ * getExerciseSaveData
+ * Accepts an exercise and a data object
+ * Return the data object seeded with `_applicationContent` property if it doesn't already exist in the data object
+ * This means _applicationContent will always be updated / recalculated UNLESS it has been provided in the save data (in which case we use that)
+ * Note: this code was copied from store/exercise/document.js as it is also used in views/Exercise/Details/ApplicationContent/Edit.vue
+ */
+function getExerciseSaveData(exercise, data) {
+  // Creates the _applicationContent if it doesnt already exist
+  const saveData = clone(data);
+  if (JSON.stringify(saveData).indexOf('_applicationContent') === -1) {  // recalculate applicationContent (if necessary)
+    const applicationParts = exerciseApplicationParts(exercise, data);
+    const existingApplicationParts = configuredApplicationParts(exercise);
+    const newApplicationParts = applicationParts.filter(part => existingApplicationParts.indexOf(part) === -1);
+    if (newApplicationParts.length || existingApplicationParts.length !== applicationParts.length) {
+      const applicationContentBefore = exercise._applicationContent ? exercise._applicationContent : {};
+      const applicationContentAfter = {};
+      APPLICATION_STEPS.forEach(step => {
+        applicationContentAfter[step] = {};
+        applicationParts.forEach(part => {
+          if (applicationContentBefore[step] && (applicationContentBefore[step][part] === true || applicationContentBefore[step][part] === false)) {
+            applicationContentAfter[step][part] = applicationContentBefore[step][part];
+          } else if (step === 'registration' && newApplicationParts.indexOf(part) >= 0) {
+            applicationContentAfter[step][part] = true;
+          }
+        });
+      });
+      if (applicationContentBefore._currentStep) {
+        applicationContentAfter._currentStep = applicationContentBefore._currentStep;
+      }
+      saveData['_applicationContent'] = applicationContentAfter;
+    }
+  }
+  return saveData;
+}
+
 function applicationPartsMap(data) {
   const applicationParts = exerciseApplicationParts(data);
   const applicationPartsMap = {};
@@ -633,6 +637,30 @@ function currentApplicationParts(data) {
   }
   return [];
 }
+
+// check if application part is asked in current stage
+function isApplicationPartAsked(exercise, part) {
+  let isAsked = false;
+  if (hasApplicationProcess(exercise)) {
+    const parts = applicationParts(exercise);
+    for (const key in parts) {
+      if (key === part && parts[key]) {
+        isAsked = true;
+      }
+    }
+  } else {
+    isAsked = true;
+  }
+
+  console.log('isApplicationPartAsked', part, isAsked);
+  return isAsked;
+}
+
+// check if character checks of application is sent
+function isCharacterChecksAsked(application) {
+  return application && application.characterChecks.status !== 'not requested';
+}
+
 // are there application parts in current stage (not registration)
 function isMoreInformationNeeded(exercise, application) {
   if (exercise._applicationContent && exercise._applicationContent._currentStep && exercise._applicationContent._currentStep.step) {

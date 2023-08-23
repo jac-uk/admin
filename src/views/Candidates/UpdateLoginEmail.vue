@@ -53,7 +53,7 @@
           <ActionButton
             type="primary"
             class="govuk-!-margin-bottom-4"
-            @click="save"
+            :action="save"
           >
             Update
           </ActionButton>

@@ -25,7 +25,7 @@
             </p>
             <ActionButton
               type="button"
-              @click.prevent="copyFromClipboard"
+              :action="copyFromClipboard"
             >
               Create exercise from clipboard
             </ActionButton>
@@ -221,12 +221,17 @@ export default {
       this.closeOverrideExerciseModal();
     },
     async copyFromClipboard() {
-      const content = this.$store.state.clipboard.data.content;
-      content.name = `${content.name} COPY`;
-      await this.$store.dispatch('exerciseDocument/create', content);
-      await this.$store.dispatch('clipboard/empty');
-      this.$store.dispatch('exerciseCreateJourney/start', []);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
+      try {
+        const content = this.$store.state.clipboard.data.content;
+        content.name = `${content.name} COPY`;
+        await this.$store.dispatch('exerciseDocument/create', content);
+        await this.$store.dispatch('clipboard/empty');
+        this.$store.dispatch('exerciseCreateJourney/start', []);
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
   },
 };

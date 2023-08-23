@@ -19,71 +19,13 @@
           @save="save"
         />
 
-        <RadioGroup
-          id="shortlisting-methods"
-          v-model="formData.assessmentOptions"
-          required
-          :messages="{
-            required: 'Please choose one of the following options'
-          }"
-        >
-          <RadioItem
-            value="self-assessment-with-competencies"
-            label="Self Assessment with competencies"
-          />
-          <RadioItem
-            value="self-assessment-with-competencies-and-covering-letter"
-            label="Self Assessment with competencies and covering letter"
-          />
-          <RadioItem
-            value="self-assessment-with-competencies-and-cv"
-            label="Self Assessment with competencies and CV"
-          />
-          <RadioItem
-            value="self-assessment-with-competencies-and-cv-and-covering-letter"
-            label="Self Assessment with competencies and CV and covering letter"
-          />
-          <RadioItem
-            value="statement-of-suitability-with-competencies"
-            label="Statement of Suitability with competencies"
-          />
-          <RadioItem
-            value="statement-of-suitability-with-skills-and-abilities"
-            label="Statement of Suitability with skills and abilities"
-          />
-          <RadioItem
-            value="statement-of-suitability-with-skills-and-abilities-and-covering-letter"
-            label="Statement of Suitability with skills and abilities and covering letter"
-          />
-          <RadioItem
-            value="statement-of-suitability-with-skills-and-abilities-and-cv"
-            label="Statement of Suitability with skills and abilities and CV"
-          />
-          <RadioItem
-            value="statement-of-suitability-with-skills-and-abilities-and-cv-and-covering-letter"
-            label="Statement of Suitability with skills and abilities and CV and covering letter"
-          />
-          <RadioItem
-            value="statement-of-eligibility"
-            label="Statement of eligibility"
-          />
-          <RadioItem
-            value="none"
-            label="None"
-          />
-        </RadioGroup>
-
         <Checkbox
-          id="assessment-method-independent-assessments"
-          v-model="formData.assessmentMethods.independentAssessments"
+          v-for="method in Object.values(ASSESSMENT_METHOD)"
+          :id="`assessment-method-${method}`"
+          :key="method"
+          v-model="formData.assessmentMethods[method]"
         >
-          Independent Assessments
-        </Checkbox>
-        <Checkbox
-          id="assessment-method-leadership-judge"
-          v-model="formData.assessmentMethods.leadershipJudgeAssessment"
-        >
-          Leadership Judge Assessment
+          {{ $filters.lookup(method) }}
         </Checkbox>
 
         <button class="govuk-button">
@@ -98,35 +40,26 @@
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import { ASSESSMENT_METHOD } from '@/helpers/constants';
 
 export default {
   components: {
     ErrorSummary,
     BackLink,
-    RadioGroup,
-    RadioItem,
     Checkbox,
   },
   extends: Form,
-  data(){
-    const defaults = {
-      assessmentOptions: null,
-      // TODO: `assessmentMethods` will eventually replace `assessmentOptions`
-      assessmentMethods: {
-        independentAssessments: true,
-        leadershipJudgeAssessment: false,
-        // selfAssessment: false,
-        // statementOfEligibility: false,
-        // statementOfSuitability: false,
-        // coveringLetter: false,
-        // cv: false,
-      },
-    };
+  data() {
+    const assessmentMethods = {};
+    Object.values(ASSESSMENT_METHOD).forEach(method => {
+      // set default values
+      assessmentMethods[method] = method === ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS;
+    });
+    const defaults = { assessmentMethods };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
+      ASSESSMENT_METHOD,
       formData: formData,
     };
   },

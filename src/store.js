@@ -1,8 +1,5 @@
 import { createStore } from 'vuex';
 
-import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-firestoreOptions.wait = true;
-
 // Vuex modules
 import ui from '@/store/ui';
 import auth from '@/store/auth';
@@ -18,6 +15,7 @@ import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
 import events from '@/store/events';
 import clipboard from '@/store/clipboard';
+import users from '@/store/users';
 
 import stageReview from '@/store/stage/review';
 import stageSelected from '@/store/stage/selected';
@@ -91,13 +89,12 @@ const store = createStore({
     task,
     tasks,
     ui,
+    users,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
-  mutations: {
-    ...vuexfireMutations,
-  },
+  mutations: {},
   actions: {},
   getters: {
     appVersion: (state) => {

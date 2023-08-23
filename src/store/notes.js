@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 const collection = firestore.collection('notes');
@@ -49,6 +49,11 @@ export default {
       const ref = firestore
         .collection('notes').doc(id);
       await ref.delete();
+    },
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
   state: {

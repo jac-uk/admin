@@ -26,7 +26,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value
               ])"
               type="primary"
-              @click="refreshReport"
+              :action="refreshReport"
             >
               Refresh
             </ActionButton>
@@ -595,7 +595,8 @@ export default {
         { title: '*Surname or Company Name', ref: 'lastName' },
         { title: 'Previous Surname (include maiden names and any other names changed by deed poll)', ref: '' },
         { title: '*Forename', ref: 'firstName' },
-        { title: 'Middle Name', ref: '' },
+        { title: 'Middle Name', ref: 'middleNames' },
+        { title: 'Previous known name(s)', ref: 'previousNames' },
         { title: 'Any Other Names used:', ref: 'otherNames' },
         { title: '*Date of birth (DD/MM/YYYY)', ref: 'dateOfBirth' },
         { title: 'Place of Birth (Town)', ref: '' },
@@ -603,6 +604,7 @@ export default {
         { title: 'Nationality (if more than one, please state all)', ref: '' },
         { title: 'Gender', ref: 'gender' },
         { title: 'Present Address', ref: 'currentAddress' },
+        { title: 'Postcode', ref: 'postcode' },
         { title: 'Previous Address', ref: 'previousAddresses' },
         { title: 'Occupation', ref: '' },
         { title: 'National Insurance Number', ref: 'nationalInsuranceNumber' },

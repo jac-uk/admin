@@ -1,6 +1,6 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 // TODO delete this. it is not being used!
@@ -19,6 +19,11 @@ export default {
       const ref = firestore.doc(`exercises/${exerciseId}/tasks/${type}`);
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       await ref.update(data);
+    },
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
   state: {
