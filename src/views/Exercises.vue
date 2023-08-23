@@ -277,9 +277,6 @@ export default {
   unmounted() {
     this.$store.dispatch('exerciseCollection/unbind');
   },
-  mounted() {
-    this.reloadTable();
-  },
   methods: {
     showMyFavourites() {
       this.$store.dispatch('exerciseCollection/showFavourites');

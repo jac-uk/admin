@@ -1,7 +1,7 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { functions } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { getExerciseSaveData } from '@/helpers/exerciseHelper';
@@ -12,6 +12,9 @@ const collection = firestore.collection('exercises');
 export default {
   namespaced: true,
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     setNoOfTestApplications(state, noOfTestApplications) {
       state.noOfTestApplications = noOfTestApplications;
     },
