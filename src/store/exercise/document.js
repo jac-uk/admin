@@ -6,6 +6,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 import { getExerciseSaveData } from '@/helpers/exerciseHelper';
 import { logEvent } from '@/helpers/logEvent';
+import { checkNested } from '@/helpersTMP/object';
 
 const collection = firestore.collection('exercises');
 
@@ -74,7 +75,7 @@ export default {
     save: async ({ state }, data) => {
       await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
-    updateApprovalProcess: async ({ state }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
+    updateApprovalProcess: async ({ state, getters }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
       const user = {
         id: userId,
@@ -88,6 +89,9 @@ export default {
         case 'approved':
           data['_approval.rejected'] = null;
           data['state'] = 'approved';
+          if (!getters.hasInitialApprovalDate) {
+            data['_approval.initialApprovalDate'] = firebase.firestore.FieldValue.serverTimestamp();
+          }
         break;
         case 'rejected':
           data['_approval.rejected.message'] = rejectionReason;
@@ -254,6 +258,9 @@ export default {
     applicationOpenDatePost01042023: (state) => {
       // Used to facilitate different fields after 01-04-2023
       return state.record.applicationOpenDate > new Date('2023-04-01');
+    },
+    hasInitialApprovalDate(state) {
+      return checkNested(state.record, '_approval', 'initialApprovalDate');
     },
   },
 };
