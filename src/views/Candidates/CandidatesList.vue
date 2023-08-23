@@ -29,11 +29,7 @@
           inputLabel: 'Show flagged candidates only'
         },
       ]"
-      :custom-search="{
-        placeholder: 'Search candidate names',
-        handler: candidateSearch,
-        field: 'id',
-      }"
+      search-map="_search"
       @change="getTableData"
     >
       <template #row="{row}">

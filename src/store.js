@@ -1,8 +1,5 @@
 import { createStore } from 'vuex';
 
-import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-firestoreOptions.wait = true;
-
 // Vuex modules
 import ui from '@/store/ui';
 import auth from '@/store/auth';
@@ -100,9 +97,7 @@ const store = createStore({
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
-  mutations: {
-    ...vuexfireMutations,
-  },
+  mutations: {},
   actions: {},
   getters: {
     appVersion: (state) => {

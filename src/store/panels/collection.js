@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
@@ -38,6 +38,11 @@ export default {
     unbindApplicationsWithoutPanels: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('applicationsWithoutPanels');
     }),
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
   },
   state: {
     records: [],

@@ -1,6 +1,6 @@
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 
@@ -25,6 +25,11 @@ export default {
     save: async (context, data) => {
       data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
       return await collection.doc(context.state.record.id).update(data);
+    },
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
   getters: {

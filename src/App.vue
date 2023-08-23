@@ -98,25 +98,20 @@
             </ul>
           </nav>
         </div>
-      </div>
-
-      <div class="govuk-phase-banner govuk-!-margin-bottom-4 print-none">
-        <p class="govuk-phase-banner__content">
-          <strong class="govuk-tag govuk-phase-banner__content__tag">
-            beta
-          </strong>
-          <span class="govuk-phase-banner__text">
-            This is a new service – your
-            <a
-              class="govuk-link govuk-link--no-visited-state"
-              target="_blank"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSexm0qgMV0tOQTFP4QUSegOOX89VeYhWwuofV---JZTOEXGIQ/viewform"
-            >
-              feedback
-            </a>
-            will help us to improve it.
-          </span>
-        </p>
+        <div
+          class="govuk-phase-banner govuk-!-margin-bottom-4 print-none govuk-width-container"
+        >
+          <p class="govuk-phase-banner__content">
+            <span class="govuk-phase-banner__text">
+              This is a new service – your <a
+                style="font-size: 16px"
+                class="govuk-link govuk-body info-link--header--feedback"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdS7FDTzrwokQwiRriCzA45q2eiZT5xUX1dl9WfkJUYZAKiBQ/viewform"
+                target="_blank"
+              >feedback</a> will help us improve it.
+            </span>
+          </p>
+        </div>
       </div>
     </header>
 
