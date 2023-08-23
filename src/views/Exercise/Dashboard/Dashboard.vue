@@ -236,6 +236,7 @@ export default {
         returnChart.labels = labels;
         // Populate the data values for the selected diversity report
         for (const labelKey of labelKeys) {
+          // check if the label exists in the report
           const element = this.report[labelKey] ? this.report[labelKey][this.selectedDiversityReportType] : null;
           if (element) {
             for (const legendKey of legendKeys) {
