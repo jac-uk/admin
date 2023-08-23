@@ -101,9 +101,6 @@ const module = {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
-    isRoleChanged(state) {
-      return state.currentUser?.role?.isChanged;
-    },
     getEmail(state) {
       if (state.currentUser) {
         return state.currentUser.email;

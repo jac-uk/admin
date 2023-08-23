@@ -184,23 +184,6 @@
     </div>
 
     <Messages v-if="canReadMessages" />
-
-    <Modal ref="modalRefSignOut">
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Your role has been changed
-      </div>
-      <div class="modal__content govuk-!-margin-6">
-        <p class="govuk-body">
-          Please sign in again.
-        </p>
-        <button
-          class="govuk-button"
-          @click="signOut"
-        >
-          Sign out
-        </button>
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -208,13 +191,11 @@
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import Messages from '@/components/Messages.vue';
 
 export default {
   name: 'App',
   components: {
-    Modal,
     Messages,
   },
   mixins: [permissionMixin],
@@ -227,14 +208,8 @@ export default {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
     },
-    currentUser() {
-      return this.$store.state.auth.currentUser;
-    },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
-    },
-    isRoleChanged() {
-      return this.$store.getters['auth/isRoleChanged'];
     },
     userName() {
       return this.$store.state.auth.currentUser.displayName ? this.$store.state.auth.currentUser.displayName : this.$store.state.auth.currentUser.email;
@@ -258,17 +233,11 @@ export default {
         this.load();
       }
     },
-    isRoleChanged() {
-      this.checkRole();
-    },
   },
   async created() {
     if (this.isSignedIn) {
       this.load();
     }
-  },
-  mounted() {
-    this.checkRole();
   },
   unmounted() {
     if (this.isSignedIn) {
@@ -283,11 +252,6 @@ export default {
       this.authorisedToPerformAction = await authorisedToPerformAction(email);
       if (this.canReadMessages) {
         await this.getMessages();
-      }
-    },
-    checkRole() {
-      if (this.isRoleChanged && this.$refs['modalRefSignOut']) {
-        this.$refs['modalRefSignOut'].openModal();
       }
     },
     signOut() {
