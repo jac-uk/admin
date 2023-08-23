@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
@@ -42,6 +42,9 @@ export default {
     },
   },
   mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
+    },
     records(state, data) {
       state.records = data;
     },
