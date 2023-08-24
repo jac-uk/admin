@@ -14,23 +14,6 @@
         >
           Export
         </button>
-        <button
-          class="govuk-button govuk-!-margin-right-2"
-          :class="{ 'govuk-button--secondary': task.passMark }"
-          type="button"
-          @click="$refs['setPassMarkModal'].openModal()"
-        >
-          <span v-if="hasPassMark >= 0">Pass mark {{ $filters.formatNumber(task.passMark, 2) }}</span>
-          <span v-else>Set pass mark</span>
-        </button>        
-        <ActionButton
-          v-if="hasPassMark"
-          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
-          type="primary"
-          :action="btnComplete"
-        >
-          Complete
-        </ActionButton>
         <FullScreenButton />
       </div>
     </div>
@@ -135,7 +118,7 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
-    },
+    },    
     scoreType() {
       if (!this.task) return 'score';
       if (this.task.scoreType) return this.task.scoreType;
@@ -288,7 +271,17 @@ export default {
     },
     downloadMeritList(saveData) {
       const fileName = `${this.exercise.referenceNumber}-qt-merit-list`;
-      downloadMeritList(this.task, this.exerciseDiversity, saveData.type, fileName);
+      // get CAT & SJT applications
+      const CAT = this.$store.getters['tasks/getTask'](TASK_TYPE.CRITICAL_ANALYSIS);
+      const SJT = this.$store.getters['tasks/getTask'](TASK_TYPE.SITUATIONAL_JUDGEMENT);
+      const didNotTakeCAT = CAT.applications.filter(item => !CAT.finalScores.find(scoreData => scoreData.id === item.id));
+      const didNotTakeSJT = SJT.applications.filter(item => !SJT.finalScores.find(scoreData => scoreData.id === item.id));
+      const didNotTake = didNotTakeCAT.filter(item => didNotTakeSJT.find(app => app.id === item.id));
+      const failedCATIDs = CAT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
+      const failedSJTIDs = SJT.finalScores.filter(scoreData => scoreData.pass === false).map(item => item.id);
+      const failedIDs = failedCATIDs.concat(failedSJTIDs).filter((value, index, array) => array.indexOf(value) === index);
+      const failed = CAT.applications.filter(item => failedIDs.indexOf(item.id) >= 0);
+      downloadMeritList(didNotTake, failed, this.task, this.exerciseDiversity, saveData.type, fileName);
       this.$refs['exportModal'].closeModal();
     },
     async setPassMark(data) {
