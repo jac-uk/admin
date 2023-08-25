@@ -113,6 +113,7 @@
           </p>
         </div>
       </div>
+      <UserFeedbackLink />
     </header>
 
     <main
@@ -192,10 +193,12 @@ import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
+import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 export default {
   name: 'App',
   components: {
     Messages,
+    UserFeedbackLink,
   },
   mixins: [permissionMixin],
   data() {
