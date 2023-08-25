@@ -118,7 +118,7 @@ export default {
       exercise: state => state.exerciseDocument.record,
     }),
     hasReportData() {
-      return this.report && (this.report?.judicialHeaders || this.report?.nonJudicialHeaders);
+      return this.report && this.report.headers;
     },
   },
   created() {
@@ -176,35 +176,25 @@ export default {
         return;
       }
     },
-    gatherReportData(isJudicial = false) {
-      const headers = isJudicial ? this.report.judicialHeaders : this.report.nonJudicialHeaders;
-      const rows = isJudicial ? this.report.judicialRows : this.report.nonJudicialRows;
+    gatherReportData() {
       const reportData = [];
       // get headers
-      reportData.push(headers.map(header => header.title));
+      reportData.push(this.report.headers.map(header => header.title));
       // get rows
-      rows.forEach((row) => {
-        reportData.push(headers.map(header => row[header.ref]));
+      this.report.rows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
       });
-
       return reportData;
     },
-    async exportData() {
+    exportData() {
       const title = 'Statutory Consultation Report';
-      await downloadXLSX(
-        this.gatherReportData(true),
+      const data = this.gatherReportData();
+      downloadXLSX(
+        data,
         {
-          title: `${this.exercise.referenceNumber} ${title} (Judicial)`,
+          title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title} (Judicial).xlsx`,
-        }
-      );
-      await downloadXLSX(
-        this.gatherReportData(false),
-        {
-          title: `${this.exercise.referenceNumber} ${title} (Non-Judicial)`,
-          sheetName: title,
-          fileName: `${this.exercise.referenceNumber} - ${title} (Non-Judicial).xlsx`,
+          fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
     },
