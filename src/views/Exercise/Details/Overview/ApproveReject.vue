@@ -117,6 +117,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('vacancy/bind', this.exerciseId).then(() => {
+      // Below only compares fields that exist in the first object
       this.changes = deepKeysDiff(this.vacancy, this.exercise, ['state']);
     });
   },
