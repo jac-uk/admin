@@ -184,6 +184,7 @@ export default {
       this.report.rows.forEach((row) => {
         reportData.push(this.report.headers.map(header => row[header.ref]));
       });
+
       return reportData;
     },
     exportData() {
