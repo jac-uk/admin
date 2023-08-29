@@ -62,6 +62,20 @@
           type="text"
           required
         />
+        <TextField
+          id="browser"
+          v-model="formData.browser"
+          label="Your browser"
+          type="text"
+          required
+        />
+        <TextField
+          id="os"
+          v-model="formData.os"
+          label="Your operating system"
+          type="text"
+          required
+        />
       </div>
 
       <button
@@ -88,6 +102,7 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
+import { detect } from 'detect-browser';
 //import ExtendedError from '@/errors/extendedError';
 export default {
   name: 'FeedbackForm',
@@ -101,6 +116,7 @@ export default {
   emits: ['close'],
   data() {
     return {
+      client: null,
       formData: {
         url: '',
         expectation: '',
@@ -108,8 +124,8 @@ export default {
         contactDetailType: '',
         contactDetails: '',
         fullName: '',
-        reason: '',
-        seniorLeadership: '', // @TODO: DO WE NEED THIS (OR SEND TO WHOLE TEAM??) - Warren said send to whole team
+        browser: '',
+        os: '',
       },
       errors: [],
 
@@ -117,60 +133,33 @@ export default {
       contactDetailTypes: ['slack', 'teams', 'email'],
     };
   },
+  computed: {
+    email() {
+      return this.$store.state.auth.currentUser.email;
+    },
+  },
+  watch: {
+    'formData.contactDetailType'(val) {
+      if (val === 'email') {
+        this.formData.contactDetails = this.email;
+      }
+      else {
+        this.formData.contactDetails = '';
+      }
+    },
+  },
+  mounted() {
+    this.client = detect();
+    this.formData.browser = `${this.client.name} ${this.client.version}`;
+    this.formData.os = this.client.os;
+  },
   methods: {
     closeModal() {
       this.$emit('close');
     },
     async save() {
       console.log('SAVE!');
-      // try {
-      //   await this.$store.dispatch('candidates/getByEmail', this.formData.email);
-      //   if (!this.candidate) {
-      //     throw {
-      //       id: 'error',
-      //       message: 'A candidate with that email does not exist.',
-      //     };
-      //   }
-      //   else if (this.hasAppliedForExercise) {
-      //     throw new ExtendedError({
-      //       id: 'error',
-      //       message: 'The candidate has already applied for the exercise.',
-      //       routerLink: {
-      //         link: { name: 'exercise-overview', params: { id: this.exerciseId } },
-      //         text: 'Click here to open the exercise',
-      //       },
-      //     });
-      //   }
-      //   else if (this.hasLateApplicationRequest) {
-      //     throw {
-      //       id: 'error',
-      //       message: 'An application request has already been created for this candidate.',
-      //     };
-      //   }
-      //   else {
-      //     const route = this.$router.resolve({
-      //       name: 'exercise-overview',
-      //       params: { id: this.exerciseId },
-      //     });
-      //     const absoluteURL = new URL(route.href, window.location.origin).href;
-      //     await this.$store.dispatch(
-      //       'lateApplicationRequestMsg/create', {
-      //         exerciseId: this.exerciseId,
-      //         exercise: this.exercise,
-      //         requester: {
-      //           fullName: this.$store.getters['auth/getDisplayName'],
-      //           email: this.$store.getters['auth/getEmail'],
-      //         },
-      //         candidate: this.candidate,
-      //         reason: this.formData.reason,
-      //         url: absoluteURL,
-      //       });
-      //     this.openConfirmModal();
-      //   }
-      // }
-      // catch (error) {
-      //   this.errors.push(error);
-      // }
+      // @TODO: See Request.vue
     },
   },
 };
