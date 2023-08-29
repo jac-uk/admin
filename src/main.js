@@ -30,21 +30,23 @@ auth.onAuthStateChanged(async (user) => {
     user.isNewUser = true;
   }
 
-  let isAuth = false;
-  if (auth.currentUser?.getIdToken) {
-    await auth.currentUser.getIdToken(true); // refresh token
-    const userData = await store.dispatch('auth/setCurrentUser', user);
-    if (userData) {
-      isAuth = true;
-  
-      if (window.location.pathname == '/sign-in') {
-        router.push('/');
-      }
+  try {
+    if (auth.currentUser?.getIdToken) {
+      // refresh token
+      await auth.currentUser.getIdToken(true); 
     }
+
+    // Bind Firebase auth state to the vuex auth state store
+    const userData = await store.dispatch('auth/setCurrentUser', user);
+    if (!userData) {
+      auth.signOut();
+    }
+  } catch (error) {
+    // console.error(error);
   }
 
-  if (!isAuth) {
-    auth.signOut();
+  if (window.location.pathname == '/sign-in') {
+    router.push('/');
   }
 
   // Create the Vue instance, but only once
