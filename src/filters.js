@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -247,6 +247,16 @@ const lookup = (value) => {
   lookup[OFFENCE_CATEGORY.SINGLE_OTHER_MATTER] = 'Single other matter';
   lookup[OFFENCE_CATEGORY.MULTIPLE_OTHER_MATTERS] = 'Multiple other matters';
   lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
+
+  // assessment methods
+  lookup[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES] = 'Self Assessment with competencies';
+  lookup[ASSESSMENT_METHOD.COVERING_LETTER] = 'Covering letter';
+  lookup[ASSESSMENT_METHOD.CV] = 'CV';
+  lookup[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_COMPETENCIES] = 'Statement of Suitability with competencies';
+  lookup[ASSESSMENT_METHOD.STATEMENT_OF_SUITABILITY_WITH_SKILLS_AND_ABILITIES] = 'Statement of Suitability with skills and abilities';
+  lookup[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] = 'Statement of eligibility';
+  lookup[ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS] = 'Independent Assessments';
+  lookup[ASSESSMENT_METHOD.LEADERSHIP_JUDGE_ASSESSMENT] = 'Leadership Judge Assessment';
 
   returnValue = lookup[value];
 

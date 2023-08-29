@@ -179,11 +179,7 @@
           :page-size="50"
           :columns="tableColumns"
           :multi-select="!isDeleted"
-          :custom-search="{
-            placeholder: 'Search candidate names',
-            handler: candidateSearch,
-            field: 'candidate.id',
-          }"
+          search-map="_search"
           :filters="filters"
           @change="getTableData"
         >

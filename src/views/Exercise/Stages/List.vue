@@ -59,11 +59,7 @@
         :columns="tableColumns"
         multi-select
         :page-size="pageSize"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
+        search-map="_search"
         :filters="[
           {
             title: 'Status',

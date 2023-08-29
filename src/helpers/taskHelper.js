@@ -139,12 +139,12 @@ function meritList(task) {
   });
 }
 
-function downloadMeritList(task, diversityData, type, fileName) {
+function downloadMeritList(didNotTake, failed, task, diversityData, type, fileName) {
   switch (type) {
   case DOWNLOAD_TYPES.full.value:
   case DOWNLOAD_TYPES.emp.value:
     downloadXLSX(
-      xlsxData(task, diversityData, type),
+      xlsxData(didNotTake, failed, task, diversityData, type),
       {
         title: 'QT Merit List',
         sheetName: DOWNLOAD_TYPES[type].sheetName,
@@ -157,19 +157,24 @@ function downloadMeritList(task, diversityData, type, fileName) {
   }
 }
 
-function xlsxData(task, diversityData, type) {  // currently only for QTs
+function xlsxData(didNotTake, failed, task, diversityData, type) {  // currently only for QTs
   const rows = [];
   const headers = [];
   headers.push('Ref');
   if (type === DOWNLOAD_TYPES.full.value) {
     headers.push('Full name');
+    headers.push('Email');
+    headers.push('SJT score');
     headers.push('SJT %');
-    headers.push('SJT Z');
+    headers.push('CAT score');
     headers.push('CAT %');
-    headers.push('CAT Z');
-    headers.push('Average %');    
+    headers.push('Z_SJT');
+    headers.push('Z_CAT');
   }
-  headers.push('Average Z');
+  headers.push('Z_Overall');
+  headers.push('Rank');
+  headers.push('Notes');
+  headers.push('Outcome');
   headers.push('Female');
   headers.push('Ethnic minority');
   headers.push('Solicitor');
@@ -180,13 +185,18 @@ function xlsxData(task, diversityData, type) {  // currently only for QTs
     row.push(item.ref);
     if (type === DOWNLOAD_TYPES.full.value) {
       row.push(item.fullName);
+      row.push(item.email);
+      row.push(item.scoreSheet.qualifyingTest.SJ.score);
       row.push(item.scoreSheet.qualifyingTest.SJ.percent);
-      row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
+      row.push(item.scoreSheet.qualifyingTest.CA.score);      
       row.push(item.scoreSheet.qualifyingTest.CA.percent);
+      row.push(item.scoreSheet.qualifyingTest.SJ.zScore);
       row.push(item.scoreSheet.qualifyingTest.CA.zScore);
-      row.push(item.percent);
     }
     row.push(item.zScore);
+    row.push(''); // TODO rank
+    row.push(''); // TODO notes
+    row.push(''); // TODO outcome
     const ref = item.ref.split('-')[1];
     if (diversityData[ref]) {
       row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
@@ -201,6 +211,70 @@ function xlsxData(task, diversityData, type) {  // currently only for QTs
     }
     rows.push(row);
   });
+  // add did not take
+  didNotTake.forEach(item => {
+    const row = [];
+    row.push(item.ref);
+    if (type === DOWNLOAD_TYPES.full.value) {
+      row.push(item.fullName);
+      row.push(item.email);
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+    }
+    row.push('');
+    row.push(''); // TODO rank
+    row.push(''); // TODO notes
+    row.push('noTestSubmitted');
+    const ref = item.ref.split('-')[1];
+    if (diversityData[ref]) {
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+    } else {
+      row.push();
+      row.push();
+      row.push();
+      row.push();
+    }
+    rows.push(row);
+  });
+  // add failed
+  failed.forEach(item => {
+    const row = [];
+    row.push(item.ref);
+    if (type === DOWNLOAD_TYPES.full.value) {
+      row.push(item.fullName);
+      row.push(item.email);
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+      row.push('');
+    }
+    row.push('');
+    row.push(''); // TODO rank
+    row.push(''); // TODO notes
+    row.push('failedFirstTest');
+    const ref = item.ref.split('-')[1];
+    if (diversityData[ref]) {
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.GENDER_FEMALE));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.ETHNICITY_BAME));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.PROFESSION_SOLICITOR));
+      row.push(hasDiversityCharacteristic(diversityData[ref], DIVERSITY_CHARACTERISTICS.DISABILITY_DISABLED));
+    } else {
+      row.push();
+      row.push();
+      row.push();
+      row.push();
+    }
+    rows.push(row);
+  });  
   return rows;
 }
 

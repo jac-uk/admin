@@ -96,13 +96,6 @@
       </table>
     </div>
     <div class="govuk-grid-column-full govuk-!-margin-top-6">
-      <div
-        v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
-        class="govuk-!-margin-bottom-4"
-      >
-        Congratulations! This exercise has been approved. Now you can publish it to the website.
-      </div>
-
       <button
         v-if="canUpdateExercises && isDraft"
         :disabled="!isReadyToSubmit"
@@ -373,11 +366,12 @@ export default {
     },
   },
   methods: {
-    async submitForApproval() {
+    async submitForApproval(note) {
       await this.$store.dispatch('exerciseDocument/updateApprovalProcess', {
         userId: this.userId,
         userName: this.displayName,
         decision: 'requested',
+        rejectionResponse: note ? note : null,
       });
       this.closeApprovalModal();
     },
