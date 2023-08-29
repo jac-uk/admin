@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { APPLICATION_STATUS } from '@/helpers/constants';
 import { lookup } from '@/filters';
@@ -99,6 +99,9 @@ export default {
     },
     records(state, data) {
       state.records = data;
+    },
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
 };
