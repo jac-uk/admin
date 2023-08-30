@@ -236,16 +236,19 @@ export default {
         returnChart.labels = labels;
         // Populate the data values for the selected diversity report
         for (const labelKey of labelKeys) {
-          const element = this.report[labelKey][this.selectedDiversityReportType];
-          for (const legendKey of legendKeys) {
-            if (!_has(dataValues, legendKey)) {
-              dataValues[legendKey] = [];
+          // check if the label exists in the report
+          const element = this.report[labelKey] ? this.report[labelKey][this.selectedDiversityReportType] : null;
+          if (element) {
+            for (const legendKey of legendKeys) {
+              if (!_has(dataValues, legendKey)) {
+                dataValues[legendKey] = [];
+              }
+              let percentage = 0;
+              if (_has(element[legendKey], 'percent')) {
+                percentage = this.$filters.formatNumber(element[legendKey].percent, 2);
+              }
+              dataValues[legendKey].push(percentage);
             }
-            let percentage = 0;
-            if (_has(element[legendKey], 'percent')) {
-              percentage = this.$filters.formatNumber(element[legendKey].percent, 2);
-            }
-            dataValues[legendKey].push(percentage);
           }
         }
         // Set the datasets (background colour gets passed to the Chart component separately and merged into the data)
