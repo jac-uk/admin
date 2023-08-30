@@ -64,6 +64,7 @@
                     type="text"
                     :data="data[index][key] ? data[index][key].location : ''"
                     :extension="'location'"
+                    :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
                 </div>
@@ -84,6 +85,7 @@
                     :index="index"
                     :extension="'jurisdiction'"
                     type="text"
+                    :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
                 </div>
@@ -105,6 +107,7 @@
                     :extension="'workingBasis'"
                     type="selection"
                     :options="['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
+                    :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
                 </div>
@@ -125,6 +128,7 @@
                     :index="index"
                     :extension="'totalDaysInRole'"
                     type="text"
+                    :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
                 </div>
@@ -144,6 +148,7 @@
                 type="multi-selection"
                 :options="taskOptions"
                 :extension="key"
+                :is-asked="isAsked"
                 @change-field="changeField"
               />
 
@@ -159,6 +164,7 @@
                     :index="index"
                     type="text"
                     :extension="key"
+                    :is-asked="isAsked"
                     @change-field="changeField"
                   />
                 </div>
@@ -177,6 +183,7 @@
                 type="multi-selection"
                 :options="taskOptions"
                 :extension="key"
+                :is-asked="isAsked"
                 @change-field="changeField"
               />
               <template v-if="data[index][key]">
@@ -191,6 +198,7 @@
                     :index="index"
                     type="text"
                     extension="otherTasks"
+                    :is-asked="isAsked"
                     @change-field="changeField"
                   />
                 </div>
@@ -209,6 +217,7 @@
                 :display-month-year-only="displayMonthYearOnly"
                 type="date"
                 :extension="key"
+                :is-asked="isAsked"
                 @change-field="changeField"
               />
             </dd>
@@ -231,6 +240,7 @@
                 :index="index"
                 type="textarea"
                 :extension="key"
+                :is-asked="isAsked"
                 @change-field="changeField"
               />
             </dd>
@@ -246,6 +256,7 @@
                 :index="index"
                 type="text"
                 :extension="key"
+                :is-asked="isAsked"
                 @change-field="changeField"
               />
             </dd>
@@ -266,7 +277,10 @@
       v-else
       class="govuk-body"
     >
-      No answers provided
+      No information
+      <span v-if="!isAsked">
+        (not asked)
+      </span>
     </span>
     <button
       v-if="edit"
@@ -322,6 +336,11 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   emits: ['changeField', 'changeTaskDetails', 'addField', 'removeField'],
   data() {
@@ -345,7 +364,7 @@ export default {
   },
   methods: {
     formattedRange(index) {
-      let result = 'No answer provided';
+      let result = 'No information';
       if (this.data[index].startDate && this.data[index].endDate) {
         result = `${this.displayDate(this.data[index].startDate)} - ${this.displayDate(this.data[index].endDate)}`;
       } else if (this.data[index].startDate && !this.data[index].endDate) {
