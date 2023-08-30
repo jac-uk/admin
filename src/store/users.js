@@ -1,4 +1,4 @@
-import { firestore, functions } from '@/firebase';
+import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
@@ -19,37 +19,12 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
-    create: async (_, data) => {
-      return await collection.add(data);
-    },
-    get: async (_, userId) => {
-      try {
-        const doc = await collection.doc(userId).get();
-        if (doc.exists) {
-          return {
-            id: userId,
-            ...doc.data(),
-          };
-        }
-        return null;
-      } catch (error) {
-        return null;
-      }
-    },
     save: async (_, { userId, data }) => {
       const ref = collection.doc(userId);
       await ref.set(data, { merge: true });
     },
     delete: async (_, id) => {
       return await collection.doc(id).delete();
-    },
-    async getUsers({ commit }) {
-      try {
-        const res = await functions.httpsCallable('adminGetUsers')();
-        commit('setUsers', res.data);
-      } catch (error) {
-        commit('setUsers', []);
-      }
     },
   },
   mutations: {
