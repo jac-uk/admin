@@ -31,8 +31,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.modal {
-  text-align: center;
+.modal  {
+  text-align: left !important;
+}
+.modal__content  {
+  text-align: left !important;
 }
 .modal__title {
   text-align: center;

@@ -7,8 +7,9 @@
       <TextField
         id="url"
         v-model="formData.url"
-        label="Url"
+        label="Current Page"
         type="text"
+        :disabled="true"
         required
       />
       <TextArea
@@ -66,6 +67,7 @@
           v-model="formData.browser"
           label="Your browser"
           type="text"
+          :disabled="true"
           required
         />
         <TextField
@@ -73,6 +75,7 @@
           v-model="formData.os"
           label="Your operating system"
           type="text"
+          :disabled="true"
           required
         />
       </div>
@@ -123,6 +126,7 @@ export default {
         contactDetailType: '',
         contactDetails: '',
         fullName: '',
+        userId: '',
         browser: '',
         os: '',
       },
@@ -135,6 +139,9 @@ export default {
   computed: {
     email() {
       return this.$store.state.auth.currentUser.email;
+    },
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
     },
     displayName() {
       return this.$store.state.auth.currentUser.displayName;
@@ -156,6 +163,7 @@ export default {
     this.formData.os = this.client.os;
     this.formData.url = window.location.href;
     this.formData.fullName = this.displayName;
+    this.formData.userId = this.userId;
   },
   methods: {
     closeModal() {
@@ -168,22 +176,3 @@ export default {
   },
 };
 </script>
-
-<style lang="css" scoped>
-.modal {
-  text-align: center;
-}
-.modal__title {
-  text-align: center;
-  vertical-align: middle;
-  border: solid 2px #1d70b8;
-  background-color: #1d70b8;
-  color: white;
-}
-.modal__message {
-  vertical-align: middle;
-}
-.deny {
-  background-color: #f3f2f1;
-}
-</style>
