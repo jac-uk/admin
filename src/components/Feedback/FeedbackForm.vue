@@ -37,8 +37,7 @@
         <Select
           id="contact-detail-type"
           v-model="formData.contactDetailType"
-          label="Contact type"
-          hint="The best way to get in touch"
+          label="Best way to contact you"
           required
         >
           <option
@@ -137,6 +136,9 @@ export default {
     email() {
       return this.$store.state.auth.currentUser.email;
     },
+    displayName() {
+      return this.$store.state.auth.currentUser.displayName;
+    },
   },
   watch: {
     'formData.contactDetailType'(val) {
@@ -152,6 +154,8 @@ export default {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
     this.formData.os = this.client.os;
+    this.formData.url = window.location.href;
+    this.formData.fullName = this.displayName;
   },
   methods: {
     closeModal() {
