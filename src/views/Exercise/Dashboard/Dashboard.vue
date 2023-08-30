@@ -239,6 +239,7 @@ export default {
         // Get the top level and second level key mappings from the report
         const labelKeys = this.labels.map(o => o.key);
         const filteredLegend = this.legend.filter(o => !(this.ignoreKeys).includes(o.key));
+        const legendKeys = this.filteredLegend.map(o => o.key);
 
         // Set the labels
         const labels = this.labels.map(o => o.title);
