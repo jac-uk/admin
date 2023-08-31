@@ -141,6 +141,7 @@ import _find from 'lodash/find';
 import Chart from '@/components/Chart';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Dashboard',
@@ -173,6 +174,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
     tableColumns() {
       const totalCandidates = this.$filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
       return [
@@ -193,14 +197,21 @@ export default {
       return applicationCounts(this.exercise);
     },
     diversityReportType() {
-      return [
+      const types = [
         'gender',
         'ethnicity',
         'disability',
         'professionalBackground',
-        'socialMobility',
-        'emp',
+        'attendedUKStateSchool',
       ];
+      if (this.applicationOpenDatePost01042023) {
+        types.push('parentsNotAttendedUniversity');
+      }
+      else {
+        types.push('firstGenerationUniversity');
+      }
+      types.push('emp');
+      return types;
     },
     tabs() {
       return _map(this.labels, item => {
@@ -362,7 +373,7 @@ export default {
     getTotalCandidates(diversity, tab) {
       if (this.report) {
         const dataApplied = this.report[tab][diversity];
-        return dataApplied.total;
+        return dataApplied.declaration.total;
       }
     },
     getOrderedKeys(selectedDiversityReportType) {

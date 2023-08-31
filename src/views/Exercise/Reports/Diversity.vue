@@ -429,7 +429,7 @@
           </table>
         </template>
 
-        <template v-else-if="applicationOpenDatePost01042023 && 'parentsAttendedUniversity' in diversity[activeTab]">
+        <template v-else-if="applicationOpenDatePost01042023 && 'parentsNotAttendedUniversity' in diversity[activeTab]">
           <table class="govuk-table">
             <caption class="govuk-table__caption hidden">
               Social mobility by selected stage
@@ -453,10 +453,10 @@
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header">
-                  Parents Attended University
+                  Parents did not attend University
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric">
-                  <Stat :stat="diversity[activeTab].parentsAttendedUniversity.parentsAttendedUniversity" />
+                  <Stat :stat="diversity[activeTab].parentsNotAttendedUniversity.parentsNotAttendedUniversity" />
                 </td>
               </tr>
               <tr class="govuk-table__row">
@@ -465,8 +465,8 @@
                 </th>
                 <td class="govuk-table__cell govuk-table__cell--numeric">
                   <Stat
-                    :stat="diversity[activeTab].parentsAttendedUniversity.declaration"
-                    :report-total="diversity[activeTab].parentsAttendedUniversity.total"
+                    :stat="diversity[activeTab].parentsNotAttendedUniversity.declaration"
+                    :report-total="diversity[activeTab].parentsNotAttendedUniversity.total"
                     :is-declaration-total="true"
                   />
                 </td>
