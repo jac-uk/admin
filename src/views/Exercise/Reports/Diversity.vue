@@ -328,7 +328,10 @@
           </tbody>
         </table>
 
-        <table class="govuk-table">
+        <table
+          v-if="'attendedUKStateSchool' in diversity[activeTab]"
+          class="govuk-table"
+        >
           <caption class="govuk-table__caption hidden">
             Social mobility by selected stage
           </caption>

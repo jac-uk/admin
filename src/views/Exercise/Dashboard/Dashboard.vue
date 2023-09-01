@@ -373,7 +373,7 @@ export default {
     getTotalCandidates(diversity, tab) {
       if (this.report) {
         const dataApplied = this.report[tab][diversity];
-        return dataApplied.declaration.total;
+        return dataApplied.total;
       }
     },
     getOrderedKeys(selectedDiversityReportType) {
