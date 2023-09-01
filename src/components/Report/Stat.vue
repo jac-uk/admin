@@ -5,7 +5,7 @@
       <span
         v-if="reportTotal > 0 && stat.total > 0"
         class="total"
-      >({{ reportTotal }} out of {{ stat.total }})</span>
+      >({{ stat.total }} out of {{ reportTotal }})</span>
     </template>
     <template v-else>
       <span class="total">({{ stat.total }})</span>

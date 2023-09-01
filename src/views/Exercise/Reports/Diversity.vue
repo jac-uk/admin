@@ -140,17 +140,6 @@
                 <Stat :stat="diversity[activeTab].gender.female" />
               </td>
             </tr>
-            <!-- <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Gender Neutral
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.genderNeutral" />
-              </td>
-            </tr> -->
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Declaration total
