@@ -222,12 +222,12 @@ export default {
       });
     },
     labels() {
-      return getReports(this.applicationOpenDate, this.exercise.ref).ApplicationStageDiversity.labels;
+      return getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.labels;
     },
     legend() {
       if (this.selectedDiversityReportType) {
         // Add the count to the legend, so the items are numbered
-        const items = getReports(this.applicationOpenDate, this.exercise.ref).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+        const items = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
         let count = 0;
         return _map(items, item => {
           ++count;
@@ -333,7 +333,7 @@ export default {
         returnChart = this.getOrderedKeys(this.selectedDiversityReportType)
           .filter(item => !this.ignoreKeys.includes(item))
           .map(item => {
-            const legendList = getReports(this.applicationOpenDate, this.exercise.ref).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+            const legendList = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
             const legend = _find(legendList, o => {
               return o.key === item;
             });
@@ -377,7 +377,7 @@ export default {
       }
     },
     getOrderedKeys(selectedDiversityReportType) {
-      const list = getReports(this.applicationOpenDate, this.exercise.ref).ApplicationStageDiversity.legend[selectedDiversityReportType];
+      const list = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[selectedDiversityReportType];
       return list.map(item => item.key);
     },
     async refreshReport() {

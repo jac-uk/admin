@@ -252,7 +252,7 @@ export default {
       return null;
     },
     applicationOpenDatePost01042023: (state) => {
-      const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(state.record.ref);
+      const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(state.record.referenceNumber);
       if (usesPre01042023Questions) {
         return false;
       }
