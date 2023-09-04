@@ -26,6 +26,14 @@
           v-model="formData.assessmentMethods[method]"
         >
           {{ $filters.lookup(method) }}
+          <TextField
+            v-if="method == 'selfAssessmentWithCompetencies' && formData.assessmentMethods[method]"
+            id="word-limit"
+            v-model="formData.selfAssessmentWordLimit"
+            input-class="govuk-input--width-5"
+            hint="What is the word limit for this assessment?"
+            :required="formData.assessmentMethods[method]"
+          />
         </Checkbox>
 
         <button class="govuk-button">
@@ -41,10 +49,12 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import { ASSESSMENT_METHOD } from '@/helpers/constants';
 
 export default {
   components: {
+    TextField,
     ErrorSummary,
     BackLink,
     Checkbox,

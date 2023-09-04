@@ -21,6 +21,9 @@
         class="display-block"
       >
         {{ $filters.lookup(assessmentMethod) }}
+        <strong>
+          {{ assessmentMethod === 'Self Assessment with competencies' ? `- Word limit: ${exercise.selfAssessmentWordLimit}` : '' }}
+        </strong>
       </span>
     </p>
   </div>
