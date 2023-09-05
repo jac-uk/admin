@@ -170,7 +170,6 @@ export default {
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
       report: null,
-      ignoreKeys: ['genderNeutral', 'preferNotToSay', 'other', 'noAnswer'],
     };
   },
   computed: {
@@ -350,6 +349,15 @@ export default {
     },
     reportCreatedAt() {
       return this.report && this.report.createdAt;
+    },
+    ignoreKeys() {
+      const ignoreKeys = ['genderNeutral', 'preferNotToSay', 'other', 'noAnswer'];
+      if (this.selectedDiversityReportType === 'professionalBackground') {
+        return ignoreKeys.filter((item) => {
+          return item !== 'other';
+        });
+      }
+      return ignoreKeys;
     },
   },
   created() {

@@ -313,6 +313,16 @@
                 <Stat :stat="diversity[activeTab].professionalBackground.solicitor" />
               </td>
             </tr>
+
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="diversity[activeTab].professionalBackground.other" />
+              </td>
+            </tr>
+
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Declaration total
