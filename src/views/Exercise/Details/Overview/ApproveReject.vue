@@ -36,7 +36,13 @@
             </div>
           </div>
         </template>
-        <p><strong>Please verify the content of the exercise and Approve or Reject.</strong></p>
+        <p>Please verify the content of the exercise and Approve or Reject.</p>
+        <div
+          v-if="hasChanges"
+          class="govuk-inset-text"
+        >
+          The following fields have changed: {{ formattedChanges }}
+        </div>
         <div>
           <button
             :disabled="!isReadyForApprovalFromAdvertType"
@@ -61,12 +67,19 @@
 <script>
 import permissionMixin from '@/permissionMixin';
 import { isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
+import { deepKeysDiff } from '@jac-uk/jac-kit/helpers/object';
 import { mapState } from 'vuex';
+import _has from 'lodash/has.js';
 import _get from 'lodash/get.js';
 export default {
   name: 'ApproveReject',
   mixins: [permissionMixin],
   emits: ['reject'],
+  data() {
+    return {
+      changes: [],
+    };
+  },
   computed: {
     ...mapState({
       userId: state => state.auth.currentUser.uid,
@@ -74,6 +87,9 @@ export default {
     }),
     exercise() {
       return this.$store.getters['exerciseDocument/data']();
+    },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record.id;
     },
     isReadyForApprovalFromAdvertType() {
       return isReadyForApprovalFromAdvertType(this.exercise);
@@ -84,6 +100,26 @@ export default {
     rejectionMessage() {
       return _get(this.exercise, '_approval.rejected.message', null);
     },
+    exerciseWasPreviouslyApproved() {
+      return _has(this.exercise, '_approval.approved.date');
+    },
+    vacancy() {
+      return this.$store.getters['vacancy/data']();
+    },
+    formattedChanges() {
+      return this.changes.map(element => {
+        return element.replace(/([A-Z])/g, ' $1').replace(/^./, (str) =>{ return str.toUpperCase(); });
+      }).join(', ');
+    },
+    hasChanges() {
+      return this.changes.length > 0;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('vacancy/bind', this.exerciseId).then(() => {
+      // Below only compares fields that exist in the first object
+      this.changes = deepKeysDiff(this.vacancy, this.exercise, ['state']);
+    });
   },
   methods: {
     async approve() {
@@ -92,7 +128,6 @@ export default {
         userName: this.displayName,
         decision: 'approved',
       });
-
     },
     reject() {
       this.$emit('reject');
