@@ -11,8 +11,7 @@
       ref="feedbackModal"
     >
       <SimpleModalInner
-        title="Support Issue Form"
-        message="Fill in the form below to raise a support issue about this page"
+        title="Raise A Support Issue With This Page"
       >
         <FeedbackForm
           @close="closeFeedbackModal"
@@ -26,7 +25,7 @@
     >
       <ModalInner
         title="Confirm Feedback"
-        message="Your feedback has been forwarded to the team and you will be contacted shortly."
+        :message="confirmationMessage"
         button-text="Close"
         :cancelable="false"
         @confirmed="closeConfirmFeedbackModal"
@@ -53,6 +52,19 @@ export default {
     ModalInner,
     SimpleModalInner,
     FeedbackForm,
+  },
+  data() {
+    return {
+      uniqueTicketNumber: null,
+    };
+  },
+  computed: {
+    confirmationMessage() {
+      return `Your feedback has been forwarded to the team and you will be contacted shortly. Your ticket number is: ${this.uniqueTicketNumber}`;
+    },
+  },
+  mounted() {
+    this.uniqueTicketNumber = 'ABC123';
   },
   methods: {
     openModal() {

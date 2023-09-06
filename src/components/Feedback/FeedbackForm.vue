@@ -4,25 +4,33 @@
       :errors="errors"
     />
     <form @submit.prevent="validateAndSave">
-      <TextField
+      <!-- <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Type of exercise
+          </dt>
+          <dd class="govuk-summary-list__value">
+            data
+          </dd>
+        </div>
+      </dl> -->
+
+      <!-- <TextField
+        id="ticket-number"
+        v-model="formData.ticketNumber"
+        label="Issue Number"
+        type="text"
+        :disabled="true"
+        required
+      /> -->
+      <!-- <TextField
         id="url"
         v-model="formData.url"
         label="Current Page"
         type="text"
         :disabled="true"
         required
-      />
-      <FileUpload
-        id="screenshot-file"
-        ref="screenshot-file"
-        v-model="formData.screenshotFileName"
-        name="screenshot"
-        :path="screenshotUploadPath"
-        types="fileTypes"
-        label="Upload screenshot"
-        :enable-delete="true"
-        @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
-      />
+      /> -->
       <Select
         id="criticality"
         v-model="formData.criticality"
@@ -43,27 +51,39 @@
           {{ criticalityType }}
         </option>
       </Select>
+      <FileUpload
+        id="screenshot-file"
+        ref="screenshot-file"
+        v-model="formData.screenshotFileName"
+        name="screenshot"
+        :path="screenshotUploadPath"
+        types="fileTypes"
+        label="Upload screenshot"
+        :enable-delete="true"
+        @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
+      />
       <TextArea
         id="complaint"
         v-model="formData.complaint"
         label="What happened?"
+        rows="2"
         required
       />
-      <TextField
+      <TextArea
         id="expectation"
         v-model="formData.expectation"
         label="What did you want to happen?"
-        type="text"
+        rows="2"
         required
       />
 
-      <TextField
+      <!-- <TextField
         id="name"
         v-model="formData.fullName"
         label="Your name"
         type="text"
         required
-      />
+      /> -->
 
       <div class="govuk-form-group">
         <!-- <Select
@@ -94,15 +114,15 @@
           required
         /> -->
 
-        <TextField
+        <!-- <TextField
           id="contactDetails"
           v-model="email"
           label="Your contact details"
           type="text"
           required
-        />
+        /> -->
 
-        <div
+        <!-- <div
           id="accordion-default"
           class="govuk-accordion"
           data-module="govuk-accordion"
@@ -131,9 +151,9 @@
               />
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <TextField
+        <!-- <TextField
           id="browser"
           v-model="formData.browser"
           label="Your browser"
@@ -148,7 +168,7 @@
           type="text"
           :disabled="true"
           required
-        />
+        /> -->
       </div>
 
       <button
@@ -171,7 +191,7 @@
 <script>
 // @TODO: THIS COMPONENT IS BASED ON MODALINNER!
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+//import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
@@ -182,7 +202,7 @@ import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 export default {
   name: 'FeedbackForm',
   components: {
-    TextField,
+    //TextField,
     TextArea,
     Select,
     ErrorSummary,

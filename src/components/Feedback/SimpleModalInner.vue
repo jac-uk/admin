@@ -3,7 +3,10 @@
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
       {{ title }}
     </div>
-    <p class="modal__message govuk-body-l govuk-!-padding-4">
+    <p
+      v-if="message"
+      class="modal__message govuk-body-l govuk-!-padding-4"
+    >
       {{ message }}
     </p>
     <div class="modal__content govuk-!-margin-6">
@@ -24,7 +27,7 @@ export default {
     },
     message: {
       type: String,
-      required: true,
+      default: '',
     },
   },
 };
