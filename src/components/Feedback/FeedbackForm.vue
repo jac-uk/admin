@@ -44,12 +44,6 @@
         </option>
       </Select>
       <TextArea
-        id="previous-action"
-        v-model="formData.previousAction"
-        label="What were you doing before the issue occurred?"
-        required
-      />
-      <TextArea
         id="complaint"
         v-model="formData.complaint"
         label="What happened?"
@@ -196,7 +190,6 @@ export default {
         url: '',
         screenshotFileName: '',
         criticalityType: '',
-        previousAction: '',
         expectation: '',
         complaint: '',
         contactDetailType: '',
@@ -211,7 +204,6 @@ export default {
       //   url: '',
       //   screenshotFileName: '',
       //   criticalityType: '',
-      //   previousAction: 'sss',
       //   expectation: 'ddddsd',
       //   complaint: 'dddd',
       //   contactDetailType: 'email',
