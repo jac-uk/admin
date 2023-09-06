@@ -12,6 +12,43 @@
         :disabled="true"
         required
       />
+      <FileUpload
+        id="screenshot-file"
+        ref="screenshot-file"
+        v-model="formData.screenshotFileName"
+        name="screenshot"
+        :path="screenshotUploadPath"
+        types="fileTypes"
+        label="Upload screenshot"
+        :enable-delete="true"
+        @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
+      />
+      <Select
+        id="criticality"
+        v-model="formData.criticality"
+        label="How critical is this issue"
+        required
+      >
+        <option
+          value=""
+          selected
+        >
+          Please select
+        </option>
+        <option
+          v-for="(criticalityType, index) in criticalityTypes"
+          :key="(index + 1)"
+          :value="criticalityType"
+        >
+          {{ criticalityType }}
+        </option>
+      </Select>
+      <TextArea
+        id="previous-action"
+        v-model="formData.previousAction"
+        label="What were you doing before the issue occurred?"
+        required
+      />
       <TextArea
         id="complaint"
         v-model="formData.complaint"
@@ -62,6 +99,38 @@
           type="text"
           required
         />
+
+        <div
+          id="accordion-default"
+          class="govuk-accordion"
+          data-module="govuk-accordion"
+        >
+          <div class="govuk-accordion__section">
+            <div class="govuk-accordion__section-header">
+              <h2 class="govuk-accordion__section-heading">
+                <span
+                  id="accordion-default-heading-1"
+                  class="govuk-accordion__section-button"
+                >
+                  Loop in other contacts?
+                </span>
+              </h2>
+            </div>
+            <div
+              id="accordion-default-content-1"
+              class="govuk-accordion__section-content"
+              aria-labelledby="accordion-default-heading-1"
+            >
+              <TextArea
+                id="other-contacts"
+                v-model="formData.otherContacts"
+                label="Add a list of comma-separated email addresses"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
         <TextField
           id="browser"
           v-model="formData.browser"
@@ -105,6 +174,8 @@ import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import { detect } from 'detect-browser';
+import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+
 //import ExtendedError from '@/errors/extendedError';
 export default {
   name: 'FeedbackForm',
@@ -113,38 +184,65 @@ export default {
     TextArea,
     Select,
     ErrorSummary,
+    FileUpload,
   },
   extends: Form,
-  emits: ['close'],
+  emits: ['close', 'success'],
   data() {
     return {
       client: null,
+      fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
         url: '',
+        screenshotFileName: '',
+        criticalityType: '',
+        previousAction: '',
         expectation: '',
         complaint: '',
         contactDetailType: '',
         contactDetails: '',
+        otherContacts: '',
         fullName: '',
         userId: '',
         browser: '',
         os: '',
       },
+      // formData: {
+      //   url: '',
+      //   screenshotFileName: '',
+      //   criticalityType: '',
+      //   previousAction: 'sss',
+      //   expectation: 'ddddsd',
+      //   complaint: 'dddd',
+      //   contactDetailType: 'email',
+      //   contactDetails: 'ddcds',
+      //   otherContacts: '',
+      //   fullName: 'dcdd',
+      //   userId: '',
+      //   browser: '',
+      //   os: '',
+      // },
+
       errors: [],
 
       // @TODO: Validation??
       contactDetailTypes: ['slack', 'teams', 'email'],
+      criticalityTypes: ['critical', 'major', 'minor', 'low'],
     };
   },
   computed: {
     email() {
-      return this.$store.state.auth.currentUser.email;
+      return this.$store.getters['auth/getEmail'];
     },
     userId() {
-      return this.$store.state.auth.currentUser.uid;
+      return this.$store.getters['auth/getUserId'];
     },
     displayName() {
-      return this.$store.state.auth.currentUser.displayName;
+      return this.$store.getters['auth/getDisplayName'];
+    },
+    screenshotUploadPath() {
+      //return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
+      return 'test';
     },
   },
   watch: {
@@ -170,8 +268,16 @@ export default {
       this.$emit('close');
     },
     async save() {
-      console.log('SAVE!');
+      this.$emit('success');
       // @TODO: See Request.vue
+    },
+    doFileUpload(val, field) {
+      console.log('Do Upload with...');
+      console.log(`Field: ${field}`);
+      console.log(`Val: ${val}`);
+      if (val) {
+        //this.$emit('updateApplication', { [field]: val });
+      }
     },
   },
 };

@@ -91,7 +91,16 @@ const module = {
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
     getDisplayName(state) {
-      return state.currentUser.displayName;
+      if (state.currentUser) {
+        return state.currentUser.displayName;
+      }
+      return null;
+    },
+    getUserId(state) {
+      if (state.currentUser) {
+        return state.currentUser.uid;
+      }
+      return null;
     },
   },
 };

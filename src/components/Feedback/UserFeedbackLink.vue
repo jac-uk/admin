@@ -14,14 +14,31 @@
         title="Support Issue Form"
         message="Fill in the form below to raise a support issue about this page"
       >
-        <FeedbackForm @close="closeFeedbackModal" />
+        <FeedbackForm
+          @close="closeFeedbackModal"
+          @success="openConfirmationModal"
+        />
       </SimpleModalInner>
+    </Modal>
+
+    <Modal
+      ref="confirmFeedbackModal"
+    >
+      <ModalInner
+        title="Confirm Feedback"
+        message="Your feedback has been forwarded to the team and you will be contacted shortly."
+        button-text="Close"
+        :cancelable="false"
+        @confirmed="closeConfirmFeedbackModal"
+        @close="closeConfirmFeedbackModal"
+      />
     </Modal>
   </div>
 </template>
 
 <script>
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 
 // @TODO: Preload as many details as possible
 
@@ -33,6 +50,7 @@ export default {
   name: 'UserFeedbackLink',
   components: {
     Modal,
+    ModalInner,
     SimpleModalInner,
     FeedbackForm,
   },
@@ -42,6 +60,13 @@ export default {
     },
     closeFeedbackModal() {
       this.$refs.feedbackModal.closeModal();
+    },
+    openConfirmationModal() {
+      this.$refs.feedbackModal.closeModal();
+      this.$refs.confirmFeedbackModal.openModal();
+    },
+    closeConfirmFeedbackModal() {
+      this.$refs.confirmFeedbackModal.closeModal();
     },
   },
 };

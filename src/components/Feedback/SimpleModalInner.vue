@@ -38,7 +38,7 @@ export default {
   text-align: left !important;
 }
 .modal__title {
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   border: solid 2px #1d70b8;
   background-color: #1d70b8;
