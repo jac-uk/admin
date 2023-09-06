@@ -113,7 +113,7 @@
           </p>
         </div>
       </div>
-      <UserFeedbackLink />
+      <UserFeedbackLink v-if="isSignedIn" />
     </header>
 
     <main
