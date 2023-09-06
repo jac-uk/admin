@@ -66,7 +66,7 @@
       />
 
       <div class="govuk-form-group">
-        <Select
+        <!-- <Select
           id="contact-detail-type"
           v-model="formData.contactDetailType"
           label="Best way to contact you"
@@ -89,6 +89,14 @@
         <TextField
           id="contactDetails"
           v-model="formData.contactDetails"
+          label="Your contact details"
+          type="text"
+          required
+        /> -->
+
+        <TextField
+          id="contactDetails"
+          v-model="email"
           label="Your contact details"
           type="text"
           required
@@ -218,7 +226,7 @@ export default {
       errors: [],
 
       // @TODO: Validation??
-      contactDetailTypes: ['slack', 'teams', 'email'],
+      //contactDetailTypes: ['slack', 'teams', 'email'],
       criticalityTypes: ['critical', 'major', 'minor', 'low'],
     };
   },
@@ -237,16 +245,16 @@ export default {
       return 'test';
     },
   },
-  watch: {
-    'formData.contactDetailType'(val) {
-      if (val === 'email') {
-        this.formData.contactDetails = this.email;
-      }
-      else {
-        this.formData.contactDetails = '';
-      }
-    },
-  },
+  // watch: {
+  //   'formData.contactDetailType'(val) {
+  //     if (val === 'email') {
+  //       this.formData.contactDetails = this.email;
+  //     }
+  //     else {
+  //       this.formData.contactDetails = '';
+  //     }
+  //   },
+  // },
   mounted() {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
@@ -260,6 +268,7 @@ export default {
       this.$emit('close');
     },
     async save() {
+      this.formData.contactDetails = this.email;
       this.$emit('success');
       // @TODO: See Request.vue
     },
