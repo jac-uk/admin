@@ -46,6 +46,7 @@ import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse
 
 import users from '@/store/users';
 import roles from '@/store/roles';
+import vacancy from '@/store/vacancy';
 
 //const store = new Vuex.Store({
 const store = createStore({
@@ -93,6 +94,7 @@ const store = createStore({
     tasks,
     ui,
     users,
+    vacancy,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
