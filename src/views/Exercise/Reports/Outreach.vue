@@ -102,7 +102,44 @@
       <div
         v-else
       >
-        <table class="govuk-table table-with-border">
+        <!--
+          @TODO: Doing the outreach (general) one which should be like professionBackground as can have multiple responses so modify the commented out one immediately
+          below to be like the professionBackground one and rem all you have to do really is change 'diversity' to 'report' in the variable being used in the bit of
+          template yhou copy across
+
+// jac-website
+//   JAC Website
+
+//   professional-body-website-or-email
+//   Professional body website or email (eg The Law Society)
+
+//   professional-body-magazine
+//   Professional body magazine
+
+//   judicial-office-extranet
+//   Judicial Office Extranet
+
+//   judging-your-future-newsletter
+// Judging Your Future Newsletter
+
+//   twitter
+//   Twitter
+
+//   linked-in
+// LinkedIn
+
+// word-of-mouth
+// Word of mouth
+
+// prefer-not-to-say
+//   I prefer not to answer this question
+
+// other
+// Other form of communication (please specify)
+
+        -->
+
+        <!-- <table class="govuk-table">
           <caption class="govuk-table__caption hidden">
             Outreach by exercise stage
           </caption>
@@ -112,7 +149,7 @@
                 scope="col"
                 class="govuk-table__header"
               >
-                How Did You Hear About The Vacancy?
+                Outreach
               </th>
               <th
                 scope="col"
@@ -123,19 +160,209 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <tr
-              v-for="(answer, key, answerIndex) in reduceReport(report[activeTab].outreach)"
-              :key="answerIndex"
-              class="govuk-table__row"
-            >
+            <tr class="govuk-table__row">
+              <th
+                scope="row"
+                class="govuk-table__header"
+              >
+                Barrister
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach.barrister" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                CILEx
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach.cilex" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Solicitor
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach.solicitor" />
+              </td>
+            </tr>
+
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach.other" />
+              </td>
+            </tr>
+
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].outreach.declaration"
+                  :report-total="report[activeTab].outreach.total"
+                  :is-declaration-total="true"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table> -->
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Attended outreach events by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
               <th
                 scope="col"
                 class="govuk-table__header"
               >
-                {{ $filters.lookup(key) }}
+                Attended outreach events
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="answer" />
+                <Stat :stat="report[activeTab].attended.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].attended.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].attended.declaration"
+                  :report-total="report[activeTab].attended.total"
+                  :is-declaration-total="true"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Participated in judicial workshadowing scheme by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Participated In Judicial Workshadowing Scheme
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].workshadowing.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].workshadowing.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].workshadowing.declaration"
+                  :report-total="report[activeTab].workshadowing.total"
+                  :is-declaration-total="true"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="govuk-table">
+          <caption class="govuk-table__caption hidden">
+            Has taken PAJE by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Has taken PAJE
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].hasTakenPAJE.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].hasTakenPAJE.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].hasTakenPAJE.declaration"
+                  :report-total="report[activeTab].hasTakenPAJE.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
@@ -205,7 +432,7 @@
           </tbody>
         </table>
         -->
-        
+
         <!--
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
