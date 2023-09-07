@@ -1,5 +1,16 @@
 <template>
   <div class="govuk-!-margin-right-3 govuk-!-margin-left-3">
+    <Banner
+      v-if="notPublishedDuringApplicationWindow"
+      message="This exercise is currently within the application window and is not published on the website."
+      status="warning"
+    />
+
+    <Banner
+      v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
+      message="This exercise has been approved. Now you can publish it to the website."
+      status="success"
+    />
     <template v-if="isReadyForApproval">
       <RejectionForm
         v-if="canApproveExercise && showRejectionForm"
@@ -39,20 +50,10 @@
       style="margin-bottom: 0;"
     />
 
-    <div :class="`govuk-!-margin-bottom-4 govuk-!-padding-4 ${isArchived ? 'background-red' : 'background-blue'}`">
-      <div style="display: flex; justify-content: space-between;">
-        <span>
-          {{ isPublished ? 'Published' : 'Unpublished' }}
-        </span>
-        <a
-          v-if="isApproved && canUpdateExercises"
-          class="govuk-link"
-          style="cursor: pointer;"
-          @click="openChangeStateModal"
-        >
-          Change stage
-        </a>
-      </div>
+    <div :class="`govuk-!-margin-bottom-4 govuk-!-padding-4 govuk-!-font-size-27 ${isArchived ? 'background-red' : 'background-blue'}`">
+      <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1 float-right">
+        {{ isPublished ? 'Published' : 'Unpublished' }}
+      </span>
       <span class="display-block govuk-!-font-size-27 govuk-!-margin-top-1">
         {{ $filters.lookup(exercise.state) }}
       </span>
@@ -67,16 +68,10 @@
       </div>
     </div>
 
-    <Modal ref="changeExerciseState">
-      <ChangeExerciseState
-        :state="exercise.state"
-        @close="closeChangeStateModal"
-      />
-    </Modal>
     <Modal ref="unlockExerciseModal">
       <ModalInner
         title="Unlock to edit the exercise"
-        message="Please be aware that the exercise will be open and editable,  and removed from the apply webstite if you unlock it. And it will need to be sent for approval to be published."
+        message="Please be aware that the exercise will be open and editable, and removed from the apply website if you unlock it. And it will need to be sent for approval to be published."
         button-text="I confirm, please unlock the exercise"
         @close="closeUnlockExerciseModal"
         @confirmed="unlock"
@@ -95,7 +90,7 @@ import SimpleBanner from '@/components/Micro/SimpleBanner.vue';
 import RejectionForm from '@/views/Exercise/Details/Overview/RejectionForm.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
-import ChangeExerciseState from '@/components/ModalViews/ChangeExerciseState.vue';
+import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -108,7 +103,7 @@ export default {
     SimpleBanner,
     Modal,
     ModalInner,
-    ChangeExerciseState,
+    Banner,
   },
   mixins: [permissionMixin],
   data() {
@@ -126,6 +121,9 @@ export default {
     rejectionReason() {
       const approval = this.getApproval;
       return (approval && approval.rejected) ? approval.rejected.message : '';
+    },
+    canPublishExercises() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canPublishExercise.value]);
     },
     approver() {
       const approval = this.getApproval;
@@ -174,6 +172,9 @@ export default {
     isPublished() {
       return this.exercise.published;
     },
+    notPublishedDuringApplicationWindow() {
+      return !this.exercise.published && (new Date() > new Date(this.exercise.applicationOpenDate) && new Date() < new Date(this.exercise.applicationCloseDate));
+    },
   },
   methods: {
     reject() {
@@ -184,12 +185,6 @@ export default {
     },
     confirmReject() {
       this.showRejectionForm = false;
-    },
-    openChangeStateModal() {
-      this.$refs.changeExerciseState.openModal();
-    },
-    closeChangeStateModal() {
-      this.$refs.changeExerciseState.closeModal();
     },
     openUnlockExerciseModal() {
       this.$refs.unlockExerciseModal.openModal();

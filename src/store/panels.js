@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
-import { firestoreAction } from 'vuexfire';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import clone from 'clone';
@@ -75,6 +75,11 @@ export default {
         batch.update(ref, data);
       });
       await batch.commit();
+    },
+  },
+  mutations: {
+    set(state, { name, value }) {
+      state[name] = value;
     },
   },
   state: {

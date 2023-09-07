@@ -1,25 +1,20 @@
-import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import clone from 'clone';
 
-// TODO delete this. it is not being used!
+const collection = firestore.collection('vacancies');
 
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(({ bindFirestoreRef }, { exerciseId, type }) => {
-      const firestoreRef = firestore.doc(`exercises/${exerciseId}/tasks/${type}`);
+    bind: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = collection.doc(id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    update: async (context, { exerciseId, type, data }) => {
-      const ref = firestore.doc(`exercises/${exerciseId}/tasks/${type}`);
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.update(data);
-    },
   },
   mutations: {
     set(state, { name, value }) {
@@ -28,5 +23,14 @@ export default {
   },
   state: {
     record: null,
+  },
+  getters: {
+    id: (state) => {
+      if (state.record === null) return null;
+      return state.record.id;
+    },
+    data: (state) => () => {
+      return clone(state.record);
+    },
   },
 };

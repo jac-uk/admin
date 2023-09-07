@@ -1,8 +1,5 @@
 import { createStore } from 'vuex';
 
-import { vuexfireMutations, firestoreOptions } from 'vuexfire';
-firestoreOptions.wait = true;
-
 // Vuex modules
 import ui from '@/store/ui';
 import auth from '@/store/auth';
@@ -47,6 +44,8 @@ import exerciseDiversity from '@/store/exercise/diversity/document';
 import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
+
+import vacancy from '@/store/vacancy';
 
 //const store = new Vuex.Store({
 const store = createStore({
@@ -93,13 +92,12 @@ const store = createStore({
     tasks,
     ui,
     users,
+    vacancy,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
   },
-  mutations: {
-    ...vuexfireMutations,
-  },
+  mutations: {},
   actions: {},
   getters: {
     appVersion: (state) => {
