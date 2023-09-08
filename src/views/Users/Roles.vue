@@ -177,12 +177,25 @@ export default {
       return permissions;
     },
   },
+  updated() {
+    const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
+    if (!canEditRolePermissions) {
+      this.disableEditRolePermissions();
+    }
+  },
   methods: {
     isRoleActive(roleId) {
       if (this.role) {
         return roleId === this.role.id;
       } else {
         return false;
+      }
+    },
+    disableEditRolePermissions() {
+      const roleRef = this.$refs.role;
+      if (roleRef) {
+        const inputs = roleRef.querySelectorAll('input');
+        inputs && inputs.forEach(input => input.disabled = true);
       }
     },
     forceUpdate() {
