@@ -27,7 +27,6 @@
                 class="govuk-header__navigation-item"
               >
                 <RouterLink
-                  v-if="authorisedToPerformAction"
                   :to="{ name: 'events' }"
                   class="govuk-header__link"
                 >
@@ -69,7 +68,7 @@
               </li>
 
               <li
-                v-if="authorisedToPerformAction"
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])"
                 class="govuk-header__navigation-item"
               >
                 <RouterLink
@@ -189,7 +188,6 @@
 
 <script>
 import { auth } from '@/firebase';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 export default {
@@ -198,11 +196,6 @@ export default {
     Messages,
   },
   mixins: [permissionMixin],
-  data() {
-    return {
-      authorisedToPerformAction: false,
-    };
-  },
   computed: {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
@@ -247,8 +240,6 @@ export default {
   methods: {
     async load() {
       await this.$store.dispatch('services/bind');
-      const email = auth.currentUser.email;
-      this.authorisedToPerformAction = await authorisedToPerformAction(email);
       if (this.canReadMessages) {
         await this.getMessages();
       }

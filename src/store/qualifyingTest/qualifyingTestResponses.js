@@ -1,10 +1,9 @@
 import firebase from '@firebase/app';
-import { auth, firestore } from '@/firebase';
+import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { QUALIFYING_TEST, QUALIFYING_TEST_RESPONSE } from '@jac-uk/jac-kit/helpers/constants';
-import { authorisedToPerformAction } from '@/helpers/authUsers';
 
 const collectionRef = firestore.collection('qualifyingTestResponses');
 
@@ -118,30 +117,22 @@ export default {
     },
     resetTest: async (context) => {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const email = auth.currentUser.email;
-      const canReset = await authorisedToPerformAction(email);
-      if (canReset) {
-        const rec = context.state.record;
-        const data = {
-          'status': 'activated',
-          'statusLog.reset': timestamp,
-        };
-        if (rec.isOutOfTime === true) {
-          data.isOutOfTime = false;
-        }
-        await context.dispatch('update', { data: data, id: rec.id });
+      const rec = context.state.record;
+      const data = {
+        'status': 'activated',
+        'statusLog.reset': timestamp,
+      };
+      if (rec.isOutOfTime === true) {
+        data.isOutOfTime = false;
       }
+      await context.dispatch('update', { data: data, id: rec.id });
     },
     markAsCompleted: async (context) => {
-      const email = auth.currentUser.email;
-      const canMarkAsCompleted = await authorisedToPerformAction(email);
-      if (canMarkAsCompleted) {
-        const rec = context.state.record;
-        const data = {
-          'status': 'completed',
-        };
-        await context.dispatch('update', { data: data, id: rec.id });
-      }
+      const rec = context.state.record;
+      const data = {
+        'status': 'completed',
+      };
+      await context.dispatch('update', { data: data, id: rec.id });
     },
   },
   mutations: {

@@ -27,31 +27,12 @@ const module = {
         if (state.authError) {
           commit('setAuthError', null);
         }
-        let allOk = false;
 
-        if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
-          allOk = true;
-        } else if ([
-          'drie@judicialappointments.digital',
-          'warren.searle@judicialappointments.digital',
-          'halcyon@judicialappointments.digital',
-          'tom.russell@judicialappointments.digital',
-          'nick.addy@judicialappointments.digital',
-          'isabel.coleman@justice.gov.uk',
-          'julian.sandler@justice.gov.uk',
-          'lisa.grant@justice.gov.uk',
-          'wincen.lowe@justice.gov.uk',
-          'lisias.loback@judicialappointments.digital',
-          'molly.meadows@justice.gov.uk',
-          'katharine.hanley@judicialappointments.gov.uk',
-          'digitalteam@judicialappointments.digital',
-          'seniorleader@judicialappointments.digital',
-          'jacstaff@judicialappointments.digital',
-          'readonly@judicialappointments.digital',
-        ].indexOf((user.email).toLowerCase()) >= 0) {
-          allOk = true;
-        }
-        if (allOk) {
+        const provider = user.providerData && user.providerData.length > 0 ? user.providerData[0] : null;
+        if (
+          user.email.match(/(.*@judicialappointments|.*@justice)[.](digital|gov[.]uk)/) &&
+          (provider && ['microsoft.com', 'google.com'].includes(provider.providerId))
+        ) {
           let shouldEnsureEmailVerified = false;
           if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
             user = { ...user, emailVerified: true };

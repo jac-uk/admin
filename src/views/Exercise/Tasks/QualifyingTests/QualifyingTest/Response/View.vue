@@ -26,7 +26,7 @@
           <dd class="govuk-summary-list__value">
             {{ $filters.lookup(response.status) }} {{ response.isOutOfTime ? '(auto-submitted)' : '' }}
             <button
-              v-if="authorisedToPerformAction && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
+              v-if="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
               :disabled="hasActivated"
               type="secondary"
               class="govuk-button govuk-button--secondary float-right govuk-!-margin-bottom-1"
@@ -35,7 +35,7 @@
               Reset
             </button>
             <ActionButton
-              v-if="authorisedToPerformAction && hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
+              v-if="hasPermissions([PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])"
               :disabled="hasCompleted"
               type="secondary"
               class="float-right govuk-!-margin-bottom-1 govuk-!-margin-right-1"
@@ -481,14 +481,12 @@
 </template>
 
 <script>
-import { auth } from '@/firebase';
 import { QUALIFYING_TEST } from '@jac-uk/jac-kit/helpers/constants';
 import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import QuestionDuration from '@/components/Micro/QuestionDuration.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import permissionMixin from '@/permissionMixin';
 import CustomHTML from '@/components/CustomHTML.vue';
@@ -510,7 +508,6 @@ export default {
       moveToTest: '',
       isEditingTestDate: false,
       activeTab: 'questions',
-      authorisedToPerformAction: false,
       history: null,
     };
   },
@@ -693,12 +690,10 @@ export default {
   },
   async created() {
     this.$store.dispatch('qualifyingTestResponses/bindRecord', { id: this.responseId });
-    const email = auth.currentUser.email;
-    this.authorisedToPerformAction = await authorisedToPerformAction(email);
   },
   methods: {
     confirmReset() {
-      if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
+      if (this.hasPermissions([this.PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])) {
         this.$store.dispatch('qualifyingTestResponses/resetTest');
         this.$refs['confirmResetModal'].closeModal();
       }
@@ -707,7 +702,7 @@ export default {
       this.$refs['confirmResetModal'].openModal();
     },
     markAsCompleted() {
-      if (this.authorisedToPerformAction && this.authorisedToPerformAction === true) {
+      if (this.hasPermissions([this.PERMISSIONS.qualifyingTestResponses.permissions.canUpdateQualifyingTestResponses.value])) {
         this.$store.dispatch('qualifyingTestResponses/markAsCompleted');
       }
     },
