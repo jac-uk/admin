@@ -291,12 +291,6 @@ export default {
     getTableData(params) {
       this.$store.dispatch('users/bind', params);
     },
-    forceUpdateTable() {
-      if (this.$refs['usersTable']) {
-        // force update table as Table component doesn't update when data is changed after vue3 upgrade
-        this.$refs['usersTable'].$forceUpdate();
-      }
-    },
     handleRoleChange(event, user) {
       const roleId = event.target.value;
       this.$store.dispatch('users/save', {
@@ -315,7 +309,6 @@ export default {
           userId: user.id,
           data: { disabled: false },
         });
-        this.forceUpdateTable();
         return true;
       } catch (error) {
         return false;
@@ -329,7 +322,6 @@ export default {
             disabled: true,
           },
         });
-        this.forceUpdateTable();
         return true;
       } catch (error) {
         return false;
@@ -342,7 +334,6 @@ export default {
         await this.$store.dispatch('users/delete', this.selectedUser.id);
         setTimeout(() => {
           this.closeDeleteUserModal();
-          this.forceUpdateTable();
         }, 200);
         return true;
       } catch (error) {
@@ -391,7 +382,6 @@ export default {
           setTimeout(() => {
             this.resetNewUser();
             this.closeCreateUserModal();
-            this.forceUpdateTable();
           }, 200);
           return true;
         } else if (data.status === 'error') {

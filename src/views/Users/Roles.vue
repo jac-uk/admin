@@ -198,10 +198,6 @@ export default {
         inputs && inputs.forEach(input => input.disabled = true);
       }
     },
-    forceUpdate() {
-      // force update as component doesn't update automatically when props are changed after vue3 upgrade
-      this.$forceUpdate();
-    },
     openCreateRoleModal(){
       this.$refs.modalRefCreateRole.openModal();
     },
@@ -213,7 +209,6 @@ export default {
       try {
         await this.$store.dispatch('roles/create', { roleName: this.newRoleName, enabledPermissions: [] });
         this.closeCreateRoleModal();
-        this.forceUpdate();
       } catch (error) {
         return false;
       }
@@ -235,7 +230,6 @@ export default {
             enabledPermissions,
           },
         });
-        this.forceUpdate();
         return true;
       } catch (error) {
         return false;
@@ -244,9 +238,6 @@ export default {
     async setDefaultRole() {
       try {
         await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
-        setTimeout(() => {
-          this.forceUpdate();
-        }, 500);
         return true;
       } catch (error) {
         return false;
