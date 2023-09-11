@@ -35,6 +35,39 @@ export default {
       const path = `/exercise/${exercise.id}/tasks/${this.stage}`;
       const sideNavigation = [];
       switch (stage) {
+      case 'all':
+        getTaskTypes(exercise).forEach(taskType => {
+          const task = this.$store.getters['tasks/getTask'](taskType);
+          let tag;
+          if (task && task.status === TASK_STATUS.COMPLETED) {
+            tag = {
+              title: 'Done',
+              class: 'govuk-tag--blue',
+            };
+          }
+          sideNavigation.push(
+            {
+              title: lookup(taskType),
+              tag: tag,
+              path: `${path}/${taskType}`,
+            }
+          );
+        });
+        if (isProcessing(exercise)) {
+          if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {
+            sideNavigation.push({
+              title: 'Independent Assessments',
+              path: `${path}/independent-assessments`,
+            });
+          }
+          sideNavigation.push(
+            {
+              title: 'Character Checks',
+              path: `${path}/character-checks`,
+            }
+          );
+        }
+        break;
       case 'shortlisting':
         if (isProcessing(exercise)) {
           if (!(exercise.assessmentMethods && exercise.assessmentMethods.independentAssessments === false)) {

@@ -25,7 +25,7 @@
               Send reminders
             </button>
             <ActionButton
-              v-if="status === 'applied' && hasPermissions([
+              v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"

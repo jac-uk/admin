@@ -1063,7 +1063,7 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: { name: 'exercise-stage-list', params: { stage: 'review' } },  // TODO change to applied
+            redirect: { name: 'exercise-stage-list', params: { stage: 'review' } },
           },
           {
             path: ':stage/',

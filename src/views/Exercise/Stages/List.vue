@@ -115,6 +115,7 @@ import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select';
 import { availableStatuses, getPreviousStage, getStagePassingStatuses } from '../../../helpers/exerciseHelper';
 import { EXERCISE_STAGE } from '../../../helpers/constants';
+import store from '@/store';
 
 export default {
   components: {
@@ -124,6 +125,15 @@ export default {
     Select,
   },
   mixins: [permissionMixin],
+  beforeRouteEnter(to) {
+    const stage = to.params.stage;
+    const exercise = store.state.exerciseDocument.record;
+    if (stage === 'review' && exercise) {
+      if (exercise._processingVersion >= 2) {
+        return { name: to.name, params: { stage: 'applied' } };
+      }
+    }
+  },
   data() {
     return {
       message: null,

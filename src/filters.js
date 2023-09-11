@@ -171,13 +171,14 @@ const lookup = (value) => {
   lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
   lookup[EXERCISE_STAGE.SHORTLISTED] = 'Shortlisted';
   lookup[EXERCISE_STAGE.SELECTABLE] = 'Selectable';
-  lookup[EXERCISE_STAGE.RECOMMENDED] = 'Recommended';
-  lookup[EXERCISE_STAGE.HANDOVER] = 'Handover';
+  lookup[EXERCISE_STAGE.RECOMMENDED] = 'Recommended to SCC';
+  lookup[EXERCISE_STAGE.HANDOVER] = 'Handover to JO';
 
   lookup[APPLICATION_STATUS.PASSED_NOT_RECOMMENDED] = 'Passed but not recommended to SCC';
   lookup[APPLICATION_STATUS.PASSED_RECOMMENDED] = 'Passed and recommended to SCC';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_FAILED] = 'Failed qualifying test';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_PASSED] = 'Passed qualifying test';
+  lookup[APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED] = 'No test submitted (first test)';
   lookup[APPLICATION_STATUS.RECOMMENDED_FUTURE] = 'Recommended for future appointment';
   lookup[APPLICATION_STATUS.RECOMMENDED_IMMEDIATE] = 'Recommended for immediate appointment';
   lookup[APPLICATION_STATUS.RECONSIDER] = 'SCC to reconsider';
@@ -186,10 +187,12 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Rejected as ineligible (statutory requirements)';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
+  lookup[APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED] = 'No test submitted (scenario test)';
   lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP second stage assessment';
   lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection day';
   lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection day';
-  lookup[APPLICATION_STATUS.SELECTION_PASSED] = 'Passed selection day';
+  lookup[APPLICATION_STATUS.SELECTION_OUTCOME_PASSED] = 'Passed selection';
+  lookup[APPLICATION_STATUS.SELECTION_OUTCOME_FAILED] = 'Failed selection';
   lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
@@ -222,6 +225,9 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Passed selection day';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
   lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';

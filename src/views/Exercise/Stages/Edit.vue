@@ -12,50 +12,54 @@
       v-model="newSelectedStatus"
       label="New status"
       hint=""
-      required
+      :required="!editEmpApplied"
     >
       <RadioItem
         v-for="item in availableStatuses"
         :key="item"
         :value="item"
-        :label="$filters.lookup(item)"
+        :label="`${$filters.lookup(item)}${getStarIfStagePassingStatus(item)}`"
       />
     </RadioGroup>
-    <CheckboxGroup
+    <Checkbox
+      v-if="!hasPassingStatus"
+      id="next-stage"
+      v-model="moveToNextStage"
+      label="Move to next stage"
+    >
+      {{ $filters.lookup(nextStage) }}
+    </Checkbox>
+    <Checkbox
       id="emp-edit-toggle"
       v-model="editEmpApplied"
       label="Equal Merit Provision"
-      hint=""
     >
-      <CheckboxItem
-        :value="true"
-        label="Update EMP"
+      Update EMP<br><br>
+      <RadioGroup
+        v-if="editEmpApplied"
+        id="emp-edit-input"
+        v-model="empApplied"
+        label=""
+        hint=""
+        required
+        :messages="{
+          required: 'Please specify a value'
+        }"
       >
-        <RadioGroup
-          id="emp-edit-input"
-          v-model="empApplied"
-          label=""
-          hint=""
-          required
-          :messages="{
-            required: 'Please specify a value'
-          }"
-        >
-          <RadioItem
-            value="gender"
-            label="Yes - EMP has been Applied on basis of gender"
-          />
-          <RadioItem
-            value="ethnicity"
-            label="Yes - EMP has been Applied on basis of ethnicity"
-          />
-          <RadioItem
-            :value="false"
-            label="No - EMP has not been Applied"
-          />
-        </RadioGroup>
-      </CheckboxItem>
-    </CheckboxGroup>
+        <RadioItem
+          value="gender"
+          label="Yes - EMP has been Applied on basis of gender"
+        />
+        <RadioItem
+          value="ethnicity"
+          label="Yes - EMP has been Applied on basis of ethnicity"
+        />
+        <RadioItem
+          :value="false"
+          label="No - EMP has not been Applied"
+        />
+      </RadioGroup>         
+    </Checkbox>     
     <button class="govuk-button">
       Save and continue
     </button>
@@ -67,23 +71,22 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import { availableStatuses, getNextStage } from '../../../helpers/exerciseHelper';
+import { availableStatuses, getNextStage, getStagePassingStatuses } from '../../../helpers/exerciseHelper';
 
 export default {
   components: {
     ErrorSummary,
     RadioGroup,
     RadioItem,
-    CheckboxGroup,
-    CheckboxItem,
+    Checkbox,
     BackLink,
   },
   extends: Form,
   data() {
     return {
+      moveToNextStage: false,
       newSelectedStatus: null,
       editEmpApplied: null,
       empApplied: null,
@@ -100,6 +103,16 @@ export default {
       const statuses = availableStatuses(this.exercise, this.stage);
       return statuses;
     },
+    stagePassingStatuses() {
+      const statuses = getStagePassingStatuses(this.exercise, this.stage);
+      return statuses;
+    },
+    hasPassingStatus() {
+      return this.stagePassingStatuses && this.stagePassingStatuses.length > 0;
+    },
+    nextStage() {
+      return getNextStage(this.exercise, this.stage);
+    },
     itemsToChange() {
       const selectedItems = this.$store.state.applicationRecords.selectedItems;
       return selectedItems;
@@ -112,14 +125,26 @@ export default {
     }
   },
   methods: {
-    async save() {
-      const nextStage = getNextStage(this.exercise, this.stage, this.newSelectedStatus);
-      const data = {};
-      data.status = this.newSelectedStatus;
-      if (nextStage !== this.stage) {
-        data.stage = nextStage;
+    getStarIfStagePassingStatus(status) {
+      if (this.stagePassingStatuses && this.stagePassingStatuses.indexOf(status) >= 0) {
+        return ' *';
       }
-      if (this.editEmpApplied[0]) {
+      return '';
+    },
+    async save() {
+      const data = {};
+      if (this.newSelectedStatus) {
+        data.status = this.newSelectedStatus;
+        if (this.moveToNextStage && this.nextStage !== this.stage) {
+          data.stage = this.nextStage;
+        } else {
+          const nextStage = getNextStage(this.exercise, this.stage, this.newSelectedStatus);
+          if (nextStage !== this.stage) {
+            data.stage = nextStage;
+          }
+        }
+      }
+      if (this.editEmpApplied) {
         data['flags.empApplied'] = this.empApplied;
       }
       await this.$store.dispatch('applicationRecords/updateStatus', data);

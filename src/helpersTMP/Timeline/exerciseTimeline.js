@@ -32,7 +32,7 @@ const createSelectionDay = (selectionDay) => {
     entry: `Selection Day - ${selectionDay.selectionDayLocation}`,
     date: selectionDay.selectionDayStart,
     dateString: null,
-    taskType: TASK_TYPE.SELECTION,
+    taskType: TASK_TYPE.SELECTION_DAY,
   };
 
   const selectionDayStart = getDateString(selectionDay.selectionDayStart);
