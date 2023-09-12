@@ -52,34 +52,11 @@
             All applications
           </option>
           <option
-            v-if="applicationRecordCounts.review"
-            value="review"
+            v-for="stage in availableStages"
+            :key="stage"
+            :value="stage"
           >
-            Review
-          </option>
-          <option
-            v-if="applicationRecordCounts.shortlisted"
-            value="shortlisted"
-          >
-            Shortlisted
-          </option>
-          <option
-            v-if="applicationRecordCounts.selected"
-            value="selected"
-          >
-            Selected
-          </option>
-          <option
-            v-if="applicationRecordCounts.recommended"
-            value="recommended"
-          >
-            Recommended
-          </option>
-          <option
-            v-if="applicationRecordCounts.handover"
-            value="handover"
-          >
-            Handover
+            {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
           </option>
         </Select>
         <Select
@@ -313,8 +290,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
-import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts, availableStatuses } from '@/helpers/exerciseHelper';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -335,7 +311,6 @@ export default {
       exerciseStage: 'all',
       candidateStatus: 'all',
       issueStatus: 'all',
-      availableStatuses: null,
       applicationRecords: [],
       unsubscribe: null,
       tableColumns: [
@@ -354,14 +329,19 @@ export default {
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
     },
+    availableStages() {
+      const stages = availableStages(this.exercise);
+      return stages.filter(stage => this.applicationRecordCounts[stage]);
+    },
+    availableStatuses() {
+      if (this.exerciseStage === 'all') return null;
+      const statuses = availableStatuses(this.exercise, this.exerciseStage);
+      return statuses;
+    },
   },
   watch: {
-    exerciseStage: function (valueNow) {
-      // populate the status dropdown, for the chosen stage
-      this.availableStatuses = availableStatuses(this.exercise, valueNow);
-      // reset the status dropdown to 'All'
+    exerciseStage: function () {
       this.candidateStatus = 'all';
-
       this.$refs['issuesTable'].reload();
     },
     candidateStatus: function() {

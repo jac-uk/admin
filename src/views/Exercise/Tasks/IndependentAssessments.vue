@@ -305,23 +305,11 @@
               Choose applications
             </option>
             <option
-              v-if="applicationRecordCounts.review"
-              value="review"
+              v-for="stage in availableStages"
+              :key="stage"
+              :value="stage"
             >
-              Review ({{ $filters.formatNumber(applicationRecordCounts.review) }})
-            </option>
-            <option
-              v-if="applicationRecordCounts.shortlisted"
-              value="shortlisted"
-            >
-              Shortlisted ({{ $filters.formatNumber(applicationRecordCounts.shortlisted) }})
-            </option>
-
-            <option
-              v-if="applicationRecordCounts.selected"
-              value="selected"
-            >
-              Selected ({{ $filters.formatNumber(applicationRecordCounts.selected) }})
+              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
             </option>
           </select>
 
@@ -375,7 +363,7 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadAssessment from '@/components/ModalViews/UploadAssessment.vue';
 import IndependentAssessmentsRequests from '@/components/ModalViews/IndependentAssessmentsRequests.vue';
-import { isArchived, applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { isArchived, applicationRecordCounts, availableStages } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import { ASSESSOR_TYPES } from '@/helpers/constants';
@@ -478,6 +466,10 @@ export default {
     },
     applicationRecordCounts() {
       return applicationRecordCounts(this.exercise);
+    },
+    availableStages() {
+      const stages = availableStages(this.exercise);
+      return stages.filter(stage => this.applicationRecordCounts[stage]);
     },
     warningMessage() {
       let msg = 'Please add';
