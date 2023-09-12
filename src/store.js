@@ -18,25 +18,15 @@ import clipboard from '@/store/clipboard';
 import users from '@/store/users';
 
 import applicationRecords from '@/store/applicationRecords';
-import stageReview from '@/store/stage/review';
-import stageSelected from '@/store/stage/selected';
-import stageHandover from '@/store/stage/handover';
-import stageRecommended from '@/store/stage/recommended';
-import stageShortlisted from '@/store/stage/shortlisted';
 import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
-import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
-import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
-import connectionMonitor from '@/store/connectionMonitor';
-import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
-import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
-// OLD: import panels from '@/store/panels';
-import panels from '@/store/panels/collection';
+import panels from '@/store/panels';
+// import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
@@ -66,7 +56,6 @@ const store = createStore({
     characterChecks,
     checks,
     clipboard,
-    connectionMonitor,
     events,
     exerciseCollection,
     exerciseCreateJourney,
@@ -82,16 +71,7 @@ const store = createStore({
     panellist,
     panellists,
     panels,
-    qualifyingTest,
-    qualifyingTestResponses,
-    qualifyingTestReports,
-    qualifyingTestReport,
     services,
-    stageReview,
-    stageSelected,
-    stageHandover,
-    stageRecommended,
-    stageShortlisted,
     task,
     tasks,
     ui,

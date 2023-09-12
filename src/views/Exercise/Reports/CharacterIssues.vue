@@ -164,7 +164,7 @@
               </div>
               <div class="govuk-grid-column-one-third text-right">
                 <RouterLink
-                  :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' } }"
+                  :to="{name: 'exercise-application', params: { applicationId: row.id }, query: {tab: 'issues' } }"
                   class="govuk-link print-none"
                   target="_blank"
                 >
@@ -262,7 +262,7 @@
                   </div>
                   <div class="govuk-grid-column-one-third text-right">
                     <a
-                      :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                      :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
                       class="govuk-link print-none"
                       target="_blank"
                     >
@@ -314,7 +314,7 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { applicationRecordCounts, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -358,17 +358,7 @@ export default {
   watch: {
     exerciseStage: function (valueNow) {
       // populate the status dropdown, for the chosen stage
-      if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
-      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
-        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
-        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
-        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
-      } else { // handover
-        this.availableStatuses = [];
-      }
+      this.availableStatuses = availableStatuses(this.exercise, valueNow);
       // reset the status dropdown to 'All'
       this.candidateStatus = 'all';
 

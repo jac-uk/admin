@@ -64,16 +64,9 @@ import ExerciseReportsOutreach from '@/views/Exercise/Reports/Outreach.vue';
 import ExerciseReportsCharacterIssues from '@/views/Exercise/Reports/CharacterIssues.vue';
 import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/EligibilityIssues.vue';
 import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments.vue';
-import ExerciseReportsQualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports.vue';
 import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency.vue';
 import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover.vue';
 import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation.vue';
-import QualifyingTestReportCreate from '@/views/Exercise/Reports/QualifyingTestReports/Create.vue';
-import QualifyingTestReport from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport.vue';
-import QualifyingTestReports from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReports.vue';
-import QualifyingTestReportEdit from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/Edit.vue';
-import QualifyingTestReportView from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/View.vue';
-import QualifyingTestReportViewScore from '@/views/Exercise/Reports/QualifyingTestReports/QualifyingTestReport/ViewScore.vue';
 import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels.vue';
 import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew.vue';
 import ExerciseReportsPanelsView from '@/views/Exercise/Reports/PanelsView.vue';
@@ -86,23 +79,10 @@ import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList.vue';
 
 // Exercise tasks
 import ExerciseTasks from '@/views/Exercise/Tasks.vue';
-// import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index.vue';
+import ExerciseTasksIndex from '@/views/Exercise/Tasks/Index.vue';
 import ExerciseTasksIndependentAssessments from '@/views/Exercise/Tasks/IndependentAssessments.vue';
 import ExerciseTasksCharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
 //import ExerciseTasksCharacterChecksEdit from '@/views/Exercise/Tasks/CharacterChecksEdit.vue';
-import QualifyingTests from '@/views/Exercise/Tasks/QualifyingTests/Cover.vue';
-import QualifyingTest from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest.vue';
-import QualifyingTestNew from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/New.vue';
-import QualifyingTestNewFromClipboard from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/NewFromClipboard.vue';
-import QualifyingTestEdit from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Edit.vue';
-import QualifyingTestView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/View.vue';
-import QualifyingTestQuestionBuilder from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/TestBuilder.vue';
-import QualifyingTestDryRun from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/DryRun.vue';
-import QualifyingTestReview from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Review.vue';
-import QualifyingTestResponses from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Responses.vue';
-import QualifyingTestResponse from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response.vue';
-import QualifyingTestResponseView from '@/views/Exercise/Tasks/QualifyingTests/QualifyingTest/Response/View.vue';
-import QualifyingTestsCover from '@/views/Exercise/Tasks/QualifyingTests/Cover.vue';
 
 // Exercise task
 import ExerciseTask from '@/views/Exercise/Tasks/Task.vue';
@@ -657,106 +637,12 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: { name: 'exercise-tasks-qualifying-tests' },
-          },
-          {
-            path: 'equal-merit-tie-breakers',
-            component: QualifyingTestsCover,
-            props: {
-              tieBreakers: true,
-            },
-            name: 'exercise-tasks-equal-merit-tie-breakers',
+            component: ExerciseTasksIndex,
+            name: 'exercise-tasks',
             meta: {
               requiresAuth: true,
-              title: 'Equal Merit Tie-Breakers',
+              title: 'Exercise Tasks',
             },
-          },
-          {
-            path: 'equal-merit-tie-breakers/new',
-            component: QualifyingTestNew,
-            props: {
-              isTieBreaker: true,
-            },
-            name: 'equal-merit-tie-breaker-new',
-            meta: {
-              requiresAuth: true,
-              title: 'Equal Merit Tie-Breakers | New',
-            },
-          },
-          {
-            path: 'equal-merit-tie-breakers/:qualifyingTestId/',
-            component: QualifyingTest,
-            children: [
-              {
-                path: '',
-                component: QualifyingTestView,
-                name: 'equal-merit-tie-breaker-view',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | View',
-                },
-              },
-              {
-                path: 'edit',
-                component: QualifyingTestEdit,
-                name: 'equal-merit-tie-breaker-edit',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | Edit',
-                },
-              },
-              {
-                path: 'build',
-                component: QualifyingTestQuestionBuilder,
-                name: 'equal-merit-tie-breaker-question-builder',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | Question Builder',
-                },
-              },
-              {
-                path: 'dry-run',
-                component: QualifyingTestDryRun,
-                name: 'equal-merit-tie-breaker-dry-run',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | Dry Run',
-                },
-              },
-              {
-                path: 'review',
-                component: QualifyingTestReview,
-                name: 'equal-merit-tie-breaker-review',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | Review',
-                },
-              },
-              {
-                path: 'responses/:status',
-                component: QualifyingTestResponses,
-                name: 'equal-merit-tie-breaker-responses',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-Breaker | Responses',
-                },
-              },
-              {
-                path: 'response/:responseId/',
-                component: QualifyingTestResponse,
-                children: [
-                  {
-                    path: '',
-                    component: QualifyingTestResponseView,
-                    name: 'equal-merit-tie-breaker-response-view',
-                    meta: {
-                      requiresAuth: true,
-                      title: 'Equal Merit Tie-Breaker | Response View',
-                    },
-                  },
-                ],
-              },
-            ],
           },
           {
             path: 'independent-assessments',
@@ -775,114 +661,6 @@ const routes = [
               requiresAuth: true,
               title: 'Character Checks | Exercise Tasks',
             },
-          },
-          {
-            path: 'qualifying-tests',
-            component: QualifyingTests,
-            props: {
-              tieBreakers: false,
-            },
-            name: 'exercise-tasks-qualifying-tests',
-            meta: {
-              requiresAuth: true,
-              title: 'Qualifying Tests | Exercise Tasks',
-            },
-          },
-          {
-            path: 'qualifying-tests/new',
-            component: QualifyingTestNew,
-            props: {
-              isTieBreaker: false,
-            },
-            name: 'qualifying-test-new',
-            meta: {
-              requiresAuth: true,
-              title: 'Create Qualifying Test | Exercise Tasks',
-            },
-          },
-          {
-            path: 'qualifying-tests/new-from-clipboard',
-            component: QualifyingTestNewFromClipboard,
-            name: 'qualifying-test-new-from-clipboard',
-            meta: {
-              requiresAuth: true,
-              title: 'Create Qualifying Test from Clipboard | Exercise Tasks',
-            },
-          },
-          {
-            path: 'qualifying-tests/:qualifyingTestId/',
-            component: QualifyingTest,
-            children: [
-              {
-                path: '',
-                component: QualifyingTestView,
-                name: 'qualifying-test-view',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'edit',
-                component: QualifyingTestEdit,
-                name: 'qualifying-test-edit',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Edit Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'build',
-                component: QualifyingTestQuestionBuilder,
-                name: 'qualifying-test-question-builder',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Edit Questions | Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'dry-run',
-                component: QualifyingTestDryRun,
-                name: 'qualifying-test-dry-run',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Dry Run | Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'review',
-                component: QualifyingTestReview,
-                name: 'qualifying-test-review',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Review | Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'responses/:status',
-                component: QualifyingTestResponses,
-                name: 'qualifying-test-responses',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Responses | Qualifying Test | Exercise Tasks',
-                },
-              },
-              {
-                path: 'response/:responseId/',
-                component: QualifyingTestResponse,
-                children: [
-                  {
-                    path: '',
-                    component: QualifyingTestResponseView,
-                    name: 'qualifying-test-response-view',
-                    meta: {
-                      requiresAuth: true,
-                      title: 'Response | Qualifying Test | Exercise Tasks',
-                    },
-                  },
-                ],
-              },
-            ],
           },
           {
             path: ':type',
@@ -1172,127 +950,6 @@ const routes = [
               title: 'Reasonable Adjustments | Exercise Reports',
             },
           },
-          {
-            path: 'qualifying-test-reports/',
-            component: EmptyRouterView,
-            children: [
-              {
-                path: '',
-                name: 'qualifying-test-reports',
-                component: ExerciseReportsQualifyingTestReports,
-                props: {
-                  tieBreakers: false,
-                },
-                meta: {
-                  requiresAuth: true,
-                  title: 'Qualifying Test Reports | Exercise Reports',
-                },
-              },
-              {
-                path: 'create',
-                name: 'qualifying-test-report-create',
-                component: QualifyingTestReportCreate,
-                props: {
-                  tieBreakers: false,
-                },
-                meta: {
-                  requiresAuth: true,
-                  title: 'Create Qualifying Test Report | Exercise Reports',
-                },
-              },
-              {
-                path: ':qualifyingTestReportId/',
-                component: QualifyingTestReport,
-                children: [
-                  {
-                    path: '',
-                    component: QualifyingTestReportView,
-                    name: 'qualifying-test-report-view',
-                    meta: {
-                      requiresAuth: true,
-                      title: 'Qualifying Test Report | Exercise Reports',
-                    },
-                  },
-                  {
-                    path: 'edit',
-                    component: QualifyingTestReportEdit,
-                    name: 'qualifying-test-report-edit',
-                    meta: {
-                      requiresAuth: true,
-                      title: 'Edit Qualifying Test Report | Exercise Reports',
-                    },
-                  },
-                  {
-                    path: ':score',
-                    component: QualifyingTestReportViewScore,
-                    name: 'qualifying-test-report-view-score',
-                    meta: {
-                      requiresAuth: true,
-                      title: 'Score | Qualifying Test Report | Exercise Reports',
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'equal-merit-tie-breaker-reports',
-            component: QualifyingTestReports,
-            props: {
-              tieBreakers: true,
-            },
-            name: 'equal-merit-tie-breaker-reports',
-            meta: {
-              requiresAuth: true,
-              title: 'Equal Merit Tie-breaker Reports',
-            },
-          },
-          {
-            path: 'equal-merit-tie-breaker-report-create',
-            component: QualifyingTestReportCreate,
-            props: {
-              tieBreakers: true,
-            },
-            name: 'equal-merit-tie-breaker-report-create',
-            meta: {
-              requiresAuth: true,
-              title: 'Equal Merit Tie-breaker Report | New',
-            },
-          },
-          {
-            path: 'equal-merit-tie-breaker-reports/:qualifyingTestReportId/',
-            component: QualifyingTestReport,
-            children: [
-              {
-                path: '',
-                component: QualifyingTestReportView,
-                name: 'equal-merit-tie-breaker-report-view',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-breaker Report | View',
-                },
-              },
-              {
-                path: 'edit',
-                component: QualifyingTestReportEdit,
-                name: 'equal-merit-tie-breaker-report-edit',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-breaker Report | Edit',
-                },
-              },
-              {
-                path: ':score',
-                component: QualifyingTestReportViewScore,
-                name: 'equal-merit-tie-breaker-report-view-score',
-                meta: {
-                  requiresAuth: true,
-                  title: 'Equal Merit Tie-breaker Report | View Score',
-                },
-              },
-            ],
-          },
-
           {
             name: 'agency',
             path: 'agency',

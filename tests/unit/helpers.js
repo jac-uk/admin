@@ -42,15 +42,6 @@ const mocks = {
       applications: {
         records: [],
       },
-      qualifyingTest: {
-        record: {
-          title: null,
-        },
-      },
-      qualifyingTestResponses: {
-        record: {
-        },
-      },
       exerciseDocument: {
         record: {},
       },
@@ -60,7 +51,6 @@ const mocks = {
       'vacancy/id': jest.fn(),
       'application/data': jest.fn(),
       'vacancies/bind': jest.fn(), //see views/vacancies.spec.js
-      'qualifyingTest/data': jest.fn(),
     },
   },
 };

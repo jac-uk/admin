@@ -281,7 +281,7 @@
                     </div>
                     <div class="govuk-grid-column-one-third text-right">
                       <a
-                        :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                        :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
                         class="govuk-link print-none"
                         target="_blank"
                       >

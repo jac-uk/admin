@@ -48,11 +48,6 @@ export default {
           name: 'reasonable-adjustments',
         },
         {
-          title: 'Qualifying Test Reports',
-          name: 'qualifying-test-reports',
-          query: { nav: '/reports/qualifying-test-reports' },
-        },
-        {
           title: 'Agency',
           name: 'agency',
         },
@@ -83,19 +78,19 @@ export default {
           );
         }
       }
-      if (exercise.selectionDays) {
-        sideNavigation.push(
-          {
-            title: 'Selection day',
-            path: `${path}/selection`,
-          }
-        );
-      }
       if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
         sideNavigation.push(
           {
             title: 'Scenario Responses',
             path: `${path}/scenario`,
+          }
+        );
+      }
+      if (exercise.selectionDays) {
+        sideNavigation.push(
+          {
+            title: 'Selection day',
+            path: `${path}/selection`,
           }
         );
       }
