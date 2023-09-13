@@ -3,9 +3,11 @@
   "version": "1.8.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode develop",
+    "dev": "npm run local:serve",
     "preview": "vite preview",
-    "serve": "vite --mode develop",
+    "serve": "npm run local:serve",
+    "local:serve": "export VITE_FIREBASE_USE_EMULATORS=true; vite --mode develop",
+    "develop:serve": "vite --mode develop",
     "staging:serve": "vite --mode staging",
     "production:serve": "vite --mode production",
     "develop:build": "vite build --mode develop;",
