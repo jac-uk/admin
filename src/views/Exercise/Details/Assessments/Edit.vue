@@ -32,7 +32,8 @@
             v-model="formData.selfAssessmentWordLimit"
             input-class="govuk-input--width-5"
             hint="What is the word limit for this assessment?"
-            :required="formData.assessmentMethods[method]"
+            required
+            type="number"
           />
         </Checkbox>
 
@@ -66,7 +67,10 @@ export default {
       // set default values
       assessmentMethods[method] = method === ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS;
     });
-    const defaults = { assessmentMethods };
+    const defaults = {
+      assessmentMethods,
+      selfAssessmentWordLimit: null,
+    };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       ASSESSMENT_METHOD,
