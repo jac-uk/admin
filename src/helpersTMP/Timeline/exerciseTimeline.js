@@ -32,7 +32,6 @@ const createSelectionDay = (selectionDay) => {
     entry: `Selection Day - ${selectionDay.selectionDayLocation}`,
     date: selectionDay.selectionDayStart,
     dateString: null,
-    taskType: TASK_TYPE.SELECTION_DAY,
   };
 
   const selectionDayStart = getDateString(selectionDay.selectionDayStart);
@@ -100,25 +99,24 @@ const exerciseTimeline = (data) => {
           entry: 'Shortlisting outcome',
           date: data.shortlistingOutcomeDate,
           dateString: getDateString(data.shortlistingOutcomeDate, 'month'),
-          taskType: TASK_TYPE.SHORTLISTING_OUTCOME,
         }
       );
     }
 
     if (data.shortlistingMethods.includes('paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Sift', data.siftStartDate, data.siftEndDate, TASK_TYPE.SIFT)
+        createShortlistingMethod('Sift', data.siftStartDate, data.siftEndDate)
       );
     }
 
     if (data.shortlistingMethods.includes('name-blind-paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Name-blind sift', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate, TASK_TYPE.SIFT)
+        createShortlistingMethod('Name-blind sift', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
       );
     }
 
     if (data.shortlistingMethods.includes('telephone-assessment')) {
-      timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate, TASK_TYPE.TELEPHONE_ASSESSMENT));
+      timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
     }
 
     if (data.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
@@ -216,7 +214,6 @@ const exerciseTimeline = (data) => {
         entry: 'Eligibility SCC',
         date: data.eligibilitySCCDate,
         dateString: getDateString(data.eligibilitySCCDate),
-        taskType: TASK_TYPE.ELIGIBILITY_SCC,
       }
     );
   }
@@ -275,7 +272,6 @@ const exerciseTimeline = (data) => {
         entry: 'Statutory consultation',
         date: data.statutoryConsultationDate,
         dateString: getDateString(data.statutoryConsultationDate),
-        taskType: TASK_TYPE.STATUTORY_CONSULTATION,
       }
     );
   }
@@ -286,7 +282,6 @@ const exerciseTimeline = (data) => {
         entry: 'Character and Selection SCC',
         date: data.characterAndSCCDate,
         dateString: getDateString(data.characterAndSCCDate),
-        taskType: TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       }
     );
   }
@@ -297,7 +292,6 @@ const exerciseTimeline = (data) => {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
         dateString: getDateString(data.finalOutcome, 'month'),
-        // taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
   }

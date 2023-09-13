@@ -93,16 +93,10 @@
             {{ $filters.lookup(row.status) }}
           </TableCell>
           <TableCell :title="tableColumns[4].title">
-            {{ $filters.toYesNo(row.flags.empApplied) }}
+            {{ $filters.lookup($filters.toYesNo(row.flags.empApplied)) }}
           </TableCell>
         </template>
       </Table>
-      <p
-        v-if="!applicationRecords.length"
-        class="govuk-body govuk-!-margin-top-4"
-      >
-        No Applications
-      </p>
     </form>
   </div>
 </template>
@@ -200,7 +194,6 @@ export default {
   },
   async created() {
     this.message = await this.$store.dispatch('applicationRecords/getMessages');
-    this.selectedItems = this.$store.state.applicationRecords.selectedItems;
     this.setPageTitle();
   },
   methods: {

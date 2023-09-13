@@ -3,7 +3,7 @@ import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { APPLICATION_STATUS } from '@/helpers/constants';
+import { getStageWithdrawalStatus } from '../helpers/exerciseHelper';
 import { lookup } from '@/filters';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
@@ -46,7 +46,9 @@ export default {
       });
       await batch.commit();
 
-      if (data.status === APPLICATION_STATUS.WITHDRAWN) {
+      const WITHDRAWAL_STATUS = getStageWithdrawalStatus(context.rootState.exerciseDocument.record);
+
+      if (data.status === WITHDRAWAL_STATUS) {
         selectedItems.map(async item => {
           await context.dispatch('application/withdraw', { applicationId: item }, { root: true });
         });
@@ -69,7 +71,7 @@ export default {
 
       if (
         data.stage ||
-        data.status === APPLICATION_STATUS.WITHDRAWN ||
+        data.status === WITHDRAWAL_STATUS ||
         data['flags.empApplied'] != null
       ) {
         context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });

@@ -141,7 +141,7 @@ export default {
             result[scoreCandidateId].pass = scorePass;
           }
         } else {
-          console.log('Application and final scores mismatch');
+          // console.log('Application and final scores mismatch');
         }
       }
       // Convert the object to an array

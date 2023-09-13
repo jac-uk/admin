@@ -13,7 +13,6 @@ import { beforeRouteEnter, getExpectedRouteName } from './helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import defaultView from './New/default.vue';
 import expired from './New/expired.vue';
-import expiredQT from './New/expiredQT.vue';
 import qualifyingTest from './New/qualifyingTest.vue';
 import stageOutcome from './New/stageOutcome.vue';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
@@ -23,7 +22,6 @@ export default {
   components: {
     defaultView,
     expired,
-    expiredQT,
     qualifyingTest,
     stageOutcome,
   },
@@ -52,10 +50,6 @@ export default {
         case TASK_TYPE.SHORTLISTING_OUTCOME:
         case TASK_TYPE.SELECTION_OUTCOME:
           return 'stageOutcome';
-        case TASK_TYPE.CRITICAL_ANALYSIS:
-        case TASK_TYPE.SITUATIONAL_JUDGEMENT:
-        case TASK_TYPE.SCENARIO:
-          return 'expiredQT';
         default:
           return 'expired';
         }

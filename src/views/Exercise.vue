@@ -221,12 +221,7 @@ export default {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
       if (this.isProcessing) {
-        if (this.exercise._processingVersion >= 2) {
-          subNavigation.push({ path: `${path}/tasks/shortlisting`, title: 'Shortlisting' });
-          subNavigation.push({ path: `${path}/tasks/selection`, title: 'Selection' });
-        } else {
-          subNavigation.push({ path: `${path}/tasks/all`, title: 'Tasks' });
-        }
+        subNavigation.push({ path: `${path}/tasks/all`, title: 'Tasks' });
         subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
         subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
       }

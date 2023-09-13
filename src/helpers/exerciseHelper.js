@@ -89,7 +89,8 @@ export {
   availableStatuses,
   getPreviousStage,
   getNextStage,
-  getStagePassingStatuses
+  getStagePassingStatuses,
+  getStageWithdrawalStatus
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -238,8 +239,7 @@ function getTimelineTasks(exercise, taskType) {
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
-      TASK_TYPE.SIFT,
-      TASK_TYPE.SELECTION_DAY,    
+      TASK_TYPE.EMP_TIEBREAKER,
     ];
     return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
   }
@@ -885,6 +885,14 @@ function getStagePassingStatuses(exercise, stage) {
     case EXERCISE_STAGE.RECOMMENDED:
       return [APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT, APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT];
     }  
+  }
+}
+
+function getStageWithdrawalStatus(exercise) {
+  if (exercise._processingVersion >= 2) {
+    return APPLICATION_STATUS.WITHDRAWN;
+  } else {
+    return APPLICATION_STATUS.WITHDREW_APPLICATION;
   }
 }
 
