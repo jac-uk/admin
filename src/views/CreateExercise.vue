@@ -81,6 +81,7 @@
               v-model="addMoreInfoSelection"
               label="What do you want to add?"
               hint="Select all that apply."
+              required
             >
               <CheckboxItem
                 value="summary"
