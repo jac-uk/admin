@@ -298,7 +298,7 @@
                 :key="columnIndex"
                 class="govuk-table__cell"
               >
-                {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
+                {{ $filters.lookup(row[column]) }}
               </td>
             </tr>
           </tbody>
@@ -843,10 +843,6 @@ export default {
       const i = this.columns.indexOf(item);
       console.log(`${item}-key = ${i}`);
       return i;
-    },
-    isUsingFilter(key) {
-      // return true if the column is a filter column
-      return ['_processing.stage', '_processing.status'].includes(key);
     },
   },
 };
