@@ -298,7 +298,7 @@
                 :key="columnIndex"
                 class="govuk-table__cell"
               >
-                {{ $filters.lookup(row[column]) }}
+                {{ isUsingFilter(column) ? $filters.lookup(row[column]) : row[column] }}
               </td>
             </tr>
           </tbody>
@@ -456,9 +456,9 @@ export default {
             'personalDetails.professionalName',
             'personalDetails.phone',
             'personalDetails.nationalInsuranceNumber',
-            'personalDetails.reasonableAdjustmentsDetails',
             'personalDetails.email',
             'personalDetails.reasonableAdjustments',
+            'personalDetails.reasonableAdjustmentsDetails',
             'personalDetails.address.current',
             'personalDetails.address.currentMoreThan5Years',
             'personalDetails.address.previous',
@@ -611,9 +611,9 @@ export default {
         '_processing.stage': { label: 'Stage', type: String },
         'personalDetails.phone': { label: 'Phone', type: String },
         'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String },
-        'personalDetails.reasonableAdjustmentsDetails': { label: 'reasonable adjustments details', type: String },
         'personalDetails.email': { label: 'Email', type: String },
         'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
+        'personalDetails.reasonableAdjustmentsDetails': { label: 'Reasonable adjustments details', type: String },
         'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date },
         'personalDetails.placeOfBirth': { label: 'Place of birth', type: String },
         'personalDetails.title': { label: 'Title', type: String },
@@ -843,6 +843,10 @@ export default {
       const i = this.columns.indexOf(item);
       console.log(`${item}-key = ${i}`);
       return i;
+    },
+    isUsingFilter(key) {
+      // return true if the column is a filter column
+      return ['_processing.stage', '_processing.status'].includes(key);
     },
   },
 };
