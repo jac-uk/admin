@@ -757,7 +757,6 @@ export default {
       // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
       // value to item-key
       const i = this.columns.indexOf(item);
-      console.log(`${item}-key = ${i}`);
       return i;
     },
     isUsingFilter(key) {

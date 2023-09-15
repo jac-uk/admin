@@ -192,7 +192,6 @@ function getNextProcessingStage(processingStage) {
 }
 
 function getProcessingEntryStage(exercise, processingStage) {
-  console.log('getEntryStage for exercise', exercise.referenceNumber);
   switch (processingStage) {
   case PROCESSING_STAGE.SHORTLISTING:
     // TO DO check for staged applications as shortlisting may start with registration rather than applied
@@ -207,7 +206,6 @@ function getProcessingEntryStage(exercise, processingStage) {
 }
 
 function getProcessingExitStage(exercise, processingStage) {
-  console.log('getExitStage for exercise', exercise.referenceNumber);
   switch (processingStage) {
   case PROCESSING_STAGE.SHORTLISTING:
     return EXERCISE_STAGE.SHORTLISTED;
@@ -732,8 +730,6 @@ function isApplicationPartAsked(exercise, part) {
   } else {
     isAsked = true;
   }
-
-  console.log('isApplicationPartAsked', part, isAsked);
   return isAsked;
 }
 
