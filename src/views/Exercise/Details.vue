@@ -73,11 +73,13 @@ export default {
           title: 'Application process',
           path: `${path}/application-content`,
         },
-        {
+      ];
+      if (this.exercise._processingVersion >= 2) {
+        sideNavigation.push({
           title: 'Additional settings',
           path: `${path}/additional-settings`,
-        },
-      ];
+        });
+      }
       if (this.exercise.inviteOnly) {
         sideNavigation.splice(1, 0, { title: 'Exercise invitations', path: `${path}/invitations` });
       }
