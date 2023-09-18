@@ -111,7 +111,7 @@ const REPORTS = {
           title: `${lookup('noAnswer')}`,
         },
       ],
-      socialMobility: [   // THIS VARIES SO WILL BE APPENDED TO BEFORE BEING RETURNED
+      attendedUKStateSchool: [
         {
           key: 'attendedUKStateSchool',
           title: `${lookup('attendedUKStateSchool')}`,
@@ -153,17 +153,20 @@ const pre04012023SocialMobility = {
 };
 
 const post04012023SocialMobility = {
-  key: 'parentsAttendedUniversity',
-  title: `${lookup('parentsAttendedUniversity')}`,
+  key: 'parentsNotAttendedUniversity',
+  title: `${lookup('parentsNotAttendedUniversity')}`,
 };
 
-const getReports = (applicationOpenDate) => {
+const getReports = (applicationOpenDate, exerciseRef) => {
+  const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(exerciseRef);
   const mergedReports = _cloneDeep(REPORTS);
-  if (applicationOpenDate > new Date('2023-04-01')) {
-    mergedReports.ApplicationStageDiversity.legend.socialMobility.push(post04012023SocialMobility);
+  if (applicationOpenDate > new Date('2023-04-01') && !usesPre01042023Questions) {
+    mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity = [];
+    mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity.push(post04012023SocialMobility);
   }
   else {
-    mergedReports.ApplicationStageDiversity.legend.socialMobility.push(pre04012023SocialMobility);
+    mergedReports.ApplicationStageDiversity.legend.firstGenerationUniversity = [];
+    mergedReports.ApplicationStageDiversity.legend.firstGenerationUniversity.push(pre04012023SocialMobility);
   }
   return mergedReports;
 };
