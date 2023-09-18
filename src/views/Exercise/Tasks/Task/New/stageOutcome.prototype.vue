@@ -429,19 +429,19 @@
 </template>
 
 <script>
-import defaultView from './default';
-import FullScreenButton from '@/components/Page/FullScreenButton';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList';
-import Table from '@jac-uk/jac-kit/components/Table/Table';
-import TableCell from '@jac-uk/jac-kit/components/Table/TableCell';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal';
-import TitleBar from '@/components/Page/TitleBar';
-import StatusTag from '../StatusChanges/StatusTag';
-import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary';
-import Notes from '@/components/Notes/Notes';
-import Form from '@/components/Page/Form';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import defaultView from './default.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import TitleBar from '@/components/Page/TitleBar.vue';
+import StatusTag from '../StatusChanges/StatusTag.vue';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import Notes from '@/components/Notes/Notes.vue';
+import Form from '@/components/Page/Form.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { generateApplications, randomArrayItem, randomNumber } from './dummyData';
 import { APPLICATION_STATUS } from '@/helpers/constants';
 import { getTableData } from '@/helpers/tableHelper';

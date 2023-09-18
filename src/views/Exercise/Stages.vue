@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import SideNavigation from '@/components/Navigation/SideNavigation';
+import SideNavigation from '@/components/Navigation/SideNavigation.vue';
 import { availableStages } from '../../helpers/exerciseHelper';
 
 export default {

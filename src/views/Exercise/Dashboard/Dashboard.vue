@@ -142,7 +142,7 @@ import AssignedCommissioner from './OverviewPanels/AssignedCommissioner.vue';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-import Chart from '@/components/Chart';
+import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
