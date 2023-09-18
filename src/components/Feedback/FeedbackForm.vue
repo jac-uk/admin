@@ -57,7 +57,7 @@
         v-model="formData.screenshotFileName"
         name="screenshot"
         :path="screenshotUploadPath"
-        types="fileTypes"
+        :types="fileTypes"
         label="Upload screenshot"
         :enable-delete="true"
         @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
