@@ -465,7 +465,6 @@ export default {
             'personalDetails.VATNumbers',
             'status',
             'appliedAt',
-            'interestedInPartTime',
             'applyingUnderSchedule2d',
             'canGiveReasonableLOS',
             'applyingUnderSchedule2Three',
@@ -501,6 +500,13 @@ export default {
             'equalityAndDiversitySurvey.attendedOutreachEvents',
             'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme',
             'equalityAndDiversitySurvey.hasTakenPAJE',
+          ],
+        },
+        {
+          name: 'Part Time Working Preferences',
+          keys: [
+            'interestedInPartTime',
+            'partTimeWorkingPreferencesDetails',
           ],
         },
         {
@@ -604,6 +610,7 @@ export default {
         status: { label: 'Application status', type: String },
         appliedAt: { label: 'Application date', type: Date },
         interestedInPartTime: { label: 'Interested in part time?', type: Boolean },
+        partTimeWorkingPreferencesDetails: { label: 'Salaried part-time work (SPTW) - Details', type: String },
         applyingUnderSchedule2d: { label: 'Applying under schedule 2d?', type: Boolean },
         canGiveReasonableLOS: { label: 'Can give reasonable LOS?', type: Boolean },
         applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
