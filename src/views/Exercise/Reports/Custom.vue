@@ -466,7 +466,6 @@ export default {
             'status',
             'appliedAt',
             'applyingUnderSchedule2d',
-            'canGiveReasonableLOS',
             'applyingUnderSchedule2Three',
             '_processing.status',
             '_processing.stage',
@@ -525,7 +524,7 @@ export default {
           ],
         },
         {
-          name: 'Character Issues',
+          name: 'Gaps in Employment',
           keys: [
             'employmentGaps',
           ],
@@ -553,6 +552,13 @@ export default {
             'charteredInstituteBuildingNumber',
             'charteredInstituteEnvironmentalHealthInformation',
             'charteredInstituteEnvironmentalHealthDate',
+          ],
+        },
+        {
+          name: 'Reasonable Length of Service',
+          keys: [
+            'canGiveReasonableLOS',
+            'cantGiveReasonableLOSDetails',
           ],
         },
         {
@@ -612,7 +618,8 @@ export default {
         interestedInPartTime: { label: 'Interested in part time?', type: Boolean },
         partTimeWorkingPreferencesDetails: { label: 'Salaried part-time work (SPTW) - Details', type: String },
         applyingUnderSchedule2d: { label: 'Applying under schedule 2d?', type: Boolean },
-        canGiveReasonableLOS: { label: 'Can give reasonable LOS?', type: Boolean },
+        canGiveReasonableLOS: { label: 'Can work a reasonable length of service', type: Boolean },
+        cantGiveReasonableLOSDetails: { label: 'Can work a reasonable length of service (details)', type: String },
         applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
         '_processing.status': { label: 'Status (admin)', type: String },
         '_processing.stage': { label: 'Stage', type: String },
