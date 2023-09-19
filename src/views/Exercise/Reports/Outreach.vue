@@ -102,44 +102,7 @@
       <div
         v-else
       >
-        <!--
-          @TODO: Doing the outreach (general) one which should be like professionBackground as can have multiple responses so modify the commented out one immediately
-          below to be like the professionBackground one and rem all you have to do really is change 'diversity' to 'report' in the variable being used in the bit of
-          template yhou copy across
-
-// jac-website
-//   JAC Website
-
-//   professional-body-website-or-email
-//   Professional body website or email (eg The Law Society)
-
-//   professional-body-magazine
-//   Professional body magazine
-
-//   judicial-office-extranet
-//   Judicial Office Extranet
-
-//   judging-your-future-newsletter
-// Judging Your Future Newsletter
-
-//   twitter
-//   Twitter
-
-//   linked-in
-// LinkedIn
-
-// word-of-mouth
-// Word of mouth
-
-// prefer-not-to-say
-//   I prefer not to answer this question
-
-// other
-// Other form of communication (please specify)
-
-        -->
-
-        <!-- <table class="govuk-table">
+        <table class="govuk-table">
           <caption class="govuk-table__caption hidden">
             Outreach by exercise stage
           </caption>
@@ -165,32 +128,71 @@
                 scope="row"
                 class="govuk-table__header"
               >
-                Barrister
+                JAC Website
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach.barrister" />
+                <Stat :stat="report[activeTab].outreach['jac-website']" />
               </td>
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                CILEx
+                Professional body website or email (eg The Law Society)
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach.cilex" />
+                <Stat :stat="report[activeTab].outreach['professional-body-website-or-email']" />
               </td>
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                Solicitor
+                Professional body magazine
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach.solicitor" />
+                <Stat :stat="report[activeTab].outreach['professional-body-magazine']" />
               </td>
             </tr>
-
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                Other
+                Judicial Office Extranet
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach['judicial-office-extranet']" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Judging Your Future Newsletter
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach['judging-your-future-newsletter']" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Twitter
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach.twitter" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                LinkedIn
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach['linked-in']" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Word of mouth
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach['word-of-mouth']" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Other form of communication
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="report[activeTab].outreach.other" />
@@ -210,7 +212,7 @@
               </td>
             </tr>
           </tbody>
-        </table> -->
+        </table>
 
         <table class="govuk-table">
           <caption class="govuk-table__caption hidden">
@@ -367,144 +369,6 @@
             </tr>
           </tbody>
         </table>
-
-        <!--
-        <table class="govuk-table">
-          <caption class="govuk-table__caption hidden">
-            Social mobility by selected stage
-          </caption>
-          <thead class="govuk-table__header">
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Social mobility
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header govuk-table__header--numeric"
-              >
-                Applications
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Attended UK state school
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
-              </td>
-            </tr>
-            <tr
-              v-if="applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
-              class="govuk-table__row"
-            >
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                First generation to attend University
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
-              </td>
-            </tr>
-            <tr
-              v-else-if="'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
-              class="govuk-table__row"
-            >
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Parents attended University
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        -->
-
-        <!--
-        <table class="govuk-table table-with-border">
-          <caption class="govuk-table__caption hidden">
-            Gender by exercise stage
-          </caption>
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP status
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header govuk-table__header--numeric"
-              >
-                Applications
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            v-if="diversity[activeTab].emp"
-            class="govuk-table__body"
-          >
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP Not applied
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.noAnswer" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP applied
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.applied" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP applied on basis of ethnicity
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.ethnicity" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP applied on basis of gender
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.gender" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        -->
       </div>
     </div>
   </div>
