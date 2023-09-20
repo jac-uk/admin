@@ -19,6 +19,34 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
+    bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = collection.doc(id);
+      return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
+      return unbindFirestoreRef('record');
+    }),
+    create: async (_, { id, data }) => {
+      if (id) {
+        await collection.doc(id).set(data);
+        return { id, ...data };
+      }
+      return await collection.add(data);
+    },
+    get: async (_, userId) => {
+      try {
+        const doc = await collection.doc(userId).get();
+        if (doc.exists) {
+          return {
+            id: userId,
+            ...doc.data(),
+          };
+        }
+        return null;
+      } catch (error) {
+        return null;
+      }
+    },
     save: async (_, { userId, data }) => {
       const ref = collection.doc(userId);
       await ref.set(data, { merge: true });

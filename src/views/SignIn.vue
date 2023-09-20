@@ -67,14 +67,15 @@ export default {
     signOut() {
       auth.signOut();
     },
-    checkIfNewUser(user) {
-      if (user.additionalUserInfo.isNewUser) {
-        this.disableNewUser(auth.currentUser.uid).then(() => {
-          this.signOut();
-        }).catch(() => {
-          this.signOut();
-        });
-      }
+    checkIfNewUser() {
+      // if (user.additionalUserInfo.isNewUser) {
+      //   // new user
+      //   this.disableNewUser(auth.currentUser.uid).then(() => {
+      //     this.signOut();
+      //   }).catch(() => {
+      //     this.signOut();
+      //   });
+      // }
     },
     loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();

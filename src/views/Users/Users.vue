@@ -124,15 +124,6 @@
           style="text-align: left;"
         >
           <TextField
-            id="displayName"
-            v-model="newUser.displayName"
-            label="Name"
-            type="text"
-            autocomplete="off"
-            required
-          />
-
-          <TextField
             id="email"
             v-model="newUser.email"
             label="Email"
@@ -153,16 +144,6 @@
           >
             Please use a JAC email address
           </p>
-
-          <TextField
-            id="password"
-            v-model="newUser.password"
-            label="Password"
-            hint="The password must be a string with at least 6 characters."
-            type="password"
-            autocomplete="off"
-            required
-          />
 
           <div class="govuk-form-group">
             <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
@@ -186,7 +167,7 @@
         <ActionButton
           type="primary"
           class="govuk-!-margin-right-3"
-          :disabled="!newUser.displayName || !newUser.email || isDuplicateEmail || isNotJACEmail || !isValidPassword || !newUser.roleId"
+          :disabled="!newUser.email || isDuplicateEmail || isNotJACEmail || !newUser.roleId"
           :action="createUser"
         >
           Save
@@ -203,6 +184,7 @@
 </template>
 
 <script>
+import firebase from '@firebase/app';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -210,9 +192,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Roles from './Roles.vue';
-import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
-import { convertPermissions } from '@/permissions';
 
 export default {
   name: 'Users',
@@ -230,17 +210,16 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Name', sort: 'displayName', direction: 'asc', default: true },
-        { title: 'Email' },
+        { title: 'Name', sort: 'displayName' },
+        { title: 'Email', direction: 'asc', default: true },
         { title: 'Role' },
         { title: 'Action' },
       ],
       selectedUser: null,
       newUser: {
         email: '',
-        password: '',
-        displayName: '',
         roleId: '',
+        status: 'pending',
       },
       isExistingEmail: false,
     };
@@ -272,9 +251,6 @@ export default {
     },
     isNotJACEmail() {
       return this.newUser.email && !this.newUser.email.match(/@judicialappointments.(digital|gov.uk)$/);
-    },
-    isValidPassword() {
-      return this.newUser.password.length >= 6;
     },
     defaultUserRoleId() {
       const role = this.roles.find(r => r.isDefault);
@@ -365,32 +341,20 @@ export default {
     resetNewUser() {
       this.newUser = {
         email: '',
-        password: '',
-        displayName: '',
         roleId: '',
+        status: 'pending',
       };
     },
     async createUser() {
       try {
-        const role = this.roles.find(r => r.id === this.newUser.roleId);
-        const res = await functions.httpsCallable('createUser')({
+        const data = {
           ...this.newUser,
-          permissions: convertPermissions(role),
-        });
-        const data = res.data;
-        if (data.status === 'success') {
-          setTimeout(() => {
-            this.resetNewUser();
-            this.closeCreateUserModal();
-          }, 200);
-          return true;
-        } else if (data.status === 'error') {
-          const errorInfo = data.data.errorInfo;
-          if (errorInfo && errorInfo.code === 'auth/email-already-exists') {
-            this.isExistingEmail = true;
-          }
-        }
-        return false;
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+        await this.$store.dispatch('userInvitations/create', data);
+        this.resetNewUser();
+        this.closeCreateUserModal();
+        return true;
       } catch (error) {
         return false;
       }

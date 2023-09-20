@@ -45,6 +45,7 @@ import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
 import users from '@/store/users';
+import userInvitations from '@/store/userInvitations';
 import roles from '@/store/roles';
 import vacancy from '@/store/vacancy';
 
@@ -94,6 +95,7 @@ const store = createStore({
     tasks,
     ui,
     users,
+    userInvitations,
     vacancy,
   },
   state: {
