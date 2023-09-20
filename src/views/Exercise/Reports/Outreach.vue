@@ -35,21 +35,17 @@
               >
                 Export all data
               </button>
-              <button
+              <ActionButton
                 v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
-                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-                  PERMISSIONS.exercises.permissions.canReadExercises.value
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-                data-module="govuk-button"
-                @click="refreshReport"
+                type="primary"
+                :action="refreshReport"
               >
-                <span
-                  v-if="refreshingReport"
-                  class="spinner-border spinner-border-sm"
-                /> Refresh
-              </button>
+                Refresh
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -381,18 +377,19 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'Outreach',
   components: {
     TabsList,
     Stat,
+    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       report: null,
-      refreshingReport: false,
       unsubscribe: null,
       tabs: [
         {
@@ -454,9 +451,11 @@ export default {
   },
   methods: {
     async refreshReport() {
-      this.refreshingReport = true;
-      await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
-      this.refreshingReport = false;
+      try {
+        return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
+      } catch (error) {
+        return;
+      }
     },
     gatherReportData(stage) {
       const data = [];
