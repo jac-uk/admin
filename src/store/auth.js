@@ -95,6 +95,9 @@ const module = {
         auth.signOut();
       }
     },
+    setAuthError({ commit }, message) {
+      commit('setAuthError', message);
+    },
   },
   getters: {
     isSignedIn(state) {
