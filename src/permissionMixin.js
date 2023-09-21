@@ -8,6 +8,8 @@ const permissionMixin = {
   },
   computed: {
     rawPermissions() {
+      // return a list of all permissions with false values
+      // e.g. { canReadUsers: false, canCreateUsers: false, ... }
       const rawPermissions = {};
       for (const group of Object.keys(this.PERMISSIONS)) {
         for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
