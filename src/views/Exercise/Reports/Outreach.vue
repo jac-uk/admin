@@ -262,109 +262,111 @@
           </tbody>
         </table>
 
-        <table class="govuk-table">
-          <caption class="govuk-table__caption hidden">
-            Participated in judicial workshadowing scheme by exercise stage
-          </caption>
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Participated In Judicial Workshadowing Scheme
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header govuk-table__header--numeric"
-              >
-                Applications
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Yes
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].workshadowing.yes" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                No
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].workshadowing.no" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Declaration total
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat
-                  :stat="report[activeTab].workshadowing.declaration"
-                  :report-total="report[activeTab].workshadowing.total"
-                  :is-declaration-total="true"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <template v-if="isLegal">
+          <table class="govuk-table">
+            <caption class="govuk-table__caption hidden">
+              Participated in judicial workshadowing scheme by exercise stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Participated In Judicial Workshadowing Scheme
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Yes
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].workshadowing.yes" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  No
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].workshadowing.no" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="report[activeTab].workshadowing.declaration"
+                    :report-total="report[activeTab].workshadowing.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-        <table class="govuk-table">
-          <caption class="govuk-table__caption hidden">
-            Has taken PAJE by exercise stage
-          </caption>
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Has taken PAJE
-              </th>
-              <th
-                scope="col"
-                class="govuk-table__header govuk-table__header--numeric"
-              >
-                Applications
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Yes
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].hasTakenPAJE.yes" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                No
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].hasTakenPAJE.no" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Declaration total
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat
-                  :stat="report[activeTab].hasTakenPAJE.declaration"
-                  :report-total="report[activeTab].hasTakenPAJE.total"
-                  :is-declaration-total="true"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <table class="govuk-table">
+            <caption class="govuk-table__caption hidden">
+              Has taken PAJE by exercise stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Has taken PAJE
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Yes
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE.yes" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  No
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE.no" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="report[activeTab].hasTakenPAJE.declaration"
+                    :report-total="report[activeTab].hasTakenPAJE.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
       </div>
     </div>
   </div>
@@ -378,6 +380,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { isLegal } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'Outreach',
@@ -434,6 +437,9 @@ export default {
         }
       }
       return '';
+    },
+    isLegal() {
+      return isLegal(this.exercise);
     },
   },
   created() {
