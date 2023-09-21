@@ -1,6 +1,5 @@
 import { auth, functions } from '@/firebase';
 import { get } from 'lodash';
-import { convertPermissions } from '../permissions';
 
 const module = {
   namespaced: true,
@@ -94,15 +93,6 @@ const module = {
       } catch (error) {
         if (error.message) commit('setAuthError', error.message);
         auth.signOut();
-      }
-    },
-    async setUserRole({ commit }, role) {
-      if (role) {
-        commit('setUserRole', {
-          rolePermissions: convertPermissions(role),
-        });
-      } else {
-        commit('setAuthError', 'This user does not have a role');
       }
     },
   },

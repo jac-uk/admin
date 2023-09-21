@@ -406,26 +406,4 @@ const PERMISSIONS = {
   },
 };
 
-/*
- * Convert permissions using values from PERMISSIONS object
- * @param {Object} role - The role object from the firestore
- * @returns {Array} - An array of permissions
- */
-const convertPermissions = (role) => {
-  const convertedPermissions = [];
-  if (role?.enabledPermissions && role.enabledPermissions.length > 0) {
-    for (const permission of role.enabledPermissions) {
-      for (const group of Object.keys(PERMISSIONS)) {
-        for (const p of Object.keys(PERMISSIONS[group].permissions)) {
-          if (p === permission) {
-            convertedPermissions.push(PERMISSIONS[group].permissions[p].value);
-          }
-        }
-      }
-    }
-  }
-  return convertedPermissions;
-};
-
 export default PERMISSIONS;
-export { convertPermissions };
