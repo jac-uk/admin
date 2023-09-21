@@ -1,14 +1,28 @@
 <template>
   <div>
-    <button
+    <!-- <button
       class="user-feedback-link"
       type="button"
       @click="openModal"
     >
       Raise A Support Issue With This Page
-    </button>
+    </button> -->
+
+    <a
+      class="user-feedback-link"
+      title="User Feedback"
+      alt="User Feedback"
+      @click="openModal"
+    >
+      <img
+        src="@/assets/report-error-icon.svg"
+        style="width: 30px"
+      >
+    </a>
+
     <Modal
       ref="feedbackModal"
+      data-html2canvas-ignore
     >
       <SimpleModalInner
         title="Raise A Support Issue With This Page"
@@ -25,12 +39,20 @@
     >
       <ModalInner
         title="Confirm Feedback"
-        :message="confirmationMessage"
         button-text="Close"
         :cancelable="false"
         @confirmed="closeConfirmFeedbackModal"
         @close="closeConfirmFeedbackModal"
-      />
+      >
+        <template #body>
+          <div class="body-content modal__message govuk-body-l">
+            <div>Your feedback has been forwarded to the team and you will be contacted shortly.</div>
+            <div class="govuk-!-margin-top-2">
+              Your ticket number is: <strong>ABC123</strong>
+            </div>
+          </div>
+        </template>
+      </ModalInner>
     </Modal>
   </div>
 </template>
@@ -88,12 +110,9 @@ export default {
 .user-feedback-link {
   position: fixed;
   top: 20px;
-  right: 0;
-  padding: 10px;
-  background-color: #fff7bf;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  border-right: none;
+  right: 20px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
 </style>

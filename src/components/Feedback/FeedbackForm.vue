@@ -31,6 +31,36 @@
         :disabled="true"
         required
       /> -->
+
+      <!-- <button
+        type="button"
+        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+        @click="captureScreenshot"
+      >
+        Capture Screenshot
+      </button> -->
+
+      <label class="screenshot-label govuk-heading-m govuk-!-margin-bottom-2">Capture Screenshot</label>
+
+      <a
+        class="screenshot-link"
+        title="Capture Screenshot"
+        alt="Capture Screenshot"
+        @click="captureScreenshot"
+      ><img
+        src="@/assets/screenshot.svg"
+        style="width: 30px"
+      ></a>
+      <div>
+        <img
+          v-if="thumbnail"
+          :src="thumbnail"
+          :style="thumbnailStyle"
+          class="dashed-border"
+          alt="Screenshot Thumbnail"
+        >
+      </div>
+
       <Select
         id="criticality"
         v-model="formData.criticality"
@@ -51,7 +81,7 @@
           {{ criticalityType }}
         </option>
       </Select>
-      <FileUpload
+      <!-- <FileUpload
         id="screenshot-file"
         ref="screenshot-file"
         v-model="formData.screenshotFileName"
@@ -61,7 +91,7 @@
         label="Upload screenshot"
         :enable-delete="true"
         @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
-      />
+      /> -->
       <TextArea
         id="complaint"
         v-model="formData.complaint"
@@ -196,7 +226,8 @@ import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import { detect } from 'detect-browser';
-import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+//import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+import html2canvas from 'html2canvas';
 
 //import ExtendedError from '@/errors/extendedError';
 export default {
@@ -206,27 +237,41 @@ export default {
     TextArea,
     Select,
     ErrorSummary,
-    FileUpload,
+    //FileUpload,
   },
   extends: Form,
   emits: ['close', 'success'],
   data() {
     return {
+
+      image: {
+        src: '',
+        width: '0px',
+        height: '0px',
+      },
+
+      thumbnail: null,
+      thumbnailStyle: {
+        height: '100px',
+        width: 'auto', // Maintain aspect ratio
+      },
+
       client: null,
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
         url: '',
-        screenshotFileName: '',
+        //screenshotFileName: '',
         criticalityType: '',
         expectation: '',
         complaint: '',
-        contactDetailType: '',
-        contactDetails: '',
-        otherContacts: '',
+        //contactDetailType: '',
+        //contactDetails: '',
+        //otherContacts: '',
         fullName: '',
         userId: '',
         browser: '',
         os: '',
+        thumbnailFile: 'screenshot.pgn',  // @TODO: We don't actually use this (only for demo purposes)
       },
       // formData: {
       //   url: '',
@@ -291,6 +336,8 @@ export default {
       this.formData.contactDetails = this.email;
       this.$emit('success');
       // @TODO: See Request.vue
+      console.log('Feedback Form Data:');
+      console.log(JSON.parse(JSON.stringify(this.formData)));
     },
     doFileUpload(val, field) {
       console.log('Do Upload with...');
@@ -300,6 +347,38 @@ export default {
         //this.$emit('updateApplication', { [field]: val });
       }
     },
+
+    async captureScreenshot() {
+      //const elementToCapture = this.$el.querySelector('div:first-child');
+      const elementToCapture = document.body;
+
+      try {
+        const canvas = await html2canvas(elementToCapture);
+        const thumbnail = canvas.toDataURL('image/png');
+        this.thumbnail = thumbnail;
+
+        // console.log(`height: ${canvas.height}`);
+        // console.log(`width: ${canvas.width}`);
+
+      } catch (error) {
+        console.error('Error capturing screenshot:', error);
+      }
+    },
   },
 };
 </script>
+<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+.dashed-border {
+  border: 3px solid black;
+  border-style: dashed;
+}
+.screenshot-link {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.screenshot-label {
+  display: inline-block;
+  margin-right: 30px;
+}
+</style>
