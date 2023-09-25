@@ -243,7 +243,6 @@ export default {
   emits: ['close', 'success'],
   data() {
     return {
-
       image: {
         src: '',
         width: '0px',

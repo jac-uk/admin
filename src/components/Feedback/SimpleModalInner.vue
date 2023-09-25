@@ -2,6 +2,10 @@
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
       {{ title }}
+      <a
+        class="close-link"
+        @click="$emit('close')"
+      >x</a>
     </div>
     <p
       v-if="message"
@@ -30,6 +34,7 @@ export default {
       default: '',
     },
   },
+  emits: ['close'],
 };
 </script>
 
@@ -52,5 +57,10 @@ export default {
 }
 .deny {
   background-color: #f3f2f1;
+}
+.close-link {
+  position: absolute;
+  right: 15px;
+  cursor: pointer;
 }
 </style>

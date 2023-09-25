@@ -23,18 +23,35 @@
     <Modal
       ref="feedbackModal"
       data-html2canvas-ignore
+      class="fixed-width-modal"
     >
       <SimpleModalInner
         title="Raise A Support Issue With This Page"
+        @close="closeFeedbackModal(true)"
       >
-        <FeedbackForm
+        <div
+          v-if="showConfirmationModal"
+          class="body-content modal__message govuk-body-l"
+        >
+          <div>Your feedback has been forwarded to the team and you will be contacted shortly.</div>
+          <div class="govuk-!-margin-top-2">
+            Your ticket number is: <strong>ABC123</strong>
+          </div>
+        </div>
+        <!-- <FeedbackForm
+          v-else
           @close="closeFeedbackModal"
-          @success="openConfirmationModal"
+          @success="showConfirmationModal = true"
+        /> -->
+        <FeedbackForm
+          v-else
+          @close="closeFeedbackModal(false)"
+          @success="showConfirmationModal = true"
         />
       </SimpleModalInner>
     </Modal>
 
-    <Modal
+    <!-- <Modal
       ref="confirmFeedbackModal"
     >
       <ModalInner
@@ -53,13 +70,15 @@
           </div>
         </template>
       </ModalInner>
-    </Modal>
+    </Modal> -->
   </div>
 </template>
 
 <script>
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+//import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import Modal from '@/components/TESTER/Modal.vue';
+
+//import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 
 // @TODO: Preload as many details as possible
 
@@ -71,13 +90,15 @@ export default {
   name: 'UserFeedbackLink',
   components: {
     Modal,
-    ModalInner,
+    //ModalInner,
     SimpleModalInner,
     FeedbackForm,
   },
   data() {
     return {
       uniqueTicketNumber: null,
+
+      showConfirmationModal: false,
     };
   },
   computed: {
@@ -92,8 +113,11 @@ export default {
     openModal() {
       this.$refs.feedbackModal.openModal();
     },
-    closeFeedbackModal() {
-      this.$refs.feedbackModal.closeModal();
+    async closeFeedbackModal(resetConfirmation) {
+      await this.$refs.feedbackModal.closeModal();
+      if (resetConfirmation) {
+        this.showConfirmationModal = false;
+      }
     },
     openConfirmationModal() {
       this.$refs.feedbackModal.closeModal();
@@ -106,7 +130,10 @@ export default {
 };
 </script>
 
-<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
+<style type="text/css" rel="stylesheet/scss" lang="scss">
+/**
+* Important that this style block is not 'scoped' so that the .modal definition below applies to the modal in the sub component
+*/
 .user-feedback-link {
   position: fixed;
   top: 20px;
@@ -114,5 +141,10 @@ export default {
   padding: 0;
   margin: 0;
   cursor: pointer;
+}
+
+.modal {
+  width: 550px !important;
+  min-width: unset !important;
 }
 </style>
