@@ -29,7 +29,7 @@
           v-else
           class="govuk-summary-list__value"
         >
-          None
+          &nbsp;
         </dd>
       </div>
       <div
@@ -66,7 +66,7 @@
           v-else
           class="govuk-summary-list__value"
         >
-          None
+          &nbsp;
         </dd>
       </div>
       <div
