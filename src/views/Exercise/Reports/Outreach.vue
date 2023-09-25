@@ -119,7 +119,7 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
+            <!-- <tr class="govuk-table__row">
               <th
                 scope="row"
                 class="govuk-table__header"
@@ -192,6 +192,19 @@
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
                 <Stat :stat="report[activeTab].outreach.other" />
+              </td>
+            </tr> -->
+
+            <tr
+              v-for="item in reportKeys"
+              :key="item"
+              class="govuk-table__row"
+            >
+              <th class="govuk-table__header">
+                {{ $filters.lookup(item) }}
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].outreach[item]" />
               </td>
             </tr>
 
@@ -421,6 +434,17 @@ export default {
         },
       ],
       activeTab: 'applied',
+      reportKeys: [
+        'jac-website',
+        'professional-body-website-or-email',
+        'professional-body-magazine',
+        'judicial-office-extranet',
+        'judging-your-future-newsletter',
+        'twitter',
+        'linked-in',
+        'word-of-mouth',
+        'other',
+      ],
     };
   },
   computed: {
