@@ -192,29 +192,55 @@ function getNextProcessingStage(processingStage) {
 }
 
 function getProcessingEntryStage(exercise, processingStage) {
-  switch (processingStage) {
-  case PROCESSING_STAGE.SHORTLISTING:
-    // TO DO check for staged applications as shortlisting may start with registration rather than applied
-    return EXERCISE_STAGE.REVIEW; // will be APPLIED
-  case PROCESSING_STAGE.SELECTION:
-    return EXERCISE_STAGE.SHORTLISTED;
-  case PROCESSING_STAGE.RECOMMENDATION:
-    return EXERCISE_STAGE.SELECTABLE;
-  case PROCESSING_STAGE.HANDOVER:
-    return EXERCISE_STAGE.RECOMMENDED;
+  if (exercise._processingVersion >= 2) {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      // TO DO check for staged applications as shortlisting may start with registration rather than applied
+      return EXERCISE_STAGE.APPLIED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.SELECTABLE;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }
+  } else {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.REVIEW;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.SELECTED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }
   }
 }
 
 function getProcessingExitStage(exercise, processingStage) {
-  switch (processingStage) {
-  case PROCESSING_STAGE.SHORTLISTING:
-    return EXERCISE_STAGE.SHORTLISTED;
-  case PROCESSING_STAGE.SELECTION:
-    return EXERCISE_STAGE.SELECTABLE;
-  case PROCESSING_STAGE.RECOMMENDATION:
-    return EXERCISE_STAGE.RECOMMENDED;
-  case PROCESSING_STAGE.HANDOVER:
-    return EXERCISE_STAGE.HANDOVER;
+  if (exercise._processingVersion >= 2) {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SELECTABLE;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.RECOMMENDED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.HANDOVER;
+    }
+  } else {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SELECTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.RECOMMENDED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.HANDOVER;
+    }  
   }
 }
 
