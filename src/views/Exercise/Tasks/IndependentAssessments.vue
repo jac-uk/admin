@@ -179,7 +179,7 @@
           :page-size="50"
           :columns="tableColumns"
           :multi-select="!isDeleted"
-          search-map="_search"
+          :search-map="$searchMap.independentAssessments"
           :filters="filters"
           @change="getTableData"
         >

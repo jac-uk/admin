@@ -40,7 +40,7 @@
         :columns="tableColumns"
         multi-select
         :page-size="50"
-        search-map="_search"
+        :search-map="$searchMap.applicationRecords"
         :filters="[
           {
             title: 'Status',
