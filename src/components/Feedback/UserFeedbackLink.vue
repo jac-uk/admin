@@ -75,8 +75,7 @@
 </template>
 
 <script>
-//import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import Modal from '@/components/TESTER/Modal.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 
 //import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 
