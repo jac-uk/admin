@@ -357,6 +357,23 @@
                   <Stat :stat="report[activeTab].hasTakenPAJE.yes" />
                 </td>
               </tr>
+
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Online only
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE['online-only']" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Online and judge-led
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE['online-and-judge-led']" />
+                </td>
+              </tr>
               <tr class="govuk-table__row">
                 <th class="govuk-table__header">
                   No
@@ -511,7 +528,7 @@ export default {
       return data;
     },
     exportData(stage) {
-      let title = 'Diversity Report';
+      let title = 'Outreach Report';
       if (stage) {
         title = `${title} - ${stage}`;
       }
