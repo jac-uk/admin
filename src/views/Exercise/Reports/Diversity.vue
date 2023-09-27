@@ -141,36 +141,15 @@
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Gender Neutral
+              <th class="govuk-table__header">
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.genderNeutral" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Prefer not to say
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.preferNotToSay" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                Other
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].gender.other" />
+                <Stat
+                  :stat="diversity[activeTab].gender.declaration"
+                  :report-total="diversity[activeTab].gender.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
@@ -220,25 +199,15 @@
               </td>
             </tr>
             <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Prefer not to say
+              <th class="govuk-table__header">
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].ethnicity.preferNotToSay" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Other
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].ethnicity.other" />
+                <Stat
+                  :stat="diversity[activeTab].ethnicity.declaration"
+                  :report-total="diversity[activeTab].ethnicity.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
@@ -283,10 +252,14 @@
             </tr>
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
-                Prefer not to say
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].disability.preferNotToSay" />
+                <Stat
+                  :stat="diversity[activeTab].disability.declaration"
+                  :report-total="diversity[activeTab].disability.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
@@ -340,14 +313,7 @@
                 <Stat :stat="diversity[activeTab].professionalBackground.solicitor" />
               </td>
             </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Prefer not to say
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].professionalBackground.preferNotToSay" />
-              </td>
-            </tr>
+
             <tr class="govuk-table__row">
               <th class="govuk-table__header">
                 Other
@@ -356,14 +322,30 @@
                 <Stat :stat="diversity[activeTab].professionalBackground.other" />
               </td>
             </tr>
+
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="diversity[activeTab].professionalBackground.declaration"
+                  :report-total="diversity[activeTab].professionalBackground.total"
+                  :is-declaration-total="true"
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
 
-        <table class="govuk-table">
+        <table
+          v-if="'attendedUKStateSchool' in diversity[activeTab]"
+          class="govuk-table"
+        >
           <caption class="govuk-table__caption hidden">
             Social mobility by selected stage
           </caption>
-          <thead class="govuk-table__header">
+          <thead class="govuk-table__head">
             <tr class="govuk-table__row">
               <th
                 scope="col"
@@ -381,46 +363,119 @@
           </thead>
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
+              <th class="govuk-table__header">
                 Attended UK state school
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.attendedUKStateSchool" />
+                <Stat :stat="diversity[activeTab].attendedUKStateSchool.attendedUKStateSchool" />
               </td>
             </tr>
-            <tr
-              v-if="applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab].socialMobility"
-              class="govuk-table__row"
-            >
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                First generation to attend University
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.firstGenerationUniversity" />
-              </td>
-            </tr>
-            <tr
-              v-else-if="'parentsAttendedUniversity' in diversity[activeTab].socialMobility"
-              class="govuk-table__row"
-            >
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                Parents attended University
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].socialMobility.parentsAttendedUniversity" />
+                <Stat
+                  :stat="diversity[activeTab].attendedUKStateSchool.declaration"
+                  :report-total="diversity[activeTab].attendedUKStateSchool.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
         </table>
+
+        <template v-if="!applicationOpenDatePost01042023 && 'firstGenerationUniversity' in diversity[activeTab]">
+          <table class="govuk-table">
+            <caption class="govuk-table__caption hidden">
+              Social mobility by selected stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Social mobility
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  First Generation University
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="diversity[activeTab].firstGenerationUniversity.firstGenerationUniversity" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="diversity[activeTab].firstGenerationUniversity.declaration"
+                    :report-total="diversity[activeTab].firstGenerationUniversity.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+
+        <template v-else-if="applicationOpenDatePost01042023 && 'parentsNotAttendedUniversity' in diversity[activeTab]">
+          <table class="govuk-table">
+            <caption class="govuk-table__caption hidden">
+              Social mobility by selected stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Social mobility
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Parents did not attend University
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="diversity[activeTab].parentsNotAttendedUniversity.parentsNotAttendedUniversity" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="diversity[activeTab].parentsNotAttendedUniversity.declaration"
+                    :report-total="diversity[activeTab].parentsNotAttendedUniversity.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
 
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
@@ -446,17 +501,6 @@
             v-if="diversity[activeTab].emp"
             class="govuk-table__body"
           >
-            <tr class="govuk-table__row">
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                EMP Not applied
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="diversity[activeTab].emp.noAnswer" />
-              </td>
-            </tr>
             <tr class="govuk-table__row">
               <th
                 scope="col"
@@ -490,6 +534,17 @@
                 <Stat :stat="diversity[activeTab].emp.gender" />
               </td>
             </tr>
+            <!-- <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="diversity[activeTab].emp.declaration"
+                  :report-total="diversity[activeTab].emp.total"
+                />
+              </td>
+            </tr> -->
           </tbody>
         </table>
       </div>
