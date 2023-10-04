@@ -75,6 +75,7 @@
 </template>
 
 <script>
+// @TODO: Use the larger width for the modal (that ur specifying below) on larger screen devices only!
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 
 //import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
@@ -143,7 +144,7 @@ export default {
 }
 
 .modal {
-  width: 550px !important;
+  width: 620px !important;
   min-width: unset !important;
 }
 </style>

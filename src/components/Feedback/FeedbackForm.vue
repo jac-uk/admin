@@ -40,25 +40,36 @@
         Capture Screenshot
       </button> -->
 
-      <label class="screenshot-label govuk-heading-m govuk-!-margin-bottom-2">Capture Screenshot</label>
+      <RadioGroup
+        id="feedback-for-proxy"
+        v-model="feedbackForProxy"
+        label="Are you raising this issue for yourself or an applicant?"
+        :inline="true"
+      >
+        <RadioItem
+          value="0"
+          label="Myself"
+        />
+        <RadioItem
+          value="1"
+          label="Applicant"
+        />
+      </RadioGroup>
 
-      <a
-        class="screenshot-link"
-        title="Capture Screenshot"
-        alt="Capture Screenshot"
-        @click="captureScreenshot"
-      ><img
-        src="@/assets/screenshot.svg"
-        style="width: 30px"
-      ></a>
-      <div>
-        <img
-          v-if="thumbnail"
-          :src="thumbnail"
-          :style="thumbnailStyle"
-          class="dashed-border"
-          alt="Screenshot Thumbnail"
-        >
+      <CaptureScreenshot v-if="!showFormForProxy" />
+
+      <div
+        v-if="showFormForProxy"
+        class="govuk-warning-text"
+      >
+        <span
+          class="govuk-warning-text__icon"
+          aria-hidden="true"
+        >!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          Please ensure you are on the relevant page before raising the issue.
+        </strong>
       </div>
 
       <Select
@@ -81,6 +92,31 @@
           {{ criticalityType }}
         </option>
       </Select>
+
+      <template v-if="showFormForProxy">
+        <TextField
+          id="name"
+          v-model="formData.applicant"
+          label="Name of applicant"
+          type="text"
+          required
+        />
+        <TextField
+          id="browser"
+          v-model="formData.browser"
+          label="Applicant browser"
+          type="text"
+          required
+        />
+        <TextField
+          id="os"
+          v-model="formData.os"
+          label="Applicant operating system"
+          type="text"
+          required
+        />
+      </template>
+
       <!-- <FileUpload
         id="screenshot-file"
         ref="screenshot-file"
@@ -102,7 +138,7 @@
       <TextArea
         id="expectation"
         v-model="formData.expectation"
-        label="What did you want to happen?"
+        :label="expectationLabel"
         rows="2"
         required
       />
@@ -221,42 +257,37 @@
 <script>
 // @TODO: THIS COMPONENT IS BASED ON MODALINNER!
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
-//import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import { detect } from 'detect-browser';
 //import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
-import html2canvas from 'html2canvas';
+import CaptureScreenshot from '../Micro/CaptureScreenshot.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 
 //import ExtendedError from '@/errors/extendedError';
 export default {
   name: 'FeedbackForm',
   components: {
-    //TextField,
+    TextField,
     TextArea,
     Select,
     ErrorSummary,
     //FileUpload,
+    CaptureScreenshot,
+    RadioGroup,
+    RadioItem,
   },
   extends: Form,
   emits: ['close', 'success'],
   data() {
     return {
-      image: {
-        src: '',
-        width: '0px',
-        height: '0px',
-      },
-
-      thumbnail: null,
-      thumbnailStyle: {
-        height: '100px',
-        width: 'auto', // Maintain aspect ratio
-      },
-
+      feedbackForProxy: '0',
       client: null,
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
+      //fullName: '',
       formData: {
         url: '',
         //screenshotFileName: '',
@@ -266,11 +297,11 @@ export default {
         //contactDetailType: '',
         //contactDetails: '',
         //otherContacts: '',
-        fullName: '',
+        reporter: '',
+        applicant: '',
         userId: '',
         browser: '',
         os: '',
-        thumbnailFile: 'screenshot.pgn',  // @TODO: We don't actually use this (only for demo purposes)
       },
       // formData: {
       //   url: '',
@@ -308,6 +339,26 @@ export default {
       //return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
       return 'test';
     },
+    showFormForProxy() {
+      return this.feedbackForProxy === '1';
+    },
+    expectationLabel() {
+      const str = this.showFormForProxy ? 'they' : 'you';
+      return `What did ${str} expect to happen?`;
+    },
+  },
+  watch: {
+    showFormForProxy(newVal) {
+      if (newVal) {
+        this.formData.browser = '';
+        this.formData.os = '';
+      }
+      else {
+        this.formData.applicant = '';
+        this.formData.browser = `${this.client.name} ${this.client.version}`;
+        this.formData.os = this.client.os;
+      }
+    },
   },
   // watch: {
   //   'formData.contactDetailType'(val) {
@@ -324,7 +375,7 @@ export default {
     this.formData.browser = `${this.client.name} ${this.client.version}`;
     this.formData.os = this.client.os;
     this.formData.url = window.location.href;
-    this.formData.fullName = this.displayName;
+    this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
   },
   methods: {
@@ -346,38 +397,12 @@ export default {
         //this.$emit('updateApplication', { [field]: val });
       }
     },
-
-    async captureScreenshot() {
-      //const elementToCapture = this.$el.querySelector('div:first-child');
-      const elementToCapture = document.body;
-
-      try {
-        const canvas = await html2canvas(elementToCapture);
-        const thumbnail = canvas.toDataURL('image/png');
-        this.thumbnail = thumbnail;
-
-        // console.log(`height: ${canvas.height}`);
-        // console.log(`width: ${canvas.width}`);
-
-      } catch (error) {
-        console.error('Error capturing screenshot:', error);
-      }
-    },
   },
 };
 </script>
-<style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
-.dashed-border {
-  border: 3px solid black;
-  border-style: dashed;
-}
-.screenshot-link {
-  cursor: pointer;
-  vertical-align: middle;
-}
-
-.screenshot-label {
-  display: inline-block;
-  margin-right: 30px;
+<style>
+  label[for="criticality"] {
+    display: inline-block !important;
+    margin-right: 40px !important;
 }
 </style>
