@@ -76,6 +76,7 @@ export default {
   },
   getters: {
     enabledMicrosoftUsers: (state) => {
+      if (!Array.isArray(state.records)) return [];
       return state.records
         .filter(user => {
           if (user.disabled) return false;
