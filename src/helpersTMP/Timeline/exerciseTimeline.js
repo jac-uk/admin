@@ -202,7 +202,7 @@ const exerciseTimeline = (data) => {
         {
           entry: 'Return date for independent assessments',
           date: data.independentAssessmentsReturnDate,
-          dateString: getDateString(data.independentAssessmentsReturnDate, 'hour'),
+          dateString: getDateString(data.independentAssessmentsReturnDate),
         }
       );
     }

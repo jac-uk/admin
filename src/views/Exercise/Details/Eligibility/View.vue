@@ -200,7 +200,7 @@
 <script>
 import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'EligibilityView',
