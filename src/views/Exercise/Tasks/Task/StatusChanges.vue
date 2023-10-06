@@ -221,15 +221,12 @@ export default {
     updateTableState(params) {
       this.tableState = params;
     },
-    searchHandler(params) {
-      console.log('candidate search', params);
+    searchHandler() {
       return [];
     },
     async setStatus(params) {
-      console.log('set status', params);
       const saveData = {};
       this.selectedItems.forEach(item => saveData[`outcomeMap.${item}`] = params.status);
-      console.log('savedata', saveData);
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.task.type, data: saveData } );
       this.$refs['setStatusModal'].closeModal();
     },
