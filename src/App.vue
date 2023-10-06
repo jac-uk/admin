@@ -183,6 +183,23 @@
     </div>
 
     <Messages v-if="canReadMessages" />
+
+    <Modal ref="modalRefSignOut">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Your role has been changed
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p class="govuk-body">
+          Please refresh the page.
+        </p>
+        <button
+          class="govuk-button"
+          @click="refresh"
+        >
+          Refresh
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -190,10 +207,13 @@
 import { auth } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+
 export default {
   name: 'App',
   components: {
     Messages,
+    Modal,
   },
   mixins: [permissionMixin],
   computed: {
@@ -218,11 +238,23 @@ export default {
     canReadMessages() {
       return this.hasPermissions([this.PERMISSIONS.messages.permissions.canReadMessages.value]);
     },
+    currentUser() {
+      return this.$store.state.auth.currentUser;
+    },
+    isRoleChanged() {
+      const user = this.$store.state.users.record;
+      return user && user.role && user.role.isChanged;
+    },
   },
   watch: {
     async isSignedIn() {
       if (this.isSignedIn) {
         this.load();
+      }
+    },
+    isRoleChanged(newValue, oldValue) {
+      if (newValue && !oldValue && this.$refs['modalRefSignOut']) {
+        this.$refs['modalRefSignOut'].openModal();
       }
     },
   },
@@ -243,6 +275,12 @@ export default {
       if (this.canReadMessages) {
         await this.getMessages();
       }
+    },
+    async refresh() {
+      if (this.$refs['modalRefSignOut']) {
+        this.$refs['modalRefSignOut'].closeModal();
+      }
+      window.location.href = '/';
     },
     signOut() {
       auth.signOut();

@@ -12,24 +12,15 @@
       v-show="activeTab == 'users'"
       class="print-full-width"
     >
-      <button
-        v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
-        class="govuk-button"
-        @click="openCreateUserModal"
-      >
-        Create
-      </button>
-
       <h2>List of admin users</h2>
 
       <Table
         ref="usersTable"
         data-key="id"
-        page-item-type="uppercase-letter"
         :data="users"
         :page-size="50"
         :columns="tableColumns"
-        :search="['displayName']"
+        :search="['email']"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -42,7 +33,7 @@
           <TableCell :title="tableColumns[2].title">
             {{ row.roleName }}
             <select
-              class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
+              class="govuk-select"
               :value="row.role.id"
               :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
               @change="event => handleRoleChange(event, row)"
@@ -60,7 +51,7 @@
             <ActionButton
               v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
               type="primary"
-              class="govuk-!-margin-right-3"
+              class="govuk-!-margin-right-3 govuk-!-margin-bottom-0"
               :action="() => enableUser(row)"
             >
               Enable
@@ -68,7 +59,7 @@
             <ActionButton
               v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
               type="secondary"
-              class="govuk-!-margin-right-3"
+              class="govuk-!-margin-right-3 govuk-!-margin-bottom-0"
               :action="() => disableUser(row)"
             >
               Disable
@@ -76,7 +67,7 @@
 
             <button
               v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
-              class="govuk-button govuk-button--warning"
+              class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
               @click="() => openDeleteUserModal(row)"
             >
               Delete
@@ -87,10 +78,20 @@
     </div>
 
     <div
-      v-show="activeTab === 'roles'"
+      v-if="activeTab === 'roles'"
       class="print-full-width"
     >
       <Roles :roles="roles" />
+    </div>
+
+    <div
+      v-if="activeTab === 'invitations'"
+      class="print-full-width"
+    >
+      <UserInvitations
+        :users="users"
+        :roles="roles"
+      />
     </div>
 
     <Modal ref="modalRefDeleteUser">
@@ -113,85 +114,17 @@
         </button>
       </div>
     </Modal>
-
-    <Modal ref="modalRefCreateUser">
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Create a new user
-      </div>
-      <div class="modal__content govuk-!-margin-6">
-        <div
-          class="govuk-grid-column-full"
-          style="text-align: left;"
-        >
-          <TextField
-            id="email"
-            v-model="newUser.email"
-            label="Email"
-            hint="The email must be a JAC email address."
-            type="email"
-            autocomplete="off"
-            required
-          />
-          <p
-            v-if="isDuplicateEmail || isExistingEmail"
-            class="govuk-error-message"
-          >
-            Duplicate Email
-          </p>
-          <p
-            v-if="isNotJACEmail"
-            class="govuk-error-message"
-          >
-            Please use a JAC email address
-          </p>
-
-          <div class="govuk-form-group">
-            <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
-            <select
-              id="role"
-              v-model="newUser.roleId"
-              class="govuk-select"
-              style="width: 100%;"
-            >
-              <option
-                v-for="(roleItem, roleIndex) in roles"
-                :key="roleIndex"
-                :value="roleItem.id"
-              >
-                {{ roleItem.roleName }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <ActionButton
-          type="primary"
-          class="govuk-!-margin-right-3"
-          :disabled="!newUser.email || isDuplicateEmail || isNotJACEmail || !newUser.roleId"
-          :action="createUser"
-        >
-          Save
-        </ActionButton>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="closeCreateUserModal"
-        >
-          Cancel
-        </button>
-      </div>
-    </Modal>
   </div>
 </template>
 
 <script>
-import firebase from '@firebase/app';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Roles from './Roles.vue';
+import UserInvitations from './Invitations.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -202,8 +135,8 @@ export default {
     ActionButton,
     TabsList,
     Modal,
-    TextField,
     Roles,
+    UserInvitations,
   },
   mixins: [permissionMixin],
   data() {
@@ -216,12 +149,6 @@ export default {
         { title: 'Action' },
       ],
       selectedUser: null,
-      newUser: {
-        email: '',
-        roleId: '',
-        status: 'pending',
-      },
-      isExistingEmail: false,
     };
   },
   computed: {
@@ -238,6 +165,10 @@ export default {
           ref: 'roles',
           title: 'Roles',
         },
+        {
+          ref: 'invitations',
+          title: 'Invitations',
+        },
       ];
     },
     users() {
@@ -245,16 +176,6 @@ export default {
     },
     roles() {
       return this.$store.state.roles.records;
-    },
-    isDuplicateEmail() {
-      return this.users.map(user => user.email).includes(this.newUser.email);
-    },
-    isNotJACEmail() {
-      return this.newUser.email && !this.newUser.email.match(/@judicialappointments.(digital|gov.uk)$/);
-    },
-    defaultUserRoleId() {
-      const role = this.roles.find(r => r.isDefault);
-      return role ? role.id : '';
     },
   },
   mounted() {
@@ -322,14 +243,6 @@ export default {
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
     },
-    openCreateUserModal() {
-      this.openModal('modalRefCreateUser');
-      this.newUser.roleId = this.defaultUserRoleId;
-    },
-    closeCreateUserModal() {
-      this.closeModal('modalRefCreateUser');
-      this.resetNewUser();
-    },
     openDeleteUserModal(user) {
       this.openModal('modalRefDeleteUser');
       this.selectedUser = user;
@@ -338,27 +251,12 @@ export default {
       this.closeModal('modalRefDeleteUser');
       this.selectedUser = null;
     },
-    resetNewUser() {
-      this.newUser = {
-        email: '',
-        roleId: '',
-        status: 'pending',
-      };
-    },
-    async createUser() {
-      try {
-        const data = {
-          ...this.newUser,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        };
-        await this.$store.dispatch('userInvitations/create', data);
-        this.resetNewUser();
-        this.closeCreateUserModal();
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
   },
 };
 </script>
+
+<style scoped>
+td {
+  vertical-align: middle;
+}
+</style>

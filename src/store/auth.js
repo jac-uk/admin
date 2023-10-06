@@ -89,6 +89,7 @@ const module = {
         };
         commit('setCurrentUser', userData);
         commit('setUserRole', role);
+        dispatch('users/bindDoc', user.uid, { root: true });
         return userData;
       } catch (error) {
         if (error.message) commit('setAuthError', error.message);

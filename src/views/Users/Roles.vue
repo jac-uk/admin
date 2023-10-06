@@ -137,7 +137,7 @@ import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 
 export default {
-  name: 'Roles',
+  name: 'UserRoles',
   components: {
     ActionButton,
     Modal,
