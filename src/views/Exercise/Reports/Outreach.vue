@@ -108,7 +108,7 @@
                 scope="col"
                 class="govuk-table__header"
               >
-                Outreach
+                How did you hear about the vacancy?
               </th>
               <th
                 scope="col"
@@ -119,82 +119,6 @@
             </tr>
           </thead>
           <tbody class="govuk-table__body">
-            <!-- <tr class="govuk-table__row">
-              <th
-                scope="row"
-                class="govuk-table__header"
-              >
-                JAC Website
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['jac-website']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Professional body website or email (eg The Law Society)
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['professional-body-website-or-email']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Professional body magazine
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['professional-body-magazine']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Judicial Office Extranet
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['judicial-office-extranet']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Judging Your Future Newsletter
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['judging-your-future-newsletter']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Twitter
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach.twitter" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                LinkedIn
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['linked-in']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Word of mouth
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach['word-of-mouth']" />
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                Other form of communication
-              </th>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="report[activeTab].outreach.other" />
-              </td>
-            </tr> -->
-
             <tr
               v-for="item in reportKeys"
               :key="item"
