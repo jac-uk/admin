@@ -153,6 +153,35 @@
             </div>
           </dd>
         </div>
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Uploaded self assessment
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="editable">
+              <InformationReviewRenderer
+                v-if="application.uploadedSelfAssessmentContent"
+                :data="application.uploadedSelfAssessmentContent"
+                :edit="editable && authorisedToPerformAction"
+                field="uploadedSelfAssessmentContent"
+                type="textarea"
+                :is-asked="isApplicationPartAsked('selfAssessmentCompetencies')"
+                @change-field="changeAssessmentInfo"
+              />
+            </div>
+            <div v-else-if="application.uploadedSelfAssessment">
+              {{ application.uploadedSelfAssessmentContent }}
+            </div>
+            <span v-else>
+              No information
+              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
+                (not asked)
+              </span>
+            </span>
+          </dd>
+        </div>
       </dl>
     </div>
 
