@@ -1,18 +1,21 @@
-import { auth, functions } from '@/firebase';
+import { auth, functions, firestore } from '@/firebase';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 
 const module = {
   namespaced: true,
   state: {
     currentUser: null,
+    rolePermissions: [],
     authError: null,
   },
   mutations: {
-    setCurrentUser(state, user) {
-      state.currentUser = user;
+    set(state, { name, value }) {
+      state[name] = value;
     },
-    setUserRole(state, role) {
-      state.currentUser = { ...state.currentUser, ...role };
+    setRolePermissions(state, permissions) {
+      state.rolePermissions = permissions;
     },
     setAuthError(state, message) {
       state.authError = message;
@@ -77,25 +80,18 @@ const module = {
         const permissions = idTokenResult?.claims?.rp || null;
         if (!roleId || !permissions) throw new Error('This user does not have a role');
 
-        const userData = {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          displayName: user.displayName,
-        };
-        const role = {
-          roleId: roleId,
-          rolePermissions: permissions,
-        };
-        commit('setCurrentUser', userData);
-        commit('setUserRole', role);
-        dispatch('users/bindDoc', user.uid, { root: true });
-        return userData;
+        commit('setRolePermissions', permissions);
+        await dispatch('bindCurrentUser', user.uid);
+        return true;
       } catch (error) {
         if (error.message) commit('setAuthError', error.message);
         auth.signOut();
       }
     },
+    bindCurrentUser: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = firestore.collection('users').doc(id);
+      return bindFirestoreRef('currentUser', firestoreRef, { serialize: vuexfireSerialize });
+    }),
     setAuthError({ commit }, message) {
       commit('setAuthError', message);
     },
@@ -111,7 +107,7 @@ const module = {
       return null;
     },
     hasPermissions: state => permissions => {
-      const rolePermissions = state.currentUser ? state.currentUser.rolePermissions : null;
+      const rolePermissions = state.rolePermissions;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
     getDisplayName(state) {
