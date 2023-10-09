@@ -46,7 +46,7 @@ const module = {
         if (!userDoc) {
           // check if user has been invited
           const userInvitation = await dispatch('userInvitations/getByEmail', { email: user.email, status: 'pending' }, { root: true });
-          if (!userInvitation) throw new Error('You has not been invited to use this site');
+          if (!userInvitation) throw new Error('You has not been invited to use this site. Please contact the Digital Team for assistance.');
 
           // create user document
           const newUser = {
@@ -78,7 +78,7 @@ const module = {
         // get user role from custom claims
         const roleId = idTokenResult?.claims?.r || null;
         const permissions = idTokenResult?.claims?.rp || null;
-        if (!roleId || !permissions) throw new Error('This user does not have a role');
+        if (!roleId || !permissions) throw new Error('You have not been assign a user role. Please contact the Digital Team for assistance.');
 
         commit('setRolePermissions', permissions);
         await dispatch('bindCurrentUser', user.uid);

@@ -241,10 +241,6 @@ export default {
     currentUser() {
       return this.$store.state.auth.currentUser;
     },
-    isRoleChanged() {
-      const user = this.$store.state.users.record;
-      return user && user.role && user.role.isChanged;
-    },
   },
   watch: {
     async isSignedIn() {
@@ -252,8 +248,8 @@ export default {
         this.load();
       }
     },
-    isRoleChanged(newValue, oldValue) {
-      if (newValue && !oldValue && this.$refs['modalRefSignOut']) {
+    currentUser(newValue, oldValue) {
+      if (newValue?.role?.isChanged && !oldValue?.role?.isChanged && this.$refs['modalRefSignOut']) {
         this.$refs['modalRefSignOut'].openModal();
       }
     },
