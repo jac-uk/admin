@@ -256,6 +256,10 @@ export default {
       return null;
     },
     applicationOpenDatePost01042023: (state) => {
+      const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(state.record.referenceNumber);
+      if (usesPre01042023Questions) {
+        return false;
+      }
       // Used to facilitate different fields after 01-04-2023
       return state.record.applicationOpenDate > new Date('2023-04-01');
     },

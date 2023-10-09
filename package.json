@@ -1,11 +1,13 @@
 {
   "name": "admin",
-  "version": "1.6.0",
+  "version": "1.9.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode develop",
+    "dev": "npm run local:serve",
     "preview": "vite preview",
-    "serve": "vite --mode develop",
+    "serve": "npm run local:serve",
+    "local:serve": "export VITE_FIREBASE_USE_EMULATORS=true; vite --mode develop",
+    "develop:serve": "vite --mode develop",
     "staging:serve": "vite --mode staging",
     "production:serve": "vite --mode production",
     "develop:build": "vite build --mode develop;",
@@ -24,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "3.0.26",
+    "@jac-uk/jac-kit": "3.0.30",
     "@ministryofjustice/frontend": "0.2.4",
     "@rollup/plugin-inject": "^5.0.3",
     "@sentry/tracing": "^7.61.1",

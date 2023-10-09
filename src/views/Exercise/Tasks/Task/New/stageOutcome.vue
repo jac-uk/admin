@@ -20,52 +20,17 @@
     </Checkbox>
 
     <Checkbox
-      v-if="entryStatus"
-      id="entryStatus"
-      v-model="formData.entryStatus"
+      id="tasksCompleted"
+      v-model="formData.tasksCompleted"
     >
-      Only '{{ $filters.lookup(entryStatus) }}' applications will be included
+      All shortlisting tasks have been completed
     </Checkbox>
-
-    <div
-      v-if="taskIsOverdue"
-      class="govuk-warning-text"
-    >
-      <span
-        class="govuk-warning-text__icon"
-        aria-hidden="true"
-      >!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        This task is overdue. Please change dates on the <RouterLink
-          :to="{ name: 'exercise-details-timeline' }"
-          class="govuk-link"
-        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
-      </strong>
-    </div>
-
-    <div
-      v-if="taskIsOverdue"
-      class="govuk-warning-text"
-    >
-      <span
-        class="govuk-warning-text__icon"
-        aria-hidden="true"
-      >!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-        This task is overdue. Please change dates on the <RouterLink
-          :to="{ name: 'exercise-details-timeline' }"
-          class="govuk-link"
-        >timeline</RouterLink> if you wish to carry out the task.<br> Alternatively press continue to enter results data only.
-      </strong>
-    </div>
 
     <ActionButton
       class="govuk-!-margin-bottom-0"
       type="primary"
       :disabled="!isFormCompleted"
-      :action="btnInitialise"
+      @click="btnInitialise"
     >
       Continue
     </ActionButton>
@@ -76,8 +41,8 @@
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { functions } from '@/firebase';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 
@@ -136,10 +101,8 @@ export default {
     isFormCompleted() {
       let expectedLength = 0;
       let actualLength = 0;
-      if (this.entryStatus) {
-        expectedLength += 1;
-        if (this.formData.entryStatus === true) actualLength += 1;
-      }
+      expectedLength += 1;
+      if (this.formData.tasksCompleted === true) actualLength += 1;
       expectedLength += this.timelineTasks.length;
       actualLength += this.formData.timelineTasks.length;
       return expectedLength === actualLength;

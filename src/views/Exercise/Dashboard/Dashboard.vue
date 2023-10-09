@@ -32,22 +32,26 @@
     <SelectionDay />
     -->
 
-    <div class="govuk-grid-column-two-thirds">
+    <div 
+      v-if="report"
+      class="govuk-grid-column-two-thirds"
+    >
       <h2 class="govuk-heading-l">
         Candidate Breakdown at Each Stage
       </h2>
     </div>
 
-    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    <div
+      v-if="report"
+      class="govuk-grid-column-one-third govuk-!-text-align-right"
+    >
       <button
-        v-if="report"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="exportData"
       >
         Export data
       </button>
       <ActionButton
-        v-if="report"
         type="primary"
         :action="refreshReport"
       >
@@ -99,7 +103,11 @@
             {{ row.name }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ $filters.formatNumber(row.val.percent, 2) }}% ({{ $filters.formatNumber(row.val.total) }})
+            <Stat
+              :stat="row.val"
+              :is-declaration-total="row.name === 'Declaration Total'"
+              :report-total="row.total"
+            />
           </TableCell>
         </template>
       </Table>
@@ -134,8 +142,11 @@ import AssignedCommissioner from './OverviewPanels/AssignedCommissioner.vue';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-import Chart from '@/components/Chart';
+import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
+import Stat from '@/components/Report/Stat.vue';
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Dashboard',
   components: {
@@ -154,6 +165,7 @@ export default {
     Timeline,
     AssignedCommissioner,
     Chart,
+    Stat,
   },
   data() {
     return {
@@ -165,6 +177,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
     tableColumns() {
       const totalCandidates = this.$filters.formatNumber(this.getTotalCandidates(this.selectedDiversityReportType, this.activeTab));
       return [
@@ -185,14 +200,21 @@ export default {
       return applicationCounts(this.exercise);
     },
     diversityReportType() {
-      return [
+      const types = [
         'gender',
         'ethnicity',
         'disability',
         'professionalBackground',
-        'socialMobility',
-        'emp',
+        'attendedUKStateSchool',
       ];
+      if (this.applicationOpenDatePost01042023) {
+        types.push('parentsNotAttendedUniversity');
+      }
+      else {
+        types.push('firstGenerationUniversity');
+      }
+      types.push('emp');
+      return types;
     },
     tabs() {
       return _map(this.labels, item => {
@@ -203,12 +225,12 @@ export default {
       });
     },
     labels() {
-      return getReports(this.applicationOpenDate).ApplicationStageDiversity.labels;
+      return getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.labels;
     },
     legend() {
       if (this.selectedDiversityReportType) {
         // Add the count to the legend, so the items are numbered
-        const items = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+        const items = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
         let count = 0;
         return _map(items, item => {
           ++count;
@@ -230,10 +252,13 @@ export default {
         const dataValues = {};
         // Get the top level and second level key mappings from the report
         const labelKeys = this.labels.map(o => o.key);
-        const legendKeys = this.legend.map(o => o.key);
+        const filteredLegend = this.legend.filter(o => !(this.ignoreKeys).includes(o.key));
+        const legendKeys = filteredLegend.map(o => o.key);
+
         // Set the labels
         const labels = this.labels.map(o => o.title);
         returnChart.labels = labels;
+
         // Populate the data values for the selected diversity report
         for (const labelKey of labelKeys) {
           // check if the label exists in the report
@@ -252,7 +277,7 @@ export default {
           }
         }
         // Set the datasets (background colour gets passed to the Chart component separately and merged into the data)
-        for (const obj of this.legend) {
+        for (const obj of filteredLegend) {
           returnChart.datasets.push({
             label: obj.title,
             data: dataValues[obj.key],
@@ -307,18 +332,36 @@ export default {
       let returnChart = [];
       if (this.report) {
         const dataApplied = this.report[this.activeTab][this.selectedDiversityReportType];
-        returnChart = this.getOrderedKeys(this.selectedDiversityReportType).map(item => {
-          const legendList = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
-          const legend = _find(legendList, o => {
-            return o.key === item;
+        const total = dataApplied.total;
+        returnChart = this.getOrderedKeys(this.selectedDiversityReportType)
+          .filter(item => !this.ignoreKeys.includes(item))
+          .map(item => {
+            const legendList = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[this.selectedDiversityReportType];
+            const legend = _find(legendList, o => {
+              return o.key === item;
+            });
+            return { 'name': `${legend.title}`, 'val': dataApplied[item], total: null };
           });
-          return { 'name': `${legend.title}`, 'val': dataApplied[item] };
+        // Append declaration total
+        returnChart.push({
+          name: 'Declaration Total',
+          val: dataApplied.declaration,
+          total: total,
         });
       }
       return returnChart;
     },
     reportCreatedAt() {
       return this.report && this.report.createdAt;
+    },
+    ignoreKeys() {
+      const ignoreKeys = ['genderNeutral', 'preferNotToSay', 'other', 'noAnswer'];
+      if (this.selectedDiversityReportType === 'professionalBackground') {
+        return ignoreKeys.filter((item) => {
+          return item !== 'other';
+        });
+      }
+      return ignoreKeys;
     },
   },
   created() {
@@ -346,7 +389,7 @@ export default {
       }
     },
     getOrderedKeys(selectedDiversityReportType) {
-      const list = getReports(this.applicationOpenDate).ApplicationStageDiversity.legend[selectedDiversityReportType];
+      const list = getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.legend[selectedDiversityReportType];
       return list.map(item => item.key);
     },
     async refreshReport() {

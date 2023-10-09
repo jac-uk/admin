@@ -415,7 +415,7 @@
           <InformationReviewRenderer
             v-else
             type="selection"
-            :options="['female', 'male', 'gender-neutral', 'other-gender', 'prefer-not-to-say']"
+            :options="['female', 'male', 'prefer-not-to-say']"
             field="gender"
             :edit="editable"
             :data="equalityAndDiversitySurvey.gender"

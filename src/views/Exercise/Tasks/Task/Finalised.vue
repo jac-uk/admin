@@ -265,6 +265,7 @@ export default {
       });
       this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
+      return true;
     },
     btnExport() {
       this.$refs['exportModal'].openModal();

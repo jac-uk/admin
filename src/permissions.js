@@ -299,69 +299,6 @@ const PERMISSIONS = {
       },
     },
   },
-  qualifyingTests: {
-    label: 'QualifyingTests',
-    permissions: {
-      canReadQualifyingTests: {
-        label: 'Can read qualifyingTests',
-        value: 'qt1',
-      },
-      canCreateQualifyingTests: {
-        label: 'Can create qualifyingTests',
-        value: 'qt2',
-      },
-      canUpdateQualifyingTests: {
-        label: 'Can update qualifyingTests',
-        value: 'qt3',
-      },
-      canDeleteQualifyingTests: {
-        label: 'Can delete qualifyingTests',
-        value: 'qt4',
-      },
-    },
-  },
-  qualifyingTestResponses: {
-    label: 'QualifyingTestResponses',
-    permissions: {
-      canReadQualifyingTestResponses: {
-        label: 'Can read qualifyingTestResponses',
-        value: 'qtr1',
-      },
-      canCreateQualifyingTestResponses: {
-        label: 'Can create qualifyingTestResponses',
-        value: 'qtr2',
-      },
-      canUpdateQualifyingTestResponses: {
-        label: 'Can update qualifyingTestResponses',
-        value: 'qtr3',
-      },
-      canDeleteQualifyingTestResponses: {
-        label: 'Can delete qualifyingTestResponses',
-        value: 'qtr4',
-      },
-    },
-  },
-  qualifyingTestReports: {
-    label: 'QualifyingTestReports',
-    permissions: {
-      canReadQualifyingTestReports: {
-        label: 'Can read qualifyingTestReports',
-        value: 'qtrp1',
-      },
-      canCreateQualifyingTestReports: {
-        label: 'Can create qualifyingTestReports',
-        value: 'qtrp2',
-      },
-      canUpdateQualifyingTestReports: {
-        label: 'Can update qualifyingTestReports',
-        value: 'qtrp3',
-      },
-      canDeleteQualifyingTestReports: {
-        label: 'Can delete qualifyingTestReports',
-        value: 'qtrp4',
-      },
-    },
-  },
   invitations: {
     label: 'Invitations',
     permissions: {

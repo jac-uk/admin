@@ -31,8 +31,12 @@ export {
   TASK_STATUS,
   TASK_TYPE,
   STAGE_TASKS,
+  getNextProcessingStage,
+  getProcessingEntryStage,
+  getProcessingExitStage,
   getTimelineTasks,
   getTaskTypes,
+  getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
   emptyScoreSheet,
@@ -84,7 +88,9 @@ export {
   availableStages,
   availableStatuses,
   getPreviousStage,
-  getNextStage
+  getNextStage,
+  getStagePassingStatuses,
+  getStageWithdrawalStatus
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -133,23 +139,36 @@ const APPLICATION_PARTS = [
 const CAPABILITIES = ['L&J', 'PQ', 'L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
 const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'interview', 'overall'];
 
-const STAGE_TASKS = {
-  shortlisting: [
-    TASK_TYPE.CRITICAL_ANALYSIS,
-    TASK_TYPE.SITUATIONAL_JUDGEMENT,
-    TASK_TYPE.SCENARIO,
-    TASK_TYPE.TELEPHONE_ASSESSMENT,
-    TASK_TYPE.SIFT,
-    TASK_TYPE.ELIGIBILITY_SCC,
-    TASK_TYPE.SHORTLISTING_OUTCOME,
-  ],
-  selection: [
-    TASK_TYPE.SELECTION,
-    TASK_TYPE.STATUTORY_CONSULTATION,
-    TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
-    TASK_TYPE.SELECTION_OUTCOME,
-  ],
+const PROCESSING_STAGE = {  // could be exercise_stage and existing exercise_stage -> application_stage
+  SHORTLISTING: 'shortlisting',
+  SELECTION: 'selection',
+  RECOMMENDATION: 'recommendation',
+  HANDOVER: 'handover',
 };
+
+const PROCESSING_STAGES = [
+  PROCESSING_STAGE.SHORTLISTING,
+  PROCESSING_STAGE.SELECTION,
+  PROCESSING_STAGE.RECOMMENDATION,
+  PROCESSING_STAGE.HANDOVER,
+];
+
+const STAGE_TASKS = {};
+STAGE_TASKS[PROCESSING_STAGE.SHORTLISTING] = [
+  TASK_TYPE.CRITICAL_ANALYSIS,
+  TASK_TYPE.SITUATIONAL_JUDGEMENT,
+  TASK_TYPE.SCENARIO,
+  TASK_TYPE.TELEPHONE_ASSESSMENT,
+  TASK_TYPE.SIFT,
+  TASK_TYPE.ELIGIBILITY_SCC,
+  TASK_TYPE.SHORTLISTING_OUTCOME,
+];
+STAGE_TASKS[PROCESSING_STAGE.SELECTION] = [
+  TASK_TYPE.SELECTION_DAY,
+  TASK_TYPE.STATUTORY_CONSULTATION,
+  TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
+  TASK_TYPE.SELECTION_OUTCOME,
+];
 
 const TASK_STATUS = {
   DATA_INITIALISED: 'dataInitialised',
@@ -166,6 +185,65 @@ const TASK_STATUS = {
   COMPLETED: 'completed',
 };
 
+function getNextProcessingStage(processingStage) {
+  const currentIndex = PROCESSING_STAGES.indexOf(processingStage);
+  if (currentIndex === PROCESSING_STAGES.length) return '';
+  return PROCESSING_STAGES[currentIndex + 1];
+}
+
+function getProcessingEntryStage(exercise, processingStage) {
+  if (exercise._processingVersion >= 2) {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      // TO DO check for staged applications as shortlisting may start with registration rather than applied
+      return EXERCISE_STAGE.APPLIED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.SELECTABLE;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }
+  } else {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.REVIEW;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.SELECTED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }
+  }
+}
+
+function getProcessingExitStage(exercise, processingStage) {
+  if (exercise._processingVersion >= 2) {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SELECTABLE;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.RECOMMENDED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.HANDOVER;
+    }
+  } else {
+    switch (processingStage) {
+    case PROCESSING_STAGE.SHORTLISTING:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case PROCESSING_STAGE.SELECTION:
+      return EXERCISE_STAGE.SELECTED;
+    case PROCESSING_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.RECOMMENDED;
+    case PROCESSING_STAGE.HANDOVER:
+      return EXERCISE_STAGE.HANDOVER;
+    }  
+  }
+}
+
 /**
  * get task types in sequence
  *  - look at exercise shortlisting and timeline
@@ -174,11 +252,21 @@ const TASK_STATUS = {
  * get next task
  * get outcome statuses
  */
-
 function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
   const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
-  return timelineTasks;
+  if (exercise._processingVersion >= 2) {
+    return timelineTasks;
+  } else {
+    const supportedTaskTypes = [
+      TASK_TYPE.CRITICAL_ANALYSIS,
+      TASK_TYPE.SITUATIONAL_JUDGEMENT,
+      TASK_TYPE.QUALIFYING_TEST,
+      TASK_TYPE.SCENARIO,
+      TASK_TYPE.EMP_TIEBREAKER,
+    ];
+    return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
+  }
 }
 
 function getTaskTypes(exercise, stage) {
@@ -193,6 +281,23 @@ function getTaskTypes(exercise, stage) {
     taskTypes.splice(indexQT + 1, 0, TASK_TYPE.QUALIFYING_TEST);
   }
   return taskTypes;
+}
+
+const MERIT_LIST_TASK_TYPES = [
+  TASK_TYPE.CRITICAL_ANALYSIS,
+  TASK_TYPE.SITUATIONAL_JUDGEMENT,
+  TASK_TYPE.QUALIFYING_TEST,
+  TASK_TYPE.SCENARIO,
+  TASK_TYPE.SIFT,
+  TASK_TYPE.SELECTION_DAY,
+];
+function getMeritListTaskTypes(exercise) {
+  // if we have Qualifying Test then remove SJ & CA
+  let taskTypes = getTaskTypes(exercise);
+  if (taskTypes.indexOf(TASK_TYPE.QUALIFYING_TEST) >= 0) {
+    taskTypes = taskTypes.filter(taskType => [TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT].indexOf(taskType) < 0);
+  }
+  return taskTypes.filter(taskType => MERIT_LIST_TASK_TYPES.indexOf(taskType) >= 0);
 }
 
 function previousTaskType(exercise, type) {
@@ -651,8 +756,6 @@ function isApplicationPartAsked(exercise, part) {
   } else {
     isAsked = true;
   }
-
-  console.log('isApplicationPartAsked', part, isAsked);
   return isAsked;
 }
 
@@ -696,149 +799,331 @@ function hasApplicationProcess(exercise) {
 function availableStages(exercise) {
   const stages = [];
   if (!exercise) return stages;
-  stages.push(EXERCISE_STAGE.APPLIED);
-  stages.push(EXERCISE_STAGE.SHORTLISTED);
-  stages.push(EXERCISE_STAGE.SELECTABLE);
-  stages.push(EXERCISE_STAGE.RECOMMENDED);
-  stages.push(EXERCISE_STAGE.HANDOVER);
+  if (exercise._processingVersion >= 2) {
+    stages.push(EXERCISE_STAGE.APPLIED);
+    stages.push(EXERCISE_STAGE.SHORTLISTED);
+    stages.push(EXERCISE_STAGE.SELECTABLE);
+    stages.push(EXERCISE_STAGE.RECOMMENDED);
+    stages.push(EXERCISE_STAGE.HANDOVER);      
+  } else {
+    stages.push(EXERCISE_STAGE.REVIEW);
+    stages.push(EXERCISE_STAGE.SHORTLISTED);
+    stages.push(EXERCISE_STAGE.SELECTED);
+    stages.push(EXERCISE_STAGE.RECOMMENDED);
+    stages.push(EXERCISE_STAGE.HANDOVER);  
+  }
   return stages;
 }
 
 function getPreviousStage(exercise, currentStage) {
-  switch (currentStage) {
-  case EXERCISE_STAGE.APPLIED:
-    return '';
-  case EXERCISE_STAGE.SHORTLISTED:
-    return EXERCISE_STAGE.APPLIED;
-  case EXERCISE_STAGE.SELECTABLE:
-    return EXERCISE_STAGE.SHORTLISTED;
-  case EXERCISE_STAGE.RECOMMENDED:
-    return EXERCISE_STAGE.SELECTABLE;
-  case EXERCISE_STAGE.HANDOVER:
-    return EXERCISE_STAGE.RECOMMENDED;
-  }
+  if (exercise._processingVersion >= 2) {
+    switch (currentStage) {
+    case EXERCISE_STAGE.APPLIED:
+      return '';
+    case EXERCISE_STAGE.SHORTLISTED:
+      return EXERCISE_STAGE.APPLIED;
+    case EXERCISE_STAGE.SELECTABLE:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case EXERCISE_STAGE.RECOMMENDED:
+      return EXERCISE_STAGE.SELECTABLE;
+    case EXERCISE_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }      
+  } else {
+    switch (currentStage) {
+    case EXERCISE_STAGE.REVIEW:
+      return '';
+    case EXERCISE_STAGE.SHORTLISTED:
+      return EXERCISE_STAGE.REVIEW;
+    case EXERCISE_STAGE.SELECTED:
+      return EXERCISE_STAGE.SHORTLISTED;
+    case EXERCISE_STAGE.RECOMMENDED:
+      return EXERCISE_STAGE.SELECTED;
+    case EXERCISE_STAGE.HANDOVER:
+      return EXERCISE_STAGE.RECOMMENDED;
+    }
+  }  
 }
 
 function getNextStage(exercise, currentStage, newStatus) {
-  switch (currentStage) {
-  case EXERCISE_STAGE.APPLIED:  // TODO make this specific to exercise
-    if (newStatus === APPLICATION_STATUS.SIFT_PASSED) return EXERCISE_STAGE.SHORTLISTED;
-    break;
-  case EXERCISE_STAGE.SHORTLISTED:
-    if (newStatus === APPLICATION_STATUS.SELECTION_PASSED) return EXERCISE_STAGE.SELECTABLE;
-    break;
-  case EXERCISE_STAGE.SELECTABLE:
-    if (newStatus === APPLICATION_STATUS.PASSED_RECOMMENDED) return EXERCISE_STAGE.RECOMMENDED;
-    break;
-  case EXERCISE_STAGE.RECOMMENDED:
-    if (newStatus === APPLICATION_STATUS.RECOMMENDED_IMMEDIATE) return EXERCISE_STAGE.HANDOVER;
-    if (newStatus === APPLICATION_STATUS.RECOMMENDED_FUTURE) return EXERCISE_STAGE.HANDOVER;
-    break;
+  if (newStatus) {
+    const passingStatuses = getStagePassingStatuses(exercise, currentStage);
+    if (passingStatuses.indexOf(newStatus) >= 0) {
+      if (exercise._processingVersion >= 2) {
+        switch (currentStage) {
+        case EXERCISE_STAGE.APPLIED:
+          return EXERCISE_STAGE.SHORTLISTED;
+        case EXERCISE_STAGE.SHORTLISTED:
+          return EXERCISE_STAGE.SELECTABLE;
+        case EXERCISE_STAGE.SELECTABLE:
+          return EXERCISE_STAGE.RECOMMENDED;
+        case EXERCISE_STAGE.RECOMMENDED:
+          return EXERCISE_STAGE.HANDOVER;
+        }
+      } else {
+        switch (currentStage) {
+        case EXERCISE_STAGE.REVIEW:
+          return EXERCISE_STAGE.SHORTLISTED;
+        case EXERCISE_STAGE.SHORTLISTED:
+          return EXERCISE_STAGE.SELECTED;
+        case EXERCISE_STAGE.SELECTED:
+          return EXERCISE_STAGE.RECOMMENDED;
+        case EXERCISE_STAGE.RECOMMENDED:
+          return EXERCISE_STAGE.HANDOVER;
+        }
+      }
+    }  
+  } else {
+    const stages = availableStages(exercise);
+    const currentStageIndex = stages.indexOf(currentStage);
+    if (currentStageIndex >= 0 && currentStageIndex < stages.length - 1) {
+      return stages[currentStageIndex + 1];
+    }
   }
   return currentStage;
 }
 
+// returns an array of statuses which trigger a move to the next stage
+function getStagePassingStatuses(exercise, stage) {
+  if (exercise._processingVersion >= 2) {
+    switch (stage) {
+    case EXERCISE_STAGE.APPLIED:
+      return [APPLICATION_STATUS.SHORTLISTING_PASSED];
+    case EXERCISE_STAGE.SHORTLISTED:
+      return [APPLICATION_STATUS.SELECTION_OUTCOME_PASSED];
+    case EXERCISE_STAGE.SELECTABLE:
+      return [APPLICATION_STATUS.PASSED_RECOMMENDED];
+    case EXERCISE_STAGE.RECOMMENDED:
+      return [APPLICATION_STATUS.RECOMMENDED_IMMEDIATE, APPLICATION_STATUS.RECOMMENDED_FUTURE];
+    }
+  } else {
+    switch (stage) {
+    case EXERCISE_STAGE.REVIEW:
+      return '';
+    case EXERCISE_STAGE.SHORTLISTED:
+      return [APPLICATION_STATUS.INVITED_TO_SELECTION_DAY];
+    case EXERCISE_STAGE.SELECTED:
+      return [APPLICATION_STATUS.PASSED_SELECTION];
+    case EXERCISE_STAGE.RECOMMENDED:
+      return [APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT, APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT];
+    }  
+  }
+}
+
+function getStageWithdrawalStatus(exercise) {
+  if (exercise._processingVersion >= 2) {
+    return APPLICATION_STATUS.WITHDRAWN;
+  } else {
+    return APPLICATION_STATUS.WITHDREW_APPLICATION;
+  }
+}
+
 function availableStatuses(exercise, stage) {
   let statuses = [];
-  switch (stage) {
-  case EXERCISE_STAGE.APPLIED:
-    statuses = [
-      ...shortlistingStatuses(exercise),
-      // APPLICATION_STATUS.SELECTION_INVITED,
-      APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
-      APPLICATION_STATUS.REJECTED_CHARACTER,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
-  case EXERCISE_STAGE.SHORTLISTED:
-    statuses = [
-      APPLICATION_STATUS.SELECTION_PASSED,
-      APPLICATION_STATUS.SELECTION_FAILED,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
-  case EXERCISE_STAGE.SELECTABLE:
-    statuses = [
-      APPLICATION_STATUS.PASSED_RECOMMENDED,
-      APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
-  case EXERCISE_STAGE.RECOMMENDED:
-    statuses = [
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
-      APPLICATION_STATUS.REJECTED_CHARACTER,
-      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
-      APPLICATION_STATUS.RECOMMENDED_FUTURE,
-      APPLICATION_STATUS.RECONSIDER,
-      APPLICATION_STATUS.SECOND_STAGE_INVITED,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
-  case EXERCISE_STAGE.HANDOVER:
-    statuses = [
-      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
-      APPLICATION_STATUS.RECOMMENDED_FUTURE,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
-  default:
-    statuses = [  // TODO make this specific to exercise
-      ...shortlistingStatuses(exercise),
-      APPLICATION_STATUS.SELECTION_INVITED,
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
-      APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
-      APPLICATION_STATUS.REJECTED_CHARACTER,
-      APPLICATION_STATUS.SELECTION_PASSED,
-      APPLICATION_STATUS.SELECTION_FAILED,
-      APPLICATION_STATUS.PASSED_RECOMMENDED,
-      APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
-      APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
-      APPLICATION_STATUS.RECOMMENDED_FUTURE,
-      APPLICATION_STATUS.RECONSIDER,
-      APPLICATION_STATUS.SECOND_STAGE_INVITED,
-      APPLICATION_STATUS.WITHDRAWN,
-    ];
-    return statuses;
+  if (exercise._processingVersion >= 2) {
+    switch (stage) {
+    case EXERCISE_STAGE.APPLIED:
+      statuses = [
+        ...shortlistingStatuses(exercise),
+        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+        APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.WITHDRAWN,
+        APPLICATION_STATUS.SHORTLISTING_PASSED,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.SHORTLISTED:
+      statuses = [
+        APPLICATION_STATUS.SELECTION_DAY_PASSED,
+        APPLICATION_STATUS.SELECTION_DAY_FAILED,
+        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
+        APPLICATION_STATUS.ELIGIBILITY_SCC_FAILED,
+        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
+        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.WITHDRAWN,
+        APPLICATION_STATUS.SELECTION_PASSED,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.SELECTABLE:
+      statuses = [
+        APPLICATION_STATUS.PASSED_RECOMMENDED,
+        APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
+        APPLICATION_STATUS.WITHDRAWN,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.RECOMMENDED:
+      statuses = [
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+        APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+        APPLICATION_STATUS.RECOMMENDED_FUTURE,
+        APPLICATION_STATUS.RECONSIDER,
+        APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.WITHDRAWN,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.HANDOVER:
+      statuses = [
+        APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+        APPLICATION_STATUS.RECOMMENDED_FUTURE,
+        APPLICATION_STATUS.WITHDRAWN,
+      ];
+      return statuses;
+    default:
+      statuses = [  // TODO make this specific to exercise
+        ...shortlistingStatuses(exercise),
+        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+        APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.WITHDRAWN,
+        APPLICATION_STATUS.SHORTLISTING_PASSED,
+        APPLICATION_STATUS.SELECTION_DAY_PASSED,
+        APPLICATION_STATUS.SELECTION_DAY_FAILED,
+        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
+        APPLICATION_STATUS.ELIGIBILITY_SCC_FAILED,
+        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
+        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.SELECTION_PASSED,
+        APPLICATION_STATUS.PASSED_RECOMMENDED,
+        APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
+        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
+        APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.RECONSIDER,
+        APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
+        APPLICATION_STATUS.RECOMMENDED_FUTURE,
+      ];
+      return statuses;
+    }    
+  } else {
+    switch (stage) {
+    case EXERCISE_STAGE.REVIEW:
+      statuses = [
+        ...shortlistingStatuses(exercise),
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.SHORTLISTED:
+      statuses = [
+        APPLICATION_STATUS.INVITED_TO_SELECTION_DAY,
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.SELECTED:
+      statuses = [
+        APPLICATION_STATUS.PASSED_SELECTION,
+        APPLICATION_STATUS.FAILED_SELECTION,
+        APPLICATION_STATUS.PASSED_BUT_NOT_RECOMMENDED,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.RECOMMENDED:
+      statuses = [
+        APPLICATION_STATUS.REJECTED_BY_CHARACTER,
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+        APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT,
+        APPLICATION_STATUS.SCC_TO_RECONSIDER,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    case EXERCISE_STAGE.HANDOVER:
+      statuses = [
+        APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+        APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    default:
+      statuses = [  // TODO make this specific to exercise
+        ...shortlistingStatuses(exercise),
+        APPLICATION_STATUS.INVITED_TO_SELECTION_DAY,
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.PASSED_SELECTION,
+        APPLICATION_STATUS.FAILED_SELECTION,
+        APPLICATION_STATUS.PASSED_BUT_NOT_RECOMMENDED,
+        APPLICATION_STATUS.REJECTED_BY_CHARACTER,
+        APPLICATION_STATUS.REJECTED_AS_INELIGIBLE,
+        APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+        APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT,
+        APPLICATION_STATUS.SCC_TO_RECONSIDER,
+        APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+        APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT,
+        APPLICATION_STATUS.WITHDREW_APPLICATION,
+      ];
+      return statuses;
+    }
   }
 }
 
 function shortlistingStatuses(exercise) {
   const statuses = [];
   if (exercise && exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
-    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0) {
-      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_PASSED);
-      statuses.push(APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_FAILED);
-    }
-    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0) {
-      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_PASSED);
-      statuses.push(APPLICATION_STATUS.CRITICAL_ANALYSIS_FAILED);
-    }
+    // QT
     if (
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 &&
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
+      (
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST) >= 0 ||
+        exercise.shortlistingMethods.indexOf(SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST) >= 0
+      )
     ) {
-      statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
-      statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
+      if (exercise._processingVersion >= 2) {
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED);  
+      } else {
+        statuses.push(APPLICATION_STATUS.SUBMITTED_FIRST_TEST);
+        statuses.push(APPLICATION_STATUS.FAILED_FIRST_TEST);
+        statuses.push(APPLICATION_STATUS.PASSED_FIRST_TEST);  
+        statuses.push(APPLICATION_STATUS.NO_TEST_SUBMITTED);
+        statuses.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);        
+      }
     }
+    // scenario test
     if (exercise.shortlistingMethods.indexOf(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST) >= 0) {
-      statuses.push(APPLICATION_STATUS.SCENARIO_TEST_PASSED);
-      statuses.push(APPLICATION_STATUS.SCENARIO_TEST_FAILED);
+      if (exercise._processingVersion >= 2) {
+        statuses.push(APPLICATION_STATUS.SCENARIO_TEST_PASSED);
+        statuses.push(APPLICATION_STATUS.SCENARIO_TEST_FAILED);
+        statuses.push(APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED);
+      } else {
+        statuses.push(APPLICATION_STATUS.SUBMITTED_SCENARIO_TEST);
+        statuses.push(APPLICATION_STATUS.FAILED_SCENARIO_TEST);
+        statuses.push(APPLICATION_STATUS.PASSED_SCENARIO_TEST);
+      }
     }
+    // sift
     if (
       exercise.shortlistingMethods.indexOf(SHORTLISTING.NAME_BLIND_PAPER_SIFT) >= 0 ||
       exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0
     ) {
-      statuses.push(APPLICATION_STATUS.SIFT_PASSED);
-      statuses.push(APPLICATION_STATUS.SIFT_FAILED);
+      if (exercise._processingVersion >= 2) {
+        statuses.push(APPLICATION_STATUS.SIFT_PASSED);
+        statuses.push(APPLICATION_STATUS.SIFT_FAILED);
+      } else {
+        statuses.push(APPLICATION_STATUS.PASSED_SIFT);
+        statuses.push(APPLICATION_STATUS.FAILED_SIFT);
+      }
     }
+    // telephone assessment
     if (exercise.shortlistingMethods.indexOf(SHORTLISTING.TELEPHONE_ASSESSMENT) >= 0) {
-      statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_PASSED);
-      statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_FAILED);
+      if (exercise._processingVersion >= 2) {
+        statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_PASSED);
+        statuses.push(APPLICATION_STATUS.TELEPHONE_ASSESSMENT_FAILED);
+      } else {
+        statuses.push(APPLICATION_STATUS.FAILED_TELEPHONE_ASSESSMENT);
+        statuses.push(APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT);
+      }
     }
+    // TODO other
   }
   return statuses;
 }

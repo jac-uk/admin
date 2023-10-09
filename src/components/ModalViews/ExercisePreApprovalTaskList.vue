@@ -67,8 +67,8 @@
   </div>
 </template>
 <script>
-import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup';
-import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import _has from 'lodash/has.js';
 export default {
