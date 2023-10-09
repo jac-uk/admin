@@ -195,6 +195,9 @@ export default {
       return !isDisabled;
     },
   },
+  created() {
+    console.log('Testing1');
+  },
   methods: {
     getTableData(params) {
       this.$store.dispatch(
