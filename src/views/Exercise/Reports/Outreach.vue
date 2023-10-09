@@ -96,7 +96,7 @@
       </p>
 
       <div
-        v-else-if="_has(report, activeTab)"
+        v-else-if="(activeTab in report)"
       >
         <table class="govuk-table">
           <caption class="govuk-table__caption hidden">
