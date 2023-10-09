@@ -36,14 +36,21 @@
                 Export all data
               </button>
               <ActionButton
+              <ActionButton
                 v-if="hasPermissions([
                   PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 type="primary"
                 :action="refreshReport"
+                type="primary"
+                :action="refreshReport"
               >
+                Refresh
+              </ActionButton>
                 Refresh
               </ActionButton>
             </div>
@@ -112,6 +119,7 @@
                 class="govuk-table__header"
               >
                 How did you hear about the vacancy?
+                How did you hear about the vacancy?
               </th>
               <th
                 scope="col"
@@ -123,6 +131,8 @@
           </thead>
           <tbody class="govuk-table__body">
             <tr
+              v-for="item in reportKeys"
+              :key="item"
               v-for="item in reportKeys"
               :key="item"
               class="govuk-table__row"
@@ -163,6 +173,36 @@
                 scope="col"
                 class="govuk-table__header"
               >
+                Attended outreach events
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].attended.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].attended.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
                 Attended outreach events
               </th>
               <th
@@ -347,12 +387,15 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { isLegal } from '@/helpers/exerciseHelper';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { isLegal } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'Outreach',
   components: {
     TabsList,
     Stat,
+    ActionButton,
     ActionButton,
   },
   mixins: [permissionMixin],
@@ -398,6 +441,17 @@ export default {
         'word-of-mouth',
         'other',
       ],
+      reportKeys: [
+        'jac-website',
+        'professional-body-website-or-email',
+        'professional-body-magazine',
+        'judicial-office-extranet',
+        'judging-your-future-newsletter',
+        'twitter',
+        'linked-in',
+        'word-of-mouth',
+        'other',
+      ],
     };
   },
   computed: {
@@ -418,6 +472,9 @@ export default {
     isLegal() {
       return isLegal(this.exercise);
     },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
   },
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
@@ -434,6 +491,11 @@ export default {
   },
   methods: {
     async refreshReport() {
+      try {
+        return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
+      } catch (error) {
+        return;
+      }
       try {
         return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
       } catch (error) {
@@ -464,6 +526,7 @@ export default {
       return data;
     },
     exportData(stage) {
+      let title = 'Outreach Report';
       let title = 'Outreach Report';
       if (stage) {
         title = `${title} - ${stage}`;
