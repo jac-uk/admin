@@ -480,15 +480,6 @@ export default {
         }
       );
     },
-    reduceReport(obj) {
-      const returnObj = {};
-      let keys = Object.keys(obj);
-      keys = keys.filter( item => !item.startsWith('total'));
-      keys.map(item => {
-        returnObj[item] = obj[item];
-      });
-      return returnObj;
-    },
   },
 };
 </script>
