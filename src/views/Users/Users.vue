@@ -48,30 +48,32 @@
             </select>
           </TableCell>
           <TableCell :title="tableColumns[3].title">
-            <ActionButton
-              v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
-              type="primary"
-              class="govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-              :action="() => enableUser(row)"
-            >
-              Enable
-            </ActionButton>
-            <ActionButton
-              v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
-              type="secondary"
-              class="govuk-!-margin-right-3 govuk-!-margin-bottom-0"
-              :action="() => disableUser(row)"
-            >
-              Disable
-            </ActionButton>
+            <div style="display: flex; gap: 15px;">
+              <ActionButton
+                v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                type="primary"
+                class="govuk-!-margin-bottom-0"
+                :action="() => enableUser(row)"
+              >
+                Enable
+              </ActionButton>
+              <ActionButton
+                v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                type="secondary"
+                class="govuk-!-margin-bottom-0"
+                :action="() => disableUser(row)"
+              >
+                Disable
+              </ActionButton>
 
-            <button
-              v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
-              class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
-              @click="() => openDeleteUserModal(row)"
-            >
-              Delete
-            </button>
+              <button
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
+                class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+                @click="() => openDeleteUserModal(row)"
+              >
+                Delete
+              </button>
+            </div>
           </TableCell>
         </template>
       </Table>
@@ -143,8 +145,8 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Name', sort: 'displayName' },
-        { title: 'Email', direction: 'asc', default: true },
+        { title: 'Name' },
+        { title: 'Email', sort: 'email', direction: 'asc', default: true },
         { title: 'Role' },
         { title: 'Action' },
       ],
