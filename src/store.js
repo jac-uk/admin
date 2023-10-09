@@ -17,28 +17,20 @@ import events from '@/store/events';
 import clipboard from '@/store/clipboard';
 import users from '@/store/users';
 
-import stageReview from '@/store/stage/review';
-import stageSelected from '@/store/stage/selected';
-import stageHandover from '@/store/stage/handover';
-import stageRecommended from '@/store/stage/recommended';
-import stageShortlisted from '@/store/stage/shortlisted';
+import applicationRecords from '@/store/applicationRecords';
 import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
-import qualifyingTest from '@/store/qualifyingTest/qualifyingTest';
-import qualifyingTestResponses from '@/store/qualifyingTest/qualifyingTestResponses';
-import connectionMonitor from '@/store/connectionMonitor';
-import qualifyingTestReports from '@/store/qualifyingTestReports/collection';
-import qualifyingTestReport from '@/store/qualifyingTestReports/document';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
 import panels from '@/store/panels';
-// NEW: import panels from '@/store/panels/collection';
+// import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
+import checks from '@/store/checks/collection';
 
 import exerciseDiversity from '@/store/exercise/diversity/document';
 import messageBase from '@/store/baseClasses/messageBase';
@@ -50,9 +42,10 @@ import vacancy from '@/store/vacancy';
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
-  strict: import.meta.env.NODE_ENV !== 'production',
+  strict: import.meta.env.DEV,
   modules: {
     // Keep these in alphabetical order for readability in Vue Chrome Extension
+    applicationRecords,
     applications,
     application,
     assessment,
@@ -61,8 +54,8 @@ const store = createStore({
     candidateApplications,
     candidates,
     characterChecks,
+    checks,
     clipboard,
-    connectionMonitor,
     events,
     exerciseCollection,
     exerciseCreateJourney,
@@ -78,16 +71,7 @@ const store = createStore({
     panellist,
     panellists,
     panels,
-    qualifyingTest,
-    qualifyingTestResponses,
-    qualifyingTestReports,
-    qualifyingTestReport,
     services,
-    stageReview,
-    stageSelected,
-    stageHandover,
-    stageRecommended,
-    stageShortlisted,
     task,
     tasks,
     ui,
@@ -104,6 +88,9 @@ const store = createStore({
       return state.packageVersion;
     },
     appEnvironment: () => {
+      if (import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
+        return 'LOCAL';
+      }
       const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
       if (projectId.indexOf('-develop') >= 0) {
         return 'DEVELOP';

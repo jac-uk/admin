@@ -35,21 +35,17 @@
               >
                 Export all data
               </button>
-              <button
+              <ActionButton
                 v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
-                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-                  PERMISSIONS.exercises.permissions.canReadExercises.value
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action"
-                data-module="govuk-button"
-                @click="refreshReport"
+                type="primary"
+                :action="refreshReport"
               >
-                <span
-                  v-if="refreshingReport"
-                  class="spinner-border spinner-border-sm"
-                /> Refresh
-              </button>
+                Refresh
+              </ActionButton>
             </div>
           </div>
         </div>
@@ -102,7 +98,10 @@
       <div
         v-else
       >
-        <table class="govuk-table table-with-border">
+        <table
+          v-if="('outreach' in report[activeTab])"
+          class="govuk-table"
+        >
           <caption class="govuk-table__caption hidden">
             Outreach by exercise stage
           </caption>
@@ -112,7 +111,7 @@
                 scope="col"
                 class="govuk-table__header"
               >
-                Answer
+                How did you hear about the vacancy?
               </th>
               <th
                 scope="col"
@@ -124,22 +123,216 @@
           </thead>
           <tbody class="govuk-table__body">
             <tr
-              v-for="(answer, key, answerIndex) in reduceReport(report[activeTab].outreach)"
-              :key="answerIndex"
+              v-for="item in reportKeys"
+              :key="item"
               class="govuk-table__row"
             >
-              <th
-                scope="col"
-                class="govuk-table__header"
-              >
-                {{ $filters.lookup(key) }}
+              <th class="govuk-table__header">
+                {{ $filters.lookup(item) }}
               </th>
               <td class="govuk-table__cell govuk-table__cell--numeric">
-                <Stat :stat="answer" />
+                <Stat :stat="report[activeTab].outreach[item]" />
+              </td>
+            </tr>
+
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].outreach.declaration"
+                  :report-total="report[activeTab].outreach.total"
+                  :is-declaration-total="true"
+                />
               </td>
             </tr>
           </tbody>
         </table>
+
+        <table
+          v-if="('attended' in report[activeTab])"
+          class="govuk-table"
+        >
+          <caption class="govuk-table__caption hidden">
+            Attended outreach events by exercise stage
+          </caption>
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th
+                scope="col"
+                class="govuk-table__header"
+              >
+                Attended outreach events
+              </th>
+              <th
+                scope="col"
+                class="govuk-table__header govuk-table__header--numeric"
+              >
+                Applications
+              </th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Yes
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].attended.yes" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                No
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat :stat="report[activeTab].attended.no" />
+              </td>
+            </tr>
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                Declaration total
+              </th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <Stat
+                  :stat="report[activeTab].attended.declaration"
+                  :report-total="report[activeTab].attended.total"
+                  :is-declaration-total="true"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <template v-if="isLegal">
+          <table
+            v-if="('workshadowing' in report[activeTab])"
+            class="govuk-table"
+          >
+            <caption class="govuk-table__caption hidden">
+              Participated in judicial workshadowing scheme by exercise stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Participated In Judicial Workshadowing Scheme
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Yes
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].workshadowing.yes" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  No
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].workshadowing.no" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="report[activeTab].workshadowing.declaration"
+                    :report-total="report[activeTab].workshadowing.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table
+            v-if="('hasTakenPAJE' in report[activeTab])"
+            class="govuk-table"
+          >
+            <caption class="govuk-table__caption hidden">
+              Has taken PAJE by exercise stage
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th
+                  scope="col"
+                  class="govuk-table__header"
+                >
+                  Has taken PAJE
+                </th>
+                <th
+                  scope="col"
+                  class="govuk-table__header govuk-table__header--numeric"
+                >
+                  Applications
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Yes
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE.yes" />
+                </td>
+              </tr>
+
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Online only
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE['online-only']" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Online and judge-led
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE['online-and-judge-led']" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  No
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat :stat="report[activeTab].hasTakenPAJE.no" />
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Declaration total
+                </th>
+                <td class="govuk-table__cell govuk-table__cell--numeric">
+                  <Stat
+                    :stat="report[activeTab].hasTakenPAJE.declaration"
+                    :report-total="report[activeTab].hasTakenPAJE.total"
+                    :is-declaration-total="true"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
       </div>
     </div>
   </div>
@@ -152,18 +345,20 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { isLegal } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'Outreach',
   components: {
     TabsList,
     Stat,
+    ActionButton,
   },
   mixins: [permissionMixin],
   data() {
     return {
       report: null,
-      refreshingReport: false,
       unsubscribe: null,
       tabs: [
         {
@@ -192,6 +387,17 @@ export default {
         },
       ],
       activeTab: 'applied',
+      reportKeys: [
+        'jac-website',
+        'professional-body-website-or-email',
+        'professional-body-magazine',
+        'judicial-office-extranet',
+        'judging-your-future-newsletter',
+        'twitter',
+        'linked-in',
+        'word-of-mouth',
+        'other',
+      ],
     };
   },
   computed: {
@@ -209,6 +415,9 @@ export default {
       }
       return '';
     },
+    isLegal() {
+      return isLegal(this.exercise);
+    },
   },
   created() {
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
@@ -225,9 +434,11 @@ export default {
   },
   methods: {
     async refreshReport() {
-      this.refreshingReport = true;
-      await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
-      this.refreshingReport = false;
+      try {
+        return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
+      } catch (error) {
+        return;
+      }
     },
     gatherReportData(stage) {
       const data = [];
@@ -253,7 +464,7 @@ export default {
       return data;
     },
     exportData(stage) {
-      let title = 'Diversity Report';
+      let title = 'Outreach Report';
       if (stage) {
         title = `${title} - ${stage}`;
       }
@@ -268,15 +479,6 @@ export default {
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
-    },
-    reduceReport(obj) {
-      const returnObj = {};
-      let keys = Object.keys(obj);
-      keys = keys.filter( item => !item.startsWith('total'));
-      keys.map(item => {
-        returnObj[item] = obj[item];
-      });
-      return returnObj;
     },
   },
 };

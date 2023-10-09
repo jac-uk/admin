@@ -32,22 +32,26 @@
     <SelectionDay />
     -->
 
-    <div class="govuk-grid-column-two-thirds">
+    <div 
+      v-if="report"
+      class="govuk-grid-column-two-thirds"
+    >
       <h2 class="govuk-heading-l">
         Candidate Breakdown at Each Stage
       </h2>
     </div>
 
-    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    <div
+      v-if="report"
+      class="govuk-grid-column-one-third govuk-!-text-align-right"
+    >
       <button
-        v-if="report"
         class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
         @click="exportData"
       >
         Export data
       </button>
       <ActionButton
-        v-if="report"
         type="primary"
         :action="refreshReport"
       >
@@ -138,7 +142,7 @@ import AssignedCommissioner from './OverviewPanels/AssignedCommissioner.vue';
 import _has from 'lodash/has';
 import _map from 'lodash/map';
 import _find from 'lodash/find';
-import Chart from '@/components/Chart';
+import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
