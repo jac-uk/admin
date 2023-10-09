@@ -38,7 +38,7 @@
     <!-- // END PANELS -->
     <!-- CANDIDATES -->
     <div v-show="activeTab == 'candidates'">
-      <Table
+      <!-- <Table
         v-model:selection="selectedItems"
         data-key="id"
         :data="candidatesList"
@@ -50,6 +50,16 @@
           handler: candidateSearch,
           field: 'candidate.id',
         }"
+        @change="getTableDataCandidates"
+      > -->
+      <Table
+        v-model:selection="selectedItems"
+        data-key="id"
+        :data="candidatesList"
+        :columns="tableColumnsCandidates"
+        multi-select
+        :page-size="50"
+        search-map="_search"
         @change="getTableDataCandidates"
       >
         <template #actions>
@@ -194,9 +204,6 @@ export default {
       const isDisabled = this.selectedItems && this.selectedItems.length;
       return !isDisabled;
     },
-  },
-  created() {
-    console.log('Testing1');
   },
   methods: {
     getTableData(params) {
