@@ -8,12 +8,16 @@ const collection = firestore.collection('userInvitations');
 export default {
   namespaced: true,
   actions: {
-    bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      const firestoreRef = await tableQuery(state.records, collection, params);
-      if (firestoreRef) {
-        return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
-      } else {
-        commit('records', []);
+    bind: firestoreAction(async ({ bindFirestoreRef, state }, params) => {
+      let firestoreRef = collection;
+      if (params.status === 'pending') {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = await tableQuery(state.userInvitationPendingRecords, firestoreRef, params);
+        return bindFirestoreRef('userInvitationPendingRecords', firestoreRef, { serialize: vuexfireSerialize });
+      } else if (params.status === 'completed') {
+        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = await tableQuery(state.userInvitationCompletedRecords, firestoreRef, params);
+        return bindFirestoreRef('userInvitationCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -26,13 +30,15 @@ export default {
     unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    get: async (_, { email, status }) => {
+    getByEmail: async (_, { email, status }) => {
+      if (!email) return null;
+
       try {
-        const snap = await collection
-          .where('email', '==', email)
-          .where('status', '==', status)
-          .limit(1)
-          .get();
+        let firestoreRef = collection.where('email', '==', email);
+        if (status) {
+          firestoreRef = firestoreRef.where('status', '==', status);
+        }
+        const snap = await firestoreRef.limit(1).get();
         let result = null;
         snap.forEach(doc => {
           result = {
@@ -63,7 +69,8 @@ export default {
     },
   },
   state: {
-    records: [],
+    userInvitationPendingRecords: [],
+    userInvitationCompletedRecords: [],
     record: null,
   },
   getters: {},

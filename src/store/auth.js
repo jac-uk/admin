@@ -39,13 +39,13 @@ const module = {
         }
 
         // check if user document exists
-        let userDoc = await dispatch('users/get', user.uid, { root: true });
+        let userDoc = await dispatch('users/getById', user.uid, { root: true });
         // check if new user
         // 1. user does not exist in authentication and firestore
         // 2. user exists in authentication but not in firestore
         if (!userDoc) {
           // check if user has been invited
-          const userInvitation = await dispatch('userInvitations/get', { email: user.email, status: 'pending' }, { root: true });
+          const userInvitation = await dispatch('userInvitations/getByEmail', { email: user.email, status: 'pending' }, { root: true });
           if (!userInvitation) throw new Error('You has not been invited to use this site');
 
           // create user document

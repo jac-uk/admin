@@ -33,7 +33,9 @@ export default {
       }
       return await collection.add(data);
     },
-    get: async (_, userId) => {
+    getById: async (_, userId) => {
+      if (!userId) return null;
+
       try {
         const doc = await collection.doc(userId).get();
         if (doc.exists) {
@@ -43,6 +45,26 @@ export default {
           };
         }
         return null;
+      } catch (error) {
+        return null;
+      }
+    },
+    getByEmail: async (_, email) => {
+      if (!email) return null;
+
+      try {
+        const snap = await collection
+          .where('email', '==', email)
+          .limit(1)
+          .get();
+        let result = null;
+        snap.forEach(doc => {
+          result = {
+            id: doc.id,
+            ...doc.data(),
+          };
+        });
+        return result;
       } catch (error) {
         return null;
       }

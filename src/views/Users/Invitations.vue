@@ -10,10 +10,17 @@
 
     <h2>List of invited users</h2>
 
+    <TabsList
+      v-model:active-tab="activeTab"
+      :tabs="tabs"
+      class="print-none"
+    />
+      
     <Table
+      :key="activeTab"
       ref="userInvitationsTable"
       data-key="id"
-      :data="userInvitations"
+      :data="records"
       :page-size="50"
       :columns="tableColumns"
       :search="['email']"
@@ -32,8 +39,11 @@
         >
           {{ row.status }}
         </TableCell>
-        <TableCell :title="tableColumns[3].title">
-          <div v-if="row.status === 'pending'">
+        <TableCell
+          v-if="row.status === 'pending'"
+          :title="tableColumns[3].title"
+        >
+          <div>
             <button
               v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
               class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
@@ -145,6 +155,7 @@
 
 <script>
 import firebase from '@firebase/app';
+import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -155,6 +166,7 @@ import permissionMixin from '@/permissionMixin';
 export default {
   name: 'UserInvitations',
   components: {
+    TabsList,
     Table,
     TableCell,
     ActionButton,
@@ -173,48 +185,99 @@ export default {
     },
   },
   data() {
+    const tabs = [
+      {
+        ref: 'pending',
+        title: 'Pending',
+      },
+      {
+        ref: 'completed',
+        title: 'Completed',
+      },
+    ];
+
     return {
-      tableColumns: [
-        { title: 'Email', direction: 'asc', sort: 'email', default: true },
-        { title: 'Role' },
-        { title: 'Status' },
-        { title: 'Action' },
-      ],
+      tabs,
+      activeTab: 'pending',
       userInvitation: {
         email: '',
         roleId: '',
         status: 'pending',
       },
+      isDuplicateEmail: false,
+      selectedUserInvitation: null,
     };
   },
   computed: {
-    userInvitations() {
-      return this.$store.state.userInvitations.records;
+    tableColumns() {
+      const tableColumns = [
+        { title: 'Email', direction: 'asc', sort: 'email', default: true },
+        { title: 'Role' },
+        { title: 'Status' },
+      ];
+      if (this.isPending) {
+        tableColumns.push({ title: 'Action' });
+      }
+      return tableColumns;
     },
-    isDuplicateEmail() {
-      return this.users.map(user => user.email).includes(this.userInvitation.email);
+    isPending() {
+      return this.activeTab === 'pending';
+    },
+    isCompleted() {
+      return this.activeTab === 'completed';
+    },
+    records() {
+      if (this.isPending) {
+        return this.$store.state.userInvitations.userInvitationPendingRecords;
+      } else if (this.isCompleted) {
+        return this.$store.state.userInvitations.userInvitationCompletedRecords;
+      } else {
+        return [];
+      }
     },
     isNotJACEmail() {
-      return this.userInvitation.email && !this.userInvitation.email.match(/@judicialappointments.(digital|gov.uk)$/);
+      return this.userInvitation.email && !this.userInvitation.email.match(/(.*@judicialappointments|.*@justice)[.](digital|gov[.]uk)/);
     },
     defaultUserRoleId() {
       const role = this.roles.find(r => r.isDefault);
       return role ? role.id : '';
     },
   },
+  watch: {
+    'userInvitation.email'() {
+      this.isDuplicateEmail = false;
+    },
+  },
   methods: {
+    getStatus() {
+      let status = '';
+      if (this.isPending) {
+        status = 'pending';
+      } else if (this.isCompleted) {
+        status = 'completed';
+      }
+      return status;
+    },
     getTableData(params) {
-      this.$store.dispatch('userInvitations/bind', params);
+      this.$store.dispatch('userInvitations/bind', {
+        status: this.getStatus(),
+        ...params,
+      });
     },
     getRoleName(roleId) {
       const role = this.roles.find(r => r.id === roleId);
       return role ? role.roleName : '';
+    },
+    async validateEmail(email) {
+      const isDuplicate = await this.$store.dispatch('users/getByEmail', email) || await this.$store.dispatch('userInvitations/getByEmail', { email });
+      if (isDuplicate) this.isDuplicateEmail = true;
     },
     openCreateUserInvitationModal() {
       this.userInvitation.roleId = this.defaultUserRoleId;
       this.$refs['modalRefUserInvitation'].openModal();
     },
     openEditUserInvitationModal(userInvitation) {
+      this.selectedUserInvitation = userInvitation;
       this.userInvitation.id = userInvitation.id;
       this.userInvitation.email = userInvitation.email;
       this.userInvitation.roleId = userInvitation.roleId;
@@ -238,8 +301,12 @@ export default {
         roleId: '',
         status: 'pending',
       };
+      this.selectedUserInvitation = null;
     },
     async createUserInvitation() {
+      await this.validateEmail(this.userInvitation.email);
+      if (this.isDuplicateEmail) return false;
+
       try {
         const data = {
           ...this.userInvitation,
@@ -253,6 +320,13 @@ export default {
       }
     },
     async updateUserInvitation() {
+      if (this.selectedUserInvitation.email === this.userInvitation.email) {
+        this.isDuplicateEmail = false;
+      } else {
+        await this.validateEmail(this.userInvitation.email);
+        if (this.isDuplicateEmail) return false;
+      }
+      
       try {
         const data = {
           id: this.userInvitation.id,
