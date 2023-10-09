@@ -38,20 +38,6 @@
     <!-- // END PANELS -->
     <!-- CANDIDATES -->
     <div v-show="activeTab == 'candidates'">
-      <!-- <Table
-        v-model:selection="selectedItems"
-        data-key="id"
-        :data="candidatesList"
-        :columns="tableColumnsCandidates"
-        multi-select
-        :page-size="50"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
-        @change="getTableDataCandidates"
-      > -->
       <Table
         v-model:selection="selectedItems"
         data-key="id"
