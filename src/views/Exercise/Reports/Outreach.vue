@@ -413,6 +413,9 @@ export default {
       .onSnapshot((snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
+
+          console.log('report:');
+          console.log(this.report);
         }
       });
   },
