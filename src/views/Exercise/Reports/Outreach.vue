@@ -408,7 +408,7 @@ export default {
     },
   },
   created() {
-    console.log('testing');
+    console.log('testing123');
     this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
       .onSnapshot((snap) => {
         if (snap.exists) {
