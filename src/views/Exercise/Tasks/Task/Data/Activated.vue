@@ -34,14 +34,13 @@
           <p class="govuk-body govuk-!-margin-bottom-4">
             Next step
           </p>
-          <ActionButton
-            class="govuk-!-margin-bottom-1"
-            type="primary"
-            :disabled="!areAllRowsComplete"
-            :action="btnFinalise"
+          <button
+            class="govuk-button govuk-!-margin-bottom-1"
+            type="button"
+            @click="btnContinue"
           >
             Continue
-          </ActionButton>
+          </button>
         </div>
       </div>
     </div>
@@ -161,6 +160,15 @@
         </template>
       </Table>
     </div>
+    <Modal ref="modalCheckDataComplete">
+      <ModalInner
+        title="Are you sure you wish to continue?"
+        :message="confirmationMessage"
+        button-text="Yes - please continue"
+        @close="$refs.modalCheckDataComplete.closeModal()"
+        @confirmed="btnFinalise"
+      />      
+    </Modal>    
   </div>
 </template>
 
@@ -170,8 +178,9 @@ import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import { functions } from '@/firebase';
 import clone from 'clone';
 
@@ -179,8 +188,9 @@ export default {
   components: {
     Table,
     TableCell,
-    ActionButton,
     FullScreenButton,
+    Modal,
+    ModalInner,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -297,6 +307,9 @@ export default {
     areAllRowsComplete() {
       return this.completeRows.length === this.task.applications.length;
     },
+    confirmationMessage() {
+      return `${this.completeRows.length} out of ${this.task.applications.length} applications have scores`;
+    },
   },
   watch: {
     task() {
@@ -305,6 +318,9 @@ export default {
   },
   methods: {
     btnNext,
+    btnContinue() {
+      this.$refs.modalCheckDataComplete.openModal();
+    },
     async btnFinalise() {
       await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
