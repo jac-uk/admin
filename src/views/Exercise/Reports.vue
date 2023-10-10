@@ -48,11 +48,6 @@ export default {
           name: 'reasonable-adjustments',
         },
         {
-          title: 'Qualifying Test Reports',
-          name: 'qualifying-test-reports',
-          query: { nav: '/reports/qualifying-test-reports' },
-        },
-        {
           title: 'Agency',
           name: 'agency',
         },
@@ -72,7 +67,7 @@ export default {
 
       if (exercise.shortlistingMethods && exercise.shortlistingMethods.length) {
         if (
-          (exercise.shortlistingMethods.indexOf('sift') >= 0 && exercise.siftStartDate)
+          (exercise.shortlistingMethods.indexOf('paper-sift') >= 0 && exercise.siftStartDate)
           || (exercise.shortlistingMethods.indexOf('name-blind-paper-sift') >= 0 && exercise.nameBlindSiftStartDate)
         ) {
           sideNavigation.push(
@@ -83,19 +78,19 @@ export default {
           );
         }
       }
-      if (exercise.selectionDays) {
-        sideNavigation.push(
-          {
-            title: 'Selection day',
-            path: `${path}/selection`,
-          }
-        );
-      }
       if (exercise.scenarioTestDate) {  // TODO: remove this when we have better support for scenarios
         sideNavigation.push(
           {
             title: 'Scenario Responses',
             path: `${path}/scenario`,
+          }
+        );
+      }
+      if (exercise.selectionDays) {
+        sideNavigation.push(
+          {
+            title: 'Selection day',
+            path: `${path}/selection`,
           }
         );
       }

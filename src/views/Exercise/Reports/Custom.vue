@@ -165,34 +165,11 @@
                 All
               </option>
               <option
-                v-if="applicationRecordCounts.review"
-                value="review"
+                v-for="stage in availableStages"
+                :key="stage"
+                :value="stage"
               >
-                Review
-              </option>
-              <option
-                v-if="applicationRecordCounts.shortlisted"
-                value="shortlisted"
-              >
-                Shortlisted
-              </option>
-              <option
-                v-if="applicationRecordCounts.selected"
-                value="selected"
-              >
-                Selected
-              </option>
-              <option
-                v-if="applicationRecordCounts.recommended"
-                value="recommended"
-              >
-                Recommended
-              </option>
-              <option
-                v-if="applicationRecordCounts.handover"
-                value="handover"
-              >
-                Handover
+                {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
               </option>
             </select>
           </div>
@@ -402,8 +379,8 @@ import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
-import { EXERCISE_STAGE, STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat
@@ -427,7 +404,6 @@ export default {
       data: null,
       statuses: [],
       selectedStage: 'all',
-      availableStatuses: [],
       selectedStageStatus: null,
       isLoading: null,
       loadFailed: null,
@@ -616,7 +592,13 @@ export default {
       return applicationRecordCounts(this.exercise);
     },
     availableStages() {
-      return Object.values(EXERCISE_STAGE).filter((stage) => this.applicationRecordCounts[stage]);
+      const stages = availableStages(this.exercise);
+      return stages.filter(stage => this.applicationRecordCounts[stage]);
+    },
+    availableStatuses() {
+      if (this.selectedStage === 'all') return null;
+      const statuses = availableStatuses(this.exercise, this.selectedStage);
+      return statuses;
     },
   },
   watch: {
@@ -626,20 +608,7 @@ export default {
       },
       deep: true,
     },
-    selectedStage: function (valueNow) {
-      // populate the status dropdown, for the chosen stage
-      if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
-      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
-        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
-        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
-        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
-      } else { // handover
-        this.availableStatuses = [];
-      }
-
+    selectedStage: function () {
       this.selectedStageStatus = 'all';
       this.getApplicationRecords();
     },
@@ -788,7 +757,6 @@ export default {
       // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
       // value to item-key
       const i = this.columns.indexOf(item);
-      console.log(`${item}-key = ${i}`);
       return i;
     },
     isUsingFilter(key) {

@@ -10,6 +10,8 @@ import { auth, functions } from '@/firebase';
 import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
+import { searchMap } from '@/helpers/searchMap';
+
 import * as Sentry from '@sentry/vue';
 
 import './styles/main.scss';
@@ -72,11 +74,14 @@ auth.onAuthStateChanged(async (user) => {
     // Bind global filters before mounting
     vueInstance.config.globalProperties.$filters = allFilters;
 
+    // Bind searchMap config before mounting
+    vueInstance.config.globalProperties.$searchMap = searchMap;
+
     // Bind emitter for global events
     vueInstance.config.globalProperties.emitter = emitter;
 
     // Initialise Sentry
-    if (import.meta.env.NODE_ENV !== 'development') {
+    if (import.meta.env.PROD) {
       Sentry.init({
         app: vueInstance,
         dsn: 'https://ab99abfef6294bc5b564e635d7b7cb4b@sentry.io/1792541',
