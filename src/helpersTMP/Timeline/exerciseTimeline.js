@@ -32,6 +32,7 @@ const createSelectionDay = (selectionDay) => {
     entry: `Selection Day - ${selectionDay.selectionDayLocation}`,
     date: selectionDay.selectionDayStart,
     dateString: null,
+    taskType: TASK_TYPE.SELECTION_DAY,
   };
 
   const selectionDayStart = getDateString(selectionDay.selectionDayStart);
@@ -99,6 +100,7 @@ const exerciseTimeline = (data) => {
           entry: 'Shortlisting outcome',
           date: data.shortlistingOutcomeDate,
           dateString: getDateString(data.shortlistingOutcomeDate, 'month'),
+          taskType: TASK_TYPE.SHORTLISTING_OUTCOME,
         }
       );
     }
@@ -214,6 +216,7 @@ const exerciseTimeline = (data) => {
         entry: 'Eligibility SCC',
         date: data.eligibilitySCCDate,
         dateString: getDateString(data.eligibilitySCCDate),
+        taskType: TASK_TYPE.ELIGIBILITY_SCC,
       }
     );
   }
