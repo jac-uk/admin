@@ -51,7 +51,7 @@
       data-key="id"
       :data="applications"
       :columns="tableColumns"
-      search-map="_search"
+      :search-map="$searchMap.applications"
       :page-item-type="pageItemType"
       :page-size="50"
       :total="exercise._applications[status]"
@@ -152,9 +152,9 @@ export default {
     },
     pageItemType() {
       if (
-        this.exercise && 
-        this.exercise._applications && 
-        this.exercise._applications[this.status] && 
+        this.exercise &&
+        this.exercise._applications &&
+        this.exercise._applications[this.status] &&
         this.exercise._applications[this.status] > 500
       ) {
         return 'uppercase-letter';
