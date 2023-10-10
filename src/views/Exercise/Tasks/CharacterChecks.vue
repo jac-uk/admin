@@ -93,7 +93,7 @@
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
-          search-map="_search"
+          :search-map="$searchMap.characterChecks"
           multi-select
           :page-size="50"
           :filters="[
