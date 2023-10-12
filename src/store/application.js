@@ -88,7 +88,8 @@ export default {
       context.dispatch('assessment/delete', { id: applicationId }, { root: true });
 
       // If Qualifying Tests have started ensure the relevant qualifyingTestResponse document is removed (soft deleted)
-      context.dispatch('qualifyingTestResponses/delete', { id: applicationId }, { root: true });
+      // TODO Update Task and QT platform (within digital-platform)
+      // context.dispatch('qualifyingTestResponses/delete', { id: applicationId }, { root: true });
     },
     createDraft: async (context, {
       exerciseId,

@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import Form from '@/components/Page/Form';
-import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup';
-import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem';
+import Form from '@/components/Page/Form.vue';
+import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
+import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 
 export default {
   name: 'ConfigureExport',

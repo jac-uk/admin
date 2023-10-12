@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
+      <div class="title-bar-exercise govuk-grid-row clearfix govuk-!-margin-top-4 govuk-!-margin-bottom-2">
         <div class="govuk-grid-column-full">
           <span class="govuk-caption-xl">
             {{ exercise.referenceNumber }}
@@ -91,7 +91,7 @@
           </div>
         </div>
       </div>
-      <div class="govuk-grid-row">
+      <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
           <SubNavigation
             v-if="!hasJourney && subNavigation.length > 1"
@@ -220,16 +220,10 @@ export default {
       if ((this.exercise.applications || this.hasOpened) && this.hasPermissions([this.PERMISSIONS.applications.permissions.canReadApplications.value])) {
         subNavigation.push({ path: `${path}/applications`, title: 'Applications' });
       }
-      if (this.hasQualifyingTests || this.isProcessing) {
-        subNavigation.push({ path: `${path}/tasks`, title: 'Tasks' });
-      }
       if (this.isProcessing) {
-        if (this.hasPermissions([this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value])) {
-          subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
-        }
-        if (this.hasPermissions([this.PERMISSIONS.qualifyingTestReports.permissions.canReadQualifyingTestReports.value])) {
-          subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
-        }
+        subNavigation.push({ path: `${path}/tasks/all`, title: 'Tasks' });
+        subNavigation.push({ path: `${path}/stages`, title: 'Stages' });
+        subNavigation.push({ path: `${path}/reports`, title: 'Reports' });
       }
       return subNavigation;
     },

@@ -1,6 +1,6 @@
 import {
   STATUS,
-  EXERCISE_STAGE,
+  // EXERCISE_STAGE,
   // APPLICATION_STATUS,
   SHORTLISTING,
   QUALIFYING_TEST,
@@ -9,8 +9,6 @@ import {
   DEFAULT
 } from '@jac-uk/jac-kit/helpers/constants';
 
-EXERCISE_STAGE.APPLIED = 'applied';
-
 const ADVERT_TYPES = {
   LISTING: 'listing',
   BASIC: 'basic',
@@ -18,41 +16,84 @@ const ADVERT_TYPES = {
   EXTERNAL: 'external',
 };
 
-// const EXERCISE_STAGE = {
-//   APPLIED: 'applied',
-//   SHORTLISTED: 'shortlisted',
-//   SELECTABLE: 'selectable',
-//   RECOMMENDED: 'recommended',
-//   HANDOVER: 'handover',
-// };
+const EXERCISE_STAGE = {
+  REVIEW: 'review', // to be replaced with applied
+  APPLIED: 'applied',
+  SHORTLISTED: 'shortlisted',
+  SELECTABLE: 'selectable',
+  SELECTED: 'selected', // to be replaced with selectable
+  RECOMMENDED: 'recommended',
+  HANDOVER: 'handover',
+};
 
 const APPLICATION_STATUS = {
+  // v2
   CRITICAL_ANALYSIS_PASSED: 'criticalAnalysisPassed',
   CRITICAL_ANALYSIS_FAILED: 'criticalAnalysisFailed',
   SITUATIONAL_JUDGEMENT_PASSED: 'situationalJudgementPassed',
   SITUATIONAL_JUDGEMENT_FAILED: 'situationalJudgementFailed',
   QUALIFYING_TEST_PASSED: 'qualifyingTestPassed',
   QUALIFYING_TEST_FAILED: 'qualifyingTestFailed',
+  QUALIFYING_TEST_NOT_SUBMITTED: 'noTestSubmitted',
   SCENARIO_TEST_PASSED: 'scenarioTestPassed',
   SCENARIO_TEST_FAILED: 'scenarioTestFailed',
+  SCENARIO_TEST_NOT_SUBMITTED: 'noScenarioTestSubmitted',
   SIFT_PASSED: 'siftPassed',
   SIFT_FAILED: 'siftFailed',
   TELEPHONE_ASSESSMENT_PASSED: 'telephoneAssessmentPassed',
   TELEPHONE_ASSESSMENT_FAILED: 'telephoneAssessmentFailed',
+  SHORTLISTING_PASSED: 'shortlistingOutcomePassed',
+  SHORTLISTING_FAILED: 'shortlistingOutcomeFailed',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
-  // SELECTION_INVITED: 'selectionInvited',
+  ELIGIBILITY_SCC_FAILED: 'eligibilitySCCFailed',
+  CHARACTER_AND_SELECTION_SCC_PASSED: 'characterAndSelectionSCCPassed',
+  CHARACTER_AND_SELECTION_SCC_FAILED: 'characterAndSelectionSCCFailed',
+  STATUTORY_CONSULTATION_PASSED: 'statutoryConsultationPassed',
+  STATUTORY_CONSULTATION_FAILED: 'statutoryConsultationFailed',
+  SELECTION_INVITED: 'selectionInvited',
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',
   REJECTED_CHARACTER: 'rejectedCharacter',
-  WITHDRAWN: 'withdrawn',
-  SELECTION_PASSED: 'selectionPassed',
-  SELECTION_FAILED: 'selectionFailed',
+  SELECTION_DAY_PASSED: 'selectionDayPassed',
+  SELECTION_DAY_FAILED: 'selectionDayFailed',
+  SELECTION_PASSED: 'selectionOutcomePassed',
+  SELECTION_FAILED: 'selectionOutcomeFailed',
+  SELECTION_OUTCOME_PASSED: 'selectionOutcomePassed',
+  SELECTION_OUTCOME_FAILED: 'selectionOutcomeFailed',
   PASSED_RECOMMENDED: 'passedRecommended',
   PASSED_NOT_RECOMMENDED: 'passedNotRecommended',
   RECOMMENDED_IMMEDIATE: 'recommendedImmediate',
   RECOMMENDED_FUTURE: 'recommendedFuture',
   RECONSIDER: 'reconsider',
   SECOND_STAGE_INVITED: 'secondStageInvited',
+  WITHDRAWN: 'withdrawn',
+
+  // v1 REVIEW
+  PASSED_SIFT: 'passedSift',
+  FAILED_SIFT: 'failedSift',
+  SUBMITTED_FIRST_TEST: 'submittedFirstTest',
+  FAILED_FIRST_TEST: 'failedFirstTest',
+  SUBMITTED_SCENARIO_TEST: 'submittedScenarioTest',
+  PASSED_FIRST_TEST: 'passedFirstTest',
+  FAILED_SCENARIO_TEST: 'failedScenarioTest',
+  PASSED_SCENARIO_TEST: 'passedScenarioTest',
+  FAILED_TELEPHONE_ASSESSMENT: 'failedTelephoneAssessment',
+  PASSED_TELEPHONE_ASSESSMENT: 'passedTelephoneAssessment',
+  NO_TEST_SUBMITTED: 'noTestSubmitted',
+  TEST_SUBMITTED_OVER_TIME: 'testSubmittedOverTime',
+  WITHDREW_APPLICATION: 'withdrewApplication',
+  REJECTED_AS_INELIGIBLE: 'rejectedAsIneligible',
+  // v1 SHORTLISTED
+  INVITED_TO_SELECTION_DAY: 'invitedToSelectionDay',
+  // v1 SELECTED
+  PASSED_SELECTION: 'passedSelection',
+  FAILED_SELECTION: 'failedSelection',
+  PASSED_BUT_NOT_RECOMMENDED: 'passedButNotRecommended',
+  // v1 RECOMMENDED
+  REJECTED_BY_CHARACTER: 'rejectedByCharacter',
+  APPROVED_FOR_IMMEDIATE_APPOINTMENT: 'approvedForImmediateAppointment',
+  APPROVED_FOR_FUTURE_APPOINTMENT: 'approvedForFutureAppointment',
+  SCC_TO_RECONSIDER: 'sccToReconsider',
 };
 
 const APPLICATION_SUCCESS_STATUSES = [
@@ -72,7 +113,7 @@ const APPLICATION_SUCCESS_STATUSES = [
 
 const TASK_TYPE = {
   SIFT: 'sift',
-  SELECTION: 'selection',
+  SELECTION_DAY: 'selectionDay',
   SCENARIO: 'scenarioTest',
   CRITICAL_ANALYSIS: 'criticalAnalysis',
   SITUATIONAL_JUDGEMENT: 'situationalJudgement',

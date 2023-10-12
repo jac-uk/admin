@@ -93,7 +93,7 @@
           data-key="id"
           :data="applicationRecordsCharacterChecksNotRequested"
           :columns="tableColumns"
-          search-map="_search"
+          :search-map="$searchMap.characterChecks"
           multi-select
           :page-size="50"
           :filters="[
@@ -292,6 +292,7 @@ import CharacterChecksRequests from '@/components/ModalViews/CharacterChecksRequ
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
+import { availableStages } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'CharacterChecks',
@@ -327,7 +328,6 @@ export default {
       status: null,
       processing: false,
       selectedItems: [],
-      exerciseStages: ['shortlisted', 'selected', 'recommended', 'handover'],
       tableColumns: [
         { title: 'Reference number' },
         { title: 'Name', sort: 'candidate.fullName', default: true },
@@ -347,6 +347,10 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    exerciseStages() {
+      const stages = availableStages(this.exercise);
+      return stages;
     },
     exerciseMailbox() {
       return this.exercise.exerciseMailbox;

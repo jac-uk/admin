@@ -3,8 +3,6 @@ import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
-// TODO delete this. it is not being used!
-
 export default {
   namespaced: true,
   actions: {

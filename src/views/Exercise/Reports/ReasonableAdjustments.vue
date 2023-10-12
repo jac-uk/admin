@@ -73,34 +73,11 @@
               All applications
             </option>
             <option
-              v-if="applicationRecordCounts.review"
-              value="review"
+              v-for="stage in availableStages"
+              :key="stage"
+              :value="stage"
             >
-              Review
-            </option>
-            <option
-              v-if="applicationRecordCounts.shortlisted"
-              value="shortlisted"
-            >
-              Shortlisted
-            </option>
-            <option
-              v-if="applicationRecordCounts.selected"
-              value="selected"
-            >
-              Selected
-            </option>
-            <option
-              v-if="applicationRecordCounts.recommended"
-              value="recommended"
-            >
-              Recommended
-            </option>
-            <option
-              v-if="applicationRecordCounts.handover"
-              value="handover"
-            >
-              Handover
+              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
             </option>
           </Select>
           <Select
@@ -281,7 +258,7 @@
                     </div>
                     <div class="govuk-grid-column-one-third text-right">
                       <a
-                        :href="`/exercise/${ar.exercise.id}/applications/qualifyingTestPassed/application/${ar.application.id}`"
+                        :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
                         class="govuk-link print-none"
                         target="_blank"
                       >
@@ -358,8 +335,7 @@ import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { debounce } from 'lodash';
 
@@ -380,7 +356,6 @@ export default {
     return {
       exerciseStage: 'all',
       candidateStatus: 'all',
-      availableStatuses: null,
       filterStatus: 'all',
       reasonableAdjustmentsStatusOptions,
       reasonableAdjustmentsReasonOptions,
@@ -405,24 +380,19 @@ export default {
     hasReportData() {
       return this.report && this.report.headers;
     },
+    availableStages() {
+      const stages = availableStages(this.exercise);
+      return stages.filter(stage => this.applicationRecordCounts[stage]);
+    },
+    availableStatuses() {
+      if (this.exerciseStage === 'all') return null;
+      const statuses = availableStatuses(this.exercise, this.exerciseStage);
+      return statuses;
+    },
   },
   watch: {
-    exerciseStage: function (valueNow) {
-      // populate the status dropdown, for the chosen stage
-      if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
-      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
-        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
-        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
-        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
-      } else { // handover
-        this.availableStatuses = [];
-      }
-      // reset the status dropdown to 'All'
+    exerciseStage: function () {
       this.candidateStatus = 'all';
-
       this.$refs['issuesTable'].reload();
     },
     candidateStatus: function() {
