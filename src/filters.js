@@ -34,6 +34,7 @@ const lookup = (value) => {
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
+    commissionerConflicts: 'Commissioner conflicts',
 
     // exercise states
     draft: 'Draft',
