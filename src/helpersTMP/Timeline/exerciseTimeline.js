@@ -107,13 +107,13 @@ const exerciseTimeline = (data) => {
 
     if (data.shortlistingMethods.includes('paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Sift', data.siftStartDate, data.siftEndDate)
+        createShortlistingMethod('Sift', data.siftStartDate, data.siftEndDate, TASK_TYPE.SIFT)
       );
     }
 
     if (data.shortlistingMethods.includes('name-blind-paper-sift')) {
       timeline.push(
-        createShortlistingMethod('Name-blind sift', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate)
+        createShortlistingMethod('Name-blind sift', data.nameBlindSiftStartDate, data.nameBlindSiftEndDate, TASK_TYPE.SIFT)
       );
     }
 

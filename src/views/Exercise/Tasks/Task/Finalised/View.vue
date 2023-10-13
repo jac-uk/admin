@@ -1,7 +1,7 @@
 <template>
   <div>
     <RouterLink
-      :to="{ name: 'exercise-task-finalised', params: { exerciseId: exercise.id, type: type } }"
+      :to="{ name: 'exercise-task-finalised', params: { type: type } }"
       class="govuk-link"
     >
       All scores
@@ -101,7 +101,7 @@
         >
           <RouterLink
             v-if="lowerScoreReport"
-            :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: lowerScoreReport.score } }"
+            :to="{ name: 'exercise-task-finalised-score', params: { type: type, score: lowerScoreReport.score } }"
             class="moj-pagination__link govuk-link"
           >
             Lower score
@@ -112,7 +112,7 @@
         >
           <RouterLink
             v-if="higherScoreReport"
-            :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: higherScoreReport.score } }"
+            :to="{ name: 'exercise-task-finalised-score', params: { type: type, score: higherScoreReport.score } }"
             class="moj-pagination__link govuk-link"
           >
             Higher score

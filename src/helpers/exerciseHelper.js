@@ -36,6 +36,8 @@ export {
   getProcessingExitStage,
   getTimelineTasks,
   getTaskTypes,
+  getTaskCurrentStep,
+  getTaskSteps,
   getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
@@ -170,7 +172,7 @@ STAGE_TASKS[PROCESSING_STAGE.SELECTION] = [
   TASK_TYPE.SELECTION_OUTCOME,
 ];
 
-const TASK_STATUS = {
+const TASK_STATUS = { // aka task STEPS
   DATA_INITIALISED: 'dataInitialised',
   DATA_ACTIVATED: 'dataActivated',
   TEST_INITIALISED: 'testInitialised',
@@ -184,6 +186,20 @@ const TASK_STATUS = {
   CHECKS: 'checks',
   COMPLETED: 'completed',
 };
+
+const TASK_STEPS = {};
+TASK_STEPS.new = { title: 'Get started' };
+TASK_STEPS[TASK_STATUS.DATA_INITIALISED] = { title: 'Configure marking scheme' };
+TASK_STEPS[TASK_STATUS.DATA_ACTIVATED] = { title: 'Enter scores' };
+TASK_STEPS[TASK_STATUS.TEST_INITIALISED] = { title: 'Test preparation' };
+TASK_STEPS[TASK_STATUS.TEST_ACTIVATED] = { title: 'Test active' };
+TASK_STEPS[TASK_STATUS.PANELS_INITIALISED] = { title: 'Configure panels' };
+TASK_STEPS[TASK_STATUS.PANELS_ACTIVATED] = { title: 'Panel scores' };
+TASK_STEPS[TASK_STATUS.MODERATION_INITIALISED] = { title: 'Configure moderation' };
+TASK_STEPS[TASK_STATUS.MODERATION_ACTIVATED] = { title: 'Moderation scores' };
+TASK_STEPS[TASK_STATUS.STATUS_CHANGES] = { title: 'Update statuses' };
+TASK_STEPS[TASK_STATUS.FINALISED] = { title: 'Merit list' };
+TASK_STEPS[TASK_STATUS.COMPLETED] = { title: 'Completed' };
 
 function getNextProcessingStage(processingStage) {
   const currentIndex = PROCESSING_STAGES.indexOf(processingStage);
@@ -256,7 +272,17 @@ function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
   const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
   if (exercise._processingVersion >= 2) {
-    return timelineTasks;
+    const supportedTaskTypes = [
+      TASK_TYPE.SIFT,
+      TASK_TYPE.CRITICAL_ANALYSIS,
+      TASK_TYPE.SITUATIONAL_JUDGEMENT,
+      TASK_TYPE.QUALIFYING_TEST,
+      TASK_TYPE.SCENARIO,
+      TASK_TYPE.EMP_TIEBREAKER,
+      TASK_TYPE.SHORTLISTING_OUTCOME,
+      TASK_TYPE.SELECTION_DAY,
+    ];
+    return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
   } else {
     const supportedTaskTypes = [
       TASK_TYPE.CRITICAL_ANALYSIS,
@@ -281,6 +307,91 @@ function getTaskTypes(exercise, stage) {
     taskTypes.splice(indexQT + 1, 0, TASK_TYPE.QUALIFYING_TEST);
   }
   return taskTypes;
+}
+
+function getTaskCurrentStep(exercise, taskStatus) {
+  return TASK_STEPS[taskStatus];
+}
+
+function getTaskSteps(exercise, taskType, task) {
+  const statuses = taskStatuses(taskType);
+  const steps = ['new'].concat(statuses).map(status => {
+    return { 
+      id: status, 
+      ...TASK_STEPS[status],
+    };
+  });
+  if (task) {
+    const currentStepIndex = steps.findIndex(step => step.id === task.status);
+    return steps.map((step, index) => {
+      return {
+        ...step,
+        completed: task.status === TASK_STATUS.COMPLETED ? true : index < currentStepIndex,
+      };
+    });
+  } else {
+    return steps;
+  }
+}
+
+function taskStatuses(taskType) { // also on DP
+  let availableStatuses = [];
+  switch (taskType) {
+    case TASK_TYPE.CRITICAL_ANALYSIS:
+    case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+      availableStatuses = [
+        TASK_STATUS.TEST_INITIALISED,
+        TASK_STATUS.TEST_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.QUALIFYING_TEST:
+      availableStatuses = [
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SCENARIO:
+      availableStatuses = [
+        TASK_STATUS.TEST_INITIALISED,
+        TASK_STATUS.TEST_ACTIVATED,
+        // TASK_STATUS.PANELS_INITIALISED,
+        // TASK_STATUS.PANELS_ACTIVATED,
+        TASK_STATUS.DATA_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.TELEPHONE_ASSESSMENT:
+    case TASK_TYPE.ELIGIBILITY_SCC:
+    case TASK_TYPE.STATUTORY_CONSULTATION:
+    case TASK_TYPE.CHARACTER_AND_SELECTION_SCC:
+        availableStatuses = [
+        TASK_STATUS.STATUS_CHANGES,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SIFT:
+    case TASK_TYPE.SELECTION_DAY:
+      availableStatuses = [
+        TASK_STATUS.DATA_INITIALISED,
+        TASK_STATUS.DATA_ACTIVATED,
+        // TASK_STATUS.PANELS_INITIALISED,
+        // TASK_STATUS.PANELS_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SHORTLISTING_OUTCOME:
+    case TASK_TYPE.SELECTION_OUTCOME:
+      availableStatuses = [
+        TASK_STATUS.STAGE_OUTCOME,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+  }
+  return availableStatuses;
 }
 
 const MERIT_LIST_TASK_TYPES = [
