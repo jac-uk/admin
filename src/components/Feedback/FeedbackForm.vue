@@ -255,7 +255,6 @@
 </template>
 
 <script>
-// @TODO: THIS COMPONENT IS BASED ON MODALINNER!
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
@@ -291,7 +290,7 @@ export default {
       formData: {
         url: '',
         //screenshotFileName: '',
-        criticalityType: '',
+        //criticalityType: '',
         expectation: '',
         complaint: '',
         //contactDetailType: '',
@@ -335,9 +334,12 @@ export default {
     displayName() {
       return this.$store.getters['auth/getDisplayName'];
     },
-    screenshotUploadPath() {
-      //return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
-      return 'test';
+    // screenshotUploadPath() {
+    //   //return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
+    //   return 'test';
+    // },
+    exerciseId() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
     showFormForProxy() {
       return this.feedbackForProxy === '1';
@@ -384,19 +386,29 @@ export default {
     },
     async save() {
       this.formData.contactDetails = this.email;
-      this.$emit('success');
-      // @TODO: See Request.vue
-      console.log('Feedback Form Data:');
-      console.log(JSON.parse(JSON.stringify(this.formData)));
-    },
-    doFileUpload(val, field) {
-      console.log('Do Upload with...');
-      console.log(`Field: ${field}`);
-      console.log(`Val: ${val}`);
-      if (val) {
-        //this.$emit('updateApplication', { [field]: val });
+      this.formData.exerciseId = this.exerciseId;
+      try {
+        await this.$store.dispatch('bugReport/create', this.formData);
+        this.$emit('success');
+      }
+      catch (e) {
+        console.log(e);
+        const str = this.showFormForProxy || this.formData.applicant === '' ? 'Development Team' : 'Admin Team';
+        const msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
+        this.errors.push({
+          id: 'error',
+          message: msg,
+        });
       }
     },
+    // doFileUpload(val, field) {
+    //   console.log('Do Upload with...');
+    //   console.log(`Field: ${field}`);
+    //   console.log(`Val: ${val}`);
+    //   if (val) {
+    //     //this.$emit('updateApplication', { [field]: val });
+    //   }
+    // },
   },
 };
 </script>
