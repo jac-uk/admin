@@ -182,6 +182,7 @@ const TASK_STATUS = { // aka task STEPS
   MODERATION_INITIALISED: 'moderationInitialised',
   MODERATION_ACTIVATED: 'moderationActivated',
   STATUS_CHANGES: 'statusChanges',
+  STAGE_OUTCOME: 'stageOutcome',
   FINALISED: 'finalised',
   CHECKS: 'checks',
   COMPLETED: 'completed',
@@ -198,6 +199,7 @@ TASK_STEPS[TASK_STATUS.PANELS_ACTIVATED] = { title: 'Panel scores' };
 TASK_STEPS[TASK_STATUS.MODERATION_INITIALISED] = { title: 'Configure moderation' };
 TASK_STEPS[TASK_STATUS.MODERATION_ACTIVATED] = { title: 'Moderation scores' };
 TASK_STEPS[TASK_STATUS.STATUS_CHANGES] = { title: 'Update statuses' };
+TASK_STEPS[TASK_STATUS.STAGE_OUTCOME] = { title: 'Confirm outcomes' };
 TASK_STEPS[TASK_STATUS.FINALISED] = { title: 'Merit list' };
 TASK_STEPS[TASK_STATUS.COMPLETED] = { title: 'Completed' };
 
@@ -278,8 +280,11 @@ function getTimelineTasks(exercise, taskType) {
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
+      TASK_TYPE.TELEPHONE_ASSESSMENT,
+      TASK_TYPE.ELIGIBILITY_SCC,
+      TASK_TYPE.STATUTORY_CONSULTATION,
+      TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       TASK_TYPE.EMP_TIEBREAKER,
-      TASK_TYPE.SHORTLISTING_OUTCOME,
       TASK_TYPE.SELECTION_DAY,
     ];
     return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
@@ -297,7 +302,7 @@ function getTimelineTasks(exercise, taskType) {
 
 function getTaskTypes(exercise, stage) {
   let taskTypes = getTimelineTasks(exercise).map(item => item.taskType).filter((value, index, thisArray) => thisArray.indexOf(value) === index);
-  if (stage) {
+  if (stage && stage !== 'all') {
     taskTypes = taskTypes.filter(taskType => STAGE_TASKS[stage].indexOf(taskType) >= 0);
   }
   const indexCA = taskTypes.indexOf(TASK_TYPE.CRITICAL_ANALYSIS);

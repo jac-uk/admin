@@ -15,13 +15,16 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+        <div 
+          v-if="totalApplications"
+          class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
+        >
           <p class="govuk-body govuk-!-margin-bottom-0">
             Applications
             <span class="govuk-caption-m">Total</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            {{ task._stats.totalApplications }}
+            {{ totalApplications }}
           </h2>
         </div>
       </div>
@@ -132,6 +135,9 @@ export default {
     taskSteps() {
       const steps = getTaskSteps(this.exercise, this.type, this.task);
       return steps;
+    },
+    totalApplications() {
+      return this.task.applications ? this.task.applications.length : null;
     },
     applicationOutcomes() {
       // List of candidates with passed/failed

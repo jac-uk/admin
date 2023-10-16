@@ -118,7 +118,7 @@ const exerciseTimeline = (data) => {
     }
 
     if (data.shortlistingMethods.includes('telephone-assessment')) {
-      timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate));
+      timeline.push(createShortlistingMethod('Telephone assessment', data.telephoneAssessmentStartDate, data.telephoneAssessmentEndDate, TASK_TYPE.TELEPHONE_ASSESSMENT ));
     }
 
     if (data.shortlistingMethods.includes('situational-judgement-qualifying-test')) {
@@ -275,6 +275,7 @@ const exerciseTimeline = (data) => {
         entry: 'Statutory consultation',
         date: data.statutoryConsultationDate,
         dateString: getDateString(data.statutoryConsultationDate),
+        taskType: TASK_TYPE.STATUTORY_CONSULTATION,
       }
     );
   }
@@ -285,6 +286,7 @@ const exerciseTimeline = (data) => {
         entry: 'Character and Selection SCC',
         date: data.characterAndSCCDate,
         dateString: getDateString(data.characterAndSCCDate),
+        taskType: TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       }
     );
   }

@@ -1,25 +1,27 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
-        <h1 class="govuk-heading-l">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
-      <div class="govuk-grid-column-one-quarter text-right">
+      <div class="text-right govuk-grid-column-one-half">
         <FullScreenButton />
       </div>
     </div>
 
+    <ProgressBar :steps="taskSteps" />
+
     <p
       v-if="hasApplicationsWithoutStatus"
-      class="govuk-body-l"
+      class="govuk-body"
     >
       Please set the new status of each application.
     </p>
     <p
       v-else
-      class="govuk-body-l govuk-!-margin-bottom-4"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} can now be completed. {{ totalApplications }} applications will be updated.
     </p>
@@ -80,6 +82,7 @@
         handler: searchHandler,
         field: 'candidate.id',
       }"
+      :search-map="$searchMap.applications"
       :filters="[
         {
           title: 'Status',
@@ -133,15 +136,17 @@
 </template>
 
 <script>
-import { beforeRouteEnter, btnNext } from './helper';
+import { beforeRouteEnter, btnNext } from '../helper';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { getTaskSteps } from '@/helpers/exerciseHelper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
-import SetStatusForm from './StatusChanges/SetStatus.vue';
-import StatusTag from './StatusChanges/StatusTag.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
+import SetStatusForm from './SetStatus.vue';
+import StatusTag from './StatusTag.vue';
 import { functions } from '@/firebase';
 import { getTableData } from '@/helpers/tableHelper';
 
@@ -153,6 +158,7 @@ export default {
     TitleBar,
     ActionButton,
     FullScreenButton,
+    ProgressBar,
     SetStatusForm,
     StatusTag,
   },
@@ -180,6 +186,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     totalApplications() {
       return this.task ? this.task.applications.length : 0;
@@ -216,7 +226,6 @@ export default {
         type: this.type,
       });
       this.btnNext();
-      this.$store.dispatch('ui/exitFullScreen');
     },
     updateTableState(params) {
       this.tableState = params;

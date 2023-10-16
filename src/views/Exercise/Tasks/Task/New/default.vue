@@ -84,7 +84,7 @@
 <script>
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
-import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps, getTaskCurrentStep } from '@/helpers/exerciseHelper';
+import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
@@ -125,9 +125,6 @@ export default {
     },
     task() {
       return { status: 'new' };
-    },
-    taskCurrentStep() {
-      return getTaskCurrentStep(this.exercise, this.task.status);
     },
     taskSteps() {
       const steps = getTaskSteps(this.exercise, this.type, this.task);

@@ -1,8 +1,17 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />
 
     <p
       class="govuk-body"
@@ -40,7 +49,9 @@
 <script>
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
-import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
+import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps } from '@/helpers/exerciseHelper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox';
 import { functions } from '@/firebase';
@@ -50,6 +61,8 @@ export default {
   components: {
     ActionButton,
     Checkbox,
+    FullScreenButton,
+    ProgressBar,
   },
   props: {
     type: {
@@ -68,6 +81,13 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    task() {
+      return { status: 'stageOutcome' };
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     entryStatus() {
       return taskEntryStatus(this.exercise, this.type);
