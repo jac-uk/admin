@@ -20,7 +20,7 @@
           Type of exercise
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.typeOfExercise === APPLICATION_STATUS.SELECTION_INVITED ? '' : $filters.lookup(exercise.typeOfExercise) }}
+          <span v-if="exercise.typeOfExercise">{{ $filters.lookup(exercise.typeOfExercise) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -28,7 +28,7 @@
           Is the vacancy for a court or tribunal?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.isCourtOrTribunal === APPLICATION_STATUS.SELECTION_INVITED ? '' : $filters.lookup(exercise.isCourtOrTribunal) }}
+          <span v-if="exercise.isCourtOrTribunal">{{ $filters.lookup(exercise.isCourtOrTribunal) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -61,9 +61,6 @@
           >
             Yes: {{ exercise.statutoryConsultationWaivedDetails }}
           </span>
-          <!-- <span v-else>
-            No
-          </span> -->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -77,7 +74,7 @@
             <span v-if="exercise.salary">{{ $filters.formatCurrency(exercise.salary) }}</span>
           </span>
           <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ $filters.lookup(exercise.appointmentType) }}: £{{ exercise.feePaidFee }}</span>
-          <span v-else-if="exercise.appointmentType !== APPLICATION_STATUS.SELECTION_INVITED">{{ $filters.lookup(exercise.appointmentType) }}</span>
+          <span v-else-if="exercise.appointmentType">{{ $filters.lookup(exercise.appointmentType) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
