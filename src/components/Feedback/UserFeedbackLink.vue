@@ -35,14 +35,9 @@
         >
           <div>Your feedback has been forwarded to the team and you will be contacted shortly.</div>
           <div class="govuk-!-margin-top-2">
-            Your ticket number is: <strong>ABC123</strong>
+            Your ticket number is: <strong>{{ bugReportRefNo }}</strong>
           </div>
         </div>
-        <!-- <FeedbackForm
-          v-else
-          @close="closeFeedbackModal"
-          @success="showConfirmationModal = true"
-        /> -->
         <FeedbackForm
           v-else
           @close="closeFeedbackModal(false)"
@@ -50,37 +45,12 @@
         />
       </SimpleModalInner>
     </Modal>
-
-    <!-- <Modal
-      ref="confirmFeedbackModal"
-    >
-      <ModalInner
-        title="Confirm Feedback"
-        button-text="Close"
-        :cancelable="false"
-        @confirmed="closeConfirmFeedbackModal"
-        @close="closeConfirmFeedbackModal"
-      >
-        <template #body>
-          <div class="body-content modal__message govuk-body-l">
-            <div>Your feedback has been forwarded to the team and you will be contacted shortly.</div>
-            <div class="govuk-!-margin-top-2">
-              Your ticket number is: <strong>ABC123</strong>
-            </div>
-          </div>
-        </template>
-      </ModalInner>
-    </Modal> -->
   </div>
 </template>
 
 <script>
 // @TODO: Use the larger width for the modal (that ur specifying below) on larger screen devices only!
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-
-//import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
-
-// @TODO: Preload as many details as possible
 
 // @TODO: MOVE THIS INTO THE JAC-KIT ??
 import SimpleModalInner from '@/components/Feedback/SimpleModalInner.vue';
@@ -102,8 +72,14 @@ export default {
     };
   },
   computed: {
-    confirmationMessage() {
-      return `Your feedback has been forwarded to the team and you will be contacted shortly. Your ticket number is: ${this.uniqueTicketNumber}`;
+    // confirmationMessage() {
+    //   return `Your feedback has been forwarded to the team and you will be contacted shortly. Your ticket number is: ${this.bugReportRefNo}`;
+    // },
+    bugReport() {
+      return this.$store.state.bugReport.record;
+    },
+    bugReportRefNo() {
+      return this.bugReport ? this.bugReport.referenceNumber : '';
     },
   },
   mounted() {

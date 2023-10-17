@@ -43,7 +43,7 @@
       <RadioGroup
         id="feedback-for-proxy"
         v-model="feedbackForProxy"
-        label="Are you raising this issue for yourself or an applicant?"
+        label="Are you raising this issue for yourself or a candidate?"
         :inline="true"
       >
         <RadioItem
@@ -52,14 +52,11 @@
         />
         <RadioItem
           value="1"
-          label="Applicant"
+          label="Candidate"
         />
       </RadioGroup>
 
-      <CaptureScreenshot v-if="!showFormForProxy" />
-
       <div
-        v-if="showFormForProxy"
         class="govuk-warning-text"
       >
         <span
@@ -68,9 +65,29 @@
         >!</span>
         <strong class="govuk-warning-text__text">
           <span class="govuk-warning-text__assistive">Warning</span>
-          Please ensure you are on the relevant page before raising the issue.
+          <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
+          <span v-else>Please ensure you are on the relevant page before raising the issue</span>
         </strong>
       </div>
+
+      <RadioGroup
+        v-show="feedbackForProxy === '1'"
+        id="cps-device"
+        v-model="formData.cpsDevice"
+        label="Have you checked if the candidate is using a CPS device?"
+        :inline="true"
+      >
+        <RadioItem
+          value="0"
+          label="No"
+        />
+        <RadioItem
+          value="1"
+          label="Yes"
+        />
+      </RadioGroup>
+
+      <CaptureScreenshot v-if="!showFormForProxy" />
 
       <Select
         id="criticality"
@@ -96,22 +113,22 @@
       <template v-if="showFormForProxy">
         <TextField
           id="name"
-          v-model="formData.applicant"
-          label="Name of applicant"
+          v-model="formData.candidate"
+          label="Name of candidate"
           type="text"
           required
         />
         <TextField
           id="browser"
           v-model="formData.browser"
-          label="Applicant browser"
+          label="Candidate browser"
           type="text"
           required
         />
         <TextField
           id="os"
           v-model="formData.os"
-          label="Applicant operating system"
+          label="Candidate operating system"
           type="text"
           required
         />
@@ -297,10 +314,11 @@ export default {
         //contactDetails: '',
         //otherContacts: '',
         reporter: '',
-        applicant: '',
+        candidate: '',
         userId: '',
         browser: '',
         os: '',
+        cpsDevice: '0',
       },
       // formData: {
       //   url: '',
@@ -356,7 +374,7 @@ export default {
         this.formData.os = '';
       }
       else {
-        this.formData.applicant = '';
+        this.formData.candidate = '';
         this.formData.browser = `${this.client.name} ${this.client.version}`;
         this.formData.os = this.client.os;
       }
@@ -385,6 +403,10 @@ export default {
       this.$emit('close');
     },
     async save() {
+
+      // @TODO: SEE CHANGES AT THE BOTTOM OF THIS TICKET!!
+      // https://app.zenhub.com/workspaces/platform-development-5ea838cd2aec471eb6d14139/issues/gh/jac-uk/admin/2117
+
       this.formData.contactDetails = this.email;
       this.formData.exerciseId = this.exerciseId;
       try {
@@ -393,7 +415,7 @@ export default {
       }
       catch (e) {
         console.log(e);
-        const str = this.showFormForProxy || this.formData.applicant === '' ? 'Development Team' : 'Admin Team';
+        const str = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
         const msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
         this.errors.push({
           id: 'error',

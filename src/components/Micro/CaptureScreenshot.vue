@@ -52,6 +52,28 @@ export default {
         const thumbnail = canvas.toDataURL('image/png');
         this.thumbnail = thumbnail;
 
+        //const fileName = this.generateFileName(file.name);
+        //const uploadRef = firebase.storage().ref(`${this.path}/${fileName}`);
+        // try {
+        //   const fileUploaded = await uploadRef.put(file);
+        //   if (fileUploaded && fileUploaded.state === 'success') {
+        //     this.isReplacing = false;
+        //     this.fileName = fileName;
+
+        //     return true;
+        //   } else {
+        //     this.setError('File upload failed, please try again [2]');
+
+        //     return false;
+        //   }
+        // } catch (e) {
+        //   this.setError('File upload failed, please try again [3]');
+
+        //   return false;
+        // } finally {
+        //   this.resetFile();
+        // }
+
         // console.log(`height: ${canvas.height}`);
         // console.log(`width: ${canvas.width}`);
 

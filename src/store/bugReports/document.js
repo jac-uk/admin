@@ -16,12 +16,52 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    create: async (context, data) => {
-      const ref = collection.doc();
-      data.created = firebase.firestore.FieldValue.serverTimestamp();
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.set(data, { merge: true });
-      return ref.id;
+    // create: async (context, data) => {
+    //   const ref = collection.doc();
+    //   data.created = firebase.firestore.FieldValue.serverTimestamp();
+    //   data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+    //   await ref.set(data, { merge: true });
+    //   return ref.id;
+    // },
+    create: async ({ rootState, dispatch }, data) => {
+      const metaRef = firestore.collection('meta').doc('stats');
+      return firestore.runTransaction((transaction) => {
+        return transaction.get(metaRef).then((metaDoc) => {
+
+          const currentBugsReportCount = metaDoc.data().bugReportsCount;
+          let newBugReportsCount;
+          if (currentBugsReportCount === undefined) {
+            newBugReportsCount = 1;
+
+            // @TODO: How to get this to work if the 'bugReportsCount' property doesnt exist in meta.stats yet??
+
+          }
+          else {
+            newBugReportsCount = currentBugsReportCount + 1;
+          }
+
+          console.log(`newBugReportsCount: ${newBugReportsCount}`);
+
+          transaction.set(metaRef, {
+            bugReportsCount: newBugReportsCount,
+          }, { merge: true });
+
+          data.referenceNumber = `BR_${  (1000000 + newBugReportsCount).toString().substr(1)}`;
+          data.createdBy = rootState.auth.currentUser.uid;
+          const ts = firebase.firestore.FieldValue.serverTimestamp();
+          data.createdAt = ts;
+          data.lastUpdatedAt = ts;
+
+          const bugReportsRef = firestore.collection('bugReports').doc();
+
+          console.log(`bugReportsRef: ${bugReportsRef}`);
+
+          transaction.set(bugReportsRef, data);
+          return bugReportsRef.id;
+        });
+      }).then((newId) => {
+        return dispatch('bind', newId);
+      });
     },
     update: async (context, { data, id }) => {
       const ref = collection.doc(id);
