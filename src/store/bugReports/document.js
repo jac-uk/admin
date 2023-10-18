@@ -16,13 +16,6 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    // create: async (context, data) => {
-    //   const ref = collection.doc();
-    //   data.created = firebase.firestore.FieldValue.serverTimestamp();
-    //   data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-    //   await ref.set(data, { merge: true });
-    //   return ref.id;
-    // },
     create: async ({ rootState, dispatch }, data) => {
       const metaRef = firestore.collection('meta').doc('stats');
       return firestore.runTransaction((transaction) => {
@@ -32,16 +25,10 @@ export default {
           let newBugReportsCount;
           if (currentBugsReportCount === undefined) {
             newBugReportsCount = 1;
-
-            // @TODO: How to get this to work if the 'bugReportsCount' property doesnt exist in meta.stats yet??
-
           }
           else {
             newBugReportsCount = currentBugsReportCount + 1;
           }
-
-          console.log(`newBugReportsCount: ${newBugReportsCount}`);
-
           transaction.set(metaRef, {
             bugReportsCount: newBugReportsCount,
           }, { merge: true });
@@ -53,8 +40,6 @@ export default {
           data.lastUpdatedAt = ts;
 
           const bugReportsRef = firestore.collection('bugReports').doc();
-
-          console.log(`bugReportsRef: ${bugReportsRef}`);
 
           transaction.set(bugReportsRef, data);
           return bugReportsRef.id;

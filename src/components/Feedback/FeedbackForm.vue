@@ -146,8 +146,8 @@
         @update:model-value="val => doFileUpload(val, 'screenshotFileName')"
       /> -->
       <TextArea
-        id="complaint"
-        v-model="formData.complaint"
+        id="issue"
+        v-model="formData.issue"
         label="What happened?"
         rows="2"
         required
@@ -308,8 +308,9 @@ export default {
         url: '',
         //screenshotFileName: '',
         //criticalityType: '',
+        criticality: '',
         expectation: '',
-        complaint: '',
+        issue: '',
         //contactDetailType: '',
         //contactDetails: '',
         //otherContacts: '',
@@ -325,7 +326,7 @@ export default {
       //   screenshotFileName: '',
       //   criticalityType: '',
       //   expectation: 'ddddsd',
-      //   complaint: 'dddd',
+      //   issue: 'dddd',
       //   contactDetailType: 'email',
       //   contactDetails: 'ddcds',
       //   otherContacts: '',
@@ -358,6 +359,9 @@ export default {
     // },
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
+    exerciseReferenceNumber() {
+      return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.referenceNumber : null;
     },
     showFormForProxy() {
       return this.feedbackForProxy === '1';
@@ -408,7 +412,10 @@ export default {
       // https://app.zenhub.com/workspaces/platform-development-5ea838cd2aec471eb6d14139/issues/gh/jac-uk/admin/2117
 
       this.formData.contactDetails = this.email;
-      this.formData.exerciseId = this.exerciseId;
+      this.formData.exercise = {
+        id: this.exerciseId,
+        referenceNumber: this.exerciseReferenceNumber,
+      };
       try {
         await this.$store.dispatch('bugReport/create', this.formData);
         this.$emit('success');
