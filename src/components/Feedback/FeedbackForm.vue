@@ -363,6 +363,12 @@ export default {
     exerciseReferenceNumber() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.referenceNumber : null;
     },
+    applicationId() {
+      return this.$store.state.application.record ? this.$store.state.application.record.id : null;
+    },
+    applicationReferenceNumber() {
+      return this.$store.state.application.record ? this.$store.state.application.record.referenceNumber : null;
+    },
     showFormForProxy() {
       return this.feedbackForProxy === '1';
     },
@@ -415,6 +421,10 @@ export default {
       this.formData.exercise = {
         id: this.exerciseId,
         referenceNumber: this.exerciseReferenceNumber,
+      };
+      this.formData.application = {
+        id: this.applicationId,
+        referenceNumber: this.applicationReferenceNumber,
       };
       try {
         await this.$store.dispatch('bugReport/create', this.formData);
