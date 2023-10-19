@@ -39,9 +39,9 @@ export default {
   },
   computed: {
     emails() {
-      const originalEmails = this.$store.getters['services/getEmails']('commissioners');
+      const commissioners = this.$store.getters['services/getCommissioners'];
       // make a copy of the array so we don't mutate the original
-      const emails = [...originalEmails];
+      const emails = commissioners.map(commissioner => commissioner.email);
       // sort emails alphabetically
       emails.sort((a, b) => {
         a = a.toLowerCase();
