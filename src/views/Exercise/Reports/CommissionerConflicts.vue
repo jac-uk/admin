@@ -12,7 +12,7 @@
           PERMISSIONS.applications.permissions.canReadApplications.value
         ])"
         class="govuk-!-margin-right-2"
-        :action="exportData"
+        :action="exportToGoogleDoc"
       >
         Export to Word
       </ActionButton>
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { functions } from '@/firebase';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
@@ -86,7 +87,6 @@ export default {
   mixins: [permissionMixin],
   data () {
     return {
-      unsubscribe: null,
       tableColumns: [
         { title: 'Candidate', sort: '_sort.fullNameUC', default: true },
       ],
@@ -120,8 +120,14 @@ export default {
       }
       return [];
     },
-    async exportData() {
-      // TODO:
+    async exportToGoogleDoc() {
+      if (!this.exercise) return;
+      try {
+        await functions.httpsCallable('exportApplicationCommissionerConflicts')({ exerciseId: this.exercise.id, format: 'googledoc' });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
   },
 };
