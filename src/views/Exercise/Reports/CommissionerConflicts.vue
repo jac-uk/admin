@@ -123,11 +123,38 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise) return;
       try {
-        await functions.httpsCallable('exportApplicationCommissionerConflicts')({ exerciseId: this.exercise.id, format: 'googledoc' });
-        return true;
+        const res = await functions.httpsCallable('exportApplicationCommissionerConflicts')({ exerciseId: this.exercise.id, format: 'googledoc' });
+        if (res.data.sourceContent) {
+          this.export2Word(res.data.sourceContent, `${this.exercise.referenceNumber} ${this.exercise.name} - Commissioner Conflicts Report`);
+          return true;
+        }
+        return;
       } catch (error) {
         return;
       }
+    },
+    export2Word(html, filename = '') {
+      const blob = new Blob(['\ufeff', html], {
+        type: 'application/msword',
+      });
+    
+      // specify link url
+      const url = `data:application/vnd.ms-word;charset=utf-8,${encodeURIComponent(html)}`;
+      // specify file name
+      filename = filename ? `${filename}.doc` : 'Commissioner Conflicts Report.doc';
+      // create download link element
+      const downloadLink = document.createElement('a');
+      document.body.appendChild(downloadLink);
+    
+      if (navigator.msSaveOrOpenBlob ){
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        downloadLink.href = url;
+        downloadLink.download = filename;
+        downloadLink.click();
+      }
+    
+      document.body.removeChild(downloadLink);
     },
   },
 };
