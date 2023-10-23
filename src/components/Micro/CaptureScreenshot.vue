@@ -8,8 +8,8 @@
       alt="Capture Screenshot"
       @click="captureScreenshot"
     ><img
-      src="@/assets/screenshot.svg"
-      style="width: 30px"
+      src="@/assets/screenshot.png"
+      style="width: 25px"
     ></a>
     <div
       v-if="thumbnail"
