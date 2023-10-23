@@ -11,7 +11,10 @@
       src="@/assets/screenshot.svg"
       style="width: 30px"
     ></a>
-    <div>
+    <div
+      v-if="thumbnail"
+      ref="thumbnailContainer"
+    >
       <img
         v-if="thumbnail"
         :src="thumbnail"
@@ -19,14 +22,22 @@
         class="dashed-border"
         alt="Screenshot Thumbnail"
       >
+      <a
+        class="govuk-link"
+        @click="removeScreenshot()"
+      ><img src="@/assets/remove.png"></a>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from '@firebase/app';
+import '@firebase/storage';
 import html2canvas from 'html2canvas';
+import FormField from '@jac-uk/jac-kit/draftComponents/Form/FormField.vue';
 export default {
   name: 'CaptureScreenshot',
+  extends: FormField,
   data() {
     return {
       thumbnail: null,
@@ -37,51 +48,63 @@ export default {
     };
   },
   computed: {
-    screenshotUploadPath() {
-      //return `/exercise/${this.exercise.id}/user/${this.application.userId}`;
-      return 'test';
+    bugReportId() {
+      return this.$store.state.bugReport.record ? this.$store.state.bugReport.record.id : null;
+    },
+    filePath() {
+      return this.bugReportId ? `/bugReport/${this.bugReportId}/screenshot.png` : '';
     },
   },
   methods: {
     async captureScreenshot() {
-      //const elementToCapture = this.$el.querySelector('div:first-child');
       const elementToCapture = document.body;
-
       try {
         const canvas = await html2canvas(elementToCapture);
-        const thumbnail = canvas.toDataURL('image/png');
-        this.thumbnail = thumbnail;
-
-        //const fileName = this.generateFileName(file.name);
-        //const uploadRef = firebase.storage().ref(`${this.path}/${fileName}`);
-        // try {
-        //   const fileUploaded = await uploadRef.put(file);
-        //   if (fileUploaded && fileUploaded.state === 'success') {
-        //     this.isReplacing = false;
-        //     this.fileName = fileName;
-
-        //     return true;
-        //   } else {
-        //     this.setError('File upload failed, please try again [2]');
-
-        //     return false;
-        //   }
-        // } catch (e) {
-        //   this.setError('File upload failed, please try again [3]');
-
-        //   return false;
-        // } finally {
-        //   this.resetFile();
-        // }
-
-        // console.log(`height: ${canvas.height}`);
-        // console.log(`width: ${canvas.width}`);
-
+        canvas.getContext('2d', {
+          willReadFrequently: true, // => faster multiple readback operations
+        });
+        this.thumbnail = canvas.toDataURL('image/png');
       } catch (error) {
         console.error('Error capturing screenshot:', error);
       }
     },
+    dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(',');
+      const mime = arr[0].match(/:(.*?);/)[1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--){
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
+    async uploadScreenshot() {
+      // Get the file path
+      const uploadRef = firebase.storage().ref(`${this.filePath}`);
+      try {
+        // Convert the base64 image to a blob
+        const blob = this.dataURLtoBlob(this.thumbnail);
+
+        // Upload the blob to file storage
+        const fileUploaded = await uploadRef.put(blob);
+
+        if (fileUploaded && fileUploaded.state === 'success') {
+          return this.filePath;
+        } else {
+          this.setError('File upload failed, please try again. If the problem persist please remove the screenshot and report the problem.');
+          return false;
+        }
+      } catch (e) {
+        this.setError('File upload failed, please try again. If the problem persist please remove the screenshot and report the problem.');
+        return false;
+      }
+    },
+    removeScreenshot() {
+      this.thumbnail = null;
+    },
   },
+  expose: ['uploadScreenshot'],
 };
 </script>
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
@@ -96,5 +119,10 @@ export default {
 .screenshot-label {
   display: inline-block;
   margin-right: 30px;
+}
+.govuk-link {
+  cursor: pointer;
+  margin-left: 10px;
+  position: absolute;
 }
 </style>
