@@ -1,8 +1,8 @@
 <template>
   <div>
     <button
-      type="button"
       class="report-issue"
+      type="button"
       @click="openModal"
     >
       <svg
@@ -59,7 +59,6 @@ export default {
   },
   data() {
     return {
-
       showConfirmationModal: false,
     };
   },
@@ -102,7 +101,7 @@ button.report-issue {
     background-color: #f3f2f1;
     padding: 0.5em 0.8em;
     position: fixed;
-    bottom: 5em;
+    bottom: 1em;
     left: 1em;
     border: 1px solid #D2D2D2FF;
     line-height: 1em;

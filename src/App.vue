@@ -5,6 +5,7 @@
     @mouseenter="onMouseOver"
   >
     <header
+      ref="headerTester"
       class="govuk-width-container"
     >
       <div class="jac-header clearfix">
@@ -113,7 +114,10 @@
           </p>
         </div>
       </div>
-      <UserFeedbackLink v-if="isSignedIn" />
+      <UserFeedbackLink
+        v-if="isSignedIn"
+        ref="user-feedback-link"
+      />
     </header>
 
     <main
@@ -194,6 +198,8 @@ import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
+import _debounce from 'lodash/debounce';
+
 export default {
   name: 'App',
   components: {
@@ -204,6 +210,8 @@ export default {
   data() {
     return {
       authorisedToPerformAction: false,
+      buttonElement: null,
+      rect: null,
     };
   },
   computed: {
@@ -241,6 +249,14 @@ export default {
       this.load();
     }
   },
+  mounted() {
+    this.buttonElement = document.querySelector('.report-issue');
+    this.handleDebouncedScroll = _debounce(this.handleScroll, 20);
+    window.addEventListener('scroll', this.handleDebouncedScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleDebouncedScroll);
+  },
   unmounted() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
@@ -277,6 +293,17 @@ export default {
           params: params,
         };
         return await this.$store.dispatch('messageBase/bind', data);
+      }
+    },
+    handleScroll() {
+      //  Ensure the feedback link sits above the footer when scrolled to the bottom of rthe page
+      if (this.$refs['user-feedback-link']) {
+        if (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 100) {
+          this.buttonElement.style.bottom = '5em';
+        }
+        else {
+          this.buttonElement.style.bottom = '1em';
+        }
       }
     },
   },
