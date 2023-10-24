@@ -39,7 +39,7 @@
               </dt>
               <InformationReviewRenderer
                 v-if="commissionerConflict.hasRelationship"
-                :data="commissionerConflict.detail"
+                :data="commissionerConflict.details"
                 field="detail"
                 :edit="editable"
                 :is-asked="isApplicationPartAsked('commissionerConflicts')"

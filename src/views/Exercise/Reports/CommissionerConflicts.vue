@@ -58,7 +58,7 @@
                   >
                   <div v-if="commissionerConflict.hasRelationship">
                     <p><b>Commissioner:</b> {{ commissionerConflict.name }}</p>
-                    <p><b>Details:</b> {{ commissionerConflict.detail }}</p>
+                    <p><b>Details:</b> {{ commissionerConflict.details }}</p>
                   </div>
                 </div>
               </div>
