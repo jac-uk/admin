@@ -40,7 +40,7 @@
               <InformationReviewRenderer
                 v-if="commissionerConflict.hasRelationship"
                 :data="commissionerConflict.details"
-                field="detail"
+                field="details"
                 :edit="editable"
                 :is-asked="isApplicationPartAsked('commissionerConflicts')"
                 @change-field="(obj) => changeCommissionerConflict(obj, index)"
@@ -87,7 +87,7 @@ export default {
         return match ? match : {
           name: commissioner.name,
           hasRelationship: null,
-          detail: null,
+          details: null,
         };
       });
     },
