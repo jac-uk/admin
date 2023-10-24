@@ -101,7 +101,7 @@ button.report-issue {
     background-color: #f3f2f1;
     padding: 0.5em 0.8em;
     position: fixed;
-    bottom: 1em;
+    bottom: 3em;
     left: 1em;
     border: 1px solid #D2D2D2FF;
     line-height: 1em;

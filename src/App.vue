@@ -298,11 +298,11 @@ export default {
     handleScroll() {
       //  Ensure the feedback link sits above the footer when scrolled to the bottom of rthe page
       if (this.$refs['user-feedback-link']) {
-        if (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 100) {
+        if (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) {
           this.buttonElement.style.bottom = '5em';
         }
         else {
-          this.buttonElement.style.bottom = '1em';
+          this.buttonElement.style.bottom = '3em';
         }
       }
     },
