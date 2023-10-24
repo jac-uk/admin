@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="exercise.commissioner"
+      v-if="exercise.commissioners"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">
