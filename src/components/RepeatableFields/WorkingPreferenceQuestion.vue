@@ -1,11 +1,13 @@
 <template>
   <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-      <h3 class="govuk-fieldset__heading">
-        Custom question
-      </h3>
+      <div class="govuk-body govuk-!-margin-0">
+        <span v-if="type">{{ $filters.lookup(type) }} {{ index + 1 }}</span>
+        <span v-else>Custom question {{ index + 1 }}</span>
+      </div>
     </legend>
     <TextField
+      v-if="!type"
       id="working-preference-topic"
       v-model="row.topic"
       hint="This will be used as the title of links to this question - e.g. Division preferences"
@@ -46,7 +48,6 @@
       required
     />
     <slot name="removeButton" />
-    <hr class="govuk-section-break govuk-section-break--visible">
   </fieldset>
 </template>
 
@@ -74,6 +75,11 @@ export default {
       required: true,
       type: Number,
     },
+    type: {
+      required: false,
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -86,3 +92,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+.govuk-fieldset {
+  @include govuk-responsive-padding(6);
+  border: 2px solid $govuk-border-colour;
+}
+
+</style>
