@@ -38,7 +38,7 @@
         v-show="feedbackForProxy === '1'"
         id="cps-device"
         v-model="formData.cpsDevice"
-        label="Have you checked if the candidate is using a CPS device?"
+        label="Is the candidate using a CPS device?"
         :inline="true"
       >
         <RadioItem

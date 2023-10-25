@@ -302,7 +302,7 @@ export default {
           this.buttonElement.style.bottom = '5em';
         }
         else {
-          this.buttonElement.style.bottom = '3em';
+          this.buttonElement.style.bottom = '1em';
         }
       }
     },
