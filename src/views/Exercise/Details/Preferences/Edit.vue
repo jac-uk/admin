@@ -18,6 +18,20 @@
           :show-save-button="true"
           @save="save"
         />
+
+        <h3 class="govuk-heading-m">
+          Location preferences
+        </h3>
+
+        <RepeatableFields
+          v-model="formData.locationPreferences"
+          :component="repeatableFields.WorkingPreferenceQuestion"
+          ident="location-preferences"
+          type-name="question"
+          :allow-empty="true"
+          type="locationPreference"
+        />        
+
         <fieldset class="govuk-fieldset govuk-!-margin-bottom-5">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
             <h3 class="govuk-fieldset__heading">
@@ -141,6 +155,7 @@ export default {
   extends: Form,
   data() {
     const defaults = {
+      locationPreferences: [],
       locationQuestion: null,
       locationQuestionType: 'single-choice',
       locationQuestionAnswers: null,

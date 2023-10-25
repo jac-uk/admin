@@ -169,6 +169,9 @@ const lookup = (value) => {
     'scenario-test': 'Scenario Test',
     'selection-day': 'Selection Day',
 
+    'locationPreference': 'Location preference',
+    'jurisdictionPreference': 'Jurisdiction preference',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
