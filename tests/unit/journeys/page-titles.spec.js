@@ -1,7 +1,8 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import App from '@/App';
-import Router from 'vue-router';
-import Vuex from 'vuex';
+//import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import App from '@/App.vue';
+// import Router from 'vue-router';
+// import Vuex from 'vuex';
 
 const routes = [
   ['exercise-new', 'Create An Exercise'],
@@ -31,22 +32,28 @@ const routes = [
   ['exercise-reports-reasonable-adjustments', 'Reasonable Adjustments'],
 ];
 
-xdescribe('Page titles', () => {
-  let router;
-  let store;
-
+describe.skip('Page titles', () => {
+  // let router;
+  // let store;
+  let wrapper;
   beforeEach(() => {
-    const localVue = createLocalVue();
-    localVue.use(Router);
-    localVue.use(Vuex);
+    // const localVue = createLocalVue();
+    // localVue.use(Router);
+    // localVue.use(Vuex);
 
-    router = require('@/router').default;
-    store = require('@/store').default;
+    // router = require('@/router').default;
+    // store = require('@/store').default;
     window.scrollTo = () => {};
-    shallowMount(App, {
-      localVue,
-      router,
-      store,
+    // shallowMount(App, {
+    //   //localVue,
+    //   router,
+    //   store,
+    // });
+    wrapper = mount(App, {
+      shallow: true,
+      global: {
+        stubs: ['RouterView'],
+      },
     });
   });
 
@@ -57,7 +64,8 @@ xdescribe('Page titles', () => {
 
   describe('sign in', () => {
     beforeEach(() => {
-      router.push({ name: 'sign-in' });
+      //router.push({ name: 'sign-in' });
+      wrapper.vm.router.push({ name: 'sign-in' });
     });
 
     it('contains Sign In', () => {
@@ -71,8 +79,10 @@ xdescribe('Page titles', () => {
 
   describe('exercises', () => {
     beforeEach(() => {
-      store.dispatch('auth/setCurrentUser', user);
-      router.push({ name: 'exercises' });
+      // store.dispatch('auth/setCurrentUser', user);
+      // router.push({ name: 'exercises' });
+      wrapper.vm.store.dispatch('auth/setCurrentUser', user);
+      wrapper.vm.router.push({ name: 'exercises' });
     });
 
     it('contains exercises', () => {
@@ -86,8 +96,10 @@ xdescribe('Page titles', () => {
 
   describe.each(routes)('%s', (routeName, routeTitle) => {
      beforeEach(() => {
-       store.dispatch('auth/setCurrentUser', user);
-      router.push({ name: routeName, params: { id: 123 } });
+      //  store.dispatch('auth/setCurrentUser', user);
+      //  router.push({ name: routeName, params: { id: 123 } });
+      wrapper.vm.store.dispatch('auth/setCurrentUser', user);
+      wrapper.vm.router.push({ name: routeName, params: { id: 123 } });
     });
 
     it(`contains ${routeTitle}`, () => {

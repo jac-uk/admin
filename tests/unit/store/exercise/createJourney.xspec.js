@@ -1,6 +1,7 @@
 import exerciseCreateJourney from '@/store/exercise/createJourney';
+import { vi } from 'vitest';
 
-xdescribe('store/exercise/createJourney', () => {
+describe.skip('store/exercise/createJourney', () => {
   it('is namespaced', () => {
     expect(exerciseCreateJourney.namespaced).toBe(true);
   });
@@ -41,7 +42,7 @@ xdescribe('store/exercise/createJourney', () => {
     let context;
     beforeEach(() => {
       context = {
-        commit: jest.fn(),
+        commit: vi.fn(),
       };
     });
 

@@ -1,5 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import App from '@/App';
+import App from '@/App.vue';
 import Router from 'vue-router';
 import Vuex from 'vuex';
 
@@ -32,7 +32,7 @@ const routes = [
   ['page-not-found', '/errors/page-not-found'],
 ];
 
-xdescribe('Sign in journey', () => {
+describe.skip('Sign in journey', () => {
   let subject;
   let router;
   let store;

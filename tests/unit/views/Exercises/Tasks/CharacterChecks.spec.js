@@ -1,12 +1,12 @@
-import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks';
+import CharacterChecks from '@/views/Exercise/Tasks/CharacterChecks.vue';
 import { shallowMount } from '@vue/test-utils';
 
 const createTestSubject = () => {
   return shallowMount(CharacterChecks);
 };
 
-xdescribe('@/views/Exercise/Tasks/CharacterChecks', () => {
-  xdescribe('template', () => {
+describe.skip('@/views/Exercise/Tasks/CharacterChecks', () => {
+  describe.skip('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();
       expect(wrapper.find('h1').exists()).toBe(true);

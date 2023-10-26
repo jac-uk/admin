@@ -1,5 +1,6 @@
-import ExerciseEditShortlisting from '@/views/Exercise/Details/Shortlisting/Edit';
+import ExerciseEditShortlisting from '@/views/Exercise/Details/Shortlisting/Edit.vue';
 import { shallowMount } from '@vue/test-utils';
+import { vi } from 'vitest';
 
 const exercise = {
   shortlistingMethods: null,
@@ -7,7 +8,7 @@ const exercise = {
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   state: {
     exerciseDocument: {
       record: {},
@@ -20,10 +21,10 @@ const mockStore = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
 
-xdescribe('views/Exercise/Edit/Shortlisting', () => {
+describe.skip('views/Exercise/Edit/Shortlisting', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditShortlisting, {
@@ -48,7 +49,7 @@ xdescribe('views/Exercise/Edit/Shortlisting', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
+      const mockSave = vi.fn();
       wrapper.setMethods({ save: mockSave });
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);

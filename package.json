@@ -19,14 +19,14 @@
     "develop:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:develop-admin-app -P develop",
     "staging:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:staging-admin-app -P staging",
     "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production",
-    "test": "vite test:unit",
-    "test:unit": "vite test:unit",
-    "test-ci": "vite test:unit --ci --runInBand --silent --forceExit",
+    "test": "vitest --mode develop ",
+    "test:coverage": "TZ='Europe/London' vite test:unit --coverage",
+    "test-ci": "TZ='Europe/London' vite test:unit --ci --runInBand",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "3.0.43",
+    "@jac-uk/jac-kit": "3.0.45",
     "@ministryofjustice/frontend": "0.2.4",
     "@rollup/plugin-inject": "^5.0.3",
     "@sentry/tracing": "^7.61.1",
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.1.0",
+    "@vue/test-utils": "^2.4.1",
     "bufferutil": "^4.0.3",
     "clone": "^2.1.2",
     "eslint": "^8.43.0",
@@ -62,12 +63,14 @@
     "eslint-plugin-vue": "^8.7.1",
     "firebase": "^8.10.1",
     "firebase-mock": "^2.3.2",
+    "jsdom": "^22.1.0",
     "postcss": "^8.4.31",
     "process": "^0.11.10",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
     "vite": "^2.5.4",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": "v16.15.1",

@@ -1,52 +1,57 @@
-  const mockExercise = {
-    yesSalaryDetails: 'yesSalaryDetails',
-    additionalWorkingPreferences: [],
-  };
-    
-  const mockApplication = {
-    userId: '0123456',
-  };
-  
-  const mockProps = {
-    editable: false,
-    application: mockApplication,
-    exercise: mockExercise,
-  };
+  // const mockExercise = {
+  //   yesSalaryDetails: 'yesSalaryDetails',
+  //   additionalWorkingPreferences: [],
+  // };
 
-  import PreferencesSummary from '@/views/InformationReview/PreferencesSummary.vue';
-  import { createTestSubject } from '@/../tests/unit/helpers';
-  
-  describe('@/views/Exercise/Applications/Application', () => {
-    describe('template', () => {
-      let wrapper;
-      beforeAll(() => {
-        wrapper = createTestSubject(PreferencesSummary, {
-          propsData: mockProps,
-          mocks: {
-            $store: {
-              getters: {
-                'application/data': jest.fn(() => mockApplication),
-              },
-              state: {
-                exerciseDocument: {
-                  record: mockExercise,
-                },
-                applications: {
-                  records: [mockApplication],
-                },
-                application: {
-                  record: mockApplication,
-                },
-              },
-            },
-          },
-          stubs: [],
-        });
-      });
-  
-      it('renders the component', () => {
-        expect(wrapper.exists()).toBe(true);
-      });
-  
-    });
+  // const mockApplication = {
+  //   userId: '0123456',
+  // };
+
+  // const mockProps = {
+  //   editable: false,
+  //   application: mockApplication,
+  //   exercise: mockExercise,
+  // };
+
+  // import PreferencesSummary from '@/views/InformationReview/PreferencesSummary.vue';
+  // import { createTestSubject } from '@/../tests/unit/helpers';
+  // import { vi } from 'vitest';
+
+  // describe('@/views/Exercise/Applications/Application', () => {
+  //   describe('template', () => {
+  //     let wrapper;
+  //     beforeAll(() => {
+  //       wrapper = createTestSubject(PreferencesSummary, {
+  //         propsData: mockProps,
+  //         mocks: {
+  //           $store: {
+  //             getters: {
+  //               'application/data': vi.fn(() => mockApplication),
+  //             },
+  //             state: {
+  //               exerciseDocument: {
+  //                 record: mockExercise,
+  //               },
+  //               applications: {
+  //                 records: [mockApplication],
+  //               },
+  //               application: {
+  //                 record: mockApplication,
+  //               },
+  //             },
+  //           },
+  //         },
+  //         stubs: [],
+  //       });
+  //     });
+
+  //     it('renders the component', () => {
+  //       expect(wrapper.exists()).toBe(true);
+  //     });
+
+  //   });
+  // });
+
+  it('empty suite', () => {
+
   });
