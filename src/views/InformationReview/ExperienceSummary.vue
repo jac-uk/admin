@@ -519,7 +519,7 @@ export default {
       const changedObj = this.application[obj.field] || {};
 
       if (!changedObj[obj.index].taskDetails) {
-        changedObj[obj.index].taskDetails = {};
+        changedObj[obj.index].taskDetails = {}; // ensure taskDetails exists
       }
       changedObj[obj.index].taskDetails[obj.extension] = obj.change;
 
