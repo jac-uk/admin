@@ -83,6 +83,7 @@ export default {
     },
   },
   methods: {
+    // test
     async save(isValid) {
       this.formData['progress.assessmentOptions'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
