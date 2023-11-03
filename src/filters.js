@@ -169,6 +169,10 @@ const lookup = (value) => {
     'scenario-test': 'Scenario Test',
     'selection-day': 'Selection Day',
 
+    // post-qualification experience
+    'judicial-post': 'Judicial',
+    'quasi-judicial-post': 'Quasi-judicial',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };

@@ -41,6 +41,7 @@
           field="experience"
           :is-asked="isApplicationPartAsked('postQualificationWorkExperience')"
           @change-field="changeInfo"
+          @change-judicial-functions="changeJudicialFunctions"
           @change-task-details="changeTaskDetails"
           @remove-field="removeInfo"
           @add-field="addInfo"
@@ -461,6 +462,12 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
         tasks: [],
+        judicialFunctions: {
+          type: '',
+          duration: '',
+          isLegalQualification: '',
+          details: '',
+        },
         taskDetails: {
           location: '',
           jurisdiction: '',
@@ -514,6 +521,16 @@ export default {
 
       this.formatUpdate(obj.field, changedObj);
 
+    },
+    changeJudicialFunctions(obj) {
+      const changedObj = this.application[obj.field] || {};
+
+      if (!changedObj[obj.index].judicialFunctions) {
+        changedObj[obj.index].judicialFunctions = {}; // ensure judicialFunctions exists
+      }
+      changedObj[obj.index].judicialFunctions[obj.extension] = obj.change;
+
+      this.formatUpdate(obj.field, changedObj);
     },
     changeTaskDetails(obj) {
       const changedObj = this.application[obj.field] || {};
