@@ -207,7 +207,13 @@ export default {
     },
     async createRole() {
       try {
-        await this.$store.dispatch('roles/create', { roleName: this.newRoleName, enabledPermissions: [] });
+        const roleDoc = await this.$store.dispatch('roles/create', { roleName: this.newRoleName, enabledPermissions: [] });
+        if (roleDoc) {
+          const index = this.roles.findIndex(role => role.id === roleDoc.id);
+          if (index > -1) {
+            this.selectedRoleIndex = index;
+          }
+        }
         this.closeCreateRoleModal();
       } catch (error) {
         return false;
