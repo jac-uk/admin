@@ -90,7 +90,11 @@ export default {
         const fileUploaded = await uploadRef.put(blob);
 
         if (fileUploaded && fileUploaded.state === 'success') {
-          return this.filePath;
+          const downloadUrl = await uploadRef.getDownloadURL();
+          return {
+            downloadUrl: downloadUrl,
+            filePath: this.filePath,
+          };
         } else {
           this.setError('File upload failed, please try again. If the problem persist please remove the screenshot and report the problem.');
           return false;

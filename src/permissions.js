@@ -337,6 +337,15 @@ const PERMISSIONS = {
       },
     },
   },
+  zenhub: {
+    label: 'Zenhub',
+    permissions: {
+      canCreateZHIssues: {
+        label: 'Can create issues',
+        value: 'zh1',
+      },
+    },
+  },
 };
 
 export default PERMISSIONS;

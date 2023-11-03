@@ -142,6 +142,8 @@ import { detect } from 'detect-browser';
 import CaptureScreenshot from '../Micro/CaptureScreenshot.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import { functions } from '@/firebase';
+
 export default {
   name: 'FeedbackForm',
   components: {
@@ -245,21 +247,19 @@ export default {
         referenceNumber: this.applicationReferenceNumber,
       };
       try {
+        let screenshot = null;
         await this.$store.dispatch('bugReport/create', this.formData);
 
         // Store the screenshot (uses the bugReportId in it's path)
-        let screenshotFilePath = null;
         if (this.$refs.screenshot) {
-          screenshotFilePath = await this.$refs.screenshot.uploadScreenshot();
-        }
+          screenshot = await this.$refs.screenshot.uploadScreenshot();
 
-        // Update the bugReport with the screenshot file path
-        if (screenshotFilePath) {
+          // Update the bugReport with the screenshot file path
           await this.$store.dispatch('bugReport/update', { data: {
-            screenshot: screenshotFilePath,
+            screenshot: screenshot,
           }, id: this.bugReportId });
         }
-
+        await functions.httpsCallable('createZenhubIssue')(this.bugReportId);
         this.$emit('success');
       }
       catch (e) {
