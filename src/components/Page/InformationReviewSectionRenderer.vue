@@ -102,7 +102,10 @@
                   />
                 </div>
               </div>
-              <div class="govuk-summary-list govuk-!-margin-0">
+              <div
+                v-if="data[index].judicialFunctions.type === 'quasi-judicial-post'"
+                class="govuk-summary-list govuk-!-margin-0"
+              >
                 <div class="govuk-summary-list__key widerColumn">
                   Please outline the powers, procedures and main responsibilities
                 </div>
