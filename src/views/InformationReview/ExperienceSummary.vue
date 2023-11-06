@@ -518,6 +518,9 @@ export default {
     changeTaskDetails(obj) {
       const changedObj = this.application[obj.field] || {};
 
+      if (!changedObj[obj.index].taskDetails) {
+        changedObj[obj.index].taskDetails = {}; // ensure taskDetails exists
+      }
       changedObj[obj.index].taskDetails[obj.extension] = obj.change;
 
       this.formatUpdate(obj.field, changedObj);

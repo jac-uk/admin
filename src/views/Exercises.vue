@@ -219,8 +219,8 @@ export default {
         { title: 'Status' },
         { title: 'Approval' },
         {
-          title: 'Applications count',
-          sort: '_applications._total',
+          title: 'Submitted Applications',
+          sort: '_applications.applied',
           class: 'govuk-table__header--numeric',
         },
       ],
@@ -248,7 +248,7 @@ export default {
       return this.records.map(row => {
         const data = { ...row };
         data.id = row.id;
-        data.applicationsCount = (row._applications && row._applications._total) || 0;
+        data.applicationsCount = (row._applications && row._applications.applied) || 0;
         return data;
       });
     },

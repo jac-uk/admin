@@ -29,6 +29,7 @@ Use this section to prioritise all requirements, particularly where there is an 
 Specify the requirements of the primary user(s) for the change, update, or new feature - consider the following checklist:
 * Describe what is a must-have for this application process for launch and in-scope. 
 **for example** - DOBs are standardised (format TBC) on the character check ARCO report (and anywhere else within character checks reports)
+* Use the format: It's done when...
 
 **Qualifying  a Ticket (optional/delete if not used)**
 Provide the following information:
