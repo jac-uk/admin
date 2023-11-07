@@ -47,6 +47,27 @@
           @add-field="addInfo"
         />
       </div>
+      <div
+        v-if="totalJudicialDays < exercise.pjeDays"
+        class="govuk-!-margin-top-8"
+      >
+        <dl class="govuk-summary-list govuk-!-margin-bottom-8">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key widerColumn">
+              Details
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="application.experienceDetails"
+                :edit="editable"
+                field="experienceDetails"
+                :is-asked="isApplicationPartAsked('postQualificationWorkExperience')"
+                @change-field="changeInfo"
+              />
+            </dd>
+          </div>
+        </dl>
+      </div>
     </div>
 
     <!-- Judicial Experience -->
@@ -486,6 +507,21 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
       };
+    },
+    totalJudicialDays() {
+      let total = 0;
+      if (Array.isArray(this.application.experience)) {
+        this.application.experience.forEach((experience) => {
+          if (
+            Array.isArray(experience.tasks) &&
+            experience.tasks.includes('judicial-functions') &&
+            experience?.judicialFunctions?.duration
+          ) {
+            total += parseInt(experience.judicialFunctions.duration, 10);
+          }
+        });
+      }
+      return total;
     },
   },
   methods: {
