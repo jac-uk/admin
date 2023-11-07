@@ -66,6 +66,8 @@ const APPLICATION_STATUS = {
   RECOMMENDED_FUTURE: 'recommendedFuture',
   RECONSIDER: 'reconsider',
   SECOND_STAGE_INVITED: 'secondStageInvited',
+  SECOND_STAGE_PASSED: 'empTiebreakerPassed',
+  SECOND_STAGE_FAILED: 'empTiebreakerFailed',
   WITHDRAWN: 'withdrawn',
 
   // v1 REVIEW

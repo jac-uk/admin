@@ -358,6 +358,7 @@ function taskStatuses(taskType) { // also on DP
       ];
       break;
     case TASK_TYPE.SCENARIO:
+    case TASK_TYPE.EMP_TIEBREAKER:
       availableStatuses = [
         TASK_STATUS.TEST_INITIALISED,
         TASK_STATUS.TEST_ACTIVATED,
@@ -1079,6 +1080,8 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
         APPLICATION_STATUS.RECONSIDER,
         APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.SECOND_STAGE_PASSED,
+        APPLICATION_STATUS.SECOND_STAGE_FAILED,
         APPLICATION_STATUS.WITHDRAWN,
       ];
       return statuses;
