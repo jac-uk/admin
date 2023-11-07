@@ -23,13 +23,15 @@
             <p class="govuk-notification-banner__heading">
               You have an exercise on your clipboard. Use the button below to create a copy.
             </p>
-            <ActionButton
+            <button
               type="button"
-              :action="copyFromClipboard"
+              class="govuk-button"
+              @click="copyFromClipboard"
             >
               Create exercise from clipboard
-            </ActionButton>
+            </button>
             <button
+              type="button"
               class="govuk-button govuk-button--secondary govuk-!-margin-left-3"
               @click.prevent="openOverrideExerciseModal"
             >
@@ -223,7 +225,7 @@ export default {
     },
     async copyFromClipboard() {
       try {
-        const content = this.$store.state.clipboard.data.content;
+        const content = { ...this.$store.state.clipboard.data.content };
         content.name = `${content.name} COPY`;
         await this.$store.dispatch('exerciseDocument/create', content);
         await this.$store.dispatch('clipboard/empty');
@@ -231,6 +233,7 @@ export default {
         this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']());
         return true;
       } catch (error) {
+        console.log(error);
         return false;
       }
     },
