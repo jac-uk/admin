@@ -98,7 +98,7 @@
         </template>
 
         <template #row="{row, index}">
-          <TableCell class="table-cell-application">
+          <TableCell class="table-cell-application vertical-align-middle">
             {{ row.fullName }}
           </TableCell>
 
@@ -157,7 +157,7 @@
             >
           </TableCell>
 
-          <TableCell class="text-center table-cell-score">
+          <TableCell class="text-center table-cell-score vertical-align-middle">
             {{ row.score }}
           </TableCell>
         </template>
@@ -469,7 +469,7 @@ export default {
 
 <style lang="scss">
 .govuk-input--width-1 {
-  max-width: 4ex;
+  width: 4ex !important;
   text-align: center;
 }
 .govuk-input--width-2 {
@@ -477,11 +477,11 @@ export default {
   text-align: right;
 }
 .vertical-align-middle {
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 .table-cell-value {
   min-width: 50px;
-  padding: 0 10px;
+  padding: 0 10px !important;
   text-align: center;
 }
 </style>
