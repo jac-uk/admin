@@ -153,7 +153,6 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
 import { cloneDeep } from 'lodash';
@@ -168,7 +167,6 @@ export default {
     CheckboxGroup,
     CheckboxItem,
     BackLink,
-    ActionButton,
     Modal,
     OverrideExercise,
   },
