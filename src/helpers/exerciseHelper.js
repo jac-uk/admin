@@ -765,7 +765,7 @@ function isApplicationPartAsked(exercise, part) {
 
 // check if character checks of application is sent
 function isCharacterChecksAsked(application) {
-  return application && application.characterChecks.status !== 'not requested';
+  return application && application.characterChecks && application.characterChecks.status !== 'not requested';
 }
 
 // are there application parts in current stage (not registration)
