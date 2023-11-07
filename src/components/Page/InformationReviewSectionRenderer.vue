@@ -44,9 +44,8 @@
               Details
             </dt>
             
-            <dd
+            <div
               v-else-if="key === 'judicialFunctions' && data[index].tasks.includes('judicial-functions')"
-              class="govuk-summary-list__value"
               style="border-bottom: none;"
             >
               <div class="govuk-summary-list govuk-!-margin-0">
@@ -107,7 +106,7 @@
                 class="govuk-summary-list govuk-!-margin-0"
               >
                 <div class="govuk-summary-list__key widerColumn">
-                  Please outline the powers, procedures and main responsibilities
+                  The powers, procedures and main responsibilities
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
@@ -122,10 +121,9 @@
                   />
                 </div>
               </div>
-            </dd>
-            <dd
+            </div>
+            <div
               v-else-if="key === 'taskDetails'"
-              class="govuk-summary-list__value"
               style="border-bottom: none;"
             >
               <div class="govuk-summary-list govuk-!-margin-0">
@@ -213,7 +211,7 @@
                   />
                 </div>
               </div>
-            </dd>
+            </div>
 
             <dd
               v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails' && key !== 'judicialFunctions')"
