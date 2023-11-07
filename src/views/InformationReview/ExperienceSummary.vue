@@ -98,7 +98,7 @@
       </dl>
     </div>
     <div
-      v-if="isLegal && exercise.previousJudicialExperienceApply"
+      v-if="isLegal && exercise.previousJudicialExperienceApply && !isApplicationVersion3"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -436,6 +436,9 @@ export default {
     },
     isNonLegal() {
       return isNonLegal(this.exercise);
+    },
+    isApplicationVersion3() {
+      return this.exercise && this.exercise._applicationVersion && this.exercise._applicationVersion === 3;
     },
     emptyMembershipObject() {
       return {

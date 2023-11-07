@@ -608,10 +608,14 @@ function exerciseApplicationParts(data, newValues) {
   if (isLegal(exercise)) {
     applicationParts.push('relevantQualifications');
     applicationParts.push('postQualificationWorkExperience');
-    if (exercise.previousJudicialExperienceApply) {
-      applicationParts.push('judicialExperience');
+
+    if (exercise._applicationVersion < 3) {
+      if (exercise.previousJudicialExperienceApply) {
+        applicationParts.push('judicialExperience');
+      }
+      applicationParts.push('employmentGaps');
     }
-    applicationParts.push('employmentGaps');
+
     applicationParts.push('reasonableLengthOfService');
   }
   if (isNonLegal(exercise)) {
