@@ -54,7 +54,7 @@
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="data[index].judicialFunctions.type"
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.type : ''"
                     :options="['judicial-post', 'quasi-judicial-post']"
                     :edit="edit"
                     type="selection"
@@ -72,7 +72,7 @@
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="data[index].judicialFunctions.duration"
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.duration : ''"
                     :edit="edit"
                     type="text"
                     :field="field"
@@ -89,8 +89,8 @@
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="data[index].judicialFunctions.isLegalQualification"
-                    :options="['true', 'false']"
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.isLegalQualification : ''"
+                    :options="[true, false]"
                     :edit="edit"
                     type="selection"
                     :field="field"
@@ -102,7 +102,7 @@
                 </div>
               </div>
               <div
-                v-if="data[index].judicialFunctions.type === 'quasi-judicial-post'"
+                v-if="data[index].judicialFunctions && data[index].judicialFunctions.type === 'quasi-judicial-post'"
                 class="govuk-summary-list govuk-!-margin-0"
               >
                 <div class="govuk-summary-list__key widerColumn">
@@ -110,7 +110,7 @@
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="data[index].judicialFunctions.details"
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.details : ''"
                     :edit="edit"
                     type="textarea"
                     :field="field"
