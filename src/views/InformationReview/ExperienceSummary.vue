@@ -489,7 +489,7 @@ export default {
         judicialFunctions: {
           type: '',
           duration: '',
-          isLegalQualification: '',
+          isLegalQualificationRequired: '',
           details: '',
         },
         taskDetails: {

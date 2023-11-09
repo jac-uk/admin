@@ -89,13 +89,13 @@
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
-                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.isLegalQualification : ''"
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.isLegalQualificationRequired : ''"
                     :options="[true, false]"
                     :edit="edit"
                     type="selection"
                     :field="field"
                     :index="index"
-                    :extension="'isLegalQualification'"
+                    :extension="'isLegalQualificationRequired'"
                     :is-asked="isAsked"
                     @change-field="changeJudicialFunctions"
                   />
