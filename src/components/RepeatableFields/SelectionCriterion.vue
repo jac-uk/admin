@@ -20,7 +20,7 @@
       v-model="row.wordLimit"
       input-class="govuk-input--width-5"
       label="Would you like to add a custom word limit to this question?"
-      hint="if none is provided this will default to 250 words"
+      :hint="hint"
       type="number"
     />
     <hr>
@@ -32,6 +32,7 @@
 <script>
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
+import { shallowRef } from 'vue';
 
 export default {
   name: 'SelectionCriterion',
@@ -39,6 +40,7 @@ export default {
     TextField,
     RichTextInput,
   },
+  inject: ['defaultWordLimit'],
   props: {
     row: {
       required: true,
@@ -49,5 +51,16 @@ export default {
       type: Number,
     },
   },
+  data() {
+    return {
+      hint: shallowRef(`if none is provided this will default to ${this.defaultWordLimit} words`),
+    };
+  },
 };
 </script>
+<style scoped>
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+</style>
