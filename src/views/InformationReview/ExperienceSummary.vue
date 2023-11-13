@@ -54,7 +54,7 @@
         <dl class="govuk-summary-list govuk-!-margin-bottom-8">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key widerColumn">
-              Details
+              Details of how you have acquired the necessary skills
             </dt>
             <dd class="govuk-summary-list__value">
               <InformationReviewRenderer

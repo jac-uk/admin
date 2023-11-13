@@ -106,7 +106,7 @@
                 class="govuk-summary-list govuk-!-margin-0"
               >
                 <div class="govuk-summary-list__key widerColumn">
-                  The powers, procedures and main responsibilities
+                  Powers, procedures and main responsibilities
                 </div>
                 <div class="govuk-summary-list__value">
                   <InformationReviewRenderer
