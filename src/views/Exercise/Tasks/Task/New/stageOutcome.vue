@@ -83,7 +83,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     task() {
-      return { status: 'stageOutcome' };
+      return { status: 'new' };
     },
     taskSteps() {
       const steps = getTaskSteps(this.exercise, this.type, this.task);
@@ -135,9 +135,9 @@ export default {
         exerciseId: this.exercise.id,
         type: this.type,
       };
-      if (this.taskIsOverdue) {
-        params.dataOnly = true;
-      }
+      // if (this.taskIsOverdue) {
+      //   params.dataOnly = true;
+      // }
       await functions.httpsCallable('createTask')(params);
       this.btnNext();
     },

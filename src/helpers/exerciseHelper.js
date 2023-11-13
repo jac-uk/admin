@@ -1,6 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, ASSESSMENT_METHOD } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, SHORTLISTING_TASK_TYPES, ASSESSMENT_METHOD } from '@/helpers/constants';
 import exerciseTimeline from '../helpersTMP/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
@@ -212,8 +212,8 @@ function getNextProcessingStage(processingStage) {
 function getProcessingEntryStage(exercise, processingStage) {
   if (exercise._processingVersion >= 2) {
     switch (processingStage) {
+    case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
-      // TO DO check for staged applications as shortlisting may start with registration rather than applied
       return EXERCISE_STAGE.APPLIED;
     case PROCESSING_STAGE.SELECTION:
       return EXERCISE_STAGE.SHORTLISTED;
@@ -239,6 +239,7 @@ function getProcessingEntryStage(exercise, processingStage) {
 function getProcessingExitStage(exercise, processingStage) {
   if (exercise._processingVersion >= 2) {
     switch (processingStage) {
+    case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
       return EXERCISE_STAGE.SHORTLISTED;
     case PROCESSING_STAGE.SELECTION:
@@ -272,32 +273,50 @@ function getProcessingExitStage(exercise, processingStage) {
  */
 function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
-  const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
+  let timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
+  let supportedTaskTypes = [];
   if (exercise._processingVersion >= 2) {
-    const supportedTaskTypes = [
+    supportedTaskTypes = [
+      TASK_TYPE.TELEPHONE_ASSESSMENT,
       TASK_TYPE.SIFT,
       TASK_TYPE.CRITICAL_ANALYSIS,
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
-      TASK_TYPE.TELEPHONE_ASSESSMENT,
+      TASK_TYPE.SHORTLISTING_OUTCOME,
       TASK_TYPE.ELIGIBILITY_SCC,
       TASK_TYPE.STATUTORY_CONSULTATION,
       TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       TASK_TYPE.EMP_TIEBREAKER,
       TASK_TYPE.SELECTION_DAY,
     ];
-    return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
   } else {
-    const supportedTaskTypes = [
+    supportedTaskTypes = [
       TASK_TYPE.CRITICAL_ANALYSIS,
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
       TASK_TYPE.EMP_TIEBREAKER,
     ];
-    return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
   }
+  timelineTasks = timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
+  if (timelineTasks.find((item) => item.taskType === TASK_TYPE.SHORTLISTING_OUTCOME)) {  // ensure shortlisting outcome comes after shortlisting methods!
+    let shortlistingOutcomeIndex = -1;
+    let lastShortlistingMethodIndex = -1;
+    timelineTasks.forEach((item, index) => {
+      if (item.taskType === TASK_TYPE.SHORTLISTING_OUTCOME) shortlistingOutcomeIndex = index;
+      if (
+        (SHORTLISTING_TASK_TYPES.indexOf(item.taskType) >= 0)
+        && index > lastShortlistingMethodIndex
+      ) {
+        lastShortlistingMethodIndex = index;
+      }
+    });
+    if (lastShortlistingMethodIndex > shortlistingOutcomeIndex) {
+      timelineTasks.splice(lastShortlistingMethodIndex, 0, timelineTasks.splice(shortlistingOutcomeIndex, 1)[0]);
+    }
+  }
+  return timelineTasks;
 }
 
 function getTaskTypes(exercise, stage) {

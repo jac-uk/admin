@@ -297,6 +297,7 @@ const exerciseTimeline = (data) => {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
         dateString: getDateString(data.finalOutcome, 'month'),
+        taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
   }

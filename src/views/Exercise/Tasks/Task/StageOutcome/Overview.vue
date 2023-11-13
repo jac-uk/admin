@@ -14,7 +14,7 @@
     <ProgressBar :steps="taskSteps" />
 
     <p class="govuk-body-l govuk-!-margin-bottom-4">
-      {{ $filters.lookup(type) }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed to {{ $filters.lookup(nextProcessingStage) }}
+      {{ $filters.lookup(type) }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed from {{ $filters.lookup(entryStage) }} to {{ $filters.lookup(exitStage) }}
     </p>
 
     <!-- OVERVIEW -->
