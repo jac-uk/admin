@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
+      <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
-      <div class="text-right govuk-grid-column-one-half">
+      <div class="text-right govuk-grid-column-one-third">
         <FullScreenButton />
       </div>
     </div>

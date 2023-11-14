@@ -89,6 +89,8 @@ import ExerciseTask from '@/views/Exercise/Tasks/Task.vue';
 import ExerciseTaskLoading from '@/views/Exercise/Tasks/Task/Loading.vue';
 import ExerciseTaskNew from '@/views/Exercise/Tasks/Task/New.vue';
 import ExerciseTaskStageOutcome  from '@/views/Exercise/Tasks/Task/StageOutcome/Overview.vue';
+import ExerciseTaskCandidateFormConfigure from '@/views/Exercise/Tasks/Task/CandidateForm/Configure.vue';
+import ExerciseTaskCandidateFormMonitor from '@/views/Exercise/Tasks/Task/CandidateForm/Monitor.vue';
 import ExerciseTaskDataInitialised from '@/views/Exercise/Tasks/Task/Data/Initialised.vue';
 import ExerciseTaskDataActivated from '@/views/Exercise/Tasks/Task/Data/Activated.vue';
 import ExerciseTaskTestInitialised from '@/views/Exercise/Tasks/Task/Test/Initialised.vue';
@@ -697,6 +699,24 @@ const routes = [
                 meta: {
                   requiresAuth: true,
                   title: 'Stage Outcome | Exercise task',
+                },
+              },
+              {
+                path: 'configue-candidate-form',
+                component: ExerciseTaskCandidateFormConfigure,
+                name: 'exercise-task-candidateFormConfigure',
+                meta: {
+                  requiresAuth: true,
+                  title: 'Configure | Candidate Form | Exercise task',
+                },
+              },
+              {
+                path: 'monitor-candidate-form',
+                component: ExerciseTaskCandidateFormMonitor,
+                name: 'exercise-task-candidateFormMonitor',
+                meta: {
+                  requiresAuth: true,
+                  title: 'Monitor | Candidate Form | Exercise task',
                 },
               },
               {

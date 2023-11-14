@@ -221,6 +221,27 @@ const exerciseTimeline = (data) => {
     );
   }
 
+  if (data.selectionDayQuestionnaireSendDate) {
+    timeline.push(
+      {
+        entry: 'Pre Selection Day Questionnaire - sent',
+        date: data.selectionDayQuestionnaireSendDate,
+        dateString: getDateString(data.selectionDayQuestionnaireSendDate),
+        taskType: TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
+      }
+    );
+  }
+
+  if (data.selectionDayQuestionnaireReturnDate) {
+    timeline.push(
+      {
+        entry: 'Pre Selection Day Questionnaire - return',
+        date: data.selectionDayQuestionnaireReturnDate,
+        dateString: getDateString(data.selectionDayQuestionnaireReturnDate),
+      }
+    );
+  }
+
   if (data.selectionDays && data.selectionDays.length > 0) {
     for (let i = 0; i < data.selectionDays.length; i++) {
       if (data.selectionDays[i].selectionDayStart) {

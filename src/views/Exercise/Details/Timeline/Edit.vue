@@ -244,6 +244,18 @@
         <h2 class="govuk-heading-l">
           Selection Day
         </h2>
+        <DateInput
+          id="selection-day-questionnaire-send-date"
+          v-model="formData.selectionDayQuestionnaireSendDate"
+          label="Pre Selection Day Questionnaire - send date"
+          required
+        />
+        <DateInput
+          id="selection-day-questionnaire-send-date"
+          v-model="formData.selectionDayQuestionnaireReturnDate"
+          label="Pre Selection Day Questionnaire - return date"
+          required
+        />
         <RepeatableFields
           v-model="formData.selectionDays"
           :component="repeatableFields.SelectionDay"
@@ -395,6 +407,8 @@ export default {
       independentAssessmentsReturnDate: null,
       independentAssessmentsHardLimitDate: null,
       eligibilitySCCDate: null,
+      selectionDayQuestionnaireSendDate: null,
+      selectionDayQuestionnaireReturnDate: null,
       selectionDays: null,
       characterChecksDate: null,
       characterChecksReturnDate: null,

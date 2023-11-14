@@ -236,6 +236,9 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';  
+  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Passed`] = 'Completed PSDQ';
+  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Failed`] = 'Not completed PSDQ';
   lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
   lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Passed selection day';
   lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';

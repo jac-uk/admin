@@ -115,7 +115,6 @@ const APPLICATION_SUCCESS_STATUSES = [
 
 const TASK_TYPE = {
   SIFT: 'sift',
-  SELECTION_DAY: 'selectionDay',
   SCENARIO: 'scenarioTest',
   CRITICAL_ANALYSIS: 'criticalAnalysis',
   SITUATIONAL_JUDGEMENT: 'situationalJudgement',
@@ -126,6 +125,8 @@ const TASK_TYPE = {
   STATUTORY_CONSULTATION: 'statutoryConsultation',
   SHORTLISTING_OUTCOME: 'shortlistingOutcome',
   WELSH_ASSESSMENT: 'welshAssessment',
+  PRE_SELECTION_DAY_QUESTIONNAIRE: 'preSelectionDayQuestionnaire',
+  SELECTION_DAY: 'selectionDay',
   SELECTION_OUTCOME: 'selectionOutcome',
   EMP_TIEBREAKER: 'empTiebreaker',
 };
