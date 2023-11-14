@@ -14,10 +14,15 @@
     <ProgressBar :steps="taskSteps" />
 
     <form @submit.prevent="validateAndSave">
+      <ErrorSummary
+        :errors="errors"
+      />
+
       <CheckboxGroup
         id="candidate-form-parts"
         v-model="formData.formParts"
-        label="Form parts go here"
+        label="Which pertinent information would you like to collect/reconfirm with candidates?"
+        required
       >
         <CheckboxItem
           v-for="part in CandidateFormParts"
@@ -26,12 +31,13 @@
           :label="$filters.lookup(part)"
         />
       </CheckboxGroup>
-
+      
       <CheckboxGroup
         v-if="formData.formParts.indexOf('panelConflicts') >= 0"
         id="panellists"
         v-model="formData.panellists"
-        label="Panellists"
+        label="Which panellists should be checked for panel conflicts?"
+        required
       >
         <CheckboxItem
           v-for="panellist in panellists"
@@ -80,10 +86,14 @@ export default {
       formData: {
         formParts: [],
       },
-      CandidateFormParts: [
+      CandidateFormParts: [ // TODO check these names are correct and then add to human-readable versions to lookup filter
         'candidateAvailability',
         'panelConflicts',
         'commissionerConflicts',
+        'characterChecks',
+        'reasonableAdjustments',
+        'workingPreferences',
+        'welshPosts',
       ],
     };
   },
