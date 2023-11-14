@@ -86,7 +86,7 @@ export default {
       formData: {
         formParts: [],
       },
-      CandidateFormParts: [ // TODO check these names are correct and then add to human-readable versions to lookup filter
+      CandidateFormParts: [ // TODO check these names are correct and then add human-readable versions to lookup filter
         'candidateAvailability',
         'panelConflicts',
         'commissionerConflicts',
