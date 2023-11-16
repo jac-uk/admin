@@ -64,7 +64,6 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { functions } from '@/firebase';
-import firebase from '@firebase/app';
 
 export default {
   components: {
@@ -83,31 +82,14 @@ export default {
     },
   },
   data() {
-
-    // {
-    //   exercise: { id: String },
-    //   task: { type: String },
-    //   createdAt: Timestamp,
-    //   lastUpdated: Timestamp,
-    //   openDate: Timestamp,
-    //   closeDate: Timestamp,
-    //   candidateIds: String[],
-
-    //   parts: String[],
-
-    //   panellists: [{ id: String, fullName: String }],
-    // }
-
+    const exercise = this.$store.state.exerciseDocument.record;
+    const openDate = exercise.preSelectionDayQuestionnaireSendDate;
+    const closeDate = exercise.preSelectionDayQuestionnaireReturnDate;
     return {
       formData: {
+        openDate: openDate,
+        closeDate: closeDate,
         formParts: [],
-        exercise: null,
-        task: '',
-        createdAt: null,
-        lastUpdated: null,
-        openDate: null,
-        closeDate: null,
-        candidateIds: [],
         panellists: [],
       },
       CandidateFormParts: [ // TODO check these names are correct and then add human-readable versions to lookup filter
@@ -133,7 +115,7 @@ export default {
       return steps;
     },
     panellists() {
-      return this.$store.state.panellists.records;
+      return this.$store.state.panellists.records.map(item => ({ id: item.id, fullName: item.fullName }));
     },
   },
   created() {
@@ -142,22 +124,16 @@ export default {
   methods: {
     btnNext,
     async save() {
-      // TODO save form data in a new `CandidateForms` document
-
-      if (this.panellists.length) {
-        this.formData.panellists = this.panellists.map(item => ({ id: item.id, fullName: item.fullName }));
-      }
-      this.formData.exercise = { id: this.exercise.id };
-
-      this.formData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      this.formData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      this.formData.task = this.task;
-
-      this.formData.candidateIds = [];
-
-      this.formData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-
-      await this.$store.dispatch('candidateForm/save', this.formData);
+      const saveData = { 
+        exercise: {
+          id: this.exercise.id,
+        },
+        task: {
+          type: this.task.type,
+        },
+        ...this.formData,
+      };
+      await this.$store.dispatch('candidateForm/create', saveData);
       await this.btnContinue();
     },
     async btnContinue() {

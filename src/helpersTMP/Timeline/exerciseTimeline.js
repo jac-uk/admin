@@ -226,7 +226,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Pre Selection Day Questionnaire - sent',
         date: data.selectionDayQuestionnaireSendDate,
-        dateString: getDateString(data.selectionDayQuestionnaireSendDate),
+        dateString: getDateString(data.preSelectionDayQuestionnaireSendDate),
         taskType: TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
       }
     );
@@ -237,7 +237,7 @@ const exerciseTimeline = (data) => {
       {
         entry: 'Pre Selection Day Questionnaire - return',
         date: data.selectionDayQuestionnaireReturnDate,
-        dateString: getDateString(data.selectionDayQuestionnaireReturnDate),
+        dateString: getDateString(data.preSelectionDayQuestionnaireReturnDate),
       }
     );
   }
