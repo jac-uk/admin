@@ -31,7 +31,7 @@
           :label="$filters.lookup(part)"
         />
       </CheckboxGroup>
-      
+
       <CheckboxGroup
         v-if="formData.formParts.indexOf('panelConflicts') >= 0"
         id="panellists"
@@ -50,7 +50,7 @@
       <button class="govuk-button">
         Save and continue
       </button>
-    </form>    
+    </form>
   </div>
 </template>
 
@@ -64,6 +64,7 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { functions } from '@/firebase';
+import firebase from '@firebase/app';
 
 export default {
   components: {
@@ -82,9 +83,32 @@ export default {
     },
   },
   data() {
+
+    // {
+    //   exercise: { id: String },
+    //   task: { type: String },
+    //   createdAt: Timestamp,
+    //   lastUpdated: Timestamp,
+    //   openDate: Timestamp,
+    //   closeDate: Timestamp,
+    //   candidateIds: String[],
+
+    //   parts: String[],
+
+    //   panellists: [{ id: String, fullName: String }],
+    // }
+
     return {
       formData: {
         formParts: [],
+        exercise: null,
+        task: '',
+        createdAt: null,
+        lastUpdated: null,
+        openDate: null,
+        closeDate: null,
+        candidateIds: [],
+        panellists: [],
       },
       CandidateFormParts: [ // TODO check these names are correct and then add human-readable versions to lookup filter
         'candidateAvailability',
@@ -119,7 +143,21 @@ export default {
     btnNext,
     async save() {
       // TODO save form data in a new `CandidateForms` document
-      // await this.$store.dispatch('candidateForm/save', this.formData);
+
+      if (this.panellists.length) {
+        this.formData.panellists = this.panellists.map(item => ({ id: item.id, fullName: item.fullName }));
+      }
+      this.formData.exercise = { id: this.exercise.id };
+
+      this.formData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      this.formData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      this.formData.task = this.task;
+
+      this.formData.candidateIds = [];
+
+      this.formData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
+      await this.$store.dispatch('candidateForm/save', this.formData);
       await this.btnContinue();
     },
     async btnContinue() {
