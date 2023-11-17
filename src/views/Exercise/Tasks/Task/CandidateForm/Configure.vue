@@ -20,7 +20,7 @@
 
       <CheckboxGroup
         id="candidate-form-parts"
-        v-model="formData.formParts"
+        v-model="formData.parts"
         label="Which pertinent information would you like to collect/reconfirm with candidates?"
         required
       >
@@ -33,7 +33,7 @@
       </CheckboxGroup>
 
       <CheckboxGroup
-        v-if="formData.formParts.indexOf('panelConflicts') >= 0"
+        v-if="formData.parts.indexOf('panelConflicts') >= 0"
         id="panellists"
         v-model="formData.panellists"
         label="Which panellists should be checked for panel conflicts?"
@@ -89,7 +89,7 @@ export default {
       formData: {
         openDate: openDate,
         closeDate: closeDate,
-        formParts: [],
+        parts: [],
         panellists: [],
       },
       CandidateFormParts: [ // TODO check these names are correct and then add human-readable versions to lookup filter

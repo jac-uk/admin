@@ -702,7 +702,7 @@ const routes = [
                 },
               },
               {
-                path: 'configue-candidate-form',
+                path: 'configure-candidate-form',
                 component: ExerciseTaskCandidateFormConfigure,
                 name: 'exercise-task-candidateFormConfigure',
                 meta: {
