@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      hint: shallowRef(`if none is provided this will default to ${this.defaultWordLimit} words`),
+      hint: shallowRef(`The default word limit for this question is ${this.defaultWordLimit} words, if you would like to customise the word limit, please add the new figure in the field below.`),
     };
   },
 };
