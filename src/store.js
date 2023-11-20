@@ -22,6 +22,7 @@ import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
+import preSelectionDayQuestionnaires from '@/store/preSelectionDayQuestionnaires';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
@@ -74,6 +75,7 @@ const store = createStore({
     panellist,
     panellists,
     panels,
+    preSelectionDayQuestionnaires,
     services,
     task,
     tasks,
