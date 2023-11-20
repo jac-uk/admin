@@ -191,7 +191,7 @@ const TASK_STATUS = { // aka task STEPS
 };
 
 const TASK_STEPS = {};
-TASK_STEPS.new = { title: 'Get started' };
+TASK_STEPS.new = { title: 'Overview' };
 TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_CONFIGURE] = { title: 'Configure candidate form' };
 TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_MONITOR] = { title: 'Monitor candidate responses' };
 TASK_STEPS[TASK_STATUS.DATA_INITIALISED] = { title: 'Configure marking scheme' };
