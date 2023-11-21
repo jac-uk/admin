@@ -255,6 +255,7 @@ export default {
   watch: {
     activeTab() {
       this.resetSelectedItems();
+      this.resetMessage();
     },
   },
   methods: {
@@ -286,7 +287,11 @@ export default {
       }
       setTimeout(() => {
         this.message = '';
-      },20000);
+      }, 20000);
+    },
+    resetMessage() {
+      this.status = null;
+      this.message = null;
     },
     btnNext,
     async btnContinue() {
