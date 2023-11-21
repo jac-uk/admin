@@ -90,7 +90,9 @@ export {
   getPreviousStage,
   getNextStage,
   getStagePassingStatuses,
-  getStageWithdrawalStatus
+  getStageWithdrawalStatus,
+  isApplicationVersionGreaterThan,
+  isApplicationVersionLessThan
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -1130,4 +1132,11 @@ function shortlistingStatuses(exercise) {
     // TODO other
   }
   return statuses;
+}
+
+function isApplicationVersionGreaterThan(exercise, version) {
+  return exercise?._applicationVersion > version;
+}
+function isApplicationVersionLessThan(exercise, version) {
+  return exercise?._applicationVersion < version;
 }

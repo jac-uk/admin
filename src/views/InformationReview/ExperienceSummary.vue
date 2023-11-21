@@ -119,7 +119,7 @@
       </dl>
     </div>
     <div
-      v-if="isLegal && exercise.previousJudicialExperienceApply && !isApplicationVersion3"
+      v-if="isLegal && exercise.previousJudicialExperienceApply && isApplicationVersionLessThan3"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -410,7 +410,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
-import { isNonLegal, isLegal, isApplicationPartAsked } from '@/helpers/exerciseHelper';
+import { isNonLegal, isLegal, isApplicationPartAsked, isApplicationVersionLessThan } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'ExperienceSummary',
@@ -458,8 +458,8 @@ export default {
     isNonLegal() {
       return isNonLegal(this.exercise);
     },
-    isApplicationVersion3() {
-      return this.exercise && this.exercise._applicationVersion && this.exercise._applicationVersion === 3;
+    isApplicationVersionLessThan3() {
+      return isApplicationVersionLessThan(this.exercise, 3);
     },
     emptyMembershipObject() {
       return {
