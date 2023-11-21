@@ -20,6 +20,11 @@ export default {
       required: false,
       default: true,
     },
+    isAsked: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   emits: ['changeInfo'],
   computed: {

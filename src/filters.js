@@ -34,6 +34,7 @@ const lookup = (value) => {
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
+    commissionerConflicts: 'Commissioner conflicts',
 
     // exercise states
     draft: 'Draft',
@@ -168,6 +169,10 @@ const lookup = (value) => {
     'qualifying-test': 'Qualifying Test',
     'scenario-test': 'Scenario Test',
     'selection-day': 'Selection Day',
+
+    // post-qualification experience
+    'judicial-post': 'Judicial',
+    'quasi-judicial-post': 'Quasi-judicial',
 
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',

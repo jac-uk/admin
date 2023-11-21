@@ -41,10 +41,32 @@
           field="experience"
           :is-asked="isApplicationPartAsked('postQualificationWorkExperience')"
           @change-field="changeInfo"
+          @change-judicial-functions="changeJudicialFunctions"
           @change-task-details="changeTaskDetails"
           @remove-field="removeInfo"
           @add-field="addInfo"
         />
+      </div>
+      <div
+        v-if="totalJudicialDays < exercise.pjeDays"
+        class="govuk-!-margin-top-8"
+      >
+        <dl class="govuk-summary-list govuk-!-margin-bottom-8">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key widerColumn">
+              Details of how you have acquired the necessary skills
+            </dt>
+            <dd class="govuk-summary-list__value">
+              <InformationReviewRenderer
+                :data="application.experienceDetails"
+                :edit="editable"
+                field="experienceDetails"
+                :is-asked="isApplicationPartAsked('postQualificationWorkExperience')"
+                @change-field="changeInfo"
+              />
+            </dd>
+          </div>
+        </dl>
       </div>
     </div>
 
@@ -97,7 +119,7 @@
       </dl>
     </div>
     <div
-      v-if="isLegal && exercise.previousJudicialExperienceApply"
+      v-if="isLegal && exercise.previousJudicialExperienceApply && isApplicationVersionLessThan3"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -388,7 +410,7 @@
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import InformationReviewSectionRenderer from '@/components/Page/InformationReviewSectionRenderer.vue';
-import { isNonLegal, isLegal, isApplicationPartAsked } from '@/helpers/exerciseHelper';
+import { isNonLegal, isLegal, isApplicationPartAsked, isApplicationVersionLessThan } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'ExperienceSummary',
@@ -436,6 +458,9 @@ export default {
     isNonLegal() {
       return isNonLegal(this.exercise);
     },
+    isApplicationVersionLessThan3() {
+      return isApplicationVersionLessThan(this.exercise, 3);
+    },
     emptyMembershipObject() {
       return {
         date: new Date(),
@@ -461,6 +486,12 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
         tasks: [],
+        judicialFunctions: {
+          type: '',
+          duration: '',
+          isLegalQualificationRequired: '',
+          details: '',
+        },
         taskDetails: {
           location: '',
           jurisdiction: '',
@@ -476,6 +507,21 @@ export default {
         startDate: new Date(),
         endDate: new Date(),
       };
+    },
+    totalJudicialDays() {
+      let total = 0;
+      if (Array.isArray(this.application.experience)) {
+        this.application.experience.forEach((experience) => {
+          if (
+            Array.isArray(experience.tasks) &&
+            experience.tasks.includes('judicial-functions') &&
+            experience?.judicialFunctions?.duration
+          ) {
+            total += parseInt(experience.judicialFunctions.duration, 10);
+          }
+        });
+      }
+      return total;
     },
   },
   methods: {
@@ -514,6 +560,16 @@ export default {
 
       this.formatUpdate(obj.field, changedObj);
 
+    },
+    changeJudicialFunctions(obj) {
+      const changedObj = this.application[obj.field] || {};
+
+      if (!changedObj[obj.index].judicialFunctions) {
+        changedObj[obj.index].judicialFunctions = {}; // ensure judicialFunctions exists
+      }
+      changedObj[obj.index].judicialFunctions[obj.extension] = obj.change;
+
+      this.formatUpdate(obj.field, changedObj);
     },
     changeTaskDetails(obj) {
       const changedObj = this.application[obj.field] || {};

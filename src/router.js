@@ -73,6 +73,7 @@ import ExerciseReportsPanelsView from '@/views/Exercise/Reports/PanelsView.vue';
 import ExerciseReportsSift from '@/views/Exercise/Reports/Sift.vue';
 import ExerciseReportsSelectionDays from '@/views/Exercise/Reports/SelectionDays.vue';
 import ExerciseReportsScenario from '@/views/Exercise/Reports/Scenario.vue';
+import ExerciseReportsCommissionerConflicts from '@/views/Exercise/Reports/CommissionerConflicts.vue';
 
 // Merit list
 import ExerciseReportsMeritList from '@/views/Exercise/Reports/MeritList.vue';
@@ -1109,6 +1110,15 @@ const routes = [
                 },
               },
             ],
+          },
+          {
+            name: 'commissioner-conflicts',
+            path: 'commissioner-conflicts',
+            component: ExerciseReportsCommissionerConflicts,
+            meta: {
+              requiresAuth: true,
+              title: 'Commissioner Conflicts | Exercise Reports',
+            },
           },
         ],
       },
