@@ -90,7 +90,9 @@ export {
   getPreviousStage,
   getNextStage,
   getStagePassingStatuses,
-  getStageWithdrawalStatus
+  getStageWithdrawalStatus,
+  isApplicationVersionGreaterThan,
+  isApplicationVersionLessThan
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -609,10 +611,14 @@ function exerciseApplicationParts(data, newValues) {
   if (isLegal(exercise)) {
     applicationParts.push('relevantQualifications');
     applicationParts.push('postQualificationWorkExperience');
-    if (exercise.previousJudicialExperienceApply) {
-      applicationParts.push('judicialExperience');
+
+    if (isApplicationVersionLessThan(exercise, 3)) {
+      if (exercise.previousJudicialExperienceApply) {
+        applicationParts.push('judicialExperience');
+      }
+      applicationParts.push('employmentGaps');
     }
-    applicationParts.push('employmentGaps');
+
     applicationParts.push('reasonableLengthOfService');
   }
   if (isNonLegal(exercise)) {
@@ -763,7 +769,7 @@ function isApplicationPartAsked(exercise, part) {
 
 // check if character checks of application is sent
 function isCharacterChecksAsked(application) {
-  return application && application.characterChecks.status !== 'not requested';
+  return application && application.characterChecks && application.characterChecks.status !== 'not requested';
 }
 
 // are there application parts in current stage (not registration)
@@ -1128,4 +1134,11 @@ function shortlistingStatuses(exercise) {
     // TODO other
   }
   return statuses;
+}
+
+function isApplicationVersionGreaterThan(exercise, version) {
+  return exercise?._applicationVersion > version;
+}
+function isApplicationVersionLessThan(exercise, version) {
+  return exercise?._applicationVersion < version;
 }
