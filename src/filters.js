@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -279,6 +279,14 @@ const lookup = (value) => {
   lookup[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] = 'Statement of eligibility';
   lookup[ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS] = 'Independent Assessments';
   lookup[ASSESSMENT_METHOD.LEADERSHIP_JUDGE_ASSESSMENT] = 'Leadership Judge Assessment';
+
+  // form parts
+  lookup[APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY] = 'Candidate Availability';
+  lookup[APPLICATION_FORM_PARTS.PANEL_CONFLICTS] = 'Panel Conflicts';
+  lookup[APPLICATION_FORM_PARTS.COMMISSIONER_CONFLICTS] = 'Commissioner Conflicts';
+  lookup[APPLICATION_FORM_PARTS.CHARACTER_CHECKS] = 'Character Checks';
+  lookup[APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS] = 'Reasonable Adjustments';
+  lookup[APPLICATION_FORM_PARTS.WORKING_PREFERENCES] = 'Working Preferences';
 
   returnValue = lookup[value];
 

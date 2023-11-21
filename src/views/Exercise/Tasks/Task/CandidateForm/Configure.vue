@@ -57,6 +57,7 @@
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
 import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { APPLICATION_FORM_PARTS } from '@/helpers/constants';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
@@ -92,14 +93,14 @@ export default {
         parts: [],
         panellists: [],
       },
-      CandidateFormParts: [ // TODO check these names are correct and then add human-readable versions to lookup filter
-        'candidateAvailability',
-        'panelConflicts',
-        'commissionerConflicts',
-        'characterChecks',
-        'reasonableAdjustments',
-        'workingPreferences',
-        'welshPosts',
+      CandidateFormParts: [
+        APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY,
+        APPLICATION_FORM_PARTS.PANEL_CONFLICTS,
+        APPLICATION_FORM_PARTS.COMMISSIONER_CONFLICTS,
+        APPLICATION_FORM_PARTS.CHARACTER_CHECKS,
+        APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS,
+        APPLICATION_FORM_PARTS.WORKING_PREFERENCES,
+        APPLICATION_FORM_PARTS.WELSH_POSTS,
       ],
     };
   },
