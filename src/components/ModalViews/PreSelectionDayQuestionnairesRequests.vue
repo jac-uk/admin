@@ -109,7 +109,7 @@ export default {
     },
     async send() {
       try {
-        const response = await functions.httpsCallable('sendPreSelectionDayQuestionnaireRequests')({
+        const response = await functions.httpsCallable('sendPreSelectionDayQuestionnaireNotifications')({
           items: this.selectedItems,
           type: this.type,
           exerciseMailbox: this.exerciseMailbox,
