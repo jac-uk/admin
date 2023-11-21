@@ -611,7 +611,7 @@ function exerciseApplicationParts(data, newValues) {
     applicationParts.push('relevantQualifications');
     applicationParts.push('postQualificationWorkExperience');
 
-    if (exercise._applicationVersion < 3) {
+    if (isApplicationVersionLessThan(exercise, 3)) {
       if (exercise.previousJudicialExperienceApply) {
         applicationParts.push('judicialExperience');
       }
