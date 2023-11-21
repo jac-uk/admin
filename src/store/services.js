@@ -45,5 +45,8 @@ export default {
       }
       return null;
     },
+    getCommissioners: (state) => {
+      return state.record && state.record.commissioners;
+    },
   },
 };

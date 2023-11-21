@@ -134,6 +134,7 @@ const APPLICATION_PARTS = [
   'statementOfEligibility',
   'selfAssessmentCompetencies',
   'additionalInfo',
+  'commissionerConflicts',
 ];
 
 const CAPABILITIES = ['L&J', 'PQ', 'L', 'EJ', 'PBK', 'ACI', 'WCO', 'MWE', 'OVERALL'];
@@ -647,6 +648,7 @@ function exerciseApplicationParts(data, newValues) {
   if (hasSelfAssessment(exercise)) {
     applicationParts.push('selfAssessmentCompetencies');
   }
+  applicationParts.push('commissionerConflicts');
   applicationParts.push('additionalInfo');
   return applicationParts;
 }
