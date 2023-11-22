@@ -221,7 +221,7 @@ const exerciseTimeline = (data) => {
     );
   }
 
-  if (data.preSelectionDayQuestionnaireSendDate) {
+  if (data.selectionDayQuestionnaireSendDate) {
     timeline.push(
       {
         entry: 'Pre Selection Day Questionnaire - sent',
