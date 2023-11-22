@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-      Pre-selection day questionnaire consent form {{ typeOfEmail }}
+      {{ $filters.lookup(type) }} consent form {{ notificationType }}
     </div>
     <div class="modal__content govuk-!-margin-6">
       <div class="govuk-grid-row">
@@ -9,7 +9,7 @@
           ref="formRef"
         >
           <div class="govuk-!-margin-bottom-5">
-            <span class="govuk-body-m">Before proceeding, please confirm that you wish to send a {{ typeOfEmail }} to </span>
+            <span class="govuk-body-m">Before proceeding, please confirm that you wish to send a {{ notificationType }} to </span>
             <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
@@ -43,12 +43,22 @@ import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
-  name: 'PreSelectionDayQuestionnairesRequests',
+  name: 'CandidateFormNotification',
   components: {
     ActionButton,
   },
   mixins: [permissionMixin],
   props: {
+    type: {
+      type: String,
+      required: true,
+      default: '',
+    },
+    notificationType: {
+      type: String,
+      required: true,
+      default: '',
+    },
     selectedItems: {
       type: Array,
       required: false,
@@ -64,16 +74,6 @@ export default {
       required: true,
       default: '',
     },
-    dueDate: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    type: {
-      type: String,
-      required: true,
-      default: '',
-    },
   },
   emits: ['close', 'confirmed', 'setmessage', 'reset'],
   data() {
@@ -85,11 +85,8 @@ export default {
     numberOfCandidates() {
       return this.selectedItems.length;
     },
-    typeOfEmail() {
-      return this.type;
-    },
     buttonText() {
-      return `I confirm, please send ${this.type}`;
+      return `I confirm, please send ${this.notificationType}`;
     },
   },
   methods: {
@@ -101,28 +98,22 @@ export default {
       this.$emit('confirmed');
       document.body.style.overflow = '';
     },
-    async updateApplicationRecord(status) {
-      await this.$store.dispatch('preSelectionDayQuestionnaires/updateStatus', {
-        selectedItems: this.selectedItems,
-        newStatus: status,
-      });
-    },
     async send() {
       try {
-        const response = await functions.httpsCallable('sendPreSelectionDayQuestionnaireNotifications')({
-          items: this.selectedItems,
+        const response = await functions.httpsCallable('sendCandidateFormNotifications')({
           type: this.type,
+          notificationType: this.notificationType,
+          items: this.selectedItems,
           exerciseMailbox: this.exerciseMailbox,
           exerciseManagerName: this.exerciseManagerName,
-          dueDate: this.dueDate,
         });
         if (response === false) {
           this.$emit('setmessage', false, 'warning');
         } else {
-          this.$emit('setmessage', true, this.type, 'success');
+          this.$emit('setmessage', true, this.notificationType, 'success');
         }
       } catch (error) {
-        this.$emit('setmessage', false, this.type, 'warning');
+        this.$emit('setmessage', false, this.notificationType, 'warning');
       }
       this.closeModal();
       this.$emit('reset');

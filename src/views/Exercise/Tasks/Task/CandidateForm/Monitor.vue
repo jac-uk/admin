@@ -16,23 +16,19 @@
     <dl class="govuk-summary-list govuk-!-margin-bottom-7">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Contact date
+          Open date
         </dt>
         <dd class="govuk-summary-list__value">
-          <template v-if="exercise.preSelectionDayQuestionnaireReturnDate">
-            {{ $filters.formatDate(exercise.preSelectionDayQuestionnaireReturnDate, 'long') }}
-          </template>
+          {{ openDate }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Due date
+          Close date
         </dt>
         <dd class="govuk-summary-list__value">
-          <template v-if="exercise.preSelectionDayQuestionnaireReturnDate">
-            {{ $filters.formatDate(exercise.preSelectionDayQuestionnaireReturnDate, 'long') }}
-          </template>
+          {{ closeDate }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -59,7 +55,7 @@
         ])"
         class="govuk-button govuk-!-margin-right-3"
         :disabled="!selectedItems.length"
-        @click="openModal('modalRefRequests', 'request')"
+        @click="openModal('modalRefNotification', 'request')"
       >
         Send requests
       </button>
@@ -71,21 +67,21 @@
         ])"
         class="govuk-button govuk-!-margin-right-3"
         :disabled="!selectedItems.length"
-        @click="openModal('modalRefRequests', 'reminder')"
+        @click="openModal('modalRefNotification', 'reminder')"
       >
         Send reminders
       </button>
     </div>
 
-    <Modal ref="modalRefRequests">
+    <Modal ref="modalRefNotification">
       <component
-        :is="`PreSelectionDayQuestionnairesRequests`"
+        :is="`CandidateFormNotification`"
+        :type="type"
+        :notification-type="notificationType"
         :selected-items="selectedItems"
-        :type="modalType"
         :exercise-mailbox="exerciseMailbox"
         :exercise-manager-name="exerciseManagerName"
-        :due-date="dueDate"
-        @close="closeModal('modalRefRequests')"
+        @close="closeModal('modalRefNotification')"
         @setmessage="setMessage"
         @reset="resetSelectedItems"
       />
@@ -99,7 +95,7 @@
       :page-size="50"
       :columns="tableColumns"
       :multi-select="true"
-      :search-map="$searchMap.characterChecks"
+      :search-map="$searchMap.applicationRecords"
       :filters="filters"
       @change="getTableData"
     >
@@ -124,7 +120,7 @@
           {{ $filters.lookup(row.stage) }}
         </TableCell>
         <TableCell :title="tableColumns[3].title">
-          {{ $filters.lookup(row.preSelectionDayQuestionnaire?.status) }}
+          {{ $filters.lookup(row[type]?.status) }}
         </TableCell>
       </template>
     </Table>
@@ -151,9 +147,8 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
-import PreSelectionDayQuestionnairesRequests from '@/components/ModalViews/PreSelectionDayQuestionnairesRequests.vue';
+import CandidateFormNotification from '@/components/ModalViews/CandidateFormNotification.vue';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 
@@ -165,7 +160,7 @@ export default {
     ActionButton,
     Banner,
     Modal,
-    PreSelectionDayQuestionnairesRequests,
+    CandidateFormNotification,
     FullScreenButton,
     ProgressBar,
   },
@@ -202,7 +197,7 @@ export default {
       ],
       filters: [],
       selectedItems: [],
-      modalType: '',
+      notificationType: '',
       message: null,
       status: null,
     };
@@ -217,12 +212,19 @@ export default {
     exerciseManagerName() {
       return this.exercise.emailSignatureName;
     },
-    dueDate(){
-      const date = this.exercise.preSelectionDayQuestionnaireReturnDate;
-      return formatDate(date);
+    candidateForm() {
+      return this.$store.state.candidateForm.record;
+    },
+    openDate(){
+      const date = this.candidateForm?.openDate;
+      return date ? this.$filters.formatDate(date, 'long') : '';
+    },
+    closeDate(){
+      const date = this.candidateForm?.closeDate;
+      return date ? this.$filters.formatDate(date, 'long') : '';
     },
     isOverdue() {
-      return !isDateInFuture(this.exercise.contactIndependentAssessors);
+      return this.candidateForm?.closeDate ? !isDateInFuture(this.candidateForm?.closeDate) : true;
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
@@ -241,15 +243,7 @@ export default {
       return this.activeTab === 'completed';
     },
     records() {
-      if (this.isCreated) {
-        return this.$store.state.preSelectionDayQuestionnaires.preSelectionDayQuestionnairesCreatedRecords;
-      } else if (this.isRequested) {
-        return this.$store.state.preSelectionDayQuestionnaires.preSelectionDayQuestionnairesRequestedRecords;
-      } else if (this.isCompleted) {
-        return this.$store.state.preSelectionDayQuestionnaires.preSelectionDayQuestionnairesCompletedRecords;
-      } else {
-        return [];
-      }
+      return this.$store.state.candidateFormRecords.records;
     },
   },
   watch: {
@@ -258,21 +252,25 @@ export default {
       this.resetMessage();
     },
   },
+  mounted() {
+    this.$store.dispatch('candidateForm/bind', this.task.formId);
+  },
   methods: {
     getTableData(params) {
-      this.$store.dispatch('preSelectionDayQuestionnaires/bind', {
+      this.$store.dispatch('candidateFormRecords/bind', {
         exerciseId: this.exercise.id,
+        type: this.type,
         status: this.activeTab,
         ...params,
       });
     },
     openModal(modalRef, type){
       this.$refs[modalRef].openModal();
-      this.modalType = type;
+      this.notificationType = type;
     },
     closeModal(modalRef) {
       this.$refs[modalRef].closeModal();
-      this.modalType = '';
+      this.notificationType = '';
     },
     resetSelectedItems() {
       this.selectedItems = [];

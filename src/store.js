@@ -22,7 +22,6 @@ import characterChecks from '@/store/characterChecks/characterChecks';
 import candidates from '@/store/candidates';
 import notes from '@/store/notes';
 import candidateApplications from '@/store/candidateApplications';
-import preSelectionDayQuestionnaires from '@/store/preSelectionDayQuestionnaires';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
@@ -34,6 +33,7 @@ import panellist from '@/store/panellists/document';
 import checks from '@/store/checks/collection';
 // import candidateForms from '@/store/candidateForms/collection';
 import candidateForm from '@/store/candidateForms/document';
+import candidateFormRecords from '@/store/candidateForms/records';
 
 import exerciseDiversity from '@/store/exercise/diversity/document';
 import messageBase from '@/store/baseClasses/messageBase';
@@ -56,6 +56,7 @@ const store = createStore({
     auth,
     candidateApplications,
     candidateForm,
+    candidateFormRecords,
     candidates,
     characterChecks,
     checks,
@@ -75,7 +76,6 @@ const store = createStore({
     panellist,
     panellists,
     panels,
-    preSelectionDayQuestionnaires,
     services,
     task,
     tasks,
