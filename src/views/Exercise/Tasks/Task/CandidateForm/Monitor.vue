@@ -92,17 +92,15 @@
       v-model:selection="selectedItems"
       data-key="id"
       :data="records"
-      :page-size="50"
       :columns="tableColumns"
-      :multi-select="true"
+      multi-select
+      :page-size="50"
       :search-map="$searchMap.applicationRecords"
-      :filters="filters"
       @change="getTableData"
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
           <RouterLink
-            class="govuk-link"
             :to="{name: 'exercise-application', params: { applicationId: row.application.id }}"
           >
             {{ row.application.referenceNumber }}
@@ -111,7 +109,6 @@
         <TableCell :title="tableColumns[1].title">
           <RouterLink
             :to="{ name: 'candidates-view', params: { id: row.candidate.id } }"
-            target="_blank"
           >
             {{ row.candidate.fullName }}
           </RouterLink>
@@ -195,7 +192,6 @@ export default {
         { title: 'Stage' },
         { title: 'Status' },
       ],
-      filters: [],
       selectedItems: [],
       notificationType: '',
       message: null,
@@ -251,6 +247,11 @@ export default {
       this.resetSelectedItems();
       this.resetMessage();
     },
+    notificationType() {
+      if (this.notificationType) {
+        this.resetMessage();
+      }
+    },
   },
   mounted() {
     this.$store.dispatch('candidateForm/bind', this.task.formId);
@@ -283,9 +284,6 @@ export default {
         this.status = status;
         this.message = `Failed to send ${type}(s).`;
       }
-      setTimeout(() => {
-        this.message = '';
-      }, 20000);
     },
     resetMessage() {
       this.status = null;
