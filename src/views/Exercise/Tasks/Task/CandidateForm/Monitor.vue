@@ -79,8 +79,7 @@
         :type="type"
         :notification-type="notificationType"
         :selected-items="selectedItems"
-        :exercise-mailbox="exerciseMailbox"
-        :exercise-manager-name="exerciseManagerName"
+        :exercise="exercise"
         @close="closeModal('modalRefNotification')"
         @setmessage="setMessage"
         @reset="resetSelectedItems"
@@ -201,12 +200,6 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },
-    exerciseMailbox() {
-      return this.exercise.exerciseMailbox;
-    },
-    exerciseManagerName() {
-      return this.exercise.emailSignatureName;
     },
     candidateForm() {
       return this.$store.state.candidateForm.record;

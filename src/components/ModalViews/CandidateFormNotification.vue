@@ -64,15 +64,9 @@ export default {
       required: false,
       default: () => [],
     },
-    exerciseMailbox: {
-      type: String,
-      required: true,
-      default: '',
-    },
-    exerciseManagerName: {
-      type: String,
-      required: true,
-      default: '',
+    exercise: {
+      type: Object,
+      default: null,
     },
   },
   emits: ['close', 'confirmed', 'setmessage', 'reset'],
@@ -82,6 +76,12 @@ export default {
     };
   },
   computed: {
+    exerciseMailbox() {
+      return this.exercise?.exerciseMailbox || '';
+    },
+    exerciseManagerName() {
+      return this.exercise?.emailSignatureName || '';
+    },
     numberOfCandidates() {
       return this.selectedItems.length;
     },
