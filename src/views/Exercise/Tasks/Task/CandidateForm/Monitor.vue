@@ -61,7 +61,7 @@
       </button>
       <button
         v-if="isRequested && hasPermissions([
-          PERMISSIONS.assessments.permissions.canReadAssessments.value,
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.notifications.permissions.canCreateNotifications.value
         ])"
