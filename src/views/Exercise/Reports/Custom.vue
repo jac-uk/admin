@@ -165,34 +165,11 @@
                 All
               </option>
               <option
-                v-if="applicationRecordCounts.review"
-                value="review"
+                v-for="stage in availableStages"
+                :key="stage"
+                :value="stage"
               >
-                Review
-              </option>
-              <option
-                v-if="applicationRecordCounts.shortlisted"
-                value="shortlisted"
-              >
-                Shortlisted
-              </option>
-              <option
-                v-if="applicationRecordCounts.selected"
-                value="selected"
-              >
-                Selected
-              </option>
-              <option
-                v-if="applicationRecordCounts.recommended"
-                value="recommended"
-              >
-                Recommended
-              </option>
-              <option
-                v-if="applicationRecordCounts.handover"
-                value="handover"
-              >
-                Handover
+                {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
               </option>
             </select>
           </div>
@@ -402,8 +379,8 @@ import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
-import { EXERCISE_STAGE, STATUS } from '@jac-uk/jac-kit/helpers/constants';
-import { applicationRecordCounts } from '@/helpers/exerciseHelper';
+import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
 // Prevents warnings and errors associated with using @vue/compat
@@ -427,7 +404,6 @@ export default {
       data: null,
       statuses: [],
       selectedStage: 'all',
-      availableStatuses: [],
       selectedStageStatus: null,
       isLoading: null,
       loadFailed: null,
@@ -444,6 +420,7 @@ export default {
           keys: [
             'referenceNumber',
             'personalDetails.dateOfBirth',
+            'personalDetails.placeOfBirth',
             'personalDetails.title',
             'personalDetails.citizenship',
             'personalDetails.firstName',
@@ -455,14 +432,16 @@ export default {
             'personalDetails.professionalName',
             'personalDetails.phone',
             'personalDetails.nationalInsuranceNumber',
-            'personalDetails.reasonableAdjustmentsDetails',
             'personalDetails.email',
             'personalDetails.reasonableAdjustments',
+            'personalDetails.reasonableAdjustmentsDetails',
+            'personalDetails.address.current',
+            'personalDetails.address.currentMoreThan5Years',
+            'personalDetails.address.previous',
+            'personalDetails.VATNumbers',
             'status',
             'appliedAt',
-            'interestedInPartTime',
             'applyingUnderSchedule2d',
-            'canGiveReasonableLOS',
             'applyingUnderSchedule2Three',
             '_processing.status',
             '_processing.stage',
@@ -474,6 +453,35 @@ export default {
             'applyingForWelshPost',
             'canReadAndWriteWelsh',
             'canSpeakWelsh',
+          ],
+        },
+        {
+          name: 'Equality and Diversity',
+          keys: [
+            'equalityAndDiversitySurvey.shareData',
+            'equalityAndDiversitySurvey.professionalBackground',
+            'equalityAndDiversitySurvey.currentLegalRole',
+            'equalityAndDiversitySurvey.feePaidJudicialRole',
+            'equalityAndDiversitySurvey.stateOrFeeSchool',
+            'equalityAndDiversitySurvey.oxbridgeUni',
+            'equalityAndDiversitySurvey.firstGenerationStudent',
+            'equalityAndDiversitySurvey.ethnicGroup',
+            'equalityAndDiversitySurvey.gender',
+            'equalityAndDiversitySurvey.changedGender',
+            'equalityAndDiversitySurvey.sexualOrientation',
+            'equalityAndDiversitySurvey.disability',
+            'equalityAndDiversitySurvey.disabilityDetails',
+            'equalityAndDiversitySurvey.religionFaith',
+            'equalityAndDiversitySurvey.attendedOutreachEvents',
+            'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme',
+            'equalityAndDiversitySurvey.hasTakenPAJE',
+          ],
+        },
+        {
+          name: 'Part Time Working Preferences',
+          keys: [
+            'interestedInPartTime',
+            'partTimeWorkingPreferencesDetails',
           ],
         },
         {
@@ -492,7 +500,7 @@ export default {
           ],
         },
         {
-          name: 'Character Issues',
+          name: 'Gaps in Employment',
           keys: [
             'employmentGaps',
           ],
@@ -523,12 +531,21 @@ export default {
           ],
         },
         {
+          name: 'Reasonable Length of Service',
+          keys: [
+            'canGiveReasonableLOS',
+            'cantGiveReasonableLOSDetails',
+          ],
+        },
+        {
           name: 'Assessor',
           keys: [
+            'firstAssessorType',
             'firstAssessorEmail',
             'firstAssessorTitle',
             'firstAssessorFullName',
             'firstAssessorPhone',
+            'secondAssessorType',
             'secondAssessorEmail',
             'secondAssessorTitle',
             'secondAssessorFullName',
@@ -542,10 +559,12 @@ export default {
         canReadAndWriteWelsh: { label: 'Can read and write Welsh?', type: Boolean },
         canSpeakWelsh: { label: 'Can speak Welsh?', type: Boolean },
         employmentGaps: { label: 'Employment gaps', type: 'Array of objects' },
+        firstAssessorType: { label: 'First Assessor Type', type: String },
         firstAssessorEmail: { label: 'First Assessor Email', type: String },
         firstAssessorTitle: { label: 'First Assessor Title', type: String },
         firstAssessorFullName: { label: 'First Assessor Full Name', type: String },
         firstAssessorPhone: { label: 'First Assessor Phone', type: String },
+        secondAssessorType: { label: 'Second Assessor Type', type: String },
         secondAssessorEmail: { label: 'Second Assessor Email', type: String },
         secondAssessorTitle: { label: 'Second Assessor Title', type: String },
         secondAssessorFullName: { label: 'Second Assessor Full Name', type: String },
@@ -573,17 +592,20 @@ export default {
         status: { label: 'Application status', type: String },
         appliedAt: { label: 'Application date', type: Date },
         interestedInPartTime: { label: 'Interested in part time?', type: Boolean },
+        partTimeWorkingPreferencesDetails: { label: 'Salaried part-time work (SPTW) - Details', type: String },
         applyingUnderSchedule2d: { label: 'Applying under schedule 2d?', type: Boolean },
-        canGiveReasonableLOS: { label: 'Can give reasonable LOS?', type: Boolean },
+        canGiveReasonableLOS: { label: 'Can work a reasonable length of service', type: Boolean },
+        cantGiveReasonableLOSDetails: { label: 'Can work a reasonable length of service (details)', type: String },
         applyingUnderSchedule2Three: { label: 'Applying under schedule 2 3?', type: Boolean },
         '_processing.status': { label: 'Status (admin)', type: String },
         '_processing.stage': { label: 'Stage', type: String },
         'personalDetails.phone': { label: 'Phone', type: String },
         'personalDetails.nationalInsuranceNumber': { label: 'National insurance number', type: String },
-        'personalDetails.reasonableAdjustmentsDetails': { label: 'reasonable adjustments details', type: String },
         'personalDetails.email': { label: 'Email', type: String },
         'personalDetails.reasonableAdjustments': { label: 'Reasonable adjustments', type: Boolean },
+        'personalDetails.reasonableAdjustmentsDetails': { label: 'Reasonable adjustments details', type: String },
         'personalDetails.dateOfBirth': { label: 'Date of birth', type: Date },
+        'personalDetails.placeOfBirth': { label: 'Place of birth', type: String },
         'personalDetails.title': { label: 'Title', type: String },
         'personalDetails.citizenship': { label: 'Citizenship', type: String },
         'personalDetails.firstName': { label: 'First Name', type: String },
@@ -591,8 +613,12 @@ export default {
         'personalDetails.lastName': { label: 'Last Name', type: String },
         'personalDetails.fullName': { label: 'Full Name', type: String },
         'personalDetails.suffix': { label: 'Suffix', type: String },
-        'personalDetails.previousNames': { label: 'Previously known name(s)', type: String },
+        'personalDetails.previousNames': { label: 'Previous known name(s)', type: String },
         'personalDetails.professionalName': { label: 'Professional name', type: String },
+        'personalDetails.address.current': { label: 'Current Address', type: String },
+        'personalDetails.address.currentMoreThan5Years': { label: 'Has lived at this address for more than 5 years', type: Boolean },
+        'personalDetails.address.previous': { label: 'Previous Addresses', type: String },
+        'personalDetails.VATNumbers': { label: 'VAT registration number', type: String },
         qualifications: { label: 'Qualifications', type: 'Array of objects' },
         feePaidOrSalariedJudge: { label: 'Fee paid or salaried judge?', type: Boolean },
         feePaidOrSalariedSatForThirtyDays: { label: 'Fee paid or salaried sat for thirty days?', type: Boolean },
@@ -605,6 +631,23 @@ export default {
         experienceUnderSchedule2Three: { label: 'Experience under schedule 2 three?', type: Boolean },
         // jurisdictionPreferences: { label: 'Jurisdiction Preferences', type: String },
         // locationPreferences: { label: 'Location Preferences', type: String },
+        'equalityAndDiversitySurvey.shareData': { label: 'Agreed to share data', type: Boolean },
+        'equalityAndDiversitySurvey.professionalBackground': { label: 'Professional background', type: String },
+        'equalityAndDiversitySurvey.currentLegalRole': { label: 'Current legal role', type: String },
+        'equalityAndDiversitySurvey.feePaidJudicialRole': { label: 'Held fee-paid judicial role', type: String },
+        'equalityAndDiversitySurvey.stateOrFeeSchool': { label: 'Attended state or fee-paying school', type: String },
+        'equalityAndDiversitySurvey.oxbridgeUni': { label: 'Attended Oxbridge universities', type: String },
+        'equalityAndDiversitySurvey.firstGenerationStudent': { label: 'First generation to go to university', type: String },
+        'equalityAndDiversitySurvey.ethnicGroup': { label: 'Ethnic group', type: String },
+        'equalityAndDiversitySurvey.gender': { label: 'Sex', type: String },
+        'equalityAndDiversitySurvey.changedGender': { label: 'Gender is the same as sex assigned at birth', type: String },
+        'equalityAndDiversitySurvey.sexualOrientation': { label: 'Sexual orientation', type: String },
+        'equalityAndDiversitySurvey.disability': { label: 'Disability', type: String },
+        'equalityAndDiversitySurvey.disabilityDetails': { label: 'Disability details', type: String },
+        'equalityAndDiversitySurvey.religionFaith': { label: 'Religion', type: String },
+        'equalityAndDiversitySurvey.attendedOutreachEvents': { label: 'Attended outreach events', type: String },
+        'equalityAndDiversitySurvey.participatedInJudicialWorkshadowingScheme': { label: 'Participated In judicial workshadowing Scheme', type: String },
+        'equalityAndDiversitySurvey.hasTakenPAJE': { label: 'Participated in Pre-Application Judicial Education Programme', type: String },
       },
     };
   },
@@ -616,7 +659,13 @@ export default {
       return applicationRecordCounts(this.exercise);
     },
     availableStages() {
-      return Object.values(EXERCISE_STAGE).filter((stage) => this.applicationRecordCounts[stage]);
+      const stages = availableStages(this.exercise);
+      return stages.filter(stage => this.applicationRecordCounts[stage]);
+    },
+    availableStatuses() {
+      if (this.selectedStage === 'all') return null;
+      const statuses = availableStatuses(this.exercise, this.selectedStage);
+      return statuses;
     },
   },
   watch: {
@@ -626,20 +675,7 @@ export default {
       },
       deep: true,
     },
-    selectedStage: function (valueNow) {
-      // populate the status dropdown, for the chosen stage
-      if (valueNow === EXERCISE_STAGE.REVIEW) {
-        this.availableStatuses = this.$store.getters['stageReview/availableStatuses'](this.exercise.shortlistingMethods, this.exercise.otherShortlistingMethod || []) ;
-      } else if (valueNow === EXERCISE_STAGE.SHORTLISTED) {
-        this.availableStatuses = this.$store.getters['stageShortlisted/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.SELECTED) {
-        this.availableStatuses = this.$store.getters['stageSelected/availableStatuses'];
-      } else if (valueNow === EXERCISE_STAGE.RECOMMENDED) {
-        this.availableStatuses = this.$store.getters['stageRecommended/availableStatuses'];
-      } else { // handover
-        this.availableStatuses = [];
-      }
-
+    selectedStage: function () {
       this.selectedStageStatus = 'all';
       this.getApplicationRecords();
     },
@@ -788,7 +824,6 @@ export default {
       // The internal index of the array isnt available in draggable so we have to use this fn to generate one so we can pass a
       // value to item-key
       const i = this.columns.indexOf(item);
-      console.log(`${item}-key = ${i}`);
       return i;
     },
     isUsingFilter(key) {

@@ -21,9 +21,19 @@
         class="display-block"
       >
         {{ $filters.lookup(assessmentMethod) }}
-        <strong>
-          {{ assessmentMethod === 'Self Assessment with competencies' ? `- Word limit: ${exercise.selfAssessmentWordLimit}` : '' }}
-        </strong>
+        <div v-if="assessmentMethod === 'Self Assessment with competencies'">
+          <div
+            v-for="(section, index) in exercise.selfAssessmentWordLimits"
+            :key="index"
+          >
+            Question {{ 1 + index }}
+            <br>
+            Word limit:
+            <strong>
+              {{ section.wordLimit }}
+            </strong>
+          </div>
+        </div>
       </span>
     </p>
   </div>

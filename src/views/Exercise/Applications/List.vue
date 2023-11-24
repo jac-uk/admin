@@ -25,7 +25,7 @@
               Send reminders
             </button>
             <ActionButton
-              v-if="status === 'applied' && hasPermissions([
+              v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
@@ -51,8 +51,8 @@
       data-key="id"
       :data="applications"
       :columns="tableColumns"
-      search-map="_search"
-      page-item-type="uppercase-letter"
+      :search-map="$searchMap.applications"
+      :page-item-type="pageItemType"
       :page-size="50"
       :total="exercise._applications[status]"
       @change="getTableData"
@@ -149,6 +149,17 @@ export default {
     },
     tableStatus() {
       return this.status;
+    },
+    pageItemType() {
+      if (
+        this.exercise &&
+        this.exercise._applications &&
+        this.exercise._applications[this.status] &&
+        this.exercise._applications[this.status] > 500
+      ) {
+        return 'uppercase-letter';
+      }
+      return '';
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;

@@ -348,9 +348,8 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 import { PANEL_TYPES, PANEL_STATUS } from './Panel/Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
 import { functions } from '@/firebase';
 
@@ -440,7 +439,7 @@ export default {
       return this.task && this.task.grades ? this.task.grades : [];
     },
     statuses() {
-      return this.$store.getters['stageReview/availableStatuses'](SHORTLISTING.NAME_BLIND_PAPER_SIFT, []);
+      return availableStatuses(this.exercise);
     },
     panelNamesAsColumns() {
       if (!this.panels) return [];

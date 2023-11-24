@@ -19,23 +19,34 @@
           @save="save"
         />
 
-        <Checkbox
+        <div
           v-for="method in Object.values(ASSESSMENT_METHOD)"
-          :id="`assessment-method-${method}`"
           :key="method"
-          v-model="formData.assessmentMethods[method]"
         >
-          {{ $filters.lookup(method) }}
-          <TextField
-            v-if="method == 'selfAssessmentWithCompetencies' && formData.assessmentMethods[method]"
-            id="word-limit"
-            v-model="formData.selfAssessmentWordLimit"
-            input-class="govuk-input--width-5"
-            hint="What is the word limit for this assessment?"
-            required
-            type="number"
-          />
-        </Checkbox>
+          <Checkbox
+            :id="`assessment-method-${method}`"
+            v-model="formData.assessmentMethods[method]"
+          >
+            {{ $filters.lookup(method) }}
+          </Checkbox>
+          <div
+            v-if="method == ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES && formData.assessmentMethods[method]"
+          >
+            <span
+              class="govuk-hint"
+            >
+              Please add a word limit for each question within the self assessment.
+            </span>
+            <RepeatableFields
+              v-model="formData.selfAssessmentWordLimits"
+              :component="repeatableFields.SelfAssessmentSection"
+              ident="selfAssessmentSection"
+              type-name="Self Assessment Section"
+              required
+            />
+            <slot name="removeButton" />
+          </div>
+        </div>
 
         <button class="govuk-button">
           Save and continue
@@ -50,12 +61,13 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import SelfAssessmentSection from '@/components/RepeatableFields/SelfAssessmentSection.vue';
 import { ASSESSMENT_METHOD } from '@/helpers/constants';
 
 export default {
   components: {
-    TextField,
+    RepeatableFields,
     ErrorSummary,
     BackLink,
     Checkbox,
@@ -69,12 +81,15 @@ export default {
     });
     const defaults = {
       assessmentMethods,
-      selfAssessmentWordLimit: null,
+      selfAssessmentWordLimits: [],
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       ASSESSMENT_METHOD,
       formData: formData,
+      repeatableFields: {
+        SelfAssessmentSection,
+      },
     };
   },
   computed: {
@@ -84,6 +99,7 @@ export default {
   },
   methods: {
     async save(isValid) {
+      console.log('is valid ', isValid);
       this.formData['progress.assessmentOptions'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-assessments'));

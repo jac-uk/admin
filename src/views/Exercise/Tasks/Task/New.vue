@@ -13,8 +13,8 @@ import { beforeRouteEnter, getExpectedRouteName } from './helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import defaultView from './New/default.vue';
 import expired from './New/expired.vue';
-import expiredQT from './New/expiredQT.vue';
 import qualifyingTest from './New/qualifyingTest.vue';
+import stageOutcome from './New/stageOutcome.vue';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 import { getTimelineTasks } from '@/helpers/exerciseHelper';
 
@@ -22,8 +22,8 @@ export default {
   components: {
     defaultView,
     expired,
-    expiredQT,
     qualifyingTest,
+    stageOutcome,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -47,15 +47,17 @@ export default {
     newView() {
       if (this.taskIsOverdue) {
         switch (this.type) {
-        case TASK_TYPE.CRITICAL_ANALYSIS:
-        case TASK_TYPE.SITUATIONAL_JUDGEMENT:
-        case TASK_TYPE.SCENARIO:
-          return 'expiredQT';
+        case TASK_TYPE.SHORTLISTING_OUTCOME:
+        case TASK_TYPE.SELECTION_OUTCOME:
+          return 'stageOutcome';
         default:
           return 'expired';
         }
       } else {
         switch (this.type) {
+        case TASK_TYPE.SHORTLISTING_OUTCOME:
+        case TASK_TYPE.SELECTION_OUTCOME:
+          return 'stageOutcome';
         case TASK_TYPE.QUALIFYING_TEST:
           return 'qualifyingTest';
         default:
