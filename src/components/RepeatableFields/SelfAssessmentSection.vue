@@ -2,7 +2,7 @@
   <div>
     <TextField
       id="word-limit"
-      :v-model="row.wordLimit"
+      v-model="row.wordLimit"
       input-class="govuk-input--width-5 govuk-!-margin-10"
       :hint="`What is the word limit for question ${index + 1} of this assessment?`"
       type="number"

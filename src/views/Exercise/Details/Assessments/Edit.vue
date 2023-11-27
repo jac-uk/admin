@@ -18,7 +18,6 @@
           :show-save-button="true"
           @save="save"
         />
-
         <div
           v-for="method in Object.values(ASSESSMENT_METHOD)"
           :key="method"
@@ -40,14 +39,12 @@
             <RepeatableFields
               v-model="formData.selfAssessmentWordLimits"
               :component="repeatableFields.SelfAssessmentSection"
-              ident="selfAssessmentSection"
               type-name="Self Assessment Section"
               required
             />
             <slot name="removeButton" />
           </div>
         </div>
-
         <button class="govuk-button">
           Save and continue
         </button>
@@ -64,6 +61,7 @@ import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelfAssessmentSection from '@/components/RepeatableFields/SelfAssessmentSection.vue';
 import { ASSESSMENT_METHOD } from '@/helpers/constants';
+import { shallowRef } from 'vue';
 
 export default {
   components: {
@@ -87,9 +85,9 @@ export default {
     return {
       ASSESSMENT_METHOD,
       formData: formData,
-      repeatableFields: {
+      repeatableFields: shallowRef({
         SelfAssessmentSection,
-      },
+      }),
     };
   },
   computed: {
@@ -99,7 +97,6 @@ export default {
   },
   methods: {
     async save(isValid) {
-      console.log('is valid ', isValid);
       this.formData['progress.assessmentOptions'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-assessments'));

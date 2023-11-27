@@ -124,62 +124,39 @@
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
-            Uploaded self assessment
+            Uploaded self assessment with competencies
           </dt>
           <dd class="govuk-summary-list__value">
             <div v-if="application.uploadedSelfAssessment">
               <DownloadLink
                 :file-name="application.uploadedSelfAssessment"
-                :exercise-id="exercise.id"
+                :exercise-id="vacancy.id"
                 :user-id="application.userId"
                 :title="application.uploadedSelfAssessment"
               />
             </div>
-            <span v-else>
-              No information
-              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
-                (not asked)
-              </span>
-            </span>
-            <div v-if="editable">
-              <FileUpload
-                id="self-assessment-upload"
-                ref="self-assessment"
-                v-model="application.uploadedSelfAssessment"
-                name="self-assessment"
-                :path="uploadPath"
-                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
-              />
-            </div>
+            <span v-else>Not yet received</span>
           </dd>
         </div>
         <div
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
-            Uploaded self assessment
+            Self assessment content
           </dt>
           <dd class="govuk-summary-list__value">
-            <div v-if="editable">
-              <InformationReviewRenderer
-                v-if="application.uploadedSelfAssessmentContent"
-                :data="application.uploadedSelfAssessmentContent"
-                :edit="editable && authorisedToPerformAction"
-                field="uploadedSelfAssessmentContent"
-                type="textarea"
-                :is-asked="isApplicationPartAsked('selfAssessmentCompetencies')"
-                @change-field="changeAssessmentInfo"
-              />
+            <div
+              v-if="application.uploadedSelfAssessment"
+            >
+              <div
+                v-for="(answer, i) in application.uploadedSelfAssessmentContent"
+                :key="i"
+              >
+                {{ answer }}
+                <hr>
+              </div>
             </div>
-            <div v-else-if="application.uploadedSelfAssessment">
-              {{ application.uploadedSelfAssessmentContent }}
-            </div>
-            <span v-else>
-              No information
-              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
-                (not asked)
-              </span>
-            </span>
+            <span v-else>Not yet received</span>
           </dd>
         </div>
       </dl>
