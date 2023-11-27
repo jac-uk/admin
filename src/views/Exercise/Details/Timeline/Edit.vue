@@ -370,6 +370,7 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.v
 import SelectionDay from '@/components/RepeatableFields/SelectionDay.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { formatDate } from '@/helpersTMP/date';
+import { shallowRef } from 'vue';
 
 export default {
   components: {
@@ -425,9 +426,9 @@ export default {
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData: formData,
-      repeatableFields: {
+      repeatableFields: shallowRef({
         SelectionDay,
-      },
+      }),
     };
   },
   computed: {
