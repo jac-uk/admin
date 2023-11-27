@@ -101,11 +101,10 @@ export default {
     },
   },
   data() {
-    const exercise = this.$store.state.exerciseDocument.record;
     return {
       formData: {
-        openDate: exercise.preSelectionDayQuestionnaireSendDate,
-        closeDate: exercise.preSelectionDayQuestionnaireReturnDate,
+        openDate: null,
+        closeDate: null,
         parts: [],
         panellists: [],
         candidateAvailabilityDates: null,
