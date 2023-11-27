@@ -146,7 +146,6 @@ export default {
       });
     },
     async onSubmit() {
-      this.saveData['progress.applicationProcess'] = true;
       await this.$store.dispatch('exerciseDocument/save', this.saveData);
       this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-application-content'));
     },

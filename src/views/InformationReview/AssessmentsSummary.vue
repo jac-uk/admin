@@ -130,7 +130,7 @@
             <div v-if="application.uploadedSelfAssessment">
               <DownloadLink
                 :file-name="application.uploadedSelfAssessment"
-                :exercise-id="vacancy.id"
+                :exercise-id="exercise.id"
                 :user-id="application.userId"
                 :title="application.uploadedSelfAssessment"
               />
