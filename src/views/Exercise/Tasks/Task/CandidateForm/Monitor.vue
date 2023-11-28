@@ -25,10 +25,10 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Close date
+          Due date
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ closeDate }}
+          {{ dueDate }}
         </dd>
         <dd class="govuk-summary-list__actions" />
       </div>
@@ -80,6 +80,7 @@
         :notification-type="notificationType"
         :selected-items="selectedItems"
         :exercise="exercise"
+        :due-date="dueDate"
         @close="closeModal('modalRefNotification')"
         @setmessage="setMessage"
         @reset="resetSelectedItems"
@@ -208,7 +209,7 @@ export default {
       const date = this.candidateForm?.openDate;
       return date ? this.$filters.formatDate(date, 'long') : '';
     },
-    closeDate(){
+    dueDate(){
       const date = this.candidateForm?.closeDate;
       return date ? this.$filters.formatDate(date, 'long') : '';
     },

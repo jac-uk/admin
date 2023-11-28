@@ -68,6 +68,11 @@ export default {
       type: Object,
       default: null,
     },
+    dueDate: {
+      type: String,
+      required: true,
+      default: '',
+    },
   },
   emits: ['close', 'confirmed', 'setmessage', 'reset'],
   data() {
@@ -106,6 +111,7 @@ export default {
           items: this.selectedItems,
           exerciseMailbox: this.exerciseMailbox,
           exerciseManagerName: this.exerciseManagerName,
+          dueDate: this.dueDate,
         });
         if (response === false) {
           this.$emit('setmessage', false, 'warning');
