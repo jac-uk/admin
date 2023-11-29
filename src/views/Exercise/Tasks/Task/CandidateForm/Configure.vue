@@ -145,8 +145,8 @@ export default {
     this.formData.openDate = candidateForm.openDate;
     this.formData.closeDate = candidateForm.closeDate;
     this.formData.parts = candidateForm.parts;
-    this.formData.panellists = candidateForm.panellists;
-    this.formData.candidateAvailabilityDates = candidateForm.candidateAvailabilityDates;
+    this.formData.panellists = candidateForm.panellists ? candidateForm.panellists : [];
+    this.formData.candidateAvailabilityDates = candidateForm.candidateAvailabilityDates ? candidateForm.candidateAvailabilityDates : [];
   },
   methods: {
     btnNext,
