@@ -13,7 +13,9 @@
 
     <ProgressBar :steps="taskSteps" />
 
-    <form @submit.prevent="validateAndSave">
+    <form
+      @submit.prevent="validateAndSave"
+    >
       <ErrorSummary
         :errors="errors"
       />
@@ -31,6 +33,18 @@
           :label="$filters.lookup(part)"
         />
       </CheckboxGroup>
+
+      <div v-if="formData.parts.indexOf('candidateAvailability') >= 0">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+          Which dates would you like to check for candidate availability?
+        </h2>
+        <RepeatableFields
+          v-model="formData.candidateAvailabilityDates"
+          :component="repeatableFields.LocationDate"
+          :allow-empty="false"
+          required
+        />
+      </div>
 
       <CheckboxGroup
         v-if="formData.parts.indexOf('panelConflicts') >= 0"
@@ -65,6 +79,9 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 import { functions } from '@/firebase';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import LocationDate from './LocationDate.vue';
+import { shallowRef } from 'vue';
 
 export default {
   components: {
@@ -73,6 +90,7 @@ export default {
     CheckboxItem,
     FullScreenButton,
     ProgressBar,
+    RepeatableFields,
   },
   extends: Form,
   beforeRouteEnter: beforeRouteEnter,
@@ -83,16 +101,17 @@ export default {
     },
   },
   data() {
-    const exercise = this.$store.state.exerciseDocument.record;
-    const openDate = exercise.preSelectionDayQuestionnaireSendDate;
-    const closeDate = exercise.preSelectionDayQuestionnaireReturnDate;
     return {
       formData: {
-        openDate: openDate,
-        closeDate: closeDate,
+        openDate: null,
+        closeDate: null,
         parts: [],
         panellists: [],
+        candidateAvailabilityDates: null,
       },
+      repeatableFields: shallowRef({
+        LocationDate,
+      }),
       CandidateFormParts: [
         APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY,
         APPLICATION_FORM_PARTS.PANEL_CONFLICTS,
@@ -119,8 +138,15 @@ export default {
       return this.$store.state.panellists.records.map(item => ({ id: item.id, fullName: item.fullName }));
     },
   },
-  created() {
+  async created() {
     this.$store.dispatch('panellists/bind', {});
+    await this.$store.dispatch('candidateForm/bind', this.task.formId);
+    const candidateForm = this.$store.getters['candidateForm/data']();
+    this.formData.openDate = candidateForm.openDate;
+    this.formData.closeDate = candidateForm.closeDate;
+    this.formData.parts = candidateForm.parts;
+    this.formData.panellists = candidateForm.panellists;
+    this.formData.candidateAvailabilityDates = candidateForm.candidateAvailabilityDates;
   },
   methods: {
     btnNext,
@@ -134,7 +160,7 @@ export default {
         },
         ...this.formData,
       };
-      await this.$store.dispatch('candidateForm/create', saveData);
+      await this.$store.dispatch('candidateForm/update', { saveData, formId: this.task.formId });
       await this.btnContinue();
     },
     async btnContinue() {

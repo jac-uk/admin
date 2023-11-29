@@ -16,16 +16,22 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    create: async (context, data) => {
-      const ref = collection.doc();
-      data.created = firebase.firestore.FieldValue.serverTimestamp();
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.set(data, { merge: true });
+    open: async (context, formId) => {
+      const saveData = {};
+      saveData.status = 'open';
+      saveData['statusLog.open'] = firebase.firestore.FieldValue.serverTimestamp();
+      await context.dispatch('update', { saveData, formId });
     },
-    update: async (context, { data, id }) => {
-      const ref = collection.doc(id);
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.update(data);
+    close: async (context, formId) => {
+      const saveData = {};
+      saveData.status = 'closed';
+      saveData['statusLog.closed'] = firebase.firestore.FieldValue.serverTimestamp();
+      await context.dispatch('update', { saveData, formId });      
+    },
+    update: async (context, { saveData, formId }) => {
+      const ref = collection.doc(formId);
+      saveData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      await ref.update(saveData);
     },
     delete: async (context, id) => {
       await collection.doc(id).delete();
