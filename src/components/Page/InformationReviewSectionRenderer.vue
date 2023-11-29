@@ -27,30 +27,108 @@
           >
             <dt
               v-if="key == 'startDate' && !edit"
-              class="govuk-summary-list__key"
+              class="govuk-summary-list__key widerColumn"
             >
               Dates
             </dt>
             <dt
-              v-if="key != 'taskDetails' && key != 'details' && key != 'startDate' || (edit && key == 'startDate' && showDateRange)"
-              class="govuk-summary-list__key"
+              v-if="key != 'taskDetails' && key != 'judicialFunctions' && key != 'details' && key != 'startDate' || (edit && key == 'startDate' && showDateRange)"
+              class="govuk-summary-list__key widerColumn"
             >
               {{ $filters.lookup(key) }}
             </dt>
             <dt
               v-else-if="key == 'details'"
-              class="govuk-summary-list__key"
+              class="govuk-summary-list__key widerColumn"
             >
               Details
             </dt>
-
-            <dd
+            
+            <div
+              v-else-if="key === 'judicialFunctions' && data[index].tasks.includes('judicial-functions')"
+              style="border-bottom: none;"
+            >
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div class="govuk-summary-list__key widerColumn">
+                  Is this a judicial or quasi-judicial post?
+                </div>
+                <div class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.type : ''"
+                    :options="['judicial-post', 'quasi-judicial-post']"
+                    :edit="edit"
+                    type="selection"
+                    :field="field"
+                    :index="index"
+                    :extension="'type'"
+                    :is-asked="isAsked"
+                    @change-field="changeJudicialFunctions"
+                  />
+                </div>
+              </div>
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div class="govuk-summary-list__key widerColumn">
+                  How many sitting days have you accumulated in this post?
+                </div>
+                <div class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.duration : ''"
+                    :edit="edit"
+                    type="text"
+                    :field="field"
+                    :index="index"
+                    :extension="'duration'"
+                    :is-asked="isAsked"
+                    @change-field="changeJudicialFunctions"
+                  />
+                </div>
+              </div>
+              <div class="govuk-summary-list govuk-!-margin-0">
+                <div class="govuk-summary-list__key widerColumn">
+                  Is a legal qualification a requisite for appointment?
+                </div>
+                <div class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.isLegalQualificationRequired : ''"
+                    :options="[true, false]"
+                    :edit="edit"
+                    type="selection"
+                    :field="field"
+                    :index="index"
+                    :extension="'isLegalQualificationRequired'"
+                    :is-asked="isAsked"
+                    @change-field="changeJudicialFunctions"
+                  />
+                </div>
+              </div>
+              <div
+                v-if="data[index].judicialFunctions && data[index].judicialFunctions.type === 'quasi-judicial-post'"
+                class="govuk-summary-list govuk-!-margin-0"
+              >
+                <div class="govuk-summary-list__key widerColumn">
+                  Powers, procedures and main responsibilities
+                </div>
+                <div class="govuk-summary-list__value">
+                  <InformationReviewRenderer
+                    :data="data[index].judicialFunctions ? data[index].judicialFunctions.details : ''"
+                    :edit="edit"
+                    type="textarea"
+                    :field="field"
+                    :index="index"
+                    :extension="'details'"
+                    :is-asked="isAsked"
+                    @change-field="changeJudicialFunctions"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
               v-else-if="key === 'taskDetails'"
-              class="govuk-summary-list__value"
+              style="border-bottom: none;"
             >
               <div class="govuk-summary-list govuk-!-margin-0">
                 <div
-                  class="govuk-summary-list__key"
+                  class="govuk-summary-list__key widerColumn"
                 >
                   Location
                 </div>
@@ -71,7 +149,7 @@
               </div>
               <div class="govuk-summary-list govuk-!-margin-0">
                 <div
-                  class="govuk-summary-list__key"
+                  class="govuk-summary-list__key widerColumn"
                 >
                   Jurisdiction
                 </div>
@@ -92,7 +170,7 @@
               </div>
               <div class="govuk-summary-list govuk-!-margin-0">
                 <div
-                  class="govuk-summary-list__key"
+                  class="govuk-summary-list__key widerColumn"
                 >
                   Working Basis
                 </div>
@@ -114,7 +192,7 @@
               </div>
               <div class="govuk-summary-list govuk-!-margin-0">
                 <div
-                  class="govuk-summary-list__key"
+                  class="govuk-summary-list__key widerColumn"
                 >
                   Total Days In Role
                 </div>
@@ -133,10 +211,10 @@
                   />
                 </div>
               </div>
-            </dd>
+            </div>
 
             <dd
-              v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails')"
+              v-else-if="(typeof data[index][key] === Object && key !== 'taskDetails' && key !== 'judicialFunctions')"
               class="govuk-summary-list__value"
             >
               {{ index }}
@@ -246,7 +324,7 @@
             </dd>
 
             <dd
-              v-else-if="key != 'taskDetails'"
+              v-else-if="key != 'taskDetails' && key != 'judicialFunctions'"
               class="govuk-summary-list__value"
             >
               <InformationReviewRenderer
@@ -342,7 +420,7 @@ export default {
       default: true,
     },
   },
-  emits: ['changeField', 'changeTaskDetails', 'addField', 'removeField'],
+  emits: ['changeField', 'changeTaskDetails', 'changeJudicialFunctions', 'addField', 'removeField'],
   data() {
     return {
       currentIndex: null,
@@ -378,6 +456,9 @@ export default {
     changeField(obj) {
       this.$emit('changeField', obj);
     },
+    changeJudicialFunctions(obj) {
+      this.$emit('changeJudicialFunctions', obj);
+    },
     changeTaskDetail(obj) {
       this.$emit('changeTaskDetails', { ...obj, ...{ taskDetails: true } });
     },
@@ -406,3 +487,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .widerColumn {
+    width: 70%;
+  }
+</style>

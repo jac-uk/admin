@@ -436,6 +436,7 @@ export default {
         'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
       };
       await this.$store.dispatch('panels/updatePanel', { id: this.panelId, data: data });
+      return true;
     },
   },
 };
