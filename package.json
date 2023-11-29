@@ -1,11 +1,13 @@
 {
   "name": "admin",
-  "version": "1.7.0",
+  "version": "1.15.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode develop",
+    "dev": "npm run local:serve",
     "preview": "vite preview",
-    "serve": "vite --mode develop",
+    "serve": "npm run local:serve",
+    "local:serve": "export VITE_FIREBASE_USE_EMULATORS=true; vite --mode develop",
+    "develop:serve": "vite --mode develop",
     "staging:serve": "vite --mode staging",
     "production:serve": "vite --mode production",
     "develop:build": "vite build --mode develop;",
@@ -24,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "3.0.36",
+    "@jac-uk/jac-kit": "3.0.46",
     "@ministryofjustice/frontend": "0.2.4",
     "@rollup/plugin-inject": "^5.0.3",
     "@sentry/tracing": "^7.61.1",
@@ -60,7 +62,7 @@
     "eslint-plugin-vue": "^8.7.1",
     "firebase": "^8.10.1",
     "firebase-mock": "^2.3.2",
-    "postcss": "8.2.15",
+    "postcss": "^8.4.31",
     "process": "^0.11.10",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
@@ -72,6 +74,6 @@
     "npm": "^8.11.0"
   },
   "peerDependencies": {
-    "postcss": "8.2.15"
+    "postcss": "^8.4.31"
   }
 }

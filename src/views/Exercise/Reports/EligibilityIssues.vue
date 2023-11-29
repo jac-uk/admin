@@ -255,15 +255,12 @@ export default {
     async gatherReportData() {
       // fetch data
       const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
-
       const reportData = [];
-
       // get headers
-      reportData.push(response.data.headers.map(header => header));
-
+      reportData.push(response.data.headers.map(header => header.title));
       // get rows
       response.data.rows.forEach((row) => {
-        reportData.push(Object.values(row).map(cell => cell));
+        reportData.push(response.data.headers.map(header => row[header.ref]));
       });
 
       return reportData;

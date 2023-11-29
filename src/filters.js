@@ -34,6 +34,7 @@ const lookup = (value) => {
     statementOfEligibility: 'Statement of eligibility',
     selfAssessmentCompetencies: 'Self assessment with competencies',
     additionalInfo: 'Additional Information',
+    commissionerConflicts: 'Commissioner conflicts',
 
     // exercise states
     draft: 'Draft',
@@ -144,6 +145,16 @@ const lookup = (value) => {
     approvedForImmediateAppointment: 'Approved For Immediate Appointment',
     passedSelection: 'Passed Selection',
 
+    // Additional Information
+    twitter: 'Twitter',
+    'jac-website': 'JAC Website',
+    'professional-body-website-or-email': 'Professional body website or email (eg The Law Society)',
+    'professional-body-magazine': 'Professional body magazine',
+    'judicial-office-extranet': 'Judicial Office Extranet',
+    'judging-your-future-newsletter': 'Judging Your Future Newsletter',
+    'linked-in': 'LinkedIn',
+    'word-of-mouth': 'Word of mouth',
+
     // reasonable adjustments status
     approved: 'Approved',
     denied: 'Denied',
@@ -152,11 +163,16 @@ const lookup = (value) => {
     score: 'Score',
     percent: 'Percent',
     zScore: 'Z Score',
+    grade: 'Grade',
 
     // reasonable adjustments reason
     'qualifying-test': 'Qualifying Test',
     'scenario-test': 'Scenario Test',
     'selection-day': 'Selection Day',
+
+    // post-qualification experience
+    'judicial-post': 'Judicial',
+    'quasi-judicial-post': 'Quasi-judicial',
 
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
@@ -167,16 +183,18 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
 
+  lookup[EXERCISE_STAGE.REVIEW] = 'Review';
   lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
   lookup[EXERCISE_STAGE.SHORTLISTED] = 'Shortlisted';
   lookup[EXERCISE_STAGE.SELECTABLE] = 'Selectable';
-  lookup[EXERCISE_STAGE.RECOMMENDED] = 'Recommended';
-  lookup[EXERCISE_STAGE.HANDOVER] = 'Handover';
+  lookup[EXERCISE_STAGE.RECOMMENDED] = 'Recommended to SCC';
+  lookup[EXERCISE_STAGE.HANDOVER] = 'Handover to JO';
 
   lookup[APPLICATION_STATUS.PASSED_NOT_RECOMMENDED] = 'Passed but not recommended to SCC';
   lookup[APPLICATION_STATUS.PASSED_RECOMMENDED] = 'Passed and recommended to SCC';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_FAILED] = 'Failed qualifying test';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_PASSED] = 'Passed qualifying test';
+  lookup[APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED] = 'No test submitted (first test)';
   lookup[APPLICATION_STATUS.RECOMMENDED_FUTURE] = 'Recommended for future appointment';
   lookup[APPLICATION_STATUS.RECOMMENDED_IMMEDIATE] = 'Recommended for immediate appointment';
   lookup[APPLICATION_STATUS.RECONSIDER] = 'SCC to reconsider';
@@ -185,10 +203,12 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Rejected as ineligible (statutory requirements)';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
+  lookup[APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED] = 'No test submitted (scenario test)';
   lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP second stage assessment';
-  lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection';
-  lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection';
-  lookup[APPLICATION_STATUS.SELECTION_PASSED] = 'Passed selection';
+  lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection day';
+  lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection day';
+  lookup[APPLICATION_STATUS.SELECTION_OUTCOME_PASSED] = 'Passed selection';
+  lookup[APPLICATION_STATUS.SELECTION_OUTCOME_FAILED] = 'Failed selection';
   lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
@@ -200,8 +220,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'QT Merit List';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed CA + SJ';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed CA + SJ';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed first test';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed first test';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
   lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed scenario test';
   lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed scenario test';
@@ -218,7 +238,12 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Passed`] = 'Passed statutory consultation';
   lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Failed`] = 'Failed statutory consultation';
   lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Passed selection day';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
   lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';
@@ -268,7 +293,17 @@ const lookup = (value) => {
   return returnValue;
 };
 
+const pluralise = (word, quantity) => {
+  if (quantity === 1) {
+    return word;
+  } else {
+    // TODO could hardcode words from our vocabulary which don't fit the default pattern of singular->WORD, plural->WORDs. If there are any?!
+    return `${word}s`;
+  }
+};
+
 export {
-  lookup
+  lookup,
+  pluralise
 };
 

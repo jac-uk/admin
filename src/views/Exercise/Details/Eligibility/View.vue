@@ -76,7 +76,7 @@
             class="govuk-list"
           >
             <li
-              v-for="criterion in exercise.selectionCriteria"
+              v-for="(criterion, index) in exercise.selectionCriteria"
               :key="criterion.id"
             >
               <p
@@ -93,7 +93,9 @@
               >
                 {{ criterion.wordLimit }} word limit
               </p>
-              <hr>
+              <hr
+                v-if="exercise.selectionCriteria.length > 1 && index < exercise.selectionCriteria.length - 1"
+              >
             </li>
           </ul>
           <span v-else-if="exercise.aSCApply === false">
@@ -200,7 +202,7 @@
 <script>
 import { isEditable, isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import CustomHTML from '@/components/CustomHTML';
+import CustomHTML from '@/components/CustomHTML.vue';
 
 export default {
   name: 'EligibilityView',

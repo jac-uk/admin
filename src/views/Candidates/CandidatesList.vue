@@ -29,7 +29,7 @@
           inputLabel: 'Show flagged candidates only'
         },
       ]"
-      search-map="_search"
+      :search-map="$searchMap.candidates"
       @change="getTableData"
     >
       <template #row="{row}">

@@ -45,11 +45,7 @@
         :columns="tableColumnsCandidates"
         multi-select
         :page-size="50"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
+        search-map="_search"
         @change="getTableDataCandidates"
       >
         <template #actions>
@@ -108,6 +104,8 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import SelectPanel from '@/components/ModalViews/SelectPanel.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
+import { availableStages } from '../../helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '../../helpers/constants';
 
 export default {
   name: 'PanelPacks',
@@ -156,25 +154,22 @@ export default {
     exerciseId() {
       return this.$route.params.id;
     },
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    siftStage() {
+      if (this.exercise) {
+        return availableStages(this.exercise)[0];
+      }
+      return EXERCISE_STAGE.REVIEW;
+    },
     panelsList() {
       // eslint-disable-next-line no-console
       // console.log('panelsList', this.$store.state.panels.records);
       return this.$store.state.panels.records;
     },
     candidatesList() {
-      // eslint-disable-next-line no-console
-      // console.log('panelsList', this.$store.state);
-      let records = [];
-      if (this.isSift) {
-        records = this.$store.state.stageReview.records;
-      }
-      if (this.isSelectionDay) {
-        records = this.$store.state.stageSelected.records;
-      }
-      if (this.isScenario) {
-        records = this.$store.state.stageReview.records;
-      }
-      return records;
+      return this.$store.state.applicationRecords.records;
     },
     isSift() {
       const routeFullPath = this.$route.fullPath ;
@@ -210,28 +205,31 @@ export default {
     getTableDataCandidates(params) {
       if (this.isSift) {
         this.$store.dispatch(
-          'stageReview/bind',
+          'applicationRecords/bind',
           {
             exerciseId: this.exerciseId,
-            ...params,
-          }
-        );
-      }
-      if (this.isSelectionDay) {
-        this.$store.dispatch(
-          'stageSelected/bind',
-          {
-            exerciseId: this.exerciseId,
+            stage: this.siftStage,
             ...params,
           }
         );
       }
       if (this.isScenario) {
         this.$store.dispatch(
-          'stageReview/bind',
+          'applicationRecords/bind',
           {
             exerciseId: this.exerciseId,
+            stage: this.siftStage,
             status: APPLICATION_STATUS.PASSED_FIRST_TEST,
+            ...params,
+          }
+        );
+      }
+      if (this.isSelectionDay) {
+        this.$store.dispatch(
+          'applicationRecords/bind',
+          {
+            exerciseId: this.exerciseId,
+            stage: EXERCISE_STAGE.SELECTED,
             ...params,
           }
         );

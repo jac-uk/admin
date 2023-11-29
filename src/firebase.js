@@ -24,6 +24,8 @@ const storage = firebase.storage();
 const database = firebase.database();
 const Timestamp = firebase.firestore.Timestamp;
 
+console.log('FIREBASE USE EMULATORS ', import.meta.env.VITE_FIREBASE_USE_EMULATORS);
+
 // Local emulator
 if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
   firestore.useEmulator('localhost', 8080);

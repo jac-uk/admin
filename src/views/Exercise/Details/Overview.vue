@@ -141,8 +141,6 @@
           PERMISSIONS.exercises.permissions.canUpdateExercises.value,
           PERMISSIONS.applications.permissions.canReadApplications.value,
           PERMISSIONS.applicationRecords.permissions.canCreateApplicationRecords.value,
-          PERMISSIONS.qualifyingTests.permissions.canReadQualifyingTests.value,
-          PERMISSIONS.qualifyingTestResponses.permissions.canCreateQualifyingTestResponses.value
         ])"
         type="primary"
         class="govuk-!-margin-right-3"
@@ -373,6 +371,7 @@ export default {
         decision: 'requested',
         rejectionResponse: note ? note : null,
       });
+      await this.$store.dispatch('exerciseDocument/updateCommissioners');
       this.closeApprovalModal();
     },
     async confirmDelete() {

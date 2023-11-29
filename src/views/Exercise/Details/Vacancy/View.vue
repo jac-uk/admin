@@ -20,7 +20,7 @@
           Type of exercise
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ $filters.lookup(exercise.typeOfExercise) }}
+          <span v-if="exercise.typeOfExercise">{{ $filters.lookup(exercise.typeOfExercise) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -28,7 +28,7 @@
           Is the vacancy for a court or tribunal?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ $filters.lookup(exercise.isCourtOrTribunal) }}
+          <span v-if="exercise.isCourtOrTribunal">{{ $filters.lookup(exercise.isCourtOrTribunal) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -61,9 +61,6 @@
           >
             Yes: {{ exercise.statutoryConsultationWaivedDetails }}
           </span>
-          <span v-else>
-            No
-          </span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -77,7 +74,7 @@
             <span v-if="exercise.salary">{{ $filters.formatCurrency(exercise.salary) }}</span>
           </span>
           <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ $filters.lookup(exercise.appointmentType) }}: £{{ exercise.feePaidFee }}</span>
-          <span v-else>{{ $filters.lookup(exercise.appointmentType) }}</span>
+          <span v-else-if="exercise.appointmentType">{{ $filters.lookup(exercise.appointmentType) }}</span>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -217,6 +214,8 @@ import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
+//import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'VacancyView',
@@ -227,6 +226,11 @@ export default {
     ListingPreview,
   },
   mixins: [permissionMixin],
+  data() {
+    return {
+      APPLICATION_STATUS: Object.freeze(APPLICATION_STATUS), // this makes vue not reactive on this data property
+    };
+  },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
