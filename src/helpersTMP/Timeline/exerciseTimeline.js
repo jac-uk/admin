@@ -221,7 +221,7 @@ const exerciseTimeline = (data) => {
     );
   }
 
-  if (data.selectionDayQuestionnaireSendDate) {
+  if (data.preSelectionDayQuestionnaireSendDate) {
     timeline.push(
       {
         entry: 'Pre Selection Day Questionnaire - sent',
@@ -236,7 +236,7 @@ const exerciseTimeline = (data) => {
     timeline.push(
       {
         entry: 'Pre Selection Day Questionnaire - return',
-        date: data.selectionDayQuestionnaireReturnDate,
+        date: data.preSelectionDayQuestionnaireReturnDate,
         dateString: getDateString(data.preSelectionDayQuestionnaireReturnDate),
       }
     );
