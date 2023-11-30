@@ -103,6 +103,9 @@
 
       <Modal ref="archiveModal">
         <ModalInner
+          title="Archive exercise"
+          :message="archiveMessage"
+          button-text="Accept - archive this exercise"
           @close="closeArchiveModal"
           @confirmed="archive"
         />
@@ -199,6 +202,13 @@ export default {
     },
     isProduction() {
       return this.$store.getters['isProduction'];
+    },
+    archiveMessage() {
+      if (this.isPublished) {
+        return 'This exercise is Live on Apply; by clicking accept, you authorise the exercise to be removed from Apply and archived';
+      } else {
+        return 'By clicking accept you authorise the exercise to be archived';
+      }
     },
     hasOpened() {
       if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {
