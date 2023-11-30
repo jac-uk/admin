@@ -56,7 +56,7 @@
         <CheckboxItem
           v-for="panellist in panellists"
           :key="panellist.id"
-          :value="panellist.id"
+          :value="{ id: panellist.id, name: panellist.fullName }"
           :label="panellist.fullName"
         />
       </CheckboxGroup>
