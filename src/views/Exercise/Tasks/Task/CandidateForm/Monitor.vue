@@ -55,7 +55,7 @@
         ])"
         class="govuk-button govuk-!-margin-right-3"
         :disabled="!selectedItems.length"
-        @click="openModal('modalRefNotification', 'request')"
+        @click="openCandidateForm(); openModal('modalRefNotification', 'request')"
       >
         Send requests
       </button>
@@ -67,7 +67,7 @@
         ])"
         class="govuk-button govuk-!-margin-right-3"
         :disabled="!selectedItems.length"
-        @click="openModal('modalRefNotification', 'reminder')"
+        @click="openCandidateForm(); openModal('modalRefNotification', 'reminder')"
       >
         Send reminders
       </button>
@@ -258,6 +258,9 @@ export default {
         status: this.activeTab,
         ...params,
       });
+    },
+    openCandidateForm() {
+      this.$store.dispatch('candidateForm/open', this.candidateForm.id);
     },
     openModal(modalRef, type){
       this.$refs[modalRef].openModal();
