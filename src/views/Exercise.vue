@@ -103,9 +103,9 @@
 
       <Modal ref="archiveModal">
         <ModalInner
-          title="Archive exercise"
+          :title="archiveTitle"
           :message="archiveMessage"
-          button-text="Accept - archive this exercise"
+          :button-text="archiveButtonText"
           @close="closeArchiveModal"
           @confirmed="archive"
         />
@@ -203,11 +203,27 @@ export default {
     isProduction() {
       return this.$store.getters['isProduction'];
     },
+    archiveTitle() {
+      if (this.isArchived) {
+        return 'Unarchive exercise';
+      } else {
+        return 'Archive exercise';
+      }
+    },
     archiveMessage() {
-      if (this.isPublished) {
+      if (this.isArchived) {
+        return 'By clicking accept you authorise the exercise to be unarchived';
+      } else if (this.isPublished) {
         return 'This exercise is Live on Apply; by clicking accept, you authorise the exercise to be removed from Apply and archived';
       } else {
         return 'By clicking accept you authorise the exercise to be archived';
+      }
+    },
+    archiveButtonText() {
+      if (this.isArchived) {
+        return 'Accept - unarchive this exercise';
+      } else {
+        return 'Accept - archive this exercise';
       }
     },
     hasOpened() {
