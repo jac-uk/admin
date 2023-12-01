@@ -162,8 +162,6 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import _upperFirst from 'lodash/upperFirst';
 import _get from 'lodash/get';
 export default {
@@ -171,8 +169,6 @@ export default {
   components: {
     Table,
     TableCell,
-    Modal,
-    ModalInner,
   },
   mixins: [permissionMixin],
   data() {
