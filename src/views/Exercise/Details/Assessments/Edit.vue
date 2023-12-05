@@ -18,33 +18,16 @@
           :show-save-button="true"
           @save="save"
         />
-        <div
+
+        <Checkbox
           v-for="method in Object.values(ASSESSMENT_METHOD)"
+          :id="`assessment-method-${method}`"
           :key="method"
+          v-model="formData.assessmentMethods[method]"
         >
-          <Checkbox
-            :id="`assessment-method-${method}`"
-            v-model="formData.assessmentMethods[method]"
-          >
-            {{ $filters.lookup(method) }}
-          </Checkbox>
-          <div
-            v-if="method == ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES && formData.assessmentMethods[method]"
-          >
-            <span
-              class="govuk-hint"
-            >
-              Please add a word limit for each question within the self assessment.
-            </span>
-            <RepeatableFields
-              v-model="formData.selfAssessmentWordLimits"
-              :component="repeatableFields.SelfAssessmentSection"
-              type-name="Self Assessment Section"
-              required
-            />
-            <slot name="removeButton" />
-          </div>
-        </div>
+          {{ $filters.lookup(method) }}
+        </Checkbox>
+
         <button class="govuk-button">
           Save and continue
         </button>
@@ -58,14 +41,10 @@ import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
-import SelfAssessmentSection from '@/components/RepeatableFields/SelfAssessmentSection.vue';
 import { ASSESSMENT_METHOD } from '@/helpers/constants';
-import { shallowRef } from 'vue';
 
 export default {
   components: {
-    RepeatableFields,
     ErrorSummary,
     BackLink,
     Checkbox,
@@ -77,17 +56,11 @@ export default {
       // set default values
       assessmentMethods[method] = method === ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS;
     });
-    const defaults = {
-      assessmentMethods,
-      selfAssessmentWordLimits: [],
-    };
+    const defaults = { assessmentMethods };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       ASSESSMENT_METHOD,
       formData: formData,
-      repeatableFields: shallowRef({
-        SelfAssessmentSection,
-      }),
     };
   },
   computed: {
