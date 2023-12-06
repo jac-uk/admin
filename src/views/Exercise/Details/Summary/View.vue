@@ -145,7 +145,7 @@
 
 <script>
 import { logEvent } from '@/helpers/logEvent';
-import { isEditable } from '@/helpers/exerciseHelper';
+import { isEditable, isArchived } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import ChangeExerciseAdvertType from '@/components/ModalViews/ChangeExerciseAdvertType.vue';
@@ -178,8 +178,11 @@ export default {
     isPublished() {
       return this.exercise.published;
     },
+    isArchived() {
+      return isArchived(this.exercise);
+    },
     canPublish() {
-      return this.exercise.progress && this.exercise.progress.vacancySummary;
+      return this.exercise.progress && this.exercise.progress.vacancySummary && !this.isArchived;
     },
   },
   methods: {

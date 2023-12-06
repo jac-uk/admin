@@ -94,6 +94,14 @@ export default {
           }
         );
       }
+      if (exercise?._applicationContent?.registration?.commissionerConflicts) {
+        sideNavigation.push(
+          {
+            title: 'Commissioner conflicts',
+            path: `${path}/commissioner-conflicts`,
+          }
+        );
+      }
 
       return sideNavigation;
     },
