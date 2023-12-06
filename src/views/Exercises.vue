@@ -140,12 +140,9 @@
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
-              <TableCell :title="tableColumns[5].title">
-                {{ getExerciseStage(row) }}
-              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[6].title"
+                :title="tableColumns[5].title"
               >
                 {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
@@ -180,7 +177,6 @@ export default {
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
-        { title: 'Stage' },
         {
           title: 'Submitted Applications',
           sort: '_applications.applied',
@@ -260,11 +256,11 @@ export default {
       } else if (exercise.state === 'draft') {
         status += 'Draft';
       } else {
-        status += 'Live';
+        status += this.getExerciseTimelineStage(exercise);
       }
       return status;
     },
-    getExerciseStage(exercise) {
+    getExerciseTimelineStage(exercise) {
       let timeItemToShow = 0;
       const timeline = createTimeline(exerciseTimeline(exercise));
       if (timeline) {
