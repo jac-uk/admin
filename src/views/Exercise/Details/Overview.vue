@@ -378,6 +378,7 @@ export default {
       this.$router.push({ name: 'exercises' });
     },
     async publish() {
+      await this.$store.dispatch('exerciseDocument/updateCommissioners');
       await this.$store.dispatch('exerciseDocument/publish');
       logEvent('info', 'Exercise published', {
         exerciseId: this.exerciseId,
