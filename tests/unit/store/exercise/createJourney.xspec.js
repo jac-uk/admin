@@ -1,5 +1,5 @@
 import exerciseCreateJourney from '@/store/exercise/createJourney';
-import { vi, xdescribe } from 'vitest';
+import { vi, describe, it, beforeEach } from 'vitest';
 
 describe.skip('store/exercise/createJourney', () => {
   it('is namespaced', () => {
