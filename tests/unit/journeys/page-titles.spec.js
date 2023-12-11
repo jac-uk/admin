@@ -1,7 +1,14 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import App from '@/App';
-import Router from 'vue-router';
-import Vuex from 'vuex';
+// import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
+
+import App from '@/App.vue';
+//import Router from 'vue-router';
+//import Vuex from 'vuex';
+import { it, describe, beforeEach } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
 
 const routes = [
   ['exercise-new', 'Create An Exercise'],
@@ -31,22 +38,31 @@ const routes = [
   ['exercise-reports-reasonable-adjustments', 'Reasonable Adjustments'],
 ];
 
-xdescribe('Page titles', () => {
+describe.skip('Page titles', () => {
   let router;
   let store;
+  // const mockRouter = {
+  //   push: vi.fn(),
+  // };
 
   beforeEach(() => {
-    const localVue = createLocalVue();
-    localVue.use(Router);
-    localVue.use(Vuex);
+    // const localVue = createLocalVue();
+    // localVue.use(Router);
+    // localVue.use(Vuex);
 
     router = require('@/router').default;
     store = require('@/store').default;
     window.scrollTo = () => {};
     shallowMount(App, {
-      localVue,
-      router,
-      store,
+      // localVue,
+      // router,
+      // store,
+      global: {
+        plugins: [store],
+        mocks: {
+          $router: router,
+        },
+      },
     });
   });
 

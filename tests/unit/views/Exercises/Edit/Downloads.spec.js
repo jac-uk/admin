@@ -1,173 +1,183 @@
-import Downloads from '@/views/Exercise/Details/Downloads/Edit';
-import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+// import Downloads from '@/views/Exercise/Details/Downloads/Edit';
+// import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
+// import { shallowMount } from '@vue/test-utils';
+// import { createStore } from 'vuex';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+// import { vi, describe, beforeEach, it } from 'vitest';
 
-const mockExercise = {
-  id: 'mock exercise id',
-  exerciseRef: 'mock exercise',
-  progress: {
+// /**
+// * @vitest-environment jsdom
+// */
 
-  },
-};
+// const mockExercise = {
+//   id: 'mock exercise id',
+//   exerciseRef: 'mock exercise',
+//   progress: {
 
-const mockIsApproved = jest.fn().mockName('exerciseDocument/isApproved');
-const mockData = jest.fn().mockName('exerciseDocument/data').mockReturnValue(mockExercise);
+//   },
+// };
 
-const mockRoute = {
-  name: 'name-of-current-route',
-  params: {
-    id: 'abc123',
-  },
-};
+// const mockIsApproved = vi.fn().mockName('exerciseDocument/isApproved');
+// const mockData = vi.fn().mockName('exerciseDocument/data').mockReturnValue(mockExercise);
 
-const mockRouter = {
-  push: jest.fn(),
-  replace: jest.fn(),
-};
+// const mockRoute = {
+//   name: 'name-of-current-route',
+//   params: {
+//     id: 'abc123',
+//   },
+// };
 
-const mockProps = {
-  exercise: {
-    id: 'mockid',
-  },
-  status: 'mockstatus',
-};
+// const mockRouter = {
+//   push: vi.fn(),
+//   replace: vi.fn(),
+// };
 
-const mockSave = jest.fn().mockName('exerciseDocument/save');
+// const mockProps = {
+//   exercise: {
+//     id: 'mockid',
+//   },
+//   status: 'mockstatus',
+// };
 
-const createTestSubject = () => {
-  const store = new Vuex.Store({
-    modules: {
-      exerciseDocument: {
-        namespaced: true,
-        state: {
-          record: mockExercise,
-        },
-        getters: {
-          id: jest.fn().mockReturnValue(mockExercise.id),
-          data: () => mockData,
-          isEditable: mockIsApproved,
-        },
-        actions: {
-          save: mockSave,
-        },
-      },
-      exerciseCreateJourney: {
-        namespaced: true,
-        getters: {
-          nextPage: () => jest.fn(),
-        },
-      },
-    },
-  });
+// const mockSave = vi.fn().mockName('exerciseDocument/save');
 
-  return shallowMount(Downloads, {
-    store,
-    localVue,
-    mocks: {
-      $route: mockRoute,
-      $router: mockRouter,
-    },
-    stubs: {
-      'BackLink': true,
-      'RouterLink': true,
-      'ErrorSummary': true,
-    },
-    propsData: mockProps,
-  });
-};
+// const store = createStore({
+//   modules: {
+//     exerciseDocument: {
+//       namespaced: true,
+//       state: {
+//         record: mockExercise,
+//       },
+//       getters: {
+//         id: vi.fn().mockReturnValue(mockExercise.id),
+//         data: () => mockData,
+//         isEditable: mockIsApproved,
+//       },
+//       actions: {
+//         save: mockSave,
+//       },
+//     },
+//     exerciseCreateJourney: {
+//       namespaced: true,
+//       getters: {
+//         nextPage: () => vi.fn(),
+//       },
+//     },
+//   },
+// });
 
-xdescribe('@/views/Exercise/Show/Downloads', () => {
-  describe('template', () => {
-    let wrapper;
-    beforeEach(() => {
-      wrapper = createTestSubject();
-    });
+// const createTestSubject = shallowMount(Downloads, {
+//   global: {
+//     plugins: [store],
+//     mocks: {
+//       $route: mockRoute,
+//       $router: mockRouter,
+//     },
+//     stubs: {
+//       'BackLink': true,
+//       'RouterLink': true,
+//       'ErrorSummary': true,
+//     },
+//     propsData: mockProps,
+//   },
+// });
 
-    it('renders the component', () => {
-      expect(wrapper.exists()).toBe(true);
-    });
+// describe.skip('@/views/Exercise/Show/Downloads', () => {
+//   describe('template', () => {
+//     let wrapper;
+//     beforeEach(() => {
+//       wrapper = createTestSubject();
+//     });
 
-    xdescribe('form', () => {
-      it('contains a form', () => {
-        expect(wrapper.find('form').exists()).toBe(true);
-      });
+//     it('renders the component', () => {
+//       expect(wrapper.exists()).toBe(true);
+//     });
 
-      it('calls save() on submit', () => {
-        wrapper.vm.save = jest.fn();
+//     describe.skip('form', () => {
+//       it('contains a form', () => {
+//         expect(wrapper.find('form').exists()).toBe(true);
+//       });
 
-        wrapper.find('form').trigger('submit');
+//       it('calls save() on submit', () => {
+//         wrapper.vm.save = vi.fn();
 
-        expect(wrapper.vm.save).toHaveBeenCalled();
-      });
-    });
+//         wrapper.find('form').trigger('submit');
 
-    xit('contains 7 multi uploads', () => {
-      expect(wrapper.findAll(RepeatableFields)).toHaveLength(7);
-    });
-  });
+//         expect(wrapper.vm.save).toHaveBeenCalled();
+//       });
+//     });
 
-  describe('computed properties', () => {
-    describe('uploadPath', () => {
-      it('returns upload path including exercise id', () => {
-        mockData.mockReturnValue(mockExercise);
-        const wrapper = createTestSubject();
-        expect(wrapper.vm.uploadPath).toEqual(`/exercise/${mockExercise.id}`);
-      });
-    });
-  });
+//     it.skip('contains 7 multi uploads', () => {
+//       expect(wrapper.findAll(RepeatableFields)).toHaveLength(7);
+//     });
+//   });
 
-  describe('methods', () => {
-    let wrapper;
-    beforeEach(() => {
-      wrapper = createTestSubject();
-      wrapper.vm.validate = jest.fn();
-      wrapper.vm.isValid = jest.fn();
-    });
+//   describe('computed properties', () => {
+//     describe('uploadPath', () => {
+//       it('returns upload path including exercise id', () => {
+//         mockData.mockReturnValue(mockExercise);
+//         const wrapper = createTestSubject();
+//         expect(wrapper.vm.uploadPath).toEqual(`/exercise/${mockExercise.id}`);
+//       });
+//     });
+//   });
 
-    describe('save()', () => {
-      it('is a function', () => {
-        expect(wrapper.vm.save).toBeFunction();
-      });
+//   describe('methods', () => {
+//     let wrapper;
+//     beforeEach(() => {
+//       wrapper = createTestSubject();
+//       wrapper.vm.validate = vi.fn();
+//       wrapper.vm.isValid = vi.fn();
+//     });
 
-      it('calls validate()', async () => {
-        await wrapper.vm.save();
+//     describe('save()', () => {
+//       it('is a function', () => {
+//         expect(wrapper.vm.save).toBeFunction();
+//       });
 
-        expect(wrapper.vm.validate).toHaveBeenCalled();
-      });
+//       it('calls validate()', async () => {
+//         await wrapper.vm.save();
 
-      it('if not valid, does nothing', async () => {
-        mockSave.mockClear();
-        wrapper.vm.isValid.mockReturnValue(false);
+//         expect(wrapper.vm.validate).toHaveBeenCalled();
+//       });
 
-        await wrapper.vm.save();
+//       it('if not valid, does nothing', async () => {
+//         mockSave.mockClear();
+//         wrapper.vm.isValid.mockReturnValue(false);
 
-        expect(wrapper.vm.isValid).toHaveBeenCalled();
-        expect(wrapper.vm.exercise.progress.downloads).toBeFalsy();
-        expect(mockSave).not.toHaveBeenCalled();
-      });
+//         await wrapper.vm.save();
 
-      describe('if valid', () => {
-        it('updates progress', async () => {
-          wrapper.vm.isValid.mockReturnValue(true);
+//         expect(wrapper.vm.isValid).toHaveBeenCalled();
+//         expect(wrapper.vm.exercise.progress.downloads).toBeFalsy();
+//         expect(mockSave).not.toHaveBeenCalled();
+//       });
 
-          await wrapper.vm.save();
+//       describe('if valid', () => {
+//         it('updates progress', async () => {
+//           wrapper.vm.isValid.mockReturnValue(true);
 
-          expect(wrapper.vm.exercise.progress.downloads).toBeTrue();
-        });
+//           await wrapper.vm.save();
 
-        it('saves the exercise and returns to preview page', async () => {
-          wrapper.vm.isValid.mockReturnValue(true);
+//           expect(wrapper.vm.exercise.progress.downloads).toBeTrue();
+//         });
 
-          await wrapper.vm.save();
+//         it('saves the exercise and returns to preview page', async () => {
+//           wrapper.vm.isValid.mockReturnValue(true);
 
-          expect(mockSave).toHaveBeenCalledWith(expect.anything(), wrapper.vm.exercise);
-          expect(mockRouter.push).toHaveBeenCalled();
-        });
-      });
-    });
+//           await wrapper.vm.save();
+
+//           expect(mockSave).toHaveBeenCalledWith(expect.anything(), wrapper.vm.exercise);
+//           expect(mockRouter.push).toHaveBeenCalled();
+//         });
+//       });
+//     });
+//   });
+// });
+
+import { describe, it } from 'vitest';
+
+describe.skip('@/views/Exercise/Show/Downloads', () => {
+  it('renders', () => {
+
   });
 });

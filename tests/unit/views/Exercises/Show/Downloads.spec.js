@@ -1,17 +1,15 @@
-import Downloads from '@/views/Exercise/Details/Downloads/View';
-import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import Downloads from '@/views/Exercise/Details/Downloads/View.vue';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { vi, describe, it } from 'vitest';
 
 const mockExercise = {
   exerciseRef: 'mock exercise',
 };
 
-const mockIsApproved = jest.fn();
-const mockData = jest.fn().mockReturnValue(mockExercise);
+const mockIsApproved = vi.fn();
+const mockData = vi.fn().mockReturnValue(mockExercise);
 
 const mockRoute = {
   name: 'name-of-current-route',
@@ -21,7 +19,7 @@ const mockRoute = {
 };
 
 const mockRouter = {
-  replace: jest.fn(),
+  replace: vi.fn(),
 };
 
 const mockProps = {
@@ -32,7 +30,7 @@ const mockProps = {
 };
 
 const createTestSubject = () => {
-  const store = new Vuex.Store({
+  const store = createStore({
     modules: {
       exerciseDocument: {
         namespaced: true,
@@ -40,7 +38,7 @@ const createTestSubject = () => {
           record: mockExercise,
         },
         getters: {
-          id: jest.fn(),
+          id: vi.fn(),
           data: () => mockData,
           isEditable: mockIsApproved,
           hasIndependentAssessments: () => true,
@@ -50,20 +48,21 @@ const createTestSubject = () => {
   });
 
   return shallowMount(Downloads, {
-    store,
-    localVue,
-    mocks: {
-      $route: mockRoute,
-      $router: mockRouter,
+    global: {
+      plugins: [store],
+      mocks: {
+        $route: mockRoute,
+        $router: mockRouter,
+      },
+      stubs: {
+        'RouterLink': true,
+      },
+      propsData: mockProps,
     },
-    stubs: {
-      'RouterLink': true,
-    },
-    propsData: mockProps,
   });
 };
 
-xdescribe('@/views/Exercise/Show/Downloads', () => {
+describe.skip('@/views/Exercise/Show/Downloads', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

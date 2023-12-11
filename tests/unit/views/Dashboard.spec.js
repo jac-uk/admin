@@ -1,62 +1,77 @@
-import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Exercises from '@/views/Exercises';
-import Router from 'vue-router';
+// import { createStore } from 'vuex';
+// import { shallowMount } from '@vue/test-utils';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-localVue.use(Router);
+// import Exercises from '@/views/Exercises';
+// import { vi, beforeEach, it } from 'vitest';
 
-const exerciseCollection = {
-  namespaced: true,
-  actions: {
-    bind: jest.fn(),
-  },
-  state: {
-    records: [],
-  },
-};
+// /**
+// * @vitest-environment jsdom
+// */
 
-const store = new Vuex.Store({
-  modules: {
-    exerciseCollection,
-  },
-});
+// const mockRouter = {
+//   push: vi.fn(),
+// };
 
-const createTestSubject = () => {
-  return shallowMount(Exercises, {
-    store,
-    localVue,
-  });
-};
+// const exerciseCollection = {
+//   namespaced: true,
+//   actions: {
+//     bind: vi.fn(),
+//   },
+//   state: {
+//     records: [],
+//   },
+// };
 
-xdescribe('views/Exercises', () => {
-  describe('template', () => {
-    let wrapper;
-    beforeEach(() => {
-      wrapper = createTestSubject();
-    });
+// const store = createStore({
+//   state() {
+//     return { count: 1 };
+//   },
+// });
 
-    it('renders the component', () => {
-      expect(wrapper.exists()).toBe(true);
-    });
+// const createTestSubject = shallowMount(Exercises, {
+//   global: {
+//     plugins: [store],
+//     mocks: {
+//       $router: mockRouter,
+//     },
+//   },
+// });
 
-    it('contains the link to ExerciseNew Exercise page', () => {
-      expect(wrapper.find({ ref: 'linkToNewExercise' }).isVisible()).toBe(true);
-    });
+// describe.skip('views/Exercises', () => {
+//   describe('template', () => {
+//     let wrapper;
+//     beforeEach(() => {
+//       wrapper = createTestSubject();
+//     });
 
-    it('contains a <h1> element', () => {
-      expect(wrapper.find('h1')).toBe(true);
-    });
-  });
+//     it('renders the component', () => {
+//       expect(wrapper.exists()).toBe(true);
+//     });
 
-  describe('lifecycle hooks', () => {
-    describe('created', () => {
-      it('loads the exercises collection using Vuex', () => {
-        exerciseCollection.actions.bind.mockReset();
-        createTestSubject();
-        expect(exerciseCollection.actions.bind).toHaveBeenCalledTimes(1);
-      });
-    });
+//     it('contains the link to ExerciseNew Exercise page', () => {
+//       expect(wrapper.find({ ref: 'linkToNewExercise' }).isVisible()).toBe(true);
+//     });
+
+//     it('contains a <h1> element', () => {
+//       expect(wrapper.find('h1')).toBe(true);
+//     });
+//   });
+
+//   describe('lifecycle hooks', () => {
+//     describe('created', () => {
+//       it('loads the exercises collection using Vuex', () => {
+//         exerciseCollection.actions.bind.mockReset();
+//         createTestSubject();
+//         expect(exerciseCollection.actions.bind).toHaveBeenCalledTimes(1);
+//       });
+//     });
+//   });
+// });
+
+import { describe, it } from 'vitest';
+
+describe.skip('views/Exercises', () => {
+  it('renders', () => {
+
   });
 });

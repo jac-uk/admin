@@ -1,17 +1,18 @@
 import exerciseDocument from '@/store/exercise/document';
 import { firestore } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { vi, it, describe, beforeEach, afterEach } from 'vitest';
 
-jest.mock('@/firebase', () => {
+vi.mock('@/firebase', () => {
   const firebase = require('firebase-mock');
   const firestore = firebase.MockFirebaseSdk().firestore();
   firestore.autoFlush();
   return { firestore };
 });
 
-jest.mock('vuexfire');
+vi.mock('vuexfire');
 
-xdescribe('store/exercise/single', () => {
+describe.skip('store/exercise/single', () => {
   describe('actions', () => {
     const actions = exerciseDocument.actions;
 
@@ -49,7 +50,7 @@ xdescribe('store/exercise/single', () => {
     describe('create', () => {
       let mockDispatch;
       beforeEach(async () => {
-        mockDispatch = jest.fn();
+        mockDispatch = vi.fn();
         const doc = firestore.collection('meta').doc('stats');
         await doc.set({
           exercisesCount: 0,
