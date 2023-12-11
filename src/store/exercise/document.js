@@ -75,7 +75,7 @@ export default {
     save: async ({ state }, data) => {
       await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
-    updateApprovalProcess: async ({ state, getters }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
+    updateApprovalProcess: async ({ state, getters, rootGetters }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
       const user = {
         id: userId,
@@ -85,6 +85,8 @@ export default {
       data[`_approval.${decision}`] = {};
       data[`_approval.${decision}.date`] = firebase.firestore.FieldValue.serverTimestamp();
       data[`_approval.${decision}.user`] = user;
+      data.commissioners = rootGetters['services/getCommissioners'] || [];
+
       switch (decision) {
         case 'approved':
           data['_approval.rejected'] = null;
@@ -146,10 +148,11 @@ export default {
       };
       await ref.update(data);
     },
-    publish: async ({ state }) => {
+    publish: async ({ state, rootGetters }) => {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
+        commissioners: rootGetters['services/getCommissioners'] || [],
         published: true,
       };
       await ref.update(data);
