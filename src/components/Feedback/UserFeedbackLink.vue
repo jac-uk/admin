@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="report-issue-container">
     <button
       class="report-issue"
       type="button"
@@ -95,17 +95,20 @@ export default {
 /**
 * Important that this style block is not 'scoped' so that the .modal definition below applies to the modal in the sub component
 */
-
+.report-issue-container {
+  position: sticky;
+  bottom: 2em;
+  left: 1em;
+  display: inline-flex;
+  background-color: white;
+  padding: 5px;
+}
 button.report-issue {
     border-radius: 2em;
     background-color: #f3f2f1;
     padding: 0.5em 0.8em;
-    position: fixed;
-    bottom: 1em;
-    left: 1em;
     border: 1px solid #D2D2D2FF;
     line-height: 1em;
-    display: inline-flex;
     align-items: center;
     font-size: 1em !important;
     text-align: center;

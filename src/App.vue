@@ -114,10 +114,6 @@
           </p>
         </div>
       </div>
-      <UserFeedbackLink
-        v-if="isSignedIn"
-        ref="user-feedback-link"
-      />
     </header>
 
     <main
@@ -127,6 +123,11 @@
     >
       <RouterView />
     </main>
+
+    <UserFeedbackLink
+      v-if="isSignedIn"
+      ref="user-feedback-link"
+    />
 
     <footer
       class="govuk-footer"
@@ -198,7 +199,6 @@ import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
-import _debounce from 'lodash/debounce';
 
 export default {
   name: 'App',
@@ -210,7 +210,6 @@ export default {
   data() {
     return {
       authorisedToPerformAction: false,
-      buttonElement: null,
       rect: null,
     };
   },
@@ -249,14 +248,6 @@ export default {
       this.load();
     }
   },
-  mounted() {
-    this.buttonElement = document.querySelector('.report-issue');
-    this.handleDebouncedScroll = _debounce(this.handleScroll, 20);
-    window.addEventListener('scroll', this.handleDebouncedScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.handleDebouncedScroll);
-  },
   unmounted() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
@@ -293,17 +284,6 @@ export default {
           params: params,
         };
         return await this.$store.dispatch('messageBase/bind', data);
-      }
-    },
-    handleScroll() {
-      //  Ensure the feedback link sits above the footer when scrolled to the bottom of rthe page
-      if (this.$refs['user-feedback-link']) {
-        if (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) {
-          this.buttonElement.style.bottom = '5em';
-        }
-        else {
-          this.buttonElement.style.bottom = '1em';
-        }
       }
     },
   },
