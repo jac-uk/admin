@@ -21,7 +21,7 @@
             class="govuk-!-margin-bottom-5"
           >
             <span class="govuk-body-m">Before proceeding, please confirm that you wish to send a {{ typeOfEmail }} to </span>
-            <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} assessor(s) </span>
+            <span class="govuk-body-m govuk-!-font-weight-bold">{{ numberOfCandidates }} candidate(s) </span>
             <span class="govuk-body-m">and the email template contains all required information</span>
           </div>
 
