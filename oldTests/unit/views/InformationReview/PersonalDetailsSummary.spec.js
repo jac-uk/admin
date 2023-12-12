@@ -1,86 +1,78 @@
-// import { vi, describe, it, beforeAll } from 'vitest';
+import { vi, describe, it, beforeAll } from 'vitest';
 
-// /**
-// * @vitest-environment jsdom
-// */
+/**
+* @vitest-environment jsdom
+*/
 
-// const mockExercise = {
-//   };
+const mockExercise = {
+  };
 
-//   const mockApplication = {
-//     userId: '0123456',
-//     personalDetails: {
-//       firstName: '',
-//     },
-//   };
+  const mockApplication = {
+    userId: '0123456',
+    personalDetails: {
+      firstName: '',
+    },
+  };
 
-//   const mockProps = {
-//     editable: false,
-//     personalDetails: mockApplication.personalDetails,
-//   };
+  const mockProps = {
+    editable: false,
+    personalDetails: mockApplication.personalDetails,
+  };
 
-//   const mockStore = {
-//     dispatch: vi.fn(),
-//     getters: {
-//       'application/update': vi.fn((obj) => { return { ...mockApplication.personalDetails, ...obj }; } ),
-//     },
-//     state: {
-//       exerciseDocument: {
-//         record: mockExercise,
-//       },
-//       applications: {
-//         records: [mockApplication],
-//       },
-//       application: {
-//         record: mockApplication,
-//       },
-//     },
-//   };
+  const mockStore = {
+    dispatch: vi.fn(),
+    getters: {
+      'application/update': vi.fn((obj) => { return { ...mockApplication.personalDetails, ...obj }; } ),
+    },
+    state: {
+      exerciseDocument: {
+        record: mockExercise,
+      },
+      applications: {
+        records: [mockApplication],
+      },
+      application: {
+        record: mockApplication,
+      },
+    },
+  };
 
-// import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
-// import { createTestSubject } from '@/../tests/unit/helpers';
+import PersonalDetailsSummary from '@/views/InformationReview/PersonalDetailsSummary.vue';
+import { createTestSubject } from '@/../tests/unit/helpers';
 
-// describe('@/views/Exercise/Applications/Application', () => {
-//   let wrapper;
-//   beforeAll(() => {
-//     wrapper = createTestSubject(PersonalDetailsSummary, {
-//       propsData: mockProps,
-//       mocks: {
-//         $store: mockStore,
-//       },
-//       stubs: [],
-//     });
-//   });
-//   describe('template', () => {
+describe('@/views/Exercise/Applications/Application', () => {
+  let wrapper;
+  beforeAll(() => {
+    wrapper = createTestSubject(PersonalDetailsSummary, {
+      propsData: mockProps,
+      mocks: {
+        $store: mockStore,
+      },
+      stubs: [],
+    });
+  });
+  describe('template', () => {
 
-//     it('renders the component', () => {
-//       expect(wrapper.exists()).toBe(true);
-//     });
+    it('renders the component', () => {
+      expect(wrapper.exists()).toBe(true);
+    });
 
-//   });
-//   describe('methods', () => {
-//     beforeAll(() => {
-//       const obj = {
-//         firstName: 'test',
-//       };
-//       wrapper.vm.changeUserDetails(obj);
-//     });
+  });
+  describe('methods', () => {
+    beforeAll(() => {
+      const obj = {
+        firstName: 'test',
+      };
+      wrapper.vm.changeUserDetails(obj);
+    });
 
-//     it('changeUserDetails', () => {
-//       expect(wrapper.emitted().update).toBeTruthy();
-//     });
+    it('changeUserDetails', () => {
+      expect(wrapper.emitted().update).toBeTruthy();
+    });
 
-//     it('dispatches formatted change', () => {
-//       expect(wrapper.emitted().update[0][0]).toEqual( { 'firstName': 'test' } );
-//     });
-
-//   });
-// });
-
-import { describe, it } from 'vitest';
-
-describe.skip('@/views/Exercise/Applications/Application', () => {
-  it('renders', () => {
+    it('dispatches formatted change', () => {
+      expect(wrapper.emitted().update[0][0]).toEqual( { 'firstName': 'test' } );
+    });
 
   });
 });
