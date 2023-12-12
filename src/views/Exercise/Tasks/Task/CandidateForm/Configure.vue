@@ -70,7 +70,7 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
-import { getTaskSteps } from '@/helpers/exerciseHelper';
+import { getTaskSteps, exerciseApplicationParts } from '@/helpers/exerciseHelper';
 import { APPLICATION_FORM_PARTS } from '@/helpers/constants';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
@@ -101,6 +101,20 @@ export default {
     },
   },
   data() {
+    const formParts = [
+      APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY,
+      APPLICATION_FORM_PARTS.PANEL_CONFLICTS,
+      APPLICATION_FORM_PARTS.CHARACTER_CHECKS,
+      APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS,
+    ];
+    const optionalAppplicationParts = [
+      APPLICATION_FORM_PARTS.COMMISSIONER_CONFLICTS,
+      APPLICATION_FORM_PARTS.LOCATION_PREFERENCES,
+      APPLICATION_FORM_PARTS.JURISDICTION_PREFERENCES,
+      APPLICATION_FORM_PARTS.WELSH_POSTS,
+    ];
+    const exercise = this.$store.state.exerciseDocument.record;
+    const applicationParts = exerciseApplicationParts(exercise).filter(part => optionalAppplicationParts.indexOf(part) >= 0);
     return {
       formData: {
         openDate: null,
@@ -113,13 +127,8 @@ export default {
         LocationDate,
       }),
       CandidateFormParts: [
-        APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY,
-        APPLICATION_FORM_PARTS.PANEL_CONFLICTS,
-        APPLICATION_FORM_PARTS.COMMISSIONER_CONFLICTS,
-        APPLICATION_FORM_PARTS.CHARACTER_CHECKS,
-        APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS,
-        APPLICATION_FORM_PARTS.WORKING_PREFERENCES,
-        APPLICATION_FORM_PARTS.WELSH_POSTS,
+        ...formParts,
+        ...applicationParts,
       ],
     };
   },
