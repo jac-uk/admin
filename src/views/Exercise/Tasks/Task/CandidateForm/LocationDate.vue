@@ -4,6 +4,7 @@
       :id="`date_${index}`"
       v-model="row.date"
       class="inline-block"
+      :messages="{ required: 'Please enter a date' }"
       required
     />
     <TextField
