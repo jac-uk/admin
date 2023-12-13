@@ -1,9 +1,7 @@
-import Contacts from '@/views/Exercise/Details/Contacts/View';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import Contacts from '@/views/Exercise/Details/Contacts/View.vue';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { describe, it } from 'vitest';
 
 const exercise = {
   exerciseMailbox: 'test@jac.co.uk',
@@ -11,7 +9,7 @@ const exercise = {
   selectionExerciseManager: 'Sierra Mcmillan',
 };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     exerciseDocument: {
       namespaced: true,
@@ -27,15 +25,16 @@ const store = new Vuex.Store({
 
 const createTestSubject = () => {
   return shallowMount(Contacts, {
-    store,
-    localVue,
-    stubs: {
-      'RouterLink': true,
+    global: {
+      plugins: [store],
+      stubs: {
+        'RouterLink': true,
+      },
     },
   });
 };
 
-xdescribe('@/views/Exercise/Show', () => {
+describe.skip('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

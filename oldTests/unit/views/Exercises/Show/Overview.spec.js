@@ -1,24 +1,22 @@
 import Overview from '@/views/Exercise/Details/Overview';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
+import { vi, describe, it, beforeEach } from 'vitest';
 
-jest.mock('@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline', () => {
-  return jest.fn().mockImplementation(() => {
+vi.mock('@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline', () => {
+  return vi.fn().mockImplementation(() => {
     return [];
   });
 });
 
-jest.mock('@jac-uk/jac-kit/helpers/Timeline/createTimeline', () => {
-  return jest.fn().mockImplementation(() => {
+vi.mock('@jac-uk/jac-kit/helpers/Timeline/createTimeline', () => {
+  return vi.fn().mockImplementation(() => {
     return [];
   });
 });
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 const exercise = {
   immediateStart: '56',
@@ -26,7 +24,7 @@ const exercise = {
   applicationCloseDate: 'TestClose',
 };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     exerciseDocument: {
       namespaced: true,
@@ -41,13 +39,18 @@ const store = new Vuex.Store({
 });
 
 const createTestSubject = () => {
+  // return shallowMount(Overview, {
+  //   store,
+  //   localVue,
+  // });
   return shallowMount(Overview, {
-    store,
-    localVue,
+    global: {
+      plugins: [store],
+    },
   });
 };
 
-xdescribe('@/views/Exercise/Show', () => {
+describe.skip('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders Timeline component', () => {
       const wrapper = createTestSubject();

@@ -1,7 +1,7 @@
 import Applications from '@/views/Exercise/Applications/List';
-// import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { createTestSubject } from '@/../tests/unit/helpers';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import { vi, describe, beforeEach, it } from 'vitest';
 
 const mockExercise = {
   exerciseRef: 'mock exercise',
@@ -60,6 +60,10 @@ const mockProps = {
   activeTab: 'panel',
 };
 
+/**
+* @vitest-environment jsdom
+*/
+
 describe('@/views/Exercise/Show/Applications', () => {
   let wrapper;
   beforeEach(() => {
@@ -68,10 +72,10 @@ describe('@/views/Exercise/Show/Applications', () => {
       mocks: {
         $store: {
           getters: {
-            'application/data': jest.fn(() => mockApplication),
-            'auth/hasPermissions': jest.fn(() => true),
+            'application/data': vi.fn(() => mockApplication),
+            'auth/hasPermissions': vi.fn(() => true),
           },
-          dispatch: jest.fn(),
+          dispatch: vi.fn(),
           state: {
             auth: {
               currentUser: {
@@ -108,16 +112,16 @@ describe('@/views/Exercise/Show/Applications', () => {
       });
 
       it('calls gatherReportData', async () => {
-        wrapper.vm.gatherReportData = jest.fn();
+        wrapper.vm.gatherReportData = vi.fn();
         await wrapper.vm.gatherReportData();
         expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
 
-      xit('calls downloadXLSX', async () => {
+      it.skip('calls downloadXLSX', async () => {
         const mockReport = 'mock report';
         const mockTitle = 'Contacts';
 
-        wrapper.vm.gatherReportData = jest.fn().mockReturnValue(mockReport);
+        wrapper.vm.gatherReportData = vi.fn().mockReturnValue(mockReport);
 
         await wrapper.vm.exportContacts();
 
