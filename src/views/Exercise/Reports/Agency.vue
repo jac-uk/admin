@@ -71,6 +71,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -99,6 +105,15 @@
                   :key="candidate.userId"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -136,6 +151,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -158,6 +179,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -192,6 +222,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -214,6 +250,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -257,6 +302,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -279,6 +330,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -313,6 +373,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -335,6 +401,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -371,6 +446,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -393,6 +474,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -425,6 +515,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -447,6 +543,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
