@@ -1,8 +1,28 @@
 <template>
   <div>
-    <div class="govuk-grid-row print-none">
+    <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <div class="text-right">
+        <div class="float-left">
+          <h1
+            v-if="isFavourites"
+            class="govuk-heading-xl govuk-!-margin-bottom-4"
+          >
+            Favourite exercises
+          </h1>
+          <h1
+            v-else-if="isArchived"
+            class="govuk-heading-xl govuk-!-margin-bottom-4"
+          >
+            Archived exercises
+          </h1>
+          <h1
+            v-else
+            class="govuk-heading-xl govuk-!-margin-bottom-4"
+          >
+            Live exercises
+          </h1>
+        </div>
+        <div class="text-right print-none">
           <button
             v-if="isFavourites"
             class="govuk-button govuk-button--secondary govuk-!-margin-right-3 govuk-!-margin-bottom-0"
@@ -44,24 +64,6 @@
     </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <h1
-          v-if="isFavourites"
-          class="govuk-heading-xl"
-        >
-          Favourite exercises
-        </h1>
-        <h1
-          v-else-if="isArchived"
-          class="govuk-heading-xl"
-        >
-          Archived exercises
-        </h1>
-        <h1
-          v-else
-          class="govuk-heading-xl"
-        >
-          Live exercises
-        </h1>
         <form
           class="exercises-table"
           @submit.prevent="checkForm"
@@ -104,24 +106,6 @@
                 :disabled="isButtonDisabled"
               >
                 Export data
-              </button>
-              <button
-                v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value]))"
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
-                :disabled="isButtonDisabled"
-                type="button"
-                @click="openArchiveModal"
-              >
-                {{ isArchived ? 'Unarchive' : 'Archive' }}
-              </button>
-              <button
-                v-if="(hasPermissions([PERMISSIONS.exercises.permissions.canDeleteExercises.value]))"
-                class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2 govuk-!-margin-bottom-3"
-                :disabled="isButtonDisabled"
-                type="button"
-                @click="openDeleteModal"
-              >
-                Delete
               </button>
             </template>
             <template #row="{row}">
@@ -170,24 +154,6 @@
         </form>
       </div>
     </div>
-    <Modal
-      ref="archiveModal"
-    >
-      <ModalInner
-        :title="archiveModalTitle"
-        :message="archiveModalMessage"
-        @close="closeArchiveModal"
-        @confirmed="toggleArchive"
-      />
-    </Modal>
-    <Modal ref="deleteModal">
-      <ModalInner
-        title="Delete Exercises"
-        :message="deleteModalMessage"
-        @close="closeDeleteModal"
-        @confirmed="deleteExercises"
-      />
-    </Modal>
   </div>
 </template>
 
@@ -196,8 +162,6 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import _upperFirst from 'lodash/upperFirst';
 import _get from 'lodash/get';
 export default {
@@ -205,8 +169,6 @@ export default {
   components: {
     Table,
     TableCell,
-    Modal,
-    ModalInner,
   },
   mixins: [permissionMixin],
   data() {
@@ -251,19 +213,6 @@ export default {
         data.applicationsCount = (row._applications && row._applications.applied) || 0;
         return data;
       });
-    },
-    archiveModalTitle() {
-      const archiveVerb = (this.isArchived) ? 'Unarchive' : 'Archive';
-      return `${archiveVerb} Exercises`;
-    },
-    archiveModalMessage() {
-      const archiveVerb = (this.isArchived) ? 'unarchive' : 'archive';
-      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
-      return `Are you sure you want to ${archiveVerb} ${this.selectedItems.length} ${pluralText}?`;
-    },
-    deleteModalMessage() {
-      const pluralText = this.selectedItems.length === 1 ? 'exercise' : 'exercises';
-      return `Are you sure you want to delete ${this.selectedItems.length} ${pluralText}?`;
     },
   },
   watch: {
@@ -316,31 +265,6 @@ export default {
     },
     getExerciseApprovalStatus(exercise) {
       return _upperFirst(_get(exercise, '_approval.status', ''));
-    },
-    toggleArchive() {
-      if (this.isArchived) {
-        this.$store.dispatch('exerciseCollection/unarchive');
-      } else {
-        this.$store.dispatch('exerciseCollection/archive');
-      }
-      this.$refs.archiveModal.closeModal();
-    },
-    openArchiveModal() {
-      this.$refs.archiveModal.openModal();
-    },
-    closeArchiveModal() {
-      this.$refs.archiveModal.closeModal();
-    },
-    deleteExercises() {
-      this.$store.dispatch('exerciseCollection/delete');
-      this.$refs.deleteModal.closeModal();
-      this.$refs['exercisesTable'].reload(); // reload table
-    },
-    openDeleteModal() {
-      this.$refs.deleteModal.openModal();
-    },
-    closeDeleteModal() {
-      this.$refs.deleteModal.closeModal();
     },
   },
 };

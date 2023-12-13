@@ -1,36 +1,43 @@
-import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Exercises from '@/views/Exercises';
-import Router from 'vue-router';
+import { createStore } from 'vuex';
+import { shallowMount } from '@vue/test-utils';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-localVue.use(Router);
+import Exercises from '@/views/Exercises';
+import { vi, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
+const mockRouter = {
+  push: vi.fn(),
+};
 
 const exerciseCollection = {
   namespaced: true,
   actions: {
-    bind: jest.fn(),
+    bind: vi.fn(),
   },
   state: {
     records: [],
   },
 };
 
-const store = new Vuex.Store({
-  modules: {
-    exerciseCollection,
+const store = createStore({
+  state() {
+    return { count: 1 };
   },
 });
 
-const createTestSubject = () => {
-  return shallowMount(Exercises, {
-    store,
-    localVue,
-  });
-};
+const createTestSubject = shallowMount(Exercises, {
+  global: {
+    plugins: [store],
+    mocks: {
+      $router: mockRouter,
+    },
+  },
+});
 
-xdescribe('views/Exercises', () => {
+describe.skip('views/Exercises', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {

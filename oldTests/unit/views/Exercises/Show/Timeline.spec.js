@@ -1,24 +1,23 @@
 import ShowTimeline from '@/views/Exercise/Details/Timeline/View';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
+import { vi, describe, it, beforeEach } from 'vitest';
 
-jest.mock('@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline', () => {
-  return jest.fn().mockImplementation(() => {
-    return [];
+vi.mock('@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline', () => {
+  return vi.fn().mockImplementation(() => {
+    return {};
   });
 });
 
-jest.mock('@jac-uk/jac-kit/helpers/Timeline/createTimeline', () => {
-  return jest.fn().mockImplementation(() => {
-    return [];
+vi.mock('@jac-uk/jac-kit/helpers/Timeline/createTimeline', () => {
+  return vi.fn().mockImplementation(() => {
+    return {};
   });
 });
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
 
 const exercise = {
   applicationOpenDate: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
@@ -40,7 +39,7 @@ const exercise = {
   finalOutcome: new Date('Wed Dec 12 2012 00:00:00 GMT+0000 (Greenwich Mean Time)'),
 };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     exerciseDocument: {
       namespaced: true,
@@ -56,15 +55,16 @@ const store = new Vuex.Store({
 
 const createTestSubject = () => {
   return shallowMount(ShowTimeline, {
-    store,
-    localVue,
-    stubs: {
-      'RouterLink': true,
+    global: {
+      plugins: [store],
+      stubs: {
+        'RouterLink': true,
+      },
     },
   });
 };
 
-xdescribe('@/views/Exercise/Show/Timeline', () => {
+describe.skip('@/views/Exercise/Show/Timeline', () => {
   describe('template', () => {
     it('renders Timeline component', () => {
       const wrapper = createTestSubject();

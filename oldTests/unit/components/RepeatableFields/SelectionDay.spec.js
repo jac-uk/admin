@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay';
+import { describe, it } from 'vitest';
 
 const createTestSubject = (props) => {
   return shallowMount(SelectionDay, {

@@ -184,6 +184,8 @@ export default {
       const id = state.record.id;
       const ref = collection.doc(id);
       const data = {
+          published: false,   // Unpublish!
+          testingState: null,
           state: 'archived',
           stateBeforeArchive: state.record.state,
         };
