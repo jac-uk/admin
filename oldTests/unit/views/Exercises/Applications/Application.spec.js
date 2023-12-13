@@ -1,5 +1,6 @@
 import Application from '@/views/Exercise/Applications/Application';
 import { createTestSubject } from '@/../tests/unit/helpers';
+import { vi, describe, beforeAll, beforeEach, it } from 'vitest';
 
 const mockExercise = {
   exerciseRef: 'mock exercise',
@@ -53,6 +54,10 @@ const mockProps = {
   activeTab: 'panel',
 };
 
+/**
+* @vitest-environment jsdom
+*/
+
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
@@ -62,10 +67,10 @@ describe('@/views/Exercise/Applications/Application', () => {
         mocks: {
           $store: {
             getters: {
-              'application/data': jest.fn(() => mockApplication),
-              'auth/hasPermissions': jest.fn(() => true),
+              'application/data': vi.fn(() => mockApplication),
+              'auth/hasPermissions': vi.fn(() => true),
             },
-            dispatch: jest.fn(),
+            dispatch: vi.fn(),
             state: {
               auth: {
                 currentUser: {
@@ -100,7 +105,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('h1').text()).toEqual(expect.stringContaining(mockApplication.referenceNumber));
     });
 
-    xit('has unlock button if application completed', () => {
+    it.skip('has unlock button if application completed', () => {
       const mockApp = {
         ...mockApplication,
         status: 'applied',
@@ -110,7 +115,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(true);
     });
 
-    xit('has "mark as applied" if draft', () => {
+    it.skip('has "mark as applied" if draft', () => {
       const mockApp = {
         ...mockApplication,
         status: 'draft',
@@ -120,7 +125,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       expect(wrapper.find('.btn-unlock').exists()).toBe(false);
     });
 
-    xit('renders identifying sections in full view', () => {
+    it.skip('renders identifying sections in full view', () => {
       wrapper.setProps({
         activeTab: 'full',
       });
@@ -136,7 +141,7 @@ describe('@/views/Exercise/Applications/Application', () => {
     });
 
     // @TODO fix this test :)
-    xit('doesn\'t render identifying sections in panel pack view', () => {
+    it.skip('doesn\'t render identifying sections in panel pack view', () => {
       wrapper.setProps({
         activeTab: 'panel',
       });
@@ -158,10 +163,10 @@ describe('@/views/Exercise/Applications/Application', () => {
         propsData: mockProps,
         mocks: {
           $store: {
-            dispatch: jest.fn(),
+            dispatch: vi.fn(),
             getters: {
-              'application/data': jest.fn(() => mockApplication),
-              'auth/hasPermissions': jest.fn(() => true),
+              'application/data': vi.fn(() => mockApplication),
+              'auth/hasPermissions': vi.fn(() => true),
             },
             state: {
               auth: {

@@ -1,9 +1,7 @@
-import Eligibility from '@/views/Exercise/Details/Eligibility/View';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import Eligibility from '@/views/Exercise/Details/Eligibility/View.vue';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { describe, it } from 'vitest';
 
 const exercise = {
   postQualificationExperience: 'other',
@@ -20,7 +18,7 @@ const exercise = {
   otherRetirement: '65 years',
 };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     exerciseDocument: {
       namespaced: true,
@@ -36,15 +34,16 @@ const store = new Vuex.Store({
 
 const createTestSubject = () => {
   return shallowMount(Eligibility, {
-    store,
-    localVue,
-    stubs: {
-      'RouterLink': true,
+    global: {
+      plugins: [store],
+      stubs: {
+        'RouterLink': true,
+      },
     },
   });
 };
 
-xdescribe('@/views/Exercise/Show/Eligibility', () => {
+describe.skip('@/views/Exercise/Show/Eligibility', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

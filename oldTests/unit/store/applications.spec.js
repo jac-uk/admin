@@ -1,4 +1,9 @@
 import applications from '@/store/applications';
+import { describe, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
 
 describe('store/applications', () => {
   const getters = applications.getters;

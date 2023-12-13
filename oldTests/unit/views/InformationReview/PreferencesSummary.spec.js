@@ -1,9 +1,13 @@
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
-const mockApplicationId = '012345';
 
 const mockApplication = {
   userId: '0123456',
@@ -13,22 +17,21 @@ const mockProps = {
   editable: false,
   application: mockApplication,
   exercise: mockExercise,
-  applicationId: mockApplicationId,
 };
 
-import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
+import PreferencesSummary from '@/views/InformationReview/PreferencesSummary.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
   describe('template', () => {
     let wrapper;
     beforeAll(() => {
-      wrapper = createTestSubject(AssessorsSummary, {
+      wrapper = createTestSubject(PreferencesSummary, {
         propsData: mockProps,
         mocks: {
           $store: {
             getters: {
-              'application/data': jest.fn(() => mockApplication),
+              'application/data': vi.fn(() => mockApplication),
             },
             state: {
               exerciseDocument: {
@@ -53,3 +56,4 @@ describe('@/views/Exercise/Applications/Application', () => {
 
   });
 });
+

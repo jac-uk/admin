@@ -1,8 +1,14 @@
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
 };
@@ -25,7 +31,7 @@ describe('@/views/Exercise/Applications/Application', () => {
         mocks: {
           $store: {
             getters: {
-              'application/data': jest.fn(() => mockApplication),
+              'application/data': vi.fn(() => mockApplication),
             },
             state: {
               exerciseDocument: {
