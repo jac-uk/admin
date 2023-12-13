@@ -46,6 +46,7 @@
       >
         <div
           class="govuk-grid-column-full"
+          style="overflow-x: auto;"
         >
           <h3 class="govuk-heading-m govuk-!-margin-top-4">
             {{ activeTabDetails.header || activeTabDetails.title }}
@@ -94,6 +95,7 @@
                   <th
                     scope="col"
                     class="govuk-table__header"
+                    style="min-width: 250px;"
                   >
                     National Insurance Number
                   </th>
@@ -171,6 +173,14 @@
                   >
                     Registration number
                   </th>
+                  <th
+                    v-for="(header,index) in toQualificationTableHeaders(sraRows)"
+                    :key="`qual_header_${index}`"
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    {{ header }}
+                  </th>
                 </tr>
               </thead>
               <tbody class="govuk-table__body">
@@ -196,6 +206,13 @@
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.sraNumber }}
+                  </td>
+                  <td
+                    v-for="(data, index) in toQualificationTableData(candidate.qualificationsLocations, sraRows)"
+                    :key="`qual_td_${index}`"
+                    class="govuk-table__cell"
+                  >
+                    {{ data }}
                   </td>
                 </tr>
               </tbody>
@@ -242,6 +259,14 @@
                   >
                     Registration number
                   </th>
+                  <th
+                    v-for="(header,index) in toQualificationTableHeaders(bsbRows)"
+                    :key="`qual_header_${index}`"
+                    scope="col"
+                    class="govuk-table__header"
+                  >
+                    {{ header }}
+                  </th>
                 </tr>
               </thead>
               <tbody class="govuk-table__body">
@@ -276,6 +301,13 @@
                   </td>
                   <td class="govuk-table__cell">
                     {{ candidate.bsbNumber }}
+                  </td>
+                  <td
+                    v-for="(data, index) in toQualificationTableData(candidate.qualificationsLocations, bsbRows)"
+                    :key="`qual_td_${index}`"
+                    class="govuk-table__cell"
+                  >
+                    {{ data }}
                   </td>
                 </tr>
               </tbody>
@@ -822,6 +854,33 @@ export default {
         }
       );
     },
+    getMaxQualificationLength(rows) {
+      return this.report ? Math.max(...rows.map(e => e?.qualificationsLocations?.length || 0)) : 0;
+    },
+    toQualificationTableHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
+        headers.push(`Qual ${i}`);
+        headers.push('Region');
+      }
+      return headers;
+    },
+    toQualificationTableData(qualificationsLocations, rows) {
+      const qualLocations = qualificationsLocations || [];
+      const tableDataColumns = [];
+      for (let i = 0; i < this.getMaxQualificationLength(rows); i++) {
+        tableDataColumns.push(qualLocations[i]?.type || '');
+        tableDataColumns.push(qualLocations[i]?.location || '');
+      }
+
+      return tableDataColumns;
+    },
   },
 };
 </script>
+
+<style scoped>
+th {
+  min-width: 200px;
+}
+</style>
