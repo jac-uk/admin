@@ -1,5 +1,27 @@
 <template>
   <div>
+    <!-- <div
+      ref="report-issue-container"
+      class="report-issue-container"
+    >
+      <button
+        class="report-issue"
+        type="button"
+        @click="openModal"
+      >
+        <svg
+          viewBox="0 0 17.583 19.237"
+          class="report-issue__icon"
+        >
+          <path
+            d="m10.198,0h-2.812C3.307,0,0,3.307,0,7.385v1.522c0,2.575,1.318,4.842,3.316,6.164.246.544.613,1.098.936,1.744.524,1.047,1.689,1.99,2.425,2.402.114.064.248-.037.22-.165-.135-.617-.195-1.875-.189-2.791.223.02.449.031.677.031h2.812c4.079,0,7.386-3.307,7.386-7.385v-1.522c0-4.079-3.307-7.385-7.386-7.385Zm-.397,3.331l-.29,5.716h-1.438l-.278-5.716h2.006Zm-1.009,9.584c-.682,0-1.123-.492-1.123-1.148.013-.669.454-1.148,1.123-1.148s1.136.479,1.136,1.148c0,.656-.455,1.148-1.136,1.148Z"
+            fill="#1d70b8"
+          />
+        </svg>
+        <span class="fourteenpx">Report an issue</span>
+      </button>
+    </div> -->
+
     <Modal
       ref="feedbackModal"
       data-html2canvas-ignore
