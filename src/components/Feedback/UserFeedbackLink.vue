@@ -3,7 +3,7 @@
     <button
       class="report-issue"
       type="button"
-      @click="emit('openFeedbackModal')"
+      @click="$emit('openFeedbackModal')"
     >
       <svg
         viewBox="0 0 17.583 19.237"
