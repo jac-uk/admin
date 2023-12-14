@@ -28,20 +28,23 @@
     >
       <template #row="{row}">
         <TableCell :title="tableColumns[0].title">
-          {{ row.email }}
+          {{ $filters.formatDate(row.createdAt) }}
         </TableCell>
         <TableCell :title="tableColumns[1].title">
+          {{ row.email }}
+        </TableCell>
+        <TableCell :title="tableColumns[2].title">
           {{ getRoleName(row.roleId) }}
         </TableCell>
         <TableCell
-          :title="tableColumns[2].title"
+          :title="tableColumns[3].title"
           class="capitalize"
         >
           {{ row.status }}
         </TableCell>
         <TableCell
           v-if="row.status === 'pending'"
-          :title="tableColumns[3].title"
+          :title="tableColumns[4].title"
         >
           <div>
             <button
@@ -211,6 +214,7 @@ export default {
   computed: {
     tableColumns() {
       const tableColumns = [
+        { title: 'Created at' },
         { title: 'Email', direction: 'asc', sort: 'email', default: true },
         { title: 'Role' },
         { title: 'Status' },
@@ -269,8 +273,10 @@ export default {
       return role ? role.roleName : '';
     },
     async validateEmail(email) {
-      const isDuplicate = await this.$store.dispatch('users/getByEmail', email) || await this.$store.dispatch('userInvitations/getByEmail', { email });
-      if (isDuplicate) this.isDuplicateEmail = true;
+      const user = await this.$store.dispatch('users/getByEmail', email);
+      const userInvitation = await this.$store.dispatch('userInvitations/getByEmail', { email });
+      if (user || userInvitation?.status === 'pending') this.isDuplicateEmail = true;
+      else this.isDuplicateEmail = false;
     },
     openCreateUserInvitationModal() {
       this.userInvitation.roleId = this.defaultUserRoleId;
