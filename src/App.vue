@@ -127,12 +127,17 @@
     <UserFeedbackLink
       v-show="isSignedIn && isMounted"
       :style="{ 'bottom': linkBottom }"
+      @open-feedback-modal="openFeedbackModal()"
     />
 
-    <UserFeedbackModal
+    <Modal
       v-if="isSignedIn"
-      @open-feedback-modal="openModal()"
-    />
+      ref="feedbackModal"
+      data-html2canvas-ignore
+      class="fixed-width-modal"
+    >
+      <UserFeedbackModal @close="$refs['feedbackModal'].closeModal()" />
+    </Modal>
 
     <footer
       class="govuk-footer"
@@ -199,11 +204,12 @@
 </template>
 
 <script>
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { auth } from '@/firebase';
 import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
-import UserFeedbackModal from '@/components/Feedback/UserFeedbackModal.vue';
+import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
 import _debounce from 'lodash/debounce';
 import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 
@@ -213,6 +219,7 @@ export default {
     Messages,
     UserFeedbackModal,
     UserFeedbackLink,
+    Modal,
   },
   mixins: [permissionMixin],
   data() {
@@ -345,6 +352,9 @@ export default {
       if (this.isMounted) {
         this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
       }
+    },
+    openFeedbackModal() {
+      this.$refs.feedbackModal.openModal();
     },
   },
 };
