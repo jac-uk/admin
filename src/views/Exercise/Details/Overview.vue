@@ -370,6 +370,7 @@ export default {
         decision: 'requested',
         rejectionResponse: note ? note : null,
       });
+      await this.$store.dispatch('exerciseDocument/updateCommissioners');
       this.closeApprovalModal();
     },
     async confirmDelete() {

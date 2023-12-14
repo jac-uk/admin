@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload';
+import { describe, beforeEach, it } from 'vitest';
 
 const mockProps = {
   id: 'mock-id',
@@ -14,6 +15,10 @@ const createTestSubject = (props) => {
     },
   });
 };
+
+/**
+* @vitest-environment jsdom
+*/
 
 describe('@/components/RepeatableFields/MultiFileUpload', () => {
   describe('template', () => {

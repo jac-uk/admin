@@ -94,8 +94,8 @@
             label="Lord Chancellor"
           />
           <CheckboxItem
-            value="lord-chief-justice"
-            label="Lord Chief Justice"
+            value="lady-chief-justice"
+            label="Lady Chief Justice"
           />
           <CheckboxItem
             value="senior-president-of-tribunals"

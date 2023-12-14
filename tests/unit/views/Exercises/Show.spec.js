@@ -1,25 +1,43 @@
-import Show from '@/views/Exercise';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
-import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
-import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton';
+import Show from '@/views/Exercise.vue';
+//import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+//import Vuex from 'vuex';
+import { createStore } from 'vuex';
+
+import Navigation from '@jac-uk/jac-kit/draftComponents/Navigation.vue';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import AddToFavouritesButton from '@jac-uk/jac-kit/draftComponents/AddToFavouritesButton.vue';
+import { vi, describe, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
+// const localVue = createLocalVue();
+// localVue.use(Vuex);
 
 const exercise = {
   name: 'test name',
 };
 
-const mockStore = {
-  dispatch: jest.fn().mockResolvedValue(),
+// const mockStore = {
+//   dispatch: vi.fn().mockResolvedValue(),
+//   state: {
+//     exerciseDocument: {
+//       record: exercise,
+//     },
+//   },
+// };
+
+const mockStore = createStore({
+  dispatch: vi.fn().mockResolvedValue(),
   state: {
     exerciseDocument: {
       record: exercise,
     },
   },
-};
+});
 
 const mockRoute = {
   name: 'name-of-current-route',
@@ -29,25 +47,38 @@ const mockRoute = {
 };
 
 const mockRouter = {
-  replace: jest.fn(),
+  replace: vi.fn(),
 };
 
 const createTestSubject = () => {
   return shallowMount(Show, {
-    localVue,
-    mocks: {
-      $route: mockRoute,
-      $router: mockRouter,
-      $store: mockStore,
-    },
-    stubs: {
-      'RouterView': true,
-      'RouterLink': true,
+    // localVue,
+    // mocks: {
+    //   $route: mockRoute,
+    //   $router: mockRouter,
+    //   $store: mockStore,
+    // },
+    // stubs: {
+    //   'RouterView': true,
+    //   'RouterLink': true,
+    // },
+    global: {
+      //localVue,
+      plugins: [mockStore],
+      mocks: {
+        $route: mockRoute,
+        $router: mockRouter,
+        $store: mockStore,
+      },
+      stubs: {
+        'RouterView': true,
+        'RouterLink': true,
+      },
     },
   });
 };
 
-xdescribe('@/views/Exercise/Show', () => {
+describe.skip('@/views/Exercise/Show', () => {
 
   beforeEach(() => {
     mockStore.dispatch.mockClear();

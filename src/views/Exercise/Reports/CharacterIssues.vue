@@ -14,7 +14,7 @@
           PERMISSIONS.exercises.permissions.canReadExercises.value
         ])"
         class="govuk-!-margin-right-2"
-        :action="downloadReport"
+        :action="exportData"
       >
         Export to Excel
       </ActionButton>
@@ -368,29 +368,38 @@ export default {
         return;
       }
     },
-    async downloadReport() {
+    async gatherReportData() {
+      // fetch data
+      const response = await functions.httpsCallable('exportApplicationCharacterIssues')({
+        exerciseId: this.exercise.id,
+        stage: this.exerciseStage,
+        status: this.candidateStatus,
+        format: 'excel',
+      });
+      const reportData = [];
+      // get headers
+      reportData.push(response.data.headers.map(header => header.title));
+      // get rows
+      response.data.rows.forEach((row) => {
+        reportData.push(response.data.headers.map(header => row[header.ref]));
+      });
+  
+      return reportData;
+    },
+    async exportData() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        const reportData = await functions.httpsCallable('exportApplicationCharacterIssues')({
-          exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          status: this.candidateStatus,
-          format: 'excel',
-        });
-        const title = `Character Check Report - ${this.exercise.referenceNumber}`;
-        const data = [];
-        if (reportData.data.rows.length === 0) return; // abort if no applications or data
-        data.push(reportData.data.headers.map(header => header.title));
-        // get rows
-        reportData.data.rows.forEach((row) => {
-          data.push(Object.values(row).map(cell => cell));
-        });
+        const title = 'Character Issues';
+        const xlsxData = await this.gatherReportData();
 
-        downloadXLSX(data, {
-          title,
-          sheetName: title,
-          filename: `${title}.xlsx`,
-        });
+        downloadXLSX(
+          xlsxData,
+          {
+            title: `${this.exercise.referenceNumber} ${title}`,
+            sheetName: title,
+            fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
+          }
+        );
         return true;
       } catch (error) {
         return;

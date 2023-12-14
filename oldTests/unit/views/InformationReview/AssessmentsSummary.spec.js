@@ -1,3 +1,9 @@
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
@@ -16,9 +22,9 @@ const mockProps = {
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   getters: {
-    'application/update': jest.fn((obj) => { return { ...mockApplication.selectionCriteriaAnswers, ...obj }; } ),
+    'application/update': vi.fn((obj) => { return { ...mockApplication.selectionCriteriaAnswers, ...obj }; } ),
   },
   state: {
     exerciseDocument: {
@@ -76,4 +82,3 @@ describe('@/views/Exercise/Applications/Application', () => {
 
   });
 });
-

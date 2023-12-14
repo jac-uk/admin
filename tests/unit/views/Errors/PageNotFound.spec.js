@@ -1,7 +1,8 @@
-import PageNotFound from '@/views/Errors/PageNotFound';
+import PageNotFound from '@/views/Errors/PageNotFound.vue';
 import { shallowMount } from '@vue/test-utils';
+import { describe, beforeEach, it } from 'vitest';
 
-xdescribe('@/views/ExerciseNotFound', () => {
+describe.skip('@/views/ExerciseNotFound', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(PageNotFound);

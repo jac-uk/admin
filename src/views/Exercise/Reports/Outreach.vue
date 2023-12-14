@@ -98,7 +98,10 @@
       <div
         v-else
       >
-        <table class="govuk-table">
+        <table
+          v-if="('outreach' in report[activeTab])"
+          class="govuk-table"
+        >
           <caption class="govuk-table__caption hidden">
             Outreach by exercise stage
           </caption>
@@ -147,7 +150,10 @@
           </tbody>
         </table>
 
-        <table class="govuk-table">
+        <table
+          v-if="('attended' in report[activeTab])"
+          class="govuk-table"
+        >
           <caption class="govuk-table__caption hidden">
             Attended outreach events by exercise stage
           </caption>
@@ -200,7 +206,10 @@
         </table>
 
         <template v-if="isLegal">
-          <table class="govuk-table">
+          <table
+            v-if="('workshadowing' in report[activeTab])"
+            class="govuk-table"
+          >
             <caption class="govuk-table__caption hidden">
               Participated in judicial workshadowing scheme by exercise stage
             </caption>
@@ -252,7 +261,10 @@
             </tbody>
           </table>
 
-          <table class="govuk-table">
+          <table
+            v-if="('hasTakenPAJE' in report[activeTab])"
+            class="govuk-table"
+          >
             <caption class="govuk-table__caption hidden">
               Has taken PAJE by exercise stage
             </caption>
@@ -467,15 +479,6 @@ export default {
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
-    },
-    reduceReport(obj) {
-      const returnObj = {};
-      let keys = Object.keys(obj);
-      keys = keys.filter( item => !item.startsWith('total'));
-      keys.map(item => {
-        returnObj[item] = obj[item];
-      });
-      return returnObj;
     },
   },
 };

@@ -116,7 +116,7 @@
 
     <main
       id="main-content"
-      class="govuk-width-container govuk-main-wrapper govuk-main-wrapper--auto-spacing"
+      class="govuk-width-container govuk-main-wrapper govuk-main-wrapper--auto-spacing govuk-!-padding-left-4 govuk-!-padding-right-4"
       role="main"
     >
       <RouterView />
