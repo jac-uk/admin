@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="exercise.commissioners"
+      v-if="commissioners"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l govuk-!-margin-bottom-4">
@@ -79,8 +79,11 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    commissioners() {
+      return this.$store.getters['services/getCommissioners'];
+    },
     commissionerConflicts() {
-      return Array.isArray(this.exercise.commissioners) && this.exercise.commissioners.map((commissioner) => {
+      return Array.isArray(this.commissioners) && this.commissioners.map((commissioner) => {
         const match = this.application?.additionalInfo?.commissionerConflicts.find((commissionerConflict) => {
           return commissionerConflict.name === commissioner.name;
         });
