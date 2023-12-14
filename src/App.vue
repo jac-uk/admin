@@ -203,7 +203,7 @@
 
     <Modal ref="modalRefRoleChanged">
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Your account has been disabled
+        Your role has been changed
       </div>
       <div class="modal__content govuk-!-margin-6">
         <p class="govuk-body">
