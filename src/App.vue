@@ -276,6 +276,7 @@ export default {
       if (this.$refs['modalRefSignOut']) {
         this.$refs['modalRefSignOut'].closeModal();
       }
+
       window.location.href = '/';
     },
     signOut() {
