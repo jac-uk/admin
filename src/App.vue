@@ -184,9 +184,26 @@
 
     <Messages v-if="canReadMessages" />
 
-    <Modal ref="modalRefSignOut">
+    <Modal ref="modalRefDisabled">
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Your role has been changed
+        Your account has been disabled
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p class="govuk-body">
+          Please sign out.
+        </p>
+        <button
+          class="govuk-button"
+          @click="signOut"
+        >
+          Sign out
+        </button>
+      </div>
+    </Modal>
+
+    <Modal ref="modalRefRoleChanged">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Your account has been disabled
       </div>
       <div class="modal__content govuk-!-margin-6">
         <p class="govuk-body">
@@ -249,8 +266,10 @@ export default {
       }
     },
     currentUser(newValue, oldValue) {
-      if (newValue?.role?.isChanged && !oldValue?.role?.isChanged && this.$refs['modalRefSignOut']) {
-        this.$refs['modalRefSignOut'].openModal();
+      if (newValue?.role?.isChanged && !oldValue?.role?.isChanged) {
+        this.$refs['modalRefRoleChanged'] && this.$refs['modalRefRoleChanged'].openModal();
+      } else if (newValue?.disabled) {
+        this.$refs['modalRefDisabled'] && this.$refs['modalRefDisabled'].openModal();
       }
     },
   },
@@ -276,7 +295,6 @@ export default {
       if (this.$refs['modalRefSignOut']) {
         this.$refs['modalRefSignOut'].closeModal();
       }
-
       window.location.href = '/';
     },
     signOut() {
