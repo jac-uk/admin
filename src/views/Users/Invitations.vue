@@ -20,6 +20,7 @@
       :key="activeTab"
       ref="userInvitationsTable"
       data-key="id"
+      class="govuk-!-margin-top-8"
       :data="records"
       :page-size="50"
       :columns="tableColumns"
