@@ -6,7 +6,7 @@ import store from '@/store';
 
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
-import { auth, functions } from '@/firebase';
+import { auth } from '@/firebase';
 import * as localFilters from '@/filters';
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 
@@ -24,42 +24,17 @@ const allFilters = Object.assign({}, filters, localFilters);
 
 let vueInstance = false;
 auth.onAuthStateChanged(async (user) => {
-  // check if user is a new user.
-  // TODO: check if there is a better way of doing this
-  // TODO: the logic for this actually sits on SignIn.vue but the redirect on line 44 still occurs without the next 3 lines
-  // TODO: and a check within auth.js
-  if (user && user.metadata.lastSignInTime === user.metadata.creationTime) {
-    user.isNewUser = true;
+  try {
+    // Bind Firebase auth state to the vuex auth state store
+    if (user) {
+      await store.dispatch('auth/setCurrentUser', user);
+    }
+  } catch (error) {
+    // console.error(error);
   }
 
-  // Bind Firebase auth state to the vuex auth state store
-  store.dispatch('auth/setCurrentUser', user);
-  if (store.getters['auth/isSignedIn']) {
-    try {
-      const idTokenResult = await user.getIdTokenResult();
-      // Get user role
-      const userRoleId = idTokenResult.claims && idTokenResult.claims.r ? idTokenResult.claims.r : null;
-      if (userRoleId) {
-        const res = await functions.httpsCallable('adminSyncUserRolePermissions')();
-        const permissions = res.data;
-        if (JSON.stringify(idTokenResult.claims.rp) !== JSON.stringify(permissions)) {
-          // need to sign in again as the current user token will be revoked if the permissions have been changed
-          auth.signOut();
-          window.location.href = '/';
-        } else {
-          const userRole = {
-            roleId: userRoleId,
-            rolePermissions: permissions,
-          };
-          store.dispatch('auth/setUserRole', userRole);
-        }
-      }
-    } catch (error) {
-      // console.error(error);
-    }
-    if (window.location.pathname == '/sign-in') {
-      router.push('/');
-    }
+  if (window.location.pathname == '/sign-in') {
+    router.push('/');
   }
 
   // Create the Vue instance, but only once
