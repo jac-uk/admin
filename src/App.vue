@@ -293,7 +293,9 @@ export default {
       const config = { attributes: true, childList: true, subtree: true };
 
       // Callback function to execute when mutations are observed
+      // eslint-disable-next-line no-unused-vars
       const callback = (mutationList, observer) => {
+        // eslint-disable-next-line no-unused-vars
         for (const mutation of mutationList) {
           // mutation.type = 'attributes' | 'childList' | 'subtree'
           this.calculateLinkPosition();
