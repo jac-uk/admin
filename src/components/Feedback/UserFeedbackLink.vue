@@ -19,7 +19,12 @@
   </div>
 </template>
 
-<script></script>
+<script>
+export default {
+  name: 'UserFeedbackLink',
+  emits: ['openFeedbackModal'],
+};
+</script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss">
 .user-feedback-link {

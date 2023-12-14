@@ -56,7 +56,7 @@ import SimpleModalInner from '@/components/Feedback/SimpleModalInner.vue';
 import FeedbackForm from '@/components/Feedback/FeedbackForm.vue';
 
 export default {
-  name: 'UserFeedbackLink',
+  name: 'UserFeedbackModal',
   components: {
     Modal,
     SimpleModalInner,
