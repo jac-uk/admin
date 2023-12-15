@@ -210,6 +210,9 @@ export default {
     bugReportId() {
       return this.$store.state.bugReport.record ? this.$store.state.bugReport.record.id : null;
     },
+    hasScreenshot() {
+      return this.$refs.screenshot.$data.thumbnail ? true : false;
+    },
   },
   watch: {
     showFormForProxy(newVal) {
@@ -251,7 +254,7 @@ export default {
         await this.$store.dispatch('bugReport/create', this.formData);
 
         // Store the screenshot (uses the bugReportId in it's path)
-        if (this.$refs.screenshot) {
+        if (this.hasScreenshot) {
           screenshot = await this.$refs.screenshot.uploadScreenshot();
 
           // Update the bugReport with the screenshot file path
