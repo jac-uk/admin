@@ -140,12 +140,9 @@
               <TableCell :title="tableColumns[4].title">
                 {{ getExerciseStatus(row) }}
               </TableCell>
-              <TableCell :title="tableColumns[5].title">
-                {{ getExerciseApprovalStatus(row) }}
-              </TableCell>
               <TableCell
                 class="govuk-table__cell--numeric"
-                :title="tableColumns[6].title"
+                :title="tableColumns[5].title"
               >
                 {{ $filters.formatNumber(row.applicationsCount) }}
               </TableCell>
@@ -162,8 +159,9 @@ import { mapState } from 'vuex';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import permissionMixin from '@/permissionMixin';
-import _upperFirst from 'lodash/upperFirst';
-import _get from 'lodash/get';
+import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
+import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
+
 export default {
   name: 'Exercises',
   components: {
@@ -179,7 +177,6 @@ export default {
         { title: 'Open date', sort: 'applicationOpenDate' },
         { title: 'Close date', sort: 'applicationCloseDate' },
         { title: 'Status' },
-        { title: 'Approval' },
         {
           title: 'Submitted Applications',
           sort: '_applications.applied',
@@ -259,12 +256,21 @@ export default {
       } else if (exercise.state === 'draft') {
         status += 'Draft';
       } else {
-        status += 'Live';
+        status += this.getExerciseTimelineStage(exercise);
       }
       return status;
     },
-    getExerciseApprovalStatus(exercise) {
-      return _upperFirst(_get(exercise, '_approval.status', ''));
+    getExerciseTimelineStage(exercise) {
+      let timeItemToShow = 0;
+      const timeline = createTimeline(exerciseTimeline(exercise));
+      if (timeline) {
+        timeline.forEach((time, index) => {
+          if (time.date <= Date.now()) {
+            timeItemToShow = index;
+          }
+        });
+      }
+      return timeline[timeItemToShow]?.entry || '';
     },
   },
 };
