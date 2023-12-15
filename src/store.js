@@ -39,6 +39,9 @@ import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse
 
 import vacancy from '@/store/vacancy';
 
+import bugReports from '@/store/bugReports/collection';
+import bugReport from '@/store/bugReports/document';
+
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -77,6 +80,8 @@ const store = createStore({
     ui,
     users,
     vacancy,
+    bugReport,
+    bugReports,
   },
   state: {
     packageVersion: import.meta.env.PACKAGE_VERSION || '0',
