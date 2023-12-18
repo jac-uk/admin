@@ -835,19 +835,15 @@ export default {
     exportData() {
       const title = 'Agency Report';
       let data = null;
-      let dataTag;
+      const dataTag = this.activeTab.toUpperCase();
 
       if (this.activeTab === 'acro') {
-        dataTag = 'ACRO';
         data = this.gatherACROReportData();
       } else if (this.activeTab === 'hmrc') {
-        dataTag = 'HMRC';
         data = this.gatherHMRCReportData();
       } else if (this.activeTab === 'bsb') {
-        dataTag = 'BSB';
         data = this.gatherBSBReportData();
       } else if (this.activeTab === 'sra') {
-        dataTag = 'SRA';
         data = this.gatherSRAReportData();
       } else {
         data = this.gatherReportData();
