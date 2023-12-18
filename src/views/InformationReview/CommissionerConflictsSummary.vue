@@ -80,7 +80,7 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
     commissioners() {
-      return this.$store.getters['services/getCommissioners'];
+      return this.$store.getters['services/getCommissioners']();
     },
     commissionerConflicts() {
       return Array.isArray(this.commissioners) && this.commissioners.map((commissioner) => {
