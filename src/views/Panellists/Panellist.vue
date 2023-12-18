@@ -68,7 +68,6 @@ export default {
   },
   data() {
     return {
-      authorisedToPerformAction: false,
       editMode: false,
       tabs: [
         {

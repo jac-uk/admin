@@ -28,7 +28,6 @@
                 class="govuk-header__navigation-item"
               >
                 <RouterLink
-                  v-if="authorisedToPerformAction"
                   :to="{ name: 'events' }"
                   class="govuk-header__link"
                 >
@@ -70,7 +69,7 @@
               </li>
 
               <li
-                v-if="authorisedToPerformAction"
+                v-if="hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])"
                 class="govuk-header__navigation-item"
               >
                 <RouterLink
@@ -200,13 +199,46 @@
     </div>
 
     <Messages v-if="canReadMessages" />
+
+    <Modal ref="modalRefDisabled">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Your account has been disabled
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p class="govuk-body">
+          Please sign out.
+        </p>
+        <button
+          class="govuk-button"
+          @click="signOut"
+        >
+          Sign out
+        </button>
+      </div>
+    </Modal>
+
+    <Modal ref="modalRefRoleChanged">
+      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
+        Your role has been changed
+      </div>
+      <div class="modal__content govuk-!-margin-6">
+        <p class="govuk-body">
+          Please refresh the page.
+        </p>
+        <button
+          class="govuk-button"
+          @click="refresh"
+        >
+          Refresh
+        </button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { auth } from '@/firebase';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
 import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
@@ -257,11 +289,21 @@ export default {
     canReadMessages() {
       return this.hasPermissions([this.PERMISSIONS.messages.permissions.canReadMessages.value]);
     },
+    currentUser() {
+      return this.$store.state.auth.currentUser;
+    },
   },
   watch: {
     async isSignedIn() {
       if (this.isSignedIn) {
         this.load();
+      }
+    },
+    currentUser(newValue, oldValue) {
+      if (newValue?.role?.isChanged && !oldValue?.role?.isChanged) {
+        this.$refs['modalRefRoleChanged'] && this.$refs['modalRefRoleChanged'].openModal();
+      } else if (newValue?.disabled) {
+        this.$refs['modalRefDisabled'] && this.$refs['modalRefDisabled'].openModal();
       }
     },
   },
@@ -318,11 +360,15 @@ export default {
     },
     async load() {
       await this.$store.dispatch('services/bind');
-      const email = auth.currentUser.email;
-      this.authorisedToPerformAction = await authorisedToPerformAction(email);
       if (this.canReadMessages) {
         await this.getMessages();
       }
+    },
+    async refresh() {
+      if (this.$refs['modalRefSignOut']) {
+        this.$refs['modalRefSignOut'].closeModal();
+      }
+      window.location.href = '/';
     },
     signOut() {
       auth.signOut();

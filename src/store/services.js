@@ -1,6 +1,7 @@
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import clone from 'clone';
 
 export default {
   namespaced: true,
@@ -45,8 +46,11 @@ export default {
       }
       return null;
     },
-    getCommissioners: (state) => {
-      return state.record && state.record.commissioners;
+    getCommissioners: (state) => () => {
+      if (state.record) {
+        return clone(state.record.commissioners);
+      }
+      return [];
     },
   },
 };
