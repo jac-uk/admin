@@ -722,6 +722,7 @@ export default {
     gatherACROReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: '*Agency Reference', ref: '' },
         { title: '*Reason for Request', ref: '' },
         { title: 'If Other please specify', ref: '' },
@@ -766,6 +767,7 @@ export default {
     gatherHMRCReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Our Ref', ref: '' },
         { title: 'NI NO', ref: 'nationalInsuranceNumber' },
         { title: 'Surname', ref: 'lastName' },
@@ -793,10 +795,13 @@ export default {
     gatherBSBReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
         { title: 'BSB Number', ref: 'bsbNumber' },
       ];
+      headers.push(...this.toQualificationReportHeaders(this.report.rows));
+
       // get headers
       reportData.push(headers.map(header => header.title));
 
@@ -810,10 +815,13 @@ export default {
     gatherSRAReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
         { title: 'SRA Number', ref: 'sraNumber' },
       ];
+      headers.push(...this.toQualificationReportHeaders(this.report.rows));
+
       // get headers
       reportData.push(headers.map(header => header.title));
 
@@ -874,6 +882,14 @@ export default {
       }
 
       return tableDataColumns;
+    },
+    toQualificationReportHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
+        headers.push({ title: `Qual ${i}`, ref: `qual${i}` });
+        headers.push({ title: 'Region', ref: `region${i}` });
+      }
+      return headers;
     },
   },
 };
