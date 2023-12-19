@@ -13,7 +13,7 @@
 
     <ProgressBar :steps="taskSteps" />
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-7">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-4">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Open date
@@ -34,11 +34,26 @@
       </div>
     </dl>
 
+    <div
+      v-if="isOverdue"
+      class="govuk-inset-text govuk-!-margin-top-0 govuk-!-margin-bottom-5"
+    >
+      <p class="govuk-!-margin-bottom-2">
+        You may now close this form and continue
+      </p>
+      <ActionButton
+        class="govuk-!-margin-bottom-0"
+        type="primary"
+        :action="btnContinue"
+      >
+        Close and continue
+      </ActionButton>
+    </div>
+
     <TabsList
       ref="tabs"
       v-model:active-tab="activeTab"
       :tabs="tabs"
-      class="print-none"
     />
 
     <Banner
@@ -121,15 +136,6 @@
         </TableCell>
       </template>
     </Table>
-
-    <ActionButton
-      v-if="isOverdue"
-      class="govuk-!-margin-bottom-1"
-      type="primary"
-      :action="btnContinue"
-    >
-      Continue
-    </ActionButton>
   </div>
 </template>
 
