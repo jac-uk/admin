@@ -1183,7 +1183,7 @@ router.beforeEach((to, from, next) => {
   const isSignedIn = store.getters['auth/isSignedIn'];
 
   if (requiresAuth && !isSignedIn) {
-    return next({ name: 'sign-in' });
+    return next({ name: 'sign-in', query: { nextPage: to.path } });
   }
 
   return next();
