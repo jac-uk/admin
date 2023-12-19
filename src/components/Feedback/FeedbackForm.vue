@@ -211,7 +211,7 @@ export default {
       return this.$store.state.bugReport.record ? this.$store.state.bugReport.record.id : null;
     },
     hasScreenshot() {
-      return this.$refs.screenshot.$data.thumbnail ? true : false;
+      return (this.$refs.screenshot && this.$refs.screenshot.$data.thumbnail) ? true : false;
     },
   },
   watch: {
