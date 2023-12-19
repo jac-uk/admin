@@ -97,18 +97,21 @@ export default {
     users: [],
   },
   getters: {
-    enabledMicrosoftUsers: (state) => {
+    enabledJACUsers: (state) => {
       if (!Array.isArray(state.records)) return [];
       return state.records
         .filter(user => {
-          if (user.disabled) return false;
-          let isMicrosoft = false;
-          user.providerData.forEach(item => {
-            if (item.providerId === 'microsoft.com') {
-              isMicrosoft = true;
-            }
-          });
-          return isMicrosoft;
+          if (user.disabled) return false;  // user account has been disabled
+          if (!(user.role && user.role.id)) return false;  // user doesn't have a role
+          if (!(user.email && user.email.split('@')[1].toLowerCase() === 'judicialappointments.gov.uk')) return false;  // user isn't using @judicialappointments.gov.uk email address
+          return true;
+        })
+        .sort((a, b) => {
+          a = a.displayName.toLowerCase();
+          b = b.displayName.toLowerCase();
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
         });
     },
   },
