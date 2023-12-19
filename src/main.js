@@ -34,7 +34,14 @@ auth.onAuthStateChanged(async (user) => {
   }
 
   if (window.location.pathname == '/sign-in') {
-    router.push('/');
+    // If user come from a link before sign-in, redirect to that link
+    const urlParams = new URLSearchParams(window.location.search);
+    const nextPage = urlParams.get('nextPage');
+    if (nextPage)  {
+      router.push(nextPage);
+    } else {
+      router.push('/');
+    }
   }
 
   // Create the Vue instance, but only once
