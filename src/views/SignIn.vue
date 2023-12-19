@@ -43,13 +43,12 @@ import { auth, functions } from '@/firebase';
 export default {
   data: function() {
     return {
-      signInError: null,
       showGoogleLogin: false,
     };
   },
   computed: {
     authError() {
-      return this.$store.state.auth.authError || this.signInError;
+      return this.$store.state.auth.authError;
     },
   },
   created() {
@@ -62,26 +61,28 @@ export default {
   methods: {
     async disableNewUser(uid) {
       await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
-      this.signInError = 'Your account requires approval before access is granted. Please request this from a manager.';
+      this.$store.dispatch('auth/setAuthError', 'Your account requires approval before access is granted. Please request this from a manager.');
     },
     signOut() {
       auth.signOut();
     },
-    checkIfNewUser(user) {
-      if (user.additionalUserInfo.isNewUser) {
-        this.disableNewUser(auth.currentUser.uid).then(() => {
-          this.signOut();
-        }).catch(() => {
-          this.signOut();
-        });
-      }
+    checkIfNewUser() {
+      // move logic to auth.js
+      // if (user.additionalUserInfo.isNewUser) {
+      //   // new user
+      //   this.disableNewUser(auth.currentUser.uid).then(() => {
+      //     this.signOut();
+      //   }).catch(() => {
+      //     this.signOut();
+      //   });
+      // }
     },
     loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);
       }).catch(err => {
-        this.signInError = err.message;
+        this.$store.dispatch('auth/setAuthError', err.message);
       });
     },
     loginWithMicrosoft() {
@@ -89,7 +90,7 @@ export default {
       auth.signInWithPopup(provider).then((user) => {
         this.checkIfNewUser(user);
       }).catch(err => {
-        this.signInError = err.message;
+        this.$store.dispatch('auth/setAuthError', err.message);
       });
     },
   },

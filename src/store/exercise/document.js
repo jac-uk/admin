@@ -113,14 +113,6 @@ export default {
       const ref = collection.doc(id);
       await ref.update(data);
     },
-    updateCommissioners: async ({ state, rootGetters }) => {
-      const id = state.record.id;
-      const ref = collection.doc(id);
-      const data = {
-        commissioners: rootGetters['services/getCommissioners'],
-      };
-      await ref.update(data);
-    },
     isReadyForTest: async ({ state }) => {
       const id = state.record.id;
       const ref = collection.doc(id);

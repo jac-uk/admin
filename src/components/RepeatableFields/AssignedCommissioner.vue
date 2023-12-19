@@ -8,11 +8,11 @@
       required
     >
       <option
-        v-for="email in emails"
-        :key="email"
-        :value="email"
+        v-for="commissioner in sortedCommissioners"
+        :key="commissioner.email"
+        :value="commissioner.email"
       >
-        {{ email }}
+        {{ commissioner.name }} ({{ commissioner.email }})
       </option>
     </Select>
     <slot name="removeButton" />
@@ -38,19 +38,16 @@ export default {
     },
   },
   computed: {
-    emails() {
-      const commissioners = this.$store.getters['services/getCommissioners'];
-      // make a copy of the array so we don't mutate the original
-      const emails = commissioners.map(commissioner => commissioner.email);
-      // sort emails alphabetically
-      emails.sort((a, b) => {
-        a = a.toLowerCase();
-        b = b.toLowerCase();
+    sortedCommissioners() {
+      const commissioners = this.$store.getters['services/getCommissioners']();
+      commissioners.sort((a, b) => {
+        a = a.name.toLowerCase();
+        b = b.name.toLowerCase();
         if (a < b) return -1;
         if (a > b) return 1;
         return 0;
       });
-      return emails;
+      return commissioners;
     },
   },
 };
