@@ -1,7 +1,14 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import App from '@/App';
-import Router from 'vue-router';
-import Vuex from 'vuex';
+//import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
+
+import App from '@/App.vue';
+// import Router from 'vue-router';
+// import Vuex from 'vuex';
+import { describe, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
 
 const id = 12345;
 const routes = [
@@ -32,23 +39,29 @@ const routes = [
   ['page-not-found', '/errors/page-not-found'],
 ];
 
-xdescribe('Sign in journey', () => {
+describe.skip('Sign in journey', () => {
   let subject;
   let router;
   let store;
 
   beforeEach(() => {
-  const localVue = createLocalVue();
-    localVue.use(Router);
-    localVue.use(Vuex);
+    // const localVue = createLocalVue();
+    // localVue.use(Router);
+    // localVue.use(Vuex);
 
     router = require('@/router').default;
     store = require('@/store').default;
     window.scrollTo = () => {};
     subject = shallowMount(App, {
-      localVue,
-      router,
-      store,
+      // localVue,
+      // router,
+      // store,
+      global: {
+        plugins: [store],
+        mocks: {
+          $router: router,
+        },
+      },
     });
   });
 

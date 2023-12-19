@@ -1,10 +1,13 @@
 import Downloads from '@/views/Exercise/Details/Downloads/Edit';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+import { createStore } from 'vuex';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import { vi, describe, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
 
 const mockExercise = {
   id: 'mock exercise id',
@@ -14,8 +17,8 @@ const mockExercise = {
   },
 };
 
-const mockIsApproved = jest.fn().mockName('exerciseDocument/isApproved');
-const mockData = jest.fn().mockName('exerciseDocument/data').mockReturnValue(mockExercise);
+const mockIsApproved = vi.fn().mockName('exerciseDocument/isApproved');
+const mockData = vi.fn().mockName('exerciseDocument/data').mockReturnValue(mockExercise);
 
 const mockRoute = {
   name: 'name-of-current-route',
@@ -25,8 +28,8 @@ const mockRoute = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
-  replace: jest.fn(),
+  push: vi.fn(),
+  replace: vi.fn(),
 };
 
 const mockProps = {
@@ -36,37 +39,36 @@ const mockProps = {
   status: 'mockstatus',
 };
 
-const mockSave = jest.fn().mockName('exerciseDocument/save');
+const mockSave = vi.fn().mockName('exerciseDocument/save');
 
-const createTestSubject = () => {
-  const store = new Vuex.Store({
-    modules: {
-      exerciseDocument: {
-        namespaced: true,
-        state: {
-          record: mockExercise,
-        },
-        getters: {
-          id: jest.fn().mockReturnValue(mockExercise.id),
-          data: () => mockData,
-          isEditable: mockIsApproved,
-        },
-        actions: {
-          save: mockSave,
-        },
+const store = createStore({
+  modules: {
+    exerciseDocument: {
+      namespaced: true,
+      state: {
+        record: mockExercise,
       },
-      exerciseCreateJourney: {
-        namespaced: true,
-        getters: {
-          nextPage: () => jest.fn(),
-        },
+      getters: {
+        id: vi.fn().mockReturnValue(mockExercise.id),
+        data: () => mockData,
+        isEditable: mockIsApproved,
+      },
+      actions: {
+        save: mockSave,
       },
     },
-  });
+    exerciseCreateJourney: {
+      namespaced: true,
+      getters: {
+        nextPage: () => vi.fn(),
+      },
+    },
+  },
+});
 
-  return shallowMount(Downloads, {
-    store,
-    localVue,
+const createTestSubject = shallowMount(Downloads, {
+  global: {
+    plugins: [store],
     mocks: {
       $route: mockRoute,
       $router: mockRouter,
@@ -77,10 +79,10 @@ const createTestSubject = () => {
       'ErrorSummary': true,
     },
     propsData: mockProps,
-  });
-};
+  },
+});
 
-xdescribe('@/views/Exercise/Show/Downloads', () => {
+describe.skip('@/views/Exercise/Show/Downloads', () => {
   describe('template', () => {
     let wrapper;
     beforeEach(() => {
@@ -91,13 +93,13 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
       expect(wrapper.exists()).toBe(true);
     });
 
-    xdescribe('form', () => {
+    describe.skip('form', () => {
       it('contains a form', () => {
         expect(wrapper.find('form').exists()).toBe(true);
       });
 
       it('calls save() on submit', () => {
-        wrapper.vm.save = jest.fn();
+        wrapper.vm.save = vi.fn();
 
         wrapper.find('form').trigger('submit');
 
@@ -105,7 +107,7 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
       });
     });
 
-    xit('contains 7 multi uploads', () => {
+    it.skip('contains 7 multi uploads', () => {
       expect(wrapper.findAll(RepeatableFields)).toHaveLength(7);
     });
   });
@@ -124,8 +126,8 @@ xdescribe('@/views/Exercise/Show/Downloads', () => {
     let wrapper;
     beforeEach(() => {
       wrapper = createTestSubject();
-      wrapper.vm.validate = jest.fn();
-      wrapper.vm.isValid = jest.fn();
+      wrapper.vm.validate = vi.fn();
+      wrapper.vm.isValid = vi.fn();
     });
 
     describe('save()', () => {

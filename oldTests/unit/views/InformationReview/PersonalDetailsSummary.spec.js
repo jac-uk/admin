@@ -1,22 +1,28 @@
-  const mockExercise = {
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
+const mockExercise = {
   };
-  
+
   const mockApplication = {
     userId: '0123456',
     personalDetails: {
       firstName: '',
     },
   };
-  
+
   const mockProps = {
     editable: false,
     personalDetails: mockApplication.personalDetails,
   };
 
   const mockStore = {
-    dispatch: jest.fn(),
+    dispatch: vi.fn(),
     getters: {
-      'application/update': jest.fn((obj) => { return { ...mockApplication.personalDetails, ...obj }; } ),
+      'application/update': vi.fn((obj) => { return { ...mockApplication.personalDetails, ...obj }; } ),
     },
     state: {
       exerciseDocument: {
@@ -46,11 +52,11 @@ describe('@/views/Exercise/Applications/Application', () => {
     });
   });
   describe('template', () => {
-    
+
     it('renders the component', () => {
       expect(wrapper.exists()).toBe(true);
     });
-    
+
   });
   describe('methods', () => {
     beforeAll(() => {
@@ -63,7 +69,7 @@ describe('@/views/Exercise/Applications/Application', () => {
     it('changeUserDetails', () => {
       expect(wrapper.emitted().update).toBeTruthy();
     });
-    
+
     it('dispatches formatted change', () => {
       expect(wrapper.emitted().update[0][0]).toEqual( { 'firstName': 'test' } );
     });

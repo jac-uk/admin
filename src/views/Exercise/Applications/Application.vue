@@ -267,6 +267,12 @@
               :authorised-to-perform-action="editable"
               @update-application="changeApplication"
             />
+            <CommissionerConflictsSummary
+              :application="application"
+              :exercise="exercise"
+              :editable="editable"
+              @update-application="changeApplication"
+            />
           </div>
         </div>
 
@@ -319,6 +325,7 @@ import QualificationsAndMembershipsSummary from '@/views/InformationReview/Quali
 import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
+import CommissionerConflictsSummary from '@/views/InformationReview/CommissionerConflictsSummary.vue';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import PageNotFound from '@/views/Errors/PageNotFound.vue';
 import { splitFullName } from '@jac-uk/jac-kit/helpers/splitFullName';
@@ -355,6 +362,7 @@ export default {
     ExperienceSummary,
     AssessmentsSummary,
     AssessorsSummary,
+    CommissionerConflictsSummary,
   },
   mixins: [permissionMixin],
   data() {

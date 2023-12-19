@@ -1,9 +1,10 @@
-import ExerciseNew from '@/views/CreateExercise';
+import ExerciseNew from '@/views/CreateExercise.vue';
 import { shallowMount } from '@vue/test-utils';
-import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
+import { vi, describe, beforeEach, it } from 'vitest';
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   getters: {
     'exerciseCreateJourney/nextPage': { name: 'mock-next-page' },
   },
@@ -17,10 +18,10 @@ const mockStore = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
 
-xdescribe('views/Exercise/New', () => {
+describe.skip('views/Exercise/New', () => {
   let wrapper;
   beforeEach(() => {
     mockStore.dispatch.mockClear();
@@ -48,7 +49,7 @@ xdescribe('views/Exercise/New', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
+      const mockSave = vi.fn();
       wrapper.setMethods({ save: mockSave });
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);

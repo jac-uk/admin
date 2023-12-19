@@ -1,13 +1,13 @@
-import ExerciseEditVacancy from '@/views/Exercise/Details/Vacancy/Edit';
+import ExerciseEditEligibility from '@/views/Exercise/Details/Eligibility/Edit';
 import { shallowMount } from '@vue/test-utils';
+import { vi, describe, beforeEach, afterEach, it } from 'vitest';
 
 const exercise = {
-  typeOfExercise: 'legal',
-  isCourtOrTribunal: 'court',
+  retirementAge: '70',
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   state: {
     exerciseDocument: {
       record: {},
@@ -20,19 +20,21 @@ const mockStore = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
 
 const createTestSubject = () => {
-  return shallowMount(ExerciseEditVacancy, {
-    mocks: {
-      $store: mockStore,
-      $router: mockRouter,
+  return shallowMount(ExerciseEditEligibility, {
+    global: {
+      mocks: {
+        $store: mockStore,
+        $router: mockRouter,
+      },
     },
   });
 };
 
-xdescribe('views/Exercise/Edit/Vacancy', () => {
+describe.skip('views/Exercise/Edit/Eligibility', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = createTestSubject();
@@ -52,7 +54,7 @@ xdescribe('views/Exercise/Edit/Vacancy', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
+      const mockSave = vi.fn();
       wrapper.setMethods({ save: mockSave });
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);
@@ -63,11 +65,68 @@ xdescribe('views/Exercise/Edit/Vacancy', () => {
       expect(button.element.type).toBe('submit');
       expect(button.text()).toBe('Save and continue');
     });
+
+    describe('Does Schedule 2(d) or Schedule 3 apply?', () => {
+      it('does not show the question if the role is a court role', () => {
+        wrapper.setData({ isCourtOrTribunal: 'court' });
+        expect(wrapper.find('#schedule-2d-apply').exists()).toBe(false);
+      });
+
+      it('does show the question if the role is a tribunal role', () => {
+        wrapper.setData({ isCourtOrTribunal: 'tribunal' });
+        expect(wrapper.find('#schedule-2d-apply').exists()).toBe(true);
+      });
+    });
+
+    describe('Qualifications', () => {
+      it('does not show the question if the role is a non-legal role', () => {
+        wrapper.setData({ typeOfExercise: 'non-legal' });
+        expect(wrapper.find('#qualifications').exists()).toBe(false);
+      });
+
+      it('does show the question if the role is a legal role', () => {
+        wrapper.setData({ typeOfExercise: 'legal' });
+        expect(wrapper.find('#qualifications').exists()).toBe(true);
+      });
+
+      it('does show the question if the role is a senior role', () => {
+        wrapper.setData({ typeOfExercise: 'senior' });
+        expect(wrapper.find('#qualifications').exists()).toBe(true);
+      });
+
+      it('does show the question if the role is a leadership role', () => {
+        wrapper.setData({ typeOfExercise: 'leadershop' });
+        expect(wrapper.find('#qualifications').exists()).toBe(true);
+      });
+    });
+
+    describe('Memberships', () => {
+      it('does not show the question if the role is a legal role', () => {
+        wrapper.setData({ typeOfExercise: 'legal' });
+        expect(wrapper.find('#memberships').exists()).toBe(false);
+      });
+
+      it('does not show the question if the role is a senior role', () => {
+        wrapper.setData({ typeOfExercise: 'senior' });
+        expect(wrapper.find('#memberships').exists()).toBe(false);
+      });
+
+      it('does show the question if the role is a leadership role', () => {
+        wrapper.setData({ typeOfExercise: 'leadership' });
+        expect(wrapper.find('#memberships').exists()).toBe(true);
+      });
+
+      it('does show the question if the role is a non-legal role', () => {
+        wrapper.setData({ typeOfExercise: 'non-legal' });
+        expect(wrapper.find('#memberships').exists()).toBe(true);
+      });
+    });
   });
 
   describe('data', () => {
     const booleanFields = [
-      'isSPTWOffered',
+      'schedule2DApply',
+      'aSCApply',
     ];
     describe.each(booleanFields)('exercise.%s', (fieldName) => {
       let originalValue;
@@ -107,8 +166,8 @@ xdescribe('views/Exercise/Edit/Vacancy', () => {
   describe('methods', () => {
     describe('save', () => {
       const exerciseData = {
-        futureStart: '20',
-        location: 'Some court somewhere',
+        reasonableLengthService: ['3 years'],
+        otherRetirement: 'other retirement age',
       };
 
       beforeEach(() => {

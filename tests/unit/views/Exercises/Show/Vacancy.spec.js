@@ -1,9 +1,14 @@
-import Vacancy from '@/views/Exercise/Details/Vacancy/View';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Vuex from 'vuex';
+import Vacancy from '@/views/Exercise/Details/Vacancy/View.vue';
+//import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+//import Vuex from 'vuex';
+import { createStore } from 'vuex';
+
+import { describe, it } from 'vitest';
+
+// const localVue = createLocalVue();
+// localVue.use(Vuex);
 
 const exercise = {
   typeOfExercise: 'testType',
@@ -11,7 +16,31 @@ const exercise = {
   appointmentType: 'test',
 };
 
-const store = new Vuex.Store({
+// const store = new Vuex.Store({
+//   modules: {
+//     exerciseDocument: {
+//       namespaced: true,
+//       state: {
+//         record: exercise,
+//       },
+//       getters: {
+//         data: () => () => exercise,
+//       },
+//     },
+//   },
+// });
+
+// const createTestSubject = () => {
+//   return shallowMount(Vacancy, {
+//     store,
+//     localVue,
+//     stubs: {
+//       'RouterLink': true,
+//     },
+//   });
+// };
+
+const store = createStore({
   modules: {
     exerciseDocument: {
       namespaced: true,
@@ -27,15 +56,16 @@ const store = new Vuex.Store({
 
 const createTestSubject = () => {
   return shallowMount(Vacancy, {
-    store,
-    localVue,
-    stubs: {
-      'RouterLink': true,
+    global: {
+      plugins: [store],
+      stubs: {
+        'RouterLink': true,
+      },
     },
   });
 };
 
-xdescribe('@/views/Exercise/Show', () => {
+describe.skip('@/views/Exercise/Show', () => {
   describe('template', () => {
     it('renders the component', () => {
       const wrapper = createTestSubject();

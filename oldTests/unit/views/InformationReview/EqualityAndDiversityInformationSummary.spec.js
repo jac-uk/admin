@@ -1,8 +1,14 @@
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
 const mockExercise = {
   yesSalaryDetails: 'yesSalaryDetails',
   additionalWorkingPreferences: [],
 };
-  
+
 const mockApplication = {
   userId: '0123456',
   equalityAndDiversitySurvey: {
@@ -11,9 +17,9 @@ const mockApplication = {
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   getters: {
-    'application/data': jest.fn(() => mockApplication),
+    'application/data': vi.fn(() => mockApplication),
   },
   state: {
     exerciseDocument: {
@@ -61,7 +67,7 @@ describe('@/views/Exercise/Applications/Application', () => {
         };
         wrapper.vm.changeEqualityAndDiversityInformation(obj);
       });
-  
+
       it('changeUserDetails', () => {
         expect(wrapper.emitted().updateApplication).toBeTruthy();
       });
@@ -69,7 +75,7 @@ describe('@/views/Exercise/Applications/Application', () => {
       it('dispatches formatted change', () => {
         expect(wrapper.emitted().updateApplication[0][0]).toEqual( { equalityAndDiversitySurvey: { professionalBackground: 'barrister' } });
       });
-  
+
     });
 
 });

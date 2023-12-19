@@ -1,12 +1,13 @@
-import ExerciseEditContacts from '@/views/Exercise/Details/Contacts/Edit';
+import ExerciseEditContacts from '@/views/Exercise/Details/Contacts/Edit.vue';
 import { shallowMount } from '@vue/test-utils';
+import { vi, describe, it, beforeEach } from 'vitest';
 
 const exercise = {
   exerciseMailbox: 'test@jac.co.uk',
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   state: {
     exerciseDocument: {
       record: {},
@@ -19,16 +20,18 @@ const mockStore = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
 
-xdescribe('views/Exercise/Edit/Contacts', () => {
+describe.skip('views/Exercise/Edit/Contacts', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditContacts, {
-      mocks: {
-        $store: mockStore,
-        $router: mockRouter,
+      global: {
+        mocks: {
+          $store: mockStore,
+          $router: mockRouter,
+        },
       },
     });
   });
@@ -47,7 +50,7 @@ xdescribe('views/Exercise/Edit/Contacts', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
+      const mockSave = vi.fn();
       wrapper.setMethods({ save: mockSave });
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);

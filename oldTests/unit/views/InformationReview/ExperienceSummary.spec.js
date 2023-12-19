@@ -1,25 +1,21 @@
+import { vi, describe, it, beforeAll } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
+
 const mockExercise = {
+  yesSalaryDetails: 'yesSalaryDetails',
+  additionalWorkingPreferences: [],
 };
 
 const mockApplication = {
   userId: '0123456',
-  characterInformation: {
-    _versionNumber: 2,
-    furtherInformationDetails: '',
-  },
 };
-
-const mockProps = {
-  editable: false,
-  characterInformation: mockApplication.characterInformation,
-  version: 2,
-};
-
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   getters: {
-    'application/update': jest.fn((obj) => { return { ...mockApplication.characterInformation, ...obj }; } ),
-    'auth/hasPermissions': jest.fn(() => true),
+    'application/data': vi.fn(() => mockApplication),
   },
   state: {
     exerciseDocument: {
@@ -33,14 +29,19 @@ const mockStore = {
     },
   },
 };
+const mockProps = {
+  editable: false,
+  application: mockApplication,
+  exercise: mockExercise,
+};
 
-import CharacterInformationSummary from '@/views/InformationReview/CharacterInformationSummary.vue';
+import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
 import { createTestSubject } from '@/../tests/unit/helpers';
 
 describe('@/views/Exercise/Applications/Application', () => {
   let wrapper;
   beforeAll(() => {
-    wrapper = createTestSubject(CharacterInformationSummary, {
+    wrapper = createTestSubject(ExperienceSummary, {
       propsData: mockProps,
       mocks: {
         $store: mockStore,
@@ -48,26 +49,27 @@ describe('@/views/Exercise/Applications/Application', () => {
       stubs: [],
     });
   });
-  
+
   it('renders the component', () => {
     expect(wrapper.exists()).toBe(true);
   });
-  
+
   describe('methods', () => {
     beforeAll(() => {
       const obj = {
-        furtherInformationDetails: 'test',
+        experience: 'test',
       };
-      wrapper.vm.changeCharacterInfo(obj);
+      wrapper.vm.changeInfo(obj);
     });
 
     it('changeUserDetails', () => {
       expect(wrapper.emitted().updateApplication).toBeTruthy();
     });
-    
+
     it('dispatches formatted change', () => {
-      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { characterInformationV2: { _versionNumber: 2, furtherInformationDetails: 'test' } } );
+      expect(wrapper.emitted().updateApplication[0][0]).toEqual( { experience: 'test', userId: '0123456' } );
     });
 
   });
+
 });
