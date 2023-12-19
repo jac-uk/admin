@@ -107,8 +107,8 @@ export default {
           return true;
         })
         .sort((a, b) => {
-          a = a.displayName.toLowerCase();
-          b = b.displayName.toLowerCase();
+          a = a.displayName ? a.displayName.toLowerCase() : a.email;
+          b = b.displayName ? b.displayName.toLowerCase() : b.email;
           if (a < b) return -1;
           if (a > b) return 1;
           return 0;
