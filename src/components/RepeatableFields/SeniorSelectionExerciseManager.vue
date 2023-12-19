@@ -12,7 +12,7 @@
         :key="user.uid"
         :value="user.email"
       >
-        {{ user.email }}
+        {{ user.displayName }} ({{ user.email }})
       </option>
     </Select>
     <slot name="removeButton" />
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      users: 'users/enabledMicrosoftUsers',
+      users: 'users/enabledJACUsers',
     }),
   },
 };
