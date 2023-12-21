@@ -174,7 +174,7 @@
                     Registration number
                   </th>
                   <th
-                    v-for="(header,index) in toQualificationTableHeaders(sraRows)"
+                    v-for="(header,index) in toSraQualificationTableHeaders(sraRows)"
                     :key="`qual_header_${index}`"
                     scope="col"
                     class="govuk-table__header"
@@ -208,7 +208,7 @@
                     {{ candidate.sraNumber }}
                   </td>
                   <td
-                    v-for="(data, index) in toQualificationTableData(candidate.qualificationsLocations, sraRows)"
+                    v-for="(data, index) in toSraQualificationTableData(candidate.sraQualifications, sraRows)"
                     :key="`qual_td_${index}`"
                     class="govuk-table__cell"
                   >
@@ -260,7 +260,7 @@
                     Registration number
                   </th>
                   <th
-                    v-for="(header,index) in toQualificationTableHeaders(bsbRows)"
+                    v-for="(header,index) in toBsbQualificationTableHeaders(bsbRows)"
                     :key="`qual_header_${index}`"
                     scope="col"
                     class="govuk-table__header"
@@ -303,7 +303,7 @@
                     {{ candidate.bsbNumber }}
                   </td>
                   <td
-                    v-for="(data, index) in toQualificationTableData(candidate.qualificationsLocations, bsbRows)"
+                    v-for="(data, index) in toBsbQualificationTableData(candidate.bsbQualifications, bsbRows)"
                     :key="`qual_td_${index}`"
                     class="govuk-table__cell"
                   >
@@ -798,9 +798,8 @@ export default {
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
-        { title: 'BSB Number', ref: 'bsbNumber' },
       ];
-      headers.push(...this.toQualificationReportHeaders(this.report.rows));
+      headers.push(...this.toBsbQualificationReportHeaders(this.report.rows));
 
       // get headers
       reportData.push(headers.map(header => header.title));
@@ -818,9 +817,8 @@ export default {
         { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
-        { title: 'SRA Number', ref: 'sraNumber' },
       ];
-      headers.push(...this.toQualificationReportHeaders(this.report.rows));
+      headers.push(...this.toSraQualificationReportHeaders(this.report.rows));
 
       // get headers
       reportData.push(headers.map(header => header.title));
@@ -858,35 +856,67 @@ export default {
         }
       );
     },
-    getMaxQualificationLength(rows) {
-      return this.report ? Math.max(...rows.map(e => e?.qualificationsLocations?.length || 0)) : 0;
+    getMaxSraQualificationLength(rows) {
+      return this.report ? Math.max(...rows.map(e => e?.sraQualifications?.length || 0)) : 0;
     },
-    toQualificationTableHeaders(rows) {
+    getMaxBsbQualificationLength(rows) {
+      return this.report ? Math.max(...rows.map(e => e?.bsbQualifications?.length || 0)) : 0;
+    },
+    toSraQualificationTableHeaders(rows) {
       const headers = [];
-      for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
-        headers.push(`Qual ${i}`);
-        headers.push('Region');
-        headers.push('Number');
+      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
+        headers.push(`Qualification ${i}`);
+        headers.push(`Region ${i}`);
+        headers.push(`SRA Number ${i}`);
       }
       return headers;
     },
-    toQualificationTableData(qualificationsLocations, rows) {
-      const qualLocations = qualificationsLocations || [];
+    toBsbQualificationTableHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
+        headers.push(`Qualification ${i}`);
+        headers.push(`Region ${i}`);
+        headers.push(`Registration Number ${i}`);
+      }
+      return headers;
+    },
+    toSraQualificationTableData(sraQualifications, rows) {
+      const qualifications = sraQualifications || [];
       const tableDataColumns = [];
-      for (let i = 0; i < this.getMaxQualificationLength(rows); i++) {
-        tableDataColumns.push(qualLocations[i]?.type || '');
-        tableDataColumns.push(qualLocations[i]?.location || '');
-        tableDataColumns.push(qualLocations[i]?.membershipNumber || '');
+      for (let i = 0; i < this.getMaxSraQualificationLength(rows); i++) {
+        tableDataColumns.push(qualifications[i]?.type || '');
+        tableDataColumns.push(qualifications[i]?.location || '');
+        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
       }
 
       return tableDataColumns;
     },
-    toQualificationReportHeaders(rows) {
+    toBsbQualificationTableData(bsbQualifications, rows) {
+      const qualifications = bsbQualifications || [];
+      const tableDataColumns = [];
+      for (let i = 0; i < this.getMaxBsbQualificationLength(rows); i++) {
+        tableDataColumns.push(qualifications[i]?.type || '');
+        tableDataColumns.push(qualifications[i]?.location || '');
+        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
+      }
+
+      return tableDataColumns;
+    },
+    toSraQualificationReportHeaders(rows) {
       const headers = [];
-      for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
-        headers.push({ title: `Qual ${i}`, ref: `qual${i}` });
-        headers.push({ title: 'Region', ref: `region${i}` });
-        headers.push({ title: 'Number', ref: `qualNumber${i}` });
+      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
+        headers.push({ title: `Qualification ${i}`, ref: `sraType${i}` });
+        headers.push({ title: `Region ${i}`, ref: `sraRegion${i}` });
+        headers.push({ title: `SRA Number ${i}`, ref: `sraRegistrationNumber${i}` });
+      }
+      return headers;
+    },
+    toBsbQualificationReportHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
+        headers.push({ title: `Qualification ${i}`, ref: `bsbType${i}` });
+        headers.push({ title: `Region ${i}`, ref: `bsbRegion${i}` });
+        headers.push({ title: `Registration Number ${i}`, ref: `bsbRegistrationNumber${i}` });
       }
       return headers;
     },
@@ -896,6 +926,6 @@ export default {
 
 <style scoped>
 th {
-  min-width: 200px;
+  min-width: 210px;
 }
 </style>
