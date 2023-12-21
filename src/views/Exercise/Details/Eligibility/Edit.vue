@@ -316,6 +316,8 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.v
 import SelectionCriterion from '@/components/RepeatableFields/SelectionCriterion.vue';
 import Membership from '@/components/RepeatableFields/Membership.vue';
 import { isLegal, isNonLegal, isTribunal } from '@/helpers/exerciseHelper';
+import { shallowRef } from 'vue';
+import { DEFAULT_WORD_COUNT } from '@/helpers/constants';
 
 const fixedFields = {
   memberships: [
@@ -366,7 +368,13 @@ export default {
     RepeatableFields,
   },
   extends: Form,
+  provide() {
+    return {
+      defaultWordLimit: this.defaultWordLimit,
+    };
+  },
   data(){
+    const defaultWordCount = DEFAULT_WORD_COUNT.ADDITIONAL_SELECTION_CRITERIA;
     const defaults = {
       postQualificationExperience: null,
       otherYears: null,
@@ -389,10 +397,11 @@ export default {
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData: formData,
-      repeatableFields: {
+      repeatableFields: shallowRef({
         SelectionCriterion,
         Membership,
-      },
+      }),
+      defaultWordLimit: shallowRef(defaultWordCount),
     };
   },
   computed: {
@@ -431,6 +440,16 @@ export default {
           this.formData.memberships.splice(selectedIndex, 1);
         }
       }
+    },
+    'formData.aSCApply': {
+      handler: function(val) {
+        if (val === false) {
+          // Reset the value to null when parent radio is set to off
+          this.formData.selectionCriteria = null;
+        }
+      },
+      deep: true,
+      immediate: true,
     },
   },
   methods: {

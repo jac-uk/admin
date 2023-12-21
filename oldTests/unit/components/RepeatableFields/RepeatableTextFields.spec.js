@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+import { describe, beforeEach, it } from 'vitest';
 
 // repeatable components
 import DraftingJudge from '@/components/RepeatableFields/DraftingJudge';

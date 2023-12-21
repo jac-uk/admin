@@ -15,7 +15,6 @@ import notifications from '@/store/notifications';
 import invitations from '@/store/invitations';
 import events from '@/store/events';
 import clipboard from '@/store/clipboard';
-import users from '@/store/users';
 
 import applicationRecords from '@/store/applicationRecords';
 import characterChecks from '@/store/characterChecks/characterChecks';
@@ -37,6 +36,9 @@ import messageBase from '@/store/baseClasses/messageBase';
 import LateApplicationRequestMsg from '@/store/messages/lateApplicationRequest';
 import LateApplicationResponseMsg from '@/store/messages/lateApplicationResponse';
 
+import users from '@/store/users';
+import userInvitations from '@/store/userInvitations';
+import roles from '@/store/roles';
 import vacancy from '@/store/vacancy';
 
 //const store = new Vuex.Store({
@@ -71,11 +73,13 @@ const store = createStore({
     panellist,
     panellists,
     panels,
+    roles,
     services,
     task,
     tasks,
     ui,
     users,
+    userInvitations,
     vacancy,
   },
   state: {

@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "1.11.0",
+  "version": "1.18.0",
   "private": true,
   "scripts": {
     "dev": "npm run local:serve",
@@ -19,19 +19,17 @@
     "develop:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:develop-admin-app -P develop",
     "staging:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:staging-admin-app -P staging",
     "production:deploy-service-offline": "rm -rf dist && mkdir dist && cp service-offline/index.html dist/index.html && firebase deploy --only hosting:production-admin-app -P production",
-    "test": "vite test:unit",
-    "test:unit": "vite test:unit",
-    "test-ci": "vite test:unit --ci --runInBand --silent --forceExit",
+    "test": "vitest --mode develop",
+    "test:unit": "vitest",
+    "test-ci": "vitest --run --silent",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "3.0.43",
+    "@jac-uk/jac-kit": "3.0.46",
     "@ministryofjustice/frontend": "0.2.4",
-    "@rollup/plugin-inject": "^5.0.3",
     "@sentry/tracing": "^7.61.1",
     "@sentry/vue": "^7.61.1",
-    "@vitejs/plugin-vue": "^1.6.1",
     "@vue/compat": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "buffer": "^6.0.3",
@@ -52,7 +50,11 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@rollup/plugin-inject": "^5.0.5",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "@vitest/coverage-v8": "^1.0.1",
     "@vue/compiler-sfc": "^3.1.0",
+    "@vue/test-utils": "^2.4.0-alpha.2",
     "bufferutil": "^4.0.3",
     "clone": "^2.1.2",
     "eslint": "^8.43.0",
@@ -62,16 +64,19 @@
     "eslint-plugin-vue": "^8.7.1",
     "firebase": "^8.10.1",
     "firebase-mock": "^2.3.2",
+    "jsdom": "^23.0.1",
     "postcss": "^8.4.31",
     "process": "^0.11.10",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "sass": "^1.32.13",
     "utf-8-validate": "^5.0.4",
-    "vite": "^2.5.4",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite": "^5.0.0",
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^1.0.0"
   },
   "engines": {
-    "node": "v16.15.1",
-    "npm": "^8.11.0"
+    "node": "v20.10.0",
+    "npm": "10.2.3"
   },
   "peerDependencies": {
     "postcss": "^8.4.31"

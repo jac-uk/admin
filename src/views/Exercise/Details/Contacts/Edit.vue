@@ -94,8 +94,8 @@
             label="Lord Chancellor"
           />
           <CheckboxItem
-            value="lord-chief-justice"
-            label="Lord Chief Justice"
+            value="lady-chief-justice"
+            label="Lady Chief Justice"
           />
           <CheckboxItem
             value="senior-president-of-tribunals"
@@ -238,7 +238,10 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('users/getUsers');
+    await this.$store.dispatch('users/bind', { orderBy: 'displayName', direction: 'asc' });
+  },
+  async unmounted() {
+    await this.$store.dispatch('users/unbind');
   },
   methods: {
     async save(isValid) {

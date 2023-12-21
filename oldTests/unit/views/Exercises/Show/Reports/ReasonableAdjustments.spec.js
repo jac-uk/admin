@@ -1,14 +1,17 @@
-import Vuex from 'vuex';
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { shallowMount } from '@vue/test-utils';
+
 import ReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
+import { vi, describe, beforeEach, it } from 'vitest';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+/**
+* @vitest-environment jsdom
+*/
 
-jest.mock('@jac-uk/jac-kit/helpers/export', () => {
+vi.mock('@jac-uk/jac-kit/helpers/export', () => {
   return {
-    downloadXLSX: jest.fn(),
+    downloadXLSX: vi.fn(),
   };
 });
 
@@ -19,12 +22,12 @@ const mockExercise = {
   applicationCloseDate: 'TestClose',
 };
 
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     applications: {
       namespaced: true,
       actions: {
-        bind: jest.fn(),
+        bind: vi.fn(),
       },
       state: {
         records: [],
@@ -36,7 +39,7 @@ const store = new Vuex.Store({
         record: mockExercise,
       },
       getters: {
-        data: jest.fn().mockReturnValue(mockExercise),
+        data: vi.fn().mockReturnValue(mockExercise),
       },
     },
     auth: {
@@ -50,8 +53,9 @@ const store = new Vuex.Store({
 
 const createTestSubject = () => {
   return shallowMount(ReasonableAdjustments, {
-    store,
-    localVue,
+    global: {
+      plugins: [store],
+    },
   });
 };
 
@@ -65,7 +69,7 @@ describe('@/views/Exercise/Show/Reports/ReasonableAdjustments', () => {
     it('renders', () => {
       expect(wrapper.exists()).toBe(true);
     });
-    
+
     it('contains a <h2>', () => {
       expect(wrapper.find('h2')).toBeTruthy();
     });
@@ -89,7 +93,7 @@ describe('@/views/Exercise/Show/Reports/ReasonableAdjustments', () => {
       });
 
       it('calls gatherReportData', () => {
-        wrapper.vm.gatherReportData = jest.fn();
+        wrapper.vm.gatherReportData = vi.fn();
         wrapper.vm.gatherReportData();
         expect(wrapper.vm.gatherReportData).toHaveBeenCalled();
       });
@@ -98,7 +102,7 @@ describe('@/views/Exercise/Show/Reports/ReasonableAdjustments', () => {
         const mockReport = 'mock report';
         const mockTitle = 'Reasonable Adjustments Report';
 
-        wrapper.vm.gatherReportData = jest.fn().mockReturnValue(mockReport);
+        wrapper.vm.gatherReportData = vi.fn().mockReturnValue(mockReport);
 
         wrapper.vm.exportData();
 

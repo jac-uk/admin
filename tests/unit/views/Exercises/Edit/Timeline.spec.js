@@ -1,5 +1,6 @@
-import ExerciseEditTimeline from '@/views/Exercise/Details/Timeline/Edit';
+import ExerciseEditTimeline from '@/views/Exercise/Details/Timeline/Edit.vue';
 import { shallowMount } from '@vue/test-utils';
+import { vi, describe, beforeEach, it } from 'vitest';
 
 const exercise = {
   applicationOpenDate: new Date(2019, 1, 1),
@@ -8,7 +9,7 @@ const exercise = {
 };
 
 const mockStore = {
-  dispatch: jest.fn(),
+  dispatch: vi.fn(),
   state: {
     exerciseDocument: {
       record: {},
@@ -21,10 +22,10 @@ const mockStore = {
 };
 
 const mockRouter = {
-  push: jest.fn(),
+  push: vi.fn(),
 };
 
-xdescribe('views/Exercise/Edit/Timeline', () => {
+describe.skip('views/Exercise/Edit/Timeline', () => {
   let wrapper;
   beforeEach(() => {
     wrapper = shallowMount(ExerciseEditTimeline, {
@@ -49,7 +50,7 @@ xdescribe('views/Exercise/Edit/Timeline', () => {
     });
 
     it('the <form> calls the `save` method when submitted', () => {
-      const mockSave = jest.fn();
+      const mockSave = vi.fn();
       wrapper.setMethods({ save: mockSave });
       wrapper.find('form').trigger('submit');
       expect(mockSave).toHaveBeenCalledTimes(1);
