@@ -866,6 +866,7 @@ export default {
       for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
         headers.push(`Qual ${i}`);
         headers.push('Region');
+        headers.push('Number');
       }
       return headers;
     },
@@ -875,6 +876,7 @@ export default {
       for (let i = 0; i < this.getMaxQualificationLength(rows); i++) {
         tableDataColumns.push(qualLocations[i]?.type || '');
         tableDataColumns.push(qualLocations[i]?.location || '');
+        tableDataColumns.push(qualLocations[i]?.membershipNumber || '');
       }
 
       return tableDataColumns;
@@ -884,6 +886,7 @@ export default {
       for (let i = 1; i <= this.getMaxQualificationLength(rows); i++) {
         headers.push({ title: `Qual ${i}`, ref: `qual${i}` });
         headers.push({ title: 'Region', ref: `region${i}` });
+        headers.push({ title: 'Number', ref: `qualNumber${i}` });
       }
       return headers;
     },
