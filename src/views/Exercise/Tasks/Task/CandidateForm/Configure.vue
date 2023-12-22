@@ -20,21 +20,11 @@
         :errors="errors"
       />
 
-      <CheckboxGroup
-        id="candidate-form-parts"
-        v-model="formData.parts"
-        label="Which pertinent information would you like to collect/reconfirm with candidates?"
-        required
-      >
-        <CheckboxItem
-          v-for="part in CandidateFormParts"
-          :key="part"
-          :value="part"
-          :label="$filters.lookup(part)"
-        />
-      </CheckboxGroup>
+      <p class="govuk-body-l">
+        Please finalise selection day interview dates and panellist details below
+      </p>
 
-      <div v-if="formData.parts.indexOf('candidateAvailability') >= 0">
+      <div v-if="formData.parts.indexOf('candidateAvailability') >= 0 && formData.candidateAvailabilityDates">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
           Which dates would you like to check for candidate availability?
         </h2>
@@ -115,21 +105,22 @@ export default {
     ];
     const exercise = this.$store.state.exerciseDocument.record;
     const applicationParts = exerciseApplicationParts(exercise).filter(part => optionalAppplicationParts.indexOf(part) >= 0);
+    const candidateFormParts = [
+      ...formParts,
+      ...applicationParts,
+    ];
     return {
       formData: {
         openDate: null,
         closeDate: null,
-        parts: [],
+        parts: candidateFormParts,  // hardcoded
         panellists: [],
         candidateAvailabilityDates: null,
       },
       repeatableFields: shallowRef({
         LocationDate,
       }),
-      CandidateFormParts: [
-        ...formParts,
-        ...applicationParts,
-      ],
+      CandidateFormParts: candidateFormParts,
     };
   },
   computed: {
@@ -153,7 +144,6 @@ export default {
     const candidateForm = this.$store.getters['candidateForm/data']();
     this.formData.openDate = candidateForm.openDate;
     this.formData.closeDate = candidateForm.closeDate;
-    this.formData.parts = candidateForm.parts;
     this.formData.panellists = candidateForm.panellists ? candidateForm.panellists : [];
     this.formData.candidateAvailabilityDates = candidateForm.candidateAvailabilityDates ? candidateForm.candidateAvailabilityDates : [];
   },
