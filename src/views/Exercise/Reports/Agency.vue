@@ -46,6 +46,7 @@
       >
         <div
           class="govuk-grid-column-full"
+          style="overflow-x: auto;"
         >
           <h3 class="govuk-heading-m govuk-!-margin-top-4">
             {{ activeTabDetails.header || activeTabDetails.title }}
@@ -71,6 +72,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -88,6 +95,7 @@
                   <th
                     scope="col"
                     class="govuk-table__header"
+                    style="min-width: 250px;"
                   >
                     National Insurance Number
                   </th>
@@ -99,6 +107,15 @@
                   :key="candidate.userId"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -136,6 +153,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -145,10 +168,12 @@
                     Admission to the roll
                   </th>
                   <th
+                    v-for="(header,index) in toSraQualificationTableHeaders(sraRows)"
+                    :key="`qual_header_${index}`"
                     scope="col"
                     class="govuk-table__header"
                   >
-                    Registration number
+                    {{ header }}
                   </th>
                 </tr>
               </thead>
@@ -159,13 +184,26 @@
                   class="govuk-table__row"
                 >
                   <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
+                  <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
                   <td class="govuk-table__cell">
                     {{ $filters.formatDate(candidate.sraDate, 'long') }}
                   </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.sraNumber }}
+                  <td
+                    v-for="(data, index) in toSraQualificationTableData(candidate.sraQualifications, sraRows)"
+                    :key="`qual_td_${index}`"
+                    class="govuk-table__cell"
+                  >
+                    {{ data }}
                   </td>
                 </tr>
               </tbody>
@@ -192,6 +230,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -201,10 +245,12 @@
                     Called to the Bar
                   </th>
                   <th
+                    v-for="(header,index) in toBsbQualificationTableHeaders(bsbRows)"
+                    :key="`qual_header_${index}`"
                     scope="col"
                     class="govuk-table__header"
                   >
-                    Registration number
+                    {{ header }}
                   </th>
                 </tr>
               </thead>
@@ -214,6 +260,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -229,8 +284,12 @@
                   >
                     None given
                   </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.bsbNumber }}
+                  <td
+                    v-for="(data, index) in toBsbQualificationTableData(candidate.bsbQualifications, bsbRows)"
+                    :key="`qual_td_${index}`"
+                    class="govuk-table__cell"
+                  >
+                    {{ data }}
                   </td>
                 </tr>
               </tbody>
@@ -257,6 +316,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -279,6 +344,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -313,6 +387,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -335,6 +415,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -371,6 +460,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -393,6 +488,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -425,6 +529,12 @@
                     scope="col"
                     class="govuk-table__header"
                   >
+                    Reference number
+                  </th>
+                  <th
+                    scope="col"
+                    class="govuk-table__header"
+                  >
                     Name
                   </th>
                   <th
@@ -447,6 +557,15 @@
                   :key="candidate.id"
                   class="govuk-table__row"
                 >
+                  <td class="govuk-table__cell">
+                    <RouterLink
+                      class="govuk-link"
+                      :to="{name: 'exercise-applications-application', params: { applicationId: candidate.applicationId, status: candidate.applicationStatus }}"
+                      target="_blank"
+                    >
+                      {{ $filters.showAlternative(candidate.applicationReferenceNumber, candidate.applicationId) }}
+                    </RouterLink>
+                  </td>
                   <td class="govuk-table__cell">
                     {{ candidate.fullName }}
                   </td>
@@ -526,10 +645,10 @@ export default {
       return activeTab;
     },
     sraRows() {
-      return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
+      return this.report ? this.report.rows.filter((e) => e.sraQualifications.length > 0) : [];
     },
     bsbRows() {
-      return this.report ? this.report.rows : [];
+      return this.report ? this.report.rows.filter((e) => e.bsbQualifications.length > 0) : [];
     },
     jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
@@ -585,6 +704,7 @@ export default {
     gatherACROReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: '*Agency Reference', ref: '' },
         { title: '*Reason for Request', ref: '' },
         { title: 'If Other please specify', ref: '' },
@@ -629,6 +749,7 @@ export default {
     gatherHMRCReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Our Ref', ref: '' },
         { title: 'NI NO', ref: 'nationalInsuranceNumber' },
         { title: 'Surname', ref: 'lastName' },
@@ -656,15 +777,17 @@ export default {
     gatherBSBReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
-        { title: 'BSB Number', ref: 'bsbNumber' },
       ];
+      headers.push(...this.toBsbQualificationReportHeaders(this.bsbRows));
+
       // get headers
       reportData.push(headers.map(header => header.title));
 
       // get rows
-      this.report.rows.forEach((row) => {
+      this.bsbRows.forEach((row) => {
         reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
@@ -673,15 +796,17 @@ export default {
     gatherSRAReportData() {
       const reportData = [];
       const headers = [
+        { title: 'JAC Reference', ref: 'applicationReferenceNumber' },
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
-        { title: 'SRA Number', ref: 'sraNumber' },
       ];
+      headers.push(...this.toSraQualificationReportHeaders(this.sraRows));
+
       // get headers
       reportData.push(headers.map(header => header.title));
 
       // get rows
-      this.report.rows.forEach((row) => {
+      this.sraRows.forEach((row) => {
         reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
@@ -690,19 +815,15 @@ export default {
     exportData() {
       const title = 'Agency Report';
       let data = null;
-      let dataTag;
+      const dataTag = this.activeTab.toUpperCase();
 
       if (this.activeTab === 'acro') {
-        dataTag = 'ACRO';
         data = this.gatherACROReportData();
       } else if (this.activeTab === 'hmrc') {
-        dataTag = 'HMRC';
         data = this.gatherHMRCReportData();
       } else if (this.activeTab === 'bsb') {
-        dataTag = 'BSB';
         data = this.gatherBSBReportData();
       } else if (this.activeTab === 'sra') {
-        dataTag = 'SRA';
         data = this.gatherSRAReportData();
       } else {
         data = this.gatherReportData();
@@ -717,6 +838,76 @@ export default {
         }
       );
     },
+    getMaxSraQualificationLength(rows) {
+      return this.report ? Math.max(...rows.map(e => e?.sraQualifications?.length || 0)) : 0;
+    },
+    getMaxBsbQualificationLength(rows) {
+      return this.report ? Math.max(...rows.map(e => e?.bsbQualifications?.length || 0)) : 0;
+    },
+    toSraQualificationTableHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
+        headers.push(`Qualification ${i}`);
+        headers.push(`Region ${i}`);
+        headers.push(`SRA Number ${i}`);
+      }
+      return headers;
+    },
+    toBsbQualificationTableHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
+        headers.push(`Qualification ${i}`);
+        headers.push(`Region ${i}`);
+        headers.push(`Registration Number ${i}`);
+      }
+      return headers;
+    },
+    toSraQualificationTableData(sraQualifications, rows) {
+      const qualifications = sraQualifications || [];
+      const tableDataColumns = [];
+      for (let i = 0; i < this.getMaxSraQualificationLength(rows); i++) {
+        tableDataColumns.push(qualifications[i]?.type || '');
+        tableDataColumns.push(qualifications[i]?.location || '');
+        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
+      }
+
+      return tableDataColumns;
+    },
+    toBsbQualificationTableData(bsbQualifications, rows) {
+      const qualifications = bsbQualifications || [];
+      const tableDataColumns = [];
+      for (let i = 0; i < this.getMaxBsbQualificationLength(rows); i++) {
+        tableDataColumns.push(qualifications[i]?.type || '');
+        tableDataColumns.push(qualifications[i]?.location || '');
+        tableDataColumns.push(qualifications[i]?.membershipNumber || '');
+      }
+
+      return tableDataColumns;
+    },
+    toSraQualificationReportHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxSraQualificationLength(rows); i++) {
+        headers.push({ title: `Qualification ${i}`, ref: `sraType${i}` });
+        headers.push({ title: `Region ${i}`, ref: `sraRegion${i}` });
+        headers.push({ title: `SRA Number ${i}`, ref: `sraRegistrationNumber${i}` });
+      }
+      return headers;
+    },
+    toBsbQualificationReportHeaders(rows) {
+      const headers = [];
+      for (let i = 1; i <= this.getMaxBsbQualificationLength(rows); i++) {
+        headers.push({ title: `Qualification ${i}`, ref: `bsbType${i}` });
+        headers.push({ title: `Region ${i}`, ref: `bsbRegion${i}` });
+        headers.push({ title: `Registration Number ${i}`, ref: `bsbRegistrationNumber${i}` });
+      }
+      return headers;
+    },
   },
 };
 </script>
+
+<style scoped>
+th {
+  min-width: 210px;
+}
+</style>
