@@ -645,10 +645,10 @@ export default {
       return activeTab;
     },
     sraRows() {
-      return this.report ? this.report.rows.filter((e) => e.sraDate) : [];
+      return this.report ? this.report.rows.filter((e) => e.sraQualifications.length > 0) : [];
     },
     bsbRows() {
-      return this.report ? this.report.rows : [];
+      return this.report ? this.report.rows.filter((e) => e.bsbQualifications.length > 0) : [];
     },
     jcioRows() {
       return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
@@ -781,13 +781,13 @@ export default {
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
       ];
-      headers.push(...this.toBsbQualificationReportHeaders(this.report.rows));
+      headers.push(...this.toBsbQualificationReportHeaders(this.bsbRows));
 
       // get headers
       reportData.push(headers.map(header => header.title));
 
       // get rows
-      this.report.rows.forEach((row) => {
+      this.bsbRows.forEach((row) => {
         reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
@@ -800,13 +800,13 @@ export default {
         { title: 'Surname', ref: 'lastName' },
         { title: 'Forename(s)', ref: 'firstName' },
       ];
-      headers.push(...this.toSraQualificationReportHeaders(this.report.rows));
+      headers.push(...this.toSraQualificationReportHeaders(this.sraRows));
 
       // get headers
       reportData.push(headers.map(header => header.title));
 
       // get rows
-      this.report.rows.forEach((row) => {
+      this.sraRows.forEach((row) => {
         reportData.push(headers.map(header => row[header.ref] ? row[header.ref] : ''));
       });
 
