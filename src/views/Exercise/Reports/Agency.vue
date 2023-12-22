@@ -168,12 +168,6 @@
                     Admission to the roll
                   </th>
                   <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Registration number
-                  </th>
-                  <th
                     v-for="(header,index) in toSraQualificationTableHeaders(sraRows)"
                     :key="`qual_header_${index}`"
                     scope="col"
@@ -203,9 +197,6 @@
                   </td>
                   <td class="govuk-table__cell">
                     {{ $filters.formatDate(candidate.sraDate, 'long') }}
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.sraNumber }}
                   </td>
                   <td
                     v-for="(data, index) in toSraQualificationTableData(candidate.sraQualifications, sraRows)"
@@ -254,12 +245,6 @@
                     Called to the Bar
                   </th>
                   <th
-                    scope="col"
-                    class="govuk-table__header"
-                  >
-                    Registration number
-                  </th>
-                  <th
                     v-for="(header,index) in toBsbQualificationTableHeaders(bsbRows)"
                     :key="`qual_header_${index}`"
                     scope="col"
@@ -298,9 +283,6 @@
                     class="govuk-table__cell"
                   >
                     None given
-                  </td>
-                  <td class="govuk-table__cell">
-                    {{ candidate.bsbNumber }}
                   </td>
                   <td
                     v-for="(data, index) in toBsbQualificationTableData(candidate.bsbQualifications, bsbRows)"
