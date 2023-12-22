@@ -15,12 +15,13 @@
     />
 
     <TextField
-      id="working-preference-question"
+      id="working-preference-${type}-question"
       v-model="row.question"
       label="What question would you like to ask?"
     />
+
     <RadioGroup
-      :id="`working-preference-question-type_${index}`"
+      :id="`working-preference-${type}-question-type_${index}`"
       v-model="row.questionType"
       label="How would you like the question answered?"
       :messages="{
@@ -40,6 +41,58 @@
         label="Ranked choice"
       />
     </RadioGroup>
+
+    <Checkbox
+      id="allow-equal-ranking"
+      v-model="row.allowEqualRanking"
+      label="Allow equal ranking?"
+      hint="For example two answers could be ranked in first place"
+    >
+      Yes
+    </Checkbox>
+
+    <RadioGroup
+      :id="`working-preference-${type}-answer-_${index}`"
+      v-model="row.minimumAnswerMode"
+      label="How many answers should candidates select?"
+    >
+      <RadioItem
+        value="all"
+        label="All"
+      />
+      <RadioItem
+        value="any"
+        label="Any"
+      />
+      <RadioItem
+        value="some"
+        label="Some"
+      >
+        <TextField
+          :id="`working-preference-${type}-answer-quantity-_${index}`"
+          v-model="row.minimumAnswerQuantity"
+          label="Specify the amount"
+          input-class="govuk-input--width-2"
+          required
+        />
+      </RadioItem>
+    </RadioGroup>
+
+    <RadioGroup
+      :id="`working-preference-${type}-linked-questions-_${index}`"
+      v-model="row.allowLinkedQuestions"
+      label="Allow answers to have linked questions?"
+    >
+      <RadioItem
+        :value="true"
+        label="Yes"
+      />
+      <RadioItem
+        :value="false"
+        label="No"
+      />
+    </RadioGroup>
+
     <RepeatableFields
       v-model="row.answers"
       :component="repeatableFields.Answer"
@@ -55,8 +108,10 @@
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
+import { shallowRef } from 'vue';
 
 export default {
   name: 'WorkingPreferenceQuestion',
@@ -65,6 +120,7 @@ export default {
     RepeatableFields,
     RadioGroup,
     RadioItem,
+    Checkbox,
   },
   props: {
     row: {
@@ -83,9 +139,9 @@ export default {
   },
   data() {
     return {
-      repeatableFields: {
+      repeatableFields: shallowRef({
         Answer,
-      },
+      }),
     };
   },
   computed: {
