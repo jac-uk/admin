@@ -1,19 +1,30 @@
 <template>
   <div>
-    <div class="govuk-panel govuk-panel--confirmation">
-      <div class="govuk-panel__body">
-        {{ $filters.lookup(type) }} was completed on {{ $filters.formatDate(task.statusLog.completed) }}
-      </div>
-    </div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <div class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />    
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div 
+          v-if="totalApplications"
+          class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
+        >
           <p class="govuk-body govuk-!-margin-bottom-0">
             Applications
             <span class="govuk-caption-m">Total</span>
           </p>
           <h2 class="govuk-heading-l govuk-!-padding-top-0 govuk-!-margin-bottom-0">
-            {{ task._stats.totalApplications }}
+            {{ totalApplications }}
           </h2>
         </div>
       </div>
@@ -94,6 +105,9 @@
 
 <script>
 import { beforeRouteEnter } from './helper';
+import { getTaskSteps } from '@/helpers/exerciseHelper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
@@ -101,6 +115,8 @@ export default {
   components: {
     Table,
     TableCell,
+    FullScreenButton,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -110,8 +126,18 @@ export default {
     },
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
+    },
+    totalApplications() {
+      return this.task.applications ? this.task.applications.length : null;
     },
     applicationOutcomes() {
       // List of candidates with passed/failed

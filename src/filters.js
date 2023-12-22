@@ -204,7 +204,7 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED] = 'No test submitted (scenario test)';
-  lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP second stage assessment';
+  lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP Tie-breaker';
   lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection day';
   lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection day';
   lookup[APPLICATION_STATUS.SELECTION_OUTCOME_PASSED] = 'Passed selection';
@@ -246,6 +246,8 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
   lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
+  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Passed`] = 'Passed EMP Tie-breaker';
+  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Failed`] = 'Failed EMP Tie-breaker';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.PENDING] = 'Pending';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.COMPLETED] = 'Completed';

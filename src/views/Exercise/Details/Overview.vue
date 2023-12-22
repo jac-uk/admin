@@ -355,7 +355,8 @@ export default {
         && this.exerciseProgress.eligibility
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
-        && this.exerciseProgress.downloads;
+        && this.exerciseProgress.downloads
+        && this.exerciseProgress.applicationProcess;
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;

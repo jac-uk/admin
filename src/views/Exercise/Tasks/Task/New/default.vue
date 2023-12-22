@@ -1,8 +1,17 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />
 
     <p
       class="govuk-body"
@@ -75,9 +84,11 @@
 <script>
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
-import { taskEntryStatus, previousTaskType, getTimelineTasks } from '@/helpers/exerciseHelper';
+import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps } from '@/helpers/exerciseHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import { functions } from '@/firebase';
 import { isDateInFuture } from '@jac-uk/jac-kit/helpers/date';
 
@@ -85,6 +96,8 @@ export default {
   components: {
     ActionButton,
     Checkbox,
+    FullScreenButton,
+    ProgressBar,
   },
   props: {
     type: {
@@ -109,6 +122,13 @@ export default {
     },
     timelineTasks() {
       return getTimelineTasks(this.exercise, this.type);
+    },
+    task() {
+      return { status: 'new' };
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     isQualifyingTest() {
       return this.type === TASK_TYPE.QUALIFYING_TEST;

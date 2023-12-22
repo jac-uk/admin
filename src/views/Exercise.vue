@@ -23,7 +23,7 @@
           <div>
             <span
               v-show="isInFavourites"
-              class="govuk-tag--yellow govuk-!-margin-right-3"
+              class="favourite-tag govuk-tag--yellow govuk-!-margin-right-3"
               style="display: inline-block; padding: 5px 8px 4px 8px; font-weight: 700; font-size: 16px; line-height: 16px; letter-spacing: 1px;"
             >
               FAVOURITE
