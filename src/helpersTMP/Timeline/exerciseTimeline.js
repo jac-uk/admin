@@ -224,7 +224,7 @@ const exerciseTimeline = (data) => {
   if (data.preSelectionDayQuestionnaireSendDate) {
     timeline.push(
       {
-        entry: 'Pre Selection Day Questionnaire - sent',
+        entry: 'Pre Selection Day Questionnaire - send',
         date: data.preSelectionDayQuestionnaireSendDate,
         dateString: getDateString(data.preSelectionDayQuestionnaireSendDate),
         taskType: TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
