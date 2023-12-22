@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -241,6 +241,9 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';  
+  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Passed`] = 'Completed PSDQ';
+  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Failed`] = 'Not completed PSDQ';
   lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
   lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Passed selection day';
   lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';
@@ -281,6 +284,14 @@ const lookup = (value) => {
   lookup[ASSESSMENT_METHOD.STATEMENT_OF_ELIGIBILITY] = 'Statement of eligibility';
   lookup[ASSESSMENT_METHOD.INDEPENDENT_ASSESSMENTS] = 'Independent Assessments';
   lookup[ASSESSMENT_METHOD.LEADERSHIP_JUDGE_ASSESSMENT] = 'Leadership Judge Assessment';
+
+  // form parts
+  lookup[APPLICATION_FORM_PARTS.CANDIDATE_AVAILABILITY] = 'Candidate Availability';
+  lookup[APPLICATION_FORM_PARTS.PANEL_CONFLICTS] = 'Panel Conflicts';
+  lookup[APPLICATION_FORM_PARTS.COMMISSIONER_CONFLICTS] = 'Commissioner Conflicts';
+  lookup[APPLICATION_FORM_PARTS.CHARACTER_CHECKS] = 'Character Checks';
+  lookup[APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS] = 'Reasonable Adjustments';
+  lookup[APPLICATION_FORM_PARTS.WORKING_PREFERENCES] = 'Working Preferences';
 
   returnValue = lookup[value];
 

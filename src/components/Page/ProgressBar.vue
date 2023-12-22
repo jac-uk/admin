@@ -20,9 +20,14 @@
         class="progress-bar-step-icon" 
         viewBox="0 0 99.295 86.056"
       >
-        <polygon fill="currentColor" points="36.371 86.056 0 54.594 9.793 43.287 34.554 64.728 87.76 0 99.295 9.49 36.371 86.056" />
+        <polygon
+          fill="currentColor" 
+          points="36.371 86.056 0 54.594 9.793 43.287 34.554 64.728 87.76 0 99.295 9.49 36.371 86.056"
+        />
       </svg>
-      <div class="progress-bar-step-label govuk-caption-m">{{ step.title }}</div>
+      <div class="progress-bar-step-label govuk-caption-m">
+        {{ step.title }}
+      </div>
     </div>    
   </div>
 </template>

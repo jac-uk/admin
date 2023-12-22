@@ -176,6 +176,8 @@ STAGE_TASKS[PROCESSING_STAGE.SELECTION] = [
 ];
 
 const TASK_STATUS = { // aka task STEPS
+  CANDIDATE_FORM_CONFIGURE: 'candidateFormConfigure',
+  CANDIDATE_FORM_MONITOR: 'candidateFormMonitor',
   DATA_INITIALISED: 'dataInitialised',
   DATA_ACTIVATED: 'dataActivated',
   TEST_INITIALISED: 'testInitialised',
@@ -192,7 +194,9 @@ const TASK_STATUS = { // aka task STEPS
 };
 
 const TASK_STEPS = {};
-TASK_STEPS.new = { title: 'Get started' };
+TASK_STEPS.new = { title: 'Overview' };
+TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_CONFIGURE] = { title: 'Configure candidate form' };
+TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_MONITOR] = { title: 'Monitor candidate responses' };
 TASK_STEPS[TASK_STATUS.DATA_INITIALISED] = { title: 'Configure marking scheme' };
 TASK_STEPS[TASK_STATUS.DATA_ACTIVATED] = { title: 'Enter scores' };
 TASK_STEPS[TASK_STATUS.TEST_INITIALISED] = { title: 'Test preparation' };
@@ -291,6 +295,7 @@ function getTimelineTasks(exercise, taskType) {
       TASK_TYPE.STATUTORY_CONSULTATION,
       TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       TASK_TYPE.EMP_TIEBREAKER,
+      TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
       TASK_TYPE.SELECTION_DAY,
     ];
   } else {
@@ -397,6 +402,13 @@ function taskStatuses(taskType) { // also on DP
     case TASK_TYPE.CHARACTER_AND_SELECTION_SCC:
         availableStatuses = [
         TASK_STATUS.STATUS_CHANGES,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE:
+      availableStatuses = [
+        TASK_STATUS.CANDIDATE_FORM_CONFIGURE,
+        TASK_STATUS.CANDIDATE_FORM_MONITOR,
         TASK_STATUS.COMPLETED,
       ];
       break;
