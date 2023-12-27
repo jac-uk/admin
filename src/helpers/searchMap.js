@@ -6,6 +6,13 @@ export const searchMap = {
       hidden: [],
     },
   },
+  users: {
+    title: 'Search users',
+    tooltip: {
+      visible: ['First Name', 'Last Name', 'Email'],
+      hidden: [],
+    },
+  },
   candidates: {
     title: 'Search candidates',
     tooltip: {
