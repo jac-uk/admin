@@ -227,13 +227,24 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
+    //mounted() {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
     this.formData.os = this.client.os;
     this.formData.url = window.location.href;
     this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
+
+    console.log('Calling github callable 1');
+
+    // @TODO: TESTING SO REMOVE ONCE DONE!!
+    await functions.httpsCallable('testGithubWebhookEndpoint1')();
+
+    console.log('Calling zenhub callable 1');
+
+    // @TODO: TESTING SO REMOVE ONCE DONE!!
+    await functions.httpsCallable('testZenhubWebhookEndpoint1')();
   },
   methods: {
     closeModal() {
