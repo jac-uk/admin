@@ -40,12 +40,15 @@
       >
         <template #row="{row}">
           <TableCell :title="tableColumns[0].title">
-            {{ row.displayName }}
+            {{ row.lastName }}
           </TableCell>
           <TableCell :title="tableColumns[1].title">
-            {{ row.email }}
+            {{ row.firstName }}
           </TableCell>
           <TableCell :title="tableColumns[2].title">
+            {{ row.email }}
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
             {{ row.roleName }}
             <select
               class="govuk-select"
@@ -62,7 +65,7 @@
               </option>
             </select>
           </TableCell>
-          <TableCell :title="tableColumns[3].title">
+          <TableCell :title="tableColumns[4].title">
             <div style="display: flex; gap: 15px;">
               <ActionButton
                 v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
@@ -160,7 +163,8 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Name', sort: 'lastName', direction: 'asc', default: true },
+        { title: 'Last Name', sort: 'lastName', direction: 'asc', default: true },
+        { title: 'First Name' },
         { title: 'Email', sort: 'email', direction: 'asc', default: false },
         { title: 'Role' },
         { title: 'Action' },
