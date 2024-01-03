@@ -1,6 +1,5 @@
 import { auth, functions, firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
-import { parseDisplayName } from '@/helpers/user';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 
@@ -52,7 +51,6 @@ const module = {
           // create user document
           const newUser = {
             displayName: user.displayName || '',
-            ...parseDisplayName(user.displayName),
             email: user.email || '',
             disabled: user.disabled || false,
             role: {
