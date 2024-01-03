@@ -9,7 +9,7 @@ export const searchMap = {
   users: {
     title: 'Search users',
     tooltip: {
-      visible: ['First Name', 'Last Name', 'Email'],
+      visible: ['Display Name', 'Email'],
       hidden: [],
     },
   },
