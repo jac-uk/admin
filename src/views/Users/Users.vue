@@ -160,7 +160,7 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Display Name', sort: 'lastName', direction: 'asc', default: true },
+        { title: 'Display Name', sort: 'displayName', direction: 'asc', default: true },
         { title: 'Email', sort: 'email', direction: 'asc', default: false },
         { title: 'Role' },
         { title: 'Action' },
