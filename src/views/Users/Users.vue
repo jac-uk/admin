@@ -14,6 +14,21 @@
     >
       <h2>List of admin users</h2>
 
+      <div class="govuk-!-margin-bottom-7">
+        <select
+          v-model="filteredRole"
+          class="govuk-select"
+        >
+          <option
+            v-for="(option, index) in roleFilterOptions"
+            :key="index"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
       <Table
         ref="usersTable"
         data-key="id"
@@ -150,6 +165,7 @@ export default {
         { title: 'Role' },
         { title: 'Action' },
       ],
+      filteredRole: null,
       selectedUser: null,
     };
   },
@@ -179,6 +195,24 @@ export default {
     roles() {
       return this.$store.state.roles.records;
     },
+    roleFilterOptions() {
+      let options = [
+        {
+          value: null,
+          label: 'All',
+        },
+      ];
+      options = options.concat(this.roles.map((role) => ({
+        value: role.id,
+        label: role.roleName,
+      })));
+      return options;
+    },
+  },
+  watch: {
+    filteredRole() {
+      this.reloadTable();
+    },
   },
   mounted() {
     this.$store.dispatch('roles/bind', {
@@ -188,7 +222,15 @@ export default {
   },
   methods: {
     getTableData(params) {
+      if (this.filteredRole) {
+        params.roleId = this.filteredRole;
+      }
       this.$store.dispatch('users/bind', params);
+    },
+    reloadTable() {
+      if (this.$refs['usersTable']) {
+        this.$refs['usersTable'].reload();
+      }
     },
     handleRoleChange(event, user) {
       const roleId = event.target.value;

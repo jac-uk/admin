@@ -9,7 +9,11 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      const firestoreRef = await tableQuery(state.records, collection, params);
+      let firestoreRef = collection;
+      if (params.roleId) {
+        firestoreRef = firestoreRef.where('role.id', '==', params.roleId);
+      }
+      firestoreRef = await tableQuery(state.records, firestoreRef, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
       } else {
