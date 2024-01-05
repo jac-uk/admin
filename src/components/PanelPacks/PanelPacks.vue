@@ -14,7 +14,7 @@
         Create New
       </button>
       <Table
-        v-if="hasPermissions([PERMISSIONS.panels.permissions.canReadPanels.value]) && panelsList.length"
+        v-if="hasPermissions([PERMISSIONS.panels.permissions.canReadPanels.value])"
         data-key="id"
         :data="panelsList"
         :page-size="50"
