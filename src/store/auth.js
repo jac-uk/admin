@@ -53,6 +53,7 @@ const module = {
             displayName: user.displayName || '',
             email: user.email || '',
             disabled: user.disabled || false,
+            providerData: user.providerData ? user.providerData.map(p => p.providerId) : [],
             role: {
               id: userInvitation.roleId || '',
               isChanged: false,
