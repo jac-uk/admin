@@ -35,7 +35,7 @@
         :data="users"
         :page-size="50"
         :columns="tableColumns"
-        :search="['email']"
+        :search-map="$searchMap.users"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -160,8 +160,8 @@ export default {
     return {
       activeTab: 'users',
       tableColumns: [
-        { title: 'Name' },
-        { title: 'Email', sort: 'email', direction: 'asc', default: true },
+        { title: 'Display Name', sort: 'displayName', direction: 'asc', default: true },
+        { title: 'Email', sort: 'email', direction: 'asc', default: false },
         { title: 'Role' },
         { title: 'Action' },
       ],
