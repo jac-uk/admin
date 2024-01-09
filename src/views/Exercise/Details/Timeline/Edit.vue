@@ -244,6 +244,18 @@
         <h2 class="govuk-heading-l">
           Selection Day
         </h2>
+        <DateInput
+          id="selection-day-questionnaire-send-date"
+          v-model="formData.preSelectionDayQuestionnaireSendDate"
+          label="Pre Selection Day Questionnaire - send date"
+          required
+        />
+        <DateInput
+          id="selection-day-questionnaire-send-date"
+          v-model="formData.preSelectionDayQuestionnaireReturnDate"
+          label="Pre Selection Day Questionnaire - return date"
+          required
+        />
         <RepeatableFields
           v-model="formData.selectionDays"
           :component="repeatableFields.SelectionDay"
@@ -358,6 +370,7 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.v
 import SelectionDay from '@/components/RepeatableFields/SelectionDay.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { formatDate } from '@/helpersTMP/date';
+import { shallowRef } from 'vue';
 
 export default {
   components: {
@@ -395,6 +408,8 @@ export default {
       independentAssessmentsReturnDate: null,
       independentAssessmentsHardLimitDate: null,
       eligibilitySCCDate: null,
+      preSelectionDayQuestionnaireSendDate: null,
+      preSelectionDayQuestionnaireReturnDate: null,
       selectionDays: null,
       characterChecksDate: null,
       characterChecksReturnDate: null,
@@ -411,9 +426,9 @@ export default {
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData: formData,
-      repeatableFields: {
+      repeatableFields: shallowRef({
         SelectionDay,
-      },
+      }),
     };
   },
   computed: {

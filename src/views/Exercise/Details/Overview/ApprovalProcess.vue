@@ -128,7 +128,7 @@ export default {
     },
     approver() {
       const approval = this.getApproval;
-      if (approval && this.isApproved) {
+      if (approval && approval.approved && this.isApproved) {
         const approverIsAuth = this.userId === approval.approved.user.id;
         return approverIsAuth ? 'you' : approval.approved.user.name;
       }

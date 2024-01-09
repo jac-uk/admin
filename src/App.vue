@@ -66,7 +66,17 @@
                   Candidates
                 </RouterLink>
               </li>
-
+              <li
+                v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
+                class="govuk-header__navigation-item"
+              >
+                <RouterLink
+                  :to="{ name: 'panellists-list' }"
+                  class="govuk-header__link"
+                >
+                  Panellists
+                </RouterLink>
+              </li>
               <li
                 v-if="hasPermissions([PERMISSIONS.users.permissions.canReadUsers.value])"
                 class="govuk-header__navigation-item"
