@@ -35,9 +35,9 @@
       </div>
 
       <TextField
-        v-if="!reporterSlackUID"
+        v-show="!reporterSlackUID"
         id="slackUID"
-        v-model="formData.reporterSlackUID"
+        v-model="newReporterSlackUID"
         label="Your Slack member ID"
         type="text"
         required
@@ -152,6 +152,7 @@ import CaptureScreenshot from '../Micro/CaptureScreenshot.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { functions } from '@/firebase';
+import SlackLookupError from '@/errors/slackLookupError';
 
 export default {
   name: 'FeedbackForm',
@@ -173,11 +174,14 @@ export default {
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
         url: '',
-        criticality: '',
-        expectation: '',
-        issue: '',
+
+        // @TODO: Remove the hardcoding below
+
+        criticality: 'major',
+        issue: 'ssss',
+        expectation: 'sss',
+
         reporter: '',
-        //reporterSlackUID: null,
         candidate: '',
         userId: '',
         browser: '',
@@ -186,6 +190,9 @@ export default {
       },
       errors: [],
       criticalityTypes: ['critical', 'major', 'minor', 'low'],
+      newReporterSlackUID: '',
+      hasSlackIdOnLoad: true,
+      checkSlackMemberIdOnBlur: false,
     };
   },
   computed: {
@@ -239,6 +246,10 @@ export default {
         this.formData.os = this.client.os;
       }
     },
+    newReporterSlackUID() {
+      this.checkSlackMemberIdOnBlur = true;
+      this.hasSlackIdOnLoad = false;
+    },
   },
   async mounted() {
     //mounted() {
@@ -248,64 +259,51 @@ export default {
     this.formData.url = window.location.href;
     this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
-
-    // console.log('Calling github callable 1');
-
-    // // @TODO: TESTING SO REMOVE ONCE DONE!!
-    // await functions.httpsCallable('testGithubWebhookEndpoint1')();
-
-    // console.log('Calling zenhub callable 1');
-
-    // // @TODO: TESTING SO REMOVE ONCE DONE!!
-    // await functions.httpsCallable('testZenhubWebhookEndpoint1')();
-
-    console.log('Calling verifySlackUser ...');
-
-    // Details for 'Drie Contractor'
-    const appUserId = 'uq7S68mW3zTKd6duK9L94dIyu1B2';
-    const userEnteredSlackUID = 'U052NR5U43Z';
-
-    // @todo:
-    // - Once its working remove the member id from the profile in firestore (develop) and run it again to see if it updates it
-    // - Move the code into the save() fn below and also allow it to be called on blur and ensure the error is coming back for failure
-
-    // const confirmed = await functions.httpsCallable('verifySlackUser')({
-    //   // userId: userId,
-    //   // slackMemberId: this.reporterSlackUID,
-    //   userId: appUserId,
-    //   slackMemberId: userEnteredSlackUID,
-    //   addSlackToProfile: true,
-    // });
-
-    // console.log(`Confirmed? ${confirmed}`);
-
   },
   methods: {
     closeModal() {
       this.$emit('close');
     },
+    async isValidSlackMemberId() {
+      if (this.checkSlackMemberIdOnBlur) {
+        const response = await functions.httpsCallable('verifySlackUser')({
+          userId: this.userId,
+          slackMemberId: this.newReporterSlackUID,
+          addSlackToProfile: true,
+        });
+        const confirmed = response.data;
+        if (confirmed) {
+          return {
+            ok: true,
+          };
+        }
+        else {
+          return {
+            ok: false,
+            error: 'The Slack Member ID you provided was invalid',
+          };
+        }
+      }
+    },
     async save() {
-      this.formData.contactDetails = this.email;
-
-      //this.formData.reporterSlackUID = this.reporterSlackUID;
-
-      // @TODO: Add call below:
-
-      // const confirmed = await functions.httpsCallable('verifySlackUser')({
-      //  userId: userId,
-      //  slackMemberId: this.reporterSlackUID,
-      //  addSlackToProfile: true,
-      //});
-
-      this.formData.exercise = {
-        id: this.exerciseId,
-        referenceNumber: this.exerciseReferenceNumber,
-      };
-      this.formData.application = {
-        id: this.applicationId,
-        referenceNumber: this.applicationReferenceNumber,
-      };
       try {
+        if (!this.reporterSlackUID) {
+          // Check if the slack member id is valid
+          const validSlackMember = await this.isValidSlackMemberId();
+          if (validSlackMember.ok === false) {
+            throw new SlackLookupError(validSlackMember.error);
+          }
+        }
+        this.formData.contactDetails = this.email;
+        this.formData.exercise = {
+          id: this.exerciseId,
+          referenceNumber: this.exerciseReferenceNumber,
+        };
+        this.formData.application = {
+          id: this.applicationId,
+          referenceNumber: this.applicationReferenceNumber,
+        };
+
         let screenshot = null;
         await this.$store.dispatch('bugReport/create', this.formData);
 
@@ -322,11 +320,18 @@ export default {
         this.$emit('success');
       }
       catch (e) {
-        console.log(e);
-        const str = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
-        const msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
+        let msg, id = '';
+        if (e instanceof SlackLookupError) {
+          id = 'slackUID';
+          msg = e.message;
+        }
+        else {
+          const str = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
+          id = 'error';
+          msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
+        }
         this.errors.push({
-          id: 'error',
+          id: id,
           message: msg,
         });
       }
