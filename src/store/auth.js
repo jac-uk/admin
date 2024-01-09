@@ -3,6 +3,8 @@ import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 
+const collection = firestore.collection('users');
+
 const module = {
   namespaced: true,
   state: {
@@ -72,7 +74,7 @@ const module = {
         }
 
         // refresh token to get latest custom claims
-        if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true); 
+        if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
         const idTokenResult = await user.getIdTokenResult();
 
         // get user role from custom claims
@@ -89,38 +91,35 @@ const module = {
       }
     },
     bindCurrentUser: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = firestore.collection('users').doc(id);
+      const firestoreRef = collection.doc(id);
       return bindFirestoreRef('currentUser', firestoreRef, { serialize: vuexfireSerialize });
     }),
     setAuthError({ commit }, message) {
       commit('setAuthError', message);
+    },
+    save: async ({ state }, data) => {
+      await collection.doc(state.record.id).update(data);
     },
   },
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
-    getEmail(state) {
-      if (state.currentUser) {
-        return state.currentUser.email;
-      }
-      return null;
-    },
     hasPermissions: state => permissions => {
       const rolePermissions = state.rolePermissions;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
+    getEmail(state) {
+      return state.currentUser?.email ?? null;
+    },
     getDisplayName(state) {
-      if (state.currentUser) {
-        return state.currentUser.displayName;
-      }
-      return null;
+      return state.currentUser?.displayName ?? null;
     },
     getUserId(state) {
-      if (state.currentUser) {
-        return state.currentUser.uid;
-      }
-      return null;
+      return state.currentUser?.uid ?? null;
+    },
+    getSlackUID(state) {
+      return state.currentUser?.slackMemberId ?? null;
     },
   },
 };

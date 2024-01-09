@@ -34,6 +34,15 @@
         </strong>
       </div>
 
+      <TextField
+        v-if="!reporterSlackUID"
+        id="slackUID"
+        v-model="formData.reporterSlackUID"
+        label="Your Slack member ID"
+        type="text"
+        required
+      />
+
       <RadioGroup
         v-show="feedbackForProxy === '1'"
         id="cps-device"
@@ -168,6 +177,7 @@ export default {
         expectation: '',
         issue: '',
         reporter: '',
+        //reporterSlackUID: null,
         candidate: '',
         userId: '',
         browser: '',
@@ -184,6 +194,9 @@ export default {
     },
     userId() {
       return this.$store.getters['auth/getUserId'];
+    },
+    reporterSlackUID() {
+      return this.$store.getters['auth/getSlackUID'];
     },
     displayName() {
       return this.$store.getters['auth/getDisplayName'];
@@ -236,15 +249,36 @@ export default {
     this.formData.reporter = this.displayName;
     this.formData.userId = this.userId;
 
-    console.log('Calling github callable 1');
+    // console.log('Calling github callable 1');
 
-    // @TODO: TESTING SO REMOVE ONCE DONE!!
-    await functions.httpsCallable('testGithubWebhookEndpoint1')();
+    // // @TODO: TESTING SO REMOVE ONCE DONE!!
+    // await functions.httpsCallable('testGithubWebhookEndpoint1')();
 
-    console.log('Calling zenhub callable 1');
+    // console.log('Calling zenhub callable 1');
 
-    // @TODO: TESTING SO REMOVE ONCE DONE!!
-    await functions.httpsCallable('testZenhubWebhookEndpoint1')();
+    // // @TODO: TESTING SO REMOVE ONCE DONE!!
+    // await functions.httpsCallable('testZenhubWebhookEndpoint1')();
+
+    console.log('Calling verifySlackUser ...');
+
+    // Details for 'Drie Contractor'
+    const appUserId = 'uq7S68mW3zTKd6duK9L94dIyu1B2';
+    const userEnteredSlackUID = 'U052NR5U43Z';
+
+    // @todo:
+    // - Once its working remove the member id from the profile in firestore (develop) and run it again to see if it updates it
+    // - Move the code into the save() fn below and also allow it to be called on blur and ensure the error is coming back for failure
+
+    // const confirmed = await functions.httpsCallable('verifySlackUser')({
+    //   // userId: userId,
+    //   // slackMemberId: this.reporterSlackUID,
+    //   userId: appUserId,
+    //   slackMemberId: userEnteredSlackUID,
+    //   addSlackToProfile: true,
+    // });
+
+    // console.log(`Confirmed? ${confirmed}`);
+
   },
   methods: {
     closeModal() {
@@ -252,6 +286,17 @@ export default {
     },
     async save() {
       this.formData.contactDetails = this.email;
+
+      //this.formData.reporterSlackUID = this.reporterSlackUID;
+
+      // @TODO: Add call below:
+
+      // const confirmed = await functions.httpsCallable('verifySlackUser')({
+      //  userId: userId,
+      //  slackMemberId: this.reporterSlackUID,
+      //  addSlackToProfile: true,
+      //});
+
       this.formData.exercise = {
         id: this.exerciseId,
         referenceNumber: this.exerciseReferenceNumber,
