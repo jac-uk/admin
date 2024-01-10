@@ -35,7 +35,7 @@
       </div>
 
       <TextField
-        v-show="!reporterSlackUID"
+        v-if="!reporterSlackUID"
         id="slackUID"
         v-model="newReporterSlackUID"
         label="Your Slack member ID"
