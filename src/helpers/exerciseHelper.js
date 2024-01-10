@@ -94,7 +94,8 @@ export {
   getStagePassingStatuses,
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
-  isApplicationVersionLessThan
+  isApplicationVersionLessThan,
+  isJAC00187
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -1291,4 +1292,10 @@ function isApplicationVersionGreaterThan(exercise, version) {
 }
 function isApplicationVersionLessThan(exercise, version) {
   return exercise?._applicationVersion < version;
+}
+
+function isJAC00187(referenceNumber) {
+  if (!referenceNumber) { return false; }
+  // [develop, staging, prod]
+  return ['JAC00696', 'JAC00695', 'JAC00187'].includes(referenceNumber);
 }
