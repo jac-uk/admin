@@ -15,7 +15,7 @@
               :edit="editable"
               :options="[true, false]"
               type="selection"
-              :data="resignationFromDWP.workingAtDWP"
+              :data="workingAtDWP"
               field="resignationFromDWP"
               extension="workingAtDWP"
               @change-field="changeInfo"
@@ -54,6 +54,9 @@ export default {
     },
     resignationFromDWP() {
       return this.application.resignationFromDWP;
+    },
+    workingAtDWP() {
+      return this.resignationFromDWP?.workingAtDWP;
     },
   },
   methods: {
