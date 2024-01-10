@@ -121,11 +121,7 @@
         :page-size="10"
         :page-item-type="'number'"
         :total="total"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -150,12 +146,12 @@
               </div>
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-bottom-1">
-                  Recommendation
+                  Recommended SCC approach
                 </h4>
                 <Select
                   id="issue-status"
-                  :value="row.issues.characterIssuesStatus || ''"
-                  @input="saveIssueStatus(row, $event)"
+                  :model-value="row.issues.characterIssuesStatus || ''"
+                  @update:model-value="saveIssueStatus(row, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -192,7 +188,7 @@
                   class="govuk-link print-none"
                   @click.prevent="toggleIssues(row.id)"
                 >
-                  View all issues<span
+                  View all character issues from previous applications<span
                     class="icon-expand"
                     :class="open[row.id] ? 'open' : 'close'"
                   >
@@ -204,9 +200,9 @@
                 Offence category
                 <Select
                   id="issue-offence-category"
-                  :value="row.issues.characterIssuesOffenceCategory || ''"
+                  :model-value="row.issues.characterIssuesOffenceCategory || ''"
                   class="offence-category"
-                  @input="saveIssueOffenceCategory(row, $event)"
+                  @update:model-value="saveIssueOffenceCategory(row, $event)"
                 >
                   <option value="" />
                   <option
@@ -451,9 +447,6 @@ export default {
       } else {
         this.applicationRecords = [];
       }
-    },
-    async candidateSearch(searchTerm) {
-      return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.characterIssuesStatus = status;
