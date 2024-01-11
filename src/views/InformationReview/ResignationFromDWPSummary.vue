@@ -22,6 +22,25 @@
             />
           </dd>
         </div>
+        <div
+          v-if="workingAtDWP"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            Please note, if you work for the DWP and are recommended for appointment as a Fee-paid Medical Member, you will be required to resign from your post in order to take up appointment. Please tick to confirm that you have read this.
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <InformationReviewRenderer
+              :edit="editable"
+              :options="[true, false]"
+              type="selection"
+              :data="isConfirmed"
+              field="resignationFromDWP"
+              extension="isConfirmed"
+              @change-field="changeInfo"
+            />
+          </dd>
+        </div>
       </dl>
     </div>
   </div>
@@ -57,6 +76,9 @@ export default {
     },
     workingAtDWP() {
       return this.resignationFromDWP?.workingAtDWP;
+    },
+    isConfirmed() {
+      return this.resignationFromDWP?.isConfirmed;
     },
   },
   methods: {
