@@ -1294,8 +1294,9 @@ function isApplicationVersionLessThan(exercise, version) {
   return exercise?._applicationVersion < version;
 }
 
-function isJAC00187(referenceNumber) {
-  if (!referenceNumber) { return false; }
-  // [develop, staging, prod]
-  return ['JAC00696', 'JAC00695', 'JAC00187'].includes(referenceNumber);
+function isJAC00187(env, referenceNumber) {
+  if (!env || !referenceNumber) { return false; }
+  return (env === 'DEVELOP' && referenceNumber === 'JAC00696') ||
+    (env === 'STAGING' && referenceNumber === 'JAC00695') ||
+    (env === 'PRODUCTION' && referenceNumber === 'JAC00187');
 }

@@ -526,7 +526,8 @@ export default {
       return this.application && isCharacterChecksAsked(this.application);
     },
     isJAC00187() {
-      return isJAC00187(this.application.exerciseRef);
+      const env = this.$store.getters.appEnvironment;
+      return isJAC00187(env, this.application.exerciseRef);
     },
   },
   watch: {
