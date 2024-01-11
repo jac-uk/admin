@@ -94,7 +94,8 @@ export {
   getStagePassingStatuses,
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
-  isApplicationVersionLessThan
+  isApplicationVersionLessThan,
+  isJAC00187
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -1291,4 +1292,11 @@ function isApplicationVersionGreaterThan(exercise, version) {
 }
 function isApplicationVersionLessThan(exercise, version) {
   return exercise?._applicationVersion < version;
+}
+
+function isJAC00187(env, referenceNumber) {
+  if (!env || !referenceNumber) { return false; }
+  return (env === 'DEVELOP' && referenceNumber === 'JAC00696') ||
+    (env === 'STAGING' && referenceNumber === 'JAC00695') ||
+    (env === 'PRODUCTION' && referenceNumber === 'JAC00187');
 }
