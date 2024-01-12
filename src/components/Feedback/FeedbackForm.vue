@@ -316,7 +316,10 @@ export default {
             screenshot: screenshot,
           }, id: this.bugReportId });
         }
-        await functions.httpsCallable('createZenhubIssue')(this.bugReportId);
+        await functions.httpsCallable('createZenhubIssue')({
+          bugReportId: this.bugReportId,
+          userId: this.userId,
+        });
         this.$emit('success');
       }
       catch (e) {
