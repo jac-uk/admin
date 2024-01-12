@@ -174,13 +174,9 @@ export default {
       fileTypes: '.bmp, .jpg, .jpeg, .gif, .png',
       formData: {
         url: '',
-
-        // @TODO: Remove the hardcoding below
-
-        criticality: 'major',
-        issue: 'ssss',
-        expectation: 'sss',
-
+        criticality: '',
+        issue: '',
+        expectation: '',
         reporter: '',
         candidate: '',
         userId: '',
