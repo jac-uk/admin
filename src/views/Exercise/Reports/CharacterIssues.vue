@@ -182,11 +182,40 @@
                 />
               </div>
 
+              <div class="govuk-grid-column-full">
+                <div
+                  v-for="(issue, index) in row.issues.characterIssues"
+                  :key="index"
+                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                >
+                  <hr
+                    v-if="index !== 0"
+                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                  >
+                  <div class="govuk-grid-column-full">
+                    <div class="issue">
+                      <p class="govuk-body">
+                        {{ issue.summary }}
+                      </p>
+                      <EventRenderer
+                        v-if="issue.events"
+                        :events="issue.events"
+                      />
+                    </div>
+                    <div
+                      v-if="issue.comments"
+                      class="jac-comments"
+                    >
+                      <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="govuk-grid-column-two-thirds">
                 <a
                   href="#"
                   class="govuk-link print-none"
-                  @click.prevent="toggleIssues(row.id)"
+                  @click.prevent="toggleIssues(row)"
                 >
                   View all character issues from previous applications<span
                     class="icon-expand"
@@ -217,57 +246,71 @@
             </div>
 
             <div v-if="open[row.id]">
-              <div
-                v-for="(ar, index) in getOtherCharacterIssues(row.candidate.id)"
-                :key="`${row.candidate.id}-${index}`"
-              >
-                <hr
-                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                >
-                <p class="govuk-hint">
-                  Exercise - {{ ar.exercise.referenceNumber }}
-                </p>
-                <div class="govuk-grid-row">
-                  <div class="govuk-grid-column-two-thirds">
-                    <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
-                      {{ ar.exercise.name }}
-                    </div>
-                  </div>
-                  <div class="govuk-grid-column-one-third text-right">
-                    <a
-                      :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
-                      class="govuk-link print-none"
-                      target="_blank"
-                    >
-                      View application
-                    </a>
-                  </div>
-                </div>
+              <template v-if="getOtherCharacterIssues(row).length">
                 <div
-                  v-for="(issue, subIndex) in ar.issues.characterIssues"
-                  :key="`${index}-${subIndex}`"
-                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                  v-for="(ar, index) in getOtherCharacterIssues(row)"
+                  :key="`${row.candidate.id}-${index}`"
                 >
-                  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
-                  <div class="govuk-grid-column-full">
-                    <div class="issue">
-                      <p class="govuk-body">
-                        {{ issue.summary }}
-                      </p>
-                      <EventRenderer
-                        v-if="issue.events"
-                        :events="issue.events"
-                      />
+                  <hr
+                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                  >
+                  <p class="govuk-hint">
+                    Exercise - {{ ar.exercise.referenceNumber }}
+                  </p>
+                  <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                      <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
+                        {{ ar.exercise.name }}
+                      </div>
                     </div>
-                    <div
-                      v-if="issue.comments"
-                      class="jac-comments"
-                    >
-                      <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                    <div class="govuk-grid-column-one-third text-right">
+                      <a
+                        :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
+                        class="govuk-link print-none"
+                        target="_blank"
+                      >
+                        View application
+                      </a>
                     </div>
                   </div>
+                  <template v-if="ar.issues.characterIssues && ar.issues.characterIssues.length">
+                    <div
+                      v-for="(issue, subIndex) in ar.issues.characterIssues"
+                      :key="`${index}-${subIndex}`"
+                      class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4 govuk-!-margin-left-3"
+                    >
+                      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
+                      <div class="govuk-grid-column-full">
+                        <div class="issue">
+                          <p class="govuk-body">
+                            {{ issue.summary }}
+                          </p>
+                          <EventRenderer
+                            v-if="issue.events"
+                            :events="issue.events"
+                          />
+                        </div>
+                        <div
+                          v-if="issue.comments"
+                          class="jac-comments"
+                        >
+                          <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <p class="govuk-body">
+                      Data not requested
+                    </p>
+                  </template>
                 </div>
-              </div>
+              </template>
+              <template v-else>
+                <p class="govuk-body">
+                  No previous applications with character issues
+                </p>
+              </template>
             </div>
           </TableCell>
         </template>
@@ -313,7 +356,7 @@ export default {
         { title: 'Candidate' },
       ],
       total: null,
-      otherApplicationRecords: [],
+      otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
     };
@@ -342,12 +385,6 @@ export default {
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
-    },
-    applicationRecords: {
-      deep: true,
-      handler() {
-        this.getOtherApplicationRecords(this.applicationRecords);
-      },
     },
   },
   unmounted() {
@@ -456,7 +493,9 @@ export default {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    toggleIssues(id) {
+    toggleIssues(applicationRecord) {
+      this.getOtherApplicationRecords(applicationRecord);
+      const id = applicationRecord.id;
       this.open[id] = this.open[id] === undefined ? true : !this.open[id];
       this.open = Object.assign({}, this.open);
     },
@@ -464,38 +503,33 @@ export default {
       applicationRecord.issues.characterIssuesOffenceCategory = category;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    async getOtherApplicationRecords(applicationRecords) {
-      if (!applicationRecords || !applicationRecords.length) {
-        this.otherApplicationRecords = [];
-      }
+    async getOtherApplicationRecords(applicationRecord) {
+      const match = this.otherApplicationRecords.find(item => item.candidateId === applicationRecord.candidate.id);
+      if (match) return; // already have the data for this candidate
 
-      for (let i = 0; i < applicationRecords.length; i++) {
-        const record = applicationRecords[i];
-        const firestoreRef = firestore
-          .collection('applicationRecords')
-          .where('candidate.id', '==', record.candidate.id)
-          .where('flags.characterIssues', '==', true);
-        const snapshot = await firestoreRef.get();
-        const otherRecords = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          if (data.exercise.id === record.exercise.id) {
-            otherRecords.unshift(data); // put current exercise first
-          } else {
-            otherRecords.push(data);
-          }
+      // get other application records for this candidate
+      const firestoreRef = firestore
+        .collection('applicationRecords')
+        .where('candidate.id', '==', applicationRecord.candidate.id)
+        .where('exercise.id', '!=', applicationRecord.exercise.id); // exclude current exercise
+      const snapshot = await firestoreRef.get();
+      const otherRecords = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        otherRecords.push(data);
+      });
+      if (otherRecords.length) {
+        this.otherApplicationRecords.push({
+          candidateId: applicationRecord.candidate.id,
+          otherRecords,
         });
-        if (otherRecords.length) {
-          this.otherApplicationRecords.push({
-            candidateId: record.candidate.id,
-            otherRecords,
-          });
-        }
       }
     },
-    getOtherCharacterIssues(candidateId) {
+    getOtherCharacterIssues(applicationRecord) {
+      const candidateId = applicationRecord.candidate.id;
+      const exerciseId = applicationRecord.exercise.id;
       const record = this.otherApplicationRecords.find(item => item.candidateId === candidateId);
-      return record ? record.otherRecords : [];
+      return record ? record.otherRecords.filter(ar => ar.exercise.id !== exerciseId) : [];
     },
   },
 };
