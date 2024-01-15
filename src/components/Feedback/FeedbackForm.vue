@@ -3,141 +3,140 @@
     <ErrorSummary
       :errors="errors"
     />
-    <form @submit.prevent="validateAndSave">
-      <RadioGroup
-        id="feedback-for-proxy"
-        v-model="feedbackForProxy"
-        label="Are you raising this issue for yourself or a candidate?"
-        :inline="true"
-      >
-        <RadioItem
-          value="0"
-          label="Myself"
-        />
-        <RadioItem
-          value="1"
-          label="Candidate"
-        />
-      </RadioGroup>
+    <RadioGroup
+      id="feedback-for-proxy"
+      v-model="feedbackForProxy"
+      label="Are you raising this issue for yourself or a candidate?"
+      :inline="true"
+    >
+      <RadioItem
+        value="0"
+        label="Myself"
+      />
+      <RadioItem
+        value="1"
+        label="Candidate"
+      />
+    </RadioGroup>
 
-      <div
-        class="govuk-warning-text"
-      >
-        <span
-          class="govuk-warning-text__icon"
-          aria-hidden="true"
-        >!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
-          <span v-else>Please ensure you are on the relevant page before raising the issue</span>
-        </strong>
-      </div>
+    <div
+      class="govuk-warning-text"
+    >
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
+        <span v-else>Please ensure you are on the relevant page before raising the issue</span>
+      </strong>
+    </div>
 
+    <TextField
+      v-if="!reporterSlackUID"
+      id="slackUID"
+      v-model="newReporterSlackUID"
+      label="Your Slack member ID"
+      type="text"
+      required
+    />
+
+    <RadioGroup
+      v-show="feedbackForProxy === '1'"
+      id="cps-device"
+      v-model="formData.cpsDevice"
+      label="Is the candidate using a CPS device?"
+      :inline="true"
+    >
+      <RadioItem
+        value="0"
+        label="No"
+      />
+      <RadioItem
+        value="1"
+        label="Yes"
+      />
+    </RadioGroup>
+
+    <CaptureScreenshot
+      v-if="!showFormForProxy"
+      id="capture-screenshot"
+      ref="screenshot"
+    />
+
+    <Select
+      id="criticality"
+      v-model="formData.criticality"
+      label="How critical is this issue"
+      required
+    >
+      <option
+        value=""
+        selected
+      >
+        Please select
+      </option>
+      <option
+        v-for="(criticalityType, index) in criticalityTypes"
+        :key="(index + 1)"
+        :value="criticalityType"
+      >
+        {{ criticalityType }}
+      </option>
+    </Select>
+
+    <template v-if="showFormForProxy">
       <TextField
-        v-if="!reporterSlackUID"
-        id="slackUID"
-        v-model="newReporterSlackUID"
-        label="Your Slack member ID"
+        id="name"
+        v-model="formData.candidate"
+        label="Name of candidate"
         type="text"
         required
       />
-
-      <RadioGroup
-        v-show="feedbackForProxy === '1'"
-        id="cps-device"
-        v-model="formData.cpsDevice"
-        label="Is the candidate using a CPS device?"
-        :inline="true"
-      >
-        <RadioItem
-          value="0"
-          label="No"
-        />
-        <RadioItem
-          value="1"
-          label="Yes"
-        />
-      </RadioGroup>
-
-      <CaptureScreenshot
-        v-if="!showFormForProxy"
-        id="capture-screenshot"
-        ref="screenshot"
-      />
-
-      <Select
-        id="criticality"
-        v-model="formData.criticality"
-        label="How critical is this issue"
-        required
-      >
-        <option
-          value=""
-          selected
-        >
-          Please select
-        </option>
-        <option
-          v-for="(criticalityType, index) in criticalityTypes"
-          :key="(index + 1)"
-          :value="criticalityType"
-        >
-          {{ criticalityType }}
-        </option>
-      </Select>
-
-      <template v-if="showFormForProxy">
-        <TextField
-          id="name"
-          v-model="formData.candidate"
-          label="Name of candidate"
-          type="text"
-          required
-        />
-        <TextField
-          id="browser"
-          v-model="formData.browser"
-          label="Candidate browser"
-          type="text"
-          required
-        />
-        <TextField
-          id="os"
-          v-model="formData.os"
-          label="Candidate operating system"
-          type="text"
-          required
-        />
-      </template>
-      <TextArea
-        id="issue"
-        v-model="formData.issue"
-        label="What happened?"
-        rows="2"
+      <TextField
+        id="browser"
+        v-model="formData.browser"
+        label="Candidate browser"
+        type="text"
         required
       />
-      <TextArea
-        id="expectation"
-        v-model="formData.expectation"
-        :label="expectationLabel"
-        rows="2"
+      <TextField
+        id="os"
+        v-model="formData.os"
+        label="Candidate operating system"
+        type="text"
         required
       />
-      <button
-        type="button"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-      <button
-        class="govuk-button"
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+    </template>
+    <TextArea
+      id="issue"
+      v-model="formData.issue"
+      label="What happened?"
+      rows="2"
+      required
+    />
+    <TextArea
+      id="expectation"
+      v-model="formData.expectation"
+      :label="expectationLabel"
+      rows="2"
+      required
+    />
+    <button
+      type="button"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="closeModal"
+    >
+      Cancel
+    </button>
+    <ActionButton
+      type="primary"
+      class="govuk-button"
+      :action="save"
+    >
+      Submit
+    </ActionButton>
   </div>
 </template>
 
@@ -153,6 +152,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { functions } from '@/firebase';
 import SlackLookupError from '@/errors/slackLookupError';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'FeedbackForm',
@@ -164,6 +164,7 @@ export default {
     CaptureScreenshot,
     RadioGroup,
     RadioItem,
+    ActionButton,
   },
   extends: Form,
   emits: ['close', 'success'],
@@ -283,6 +284,7 @@ export default {
     },
     async save() {
       try {
+        this.validate();
         if (!this.reporterSlackUID) {
           // Check if the slack member id is valid
           const validSlackMember = await this.isValidSlackMemberId();
@@ -301,7 +303,7 @@ export default {
         };
 
         let screenshot = null;
-        await this.$store.dispatch('bugReport/create', this.formData);
+        const newBugReport = await this.$store.dispatch('bugReport/create', this.formData);
 
         // Store the screenshot (uses the bugReportId in it's path)
         if (this.hasScreenshot) {
@@ -310,13 +312,14 @@ export default {
           // Update the bugReport with the screenshot file path
           await this.$store.dispatch('bugReport/update', { data: {
             screenshot: screenshot,
-          }, id: this.bugReportId });
+          }, id: newBugReport.id });
         }
         await functions.httpsCallable('createZenhubIssue')({
-          bugReportId: this.bugReportId,
+          bugReportId: newBugReport.id,
           userId: this.userId,
         });
         this.$emit('success');
+        return true;
       }
       catch (e) {
         let msg, id = '';
@@ -333,6 +336,7 @@ export default {
           id: id,
           message: msg,
         });
+        return false;
       }
     },
   },
