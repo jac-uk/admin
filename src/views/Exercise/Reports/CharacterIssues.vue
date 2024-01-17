@@ -48,9 +48,6 @@
           v-model="exerciseStage"
           class="govuk-!-margin-right-2"
         >
-          <option value="all">
-            All applications
-          </option>
           <option
             v-for="stage in availableStages"
             :key="stage"
@@ -64,11 +61,6 @@
           id="availableStatuses"
           v-model="candidateStatus"
         >
-          <option
-            value="all"
-          >
-            All
-          </option>
           <option
             v-for="item in availableStatuses"
             :key="item"
@@ -380,12 +372,16 @@ export default {
   },
   watch: {
     exerciseStage: function () {
-      this.candidateStatus = 'all';
+      this.candidateStatus = this.availableStatuses[0] || '';
       this.$refs['issuesTable'].reload();
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
     },
+  },
+  mounted() {
+    this.exerciseStage = this.availableStages[0] || '';
+    this.candidateStatus = this.availableStatuses[0] || '';
   },
   unmounted() {
     if (this.unsubscribe) {
@@ -416,7 +412,7 @@ export default {
       response.data.rows.forEach((row) => {
         reportData.push(response.data.headers.map(header => row[header.ref]));
       });
-  
+
       return reportData;
     },
     async exportData() {
@@ -456,19 +452,14 @@ export default {
       let firestoreRef = firestore
         .collection('applicationRecords')
         .where('exercise.id', '==', this.exercise.id)
-        .where('flags.characterIssues', '==', true);
-      if (this.exerciseStage !== 'all') {
-        firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
-      }
+        .where('flags.characterIssues', '==', true)
+        .where('stage', '==', this.exerciseStage)
+        .where('status', '==', this.candidateStatus);
+
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
-      if (this.candidateStatus === 'all') {
-        firestoreRef = firestoreRef.where('status', '!=', 'withdrewApplication');
-        localParams.orderBy = ['status', 'documentId'];
-      } else {
-        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
-        localParams.orderBy = 'documentId';
-      }
+      localParams.orderBy = 'documentId';
+
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
