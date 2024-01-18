@@ -339,8 +339,9 @@ export default {
   mixins: [permissionMixin],
   data () {
     return {
-      exerciseStage: 'all',
-      candidateStatus: 'all',
+      recordVersion: 0,
+      exerciseStage: '',
+      candidateStatus: '',
       issueStatus: 'all',
       applicationRecords: [],
       unsubscribe: null,
@@ -365,7 +366,6 @@ export default {
       return stages.filter(stage => this.applicationRecordCounts[stage]);
     },
     availableStatuses() {
-      if (this.exerciseStage === 'all') return null;
       const statuses = availableStatuses(this.exercise, this.exerciseStage);
       return statuses;
     },
@@ -456,6 +456,10 @@ export default {
         .where('stage', '==', this.exerciseStage)
         .where('status', '==', this.candidateStatus);
 
+      // Track the version of getTableData query, for skipping initial query with invalid parameters
+      const callbackRecordVersion = this.recordVersion;
+      this.recordVersion += 1;
+
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
       localParams.orderBy = 'documentId';
@@ -463,14 +467,21 @@ export default {
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
+
       if (firestoreRef) {
         this.unsubscribe = firestoreRef
           .onSnapshot((snap) => {
             const applicationRecords = [];
+
+            // Skip the records of initial version, because the parameters (exerciseStage, candidateStatus) are not ready for query.
+            if (callbackRecordVersion === 0) return;
+
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));
             });
+
             this.applicationRecords = applicationRecords;
+
           });
       } else {
         this.applicationRecords = [];
