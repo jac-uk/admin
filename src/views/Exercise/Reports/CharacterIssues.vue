@@ -43,32 +43,39 @@
     </div>
     <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
-        <Select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          class="govuk-!-margin-right-2"
-        >
-          <option
-            v-for="stage in availableStages"
-            :key="stage"
-            :value="stage"
+        <div>
+          <label class="govuk-label">Stage</label>
+          <Select
+            id="exercise-stage"
+            v-model="exerciseStage"
+            class="govuk-!-margin-right-2"
           >
-            {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
-          </option>
-        </Select>
-        <Select
-          v-if="availableStatuses && availableStatuses.length > 0"
-          id="availableStatuses"
-          v-model="candidateStatus"
-        >
-          <option
-            v-for="item in availableStatuses"
-            :key="item"
-            :value="item"
+            <option
+              v-for="stage in availableStages"
+              :key="stage"
+              :value="stage"
+            >
+              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
+            </option>
+          </Select>
+        </div>
+
+        <div>
+          <label class="govuk-label">Status</label>
+          <Select
+            v-if="availableStatuses && availableStatuses.length > 0"
+            id="availableStatuses"
+            v-model="candidateStatus"
           >
-            {{ $filters.lookup(item) }}
-          </option>
-        </Select>
+            <option
+              v-for="item in availableStatuses"
+              :key="item"
+              :value="item"
+            >
+              {{ $filters.lookup(item) }}
+            </option>
+          </Select>
+        </div>
       </div>
     </div>
 
