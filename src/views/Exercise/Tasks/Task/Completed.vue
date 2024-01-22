@@ -7,15 +7,21 @@
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-third">
+        <button
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          @click.prevent="notifyCandidates"
+        >
+          Email
+        </button>
         <FullScreenButton />
       </div>
     </div>
 
-    <ProgressBar :steps="taskSteps" />    
+    <ProgressBar :steps="taskSteps" />
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <div 
+        <div
           v-if="totalApplications"
           class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
         >
@@ -111,6 +117,8 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
+import { functions } from '@/firebase';
+
 export default {
   components: {
     Table,
@@ -178,6 +186,11 @@ export default {
     },
     failed() {
       return this.applicationOutcomes.filter(o => !o.pass);
+    },
+  },
+  methods: {
+    async notifyCandidates() {
+      await functions.httpsCallable('sendPublishedFeedbackReportNotification')({ exerciseId: this.exerciseId, type: this.type });
     },
   },
 };
