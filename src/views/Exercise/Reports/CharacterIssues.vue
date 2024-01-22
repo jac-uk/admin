@@ -259,7 +259,7 @@ import TextareaInput from "@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import { tableAsyncQuery } from "@jac-uk/jac-kit/components/Table/tableQuery";
 import { downloadXLSX } from "@jac-uk/jac-kit/helpers/export";
 import Select from "@jac-uk/jac-kit/draftComponents/Form/Select.vue";
-import { applicationRecordCounts, availableStages, availableStatuses } from "@/helpers/exerciseHelper";
+import { availableStages, availableStatuses } from "@/helpers/exerciseHelper";
 import permissionMixin from "@/permissionMixin";
 import { OFFENCE_CATEGORY } from "@/helpers/constants";
 import ActionButton from "@jac-uk/jac-kit/draftComponents/ActionButton.vue";
@@ -308,7 +308,6 @@ export default {
       const statuses = availableStatuses(this.exercise, this.exerciseStage);
       return statuses.filter((status) => this.applicationStatusCounts[status] > 0);
     },
-
   },
   watch: {
     exerciseStage: function () {
