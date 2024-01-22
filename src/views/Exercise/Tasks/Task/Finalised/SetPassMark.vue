@@ -6,7 +6,7 @@
     <Select
       id="pass-mark"
       v-model="formData.passMark"
-      label="Please select from the available scores"
+      label="Available scores"
       required
     >
       <option

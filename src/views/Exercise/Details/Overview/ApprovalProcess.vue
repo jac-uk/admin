@@ -1,16 +1,17 @@
 <template>
   <div class="govuk-!-margin-right-3 govuk-!-margin-left-3">
     <Banner
-      v-if="notPublishedDuringApplicationWindow"
-      message="This exercise is currently within the application window and is not published on the website."
-      status="warning"
-    />
-
-    <Banner
       v-if="isApproved && !isPublished && !isArchived && (canUpdateExercises && canPublishExercises)"
       message="This exercise has been approved. Now you can publish it to the website."
       status="success"
     />
+
+    <Banner
+      v-else-if="notPublishedDuringApplicationWindow"
+      message="This exercise is currently within the application window and is not published on the website."
+      status="warning"
+    />
+
     <template v-if="isReadyForApproval">
       <RejectionForm
         v-if="canApproveExercise && showRejectionForm"
@@ -127,7 +128,7 @@ export default {
     },
     approver() {
       const approval = this.getApproval;
-      if (approval && this.isApproved) {
+      if (approval && approval.approved && this.isApproved) {
         const approverIsAuth = this.userId === approval.approved.user.id;
         return approverIsAuth ? 'you' : approval.approved.user.name;
       }

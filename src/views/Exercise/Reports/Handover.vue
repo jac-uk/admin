@@ -190,6 +190,18 @@ export default {
     async exportData() {
       const title = 'Handover Report';
       const data = this.gatherReportData();
+      /**
+       * Make the 'Judicial experience' (column S) can display multiple lines.
+       * 
+       * @link: https://github.com/dtjohnson/xlsx-populate?tab=readme-ov-file#styles-1
+       */
+      const styles = {
+        column: {
+          'S': {
+            wrapText: true,
+          },
+        },
+      };
 
       downloadXLSX(
         data,
@@ -197,7 +209,8 @@ export default {
           title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-        }
+        },
+        styles
       );
     },
   },

@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '16.15.1'
+          node-version: '20.10.0'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Dependency Check
@@ -66,7 +66,7 @@ jobs:
       - name: Lint
         run: npm run lint-ci
       - name: Test
-        run: echo "tests disabled" #npm run test-ci
+        run: npm run test-ci
 
   deploy_to_develop:
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '16.15.1'
+          node-version: '20.10.0'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file
@@ -138,7 +138,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@master
         with:
-          node-version: '16.15.1'
+          node-version: '20.10.0'
       - name: Installing project dependencies
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc && npm ci
       - name: Create env file

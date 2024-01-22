@@ -1,17 +1,22 @@
 import exerciseCollection from '@/store/exercise/collection';
 import { firestore } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
+import { vi, describe, beforeEach, it } from 'vitest';
 
-jest.mock('@/firebase', () => {
+/**
+* @vitest-environment jsdom
+*/
+
+vi.mock('@/firebase', () => {
   const firebase = require('firebase-mock');
   const firestore = firebase.MockFirebaseSdk().firestore();
   firestore.autoFlush();
   return { firestore };
 });
 
-jest.mock('vuexfire');
+vi.mock('vuexfire');
 
-xdescribe('store/exercise/collection', () => {
+describe.skip('store/exercise/collection', () => {
   describe('actions', () => {
     const actions = exerciseCollection.actions;
 

@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <h1 class="govuk-heading-l">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
@@ -18,15 +18,17 @@
       </div>
     </div>
 
+    <ProgressBar :steps="taskSteps" />    
+
     <p
       v-if="!hasPassMark"
-      class="govuk-body-l govuk-!-margin-bottom-4"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       Please set a pass mark.
     </p>
     <p
       v-else
-      class="govuk-body-l govuk-!-margin-bottom-4"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} can now be completed. {{ totalPassed }} <span v-if="totalPassed === 1">application</span><span v-else>applications</span> will be updated as passed and {{ totalFailed }}  <span v-if="totalFailed === 1">application</span><span v-else>applications</span> will be updated as failed.
     </p>
@@ -44,7 +46,7 @@
       v-if="hasPassMark"
       class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
       type="primary"
-      @click="btnComplete"
+      :action="btnComplete"
     >
       Complete
     </ActionButton>
@@ -85,9 +87,10 @@
 <script>
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
-import { TASK_TYPE } from '@/helpers/exerciseHelper';
+import { TASK_TYPE, getTaskSteps } from '@/helpers/exerciseHelper';
 import { downloadMeritList, getDownloadTypes } from '@/helpers/taskHelper';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import { functions } from '@/firebase';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
@@ -104,6 +107,7 @@ export default {
     TitleBar,
     SetPassMark,
     ConfigureExport,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -118,7 +122,11 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
-    },    
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
+    },
     scoreType() {
       if (!this.task) return 'score';
       if (this.task.scoreType) return this.task.scoreType;
@@ -263,7 +271,6 @@ export default {
         exerciseId: this.exercise.id,
         type: this.type,
       });
-      this.$store.dispatch('ui/exitFullScreen');
       this.btnNext();
       return true;
     },

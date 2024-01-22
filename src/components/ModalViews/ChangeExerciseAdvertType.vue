@@ -72,7 +72,7 @@ export default {
     const exercise = this.$store.state.exerciseDocument.record;
     return {
       formData: {
-        state: 'review',
+        advertType: null,
       },
       exerciseAdvertTypes: exerciseAdvertTypes(exercise),
     };

@@ -23,7 +23,7 @@
           <div>
             <span
               v-show="isInFavourites"
-              class="govuk-tag--yellow govuk-!-margin-right-3"
+              class="favourite-tag govuk-tag--yellow govuk-!-margin-right-3"
               style="display: inline-block; padding: 5px 8px 4px 8px; font-weight: 700; font-size: 16px; line-height: 16px; letter-spacing: 1px;"
             >
               FAVOURITE
@@ -103,6 +103,9 @@
 
       <Modal ref="archiveModal">
         <ModalInner
+          :title="archiveTitle"
+          :message="archiveMessage"
+          :button-text="archiveButtonText"
           @close="closeArchiveModal"
           @confirmed="archive"
         />
@@ -199,6 +202,29 @@ export default {
     },
     isProduction() {
       return this.$store.getters['isProduction'];
+    },
+    archiveTitle() {
+      if (this.isArchived) {
+        return 'Unarchive exercise';
+      } else {
+        return 'Archive exercise';
+      }
+    },
+    archiveMessage() {
+      if (this.isArchived) {
+        return 'By clicking accept you authorise the exercise to be unarchived';
+      } else if (this.isPublished) {
+        return 'This exercise is Live on Apply; by clicking accept, you authorise the exercise to be removed from Apply and archived';
+      } else {
+        return 'By clicking accept you authorise the exercise to be archived';
+      }
+    },
+    archiveButtonText() {
+      if (this.isArchived) {
+        return 'Accept - unarchive this exercise';
+      } else {
+        return 'Accept - archive this exercise';
+      }
     },
     hasOpened() {
       if (this.exercise && this.exercise.applicationOpenDate <= new Date()) {

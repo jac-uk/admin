@@ -195,7 +195,6 @@ import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import { lookup } from '@/filters';
 import { functions } from '@/firebase';
 import { logEvent } from '@/helpers/logEvent';
-import { authorisedToPerformAction }  from '@/helpers/authUsers';
 import { isArchived, isApproved, isProcessing, applicationCounts, isReadyForApproval, isApprovalRejected, isReadyForApprovalFromAdvertType } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 import { ADVERT_TYPES } from '@/helpers/constants';
@@ -356,7 +355,8 @@ export default {
         && this.exerciseProgress.eligibility
         && this.exerciseProgress.workingPreferences
         && this.exerciseProgress.assessmentOptions
-        && this.exerciseProgress.downloads;
+        && this.exerciseProgress.downloads
+        && this.exerciseProgress.applicationProcess;
     },
     approveErrorMessage() {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
@@ -371,7 +371,6 @@ export default {
         decision: 'requested',
         rejectionResponse: note ? note : null,
       });
-      await this.$store.dispatch('exerciseDocument/updateCommissioners');
       this.closeApprovalModal();
     },
     async confirmDelete() {
@@ -403,15 +402,13 @@ export default {
       return true;
     },
     refreshApplicationCounts() {
-      if (authorisedToPerformAction(this.$store.getters['auth/getEmail'])) {
-        if (this.hasPermissions([
-          this.PERMISSIONS.exercises.permissions.canReadExercises.value,
-          this.PERMISSIONS.exercises.permissions.canUpdateExercises.value,
-          this.PERMISSIONS.applications.permissions.canReadApplications.value,
-          this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-        ])) {
-          this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
-        }
+      if (this.hasPermissions([
+        this.PERMISSIONS.exercises.permissions.canReadExercises.value,
+        this.PERMISSIONS.exercises.permissions.canUpdateExercises.value,
+        this.PERMISSIONS.applications.permissions.canReadApplications.value,
+        this.PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+      ])) {
+        this.$store.dispatch('exerciseDocument/refreshApplicationCounts');
       }
     },
     openApprovalModal() {

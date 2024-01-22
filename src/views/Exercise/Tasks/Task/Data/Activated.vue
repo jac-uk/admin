@@ -2,7 +2,7 @@
   <div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <h1 class="govuk-heading-l">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
@@ -10,7 +10,10 @@
         <FullScreenButton />
       </div>
     </div>
-    <p class="govuk-body-l govuk-!-margin-bottom-4">
+
+    <ProgressBar :steps="taskSteps" />
+
+    <p class="govuk-body govuk-!-margin-bottom-4">
       Please enter scores for all candidates.
     </p>
 
@@ -95,7 +98,7 @@
         </template>
 
         <template #row="{row, index}">
-          <TableCell class="table-cell-application">
+          <TableCell class="table-cell-application vertical-align-middle">
             {{ row.fullName }}
           </TableCell>
 
@@ -154,7 +157,7 @@
             >
           </TableCell>
 
-          <TableCell class="text-center table-cell-score">
+          <TableCell class="text-center table-cell-score vertical-align-middle">
             {{ row.score }}
           </TableCell>
         </template>
@@ -174,8 +177,9 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
-import { CAPABILITIES, SELECTION_CATEGORIES } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
@@ -191,6 +195,7 @@ export default {
     FullScreenButton,
     Modal,
     ModalInner,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -211,6 +216,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     hasTaskStarted() {
       if (!this.task) return false;
@@ -460,7 +469,7 @@ export default {
 
 <style lang="scss">
 .govuk-input--width-1 {
-  max-width: 4ex;
+  width: 4ex !important;
   text-align: center;
 }
 .govuk-input--width-2 {
@@ -468,11 +477,11 @@ export default {
   text-align: right;
 }
 .vertical-align-middle {
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 .table-cell-value {
   min-width: 50px;
-  padding: 0 10px;
+  padding: 0 10px !important;
   text-align: center;
 }
 </style>

@@ -16,7 +16,7 @@
         </TableCell>
         <TableCell :title="tableColumns[2].title">
           <RouterLink
-            :to="{ name: 'exercise-task-finalised-score', params: { exerciseId: exercise.id, type: type, score: row.score } }"
+            :to="{ name: 'exercise-task-finalised-score', params: { id: exercise.id, type: type, score: row.score } }"
             class="govuk-link"
           >
             {{ $filters.formatNumber(row.score, 2) }}

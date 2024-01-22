@@ -1,9 +1,14 @@
-import Edit from '@/views/Exercise';
+import Edit from '@/views/Exercise.vue';
 import { shallowMount } from '@vue/test-utils';
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage';
+import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
+import { vi, describe, beforeEach, it } from 'vitest';
+
+/**
+* @vitest-environment jsdom
+*/
 
 const mockStore = {
-  dispatch: jest.fn().mockResolvedValue(),
+  dispatch: vi.fn().mockResolvedValue(),
 };
 
 const mockRoute = {
@@ -14,7 +19,7 @@ const mockRoute = {
 };
 
 const mockRouter = {
-  replace: jest.fn(),
+  replace: vi.fn(),
 };
 
 const createTestSubject = () => {
@@ -30,7 +35,7 @@ const createTestSubject = () => {
   });
 };
 
-xdescribe('@/views/Exercise/Edit', () => {
+describe.skip('@/views/Exercise/Edit', () => {
   let wrapper;
   beforeEach(() => {
     mockStore.dispatch.mockClear();

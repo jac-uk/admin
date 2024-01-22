@@ -2,22 +2,19 @@
   <div>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <h1 class="govuk-heading-l">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
       <div class="text-right govuk-grid-column-one-half">
-        <ActionButton
-          class="govuk-!-margin-bottom-1"
-          type="primary"
-          :action="btnContinue"
-        >
-          Continue
-        </ActionButton>
+        <FullScreenButton />
       </div>
     </div>
-    <p class="govuk-body-l govuk-!-margin-bottom-4">
-      Please check the marking scheme is correct then press Continue
+
+    <ProgressBar :steps="taskSteps" />
+
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      Please check the marking scheme is correct and then press Continue
     </p>
 
     <div
@@ -61,6 +58,14 @@
       </button>
     </div>
 
+    <ActionButton
+      class="govuk-!-margin-bottom-1"
+      type="primary"
+      :action="btnContinue"
+    >
+      Continue
+    </ActionButton>
+
     <Modal ref="modalAddMarkingSchemeItem">
       <TitleBar>
         Add to marking scheme
@@ -76,6 +81,9 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
+import { getTaskSteps } from '@/helpers/exerciseHelper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -91,6 +99,8 @@ export default {
     TableCell,
     Modal,
     TitleBar,
+    FullScreenButton,
+    ProgressBar,
     AddMarkingSchemeItem,
   },
   beforeRouteEnter: beforeRouteEnter,
@@ -118,6 +128,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
   },
   watch: {

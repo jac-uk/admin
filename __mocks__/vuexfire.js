@@ -13,7 +13,10 @@
  * parameters with which they were called. This allows us to test that we're calling these methods
  * with expected parameters.
  */
-const firestoreAction = jest.fn(callback => {
+
+import { vi } from 'vitest';
+
+const firestoreAction = vi.fn(callback => {
   const context = {
     bindFirestoreRef: (key, ref, options) => {
       return [key, ref, options];

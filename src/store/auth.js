@@ -1,79 +1,108 @@
-import { auth, functions } from '@/firebase';
+import { auth, functions, firestore } from '@/firebase';
+import { firestoreAction } from '@/helpers/vuexfireJAC';
+import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 
 const module = {
   namespaced: true,
   state: {
     currentUser: null,
+    rolePermissions: [],
     authError: null,
   },
   mutations: {
-    setCurrentUser(state, user) {
-      state.currentUser = user;
+    set(state, { name, value }) {
+      state[name] = value;
     },
-    setUserRole(state, role) {
-      state.currentUser = { ...state.currentUser, ...role };
+    setRolePermissions(state, permissions) {
+      state.rolePermissions = permissions;
     },
     setAuthError(state, message) {
       state.authError = message;
     },
   },
   actions: {
-    async setCurrentUser({ state, commit }, user) {
-      if (user === null || (user && user.isNewUser)) {
-        commit('setCurrentUser', null);
-      } else {
-        if (state.authError) {
-          commit('setAuthError', null);
-        }
-        let allOk = false;
+    async setCurrentUser({ state, commit, dispatch }, user) {
+      if (state.authError) commit('setAuthError', null);
 
-        if (user.email.indexOf('@judicialappointments.gov.uk') > 0) {
-          allOk = true;
-        } else if ([
-          'drie@judicialappointments.digital',
-          'warren.searle@judicialappointments.digital',
-          'halcyon@judicialappointments.digital',
-          'tom.russell@judicialappointments.digital',
-          'nick.addy@judicialappointments.digital',
-          'isabel.coleman@justice.gov.uk',
-          'julian.sandler@justice.gov.uk',
-          'lisa.grant@justice.gov.uk',
-          'wincen.lowe@justice.gov.uk',
-          'lisias.loback@judicialappointments.digital',
-          'molly.meadows@justice.gov.uk',
-          'katharine.hanley@judicialappointments.gov.uk',
-          'digitalteam@judicialappointments.digital',
-          'seniorleader@judicialappointments.digital',
-          'jacstaff@judicialappointments.digital',
-          'readonly@judicialappointments.digital',
-        ].indexOf((user.email).toLowerCase()) >= 0) {
-          allOk = true;
-        }
-        if (allOk) {
-          let shouldEnsureEmailVerified = false;
-          if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
-            user = { ...user, emailVerified: true };
-            shouldEnsureEmailVerified = true;
-          }
+      try {
+        if (!user) throw new Error();
 
-          commit('setCurrentUser', {
-            uid: user.uid,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            displayName: user.displayName,
-          });
-          if (shouldEnsureEmailVerified) {
-            await functions.httpsCallable('ensureEmailValidated')({});
-          }
-        } else {
-          auth.signOut();
-          commit('setAuthError', 'This site is restricted to employees of the Judicial Appointments Commission');
+        const provider = user.providerData && user.providerData.length > 0 ? user.providerData[0] : null;
+        // check if email is valid
+        if (
+          !user.email.match(/(.*@judicialappointments|.*@justice)[.](digital|gov[.]uk)/) ||
+          !provider ||
+          !['microsoft.com', 'google.com'].includes(provider.providerId)
+        ) {
+          throw new Error('invalid-email');
         }
+
+        // check if user document exists
+        let userDoc = await dispatch('users/getById', user.uid, { root: true });
+        // check if new user
+        // 1. user does not exist in authentication and firestore
+        // 2. user exists in authentication but not in firestore
+        if (!userDoc) {
+          // check if user has been invited
+          const userInvitation = await dispatch('userInvitations/getByEmail', { email: user.email, status: 'pending' }, { root: true });
+          if (!userInvitation) throw new Error('not-invited');
+
+          // create user document
+          const newUser = {
+            displayName: user.displayName || '',
+            email: user.email || '',
+            disabled: user.disabled || false,
+            providerData: user.providerData ? user.providerData.map(p => p.providerId) : [],
+            role: {
+              id: userInvitation.roleId || '',
+              isChanged: false,
+            },
+          };
+          userDoc = await dispatch('users/create', { id: user.uid, data: newUser }, { root: true });
+          // set user role in custom claims
+          await functions.httpsCallable('updateUserCustomClaims')({ userId: user.uid });
+          // mark user invitation as completed
+          await dispatch('userInvitations/save', { id: userInvitation.id, data: { status: 'completed' } }, { root: true });
+        }
+
+        // check if user is microsoft user and email is not verified
+        if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
+          user = { ...user, emailVerified: true };
+          await functions.httpsCallable('ensureEmailVerified')({});
+        }
+
+        // refresh token to get latest custom claims
+        if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
+        const idTokenResult = user.getIdTokenResult ? await user.getIdTokenResult() : null;
+
+        // get user role from custom claims
+        const roleId = idTokenResult?.claims?.r || null;
+        const permissions = idTokenResult?.claims?.rp || null;
+        if (!roleId || !permissions) throw new Error('not-assigned-role');
+
+        commit('setRolePermissions', permissions);
+        await dispatch('bindCurrentUser', user.uid);
+        return true;
+      } catch (error) {
+        let errorMessage = '';
+        if (error.message === 'invalid-email') {
+          errorMessage = 'This site is restricted to employees of the Judicial Appointments Commission';
+        } else if (error.message === 'not-invited') {
+          errorMessage = 'You have not been invited to use this site. Please contact the Digital Team for assistance.';
+        } else if (error.message === 'not-assigned-role') {
+          errorMessage = 'You have not been assign a user role. Please contact the Digital Team for assistance.';
+        }
+        commit('setAuthError', errorMessage);
+        auth.signOut();
       }
     },
-    setUserRole({ commit }, userRole) {
-      commit('setUserRole', userRole);
+    bindCurrentUser: firestoreAction(({ bindFirestoreRef }, id) => {
+      const firestoreRef = firestore.collection('users').doc(id);
+      return bindFirestoreRef('currentUser', firestoreRef, { serialize: vuexfireSerialize });
+    }),
+    setAuthError({ commit }, message) {
+      commit('setAuthError', message);
     },
   },
   getters: {
@@ -87,7 +116,7 @@ const module = {
       return null;
     },
     hasPermissions: state => permissions => {
-      const rolePermissions = state.currentUser ? state.currentUser.rolePermissions : null;
+      const rolePermissions = state.rolePermissions;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
     getDisplayName(state) {

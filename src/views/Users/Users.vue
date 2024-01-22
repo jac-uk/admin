@@ -1,257 +1,116 @@
 <template>
   <div>
-    <!-- TODO: refactor into more logical file structure -->
-    <LoadingMessage
-      v-if="loaded === false"
-      :load-failed="loadFailed"
-    />
-    <div v-if="loaded === true">
-      <div class="print-none">
-        <h1>User Management</h1>
-        <TabsList
-          v-model:active-tab="activeTab"
-          :tabs="tabs"
-        />
-      </div>
-      <div
-        v-show="activeTab == 'users'"
-        class="print-full-width"
-      >
-        <button
-          v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateUsers.value])"
-          class="govuk-button"
-          @click="openCreateUserModal"
-        >
-          Create
-        </button>
-        <h2>List of admin users</h2>
-        <table class="govuk-table">
-          <tr class="govuk-table__row">
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              User
-            </th>
-            <th
-              scope="row"
-              class="govuk-table__header"
-            />
+    <div class="print-none">
+      <h1>User Management</h1>
+      <TabsList
+        v-model:active-tab="activeTab"
+        :tabs="tabs"
+      />
+    </div>
 
-            <th
-              scope="row"
-              class="govuk-table__header"
-            >
-              Role
-            </th>
-          </tr>
-          <tr
-            v-for="(user, userIndex) in users"
-            :key="userIndex"
-            class="govuk-table__row"
+    <div
+      v-show="activeTab == 'users'"
+      class="print-full-width"
+    >
+      <h2>List of admin users</h2>
+
+      <div class="govuk-!-margin-bottom-7">
+        <select
+          v-model="filteredRole"
+          class="govuk-select"
+        >
+          <option
+            v-for="(option, index) in roleFilterOptions"
+            :key="index"
+            :value="option.value"
           >
-            <td class="govuk-table__cell">
-              <div class="govuk-heading-s govuk-!-margin-bottom-1">
-                {{ user.displayName }}
-              </div>
-              <div>
-                {{ user.email }}
-              </div>
-            </td>
-            <td class="govuk-table__cell">
-              <Warning
-                v-if="!user.isJACEmployee"
-                :message="'External user'"
-              />
-            </td>
-            <td class="govuk-table__cell">
-              <select
-                v-model="user.customClaims.r"
-                class="govuk-select govuk-!-margin-right-3 govuk-!-margin-bottom-2"
-                :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
-                @change="handleRoleChange(user)"
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <Table
+        ref="usersTable"
+        data-key="id"
+        :data="users"
+        :page-size="50"
+        :columns="tableColumns"
+        :search-map="$searchMap.users"
+        @change="getTableData"
+      >
+        <template #row="{row}">
+          <TableCell :title="tableColumns[0].title">
+            {{ row.displayName }}
+          </TableCell>
+          <TableCell :title="tableColumns[1].title">
+            {{ row.email }}
+          </TableCell>
+          <TableCell :title="tableColumns[2].title">
+            {{ row.roleName }}
+            <select
+              class="govuk-select"
+              :value="row.role.id"
+              :disabled="!hasPermissions([PERMISSIONS.users.permissions.canChangeUserRole.value])"
+              @change="event => handleRoleChange(event, row)"
+            >
+              <option
+                v-for="(roleItem, roleIndex) in roles"
+                :key="roleIndex"
+                :value="roleItem.id"
               >
-                <option
-                  v-for="(roleItem, roleIndex) in roles"
-                  :key="roleIndex"
-                  :value="roleItem.id"
-                >
-                  {{ roleItem.roleName }}
-                </option>
-              </select>
+                {{ roleItem.roleName }}
+              </option>
+            </select>
+          </TableCell>
+          <TableCell :title="tableColumns[3].title">
+            <div style="display: flex; gap: 15px;">
               <ActionButton
-                v-if="user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                v-if="row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="primary"
-                class="govuk-!-margin-right-2"
-                :action="() => toggleDisableUser(user.uid, userIndex)"
+                class="govuk-!-margin-bottom-0"
+                :action="() => enableUser(row)"
               >
-                Enable user
+                Enable
               </ActionButton>
               <ActionButton
-                v-if="!user.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
+                v-if="!row.disabled && hasPermissions([PERMISSIONS.users.permissions.canEnableUsers.value])"
                 type="secondary"
-                class="govuk-!-margin-right-2"
-                :action="() => toggleDisableUser(user.uid, userIndex)"
+                class="govuk-!-margin-bottom-0"
+                :action="() => disableUser(row)"
               >
-                Disable user
+                Disable
               </ActionButton>
+
               <button
                 v-if="hasPermissions([PERMISSIONS.users.permissions.canDeleteUsers.value])"
-                class="govuk-button govuk-button--warning"
-                @click="confirmDeleteUser(userIndex)"
+                class="govuk-button govuk-button--warning govuk-!-margin-bottom-0"
+                @click="() => openDeleteUserModal(row)"
               >
-                Delete user
+                Delete
               </button>
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div
-        v-show="activeTab === 'roles'"
-        class="print-full-width"
-      >
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-quarter print-none">
-            <!-- TODO: consider refactoring this -->
-            <nav
-              class="moj-side-navigation govuk-!-padding-top-0"
-              :aria-label="'side-navigation'"
-            >
-              <ul class="moj-side-navigation__list">
-                <h4
-
-                  class="moj-side-navigation__title"
-                >
-                  Roles
-                </h4>
-                <ul
-                  v-if="roles.length > 0"
-                  class="moj-side-navigation__list"
-                >
-                  <!-- TODO: Sort the active class -->
-                  <li
-                    v-for="(roleItem, roleIndex) in roles"
-                    :key="roleIndex"
-                    :class=" isActive(roleItem.id) ? 'moj-side-navigation__item moj-side-navigation__item--active' : 'moj-side-navigation__item'"
-                  >
-                    <a
-                      href="#"
-                      class="moj-side-navigation__item"
-                      @click.prevent="viewRolePermissions(roleIndex)"
-                    >
-                      {{ roleItem.roleName }} {{ roleItem.isDefault ? '(Default)' : '' }}
-                    </a>
-                  </li>
-                </ul>
-                <span v-else>No roles</span>
-              </ul>
-            </nav>
-          </div>
-          <div class="govuk-grid-column-three-quarters print-full-width">
-            <div class="govuk-grid-row print-none">
-              <div class="govuk-grid-column-one-half">
-                <h1>Roles</h1>
-              </div>
-              <div
-                v-if="hasPermissions([PERMISSIONS.users.permissions.canCreateRoles.value])"
-                class="govuk-grid-column-one-half"
-              >
-                <div class="text-right">
-                  <button
-                    class="govuk-button govuk-!-margin-right-1 govuk-!-margin-top-3 govuk-!-margin-bottom-3"
-                    @click="openCreateRoleModal()"
-                  >
-                    Create a new role
-                  </button>
-                </div>
-              </div>
             </div>
-            <div
-              v-if="role"
-              ref="role"
-            >
-              <h1>{{ role.roleName }}</h1>
-
-              <div
-                v-for="(value, key) in PERMISSIONS"
-                :key="key"
-              >
-                <h2>{{ value.label }}</h2>
-                <Checkbox
-                  v-for="(subValue, subKey) in value.permissions"
-                  :id="subKey"
-                  :key="subKey"
-                  v-model="permissions[subKey]"
-                >
-                  {{ subValue.label }}
-                </Checkbox>
-              </div>
-
-              <div v-if="hasPermissions([PERMISSIONS.users.permissions.canEditRolePermissions.value])">
-                <ActionButton
-                  type="primary"
-                  class="govuk-!-margin-right-1"
-                  :action="saveRole"
-                >
-                  Save role
-                </ActionButton>
-                <ActionButton
-                  type="secondary"
-                  :disabled="role.isDefault"
-                  :action="setDefaultRole"
-                >
-                  Set as default role
-                </ActionButton>
-              </div>
-            </div>
-            <div v-else>
-              <h3>Select a role on the left to edit.</h3>
-            </div>
-          </div>
-        </div>
-      </div>
+          </TableCell>
+        </template>
+      </Table>
     </div>
-    <Modal
-      ref="modalRef"
+
+    <div
+      v-if="activeTab === 'roles'"
+      class="print-full-width"
     >
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Create a new role
-      </div>
-      <div
-        v-if="!roleId"
-        class="modal__content govuk-!-margin-6"
-      >
-        <TextField
-          :id="`user_role_id`"
-          v-model="newRoleName"
-          label="User role name"
-          type="text"
-        />
-        <ActionButton
-          class="govuk-!-margin-right-1"
-          type="primary"
-          :action="createUserRole"
-        >
-          Save and set permissions
-        </ActionButton>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="closeModal('modalRef')"
-        >
-          Cancel
-        </button>
-      </div>
-    </Modal>
-    <Modal
-      ref="changingRole"
+      <Roles :roles="roles" />
+    </div>
+
+    <div
+      v-if="activeTab === 'invitations'"
+      class="print-full-width"
     >
-      <div class="modal__content govuk-!-margin-6">
-        <h2>
-          Please wait...
-        </h2>
-      </div>
-    </Modal>
+      <UserInvitations
+        :users="users"
+        :roles="roles"
+      />
+    </div>
+
     <Modal ref="modalRefDeleteUser">
       <div class="modal__title govuk-!-padding-2 govuk-heading-m">
         Are you sure to delete user?
@@ -266,84 +125,7 @@
         </ActionButton>
         <button
           class="govuk-button govuk-button--secondary"
-          @click="closeModal('modalRefDeleteUser')"
-        >
-          Cancel
-        </button>
-      </div>
-    </Modal>
-
-    <Modal ref="modalRefCreateUser">
-      <div class="modal__title govuk-!-padding-2 govuk-heading-m">
-        Create a new user
-      </div>
-      <div class="modal__content govuk-!-margin-6">
-        <div
-          class="govuk-grid-column-full"
-          style="text-align: left;"
-        >
-          <TextField
-            id="email"
-            v-model="newUserEmail"
-            label="Email"
-            hint="The email must be a JAC email address."
-            type="email"
-            autocomplete="off"
-            required
-          />
-          <p
-            v-if="isDuplicateEmail"
-            class="govuk-error-message"
-          >
-            Duplicate Email
-          </p>
-          <p
-            v-if="isNotJACEmail"
-            class="govuk-error-message"
-          >
-            Please use a JAC email address
-          </p>
-
-          <TextField
-            id="password"
-            v-model="newUserPassword"
-            label="Password"
-            hint="The password must be a string with at least 6 characters."
-            type="password"
-            autocomplete="off"
-            required
-          />
-
-          <div class="govuk-form-group">
-            <label class="govuk-heading-m govuk-!-margin-bottom-2">Role</label>
-            <select
-              id="role"
-              v-model="newUserRole"
-              class="govuk-select"
-              style="width: 100%;"
-            >
-              <option
-                v-for="(roleItem, roleIndex) in roles"
-                :key="roleIndex"
-                :value="roleItem.id"
-              >
-                {{ roleItem.roleName }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <ActionButton
-          type="primary"
-          class="govuk-!-margin-right-3"
-          :disabled="!newUserEmail || isDuplicateEmail || isNotJACEmail || !isValidPassword "
-          :action="createUser"
-        >
-          Save
-        </ActionButton>
-        <button
-          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click="closeCreateUserModal"
+          @click="closeDeleteUserModal"
         >
           Cancel
         </button>
@@ -353,46 +135,44 @@
 </template>
 
 <script>
-import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
-import { functions } from '@/firebase';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import Warning from '@jac-uk/jac-kit/draftComponents/Warning.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
-import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import Roles from './Roles.vue';
+import UserInvitations from './Invitations.vue';
 import permissionMixin from '@/permissionMixin';
 
 export default {
+  name: 'Users',
   components: {
-    LoadingMessage,
+    Table,
+    TableCell,
     ActionButton,
-    Warning,
     TabsList,
     Modal,
-    Checkbox,
-    TextField,
+    Roles,
+    UserInvitations,
   },
   mixins: [permissionMixin],
   data() {
     return {
-      loaded: false,
-      loadFailed: false,
-      users: [],
-      roles: [],
       activeTab: 'users',
-      roleId: null,
-      role: null,
-      rolePermissions: null,
-      newRoleName: null,
-      permissions: {},
-      selectedUserIndex: null,
-      newUserEmail: '',
-      newUserPassword: '',
-      newUserRole: '',
+      tableColumns: [
+        { title: 'Display Name', sort: 'displayName', direction: 'asc', default: true },
+        { title: 'Email', sort: 'email', direction: 'asc', default: false },
+        { title: 'Role' },
+        { title: 'Action' },
+      ],
+      filteredRole: null,
+      selectedUser: null,
     };
   },
   computed: {
+    userId() {
+      return this.$store.state.auth.currentUser.uid;
+    },
     tabs() {
       return [
         {
@@ -403,226 +183,124 @@ export default {
           ref: 'roles',
           title: 'Roles',
         },
+        {
+          ref: 'invitations',
+          title: 'Invitations',
+        },
       ];
     },
-    isDuplicateEmail() {
-      return this.users.map(user => user.email).includes(this.newUserEmail);
+    users() {
+      return this.$store.state.users.records;
     },
-    isNotJACEmail() {
-      return this.newUserEmail && !this.newUserEmail.match(/@judicialappointments.(digital|gov.uk)$/);
+    roles() {
+      return this.$store.state.roles.records;
     },
-    isValidPassword() {
-      return this.newUserPassword.length >= 6;
-    },
-    defaultUserRole() {
-      const role = this.roles.find(r => r.isDefault);
-      return role ? role.id : '';
-    },
-    rolesNav() {
-      const rolesNav = [];
-      for (const role of this.roles) {
-        rolesNav.push({
-          title: role.roleName,
-          name: role.id,
-        });
-      }
-      return rolesNav;
+    roleFilterOptions() {
+      let options = [
+        {
+          value: null,
+          label: 'All',
+        },
+      ];
+      options = options.concat(this.roles.map((role) => ({
+        value: role.id,
+        label: role.roleName,
+      })));
+      return options;
     },
   },
-  async mounted() {
-    await this.getUsers();
-    await this.getRoles();
+  watch: {
+    filteredRole() {
+      this.reloadTable();
+    },
   },
-  updated() {
-    const canEditRolePermissions = this.hasPermissions([this.PERMISSIONS.users.permissions.canEditRolePermissions.value]);
-    if (!canEditRolePermissions) {
-      const roleRef = this.$refs.role;
-      if (roleRef) {
-        const inputs = roleRef.querySelectorAll('input');
-        inputs && inputs.forEach(input => input.disabled = true);
-      }
-    }
+  mounted() {
+    this.$store.dispatch('roles/bind', {
+      orderBy: 'roleName',
+      direction: 'asc',
+    });
   },
   methods: {
-    async getUsers() {
-      try {
-        const users = await functions.httpsCallable('adminGetUsers')();
-        this.users = users.data;
-        for (const user of this.users) {
-          //TODO: add default role logic
-          if (!user.customClaims) {
-            user.customClaims = {
-              r: 'not set',
-            };
-          }
-        }
-        this.loaded = true;
-      } catch (e) {
-        this.loadFailed = true;
-        throw e;
+    getTableData(params) {
+      if (this.filteredRole) {
+        params.roleId = this.filteredRole;
+      }
+      this.$store.dispatch('users/bind', params);
+    },
+    reloadTable() {
+      if (this.$refs['usersTable']) {
+        this.$refs['usersTable'].reload();
       }
     },
-    async getRoles() {
-      const roles = await functions.httpsCallable('adminGetUserRoles')();
-      this.roles = roles.data;
+    handleRoleChange(event, user) {
+      const roleId = event.target.value;
+      this.$store.dispatch('users/save', {
+        userId: user.id,
+        data: {
+          role: {
+            id: roleId,
+            isChanged: true,
+          },
+        },
+      });
     },
-    async toggleDisableUser(uid, index) {
+    async enableUser(user) {
       try {
-        const response = await functions.httpsCallable('adminDisableUser')({ uid: uid });
-        this.users[index].disabled = response.data.disabled;
+        await this.$store.dispatch('users/save', {
+          userId: user.id,
+          data: { disabled: false },
+        });
         return true;
       } catch (error) {
-        return;
+        return false;
       }
     },
-    confirmDeleteUser(index) {
-      this.selectedUserIndex = index;
-      this.openModal('modalRefDeleteUser');
+    async disableUser(user) {
+      try {
+        await this.$store.dispatch('users/save', {
+          userId: user.id,
+          data: {
+            disabled: true,
+          },
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     async deleteUser() {
-      if (this.selectedUserIndex !== null) {
-        const selectedUid = this.users[this.selectedUserIndex].uid;
-        try {
-          const response = await functions.httpsCallable('deleteUsers')({ uids: [selectedUid] });
-          if (response && response.data.successCount) {
-            this.users.splice(this.selectedUserIndex, 1);
-            setTimeout(() => {
-              this.closeModal('modalRefDeleteUser');
-            }, 1000);
-            return true;
-          }
-        } catch (error) {
-          return false;
-        }
+      if (!this.selectedUser) return false;
+
+      try {
+        await this.$store.dispatch('users/delete', this.selectedUser.id);
+        setTimeout(() => {
+          this.closeDeleteUserModal();
+        }, 200);
+        return true;
+      } catch (error) {
+        return false;
       }
-      return false;
     },
     openModal(modalRef){
       this.$refs[modalRef].openModal();
     },
     closeModal(modalRef) {
-      this.rolePermissions = null;
       this.$refs[modalRef].closeModal();
-      this.newRoleName = null;
-      this.selectedUserIndex = null;
     },
-    openCreateUserModal() {
-      this.openModal('modalRefCreateUser');
-      this.newUserRole = this.defaultUserRole;
+    openDeleteUserModal(user) {
+      this.openModal('modalRefDeleteUser');
+      this.selectedUser = user;
     },
-    closeCreateUserModal() {
-      this.closeModal('modalRefCreateUser');
-      this.resetNewUser();
-    },
-    resetNewUser() {
-      this.newUserEmail = '';
-      this.newUserPassword = '';
-      this.newUserRole = '';
-    },
-    async createUser() {
-      try {
-        const res = await functions.httpsCallable('createUser')({
-          email: this.newUserEmail,
-          password: this.newUserPassword, // need to pass password to create new user
-        });
-        if (res && res.data && 'uid' in res.data) {
-          await this.setUserRole(res.data.uid, this.newUserRole);
-          await this.getUsers();
-          this.resetNewUser();
-          setTimeout(() => {
-            this.closeCreateUserModal();
-          }, 1000);
-          return true;
-        }
-      } catch (error) {
-        return;
-      }
-    },
-    async handleRoleChange(user) {
-      this.openModal('changingRole');
-      await this.setUserRole(user.uid, user.customClaims.r);
-      this.closeModal('changingRole');
-    },
-    async setUserRole(userId, roleId) {
-      await functions.httpsCallable('adminSetUserRole')({ userId, roleId });
-    },
-    viewRolePermissions(roleIndex) {
-      this.role = this.roles[roleIndex];
-      // set all permissions to false
-      const obj = {};
-      for (const group of Object.keys(this.PERMISSIONS)) {
-        for (const p of Object.keys(this.PERMISSIONS[group].permissions)) {
-          obj[p] = false;
-        }
-      }
-      // make it reactive
-      this.permissions = Object.assign({}, obj);
-
-      // set the enabled permissions for the role to true
-      if (this.role.enabledPermissions) {
-        for (const permission of this.role.enabledPermissions) {
-          if (permission in this.permissions) {
-            this.permissions[permission] = true;
-          }
-        }
-      }
-
-    },
-    async createUserRole() {
-      try {
-        //TODO: enforce unique role name
-        const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.newRoleName });
-        await this.getRoles();
-        //this.role = Array.filter((role) => { return role.id === response.data.id; });
-        this.role = this.roles.filter((role) => { return role.id === response.data.id; })[0];
-        setTimeout(() => {
-          this.closeModal('modalRef');
-        }, 1000);
-        return true;
-      } catch (error) {
-        return;
-      }
-    },
-    async saveRole() {
-      this.role.enabledPermissions = [];
-      for (const permission in this.permissions) {
-        if (this.permissions[permission]) {
-          this.role.enabledPermissions.push(permission);
-        }
-      }
-      try {
-        return await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.role.id, enabledPermissions: this.role.enabledPermissions });
-      } catch (error) {
-        return;
-      }
-    },
-    async setDefaultRole() {
-      try {
-        await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
-        await this.getRoles();
-        this.role.isDefault = true;
-        return true;
-      } catch (error) {
-        return;
-      }
-    },
-    openCreateRoleModal() {
-      this.openModal('modalRef');
-    },
-    isActive(roleId) {
-      if (this.role) {
-        return roleId === this.role.id;
-      } else {
-        return false;
-      }
+    closeDeleteUserModal() {
+      this.closeModal('modalRefDeleteUser');
+      this.selectedUser = null;
     },
   },
-
 };
 </script>
 
-<style>
-td .govuk-warning-text {
-  margin-bottom: 0 !important;
+<style scoped>
+td {
+  vertical-align: middle;
 }
 </style>

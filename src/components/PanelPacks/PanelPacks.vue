@@ -45,7 +45,7 @@
         :columns="tableColumnsCandidates"
         multi-select
         :page-size="50"
-        search-map="_search"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableDataCandidates"
       >
         <template #actions>
@@ -229,7 +229,7 @@ export default {
           'applicationRecords/bind',
           {
             exerciseId: this.exerciseId,
-            stage: EXERCISE_STAGE.SELECTED,
+            stage: this.exercise && this.exercise._processingVersion >= 2 ? EXERCISE_STAGE.SHORTLISTED : EXERCISE_STAGE.SELECTED,
             ...params,
           }
         );

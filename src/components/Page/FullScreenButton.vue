@@ -2,7 +2,7 @@
   <button
     v-if="fullScreen"
     type="button"
-    class="govuk-button govuk-button--secondary"
+    class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
     @click="exitFullScreen"
   >
     Exit full screen
@@ -10,7 +10,7 @@
   <button
     v-else
     type="button"
-    class="govuk-button govuk-button--secondary"
+    class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
     @click="enterFullScreen"
   >
     Full screen
