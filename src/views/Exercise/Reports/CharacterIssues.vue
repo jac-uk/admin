@@ -51,7 +51,7 @@
           <label class="govuk-label">Stage</label>
           <Select id="exercise-stage" v-model="exerciseStage" class="govuk-!-margin-right-2">
             <option v-for="stage in availableStages" :key="stage" :value="stage">
-              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
+              {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationStageCounts[stage]) }})
             </option>
           </Select>
         </div>
@@ -60,7 +60,7 @@
           <label class="govuk-label">Status</label>
           <Select v-if="availableStatuses && availableStatuses.length > 0" id="availableStatuses" v-model="candidateStatus">
             <option v-for="item in availableStatuses" :key="item" :value="item">
-              {{ $filters.lookup(item) }}
+              {{ $filters.lookup(item) }} ({{ $filters.formatNumber(applicationStatusCounts[item]) }})
             </option>
           </Select>
         </div>
@@ -294,17 +294,21 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    applicationRecordCounts() {
-      return applicationRecordCounts(this.exercise);
+    applicationStageCounts() {
+      return this.exercise._characterIssue.stageCounts;
+    },
+    applicationStatusCounts() {
+      return this.exercise._characterIssue.statusCounts;
     },
     availableStages() {
       const stages = availableStages(this.exercise);
-      return stages.filter((stage) => this.applicationRecordCounts[stage]);
+      return stages.filter((stage) => this.applicationStageCounts[stage] > 0);
     },
     availableStatuses() {
       const statuses = availableStatuses(this.exercise, this.exerciseStage);
-      return statuses;
+      return statuses.filter((status) => this.applicationStatusCounts[status] > 0);
     },
+
   },
   watch: {
     exerciseStage: function () {
