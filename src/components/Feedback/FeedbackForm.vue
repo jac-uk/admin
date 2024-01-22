@@ -186,7 +186,12 @@ export default {
         cpsDevice: '0',
       },
       errors: [],
-      criticalityTypes: ['critical', 'major', 'minor', 'low'],
+      criticalityTypes: [
+        'Critical - a response will be provided within 2 hours',
+        'Major - a response will be provided within 24 hours',
+        'Minor - a response will be provided within 48 hours',
+        'Low - a response will be provided within 1 week',
+      ],
       newReporterSlackUID: '',
       hasSlackIdOnLoad: true,
       checkSlackMemberIdOnBlur: false,
