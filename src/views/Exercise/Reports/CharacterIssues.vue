@@ -80,13 +80,14 @@
     </div>
 
     <div class="govuk-grid-column-one-third text-right">
+      <label class="govuk-label">Recommended SCC Approach</label>
       <Select
         id="issue-status-filter"
         v-model="issueStatus"
         class="govuk-!-margin-right-2"
       >
         <option value="all">
-          All issue statuses
+          All
         </option>
         <option value="">
           Unassigned
