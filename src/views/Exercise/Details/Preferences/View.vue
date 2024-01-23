@@ -32,14 +32,10 @@
             {{ $filters.lookup(item.questionType) }}
           </dt>
           <dd class="govuk-summary-list__value">
-            <ul class="govuk-list">
-              <li
-                v-for="answer in item.answers"
-                :key="answer"
-              >
-                {{ answer.answer }}
-              </li>
-            </ul>            
+            <ViewAnswers 
+              :answers="item.answers" 
+              :grouped="item.groupAnswers" 
+            />
           </dd>
         </div>
       </template>
@@ -63,14 +59,22 @@
             {{ $filters.lookup(item.questionType) }}
           </dt>
           <dd class="govuk-summary-list__value">
-            <ul class="govuk-list">
+            <ul 
+              v-if="item.answerSource == 'jurisdictions'"
+              class="govuk-list"
+            >
               <li
-                v-for="answer in item.answers"
-                :key="answer"
+                v-for="jurisdiction in exercise.jurisdiction"
+                :key="jurisdiction"
               >
-                {{ answer.answer }}
+                {{ $filters.lookup(jurisdiction) }}
               </li>
-            </ul>            
+            </ul>   
+            <ViewAnswers
+              v-else 
+              :answers="item.answers" 
+              :grouped="item.groupAnswers" 
+            />
           </dd>
         </div>
       </template>
@@ -94,14 +98,10 @@
           {{ $filters.lookup(additionalWorkingPreference.questionType) }}
         </dt>
         <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="(answer, answerIndex) in additionalWorkingPreference.answers"
-              :key="answerIndex"
-            >
-              {{ answer.answer }}
-            </li>
-          </ul>
+          <ViewAnswers 
+            :answers="additionalWorkingPreference.answers" 
+            :grouped="additionalWorkingPreference.groupAnswers" 
+          />
         </dd>
       </div>
     </dl>
@@ -111,9 +111,13 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import ViewAnswers from './_ViewAnswers.vue';
 
 export default {
   name: 'PreferencesView',
+  components: {
+    ViewAnswers,
+  },
   mixins: [permissionMixin],
   computed: {
     exercise() {

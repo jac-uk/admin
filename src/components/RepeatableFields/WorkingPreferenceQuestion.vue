@@ -14,10 +14,73 @@
       label="Preference type"
     />
 
+    <div 
+      v-if="otherLinkedQuestions && otherLinkedQuestions.length"
+    >
+      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
+        Link this question?
+      </h3>
+      <div class="govuk-label">
+        This question will only be asked if the user selects a specific answer from another question
+      </div>
+      <div class="govuk-button-group">
+        <Select
+          id="linked-question"
+          v-model="row.linkedQuestion"
+          class="govuk-!-margin-right-2"
+        >
+          <option value="">
+            Choose a question
+          </option>
+          <option
+            v-for="question in otherLinkedQuestions"
+            :key="question.question"
+            :value="question.question"
+          >
+            {{ question.question }}
+          </option>
+        </Select>
+        <Select
+          v-if="row.linkedQuestion"
+          id="linked-answer"
+          v-model="row.linkedAnswer"
+        >
+          <option value="">
+            Choose an answer
+          </option>
+          <template v-if="getLinkedQuestion(row.linkedQuestion).groupAnswers">
+            <optgroup
+              v-for="item in getLinkedQuestion(row.linkedQuestion).answers"
+              :key="item.group"
+              :label="item.group"
+            >
+              <option
+                v-for="answer in item.answers"
+                :key="answer.answer"
+                :value="answer.answer"
+              >
+                {{ answer.answer }}
+              </option>
+            </optgroup>
+          </template>
+          <template v-else>
+            <option
+              v-for="answer in getLinkedQuestion(row.linkedQuestion).answers"
+              :key="answer.answer"
+              :value="answer.answer"
+            >
+              {{ answer.answer }}
+            </option>
+          </template>
+        </Select>
+      </div>
+    </div>    
+
     <TextField
       id="working-preference-${type}-question"
       v-model="row.question"
       label="What question would you like to ask?"
+      required
     />
 
     <RadioGroup
@@ -42,16 +105,8 @@
       />
     </RadioGroup>
 
-    <Checkbox
-      id="allow-equal-ranking"
-      v-model="row.allowEqualRanking"
-      label="Allow equal ranking?"
-      hint="For example two answers could be ranked in first place"
-    >
-      Yes
-    </Checkbox>
-
     <RadioGroup
+      v-if="row.questionType != 'single-choice'"
       :id="`working-preference-${type}-answer-_${index}`"
       v-model="row.minimumAnswerMode"
       label="How many answers should candidates select?"
@@ -78,6 +133,16 @@
       </RadioItem>
     </RadioGroup>
 
+    <Checkbox
+      v-if="row.questionType == 'ranked-choice'"
+      id="allow-equal-ranking"
+      v-model="row.allowEqualRanking"
+      label="Allow equal ranking?"
+      hint="For example two answers could be ranked in first place"
+    >
+      Yes
+    </Checkbox>
+
     <RadioGroup
       :id="`working-preference-${type}-linked-questions-_${index}`"
       v-model="row.allowLinkedQuestions"
@@ -93,13 +158,55 @@
       />
     </RadioGroup>
 
-    <RepeatableFields
-      v-model="row.answers"
-      :component="repeatableFields.Answer"
-      ident="answer"
-      type-name="answer"
-      required
-    />
+    <RadioGroup
+      v-if="type == 'jurisdictionPreference'"
+      :id="`working-preference-${type}-answer-source-_${index}`"
+      v-model="row.answerSource"
+      label="Answers"
+    >
+      <RadioItem
+        value="jurisdictions"
+        label="Use master jurisdiction list as answers"
+      />
+      <RadioItem
+        value=""
+        label="Custom answers"
+      />
+    </RadioGroup>
+
+    <div v-if="type != 'jurisdictionPreference' || row.answerSource == ''">
+      <RadioGroup
+        :id="`working-preference-${type}-answer-grouping-_${index}`"
+        v-model="row.groupAnswers"
+        label="Group answers together?"
+      >
+        <RadioItem
+          :value="true"
+          label="Yes - answers will be grouped together"
+        />
+        <RadioItem
+          :value="false"
+          label="No"
+        />
+      </RadioGroup>
+
+      <RepeatableFields
+        v-if="row.groupAnswers"
+        v-model="row.answers"
+        :component="repeatableFields.AnswerGroup"
+        ident="answer"
+        type-name="answer group"
+        required
+      />
+      <RepeatableFields
+        v-else
+        v-model="row.answers"
+        :component="repeatableFields.Answer"
+        ident="answer"
+        type-name="answer"
+        required
+      />
+    </div>
     <slot name="removeButton" />
   </fieldset>
 </template>
@@ -109,7 +216,9 @@ import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import AnswerGroup from '@/components/RepeatableFields/AnswerGroup.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
 import { shallowRef } from 'vue';
 
@@ -121,6 +230,7 @@ export default {
     RadioGroup,
     RadioItem,
     Checkbox,
+    Select,
   },
   props: {
     row: {
@@ -136,15 +246,40 @@ export default {
       type: String,
       default: '',
     },
+    linkedQuestions: {
+      required: false,
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
+    // set default values
+    if (!this.row.hasOwnProperty('questionType')) this.row.questionType = 'single-choice';
+    if (!this.row.hasOwnProperty('allowLinkedQuestions')) this.row.allowLinkedQuestions = false;
+    if (!this.row.hasOwnProperty('minimumAnswerMode')) this.row.minimumAnswerMode = 'any';
+    if (
+      this.type === 'jurisdictionPreference' 
+      && !this.row.hasOwnProperty('answerSource')
+    ) {
+      this.row.answerSource = 'jurisdictions';
+    }
+    if (!this.row.hasOwnProperty('groupAnswers')) this.row.groupAnswers = false;    
     return {
       repeatableFields: shallowRef({
         Answer,
+        AnswerGroup,
       }),
     };
   },
   computed: {
+    otherLinkedQuestions() {
+      return this.linkedQuestions.filter(item => item.question !== this.row.question);
+    },
+  },
+  methods: {
+    getLinkedQuestion(questionTitle) {
+      return this.linkedQuestions.find(question => question.question === questionTitle);
+    },
   },
 };
 </script>
@@ -154,6 +289,10 @@ export default {
 .govuk-fieldset {
   @include govuk-responsive-padding(6);
   border: 2px solid $govuk-border-colour;
+}
+
+.jac-add-another__remove-button {
+  color: blue;
 }
 
 </style>
