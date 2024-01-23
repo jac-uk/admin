@@ -32,6 +32,7 @@
             type-name="question"
             :allow-empty="true"
             type="locationPreference"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
           />
         </div>
 
@@ -43,6 +44,7 @@
             type-name="question"
             :allow-empty="true"
             type="jurisdictionPreference"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
           />
         </div>
 
@@ -53,6 +55,7 @@
             ident="additional-working-preferences"
             type-name="question"
             :allow-empty="true"
+            :extra-props="{ linkedQuestions: linkedQuestions }"
           />
         </div>
 
@@ -86,12 +89,6 @@ export default {
     const defaults = {
       locationPreferences: [],
       jurisdictionPreferences: [],
-      locationQuestion: null,
-      locationQuestionType: 'single-choice',
-      locationQuestionAnswers: null,
-      jurisdictionQuestion: null,
-      jurisdictionQuestionType: 'single-choice',
-      jurisdictionQuestionAnswers: null,
       additionalWorkingPreferences: [],
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
@@ -123,6 +120,19 @@ export default {
           title: 'Additional',
         },
       ];
+    },
+    linkedQuestions() {
+      const linkableQuestions = [];
+      this.formData.locationPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+      });
+      this.formData.jurisdictionPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+      });
+      this.formData.additionalWorkingPreferences.forEach(question => {
+        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+      });
+      return linkableQuestions;
     },
   },
   methods: {
