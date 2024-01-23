@@ -121,6 +121,9 @@ const module = {
     getSlackUID(state) {
       return state.currentUser?.slackMemberId ?? null;
     },
+    getCurrentUser(state) {
+      return state.currentUser;
+    },
   },
 };
 

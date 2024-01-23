@@ -78,9 +78,9 @@
         Please select
       </option>
       <option
-        v-for="(criticalityType, index) in criticalityTypes"
-        :key="(index + 1)"
-        :value="criticalityType"
+        v-for="(criticalityType, key) in criticalityTypes"
+        :key="key"
+        :value="key"
       >
         {{ criticalityType }}
       </option>
@@ -186,12 +186,12 @@ export default {
         cpsDevice: '0',
       },
       errors: [],
-      criticalityTypes: [
-        'Critical - a response will be provided within 2 hours',
-        'Major - a response will be provided within 24 hours',
-        'Minor - a response will be provided within 48 hours',
-        'Low - a response will be provided within 1 week',
-      ],
+      criticalityTypes: {
+        Critical: 'Critical - a response will be provided within 2 hours',
+        Major: 'Major - a response will be provided within 24 hours',
+        Minor: 'Minor - a response will be provided within 48 hours',
+        Low: 'Low - a response will be provided within 1 week',
+      },
       newReporterSlackUID: '',
       hasSlackIdOnLoad: true,
       checkSlackMemberIdOnBlur: false,
@@ -204,6 +204,15 @@ export default {
     userId() {
       return this.$store.getters['auth/getUserId'];
     },
+
+    // @TODO: TESTING
+    isSignedIn() {
+      return this.$store.getters['auth/isSignedIn'];
+    },
+    currentUser() {
+      return this.$store.getters['auth/getCurrentUser'];
+    },
+
     reporterSlackUID() {
       return this.$store.getters['auth/getSlackUID'];
     },
@@ -254,6 +263,11 @@ export default {
     },
   },
   async mounted() {
+
+    console.log(`isSignedIn: ${this.isSignedIn}`);
+    console.log('currentUser: ');
+    console.log(this.currentUser);
+
     //mounted() {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
@@ -327,8 +341,15 @@ export default {
         return true;
       }
       catch (e) {
+
+        console.log('Caught error with msg:');
+        console.log(e.message);
+
         let msg, id = '';
         if (e instanceof SlackLookupError) {
+
+          console.log('SlackLookupError!!!');
+
           id = 'slackUID';
           msg = e.message;
         }
