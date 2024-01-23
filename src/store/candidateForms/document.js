@@ -1,3 +1,4 @@
+// TODO: KO upgrade to modular API
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
@@ -26,7 +27,7 @@ export default {
       const saveData = {};
       saveData.status = 'closed';
       saveData['statusLog.closed'] = firebase.firestore.FieldValue.serverTimestamp();
-      await context.dispatch('update', { saveData, formId });      
+      await context.dispatch('update', { saveData, formId });
     },
     update: async (context, { saveData, formId }) => {
       const ref = collection.doc(formId);

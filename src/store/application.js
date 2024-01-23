@@ -1,3 +1,4 @@
+// TODO: KO upgrade to modular API
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';

@@ -1,3 +1,4 @@
+// TODO: KO upgrade to modular API
 // eslint-disable-next-line
 import firebase from '@firebase/app';
 import { firestore } from '@/firebase';
