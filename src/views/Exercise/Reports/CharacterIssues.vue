@@ -123,6 +123,7 @@
         ref="issuesTable"
         data-key="id"
         :data="applicationRecords"
+        :local-data="true"
         :columns="tableColumns"
         :page-size="10"
         :page-item-type="'number'"
