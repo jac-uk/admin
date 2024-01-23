@@ -1,5 +1,9 @@
-// TODO: KO upgrade to modular API
+// TODO: KO upgrade to modular API 123
+
 import firebase from '@firebase/app';
+
+import { doc, collection, getDoc, getDocs, where, limit, runTransaction } from '@firebase/firestore';
+
 import { firestore } from '@/firebase';
 import { functions } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
@@ -9,7 +13,8 @@ import { getExerciseSaveData } from '@/helpers/exerciseHelper';
 import { logEvent } from '@/helpers/logEvent';
 import { checkNested } from '@/helpersTMP/object';
 
-const collection = firestore.collection('exercises');
+const collectionName = 'exercises';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
@@ -26,19 +31,20 @@ export default {
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, collectionName, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     getDocumentData: async (context, id) => {
-      const docRef = await collection.doc(id).get();
-      return docRef.data();
+      const docSnap = await getDoc(doc(collectionRef, collectionName, id));
+      return docSnap.data();
     },
     getDocumentDataByReferenceNumber: async (context, referenceNumber) => {
       let exercise = null;
-      const snap = await collection.where('referenceNumber', '==', referenceNumber).limit(1).get();
+      const queryRef = query(collectionRef, where('referenceNumber', '==', referenceNumber), limit(1));
+      const snap = await getDocs(queryRef);
       if (snap.empty) return null;
 
       snap.forEach(doc => {
@@ -49,11 +55,35 @@ export default {
       return exercise;
     },
     create: async ({ rootState, dispatch }, data) => {
-      const metaRef = firestore.collection('meta').doc('stats');
+      const metaRef = doc(collectionRef, 'meta', 'stats');
+
+      await runTransaction(db, async (transaction) => {
+        const metaRef = await transaction.get(metaRef);
+
+        // TODO: WIP
+        const newExercisesCount = metaDoc.data().exercisesCount + 1;
+        const exerciseRef = firestore.collectionRef('exercises').doc();
+        transaction.update(metaRef, { exercisesCount: newExercisesCount });
+        data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
+        data.progress = data.progress || { started: true };
+        data.state = 'draft';
+        data.published = false;
+        data._applicationVersion = 2;
+        data.favouriteOf = firebase.firestore.FieldValue.arrayUnion(rootState.auth.currentUser.uid);
+        data.createdBy = rootState.auth.currentUser.uid;
+        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        transaction.set(exerciseRef, getExerciseSaveData(data, data));
+        return exerciseRef.id;
+
+        const newPopulation = sfDoc.data().population + 1;
+        transaction.update(sfDocRef, { population: newPopulation });
+      });
+
+      // TODO:
       return firestore.runTransaction((transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
           const newExercisesCount = metaDoc.data().exercisesCount + 1;
-          const exerciseRef = firestore.collection('exercises').doc();
+          const exerciseRef = firestore.collectionRef('exercises').doc();
           transaction.update(metaRef, { exercisesCount: newExercisesCount });
           data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
           data.progress = data.progress || { started: true };
@@ -71,10 +101,10 @@ export default {
       });
     },
     override: async (_, { exerciseId, data }) => {
-      await collection.doc(exerciseId).update(data);
+      await collectionRef.doc(exerciseId).update(data);
     },
     save: async ({ state }, data) => {
-      await collection.doc(state.record.id).update(getExerciseSaveData(state.record, data));
+      await collectionRef.doc(state.record.id).update(getExerciseSaveData(state.record, data));
     },
     updateApprovalProcess: async ({ state, getters }, { userId, userName, decision, rejectionReason, rejectionResponse }) => {
       const data = {};
@@ -111,12 +141,12 @@ export default {
       }
       // Update record
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       await ref.update(data);
     },
     isReadyForTest: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         testingState: null,
       };
@@ -124,7 +154,7 @@ export default {
     },
     testing: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         testingState: 'testing',
       };
@@ -132,7 +162,7 @@ export default {
     },
     tested: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         testingState: 'tested',
       };
@@ -140,7 +170,7 @@ export default {
     },
     unlock: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         state: 'draft',
         testingState: null,
@@ -149,7 +179,7 @@ export default {
     },
     publish: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         published: true,
       };
@@ -157,7 +187,7 @@ export default {
     },
     unpublish: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         published: false,
         testingState: null,
@@ -166,7 +196,7 @@ export default {
     },
     unarchive: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         state: state.record.hasOwnProperty('stateBeforeArchive') ? state.record.stateBeforeArchive : 'ready',
         stateBeforeArchive: null,
@@ -175,7 +205,7 @@ export default {
     },
     archive: async ({ state }) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
           published: false,   // Unpublish!
           testingState: null,
@@ -186,7 +216,7 @@ export default {
     },
     addToFavourites: async ({ state }, userId) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         favouriteOf: firebase.firestore.FieldValue.arrayUnion(userId),
       };
@@ -194,7 +224,7 @@ export default {
     },
     removeFromFavourites: async ({ state }, userId) => {
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         favouriteOf: firebase.firestore.FieldValue.arrayRemove(userId),
       };
@@ -219,7 +249,7 @@ export default {
         exerciseRefs: [state.record.referenceNumber],
       };
       const id = state.record.id;
-      const ref = collection.doc(id);
+      const ref = collectionRef.doc(id);
       const data = {
         state: 'deleted',
         stateBeforeDelete: state.record.state,
