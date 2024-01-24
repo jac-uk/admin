@@ -264,6 +264,7 @@ export default {
   },
   async mounted() {
 
+    console.log('Mounted:');
     console.log(`isSignedIn: ${this.isSignedIn}`);
     console.log('currentUser: ');
     console.log(this.currentUser);
@@ -282,6 +283,16 @@ export default {
     },
     async isValidSlackMemberId() {
       if (this.checkSlackMemberIdOnBlur) {
+
+        console.log('isValidSlackMemberId:');
+        console.log(`isSignedIn: ${this.isSignedIn}`);
+        console.log('currentUser: ');
+        console.log(this.currentUser);
+        console.log('userId: ');
+        console.log(this.userId);
+        console.log('formData:');
+        console.log(this.formData);
+
         const response = await functions.httpsCallable('verifySlackUser')({
           userId: this.userId,
           slackMemberId: this.newReporterSlackUID,
