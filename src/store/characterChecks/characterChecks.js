@@ -1,37 +1,39 @@
-// TODO: KO upgrade to modular API
-import firebase from '@firebase/app';
+import { query, doc, writeBatch, collection, where, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collectionRef = firestore.collection('applicationRecords');
+const collectionName = 'applicationRecords';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
-      let firestoreRef = collectionRef
-        .where('exercise.id', '==', params.exerciseId)
-        .where('active', '==', true);
+      let firestoreRef = query(
+        collectionRef,
+        where('exercise.id', '==', params.exerciseId),
+        where('active', '==', true)
+      );
 
       if (params.where.length === 0) {
-        firestoreRef = firestoreRef.where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]);
+        firestoreRef = query(firestoreRef, where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]));
       }
 
       if (params.requested === true) {
-        firestoreRef = firestoreRef.where('characterChecks.status', '==', 'requested');
+        firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'requested'));
         firestoreRef = tableQuery(state.checksRequestedRecords, firestoreRef, params);
         return bindFirestoreRef('checksRequestedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
       if (params.requested === false) {
-        firestoreRef = firestoreRef.where('characterChecks.status', '==', 'not requested');
+        firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'not requested'));
         firestoreRef = tableQuery(state.checksNotRequestedRecords, firestoreRef, params);
         return bindFirestoreRef('checksNotRequestedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
         if (params.completed === true) {
-          firestoreRef = firestoreRef.where('characterChecks.status', '==', 'completed');
+          firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'completed'));
           firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
           return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
         }
@@ -55,12 +57,12 @@ export default {
 
       const data = {
         'characterChecks.status': existingStatus,
-        [field]: firebase.firestore.FieldValue.serverTimestamp(),
+        [field]: serverTimestamp(),
       };
 
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       selectedItems.map(item => {
-        const ref = collectionRef.doc(item);
+        const ref = doc(collectionRef, item);
         batch.update(ref, data);
       });
       await batch.commit();

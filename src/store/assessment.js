@@ -1,18 +1,18 @@
-// TODO: KO upgrade to modular API
-import firebase from '@firebase/app';
+import { query, where, getDocs, collection, doc, updateDoc, setDoc, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import clone from 'clone';
 
-const collection = firestore.collection('assessments');
+const collectionName = 'assessments';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
 
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -24,27 +24,26 @@ export default {
         throw 'State null and no ID passed';
       }
       if (!data.submittedDate){
-        data.submittedDate = firebase.firestore.FieldValue.serverTimestamp();
+        data.submittedDate = serverTimestamp();
       }
-      data.updatedDate = firebase.firestore.FieldValue.serverTimestamp();
+      data.updatedDate = serverTimestamp();
       let docId;
       state.record == null ? docId = data.id : docId = state.record.id;
-      const ref = collection.doc(docId);
-      return await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, docId);
+      return await setDoc(ref, data, { merge: true });
     },
-    delete: (context, { id }) => {
+    delete: async (context, { id }) => {
       const data = {
         status: STATUS.DELETED,
       };
-      const collectionRef = collection
-        .where('application.id', '==', id)
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(async doc => {
-            await collection.doc(doc.id).update(data);
-          });
-        });
-      return collectionRef;
+
+      const queryRef = query(collectionRef, where('application.id', '==', id));
+      const snapshot = getDocs(queryRef);
+      snapshot.forEach(async doc => {
+        await updateDoc(doc(collectionRef, doc.id), data);
+      });
+
+      return queryRef;
     },
     update: async (context, { data, AssessorNr, id }) => {
       let returnData = {};
@@ -64,13 +63,11 @@ export default {
         };
       }
 
-      const ref = collection.doc(`${id}-${AssessorNr}`);
-      await ref.get()
-        .then((docSnapshot) => {
-          if (docSnapshot.exists) {
-            ref.set(returnData, { merge: true });
-          }
-        });
+      const ref = doc(collectionRef, `${id}-${AssessorNr}`);
+      const docSnapshot = await ref.get();
+      if (docSnapshot.exists) {
+         await setDoc(ref, returnData, { merge: true });
+      }
       return true;
     },
   },

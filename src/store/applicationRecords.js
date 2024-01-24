@@ -1,6 +1,5 @@
-// TODO: KO upgrade to modular API
 // eslint-disable-next-line
-import firebase from '@firebase/app';
+import { writeBatch, query, doc, collection, where, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -8,18 +7,21 @@ import { getStageWithdrawalStatus } from '../helpers/exerciseHelper';
 import { lookup } from '@/filters';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collectionRef = firestore.collection('applicationRecords');
+const collectionName = 'applicationRecords';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      let firestoreRef = collectionRef
-        .where('exercise.id', '==', params.exerciseId)
-        .where('stage', '==', params.stage)
-        .where('active', '==', true);
+      let firestoreRef = query(
+        collectionRef,
+        where('exercise.id', '==', params.exerciseId),
+        where('stage', '==', params.stage),
+        where('active', '==', true)
+      );
       if (params.status) {
-        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = query(firestoreRef, where('status', '==', params.status));
       }
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
       if (firestoreRef) {
@@ -35,14 +37,14 @@ export default {
       const selectedItems = context.state.selectedItems;
       const saveData = { ...data };
       if (data.stage) {
-        saveData[`stageLog.${data.stage}`] = firebase.firestore.FieldValue.serverTimestamp();
+        saveData[`stageLog.${data.stage}`] = serverTimestamp();
       }
       if (data.status) {
-        saveData[`statusLog.${data.status}`] = firebase.firestore.FieldValue.serverTimestamp();
+        saveData[`statusLog.${data.status}`] = serverTimestamp();
       }
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       selectedItems.map(item => {
-        const ref = collectionRef.doc(item);
+        const ref = doc(collectionRef, item);
         batch.update(ref, saveData);
       });
       await batch.commit();

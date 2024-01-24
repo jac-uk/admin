@@ -1,13 +1,13 @@
-// TODO: KO upgrade to modular API
 // eslint-disable-next-line
-import firebase from '@firebase/app';
+import { writeBatch, query, doc, collection, addDoc, setDoc, deleteDoc, getDoc, getDocs, updateDoc, where, limit, runTransaction, serverTimestamp, arrayUnion, arrayRemove } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import clone from 'clone';
 
-const collectionRef = firestore.collection('panels');
+const collectionName = 'panels';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
@@ -15,9 +15,11 @@ export default {
     bind: firestoreAction(({ bindFirestoreRef, state }, params ) => {
       // eslint-disable-next-line no-console
       // console.log('bind panels', params);
-      let firestoreRef = collectionRef
-        .where('exerciseId', '==', params.exerciseId)
-        .where('type', '==', params.type);
+      let firestoreRef = query(
+        collectionRef,
+        where('exerciseId', '==', params.exerciseId),
+        where('type', '==', params.type)
+      );
       firestoreRef = tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -27,7 +29,7 @@ export default {
     create: async (context, data ) => {
       // eslint-disable-next-line no-console
       // console.log('store create', data);
-      await collectionRef.add(data);
+      await addDoc(collectionRef, data);
     },
     updateMembers: async (context, data) => {
       const panel = context.getters.getPanel(data.id);
@@ -45,22 +47,24 @@ export default {
       }
       // eslint-disable-next-line no-console
       // console.log('updateMembers store members: ', members);
-      await collectionRef.doc(data.id).set({
+      await setDoc(doc(collectionRef, data.id), {
         members: members,
       }, { merge: true });
     },
     updatePanel: async (context, params) => {
-      return await collectionRef.doc(params.id).update(params.data);
+      return await updateDoc(doc(collectionRef, params.id), params.data);
     },
     deletePanel: async (context, id) => {
-      await collectionRef.doc(id).delete();
+      await deleteDoc(doc(collectionRef, id));
       // @TODO@ - ?also empty google drive folder, if it has been created?
       return true;
     },
     bindPanelApplications: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = firestore.collection('applicationRecords')
-        .where('exercise.id', '==', params.exerciseId)
-        .where(`panelIds.${params.type}`, '==', params.panelId);
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', params.exerciseId),
+        where(`panelIds.${params.type}`, '==', params.panelId)
+      );
       firestoreRef = tableQuery(state.panelApplications, firestoreRef, params);
       return bindFirestoreRef('panelApplications', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -68,9 +72,9 @@ export default {
       return unbindFirestoreRef('panelApplications');
     }),
     removePanelApplications: async (context, { panelType, applicationIds }) => {
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       applicationIds.forEach(applicationId => {
-        const ref = firestore.collection('applicationRecords').doc(applicationId);
+        const ref = doc(collection(firestore, 'applicationRecords'), applicationId);
         const data = {};
         data[`panelIds.${panelType}`] = '';
         batch.update(ref, data);

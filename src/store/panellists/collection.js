@@ -1,12 +1,12 @@
 // eslint-disable-next-line
-// TODO: KO upgrade to modular API
-import firebase from '@firebase/app';
+import { collection } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collectionRef = firestore.collection('panellists');
+const collectionName = 'panellists';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,

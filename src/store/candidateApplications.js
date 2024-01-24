@@ -1,25 +1,26 @@
-// TODO: KO upgrade to modular API
+import { query, doc, collection, writeBatch, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('applications');
+const collectionName = 'applications';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = await tableQuery(state.records, collection.where('userId', '==', params.candidateId), params);
+      const firestoreRef = await tableQuery(state.records, query(collectionRef, where('userId', '==', params.candidateId), params));
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('records');
     }),
     update: async (context, data ) => {
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
         data.forEach( item => {
-          const ref = firestore.collection('applicationRecords').doc(item.id);
+          const ref = doc(collection(firestore, 'applicationRecords'), item.id);
           batch.update(ref, item.data);
         });
         await batch.commit();
