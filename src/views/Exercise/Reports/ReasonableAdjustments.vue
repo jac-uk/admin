@@ -127,11 +127,7 @@
           :columns="tableColumns"
           page-item-type="uppercase-letter"
           :page-size="50"
-          :custom-search="{
-            placeholder: 'Search candidate names',
-            handler: candidateSearch,
-            field: 'candidate.id',
-          }"
+          :search-map="$searchMap.applicationRecords"
           @change="getTableData"
         >
           <template #row="{row, index}">
@@ -140,14 +136,41 @@
               :title="tableColumns[0].title"
             >
               <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                  <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-0">
-                    <span v-if="row.candidate">
+                <div
+                  v-if="row.candidate"
+                  class="govuk-grid-column-one-quarter"
+                >
+                  <div class="candidate-name govuk-!-margin-bottom-0">
+                    <strong>
+                      Full Name:
+                    </strong>
+                    <br>
+                    <span>
                       {{ row.candidate.fullName }}
                     </span>
                   </div>
                 </div>
-                <div class="govuk-grid-column-one-third text-right">
+                <div class="govuk-grid-column-one-quarter">
+                  <div class="candidate-phone govuk-!-margin-bottom-0">
+                    <span>
+                      <strong>
+                        Phone:
+                      </strong>
+                      [ PHONE ]
+                    </span>
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                  <div class="candidate-phone govuk-!-margin-bottom-0">
+                    <span>
+                      <strong>
+                        Email:
+                      </strong>
+                      [ EMAIL ]
+                    </span>
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter text-right">
                   <RouterLink
                     :to="{name: 'exercise-application', params: { applicationId: row.id }, query: { tab: 'issues' } }"
                     class="govuk-link print-none"
@@ -155,6 +178,18 @@
                   >
                     View application
                   </RouterLink>
+                </div>
+              </div>
+              <hr>
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                  <strong>
+                    {{ exercise.referenceNumber }}:
+                  </strong>
+                  <br>
+                  <span v-if="row.candidate">
+                    {{ row.candidate.reasonableAdjustmentsDetails }}
+                  </span>
                 </div>
               </div>
 
@@ -166,18 +201,18 @@
                 <div
                   v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
                   :key="i"
-                  class="govuk-grid-row"
+                  class="govuk-grid-row govuk-!-margin-left-0"
                 >
                   <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-!-margin-bottom-1">
-                      Status
+                      Approval Status
                     </h4>
                     <Select
                       :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
-                      :value="reasonableAdjustmentsState.status || ''"
-                      @input="saveReasonableAdjustmentsStatus(row, $event, i)"
+                      v-model="reasonableAdjustmentsState.status"
                     >
-                      <option value="" />
+                      <!-- :value="reasonableAdjustmentsState.status || ''"
+                      @input="saveReasonableAdjustmentsStatus(row, $event, i)" -->
                       <option
                         v-for="status in reasonableAdjustmentsStatusOptions"
                         :key="status"
@@ -187,35 +222,60 @@
                       </option>
                     </Select>
                   </div>
-                  <div class="govuk-grid-column-two-thirds">
+                  <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-!-margin-bottom-1">
-                      Where the reasonable adjustments was given
+                      Activity for which reasonable adjustment given
                     </h4>
                     <Select
                       :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
-                      :value="reasonableAdjustmentsState.reason || ''"
-                      @input="saveReasonableAdjustmentsReason(row, $event, i)"
+                      v-model="reasonableAdjustmentsState.reason"
                     >
-                      <option value="" />
+                      <!-- :value="reasonableAdjustmentsState.reason || ''"
+                      @input="saveReasonableAdjustmentsReason(row, $event, i)" -->
                       <option
-                        v-for="reason in reasonableAdjustmentsReasonOptions"
-                        :key="reason"
-                        :value="reason"
+                        v-for="activity in reasonableAdjustmentsActivities"
+                        :key="activity"
+                        :value="activity"
                       >
-                        {{ $filters.lookup(reason) }}
+                        {{ $filters.lookup(activity) }}
                       </option>
                     </Select>
+                  </div>
+                  <div class="govuk-grid-column-one-third">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Reasonable adjustment allocated
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.timeAllocations"
+                    >
+                      <!-- :value="reasonableAdjustmentsState.timeAllocations || ''"
+                      @input="saveReasonableAdjustmentsTimeAllocations(row, $event, i)" -->
+                      <option
+                        v-for="time in reasonableAdjustmentsTimeAllocations"
+                        :key="time"
+                        :value="time"
+                      >
+                        {{ $filters.lookup(time) }}
+                      </option>
+                    </Select>
+                  </div>
+                  <div class="govuk-grid-column-full">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Describe reasonable adjustment given
+                    </h4>
                     <TextareaInput
                       :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
-                      :value="reasonableAdjustmentsState.note"
-                      @input="saveReasonableAdjustmentsNote(row, $event, i)"
+                      v-model="reasonableAdjustmentsState.note"
                     />
+                    <!-- :value="reasonableAdjustmentsState.note"
+                      @input="saveReasonableAdjustmentsNote(row, $event, i)" -->
                   </div>
                 </div>
 
                 <div class="text-right">
                   <button
-                    v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsReasonOptions.length"
+                    v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length"
                     class="print-none govuk-button govuk-!-margin-bottom-0"
                     @click="addReasonableAdjustmentsState(index)"
                   >
@@ -241,7 +301,7 @@
 
               <div v-if="open[row.id]">
                 <div
-                  v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id)"
+                  v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id).filter(ra => ra.exercise.id !== exercise.id)"
                   :key="`${row.candidate.id}-${i}`"
                 >
                   <hr
@@ -351,14 +411,26 @@ export default {
   mixins: [permissionMixin],
   data() {
     const reasonableAdjustmentsStatusOptions = ['approved', 'denied'];
-    const reasonableAdjustmentsReasonOptions = ['qualifying-test', 'scenario-test', 'selection-day'];
+    const reasonableAdjustmentsActivities = ['qualifying-test', 'scenario-test', 'selection-day'];
+    const reasonableAdjustmentsTimeAllocations = [
+      '5% additional time',
+      '10% additional time',
+      '15% additional time',
+      '20% additional time',
+      '25% additional time',
+      '30% additional time',
+      '40% additional time',
+      '50% additional time',
+    ]
+    ;
 
     return {
       exerciseStage: 'all',
       candidateStatus: 'all',
       filterStatus: 'all',
       reasonableAdjustmentsStatusOptions,
-      reasonableAdjustmentsReasonOptions,
+      reasonableAdjustmentsActivities,
+      reasonableAdjustmentsTimeAllocations,
       applicationRecords: [],
       tableColumns: [
         { title: 'Candidate' },
