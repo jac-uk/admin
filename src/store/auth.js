@@ -58,6 +58,7 @@ const module = {
               id: userInvitation.roleId || '',
               isChanged: false,
             },
+            uid: user.uid || '',
           };
           userDoc = await dispatch('users/create', { id: user.uid, data: newUser }, { root: true });
           // set user role in custom claims
