@@ -399,10 +399,16 @@ export default {
         this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
       }
     },
-    openFeedbackModal() {
+    async openFeedbackModal() {
       // @TODO: TESTING
       console.log(`openFeedbackModal isSignedIn: ${this.isSignedIn}`);
-      this.$refs.feedbackModal.openModal();
+
+      if (!this.isSignedIn) {
+        await this.signOut();
+      }
+      else {
+        this.$refs.feedbackModal.openModal();
+      }
     },
   },
 };
