@@ -400,15 +400,7 @@ export default {
       }
     },
     async openFeedbackModal() {
-      // @TODO: TESTING
-      console.log(`openFeedbackModal isSignedIn: ${this.isSignedIn}`);
-
-      if (!this.isSignedIn) {
-        await this.signOut();
-      }
-      else {
-        this.$refs.feedbackModal.openModal();
-      }
+      this.$refs.feedbackModal.openModal();
     },
   },
 };

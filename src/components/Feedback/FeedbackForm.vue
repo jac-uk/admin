@@ -152,6 +152,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { functions } from '@/firebase';
 import SlackLookupError from '@/errors/slackLookupError';
+import UserError from '@/errors/userError';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
@@ -315,6 +316,9 @@ export default {
     async save() {
       try {
         this.validate();
+        if (!this.userId) {
+          throw new UserError('Your user is missing a uid field.');
+        }
         if (!this.reporterSlackUID) {
           // Check if the slack member id is valid
           const validSlackMember = await this.isValidSlackMemberId();
@@ -357,6 +361,7 @@ export default {
         console.log(e.message);
 
         let msg, id = '';
+        const reportErrorTo = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
         if (e instanceof SlackLookupError) {
 
           console.log('SlackLookupError!!!');
@@ -364,10 +369,13 @@ export default {
           id = 'slackUID';
           msg = e.message;
         }
+        else if (e instanceof UserError) {
+          id = 'uid';
+          msg = `${e.message} Please report the problem directly to the ${reportErrorTo}`;
+        }
         else {
-          const str = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
           id = 'error';
-          msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
+          msg = `We were unable to save your bug report. Please report the problem directly to the ${reportErrorTo}`;
         }
         this.errors.push({
           id: id,
