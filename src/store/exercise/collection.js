@@ -1,4 +1,4 @@
-// TODO: KO upgrade to modular API
+import { query, doc, collection, writeBatch, where, orderBy } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -11,24 +11,27 @@ export default {
     bind: firestoreAction(({ rootState, state, bindFirestoreRef }, params) => {
       let firestoreRef;
       if (state.isFavourites) {
-        firestoreRef = firestore
-        .collection('exercises')
-        .where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid);
+        firestoreRef = query(
+          collection(firestore, 'exercises'),
+          where('favouriteOf', 'array-contains', rootState.auth.currentUser.uid)
+        );
       } else if (state.isArchived) {
-        firestoreRef = firestore
-        .collection('exercises')
-        .where('state', '==', 'archived');
+        firestoreRef = query(
+          collection(firestore, 'exercises'),
+          where('state', '==', 'archived')
+        );
       } else {
-        firestoreRef = firestore
-        .collection('exercises')
-        .where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved']);
+        firestoreRef = query(
+          collection(firestore, 'exercises'),
+          where('state', 'in', ['draft', 'review', 'ready', 'shortlisting', 'selection', 'handover', 'recomended', 'approved'])
+        );
       }
       if (params) {
         // Ensure if the where clause uses an inequality that it appears as the first argument to Query.orderBy()
         if (params.where.length) {
           for (const w of params.where) {
             if (['<', '<=', '!=', 'not-in', '>', '>='].includes(w.comparator)) {
-              firestoreRef = firestoreRef.orderBy(w.field);
+              firestoreRef = query(firestoreRef, orderBy(w.field));
             }
           }
         }
@@ -40,9 +43,10 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindDraft: firestoreAction(({ bindFirestoreRef }) => {
-      const firestoreRef = firestore
-        .collection('exercises')
-        .where('state', '==', 'draft');
+      const firestoreRef = query(
+        collection(firestore, 'exercises'),
+        where('state', '==', 'draft')
+      );
       return bindFirestoreRef('draftRecords', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindDraft: firestoreAction(({ unbindFirestoreRef }) => {
@@ -68,9 +72,9 @@ export default {
         exerciseIds: [],
         exerciseRefs: [],
       };
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       state.selectedItems.forEach( id => {
-        const ref = firestore.collection('exercises').doc(id);
+        const ref = doc(collection(firestore, 'exercises'), id);
         const record = state.records.find(record => record.id === id);
         batch.update(ref, {
           state: record.hasOwnProperty('stateBeforeArchive') ? record.stateBeforeArchive : 'ready',
@@ -88,9 +92,9 @@ export default {
         exerciseIds: [],
         exerciseRefs: [],
       };
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       state.selectedItems.forEach( id => {
-        const ref = firestore.collection('exercises').doc(id);
+        const ref = doc(collection(firestore, 'exercises', id));
         const record = state.records.find(record => record.id === id);
         batch.update(ref, {
           state: 'archived',
@@ -108,9 +112,9 @@ export default {
         exerciseIds: [],
         exerciseRefs: [],
       };
-      const batch = firestore.batch();
+      const batch = writeBatch(firestore);
       state.selectedItems.forEach(id => {
-        const ref = firestore.collection('exercises').doc(id);
+        const ref = doc(collection(firestore, 'exercises'), id);
         const record = state.records.find(record => record.id === id);
         batch.update(ref, {
           state: 'deleted',

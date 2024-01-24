@@ -1,16 +1,17 @@
-// TODO: KO upgrade to modular API
+import { query, doc, getDocs, limit, collection, setDoc, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('candidates');
+const collectionName = 'candidates';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      const firestoreRef = await tableQuery(state.records, collection, params);
+      const firestoreRef = await tableQuery(state.records, collectionRef, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
       } else {
@@ -23,11 +24,11 @@ export default {
     search: async (context, { searchTerm, exerciseId }) => {
       const results = [];
       if (searchTerm) {
-        let query = collection.where('computed.search', 'array-contains', searchTerm.toLowerCase());
+        let queryRef = query(collectionRef, where('computed.search', 'array-contains', searchTerm.toLowerCase()));
         if (exerciseId) {
-          query = query.where(`computed.exercisesMap.${exerciseId}`, 'in', ['applied', 'draft', 'withdrawn']);
+          queryRef = query(queryRef, where(`computed.exercisesMap.${exerciseId}`, 'in', ['applied', 'draft', 'withdrawn']));
         }
-        const snap = await query.limit(10).get();
+        const snap = await getDocs(query(queryRef, limit(10)));
         snap.forEach(doc => {
           const row = doc.data();
           row.id = doc.id;
@@ -42,16 +43,16 @@ export default {
     },
     // @TODO tidy up these binds
     bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     bindDocs: firestoreAction(async ({ bindFirestoreRef }, id) => {
-      await bindFirestoreRef('personalDetails', collection.doc(`${id}/documents/personalDetails`), { serialize: vuexfireSerialize });
-      await bindFirestoreRef('characterInformation', collection.doc(id).collection('documents').doc('characterInformation'), { serialize: vuexfireSerialize });
-      await bindFirestoreRef('equalityAndDiversitySurvey', collection.doc(id).collection('documents').doc('equalityAndDiversitySurvey'), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('personalDetails', doc(collectionRef, `${id}/documents/personalDetails`), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('characterInformation', doc(collectionRef, id, 'documents', 'characterInformation'), { serialize: vuexfireSerialize });
+      await bindFirestoreRef('equalityAndDiversitySurvey', doc(collectionRef, id, 'documents', 'equalityAndDiversitySurvey'), { serialize: vuexfireSerialize });
       return;
     }),
     unbindDocs: firestoreAction(async ({ unbindFirestoreRef }) => {
@@ -61,23 +62,19 @@ export default {
       return;
     }),
     savePersonalDetails: async (context, { data, id }) => {
-      const ref = collection.doc(`${id}/documents/personalDetails`);
-      await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, `${id}/documents/personalDetails`);
+      await setDoc(ref, data, { merge: true });
     },
     getByEmail: async ({ commit }, email) => {
-      return collection
-        .where('email', '==', email)
-        .get()
-        .then(querySnapshot => {
-          if (!querySnapshot.empty) {
-            const candidate = vuexfireSerialize(querySnapshot.docs[0]);
-            commit('setRecord', candidate);
-          }
-        });
+      const queryRefSnapshot = await getDocs(query(collectionRef, where('email', '==', email)));
+      if (!queryRefSnapshot.empty) {
+        const candidate = vuexfireSerialize(queryRefSnapshot.docs[0]);
+        commit('setRecord', candidate);
+      }
     },
     save: async ({ state }, data) => {
-      const ref = collection.doc(state.record.id);
-      await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, state.record.id);
+      await setDoc(ref, data, { merge: true });
     },
   },
   mutations: {

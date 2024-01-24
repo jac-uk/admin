@@ -1,6 +1,4 @@
-// TODO: KO upgrade to modular API
 import { query, doc, collection, addDoc, deleteDoc, where, serverTimestamp } from '@firebase/firestore';
-
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';

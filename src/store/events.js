@@ -1,4 +1,4 @@
-// TODO: KO upgrade to modular API
+import { collection } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -8,21 +8,21 @@ export default {
   namespaced: true,
   actions: {
     bindInfo: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.info, firestore.collection('logs/info/events'), params);
+      const firestoreRef = tableQuery(state.info, collection(firestore, 'logs/info/events'), params);
       return bindFirestoreRef('info', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindInfo: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('info');
     }),
     bindWarnings: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.warnings, firestore.collection('logs/warnings/events'), params);
+      const firestoreRef = tableQuery(state.warnings, collection(firestore, 'logs/warnings/events'), params);
       return bindFirestoreRef('warnings', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindWarnings: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('warnings');
     }),
     bindErrors: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = tableQuery(state.errors, firestore.collection('logs/errors/events'), params);
+      const firestoreRef = tableQuery(state.errors, collection(firestore, 'logs/errors/events'), params);
       return bindFirestoreRef('errors', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindErrors: firestoreAction(({ unbindFirestoreRef }) => {

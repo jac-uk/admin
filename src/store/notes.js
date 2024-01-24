@@ -1,22 +1,25 @@
-// TODO: KO upgrade to modular API
+import { orderBy, query, doc, collection, addDoc, deleteDoc, updateDoc, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
-const collection = firestore.collection('notes');
+const collectionName = 'notes';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef }, { candidateId, applicationId }) => {
-      let firestoreRef = collection;
+      let firestoreRef = collectionRef;
       if (candidateId) {
-        firestoreRef = firestoreRef
-          .where('candidate.id', '==', candidateId)
-          .orderBy('created', 'desc');
+        firestoreRef = query(
+          firestoreRef,
+          where('candidate.id', '==', candidateId),
+          orderBy('created', 'desc')
+        );
       }
       if (applicationId) {
-        firestoreRef = firestoreRef.where('applicationId', '==', applicationId);
+        firestoreRef = query(firestoreRef, where('applicationId', '==', applicationId));
       }
       if (firestoreRef) {
         await bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
@@ -41,15 +44,14 @@ export default {
       }
 
       if (isUpdate) {
-        await collection.doc(id).update(data);
+        await updateDoc(doc(collectionRef, id),data);
       } else {
-        await collection.add(data);
+        await addDoc(collectionRef, data);
       }
     },
     delete: async (context, { id }) => {
-      const ref = firestore
-        .collection('notes').doc(id);
-      await ref.delete();
+      const ref = doc(collection(firestore, 'notes'), id);
+      await deleteDoc(ref);
     },
   },
   mutations: {

@@ -1,18 +1,19 @@
-// TODO: KO upgrade to modular API
+import { query, doc, collection, setDoc, addDoc, getDoc, getDocs, deleteDoc, where, limit } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('users');
+const collectionName = 'users';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      let firestoreRef = collection;
+      let firestoreRef = collectionRef;
       if (params.roleId) {
-        firestoreRef = firestoreRef.where('role.id', '==', params.roleId);
+        firestoreRef = query(firestoreRef, where('role.id', '==', params.roleId));
       }
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
       if (firestoreRef) {
@@ -25,7 +26,7 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
@@ -33,16 +34,16 @@ export default {
     }),
     create: async (_, { id, data }) => {
       if (id) {
-        await collection.doc(id).set(data);
+        await setDoc(doc(collectionRef, id), data);
         return { id, ...data };
       }
-      return await collection.add(data);
+      return await addDoc(collectionRef, data);
     },
     getById: async (_, userId) => {
       if (!userId) return null;
 
       try {
-        const doc = await collection.doc(userId).get();
+        const doc = await getDoc(doc(collectionRef, userId));
         if (doc.exists) {
           return {
             id: userId,
@@ -58,10 +59,13 @@ export default {
       if (!email) return null;
 
       try {
-        const snap = await collection
-          .where('email', '==', email)
-          .limit(1)
-          .get();
+        const snap = await getDocs(
+          query(
+            collectionRef,
+            where('email', '==', email),
+            limit(1)
+          )
+        );
         let result = null;
         snap.forEach(doc => {
           result = {
@@ -75,11 +79,11 @@ export default {
       }
     },
     save: async (_, { userId, data }) => {
-      const ref = collection.doc(userId);
-      await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, userId);
+      await setDoc(ref, data, { merge: true });
     },
     delete: async (_, id) => {
-      return await collection.doc(id).delete();
+      return await deleteDoc(doc(collectionRef, id));
     },
   },
   mutations: {

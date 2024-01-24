@@ -1,4 +1,4 @@
-// TODO: KO upgrade to modular API
+import { doc, updateDoc } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -8,23 +8,23 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }) => {
-      const firestoreRef = firestore.doc('settings/services');
+      const firestoreRef = doc(firestore, 'settings/services');
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     saveNotificationsSettings: async (context, data) => {
-      const ref = firestore.doc('settings/services');
-      await ref.update({ notifications: data });
+      const ref = doc(firestore, 'settings/services');
+      await updateDoc(ref, { notifications: data });
     },
     notificationsStart() {
-      return firestore.doc('settings/services').update({
+      return updateDoc(doc(firestore, 'settings/services'), {
         'notifications.isProcessing': true,
       });
     },
     notificationsStop() {
-      return firestore.doc('settings/services').update({
+      return updateDoc(doc(firestore, 'settings/services'), {
         'notifications.isProcessing': false,
       });
     },

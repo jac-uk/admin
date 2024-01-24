@@ -1,22 +1,23 @@
-// TODO: KO upgrade to modular API
+import { query, doc, collection, addDoc, setDoc, getDocs, deleteDoc, where, limit } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('userInvitations');
+const collectionName = 'userInvitations';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = collection;
+      let firestoreRef = collectionRef;
       if (params.status === 'pending') {
-        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = query(firestoreRef, where('status', '==', params.status));
         firestoreRef = await tableQuery(state.userInvitationPendingRecords, firestoreRef, params);
         return bindFirestoreRef('userInvitationPendingRecords', firestoreRef, { serialize: vuexfireSerialize });
       } else if (params.status === 'completed') {
-        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = query(firestoreRef, where('status', '==', params.status));
         firestoreRef = await tableQuery(state.userInvitationCompletedRecords, firestoreRef, params);
         return bindFirestoreRef('userInvitationCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
@@ -25,7 +26,7 @@ export default {
       return unbindFirestoreRef('records');
     }),
     bindDoc: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbindDoc: firestoreAction(({ unbindFirestoreRef }) => {
@@ -35,11 +36,11 @@ export default {
       if (!email) return null;
 
       try {
-        let firestoreRef = collection.where('email', '==', email);
+        let firestoreRef = query(collectionRef, where('email', '==', email));
         if (status) {
-          firestoreRef = firestoreRef.where('status', '==', status);
+          firestoreRef = query(firestoreRef, where('status', '==', status));
         }
-        const snap = await firestoreRef.limit(1).get();
+        const snap = await getDocs(query(firestoreRef, limit(1)));
         let result = null;
         snap.forEach(doc => {
           result = {
@@ -53,15 +54,15 @@ export default {
       }
     },
     create: async (_, data) => {
-      return await collection.add(data);
+      return await addDoc(collectionRef, data);
     },
     save: async (_, { id, data }) => {
-      const ref = collection.doc(id);
-      await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, id);
+      await setDoc(ref, data, { merge: true });
     },
     delete: async (_, id) => {
       console.log(id);
-      return await collection.doc(id).delete();
+      return await deleteDoc(doc(collectionRef, id));
     },
   },
   mutations: {
