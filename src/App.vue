@@ -400,6 +400,8 @@ export default {
       }
     },
     openFeedbackModal() {
+      // @TODO: TESTING
+      console.log(`openFeedbackModal isSignedIn: ${this.isSignedIn}`);
       this.$refs.feedbackModal.openModal();
     },
   },
