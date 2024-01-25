@@ -21,7 +21,7 @@ const firestoreAction = (action) => {
       return new Promise((resolve) => {
         let unsubscribe = null;
 
-        if ('where' in ref) {
+        if (ref.type === 'query') {
           // bind collection
           unsubscribe = onSnapshot(ref, (snapshot) => {
             const records = [];
