@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import '@firebase/storage';
+import { ref, deleteObject } from '@firebase/storage';
+import { storage } from '@/firebase';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 
@@ -115,8 +115,8 @@ export default {
       return Promise.resolve(obj);
     },
     deleteFile(path, filename) {
-      const deleteRef = firebase.storage().ref(`${path}/${filename}`);
-      deleteRef.delete().then(() => {
+      const deleteRef = ref(storage, `${path}/${filename}`);
+      deleteObject(deleteRef).then(() => {
         // File deleted successfully
       }).catch((error) => {
         // Uh-oh, an error occurred!
