@@ -586,6 +586,7 @@
 </template>
 
 <script>
+import { onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -667,8 +668,9 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/agency`)
-      .onSnapshot((snap) => {
+    this.unsubscribe = onSnapshot(
+      doc(firestore,`exercises/${this.exercise.id}/reports/agency`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }

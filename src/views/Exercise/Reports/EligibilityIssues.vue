@@ -170,6 +170,7 @@
 </template>
 
 <script>
+import { query, collection, where, onSnapshot } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -229,16 +230,18 @@ export default {
       }
     },
     async getTableData(params) {
-      let firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('exercise.id', '==', this.exercise.id)
-        .where('flags.eligibilityIssues', '==', true);
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', this.exercise.id),
+        where('flags.eligibilityIssues', '==', true)
+      );
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
       if (firestoreRef) {
-        this.unsubscribe = firestoreRef
-          .onSnapshot((snap) => {
+        this.unsubscribe = onSnapshot(
+          firestoreRef,
+          (snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));
