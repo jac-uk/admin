@@ -8,6 +8,7 @@
       </div>
       <div class="text-right govuk-grid-column-one-third">
         <button
+          v-show="showEmailButton"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
           @click.prevent="notifyCandidates"
         >
@@ -118,6 +119,7 @@ import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
 import { functions } from '@/firebase';
+import { TASK_TYPE } from '@/helpers/constants';
 
 export default {
   components: {
@@ -187,10 +189,21 @@ export default {
     failed() {
       return this.applicationOutcomes.filter(o => !o.pass);
     },
+    showEmailButton() {
+      return [
+        TASK_TYPE.CRITICAL_ANALYSIS,
+        TASK_TYPE.QUALIFYING_TEST,
+        TASK_TYPE.SCENARIO,
+        TASK_TYPE.SITUATIONAL_JUDGEMENT,
+      ].includes(this.type);
+    },
   },
   methods: {
     async notifyCandidates() {
-      await functions.httpsCallable('sendPublishedFeedbackReportNotification')({ exerciseId: this.exerciseId, type: this.type });
+
+      console.log(`exerciseId: ${this.exerciseId}, type: ${this.type}`);
+
+      await functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
     },
   },
 };
