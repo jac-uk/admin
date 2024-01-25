@@ -43,11 +43,11 @@ export default {
       if (!userId) return null;
 
       try {
-        const doc = await getDoc(doc(collectionRef, userId));
-        if (doc.exists) {
+        const snap = await getDoc(doc(collectionRef, userId));
+        if (snap.exists) {
           return {
             id: userId,
-            ...doc.data(),
+            ...snap.data(),
           };
         }
         return null;
