@@ -155,8 +155,9 @@
                     <span>
                       <strong>
                         Phone:
+                        <br>
                       </strong>
-                      [ PHONE ]
+                      {{ personalDetails(row.candidate.id).phone }}
                     </span>
                   </div>
                 </div>
@@ -166,7 +167,8 @@
                       <strong>
                         Email:
                       </strong>
-                      [ EMAIL ]
+                      <br>
+                      {{ personalDetails(row.candidate.id).email }}
                     </span>
                   </div>
                 </div>
@@ -210,9 +212,8 @@
                     <Select
                       :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.status"
+                      @input="saveReasonableAdjustmentsStatus(row, $event.target.value, i)"
                     >
-                      <!-- :value="reasonableAdjustmentsState.status || ''"
-                      @input="saveReasonableAdjustmentsStatus(row, $event, i)" -->
                       <option
                         v-for="status in reasonableAdjustmentsStatusOptions"
                         :key="status"
@@ -229,9 +230,8 @@
                     <Select
                       :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.reason"
+                      @input="saveReasonableAdjustmentsReason(row, $event.target.value, i)"
                     >
-                      <!-- :value="reasonableAdjustmentsState.reason || ''"
-                      @input="saveReasonableAdjustmentsReason(row, $event, i)" -->
                       <option
                         v-for="activity in reasonableAdjustmentsActivities"
                         :key="activity"
@@ -248,9 +248,8 @@
                     <Select
                       :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.timeAllocations"
+                      @input="saveReasonableAdjustmentsTimeAllocations(row, $event.target.value, i)"
                     >
-                      <!-- :value="reasonableAdjustmentsState.timeAllocations || ''"
-                      @input="saveReasonableAdjustmentsTimeAllocations(row, $event, i)" -->
                       <option
                         v-for="time in reasonableAdjustmentsTimeAllocations"
                         :key="time"
@@ -267,9 +266,8 @@
                     <TextareaInput
                       :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.note"
+                      @input="saveReasonableAdjustmentsNote(row, $event.target.value, i)"
                     />
-                    <!-- :value="reasonableAdjustmentsState.note"
-                      @input="saveReasonableAdjustmentsNote(row, $event, i)" -->
                   </div>
                 </div>
 
@@ -443,6 +441,9 @@ export default {
     };
   },
   computed: {
+    reasonableAdjustmentsReport() {
+      return this.$store.getters['applications/reasonableAdjustments'];
+    },
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
@@ -518,6 +519,9 @@ export default {
         this.applicationRecords = [];
       }
     },
+    personalDetails(id) {
+      return this.reasonableAdjustmentsReport.candidates.filter((candidate) => candidate.userId === id)[0];
+    },
     async candidateSearch(searchTerm) {
       return await this.$store.dispatch('candidates/search', { searchTerm: searchTerm });
     },
@@ -531,6 +535,10 @@ export default {
     },
     async saveReasonableAdjustmentsReason(applicationRecord, reason, index) {
       applicationRecord.candidate.reasonableAdjustmentsStates[index].reason = reason;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveReasonableAdjustmentsTimeAllocations(applicationRecord, timeAllocation, index) {
+      applicationRecord.candidate.reasonableAdjustmentsStates[index].timeAllocation = timeAllocation;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     saveReasonableAdjustmentsNote: debounce(async function (applicationRecord, note, index) {
