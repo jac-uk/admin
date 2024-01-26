@@ -11,7 +11,7 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state }, params) => {
-      const firestoreRef = await tableQuery(state.records, query(collectionRef, where('userId', '==', params.candidateId), params));
+      const firestoreRef = await tableQuery(state.records, query(collectionRef, where('userId', '==', params.candidateId)), params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
