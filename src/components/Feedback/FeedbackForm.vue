@@ -3,132 +3,140 @@
     <ErrorSummary
       :errors="errors"
     />
-    <form @submit.prevent="validateAndSave">
-      <RadioGroup
-        id="feedback-for-proxy"
-        v-model="feedbackForProxy"
-        label="Are you raising this issue for yourself or a candidate?"
-        :inline="true"
-      >
-        <RadioItem
-          value="0"
-          label="Myself"
-        />
-        <RadioItem
-          value="1"
-          label="Candidate"
-        />
-      </RadioGroup>
-
-      <div
-        class="govuk-warning-text"
-      >
-        <span
-          class="govuk-warning-text__icon"
-          aria-hidden="true"
-        >!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
-          <span v-else>Please ensure you are on the relevant page before raising the issue</span>
-        </strong>
-      </div>
-
-      <RadioGroup
-        v-show="feedbackForProxy === '1'"
-        id="cps-device"
-        v-model="formData.cpsDevice"
-        label="Is the candidate using a CPS device?"
-        :inline="true"
-      >
-        <RadioItem
-          value="0"
-          label="No"
-        />
-        <RadioItem
-          value="1"
-          label="Yes"
-        />
-      </RadioGroup>
-
-      <CaptureScreenshot
-        v-if="!showFormForProxy"
-        id="capture-screenshot"
-        ref="screenshot"
+    <RadioGroup
+      id="feedback-for-proxy"
+      v-model="feedbackForProxy"
+      label="Are you raising this issue for yourself or a candidate?"
+      :inline="true"
+    >
+      <RadioItem
+        value="0"
+        label="Myself"
       />
+      <RadioItem
+        value="1"
+        label="Candidate"
+      />
+    </RadioGroup>
 
-      <Select
-        id="criticality"
-        v-model="formData.criticality"
-        label="How critical is this issue"
-        required
+    <div
+      class="govuk-warning-text"
+    >
+      <span
+        class="govuk-warning-text__icon"
+        aria-hidden="true"
+      >!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        <span v-if="showFormForProxy">Please ensure you are on the relevant candidate application page before raising the issue</span>
+        <span v-else>Please ensure you are on the relevant page before raising the issue</span>
+      </strong>
+    </div>
+
+    <TextField
+      v-if="!reporterSlackUID"
+      id="slackUID"
+      v-model="newReporterSlackUID"
+      label="Your Slack member ID"
+      type="text"
+      required
+    />
+
+    <RadioGroup
+      v-show="feedbackForProxy === '1'"
+      id="cps-device"
+      v-model="formData.cpsDevice"
+      label="Is the candidate using a CPS device?"
+      :inline="true"
+    >
+      <RadioItem
+        value="0"
+        label="No"
+      />
+      <RadioItem
+        value="1"
+        label="Yes"
+      />
+    </RadioGroup>
+
+    <CaptureScreenshot
+      v-if="!showFormForProxy"
+      id="capture-screenshot"
+      ref="screenshot"
+    />
+
+    <Select
+      id="criticality"
+      v-model="formData.criticality"
+      label="How critical is this issue"
+      required
+    >
+      <option
+        value=""
+        selected
       >
-        <option
-          value=""
-          selected
-        >
-          Please select
-        </option>
-        <option
-          v-for="(criticalityType, index) in criticalityTypes"
-          :key="(index + 1)"
-          :value="criticalityType"
-        >
-          {{ criticalityType }}
-        </option>
-      </Select>
+        Please select
+      </option>
+      <option
+        v-for="(criticalityType, key) in criticalityTypes"
+        :key="key"
+        :value="key"
+      >
+        {{ criticalityType }}
+      </option>
+    </Select>
 
-      <template v-if="showFormForProxy">
-        <TextField
-          id="name"
-          v-model="formData.candidate"
-          label="Name of candidate"
-          type="text"
-          required
-        />
-        <TextField
-          id="browser"
-          v-model="formData.browser"
-          label="Candidate browser"
-          type="text"
-          required
-        />
-        <TextField
-          id="os"
-          v-model="formData.os"
-          label="Candidate operating system"
-          type="text"
-          required
-        />
-      </template>
-      <TextArea
-        id="issue"
-        v-model="formData.issue"
-        label="What happened?"
-        rows="2"
+    <template v-if="showFormForProxy">
+      <TextField
+        id="name"
+        v-model="formData.candidate"
+        label="Name of candidate"
+        type="text"
         required
       />
-      <TextArea
-        id="expectation"
-        v-model="formData.expectation"
-        :label="expectationLabel"
-        rows="2"
+      <TextField
+        id="browser"
+        v-model="formData.browser"
+        label="Candidate browser"
+        type="text"
         required
       />
-      <button
-        type="button"
-        class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-        @click="closeModal"
-      >
-        Cancel
-      </button>
-      <button
-        class="govuk-button"
-        type="submit"
-      >
-        Submit
-      </button>
-    </form>
+      <TextField
+        id="os"
+        v-model="formData.os"
+        label="Candidate operating system"
+        type="text"
+        required
+      />
+    </template>
+    <TextArea
+      id="issue"
+      v-model="formData.issue"
+      label="What happened?"
+      rows="2"
+      required
+    />
+    <TextArea
+      id="expectation"
+      v-model="formData.expectation"
+      :label="expectationLabel"
+      rows="2"
+      required
+    />
+    <button
+      type="button"
+      class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+      @click="closeModal"
+    >
+      Cancel
+    </button>
+    <ActionButton
+      type="primary"
+      class="govuk-button"
+      :action="save"
+    >
+      Submit
+    </ActionButton>
   </div>
 </template>
 
@@ -143,6 +151,9 @@ import CaptureScreenshot from '../Micro/CaptureScreenshot.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import { functions } from '@/firebase';
+import SlackLookupError from '@/errors/slackLookupError';
+import UserError from '@/errors/userError';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
   name: 'FeedbackForm',
@@ -154,6 +165,7 @@ export default {
     CaptureScreenshot,
     RadioGroup,
     RadioItem,
+    ActionButton,
   },
   extends: Form,
   emits: ['close', 'success'],
@@ -165,8 +177,8 @@ export default {
       formData: {
         url: '',
         criticality: '',
-        expectation: '',
         issue: '',
+        expectation: '',
         reporter: '',
         candidate: '',
         userId: '',
@@ -175,7 +187,15 @@ export default {
         cpsDevice: '0',
       },
       errors: [],
-      criticalityTypes: ['critical', 'major', 'minor', 'low'],
+      criticalityTypes: {
+        Critical: 'Critical - a response will be provided within 2 hours',
+        Major: 'Major - a response will be provided within 24 hours',
+        Minor: 'Minor - a response will be provided within 48 hours',
+        Low: 'Low - a response will be provided within 1 week',
+      },
+      newReporterSlackUID: '',
+      hasSlackIdOnLoad: true,
+      checkSlackMemberIdOnBlur: false,
     };
   },
   computed: {
@@ -184,6 +204,9 @@ export default {
     },
     userId() {
       return this.$store.getters['auth/getUserId'];
+    },
+    reporterSlackUID() {
+      return this.$store.getters['auth/getSlackUID'];
     },
     displayName() {
       return this.$store.getters['auth/getDisplayName'];
@@ -226,8 +249,12 @@ export default {
         this.formData.os = this.client.os;
       }
     },
+    newReporterSlackUID() {
+      this.checkSlackMemberIdOnBlur = true;
+      this.hasSlackIdOnLoad = false;
+    },
   },
-  mounted() {
+  async mounted() {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
     this.formData.os = this.client.os;
@@ -239,19 +266,52 @@ export default {
     closeModal() {
       this.$emit('close');
     },
+    async isValidSlackMemberId() {
+      if (this.checkSlackMemberIdOnBlur) {
+        const response = await functions.httpsCallable('verifySlackUser')({
+          userId: this.userId,
+          slackMemberId: this.newReporterSlackUID,
+          addSlackToProfile: true,
+        });
+        const confirmed = response.data;
+        if (confirmed) {
+          return {
+            ok: true,
+          };
+        }
+        else {
+          return {
+            ok: false,
+            error: 'The Slack Member ID you provided was invalid',
+          };
+        }
+      }
+    },
     async save() {
-      this.formData.contactDetails = this.email;
-      this.formData.exercise = {
-        id: this.exerciseId,
-        referenceNumber: this.exerciseReferenceNumber,
-      };
-      this.formData.application = {
-        id: this.applicationId,
-        referenceNumber: this.applicationReferenceNumber,
-      };
       try {
+        this.validate();
+        if (!this.userId) {
+          throw new UserError('Your user is missing a uid field.');
+        }
+        if (!this.reporterSlackUID) {
+          // Check if the slack member id is valid
+          const validSlackMember = await this.isValidSlackMemberId();
+          if (validSlackMember.ok === false) {
+            throw new SlackLookupError(validSlackMember.error);
+          }
+        }
+        this.formData.contactDetails = this.email;
+        this.formData.exercise = {
+          id: this.exerciseId,
+          referenceNumber: this.exerciseReferenceNumber,
+        };
+        this.formData.application = {
+          id: this.applicationId,
+          referenceNumber: this.applicationReferenceNumber,
+        };
+
         let screenshot = null;
-        await this.$store.dispatch('bugReport/create', this.formData);
+        const newBugReport = await this.$store.dispatch('bugReport/create', this.formData);
 
         // Store the screenshot (uses the bugReportId in it's path)
         if (this.hasScreenshot) {
@@ -260,19 +320,35 @@ export default {
           // Update the bugReport with the screenshot file path
           await this.$store.dispatch('bugReport/update', { data: {
             screenshot: screenshot,
-          }, id: this.bugReportId });
+          }, id: newBugReport.id });
         }
-        await functions.httpsCallable('createZenhubIssue')(this.bugReportId);
+        await functions.httpsCallable('createZenhubIssue')({
+          bugReportId: newBugReport.id,
+          userId: this.userId,
+        });
         this.$emit('success');
+        return true;
       }
       catch (e) {
-        console.log(e);
-        const str = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
-        const msg = `We were unable to save your bug report. Please report the problem directly to the ${str}`;
+        let msg, id = '';
+        const reportErrorTo = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
+        if (e instanceof SlackLookupError) {
+          id = 'slackUID';
+          msg = e.message;
+        }
+        else if (e instanceof UserError) {
+          id = 'uid';
+          msg = `${e.message} Please report the problem directly to the ${reportErrorTo}`;
+        }
+        else {
+          id = 'error';
+          msg = `We were unable to save your bug report. Please report the problem directly to the ${reportErrorTo}`;
+        }
         this.errors.push({
-          id: 'error',
+          id: id,
           message: msg,
         });
+        return false;
       }
     },
   },

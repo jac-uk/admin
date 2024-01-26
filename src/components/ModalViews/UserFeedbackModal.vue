@@ -13,9 +13,9 @@
         class="body-content modal__message govuk-body-l"
       >
         <div>Your feedback has been forwarded to the team and you will be contacted shortly.</div>
-        <div class="govuk-!-margin-top-2">
+        <!-- <div class="govuk-!-margin-top-2">
           Your ticket number is: <strong>{{ bugReportRefNo }}</strong>
-        </div>
+        </div> -->
       </div>
       <FeedbackForm
         v-else

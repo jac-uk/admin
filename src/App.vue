@@ -399,7 +399,7 @@ export default {
         this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
       }
     },
-    openFeedbackModal() {
+    async openFeedbackModal() {
       this.$refs.feedbackModal.openModal();
     },
   },
