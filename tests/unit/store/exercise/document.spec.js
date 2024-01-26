@@ -1,3 +1,4 @@
+import { collection, doc, getDoc } from '@firebase/firestore';
 import exerciseDocument from '@/store/exercise/document';
 import { firestore } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -30,7 +31,7 @@ describe.skip('store/exercise/single', () => {
 
         it('binds the `/exercises` document with the given ID', () => {
           const firestoreRef = callToBindFirestoreRef[1];
-          expect(firestoreRef).toEqual(firestore.collection('exercises').doc('TestDocumentID'));
+          expect(firestoreRef).toEqual(doc(collection(firestore, 'exercises'), 'TestDocumentID'));
         });
 
         it('serializes document data with `vuexfireSerialize` helper', () => {
@@ -51,15 +52,15 @@ describe.skip('store/exercise/single', () => {
       let mockDispatch;
       beforeEach(async () => {
         mockDispatch = vi.fn();
-        const doc = firestore.collection('meta').doc('stats');
+        const doc = doc(collection(firestore, 'meta') ,'stats');
         await doc.set({
           exercisesCount: 0,
         });
       });
 
       afterEach(() => {
-        firestore.collection('exercises').data = null;
-        firestore.collection('meta').data = null;
+        collection(firestore, 'exercises').data = null;
+        collection(firestore, 'meta').data = null;
       });
 
       const create = () => {
@@ -79,7 +80,7 @@ describe.skip('store/exercise/single', () => {
       });
 
       describe('the Promise', () => {
-        const collection = firestore.collection('exercises');
+        const collection = collection(firestore, 'exercises');
 
         it('creates a new document in the Firestore collection `exercises`', async () => {
           expect((await collection.get()).size).toBe(0);
@@ -108,14 +109,14 @@ describe.skip('store/exercise/single', () => {
 
     describe('save', () => {
       beforeEach(async () => {
-        const doc = firestore.collection('exercises').doc('001');
+        const doc = doc(collection(firestore, 'exercises'), '001');
         await doc.set({
           name: 'Example exercise',
         });
       });
 
       afterEach(() => {
-        firestore.collection('exercises').data = null;
+        collection(firestore, 'exercises').data = null;
       });
 
       const save = () => {
@@ -140,7 +141,7 @@ describe.skip('store/exercise/single', () => {
       it('updates the bound Firestore document with the supplied data', async () => {
         await save();
 
-        const docSnapshot = await firestore.collection('exercises').doc('001').get();
+        const docSnapshot = await getDoc(doc(collection(firestore, 'exercises'),'001'));
 
         const expectedData = {
           name: 'Example exercise',
