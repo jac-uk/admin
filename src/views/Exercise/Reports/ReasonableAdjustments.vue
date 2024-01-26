@@ -119,7 +119,7 @@
         </Select>
       </div>
 
-      <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-full govuk-!-margin-0">
         <Table
           ref="issuesTable"
           data-key="id"
@@ -269,15 +269,28 @@
                       @input="saveReasonableAdjustmentsNote(row, $event.target.value, i)"
                     />
                   </div>
+                  <!-- v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length" -->
+                  <button
+                    class="print-none govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-bottom-2"
+                    @click="removeReasonableAdjustmentsState(index, i)"
+                  >
+                    Remove
+                  </button>
                 </div>
 
                 <div class="text-right">
                   <button
                     v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length"
-                    class="print-none govuk-button govuk-!-margin-bottom-0"
+                    class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
                     @click="addReasonableAdjustmentsState(index)"
                   >
                     Add another
+                  </button>
+                  <button
+                    class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
+                    @click="removeCandidateFromList(index)"
+                  >
+                    No further reasonable adjustments to add
                   </button>
                 </div>
               </div>
@@ -548,6 +561,12 @@ export default {
     }, 2000),
     addReasonableAdjustmentsState(index) {
       this.applicationRecords[index].candidate.reasonableAdjustmentsStates.push({});
+    },
+    removeCandidateFromList(index) {
+      console.log(index);
+    },
+    removeReasonableAdjustmentsState(candidateIndex, index) {
+      this.applicationRecords[candidateIndex].candidate.reasonableAdjustmentsStates.splice(index, 1);
     },
     handleReasonableAdjustmentsDetailsClick(record) {
       this.toggleReasonableAdjustmentsDetails(record.id);
