@@ -283,6 +283,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -448,7 +449,7 @@ export default {
     async enableCharacterChecks() {
       try {
         this.processing = true;
-        const response = await functions.httpsCallable('enableCharacterChecks')({
+        const response = await httpsCallable(functions, 'enableCharacterChecks')({
           exerciseId: this.exercise.id,
         });
         if (response === false) {

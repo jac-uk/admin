@@ -586,6 +586,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
@@ -684,7 +685,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateAgencyReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateAgencyReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;

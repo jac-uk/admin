@@ -334,6 +334,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { query, collection, onSnapshot, where } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -424,7 +425,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;
@@ -432,7 +433,7 @@ export default {
     },
     async gatherReportData() {
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationCharacterIssues')({
+      const response = await httpsCallable(functions, 'exportApplicationCharacterIssues')({
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
@@ -467,7 +468,7 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        await functions.httpsCallable('exportApplicationCharacterIssues')({
+        await httpsCallable(functions, 'exportApplicationCharacterIssues')({
           exerciseId: this.exercise.id,
           stage: this.exerciseStage,
           status: this.candidateStatus,

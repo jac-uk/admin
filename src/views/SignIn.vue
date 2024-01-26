@@ -37,7 +37,7 @@
 </template>
 
 <script>
-
+import { httpsCallable } from '@firebase/functions';
 import { GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth, functions } from '@/firebase';
 
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     async disableNewUser(uid) {
-      await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
+      await httpsCallable(functions, 'adminDisableNewUser')({ uid: uid });
       this.$store.dispatch('auth/setAuthError', 'Your account requires approval before access is granted. Please request this from a manager.');
     },
     signOut() {

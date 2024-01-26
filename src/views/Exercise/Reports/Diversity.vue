@@ -553,6 +553,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -640,7 +641,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'generateDiversityReport')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }

@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { getTaskSteps, exerciseApplicationParts } from '@/helpers/exerciseHelper';
 import { APPLICATION_FORM_PARTS } from '@/helpers/constants';
@@ -150,7 +151,7 @@ export default {
   methods: {
     btnNext,
     async save() {
-      const saveData = { 
+      const saveData = {
         exercise: {
           id: this.exercise.id,
         },
@@ -163,7 +164,7 @@ export default {
       await this.btnContinue();
     },
     async btnContinue() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

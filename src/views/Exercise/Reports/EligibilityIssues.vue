@@ -170,6 +170,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { query, collection, where, onSnapshot } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -216,7 +217,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }
@@ -224,7 +225,7 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        return await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+        return await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
       } catch (error) {
         return;
       }
@@ -257,7 +258,7 @@ export default {
     },
     async gatherReportData() {
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
+      const response = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
       const reportData = [];
       // get headers
       reportData.push(response.data.headers.map(header => header.title));

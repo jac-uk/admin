@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -109,7 +110,7 @@ export default {
     },
     async send() {
       try {
-        const response = await functions.httpsCallable('sendCharacterCheckRequests')({
+        const response = await httpsCallable(functions, 'sendCharacterCheckRequests')({
           items: this.selectedItems,
           type: this.type,
           exerciseMailbox: this.exerciseMailbox,

@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { functions } from '@/firebase';
@@ -50,7 +51,7 @@ export default {
   methods: {
     async exportData() {
       try {
-        const response = await functions.httpsCallable('exportExerciseData')({ exerciseIds: this.selectedItems });
+        const response = await httpsCallable(functions, 'exportExerciseData')({ exerciseIds: this.selectedItems });
         const data = response.data;
         const xlsxData = [];
         for (let i = 0, len = data.rows.length; i < len; ++i) {

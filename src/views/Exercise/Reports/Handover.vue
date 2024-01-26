@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
@@ -156,7 +157,7 @@ export default {
   },
   methods: {
     async transferHandoverData() {
-      await functions.httpsCallable('transferHandoverData')({ exerciseId: this.exercise.id });
+      await httpsCallable(functions, 'transferHandoverData')({ exerciseId: this.exercise.id });
     },
     getTableData(params) {
       this.$store.dispatch(
@@ -170,7 +171,7 @@ export default {
     },
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateHandoverReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;

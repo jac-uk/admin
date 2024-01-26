@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
@@ -243,7 +244,7 @@ export default {
     },
     async setDefaultRole() {
       try {
-        await functions.httpsCallable('adminSetDefaultRole')({ roleId: this.role.id });
+        await httpsCallable(functions, 'adminSetDefaultRole')({ roleId: this.role.id });
         return true;
       } catch (error) {
         return false;

@@ -185,6 +185,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import Timeline from '@jac-uk/jac-kit/draftComponents/Timeline.vue';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 import exerciseTimeline from '@jac-uk/jac-kit/helpers/Timeline/exerciseTimeline';
@@ -393,12 +394,12 @@ export default {
       });
     },
     async startProcessing() {
-      await functions.httpsCallable('initialiseApplicationRecords')({ exerciseId: this.exerciseId });
+      await httpsCallable(functions, 'initialiseApplicationRecords')({ exerciseId: this.exerciseId });
       return true;
     },
     async updateProcessing() {
       // this is temporary function to cover late applications to existing exercises. It can be removed when we automatically create applicationRecords and existing exercises have been processed
-      await functions.httpsCallable('initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
+      await httpsCallable(functions, 'initialiseMissingApplicationRecords')({ exerciseId: this.exerciseId });
       return true;
     },
     refreshApplicationCounts() {

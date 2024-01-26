@@ -170,12 +170,13 @@
         button-text="Yes - please continue"
         @close="$refs.modalCheckDataComplete.closeModal()"
         @confirmed="btnFinalise"
-      />      
-    </Modal>    
+      />
+    </Modal>
   </div>
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import { CAPABILITIES, SELECTION_CATEGORIES, getTaskSteps } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADES, isScoreSheetComplete } from '@/helpers/taskHelper';
@@ -331,7 +332,7 @@ export default {
       this.$refs.modalCheckDataComplete.openModal();
     },
     async btnFinalise() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

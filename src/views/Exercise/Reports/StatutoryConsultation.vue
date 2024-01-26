@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { query, collection, where, onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { debounce } from 'lodash';
@@ -174,7 +175,7 @@ export default {
     }, 2000),
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateStatutoryConsultationReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateStatutoryConsultationReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;

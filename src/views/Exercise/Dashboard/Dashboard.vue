@@ -118,6 +118,7 @@
   </div>
 </template>
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { onSnapshot, doc } from '@firebase/firestore';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -397,7 +398,7 @@ export default {
     async refreshReport() {
       try {
         if (this.applicationCounts._total) {
-          await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+          await httpsCallable(functions, 'generateDiversityReport')({ exerciseId: this.exerciseId });
         }
         return true;
       } catch (error) {

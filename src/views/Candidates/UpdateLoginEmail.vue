@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Banner from '@jac-uk/jac-kit/draftComponents/Banner.vue';
@@ -106,7 +107,7 @@ export default {
   methods: {
     async getCurrentEmailAddress() {
       try {
-        const response = await functions.httpsCallable('getUserEmailByID')({
+        const response = await httpsCallable(functions, 'getUserEmailByID')({
           candidateId: this.candidateId });
 
         if (response.data === false) {
@@ -126,7 +127,7 @@ export default {
         if (this.hasPermissions([this.PERMISSIONS.candidates.permissions.canUpdateCandidates.value])) {
           this.submitted = true;
           try {
-            const response = await functions.httpsCallable('updateEmailAddress')({
+            const response = await httpsCallable(functions, 'updateEmailAddress')({
               currentEmailAddress: this.currentEmailAddress,
               newEmailAddress: this.newEmailAddress });
 
