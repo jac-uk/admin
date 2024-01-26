@@ -321,8 +321,8 @@
                 </h4>
                 <TextareaInput
                   id="reason-for-status"
-                  :value="row.issues.characterIssuesStatusReason"
-                  @input="saveIssueStatusReason(row, $event)"
+                  :model-value="row.issues.characterIssuesStatusReason || ''"
+                  @update:model-value="saveIssueStatusReason(row, $event)"
                 />
               </div>
             </div>
