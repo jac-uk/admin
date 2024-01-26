@@ -55,7 +55,7 @@ export default {
       const newId = await runTransaction(firestore, async (transaction) => {
         const metaDoc = await transaction.get(metaRef);
         const newExercisesCount = metaDoc.data().exercisesCount + 1;
-        const exerciseRef = doc(firestore, 'exercises');
+        const exerciseRef = doc(collection(firestore, 'exercises'));
         transaction.update(metaRef, { exercisesCount: newExercisesCount });
         data.referenceNumber = `JAC${  (100000 + newExercisesCount).toString().substr(1)}`;
         data.progress = data.progress || { started: true };
