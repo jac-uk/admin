@@ -205,15 +205,6 @@ export default {
     userId() {
       return this.$store.getters['auth/getUserId'];
     },
-
-    // @TODO: TESTING
-    isSignedIn() {
-      return this.$store.getters['auth/isSignedIn'];
-    },
-    currentUser() {
-      return this.$store.getters['auth/getCurrentUser'];
-    },
-
     reporterSlackUID() {
       return this.$store.getters['auth/getSlackUID'];
     },
@@ -264,13 +255,6 @@ export default {
     },
   },
   async mounted() {
-
-    console.log('Mounted:');
-    console.log(`isSignedIn: ${this.isSignedIn}`);
-    console.log('currentUser: ');
-    console.log(this.currentUser);
-
-    //mounted() {
     this.client = detect();
     this.formData.browser = `${this.client.name} ${this.client.version}`;
     this.formData.os = this.client.os;
@@ -284,16 +268,6 @@ export default {
     },
     async isValidSlackMemberId() {
       if (this.checkSlackMemberIdOnBlur) {
-
-        console.log('isValidSlackMemberId:');
-        console.log(`isSignedIn: ${this.isSignedIn}`);
-        console.log('currentUser: ');
-        console.log(this.currentUser);
-        console.log('userId: ');
-        console.log(this.userId);
-        console.log('formData:');
-        console.log(this.formData);
-
         const response = await functions.httpsCallable('verifySlackUser')({
           userId: this.userId,
           slackMemberId: this.newReporterSlackUID,
@@ -356,16 +330,9 @@ export default {
         return true;
       }
       catch (e) {
-
-        console.log('Caught error with msg:');
-        console.log(e.message);
-
         let msg, id = '';
         const reportErrorTo = this.showFormForProxy || this.formData.candidate === '' ? 'Development Team' : 'Admin Team';
         if (e instanceof SlackLookupError) {
-
-          console.log('SlackLookupError!!!');
-
           id = 'slackUID';
           msg = e.message;
         }
