@@ -4,6 +4,20 @@
       {{ $attrs.title }}
     </div>
     <div class="modal__content govuk-!-padding-4">
+      <div
+        v-if="$attrs.id === 'candidateAssessementForms'"
+        class="govuk-form-group"
+      >
+        <p class="modal__message govuk-body-l">
+          <a
+            href="https://firebasestorage.googleapis.com/v0/b/platform-production-9207d.appspot.com/o/Preparing%20SA%20template%20for%20upload.pdf?alt=media&token=353fad1f-fa08-4d67-a0a7-85323baed3d3"
+            target="_blank"
+            title="Guidance"
+          >
+            Preparing SA template for upload
+          </a>
+        </p>
+      </div>
       <p class="modal__message govuk-body-l">
         <TextField
           :id="`${$attrs.name}-file-title`"
