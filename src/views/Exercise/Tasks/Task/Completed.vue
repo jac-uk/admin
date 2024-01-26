@@ -139,6 +139,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    exerciseId() {
+      return this.exercise ? this.exercise.id : null;
+    },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
     },
