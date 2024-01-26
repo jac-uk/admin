@@ -157,7 +157,7 @@
                         Phone:
                         <br>
                       </strong>
-                      {{ personalDetails(row.candidate.id).phone }}
+                      {{ personalDetails(row.candidate.id)?.phone }}
                     </span>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
                         Email:
                       </strong>
                       <br>
-                      {{ personalDetails(row.candidate.id).email }}
+                      {{ personalDetails(row.candidate.id)?.email }}
                     </span>
                   </div>
                 </div>
