@@ -55,7 +55,7 @@
       :search-map="$searchMap.applications"
       :page-item-type="pageItemType"
       :page-size="50"
-      :total="exercise._applications[status]"
+      :total="!!(exercise._applications) ? exercise._applications[status] : 0"
       @change="getTableData"
     >
       <template #row="{row}">
