@@ -112,6 +112,7 @@
       label="How many answers should candidates select?"
     >
       <RadioItem
+        v-if="row.questionType != 'multiple-choice'"
         value="all"
         label="All"
       />
