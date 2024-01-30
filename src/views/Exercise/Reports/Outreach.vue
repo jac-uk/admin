@@ -362,32 +362,6 @@ export default {
     return {
       report: null,
       unsubscribe: null,
-      tabs: [
-        {
-          ref: 'applied',
-          title: 'Applied',
-        },
-        {
-          ref: 'shortlisted',
-          title: 'Shortlisted',
-        },
-        {
-          ref: 'selected',
-          title: 'Selected',
-        },
-        {
-          ref: 'recommended',
-          title: 'Recommended',
-        },
-        {
-          ref: 'handover',
-          title: 'Handover',
-        },
-        {
-          ref: 'summary',
-          title: 'Summary',
-        },
-      ],
       activeTab: 'applied',
       reportKeys: [
         'jac-website',
@@ -405,6 +379,46 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    tabs() {
+      const tabs = [
+        {
+          ref: 'applied',
+          title: 'Applied',
+        },
+        {
+          ref: 'shortlisted',
+          title: 'Shortlisted',
+        },
+      ];
+
+      if (this.exercise?._processingVersion >= 2) {
+        tabs.push({
+          ref: 'selectable',
+          title: 'Selectable',
+        });
+      } else {
+        tabs.push({
+          ref: 'selected',
+          title: 'Selected',
+        });
+      }
+
+      tabs.push(
+        {
+          ref: 'recommended',
+          title: 'Recommended',
+        },
+        {
+          ref: 'handover',
+          title: 'Handover',
+        },
+        {
+          ref: 'summary',
+          title: 'Summary',
+        }
+      );
+      return tabs;
     },
     showTabs() {
       return this.report && this.report.shortlisted;  // .shortlisted indicates we have stages reports
@@ -445,7 +459,13 @@ export default {
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      let stages = [
+        'applied',
+        'shortlisted',
+        this.exercise?._processingVersion >= 2 ? 'selectable' : 'selected',
+        'recommended',
+        'handover',
+      ];
       if (stage) {
         stages = [stage];
       }
