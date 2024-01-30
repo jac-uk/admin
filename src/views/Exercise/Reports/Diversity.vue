@@ -576,7 +576,18 @@ export default {
     return {
       diversity: null,
       unsubscribe: null,
-      tabs: [
+      activeTab: 'applied',
+    };
+  },
+  computed: {
+    ...mapGetters({
+      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
+    }),
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
+    tabs() {
+      const tabs = [
         {
           ref: 'applied',
           title: 'Applied',
@@ -585,10 +596,21 @@ export default {
           ref: 'shortlisted',
           title: 'Shortlisted',
         },
-        {
+      ];
+
+      if (this.exercise?._processingVersion >= 2) {
+        tabs.push({
+          ref: 'selectable',
+          title: 'Selectable',
+        });
+      } else {
+        tabs.push({
           ref: 'selected',
           title: 'Selected',
-        },
+        });
+      }
+
+      tabs.push(
         {
           ref: 'recommended',
           title: 'Recommended',
@@ -600,17 +622,9 @@ export default {
         {
           ref: 'summary',
           title: 'Summary',
-        },
-      ],
-      activeTab: 'applied',
-    };
-  },
-  computed: {
-    ...mapGetters({
-      applicationOpenDatePost01042023: 'exerciseDocument/applicationOpenDatePost01042023',
-    }),
-    exercise() {
-      return this.$store.state.exerciseDocument.record;
+        }
+      );
+      return tabs;
     },
     showTabs() {
       return this.diversity && this.diversity.shortlisted;  // .shortlisted indicates we have stages reports
@@ -648,7 +662,13 @@ export default {
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      let stages = [
+        'applied',
+        'shortlisted',
+        this.exercise?._processingVersion >= 2 ? 'selectable' : 'selected',
+        'recommended',
+        'handover',
+      ];
       if (stage) {
         stages = [stage];
       }
