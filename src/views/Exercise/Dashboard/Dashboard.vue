@@ -227,7 +227,7 @@ export default {
       });
     },
     labels() {
-      return getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.labels;
+      return getReports(this.applicationOpenDate, this.exercise.referenceNumber, this.exercise._processingVersion).ApplicationStageDiversity.labels;
     },
     legend() {
       if (this.selectedDiversityReportType) {
@@ -415,7 +415,13 @@ export default {
     },
     gatherReportData() {
       const data = [];
-      const stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      const stages = [
+        'applied',
+        'shortlisted',
+        this.exercise?._processingVersion >= 2 ? 'selectable' : 'selected',
+        'recommended',
+        'handover',
+      ];
       data.push(['Statistic'].concat(stages));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {

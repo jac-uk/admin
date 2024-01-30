@@ -157,9 +157,22 @@ const post04012023SocialMobility = {
   title: `${lookup('parentsNotAttendedUniversity')}`,
 };
 
-const getReports = (applicationOpenDate, exerciseRef) => {
+const getReports = (applicationOpenDate, exerciseRef, processingVersion) => {
   const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(exerciseRef);
   const mergedReports = _cloneDeep(REPORTS);
+
+  if (processingVersion >= 2) {
+    mergedReports.ApplicationStageDiversity.labels = REPORTS.ApplicationStageDiversity.labels.map(item => {
+      if (item.key === 'selected') {
+        return {
+          key: 'selectable',
+          title: 'Selectable',
+        };
+      }
+      return item;
+    });
+  }
+
   if (applicationOpenDate > new Date('2023-04-01') && !usesPre01042023Questions) {
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity = [];
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity.push(post04012023SocialMobility);
