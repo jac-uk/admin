@@ -126,6 +126,7 @@ export default {
             this.updateApplicationRecord('reminder sent');
           }
           this.$emit('setmessage', true, this.type, 'success');
+          this.closeModal();
           return true;
         }
       } catch (error) {
