@@ -1,15 +1,21 @@
-import { collection, doc, getDoc } from '@firebase/firestore';
-import exerciseDocument from '@/store/exercise/document';
+import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { vi, it, describe, beforeEach, afterEach } from 'vitest';
 
-vi.mock('@/firebase', () => {
+/**
+ * @https://vitest.dev/api/vi#vi-mock
+ * Use vi.doMock instead of vi.mock to make it execute as the same order as the codebase (prevent it from hoisting),
+ * So, the mock module can be imported by src/store/exercise/document.js
+ */
+vi.doMock('@/firebase', () => {
   const firebase = require('firebase-mock');
   const firestore = firebase.MockFirebaseSdk().firestore();
   firestore.autoFlush();
   return { firestore };
 });
+
+import exerciseDocument from '@/store/exercise/document';
 
 vi.mock('vuexfire');
 
@@ -53,7 +59,7 @@ describe.skip('store/exercise/single', () => {
       beforeEach(async () => {
         mockDispatch = vi.fn();
         const doc = doc(collection(firestore, 'meta') ,'stats');
-        await doc.set({
+        await setDoc(doc, {
           exercisesCount: 0,
         });
       });
@@ -80,17 +86,17 @@ describe.skip('store/exercise/single', () => {
       });
 
       describe('the Promise', () => {
-        const collection = collection(firestore, 'exercises');
+        const collectionRef = collection(firestore, 'exercises');
 
         it('creates a new document in the Firestore collection `exercises`', async () => {
-          expect((await collection.get()).size).toBe(0);
+          expect((await getDocs(collectionRef)).size).toBe(0);
           await create();
-          expect((await collection.get()).size).toBe(1);
+          expect((await getDocs(collectionRef)).size).toBe(1);
         });
 
         it('the document data matches the supplied `data` object', async () => {
           await create();
-          const doc = (await collection.get()).docs[0];
+          const doc = (await getDocs(collectionRef)).docs[0];
           const expectedData = {
             name: 'Example exercise',
             referenceNumber: 'JAC00001',
@@ -101,7 +107,7 @@ describe.skip('store/exercise/single', () => {
 
         it('binds the newly created document', async () => {
           await create();
-          const doc = (await collection.get()).docs[0];
+          const doc = (await getDocs(collectionRef)).docs[0];
           expect(mockDispatch).toHaveBeenCalledWith('bind', doc.id);
         });
       });
@@ -110,7 +116,7 @@ describe.skip('store/exercise/single', () => {
     describe('save', () => {
       beforeEach(async () => {
         const doc = doc(collection(firestore, 'exercises'), '001');
-        await doc.set({
+        await setDoc(doc, {
           name: 'Example exercise',
         });
       });
