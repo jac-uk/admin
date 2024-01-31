@@ -174,7 +174,7 @@
           data-key="id"
           :data="applicationRecordsCharacterChecksRequested"
           :columns="tableColumnsCharacterChecksRequested"
-          :search="['candidate.fullName']"
+          :search-map="$searchMap.characterChecks"
           multi-select
           :page-size="50"
           :filters="[
@@ -234,7 +234,7 @@
           data-key="id"
           :data="applicationRecordsCharacterChecksCompleted"
           :columns="tableColumns"
-          :search="['candidate.fullName']"
+          :search-map="$searchMap.characterChecks"
           multi-select
           :page-size="50"
           :filters="[
