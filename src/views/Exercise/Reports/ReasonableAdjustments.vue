@@ -118,6 +118,13 @@
           </option>
         </Select>
       </div>
+      <div class="govuk-grid-row govuk-!-padding-2 text-right float-right">
+        Show actioned candidates
+        <Checkbox
+          id="welsh-posts"
+          v-model="showActioned"
+        />
+      </div>
 
       <div class="govuk-grid-column-full govuk-!-margin-0">
         <Table
@@ -132,7 +139,7 @@
         >
           <template #row="{row, index}">
             <TableCell
-              v-if="hasStatus(row)"
+              v-if="hasStatus(row) && !isActioned(row) || showActioned && (isActioned(row) && hasStatus(row))"
               :title="tableColumns[0].title"
             >
               <div class="govuk-grid-row">
@@ -212,7 +219,7 @@
                     <Select
                       :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.status"
-                      @input="saveReasonableAdjustmentsStatus(row, $event.target.value, i)"
+                      @input="saveReasonableAdjustmentsChange(row, { status: $event.target.value }, i)"
                     >
                       <option
                         v-for="status in reasonableAdjustmentsStatusOptions"
@@ -225,12 +232,12 @@
                   </div>
                   <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-!-margin-bottom-1">
-                      Activity for which reasonable adjustment given
+                      RA applies to
                     </h4>
                     <Select
                       :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
                       v-model="reasonableAdjustmentsState.reason"
-                      @input="saveReasonableAdjustmentsReason(row, $event.target.value, i)"
+                      @input="saveReasonableAdjustmentsChange(row, { reason: $event.target.value }, i)"
                     >
                       <option
                         v-for="activity in reasonableAdjustmentsActivities"
@@ -243,12 +250,12 @@
                   </div>
                   <div class="govuk-grid-column-one-third">
                     <h4 class="govuk-!-margin-bottom-1">
-                      Reasonable adjustment allocated
+                      RA allocated
                     </h4>
                     <Select
-                      :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
-                      v-model="reasonableAdjustmentsState.timeAllocations"
-                      @input="saveReasonableAdjustmentsTimeAllocations(row, $event.target.value, i)"
+                      :id="`reasonable-adjustments-time-allocations-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.timeAllocation"
+                      @input="saveReasonableAdjustmentsChange(row, { timeAllocation: $event.target.value }, i)"
                     >
                       <option
                         v-for="time in reasonableAdjustmentsTimeAllocations"
@@ -269,16 +276,35 @@
                       @input="saveReasonableAdjustmentsNote(row, $event.target.value, i)"
                     />
                   </div>
-                  <!-- v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length" -->
+
                   <button
+                    v-if="row.candidate.reasonableAdjustmentsStates.length > 1 && i > 0"
                     class="print-none govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-bottom-2"
-                    @click="removeReasonableAdjustmentsState(index, i)"
+                    @click="openModal(index, i)"
                   >
                     Remove
                   </button>
+                  <Modal
+                    :ref="`removeModal-${index}-${i}`"
+                  >
+                    <ModalInner
+                      @close="closeModal(index, i)"
+                      @confirmed="removeReasonableAdjustmentsState(index, i)"
+                    />
+                  </Modal>
+                  <hr>
                 </div>
 
-                <div class="text-right">
+                <div
+                  class="govuk-grid-row govuk-!-margin-left-0 text-right"
+                >
+                  <button
+                    :class="`print-none govuk-button govuk-!-margin-bottom-0 float-left ${isActioned(row) ? 'govuk-button--warning' : ''}`"
+                    @click="toggleActioned(index)"
+                  >
+                    Mark candidate as {{ isActioned(row) ? 'un' : '' }}actioned
+                    <!-- No further reasonable adjustments to add -->
+                  </button>
                   <button
                     v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length"
                     class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
@@ -286,19 +312,15 @@
                   >
                     Add another
                   </button>
-                  <button
-                    class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
-                    @click="removeCandidateFromList(index)"
-                  >
-                    No further reasonable adjustments to add
-                  </button>
                 </div>
               </div>
 
-              <div>
+              <div
+                class="govuk-grid-row govuk-!-margin-left-0 govuk-!-margin-top-2 text-left"
+              >
                 <a
                   href="#"
-                  class="govuk-link print-none"
+                  class="govuk-link"
                   @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
                 >
                   View all reasonable adjustments<span
@@ -315,8 +337,9 @@
                   v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id).filter(ra => ra.exercise.id !== exercise.id)"
                   :key="`${row.candidate.id}-${i}`"
                 >
+                  <br>
                   <hr
-                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-2"
                   >
                   <p class="govuk-hint">
                     Exercise - {{ ar.exercise.referenceNumber }}
@@ -400,11 +423,14 @@
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import { applicationRecordCounts, availableStages, availableStatuses } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
@@ -418,6 +444,9 @@ export default {
     TableCell,
     TextareaInput,
     ActionButton,
+    Checkbox,
+    Modal,
+    ModalInner,
   },
   mixins: [permissionMixin],
   data() {
@@ -439,6 +468,7 @@ export default {
       exerciseStage: 'all',
       candidateStatus: 'all',
       filterStatus: 'all',
+      showActioned: false,
       reasonableAdjustmentsStatusOptions,
       reasonableAdjustmentsActivities,
       reasonableAdjustmentsTimeAllocations,
@@ -542,16 +572,11 @@ export default {
       if (this.filterStatus === 'all') return true;
       return applicationRecord.candidate.reasonableAdjustmentsStates.some(state => state.status === this.filterStatus);
     },
-    async saveReasonableAdjustmentsStatus(applicationRecord, status, index) {
-      applicationRecord.candidate.reasonableAdjustmentsStates[index].status = status;
-      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    isActioned(applicationRecord) {
+      return applicationRecord.candidate.reasonableAdjustmentsActioned;
     },
-    async saveReasonableAdjustmentsReason(applicationRecord, reason, index) {
-      applicationRecord.candidate.reasonableAdjustmentsStates[index].reason = reason;
-      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
-    },
-    async saveReasonableAdjustmentsTimeAllocations(applicationRecord, timeAllocation, index) {
-      applicationRecord.candidate.reasonableAdjustmentsStates[index].timeAllocation = timeAllocation;
+    async saveReasonableAdjustmentsChange(applicationRecord, change, index) {
+      applicationRecord.candidate.reasonableAdjustmentsStates[index] = { ...applicationRecord.candidate.reasonableAdjustmentsStates[index], ...change };
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     saveReasonableAdjustmentsNote: debounce(async function (applicationRecord, note, index) {
@@ -562,11 +587,20 @@ export default {
     addReasonableAdjustmentsState(index) {
       this.applicationRecords[index].candidate.reasonableAdjustmentsStates.push({});
     },
-    removeCandidateFromList(index) {
-      console.log(index);
+    async toggleActioned(index) {
+      const applicationRecord = this.applicationRecords[index];
+      if (applicationRecord.candidate.hasOwnProperty('reasonableAdjustmentsActioned')) {
+        applicationRecord.candidate.reasonableAdjustmentsActioned = !applicationRecord.candidate.reasonableAdjustmentsActioned;
+      } else {
+        applicationRecord.candidate.reasonableAdjustmentsActioned = true;
+      }
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    removeReasonableAdjustmentsState(candidateIndex, index) {
+    async removeReasonableAdjustmentsState(candidateIndex, index) {
+      this.closeModal(candidateIndex, index);
       this.applicationRecords[candidateIndex].candidate.reasonableAdjustmentsStates.splice(index, 1);
+      const applicationRecord = this.applicationRecords[candidateIndex];
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     handleReasonableAdjustmentsDetailsClick(record) {
       this.toggleReasonableAdjustmentsDetails(record.id);
@@ -639,6 +673,12 @@ export default {
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
         }
       );
+    },
+    closeModal(index, i) {
+      this.$refs[`removeModal-${index}-${i}`][0].closeModal();
+    },
+    openModal(index, i) {
+      this.$refs[`removeModal-${index}-${i}`][0].openModal();
     },
   },
 };
