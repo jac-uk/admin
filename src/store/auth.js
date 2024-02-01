@@ -37,7 +37,7 @@ const module = {
           !provider ||
           !['microsoft.com', 'google.com'].includes(provider.providerId)
         ) {
-          throw new Error('This site is restricted to employees of the Judicial Appointments Commission');
+          throw new Error('invalid-email');
         }
 
         // check if user document exists
@@ -48,17 +48,19 @@ const module = {
         if (!userDoc) {
           // check if user has been invited
           const userInvitation = await dispatch('userInvitations/getByEmail', { email: user.email, status: 'pending' }, { root: true });
-          if (!userInvitation) throw new Error('You has not been invited to use this site. Please contact the Digital Team for assistance.');
+          if (!userInvitation) throw new Error('not-invited');
 
           // create user document
           const newUser = {
             displayName: user.displayName || '',
             email: user.email || '',
             disabled: user.disabled || false,
+            providerData: user.providerData ? user.providerData.map(p => p.providerId) : [],
             role: {
               id: userInvitation.roleId || '',
               isChanged: false,
             },
+            uid: user.uid || '',
           };
           userDoc = await dispatch('users/create', { id: user.uid, data: newUser }, { root: true });
           // set user role in custom claims
@@ -75,18 +77,26 @@ const module = {
 
         // refresh token to get latest custom claims
         if (auth.currentUser?.getIdToken) await auth.currentUser.getIdToken(true);
-        const idTokenResult = await user.getIdTokenResult();
+        const idTokenResult = user.getIdTokenResult ? await user.getIdTokenResult() : null;
 
         // get user role from custom claims
         const roleId = idTokenResult?.claims?.r || null;
         const permissions = idTokenResult?.claims?.rp || null;
-        if (!roleId || !permissions) throw new Error('You have not been assign a user role. Please contact the Digital Team for assistance.');
+        if (!roleId || !permissions) throw new Error('not-assigned-role');
 
         commit('setRolePermissions', permissions);
         await dispatch('bindCurrentUser', user.uid);
         return true;
       } catch (error) {
-        if (error.message) commit('setAuthError', error.message);
+        let errorMessage = '';
+        if (error.message === 'invalid-email') {
+          errorMessage = 'This site is restricted to employees of the Judicial Appointments Commission';
+        } else if (error.message === 'not-invited') {
+          errorMessage = 'You have not been invited to use this site. Please contact the Digital Team for assistance.';
+        } else if (error.message === 'not-assigned-role') {
+          errorMessage = 'You have not been assign a user role. Please contact the Digital Team for assistance.';
+        }
+        commit('setAuthError', errorMessage);
         auth.signOut();
       }
     },

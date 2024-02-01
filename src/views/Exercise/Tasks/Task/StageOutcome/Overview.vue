@@ -1,24 +1,20 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
-        <h1 class="govuk-heading-l">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
           {{ $filters.lookup(type) }}
         </h1>
       </div>
-      <div class="govuk-grid-column-one-quarter text-right">
-        <ActionButton
-          class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
-          type="primary"
-          @click="btnComplete"
-        >
-          Complete
-        </ActionButton>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
       </div>
     </div>
 
+    <ProgressBar :steps="taskSteps" />
+
     <p class="govuk-body-l govuk-!-margin-bottom-4">
-      {{ $filters.lookup(type) }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed to {{ $filters.lookup(nextProcessingStage) }}
+      {{ $filters.lookup(type) }} can now be completed. {{ totalApplicationsProgressing }} <span v-if="totalApplicationsProgressing === 1">application</span><span v-else>applications</span> will be progressed from {{ $filters.lookup(entryStage) }} to {{ $filters.lookup(exitStage) }}
     </p>
 
     <!-- OVERVIEW -->
@@ -49,6 +45,14 @@
       </div>
     </div>
     <!-- END OVERVIEW -->
+
+    <ActionButton
+      class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
+      type="primary"
+      @click="btnComplete"
+    >
+      Complete
+    </ActionButton>
   </div>
 </template>
 

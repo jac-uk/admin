@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Moderation Activated</h1>
-    [ view and agree final scores ]
+    <h1>Moderation Initialised</h1>
+    [ choose additional applications (random selection), create panels, allocate applications ]
     <button @click="btnNext">
       Next
     </button>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { beforeRouteEnter, btnNext } from './helper';
+import { beforeRouteEnter, btnNext } from '../helper';
 export default {
   beforeRouteEnter: beforeRouteEnter,
   props: {

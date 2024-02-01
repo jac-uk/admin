@@ -38,8 +38,9 @@
   header,
   footer,
   .title-bar-exercise,
+  .favourite-tag,
   .sub-navigation {
-    display: none;
+    display: none !important;
   }
   .print-full-width {
     width: 100%;

@@ -29,6 +29,7 @@
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
                 PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
+              class="govuk-!-margin-bottom-0"
               :action="exportContacts"
             >
               Export contacts

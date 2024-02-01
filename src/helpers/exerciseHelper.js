@@ -1,6 +1,6 @@
 /*eslint func-style: ["error", "declaration"]*/
 import clone from 'clone';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, ASSESSMENT_METHOD } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, SHORTLISTING, TASK_TYPE, SHORTLISTING_TASK_TYPES, ASSESSMENT_METHOD } from '@/helpers/constants';
 import exerciseTimeline from '../helpersTMP/Timeline/exerciseTimeline';
 import createTimeline from '@jac-uk/jac-kit/helpers/Timeline/createTimeline';
 
@@ -36,6 +36,8 @@ export {
   getProcessingExitStage,
   getTimelineTasks,
   getTaskTypes,
+  getTaskCurrentStep,
+  getTaskSteps,
   getMeritListTaskTypes,
   taskEntryStatus,
   previousTaskType,
@@ -92,7 +94,8 @@ export {
   getStagePassingStatuses,
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
-  isApplicationVersionLessThan
+  isApplicationVersionLessThan,
+  isJAC00187
 };
 
 // const EXERCISE_STATES = ['draft', 'ready', 'approved', 'shortlisting', 'selection', 'recommendation', 'handover', 'archived'];
@@ -173,7 +176,9 @@ STAGE_TASKS[PROCESSING_STAGE.SELECTION] = [
   TASK_TYPE.SELECTION_OUTCOME,
 ];
 
-const TASK_STATUS = {
+const TASK_STATUS = { // aka task STEPS
+  CANDIDATE_FORM_CONFIGURE: 'candidateFormConfigure',
+  CANDIDATE_FORM_MONITOR: 'candidateFormMonitor',
   DATA_INITIALISED: 'dataInitialised',
   DATA_ACTIVATED: 'dataActivated',
   TEST_INITIALISED: 'testInitialised',
@@ -183,10 +188,28 @@ const TASK_STATUS = {
   MODERATION_INITIALISED: 'moderationInitialised',
   MODERATION_ACTIVATED: 'moderationActivated',
   STATUS_CHANGES: 'statusChanges',
+  STAGE_OUTCOME: 'stageOutcome',
   FINALISED: 'finalised',
   CHECKS: 'checks',
   COMPLETED: 'completed',
 };
+
+const TASK_STEPS = {};
+TASK_STEPS.new = { title: 'Overview' };
+TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_CONFIGURE] = { title: 'Configure candidate form' };
+TASK_STEPS[TASK_STATUS.CANDIDATE_FORM_MONITOR] = { title: 'Monitor candidate responses' };
+TASK_STEPS[TASK_STATUS.DATA_INITIALISED] = { title: 'Configure marking scheme' };
+TASK_STEPS[TASK_STATUS.DATA_ACTIVATED] = { title: 'Enter scores' };
+TASK_STEPS[TASK_STATUS.TEST_INITIALISED] = { title: 'Test preparation' };
+TASK_STEPS[TASK_STATUS.TEST_ACTIVATED] = { title: 'Test active' };
+TASK_STEPS[TASK_STATUS.PANELS_INITIALISED] = { title: 'Configure panels' };
+TASK_STEPS[TASK_STATUS.PANELS_ACTIVATED] = { title: 'Panel scores' };
+TASK_STEPS[TASK_STATUS.MODERATION_INITIALISED] = { title: 'Configure moderation' };
+TASK_STEPS[TASK_STATUS.MODERATION_ACTIVATED] = { title: 'Moderation scores' };
+TASK_STEPS[TASK_STATUS.STATUS_CHANGES] = { title: 'Update statuses' };
+TASK_STEPS[TASK_STATUS.STAGE_OUTCOME] = { title: 'Confirm outcomes' };
+TASK_STEPS[TASK_STATUS.FINALISED] = { title: 'Merit list' };
+TASK_STEPS[TASK_STATUS.COMPLETED] = { title: 'Completed' };
 
 function getNextProcessingStage(processingStage) {
   const currentIndex = PROCESSING_STAGES.indexOf(processingStage);
@@ -197,8 +220,8 @@ function getNextProcessingStage(processingStage) {
 function getProcessingEntryStage(exercise, processingStage) {
   if (exercise._processingVersion >= 2) {
     switch (processingStage) {
+    case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
-      // TO DO check for staged applications as shortlisting may start with registration rather than applied
       return EXERCISE_STAGE.APPLIED;
     case PROCESSING_STAGE.SELECTION:
       return EXERCISE_STAGE.SHORTLISTED;
@@ -224,6 +247,7 @@ function getProcessingEntryStage(exercise, processingStage) {
 function getProcessingExitStage(exercise, processingStage) {
   if (exercise._processingVersion >= 2) {
     switch (processingStage) {
+    case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
       return EXERCISE_STAGE.SHORTLISTED;
     case PROCESSING_STAGE.SELECTION:
@@ -243,7 +267,7 @@ function getProcessingExitStage(exercise, processingStage) {
       return EXERCISE_STAGE.RECOMMENDED;
     case PROCESSING_STAGE.HANDOVER:
       return EXERCISE_STAGE.HANDOVER;
-    }  
+    }
   }
 }
 
@@ -257,24 +281,56 @@ function getProcessingExitStage(exercise, processingStage) {
  */
 function getTimelineTasks(exercise, taskType) {
   const timeline = createTimeline(exerciseTimeline(exercise));
-  const timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
+  let timelineTasks = timeline.filter(item => item.taskType && (!taskType || item.taskType === taskType));
+  let supportedTaskTypes = [];
   if (exercise._processingVersion >= 2) {
-    return timelineTasks;
+    supportedTaskTypes = [
+      TASK_TYPE.TELEPHONE_ASSESSMENT,
+      TASK_TYPE.SIFT,
+      TASK_TYPE.CRITICAL_ANALYSIS,
+      TASK_TYPE.SITUATIONAL_JUDGEMENT,
+      TASK_TYPE.QUALIFYING_TEST,
+      TASK_TYPE.SCENARIO,
+      TASK_TYPE.SHORTLISTING_OUTCOME,
+      TASK_TYPE.ELIGIBILITY_SCC,
+      TASK_TYPE.STATUTORY_CONSULTATION,
+      TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
+      TASK_TYPE.EMP_TIEBREAKER,
+      TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE,
+      TASK_TYPE.SELECTION_DAY,
+    ];
   } else {
-    const supportedTaskTypes = [
+    supportedTaskTypes = [
       TASK_TYPE.CRITICAL_ANALYSIS,
       TASK_TYPE.SITUATIONAL_JUDGEMENT,
       TASK_TYPE.QUALIFYING_TEST,
       TASK_TYPE.SCENARIO,
       TASK_TYPE.EMP_TIEBREAKER,
     ];
-    return timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
   }
+  timelineTasks = timelineTasks.filter(task => supportedTaskTypes.indexOf(task.taskType) >= 0);
+  if (timelineTasks.find((item) => item.taskType === TASK_TYPE.SHORTLISTING_OUTCOME)) {  // ensure shortlisting outcome comes after shortlisting methods!
+    let shortlistingOutcomeIndex = -1;
+    let lastShortlistingMethodIndex = -1;
+    timelineTasks.forEach((item, index) => {
+      if (item.taskType === TASK_TYPE.SHORTLISTING_OUTCOME) shortlistingOutcomeIndex = index;
+      if (
+        (SHORTLISTING_TASK_TYPES.indexOf(item.taskType) >= 0)
+        && index > lastShortlistingMethodIndex
+      ) {
+        lastShortlistingMethodIndex = index;
+      }
+    });
+    if (lastShortlistingMethodIndex > shortlistingOutcomeIndex) {
+      timelineTasks.splice(lastShortlistingMethodIndex, 0, timelineTasks.splice(shortlistingOutcomeIndex, 1)[0]);
+    }
+  }
+  return timelineTasks;
 }
 
 function getTaskTypes(exercise, stage) {
   let taskTypes = getTimelineTasks(exercise).map(item => item.taskType).filter((value, index, thisArray) => thisArray.indexOf(value) === index);
-  if (stage) {
+  if (stage && stage !== 'all') {
     taskTypes = taskTypes.filter(taskType => STAGE_TASKS[stage].indexOf(taskType) >= 0);
   }
   const indexCA = taskTypes.indexOf(TASK_TYPE.CRITICAL_ANALYSIS);
@@ -284,6 +340,99 @@ function getTaskTypes(exercise, stage) {
     taskTypes.splice(indexQT + 1, 0, TASK_TYPE.QUALIFYING_TEST);
   }
   return taskTypes;
+}
+
+function getTaskCurrentStep(exercise, taskStatus) {
+  return TASK_STEPS[taskStatus];
+}
+
+function getTaskSteps(exercise, taskType, task) {
+  const statuses = taskStatuses(taskType);
+  const steps = ['new'].concat(statuses).map(status => {
+    return {
+      id: status,
+      ...TASK_STEPS[status],
+    };
+  });
+  if (task) {
+    const currentStepIndex = steps.findIndex(step => step.id === task.status);
+    return steps.map((step, index) => {
+      return {
+        ...step,
+        completed: task.status === TASK_STATUS.COMPLETED ? true : index < currentStepIndex,
+      };
+    });
+  } else {
+    return steps;
+  }
+}
+
+function taskStatuses(taskType) { // also on DP
+  let availableStatuses = [];
+  switch (taskType) {
+    case TASK_TYPE.CRITICAL_ANALYSIS:
+    case TASK_TYPE.SITUATIONAL_JUDGEMENT:
+      availableStatuses = [
+        TASK_STATUS.TEST_INITIALISED,
+        TASK_STATUS.TEST_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.QUALIFYING_TEST:
+      availableStatuses = [
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SCENARIO:
+    case TASK_TYPE.EMP_TIEBREAKER:
+      availableStatuses = [
+        TASK_STATUS.TEST_INITIALISED,
+        TASK_STATUS.TEST_ACTIVATED,
+        // TASK_STATUS.PANELS_INITIALISED,
+        // TASK_STATUS.PANELS_ACTIVATED,
+        TASK_STATUS.DATA_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.TELEPHONE_ASSESSMENT:
+    case TASK_TYPE.ELIGIBILITY_SCC:
+    case TASK_TYPE.STATUTORY_CONSULTATION:
+    case TASK_TYPE.CHARACTER_AND_SELECTION_SCC:
+        availableStatuses = [
+        TASK_STATUS.STATUS_CHANGES,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE:
+      availableStatuses = [
+        TASK_STATUS.CANDIDATE_FORM_CONFIGURE,
+        TASK_STATUS.CANDIDATE_FORM_MONITOR,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SIFT:
+    case TASK_TYPE.SELECTION_DAY:
+      availableStatuses = [
+        TASK_STATUS.DATA_INITIALISED,
+        TASK_STATUS.DATA_ACTIVATED,
+        // TASK_STATUS.PANELS_INITIALISED,
+        // TASK_STATUS.PANELS_ACTIVATED,
+        TASK_STATUS.FINALISED,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+    case TASK_TYPE.SHORTLISTING_OUTCOME:
+    case TASK_TYPE.SELECTION_OUTCOME:
+      availableStatuses = [
+        TASK_STATUS.STAGE_OUTCOME,
+        TASK_STATUS.COMPLETED,
+      ];
+      break;
+  }
+  return availableStatuses;
 }
 
 const MERIT_LIST_TASK_TYPES = [
@@ -622,7 +771,6 @@ function exerciseApplicationParts(data, newValues) {
     applicationParts.push('reasonableLengthOfService');
   }
   if (isNonLegal(exercise)) {
-    applicationParts.push('relevantQualifications');
     if (exercise.previousJudicialExperienceApply) {
       applicationParts.push('judicialExperience');
     }
@@ -812,13 +960,13 @@ function availableStages(exercise) {
     stages.push(EXERCISE_STAGE.SHORTLISTED);
     stages.push(EXERCISE_STAGE.SELECTABLE);
     stages.push(EXERCISE_STAGE.RECOMMENDED);
-    stages.push(EXERCISE_STAGE.HANDOVER);      
+    stages.push(EXERCISE_STAGE.HANDOVER);
   } else {
     stages.push(EXERCISE_STAGE.REVIEW);
     stages.push(EXERCISE_STAGE.SHORTLISTED);
     stages.push(EXERCISE_STAGE.SELECTED);
     stages.push(EXERCISE_STAGE.RECOMMENDED);
-    stages.push(EXERCISE_STAGE.HANDOVER);  
+    stages.push(EXERCISE_STAGE.HANDOVER);
   }
   return stages;
 }
@@ -836,7 +984,7 @@ function getPreviousStage(exercise, currentStage) {
       return EXERCISE_STAGE.SELECTABLE;
     case EXERCISE_STAGE.HANDOVER:
       return EXERCISE_STAGE.RECOMMENDED;
-    }      
+    }
   } else {
     switch (currentStage) {
     case EXERCISE_STAGE.REVIEW:
@@ -850,7 +998,7 @@ function getPreviousStage(exercise, currentStage) {
     case EXERCISE_STAGE.HANDOVER:
       return EXERCISE_STAGE.RECOMMENDED;
     }
-  }  
+  }
 }
 
 function getNextStage(exercise, currentStage, newStatus) {
@@ -880,7 +1028,7 @@ function getNextStage(exercise, currentStage, newStatus) {
           return EXERCISE_STAGE.HANDOVER;
         }
       }
-    }  
+    }
   } else {
     const stages = availableStages(exercise);
     const currentStageIndex = stages.indexOf(currentStage);
@@ -914,7 +1062,7 @@ function getStagePassingStatuses(exercise, stage) {
       return [APPLICATION_STATUS.PASSED_SELECTION];
     case EXERCISE_STAGE.RECOMMENDED:
       return [APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT, APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT];
-    }  
+    }
   }
 }
 
@@ -950,7 +1098,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
         APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
         APPLICATION_STATUS.WITHDRAWN,
         APPLICATION_STATUS.SELECTION_PASSED,
       ];
@@ -971,6 +1119,8 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
         APPLICATION_STATUS.RECONSIDER,
         APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.SECOND_STAGE_PASSED,
+        APPLICATION_STATUS.SECOND_STAGE_FAILED,
         APPLICATION_STATUS.WITHDRAWN,
       ];
       return statuses;
@@ -997,7 +1147,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
         APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
         APPLICATION_STATUS.SELECTION_PASSED,
         APPLICATION_STATUS.PASSED_RECOMMENDED,
         APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
@@ -1010,7 +1160,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
       ];
       return statuses;
-    }    
+    }
   } else {
     switch (stage) {
     case EXERCISE_STAGE.REVIEW:
@@ -1087,13 +1237,13 @@ function shortlistingStatuses(exercise) {
       if (exercise._processingVersion >= 2) {
         statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
         statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
-        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED);  
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED);
       } else {
         statuses.push(APPLICATION_STATUS.SUBMITTED_FIRST_TEST);
         statuses.push(APPLICATION_STATUS.FAILED_FIRST_TEST);
-        statuses.push(APPLICATION_STATUS.PASSED_FIRST_TEST);  
+        statuses.push(APPLICATION_STATUS.PASSED_FIRST_TEST);
         statuses.push(APPLICATION_STATUS.NO_TEST_SUBMITTED);
-        statuses.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);        
+        statuses.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);
       }
     }
     // scenario test
@@ -1141,4 +1291,11 @@ function isApplicationVersionGreaterThan(exercise, version) {
 }
 function isApplicationVersionLessThan(exercise, version) {
   return exercise?._applicationVersion < version;
+}
+
+function isJAC00187(env, referenceNumber) {
+  if (!env || !referenceNumber) { return false; }
+  return (env === 'DEVELOP' && referenceNumber === 'JAC00696') ||
+    (env === 'STAGING' && referenceNumber === 'JAC00695') ||
+    (env === 'PRODUCTION' && referenceNumber === 'JAC00187');
 }
