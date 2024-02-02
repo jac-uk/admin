@@ -1,11 +1,11 @@
-import { doc, collection } from '@firebase/firestore';
+import { doc, collection, updateDoc } from '@firebase/firestore';
 import { httpsCallable } from '@firebase/functions';
 import { auth, functions, firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
 
-const collection = firestore.collection('users');
+const collectionRef = collection(firestore, 'users');
 
 const module = {
   namespaced: true,
@@ -110,7 +110,7 @@ const module = {
       commit('setAuthError', message);
     },
     save: async ({ state }, data) => {
-      await collection.doc(state.record.id).update(data);
+      await updateDoc(doc(collectionRef, state.record.id), data);
     },
   },
   getters: {
