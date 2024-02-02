@@ -18,7 +18,7 @@ export default {
     }),
     create: async ({ rootState, dispatch }, data) => {
       const metaRef = doc(collection(firestore, 'meta'), 'stats');
-      return runTransaction((transaction) => {
+      return runTransaction(firestore, (transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
 
           const currentBugsReportCount = metaDoc.data().bugReportsCount;

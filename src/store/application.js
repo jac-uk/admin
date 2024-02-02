@@ -52,7 +52,7 @@ export default {
           const vacancyMetaRef = doc(firestore, `vacancies/${state.record.exerciseId}/meta/stats`);
           const vacancyReferenceNumber = state.record.exerciseRef;
           const applicationRef = doc(firestore, `applications/${state.record.id}`);
-          return await runTransaction(async (transaction) => {
+          return await runTransaction(firestore, async (transaction) => {
             const doc = await transaction.get(vacancyMetaRef);
             let newApplicationsCount;
             if (!doc.exists) {
