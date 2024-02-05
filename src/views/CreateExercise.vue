@@ -65,6 +65,27 @@
         />
 
         <RadioGroup
+          id="is-external-vacancy"
+          v-model="isExternalVacancy"
+          label="Are applications being managed by JAC?"
+          required
+          :messages="{
+            required: 'Please specify whether the applications being managed by JAC'
+          }"
+        >
+          <RadioItem
+            :value="false"
+            label="Yes"
+          />
+
+          <RadioItem
+            :value="true"
+            label="No - this is an external vacancy"
+          />
+        </RadioGroup>
+
+        <RadioGroup
+          v-if="isExternalVacancy !== null && !isExternalVacancy"
           id="is-more-info-needed"
           v-model="addMoreInfo"
           label="Do you want to add more information about this exercise now?"
@@ -156,6 +177,7 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
 import { cloneDeep } from 'lodash';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'CreateExercise',
@@ -174,6 +196,7 @@ export default {
   data() {
     return {
       exerciseName: null,
+      isExternalVacancy: null,
       addMoreInfo: null,
       addMoreInfoSelection: null,
     };
@@ -192,6 +215,10 @@ export default {
           exerciseMailbox: this.$store.state.auth.currentUser.email,
           characterChecksEnabled: true,
         };
+
+        if (this.isExternalVacancy) {
+          data.advertType = ADVERT_TYPES.EXTERNAL;
+        }
         await this.$store.dispatch('exerciseDocument/create', data);
         const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
         this.$store.dispatch('exerciseCreateJourney/start', selectedPages);

@@ -364,6 +364,12 @@ export default {
       return msg;
     },
   },
+  created() {
+    if (this.exercise.advertType === ADVERT_TYPES.EXTERNAL) {
+      this.$router.push({ name: 'exercise-external', params: { id: this.exercise.id } });
+      return;
+    }
+  },
   methods: {
     async submitForApproval(note) {
       await this.$store.dispatch('exerciseDocument/updateApprovalProcess', {
