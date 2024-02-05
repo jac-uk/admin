@@ -261,16 +261,6 @@ const routes = [
         meta: {
           requiresAuth: true,
         },
-        children: [
-          {
-            name: 'exercise-external-edit',
-            path: 'edit',
-            component: ExerciseExternalsEdit,
-            meta: {
-              requiresAuth: true,
-            },
-          },
-        ],
       },
       {
 
