@@ -8,7 +8,7 @@
         <router-link
           v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
           class="govuk-link"
-          :to="{name: 'exercise-details-summary-edit'}"
+          :to="{name: 'exercise-external-edit'}"
         >
           Update
         </router-link>
