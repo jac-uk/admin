@@ -148,6 +148,7 @@ import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Dashboard',
@@ -171,7 +172,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'applied',
+      activeTab: EXERCISE_STAGE.APPLIED,
       timelineSelected: 0,
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
@@ -416,11 +417,11 @@ export default {
     gatherReportData() {
       const data = [];
       const stages = [
-        'applied',
-        'shortlisted',
-        this.exercise?._processingVersion >= 2 ? 'selectable' : 'selected',
-        'recommended',
-        'handover',
+        EXERCISE_STAGE.APPLIED,
+        EXERCISE_STAGE.SHORTLISTED,
+        this.exercise?._processingVersion >= 2 ? EXERCISE_STAGE.SELECTABLE : EXERCISE_STAGE.SELECTED,
+        EXERCISE_STAGE.RECOMMENDED,
+        EXERCISE_STAGE.HANDOVER,
       ];
       data.push(['Statistic'].concat(stages));
       Object.keys(this.report.applied).forEach((report) => {
