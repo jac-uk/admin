@@ -212,12 +212,91 @@
         </h2>
 
         <TextField
+          id="immediate-start"
+          v-model="formData.immediateStart"
+          label="Immediate start"
+          input-class="govuk-input--width-3"
+          hint="These are also called Section 87 (S87) vacancies."
+        />
+
+        <TextField
           id="future-start"
           v-model="formData.futureStart"
           label="Future start"
           input-class="govuk-input--width-3"
           hint="These are also called Section 94 (S94) vacancies."
         />
+
+        <h2 class="govuk-label-input">
+          Downloads
+        </h2>
+
+        <div
+          class="govuk-grid-column-full govuk-!-margin-top-5 govuk-!-margin-bottom-2"
+        >
+          <table class="govuk-table">
+            <tbody class="govuk-table__body">
+              <tr
+                v-for="upload in uploadList"
+                :key="upload.id"
+                :ref="`${upload.id}-group`"
+                class="govuk-table__row"
+              >
+                <th class="govuk-table__header">
+                  {{ upload.title }}
+                </th>
+                <td class="govuk-table__cell">
+                  <div>
+                    <a
+                      :class="`govuk-link moj-download-button ${!upload.mandatory ? 'optional' : ''}`"
+                      href="#"
+                      @click.prevent="modalUploadOpen({ ...upload })"
+                    >
+                      Add
+                    </a>
+                    <span
+                      v-for="item in formData.downloads[upload.id]"
+                      :key="item.id"
+                    >
+                      <a
+                        class="govuk-link moj-download-link"
+                        href="#"
+                        @click.prevent="modalUploadOpen({ ...upload, fileRef: item.file, fileTitle: item.title })"
+                      >
+                        {{ item.title }}
+                      </a>
+                    </span>
+                    <span
+                      :id="`${upload.id}-error`"
+                      :ref="`${upload.id}-error`"
+                      class="govuk-error-message"
+                    ><span class="govuk-visually-hidden">Error:</span> Please upload file: {{ upload.title }} </span>
+                  </div>
+                </td>
+                <td class="govuk-table__cell text-right">
+                  <strong
+                    v-if="formData.downloads[upload.id] && formData.downloads[upload.id].length > 0"
+                    class="govuk-tag"
+                  >
+                    Done
+                  </strong>
+                  <span
+                    v-else
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <Modal
+            ref="modalRef"
+          >
+            <component
+              :is="`UploadFiles`"
+              v-bind="uploadProps"
+              @close="modalUploadClose"
+            />
+          </Modal>
+        </div>
 
         <ListingPreview
           class="govuk-!-margin-bottom-4"
@@ -254,6 +333,9 @@ import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import Currency from '@jac-uk/jac-kit/draftComponents/Form/Currency.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import UploadFiles from '@/components/ModalViews/UploadFiles.vue';
+import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload.vue';
 
 export default {
   name: 'SummaryEdit',
@@ -270,25 +352,52 @@ export default {
     Select,
     Currency,
     TextareaInput,
+    Modal,
+    UploadFiles,
   },
   extends: Form,
   mixins: [exerciseMixin],
   data() {
     const defaults = {
       name: null,
-      estimatedLaunchDate: null,
-      inviteOnly: false,
+      applicationOpenDate: null,
+      applicationCloseDate: null,
+      exerciseMailbox: null,
       welshPosts: false,
       roleSummary: '',
       roleSummaryWelsh: '',
+      aboutTheRole: '',
+      aboutTheRoleWelsh: '',
+      appointmentType: null,
+      salaryGrouping: null,
+      salary: null,
+      location: null,
+      immediateStart: null,
+      futureStart: null,
       subscriberAlertsUrl: null,
       advertType: ADVERT_TYPES.FULL,
+      downloads: {
+        jobDescriptions: [],
+        termsAndConditions: [],
+        competencyFramework: [],
+        pensionsInformation: [],
+        skillsAndAbilitiesCriteria: [],
+        independentAssessors: [],
+        candidateAssessementForms: [],
+        welshTranslation: [],
+        statutoryConsultationGuidanceLetter: [],
+        otherDownloads: [],
+      },
     };
     const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData: formData,
       setDay: true,
       exerciseAdvertTypes: exerciseAdvertTypes({}),
+      repeatableFields: {
+        MultiFileUpload,
+      },
+      uploadProps: {},
     };
   },
   computed: {
@@ -346,6 +455,77 @@ export default {
         this.formData.applicationCloseDate = dateString;
       },
     },
+    uploadPath() {
+      return `/exercise/${this.exerciseId}`;
+    },
+    uploadList() {
+      const data = [];
+
+      data.push({
+        title: 'Job Description',
+        id: 'jobDescriptions',
+        name: 'job-descriptions',
+        mandatory: true,
+      });
+
+      data.push({
+        title: 'Terms and Conditions',
+        id: 'termsAndConditions',
+        name: 'terms-and-conditions',
+        mandatory: true,
+      });
+
+      data.push({
+        title: 'Competency Framework',
+        id: 'competencyFramework',
+        name: 'competency-framework',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Pensions Information',
+        id: 'pensionsInformation',
+        name: 'pensions-information',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Skills and Abilities Criteria',
+        id: 'skillsAndAbilitiesCriteria',
+        name: 'skills-and-abilities-criteria',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Candidate Assessment Form',
+        id: 'candidateAssessementForms',
+        name: 'candidate-assessement-forms',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Welsh Translation',
+        id: 'welshTranslation',
+        name: 'welsh-translation',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Statutory Consultation Guidance Letter',
+        id: 'statutoryConsultationGuidanceLetter',
+        name: 'statutory-consultation-guidance-letter',
+        mandatory: false,
+      });
+
+      data.push({
+        title: 'Other Downloads',
+        id: 'otherDownloads',
+        name: 'other-downloads',
+        mandatory: false,
+      });
+
+      return data;
+    },
     toggleLabel() {
       if (this.setDay) {
         return 'Remove launch day';
@@ -360,7 +540,7 @@ export default {
     async save(isValid) {
       this.formData['progress.vacancySummary'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-summary'));
+      this.$router.push({ name: 'exercise-external' });
     },
     toggleDay() {
       this.setDay = !this.setDay;
@@ -382,6 +562,65 @@ export default {
 
       return date;
     },
+    modalUploadOpen(obj) {
+      this.validateUI(obj.id, false);
+      this.uploadProps = {
+        ...obj,
+        filePath: this.uploadPath,
+        fileTitle: obj.fileTitle ? obj.fileTitle : `${obj.title} - ${this.exercise.referenceNumber}`,
+        data: this.formData.downloads,
+        exerciseId: this.exerciseId,
+      };
+      this.$refs.modalRef.openModal();
+    },
+    modalUploadClose() {
+      this.$refs.modalRef.closeModal();
+    },
+    validateUI(downloadId, add) {
+      const wrapperCssClass = this.$refs[`${downloadId}-group`][0].classList;
+      const itemCssClass = this.$refs[`${downloadId}-error`][0].classList;
+      if (add) {
+        itemCssClass.add('active');
+        wrapperCssClass.add('govuk-form-group--error');
+      } else {
+        itemCssClass.remove('active');
+        wrapperCssClass.remove('govuk-form-group--error');
+      }
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.moj-download-link {
+  background-color: #f3f2f1;
+  padding: 5px;
+  margin: 0 5px 5px 5px;
+  display: inline-block;
+}
+.moj-download-button {
+  @extend .moj-download-link;
+  background-color: #00703c;
+  text-decoration: none;
+
+  &:visited,
+  &:link {
+    color: #ffffff;
+  }
+
+  &.optional {
+    background-color: #f3f2f1;
+    color: #0b0c0c;
+  }
+}
+.govuk-form-group--error th {
+  padding-left: .5em;
+}
+.govuk-error-message {
+  display: none;
+
+  &.active {
+    display: inherit;
+  }
+}
+</style>
