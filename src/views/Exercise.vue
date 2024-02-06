@@ -63,7 +63,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+            v-if="!exercise.isExternalVacancy && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -94,7 +94,7 @@
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
           <SubNavigation
-            v-if="!hasJourney && subNavigation.length > 1"
+            v-if="!exercise.isExternalVacancy && !hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
           />
         </div>

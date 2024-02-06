@@ -251,7 +251,7 @@ const routes = [
         name: 'exercise-dashboard',
         meta: {
           requiresAuth: true,
-          title: 'Dashboard | Exercise Details',
+          title: 'Overview | External Vacancy',
         },
       },
       {
@@ -260,6 +260,7 @@ const routes = [
         name: 'exercise-external',
         meta: {
           requiresAuth: true,
+          title: 'Edit | External Vacancy',
         },
       },
       {
