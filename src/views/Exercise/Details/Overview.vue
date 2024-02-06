@@ -365,7 +365,7 @@ export default {
     },
   },
   created() {
-    if (this.exercise.advertType === ADVERT_TYPES.EXTERNAL) {
+    if (this.exercise.isExternalVacancy) {
       this.$router.push({ name: 'exercise-external', params: { id: this.exercise.id } });
       return;
     }

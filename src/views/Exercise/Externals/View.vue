@@ -22,14 +22,6 @@
         </dt>
         <dd class="govuk-summary-list__value">
           {{ exercise.name }}
-          <!-- <span
-            v-if="exercise.inviteOnly"
-          >
-            -
-            <b>
-              Invite only exercise
-            </b>
-          </span> -->
         </dd>
       </div>
 
@@ -71,10 +63,10 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Apply url
+          Subscriber alerts url
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ exercise.applyUrl }}
+          {{ exercise.subscriberAlertsUrl }}
         </dd>
       </div>
 
@@ -89,12 +81,36 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+          Are there Welsh posts?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ $filters.toYesNo(exercise.welshPosts) }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
           Brief Overview
         </dt>
         <dd class="govuk-summary-list__value">
           <CustomHTML
             class="govuk-body"
             :value="exercise.roleSummary"
+          />
+        </dd>
+      </div>
+
+      <div
+        v-if="exercise.welshPosts"
+        class="govuk-summary-list__row"
+      >
+        <dt class="govuk-summary-list__key">
+          Brief Overview(Welsh)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.roleSummaryWelsh"
           />
         </dd>
       </div>
@@ -111,23 +127,312 @@
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <div
+        v-if="exercise.welshPosts"
+        class="govuk-summary-list__row"
+      >
         <dt class="govuk-summary-list__key">
-          Are there Welsh posts?
+          About the role (Welsh)
         </dt>
         <dd class="govuk-summary-list__value">
-          {{ $filters.toYesNo(exercise.welshPosts) }}
+          <CustomHTML
+            class="govuk-body"
+            :value="exercise.aboutTheRoleWelsh"
+          />
         </dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Subscriber alerts url
+          Advert type
         </dt>
-        <dd class="govuk-summary-list__value">
-          {{ exercise.subscriberAlertsUrl }}
+        <dd class="govuk-summary-list__value editable-field">
+          <span>
+            {{ $filters.lookup(exercise.advertType) }}
+          </span>
         </dd>
       </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Appointment type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <span v-if="exercise.appointmentType == 'salaried'">
+            {{ $filters.lookup(exercise.appointmentType) }}:
+            <span v-if="exercise.salaryGrouping">{{ $filters.lookup(exercise.salaryGrouping) }}</span>
+            <span v-if="exercise.salary">{{ $filters.formatCurrency(exercise.salary) }}</span>
+          </span>
+          <span v-else-if="exercise.appointmentType == 'fee-paid'">{{ $filters.lookup(exercise.appointmentType) }}: £{{ exercise.feePaidFee }}</span>
+          <span v-else-if="exercise.appointmentType">{{ $filters.lookup(exercise.appointmentType) }}</span>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Location
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ exercise.location }}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Number of vacancies
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li v-if="exercise.immediateStart > 0">
+              {{ exercise.immediateStart }} Immediate start (S87)
+            </li>
+            <li v-if="exercise.futureStart > 0">
+              {{ exercise.futureStart }} Future start (S94)
+            </li>
+          </ul>
+        </dd>
+      </div>
+
+      <h2 class="govuk-heading-l govuk-!-margin-top-4">
+        Downloads
+      </h2>
+      <p
+        v-if="!exercise.downloads"
+        class="govuk-body"
+      >
+        No files uploaded.
+      </p>
+      <dl
+        v-else
+        class="govuk-summary-list"
+      >
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Job Description
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!exercise.downloads.jobDescriptions.length">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.jobDescriptions"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Terms and Conditions
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!exercise.downloads.termsAndConditions.length">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.termsAndConditions"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div
+          v-if="hasIndependentAssessments"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Independent Assessors
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!exercise.downloads.independentAssessors.length">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.independentAssessors"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Candidate Assessment
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!exercise.downloads.candidateAssessementForms.length">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.candidateAssessementForms"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Pensions Information
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!showPensionsInformation">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.pensionsInformation"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Skills and Abilities Criteria
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!showSkillsAndAbilitiesCriteria">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.skillsAndAbilitiesCriteria"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Competency Framework
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!showCompetencyFramework">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.competencyFramework"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Welsh Translation
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!showWelshTranslation">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.welshTranslation"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Statutory Consultation Guidance Letter
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <span v-if="!showStatutoryConsultationGuidanceLetter">
+              No files uploaded
+            </span>
+            <ul class="govuk-list">
+              <li
+                v-for="file in exercise.downloads.statutoryConsultationGuidanceLetter"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Other Downloads
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul
+              v-if="hasOtherDownloads"
+              class="govuk-list"
+            >
+              <li
+                v-for="file in exercise.downloads.otherDownloads"
+                :key="file.file"
+              >
+                <DownloadLink
+                  :file-name="file.file"
+                  :title="file.title"
+                  :exercise-id="exerciseId"
+                />
+              </li>
+            </ul>
+            <span v-else>
+              No files uploaded
+            </span>
+          </dd>
+        </div>
+      </dl>
     </dl>
 
     <button
@@ -179,6 +484,8 @@ import CustomHTML from '@/components/CustomHTML.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
 import DetailPreview from '@/components/Previews/DetailPreview.vue';
 import exerciseMixin from '@/views/Exercise/exerciseMixin.js';
+import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
+import { hasIndependentAssessments } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'SummaryView',
@@ -188,6 +495,7 @@ export default {
     CustomHTML,
     ListingPreview,
     DetailPreview,
+    DownloadLink,
   },
   mixins: [permissionMixin, exerciseMixin],
   computed: {
@@ -208,6 +516,81 @@ export default {
     },
     canPublish() {
       return this.exercise.progress && this.exercise.progress.vacancySummary && !this.isArchived;
+    },
+    hasIndependentAssessments() {
+      return hasIndependentAssessments(this.exercise);
+    },
+    showPensionsInformation() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.pensionsInformation &&
+        this.exercise.downloads.pensionsInformation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showCompetencyFramework() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.competencyFramework &&
+        this.exercise.downloads.competencyFramework.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showSkillsAndAbilitiesCriteria() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.skillsAndAbilitiesCriteria &&
+        this.exercise.downloads.skillsAndAbilitiesCriteria.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showWelshTranslation() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.welshTranslation &&
+        this.exercise.downloads.welshTranslation.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showStatutoryConsultationGuidanceLetter() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.statutoryConsultationGuidanceLetter &&
+        this.exercise.downloads.statutoryConsultationGuidanceLetter.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    hasOtherDownloads() {
+      if (
+        this.exercise &&
+        this.exercise.downloads &&
+        this.exercise.downloads.otherDownloads &&
+        this.exercise.downloads.otherDownloads.length
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {

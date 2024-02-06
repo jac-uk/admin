@@ -78,7 +78,6 @@
           label="About the role"
           hint="Short summary of the role for the vacancies listing page."
           class="custom-html"
-          required
         />
 
         <RichTextInput
@@ -111,7 +110,6 @@
           id="appointment-type"
           v-model="formData.appointmentType"
           label="Appointment type"
-          required
         >
           <RadioItem
             v-if="formData.salaryGrouping"
@@ -322,7 +320,6 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import RichTextInput from '@jac-uk/jac-kit/draftComponents/Form/RichTextInput.vue';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
-import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 import { ADVERT_TYPES } from '@/helpers/constants';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import ListingPreview from '@/components/Previews/ListingPreview.vue';
@@ -336,6 +333,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadFiles from '@/components/ModalViews/UploadFiles.vue';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload.vue';
+import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'SummaryEdit',
@@ -362,6 +360,7 @@ export default {
       name: null,
       applicationOpenDate: null,
       applicationCloseDate: null,
+      isExternalVacancy: true,
       exerciseMailbox: null,
       welshPosts: false,
       roleSummary: '',
@@ -393,7 +392,7 @@ export default {
     return {
       formData: formData,
       setDay: true,
-      exerciseAdvertTypes: exerciseAdvertTypes({}),
+      exerciseAdvertTypes: exerciseAdvertTypes(formData),
       repeatableFields: {
         MultiFileUpload,
       },
@@ -403,23 +402,6 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
-    },
-    launchDate: {
-      get() {
-        return this.parseDate({ ...this.exercise, ...this.formData }.estimatedLaunchDate);
-      },
-      set(val) {
-        if (!val || !(val instanceof Date)){
-          return;
-        }
-
-        let dateString = `${val.getUTCFullYear()}-${val.getUTCMonth() + 1}`;
-        if (this.setDay) {
-          dateString = `${dateString}-${val.getUTCDate()}`;
-        }
-
-        this.formData.estimatedLaunchDate = dateString;
-      },
     },
     applicationOpenDate: {
       get() {
@@ -465,14 +447,14 @@ export default {
         title: 'Job Description',
         id: 'jobDescriptions',
         name: 'job-descriptions',
-        mandatory: true,
+        mandatory: false,
       });
 
       data.push({
         title: 'Terms and Conditions',
         id: 'termsAndConditions',
         name: 'terms-and-conditions',
-        mandatory: true,
+        mandatory: false,
       });
 
       data.push({

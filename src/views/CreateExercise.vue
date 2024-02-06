@@ -177,7 +177,6 @@ import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import OverrideExercise from '@/components/ModalViews/OverrideExercise.vue';
 import { cloneDeep } from 'lodash';
-import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'CreateExercise',
@@ -217,7 +216,7 @@ export default {
         };
 
         if (this.isExternalVacancy) {
-          data.advertType = ADVERT_TYPES.EXTERNAL;
+          data.isExternalVacancy = true;
         }
         await this.$store.dispatch('exerciseDocument/create', data);
         const selectedPages = this.addMoreInfo ? this.addMoreInfoSelection : [];
