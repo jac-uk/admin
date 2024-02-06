@@ -24,7 +24,7 @@ import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard.vue';
 
 // Exercise External (Vacancy)
 import ExerciseExternals from '@/views/Exercise/Externals/View.vue';
-import ExerciseExternalsEdit from '@/views/Exercise/Externals/edit.vue';
+import ExerciseExternalsEdit from '@/views/Exercise/Externals/Edit.vue';
 
 // Exercise details
 import ExerciseDetails from '@/views/Exercise/Details.vue';
