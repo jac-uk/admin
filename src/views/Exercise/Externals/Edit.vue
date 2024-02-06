@@ -403,6 +403,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    exerciseId() {
+      return this.exercise.id;
+    },
     applicationOpenDate: {
       get() {
         return this.parseDate({ ...this.exercise, ...this.formData }.applicationOpenDate);
