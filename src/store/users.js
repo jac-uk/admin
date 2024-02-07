@@ -47,7 +47,7 @@ export default {
         console.log(snap);
         console.log(snap.exists());
         console.log(snap.data());
-        if (snap.exists) {
+        if (snap.exists()) {
           return {
             id: userId,
             ...snap.data(),
