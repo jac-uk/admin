@@ -180,6 +180,10 @@
                   </div>
                 </div>
                 <div class="govuk-grid-column-one-quarter text-right">
+                  <strong>
+                    Application:
+                  </strong>
+                  <br>
                   <RouterLink
                     :to="{name: 'exercise-application', params: { applicationId: row.id }, query: { tab: 'issues' } }"
                     class="govuk-link print-none"
