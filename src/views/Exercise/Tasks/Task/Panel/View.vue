@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -466,7 +466,7 @@ export default {
     async exportToGoogleDrive() {
       const data = {
         status: 'approved',   // TODO this needs to work off of another field e.g. `exportStatus`
-        'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
+        'statusLog.approved': serverTimestamp(),
       };
       await this.$store.dispatch('panel/update', { id: this.panelId, data: data });
       return true;

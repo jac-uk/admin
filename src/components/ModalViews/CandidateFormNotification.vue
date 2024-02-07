@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -105,7 +106,7 @@ export default {
     },
     async send() {
       try {
-        const response = await functions.httpsCallable('sendCandidateFormNotifications')({
+        const response = await httpsCallable(functions, 'sendCandidateFormNotifications')({
           type: this.type,
           notificationType: this.notificationType,
           items: this.selectedItems,

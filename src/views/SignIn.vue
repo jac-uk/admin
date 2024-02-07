@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import firebase from 'firebase/app';
+import { httpsCallable } from '@firebase/functions';
+import { GoogleAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth, functions } from '@/firebase';
 
 export default {
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     async disableNewUser(uid) {
-      await functions.httpsCallable('adminDisableNewUser')({ uid: uid });
+      await httpsCallable(functions, 'adminDisableNewUser')({ uid: uid });
       this.$store.dispatch('auth/setAuthError', 'Your account requires approval before access is granted. Please request this from a manager.');
     },
     signOut() {
@@ -77,21 +78,23 @@ export default {
       //   });
       // }
     },
-    loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).then((user) => {
-        this.checkIfNewUser(user);
-      }).catch(err => {
+    async loginWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        this.checkIfNewUser(result.user);
+      } catch (err) {
         this.$store.dispatch('auth/setAuthError', err.message);
-      });
+      }
     },
-    loginWithMicrosoft() {
-      const provider = new firebase.auth.OAuthProvider('microsoft.com');
-      auth.signInWithPopup(provider).then((user) => {
-        this.checkIfNewUser(user);
-      }).catch(err => {
+    async loginWithMicrosoft() {
+      const provider = new OAuthProvider('microsoft.com');
+      try {
+        const result = await signInWithPopup(auth, provider);
+        this.checkIfNewUser(result.user);
+      } catch (err) {
         this.$store.dispatch('auth/setAuthError', err.message);
-      });
+      }
     },
   },
 };

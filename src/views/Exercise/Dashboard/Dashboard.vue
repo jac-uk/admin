@@ -32,7 +32,7 @@
     <SelectionDay />
     -->
 
-    <div 
+    <div
       v-if="report"
       class="govuk-grid-column-two-thirds"
     >
@@ -118,6 +118,8 @@
   </div>
 </template>
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -366,8 +368,9 @@ export default {
   },
   created() {
     if (this.applicationCounts._total) {
-      this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
-        .onSnapshot((snap) => {
+      this.unsubscribe = onSnapshot(
+        doc(firestore, `exercises/${this.exerciseId}/reports/diversity`),
+        (snap) => {
           if (snap.exists) {
             this.report = vuexfireSerialize(snap);
           }
@@ -395,7 +398,7 @@ export default {
     async refreshReport() {
       try {
         if (this.applicationCounts._total) {
-          await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+          await httpsCallable(functions, 'generateDiversityReport')({ exerciseId: this.exerciseId });
         }
         return true;
       } catch (error) {

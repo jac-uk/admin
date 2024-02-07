@@ -79,6 +79,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { query, collection, where, onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { debounce } from 'lodash';
 import { firestore, functions } from '@/firebase';
@@ -122,8 +124,9 @@ export default {
     },
   },
   created() {
-    this.unsubscribeReport = firestore.doc(`exercises/${this.exercise.id}/reports/statutoryConsultation`)
-      .onSnapshot((snap) => {
+    this.unsubscribeReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/statutoryConsultation`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
@@ -139,15 +142,17 @@ export default {
   },
   methods: {
     async getTableData(params) {
-      let firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('exercise.id', '==', this.exercise.id)
-        .where('status', '==', 'invitedToSelectionDay');
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', this.exercise.id),
+        where('status', '==', 'invitedToSelectionDay')
+      );
       params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
       if (firestoreRef) {
-        this.unsubscribe = firestoreRef
-          .onSnapshot((snap) => {
+        this.unsubscribe = onSnapshot(
+          firestoreRef,
+          (snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));
@@ -170,7 +175,7 @@ export default {
     }, 2000),
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateStatutoryConsultationReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateStatutoryConsultationReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;

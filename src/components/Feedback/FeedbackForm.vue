@@ -150,6 +150,7 @@ import { detect } from 'detect-browser';
 import CaptureScreenshot from '../Micro/CaptureScreenshot.vue';
 import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import SlackLookupError from '@/errors/slackLookupError';
 import UserError from '@/errors/userError';
@@ -268,7 +269,7 @@ export default {
     },
     async isValidSlackMemberId() {
       if (this.checkSlackMemberIdOnBlur) {
-        const response = await functions.httpsCallable('verifySlackUser')({
+        const response = await httpsCallable(functions, 'verifySlackUser')({
           userId: this.userId,
           slackMemberId: this.newReporterSlackUID,
           addSlackToProfile: true,
@@ -322,7 +323,7 @@ export default {
             screenshot: screenshot,
           }, id: newBugReport.id });
         }
-        await functions.httpsCallable('createZenhubIssue')({
+        await httpsCallable(functions, 'createZenhubIssue')({
           bugReportId: newBugReport.id,
           userId: this.userId,
         });

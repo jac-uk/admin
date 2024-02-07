@@ -334,6 +334,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { query, collection, onSnapshot, where } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
@@ -423,7 +425,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;
@@ -431,7 +433,7 @@ export default {
     },
     async gatherReportData() {
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationCharacterIssues')({
+      const response = await httpsCallable(functions, 'exportApplicationCharacterIssues')({
         exerciseId: this.exercise.id,
         stage: this.exerciseStage,
         status: this.candidateStatus,
@@ -466,7 +468,7 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        await functions.httpsCallable('exportApplicationCharacterIssues')({
+        await httpsCallable(functions, 'exportApplicationCharacterIssues')({
           exerciseId: this.exercise.id,
           stage: this.exerciseStage,
           status: this.candidateStatus,
@@ -478,38 +480,37 @@ export default {
       }
     },
     async getTableData(params) {
-      let firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('exercise.id', '==', this.exercise.id)
-        .where('flags.characterIssues', '==', true)
-        .where('stage', '==', this.exerciseStage)
-        .where('status', '==', this.candidateStatus);
-
-      // Track the version of getTableData query, for skipping initial query with invalid parameters
-      const callbackRecordVersion = this.recordVersion;
-      this.recordVersion += 1;
-
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', this.exercise.id),
+        where('flags.characterIssues', '==', true)
+      );
+      if (this.exerciseStage !== 'all') {
+        firestoreRef = where(firestoreRef, 'stage', '==', this.exerciseStage);
+      }
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
-      localParams.orderBy = 'documentId';
-
+      if (this.candidateStatus === 'all') {
+        firestoreRef = where(firestoreRef, 'status', '!=', 'withdrewApplication');
+        localParams.orderBy = ['status', 'documentId'];
+      } else {
+        firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
+        localParams.orderBy = 'documentId';
+      }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
 
       if (firestoreRef) {
-        this.unsubscribe = firestoreRef.onSnapshot((snap) => {
-          const applicationRecords = [];
-
-          // Skip the records of initial version, because the parameters (exerciseStage, candidateStatus) are not ready for query.
-          if (callbackRecordVersion === 0) return;
-
-          snap.forEach((doc) => {
-            applicationRecords.push(vuexfireSerialize(doc));
+        this.unsubscribe = onSnapshot(
+          firestoreRef,
+          (snap) => {
+            const applicationRecords = [];
+            snap.forEach((doc) => {
+              applicationRecords.push(vuexfireSerialize(doc));
+            });
+            this.applicationRecords = applicationRecords;
           });
-
-          this.applicationRecords = applicationRecords;
-        });
       } else {
         this.applicationRecords = [];
       }

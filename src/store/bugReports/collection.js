@@ -1,11 +1,11 @@
 // eslint-disable-next-line
-import firebase from '@firebase/app';
+import { collection } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collectionRef = firestore.collection('bugReports');
+const collectionRef = collection(firestore, 'bugReports');
 
 export default {
   namespaced: true,

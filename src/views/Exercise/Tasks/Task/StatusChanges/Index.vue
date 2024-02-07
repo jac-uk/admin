@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -221,7 +222,7 @@ export default {
   methods: {
     btnNext,
     async btnComplete() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

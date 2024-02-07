@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
-import '@firebase/storage';
+import { ref, getDownloadURL, uploadBytes } from '@firebase/storage';
+import { storage } from '@/firebase';
 import html2canvas from 'html2canvas';
 import FormField from '@jac-uk/jac-kit/draftComponents/Form/FormField.vue';
 export default {
@@ -81,16 +81,16 @@ export default {
     },
     async uploadScreenshot() {
       // Get the file path
-      const uploadRef = firebase.storage().ref(`${this.filePath}`);
+      const uploadRef = ref(storage, `${this.filePath}`);
       try {
         // Convert the base64 image to a blob
         const blob = this.dataURLtoBlob(this.thumbnail);
 
         // Upload the blob to file storage
-        const fileUploaded = await uploadRef.put(blob);
+        const fileUploaded = await uploadBytes(uploadRef, blob);
 
         if (fileUploaded && fileUploaded.state === 'success') {
-          const downloadUrl = await uploadRef.getDownloadURL();
+          const downloadUrl = await getDownloadURL(uploadRef);
           return {
             downloadUrl: downloadUrl,
             filePath: this.filePath,

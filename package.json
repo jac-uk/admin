@@ -26,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "3.0.47",
+    "@jac-uk/jac-kit": "4.0.0",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.61.1",
     "@sentry/vue": "^7.61.1",
@@ -64,7 +64,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^8.7.1",
-    "firebase": "^8.10.1",
+    "firebase": "^10.7.1",
     "firebase-mock": "^2.3.2",
     "jsdom": "^23.0.1",
     "postcss": "^8.4.31",

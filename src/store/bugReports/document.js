@@ -1,24 +1,24 @@
-import firebase from '@firebase/app';
+import { collection, doc, runTransaction, serverTimestamp, setDoc, deleteDoc } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import clone from 'clone';
 
-const collection = firestore.collection('bugReports');
+const collectionRef = collection(firestore, 'bugReports');
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = collection.doc(id);
+      const firestoreRef = doc(collectionRef, id);
       return bindFirestoreRef('record', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
     create: async ({ rootState, dispatch }, data) => {
-      const metaRef = firestore.collection('meta').doc('stats');
-      return firestore.runTransaction((transaction) => {
+      const metaRef = doc(collection(firestore, 'meta'), 'stats');
+      return runTransaction(firestore, (transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
 
           const currentBugsReportCount = metaDoc.data().bugReportsCount;
@@ -35,11 +35,11 @@ export default {
 
           data.referenceNumber = `BR_${  (1000000 + newBugReportsCount).toString().substr(1)}`;
           data.createdBy = rootState.auth.currentUser.uid;
-          const ts = firebase.firestore.FieldValue.serverTimestamp();
+          const ts = serverTimestamp();
           data.createdAt = ts;
           data.lastUpdatedAt = ts;
 
-          const bugReportsRef = firestore.collection('bugReports').doc();
+          const bugReportsRef = doc(collection(firestore, 'bugReports'));
 
           transaction.set(bugReportsRef, data);
           return bugReportsRef.id;
@@ -49,12 +49,12 @@ export default {
       });
     },
     update: async (context, { data, id }) => {
-      const ref = collection.doc(id);
-      data.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, id);
+      data.lastUpdated = serverTimestamp();
+      await setDoc(ref, data, { merge: true });
     },
     delete: async (context, id) => {
-      await collection.doc(id).delete();
+      await deleteDoc(doc(collectionRef, id));
     },
   },
   mutations: {

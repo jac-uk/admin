@@ -122,6 +122,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import SubNavigation from '@/components/Navigation/SubNavigation.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
@@ -343,7 +344,7 @@ export default {
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
       if (!noOfTestApplications) return;
-      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
+      await httpsCallable(functions, 'createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
       this.$store.dispatch('exerciseDocument/tested');
       this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
     },

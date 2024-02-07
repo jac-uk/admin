@@ -1,3 +1,4 @@
+import { query, collection, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -7,14 +8,15 @@ export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      let firestoreRef = firestore
-        .collection('applications')
-        .where('exerciseId', '==', params.exerciseId);
+      let firestoreRef = query(
+        collection(firestore, 'applications'),
+        where('exerciseId', '==', params.exerciseId)
+      );
       if (params.status) {
-        firestoreRef = firestoreRef.where('status', '==', params.status);
+        firestoreRef = query(firestoreRef, where('status', '==', params.status));
       }
       if (params.characterChecks) {
-        firestoreRef = firestoreRef.where('characterChecks.declaration', '==', params.characterChecks);
+        firestoreRef = query(firestoreRef, where('characterChecks.declaration', '==', params.characterChecks));
       }
 
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
