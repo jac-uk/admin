@@ -44,12 +44,14 @@ const module = {
 
         // check if user document exists
         let userDoc = await dispatch('users/getById', user.uid, { root: true });
+        console.log('userDoc', userDoc);
         // check if new user
         // 1. user does not exist in authentication and firestore
         // 2. user exists in authentication but not in firestore
         if (!userDoc) {
           // check if user has been invited
           const userInvitation = await dispatch('userInvitations/getByEmail', { email: user.email, status: 'pending' }, { root: true });
+          console.log('userInvitation', userInvitation);
           if (!userInvitation) throw new Error('not-invited');
 
           // create user document
@@ -65,6 +67,7 @@ const module = {
             uid: user.uid || '',
           };
           userDoc = await dispatch('users/create', { id: user.uid, data: newUser }, { root: true });
+          console.log('userDoc', userDoc);
           // set user role in custom claims
           await httpsCallable(functions, 'updateUserCustomClaims')({ userId: user.uid });
           // mark user invitation as completed
@@ -90,6 +93,7 @@ const module = {
         await dispatch('bindCurrentUser', user.uid);
         return true;
       } catch (error) {
+        console.error(error);
         let errorMessage = '';
         if (error.message === 'invalid-email') {
           errorMessage = 'This site is restricted to employees of the Judicial Appointments Commission';
