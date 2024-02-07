@@ -121,8 +121,9 @@
       <div class="govuk-grid-row govuk-!-padding-2 text-right float-right">
         Show actioned candidates
         <Checkbox
-          id="welsh-posts"
+          id="show-actioned"
           v-model="showActioned"
+          @change="$refs.issuesTable.reload()"
         />
       </div>
 
@@ -139,7 +140,6 @@
         >
           <template #row="{row, index}">
             <TableCell
-              v-if="hasStatus(row) && !isActioned(row) || showActioned && (isActioned(row) && hasStatus(row))"
               :title="tableColumns[0].title"
             >
               <div class="govuk-grid-row">
@@ -185,7 +185,7 @@
                     class="govuk-link print-none"
                     target="_blank"
                   >
-                    View application
+                    {{ row.id }}
                   </RouterLink>
                 </div>
               </div>
@@ -453,7 +453,7 @@ export default {
   mixins: [permissionMixin],
   data() {
     const reasonableAdjustmentsStatusOptions = ['approved', 'denied'];
-    const reasonableAdjustmentsActivities = ['qualifying-test', 'scenario-test', 'selection-day'];
+    const reasonableAdjustmentsActivities = ['qualifying-test', 'scenario-test', 'selection-day', 'Other'];
     const reasonableAdjustmentsTimeAllocations = [
       '5% additional time',
       '10% additional time',
@@ -548,6 +548,10 @@ export default {
       if (this.candidateStatus !== 'all') {
         firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
       }
+      if (!this.showActioned) {
+        firestoreRef = firestoreRef.where('candidate.reasonableAdjustmentsActioned', '==', false);
+      }
+
       params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
       if (firestoreRef) {
