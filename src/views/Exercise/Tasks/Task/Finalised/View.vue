@@ -229,7 +229,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { arrayRemove, arrayUnion } from '@firebase/firestore';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import SetPassOrFail from './SetPassOrFail.vue';
@@ -409,9 +409,9 @@ export default {
       if (!this.passMark) return false;
       const data = {};
       if (params.outcome === this.defaultOutcome) {
-        data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = firebase.firestore.FieldValue.arrayRemove(...this.selectedItems);
+        data[`overrides.${this.getOppositeOutcome(params.outcome)}`] = arrayRemove(...this.selectedItems);
       } else {
-        data[`overrides.${params.outcome}`] = firebase.firestore.FieldValue.arrayUnion(...this.selectedItems);
+        data[`overrides.${params.outcome}`] = arrayUnion(...this.selectedItems);
       }
       await this.$store.dispatch('task/update', { exerciseId: this.exercise.id, type: this.type, data: data } );
     },

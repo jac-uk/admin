@@ -124,7 +124,7 @@
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
-            Uploaded self assessment
+            Uploaded self assessment with competencies
           </dt>
           <dd class="govuk-summary-list__value">
             <div v-if="application.uploadedSelfAssessment">
@@ -135,22 +135,28 @@
                 :title="application.uploadedSelfAssessment"
               />
             </div>
-            <span v-else>
-              No information
-              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
-                (not asked)
-              </span>
-            </span>
-            <div v-if="editable">
-              <FileUpload
-                id="self-assessment-upload"
-                ref="self-assessment"
-                v-model="application.uploadedSelfAssessment"
-                name="self-assessment"
-                :path="uploadPath"
-                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
-              />
+            <span v-else>Not yet received</span>
+          </dd>
+        </div>
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Self assessment content
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div
+              v-if="application.uploadedSelfAssessment"
+            >
+              <div
+                v-for="(answer, i) in application.uploadedSelfAssessmentContent"
+                :key="i"
+              >
+                {{ answer }}
+                <hr>
+              </div>
             </div>
+            <span v-else>Not yet received</span>
           </dd>
         </div>
       </dl>

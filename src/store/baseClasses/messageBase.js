@@ -1,11 +1,12 @@
 import { firestore } from '@/firebase';
-import firebase from '@firebase/app';
+import { doc, setDoc, updateDoc, deleteDoc ,collection, query, where, orderBy, limit as firestoreLimit, serverTimestamp } from '@firebase/firestore';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';
 
-const collection = firestore.collection('messages');
+const collectionName = 'message';
+const collectionRef = collection(firestore, collectionName);
 
 export default class {
   state() {
@@ -20,18 +21,18 @@ export default class {
   actions() {
     return {
       bind: firestoreAction(({ bindFirestoreRef }, { params, limit }) => {
-        let firestoreRef = collection;
+        let queryRef = collectionRef;
         for (const param of params) {
           const field = param[0];
           const operator = param[1];
           const val = param[2];
-          firestoreRef = firestoreRef.where(field, operator, val);
+          queryRef = query(queryRef, where(field, operator, val));
         }
-        firestoreRef = firestoreRef.orderBy('createdAt');
+        queryRef = query(queryRef, orderBy('createdAt'));
         if (limit) {
-          firestoreRef = firestoreRef.limit(limit);
+          queryRef = query(queryRef, firestoreLimit(limit));
         }
-        return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
+        return bindFirestoreRef('records', queryRef, { serialize: vuexfireSerialize });
       }),
       unbind: firestoreAction(({ unbindFirestoreRef }) => {
         return unbindFirestoreRef('records');
@@ -39,7 +40,7 @@ export default class {
       save: async (context, { data, id }) => {
         const isUpdate = id ? true : false;
         if (isUpdate) {
-          data.lastUpdatedAt = firebase.firestore.FieldValue.serverTimestamp();
+          data.lastUpdatedAt = serverTimestamp();
           data.lastUpdatedBy = {
             userId: context.rootState.auth.currentUser.uid,
             displayName: context.rootState.auth.currentUser.displayName,
@@ -48,10 +49,10 @@ export default class {
             const status = data.status;
 
             // Make an entry in the statusLog
-            data[`statusLog.${status}`] = firebase.firestore.FieldValue.serverTimestamp();
+            data[`statusLog.${status}`] = serverTimestamp();
           }
         } else {
-          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          data.createdAt = serverTimestamp();
           data.createdBy = {
             userId: context.rootState.auth.currentUser.uid,
             displayName: context.rootState.auth.currentUser.displayName,
@@ -61,20 +62,21 @@ export default class {
 
             // Make an entry in the statusLog
             data.statusLog = {
-              [status]: firebase.firestore.FieldValue.serverTimestamp(),
+              [status]: serverTimestamp(),
             };
           }
         }
 
+        const docRef = doc(firestore, collectionName, id);
         if (isUpdate) {
-          await collection.doc(id).update(data);
+          await updateDoc(docRef, data);
         } else {
-          await collection.add(data);
+          await setDoc(docRef, data);
         }
       },
       delete: async (context, { id }) => {
-        const ref = collection.doc(id);
-        await ref.delete();
+        const docRef = doc(firestore, collectionName, id);
+        await deleteDoc(docRef);
       },
       markAsRead: async (context, id) => {
         await context.dispatch('save', {

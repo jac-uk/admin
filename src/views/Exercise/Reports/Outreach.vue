@@ -339,6 +339,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -420,8 +422,9 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
-      .onSnapshot((snap) => {
+    this.unsubscribe = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/outreach`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
@@ -435,7 +438,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'generateOutreachReport')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }

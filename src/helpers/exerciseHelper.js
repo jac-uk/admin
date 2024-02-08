@@ -267,7 +267,7 @@ function getProcessingExitStage(exercise, processingStage) {
       return EXERCISE_STAGE.RECOMMENDED;
     case PROCESSING_STAGE.HANDOVER:
       return EXERCISE_STAGE.HANDOVER;
-    }  
+    }
   }
 }
 
@@ -349,8 +349,8 @@ function getTaskCurrentStep(exercise, taskStatus) {
 function getTaskSteps(exercise, taskType, task) {
   const statuses = taskStatuses(taskType);
   const steps = ['new'].concat(statuses).map(status => {
-    return { 
-      id: status, 
+    return {
+      id: status,
       ...TASK_STEPS[status],
     };
   });
@@ -476,7 +476,7 @@ function previousTaskType(exercise, type) {
 function taskEntryStatus(exercise, type) {
   let status = '';
   if (!exercise) return status;
-  if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SECOND_STAGE_INVITED;  // TODO: remove this eventually: override entry status for EMP tie-breakers
+  if (type === TASK_TYPE.EMP_TIEBREAKER) return APPLICATION_STATUS.SCC_TO_RECONSIDER;  // TODO: remove this eventually: override entry status for EMP tie-breakers
   const prevTaskType = previousTaskType(exercise, type);
   if (prevTaskType) {
     status = `${prevTaskType}Passed`;
@@ -771,7 +771,6 @@ function exerciseApplicationParts(data, newValues) {
     applicationParts.push('reasonableLengthOfService');
   }
   if (isNonLegal(exercise)) {
-    applicationParts.push('relevantQualifications');
     if (exercise.previousJudicialExperienceApply) {
       applicationParts.push('judicialExperience');
     }
@@ -961,13 +960,13 @@ function availableStages(exercise) {
     stages.push(EXERCISE_STAGE.SHORTLISTED);
     stages.push(EXERCISE_STAGE.SELECTABLE);
     stages.push(EXERCISE_STAGE.RECOMMENDED);
-    stages.push(EXERCISE_STAGE.HANDOVER);      
+    stages.push(EXERCISE_STAGE.HANDOVER);
   } else {
     stages.push(EXERCISE_STAGE.REVIEW);
     stages.push(EXERCISE_STAGE.SHORTLISTED);
     stages.push(EXERCISE_STAGE.SELECTED);
     stages.push(EXERCISE_STAGE.RECOMMENDED);
-    stages.push(EXERCISE_STAGE.HANDOVER);  
+    stages.push(EXERCISE_STAGE.HANDOVER);
   }
   return stages;
 }
@@ -985,7 +984,7 @@ function getPreviousStage(exercise, currentStage) {
       return EXERCISE_STAGE.SELECTABLE;
     case EXERCISE_STAGE.HANDOVER:
       return EXERCISE_STAGE.RECOMMENDED;
-    }      
+    }
   } else {
     switch (currentStage) {
     case EXERCISE_STAGE.REVIEW:
@@ -999,7 +998,7 @@ function getPreviousStage(exercise, currentStage) {
     case EXERCISE_STAGE.HANDOVER:
       return EXERCISE_STAGE.RECOMMENDED;
     }
-  }  
+  }
 }
 
 function getNextStage(exercise, currentStage, newStatus) {
@@ -1029,7 +1028,7 @@ function getNextStage(exercise, currentStage, newStatus) {
           return EXERCISE_STAGE.HANDOVER;
         }
       }
-    }  
+    }
   } else {
     const stages = availableStages(exercise);
     const currentStageIndex = stages.indexOf(currentStage);
@@ -1063,7 +1062,7 @@ function getStagePassingStatuses(exercise, stage) {
       return [APPLICATION_STATUS.PASSED_SELECTION];
     case EXERCISE_STAGE.RECOMMENDED:
       return [APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT, APPLICATION_STATUS.APPROVED_FOR_FUTURE_APPOINTMENT];
-    }  
+    }
   }
 }
 
@@ -1099,7 +1098,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
         APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
         APPLICATION_STATUS.WITHDRAWN,
         APPLICATION_STATUS.SELECTION_PASSED,
       ];
@@ -1148,7 +1147,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
         APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
         APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,    
+        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
         APPLICATION_STATUS.SELECTION_PASSED,
         APPLICATION_STATUS.PASSED_RECOMMENDED,
         APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
@@ -1161,7 +1160,7 @@ function availableStatuses(exercise, stage) {
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
       ];
       return statuses;
-    }    
+    }
   } else {
     switch (stage) {
     case EXERCISE_STAGE.REVIEW:
@@ -1238,13 +1237,13 @@ function shortlistingStatuses(exercise) {
       if (exercise._processingVersion >= 2) {
         statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_PASSED);
         statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_FAILED);
-        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED);  
+        statuses.push(APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED);
       } else {
         statuses.push(APPLICATION_STATUS.SUBMITTED_FIRST_TEST);
         statuses.push(APPLICATION_STATUS.FAILED_FIRST_TEST);
-        statuses.push(APPLICATION_STATUS.PASSED_FIRST_TEST);  
+        statuses.push(APPLICATION_STATUS.PASSED_FIRST_TEST);
         statuses.push(APPLICATION_STATUS.NO_TEST_SUBMITTED);
-        statuses.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);        
+        statuses.push(APPLICATION_STATUS.TEST_SUBMITTED_OVER_TIME);
       }
     }
     // scenario test

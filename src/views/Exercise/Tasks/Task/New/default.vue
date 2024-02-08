@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { btnNext } from '../helper';
 import { TASK_TYPE } from '@/helpers/constants';
 import { taskEntryStatus, previousTaskType, getTimelineTasks, getTaskSteps } from '@/helpers/exerciseHelper';
@@ -175,7 +176,7 @@ export default {
       if (this.taskIsOverdue) {
         params.dataOnly = true;
       }
-      await functions.httpsCallable('createTask')(params);
+      await httpsCallable(functions, 'createTask')(params);
       this.btnNext();
     },
   },
