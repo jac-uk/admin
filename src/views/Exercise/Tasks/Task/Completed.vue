@@ -1,19 +1,24 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-          {{ $filters.lookup(type) }}
-        </h1>
-      </div>
-      <div class="text-right govuk-grid-column-one-third">
-        <button
-          v-show="showEmailButton"
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+        {{ $filters.lookup(type) }}
+      </h1>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="text-right">
+        <ActionButton
+          v-if="showEmailButton && hasPermissions([
+            PERMISSIONS.applications.permissions.canReadApplications.value,
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+          ])"
+          type="primary"
           class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
-          @click.prevent="notifyCandidates"
+          :action="notifyCandidates"
         >
-          Email
-        </button>
+          Send report notfication
+        </ActionButton>
+
         <FullScreenButton />
       </div>
     </div>
@@ -120,6 +125,8 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
 import { functions } from '@/firebase';
 import { TASK_TYPE } from '@/helpers/constants';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -127,7 +134,9 @@ export default {
     TableCell,
     FullScreenButton,
     ProgressBar,
+    ActionButton,
   },
+  mixins: [permissionMixin],
   beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
@@ -202,11 +211,10 @@ export default {
     },
   },
   methods: {
-    async notifyCandidates() {
-
-      console.log(`exerciseId: ${this.exerciseId}, type: ${this.type}`);
-
-      await functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
+    notifyCandidates() {
+      // Dont do this async as we just want to fire and forget
+      functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
+      return true;
     },
   },
 };
