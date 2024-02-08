@@ -491,7 +491,11 @@ export default {
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
       if (this.candidateStatus === 'all') {
-        firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION);
+        if (this.exercise?._processingVersion >= 2) {
+          firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDRAWN); // TODO: need to confirm the status
+        } else {
+          firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION);
+        }
         localParams.orderBy = ['status', 'documentId'];
       } else {
         firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
