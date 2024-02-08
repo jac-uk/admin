@@ -515,11 +515,15 @@ function applicationCurrentStep(exercise, application) {
     case 'review':
       if (hasQualifyingTests(exercise)) {
         if (hasScenarioTest(exercise)) {
-          if (application._processing.status === 'passedScenarioTest') {
+          if (exercise._processingVersion >= 2 && application._processing.status === APPLICATION_STATUS.SCENARIO_TEST_PASSED) {
+            currentStep = 'passedTests';
+          } else if (application._processing.status === APPLICATION_STATUS.PASSED_SCENARIO_TEST) {
             currentStep = 'passedTests';
           }
         } else {
-          if (application._processing.status === 'passedFirstTest') {
+          if (exercise._processingVersion >= 2 && application._processing.status === APPLICATION_STATUS.QUALIFYING_TEST_PASSED) {
+            currentStep = 'passedTests';
+          } else if (application._processing.status === APPLICATION_STATUS.PASSED_FIRST_TEST) {
             currentStep = 'passedTests';
           }
         }
