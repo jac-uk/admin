@@ -1,28 +1,29 @@
 
 import { lookup } from '@/filters';
 import _cloneDeep from 'lodash/cloneDeep';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 const REPORTS = {
   ApplicationStageDiversity: {
     labels: [
       {
-        key: 'applied',
+        key: EXERCISE_STAGE.APPLIED,
         title: 'Applied',
       },
       {
-        key: 'shortlisted',
+        key: EXERCISE_STAGE.SHORTLISTED,
         title: 'Shortlisted',
       },
       {
-        key: 'selected',
+        key: EXERCISE_STAGE.SELECTED,
         title: 'Selected',
       },
       {
-        key: 'recommended',
+        key: EXERCISE_STAGE.RECOMMENDED,
         title: 'Recommended',
       },
       {
-        key: 'handover',
+        key: EXERCISE_STAGE.HANDOVER,
         title: 'Handover',
       },
     ],
@@ -163,9 +164,9 @@ const getReports = (applicationOpenDate, exerciseRef, processingVersion) => {
 
   if (processingVersion >= 2) {
     mergedReports.ApplicationStageDiversity.labels = REPORTS.ApplicationStageDiversity.labels.map(item => {
-      if (item.key === 'selected') {
+      if (item.key === EXERCISE_STAGE.SELECTED) {
         return {
-          key: 'selectable',
+          key: EXERCISE_STAGE.SELECTABLE,
           title: 'Selectable',
         };
       }

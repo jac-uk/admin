@@ -563,6 +563,7 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
@@ -576,7 +577,7 @@ export default {
     return {
       diversity: null,
       unsubscribe: null,
-      activeTab: 'applied',
+      activeTab: EXERCISE_STAGE.APPLIED,
     };
   },
   computed: {
@@ -589,34 +590,34 @@ export default {
     tabs() {
       const tabs = [
         {
-          ref: 'applied',
+          ref: EXERCISE_STAGE.APPLIED,
           title: 'Applied',
         },
         {
-          ref: 'shortlisted',
+          ref: EXERCISE_STAGE.SHORTLISTED,
           title: 'Shortlisted',
         },
       ];
 
       if (this.exercise?._processingVersion >= 2) {
         tabs.push({
-          ref: 'selectable',
+          ref: EXERCISE_STAGE.SELECTABLE,
           title: 'Selectable',
         });
       } else {
         tabs.push({
-          ref: 'selected',
+          ref: EXERCISE_STAGE.SELECTED,
           title: 'Selected',
         });
       }
 
       tabs.push(
         {
-          ref: 'recommended',
+          ref: EXERCISE_STAGE.RECOMMENDED,
           title: 'Recommended',
         },
         {
-          ref: 'handover',
+          ref: EXERCISE_STAGE.HANDOVER,
           title: 'Handover',
         },
         {
@@ -663,11 +664,11 @@ export default {
     gatherReportData(stage) {
       const data = [];
       let stages = [
-        'applied',
-        'shortlisted',
-        this.exercise?._processingVersion >= 2 ? 'selectable' : 'selected',
-        'recommended',
-        'handover',
+        EXERCISE_STAGE.APPLIED,
+        EXERCISE_STAGE.SHORTLISTED,
+        this.exercise?._processingVersion >= 2 ? EXERCISE_STAGE.SELECTABLE : EXERCISE_STAGE.SELECTED,
+        EXERCISE_STAGE.RECOMMENDED,
+        EXERCISE_STAGE.HANDOVER,
       ];
       if (stage) {
         stages = [stage];
