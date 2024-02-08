@@ -92,6 +92,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import permissionMixin from '@/permissionMixin';
+import { APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'StatutoryConsultation',
@@ -145,7 +146,7 @@ export default {
       let firestoreRef = query(
         collection(firestore, 'applicationRecords'),
         where('exercise.id', '==', this.exercise.id),
-        where('status', '==', 'invitedToSelectionDay')
+        where('status', '==', APPLICATION_STATUS.INVITED_TO_SELECTION_DAY)
       );
       params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);

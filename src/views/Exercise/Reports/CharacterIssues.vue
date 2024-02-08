@@ -346,7 +346,7 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY } from '@/helpers/constants';
+import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
@@ -491,7 +491,7 @@ export default {
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
       if (this.candidateStatus === 'all') {
-        firestoreRef = where(firestoreRef, 'status', '!=', 'withdrewApplication');
+        firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION);
         localParams.orderBy = ['status', 'documentId'];
       } else {
         firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
