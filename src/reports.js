@@ -8,23 +8,23 @@ const REPORTS = {
     labels: [
       {
         key: EXERCISE_STAGE.APPLIED,
-        title: 'Applied',
+        title: lookup(EXERCISE_STAGE.APPLIED),
       },
       {
         key: EXERCISE_STAGE.SHORTLISTED,
-        title: 'Shortlisted',
+        title: lookup(EXERCISE_STAGE.SHORTLISTED),
       },
       {
         key: EXERCISE_STAGE.SELECTED,
-        title: 'Selected',
+        title: lookup(EXERCISE_STAGE.SELECTED),
       },
       {
         key: EXERCISE_STAGE.RECOMMENDED,
-        title: 'Recommended',
+        title: lookup(EXERCISE_STAGE.RECOMMENDED),
       },
       {
         key: EXERCISE_STAGE.HANDOVER,
-        title: 'Handover',
+        title: lookup(EXERCISE_STAGE.HANDOVER),
       },
     ],
     legend: {
@@ -167,7 +167,7 @@ const getReports = (applicationOpenDate, exerciseRef, processingVersion) => {
       if (item.key === EXERCISE_STAGE.SELECTED) {
         return {
           key: EXERCISE_STAGE.SELECTABLE,
-          title: 'Selectable',
+          title: lookup(EXERCISE_STAGE.SELECTABLE),
         };
       }
       return item;

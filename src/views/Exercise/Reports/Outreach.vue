@@ -385,34 +385,34 @@ export default {
       const tabs = [
         {
           ref: EXERCISE_STAGE.APPLIED,
-          title: 'Applied',
+          title: this.$filters.lookup(EXERCISE_STAGE.APPLIED),
         },
         {
           ref: EXERCISE_STAGE.SHORTLISTED,
-          title: 'Shortlisted',
+          title: this.$filters.lookup(EXERCISE_STAGE.SHORTLISTED),
         },
       ];
 
       if (this.exercise?._processingVersion >= 2) {
         tabs.push({
           ref: EXERCISE_STAGE.SELECTABLE,
-          title: 'Selectable',
+          title: this.$filters.lookup(EXERCISE_STAGE.SELECTABLE),
         });
       } else {
         tabs.push({
           ref: EXERCISE_STAGE.SELECTED,
-          title: 'Selected',
+          title: this.$filters.lookup(EXERCISE_STAGE.SELECTED),
         });
       }
 
       tabs.push(
         {
           ref: EXERCISE_STAGE.RECOMMENDED,
-          title: 'Recommended',
+          title: this.$filters.lookup(EXERCISE_STAGE.RECOMMENDED),
         },
         {
           ref: EXERCISE_STAGE.HANDOVER,
-          title: 'Handover',
+          title: this.$filters.lookup(EXERCISE_STAGE.HANDOVER),
         },
         {
           ref: 'summary',
