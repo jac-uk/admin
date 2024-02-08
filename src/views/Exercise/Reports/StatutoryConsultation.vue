@@ -143,10 +143,17 @@ export default {
   },
   methods: {
     async getTableData(params) {
+      const statuses = [];
+      if (this.exercise?._processingVersion >= 2) {
+        statuses.push(APPLICATION_STATUS.SHORTLISTING_PASSED, APPLICATION_STATUS.SHORTLISTING_FAILED); // TODO: need to confirm the status
+      } else {
+        statuses.push(APPLICATION_STATUS.INVITED_TO_SELECTION_DAY);
+      }
+
       let firestoreRef = query(
         collection(firestore, 'applicationRecords'),
         where('exercise.id', '==', this.exercise.id),
-        where('status', '==', APPLICATION_STATUS.INVITED_TO_SELECTION_DAY)
+        where('status', 'in', statuses)
       );
       params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
