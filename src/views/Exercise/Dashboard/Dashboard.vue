@@ -423,7 +423,7 @@ export default {
         EXERCISE_STAGE.RECOMMENDED,
         EXERCISE_STAGE.HANDOVER,
       ];
-      data.push(['Statistic'].concat(stages));
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];

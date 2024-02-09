@@ -470,7 +470,7 @@ export default {
       if (stage) {
         stages = [stage];
       }
-      data.push(['Statistic'].concat(stages));
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];
