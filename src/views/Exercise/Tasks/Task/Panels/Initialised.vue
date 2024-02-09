@@ -1,23 +1,33 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />
+
     <p
       v-if="hasApplicationsWithoutPanels"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       Please create panels and allocate applications to those panels.
     </p>
     <p
       v-else-if="hasPanelsWithoutPanellists"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       Please ensure all panels have panellists.
     </p>
     <p
       v-else
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       You may now activate this {{ $filters.lookup(type) }}.
     </p>
@@ -193,8 +203,10 @@
 </template>
 
 <script>
-// import { functions } from '@/firebase';
 import { beforeRouteEnter, btnNext } from '../helper';
+import { getTaskSteps } from '@/helpers/exerciseHelper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -213,6 +225,8 @@ export default {
     TitleBar,
     SelectPanel,
     ActionButton,
+    FullScreenButton,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -244,6 +258,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     totalApplications() {
       return this.task ? this.task._stats.totalApplications : 0;
@@ -281,11 +299,13 @@ export default {
   methods: {
     btnNext,
     async btnActivate() {
-      await functions.httpsCallable('updateTask')({
+      const response = await functions.httpsCallable('updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });
-      this.btnNext();
+      if (response && response.data && response.data.success) {
+        this.btnNext();
+      }
     },
     getTableData(params) {
       this.$store.dispatch(

@@ -1,30 +1,39 @@
 <template>
   <div>
-    <h1 class="govuk-heading-l">
-      {{ $filters.lookup(type) }}
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+          {{ $filters.lookup(type) }}
+        </h1>
+      </div>
+      <div class="text-right govuk-grid-column-one-half">
+        <FullScreenButton />
+      </div>
+    </div>
+
+    <ProgressBar :steps="taskSteps" />
 
     <p
       v-if="!hasTaskStarted"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} scoring will start on {{ $filters.formatDate(task.startDate) }}
     </p>
     <p
       v-else-if="!hasAllPanelsCompleted"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       {{ $filters.lookup(type) }} scoring has started and panels are providing scores.
     </p>
     <p
       v-else-if="isModerationRequired"
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       All panels have provided scores. Please select any applications that require moderation before continuing.
     </p>
     <p
       v-else
-      class="govuk-body-l"
+      class="govuk-body govuk-!-margin-bottom-4"
     >
       All panels have provided scores.
     </p>
@@ -344,12 +353,14 @@
 
 <script>
 import { beforeRouteEnter, btnNext } from '../helper';
+import FullScreenButton from '@/components/Page/FullScreenButton.vue';
+import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { PANEL_TYPES, PANEL_STATUS } from '../Panel/Constants';
-import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses } from '@/helpers/exerciseHelper';
+import { CAPABILITIES, SELECTION_CATEGORIES, availableStatuses, getTaskSteps } from '@/helpers/exerciseHelper';
 import { getScoreSheetTotal, GRADE_VALUES } from '@/helpers/taskHelper';
 import { functions } from '@/firebase';
 
@@ -359,6 +370,8 @@ export default {
     TableCell,
     TabsList,
     ActionButton,
+    FullScreenButton,
+    ProgressBar,
   },
   beforeRouteEnter: beforeRouteEnter,
   props: {
@@ -399,6 +412,10 @@ export default {
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
+    },
+    taskSteps() {
+      const steps = getTaskSteps(this.exercise, this.type, this.task);
+      return steps;
     },
     hasTaskStarted() {
       if (!this.task) return false;

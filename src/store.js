@@ -24,8 +24,8 @@ import candidateApplications from '@/store/candidateApplications';
 
 import tasks from '@/store/tasks/collection';
 import task from '@/store/tasks/document';
-import panels from '@/store/panels';
-// import panels from '@/store/panels/collection';
+import xpanels from '@/store/xpanels';  // TODO to be removed once panel export functionality moved across to Tasks/Task/Panel
+import panels from '@/store/panels/collection';
 import panel from '@/store/panels/document';
 import panellists from '@/store/panellists/collection';
 import panellist from '@/store/panellists/document';
@@ -75,9 +75,10 @@ const store = createStore({
     notes,
     notifications,
     panel,
+    panels,
     panellist,
     panellists,
-    panels,
+    xpanels,
     roles,
     services,
     task,

@@ -115,7 +115,7 @@ export default {
           email: this.email === null || this.email === undefined ? '' : this.email,
         },
       };
-      await this.$store.dispatch('panels/updateMembers', { ...data });
+      await this.$store.dispatch('xpanels/updateMembers', { ...data });
       // this.$store.dispatch('assessment/update', { data: data, id: this.$attrs.applicationId, AssessorNr: this.$attrs.AssessorNr });
       this.closeModal();
     },

@@ -416,10 +416,10 @@ function taskStatuses(taskType) { // also on DP
     case TASK_TYPE.SIFT:
     case TASK_TYPE.SELECTION_DAY:
       availableStatuses = [
+        TASK_STATUS.PANELS_INITIALISED,
+        TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.DATA_INITIALISED,
         TASK_STATUS.DATA_ACTIVATED,
-        // TASK_STATUS.PANELS_INITIALISED,
-        // TASK_STATUS.PANELS_ACTIVATED,
         TASK_STATUS.FINALISED,
         TASK_STATUS.COMPLETED,
       ];
