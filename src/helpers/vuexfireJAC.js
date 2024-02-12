@@ -20,8 +20,7 @@ const firestoreAction = (action) => {
 
       return new Promise((resolve) => {
         let unsubscribe = null;
-
-        if (ref.type === 'query') {
+        if (ref.type === 'query' || ref.type === 'collection') {
           // bind collection
           unsubscribe = onSnapshot(ref, (snapshot) => {
             const records = [];
@@ -46,7 +45,7 @@ const firestoreAction = (action) => {
           // bind document
           unsubscribe = onSnapshot(ref, (snap) => {
             let record = null;
-            if (snap.exists) {
+            if (snap.exists()) {
               record = options && options.serialize ? options.serialize(snap) : snap.data();
               commit('set', { name, value: record });
             }
