@@ -151,6 +151,7 @@
               <div
                 v-for="(answer, i) in application.uploadedSelfAssessmentContent"
                 :key="i"
+                style="white-space: pre-line;"
               >
                 {{ answer }}
                 <hr>
