@@ -1,21 +1,33 @@
 <template>
   <div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
-          {{ $filters.lookup(type) }}
-        </h1>
-      </div>
-      <div class="text-right govuk-grid-column-one-third">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-2">
+        {{ $filters.lookup(type) }}
+      </h1>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="text-right">
+        <ActionButton
+          v-if="showEmailButton && hasPermissions([
+            PERMISSIONS.applications.permissions.canReadApplications.value,
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+          ])"
+          type="primary"
+          class="govuk-button govuk-button--secondary govuk-!-margin-right-3"
+          :action="notifyCandidates"
+        >
+          Send report notfication
+        </ActionButton>
+
         <FullScreenButton />
       </div>
     </div>
 
-    <ProgressBar :steps="taskSteps" />    
+    <ProgressBar :steps="taskSteps" />
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <div 
+        <div
           v-if="totalApplications"
           class="panel govuk-!-margin-bottom-6 govuk-!-padding-4 background-light-grey"
         >
@@ -111,13 +123,20 @@ import ProgressBar from '@/components/Page/ProgressBar.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import _has from 'lodash/has';
+import { functions } from '@/firebase';
+import { TASK_TYPE } from '@/helpers/constants';
+import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import permissionMixin from '@/permissionMixin';
+
 export default {
   components: {
     Table,
     TableCell,
     FullScreenButton,
     ProgressBar,
+    ActionButton,
   },
+  mixins: [permissionMixin],
   beforeRouteEnter: beforeRouteEnter,
   props: {
     type: {
@@ -128,6 +147,9 @@ export default {
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    exerciseId() {
+      return this.exercise ? this.exercise.id : null;
     },
     task() {
       return this.$store.getters['tasks/getTask'](this.type);
@@ -178,6 +200,21 @@ export default {
     },
     failed() {
       return this.applicationOutcomes.filter(o => !o.pass);
+    },
+    showEmailButton() {
+      return [
+        TASK_TYPE.CRITICAL_ANALYSIS,
+        TASK_TYPE.QUALIFYING_TEST,
+        TASK_TYPE.SCENARIO,
+        TASK_TYPE.SITUATIONAL_JUDGEMENT,
+      ].includes(this.type);
+    },
+  },
+  methods: {
+    notifyCandidates() {
+      // Dont do this async as we just want to fire and forget
+      functions.httpsCallable('sendPublishedFeedbackReportNotifications')({ exerciseId: this.exerciseId, type: this.type });
+      return true;
     },
   },
 };
