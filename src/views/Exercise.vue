@@ -63,7 +63,7 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!exercise.isExternalVacancy && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+            v-if="!isAdvertTypeExternal && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
             class="govuk-link print-none"
             :to="{name: 'exercise-edit-name'}"
           >
@@ -94,7 +94,7 @@
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
           <SubNavigation
-            v-if="!exercise.isExternalVacancy && !hasJourney && subNavigation.length > 1"
+            v-if="!isAdvertTypeExternal && !hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
           />
         </div>
@@ -134,6 +134,7 @@ import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isAppr
 import permissionMixin from '@/permissionMixin';
 import { logEvent } from '@/helpers/logEvent';
 import { functions } from '@/firebase';
+import { ADVERT_TYPES } from '../helpers/constants';
 
 export default {
   name: 'ExerciseView',
@@ -176,6 +177,9 @@ export default {
     },
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
+    },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
     },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);

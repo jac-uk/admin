@@ -234,6 +234,9 @@ export default {
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
+    },
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
@@ -365,7 +368,7 @@ export default {
     },
   },
   created() {
-    if (this.exercise.isExternalVacancy) {
+    if (this.isAdvertTypeExternal) {
       this.$router.push({ name: 'exercise-external', params: { id: this.exercise.id } });
       return;
     }

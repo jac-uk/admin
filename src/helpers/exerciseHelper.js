@@ -604,19 +604,11 @@ function exerciseStates(exercise) {
 }
 function exerciseAdvertTypes(exercise) {
   if (!exercise) { return []; }
-  if (exercise.isExternalVacancy) {
-    return [ADVERT_TYPES.LISTING, ADVERT_TYPES.BASIC];
-  }
-  let advertTypes = [];
+  const advertTypes = [];
 
   Object.keys(ADVERT_TYPES).map(item => {
     advertTypes.push(ADVERT_TYPES[item]);
   });
-  // remove external advert type
-  if (exercise.advertType !== ADVERT_TYPES.EXTERNAL) {
-    advertTypes = advertTypes.filter((item) => item !== ADVERT_TYPES.EXTERNAL);
-  }
-
   return advertTypes;
 }
 function applicationContentSteps(data) {

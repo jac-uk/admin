@@ -360,7 +360,6 @@ export default {
       name: null,
       applicationOpenDate: null,
       applicationCloseDate: null,
-      isExternalVacancy: true,
       exerciseMailbox: null,
       welshPosts: false,
       roleSummary: '',
@@ -374,7 +373,7 @@ export default {
       immediateStart: null,
       futureStart: null,
       subscriberAlertsUrl: null,
-      advertType: ADVERT_TYPES.FULL,
+      advertType: ADVERT_TYPES.EXTERNAL,
       downloads: {
         jobDescriptions: [],
         termsAndConditions: [],
