@@ -259,7 +259,7 @@ export default {
       return subNavigation;
     },
     goBack() {
-      if (this.$route.name === 'exercise-overview') {
+      if (this.$route.name === 'exercise-overview' || (this.isAdvertTypeExternal && this.$route.name === 'exercise-external')) {
         return {
           name: 'exercises',
         };
