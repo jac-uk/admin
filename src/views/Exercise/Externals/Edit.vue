@@ -5,6 +5,9 @@
         <h2 class="govuk-heading-l">
           External Vacancy
         </h2>
+        <div class="text-right">
+          <BackLink class="govuk-!-margin-top-0 govuk-!-margin-bottom-0" />
+        </div>
 
         <ErrorSummary
           :errors="errors"
@@ -334,6 +337,7 @@ import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import UploadFiles from '@/components/ModalViews/UploadFiles.vue';
 import MultiFileUpload from '@/components/RepeatableFields/MultiFileUpload.vue';
 import { exerciseAdvertTypes } from '@/helpers/exerciseHelper';
+import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 
 export default {
   name: 'SummaryEdit',
@@ -352,6 +356,7 @@ export default {
     TextareaInput,
     Modal,
     UploadFiles,
+    BackLink,
   },
   extends: Form,
   mixins: [exerciseMixin],
