@@ -43,7 +43,7 @@
             >
               Details
             </dt>
-            
+
             <div
               v-else-if="key === 'judicialFunctions' && data[index].tasks.includes('judicial-functions')"
               style="border-bottom: none;"
@@ -184,7 +184,7 @@
                     :index="index"
                     :extension="'workingBasis'"
                     type="selection"
-                    :options="['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
+                    :options="workingBasisOptions"
                     :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
@@ -376,6 +376,7 @@ import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
+import { WORKING_BASIS } from '@/helpers/constants';
 
 export default {
   name: 'InformationReviewSectionRenderer',
@@ -438,6 +439,9 @@ export default {
         return true;
       }
       return false;
+    },
+    workingBasisOptions() {
+      return Object.values(WORKING_BASIS);
     },
   },
   methods: {

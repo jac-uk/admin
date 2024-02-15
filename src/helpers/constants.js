@@ -221,6 +221,13 @@ const DEFAULT_WORD_COUNT = {
   ADDITIONAL_SELECTION_CRITERIA: 250,
 };
 
+const WORKING_BASIS = {
+  FULL_TIME: 'full-time',
+  SALARIED_PART_TIME: 'salaried-part-time',
+  FEE_PAID: 'fee-paid',
+  VOLUNTARY: 'voluntary',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
@@ -239,7 +246,8 @@ export {
   OFFENCE_CATEGORY,
   ASSESSMENT_METHOD,
   APPLICATION_FORM_PARTS,
-  DEFAULT_WORD_COUNT
+  DEFAULT_WORD_COUNT,
+  WORKING_BASIS
 };
 
 // end
