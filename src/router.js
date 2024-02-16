@@ -22,6 +22,10 @@ import Exercise from '@/views/Exercise.vue';
 // Exercise Dashboard
 import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard.vue';
 
+// Exercise External (Vacancy)
+import ExerciseExternals from '@/views/Exercise/Externals/View.vue';
+import ExerciseExternalsEdit from '@/views/Exercise/Externals/Edit.vue';
+
 // Exercise details
 import ExerciseDetails from '@/views/Exercise/Details.vue';
 import ExerciseDetailsOverview from '@/views/Exercise/Details/Overview.vue';
@@ -247,7 +251,25 @@ const routes = [
         name: 'exercise-dashboard',
         meta: {
           requiresAuth: true,
-          title: 'Dashboard | Exercise Details',
+          title: 'Overview | External Vacancy',
+        },
+      },
+      {
+        path: 'externals/',
+        component: ExerciseExternals,
+        name: 'exercise-external',
+        meta: {
+          requiresAuth: true,
+          title: 'Edit | External Vacancy',
+        },
+      },
+      {
+
+        name: 'exercise-external-edit',
+        path: 'externals/edit',
+        component: ExerciseExternalsEdit,
+        meta: {
+          requiresAuth: true,
         },
       },
       {
@@ -563,7 +585,7 @@ const routes = [
                 },
               },
             ],
-          },          
+          },
         ],
       },
       {

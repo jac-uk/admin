@@ -234,6 +234,9 @@ export default {
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
     },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
+    },
     applicationCounts() {
       return applicationCounts(this.exercise);
     },
@@ -363,6 +366,12 @@ export default {
       const msg = `You can only approve exercises with the advertType '${ lookup(ADVERT_TYPES.FULL) }' or '${ lookup(ADVERT_TYPES.EXTERNAL) }'.`;
       return msg;
     },
+  },
+  created() {
+    if (this.isAdvertTypeExternal) {
+      this.$router.push({ name: 'exercise-external', params: { id: this.exercise.id } });
+      return;
+    }
   },
   methods: {
     async submitForApproval(note) {

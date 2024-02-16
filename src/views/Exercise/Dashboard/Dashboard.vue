@@ -148,6 +148,7 @@ import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'Dashboard',
@@ -194,6 +195,9 @@ export default {
     },
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
     },
     applicationOpenDate() {
       return this.exercise.applicationOpenDate;
@@ -367,6 +371,11 @@ export default {
     },
   },
   created() {
+    if (this.isAdvertTypeExternal) {
+      router.push('externals');
+      return;
+    }
+
     if (this.applicationCounts._total) {
       this.unsubscribe = onSnapshot(
         doc(firestore, `exercises/${this.exerciseId}/reports/diversity`),
