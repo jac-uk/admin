@@ -434,7 +434,7 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.applicationVersion === 2) {
+      if (this.applicationVersion >= 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
