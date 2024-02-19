@@ -41,7 +41,7 @@
     </div>
 
     <div
-      v-if="!isPanelView && exercise.locationQuestion"
+      v-if="!isPanelView && (exercise.locationQuestion || exercise.locationPreferences)"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -102,10 +102,50 @@
           </div>
         </dd>
       </dl>
+
+      <dl
+        v-else-if="exercise.locationPreferences"
+        class="govuk-summary-list"
+      >
+        <div
+          v-for="(item) in exercise.locationPreferences"
+          :key="item"
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key widerColumn">
+            {{ item.question }}
+          </dt>
+          <div
+            v-if="application.locationPreferences"
+            class="govuk-summary-list__value"
+          >
+            <span
+              class="govuk-hint"
+            >
+              {{ $filters.lookup(item.questionType) }}
+              {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
+              {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
+              {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
+              {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
+            </span>
+            <InformationReviewRenderer
+              :data="application.locationPreferences[item.question]"
+              field="locationPreferences"
+              :edit="editable"
+              :type="item.questionType"
+              :options="item.answers.map((ans) => ans.answer)"
+              :index="item.question"
+              :is-asked="isApplicationPartAsked('locationPreferences')"
+              :question-config="item"
+              @change-field="changePreferences"
+            />
+          </div>
+        </div>
+      </dl>
     </div>
 
     <div
-      v-if="!isPanelView && exercise.jurisdictionQuestion"
+      v-if="!isPanelView && (exercise.jurisdictionQuestion || exercise.jurisdictionPreferences)"
       class="govuk-!-margin-top-9"
     >
       <h2 class="govuk-heading-l">
@@ -113,6 +153,7 @@
       </h2>
 
       <dl
+        v-if="exercise.jurisdictionQuestion"
         class="govuk-summary-list"
       >
         <div class="govuk-summary-list__row">
@@ -334,6 +375,7 @@
 </template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
+// import QuestionRenderer from '@/components/Page/QuestionRenderer.vue';
 import Banner from '@jac-uk/jac-kit/components/Banner/Banner.vue';
 import { isApplicationPartAsked } from '@/helpers/exerciseHelper';
 
@@ -341,6 +383,7 @@ export default {
   name: 'PreferencesSummary',
   components: {
     InformationReviewRenderer,
+    // QuestionRenderer,
     Banner,
   },
   props: {
@@ -385,8 +428,11 @@ export default {
     },
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
+      // console.log(obj);
 
-      if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
+      if (['locationPreferences'].includes(obj.field)) {
+        changedObj[obj.index] = obj.change;
+      } else if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
         if (changedObj.length) {
           changedObj[obj.index].selection = obj.change;
         } else {
@@ -407,6 +453,7 @@ export default {
         ...changedObj ,
       };
 
+      // console.log(updatedApplication.locationPreferences);
       this.$emit('updateApplication', updatedApplication );
     },
     isApplicationPartAsked(part) {
