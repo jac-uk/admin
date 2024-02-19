@@ -148,7 +148,7 @@ import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
-import { ADVERT_TYPES } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Dashboard',
@@ -172,7 +172,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'applied',
+      activeTab: EXERCISE_STAGE.APPLIED,
       timelineSelected: 0,
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
@@ -231,7 +231,7 @@ export default {
       });
     },
     labels() {
-      return getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.labels;
+      return getReports(this.applicationOpenDate, this.exercise.referenceNumber, this.exercise._processingVersion).ApplicationStageDiversity.labels;
     },
     legend() {
       if (this.selectedDiversityReportType) {
@@ -424,8 +424,14 @@ export default {
     },
     gatherReportData() {
       const data = [];
-      const stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
-      data.push(['Statistic'].concat(stages));
+      const stages = [
+        EXERCISE_STAGE.APPLIED,
+        EXERCISE_STAGE.SHORTLISTED,
+        this.exercise?._processingVersion >= 2 ? EXERCISE_STAGE.SELECTABLE : EXERCISE_STAGE.SELECTED,
+        EXERCISE_STAGE.RECOMMENDED,
+        EXERCISE_STAGE.HANDOVER,
+      ];
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];

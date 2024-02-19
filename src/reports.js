@@ -1,29 +1,30 @@
 
 import { lookup } from '@/filters';
 import _cloneDeep from 'lodash/cloneDeep';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 const REPORTS = {
   ApplicationStageDiversity: {
     labels: [
       {
-        key: 'applied',
-        title: 'Applied',
+        key: EXERCISE_STAGE.APPLIED,
+        title: lookup(EXERCISE_STAGE.APPLIED),
       },
       {
-        key: 'shortlisted',
-        title: 'Shortlisted',
+        key: EXERCISE_STAGE.SHORTLISTED,
+        title: lookup(EXERCISE_STAGE.SHORTLISTED),
       },
       {
-        key: 'selected',
-        title: 'Selected',
+        key: EXERCISE_STAGE.SELECTED,
+        title: lookup(EXERCISE_STAGE.SELECTED),
       },
       {
-        key: 'recommended',
-        title: 'Recommended',
+        key: EXERCISE_STAGE.RECOMMENDED,
+        title: lookup(EXERCISE_STAGE.RECOMMENDED),
       },
       {
-        key: 'handover',
-        title: 'Handover',
+        key: EXERCISE_STAGE.HANDOVER,
+        title: lookup(EXERCISE_STAGE.HANDOVER),
       },
     ],
     legend: {
@@ -157,9 +158,22 @@ const post04012023SocialMobility = {
   title: `${lookup('parentsNotAttendedUniversity')}`,
 };
 
-const getReports = (applicationOpenDate, exerciseRef) => {
+const getReports = (applicationOpenDate, exerciseRef, processingVersion) => {
   const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(exerciseRef);
   const mergedReports = _cloneDeep(REPORTS);
+
+  if (processingVersion >= 2) {
+    mergedReports.ApplicationStageDiversity.labels = REPORTS.ApplicationStageDiversity.labels.map(item => {
+      if (item.key === EXERCISE_STAGE.SELECTED) {
+        return {
+          key: EXERCISE_STAGE.SELECTABLE,
+          title: lookup(EXERCISE_STAGE.SELECTABLE),
+        };
+      }
+      return item;
+    });
+  }
+
   if (applicationOpenDate > new Date('2023-04-01') && !usesPre01042023Questions) {
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity = [];
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity.push(post04012023SocialMobility);
