@@ -212,6 +212,7 @@
           class="application-details"
         >
           <div v-if="application && exercise">
+            <!--
             <PersonalDetailsSummary
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
@@ -234,6 +235,7 @@
               :is-asked="isApplicationPartAsked('equalityAndDiversitySurvey')"
               @update-application="changeApplication"
             />
+          -->
             <PreferencesSummary
               :application="application"
               :exercise="exercise"
@@ -241,6 +243,7 @@
               :is-panel-view="isPanelView"
               @update-application="changeApplication"
             />
+            <!--
             <QualificationsAndMembershipsSummary
               :application="application"
               :exercise="exercise"
@@ -273,6 +276,7 @@
               :editable="editable"
               @update-application="changeApplication"
             />
+            -->
           </div>
         </div>
 
