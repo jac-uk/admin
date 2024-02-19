@@ -190,7 +190,10 @@
                   />
                 </div>
               </div>
-              <div class="govuk-summary-list govuk-!-margin-0">
+              <div
+                v-if="data[index][key] && [WORKING_BASIS.FEE_PAID, WORKING_BASIS.VOLUNTARY].includes(data[index][key].workingBasis)"
+                class="govuk-summary-list govuk-!-margin-0"
+              >
                 <div
                   class="govuk-summary-list__key widerColumn"
                 >
@@ -424,6 +427,7 @@ export default {
   emits: ['changeField', 'changeTaskDetails', 'changeJudicialFunctions', 'addField', 'removeField'],
   data() {
     return {
+      WORKING_BASIS,
       currentIndex: null,
     };
   },
