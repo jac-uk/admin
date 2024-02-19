@@ -2,7 +2,7 @@ import { query, doc, writeBatch, collection, where, serverTimestamp } from '@fir
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { EXERCISE_STAGE } from '@jac-uk/jac-kit/helpers/constants';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
 const collectionName = 'applicationRecords';
@@ -19,7 +19,7 @@ export default {
       );
 
       if (params.where.length === 0) {
-        firestoreRef = query(firestoreRef, where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]));
+        firestoreRef = query(firestoreRef, where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTABLE, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]));
       }
 
       if (params.requested === true) {

@@ -60,3 +60,16 @@
 .modal__title {
   color: #ffffff;
 }
+
+/* Fix issue with background arrow image not being built correctly from MOJ Assets */
+.moj-button-menu__toggle-button--secondary {
+  padding-right: 26px;
+  &:after {
+    content: "\25bc";
+    font-size: 0.8em;
+    position: absolute;
+    right: 10px;
+    top: 11px;
+    background: none;
+  }
+}
