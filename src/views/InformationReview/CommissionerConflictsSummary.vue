@@ -9,7 +9,7 @@
       </h2>
 
       <dl
-        v-if="commissionerConflicts || editable"
+        v-if="commissionerConflicts.length || editable"
         class="govuk-summary-list"
       >
         <div
@@ -83,16 +83,19 @@ export default {
       return this.$store.getters['services/getCommissioners']();
     },
     commissionerConflicts() {
-      return Array.isArray(this.commissioners) && this.commissioners.map((commissioner) => {
-        const match = this.application?.additionalInfo?.commissionerConflicts.find((commissionerConflict) => {
-          return commissionerConflict.name === commissioner.name;
+      if (Array.isArray(this.commissioners)) {
+        return this.commissioners.map((commissioner) => {
+          const match = this.application?.additionalInfo?.commissionerConflicts?.find?.((commissionerConflict) => {
+            return commissionerConflict.name === commissioner.name;
+          });
+          return match ? match : {
+            name: commissioner.name,
+            hasRelationship: null,
+            details: null,
+          };
         });
-        return match ? match : {
-          name: commissioner.name,
-          hasRelationship: null,
-          details: null,
-        };
-      });
+      }
+      return [];
     },
   },
   methods: {
