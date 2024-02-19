@@ -8,7 +8,7 @@
       </div>
 
       <div
-        class="moj-page-header-actions__actions float-right"
+        class="moj-page-header-actions__actions float-right govuk-margin-left-10"
       >
         <div class="moj-button-menu">
           <div class="moj-button-menu__wrapper">
@@ -62,11 +62,12 @@
     </div>
 
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-column-full-width">
         <div class="govuk-button-group">
           <Select
             id="exercise-stage"
             v-model="exerciseStage"
+            label="Application Status"
             class="govuk-!-margin-right-2"
           >
             <option value="all">
@@ -98,33 +99,31 @@
               {{ $filters.lookup(item) }}
             </option>
           </Select>
-        </div>
-      </div>
-      <div class="govuk-grid-column-one-third text-right">
-        <Select
-          id="reasonalbe-adjustments-status-filter"
-          v-model="filterStatus"
-          class="govuk-!-margin-right-2"
-        >
-          <option value="all">
-            All
-          </option>
-          <option
-            v-for="status in reasonableAdjustmentsStatusOptions"
-            :key="status"
-            :value="status"
+          <Select
+            id="reasonalbe-adjustments-status-filter"
+            v-model="filterStatus"
+            class="govuk-!-margin-right-2"
+            label="RA Approval Status"
           >
-            {{ $filters.lookup(status) }}
-          </option>
-        </Select>
-      </div>
-      <div class="govuk-grid-row govuk-!-padding-2 text-right float-right">
-        Show actioned candidates
-        <Checkbox
-          id="show-actioned"
-          v-model="showActioned"
-          @change="$refs.issuesTable.reload()"
-        />
+            <option value="all">
+              All
+            </option>
+            <option
+              v-for="status in reasonableAdjustmentsStatusOptions"
+              :key="status"
+              :value="status"
+            >
+              {{ $filters.lookup(status) }}
+            </option>
+          </Select>
+          <Checkbox
+            id="show-actioned"
+            v-model="showActioned"
+            class="govuk-!-margin-right-2"
+            label="Show actioned candidates"
+            @change="$refs.issuesTable.reload()"
+          />
+        </div>
       </div>
 
       <div class="govuk-grid-column-full govuk-!-margin-0">
@@ -186,7 +185,7 @@
                   </strong>
                   <br>
                   <RouterLink
-                    :to="{name: 'exercise-application', params: { applicationId: row.id }, query: { tab: 'issues' } }"
+                    :to="{name: 'exercise-application', params: { applicationId: row.id } }"
                     class="govuk-link print-none"
                     target="_blank"
                   >
