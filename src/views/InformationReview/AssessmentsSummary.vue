@@ -145,16 +145,18 @@
             Self assessment content
           </dt>
           <dd class="govuk-summary-list__value">
-            <div
-              v-if="application.uploadedSelfAssessment"
-            >
+            <div v-if="selfAssessmentWordLimits.length && application.uploadedSelfAssessment">
               <div
-                v-for="(answer, i) in application.uploadedSelfAssessmentContent"
+                v-for="(item, i) in selfAssessmentWordLimits"
                 :key="i"
                 style="white-space: pre-line;"
               >
-                {{ answer }}
-                <hr>
+                <strong>
+                  {{ item.question }}
+                </strong>
+                <br>
+                {{ application.uploadedSelfAssessmentContent[i] || '' }}
+                <hr v-if="i !== selfAssessmentWordLimits.length - 1">
               </div>
             </div>
             <span v-else>Not yet received</span>
@@ -328,6 +330,9 @@ export default {
     },
     applicationId() {
       return this.$route.params.applicationId;
+    },
+    selfAssessmentWordLimits() {
+      return this.exercise.selfAssessmentWordLimits || [];
     },
   },
   methods: {

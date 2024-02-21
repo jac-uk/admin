@@ -1,7 +1,14 @@
 <template>
   <div>
     <TextField
-      id="word-limit"
+      :id="`assessment-question-${index + 1}`"
+      v-model="row.question"
+      input-class="govuk-input--width-5 govuk-!-margin-10"
+      :hint="`What is the question ${index + 1} of this assessment?`"
+      type="text"
+    />
+    <TextField
+      :id="`assessment-question-word-limit-${index + 1}`"
       v-model="row.wordLimit"
       input-class="govuk-input--width-5 govuk-!-margin-10"
       :hint="`What is the word limit for question ${index + 1} of this assessment?`"
