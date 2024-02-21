@@ -18,7 +18,7 @@
         <hr>
       </div>
       <dl
-        v-else-if="isApplicationVersionGreaterThan1"
+        v-else-if="isVersion2"
         class="govuk-summary-list"
       >
         <div>
@@ -77,8 +77,8 @@ export default {
   },
   emits: ['updateApplication'],
   computed: {
-    isApplicationVersionGreaterThan1() {
-      return this.version > 1;
+    isVersion2() {
+      return this.version === 2;
     },
     applicationId() {
       return this.$route.params.applicationId;
@@ -94,7 +94,7 @@ export default {
     },
     changeCharacterInfo(obj) {
       let myCharacterInfo;
-      if (this.isApplicationVersionGreaterThan1) {
+      if (this.isVersion2) {
         myCharacterInfo = { ...this.characterInformation, ...obj };
         this.$emit('updateApplication', { characterInformationV2: myCharacterInfo });
       } else {
