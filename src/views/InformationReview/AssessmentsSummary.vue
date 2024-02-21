@@ -152,7 +152,7 @@
                 style="white-space: pre-line;"
               >
                 <strong>
-                  {{ section.question }}
+                  {{ `${i + 1}. ${section.question}` }}
                 </strong>
                 <br>
                 {{ application.uploadedSelfAssessmentContent[i] || '' }}
