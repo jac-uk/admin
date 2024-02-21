@@ -3,7 +3,7 @@
     <TextField
       :id="`assessment-question-${index + 1}`"
       v-model="row.question"
-      input-class="govuk-input--width-5 govuk-!-margin-10"
+      input-class="govuk-input--width-30 govuk-!-margin-10"
       :hint="`What is the question ${index + 1} of this assessment?`"
       type="text"
     />
