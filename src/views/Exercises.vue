@@ -92,7 +92,7 @@
                 type: 'singleCheckbox',
                 field: '_lateApplicationRequests',
                 inputLabel: 'Exercises with late application requests',
-                fieldComparator: 'arrayNotEmpty'
+                fieldComparator: 'arrayEmpty' // better to use `arrayEmpty` as we cannot use more than one '!=' filter
               },
             ]"
             :search-map="$searchMap.exercises"
