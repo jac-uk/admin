@@ -233,7 +233,6 @@ export default {
       this.$store.dispatch('exerciseCollection/showArchived');
     },
     getTableData(params) {
-      console.log('getTableData', params);
       this.$store.dispatch(
         'exerciseCollection/bind',
         params
