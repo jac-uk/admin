@@ -14,7 +14,7 @@
       label="Preference type"
     />
 
-    <div 
+    <div
       v-if="otherLinkedQuestions && otherLinkedQuestions.length"
     >
       <h3 class="govuk-heading-m govuk-!-margin-bottom-0">
@@ -74,7 +74,7 @@
           </template>
         </Select>
       </div>
-    </div>    
+    </div>
 
     <TextField
       id="working-preference-${type}-question"
@@ -82,6 +82,24 @@
       label="What question would you like to ask?"
       required
     />
+
+    <RadioGroup
+      :id="`working-preference-${type}-question-required_${index}`"
+      v-model="row.questionRequired"
+      label="Is this a required question?"
+      :messages="{
+        required: 'Please choose one of the following options'
+      }"
+    >
+      <RadioItem
+        :value="true"
+        label="Yes"
+      />
+      <RadioItem
+        :value="false"
+        label="No"
+      />
+    </RadioGroup>
 
     <RadioGroup
       :id="`working-preference-${type}-question-type_${index}`"
@@ -122,7 +140,19 @@
       />
       <RadioItem
         value="some"
-        label="Some"
+        label="At least"
+      >
+        <TextField
+          :id="`working-preference-${type}-answer-quantity-_${index}`"
+          v-model="row.minimumAnswerQuantity"
+          label="Specify the amount"
+          input-class="govuk-input--width-2"
+          required
+        />
+      </RadioItem>
+      <RadioItem
+        value="exactly"
+        label="Exactly"
       >
         <TextField
           :id="`working-preference-${type}-answer-quantity-_${index}`"
@@ -255,16 +285,17 @@ export default {
   },
   data() {
     // set default values
+    if (!this.row.hasOwnProperty('questionRequired')) this.row.questionRequired = true;
     if (!this.row.hasOwnProperty('questionType')) this.row.questionType = 'single-choice';
     if (!this.row.hasOwnProperty('allowLinkedQuestions')) this.row.allowLinkedQuestions = false;
     if (!this.row.hasOwnProperty('minimumAnswerMode')) this.row.minimumAnswerMode = 'any';
     if (
-      this.type === 'jurisdictionPreference' 
+      this.type === 'jurisdictionPreference'
       && !this.row.hasOwnProperty('answerSource')
     ) {
       this.row.answerSource = 'jurisdictions';
     }
-    if (!this.row.hasOwnProperty('groupAnswers')) this.row.groupAnswers = false;    
+    if (!this.row.hasOwnProperty('groupAnswers')) this.row.groupAnswers = false;
     return {
       repeatableFields: shallowRef({
         Answer,
