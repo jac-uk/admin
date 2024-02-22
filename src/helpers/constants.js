@@ -228,6 +228,9 @@ const SELF_ASSESSMENT_COMPETENCIES_QUESTIONS = [
   'Working and Communicating with Others',
   'Managing Work Efficiently',
   'Leadership',
+  'Legal and judicial skills',
+  'Personal qualities',
+  'Working Effectively',
 ];
 
 export {
