@@ -82,12 +82,11 @@
                 title: 'Open date',
               },
               {
-                title: 'Approval',
-                field: '_approval.status',
-                type: 'radio',
-                options: ['None', 'Approved', 'Rejected', 'Requested'],
-                emptyOption: 'None',
-                defaultValue: 'None',
+                type: 'singleCheckbox',
+                field: 'state',
+                inputLabel: 'Exclude Exercises in Draft status',
+                fieldComparator: 'notEqual',
+                value: 'draft',
               },
               {
                 type: 'singleCheckbox',
@@ -234,6 +233,7 @@ export default {
       this.$store.dispatch('exerciseCollection/showArchived');
     },
     getTableData(params) {
+      console.log('getTableData', params);
       this.$store.dispatch(
         'exerciseCollection/bind',
         params
