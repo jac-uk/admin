@@ -6,6 +6,8 @@
     <dt
       class="govuk-summary-list__key"
     >
+      {{ currentItem.hasOwnProperty('topic') ? currentItem.topic : '' }}
+      <br>
       {{ currentItem.question }}
       <span
         class="govuk-hint"
@@ -17,10 +19,62 @@
         {{ currentItem.allowLinkedQuestions ? ' - has linked Questions' : '' }}
       </span>
     </dt>
+    <template
+      v-if="currentItem.groupAnswers"
+    >
+      <dd
+        class="govuk-summary-list__value"
+      >
+        <!-- Render grouped multiple-choice answers -->
+        <p
+          v-for="(group) in currentItem.answers"
+          :key="group"
+          class="govuk-body"
+        >
+          <strong>
+            {{ group.group }} -
+          </strong>
+          <span
+            v-for="(answer, idx) in group.answers"
+            :key="answer"
+          >
+            {{ answer.answer }}{{ idx + 1 < group.answers.length ? ', ' : '' }}
+          </span>
+          <br>
+        </p>
+      </dd>
+    </template>
+    <template v-else-if="currentItem.answerSource === 'jurisdictions'">
+      <dd
+        class="govuk-summary-list__value"
+      >
+        <p
+          v-for="answer in exercise.jurisdiction"
+          :key="answer"
+          class="govuk-body"
+        >
+          {{ answer }}
+        </p>
+      </dd>
+    </template>
+    <template v-else>
+      <dd
+        class="govuk-summary-list__value"
+      >
+        <p
+          v-for="answer in currentItem.answers"
+          :key="answer"
+          class="govuk-body"
+        >
+          {{ answer.answer }}
+        </p>
+      </dd>
+    </template>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'LocationPreferences',
   props: {
@@ -88,6 +142,7 @@ export default {
       return Object.entries(groups).map(([rank, answers]) => ({ rank, answers }));
     },
     findGroupByAnswer(dataset, targetAnswer) {
+      console.log(dataset, targetAnswer);
       for (const question of dataset) {
 
         if (question.answers.some(answerObj => answerObj.answer === targetAnswer)) {

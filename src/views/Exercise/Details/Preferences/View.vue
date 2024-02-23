@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="govuk-grid-row">
     <div class="text-right">
       <router-link
         v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
@@ -27,29 +27,11 @@
     </dl>
 
     <dl
-      v-for="(additionalWorkingPreference, index) in exercise.additionalWorkingPreferences"
-      :key="index"
       class="govuk-summary-list"
     >
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {{ additionalWorkingPreference.topic }}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ additionalWorkingPreference.question }}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {{ $filters.lookup(additionalWorkingPreference.questionType) }}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ViewAnswers
-            :answers="additionalWorkingPreference.answers"
-            :grouped="additionalWorkingPreference.groupAnswers"
-          />
-        </dd>
-      </div>
+      <AdditionalWorkingPreferences
+        :exercise="exercise"
+      />
     </dl>
   </div>
 </template>
@@ -57,16 +39,16 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import ViewAnswers from './_ViewAnswers.vue';
 import LocationPreferences from '@/views/Exercise/Details/Preferences/LocationPreferences.vue';
 import JurisdictionPreferences from './JurisdictionPreferences.vue';
+import AdditionalWorkingPreferences from './AdditionalWorkingPreferences.vue';
 
 export default {
   name: 'PreferencesView',
   components: {
-    ViewAnswers,
     LocationPreferences,
     JurisdictionPreferences,
+    AdditionalWorkingPreferences,
   },
   mixins: [permissionMixin],
   computed: {
