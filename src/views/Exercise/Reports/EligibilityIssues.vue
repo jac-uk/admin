@@ -29,6 +29,17 @@
         Generate Report
       </ActionButton>
       <ActionButton
+        v-if="hasPermissions([
+          PERMISSIONS.exercises.permissions.canReadExercises.value,
+          PERMISSIONS.applications.permissions.canReadApplications.value,
+          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
+        ])"
+        class="govuk-!-margin-right-2"
+        :action="downloadSCCAnnexReport"
+      >
+        Download SCC Annex report
+      </ActionButton>
+      <ActionButton
         type="primary"
         :action="refreshReport"
       >
@@ -288,6 +299,9 @@ export default {
     async saveIssueStatusReason(applicationRecord, reason) {
       applicationRecord.issues.eligibilityIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    downloadSCCAnnexReport() {
+      // TODO: implement
     },
   },
 };
