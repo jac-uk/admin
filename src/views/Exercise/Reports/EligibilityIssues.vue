@@ -54,9 +54,6 @@
         <option value="reject">
           Reject
         </option>
-        <option value="reject-non-declaration">
-          Reject Non-Declaration
-        </option>
         <option value="discuss">
           Discuss
         </option>
@@ -117,9 +114,6 @@
                   </option>
                   <option value="reject">
                     Reject
-                  </option>
-                  <option value="reject-non-declaration">
-                    Reject Non-Declaration
                   </option>
                   <option value="discuss">
                     Discuss
