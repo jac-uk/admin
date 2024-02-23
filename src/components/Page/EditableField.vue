@@ -92,7 +92,7 @@
       </div>
 
       <div
-        v-if="config"
+        v-else-if="config"
         class="wrap"
       >
         <template v-if="isRankedChoice">
@@ -163,8 +163,7 @@
 
       <div
         v-else
-        class="
-          wrap"
+        class="wrap"
       >
         {{ value }}
       </div>
@@ -279,13 +278,14 @@
               @input="updateRanking"
             >
               <option
-                v-for="score in localField.length"
+                v-for="(score) in localField.length"
                 :key="score"
                 :value="score"
-              />
+              >
+                {{ score }}
+              </option>
             </Select>
           </div>
-          {{ score }}
         </div>
       </div>
 
@@ -490,7 +490,11 @@ export default {
   },
   methods: {
     sortRankedSelection(dataset) {
-      return Object.fromEntries(Object.entries(dataset).sort((a, b) => a[1] - b[1]));
+      if (dataset) {
+        return Object.fromEntries(Object.entries(dataset).sort((a, b) => a[1] - b[1]));
+      } else {
+        return [];
+      }
     },
     sortEqualRankedSelection(dataset) {
       const groups = {};

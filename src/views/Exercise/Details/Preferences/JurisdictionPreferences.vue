@@ -1,8 +1,10 @@
 <template>
   <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Jurisdiction question
+    <dt class="govuk-summary-list__key govuk-heading-m">
+      Jurisdiction question{{ exercise.jurisdictionPreferences ? 's' : '' }}
     </dt>
+  </div>
+  <div class="govuk-summary-list__row">
     <div
       v-if="exercise.jurisdictionPreferences"
       class="govuk-summary-list__value"
@@ -16,7 +18,6 @@
         >
           <QuestionRenderer
             section="jurisdictionPreferences"
-            :application="application"
             :exercise="exercise"
             :index="index"
             :review="false"
@@ -24,39 +25,32 @@
         </li>
       </ul>
     </div>
-    <template
-      v-else-if="exercise.jurisdictionQuestion"
-    >
-      <dd
-        class="govuk-summary-list__value"
+    <dl class="govuk-summary-list">
+      <div
+        v-if="exercise.jurisdictionQuestion"
+        class="govuk-summary-list__row"
       >
-        {{ exercise.jurisdictionQuestion }}
-      </dd>
-      <dd
-        v-if="!exercise.jurisdictionQuestion"
-        class="govuk-summary-list__value"
-      >
-        &nbsp;
-      </dd>
-    </template>
-  </div>
-  <div
-    v-if="exercise.jurisdictionQuestion"
-    class="govuk-summary-list__row"
-  >
-    <dt class="govuk-summary-list__key">
-      {{ $filters.lookup(exercise.jurisdictionQuestionType) }}
-    </dt>
-    <dd class="govuk-summary-list__value">
-      <ul class="govuk-list">
-        <li
-          v-for="(answer, index) in exercise.jurisdictionQuestionAnswers"
-          :key="index"
-        >
-          {{ answer.answer }}
-        </li>
-      </ul>
-    </dd>
+        <dt class="govuk-summary-list__key">
+          {{ exercise.jurisdictionQuestion }}
+          <br>
+          <span
+            class="govuk-hint"
+          >
+            {{ $filters.lookup(exercise.jurisdictionQuestionType) }}
+          </span>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ul class="govuk-list">
+            <li
+              v-for="(answer, index) in exercise.jurisdictionQuestionAnswers"
+              :key="index"
+            >
+              {{ answer.answer }}
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
   </div>
 </template>
 <script>
