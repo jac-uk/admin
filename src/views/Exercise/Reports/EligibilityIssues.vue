@@ -84,11 +84,15 @@
         :page-size="10"
         :page-item-type="'number'"
         :total="total"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
+        :filters="[
+          {
+            type: 'singleCheckbox',
+            field: 'issues.eligibilityIssues',
+            inputLabel: 'Display only candidates with Eligibility issues',
+            fieldComparator: 'arrayNotEmpty'
+          },
+        ]"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
         <template #row="{row}">
