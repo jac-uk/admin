@@ -428,6 +428,7 @@ export default {
   data() {
     return {
       WORKING_BASIS,
+      workingBasisOptions: Object.values(WORKING_BASIS),
       currentIndex: null,
     };
   },
@@ -443,9 +444,6 @@ export default {
         return true;
       }
       return false;
-    },
-    workingBasisOptions() {
-      return Object.values(WORKING_BASIS);
     },
   },
   methods: {
