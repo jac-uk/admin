@@ -105,8 +105,8 @@
                 </h4>
                 <Select
                   id="issue-status"
-                  :value="row.issues.eligibilityIssuesStatus || ''"
-                  @input="saveIssueStatus(row, $event)"
+                  :model-value="row.issues.eligibilityIssuesStatus || ''"
+                  @update:model-value="saveIssueStatus(row, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
