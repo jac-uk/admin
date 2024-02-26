@@ -82,18 +82,17 @@
                 title: 'Open date',
               },
               {
-                title: 'Approval',
-                field: '_approval.status',
-                type: 'radio',
-                options: ['None', 'Approved', 'Rejected', 'Requested'],
-                emptyOption: 'None',
-                defaultValue: 'None',
+                type: 'singleCheckbox',
+                field: 'state',
+                inputLabel: 'Exclude Exercises in Draft status',
+                fieldComparator: 'notEqual',
+                value: 'draft',
               },
               {
                 type: 'singleCheckbox',
                 field: '_lateApplicationRequests',
                 inputLabel: 'Exercises with late application requests',
-                fieldComparator: 'arrayNotEmpty'
+                fieldComparator: 'arrayEmpty' // better to use `arrayEmpty` as we cannot use more than one '!=' filter
               },
             ]"
             :search-map="$searchMap.exercises"
