@@ -61,7 +61,7 @@ export default {
         data.progress = data.progress || { started: true };
         data.state = 'draft';
         data.published = false;
-        data._applicationVersion = 2;
+        data._applicationVersion = 3;
         data.favouriteOf = arrayUnion(rootState.auth.currentUser.uid);
         data.createdBy = rootState.auth.currentUser.uid;
         data.createdAt = serverTimestamp();
