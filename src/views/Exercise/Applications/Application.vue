@@ -223,7 +223,7 @@
             <CharacterInformationSummary
               :editable="editable"
               :character-information="correctCharacterInformation"
-              :version="applicationVersion"
+              :version="characterInformationVersion"
               :is-asked="isApplicationPartAsked('characterInformation')"
               @update-application="changeApplication"
             />
@@ -434,7 +434,7 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.applicationVersion === 2) {
+      if (this.applicationVersion >= 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
@@ -448,6 +448,9 @@ export default {
     },
     applicationVersion() {
       return this.exercise._applicationVersion || 1;
+    },
+    characterInformationVersion() {
+      return this.applicationVersion >= 2 ? 2 : 1;
     },
     applications() {
       return this.$store.state.applications.records;
