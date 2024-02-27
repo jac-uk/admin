@@ -1,5 +1,5 @@
 <template>
-  <div class="govuk-grid-row">
+  <div class="xgovuk-grid-row">
     <div class="text-right">
       <router-link
         v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
@@ -14,25 +14,17 @@
       Working preferences
     </h2>
 
-    <dl class="govuk-summary-list">
-      <LocationPreferences
-        :exercise="exercise"
-      />
-    </dl>
+    <LocationPreferences
+      :exercise="exercise"
+    />    
 
-    <dl class="govuk-summary-list">
-      <JurisdictionPreferences
-        :exercise="exercise"
-      />
-    </dl>
+    <JurisdictionPreferences
+      :exercise="exercise"
+    />
 
-    <dl
-      class="govuk-summary-list"
-    >
-      <AdditionalWorkingPreferences
-        :exercise="exercise"
-      />
-    </dl>
+    <AdditionalWorkingPreferences
+      :exercise="exercise"
+    />
   </div>
 </template>
 
@@ -63,13 +55,13 @@ export default {
 </script>
 
 <style type="text/css" rel="stylesheet/scss" lang="scss" scoped>
-.govuk-summary-list {
-  > .govuk-summary-list__row:last-child {
-    > .govuk-summary-list__key,
-    > .govuk-summary-list__value {
-      border-bottom: none;
-    }
-  }
-}
+// .govuk-summary-list {
+//   > .govuk-summary-list__row:last-child {
+//     > .govuk-summary-list__key,
+//     > .govuk-summary-list__value {
+//       border-bottom: none;
+//     }
+//   }
+// }
 
 </style>
