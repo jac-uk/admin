@@ -71,6 +71,7 @@
         :page-size="500"
         local-data
         sticky
+        class="score-sheet"
       >
         <template
           v-if="scoreSheetHeaders.length"
@@ -99,7 +100,7 @@
 
         <template #row="{row, index}">
           <TableCell class="table-cell-application vertical-align-middle">
-            {{ row.fullName }}
+            {{ row.referenceNumber }}
           </TableCell>
 
           <TableCell
@@ -113,7 +114,7 @@
               :id="`row-${index}_col-${columnIndex}`"
               v-model="scoreSheet[row.id][column.parent][column.ref]"
               type="number"
-              class="govuk-input govuk-input--width-1"
+              class="govuk-input"
               spellcheck="false"
               autocomplete="off"
               @keydown="onKeyDown($event, index, columnIndex)"
@@ -125,7 +126,7 @@
               v-model="scoreSheet[row.id][column.parent][column.ref]"
               type="text"
               maxlength="1"
-              class="govuk-input govuk-input--width-1"
+              class="govuk-input"
               spellcheck="false"
               autocomplete="grade"
               @keydown="onKeyDown($event, index, columnIndex)"
@@ -137,7 +138,7 @@
               v-model="scoreSheet[row.id][column.ref]"
               type="text"
               maxlength="1"
-              class="govuk-input govuk-input--width-1"
+              class="govuk-input"
               spellcheck="false"
               autocomplete="grade"
               @keydown="onKeyDown($event, index, columnIndex)"
@@ -149,7 +150,7 @@
               v-model="scoreSheet[row.id][column.parent][column.ref]"
               type="text"
               maxlength="1"
-              class="govuk-input govuk-input--width-1"
+              class="govuk-input"
               spellcheck="false"
               autocomplete="grade"
               @keydown="onKeyDown($event, index, columnIndex)"
@@ -468,20 +469,28 @@ export default {
 </script>
 
 <style lang="scss">
-.govuk-input--width-1 {
-  width: 4ex !important;
-  text-align: center;
-}
-.govuk-input--width-2 {
-  max-width: 6ex;
-  text-align: right;
-}
 .vertical-align-middle {
   vertical-align: middle !important;
 }
-.table-cell-value {
-  min-width: 50px;
-  padding: 0 10px !important;
-  text-align: center;
+
+.score-sheet {
+  .table-cell-value {
+    min-width: 50px;
+    padding: 0 10px !important;
+    text-align: center;
+  }
+  .govuk-table__body .table-cell-application {
+    padding: 0 10px;
+    border-left: 1px solid govuk-colour("mid-grey");
+    border-right: 1px solid govuk-colour("mid-grey");
+  }
+  .table-cell-score {
+    padding: 0;
+    border-right: 1px solid govuk-colour("mid-grey");
+    > .govuk-input {
+      text-align: center;
+      border: 0;
+    }
+  }
 }
 </style>
