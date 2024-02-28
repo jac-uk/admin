@@ -48,6 +48,14 @@
     </div>
 
     <div class="govuk-grid-column-full text-right">
+      <div class="govuk-!-display-inline-block ">
+        <Checkbox
+          id="show-not-met"
+          v-model="showNotMet"
+        >
+          Display only candidates with Eligibility issues
+        </Checkbox>
+      </div>
       <Select
         id="issue-status-filter"
         v-model="issueStatus"
@@ -69,14 +77,6 @@
           Discuss
         </option>
       </Select>
-      <div class="govuk-!-display-inline-block ">
-        <Checkbox
-          id="show-not-met"
-          v-model="showNotMet"
-        >
-          Display only candidates with Eligibility issues
-        </Checkbox>
-      </div>
     </div>
 
     <div class="govuk-grid-column-full">
