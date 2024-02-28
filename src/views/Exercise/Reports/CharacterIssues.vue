@@ -480,6 +480,8 @@ export default {
       }
     },
     async getTableData(params) {
+      const stage = this.exerciseStage;
+      const status = this.candidateStatus;
       let firestoreRef = query(
         collection(firestore, 'applicationRecords'),
         where('exercise.id', '==', this.exercise.id),
@@ -509,6 +511,8 @@ export default {
         this.unsubscribe = onSnapshot(
           firestoreRef,
           (snap) => {
+            // prevent from empty records with initial stage, status
+            if (!status && !stage) return;
             const applicationRecords = [];
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));
