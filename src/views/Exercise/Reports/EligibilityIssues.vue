@@ -69,6 +69,14 @@
           Discuss
         </option>
       </Select>
+      <div class="govuk-!-display-inline-block ">
+        <Checkbox
+          id="show-not-met"
+          v-model="showNotMet"
+        >
+          Display only candidates with Eligibility issues
+        </Checkbox>
+      </div>
     </div>
 
     <div class="govuk-grid-column-full">
@@ -78,20 +86,13 @@
       </p>
       -->
       <Table
+        ref="issuesTable"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :page-item-type="'number'"
         :total="total"
-        :filters="[
-          {
-            type: 'singleCheckbox',
-            field: 'issues.eligibilityIssues',
-            inputLabel: 'Display only candidates with Eligibility issues',
-            fieldComparator: 'arrayNotEmpty'
-          },
-        ]"
         :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
@@ -189,6 +190,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 
 export default {
   name: 'EligibilityIssues',
@@ -198,6 +200,7 @@ export default {
     Select,
     TextareaInput,
     ActionButton,
+    Checkbox,
   },
   mixins: [permissionMixin],
   data () {
@@ -209,11 +212,17 @@ export default {
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
       total: null,
+      showNotMet: false,
     };
   },
   computed: {
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+  },
+  watch: {
+    showNotMet: function () {
+      this.$refs['issuesTable'].reload();
     },
   },
   unmounted() {
@@ -243,6 +252,9 @@ export default {
         where('exercise.id', '==', this.exercise.id),
         where('flags.eligibilityIssues', '==', true)
       );
+      if (this.showNotMet) {
+        firestoreRef = query(firestoreRef, where('flags.eligibilityIssuesMet', '==', false));
+      }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
