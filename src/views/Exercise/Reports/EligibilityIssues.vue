@@ -150,15 +150,12 @@
               </div>
             </div>
 
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
             <div
               v-for="(issue, index) in row.issues.eligibilityIssues"
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-              >
               <div class="govuk-grid-column-two-thirds">
                 <div class="issue">
                   <span class="govuk-!-font-weight-bold">{{ $filters.lookup(issue.type) }}:</span> {{ issue.summary }}

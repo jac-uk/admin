@@ -174,6 +174,9 @@ const lookup = (value) => {
     'judicial-post': 'Judicial',
     'quasi-judicial-post': 'Quasi-judicial',
 
+    pq: 'Professional Qualification',
+    pje: 'Previous Judicial Experience',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
