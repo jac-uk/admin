@@ -144,8 +144,8 @@
                 </h4>
                 <TextareaInput
                   id="recommendation-reason"
-                  :value="row.issues.eligibilityIssuesStatusReason"
-                  @input="saveIssueStatusReason(row, $event)"
+                  :model-value="row.issues.eligibilityIssuesStatusReason"
+                  @update:model-value="saveIssueStatusReason(row, $event)"
                 />
               </div>
             </div>
@@ -188,6 +188,7 @@ import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { debounce } from 'lodash';
 
 export default {
   name: 'EligibilityIssues',
@@ -297,10 +298,11 @@ export default {
       applicationRecord.issues.eligibilityIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    async saveIssueStatusReason(applicationRecord, reason) {
+    saveIssueStatusReason: debounce(async function (applicationRecord, reason) {
+      // use debounce
       applicationRecord.issues.eligibilityIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
-    },
+    }, 2000),
     downloadSCCAnnexReport() {
       // TODO: implement
     },
