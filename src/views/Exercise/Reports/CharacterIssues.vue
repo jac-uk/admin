@@ -486,19 +486,19 @@ export default {
         where('flags.characterIssues', '==', true)
       );
       if (this.exerciseStage !== 'all') {
-        firestoreRef = where(firestoreRef, 'stage', '==', this.exerciseStage);
+        firestoreRef = query(firestoreRef, where('stage', '==', this.exerciseStage));
       }
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
       if (this.candidateStatus === 'all') {
         if (this.exercise?._processingVersion >= 2) {
-          firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDRAWN); // TODO: need to confirm the status
+          firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDRAWN)); // TODO: need to confirm the status
         } else {
-          firestoreRef = where(firestoreRef, 'status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION);
+          firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION));
         }
         localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
+        firestoreRef = query(firestoreRef, where('status', '==', this.candidateStatus));
         localParams.orderBy = 'documentId';
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
