@@ -557,10 +557,10 @@ export default {
         where('candidate.reasonableAdjustments', '==', true)
       );
       if (this.exerciseStage !== 'all') {
-        firestoreRef = where(firestoreRef, 'stage', '==', this.exerciseStage);
+        firestoreRef = query(firestoreRef, where('stage', '==', this.exerciseStage));
       }
       if (this.candidateStatus !== 'all') {
-        firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
+        firestoreRef = query(firestoreRef, where('status', '==', this.candidateStatus));
       }
       // if (!this.showActioned) {
       // firestoreRef = firestoreRef.where('candidate.reasonableAdjustmentsActioned', '==', false);
