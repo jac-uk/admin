@@ -1,50 +1,66 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <h1 class="govuk-heading-l">
-        Eligibility Issues
-      </h1>
-    </div>
-    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="exportData"
-      >
-        Export to Excel
-      </ActionButton>
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value,
-          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="exportToGoogleDoc"
-      >
-        Generate Report
-      </ActionButton>
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value,
-          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="downloadSCCAnnexReport"
-      >
-        Download SCC Annex report
-      </ActionButton>
-      <ActionButton
-        type="primary"
-        :action="refreshReport"
-      >
-        Refresh
-      </ActionButton>
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Eligibility Issues
+          </h2>
+          <span
+            v-if="eligibilityIssuesReport"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ $filters.formatDate(eligibilityIssuesReport.createdAt, 'longdatetime') }}
+          </span>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="exportData"
+              >
+                Export to Excel
+              </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="exportToGoogleDoc"
+              >
+                Generate Report
+              </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="downloadSCCAnnexReport"
+              >
+                Download SCC Annex report
+              </ActionButton>
+              <ActionButton
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="govuk-grid-column-full text-right">
@@ -178,7 +194,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, where, onSnapshot } from '@firebase/firestore';
+import { query, collection, doc, where, onSnapshot } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -205,9 +221,11 @@ export default {
   mixins: [permissionMixin],
   data () {
     return {
+      eligibilityIssuesReport: null,
+      unsubscribeEligibilityIssuesReport: null,
       applicationRecords: [],
       issueStatus: 'all',
-      unsubscribe: null,
+      unsubscribeApplicationRecords: null,
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
@@ -225,9 +243,21 @@ export default {
       this.$refs['issuesTable'].reload();
     },
   },
+  created() {
+    this.unsubscribeEligibilityIssuesReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/eligibilityIssues`),
+      (snap) => {
+        if (snap.exists) {
+          this.eligibilityIssuesReport = vuexfireSerialize(snap);
+        }
+      });
+  },
   unmounted() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
+    if (this.unsubscribeEligibilityIssuesReport) {
+      this.unsubscribeEligibilityIssuesReport();
+    }
+    if (this.unsubscribeApplicationRecords) {
+      this.unsubscribeApplicationRecords();
     }
   },
   methods: {
@@ -259,7 +289,7 @@ export default {
       firestoreRef = res.queryRef;
       this.total = res.total;
       if (firestoreRef) {
-        this.unsubscribe = onSnapshot(
+        this.unsubscribeApplicationRecords = onSnapshot(
           firestoreRef,
           (snap) => {
             const applicationRecords = [];
