@@ -44,7 +44,7 @@ export default {
 
       try {
         const snap = await getDoc(doc(collectionRef, userId));
-        if (snap.exists) {
+        if (snap.exists()) {
           return {
             id: userId,
             ...snap.data(),

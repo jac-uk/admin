@@ -346,7 +346,7 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY } from '@/helpers/constants';
+import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 
 export default {
@@ -480,21 +480,27 @@ export default {
       }
     },
     async getTableData(params) {
+      const exerciseStage = this.exerciseStage;
+      const candidateStatus = this.candidateStatus;
       let firestoreRef = query(
         collection(firestore, 'applicationRecords'),
         where('exercise.id', '==', this.exercise.id),
         where('flags.characterIssues', '==', true)
       );
-      if (this.exerciseStage !== 'all') {
-        firestoreRef = where(firestoreRef, 'stage', '==', this.exerciseStage);
+      if (exerciseStage !== 'all') {
+        firestoreRef = query(firestoreRef, where('stage', '==', exerciseStage));
       }
       // intercept params so we can override without polluting the passed in object
       const localParams = { ...params };
-      if (this.candidateStatus === 'all') {
-        firestoreRef = where(firestoreRef, 'status', '!=', 'withdrewApplication');
+      if (candidateStatus === 'all') {
+        if (this.exercise?._processingVersion >= 2) {
+          firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDRAWN)); // TODO: need to confirm the status
+        } else {
+          firestoreRef = query(firestoreRef, where('status', '!=', APPLICATION_STATUS.WITHDREW_APPLICATION));
+        }
         localParams.orderBy = ['status', 'documentId'];
       } else {
-        firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
+        firestoreRef = query(firestoreRef, where('status', '==', candidateStatus));
         localParams.orderBy = 'documentId';
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, localParams, null);
@@ -505,6 +511,8 @@ export default {
         this.unsubscribe = onSnapshot(
           firestoreRef,
           (snap) => {
+            // prevent from empty records with initial stage, status
+            if (!exerciseStage && !candidateStatus) return;
             const applicationRecords = [];
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));

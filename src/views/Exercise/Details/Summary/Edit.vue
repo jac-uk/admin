@@ -204,7 +204,11 @@ export default {
     async save(isValid) {
       this.formData['progress.vacancySummary'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
-      this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-summary'));
+      if (this.formData.advertType === ADVERT_TYPES.EXTERNAL) {
+        this.$router.push({ name: 'exercise-external' });
+      } else {
+        this.$router.push(this.$store.getters['exerciseCreateJourney/nextPage']('exercise-details-summary'));
+      }
     },
     toggleDay() {
       this.setDay = !this.setDay;
