@@ -41,6 +41,19 @@
             PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
           ])
         "
+        class="govuk-!-margin-right-2"
+        :action="exportAnnexReport"
+      >
+        Annex Report
+      </ActionButton>
+      <ActionButton
+        v-if="
+          hasPermissions([
+            PERMISSIONS.exercises.permissions.canReadExercises.value,
+            PERMISSIONS.applications.permissions.canReadApplications.value,
+            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+          ])
+        "
         type="primary"
         :action="refreshReport"
       >
@@ -568,6 +581,9 @@ export default {
       const exerciseId = applicationRecord.exercise.id;
       const record = this.otherApplicationRecords.find((item) => item.candidateId === candidateId);
       return record ? record.otherRecords.filter((ar) => ar.exercise.id !== exerciseId) : [];
+    },
+    exportAnnexReport() {
+      // TODO: implement
     },
   },
 };
