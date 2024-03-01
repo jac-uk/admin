@@ -1,68 +1,52 @@
 <template>
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key govuk-heading-m">
-      Additional Working Preference{{ exercise.additionalWorkingPreferences.length > 1 ? 's' : '' }}
-    </dt>
-  </div>
-  <div class="govuk-summary-list__row">
-    <div
-      v-if="isNewQuestionType"
-      class="govuk-summary-list__value"
-    >
-      <!-- new questions -->
-      <ul
-        class="govuk-list"
-      >
-        <li
-          v-for="(additionalWorkingPreference, index) in exercise.additionalWorkingPreferences"
-          :key="additionalWorkingPreference"
-        >
-          <QuestionRenderer
-            section="additionalWorkingPreferences"
-            :exercise="exercise"
-            :index="index"
-            :review="false"
-          />
-        </li>
-      </ul>
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key govuk-heading-m">
+        Additional Working Preference{{ exercise.additionalWorkingPreferences.length > 1 ? 's' : '' }}
+      </dt>
+      <dd class="govuk-summary-list__key">
+        &nbsp;
+      </dd>
     </div>
-    <template
+    <template v-if="isNewQuestionType">
+      <QuestionRenderer
+        v-for="(additionalWorkingPreference, index) in exercise.additionalWorkingPreferences"
+        :key="additionalWorkingPreference"
+        section="additionalWorkingPreferences"
+        :exercise="exercise"
+        :index="index"
+        :review="false"
+      />
+    </template>
+    <div
       v-else
+      class="govuk-summary-list__row"
     >
-      <dd
+      <template
         v-for="additionalWorkingPreference in exercise.additionalWorkingPreferences"
         :key="additionalWorkingPreference"
         class="govuk-summary-list__value"
       >
         <!-- old working prefs -->
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            {{ additionalWorkingPreference.topic }}:
-            {{ additionalWorkingPreference.question }}
-            <br>
-            <span
-              class="govuk-hint"
-            >
-              {{ $filters.lookup(additionalWorkingPreference.questionType) }}
-            </span>
-          </dt>
-          <!-- <dt class="govuk-summary-list__key">
-            <br>
-            <span
-              class="govuk-hint"
-            >
-            </span>
-          </dt> -->
-          <dd class="govuk-summary-list__value">
-            <ViewAnswers
-              :answers="additionalWorkingPreference.answers"
-              :grouped="additionalWorkingPreference.groupAnswers"
-            />
-          </dd>
-        </div>
-      </dd>
-    </template>
-  </div>
+        <dt class="govuk-summary-list__key">
+          {{ additionalWorkingPreference.topic }}:
+          {{ additionalWorkingPreference.question }}
+          <br>
+          <span
+            class="govuk-hint"
+          >
+            {{ $filters.lookup(additionalWorkingPreference.questionType) }}
+          </span>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <ViewAnswers
+            :answers="additionalWorkingPreference.answers"
+            :grouped="additionalWorkingPreference.groupAnswers"
+          />
+        </dd>
+      </template>
+    </div>
+  </dl>
 </template>
 <script>
 import QuestionRenderer from '@/components/Page/QuestionRenderer.vue';
