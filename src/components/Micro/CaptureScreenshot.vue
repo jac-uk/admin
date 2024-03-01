@@ -87,18 +87,12 @@ export default {
         const blob = this.dataURLtoBlob(this.thumbnail);
 
         // Upload the blob to file storage
-        const fileUploaded = await uploadBytes(uploadRef, blob);
-
-        if (fileUploaded && fileUploaded.state === 'success') {
-          const downloadUrl = await getDownloadURL(uploadRef);
-          return {
-            downloadUrl: downloadUrl,
-            filePath: this.filePath,
-          };
-        } else {
-          this.setError('File upload failed, please try again. If the problem persist please remove the screenshot and report the problem.');
-          return false;
-        }
+        await uploadBytes(uploadRef, blob);
+        const downloadUrl = await getDownloadURL(uploadRef);
+        return {
+          downloadUrl: downloadUrl,
+          filePath: this.filePath,
+        };
       } catch (e) {
         this.setError('File upload failed, please try again. If the problem persist please remove the screenshot and report the problem.');
         return false;
