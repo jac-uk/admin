@@ -25,7 +25,6 @@
       <template
         v-for="additionalWorkingPreference in exercise.additionalWorkingPreferences"
         :key="additionalWorkingPreference"
-        class="govuk-summary-list__value"
       >
         <!-- old working prefs -->
         <dt class="govuk-summary-list__key">
