@@ -53,7 +53,7 @@
                   ])
                 "
                 class="govuk-!-margin-right-2"
-                :action="exportAnnexReport"
+                :action="exportCharacterAnnexReport"
               >
                 Annex Report
               </ActionButton>
@@ -612,8 +612,19 @@ export default {
       const record = this.otherApplicationRecords.find((item) => item.candidateId === candidateId);
       return record ? record.otherRecords.filter((ar) => ar.exercise.id !== exerciseId) : [];
     },
-    exportAnnexReport() {
-      // TODO: implement
+    async exportCharacterAnnexReport() {
+      if (!this.exercise.referenceNumber) return; // abort if no ref
+      try {
+        await httpsCallable(functions, 'exportApplicationCharacterIssues')({
+          exerciseId: this.exercise.id,
+          stage: this.exerciseStage,
+          status: this.candidateStatus,
+          format: 'annex',
+        });
+        return true;
+      } catch (error) {
+        return;
+      }
     },
   },
 };
