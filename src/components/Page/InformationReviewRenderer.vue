@@ -155,8 +155,7 @@
 </template>
 
 <script>
-// import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
-import EditableField from './EditableField.vue';
+import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {

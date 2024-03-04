@@ -49,7 +49,7 @@
   </dl>
 </template>
 <script>
-import QuestionRenderer from '@/components/Page/QuestionRenderer.vue';
+import QuestionRenderer from '@jac-uk/jac-kit/draftComponents/Page/QuestionRendererAdmin.vue';
 
 export default {
   name: 'JurisdictionPreferences',
