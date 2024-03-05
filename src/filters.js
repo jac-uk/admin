@@ -175,8 +175,6 @@ const lookup = (value) => {
     // post-qualification experience
     'judicial-post': 'Judicial',
     'quasi-judicial-post': 'Quasi-judicial',
-    'locationPreference': 'Location preference',
-    'jurisdictionPreference': 'Jurisdiction preference',
 
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
