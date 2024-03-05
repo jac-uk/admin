@@ -122,9 +122,9 @@ export default {
   beforeRouteEnter(to) {
     const stage = to.params.stage;
     const exercise = store.state.exerciseDocument.record;
-    if (stage === 'review' && exercise) {
+    if (stage === EXERCISE_STAGE.REVIEW && exercise) {
       if (exercise._processingVersion >= 2) {
-        return { name: to.name, params: { stage: 'applied' } };
+        return { name: to.name, params: { stage: EXERCISE_STAGE.SHORTLISTING } };
       }
     }
   },

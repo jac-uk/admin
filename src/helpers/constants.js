@@ -17,13 +17,22 @@ const ADVERT_TYPES = {
 };
 
 const EXERCISE_STAGE = {
-  REVIEW: 'review', // to be replaced with applied
-  APPLIED: 'applied',
-  SHORTLISTED: 'shortlisted',
-  SELECTABLE: 'selectable',
-  SELECTED: 'selected', // to be replaced with selectable
-  RECOMMENDED: 'recommended',
-  HANDOVER: 'handover',
+  // v2
+  SHORTLISTING: 'shortlisting',
+  SELECTION: 'selection',
+  SCC: 'scc',
+  RECOMMENDATION: 'recommendation',
+
+  // v2 proposed but then removed
+  APPLIED: 'applied', // to be removed
+  SELECTABLE: 'selectable', // to be removed
+
+  // v1
+  REVIEW: 'review', // to be replaced with shortlisting
+  SHORTLISTED: 'shortlisted', // to be replaced with selection
+  SELECTED: 'selected', // to be replaced with recommendation
+  RECOMMENDED: 'recommended', // to be replaced with recommendation
+  HANDOVER: 'handover', // to be removed/replaced with recommendation
 };
 
 const APPLICATION_STATUS = {

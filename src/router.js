@@ -5,7 +5,7 @@ import {
 
 import store from '@/store';
 
-import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { STATUS, EXERCISE_STAGE } from '@/helpers/constants';
 
 import EmptyRouterView from '@/components/EmptyRouterView.vue';
 
@@ -884,7 +884,7 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: { name: 'exercise-stage-list', params: { stage: 'review' } },
+            redirect: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } },
           },
           {
             path: ':stage/',
