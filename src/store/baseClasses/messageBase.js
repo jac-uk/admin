@@ -5,7 +5,7 @@ import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
 'use strict';
 
-const collectionName = 'message';
+const collectionName = 'messages';
 const collectionRef = collection(firestore, collectionName);
 
 export default class {

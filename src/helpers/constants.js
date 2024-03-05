@@ -218,6 +218,25 @@ const DEFAULT_WORD_COUNT = {
   ADDITIONAL_SELECTION_CRITERIA: 250,
 };
 
+const SELF_ASSESSMENT_COMPETENCIES_QUESTIONS = [
+  'Exercising Judgement',
+  'Possessing and Building Knowledge',
+  'Assimilating and Clarifying Information',
+  'Working and Communicating with Others',
+  'Managing Work Efficiently',
+  'Leadership',
+  'Legal and judicial skills',
+  'Personal qualities',
+  'Working Effectively',
+];
+
+const WORKING_BASIS = {
+  FULL_TIME: 'full-time',
+  SALARIED_PART_TIME: 'salaried-part-time',
+  FEE_PAID: 'fee-paid',
+  VOLUNTARY: 'voluntary',
+};
+
 export {
   STATUS,
   EXERCISE_STAGE,
@@ -235,7 +254,9 @@ export {
   OFFENCE_CATEGORY,
   ASSESSMENT_METHOD,
   APPLICATION_FORM_PARTS,
-  DEFAULT_WORD_COUNT
+  DEFAULT_WORD_COUNT,
+  SELF_ASSESSMENT_COMPETENCIES_QUESTIONS,
+  WORKING_BASIS
 };
 
 // end

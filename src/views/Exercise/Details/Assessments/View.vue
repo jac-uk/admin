@@ -26,7 +26,10 @@
             v-for="(section, index) in exercise.selfAssessmentWordLimits"
             :key="index"
           >
-            Question {{ 1 + index }}
+            Question {{ 1 + index }}:
+            <strong>
+              {{ section.question }}
+            </strong>
             <br>
             Word limit:
             <strong>
