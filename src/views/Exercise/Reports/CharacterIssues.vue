@@ -40,22 +40,9 @@
                   ])
                 "
                 class="govuk-!-margin-right-2"
-                :action="exportToGoogleDoc"
-              >
-                Generate Report
-              </ActionButton>
-              <ActionButton
-                v-if="
-                  hasPermissions([
-                    PERMISSIONS.exercises.permissions.canReadExercises.value,
-                    PERMISSIONS.applications.permissions.canReadApplications.value,
-                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-                  ])
-                "
-                class="govuk-!-margin-right-2"
                 :action="exportCharacterAnnexReport"
               >
-                Annex Report
+                SCC Annex
               </ActionButton>
               <ActionButton
                 v-if="
@@ -617,8 +604,6 @@ export default {
       try {
         await httpsCallable(functions, 'exportApplicationCharacterIssues')({
           exerciseId: this.exercise.id,
-          stage: this.exerciseStage,
-          status: this.candidateStatus,
           format: 'annex',
         });
         return true;
