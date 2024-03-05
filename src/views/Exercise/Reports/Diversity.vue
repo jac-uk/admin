@@ -553,6 +553,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -561,6 +563,7 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
@@ -574,33 +577,7 @@ export default {
     return {
       diversity: null,
       unsubscribe: null,
-      tabs: [
-        {
-          ref: 'applied',
-          title: 'Applied',
-        },
-        {
-          ref: 'shortlisted',
-          title: 'Shortlisted',
-        },
-        {
-          ref: 'selected',
-          title: 'Selected',
-        },
-        {
-          ref: 'recommended',
-          title: 'Recommended',
-        },
-        {
-          ref: 'handover',
-          title: 'Handover',
-        },
-        {
-          ref: 'summary',
-          title: 'Summary',
-        },
-      ],
-      activeTab: 'applied',
+      activeTab: EXERCISE_STAGE.APPLIED,
     };
   },
   computed: {
@@ -609,6 +586,46 @@ export default {
     }),
     exercise() {
       return this.$store.state.exerciseDocument.record;
+    },
+    tabs() {
+      const tabs = [
+        {
+          ref: EXERCISE_STAGE.APPLIED,
+          title: this.$filters.lookup(EXERCISE_STAGE.APPLIED),
+        },
+        {
+          ref: EXERCISE_STAGE.SHORTLISTED,
+          title: this.$filters.lookup(EXERCISE_STAGE.SHORTLISTED),
+        },
+      ];
+
+      if (this.exercise?._processingVersion >= 2) {
+        tabs.push({
+          ref: EXERCISE_STAGE.SELECTABLE,
+          title: this.$filters.lookup(EXERCISE_STAGE.SELECTABLE),
+        });
+      } else {
+        tabs.push({
+          ref: EXERCISE_STAGE.SELECTED,
+          title: this.$filters.lookup(EXERCISE_STAGE.SELECTED),
+        });
+      }
+
+      tabs.push(
+        {
+          ref: EXERCISE_STAGE.RECOMMENDED,
+          title: this.$filters.lookup(EXERCISE_STAGE.RECOMMENDED),
+        },
+        {
+          ref: EXERCISE_STAGE.HANDOVER,
+          title: this.$filters.lookup(EXERCISE_STAGE.HANDOVER),
+        },
+        {
+          ref: 'summary',
+          title: 'Summary',
+        }
+      );
+      return tabs;
     },
     showTabs() {
       return this.diversity && this.diversity.shortlisted;  // .shortlisted indicates we have stages reports
@@ -623,8 +640,9 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/diversity`)
-      .onSnapshot((snap) => {
+    this.unsubscribe = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/diversity`),
+      (snap) => {
         if (snap.exists) {
           this.diversity = vuexfireSerialize(snap);
         }
@@ -638,18 +656,24 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'generateDiversityReport')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      let stages = [
+        EXERCISE_STAGE.APPLIED,
+        EXERCISE_STAGE.SHORTLISTED,
+        this.exercise?._processingVersion >= 2 ? EXERCISE_STAGE.SELECTABLE : EXERCISE_STAGE.SELECTED,
+        EXERCISE_STAGE.RECOMMENDED,
+        EXERCISE_STAGE.HANDOVER,
+      ];
       if (stage) {
         stages = [stage];
       }
-      data.push(['Statistic'].concat(stages));
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.diversity.applied).forEach((report) => {
         Object.keys(this.diversity.applied[report]).forEach((stat) => {
           const columns = [];

@@ -48,7 +48,7 @@
   </dl>
 </template>
 <script>
-import QuestionRenderer from '@/components/Page/QuestionRenderer.vue';
+import QuestionRenderer from '@jac-uk/jac-kit/draftComponents/Page/QuestionRendererAdmin.vue';
 import ViewAnswers from './_ViewAnswers.vue';
 
 export default {

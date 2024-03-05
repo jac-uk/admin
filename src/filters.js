@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -243,7 +243,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
   lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
-  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';  
+  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';
   lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Passed`] = 'Completed PSDQ';
   lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Failed`] = 'Not completed PSDQ';
   lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
@@ -294,6 +294,12 @@ const lookup = (value) => {
   lookup[APPLICATION_FORM_PARTS.CHARACTER_CHECKS] = 'Character Checks';
   lookup[APPLICATION_FORM_PARTS.REASONABLE_ADJUSTMENTS] = 'Reasonable Adjustments';
   lookup[APPLICATION_FORM_PARTS.WORKING_PREFERENCES] = 'Working Preferences';
+
+  // working basis
+  lookup[WORKING_BASIS.FULL_TIME] = 'Full-time';
+  lookup[WORKING_BASIS.SALARIED_PART_TIME] = 'Salaried part-time';
+  lookup[WORKING_BASIS.FEE_PAID] = 'Fee paid';
+  lookup[WORKING_BASIS.VOLUNTARY] = 'Voluntary';
 
   returnValue = lookup[value];
 

@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <ProgressBar :steps="taskSteps" />    
+    <ProgressBar :steps="taskSteps" />
 
     <p
       v-if="!hasPassMark"
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from './helper';
 import { DIVERSITY_CHARACTERISTICS, hasDiversityCharacteristic } from '@/helpers/diversityCharacteristics';
 import { TASK_TYPE, getTaskSteps } from '@/helpers/exerciseHelper';
@@ -267,7 +268,7 @@ export default {
     hasDiversityCharacteristic,
     btnNext,
     async btnComplete() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

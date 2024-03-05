@@ -91,6 +91,9 @@ export default {
     },
     async save() {
       await this.$store.dispatch('exerciseDocument/save', this.formData);
+      if (this.formData.advertType === ADVERT_TYPES.EXTERNAL) {
+        this.$router.push({ name: 'exercise-external' });
+      }
       this.closeModal();
     },
   },

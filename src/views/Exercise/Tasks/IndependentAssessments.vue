@@ -353,6 +353,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import { isDateInFuture, isDateGreaterThan } from '@jac-uk/jac-kit/helpers/date';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -570,7 +571,7 @@ export default {
     async initialiseAssessments() {
       if (!this.exerciseStage) return;
       try {
-        await functions.httpsCallable('initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
+        await httpsCallable(functions, 'initialiseAssessments')({ exerciseId: this.exercise.id, stage: this.exerciseStage });
         return true;
       } catch (error) {
         return;
@@ -578,28 +579,28 @@ export default {
     },
     async cancelAssessments({ assessmentIds, cancelReason }) {
       this.resetSelectedItems();
-      await functions.httpsCallable('cancelAssessments')({ exerciseId: this.exercise.id, assessmentIds, cancelReason });
+      await httpsCallable(functions, 'cancelAssessments')({ exerciseId: this.exercise.id, assessmentIds, cancelReason });
     },
     async resetAssessments({ assessmentIds, status }) {
       this.resetSelectedItems();
-      await functions.httpsCallable('resetAssessments')({ exerciseId: this.exercise.id, assessmentIds, status });
+      await httpsCallable(functions, 'resetAssessments')({ exerciseId: this.exercise.id, assessmentIds, status });
     },
     async sendRequests({ assessmentIds }) {
       this.resetSelectedItems();
-      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentIds });
+      const result = await httpsCallable(functions, 'sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentIds });
       this.processSendAssessmentResult(result);
     },
     async sendReminders({ assessmentIds }) {
       this.resetSelectedItems();
-      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentIds });
+      const result = await httpsCallable(functions, 'sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentIds });
       this.processSendAssessmentResult(result);
     },
     async resendRequest({ assessmentId }) {
-      const result = await functions.httpsCallable('sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId, resend: true });
+      const result = await httpsCallable(functions, 'sendAssessmentRequests')({ exerciseId: this.exercise.id, assessmentId, resend: true });
       this.processSendAssessmentResult(result);
     },
     async sendReminder({ assessmentId }) {
-      const result = await functions.httpsCallable('sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId });
+      const result = await httpsCallable(functions, 'sendAssessmentReminders')({ exerciseId: this.exercise.id, assessmentId });
       this.processSendAssessmentResult(result);
     },
     async processSendAssessmentResult(result) {
@@ -614,7 +615,7 @@ export default {
     },
     async testRequest({ assessmentIds, notificationType }) {
       this.resetSelectedItems();
-      await functions.httpsCallable('testAssessmentNotification')({ assessmentIds, notificationType });
+      await httpsCallable(functions, 'testAssessmentNotification')({ assessmentIds, notificationType });
     },
     lateIASubmission(assessment){
       // Not submitted and late

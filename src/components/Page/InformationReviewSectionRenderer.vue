@@ -43,7 +43,7 @@
             >
               Details
             </dt>
-            
+
             <div
               v-else-if="key === 'judicialFunctions' && data[index].tasks.includes('judicial-functions')"
               style="border-bottom: none;"
@@ -184,13 +184,16 @@
                     :index="index"
                     :extension="'workingBasis'"
                     type="selection"
-                    :options="['full-time', 'salaried-part-time', 'fee-paid', 'voluntary']"
+                    :options="workingBasisOptions"
                     :is-asked="isAsked"
                     @change-field="changeTaskDetail"
                   />
                 </div>
               </div>
-              <div class="govuk-summary-list govuk-!-margin-0">
+              <div
+                v-if="data[index][key] && [WORKING_BASIS.FEE_PAID, WORKING_BASIS.VOLUNTARY].includes(data[index][key].workingBasis)"
+                class="govuk-summary-list govuk-!-margin-0"
+              >
                 <div
                   class="govuk-summary-list__key widerColumn"
                 >
@@ -376,6 +379,7 @@ import ModalInner from '@jac-uk/jac-kit/components/Modal/ModalInner.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { formatDate } from '@jac-uk/jac-kit/filters/filters';
 import permissionMixin from '@/permissionMixin';
+import { WORKING_BASIS } from '@/helpers/constants';
 
 export default {
   name: 'InformationReviewSectionRenderer',
@@ -423,6 +427,8 @@ export default {
   emits: ['changeField', 'changeTaskDetails', 'changeJudicialFunctions', 'addField', 'removeField'],
   data() {
     return {
+      WORKING_BASIS,
+      workingBasisOptions: Object.values(WORKING_BASIS),
       currentIndex: null,
     };
   },

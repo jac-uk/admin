@@ -1,7 +1,11 @@
+import { doc, collection, updateDoc } from '@firebase/firestore';
+import { httpsCallable } from '@firebase/functions';
 import { auth, functions, firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { get } from 'lodash';
+
+const collectionRef = collection(firestore, 'users');
 
 const module = {
   namespaced: true,
@@ -58,10 +62,11 @@ const module = {
               id: userInvitation.roleId || '',
               isChanged: false,
             },
+            uid: user.uid || '',
           };
           userDoc = await dispatch('users/create', { id: user.uid, data: newUser }, { root: true });
           // set user role in custom claims
-          await functions.httpsCallable('updateUserCustomClaims')({ userId: user.uid });
+          await httpsCallable(functions, 'updateUserCustomClaims')({ userId: user.uid });
           // mark user invitation as completed
           await dispatch('userInvitations/save', { id: userInvitation.id, data: { status: 'completed' } }, { root: true });
         }
@@ -69,7 +74,7 @@ const module = {
         // check if user is microsoft user and email is not verified
         if ((user.emailVerified === false) && (get(user, 'providerData.0.providerId', null) === 'microsoft.com')) {
           user = { ...user, emailVerified: true };
-          await functions.httpsCallable('ensureEmailVerified')({});
+          await httpsCallable(functions, 'ensureEmailVerified')({});
         }
 
         // refresh token to get latest custom claims
@@ -98,29 +103,35 @@ const module = {
       }
     },
     bindCurrentUser: firestoreAction(({ bindFirestoreRef }, id) => {
-      const firestoreRef = firestore.collection('users').doc(id);
+      const firestoreRef = doc(collection(firestore, 'users'), id);
       return bindFirestoreRef('currentUser', firestoreRef, { serialize: vuexfireSerialize });
     }),
     setAuthError({ commit }, message) {
       commit('setAuthError', message);
+    },
+    save: async ({ state }, data) => {
+      await updateDoc(doc(collectionRef, state.record.id), data);
     },
   },
   getters: {
     isSignedIn(state) {
       return (state.currentUser !== null);
     },
-    getEmail(state) {
-      if (state.currentUser) {
-        return state.currentUser.email;
-      }
-      return null;
-    },
     hasPermissions: state => permissions => {
       const rolePermissions = state.rolePermissions;
       return rolePermissions && Array.isArray(rolePermissions) && permissions.every(p => rolePermissions.includes(p));
     },
+    getEmail(state) {
+      return state.currentUser?.email ?? null;
+    },
     getDisplayName(state) {
-      return state.currentUser.displayName;
+      return state.currentUser?.displayName ?? null;
+    },
+    getUserId(state) {
+      return state.currentUser?.uid ?? null;
+    },
+    getSlackUID(state) {
+      return state.currentUser?.slackMemberId ?? null;
     },
   },
 };

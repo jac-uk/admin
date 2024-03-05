@@ -1,3 +1,4 @@
+import { query, collection, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -7,9 +8,10 @@ export default {
   namespaced: true,
   actions: {
     bindQueue: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = firestore
-        .collection('notifications')
-        .where('status', 'in', ['ready', 'failed']);
+      let firestoreRef = query(
+        collection(firestore, 'notifications'),
+        where('status', 'in', ['ready', 'failed'])
+      );
       firestoreRef = tableQuery(state.queue, firestoreRef, params);
       return bindFirestoreRef('queue', firestoreRef, { serialize: vuexfireSerialize });
     }),
@@ -17,9 +19,10 @@ export default {
       return unbindFirestoreRef('queue');
     }),
     bindSent: firestoreAction(({ bindFirestoreRef, state }, params) => {
-      let firestoreRef = firestore
-        .collection('notifications')
-        .where('status', '==', 'sent');
+      let firestoreRef = query(
+        collection(firestore, 'notifications'),
+        where('status', '==', 'sent')
+      );
       firestoreRef = tableQuery(state.queue, firestoreRef, params);
       return bindFirestoreRef('sent', firestoreRef, { serialize: vuexfireSerialize });
     }),

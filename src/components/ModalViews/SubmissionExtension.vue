@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 
@@ -79,7 +79,7 @@ export default {
         candidate: {
           id: this.$attrs.userId,
         },
-        created: firebase.firestore.FieldValue.serverTimestamp(),
+        created: serverTimestamp(),
       };
 
       await this.$store.dispatch('application/update', { data: data, id: this.$attrs.applicationId });

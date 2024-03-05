@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -123,7 +124,7 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise) return;
       try {
-        const res = await functions.httpsCallable('exportApplicationCommissionerConflicts')({ exerciseId: this.exercise.id, format: 'googledoc' });
+        const res = await httpsCallable(functions, 'exportApplicationCommissionerConflicts')({ exerciseId: this.exercise.id, format: 'googledoc' });
         if (res.data.sourceContent) {
           this.export2Word(res.data.sourceContent, `${this.exercise.referenceNumber} ${this.exercise.name} - Commissioner Conflicts Report`);
           return true;
@@ -137,7 +138,7 @@ export default {
       const blob = new Blob(['\ufeff', html], {
         type: 'application/msword',
       });
-    
+
       // specify link url
       const url = `data:application/vnd.ms-word;charset=utf-8,${encodeURIComponent(html)}`;
       // specify file name
@@ -145,7 +146,7 @@ export default {
       // create download link element
       const downloadLink = document.createElement('a');
       document.body.appendChild(downloadLink);
-    
+
       if (navigator.msSaveOrOpenBlob ){
         navigator.msSaveOrOpenBlob(blob, filename);
       } else {
@@ -153,7 +154,7 @@ export default {
         downloadLink.download = filename;
         downloadLink.click();
       }
-    
+
       document.body.removeChild(downloadLink);
     },
   },

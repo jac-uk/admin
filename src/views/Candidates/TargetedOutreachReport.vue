@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import TextArea from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
@@ -174,7 +175,7 @@ export default {
       const data = {
         nationalInsuranceNumbers: this.nins.split(/[\n,]/), // split on new line or comma
       };
-      const returnData = await functions.httpsCallable('targetedOutreachReport')(data);
+      const returnData = await httpsCallable(functions, 'targetedOutreachReport')(data);
       if (returnData.data.length) {
         this.results = returnData.data;
       } else {

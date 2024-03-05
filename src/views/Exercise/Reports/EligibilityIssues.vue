@@ -170,6 +170,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { query, collection, where, onSnapshot } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -215,7 +217,7 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }
@@ -223,22 +225,24 @@ export default {
     async exportToGoogleDoc() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        return await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
+        return await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
       } catch (error) {
         return;
       }
     },
     async getTableData(params) {
-      let firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('exercise.id', '==', this.exercise.id)
-        .where('flags.eligibilityIssues', '==', true);
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', this.exercise.id),
+        where('flags.eligibilityIssues', '==', true)
+      );
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
       if (firestoreRef) {
-        this.unsubscribe = firestoreRef
-          .onSnapshot((snap) => {
+        this.unsubscribe = onSnapshot(
+          firestoreRef,
+          (snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
               applicationRecords.push(vuexfireSerialize(doc));
@@ -254,7 +258,7 @@ export default {
     },
     async gatherReportData() {
       // fetch data
-      const response = await functions.httpsCallable('exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
+      const response = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
       const reportData = [];
       // get headers
       reportData.push(response.data.headers.map(header => header.title));

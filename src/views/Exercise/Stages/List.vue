@@ -176,8 +176,6 @@ export default {
       let statuses = this.availableStatuses;
       if (this.previousStage) {
         statuses = statuses.concat(getStagePassingStatuses(this.exercise, this.previousStage));
-      } else {
-        statuses = statuses.concat(['']); // add blank checkbox so we can filter on no status
       }
       return statuses;
     },
