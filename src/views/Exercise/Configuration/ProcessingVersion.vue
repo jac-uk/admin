@@ -16,18 +16,18 @@
         required
       >
         <RadioItem
-          value="2"
+          :value="2"
           label="Processing version 2.0"
           hint="Introduced in March 2024, processing version 2.0 updates stages and statuses and includes a number of new tasks"
         />
         <RadioItem
-          value="1"
+          :value="1"
           label="Processing version 1.0"
           hint="The original!"
           disabled
         />
       </RadioGroup>
-      <button 
+      <button
         class="govuk-button"
         :disabled="!hasChanges"
       >
@@ -54,9 +54,9 @@ export default {
   extends: Form,
   data() {
     const defaults = {
-      _processingVersion: '1',
+      _processingVersion: 1,
     };
-    const formData = this.$store.getters['exerciseDocument/data'](defaults);    
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData,
     };

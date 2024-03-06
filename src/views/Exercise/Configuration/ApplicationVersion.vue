@@ -16,23 +16,23 @@
         required
       >
         <RadioItem
-          value="3"
+          :value="3"
           label="Application version 3.0"
           hint="Introduces combined work history which replaces PQE, Employment Gaps and Judicial Experience"
         />
         <RadioItem
-          value="2"
+          :value="2"
           label="Application version 2.0"
           hint="[ changes TBC ]"
         />
         <RadioItem
-          value="1"
+          :value="1"
           label="Application version 1.0"
           hint="The original!"
           disabled
         />
       </RadioGroup>
-      <button 
+      <button
         class="govuk-button"
         :disabled="!hasChanges"
       >
@@ -59,7 +59,7 @@ export default {
     const defaults = {
       _applicationVersion: 2,
     };
-    const formData = this.$store.getters['exerciseDocument/data'](defaults);    
+    const formData = this.$store.getters['exerciseDocument/data'](defaults);
     return {
       formData,
     };
