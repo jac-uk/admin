@@ -134,7 +134,7 @@
     </main>
 
     <UserFeedbackLink
-      v-show="isSignedIn && isMounted"
+      v-show="isSignedIn && isMounted && !isStagingEnvironment"
       :style="{ 'bottom': linkBottom }"
       @open-feedback-modal="openFeedbackModal()"
     />
@@ -280,6 +280,9 @@ export default {
   computed: {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
+    },
+    isStagingEnvironment() {
+      return this.$store.getters.isStaging;
     },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
