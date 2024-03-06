@@ -69,7 +69,13 @@
           >
             Edit name
           </router-link>
-
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link govuk-!-margin-left-4 print-none"
+            :to="{name: 'exercise-configuration-application-version'}"
+          >
+            Configuration
+          </router-link>
           <div
             v-if="!isProduction"
             class="govuk-!-margin-top-4"
@@ -186,6 +192,9 @@ export default {
     },
     canArchiveExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
+    canEditExerciseConfiguration() {
+      return true;
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
