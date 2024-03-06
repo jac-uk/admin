@@ -374,7 +374,7 @@
           <InformationReviewRenderer
             v-else
             type="selection"
-            :options="['bangladeshi', 'chinese', 'indian', 'pakistani', 'other-asian', 'african', 'caribbean', 'other-black', 'uk-ethnic', 'irish', 'gypsy-irish-traveller', 'other-white', 'white-black-caribbean', 'white-black-african', 'white-asian', 'other-mixed', 'other-ethnic-group', 'prefer-not-to-say']"
+            :options="['bangladeshi', 'chinese', 'indian', 'pakistani', 'other-asian', 'african', 'caribbean', 'other-black', 'uk-ethnic', 'irish', 'gypsy-irish-traveller', 'roma' ,'other-white', 'white-black-caribbean', 'white-black-african', 'white-asian', 'other-mixed', 'arab', 'other-ethnic-group', 'prefer-not-to-say']"
             field="ethnicGroup"
             :edit="editable"
             :data="equalityAndDiversitySurvey.ethnicGroup"
