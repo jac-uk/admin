@@ -64,14 +64,14 @@
           </h1>
           <router-link
             v-if="!isAdvertTypeExternal && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-            class="govuk-link print-none"
+            class="govuk-link govuk-!-margin-right-4 print-none"
             :to="{name: 'exercise-edit-name'}"
           >
             Edit name
           </router-link>
           <router-link
             v-if="canEditExerciseConfiguration"
-            class="govuk-link govuk-!-margin-left-4 print-none"
+            class="govuk-link print-none"
             :to="{name: 'exercise-configuration-application-version'}"
           >
             Configuration
