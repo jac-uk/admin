@@ -70,7 +70,7 @@ export default {
     },
   },
   methods: {
-    async save(isValid) {
+    async save() {
       await this.$store.dispatch('exerciseDocument/save', this.formData);
       await httpsCallable(functions, 'updateApplicationRecordStageStatus')({ exerciseId: this.exercise.id, version: this.exercise._processingVersion });
     },

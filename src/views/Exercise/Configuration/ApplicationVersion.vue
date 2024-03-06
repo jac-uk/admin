@@ -73,7 +73,7 @@ export default {
     },
   },
   methods: {
-    async save(isValid) {
+    async save() {
       await this.$store.dispatch('exerciseDocument/save', this.formData);
     },
   },
