@@ -95,6 +95,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import { mapState } from 'vuex';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -140,8 +142,9 @@ export default {
     },
   },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/handover`)
-      .onSnapshot((snap) => {
+    this.unsubscribe = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/handover`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
@@ -154,7 +157,7 @@ export default {
   },
   methods: {
     async transferHandoverData() {
-      await functions.httpsCallable('transferHandoverData')({ exerciseId: this.exercise.id });
+      await httpsCallable(functions, 'transferHandoverData')({ exerciseId: this.exercise.id });
     },
     getTableData(params) {
       this.$store.dispatch(
@@ -168,7 +171,7 @@ export default {
     },
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateHandoverReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateHandoverReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;
@@ -192,7 +195,7 @@ export default {
       const data = this.gatherReportData();
       /**
        * Make the 'Judicial experience' (column S) can display multiple lines.
-       * 
+       *
        * @link: https://github.com/dtjohnson/xlsx-populate?tab=readme-ov-file#styles-1
        */
       const styles = {

@@ -15,7 +15,7 @@
       :tabs="tabs"
       class="print-none"
     />
-      
+
     <Table
       :key="activeTab"
       ref="userInvitationsTable"
@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
@@ -317,7 +317,7 @@ export default {
       try {
         const data = {
           ...this.userInvitation,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: serverTimestamp(),
         };
         await this.$store.dispatch('userInvitations/create', data);
         this.closeUserInvitationModal();
@@ -333,7 +333,7 @@ export default {
         await this.validateEmail(this.userInvitation.email);
         if (this.isDuplicateEmail) return false;
       }
-      
+
       try {
         const data = {
           id: this.userInvitation.id,

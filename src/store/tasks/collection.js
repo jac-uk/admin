@@ -1,3 +1,4 @@
+import { collection } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -9,7 +10,7 @@ export default {
     bind: firestoreAction(({ bindFirestoreRef, commit }, params) => {
       commit('setLoaded', true);
       commit('setParams', params);
-      const firestoreRef = firestore.collection(`exercises/${params.exerciseId}/tasks`);
+      const firestoreRef = collection(firestore, `exercises/${params.exerciseId}/tasks`);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef, commit }) => {

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
@@ -119,7 +119,7 @@ export default {
           exerciseId: this.exerciseId,
           status: 'draft',
           // @TODO statuses
-          created: firebase.firestore.FieldValue.serverTimestamp(),
+          created: serverTimestamp(),
         };
         await this.$store.dispatch('panels/create', data);
         this.$router.push({

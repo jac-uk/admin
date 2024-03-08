@@ -124,7 +124,7 @@
           class="govuk-summary-list__row"
         >
           <dt class="govuk-summary-list__key">
-            Uploaded self assessment
+            Uploaded self assessment with competencies
           </dt>
           <dd class="govuk-summary-list__value">
             <div v-if="application.uploadedSelfAssessment">
@@ -135,22 +135,31 @@
                 :title="application.uploadedSelfAssessment"
               />
             </div>
-            <span v-else>
-              No information
-              <span v-if="!isApplicationPartAsked('selfAssessmentCompetencies')">
-                (not asked)
-              </span>
-            </span>
-            <div v-if="editable">
-              <FileUpload
-                id="self-assessment-upload"
-                ref="self-assessment"
-                v-model="application.uploadedSelfAssessment"
-                name="self-assessment"
-                :path="uploadPath"
-                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
-              />
+            <span v-else>Not yet received</span>
+          </dd>
+        </div>
+        <div
+          class="govuk-summary-list__row"
+        >
+          <dt class="govuk-summary-list__key">
+            Self assessment content
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <div v-if="selfAssessmentSections">
+              <div
+                v-for="(section, i) in selfAssessmentSections"
+                :key="i"
+                style="white-space: pre-line;"
+              >
+                <strong>
+                  {{ `${i + 1}. ${section.question}` }}
+                </strong>
+                <br>
+                {{ application.uploadedSelfAssessmentContent[i] || '' }}
+                <hr v-if="i !== selfAssessmentSections.length - 1">
+              </div>
             </div>
+            <span v-else>Not yet received</span>
           </dd>
         </div>
       </dl>
@@ -321,6 +330,9 @@ export default {
     },
     applicationId() {
       return this.$route.params.applicationId;
+    },
+    selfAssessmentSections() {
+      return this.exercise.selfAssessmentWordLimits || [];
     },
   },
   methods: {

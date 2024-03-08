@@ -2,6 +2,7 @@ import exerciseCollection from '@/store/exercise/collection';
 import { firestore } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { vi, describe, beforeEach, it } from 'vitest';
+import { collection, orderBy as firebaseOrderBy } from '@firebase/firestore';
 
 /**
 * @vitest-environment jsdom
@@ -34,7 +35,7 @@ describe.skip('store/exercise/collection', () => {
 
         it('binds the `/exercises` collection', () => {
           const firestoreRef = callToBindFirestoreRef[1];
-          expect(firestoreRef).toEqual(firestore.collection('exercises').orderBy('referenceNumber', 'desc'));
+          expect(firestoreRef).toEqual(collection(firestore, 'exercises', firebaseOrderBy('referenceNumber', 'desc')));
         });
 
         it('serializes document data with `vuexfireSerialize` helper', () => {

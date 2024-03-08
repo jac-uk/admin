@@ -1,5 +1,4 @@
-import firebase from 'firebase/app';
-
+import { Timestamp } from '@firebase/firestore';
 const toJACString = (data) => {
   return `JAC_ENV=${data.environment}&&JAC_TYPE=${data.type}&&JAC_TITLE=${data.title}&&JAC_CONTENT=${JSON.stringify(data.content)}`;
 };
@@ -20,7 +19,7 @@ const fromJACString = (JACString) => {
     if (part.indexOf('JAC_CONTENT=') >= 0) {
       data.content = JSON.parse(part.substring(12), (key, value) => {
         if (value && typeof value == 'object' && typeof value.seconds == 'number' && typeof value.nanoseconds == 'number') {
-          value = new firebase.firestore.Timestamp(value.seconds, value.nanoseconds);
+          value = new Timestamp(value.seconds, value.nanoseconds);
         }
         return value;
       });

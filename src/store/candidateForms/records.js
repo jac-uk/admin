@@ -1,19 +1,23 @@
+import { query, collection, where } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collectionRef = firestore.collection('applicationRecords');
+const collectionName = 'applicationRecords';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state }, { type, ...params }) => {
-      let firestoreRef = collectionRef
-        .where('exercise.id', '==', params.exerciseId)
-        .where('active', '==', true);
+      let firestoreRef = query(
+        collectionRef,
+        where('exercise.id', '==', params.exerciseId),
+        where('active', '==', true)
+      );
 
-      firestoreRef = firestoreRef.where(`${type}.status`, '==', params.status);
+      firestoreRef = query(firestoreRef, where(`${type}.status`, '==', params.status));
       firestoreRef = await tableQuery(state.records, firestoreRef, params);
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),

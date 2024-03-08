@@ -1,15 +1,17 @@
+import { doc, collection, addDoc, setDoc } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import tableQuery from '@jac-uk/jac-kit/components/Table/tableQuery';
 
-const collection = firestore.collection('roles');
+const collectionName = 'roles';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
   actions: {
     bind: firestoreAction(async ({ bindFirestoreRef, state, commit }, params) => {
-      const firestoreRef = await tableQuery(state.records, collection, params);
+      const firestoreRef = await tableQuery(state.records, collectionRef, params);
       if (firestoreRef) {
         return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
       } else {
@@ -20,11 +22,11 @@ export default {
       return unbindFirestoreRef('records');
     }),
     create: async (_, data) => {
-      return await collection.add(data);
+      return await addDoc(collectionRef, data);
     },
     save: async (_, { roleId, data }) => {
-      const ref = collection.doc(roleId);
-      return await ref.set(data, { merge: true });
+      const ref = doc(collectionRef, roleId);
+      return await setDoc(ref, data, { merge: true });
     },
   },
   mutations: {

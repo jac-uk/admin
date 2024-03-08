@@ -155,6 +155,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
@@ -258,7 +259,7 @@ export default {
     },
     async processNow() {
       try {
-        await functions.httpsCallable('processNotifications')();
+        await httpsCallable(functions, 'processNotifications')();
         return true;
       } catch (error) {
         return;

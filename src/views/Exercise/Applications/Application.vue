@@ -223,7 +223,7 @@
             <CharacterInformationSummary
               :editable="editable"
               :character-information="correctCharacterInformation"
-              :version="applicationVersion"
+              :version="characterInformationVersion"
               :is-asked="isApplicationPartAsked('characterInformation')"
               @update-application="changeApplication"
             />
@@ -268,6 +268,13 @@
               @update-application="changeApplication"
             />
             <CommissionerConflictsSummary
+              :application="application"
+              :exercise="exercise"
+              :editable="editable"
+              @update-application="changeApplication"
+            />
+            <ResignationFromDWPSummary
+              v-if="isJAC00187"
               :application="application"
               :exercise="exercise"
               :editable="editable"
@@ -326,6 +333,7 @@ import ExperienceSummary from '@/views/InformationReview/ExperienceSummary.vue';
 import AssessmentsSummary from '@/views/InformationReview/AssessmentsSummary.vue';
 import AssessorsSummary from '@/views/InformationReview/AssessorsSummary.vue';
 import CommissionerConflictsSummary from '@/views/InformationReview/CommissionerConflictsSummary.vue';
+import ResignationFromDWPSummary from '@/views/InformationReview/ResignationFromDWPSummary.vue';
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import PageNotFound from '@/views/Errors/PageNotFound.vue';
 import { splitFullName } from '@jac-uk/jac-kit/helpers/splitFullName';
@@ -337,7 +345,8 @@ import {
   hasStatementOfSuitability,
   hasIndependentAssessments,
   isApplicationPartAsked,
-  isCharacterChecksAsked
+  isCharacterChecksAsked,
+  isJAC00187
 } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
 
@@ -363,6 +372,7 @@ export default {
     AssessmentsSummary,
     AssessorsSummary,
     CommissionerConflictsSummary,
+    ResignationFromDWPSummary,
   },
   mixins: [permissionMixin],
   data() {
@@ -424,7 +434,7 @@ export default {
       return isNonLegal(this.exercise);
     },
     correctCharacterInformation() {
-      if (this.applicationVersion === 2) {
+      if (this.applicationVersion >= 2) {
         return this.application.characterInformationV2 || {};
       } else {
         return this.application.characterInformation || {};
@@ -438,6 +448,9 @@ export default {
     },
     applicationVersion() {
       return this.exercise._applicationVersion || 1;
+    },
+    characterInformationVersion() {
+      return this.applicationVersion >= 2 ? 2 : 1;
     },
     applications() {
       return this.$store.state.applications.records;
@@ -514,6 +527,10 @@ export default {
     },
     isCharacterChecksAsked() {
       return this.application && isCharacterChecksAsked(this.application);
+    },
+    isJAC00187() {
+      const env = this.$store.getters.appEnvironment;
+      return isJAC00187(env, this.application.exerciseRef);
     },
   },
   watch: {

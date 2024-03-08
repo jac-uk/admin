@@ -326,6 +326,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { query, collection, where, onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
@@ -401,8 +403,9 @@ export default {
   },
   created() {
     this.$store.dispatch('applications/bind', { exerciseId: this.exercise.id, status: 'applied' });
-    this.unsubscribeReport = firestore.doc(`exercises/${this.exercise.id}/reports/reasonableAdjustments`)
-      .onSnapshot((snap) => {
+    this.unsubscribeReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/reasonableAdjustments`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
@@ -418,21 +421,23 @@ export default {
   },
   methods: {
     async getTableData(params) {
-      let firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('exercise.id', '==', this.exercise.id)
-        .where('candidate.reasonableAdjustments', '==', true);
+      let firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('exercise.id', '==', this.exercise.id),
+        where('candidate.reasonableAdjustments', '==', true)
+      );
       if (this.exerciseStage !== 'all') {
-        firestoreRef = firestoreRef.where('stage', '==', this.exerciseStage);
+        firestoreRef = where(firestoreRef, 'stage', '==', this.exerciseStage);
       }
       if (this.candidateStatus !== 'all') {
-        firestoreRef = firestoreRef.where('status', '==', this.candidateStatus);
+        firestoreRef = where(firestoreRef, 'status', '==', this.candidateStatus);
       }
       params.orderBy = 'candidate.fullName';
       firestoreRef = await tableQuery(this.applicationRecords, firestoreRef, params);
       if (firestoreRef) {
-        this.unsubscribe = firestoreRef
-          .onSnapshot((snap) => {
+        this.unsubscribe = onSnapshot(
+          firestoreRef,
+          (snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
               const data = vuexfireSerialize(doc);
@@ -509,7 +514,7 @@ export default {
     },
     async refreshReport() {
       try {
-        await functions.httpsCallable('generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
+        await httpsCallable(functions, 'generateReasonableAdjustmentsReport')({ exerciseId: this.exercise.id });
         return true;
       } catch (error) {
         return;

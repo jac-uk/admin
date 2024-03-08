@@ -55,7 +55,7 @@
       :search-map="$searchMap.applications"
       :page-item-type="pageItemType"
       :page-size="50"
-      :total="exercise._applications[status]"
+      :total="!!(exercise._applications) ? exercise._applications[status] : 0"
       @change="getTableData"
     >
       <template #row="{row}">
@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import { functions } from '@/firebase';
@@ -197,7 +198,7 @@ export default {
       );
     },
     async gatherReportData() {
-      const response = await functions.httpsCallable('exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
+      const response = await httpsCallable(functions, 'exportApplicationContactsData')({ exerciseId: this.exercise.id, status: this.status });
       const reportData = [];
       const { headers, rows } = response.data;
 
@@ -227,7 +228,7 @@ export default {
     async sendApplicationReminders() {
       if (this.applications && this.applications.length) {
         try {
-          await functions.httpsCallable('sendApplicationReminders')({ exerciseId: this.exercise.id });
+          await httpsCallable(functions, 'sendApplicationReminders')({ exerciseId: this.exercise.id });
         } catch (error) {
           console.error(error);
         }
