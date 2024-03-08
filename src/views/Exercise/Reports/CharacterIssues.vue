@@ -364,6 +364,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { downloadBase64File } from '@/helpers/file';
 
 export default {
   name: 'CharacterIssues',
@@ -602,10 +603,16 @@ export default {
     async exportCharacterAnnexReport() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        await httpsCallable(functions, 'exportApplicationCharacterIssues')({
+        const result = await httpsCallable(functions, 'exportApplicationCharacterIssues')({
           exerciseId: this.exercise.id,
           format: 'annex',
         });
+        if (!result.data) return false;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_SCC Annex Report.docx`
+        );
         return true;
       } catch (error) {
         return;
