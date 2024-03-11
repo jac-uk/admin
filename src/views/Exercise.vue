@@ -71,11 +71,14 @@
           </router-link>
           <router-link
             v-if="canEditExerciseConfiguration"
-            class="govuk-link print-none"
+            class="govuk-link govuk-!-margin-right-4 print-none"
             :to="{name: 'exercise-configuration-application-version'}"
-          >
-            Configuration
-          </router-link>
+          >Application form v{{ exercise._applicationVersion || 1 }}</router-link>
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link print-none"
+            :to="{name: 'exercise-configuration-processing-version'}"
+          >Processing v{{ exercise._processingVersion || 1 }}</router-link>
           <div
             v-if="!isProduction"
             class="govuk-!-margin-top-4"
