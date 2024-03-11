@@ -1,3 +1,4 @@
+/*eslint func-style: ["error", "declaration"]*/
 
 function getRandomString(length = 3) {
   const characters = 'abcdefghijklmnopqrstuvwxyz';
