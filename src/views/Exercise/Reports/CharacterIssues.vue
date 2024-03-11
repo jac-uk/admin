@@ -607,7 +607,7 @@ export default {
           exerciseId: this.exercise.id,
           format: 'annex',
         });
-        if (!result.data) return false;
+        if (!result.data) return;
         downloadBase64File(
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           result.data,
