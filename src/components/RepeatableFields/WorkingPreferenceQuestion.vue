@@ -252,6 +252,7 @@ import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.v
 import AnswerGroup from '@/components/RepeatableFields/AnswerGroup.vue';
 import Answer from '@/components/RepeatableFields/Answer.vue';
 import { shallowRef } from 'vue';
+import { getRandomString } from '@/helpers/helpers';
 
 export default {
   name: 'WorkingPreferenceQuestion',
@@ -285,6 +286,7 @@ export default {
   },
   data() {
     // set default values
+    if (!this.row.hasOwnProperty('id')) this.row.id = getRandomString(3);
     if (!this.row.hasOwnProperty('questionRequired')) this.row.questionRequired = true;
     if (!this.row.hasOwnProperty('questionType')) this.row.questionType = 'single-choice';
     if (!this.row.hasOwnProperty('allowLinkedQuestions')) this.row.allowLinkedQuestions = false;

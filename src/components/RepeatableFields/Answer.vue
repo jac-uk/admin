@@ -11,6 +11,7 @@
 
 <script>
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import { getRandomString } from '@/helpers/helpers';
 
 export default {
   name: 'Answer',
@@ -36,6 +37,9 @@ export default {
       type: String,
       default: 'Answer option',
     },
+  },
+  created() {
+    if (!this.row.hasOwnProperty('id')) this.row.id = getRandomString(3);
   },
 };
 </script>
