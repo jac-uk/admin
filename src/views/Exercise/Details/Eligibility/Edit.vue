@@ -100,11 +100,7 @@
           />
           <CheckboxItem
             value="s9-4"
-            label="s9(4)"
-          />
-          <CheckboxItem
-            value="none"
-            label="None"
+            label="Class 1 ticket"
           />
         </CheckboxGroup>
 
