@@ -5,6 +5,12 @@
         <h2 class="govuk-heading-l">
           Deployment
         </h2>
+        <span
+          v-if="report"
+          class="govuk-body govuk-!-font-size-14"
+        >
+          {{ $filters.formatDate(report.createdAt, 'longdatetime') }}
+        </span>
       </div>
 
       <div
