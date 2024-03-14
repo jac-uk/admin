@@ -60,7 +60,7 @@
     </div>
 
     <div
-      v-if="report"
+      v-if="report && showTabs"
       class="govuk-grid-column-full"
     >
       <Select
@@ -113,6 +113,14 @@
       </Table>
       <p class="govuk-caption-s color-middle">
         <span class="">Diversity Report Last Updated: {{ $filters.formatDate(reportCreatedAt, 'datetime') }}</span>
+      </p>
+    </div>
+    <div
+      v-else
+      class="govuk-grid-column-full"
+    >
+      <p class="govuk-body">
+        Please refresh the report.
       </p>
     </div>
   </div>
@@ -224,6 +232,9 @@ export default {
       }
       types.push('emp');
       return types;
+    },
+    showTabs() {
+      return this.report && this.availableStages?.length && this.report?.[this.availableStages[0]];  // check if report data is available
     },
     tabs() {
       return _map(this.labels, item => {

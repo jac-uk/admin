@@ -52,7 +52,7 @@
       </div>
 
       <div
-        v-if="report"
+        v-if="report && showTabs"
         class="govuk-grid-row"
       >
         <div class="govuk-grid-column-one-half">
@@ -74,15 +74,19 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        <p class="govuk-body">
+          Please refresh the report.
+        </p>
+      </div>
     </div>
 
     <!-- results -->
     <div
-      v-if="report"
+      v-if="report && showTabs"
       class="govuk-grid-column-full"
     >
       <TabsList
-        v-if="showTabs"
         v-model:active-tab="activeTab"
         :tabs="tabs"
         class="print-none"
@@ -398,7 +402,7 @@ export default {
       return tabs;
     },
     showTabs() {
-      return this.report && this.availableStages?.length && this.report?.[this.availableStages[0]];  // check if diversity data is available
+      return this.report && this.availableStages?.length && this.report?.[this.availableStages[0]];  // check if report data is available
     },
     activeTabTitle() {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
