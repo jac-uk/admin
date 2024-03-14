@@ -185,9 +185,9 @@ const lookup = (value) => {
 
   // v2 exercise stages
   lookup[EXERCISE_STAGE.SHORTLISTING] = 'Shortlisting';
-  lookup[EXERCISE_STAGE.SELECTION] = 'Selection';
+  lookup[EXERCISE_STAGE.SELECTION] = 'Selection Days';
   lookup[EXERCISE_STAGE.SCC] = 'SCC';
-  lookup[EXERCISE_STAGE.RECOMMENDATION] = 'Recommendation';
+  lookup[EXERCISE_STAGE.RECOMMENDATION] = 'Recommendations';
 
   lookup[EXERCISE_STAGE.REVIEW] = 'Review';
   lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
@@ -244,7 +244,7 @@ const lookup = (value) => {
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Shortlisting Passed';
   lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Shortlisting Failed';
   // lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
-  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';  
+  lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';
   lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
   lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Selection Day Passed';
   lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Selection Day Failed';
