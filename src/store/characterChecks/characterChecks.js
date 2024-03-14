@@ -19,6 +19,7 @@ export default {
       );
 
       if (params.where.length === 0) {
+        // TODO this should use stages for the correct processing version
         firestoreRef = query(firestoreRef, where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTABLE, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]));
       }
 

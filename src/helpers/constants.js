@@ -64,6 +64,7 @@ const APPLICATION_STATUS = {
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',
   REJECTED_CHARACTER: 'rejectedCharacter',
+  REJECTED_MERIT: 'rejectedMerit',
   SELECTION_DAY_PASSED: 'selectionDayPassed',
   SELECTION_DAY_FAILED: 'selectionDayFailed',
   SELECTION_PASSED: 'selectionOutcomePassed',

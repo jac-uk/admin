@@ -208,6 +208,7 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.APPROVED_IMMEDIATE] = 'Approved Immediate';
   lookup[APPLICATION_STATUS.RECONSIDER] = 'Reconsider';
   lookup[APPLICATION_STATUS.REJECTED_CHARACTER] = 'Character - Rejected';
+  lookup[APPLICATION_STATUS.REJECTED_MERIT] = 'Merit - Rejected';
   lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL] = 'Ineligible (ASC) - Rejected';
   lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Ineligible (Statutory) - Rejected';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
