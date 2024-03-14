@@ -1,42 +1,77 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <h1 class="govuk-heading-l">
-        Eligibility Issues
-      </h1>
-    </div>
-    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="exportData"
-      >
-        Export to Excel
-      </ActionButton>
-      <ActionButton
-        v-if="hasPermissions([
-          PERMISSIONS.exercises.permissions.canReadExercises.value,
-          PERMISSIONS.applications.permissions.canReadApplications.value,
-          PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
-        ])"
-        class="govuk-!-margin-right-2"
-        :action="exportToGoogleDoc"
-      >
-        Generate Report
-      </ActionButton>
-      <ActionButton
-        type="primary"
-        :action="refreshReport"
-      >
-        Refresh
-      </ActionButton>
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Eligibility Issues
+          </h2>
+          <span
+            v-if="eligibilityIssuesReport"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ $filters.formatDate(eligibilityIssuesReport.createdAt, 'longdatetime') }}
+          </span>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="exportData"
+              >
+                Export to Excel
+              </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="exportToGoogleDoc"
+              >
+                Generate Report
+              </ActionButton>
+              <ActionButton
+                v-if="hasPermissions([
+                  PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  PERMISSIONS.applications.permissions.canReadApplications.value,
+                  PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
+                ])"
+                class="govuk-!-margin-right-2"
+                :action="downloadSCCAnnexReport"
+              >
+                Download SCC Annex report
+              </ActionButton>
+              <ActionButton
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="govuk-grid-column-full text-right">
+      <div class="govuk-!-display-inline-block ">
+        <Checkbox
+          id="show-not-met"
+          v-model="showNotMet"
+        >
+          Display only candidates with Eligibility issues
+        </Checkbox>
+      </div>
       <Select
         id="issue-status-filter"
         v-model="issueStatus"
@@ -54,9 +89,6 @@
         <option value="reject">
           Reject
         </option>
-        <option value="reject-non-declaration">
-          Reject Non-Declaration
-        </option>
         <option value="discuss">
           Discuss
         </option>
@@ -70,17 +102,14 @@
       </p>
       -->
       <Table
+        ref="issuesTable"
         data-key="id"
         :data="applicationRecords"
         :columns="tableColumns"
         :page-size="10"
         :page-item-type="'number'"
         :total="total"
-        :custom-search="{
-          placeholder: 'Search candidate names',
-          handler: candidateSearch,
-          field: 'candidate.id',
-        }"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableData"
       >
         <template #row="{row}">
@@ -108,8 +137,8 @@
                 </h4>
                 <Select
                   id="issue-status"
-                  :value="row.issues.eligibilityIssuesStatus || ''"
-                  @input="saveIssueStatus(row, $event)"
+                  :model-value="row.issues.eligibilityIssuesStatus || ''"
+                  @update:model-value="saveIssueStatus(row, $event)"
                 >
                   <option value="" />
                   <option value="proceed">
@@ -117,9 +146,6 @@
                   </option>
                   <option value="reject">
                     Reject
-                  </option>
-                  <option value="reject-non-declaration">
-                    Reject Non-Declaration
                   </option>
                   <option value="discuss">
                     Discuss
@@ -135,21 +161,18 @@
                 </h4>
                 <TextareaInput
                   id="recommendation-reason"
-                  :value="row.issues.eligibilityIssuesStatusReason"
-                  @input="saveIssueStatusReason(row, $event)"
+                  :model-value="row.issues.eligibilityIssuesStatusReason"
+                  @update:model-value="saveIssueStatusReason(row, $event)"
                 />
               </div>
             </div>
 
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
             <div
               v-for="(issue, index) in row.issues.eligibilityIssues"
               :key="index"
               class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
             >
-              <hr
-                class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                :class="{'govuk-!-margin-left-3 govuk-!-margin-right-3': index}"
-              >
               <div class="govuk-grid-column-two-thirds">
                 <div class="issue">
                   <span class="govuk-!-font-weight-bold">{{ $filters.lookup(issue.type) }}:</span> {{ issue.summary }}
@@ -171,7 +194,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, where, onSnapshot } from '@firebase/firestore';
+import { query, collection, doc, where, onSnapshot } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -182,6 +205,8 @@ import permissionMixin from '@/permissionMixin';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { debounce } from 'lodash';
+import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 
 export default {
   name: 'EligibilityIssues',
@@ -191,17 +216,21 @@ export default {
     Select,
     TextareaInput,
     ActionButton,
+    Checkbox,
   },
   mixins: [permissionMixin],
   data () {
     return {
+      eligibilityIssuesReport: null,
+      unsubscribeEligibilityIssuesReport: null,
       applicationRecords: [],
       issueStatus: 'all',
-      unsubscribe: null,
+      unsubscribeApplicationRecords: null,
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
       ],
       total: null,
+      showNotMet: false,
     };
   },
   computed: {
@@ -209,9 +238,26 @@ export default {
       return this.$store.state.exerciseDocument.record;
     },
   },
+  watch: {
+    showNotMet: function () {
+      this.$refs['issuesTable'].reload();
+    },
+  },
+  created() {
+    this.unsubscribeEligibilityIssuesReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/eligibilityIssues`),
+      (snap) => {
+        if (snap.exists) {
+          this.eligibilityIssuesReport = vuexfireSerialize(snap);
+        }
+      });
+  },
   unmounted() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
+    if (this.unsubscribeEligibilityIssuesReport) {
+      this.unsubscribeEligibilityIssuesReport();
+    }
+    if (this.unsubscribeApplicationRecords) {
+      this.unsubscribeApplicationRecords();
     }
   },
   methods: {
@@ -236,11 +282,14 @@ export default {
         where('exercise.id', '==', this.exercise.id),
         where('flags.eligibilityIssues', '==', true)
       );
+      if (this.showNotMet) {
+        firestoreRef = query(firestoreRef, where('flags.eligibilityIssuesMet', '==', false));
+      }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
       if (firestoreRef) {
-        this.unsubscribe = onSnapshot(
+        this.unsubscribeApplicationRecords = onSnapshot(
           firestoreRef,
           (snap) => {
             const applicationRecords = [];
@@ -291,9 +340,13 @@ export default {
       applicationRecord.issues.eligibilityIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
-    async saveIssueStatusReason(applicationRecord, reason) {
+    saveIssueStatusReason: debounce(async function (applicationRecord, reason) {
+      // use debounce
       applicationRecord.issues.eligibilityIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    }, 2000),
+    downloadSCCAnnexReport() {
+      // TODO: implement
     },
   },
 };
