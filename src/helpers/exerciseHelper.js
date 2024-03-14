@@ -1010,7 +1010,7 @@ function getNextStage(exercise, currentStage, newStatus) {
       const stages = availableStages(exercise);
       const currentIndex = stages.indexOf(currentStage);
       if (currentIndex > 0) {
-        return stages[currentIndex-1];
+        return stages[currentIndex - 1];
       }
     }
     const passingStatuses = getStagePassingStatuses(exercise, currentStage);
