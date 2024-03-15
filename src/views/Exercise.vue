@@ -201,7 +201,7 @@ export default {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
     },
     canEditExerciseConfiguration() {
-      return true;
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canConfigureExercise.value]);
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
