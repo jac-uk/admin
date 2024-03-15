@@ -568,6 +568,7 @@ import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
@@ -595,10 +596,28 @@ export default {
       return availableStages(this.exercise);
     },
     tabs() {
-      const tabs = this.availableStages.map((stage) => ({
-        ref: stage,
-        title: this.$filters.lookup(stage),
-      }));
+      const tabs = this.availableStages.map((stage) => {
+        const tab = {};
+        tab.ref = stage;
+        switch (stage) {
+        case EXERCISE_STAGE.SHORTLISTING:
+        case EXERCISE_STAGE.REVIEW:
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SELECTION:
+          tab.title = 'Shortlisted';
+          break;
+        case EXERCISE_STAGE.SCC:
+          tab.title = 'Passed SD';
+          break;
+        case EXERCISE_STAGE.RECOMMENDATION:
+          tab.title = 'Recommended to JO';
+          break;
+        default:
+          tab.title = this.$filters.lookup(stage);
+        }
+        return tab;
+      });
 
       tabs.push(
         {
