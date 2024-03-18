@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { btnNext } from '../helper';
 import { functions } from '@/firebase';
 import defaultView from '../New/default';
@@ -137,7 +138,7 @@ export default {
   methods: {
     btnNext,
     async btnComplete() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
         nextStage: this.exitStage,

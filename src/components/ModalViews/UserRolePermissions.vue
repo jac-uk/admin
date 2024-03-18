@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
@@ -195,7 +196,7 @@ export default {
     async createUserRole() {
       //TODO: enforce unique role name
       try {
-        const response = await functions.httpsCallable('adminCreateUserRole')({ roleName: this.roleName });
+        const response = await httpsCallable(functions, 'adminCreateUserRole')({ roleName: this.roleName });
         this.roleId = response.data.id;
         return true;
       } catch (error) {
@@ -203,7 +204,7 @@ export default {
       }
     },
     async saveUserRole() {
-      const response = await functions.httpsCallable('adminUpdateUserRole')({ roleId: this.roleId, permissions: this.permissions });
+      const response = await httpsCallable(functions, 'adminUpdateUserRole')({ roleId: this.roleId, permissions: this.permissions });
       return response;
     },
   },

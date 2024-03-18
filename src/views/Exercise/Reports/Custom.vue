@@ -371,6 +371,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { functions } from '@/firebase';
 import draggable from 'vuedraggable';
 import _ from 'lodash';
@@ -731,7 +732,7 @@ export default {
       this.isLoading = true;
       this.data = null;
       if (this.columns.length > 0) {
-        this.data = await functions.httpsCallable('getApplicationData')({
+        this.data = await httpsCallable(functions, 'getApplicationData')({
           exerciseId: this.exercise.id,
           columns: this.columns,
           type: this.type,
@@ -787,7 +788,7 @@ export default {
         this.warningTimeout = window.setTimeout(() => this.warnings = '', 5000);
         return;
       }
-      const reports = await functions.httpsCallable('customReport')({
+      const reports = await httpsCallable(functions, 'customReport')({
         columns: this.columns,
         whereClauses: this.whereClauses,
         name: this.customReportName,
@@ -797,7 +798,7 @@ export default {
       this.openModal('modalRefReportSaved');
     },
     async getReports() {
-      const reports = await functions.httpsCallable('customReport')({});
+      const reports = await httpsCallable(functions, 'customReport')({});
       this.customReports = reports.data;
     },
     selectReport(event) {

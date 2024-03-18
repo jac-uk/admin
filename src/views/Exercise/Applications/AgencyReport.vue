@@ -340,7 +340,7 @@
       </div>
 
       <div
-        v-if="isVersion2 && application.characterInformationV2 && hasFinancialIssues"
+        v-if="isApplicationVersionGreaterThan1 && application.characterInformationV2 && hasFinancialIssues"
         class="govuk-summary-list__row"
       >
         <dt class="govuk-summary-list__key">
@@ -502,6 +502,7 @@
 
 <script>
 import FinancialMattersAgencyReport from '@/views/InformationReview/FinancialMattersAgencyReport.vue';
+import { isApplicationVersionGreaterThan } from '@/helpers/exerciseHelper';
 
 export default {
   name: 'AgencyReport',
@@ -515,11 +516,8 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
-    isVersion2() {
-      if (this.exercise._applicationVersion && this.exercise._applicationVersion === 2) {
-        return true;
-      }
-      return false;
+    isApplicationVersionGreaterThan1() {
+      return isApplicationVersionGreaterThan(this.exercise, 1);
     },
     sra() {
       const qualifications = this.application.qualifications || [];

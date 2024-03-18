@@ -52,7 +52,7 @@
       </div>
 
       <div
-        v-if="report"
+        v-if="report && showTabs"
         class="govuk-grid-row"
       >
         <div class="govuk-grid-column-one-half">
@@ -74,15 +74,19 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        <p class="govuk-body">
+          Please refresh the report.
+        </p>
+      </div>
     </div>
 
     <!-- results -->
     <div
-      v-if="report"
+      v-if="report && showTabs"
       class="govuk-grid-column-full"
     >
       <TabsList
-        v-if="showTabs"
         v-model:active-tab="activeTab"
         :tabs="tabs"
         class="print-none"
@@ -339,6 +343,8 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
@@ -346,7 +352,8 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { isLegal } from '@/helpers/exerciseHelper';
+import { isLegal, availableStages } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE } from '@/helpers/constants';
 
 export default {
   name: 'Outreach',
@@ -360,33 +367,7 @@ export default {
     return {
       report: null,
       unsubscribe: null,
-      tabs: [
-        {
-          ref: 'applied',
-          title: 'Applied',
-        },
-        {
-          ref: 'shortlisted',
-          title: 'Shortlisted',
-        },
-        {
-          ref: 'selected',
-          title: 'Selected',
-        },
-        {
-          ref: 'recommended',
-          title: 'Recommended',
-        },
-        {
-          ref: 'handover',
-          title: 'Handover',
-        },
-        {
-          ref: 'summary',
-          title: 'Summary',
-        },
-      ],
-      activeTab: 'applied',
+      activeTab: '',
       reportKeys: [
         'jac-website',
         'professional-body-website-or-email',
@@ -404,8 +385,42 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    availableStages() {
+      return availableStages(this.exercise);
+    },
+    tabs() {
+      const tabs = this.availableStages.map((stage) => {
+        const tab = {};
+        tab.ref = stage;
+        switch (stage) {
+        case EXERCISE_STAGE.SHORTLISTING:
+        case EXERCISE_STAGE.REVIEW:
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SELECTION:
+          tab.title = 'Shortlisted';
+          break;
+        case EXERCISE_STAGE.SCC:
+          tab.title = 'Passed SD';
+          break;
+        case EXERCISE_STAGE.RECOMMENDATION:
+          tab.title = 'Recommended to JO';
+          break;
+        default:
+          tab.title = this.$filters.lookup(stage);
+        }
+        return tab;
+      });
+      tabs.push(
+        {
+          ref: 'summary',
+          title: 'Summary',
+        }
+      );
+      return tabs;
+    },
     showTabs() {
-      return this.report && this.report.shortlisted;  // .shortlisted indicates we have stages reports
+      return this.report && this.availableStages?.length && this.report?.[this.availableStages[0]];  // check if report data is available
     },
     activeTabTitle() {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
@@ -419,9 +434,24 @@ export default {
       return isLegal(this.exercise);
     },
   },
+  watch: {
+    availableStages: {
+      immediate: true,
+      handler() {
+        if (this.availableStages.length && !this.activeTab && this.activeTab !== this.availableStages[0]) {
+          this.activeTab = this.availableStages[0];
+        }
+      },
+    },
+  },
   created() {
-    this.unsubscribe = firestore.doc(`exercises/${this.exercise.id}/reports/outreach`)
-      .onSnapshot((snap) => {
+    if (this.$route.hash && this.$route.hash.slice(1)) {
+      this.activeTab = this.$route.hash.slice(1);
+    }
+
+    this.unsubscribe = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/outreach`),
+      (snap) => {
         if (snap.exists) {
           this.report = vuexfireSerialize(snap);
         }
@@ -435,18 +465,18 @@ export default {
   methods: {
     async refreshReport() {
       try {
-        return await functions.httpsCallable('generateOutreachReport')({ exerciseId: this.exercise.id });
+        return await httpsCallable(functions, 'generateOutreachReport')({ exerciseId: this.exercise.id });
       } catch (error) {
         return;
       }
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
+      let stages = this.availableStages;
       if (stage) {
         stages = [stage];
       }
-      data.push(['Statistic'].concat(stages));
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];

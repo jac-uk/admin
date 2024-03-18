@@ -1,6 +1,6 @@
 'use strict';
 
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import MessageBase from '@/store/baseClasses/messageBase';
 
 export default class extends MessageBase {
@@ -22,7 +22,7 @@ export default class extends MessageBase {
             exerciseRef: data.requestMessage.lateApplicationRequest.exerciseRef,
             reason: data.requestMessage.lateApplicationRequest.reason,
             decision: data.decision,
-            decisionAt: firebase.firestore.FieldValue.serverTimestamp(),
+            decisionAt: serverTimestamp(),
             requestMessageId: data.requestMessage.id,
             candidateId: data.requestMessage.lateApplicationRequest.candidateId,
             candidateName: data.requestMessage.lateApplicationRequest.candidateName,

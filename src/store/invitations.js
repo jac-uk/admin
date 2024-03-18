@@ -1,9 +1,10 @@
-import firebase from '@firebase/app';
+import { query, doc, collection, addDoc, deleteDoc, where, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
-const collectionRef = firestore.collection('invitations');
+const collectionName = 'invitations';
+const collectionRef = collection(firestore, collectionName);
 
 export default {
   namespaced: true,
@@ -12,8 +13,7 @@ export default {
   },
   actions: {
     bind: firestoreAction(({ bindFirestoreRef }, { exerciseId }) => {
-      const firestoreRef = collectionRef
-        .where('vacancy.id', '==', exerciseId);
+      const firestoreRef = query(collectionRef, where('vacancy.id', '==', exerciseId));
       return bindFirestoreRef('records', firestoreRef, { serialize: vuexfireSerialize });
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
@@ -28,15 +28,15 @@ export default {
           context.state.records.forEach (async (r) => {
             const toBeAdded = emailsToAdd.find(email => email === r.candidate.email);
             if (!toBeAdded) {
-              const ref = firestore.collection('invitations').doc(r.id);
-              await ref.delete();
+              const ref = doc(collectionRef, r.id);
+              await deleteDoc(ref);
             }
           });
           // Add new emails that are not in the database
           emailsToAdd.forEach(email => {
             const existing = context.state.records.find(r => r.candidate.email === email);
             if (existing) return;
-            collectionRef.add({
+            addDoc(collectionRef, {
               vacancy: {
                 id: exercise.id,
               },
@@ -46,7 +46,7 @@ export default {
               },
               status: 'created',  // 'created' | 'invited' | 'accepted' | 'rejected'
               statusLog: {
-                created: firebase.firestore.FieldValue.serverTimestamp(),
+                created: serverTimestamp(),
                 invited: null, // populated when email invite has been sent (out of scope right now)
                 accepted: null, // populated when candidate accepts the invitation
                 rejected: null, // populated when candidate rejects the invitation

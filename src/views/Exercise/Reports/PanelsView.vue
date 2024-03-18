@@ -259,7 +259,7 @@ import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue'
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import DateInput from '@jac-uk/jac-kit/draftComponents/Form/DateInput.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import firebase from '@firebase/app';
+import { serverTimestamp } from '@firebase/firestore';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -433,7 +433,7 @@ export default {
     async exportToGoogleDrive() {
       const data = {
         status: 'approved',
-        'statusLog.approved': firebase.firestore.FieldValue.serverTimestamp(),
+        'statusLog.approved': serverTimestamp(),
       };
       await this.$store.dispatch('xpanels/updatePanel', { id: this.panelId, data: data });
       return true;

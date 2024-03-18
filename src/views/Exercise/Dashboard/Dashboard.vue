@@ -32,7 +32,7 @@
     <SelectionDay />
     -->
 
-    <div 
+    <div
       v-if="report"
       class="govuk-grid-column-two-thirds"
     >
@@ -60,7 +60,7 @@
     </div>
 
     <div
-      v-if="report"
+      v-if="report && showTabs"
       class="govuk-grid-column-full"
     >
       <Select
@@ -115,9 +115,19 @@
         <span class="">Diversity Report Last Updated: {{ $filters.formatDate(reportCreatedAt, 'datetime') }}</span>
       </p>
     </div>
+    <div
+      v-else
+      class="govuk-grid-column-full"
+    >
+      <p class="govuk-body">
+        Please refresh the report.
+      </p>
+    </div>
   </div>
 </template>
 <script>
+import { httpsCallable } from '@firebase/functions';
+import { onSnapshot, doc } from '@firebase/firestore';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
@@ -126,7 +136,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import { lookup } from '@/filters';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import { applicationCounts } from '@/helpers/exerciseHelper';
+import { applicationCounts, availableStages } from '@/helpers/exerciseHelper';
 //import { EXERCISE_STAGE } from '@/helpers/constants';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import router from '@/router';
@@ -146,6 +156,7 @@ import Chart from '@/components/Chart.vue';
 import { getReports } from '@/reports';
 import Stat from '@/components/Report/Stat.vue';
 import { mapGetters } from 'vuex';
+import { ADVERT_TYPES } from '@/helpers/constants';
 
 export default {
   name: 'Dashboard',
@@ -169,7 +180,7 @@ export default {
   },
   data() {
     return {
-      activeTab: 'applied',
+      activeTab: '',
       timelineSelected: 0,
       timelineTotal: 0,
       selectedDiversityReportType: 'gender',
@@ -192,6 +203,12 @@ export default {
     },
     exerciseId() {
       return this.$store.state.exerciseDocument.record ? this.$store.state.exerciseDocument.record.id : null;
+    },
+    availableStages() {
+      return availableStages(this.exercise);
+    },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
     },
     applicationOpenDate() {
       return this.exercise.applicationOpenDate;
@@ -216,6 +233,9 @@ export default {
       types.push('emp');
       return types;
     },
+    showTabs() {
+      return this.report && this.availableStages?.length && this.report?.[this.availableStages[0]];  // check if report data is available
+    },
     tabs() {
       return _map(this.labels, item => {
         return {
@@ -225,7 +245,10 @@ export default {
       });
     },
     labels() {
-      return getReports(this.applicationOpenDate, this.exercise.referenceNumber).ApplicationStageDiversity.labels;
+      return this.availableStages.map(stage => ({
+        key: stage,
+        title: this.$filters.lookup(stage),
+      }));
     },
     legend() {
       if (this.selectedDiversityReportType) {
@@ -364,14 +387,33 @@ export default {
       return ignoreKeys;
     },
   },
+  watch: {
+    availableStages: {
+      immediate: true,
+      handler() {
+        if (this.availableStages.length && !this.activeTab && this.activeTab !== this.availableStages[0]) {
+          this.activeTab = this.availableStages[0];
+        }
+      },
+    },
+  },
   created() {
+    if (this.isAdvertTypeExternal) {
+      router.push('externals');
+      return;
+    }
+
     if (this.applicationCounts._total) {
-      this.unsubscribe = firestore.doc(`exercises/${this.exerciseId}/reports/diversity`)
-        .onSnapshot((snap) => {
+      this.unsubscribe = onSnapshot(
+        doc(firestore, `exercises/${this.exerciseId}/reports/diversity`),
+        (snap) => {
           if (snap.exists) {
             this.report = vuexfireSerialize(snap);
           }
         });
+      if (this.$route.hash && this.$route.hash.slice(1)) {
+        this.activeTab = this.$route.hash.slice(1);
+      }
     } else {
       router.push('details');
     }
@@ -395,7 +437,7 @@ export default {
     async refreshReport() {
       try {
         if (this.applicationCounts._total) {
-          await functions.httpsCallable('generateDiversityReport')({ exerciseId: this.exerciseId });
+          await httpsCallable(functions, 'generateDiversityReport')({ exerciseId: this.exerciseId });
         }
         return true;
       } catch (error) {
@@ -412,8 +454,8 @@ export default {
     },
     gatherReportData() {
       const data = [];
-      const stages = ['applied', 'shortlisted', 'selected', 'recommended', 'handover'];
-      data.push(['Statistic'].concat(stages));
+      const stages = this.availableStages;
+      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];

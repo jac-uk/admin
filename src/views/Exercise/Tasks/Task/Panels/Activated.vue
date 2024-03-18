@@ -352,6 +352,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import { beforeRouteEnter, btnNext } from '../helper';
 import FullScreenButton from '@/components/Page/FullScreenButton.vue';
 import ProgressBar from '@/components/Page/ProgressBar.vue';
@@ -596,7 +597,7 @@ export default {
   methods: {
     btnNext,
     async btnFinalise() {
-      await functions.httpsCallable('updateTask')({
+      await httpsCallable(functions, 'updateTask')({
         exerciseId: this.exercise.id,
         type: this.type,
       });

@@ -4,28 +4,6 @@ import _cloneDeep from 'lodash/cloneDeep';
 
 const REPORTS = {
   ApplicationStageDiversity: {
-    labels: [
-      {
-        key: 'applied',
-        title: 'Applied',
-      },
-      {
-        key: 'shortlisted',
-        title: 'Shortlisted',
-      },
-      {
-        key: 'selected',
-        title: 'Selected',
-      },
-      {
-        key: 'recommended',
-        title: 'Recommended',
-      },
-      {
-        key: 'handover',
-        title: 'Handover',
-      },
-    ],
     legend: {
       gender: [
         {
@@ -160,6 +138,7 @@ const post04012023SocialMobility = {
 const getReports = (applicationOpenDate, exerciseRef) => {
   const usesPre01042023Questions = ['JAC00130', 'JAC00123', 'JAC00164'].includes(exerciseRef);
   const mergedReports = _cloneDeep(REPORTS);
+
   if (applicationOpenDate > new Date('2023-04-01') && !usesPre01042023Questions) {
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity = [];
     mergedReports.ApplicationStageDiversity.legend.parentsNotAttendedUniversity.push(post04012023SocialMobility);

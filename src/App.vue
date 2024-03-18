@@ -5,6 +5,7 @@
     @mouseenter="onMouseOver"
   >
     <header
+      ref="headerTester"
       class="govuk-width-container"
     >
       <div class="jac-header clearfix">
@@ -132,6 +133,21 @@
       <RouterView />
     </main>
 
+    <UserFeedbackLink
+      v-show="isSignedIn && isMounted"
+      :style="{ 'bottom': linkBottom }"
+      @open-feedback-modal="openFeedbackModal()"
+    />
+
+    <Modal
+      v-if="isSignedIn"
+      ref="feedbackModal"
+      data-html2canvas-ignore
+      class="fixed-width-modal"
+    >
+      <UserFeedbackModal @close="$refs['feedbackModal'].closeModal()" />
+    </Modal>
+
     <footer
       class="govuk-footer"
       role="contentinfo"
@@ -231,18 +247,36 @@
 </template>
 
 <script>
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import { auth } from '@/firebase';
 import permissionMixin from '@/permissionMixin';
 import Messages from '@/components/Messages.vue';
-import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import UserFeedbackModal from '@/components/ModalViews/UserFeedbackModal.vue';
+import _debounce from 'lodash/debounce';
+import UserFeedbackLink from '@/components/Feedback/UserFeedbackLink.vue';
 
 export default {
   name: 'App',
   components: {
     Messages,
+    UserFeedbackModal,
+    UserFeedbackLink,
     Modal,
   },
   mixins: [permissionMixin],
+  data() {
+    return {
+      authorisedToPerformAction: false,
+      rect: null,
+
+      // @TODO: May not need the ref of the button anymore!
+
+      //buttonElement: null,
+      linkBottom: '',
+      isMounted: false,
+      observer: null,
+    };
+  },
   computed: {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
@@ -288,13 +322,52 @@ export default {
       this.load();
     }
   },
+  mounted() {
+    this.handleDebouncedScroll = _debounce(this.calculateLinkPosition, 20);
+    window.addEventListener('scroll', this.handleDebouncedScroll);
+
+    // Need to observe changes to the main content div to recalculate the position of the help button
+    this.bindObserver();
+
+    this.isMounted = true;
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleDebouncedScroll);
+  },
   unmounted() {
     if (this.isSignedIn) {
       this.$store.dispatch('services/unbind');
       this.$store.dispatch('messageBase/unbind');
     }
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   },
   methods: {
+    bindObserver() {
+      // Select the node that will be observed for mutations
+      const targetNode = document.getElementById('main-content');
+
+      // Options for the observer (which mutations to observe)
+      const config = { attributes: true, childList: true, subtree: true };
+
+      // Callback function to execute when mutations are observed
+      // eslint-disable-next-line no-unused-vars
+      const callback = (mutationList, observer) => {
+        // eslint-disable-next-line no-unused-vars
+        for (const mutation of mutationList) {
+          // mutation.type = 'attributes' | 'childList' | 'subtree'
+          this.calculateLinkPosition();
+        }
+      };
+
+      // Create an observer instance linked to the callback function
+      this.observer = new MutationObserver(callback);
+
+      // Start observing the target node for configured mutations
+      this.observer.observe(targetNode, config);
+
+    },
     async load() {
       await this.$store.dispatch('services/bind');
       if (this.canReadMessages) {
@@ -329,6 +402,15 @@ export default {
         };
         return await this.$store.dispatch('messageBase/bind', data);
       }
+    },
+    calculateLinkPosition() {
+      // Ensure the feedback link sits above the footer when scrolled to the bottom of the page
+      if (this.isMounted) {
+        this.linkBottom = (window.scrollY + window.innerHeight > document.documentElement.scrollHeight - 70) ? '5em' : '1em';
+      }
+    },
+    async openFeedbackModal() {
+      this.$refs.feedbackModal.openModal();
     },
   },
 };
@@ -401,4 +483,5 @@ $jac-link-colour: #753880;
   counter-increment: item;
   content: counters(item, '.') '. ';
 }
+
 </style>

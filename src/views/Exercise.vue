@@ -63,13 +63,26 @@
             {{ exerciseName }}
           </h1>
           <router-link
-            v-if="!hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-            class="govuk-link print-none"
+            v-if="!isAdvertTypeExternal && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
+            class="govuk-link govuk-!-margin-right-4 print-none"
             :to="{name: 'exercise-edit-name'}"
           >
             Edit name
           </router-link>
-
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link govuk-!-margin-right-4 print-none"
+            :to="{name: 'exercise-configuration-application-version'}"
+          >
+            Application form v{{ exercise._applicationVersion || 1 }}
+          </router-link>
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link print-none"
+            :to="{name: 'exercise-configuration-processing-version'}"
+          >
+            Processing v{{ exercise._processingVersion || 1 }}
+          </router-link>
           <div
             v-if="!isProduction"
             class="govuk-!-margin-top-4"
@@ -94,7 +107,7 @@
       <div class="sub-navigation govuk-grid-row">
         <div class="govuk-grid-column-full print-none">
           <SubNavigation
-            v-if="!hasJourney && subNavigation.length > 1"
+            v-if="!isAdvertTypeExternal && !hasJourney && subNavigation.length > 1"
             :pages="subNavigation"
           />
         </div>
@@ -122,6 +135,7 @@
 </template>
 
 <script>
+import { httpsCallable } from '@firebase/functions';
 import LoadingMessage from '@jac-uk/jac-kit/draftComponents/LoadingMessage.vue';
 import SubNavigation from '@/components/Navigation/SubNavigation.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
@@ -133,6 +147,7 @@ import { isEditable, hasQualifyingTests, isProcessing, applicationCounts, isAppr
 import permissionMixin from '@/permissionMixin';
 import { logEvent } from '@/helpers/logEvent';
 import { functions } from '@/firebase';
+import { ADVERT_TYPES } from '../helpers/constants';
 
 export default {
   name: 'ExerciseView',
@@ -176,11 +191,17 @@ export default {
     exerciseName() {
       return this.exercise.name && this.exercise.name.length < 80 ? this.exercise.name : `${this.exercise.name.substring(0,79)}..`;
     },
+    isAdvertTypeExternal() {
+      return this.exercise && this.exercise.advertType === ADVERT_TYPES.EXTERNAL;
+    },
     canUpdateExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canUpdateExercises.value]);
     },
     canArchiveExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
+    canEditExerciseConfiguration() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canConfigureExercise.value]);
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;
@@ -254,7 +275,7 @@ export default {
       return subNavigation;
     },
     goBack() {
-      if (this.$route.name === 'exercise-overview') {
+      if (this.$route.name === 'exercise-overview' || (this.isAdvertTypeExternal && this.$route.name === 'exercise-external')) {
         return {
           name: 'exercises',
         };
@@ -343,7 +364,7 @@ export default {
     async createTestApplications() {
       const noOfTestApplications = this.$store.getters['exerciseDocument/noOfTestApplications'];
       if (!noOfTestApplications) return;
-      await functions.httpsCallable('createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
+      await httpsCallable(functions, 'createTestApplications')({ exerciseId: this.exerciseId, noOfTestApplications });
       this.$store.dispatch('exerciseDocument/tested');
       this.$store.dispatch('exerciseDocument/changeNoOfTestApplications', 0);
     },
