@@ -618,7 +618,6 @@ export default {
         }
         return tab;
       });
-
       tabs.push(
         {
           ref: 'summary',
