@@ -30,8 +30,8 @@
             <ActionButton
               v-if="hasPermissions([
                 PERMISSIONS.exercises.permissions.canReadExercises.value,
+                PERMISSIONS.applications.permissions.canReadApplications.value,
                 PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-                PERMISSIONS.applications.permissions.canReadApplications.value
               ])"
               type="primary"
               :action="refreshReport"
@@ -47,7 +47,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
-            Approved for immediate appointment
+            {{ $filters.lookup(applicationRecordStatus) }}
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
             {{ $filters.formatNumber(totalApplicationRecords) }}
@@ -103,7 +103,7 @@ import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
 
 export default {
@@ -130,6 +130,12 @@ export default {
     ...mapState({
       exercise: state => state.exerciseDocument.record,
     }),
+    exerciseStage() {
+      return EXERCISE_STAGE.HANDOVER; // TODO: check exercise._processingVersion
+    },
+    applicationRecordStatus() {
+      return APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT; // TODO: check exercise._processingVersion
+    },
     exerciseType() {
       return this.exercise.typeOfExercise;
     },
@@ -157,10 +163,11 @@ export default {
   methods: {
     getTableData(params) {
       this.$store.dispatch(
-        'stageHandover/bind',
+        'applicationRecords/bind',
         {
           exerciseId: this.exercise.id,
-          status: APPLICATION_STATUS.APPROVED_FOR_IMMEDIATE_APPOINTMENT,
+          stage: this.exerciseStage,
+          status: this.applicationRecordStatus,
           ...params,
         }
       );
@@ -189,27 +196,13 @@ export default {
     async exportData() {
       const title = 'Deployment Report';
       const data = this.gatherReportData();
-      /**
-       * Make the 'Judicial experience' (column S) can display multiple lines.
-       *
-       * @link: https://github.com/dtjohnson/xlsx-populate?tab=readme-ov-file#styles-1
-       */
-      const styles = {
-        column: {
-          'S': {
-            wrapText: true,
-          },
-        },
-      };
-
       downloadXLSX(
         data,
         {
           title: `${this.exercise.referenceNumber} ${title}`,
           sheetName: title,
           fileName: `${this.exercise.referenceNumber} - ${title}.xlsx`,
-        },
-        styles
+        }
       );
     },
   },
