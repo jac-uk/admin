@@ -15,79 +15,71 @@
     </h2>
 
     <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Location question
-        </dt>
-        <dd
-          v-if="exercise.locationQuestion"
-          class="govuk-summary-list__value"
-        >
-          {{ exercise.locationQuestion }}
-        </dd>
-        <dd
-          v-else
-          class="govuk-summary-list__value"
-        >
-          &nbsp;
-        </dd>
-      </div>
-      <div
-        v-if="exercise.locationQuestion"
-        class="govuk-summary-list__row"
+      <template 
+        v-for="(item, index) in exercise.locationPreferences"
+        :key="item"
       >
-        <dt class="govuk-summary-list__key">
-          {{ $filters.lookup(exercise.locationQuestionType) }}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="(answer, index) in exercise.locationQuestionAnswers"
-              :key="index"
-            >
-              {{ answer.answer }}
-            </li>
-          </ul>
-        </dd>
-      </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Location question {{ index + 1 }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ item.question }}
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{ $filters.lookup(item.questionType) }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ViewAnswers 
+              :answers="item.answers" 
+              :grouped="item.groupAnswers" 
+            />
+          </dd>
+        </div>
+      </template>
     </dl>
+
     <dl class="govuk-summary-list">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Jurisdiction question
-        </dt>
-        <dd
-          v-if="exercise.jurisdictionQuestion"
-          class="govuk-summary-list__value"
-        >
-          {{ exercise.jurisdictionQuestion }}
-        </dd>
-        <dd
-          v-else
-          class="govuk-summary-list__value"
-        >
-          &nbsp;
-        </dd>
-      </div>
-      <div
-        v-if="exercise.jurisdictionQuestion"
-        class="govuk-summary-list__row"
+      <template 
+        v-for="(item, index) in exercise.jurisdictionPreferences"
+        :key="item"
       >
-        <dt class="govuk-summary-list__key">
-          {{ $filters.lookup(exercise.jurisdictionQuestionType) }}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="(answer, index) in exercise.jurisdictionQuestionAnswers"
-              :key="index"
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Jurisdiction question {{ index + 1 }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ item.question }}
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{ $filters.lookup(item.questionType) }}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <ul 
+              v-if="item.answerSource == 'jurisdictions'"
+              class="govuk-list"
             >
-              {{ answer.answer }}
-            </li>
-          </ul>
-        </dd>
-      </div>
+              <li
+                v-for="jurisdiction in exercise.jurisdiction"
+                :key="jurisdiction"
+              >
+                {{ $filters.lookup(jurisdiction) }}
+              </li>
+            </ul>   
+            <ViewAnswers
+              v-else 
+              :answers="item.answers" 
+              :grouped="item.groupAnswers" 
+            />
+          </dd>
+        </div>
+      </template>
     </dl>
+    
     <dl
       v-for="(additionalWorkingPreference, index) in exercise.additionalWorkingPreferences"
       :key="index"
@@ -106,14 +98,10 @@
           {{ $filters.lookup(additionalWorkingPreference.questionType) }}
         </dt>
         <dd class="govuk-summary-list__value">
-          <ul class="govuk-list">
-            <li
-              v-for="(answer, answerIndex) in additionalWorkingPreference.answers"
-              :key="answerIndex"
-            >
-              {{ answer.answer }}
-            </li>
-          </ul>
+          <ViewAnswers 
+            :answers="additionalWorkingPreference.answers" 
+            :grouped="additionalWorkingPreference.groupAnswers" 
+          />
         </dd>
       </div>
     </dl>
@@ -123,9 +111,13 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
+import ViewAnswers from './_ViewAnswers.vue';
 
 export default {
   name: 'PreferencesView',
+  components: {
+    ViewAnswers,
+  },
   mixins: [permissionMixin],
   computed: {
     exercise() {

@@ -1,22 +1,36 @@
 <template>
   <div>
     <TextField
-      :id="`answer_${id}_${index}`"
-      v-model="row.answer"
+      :id="`answer_group_${id}_${index}`"
+      v-model="row.group"
       :label="`${label} ${1 + index}`"
     />
     <slot name="removeButton" />
+
+    <div class="govuk-!-margin-left-8">
+      <RepeatableFields
+        v-model="row.answers"
+        :component="repeatableFields.Answer"
+        ident="answer"
+        type-name="answer"
+        required
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
+import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
+import Answer from '@/components/RepeatableFields/Answer.vue';
+import { shallowRef } from 'vue';
 import { getRandomString } from '@/helpers/helpers';
 
 export default {
-  name: 'Answer',
+  name: 'AnswerGroup',
   components: {
     TextField,
+    RepeatableFields,
   },
   props: {
     row: {
@@ -37,6 +51,13 @@ export default {
       type: String,
       default: 'Answer option',
     },
+  },
+  data() {
+    return {
+      repeatableFields: shallowRef({
+        Answer,
+      }),
+    };
   },
   created() {
     if (!this.row.hasOwnProperty('id')) this.row.id = getRandomString(3);

@@ -749,10 +749,10 @@ function exerciseApplicationParts(data, newValues) {
   if (exercise.isSPTWOffered) {
     applicationParts.push('partTimeWorkingPreferences');
   }
-  if (exercise.locationQuestion) {
+  if (exercise.locationQuestion || (exercise.locationPreferences && exercise.locationPreferences.length)) {
     applicationParts.push('locationPreferences');
   }
-  if (exercise.jurisdictionQuestion) {
+  if (exercise.jurisdictionQuestion || (exercise.jurisdictionPreferences && exercise.jurisdictionPreferences.length)) {
     applicationParts.push('jurisdictionPreferences');
   }
   if (exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length) {
