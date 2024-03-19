@@ -81,7 +81,7 @@ const store = createStore({
     panels,
     panellist,
     panellists,
-    xpanels,
+    // xpanels,
     roles,
     services,
     task,

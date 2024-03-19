@@ -136,7 +136,7 @@
     <!-- APPLICATIONS LIST -->
     <div v-show="activeTab == 'applications'">
       <button
-        class="govuk-button moj-button-menu__item moj-page-header-actions__action govuk-!-margin-right-2"
+        class="govuk-button govuk-!-margin-bottom-4"
         :disabled="isButtonDisabled"
         @click="removeFromPanel"
       >

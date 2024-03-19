@@ -112,7 +112,7 @@
     <!-- PANELS -->
     <div v-show="activeTab == 'panels'">
       <button
-        class="govuk-button govuk-!-margin-bottom-0"
+        class="govuk-button govuk-!-margin-bottom-4"
         @click="createNewPanel"
       >
         Create new panel
@@ -152,7 +152,7 @@
         :columns="tableColumnsApplications"
         multi-select
         :page-size="50"
-        :search="['candidate.fullName']"
+        :search-map="$searchMap.applicationRecords"
         @change="getTableDataApplications"
       >
         <template #actions>
