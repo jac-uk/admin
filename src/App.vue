@@ -307,7 +307,7 @@ export default {
     },
     showFeedbackLink() {
       // Enable when the environment and app are defined (these are used when creating the bug request number)
-      return this.isSignedIn && this.isMounted && this.environment && (import.meta.env.VITE_APP !== undefined && import.meta.env.VITE_APP !== null);
+      return this.isSignedIn && this.isMounted && this.environment && (import.meta.env.PACKAGE_NAME !== undefined && import.meta.env.PACKAGE_NAME !== null);
     },
   },
   watch: {

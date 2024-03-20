@@ -18,12 +18,12 @@ export default {
     }),
     create: async ({ rootState, rootGetters, dispatch }, data) => {
 
-      if (!rootGetters.appEnvironment || !import.meta.env.VITE_APP) {
+      if (!rootGetters.appEnvironment || !import.meta.env.PACKAGE_NAME) {
         throw new Error('User feedback has not been activated for this platform/environment');
       }
 
       const environment = rootGetters.appEnvironment;
-      const platform = import.meta.env.VITE_APP;
+      const platform = import.meta.env.PACKAGE_NAME;
 
       const metaRef = doc(collection(firestore, 'meta'), 'stats');
       return runTransaction(firestore, (transaction) => {
