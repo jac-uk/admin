@@ -601,6 +601,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    isProcessingVersion2() {
+      return this.exercise._processingVersion >= 2;
+    },
     availableStages() {
       return availableStages(this.exercise);
     },
@@ -641,35 +644,23 @@ export default {
         SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
         SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST,
       ].includes(method))) {
-        additionalTabs.push(
-          {
-            ref: APPLICATION_STATUS.QUALIFYING_TEST_PASSED,
-            title: this.$filters.lookup(APPLICATION_STATUS.QUALIFYING_TEST_PASSED),
-          }
-        );
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
+        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
       }
       // scenario test
       if (this.exercise.shortlistingMethods.some(method => [
         SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST,
       ].includes(method))) {
-        additionalTabs.push(
-          {
-            ref: APPLICATION_STATUS.SCENARIO_TEST_PASSED,
-            title: this.$filters.lookup(APPLICATION_STATUS.SCENARIO_TEST_PASSED),
-          }
-        );
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
+        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
       }
       // sift
       if (this.exercise.shortlistingMethods.some(method => [
         SHORTLISTING.NAME_BLIND_PAPER_SIFT,
         SHORTLISTING.PAPER_SIFT,
       ].includes(method))) {
-        additionalTabs.push(
-          {
-            ref: APPLICATION_STATUS.SIFT_PASSED,
-            title: this.$filters.lookup(APPLICATION_STATUS.SIFT_PASSED),
-          }
-        );
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
+        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
       }
 
       return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
