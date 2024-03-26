@@ -16,11 +16,18 @@ export default {
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       return unbindFirestoreRef('record');
     }),
-    create: async ({ rootState, dispatch }, data) => {
+    create: async ({ rootState, rootGetters, dispatch }, data) => {
+
+      if (!rootGetters.appEnvironment || !import.meta.env.PACKAGE_NAME) {
+        throw new Error('User feedback has not been activated for this platform/environment');
+      }
+
+      const environment = rootGetters.appEnvironment;
+      const platform = import.meta.env.PACKAGE_NAME;
+
       const metaRef = doc(collection(firestore, 'meta'), 'stats');
       return runTransaction(firestore, (transaction) => {
         return transaction.get(metaRef).then((metaDoc) => {
-
           const currentBugsReportCount = metaDoc.data().bugReportsCount;
           let newBugReportsCount;
           if (currentBugsReportCount === undefined) {
@@ -33,7 +40,19 @@ export default {
             bugReportsCount: newBugReportsCount,
           }, { merge: true });
 
-          data.referenceNumber = `BR_${  (1000000 + newBugReportsCount).toString().substr(1)}`;
+          const envStr = environment.substring(0, 2);
+
+          data.environment = environment;
+          data.platform = platform;
+
+          // Use timestamp for ref no on 'local' to avoid dupe refs being created
+          const referenceNumber = (environment === 'LOCAL')
+            ? Date.now()
+            : (1000000 + newBugReportsCount).toString().substr(1);
+
+          // Reference number consists of the following: BR_<platform>_<2 letter environment>_<timestamp or numerical count>
+          data.referenceNumber = `BR_${platform}_${envStr}_${referenceNumber}`.toUpperCase();
+
           data.createdBy = rootState.auth.currentUser.uid;
           const ts = serverTimestamp();
           data.createdAt = ts;

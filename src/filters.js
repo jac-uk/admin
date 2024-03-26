@@ -176,6 +176,11 @@ const lookup = (value) => {
     'judicial-post': 'Judicial',
     'quasi-judicial-post': 'Quasi-judicial',
 
+    // eligibility issues
+    pq: 'Professional Qualification',
+    pje: 'Previous Judicial Experience',
+    pr: 'Professional Registration',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };

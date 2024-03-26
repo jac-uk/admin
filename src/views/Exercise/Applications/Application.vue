@@ -642,10 +642,6 @@ export default {
       return objChanged;
     },
     changePersonalDetails(objChanged) {
-      if (objChanged.firstName || objChanged.lastName) {
-        objChanged = this.makeFullName(objChanged);
-      }
-
       const myPersonalDetails = { ...this.application.personalDetails, ...objChanged };
       this.changeApplication({ personalDetails: myPersonalDetails });
       this.$store.dispatch('candidates/savePersonalDetails', { data: objChanged, id: this.application.userId });
