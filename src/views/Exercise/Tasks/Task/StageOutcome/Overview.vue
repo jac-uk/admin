@@ -49,7 +49,7 @@
     <ActionButton
       class="govuk-!-margin-bottom-1 govuk-!-margin-right-2"
       type="primary"
-      @click="btnComplete"
+      :action="btnComplete"
     >
       Complete
     </ActionButton>
@@ -125,10 +125,13 @@ export default {
     },
     applications() {
       if (!this.firstTask) return [];
+      if (!this.firstTask.applications) return [];
       return this.firstTask.applications;
     },
     totalApplications() {
-      return this.applications.length;
+      if (this.applications && this.applications.length) return this.applications.length;
+      if (this.firstTask && this.firstTask._stats) return this.firstTask._stats.totalApplications;
+      return 0;
     },
     totalApplicationsProgressing() {
       if (!this.lastTask) return null;

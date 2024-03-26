@@ -284,6 +284,9 @@ export default {
     panels() {
       return this.$store.state.panels.records;
     },
+    panelIds() {
+      return this.panels.map(panel => panel.id);
+    },
     applicationsWithoutPanels() {
       return this.$store.state.panels.applicationsWithoutPanels;
     },

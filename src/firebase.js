@@ -29,32 +29,13 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 const database = getDatabase(app);
 
-// Deprecated Namespace API
-// const functions = firebase.initializeApp(config).functions('europe-west2');
-// const firestore = firebase.firestore();
-// const auth = firebase.auth();
-// const storage = firebase.storage();
-// const database = firebase.database();
-// const Timestamp = firebase.firestore.Timestamp;
-
 // Local emulator
 if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULATORS == 'true') {
-  /**
-   * Module API
-   * @see https://firebase.google.com/docs/emulator-suite/connect_firestore#web-modular-api
-   */
   connectFirestoreEmulator(firestore, 'localhost', 8080);
   connectFunctionsEmulator(functions ,'localhost', 5001);
   connectAuthEmulator(auth, 'http://localhost:9099');
   connectStorageEmulator(storage ,'localhost', 9199);
   connectDatabaseEmulator(database ,'localhost', 9000);
-
-  // Deprecated Namespace API
-  // firestore.useEmulator('localhost', 8080);
-  // functions.useEmulator('localhost', 5001);
-  // auth.useEmulator('http://localhost:9099');
-  // storage.useEmulator('localhost', 9199);
-  // database.useEmulator('localhost', 9000);
 } else {
   // App check
   if (import.meta.env.VITE_RECAPTCHA_TOKEN) {
@@ -64,9 +45,6 @@ if (location.hostname === 'localhost' && import.meta.env.VITE_FIREBASE_USE_EMULA
     initializeAppCheck(app, {
       provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_TOKEN),
     });
-
-    // Deprecated Namespace API
-    // firebase.appCheck().activate(import.meta.env.VITE_RECAPTCHA_TOKEN);
   }
 
 }

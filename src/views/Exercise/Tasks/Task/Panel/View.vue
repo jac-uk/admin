@@ -257,21 +257,7 @@ export default {
   },
   data() {
     const data = {
-      activeTab: 'applications',
-      tabs: [
-        {
-          ref: 'applications',
-          title: 'Applications',
-        },
-        {
-          ref: 'panellists',
-          title: 'Panellists',
-        },
-        {
-          ref: 'edit',
-          title: 'Edit',
-        },
-      ],
+      activeTab: 'panellists',
       selectedItems: [],
       tableColumnsApplications: [
         { title: 'Reference number' },
@@ -288,6 +274,14 @@ export default {
     return data;
   },
   computed: {
+    tabs() {
+      const tabs = [];
+      tabs.push({ ref: 'panellists', title: 'Panellists' });
+      tabs.push({ ref: 'slots', title: 'Selection Days' });
+      tabs.push({ ref: 'applications', title: 'Applications' });
+      tabs.push({ ref: 'edit', title: 'Edit' });
+      return tabs;
+    },
     scoreSheetRows() {
       const rows = [];
       if (!this.panel) return rows;
@@ -439,6 +433,12 @@ export default {
         panellistIds: Object.values(data).filter(item => item.length > 0),
         roles: data,
       };
+      if (data[ROLES.CHAIR]) {
+        const chair = this.panellists.find(item => item.id === data[ROLES.CHAIR]);
+        if (chair) {
+          saveData.editors = [ chair.email ]; // `editors` just has a single editor for now however is named in case we want to add more in the future
+        }
+      }
       await this.$store.dispatch('panel/update', { id: this.panelId, data: saveData } );
       this.isEditingPanellists = false;
     },
