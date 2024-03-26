@@ -151,11 +151,13 @@
                 :key="i"
                 style="white-space: pre-line;"
               >
-                <strong>
+                <strong v-if="section.question">
                   {{ `${i + 1}. ${section.question}` }}
                 </strong>
                 <br>
-                {{ application.uploadedSelfAssessmentContent[i] || '' }}
+                <p v-if="application.uploadedSelfAssessmentContent && application.uploadedSelfAssessmentContent[i]">
+                  {{ application.uploadedSelfAssessmentContent[i] }}
+                </p>
                 <hr v-if="i !== selfAssessmentSections.length - 1">
               </div>
             </div>

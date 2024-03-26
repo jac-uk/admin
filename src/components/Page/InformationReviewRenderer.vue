@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!questionConfig">
       <div
         v-if="isDate"
       >
@@ -136,11 +136,27 @@
         />
       </div>
     </div>
+    <div v-else>
+      <EditableField
+        :id="field"
+        :edit-mode="edit"
+        :value="data"
+        :field="field"
+        :index="index"
+        :type="type"
+        :extension="extension"
+        :options="options"
+        :is-asked="isAsked"
+        :config="questionConfig"
+        @change-field="changeField"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+// import EditableField from '@jac-uk/jac-kit/draftComponents/EditableField.vue';
+import EditableField from './EditableField.vue';
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
 export default {
@@ -180,7 +196,7 @@ export default {
       default: () => '',
     },
     data: {
-      type: [String, Date, Boolean, Array],
+      type: [String, Date, Boolean, Array, Object],
       required: false,
       default: () => null,
     },
@@ -202,6 +218,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    questionConfig: {
+      type: Object,
+      required: false,
+      default: () => { false; },
     },
   },
   emits: ['changeField'],

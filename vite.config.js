@@ -11,6 +11,7 @@ const nodeModuleDir = path.resolve(__dirname, './node_modules');
 export default defineConfig({
   define: {
     'import.meta.env.PACKAGE_VERSION': JSON.stringify(process.env.npm_package_version),
+    'import.meta.env.PACKAGE_NAME': JSON.stringify(process.env.npm_package_name),
   },
   resolve: {
     alias: {

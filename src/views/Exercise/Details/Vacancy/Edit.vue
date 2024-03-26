@@ -344,6 +344,13 @@
           rows="2"
         />
 
+        <TextareaInput
+          id="location-welsh"
+          v-model="formData.locationWelsh"
+          label="Location (Welsh)"
+          rows="2"
+        />
+
         <RadioGroup
           id="welsh-requirement"
           v-model="formData.welshRequirement"
@@ -481,6 +488,7 @@ export default {
       immediateStart: null,
       futureStart: null,
       location: null,
+      locationWelsh: null,
       jurisdiction: null,
       otherJurisdiction: null,
       statutoryConsultationWaived: null,

@@ -1,4 +1,4 @@
-import { query, where, getDocs, collection, doc, updateDoc, setDoc, serverTimestamp } from '@firebase/firestore';
+import { query, where, getDocs, getDoc, collection, doc, updateDoc, setDoc, serverTimestamp } from '@firebase/firestore';
 import { firestore } from '@/firebase';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
@@ -64,7 +64,7 @@ export default {
       }
 
       const ref = doc(collectionRef, `${id}-${AssessorNr}`);
-      const docSnapshot = await ref.get();
+      const docSnapshot = await getDoc(ref);
       if (docSnapshot.exists) {
          await setDoc(ref, returnData, { merge: true });
       }

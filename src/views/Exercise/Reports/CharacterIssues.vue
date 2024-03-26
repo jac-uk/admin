@@ -1,52 +1,68 @@
 <template>
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <h1 class="govuk-heading-l">
-        Character Issues
-      </h1>
+    <div class="govuk-grid-column-full">
+      <div class="moj-page-header-actions">
+        <div class="moj-page-header-actions__title">
+          <h2 class="govuk-heading-l">
+            Character Issues
+          </h2>
+          <span
+            v-if="characterIssuesReport"
+            class="govuk-body govuk-!-font-size-14"
+          >
+            {{ $filters.formatDate(characterIssuesReport.createdAt, 'longdatetime') }}
+          </span>
+        </div>
+        <div
+          class="moj-page-header-actions__actions float-right"
+        >
+          <div class="moj-button-menu">
+            <div class="moj-button-menu__wrapper">
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                  ])
+                "
+                class="govuk-!-margin-right-2"
+                :action="exportData"
+              >
+                Export to Excel
+              </ActionButton>
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                  ])
+                "
+                class="govuk-!-margin-right-2"
+                :action="exportCharacterAnnexReport"
+              >
+                SCC Annex
+              </ActionButton>
+              <ActionButton
+                v-if="
+                  hasPermissions([
+                    PERMISSIONS.exercises.permissions.canReadExercises.value,
+                    PERMISSIONS.applications.permissions.canReadApplications.value,
+                    PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                  ])
+                "
+                type="primary"
+                :action="refreshReport"
+              >
+                Refresh
+              </ActionButton>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- bottom padding is needed on the next div else the grid layout messes up for some reason -->
-    <div class="govuk-grid-column-two-thirds text-right govuk-!-padding-bottom-7">
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-          ])
-        "
-        class="govuk-!-margin-right-2"
-        :action="exportData"
-      >
-        Export to Excel
-      </ActionButton>
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-          ])
-        "
-        class="govuk-!-margin-right-2"
-        :action="exportToGoogleDoc"
-      >
-        Generate Report
-      </ActionButton>
-      <ActionButton
-        v-if="
-          hasPermissions([
-            PERMISSIONS.exercises.permissions.canReadExercises.value,
-            PERMISSIONS.applications.permissions.canReadApplications.value,
-            PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-          ])
-        "
-        type="primary"
-        :action="refreshReport"
-      >
-        Refresh
-      </ActionButton>
-    </div>
+
     <div class="govuk-grid-column-two-thirds clearfix">
       <div class="govuk-button-group">
         <div>
@@ -335,7 +351,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, onSnapshot, where } from '@firebase/firestore';
+import { query, collection, doc, onSnapshot, where } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
@@ -348,6 +364,7 @@ import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
 import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
+import { downloadBase64File } from '@/helpers/file';
 
 export default {
   name: 'CharacterIssues',
@@ -362,6 +379,8 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
+      characterIssuesReport: null,
+      unsubscribeCharacterIssuesReport: null,
       recordVersion: 0,
       exerciseStage: '',
       candidateStatus: '',
@@ -413,11 +432,23 @@ export default {
       this.$refs['issuesTable'].reload();
     },
   },
+  created() {
+    this.unsubscribeCharacterIssuesReport = onSnapshot(
+      doc(firestore, `exercises/${this.exercise.id}/reports/characterIssues`),
+      (snap) => {
+        if (snap.exists) {
+          this.characterIssuesReport = vuexfireSerialize(snap);
+        }
+      });
+  },
   mounted() {
     this.exerciseStage = this.availableStages[0] || '';
     this.candidateStatus = this.availableStatuses[0] || '';
   },
   unmounted() {
+    if (this.unsubscribeCharacterIssuesReport) {
+      this.unsubscribeCharacterIssuesReport();
+    }
     if (this.unsubscribe) {
       this.unsubscribe();
     }
@@ -568,6 +599,24 @@ export default {
       const exerciseId = applicationRecord.exercise.id;
       const record = this.otherApplicationRecords.find((item) => item.candidateId === candidateId);
       return record ? record.otherRecords.filter((ar) => ar.exercise.id !== exerciseId) : [];
+    },
+    async exportCharacterAnnexReport() {
+      if (!this.exercise.referenceNumber) return; // abort if no ref
+      try {
+        const result = await httpsCallable(functions, 'exportApplicationCharacterIssues')({
+          exerciseId: this.exercise.id,
+          format: 'annex',
+        });
+        if (!result.data) return;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_SCC Annex Report.docx`
+        );
+        return true;
+      } catch (error) {
+        return;
+      }
     },
   },
 };
