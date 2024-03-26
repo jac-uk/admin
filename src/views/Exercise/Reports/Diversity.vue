@@ -86,11 +86,19 @@
       v-if="diversity && showTabs"
       class="govuk-grid-column-full"
     >
-      <TabsList
-        v-model:active-tab="activeTab"
-        :tabs="tabs"
-        class="print-none"
-      />
+      <Select
+        id="tab-filter"
+        v-model="activeTab"
+        class="govuk-!-margin-right-2"
+      >
+        <option
+          v-for="tab in tabs"
+          :key="tab.ref"
+          :value="tab.ref"
+        >
+          {{ tab.title }}
+        </option>
+      </Select>
 
       <h3 class="govuk-heading-m">
         {{ activeTabTitle }}
@@ -100,7 +108,7 @@
         Summary report coming soon
       </p>
 
-      <div v-else>
+      <div v-else-if="diversity[activeTab]">
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
             Gender by exercise stage
@@ -562,18 +570,19 @@ import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { availableStages } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'Diversity',
   components: {
-    TabsList,
+    Select,
     Stat,
     ActionButton,
   },
@@ -624,7 +633,46 @@ export default {
           title: 'Summary',
         }
       );
-      return tabs;
+
+      // add additional tabs based on shortlisting methods
+      const additionalTabs = [];
+      // qt
+      if (this.exercise.shortlistingMethods.some(method => [
+        SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
+        SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST,
+      ].includes(method))) {
+        additionalTabs.push(
+          {
+            ref: APPLICATION_STATUS.QUALIFYING_TEST_PASSED,
+            title: this.$filters.lookup(APPLICATION_STATUS.QUALIFYING_TEST_PASSED),
+          }
+        );
+      }
+      // scenario test
+      if (this.exercise.shortlistingMethods.some(method => [
+        SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST,
+      ].includes(method))) {
+        additionalTabs.push(
+          {
+            ref: APPLICATION_STATUS.SCENARIO_TEST_PASSED,
+            title: this.$filters.lookup(APPLICATION_STATUS.SCENARIO_TEST_PASSED),
+          }
+        );
+      }
+      // sift
+      if (this.exercise.shortlistingMethods.some(method => [
+        SHORTLISTING.NAME_BLIND_PAPER_SIFT,
+        SHORTLISTING.PAPER_SIFT,
+      ].includes(method))) {
+        additionalTabs.push(
+          {
+            ref: APPLICATION_STATUS.SIFT_PASSED,
+            title: this.$filters.lookup(APPLICATION_STATUS.SIFT_PASSED),
+          }
+        );
+      }
+
+      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
     },
     showTabs() {
       return this.diversity && this.availableStages?.length && this.diversity?.[this.availableStages[0]];  // check if report data is available
