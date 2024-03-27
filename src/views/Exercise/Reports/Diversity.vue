@@ -638,21 +638,23 @@ export default {
       );
 
       // add additional tabs based on shortlisting methods
-      const additionalTabs = [];
+      const additionalTabs = this.additionalTabs.map(ref => ({ ref, title: this.$filters.lookup(ref) }));
+      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
+    },
+    additionalTabs() {
+      const tabs = [];
       // qt
       if (this.exercise.shortlistingMethods.some(method => [
         SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
         SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST,
       ].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
-        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
+        tabs.push(ref);
       }
       // scenario test
-      if (this.exercise.shortlistingMethods.some(method => [
-        SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST,
-      ].includes(method))) {
+      if (this.exercise.shortlistingMethods.includes(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST)) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
-        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
+        tabs.push(ref);
       }
       // sift
       if (this.exercise.shortlistingMethods.some(method => [
@@ -660,10 +662,10 @@ export default {
         SHORTLISTING.PAPER_SIFT,
       ].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
-        additionalTabs.push({ ref, title: this.$filters.lookup(ref) });
+        tabs.push(ref);
       }
 
-      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
+      return tabs;
     },
     showTabs() {
       return this.diversity && this.availableStages?.length && this.diversity?.[this.availableStages[0]];  // check if report data is available
@@ -718,6 +720,8 @@ export default {
       let stages = this.availableStages;
       if (stage) {
         stages = [stage];
+      } else {
+        stages = [stages[0], ...this.additionalTabs, ...stages.slice(1)];
       }
       data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.diversity.applied).forEach((report) => {
