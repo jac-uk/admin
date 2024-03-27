@@ -393,6 +393,9 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    isProcessingVersion2() {
+      return this.exercise._processingVersion >= 2;
+    },
     availableStages() {
       return availableStages(this.exercise);
     },
