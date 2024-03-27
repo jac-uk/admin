@@ -80,7 +80,9 @@
           {{ row._language === 'cym' ? 'Yes' : 'No' }}
         </TableCell>
         <TableCell :title="tableColumns[3].title">
-          {{ $filters.lookup(row.status) }}
+          <span v-if="row._processing && row._processing.status">
+            {{ $filters.lookup(row._processing.status) }}
+          </span>
         </TableCell>
       </template>
     </Table>

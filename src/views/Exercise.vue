@@ -64,12 +64,25 @@
           </h1>
           <router-link
             v-if="!isAdvertTypeExternal && !hasJourney && isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
-            class="govuk-link print-none"
+            class="govuk-link govuk-!-margin-right-4 print-none"
             :to="{name: 'exercise-edit-name'}"
           >
             Edit name
           </router-link>
-
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link govuk-!-margin-right-4 print-none"
+            :to="{name: 'exercise-configuration-application-version'}"
+          >
+            Application form v{{ exercise._applicationVersion || 1 }}
+          </router-link>
+          <router-link
+            v-if="canEditExerciseConfiguration"
+            class="govuk-link print-none"
+            :to="{name: 'exercise-configuration-processing-version'}"
+          >
+            Processing v{{ exercise._processingVersion || 1 }}
+          </router-link>
           <div
             v-if="!isProduction"
             class="govuk-!-margin-top-4"
@@ -186,6 +199,9 @@ export default {
     },
     canArchiveExercises() {
       return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canAmendAfterLaunch.value]);
+    },
+    canEditExerciseConfiguration() {
+      return this.hasPermissions([this.PERMISSIONS.exercises.permissions.canConfigureExercise.value]);
     },
     isInFavourites() {
       return this.userId && this.exercise && this.exercise.favouriteOf && this.exercise.favouriteOf.indexOf(this.userId) >= 0;

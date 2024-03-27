@@ -229,7 +229,7 @@ export default {
           'applicationRecords/bind',
           {
             exerciseId: this.exerciseId,
-            stage: this.exercise && this.exercise._processingVersion >= 2 ? EXERCISE_STAGE.SHORTLISTED : EXERCISE_STAGE.SELECTED,
+            stage: this.exercise && this.exercise._processingVersion >= 2 ? EXERCISE_STAGE.SELECTION : EXERCISE_STAGE.SELECTED,
             ...params,
           }
         );

@@ -18,11 +18,11 @@
         v-for="item in availableStatuses"
         :key="item"
         :value="item"
-        :label="`${$filters.lookup(item)}${getStarIfStagePassingStatus(item)}`"
+        :label="`${$filters.lookup(item)}${getStatusMark(item)}`"
       />
     </RadioGroup>
     <Checkbox
-      v-if="!hasPassingStatus"
+      v-if="!hasPassingStatus && hasNextStage"
       id="next-stage"
       v-model="moveToNextStage"
       label="Move to next stage"
@@ -73,7 +73,7 @@ import RadioGroup from '@jac-uk/jac-kit/draftComponents/Form/RadioGroup.vue';
 import RadioItem from '@jac-uk/jac-kit/draftComponents/Form/RadioItem.vue';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import { availableStatuses, getNextStage, getStagePassingStatuses } from '../../../helpers/exerciseHelper';
+import { availableStatuses, getNextStage, getStagePassingStatuses, getStageMoveBackStatuses } from '../../../helpers/exerciseHelper';
 
 export default {
   components: {
@@ -110,8 +110,15 @@ export default {
     hasPassingStatus() {
       return this.stagePassingStatuses && this.stagePassingStatuses.length > 0;
     },
+    stageMoveBackStatuses() {
+      const statuses = getStageMoveBackStatuses(this.exercise, this.stage);
+      return statuses;
+    },
     nextStage() {
       return getNextStage(this.exercise, this.stage);
+    },
+    hasNextStage() {
+      return this.stage !== this.nextStage;
     },
     itemsToChange() {
       const selectedItems = this.$store.state.applicationRecords.selectedItems;
@@ -125,8 +132,11 @@ export default {
     }
   },
   methods: {
-    getStarIfStagePassingStatus(status) {
+    getStatusMark(status) {
       if (this.stagePassingStatuses && this.stagePassingStatuses.indexOf(status) >= 0) {
+        return ' *';
+      }
+      if (this.stageMoveBackStatuses && this.stageMoveBackStatuses.indexOf(status) >= 0) {
         return ' *';
       }
       return '';
@@ -135,11 +145,11 @@ export default {
       const data = {};
       if (this.newSelectedStatus) {
         data.status = this.newSelectedStatus;
-        if (this.moveToNextStage && this.nextStage !== this.stage) {
+        if (this.moveToNextStage && this.hasNextStage) {
           data.stage = this.nextStage;
         } else {
           const nextStage = getNextStage(this.exercise, this.stage, this.newSelectedStatus);
-          if (nextStage !== this.stage) {
+          if (this.stage !== nextStage) {
             data.stage = nextStage;
           }
         }

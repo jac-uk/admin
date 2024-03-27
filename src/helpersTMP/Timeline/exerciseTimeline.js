@@ -216,7 +216,6 @@ const exerciseTimeline = (data) => {
         entry: 'Eligibility SCC',
         date: data.eligibilitySCCDate,
         dateString: getDateString(data.eligibilitySCCDate),
-        taskType: TASK_TYPE.ELIGIBILITY_SCC,
       }
     );
   }
@@ -296,7 +295,6 @@ const exerciseTimeline = (data) => {
         entry: 'Statutory consultation',
         date: data.statutoryConsultationDate,
         dateString: getDateString(data.statutoryConsultationDate),
-        taskType: TASK_TYPE.STATUTORY_CONSULTATION,
       }
     );
   }
@@ -307,7 +305,6 @@ const exerciseTimeline = (data) => {
         entry: 'Character and Selection SCC',
         date: data.characterAndSCCDate,
         dateString: getDateString(data.characterAndSCCDate),
-        taskType: TASK_TYPE.CHARACTER_AND_SELECTION_SCC,
       }
     );
   }
@@ -318,7 +315,7 @@ const exerciseTimeline = (data) => {
         entry: 'Selection process outcome',
         date: data.finalOutcome,
         dateString: getDateString(data.finalOutcome, 'month'),
-        taskType: TASK_TYPE.SELECTION_OUTCOME,
+        // taskType: TASK_TYPE.SELECTION_OUTCOME,
       }
     );
   }

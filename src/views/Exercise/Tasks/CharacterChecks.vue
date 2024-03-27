@@ -123,7 +123,7 @@
               </RouterLink>
             </TableCell>
             <TableCell :title="tableColumns[2].title">
-              {{ row.stage }}
+              {{ $filters.lookup(row.stage) }}
             </TableCell>
             <TableCell :title="tableColumns[3].title">
               {{ row.characterChecks.status }}

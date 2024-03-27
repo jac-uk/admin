@@ -19,9 +19,21 @@ export default {
       );
 
       if (params.where.length === 0) {
-        firestoreRef = query(firestoreRef, where('stage', 'in', [EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTABLE, EXERCISE_STAGE.SELECTED, EXERCISE_STAGE.RECOMMENDED, EXERCISE_STAGE.HANDOVER]));
+        // TODO this should use stages for the correct processing version
+        firestoreRef = query(firestoreRef, where('stage', 'in', [
+          // v2
+          EXERCISE_STAGE.SHORTLISTING,
+          EXERCISE_STAGE.SELECTION,
+          EXERCISE_STAGE.SCC,
+          EXERCISE_STAGE.RECOMMENDATION,
+          // v1
+          EXERCISE_STAGE.SHORTLISTED, 
+          EXERCISE_STAGE.SELECTABLE, 
+          EXERCISE_STAGE.SELECTED, 
+          EXERCISE_STAGE.RECOMMENDED, 
+          EXERCISE_STAGE.HANDOVER,
+        ]));
       }
-
       if (params.requested === true) {
         firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'requested'));
         firestoreRef = tableQuery(state.checksRequestedRecords, firestoreRef, params);
@@ -32,11 +44,11 @@ export default {
         firestoreRef = tableQuery(state.checksNotRequestedRecords, firestoreRef, params);
         return bindFirestoreRef('checksNotRequestedRecords', firestoreRef, { serialize: vuexfireSerialize });
       }
-        if (params.completed === true) {
-          firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'completed'));
-          firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
-          return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
-        }
+      if (params.completed === true) {
+        firestoreRef = query(firestoreRef, where('characterChecks.status', '==', 'completed'));
+        firestoreRef = tableQuery(state.checksCompletedRecords, firestoreRef, params);
+        return bindFirestoreRef('checksCompletedRecords', firestoreRef, { serialize: vuexfireSerialize });
+      }
     }),
     unbind: firestoreAction(({ unbindFirestoreRef }) => {
       unbindFirestoreRef('checksRequestedRecords');

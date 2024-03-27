@@ -40,7 +40,7 @@ export default {
           path: `${path}/applied`,
         },
         {
-          title: `Withdrawn (${this.$filters.formatNumber(withdrawn)})`,
+          title: `Withdrew (${this.$filters.formatNumber(withdrawn)})`,
           path: `${path}/withdrawn`,
         },
       ];
