@@ -86,11 +86,20 @@
       v-if="report && showTabs"
       class="govuk-grid-column-full"
     >
-      <TabsList
-        v-model:active-tab="activeTab"
-        :tabs="tabs"
-        class="print-none"
-      />
+      <Select
+        id="tab-filter"
+        v-model="activeTab"
+        class="govuk-!-margin-right-2"
+      >
+        <option
+          v-for="tab in tabs"
+          :key="tab.ref"
+          :value="tab.ref"
+        >
+          {{ tab.title }}
+        </option>
+      </Select>
+
       <h3 class="govuk-heading-m">
         {{ activeTabTitle }}
       </h3>
@@ -99,9 +108,7 @@
         Summary report coming soon
       </p>
 
-      <div
-        v-else
-      >
+      <div v-else-if="report[activeTab]">
         <table
           v-if="('outreach' in report[activeTab])"
           class="govuk-table"
@@ -348,17 +355,18 @@ import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { isLegal, availableStages } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
+import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
 
 export default {
   name: 'Outreach',
   components: {
-    TabsList,
+    Select,
     Stat,
     ActionButton,
   },
@@ -417,6 +425,35 @@ export default {
           title: 'Summary',
         }
       );
+
+      // add additional tabs based on shortlisting methods
+      const additionalTabs = this.additionalTabs.map(ref => ({ ref, title: this.$filters.lookup(ref) }));
+      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
+    },
+    additionalTabs() {
+      const tabs = [];
+      // qt
+      if (this.exercise.shortlistingMethods.some(method => [
+        SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
+        SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST,
+      ].includes(method))) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
+        tabs.push(ref);
+      }
+      // scenario test
+      if (this.exercise.shortlistingMethods.includes(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST)) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
+        tabs.push(ref);
+      }
+      // sift
+      if (this.exercise.shortlistingMethods.some(method => [
+        SHORTLISTING.NAME_BLIND_PAPER_SIFT,
+        SHORTLISTING.PAPER_SIFT,
+      ].includes(method))) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
+        tabs.push(ref);
+      }
+
       return tabs;
     },
     showTabs() {
@@ -475,6 +512,8 @@ export default {
       let stages = this.availableStages;
       if (stage) {
         stages = [stage];
+      } else {
+        stages = [stages[0], ...this.additionalTabs, ...stages.slice(1)];
       }
       data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
       Object.keys(this.report.applied).forEach((report) => {
