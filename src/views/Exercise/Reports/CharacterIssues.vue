@@ -351,7 +351,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, doc, onSnapshot, where } from '@firebase/firestore';
+import { query, collection, doc, onSnapshot, where, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
@@ -577,11 +577,12 @@ export default {
       if (match) return; // already have the data for this candidate
 
       // get other application records for this candidate
-      const firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('candidate.id', '==', applicationRecord.candidate.id)
-        .where('exercise.id', '!=', applicationRecord.exercise.id); // exclude current exercise
-      const snapshot = await firestoreRef.get();
+      const firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('candidate.id', '==', applicationRecord.candidate.id),
+        where('exercise.id', '!=', applicationRecord.exercise.id) // exclude current exercise
+      );
+      const snapshot = await getDocs(firestoreRef);
       const otherRecords = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
