@@ -64,7 +64,7 @@ export default {
   computed: {
     selected: {
       get() {
-        return this.modelValue ? this.modelValue : [];
+        return this.modelValue || [];
       },
       set(val) {
         this.$emit('update:modelValue', val);

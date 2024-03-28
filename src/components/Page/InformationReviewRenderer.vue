@@ -138,7 +138,6 @@
     </div>
     <div v-else>
       <EditableField
-        :id="field"
         :edit-mode="edit"
         :value="data"
         :field="field"

@@ -108,12 +108,21 @@
               <strong>
                 {{ answerIndex }}:
               </strong>
-              <span
-                v-if="config.groupAnswers"
-              >
-                {{ findGroupByAnswer(config.answers, answer) + ' - ' }}
-              </span>
-              {{ answer }}
+              <template v-if="config.groupAnswers">
+                <strong>
+                  {{ findGroupByAnswer(config.answers, answer) + ' - ' }}
+                </strong>
+                <span
+                  v-for="group in config.answers"
+                  :key="group"
+                  class="govuk-body"
+                >
+                  {{ group.answers.find(ans => ans.id === answer) ? group.answers.find(ans => ans.id === answer).answer : '' }}
+                </span>
+              </template>
+              <template v-else>
+                {{ config.answers.find(ans => ans.id === answer).answer }}
+              </template>
             </p>
           </div>
           <div
@@ -132,7 +141,7 @@
                 v-for="(answer, sortedAnswerIndex) in sortedAnswers.answers"
                 :key="answer"
               >
-                {{ `${answer}${(sortedAnswerIndex + 1 < sortedAnswers.answers.length) ? ', ' : ''}` }}
+                {{ `${config.answers.find(ans => ans.id === answer).answer}${(sortedAnswerIndex + 1 < sortedAnswers.answers.length) ? ', ' : ''}` }}
               </span>
             </p>
           </div>
@@ -141,22 +150,36 @@
           v-else-if="isSingleChoice"
         >
           <!-- Render single-choice answer -->
-          {{ value }}
+          {{ config.answers.find(ans => ans.id === value).answer }}
         </div>
         <div
           v-else-if="isMultipleChoice"
         >
-          <!-- {{ value }} -->
           <!-- Render multiple-choice answers -->
           <p
             v-for="answer in value"
             :key="answer"
             class="govuk-body"
           >
-            <strong v-if="config.groupAnswers">
-              {{ findGroupByAnswer(config.answers, answer) + ' - ' }}
-            </strong>
-            {{ answer }}
+            <template v-if="config.groupAnswers">
+              <strong>
+                {{ findGroupByAnswer(config.answers, answer) + ' - ' }}
+              </strong>
+              <span
+                v-for="group in config.answers"
+                :key="group"
+                class="govuk-body"
+              >
+                val: {{ value }}
+                prased val: {{ group.answers.find(ans => ans.id === answer) ? group.answers.find(ans => ans.id === answer).answer : '' }}
+              </span>
+            </template>
+            <template v-else-if="config.answerSource">
+              {{ answer }}
+            </template>
+            <template v-else>
+              {{ config.answers.find(ans => ans.id === answer).answer }}
+            </template>
           </p>
         </div>
       </div>
@@ -509,7 +532,7 @@ export default {
     findGroupByAnswer(dataset, targetAnswer) {
       for (const question of dataset) {
 
-        if (question.answers.some(answerObj => answerObj.answer === targetAnswer)) {
+        if (question.answers.some(answerObj => answerObj.id === targetAnswer)) {
           return question.group;
         }
       }
@@ -554,27 +577,57 @@ export default {
         }
 
         if (this.index != undefined || this.extension != undefined) { // is nested or indexed item
-          resultObj = {
-            field: this.field,
-            change: this.localField,
-          };
-          if (this.index != undefined) { // is indexed item
+          if (this.isSingleChoice) {
+            console.log(1);
             resultObj = {
-              ...resultObj,
-              index: this.index,
+              field: this.field,
+              change: this.config.answers.find(ans => ans.answer === this.localField).id,
             };
           }
-          if (this.extension != undefined) { // is nested item
+          else if (this.isMultipleChoice) {
+            console.log(2);
+            resultObj = {
+              field: this.field,
+              change: [],
+            };
+            this.localField.forEach((val) => {
+              console.log(val);
+              // console.log(this.config.answers);
+              if (val) {
+                resultObj.change.push(this.config.answers.find(ans => ans.answer === val));
+              }
+            });
+          } else if (this.isRankedChoice) {
+            console.log(3);
+            resultObj = {
+              field: this.field,
+              change: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField,
+            };
+          } else {
+            console.log(4);
+            resultObj = {
+              field: this.field,
+              change: this.localField,
+            };
+          } if (this.config.id != undefined) { // is indexed item
+            console.log(5);
+            resultObj = {
+              ...resultObj,
+              index: this.config.id,
+            };
+          } if (this.extension != undefined) { // is nested item
+            console.log(6);
             resultObj = {
               ...resultObj,
               extension: this.extension,
             };
           }
         } else {
-          resultObj = { [this.field]: this.localField }; // else
+          resultObj = { [this.field]: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField }; // else
         }
 
-        this.$emit('changeField', resultObj);
+        console.log(resultObj);
+        // this.$emit('changeField', resultObj);
 
         this.editField = false;
       }
