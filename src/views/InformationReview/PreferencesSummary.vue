@@ -107,7 +107,7 @@
         class="govuk-summary-list"
       >
         <div
-          v-for="(item) in exercise.locationPreferences.slice(1,2)"
+          v-for="(item) in exercise.locationPreferences"
           :key="item"
           class="govuk-summary-list__row"
         >
@@ -148,7 +148,6 @@
       </dl>
     </div>
   </div>
-  <!--
   <div
     v-if="!isPanelView && (exercise.jurisdictionQuestion || exercise.jurisdictionPreferences)"
     class="govuk-!-margin-top-9"
@@ -260,7 +259,6 @@
       </div>
     </dl>
   </div>
---->
   <div
     v-if="exercise.welshRequirement"
     class="govuk-!-margin-top-9"
@@ -337,7 +335,6 @@
       </div>
     </dl>
   </div>
-  <!--
   <div
     v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length"
     class="govuk-!-margin-top-9"
@@ -351,7 +348,7 @@
 
     <template v-if="application.additionalWorkingPreferences || editable">
       <dl
-        v-for="(item, index) in exercise.additionalWorkingPreferences"
+        v-for="(item, index) in exercise.additionalWorkingPreferences.slice"
         :key="index"
         class="govuk-summary-list"
       >
@@ -377,47 +374,47 @@
             v-if="item.hasOwnProperty('groupAnswers')"
             class="govuk-summary-list__value"
           >
-            new working prefs
-  <span
-    class="govuk-hint"
-  >
-    {{ $filters.lookup(item.questionType) }}
-    {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
-    {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
-    {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
-    {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
-  </span>
-  <InformationReviewRenderer
-    :data="application.additionalWorkingPreferences[item.id]"
-    field="additionalWorkingPreferences"
-    :index="index"
-    :edit="editable"
-    :options="getItemAnswers(item)"
-    :type="item.questionType"
-    :is-asked="isApplicationPartAsked('additionalWorkingPreferences')"
-    :question-config="getQuestionConfig(item)"
-    @change-field="changePreferences"
-  />
-  </dd>
-  <dd
-    v-else
-    class="govuk-summary-list__value"
-  >
-    old working prefs
-    <InformationReviewRenderer
-      :data="additionalWorkingPreferenceAnswer(index)"
-      field="additionalWorkingPreferences"
-      :index="index"
-      :edit="editable"
-      :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
-      :type="getQuestionType(item)"
-      :is-asked="isApplicationPartAsked('additionalWorkingPreferences')"
-      @change-field="changePreferences"
-    />
-  </dd>
-  </div>
-  </dl>
-</template>
+            <!--new working prefs-->
+            <span
+              class="govuk-hint"
+            >
+              {{ $filters.lookup(item.questionType) }}
+              {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
+              {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
+              {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
+              {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
+            </span>
+            <InformationReviewRenderer
+              :data="application.additionalWorkingPreferences[item.id]"
+              field="additionalWorkingPreferences"
+              :index="index"
+              :edit="editable"
+              :options="getItemAnswers(item)"
+              :type="item.questionType"
+              :is-asked="isApplicationPartAsked('additionalWorkingPreferences')"
+              :question-config="getQuestionConfig(item)"
+              @change-field="changePreferences"
+            />
+          </dd>
+          <dd
+            v-else
+            class="govuk-summary-list__value"
+          >
+            <!-- old working prefs -->
+            <InformationReviewRenderer
+              :data="additionalWorkingPreferenceAnswer(index)"
+              field="additionalWorkingPreferences"
+              :index="index"
+              :edit="editable"
+              :options="exercise.additionalWorkingPreferences[index].answers.map(item => item.answer)"
+              :type="getQuestionType(item)"
+              :is-asked="isApplicationPartAsked('additionalWorkingPreferences')"
+              @change-field="changePreferences"
+            />
+          </dd>
+        </div>
+      </dl>
+    </template>
     <div
       v-else
     >
@@ -428,7 +425,6 @@
       </span>
     </div>
   </div>
--->
 </template>
 <script>
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
@@ -533,7 +529,6 @@ export default {
     },
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
-      // console.log(obj);
 
       if (['locationPreferences'].includes(obj.field)) {
         changedObj[obj.index] = obj.change;
@@ -558,7 +553,6 @@ export default {
         ...changedObj ,
       };
 
-      // console.log(updatedApplication.locationPreferences);
       this.$emit('updateApplication', updatedApplication );
     },
     isApplicationPartAsked(part) {

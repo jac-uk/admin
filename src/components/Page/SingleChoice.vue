@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-radios">
-    <div
+    <div 
       v-if="config.groupAnswers"
     >
       <div

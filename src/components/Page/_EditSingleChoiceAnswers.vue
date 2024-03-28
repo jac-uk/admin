@@ -8,7 +8,7 @@
       :id="`${id}-answer-${index}`"
       v-model="localVModel"
       :name="`${id}-answer-${index}`"
-      :value="answer.answer"
+      :value="answer.id"
       type="radio"
       class="govuk-radios__input"
     >
@@ -44,7 +44,7 @@ export default {
   emits: ['update:modelValue'],
   computed: {
     localVModel: {
-      get() {
+      get() {  
         return this.modelValue;
       },
       set(val) {

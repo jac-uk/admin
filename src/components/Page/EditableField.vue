@@ -170,8 +170,7 @@
                 :key="group"
                 class="govuk-body"
               >
-                val: {{ value }}
-                prased val: {{ group.answers.find(ans => ans.id === answer) ? group.answers.find(ans => ans.id === answer).answer : '' }}
+                {{ group.answers.find(ans => ans.id === answer) ? group.answers.find(ans => ans.id === answer).answer : '' }}
               </span>
             </template>
             <template v-else-if="config.answerSource">
@@ -577,60 +576,28 @@ export default {
         }
 
         if (this.index != undefined || this.extension != undefined) { // is nested or indexed item
-          if (this.isSingleChoice) {
-            console.log(1);
-            resultObj = {
-              field: this.field,
-              change: this.config.answers.find(ans => ans.answer === this.localField).id,
-            };
-          }
-          else if (this.isMultipleChoice) {
-            console.log(2);
-            resultObj = {
-              field: this.field,
-              change: [],
-            };
-            this.localField.forEach((val) => {
-              console.log(val);
-              // console.log(this.config.answers);
-              if (val) {
-                resultObj.change.push(this.config.answers.find(ans => ans.answer === val));
-              }
-            });
-          } else if (this.isRankedChoice) {
-            console.log(3);
-            resultObj = {
-              field: this.field,
-              change: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField,
-            };
-          } else {
-            console.log(4);
-            resultObj = {
-              field: this.field,
-              change: this.localField,
-            };
-          } if (this.config.id != undefined) { // is indexed item
-            console.log(5);
-            resultObj = {
-              ...resultObj,
-              index: this.config.id,
-            };
-          } if (this.extension != undefined) { // is nested item
-            console.log(6);
-            resultObj = {
-              ...resultObj,
-              extension: this.extension,
-            };
-          }
-        } else {
-          resultObj = { [this.field]: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField }; // else
+          resultObj = {
+            field: this.field,
+            change: this.localField,
+          };
+        } if (this.config.id != undefined) { // is indexed item
+          resultObj = {
+            ...resultObj,
+            index: this.config.id,
+          };
+        } if (this.extension != undefined) { // is nested item
+          resultObj = {
+            ...resultObj,
+            extension: this.extension,
+          };
         }
-
-        console.log(resultObj);
-        // this.$emit('changeField', resultObj);
-
-        this.editField = false;
+      } else {
+        resultObj = { [this.field]: this.config ? this.config.answers.find(ans => ans.answer === this.localField).id : this.localField }; // else
       }
+
+      this.$emit('changeField', resultObj);
+
+      this.editField = false;
     },
   },
 };
