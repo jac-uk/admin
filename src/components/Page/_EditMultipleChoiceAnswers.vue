@@ -8,7 +8,7 @@
       :id="`${id}-answer-${index}`"
       v-model="localVModel"
       :name="`${id}-answer-${index}`"
-      :value="answer.answer"
+      :value="answer.id"
       type="checkbox"
       class="govuk-checkboxes__input"
     >
