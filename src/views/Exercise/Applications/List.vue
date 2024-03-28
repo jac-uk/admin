@@ -54,7 +54,7 @@
       :columns="tableColumns"
       :search-map="$searchMap.applications"
       :page-item-type="pageItemType"
-      :page-size="50"
+      :page-size="pageSize"
       :total="!!(exercise._applications) ? exercise._applications[status] : 0"
       @change="getTableData"
     >
@@ -162,6 +162,12 @@ export default {
         return 'uppercase-letter';
       }
       return '';
+    },
+    pageSize() {
+      if (this.pageItemType === 'uppercase-letter') {
+        return 10000; // set a high number to show all records
+      }
+      return 50;
     },
     exercise() {
       return this.$store.state.exerciseDocument.record;
