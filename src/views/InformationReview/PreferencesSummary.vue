@@ -336,7 +336,7 @@
     </dl>
   </div>
   <div
-    v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length"
+    v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length || false"
     class="govuk-!-margin-top-9"
   >
     <h2
@@ -369,7 +369,6 @@
               {{ item.topic }}
             </span>
           </dt>
-
           <dd
             v-if="item.hasOwnProperty('groupAnswers')"
             class="govuk-summary-list__value"
@@ -530,7 +529,7 @@ export default {
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
-      if (['locationPreferences'].includes(obj.field)) {
+      if (['locationPreferences', 'jurisdictionPreferences'].includes(obj.field)) {
         changedObj[obj.index] = obj.change;
       } else if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
         if (changedObj.length) {

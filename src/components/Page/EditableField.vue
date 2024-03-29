@@ -174,7 +174,7 @@
               </span>
             </template>
             <template v-else-if="config.answerSource">
-              {{ answer }}
+              {{ $filters.lookup(answer) }}
             </template>
             <template v-else>
               {{ config.answers.find(ans => ans.id === answer).answer }}
@@ -290,7 +290,7 @@
               :for="`${id}-answer-${i}`"
               class="govuk-label govuk-checkboxes__label"
             >
-              {{ answer }}
+              {{ $filters.lookup(answer) }}
             </label>
 
             <Select

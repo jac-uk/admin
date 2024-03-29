@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-checkboxes">
-    <div 
+    <div
       v-if="config.groupAnswers"
     >
       <div
@@ -8,7 +8,7 @@
         :key="itemIndex"
       >
         <span class="govuk-heading-s govuk-!-margin-bottom-2 govuk-!-margin-top-4">{{ item.group }}</span>
-        <EditMultipleChoiceAnswers 
+        <EditMultipleChoiceAnswers
           :id="`${id}-${itemIndex}`"
           v-model="selected"
           :answers="item.answers"
@@ -17,12 +17,13 @@
       </div>
     </div>
     <div v-else>
-      <EditMultipleChoiceAnswers 
+      <EditMultipleChoiceAnswers
         :id="id"
         v-model="selected"
-        :answers="answers"    
+        :answers="answers"
+        :config="config"
       />
-    </div>    
+    </div>
   </div>
 </template>
 
@@ -45,7 +46,7 @@ export default {
       required: true,
     },
     answers: {
-      type: Array,
+      type: [Array, Object],
       required: true,
     },
     config: {
@@ -54,9 +55,9 @@ export default {
       default: () => ({}),
     },
     modelValue: {
-      type: Array,
-      default: function () { 
-        return new Array(); 
+      type: [Array, Object],
+      default: function () {
+        return new Array();
       },
     },
   },

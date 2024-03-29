@@ -8,7 +8,7 @@
       :id="`${id}-answer-${index}`"
       v-model="localVModel"
       :name="`${id}-answer-${index}`"
-      :value="answer.id"
+      :value="config.answerSource ? answer.answer : answer.id"
       type="checkbox"
       class="govuk-checkboxes__input"
     >
@@ -34,7 +34,7 @@ export default {
     },
     answers: {
       required: true,
-      type: Array,
+      type: [Array, Object],
     },
     config: {
       type: Object,
@@ -43,15 +43,15 @@ export default {
     },
     modelValue: {
       type: Array,
-      default: function () { 
-        return new Array(); 
+      default: function () {
+        return new Array();
       },
     },
   },
   emits: ['update:modelValue'],
   computed: {
     localVModel: {
-      get() {  
+      get() {
         return this.modelValue;
       },
       set(val) {
