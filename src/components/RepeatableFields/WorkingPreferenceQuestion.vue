@@ -312,7 +312,7 @@ export default {
   },
   methods: {
     getLinkedQuestion(questionTitle) {
-      return this.linkedQuestions.find(question => question.question === questionTitle);
+      return this.linkedQuestions.find(question => question.id === questionTitle);
     },
   },
 };
