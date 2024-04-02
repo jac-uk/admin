@@ -35,7 +35,7 @@
           <option
             v-for="question in otherLinkedQuestions"
             :key="question.question"
-            :value="question.question"
+            :value="question.id"
           >
             {{ question.question }}
           </option>
@@ -57,7 +57,7 @@
               <option
                 v-for="answer in item.answers"
                 :key="answer.answer"
-                :value="answer.answer"
+                :value="answer.id"
               >
                 {{ answer.answer }}
               </option>
@@ -67,7 +67,7 @@
             <option
               v-for="answer in getLinkedQuestion(row.linkedQuestion).answers"
               :key="answer.answer"
-              :value="answer.answer"
+              :value="answer.id"
             >
               {{ answer.answer }}
             </option>
