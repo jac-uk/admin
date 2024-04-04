@@ -575,9 +575,8 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { availableStages } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
-import { SHORTLISTING } from '@jac-uk/jac-kit/helpers/constants';
+import { availableStages, getTaskTypes } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
@@ -642,25 +641,23 @@ export default {
       return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
     },
     additionalTabs() {
+      const taskTypes = getTaskTypes(this.exercise);
       const tabs = [];
       // qt
-      if (this.exercise.shortlistingMethods.some(method => [
-        SHORTLISTING.SITUATIONAL_JUDGEMENT_QUALIFYING_TEST,
-        SHORTLISTING.CRITICAL_ANALYSIS_QUALIFYING_TEST,
+      if (taskTypes.some(method => [
+        TASK_TYPE.CRITICAL_ANALYSIS,
+        TASK_TYPE.SITUATIONAL_JUDGEMENT,
       ].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
         tabs.push(ref);
       }
       // scenario test
-      if (this.exercise.shortlistingMethods.includes(SHORTLISTING.SCENARIO_TEST_QUALIFYING_TEST)) {
+      if (taskTypes.includes(TASK_TYPE.SCENARIO)) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
         tabs.push(ref);
       }
       // sift
-      if (this.exercise.shortlistingMethods.some(method => [
-        SHORTLISTING.NAME_BLIND_PAPER_SIFT,
-        SHORTLISTING.PAPER_SIFT,
-      ].includes(method))) {
+      if (taskTypes.includes(TASK_TYPE.SIFT)) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
         tabs.push(ref);
       }
