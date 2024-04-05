@@ -167,6 +167,7 @@ export default {
         }
       }
       catch (error) {
+        console.error(error);
         this.errors.push(error);
       }
     },
