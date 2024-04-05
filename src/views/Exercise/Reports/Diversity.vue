@@ -644,10 +644,7 @@ export default {
       const taskTypes = getTaskTypes(this.exercise);
       const tabs = [];
       // qt
-      if (taskTypes.some(method => [
-        TASK_TYPE.CRITICAL_ANALYSIS,
-        TASK_TYPE.SITUATIONAL_JUDGEMENT,
-      ].includes(method))) {
+      if (taskTypes.some(method => [TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
         tabs.push(ref);
       }
