@@ -36,7 +36,7 @@
             </ActionButton>
             <button
               v-if="status === 'draft' && isClosed && hasPermissions([PERMISSIONS.applications.permissions.canRequestLateApplications.value])"
-              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action"
+              class="govuk-button govuk-button--secondary moj-button-menu__item moj-page-header-actions__action govuk-!-margin-left-2"
               data-module="govuk-button"
               @click="openModal"
             >
