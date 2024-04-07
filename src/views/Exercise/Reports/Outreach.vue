@@ -399,34 +399,34 @@ export default {
       return availableStages(this.exercise);
     },
     tabs() {
-      const tabs = this.availableStages.map((stage) => {
-        const tab = {};
-        tab.ref = stage;
+      const tabs = [];
+      this.availableStages.forEach((stage) => {
         switch (stage) {
         case EXERCISE_STAGE.SHORTLISTING:
         case EXERCISE_STAGE.REVIEW:
-          tab.title = 'Applied';
-          break;
-        case EXERCISE_STAGE.SELECTION:
-          tab.title = 'Shortlisted';
+          tabs.push({
+            ref: stage,
+            title: 'Applied',
+          });
           break;
         case EXERCISE_STAGE.SCC:
-          tab.title = 'Passed SD';
+          tabs.push({
+            ref: stage,
+            title: 'Passed SD',
+          });
           break;
         case EXERCISE_STAGE.RECOMMENDATION:
-          tab.title = 'Recommended to JO';
+          tabs.push({
+            ref: stage,
+            title: 'Recommended to JO',
+          });
           break;
-        default:
-          tab.title = this.$filters.lookup(stage);
         }
-        return tab;
       });
-      tabs.push(
-        {
-          ref: 'summary',
-          title: 'Summary',
-        }
-      );
+      tabs.push({
+        ref: 'summary',
+        title: 'Summary',
+      });
 
       // add additional tabs based on shortlisting methods
       const additionalTabs = this.additionalTabs.map(ref => ({ ref, title: this.$filters.lookup(ref) }));
@@ -509,18 +509,17 @@ export default {
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = this.availableStages;
+      let stageItems = this.tabs.slice(0, -1); // exclude summary tab
       if (stage) {
-        stages = [stage];
-      } else {
-        stages = [stages[0], ...this.additionalTabs, ...stages.slice(1)];
+        stageItems = this.tabs.filter(tab => tab.ref === stage);
       }
-      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
+      data.push(['Statistic'].concat(stageItems.map(item => item.title)));
       Object.keys(this.report.applied).forEach((report) => {
         Object.keys(this.report.applied[report]).forEach((stat) => {
           const columns = [];
           columns.push(`${report}:${stat}`);
-          stages.forEach((stage) => {
+          stageItems.forEach((item) => {
+            const stage = item.ref;
             if (stat === 'total') {
               columns.push(this.report[stage][report][stat]);
             } else {
