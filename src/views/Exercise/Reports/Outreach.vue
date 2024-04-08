@@ -399,29 +399,28 @@ export default {
       return availableStages(this.exercise);
     },
     tabs() {
-      const tabs = [];
-      this.availableStages.forEach((stage) => {
+      const stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION].includes(stage));
+      const tabs = stages.map((stage) => {
+        const tab = {};
+        tab.ref = stage;
         switch (stage) {
         case EXERCISE_STAGE.SHORTLISTING:
         case EXERCISE_STAGE.REVIEW:
-          tabs.push({
-            ref: stage,
-            title: 'Applied',
-          });
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SELECTION:
+          tab.title = 'Shortlisted';
           break;
         case EXERCISE_STAGE.SCC:
-          tabs.push({
-            ref: stage,
-            title: 'Passed SD',
-          });
+          tab.title = 'Passed SD';
           break;
         case EXERCISE_STAGE.RECOMMENDATION:
-          tabs.push({
-            ref: stage,
-            title: 'Recommended to JO',
-          });
+          tab.title = 'Recommended to JO';
           break;
+        default:
+          tab.title = this.$filters.lookup(stage);
         }
+        return tab;
       });
       tabs.push({
         ref: 'summary',
