@@ -314,29 +314,31 @@
       <template
         v-if="config"
       >
-        <SingleChoice
-          v-if="isSingleChoice"
-          :id="index"
-          v-model="localField"
-          :answers="config.answers"
-          :config="config"
-        />
+        <div class="govuk-form-group">
+          <SingleChoice
+            v-if="isSingleChoice"
+            :id="index"
+            v-model="localField"
+            :answers="config.answers"
+            :config="config"
+          />
 
-        <MultipleChoice
-          v-if="isMultipleChoice"
-          :id="index"
-          v-model="localField"
-          :answers="config.answers"
-          :config="config"
-        />
+          <MultipleChoice
+            v-if="isMultipleChoice"
+            :id="index"
+            v-model="localField"
+            :answers="config.answers"
+            :config="config"
+          />
 
-        <RankedChoice
-          v-if="isRankedChoice"
-          :id="index"
-          v-model="localField"
-          :answers="config.answers"
-          :config="config"
-        />
+          <RankedChoice
+            v-if="isRankedChoice"
+            :id="index"
+            v-model="localField"
+            :answers="config.answers"
+            :config="config"
+          />
+        </div>
       </template>
 
       <div class="change-link">
