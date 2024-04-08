@@ -310,6 +310,16 @@ export default {
       return this.linkedQuestions.filter(item => item.question !== this.row.question);
     },
   },
+  watch: {
+    'row.questionType': {
+      handler() {
+        console.log(this.row.questionType);
+        if (this.row.questionType === 'single-choice') {
+          this.row.minimumAnswerMode = 'any'; // reset to default
+        }
+      },
+    },
+  },
   methods: {
     getLinkedQuestion(questionTitle) {
       return this.linkedQuestions.find(question => question.question === questionTitle);
