@@ -653,7 +653,7 @@ export default {
       return this.report ? this.report.rows.filter((e) => e.bsbQualifications.length > 0) : [];
     },
     jcioRows() {
-      return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
+      return this.report ? this.report.rows.filter((e) => e.jcioOffice === 'Yes') : [];
     },
     hmrcRows() {
       return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
