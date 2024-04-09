@@ -515,7 +515,7 @@ export default {
     changePreferences(obj) {
       let changedObj = this.application[obj.field] || [];
 
-      if (['locationPreferences', 'jurisdictionPreferences'].includes(obj.field)) {
+      if (['locationPreferences', 'jurisdictionPreferences', 'additionalWorkingPreferences'].includes(obj.field)) {
         changedObj[obj.index] = obj.change;
       } else if (obj.hasOwnProperty('change') && obj.hasOwnProperty('index')) {
         if (changedObj.length) {
@@ -538,7 +538,7 @@ export default {
         ...changedObj ,
       };
 
-      this.$emit('updateApplication', updatedApplication );
+      this.$emit('updateApplication', updatedApplication);
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);

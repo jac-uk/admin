@@ -40,6 +40,7 @@
 
 <script>
 import { getDataWelsh } from '@/helpers/language';
+import { deleteField } from 'firebase/firestore';
 
 export default {
   name: 'EditRankedChoiceAnswers',
@@ -74,7 +75,7 @@ export default {
   computed: {
     localVModel: {
       get() {
-        return this.modelValue;
+        return this.modelValue || {};
       },
       set(val) {
         this.$emit('update:modelValue', val);
@@ -99,19 +100,21 @@ export default {
         }
       } else {
         // remove un-selected
-        delete this.localVModel[event.target.value];
+        this.localVModel[event.target.value] = deleteField();
         this.$emit('update:modelValue', this.localVModel);
 
         if (this.config.allowEqualRanking) {
           // reduce any ranks above the maximum rank. Leave the others alone.
           const maxRank = this.numSelected;
           Object.entries(this.localVModel).forEach(([key, value]) => {
-            if (value > maxRank) this.localVModel[key] = maxRank;
+            // exclude the one we just removed
+            if (value?._methodName !== 'deleteField' && value > maxRank) this.localVModel[key] = maxRank;
           });
         } else {
           // ensure we have distinct ranks up to the maximum
           Object.entries(this.localVModel)
             .map(([key, value]) => { return { key: key, value: value }; })
+            .filter(item => item.value?._methodName !== 'deleteField') // exclude the one we just removed
             .sort(( item1, item2 ) => {
               if (item1.value < item2.value) {
                 return -1;

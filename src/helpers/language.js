@@ -194,7 +194,7 @@ const getDataWelshId = (value) => {
 
 // get welsh value for data-welsh attribute
 const getDataWelsh = ({ id, value }) => {
-  if (id && (
+  if (id && id.includes && (
     id.includes(getDataWelshId('Secondment to the Court of Protection')) ||
     id.includes(getDataWelshId('Posts in Wales - Welsh Language')) ||
     id.includes(getDataWelshId('Posts in Wales - Welsh Language Continued'))
