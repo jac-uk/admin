@@ -111,9 +111,7 @@
           :key="item"
           class="govuk-summary-list__row"
         >
-          <template
-            v-if="shouldRenderQuestion(item, 'locationPreferences') || editable"
-          >
+          <template v-if="shouldRenderQuestion(item, 'locationPreferences')">
             <dt class="govuk-summary-list__key widerColumn">
               {{ item.question }}
             </dt>
@@ -121,9 +119,7 @@
               v-if="application.locationPreferences"
               class="govuk-summary-list__value"
             >
-              <span
-                class="govuk-hint"
-              >
+              <span class="govuk-hint">
                 {{ $filters.lookup(item.questionType) }}
                 {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
                 {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
@@ -131,7 +127,6 @@
                 {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
               </span>
               <InformationReviewRenderer
-                v-if="shouldRenderQuestion(item, 'locationPreferences') || editable"
                 :data="application.locationPreferences[item.id]"
                 field="locationPreferences"
                 :edit="editable"
@@ -196,10 +191,7 @@
           v-if="exercise.jurisdictionQuestionType == 'ranked-choice'"
           class="govuk-summary-list__value"
         >
-          B
-          <div
-            class="govuk-checkboxes__item"
-          >
+          <div class="govuk-checkboxes__item">
             <InformationReviewRenderer
               :data="application.jurisdictionPreferences"
               field="jurisdictionPreferences"
@@ -223,9 +215,7 @@
         :key="item"
         class="govuk-summary-list__row"
       >
-        <template
-          v-if="shouldRenderQuestion(item, 'jurisdictionPreferences') || editable"
-        >
+        <template v-if="shouldRenderQuestion(item, 'jurisdictionPreferences')">
           <dt class="govuk-summary-list__key widerColumn">
             {{ item.question }}
           </dt>
@@ -233,9 +223,7 @@
             v-if="application.jurisdictionPreferences"
             class="govuk-summary-list__value"
           >
-            <span
-              class="govuk-hint"
-            >
+            <span class="govuk-hint">
               {{ $filters.lookup(item.questionType) }}
               {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
               {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
