@@ -1,6 +1,6 @@
 <template>
   <div class="govuk-radios">
-    <div 
+    <div
       v-if="config.groupAnswers"
     >
       <div
@@ -40,7 +40,7 @@ export default {
   },
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     answers: {

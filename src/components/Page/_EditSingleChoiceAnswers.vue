@@ -29,7 +29,7 @@ export default {
   name: 'EditSingleChoiceAnswers',
   props: {
     id: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     answers: {
@@ -44,7 +44,7 @@ export default {
   emits: ['update:modelValue'],
   computed: {
     localVModel: {
-      get() {  
+      get() {
         return this.modelValue;
       },
       set(val) {
