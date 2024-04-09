@@ -5,7 +5,12 @@
       class="non-editable"
     >
       <div
-        v-if="value == undefined || value == null || value === '' || (Array.isArray(value) && !value.length)"
+        v-if="value == undefined ||
+          value == null ||
+          value === '' ||
+          (Array.isArray(value) && !value.length) ||
+          (value.constructor === Object && !Object.keys(value).length)
+        "
       >
         <span>
           No information
@@ -121,7 +126,7 @@
                 </span>
               </template>
               <template v-else>
-                {{ config.answers.find(ans => ans.id === answer).answer }}
+                {{ getConfigAnswer(answer) }}
               </template>
             </p>
           </div>
@@ -177,7 +182,7 @@
               {{ $filters.lookup(answer) }}
             </template>
             <template v-else>
-              {{ config.answers.find(ans => ans.id === answer).answer }}
+              {{ getConfigAnswer(answer) }}
             </template>
           </p>
         </div>
@@ -600,6 +605,10 @@ export default {
       this.$emit('changeField', resultObj);
 
       this.editField = false;
+    },
+    getConfigAnswer(answerId) {
+      const match = this.config.answers.find(ans => ans.id === answerId);
+      return match ? match.answer : '';
     },
   },
 };
