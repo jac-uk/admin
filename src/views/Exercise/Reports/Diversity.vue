@@ -607,8 +607,11 @@ export default {
       return availableStages(this.exercise);
     },
     tabs() {
-      // exclude shortlisted and selection stages as they are not required for diversity report
-      const stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION].includes(stage));
+      let stages = this.availableStages;
+      if (this.additionalTabs.length > 1) {
+        // exclude shortlisted tab if there are more than one shortlisting methods
+        stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION].includes(stage));
+      }
       const tabs = stages.map((stage) => {
         const tab = {};
         tab.ref = stage;
