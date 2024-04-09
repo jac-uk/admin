@@ -324,7 +324,7 @@
     </dl>
   </div>
   <div
-    v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length || false"
+    v-if="exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length"
     class="govuk-!-margin-top-9"
   >
     <h2
@@ -334,9 +334,9 @@
       Additional Preferences
     </h2>
 
-    <template v-if="application.additionalWorkingPreferences || editable">
+    <template v-if="application.additionalWorkingPreferences">
       <dl
-        v-for="(item, index) in exercise.additionalWorkingPreferences.slice"
+        v-for="(item, index) in exercise.additionalWorkingPreferences"
         :key="index"
         class="govuk-summary-list"
       >
@@ -361,10 +361,8 @@
             v-if="item.hasOwnProperty('groupAnswers')"
             class="govuk-summary-list__value"
           >
-            <!--new working prefs-->
-            <span
-              class="govuk-hint"
-            >
+            <!-- new working prefs -->
+            <span class="govuk-hint">
               {{ $filters.lookup(item.questionType) }}
               {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
               {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
