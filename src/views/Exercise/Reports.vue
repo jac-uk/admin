@@ -56,6 +56,10 @@ export default {
           name: 'handover',
         },
         {
+          title: 'Deployment',
+          name: 'deployment',
+        },
+        {
           title: 'Statutory Consultation',
           name: 'statutory-consultation',
         },
