@@ -134,7 +134,7 @@
     </main>
 
     <UserFeedbackLink
-      v-show="isSignedIn && isMounted && !isStagingEnvironment"
+      v-show="showFeedbackLink"
       :style="{ 'bottom': linkBottom }"
       @open-feedback-modal="openFeedbackModal()"
     />
@@ -281,8 +281,8 @@ export default {
     isDevelopmentEnvironment() {
       return this.$store.getters.isDevelop;
     },
-    isStagingEnvironment() {
-      return this.$store.getters.isStaging;
+    environment() {
+      return this.$store.getters.appEnvironment;
     },
     isSignedIn() {
       return this.$store.getters['auth/isSignedIn'];
@@ -304,6 +304,10 @@ export default {
     },
     currentUser() {
       return this.$store.state.auth.currentUser;
+    },
+    showFeedbackLink() {
+      // Enable when the environment and app are defined (these are used when creating the bug request number)
+      return this.isSignedIn && this.isMounted && this.environment && (import.meta.env.PACKAGE_NAME !== undefined && import.meta.env.PACKAGE_NAME !== null);
     },
   },
   watch: {
@@ -333,6 +337,9 @@ export default {
     this.bindObserver();
 
     this.isMounted = true;
+    if (!this.showFeedbackLink) {
+      console.log('The user feedback link is not enabled for this environment');
+    }
   },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleDebouncedScroll);
