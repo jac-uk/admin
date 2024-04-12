@@ -16,6 +16,7 @@
         :exercise="exercise"
         :index="index"
         :review="false"
+        :is-admin-site="true"
       />
     </template>
     <div

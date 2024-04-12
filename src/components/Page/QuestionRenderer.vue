@@ -10,6 +10,7 @@
       <br>
       {{ currentItem.question }}
       <span
+        v-if="onAdminSite"
         class="govuk-hint"
       >
         {{ $filters.lookup(currentItem.questionType) }}
@@ -90,6 +91,11 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    onAdminSite: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     review: {
       type: Boolean,

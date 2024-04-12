@@ -375,9 +375,9 @@ import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue'
 //import * as filters from '../filters/filters';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import { transformOnSelection } from '@jac-uk/jac-kit/helpers/array';
-import SingleChoice from './SingleChoice.vue';
-import MultipleChoice from './MultipleChoice.vue';
-import RankedChoice from './RankedChoice.vue';
+import SingleChoice from '@jac-uk/jac-kit/draftComponents/Page/SingleChoice.vue';
+import MultipleChoice from '@jac-uk/jac-kit/draftComponents/Page/MultipleChoice.vue';
+import RankedChoice from '@jac-uk/jac-kit/draftComponents/Page/RankedChoice.vue';
 
 export default {
   components: {
