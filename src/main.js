@@ -13,6 +13,7 @@ import VueDOMPurifyHTML from 'vue-dompurify-html';
 import { searchMap } from '@/helpers/searchMap';
 
 import * as Sentry from '@sentry/vue';
+import VueGtag from 'vue-gtag';
 
 import './styles/main.scss';
 
@@ -76,6 +77,14 @@ auth.onAuthStateChanged(async (user) => {
         ],
       });
     }
+
+    // Config GA
+    //if (import.meta.env.PROD) {
+      vueInstance.use(VueGtag, {
+        pageTrackerScreenviewEnabled: true,
+        config: { id: 'G-ZZ44WE7G1M' }, // TODO: change to production ID 'G-5V4B1BS5BB'
+      }, router);
+    //}
 
     // Root component
     vueInstance.mount('#app');
