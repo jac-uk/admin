@@ -305,6 +305,24 @@
 
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Guidance reference
+                </h4>
+                <CheckboxGroup
+                  id="guidance-reference"
+                  :model-value="row.issues.characterIssuesGuidanceReferences || []"
+                  @update:model-value="saveIssueGuidanceReferences(row, $event)"
+                >
+                  <CheckboxItem
+                    v-for="value in guidanceReference"
+                    :key="value"
+                    :value="value"
+                    :label="$filters.lookup(value)"
+                  />
+                </CheckboxGroup>
+              </div>
+
+              <div class="govuk-grid-column-full">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                   Recommended SCC approach
                 </h4>
                 <Select
@@ -362,9 +380,11 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
+import { OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadBase64File } from '@/helpers/file';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
 
 export default {
   name: 'CharacterIssues',
@@ -375,6 +395,8 @@ export default {
     TableCell,
     TextareaInput,
     ActionButton,
+    CheckboxGroup,
+    CheckboxItem,
   },
   mixins: [permissionMixin],
   data() {
@@ -392,6 +414,7 @@ export default {
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
+      guidanceReference: GUIDANCE_REFERENCE,
     };
   },
   computed: {
@@ -570,6 +593,10 @@ export default {
     },
     async saveIssueOffenceCategory(applicationRecord, category) {
       applicationRecord.issues.characterIssuesOffenceCategory = category;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueGuidanceReferences(applicationRecord, guidanceReferences) {
+      applicationRecord.issues.characterIssuesGuidanceReferences = guidanceReferences;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     async getOtherApplicationRecords(applicationRecord) {

@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -281,6 +281,15 @@ const lookup = (value) => {
   lookup[OFFENCE_CATEGORY.SINGLE_OTHER_MATTER] = 'Single other matter';
   lookup[OFFENCE_CATEGORY.MULTIPLE_OTHER_MATTERS] = 'Multiple other matters';
   lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
+
+  // character issues guide reference
+  lookup[GUIDANCE_REFERENCE.CRIMINAL_OFFENCES] = 'Criminal offences: paras 21-24';
+  lookup[GUIDANCE_REFERENCE.MOTERING_OFFENCES] = 'Motoring offences: paras 25-30';
+  lookup[GUIDANCE_REFERENCE.FIXED_PENALTY_NOTICES] = 'Fixed penalty notices: paras 31-34';
+  lookup[GUIDANCE_REFERENCE.FINANCIAL_INSOLVENCY_DEBT] = 'Financial insolvency and debt: paras 35-38';
+  lookup[GUIDANCE_REFERENCE.FINANCIAL_VAT_TAX] = 'Financial VAT and Tax: paras 39-43';
+  lookup[GUIDANCE_REFERENCE.PROFESSIONAL_CONDUCT] = 'Professional conduct: paras 44-57';
+  lookup[GUIDANCE_REFERENCE.FURTHER_DISCLOSURES] = 'Further disclosures: paras 58-65';
 
   // assessment methods
   lookup[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES] = 'Self Assessment with competencies';
