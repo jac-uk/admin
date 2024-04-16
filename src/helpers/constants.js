@@ -156,10 +156,12 @@ const ASSESSOR_TYPES = {
 };
 
 const OFFENCE_CATEGORY = {
-  SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
-  MULTIPLE_CRIMINAL_OFFENCES: 'multipleCriminalOffences',
   SINGLE_MOTORING_OFFENCE: 'singleMotoringOffence',
   MULTIPLE_MOTORING_OFFENCES: 'multipleMotoringOffences',
+  SINGLE_PENALTY_NOTICE: 'singlePenaltyNotice',
+  MULTIPLE_PENALTY_NOTICES: 'multiplePenaltyNotices',
+  SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
+  MULTIPLE_CRIMINAL_OFFENCES: 'multipleCriminalOffences',
   SINGLE_FINANCIAL_OFFENCE: 'singleFinancialOffence',
   MULTIPLE_FINANCIAL_OFFENCES: 'multipleFinancialOffences',
   SINGLE_PROFESSIONAL_CONDUCT: 'singleProfessionalConduct',
