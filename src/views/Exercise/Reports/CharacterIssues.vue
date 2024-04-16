@@ -321,7 +321,7 @@
                 </CheckboxGroup>
               </div>
 
-              <div class="govuk-grid-column-full">
+              <div class="govuk-grid-column-one-half">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                   Recommended SCC approach
                 </h4>
@@ -342,6 +342,28 @@
                   </option>
                   <option value="discuss">
                     Discuss
+                  </option>
+                </Select>
+              </div>
+
+              <div class="govuk-grid-column-one-half">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  SCC approach
+                </h4>
+                <Select
+                  id="issue-status"
+                  :model-value="row.issues.characterIssuesSCCDecision || ''"
+                  @update:model-value="saveIssueSCCDecision(row, $event)"
+                >
+                  <option value="" />
+                  <option value="proceed">
+                    Proceed
+                  </option>
+                  <option value="reject">
+                    Reject
+                  </option>
+                  <option value="defer">
+                    Defer
                   </option>
                 </Select>
               </div>
@@ -579,6 +601,10 @@ export default {
     },
     async saveIssueStatus(applicationRecord, status) {
       applicationRecord.issues.characterIssuesStatus = status;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueSCCDecision(applicationRecord, decision) {
+      applicationRecord.issues.characterIssuesSCCDecision = decision;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     async saveIssueStatusReason(applicationRecord, reason) {
