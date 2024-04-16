@@ -105,6 +105,7 @@ jobs:
           echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env.${{ env.environment }}
           echo "VITE_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
+          echo "VITE_GTAG_ID=${{ secrets.GTAG_ID }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
         run: npm run ${{ env.environment }}:build
@@ -153,6 +154,7 @@ jobs:
           echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}" >> .env.${{ env.environment }}
           echo "VITE_FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}" >> .env.${{ env.environment }}
           echo "VITE_RECAPTCHA_TOKEN=${{ secrets.RECAPTCHA_TOKEN }}" >> .env.${{ env.environment }}
+          echo "VITE_GTAG_ID=${{ secrets.GTAG_ID }}" >> .env.${{ env.environment }}
           cat .env.${{ env.environment }}
       - name: Building the project
         run: npm run ${{ env.environment }}:build
