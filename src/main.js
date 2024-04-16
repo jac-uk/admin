@@ -79,12 +79,14 @@ auth.onAuthStateChanged(async (user) => {
     }
 
     // Config GA
-    //if (import.meta.env.PROD) {
+    const gtagId = import.meta.env.VITE_GTAG_ID;
+    console.log('gtagId', gtagId);
+    if (gtagId) {
       vueInstance.use(VueGtag, {
         pageTrackerScreenviewEnabled: true,
-        config: { id: 'G-ZZ44WE7G1M' }, // TODO: change to production ID 'G-5V4B1BS5BB'
+        config: { id: gtagId }, // TODO: change to production ID 'G-5V4B1BS5BB'
       }, router);
-    //}
+    }
 
     // Root component
     vueInstance.mount('#app');
