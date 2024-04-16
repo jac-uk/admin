@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
+import { generalisePath } from '@/helpers/path';
 
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
@@ -80,9 +81,20 @@ auth.onAuthStateChanged(async (user) => {
 
     // Config GA
     const gtagId = import.meta.env.VITE_GTAG_ID;
+
     console.log('gtagId', gtagId);
+
     if (gtagId) {
       vueInstance.use(VueGtag, {
+        pageTrackerTemplate(to) {
+          console.log('to', to);
+          console.log('generalisePath', generalisePath(to));
+
+          return {
+            page_title: generalisePath(to),
+            page_path: to.path,
+          };
+        },
         pageTrackerScreenviewEnabled: true,
         config: { id: gtagId }, // TODO: change to production ID 'G-5V4B1BS5BB'
       }, router);
