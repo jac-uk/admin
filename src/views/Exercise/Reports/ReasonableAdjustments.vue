@@ -403,7 +403,7 @@
                         class="govuk-heading-s"
                         style="flex-basis: 220px;"
                       >
-                        Reason:
+                        RA applies to:
                         <span
                           v-if="reasonableAdjustmentsState.reason"
                           class="govuk-body"
@@ -412,7 +412,7 @@
                         </span>
                       </span>
                       <span class="govuk-heading-s">
-                        Note:
+                        RA allocated:
                         <span
                           v-if="reasonableAdjustmentsState.note"
                           class="govuk-body"
