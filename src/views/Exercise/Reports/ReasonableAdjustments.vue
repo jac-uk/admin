@@ -434,7 +434,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, where, onSnapshot, doc } from '@firebase/firestore';
+import { query, collection, where, orderBy, onSnapshot, doc, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
@@ -637,12 +637,14 @@ export default {
       this.open = Object.assign({}, this.open);
     },
     async getOtherApplicationRecords(record) {
-      const firestoreRef = firestore
-        .collection('applicationRecords')
-        .where('candidate.id', '==', record.candidate.id)
-        .where('candidate.reasonableAdjustments', '==', true)
-        .orderBy('exercise.referenceNumber', 'desc');
-      const snapshot = await firestoreRef.get();
+      const firestoreRef = query(
+        collection(firestore, 'applicationRecords'),
+        where('candidate.id', '==', record.candidate.id),
+        where('candidate.reasonableAdjustments', '==', true),
+        orderBy('exercise.referenceNumber', 'desc')
+      );
+
+      const snapshot = await getDocs(firestoreRef);
       const otherRecords = [];
       snapshot.forEach(doc => {
         const data = doc.data();
