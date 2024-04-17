@@ -4,6 +4,7 @@
       <div class="govuk-grid-column-full">
         <div class="text-right">
           <button
+            v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
             class="govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0"
             @click="$refs['createPanellistModal'].openModal()"
           >
@@ -42,7 +43,9 @@
         </TableCell>
       </template>
     </Table>
-
+    <!--
+      Name, Phone, JAC Exercise Email, Sex, Ethnicity, Correspondence Email
+    -->
     <Modal ref="createPanellistModal">
       <TitleBar>
         Create panellist
@@ -62,6 +65,7 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
 import TitleBar from '@/components/Page/TitleBar.vue';
 import PanellistsForm from './components/AddEdit.vue';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   components: {
@@ -71,11 +75,12 @@ export default {
     TitleBar,
     PanellistsForm,
   },
+  mixins: [permissionMixin],
   data() {
     return {
       tableColumns: [
         { title: 'Name', sort: 'fullName', default: true },
-        { title: 'Email', sort: 'email' },
+        { title: 'Correspondence Email', sort: 'email' },
         { title: 'Phone', sort: 'phone' },
       ],
     };

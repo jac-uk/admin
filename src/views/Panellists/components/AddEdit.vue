@@ -1,6 +1,6 @@
 <template>
   <Form
-    v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value])"
+    v-if="hasPermissions([PERMISSIONS.panellists.permissions.canManagePanellists.value]) && formData"
     :id="id"
     @save="save"
     @cancel="cancel"
@@ -80,6 +80,7 @@
 import Form from '@/components/Page/Form.vue';
 import TextField from '@jac-uk/jac-kit/draftComponents/Form/TextField.vue';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
+import permissionMixin from '@/permissionMixin';
 
 export default {
   name: 'SelectPanel',
@@ -89,6 +90,7 @@ export default {
     Select,
   },
   extends: Form,
+  mixins: [permissionMixin],
   data() {
     return {
       sexes: [
@@ -118,21 +120,22 @@ export default {
         'other-ethnic-group',
         'prefer-not-to-say',
       ],
+      hasManagePanellistPermissions: false,
     };
+  },
+  created() {
+    this.hasManagePanellistPermissions = this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value]);
   },
   methods: {
     load(data) {
-      let dataFields;
-      if (this.hasPermissions([this.PERMISSIONS.panellists.permissions.canManagePanellists.value])){
-        dataFields = {
-          fullName: data ? data.fullName : '',
-          phone: data ? data.phone : '',
-          jacEmail: data ? data.jacEmail : '',
-          sex: data ? data.sex : '',
-          ethnicity: data ? data.ethnicity : '',
-          email: data ? data.email : '',
-        };
-      }
+      const dataFields = {
+        fullName: data ? data.fullName : '',
+        phone: data ? data.phone : '',
+        jacEmail: data ? data.jacEmail : '',
+        sex: data ? data.sex : '',
+        ethnicity: data ? data.ethnicity : '',
+        email: data ? data.email : '',
+      };
       return dataFields;
     },
   },
