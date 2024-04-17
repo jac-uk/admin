@@ -10,10 +10,34 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Email
+        Phone
       </dt>
       <dd class="govuk-summary-list__value">
-        {{ data.email }}
+        {{ data.phone }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        JAC Exercise Email
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ data.jacEmail }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Sex
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ $filters.lookup(data.sex) }}
+      </dd>
+    </div>
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key">
+        Ethnicity
+      </dt>
+      <dd class="govuk-summary-list__value">
+        {{ $filters.lookup(data.ethnicity) }}
       </dd>
     </div>
     <div class="govuk-summary-list__row">
