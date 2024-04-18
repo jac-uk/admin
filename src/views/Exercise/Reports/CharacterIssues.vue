@@ -168,17 +168,17 @@
                 </RouterLink>
               </div>
 
-              <div class="govuk-grid-column-full">
+              <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
                 <div
                   v-for="(issue, index) in row.issues.characterIssues"
                   :key="index"
-                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                  class="govuk-grid-row govuk-!-margin-0"
                 >
-                  <hr
-                    v-if="index !== 0"
-                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  >
                   <div class="govuk-grid-column-full">
+                    <hr
+                      v-if="index !== 0"
+                      class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                    >
                     <div class="issue govuk-!-margin-top-4">
                       <p class="govuk-body">
                         {{ issue.summary }}
