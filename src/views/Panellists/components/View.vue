@@ -42,10 +42,10 @@
     </div>
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key">
-        Phone
+        Correspondence Email
       </dt>
       <dd class="govuk-summary-list__value">
-        {{ data.phone }}
+        {{ data.email }}
       </dd>
     </div>
   </dl>
