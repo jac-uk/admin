@@ -92,7 +92,6 @@
           v-model="formData.authorisations"
           label="Authorisations"
           hint="Select all that apply."
-          required
         >
           <CheckboxItem
             value="s9-1"
