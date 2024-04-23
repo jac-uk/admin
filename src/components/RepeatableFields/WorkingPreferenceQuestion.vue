@@ -86,18 +86,18 @@
     <RadioGroup
       :id="`working-preference-${type}-question-required_${index}`"
       v-model="row.questionRequired"
-      label="Is this a required question?"
+      label="Is the candidate required to answer this question?"
       :messages="{
         required: 'Please choose one of the following options'
       }"
     >
       <RadioItem
         :value="true"
-        label="Yes"
+        label="Yes - this question must be answered by the candidate"
       />
       <RadioItem
         :value="false"
-        label="No"
+        label="No - answering this question is optional"
       />
     </RadioGroup>
 
