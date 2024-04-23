@@ -383,13 +383,6 @@ export default {
     TabsList,
   },
   mixins: [permissionMixin],
-  beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('assessments/bind', {
-      exerciseId: this.exercise.id,
-      status: this.getStatus(),
-    });
-    next();
-  },
   data() {
     const tabs = [
       {
