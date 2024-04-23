@@ -24,7 +24,7 @@
     </template>
 
     <div
-      v-if="exercise.jurisdictionQuestion"
+      v-else-if="exercise.jurisdictionQuestion"
       class="govuk-summary-list__row"
     >
       <dt class="govuk-summary-list__key">
