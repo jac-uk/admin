@@ -2,7 +2,7 @@
   <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key govuk-heading-m">
-        Additional Working Preference{{ exercise.additionalWorkingPreferences.length > 1 ? 's' : '' }}
+        Additional Working Preference{{ exercise.additionalWorkingPreferences && exercise.additionalWorkingPreferences.length > 1 ? 's' : '' }}
       </dt>
       <dd class="govuk-summary-list__key">
         &nbsp;
@@ -49,7 +49,7 @@
   </dl>
 </template>
 <script>
-import QuestionRenderer from '@/draftComponents/Page/QuestionRendererAdmin.vue';
+import QuestionRenderer from '@jac-uk/jac-kit/draftComponents/Page/QuestionRendererAdmin.vue';
 import ViewAnswers from './_ViewAnswers.vue';
 
 export default {
@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     isNewQuestionType(){
-      return this.exercise.additionalWorkingPreferences.some((el) => 'groupAnswers' in el);
+      return this.exercise.additionalWorkingPreferences && this.exercise.additionalWorkingPreferences.some((el) => 'groupAnswers' in el);
     },
   },
 };
