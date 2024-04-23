@@ -575,8 +575,8 @@ import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { availableStages, getTaskTypes } from '@/helpers/exerciseHelper';
-import { EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE } from '@/helpers/constants';
+import { availableStages } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
@@ -644,20 +644,20 @@ export default {
       return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
     },
     additionalTabs() {
-      const taskTypes = getTaskTypes(this.exercise);
+      const shortlistingMethods = this.exercise.shortlistingMethods;
       const tabs = [];
       // qt
-      if (taskTypes.some(method => [TASK_TYPE.CRITICAL_ANALYSIS, TASK_TYPE.SITUATIONAL_JUDGEMENT].includes(method))) {
+      if (shortlistingMethods.some(method => ['situational-judgement-qualifying-test', 'critical-analysis-qualifying-test'].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
         tabs.push(ref);
       }
       // scenario test
-      if (taskTypes.includes(TASK_TYPE.SCENARIO)) {
+      if (shortlistingMethods.includes('scenario-test-qualifying-test')) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
         tabs.push(ref);
       }
       // sift
-      if (taskTypes.includes(TASK_TYPE.SIFT)) {
+      if (shortlistingMethods.some(method => ['name-blind-paper-sift', 'paper-sift'].includes(method))) {
         const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
         tabs.push(ref);
       }
