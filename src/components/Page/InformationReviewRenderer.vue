@@ -10,6 +10,7 @@
           :value="data"
           :field="field"
           :type="type"
+          :date-format="dateFormat"
           :index="index"
           :extension="extension"
           :display-month-year-only="displayMonthYearOnly"
@@ -163,6 +164,11 @@ export default {
       type: String,
       required: false,
       default: () => 'text',
+    },
+    dateFormat: {
+      type: String,
+      required: false,
+      default: () => '',
     },
     extension: {
       type: String,

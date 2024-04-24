@@ -208,6 +208,7 @@
                         >
                           <InformationReviewRenderer
                             type="date"
+                            date-format="DD.MM.YYYY"
                             field="date"
                             :edit="editMode"
                             :data="item.date"
@@ -220,6 +221,7 @@
                             @change-field="obj => updateIssue(row, index, i, obj)"
                           />
                           <InformationReviewRenderer
+                            type="textarea"
                             field="details"
                             :edit="editMode"
                             :data="item.details"
