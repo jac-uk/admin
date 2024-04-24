@@ -167,6 +167,22 @@
                   View application
                 </RouterLink>
               </div>
+              <div class="govuk-grid-column-full govuk-!-margin-top-2 text-right">
+                <button
+                  v-if="editMode"
+                  class="govuk-button govuk-button btn-unlock"
+                  @click="toggleEdit"
+                >
+                  Done
+                </button>
+                <button
+                  v-else
+                  class="govuk-button govuk-button--secondary btn-mark-as-applied"
+                  @click="toggleEdit"
+                >
+                  Edit
+                </button>
+              </div>
 
               <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
                 <div
@@ -183,10 +199,34 @@
                       <p class="govuk-body">
                         {{ issue.summary }}
                       </p>
-                      <EventRenderer
-                        v-if="issue.events"
-                        :events="issue.events"
-                      />
+
+                      <div v-if="issue.events">
+                        <ul
+                          v-for="(item, i) in issue.events"
+                          :key="item.name"
+                          class="govuk-list"
+                        >
+                          <InformationReviewRenderer
+                            type="date"
+                            field="date"
+                            :edit="editMode"
+                            :data="item.date"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <InformationReviewRenderer
+                            field="title"
+                            :edit="editMode"
+                            :data="item.title"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <InformationReviewRenderer
+                            field="details"
+                            :edit="editMode"
+                            :data="item.details"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                        </ul>
+                      </div>
                     </div>
                     <div
                       v-if="issue.comments"
@@ -407,6 +447,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadBase64File } from '@/helpers/file';
 import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
 import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 
 export default {
   name: 'CharacterIssues',
@@ -419,6 +460,7 @@ export default {
     ActionButton,
     CheckboxGroup,
     CheckboxItem,
+    InformationReviewRenderer,
   },
   mixins: [permissionMixin],
   data() {
@@ -437,6 +479,7 @@ export default {
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
       guidanceReference: GUIDANCE_REFERENCE,
+      editMode: false,
     };
   },
   computed: {
@@ -671,6 +714,15 @@ export default {
       } catch (error) {
         return;
       }
+    },
+    toggleEdit(){
+      this.editMode = !this.editMode;
+    },
+    async updateIssue(applicationRecord, index1, index2, obj) {
+      for (const [key, value] of Object.entries(obj)) {
+        applicationRecord.issues.characterIssues[index1].events[index2][key] = value || null;
+      }
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
 };
