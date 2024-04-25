@@ -36,10 +36,13 @@
           </RouterLink>
         </TableCell>
         <TableCell :title="tableColumns[1].title">
-          {{ row.email }}
+          {{ row.phone }}
         </TableCell>
         <TableCell :title="tableColumns[2].title">
-          {{ row.phone }}
+          {{ row.email }}
+        </TableCell>
+        <TableCell :title="tableColumns[3].title">
+          {{ row.jacEmail }}
         </TableCell>
       </template>
     </Table>
@@ -80,8 +83,9 @@ export default {
     return {
       tableColumns: [
         { title: 'Name', sort: 'fullName', default: true },
-        { title: 'Correspondence Email', sort: 'email' },
         { title: 'Phone', sort: 'phone' },
+        { title: 'Correspondence Email', sort: 'email' },
+        { title: 'JAC Email', sort: 'jacEmail' },
       ],
     };
   },
