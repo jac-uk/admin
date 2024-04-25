@@ -296,10 +296,29 @@
                               <p class="govuk-body">
                                 {{ issue.summary }}
                               </p>
-                              <EventRenderer
-                                v-if="issue.events"
-                                :events="issue.events"
-                              />
+                              <div v-if="issue.events">
+                                <ul
+                                  v-for="item in issue.events"
+                                  :key="item.name"
+                                  class="govuk-list"
+                                >
+                                  <li
+                                    v-if="item.date"
+                                    class="govuk-body"
+                                  >
+                                    {{ $filters.formatDate(item.date, 'DD.MM.YYYY') }}
+                                  </li>
+                                  <li
+                                    v-if="item.title"
+                                    class="govuk-body"
+                                  >
+                                    {{ item.title }}
+                                  </li>
+                                  <li v-if="item.details">
+                                    {{ item.details }}
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
                             <div
                               v-if="issue.comments"
@@ -436,7 +455,6 @@ import { httpsCallable } from '@firebase/functions';
 import { query, collection, doc, onSnapshot, where, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
@@ -454,7 +472,6 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 export default {
   name: 'CharacterIssues',
   components: {
-    EventRenderer,
     Select,
     Table,
     TableCell,
