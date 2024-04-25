@@ -196,7 +196,7 @@
                       class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
                     >
                     <div class="issue govuk-!-margin-top-4">
-                      <p class="govuk-body">
+                      <p class="govuk-body govuk-!-font-weight-bold">
                         {{ issue.summary }}
                       </p>
 
@@ -293,7 +293,7 @@
                           >
                           <div class="govuk-grid-column-full">
                             <div class="issue">
-                              <p class="govuk-body">
+                              <p class="govuk-body govuk-!-font-weight-bold">
                                 {{ issue.summary }}
                               </p>
                               <div v-if="issue.events">
