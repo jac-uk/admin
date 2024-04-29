@@ -653,7 +653,7 @@ export default {
       return this.report ? this.report.rows.filter((e) => e.bsbQualifications.length > 0) : [];
     },
     jcioRows() {
-      return this.report ? this.report.rows.filter((e) => e.jcioOffice) : [];
+      return this.report ? this.report.rows.filter((e) => e.jcioOffice === 'Yes') : [];
     },
     hmrcRows() {
       return this.report ? this.report.rows.filter((e) => e.hmrcVATNumbers) : [];
@@ -815,6 +815,19 @@ export default {
 
       return reportData;
     },
+    gatherJCIOReportData() {
+      const reportData = [];
+
+      // get headers
+      reportData.push(this.report.headers.map(header => header.title));
+
+      // get rows
+      this.jcioRows.forEach((row) => {
+        reportData.push(this.report.headers.map(header => row[header.ref]));
+      });
+
+      return reportData;
+    },
     exportData() {
       const title = 'Agency Report';
       let data = null;
@@ -828,6 +841,8 @@ export default {
         data = this.gatherBSBReportData();
       } else if (this.activeTab === 'sra') {
         data = this.gatherSRAReportData();
+      } else if (this.activeTab === 'jcio') {
+        data = this.gatherJCIOReportData();
       } else {
         data = this.gatherReportData();
       }
