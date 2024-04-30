@@ -17,13 +17,22 @@ const ADVERT_TYPES = {
 };
 
 const EXERCISE_STAGE = {
-  REVIEW: 'review', // to be replaced with applied
-  APPLIED: 'applied',
-  SHORTLISTED: 'shortlisted',
-  SELECTABLE: 'selectable',
-  SELECTED: 'selected', // to be replaced with selectable
-  RECOMMENDED: 'recommended',
-  HANDOVER: 'handover',
+  // v2
+  SHORTLISTING: 'shortlisting',
+  SELECTION: 'selection',
+  SCC: 'scc',
+  RECOMMENDATION: 'recommendation',
+
+  // v2 proposed but then removed
+  APPLIED: 'applied', // to be removed
+  SELECTABLE: 'selectable', // to be removed
+
+  // v1
+  REVIEW: 'review', // to be replaced with shortlisting
+  SHORTLISTED: 'shortlisted', // to be replaced with selection
+  SELECTED: 'selected', // to be replaced with recommendation
+  RECOMMENDED: 'recommended', // to be replaced with recommendation
+  HANDOVER: 'handover', // to be removed/replaced with recommendation
 };
 
 const APPLICATION_STATUS = {
@@ -44,6 +53,7 @@ const APPLICATION_STATUS = {
   TELEPHONE_ASSESSMENT_FAILED: 'telephoneAssessmentFailed',
   SHORTLISTING_PASSED: 'shortlistingOutcomePassed',
   SHORTLISTING_FAILED: 'shortlistingOutcomeFailed',
+  FULL_APPLICATION_NOT_SUBMITTED: 'fullApplicationNotSubmitted',
   ELIGIBILITY_SCC_PASSED: 'eligibilitySCCPassed',
   ELIGIBILITY_SCC_FAILED: 'eligibilitySCCFailed',
   CHARACTER_AND_SELECTION_SCC_PASSED: 'characterAndSelectionSCCPassed',
@@ -54,6 +64,7 @@ const APPLICATION_STATUS = {
   REJECTED_INELIGIBLE_STATUTORY: 'rejectedIneligibleStatutory',
   REJECTED_INELIGIBLE_ADDITIONAL: 'rejectedIneligibleAdditional',
   REJECTED_CHARACTER: 'rejectedCharacter',
+  REJECTED_MERIT: 'rejectedMerit',
   SELECTION_DAY_PASSED: 'selectionDayPassed',
   SELECTION_DAY_FAILED: 'selectionDayFailed',
   SELECTION_PASSED: 'selectionOutcomePassed',
@@ -68,6 +79,8 @@ const APPLICATION_STATUS = {
   SECOND_STAGE_INVITED: 'secondStageInvited',
   SECOND_STAGE_PASSED: 'empTiebreakerPassed',
   SECOND_STAGE_FAILED: 'empTiebreakerFailed',
+  APPROVED_IMMEDIATE: 'approvedImmediate',
+  APPROVED_FUTURE: 'approvedFuture',
   WITHDRAWN: 'withdrawn',
 
   // v1 REVIEW
@@ -97,21 +110,6 @@ const APPLICATION_STATUS = {
   APPROVED_FOR_FUTURE_APPOINTMENT: 'approvedForFutureAppointment',
   SCC_TO_RECONSIDER: 'sccToReconsider',
 };
-
-const APPLICATION_SUCCESS_STATUSES = [
-  APPLICATION_STATUS.CRITICAL_ANALYSIS_PASSED,
-  APPLICATION_STATUS.SITUATIONAL_JUDGEMENT_PASSED,
-  APPLICATION_STATUS.QUALIFYING_TEST_PASSED,
-  APPLICATION_STATUS.SCENARIO_TEST_PASSED,
-  APPLICATION_STATUS.SIFT_PASSED,
-  APPLICATION_STATUS.TELEPHONE_ASSESSMENT_PASSED,
-  APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
-  APPLICATION_STATUS.SELECTION_PASSED,
-  APPLICATION_STATUS.PASSED_RECOMMENDED,
-  APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
-  APPLICATION_STATUS.RECOMMENDED_FUTURE,
-  APPLICATION_STATUS.SECOND_STAGE_INVITED,
-];
 
 const TASK_TYPE = {
   SIFT: 'sift',
@@ -245,7 +243,6 @@ export {
   STATUS,
   EXERCISE_STAGE,
   APPLICATION_STATUS,
-  APPLICATION_SUCCESS_STATUSES,
   TASK_TYPE,
   SHORTLISTING_TASK_TYPES,
   TASK_QT_MAP,
