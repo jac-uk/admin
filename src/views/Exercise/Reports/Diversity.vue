@@ -615,6 +615,7 @@ export default {
         switch (stage) {
         case EXERCISE_STAGE.SHORTLISTING:
         case EXERCISE_STAGE.REVIEW:
+          tab.ref = EXERCISE_STAGE.APPLIED;
           tab.title = 'Applied';
           break;
         case EXERCISE_STAGE.SELECTION:
@@ -674,11 +675,11 @@ export default {
     },
   },
   watch: {
-    availableStages: {
+    tabs: {
       immediate: true,
       handler() {
-        if (this.availableStages.length && !this.activeTab && this.activeTab !== this.availableStages[0]) {
-          this.activeTab = this.availableStages[0];
+        if (this.tabs.length && !this.activeTab && this.activeTab !== this.tabs[0].ref) {
+          this.activeTab = this.tabs[0].ref;
         }
       },
     },
