@@ -215,6 +215,7 @@
                             @change-field="obj => updateIssue(row, index, i, obj)"
                           />
                           <InformationReviewRenderer
+                            v-if="item.title"
                             field="title"
                             :edit="editMode"
                             :data="item.title"
