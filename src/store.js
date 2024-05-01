@@ -123,6 +123,9 @@ const store = createStore({
     isDevelop: (state, getters) => {
       return getters.appEnvironment === 'DEVELOP';
     },
+    isStaging: (state, getters) => {
+      return getters.appEnvironment === 'STAGING';
+    },
   },
 });
 

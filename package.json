@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "1.31.0",
+  "version": "1.42.0",
   "private": true,
   "scripts": {
     "dev": "npm run local:serve",
@@ -26,7 +26,7 @@
     "lint-ci": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --no-fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@jac-uk/jac-kit": "4.0.2",
+    "@jac-uk/jac-kit": "4.0.8",
     "@ministryofjustice/frontend": "0.2.4",
     "@sentry/tracing": "^7.61.1",
     "@sentry/vue": "^7.61.1",

@@ -229,6 +229,7 @@ const SELF_ASSESSMENT_COMPETENCIES_QUESTIONS = [
   'Legal and judicial skills',
   'Personal qualities',
   'Working Effectively',
+  'Career Highlights',
 ];
 
 const WORKING_BASIS = {

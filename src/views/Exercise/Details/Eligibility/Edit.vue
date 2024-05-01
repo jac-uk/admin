@@ -92,7 +92,6 @@
           v-model="formData.authorisations"
           label="Authorisations"
           hint="Select all that apply."
-          required
         >
           <CheckboxItem
             value="s9-1"
@@ -100,11 +99,7 @@
           />
           <CheckboxItem
             value="s9-4"
-            label="s9(4)"
-          />
-          <CheckboxItem
-            value="none"
-            label="None"
+            label="Class 1 ticket"
           />
         </CheckboxGroup>
 

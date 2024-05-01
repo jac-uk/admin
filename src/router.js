@@ -75,6 +75,7 @@ import ExerciseReportsEligibilityIssues from '@/views/Exercise/Reports/Eligibili
 import ExerciseReportsReasonableAdjustments from '@/views/Exercise/Reports/ReasonableAdjustments.vue';
 import ExerciseReportsAgency from '@/views/Exercise/Reports/Agency.vue';
 import ExerciseReportsHandover from '@/views/Exercise/Reports/Handover.vue';
+import ExerciseReportsDeployment from '@/views/Exercise/Reports/Deployment.vue';
 import ExerciseReportsStatutoryConsultation from '@/views/Exercise/Reports/StatutoryConsultation.vue';
 import ExerciseReportsPanels from '@/views/Exercise/Reports/Panels.vue';
 import ExerciseReportsPanelsNew from '@/views/Exercise/Reports/PanelsNew.vue';
@@ -1042,6 +1043,15 @@ const routes = [
             meta: {
               requiresAuth: true,
               title: 'Handover | Exercise Reports',
+            },
+          },
+          {
+            name: 'deployment',
+            path: 'deployment',
+            component: ExerciseReportsDeployment,
+            meta: {
+              requiresAuth: true,
+              title: 'Deployment | Exercise Reports',
             },
           },
           {

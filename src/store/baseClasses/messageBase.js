@@ -1,5 +1,5 @@
 import { firestore } from '@/firebase';
-import { doc, setDoc, updateDoc, deleteDoc ,collection, query, where, orderBy, limit as firestoreLimit, serverTimestamp } from '@firebase/firestore';
+import { doc, addDoc, updateDoc, deleteDoc ,collection, query, where, orderBy, limit as firestoreLimit, serverTimestamp } from '@firebase/firestore';
 import { firestoreAction } from '@/helpers/vuexfireJAC';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 
@@ -67,11 +67,10 @@ export default class {
           }
         }
 
-        const docRef = doc(firestore, collectionName, id);
         if (isUpdate) {
-          await updateDoc(docRef, data);
+          await updateDoc(doc(firestore, collectionName, id), data);
         } else {
-          await setDoc(docRef, data);
+          await addDoc(collection(firestore, collectionName), data);
         }
       },
       delete: async (context, { id }) => {
