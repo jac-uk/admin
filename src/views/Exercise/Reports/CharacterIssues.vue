@@ -207,6 +207,7 @@
                           class="govuk-list"
                         >
                           <InformationReviewRenderer
+                            v-if="item.date || editMode"
                             type="date"
                             date-format="DD.MM.YYYY"
                             field="date"
@@ -215,13 +216,14 @@
                             @change-field="obj => updateIssue(row, index, i, obj)"
                           />
                           <InformationReviewRenderer
-                            v-if="item.title"
+                            v-if="item.title || editMode"
                             field="title"
                             :edit="editMode"
                             :data="item.title"
                             @change-field="obj => updateIssue(row, index, i, obj)"
                           />
                           <InformationReviewRenderer
+                            v-if="item.details || editMode"
                             type="textarea"
                             field="details"
                             :edit="editMode"
