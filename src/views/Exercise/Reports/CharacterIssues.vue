@@ -409,7 +409,7 @@
 
               <div class="govuk-grid-column-one-half">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  SCC approach
+                  SCC Decision
                 </h4>
                 <Select
                   id="issue-status"
