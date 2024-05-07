@@ -222,6 +222,35 @@
                             :data="item.title"
                             @change-field="obj => updateIssue(row, index, i, obj)"
                           />
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigations:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="item.investigations !== null || editMode"
+                              field="investigations"
+                              type="selection"
+                              :options="[true, false]"
+                              :edit="editMode"
+                              :data="item.investigations"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigation conclusion date:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="item.investigationConclusionDate || editMode"
+                              field="investigationConclusionDate"
+                              type="date"
+                              :edit="editMode"
+                              :data="item.investigationConclusionDate"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
                           <InformationReviewRenderer
                             v-if="item.details || editMode"
                             type="textarea"
@@ -742,7 +771,7 @@ export default {
     },
     async updateIssue(applicationRecord, index1, index2, obj) {
       for (const [key, value] of Object.entries(obj)) {
-        applicationRecord.issues.characterIssues[index1].events[index2][key] = value || null;
+        applicationRecord.issues.characterIssues[index1].events[index2][key] = value !== undefined ? value : null;
       }
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
