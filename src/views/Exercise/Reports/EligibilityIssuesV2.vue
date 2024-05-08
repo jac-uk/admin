@@ -133,7 +133,6 @@
                 </RouterLink>
               </div>
             </div>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
 
             <!-- statutory eligibility issues -->
             <div
@@ -141,6 +140,7 @@
               :key="issueGroup.category"
               class="govuk-grid-row"
             >
+              <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-6">
               <div class="govuk-grid-column-full">
                 <h3 class="govuk-!-margin-top-0 govuk-!-margin-bottom-4">
                   {{ issueGroup.category }}
@@ -210,25 +210,6 @@
                 </div>
               </div>
             </div>
-
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
-            <div
-              v-for="(issue, index) in row.issues.eligibilityIssues"
-              :key="index"
-              class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
-            >
-              <div class="govuk-grid-column-two-thirds">
-                <div class="issue">
-                  <span class="govuk-!-font-weight-bold">{{ $filters.lookup(issue.type) }}:</span> {{ issue.summary }}
-                </div>
-                <div
-                  v-if="issue.comments"
-                  class="jac-comments"
-                >
-                  <span class="govuk-!-font-weight-bold">JAC / Panel comments:</span> {{ issue.comments }}
-                </div>
-              </div>
-            </div>
           </TableCell>
         </template>
       </Table>
@@ -251,7 +232,6 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
-import _ from 'lodash';
 
 export default {
   name: 'EligibilityIssuesV2',
