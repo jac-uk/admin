@@ -137,7 +137,7 @@
 
             <!-- statutory eligibility issues -->
             <div
-              v-for="issueGroup in groupIssuesByStatutory(row)"
+              v-for="issueGroup in row.issueGroups"
               :key="issueGroup.category"
               class="govuk-grid-row"
             >
@@ -177,10 +177,10 @@
                     Recommendation
                   </h4>
                   <Select
-                    id="issue-status"
+                    :id="`${row.id}_${index}_${issue.type}_status`"
                     :model-value="issue.result"
                     class="govuk-!-margin-bottom-0"
-                    @update:model-value="saveIssueStatus(row, $event)"
+                    @update:model-value="saveIssueStatus(row, issue.type, $event)"
                   >
                     <option value="" />
                     <option value="proceed">
@@ -203,9 +203,9 @@
                     Reasons not satisfied
                   </h4>
                   <TextareaInput
-                    id="recommendation-reason"
-                    :model-value="row.issues.eligibilityIssuesStatusReason"
-                    @update:model-value="saveIssueStatusReason(row, $event)"
+                    :id="`${row.id}_${index}_${issue.type}_reason`"
+                    :model-value="issue.comments"
+                    @update:model-value="saveIssueStatusReason(row, issue.type, $event)"
                   />
                 </div>
               </div>
@@ -251,6 +251,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import _ from 'lodash';
 
 export default {
   name: 'EligibilityIssuesV2',
@@ -338,7 +339,9 @@ export default {
           (snap) => {
             const applicationRecords = [];
             snap.forEach((doc) => {
-              applicationRecords.push(vuexfireSerialize(doc));
+              const record = vuexfireSerialize(doc);
+              record.issueGroups = this.groupIssuesByStatutory(record);
+              applicationRecords.push(record);
             });
             this.applicationRecords = applicationRecords;
           });
@@ -380,22 +383,35 @@ export default {
         return;
       }
     },
-    async saveIssueStatus(applicationRecord, status) {
-      // TODO: update by issue type
-      applicationRecord.issues.eligibilityIssuesStatus = status;
-      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    async saveIssueStatus(applicationRecord, issueType, status) {
+      applicationRecord.issues.eligibilityIssues.forEach((issue) => {
+        if (issue.type === issueType) {
+          issue.result = status;
+        }
+      });
+
+      const data = {
+        'issues.eligibilityIssues': applicationRecord.issues.eligibilityIssues,
+      };
+
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data }]);
     },
-    saveIssueStatusReason: debounce(async function (applicationRecord, reason) {
-      // use debounce
-      applicationRecord.issues.eligibilityIssuesStatusReason = reason;
-      // TODO: update by issue type
-      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    saveIssueStatusReason: debounce(async function (applicationRecord, issueType, reason) {
+
+      applicationRecord.issues.eligibilityIssues.forEach((issue) => {
+        if (issue.type === issueType) {
+          issue.comments = reason;
+        }
+      });
+      const data = {
+        'issues.eligibilityIssues': applicationRecord.issues.eligibilityIssues,
+      };
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data }]);
     }, 2000),
     downloadSCCAnnexReport() {
       // TODO: implement
     },
     groupIssuesByStatutory(applicationRecord) {
-      console.log(applicationRecord);
       const eligibilityIssues = applicationRecord.issues.eligibilityIssues;
 
       const statutoryTypes = ['pq', 'pqe'];
