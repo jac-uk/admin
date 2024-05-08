@@ -136,45 +136,78 @@
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2">
 
             <!-- statutory eligibility issues -->
-            <div class="govuk-grid-row">
+            <div
+              v-for="issueGroup in groupIssuesByStatutory(row)"
+              :key="issueGroup.category"
+              class="govuk-grid-row"
+            >
               <div class="govuk-grid-column-full">
                 <h3 class="govuk-!-margin-top-0 govuk-!-margin-bottom-4">
-                  Statutory
+                  {{ issueGroup.category }}
                 </h3>
               </div>
-              <div class="govuk-grid-column-full">
-                <h4 class="govuk-!-margin-bottom-1">
-                  Recommendation
-                </h4>
-                <Select
-                  id="issue-status"
-                  :model-value="row.issues.eligibilityIssuesStatus || ''"
-                  @update:model-value="saveIssueStatus(row, $event)"
-                >
-                  <option value="" />
-                  <option value="proceed">
-                    Proceed
-                  </option>
-                  <option value="reject">
-                    Reject
-                  </option>
-                  <option value="discuss">
-                    Discuss
-                  </option>
-                </Select>
-              </div>
+
               <div
-                v-if="row.issues.eligibilityIssuesStatus"
-                class="govuk-grid-column-full"
+                v-for="(issue, index) in issueGroup.issues"
+                :key="`${index}_${issue.type}`"
+                class="issue"
               >
-                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  Reason for recommendation
-                </h4>
-                <TextareaInput
-                  id="recommendation-reason"
-                  :model-value="row.issues.eligibilityIssuesStatusReason"
-                  @update:model-value="saveIssueStatusReason(row, $event)"
-                />
+                <!-- issue summary & candidate comments -->
+                <div class="govuk-grid-column-two-thirds  govuk-!-margin-bottom-3">
+                  <!-- issue summary -->
+                  <div class="govuk-!-margin-top-0 govuk-!-margin-bottom-3">
+                    <span class="govuk-!-font-weight-bold">{{ mapIssueTypeToName(issue.type) }}:</span> {{ issue.summary }}
+                  </div>
+
+                  <!-- candidate comments -->
+                  <div
+                    v-if="hasCandidateComments(issue)"
+                    class="govuk-!-margin-top-0  govuk-!-margin-bottom-0"
+                  >
+                    <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                      Candidate comments:
+                    </h4>
+                    {{ issue.candidateComments || '' }}
+                  </div>
+                </div>
+
+                <!-- issue recommendation -->
+                <div class="govuk-grid-column-one-third govuk-!-margin-top-0  govuk-!-margin-bottom-0 text-right">
+                  <h4 class="govuk-!-margin-bottom-1 govuk-!-margin-top-0">
+                    Recommendation
+                  </h4>
+                  <Select
+                    id="issue-status"
+                    :model-value="issue.result"
+                    class="govuk-!-margin-bottom-0"
+                    @update:model-value="saveIssueStatus(row, $event)"
+                  >
+                    <option value="" />
+                    <option value="proceed">
+                      Proceed
+                    </option>
+                    <option value="reject">
+                      Reject
+                    </option>
+                    <option value="discuss">
+                      Discuss
+                    </option>
+                  </Select>
+                </div>
+
+                <!-- reasons not satisfied -->
+                <div
+                  class="govuk-!-margin-top-0 govuk-grid-column-full"
+                >
+                  <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                    Reasons not satisfied
+                  </h4>
+                  <TextareaInput
+                    id="recommendation-reason"
+                    :model-value="row.issues.eligibilityIssuesStatusReason"
+                    @update:model-value="saveIssueStatusReason(row, $event)"
+                  />
+                </div>
               </div>
             </div>
 
@@ -362,6 +395,7 @@ export default {
       // TODO: implement
     },
     groupIssuesByStatutory(applicationRecord) {
+      console.log(applicationRecord);
       const eligibilityIssues = applicationRecord.issues.eligibilityIssues;
 
       const statutoryTypes = ['pq', 'pqe'];
@@ -380,6 +414,19 @@ export default {
           issues: nonStatutoryIssues,
         },
       ];
+    },
+    mapIssueTypeToName(type) {
+      const typeToName = {
+        'pq': 'Professional Qualification',
+        'pqe': 'Post-qualification experience',
+        'pje': 'Previous Judicial Experience',
+        'rls': 'Reasonable length of service',
+      };
+
+      return typeToName[type] || '';
+    },
+    hasCandidateComments(issue) {
+      return ['pje', 'rls'].includes(issue.type);
     },
   },
 };
