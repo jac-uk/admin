@@ -150,10 +150,9 @@
               <div
                 v-for="(issue, index) in issueGroup.issues"
                 :key="`${index}_${issue.type}`"
-                class="issue"
               >
                 <!-- issue summary & candidate comments -->
-                <div class="govuk-grid-column-two-thirds  govuk-!-margin-bottom-3">
+                <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-3">
                   <!-- issue summary -->
                   <div class="govuk-!-margin-top-0 govuk-!-margin-bottom-3">
                     <span class="govuk-!-font-weight-bold">{{ mapIssueTypeToName(issue.type) }}:</span> {{ issue.summary }}
@@ -172,7 +171,13 @@
                 </div>
 
                 <!-- issue recommendation -->
-                <div class="govuk-grid-column-one-third govuk-!-margin-top-0  govuk-!-margin-bottom-0 text-right">
+                <div
+                  class="govuk-grid-column-one-third govuk-!-margin-top-0  govuk-!-margin-bottom-0 text-right"
+                  :class="{
+                    'govuk-!-margin-bottom-0': !!issue.result,
+                    'govuk-!-margin-bottom-6': !issue.result,
+                  }"
+                >
                   <h4 class="govuk-!-margin-bottom-1 govuk-!-margin-top-0">
                     Recommendation
                   </h4>
@@ -197,6 +202,7 @@
 
                 <!-- reasons not satisfied -->
                 <div
+                  v-if="issue.result"
                   class="govuk-!-margin-top-0 govuk-grid-column-full"
                 >
                   <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
