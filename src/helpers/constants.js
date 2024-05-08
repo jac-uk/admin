@@ -154,10 +154,12 @@ const ASSESSOR_TYPES = {
 };
 
 const OFFENCE_CATEGORY = {
-  SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
-  MULTIPLE_CRIMINAL_OFFENCES: 'multipleCriminalOffences',
   SINGLE_MOTORING_OFFENCE: 'singleMotoringOffence',
   MULTIPLE_MOTORING_OFFENCES: 'multipleMotoringOffences',
+  SINGLE_PENALTY_NOTICE: 'singlePenaltyNotice',
+  MULTIPLE_PENALTY_NOTICES: 'multiplePenaltyNotices',
+  SINGLE_CRIMINAL_OFFENCE: 'singleCriminalOffence',
+  MULTIPLE_CRIMINAL_OFFENCES: 'multipleCriminalOffences',
   SINGLE_FINANCIAL_OFFENCE: 'singleFinancialOffence',
   MULTIPLE_FINANCIAL_OFFENCES: 'multipleFinancialOffences',
   SINGLE_PROFESSIONAL_CONDUCT: 'singleProfessionalConduct',
@@ -165,6 +167,16 @@ const OFFENCE_CATEGORY = {
   SINGLE_OTHER_MATTER: 'singleOtherMatter',
   MULTIPLE_OTHER_MATTERS: 'multipleOtherMatters',
   MIXED: 'mixed',
+};
+
+const GUIDANCE_REFERENCE = {
+  CRIMINAL_OFFENCES: 'criminalOffences',
+  MOTERING_OFFENCES: 'moteringOffences',
+  FIXED_PENALTY_NOTICES: 'fixedPenaltyNotices',
+  FINANCIAL_INSOLVENCY_DEBT: 'financialInsolvencyDebt',
+  FINANCIAL_VAT_TAX: 'financialVatTax',
+  PROFESSIONAL_CONDUCT: 'professionalConduct',
+  FURTHER_DISCLOSURES: 'furtherDisclosures',
 };
 
 const TASK_QT_MAP = {};
@@ -254,6 +266,7 @@ export {
   INDEPENDENT_ASSESSMENTS_STATUS,
   ASSESSOR_TYPES,
   OFFENCE_CATEGORY,
+  GUIDANCE_REFERENCE,
   ASSESSMENT_METHOD,
   APPLICATION_FORM_PARTS,
   DEFAULT_WORD_COUNT,

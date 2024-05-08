@@ -311,6 +311,39 @@
             </dd>
 
             <dd
+              v-else-if="key === 'investigations'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="selection"
+                :options="[true, false]"
+                :extension="key"
+                :is-asked="isAsked"
+                @change-field="changeField"
+              />
+            </dd>
+
+            <dd
+              v-else-if="key === 'investigationConclusionDate'"
+              class="govuk-summary-list__value"
+            >
+              <InformationReviewRenderer
+                :data="data[index][key]"
+                :field="field"
+                :edit="edit"
+                :index="index"
+                type="date"
+                :extension="key"
+                :is-asked="isAsked"
+                @change-field="changeField"
+              />
+            </dd>
+
+            <dd
               v-else-if="key === 'details'"
               class="govuk-summary-list__value"
             >
