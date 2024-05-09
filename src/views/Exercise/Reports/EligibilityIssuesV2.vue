@@ -403,8 +403,10 @@ export default {
       const statutoryTypes = ['pq', 'pqe'];
       const nonStatutoryTypes = ['pje', 'rls'];
 
-      const statutoryIssues = statutoryTypes.map((targeType) => eligibilityIssues.find((issue) => issue.type === targeType));
-      const nonStatutoryIssues = nonStatutoryTypes.map((targeType) => eligibilityIssues.find((issue) => issue.type === targeType));
+      const statutoryIssues = statutoryTypes.map((targeType) => eligibilityIssues.find((issue) => issue.type === targeType))
+        .filter((issue) => !!issue);
+      const nonStatutoryIssues = nonStatutoryTypes.map((targeType) => eligibilityIssues.find((issue) => issue.type === targeType))
+        .filter((issue) => !!issue);
 
       return [
         {
