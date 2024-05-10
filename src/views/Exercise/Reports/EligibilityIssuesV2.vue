@@ -122,12 +122,7 @@
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-top-8 govuk-!-margin-bottom-0">
                   {{ row.referenceNumber }}
-                  <h3
-                    v-if="row.candidate"
-                    class="govuk-!-margin-top-0 govuk-!-margin-bottom-0"
-                  >
-                    {{ row.candidate.fullName }}
-                  </h3>
+                  <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
                 </div>
               </div>
               <div class="govuk-grid-column-one-third text-right  govuk-!-margin-top-8 govuk-!-margin-bottom-0">
