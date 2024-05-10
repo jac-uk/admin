@@ -172,6 +172,7 @@
 
                 <!-- issue recommendation -->
                 <div
+                  v-if="showRecommendation(issue, index) || isForStatutoryRecommendation(issue, index)"
                   class="govuk-grid-column-one-third govuk-!-margin-top-0  govuk-!-margin-bottom-0 text-right"
                   :class="{
                     'govuk-!-margin-bottom-0': !!issue.result,
@@ -202,7 +203,7 @@
 
                 <!-- reasons not satisfied -->
                 <div
-                  v-if="issue.result"
+                  v-if="issue.result && (showRecommendation(issue, index) || isForStatutoryReasons(issueGroup.issues, issue, index))"
                   class="govuk-!-margin-top-0 govuk-grid-column-full"
                 >
                   <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
@@ -262,6 +263,8 @@ export default {
       ],
       total: null,
       showNotMet: false,
+      statutoryTypes: ['pq', 'pqe'],
+      nonStatutoryTypes: ['pje', 'rls'],
     };
   },
   computed: {
@@ -400,8 +403,8 @@ export default {
     groupIssuesByStatutory(applicationRecord) {
       const eligibilityIssues = applicationRecord.issues.eligibilityIssues;
 
-      const statutoryTypes = ['pq', 'pqe'];
-      const nonStatutoryTypes = ['pje', 'rls'];
+      const statutoryTypes = this.statutoryTypes;
+      const nonStatutoryTypes = this.nonStatutoryTypes;
 
       const statutoryIssues = statutoryTypes.map((targeType) => eligibilityIssues.find((issue) => issue.type === targeType))
         .filter((issue) => !!issue);
@@ -429,8 +432,22 @@ export default {
 
       return typeToName[type] || '';
     },
+    showRecommendation(issue) {
+      // For statutory issues, only have one overall recommendation, it's displayed in other style.
+      // For non-statutory issues, show recommendation for each issue.
+      const isStatutory = this.statutoryTypes.includes(issue.type);
+      return !isStatutory;
+    },
+    isForStatutoryRecommendation(issue, index) {
+      // For statutory issues, only have one overall recommendation, it's next to the first statutory issue.
+      return this.statutoryTypes.includes(issue.type) && index === 0;
+    },
+    isForStatutoryReasons(statutoryIssues, issue, index) {
+      // For statutory issues, only have one overall recommendation, it's next to the last statutory issue.
+      return this.statutoryTypes.includes(issue.type) && index === (statutoryIssues.length - 1);
+    },
     hasCandidateComments(issue) {
-      return ['pje', 'rls'].includes(issue.type);
+      return this.nonStatutoryTypes.includes(issue.type);
     },
   },
 };
