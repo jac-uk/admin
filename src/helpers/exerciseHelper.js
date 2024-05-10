@@ -1259,7 +1259,8 @@ function shortlistingStatuses(exercise) {
     // sift
     if (
       exercise.shortlistingMethods.indexOf(SHORTLISTING.NAME_BLIND_PAPER_SIFT) >= 0 ||
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0 ||
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.OTHER) >= 0
     ) {
       if (exercise._processingVersion >= 2) {
         statuses.push(APPLICATION_STATUS.SIFT_PASSED);
