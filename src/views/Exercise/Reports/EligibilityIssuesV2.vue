@@ -121,7 +121,13 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-top-8 govuk-!-margin-bottom-0">
-                  {{ row.referenceNumber }} <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
+                  {{ row.referenceNumber }}
+                  <h3
+                    v-if="row.candidate"
+                    class="govuk-!-margin-top-0 govuk-!-margin-bottom-0"
+                  >
+                    {{ row.candidate.fullName }}
+                  </h3>
                 </div>
               </div>
               <div class="govuk-grid-column-one-third text-right  govuk-!-margin-top-8 govuk-!-margin-bottom-0">
@@ -175,8 +181,8 @@
                   v-if="showRecommendation(issue, index) || isForStatutoryRecommendation(issue, index)"
                   class="govuk-grid-column-one-third govuk-!-margin-top-0  govuk-!-margin-bottom-0 text-right"
                   :class="{
-                    'govuk-!-margin-bottom-0': !!issue.result,
-                    'govuk-!-margin-bottom-6': !issue.result,
+                    'govuk-!-margin-bottom-0': !!issue.result || isForStatutoryRecommendation(issue, index),
+                    'govuk-!-margin-bottom-6': !issue.result && !isForStatutoryRecommendation(issue, index),
                   }"
                 >
                   <h4 class="govuk-!-margin-bottom-1 govuk-!-margin-top-0">
@@ -374,7 +380,10 @@ export default {
     },
     async saveIssueStatus(applicationRecord, issueType, status) {
       applicationRecord.issues.eligibilityIssues.forEach((issue) => {
-        if (issue.type === issueType) {
+        // statutory issues share one overall recommendation
+        // non-statutory issues have separate recommendation
+        const isStatutory = this.statutoryTypes.includes(issue.type);
+        if (isStatutory || issue.type === issueType) {
           issue.result = status;
         }
       });
@@ -388,7 +397,8 @@ export default {
     saveIssueStatusReason: debounce(async function (applicationRecord, issueType, reason) {
 
       applicationRecord.issues.eligibilityIssues.forEach((issue) => {
-        if (issue.type === issueType) {
+        const isStatutory = this.statutoryTypes.includes(issue.type);
+        if (isStatutory || issue.type === issueType) {
           issue.comments = reason;
         }
       });
