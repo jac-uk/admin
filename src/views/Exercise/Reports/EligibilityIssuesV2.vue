@@ -380,7 +380,7 @@ export default {
       applicationRecord.issues.eligibilityIssues.forEach((issue) => {
         // statutory issues share one overall recommendation
         // non-statutory issues have separate recommendation
-        const isStatutory = this.statutoryTypes.includes(issue.type);
+        const isStatutory = this.statutoryTypes.includes(issue.type) && this.statutoryTypes.includes(issueType);
         if (isStatutory || issue.type === issueType) {
           issue.result = status;
         }
@@ -395,7 +395,7 @@ export default {
     saveIssueStatusReason: debounce(async function (applicationRecord, issueType, reason) {
 
       applicationRecord.issues.eligibilityIssues.forEach((issue) => {
-        const isStatutory = this.statutoryTypes.includes(issue.type);
+        const isStatutory = this.statutoryTypes.includes(issue.type) && this.statutoryTypes.includes(issueType);
         if (isStatutory || issue.type === issueType) {
           issue.comments = reason;
         }
