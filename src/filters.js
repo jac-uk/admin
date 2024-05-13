@@ -228,6 +228,9 @@ const lookup = (value) => {
   lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Sift Passed';
   lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrew';
 
+  lookup[APPLICATION_STATUS.OTHER_PASSED] = 'Other Passed';
+  lookup[APPLICATION_STATUS.OTHER_FAILED] = 'Other Failed';
+
   lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}`] = 'Critical Analysis Test';
   lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Passed`] = 'Critical Analysis Test Passed';
   lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Failed`] = 'Critical Analysis Test Failed';

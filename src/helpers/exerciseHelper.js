@@ -1259,8 +1259,7 @@ function shortlistingStatuses(exercise) {
     // sift
     if (
       exercise.shortlistingMethods.indexOf(SHORTLISTING.NAME_BLIND_PAPER_SIFT) >= 0 ||
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0 ||
-      exercise.shortlistingMethods.indexOf(SHORTLISTING.OTHER) >= 0
+      exercise.shortlistingMethods.indexOf(SHORTLISTING.PAPER_SIFT) >= 0
     ) {
       if (exercise._processingVersion >= 2) {
         statuses.push(APPLICATION_STATUS.SIFT_PASSED);
@@ -1280,7 +1279,11 @@ function shortlistingStatuses(exercise) {
         statuses.push(APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT);
       }
     }
-    // TODO other
+    // other
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.OTHER) >= 0) {
+      statuses.push(APPLICATION_STATUS.OTHER_PASSED);
+      statuses.push(APPLICATION_STATUS.OTHER_FAILED);
+    }
   }
   return statuses;
 }

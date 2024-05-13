@@ -83,6 +83,10 @@ const APPLICATION_STATUS = {
   APPROVED_FUTURE: 'approvedFuture',
   WITHDRAWN: 'withdrawn',
 
+  // shortlisting other
+  OTHER_PASSED: 'otherPassed',
+  OTHER_FAILED: 'otherFailed',
+
   // v1 REVIEW
   PASSED_SIFT: 'passedSift',
   FAILED_SIFT: 'failedSift',
