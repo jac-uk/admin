@@ -209,7 +209,6 @@
                           <InformationReviewRenderer
                             v-if="item.date || editMode"
                             type="date"
-                            date-format="DD.MM.YYYY"
                             field="date"
                             :edit="editMode"
                             :data="item.date"
@@ -338,7 +337,7 @@
                                     v-if="item.date"
                                     class="govuk-body"
                                   >
-                                    {{ $filters.formatDate(item.date, 'DD.MM.YYYY') }}
+                                    {{ $filters.formatDate(item.date) }}
                                   </li>
                                   <li
                                     v-if="item.title"
@@ -357,7 +356,7 @@
                                       v-if="item.investigationConclusionDate"
                                       class="govuk-body"
                                     >
-                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate, 'DD.MM.YYYY') }}
+                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate) }}
                                     </li>
                                   </template>
                                   <li v-if="item.details">
