@@ -167,26 +167,100 @@
                   View application
                 </RouterLink>
               </div>
+              <div class="govuk-grid-column-full govuk-!-margin-top-2 text-right">
+                <button
+                  v-if="editMode"
+                  class="govuk-button govuk-button btn-unlock"
+                  @click="toggleEdit"
+                >
+                  Done
+                </button>
+                <button
+                  v-else
+                  class="govuk-button govuk-button--secondary btn-mark-as-applied"
+                  @click="toggleEdit"
+                >
+                  Edit
+                </button>
+              </div>
 
-              <div class="govuk-grid-column-full">
+              <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
                 <div
                   v-for="(issue, index) in row.issues.characterIssues"
                   :key="index"
-                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                  class="govuk-grid-row govuk-!-margin-0"
                 >
-                  <hr
-                    v-if="index !== 0"
-                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
-                  >
                   <div class="govuk-grid-column-full">
+                    <hr
+                      v-if="index !== 0"
+                      class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-2"
+                    >
                     <div class="issue govuk-!-margin-top-4">
-                      <p class="govuk-body">
+                      <p class="govuk-body govuk-!-font-weight-bold">
                         {{ issue.summary }}
                       </p>
-                      <EventRenderer
-                        v-if="issue.events"
-                        :events="issue.events"
-                      />
+
+                      <div v-if="issue.events">
+                        <ul
+                          v-for="(item, i) in issue.events"
+                          :key="item.name"
+                          class="govuk-list"
+                        >
+                          <InformationReviewRenderer
+                            v-if="item.date || editMode"
+                            type="date"
+                            date-format="DD.MM.YYYY"
+                            field="date"
+                            :edit="editMode"
+                            :data="item.date"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <InformationReviewRenderer
+                            v-if="item.title || editMode"
+                            field="title"
+                            :edit="editMode"
+                            :data="item.title"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigations:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="item.investigations !== null || editMode"
+                              field="investigations"
+                              type="selection"
+                              :options="[true, false]"
+                              :edit="editMode"
+                              :data="item.investigations"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
+                          <div
+                            v-if="issue.summary === 'Professional Conduct'"
+                            :style="editMode ? '' : 'display: flex;'"
+                          >
+                            Investigation conclusion date:&nbsp;
+                            <InformationReviewRenderer
+                              v-if="item.investigationConclusionDate || editMode"
+                              field="investigationConclusionDate"
+                              type="date"
+                              :edit="editMode"
+                              :data="item.investigationConclusionDate"
+                              @change-field="obj => updateIssue(row, index, i, obj)"
+                            />
+                          </div>
+                          <InformationReviewRenderer
+                            v-if="item.details || editMode"
+                            type="textarea"
+                            field="details"
+                            :edit="editMode"
+                            :data="item.details"
+                            @change-field="obj => updateIssue(row, index, i, obj)"
+                          />
+                        </ul>
+                      </div>
                     </div>
                     <div
                       v-if="issue.comments"
@@ -251,13 +325,32 @@
                           >
                           <div class="govuk-grid-column-full">
                             <div class="issue">
-                              <p class="govuk-body">
+                              <p class="govuk-body govuk-!-font-weight-bold">
                                 {{ issue.summary }}
                               </p>
-                              <EventRenderer
-                                v-if="issue.events"
-                                :events="issue.events"
-                              />
+                              <div v-if="issue.events">
+                                <ul
+                                  v-for="item in issue.events"
+                                  :key="item.name"
+                                  class="govuk-list"
+                                >
+                                  <li
+                                    v-if="item.date"
+                                    class="govuk-body"
+                                  >
+                                    {{ $filters.formatDate(item.date, 'DD.MM.YYYY') }}
+                                  </li>
+                                  <li
+                                    v-if="item.title"
+                                    class="govuk-body"
+                                  >
+                                    {{ item.title }}
+                                  </li>
+                                  <li v-if="item.details">
+                                    {{ item.details }}
+                                  </li>
+                                </ul>
+                              </div>
                             </div>
                             <div
                               v-if="issue.comments"
@@ -305,6 +398,24 @@
 
               <div class="govuk-grid-column-full">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  Guidance reference
+                </h4>
+                <CheckboxGroup
+                  id="guidance-reference"
+                  :model-value="row.issues.characterIssuesGuidanceReferences || []"
+                  @update:model-value="saveIssueGuidanceReferences(row, $event)"
+                >
+                  <CheckboxItem
+                    v-for="value in guidanceReference"
+                    :key="value"
+                    :value="value"
+                    :label="$filters.lookup(value)"
+                  />
+                </CheckboxGroup>
+              </div>
+
+              <div class="govuk-grid-column-one-half">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                   Recommended SCC approach
                 </h4>
                 <Select
@@ -324,6 +435,28 @@
                   </option>
                   <option value="discuss">
                     Discuss
+                  </option>
+                </Select>
+              </div>
+
+              <div class="govuk-grid-column-one-half">
+                <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
+                  SCC Decision
+                </h4>
+                <Select
+                  id="issue-status"
+                  :model-value="row.issues.characterIssuesSCCDecision || ''"
+                  @update:model-value="saveIssueSCCDecision(row, $event)"
+                >
+                  <option value="" />
+                  <option value="proceed">
+                    Proceed
+                  </option>
+                  <option value="reject">
+                    Reject
+                  </option>
+                  <option value="defer">
+                    Defer
                   </option>
                 </Select>
               </div>
@@ -354,7 +487,6 @@ import { httpsCallable } from '@firebase/functions';
 import { query, collection, doc, onSnapshot, where, getDocs } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
-import EventRenderer from '@jac-uk/jac-kit/draftComponents/EventRenderer.vue';
 import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
 import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vue';
@@ -362,19 +494,24 @@ import { tableAsyncQuery } from '@jac-uk/jac-kit/components/Table/tableQuery';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import permissionMixin from '@/permissionMixin';
-import { OFFENCE_CATEGORY, APPLICATION_STATUS } from '@/helpers/constants';
+import { OFFENCE_CATEGORY, GUIDANCE_REFERENCE, APPLICATION_STATUS } from '@/helpers/constants';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { downloadBase64File } from '@/helpers/file';
+import CheckboxGroup from '@jac-uk/jac-kit/draftComponents/Form/CheckboxGroup.vue';
+import CheckboxItem from '@jac-uk/jac-kit/draftComponents/Form/CheckboxItem.vue';
+import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 
 export default {
   name: 'CharacterIssues',
   components: {
-    EventRenderer,
     Select,
     Table,
     TableCell,
     TextareaInput,
     ActionButton,
+    CheckboxGroup,
+    CheckboxItem,
+    InformationReviewRenderer,
   },
   mixins: [permissionMixin],
   data() {
@@ -392,6 +529,8 @@ export default {
       otherApplicationRecords: [], // used to store other application records for the same candidate (format: "[ { candidateId: '', otherRecords: [] }")
       open: [],
       offenceCategory: OFFENCE_CATEGORY,
+      guidanceReference: GUIDANCE_REFERENCE,
+      editMode: false,
     };
   },
   computed: {
@@ -558,6 +697,10 @@ export default {
       applicationRecord.issues.characterIssuesStatus = status;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
+    async saveIssueSCCDecision(applicationRecord, decision) {
+      applicationRecord.issues.characterIssuesSCCDecision = decision;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
     async saveIssueStatusReason(applicationRecord, reason) {
       applicationRecord.issues.characterIssuesStatusReason = reason;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
@@ -570,6 +713,10 @@ export default {
     },
     async saveIssueOffenceCategory(applicationRecord, category) {
       applicationRecord.issues.characterIssuesOffenceCategory = category;
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async saveIssueGuidanceReferences(applicationRecord, guidanceReferences) {
+      applicationRecord.issues.characterIssuesGuidanceReferences = guidanceReferences;
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
     async getOtherApplicationRecords(applicationRecord) {
@@ -618,6 +765,15 @@ export default {
       } catch (error) {
         return;
       }
+    },
+    toggleEdit(){
+      this.editMode = !this.editMode;
+    },
+    async updateIssue(applicationRecord, index1, index2, obj) {
+      for (const [key, value] of Object.entries(obj)) {
+        applicationRecord.issues.characterIssues[index1].events[index2][key] = value !== undefined ? value : null;
+      }
+      await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
     },
   },
 };

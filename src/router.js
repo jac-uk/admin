@@ -5,7 +5,7 @@ import {
 
 import store from '@/store';
 
-import { STATUS } from '@jac-uk/jac-kit/helpers/constants';
+import { STATUS, EXERCISE_STAGE } from '@/helpers/constants';
 
 import EmptyRouterView from '@/components/EmptyRouterView.vue';
 
@@ -25,6 +25,11 @@ import ExerciseDashboard from '@/views/Exercise/Dashboard/Dashboard.vue';
 // Exercise External (Vacancy)
 import ExerciseExternals from '@/views/Exercise/Externals/View.vue';
 import ExerciseExternalsEdit from '@/views/Exercise/Externals/Edit.vue';
+
+// Exercise Configuration
+import ExerciseConfiguration from '@/views/Exercise/Configuration.vue';
+import ExerciseConfigurationApplicationVersion from '@/views/Exercise/Configuration/ApplicationVersion.vue';
+import ExerciseConfigurationProcessingVersion from '@/views/Exercise/Configuration/ProcessingVersion.vue';
 
 // Exercise details
 import ExerciseDetails from '@/views/Exercise/Details.vue';
@@ -273,6 +278,34 @@ const routes = [
         meta: {
           requiresAuth: true,
         },
+      },
+      {
+        path: 'configuration/',
+        component: ExerciseConfiguration,
+        children: [
+          {
+            path: '',
+            redirect: { name: 'exercise-configuration-application-version' },
+          },
+          {
+            name: 'exercise-configuration-application-version',
+            path: 'application-version',
+            component: ExerciseConfigurationApplicationVersion,
+            meta: {
+              requiresAuth: true,
+              title: 'Application Version | Exercise Configuration',
+            },
+          },
+          {
+            name: 'exercise-configuration-processing-version',
+            path: 'processing-version',
+            component: ExerciseConfigurationProcessingVersion,
+            meta: {
+              requiresAuth: true,
+              title: 'Processing Version | Exercise Configuration',
+            },
+          },          
+        ],
       },
       {
         path: 'details/',
@@ -895,7 +928,7 @@ const routes = [
         children: [
           {
             path: '',
-            redirect: { name: 'exercise-stage-list', params: { stage: 'review' } },
+            redirect: { name: 'exercise-stage-list', params: { stage: EXERCISE_STAGE.REVIEW } },
           },
           {
             path: ':stage/',

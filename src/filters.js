@@ -1,5 +1,5 @@
 import * as filters from '@jac-uk/jac-kit/filters/filters';
-import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
+import { ADVERT_TYPES, EXERCISE_STAGE, APPLICATION_STATUS, TASK_TYPE, OFFENCE_CATEGORY, GUIDANCE_REFERENCE, INDEPENDENT_ASSESSMENTS_STATUS, ASSESSOR_TYPES, ASSESSMENT_METHOD, APPLICATION_FORM_PARTS, WORKING_BASIS } from '@/helpers/constants';
 
 const lookup = (value) => {
   let returnValue;
@@ -190,6 +190,12 @@ const lookup = (value) => {
   lookup[ADVERT_TYPES.FULL] = 'Full';
   lookup[ADVERT_TYPES.EXTERNAL] = 'External';
 
+  // v2 exercise stages
+  lookup[EXERCISE_STAGE.SHORTLISTING] = 'Shortlisting';
+  lookup[EXERCISE_STAGE.SELECTION] = 'Selection Days';
+  lookup[EXERCISE_STAGE.SCC] = 'SCC';
+  lookup[EXERCISE_STAGE.RECOMMENDATION] = 'Recommendations';
+
   lookup[EXERCISE_STAGE.REVIEW] = 'Review';
   lookup[EXERCISE_STAGE.APPLIED] = 'Applied';
   lookup[EXERCISE_STAGE.SHORTLISTED] = 'Shortlisted';
@@ -198,66 +204,65 @@ const lookup = (value) => {
   lookup[EXERCISE_STAGE.HANDOVER] = 'Handover to JO';
 
   lookup[APPLICATION_STATUS.PASSED_NOT_RECOMMENDED] = 'Passed but not recommended to SCC';
-  lookup[APPLICATION_STATUS.PASSED_RECOMMENDED] = 'Passed and recommended to SCC';
+  lookup[APPLICATION_STATUS.PASSED_RECOMMENDED] = 'Recommended to SCC';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_FAILED] = 'Failed qualifying test';
   lookup[APPLICATION_STATUS.QUALIFYING_TEST_PASSED] = 'Passed qualifying test';
-  lookup[APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED] = 'No test submitted (first test)';
-  lookup[APPLICATION_STATUS.RECOMMENDED_FUTURE] = 'Recommended for future appointment';
-  lookup[APPLICATION_STATUS.RECOMMENDED_IMMEDIATE] = 'Recommended for immediate appointment';
-  lookup[APPLICATION_STATUS.RECONSIDER] = 'SCC to reconsider';
-  lookup[APPLICATION_STATUS.REJECTED_CHARACTER] = 'Rejected on character';
-  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL] = 'Rejected as ineligible (ASC)';
-  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Rejected as ineligible (statutory requirements)';
+  lookup[APPLICATION_STATUS.QUALIFYING_TEST_NOT_SUBMITTED] = 'Qualifying Test Not Started';
+  lookup[APPLICATION_STATUS.FULL_APPLICATION_NOT_SUBMITTED] = 'Full application not submitted';
+  lookup[APPLICATION_STATUS.RECOMMENDED_FUTURE] = 'Recommended Future';
+  lookup[APPLICATION_STATUS.RECOMMENDED_IMMEDIATE] = 'Recommended Immediate';
+  lookup[APPLICATION_STATUS.APPROVED_FUTURE] = 'Approved Future';
+  lookup[APPLICATION_STATUS.APPROVED_IMMEDIATE] = 'Approved Immediate';
+  lookup[APPLICATION_STATUS.RECONSIDER] = 'Reconsider';
+  lookup[APPLICATION_STATUS.REJECTED_CHARACTER] = 'Character - Rejected';
+  lookup[APPLICATION_STATUS.REJECTED_MERIT] = 'Merit - Rejected';
+  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL] = 'Ineligible (ASC) - Rejected';
+  lookup[APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY] = 'Ineligible (Statutory) - Rejected';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_FAILED] = 'Failed scenario test';
   lookup[APPLICATION_STATUS.SCENARIO_TEST_PASSED] = 'Passed scenario test';
-  lookup[APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED] = 'No test submitted (scenario test)';
-  lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'Invited to EMP Tie-breaker';
+  lookup[APPLICATION_STATUS.SCENARIO_TEST_NOT_SUBMITTED] = 'Scenario Test Not Started';
+  lookup[APPLICATION_STATUS.SECOND_STAGE_INVITED] = 'EMP Tiebreaker Invited';
   lookup[APPLICATION_STATUS.SELECTION_FAILED] = 'Failed selection day';
   lookup[APPLICATION_STATUS.SELECTION_INVITED] = 'Invited to selection day';
   lookup[APPLICATION_STATUS.SELECTION_OUTCOME_PASSED] = 'Passed selection';
   lookup[APPLICATION_STATUS.SELECTION_OUTCOME_FAILED] = 'Failed selection';
-  lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Failed sift';
-  lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Passed sift';
-  lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrawn';
+  lookup[APPLICATION_STATUS.SIFT_FAILED] = 'Sift Failed';
+  lookup[APPLICATION_STATUS.SIFT_PASSED] = 'Sift Passed';
+  lookup[APPLICATION_STATUS.WITHDRAWN] = 'Withdrew';
+
+  lookup[APPLICATION_STATUS.OTHER_PASSED] = 'Other Passed';
+  lookup[APPLICATION_STATUS.OTHER_FAILED] = 'Other Failed';
 
   lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}`] = 'Critical Analysis Test';
-  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Passed`] = 'Passed CA';
-  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Failed`] = 'Failed CA';
+  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Passed`] = 'Critical Analysis Test Passed';
+  lookup[`${TASK_TYPE.CRITICAL_ANALYSIS}Failed`] = 'Critical Analysis Test Failed';
   lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}`] = 'Situational Judgement Test';
-  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Passed SJ';
-  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Failed SJ';
+  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Passed`] = 'Situational Judgement Test Passed';
+  lookup[`${TASK_TYPE.SITUATIONAL_JUDGEMENT}Failed`] = 'Situational Judgement Test Failed';
   lookup[`${TASK_TYPE.QUALIFYING_TEST}`] = 'QT Merit List';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Passed first test';
-  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Failed first test';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Passed`] = 'Qualifying Test(s) Passed';
+  lookup[`${TASK_TYPE.QUALIFYING_TEST}Failed`] = 'Qualifying Test(s) Failed';
   lookup[`${TASK_TYPE.SCENARIO}`] = 'Scenario Test';
-  lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Passed scenario test';
-  lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Failed scenario test';
+  lookup[`${TASK_TYPE.SCENARIO}Passed`] = 'Scenario Test Passed';
+  lookup[`${TASK_TYPE.SCENARIO}Failed`] = 'Scenario Test Failed';
   lookup[TASK_TYPE.TELEPHONE_ASSESSMENT] = 'Telephone Assessment';
-  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Passed`] = 'Passed telephone assessment';
-  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Failed`] = 'Failed telephone assessment';
+  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Passed`] = 'Telephone Assessment Passed';
+  lookup[`${TASK_TYPE.TELEPHONE_ASSESSMENT}Failed`] = 'Telephone Assessment Failed';
   lookup[TASK_TYPE.ELIGIBILITY_SCC] = 'Eligibility SCC';
-  lookup[`${TASK_TYPE.ELIGIBILITY_SCC}Passed`] = 'Passed eligibility SCC';
-  lookup[`${TASK_TYPE.ELIGIBILITY_SCC}Failed`] = 'Failed eligibility SCC';
   lookup[TASK_TYPE.CHARACTER_AND_SELECTION_SCC] = 'Character and Selection SCC';
-  lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Passed`] = 'Passed character and selection SCC';
-  lookup[`${TASK_TYPE.CHARACTER_AND_SELECTION_SCC}Failed`] = 'Failed character and selection SCC';
   lookup[TASK_TYPE.STATUTORY_CONSULTATION] = 'Statutory Consultation';
-  lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Passed`] = 'Passed statutory consultation';
-  lookup[`${TASK_TYPE.STATUTORY_CONSULTATION}Failed`] = 'Failed statutory consultation';
   lookup[TASK_TYPE.SHORTLISTING_OUTCOME] = 'Shortlisting Outcome';
-  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Passed shortlisting';
-  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Failed shortlisting';
-  lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Passed`] = 'Shortlisting Passed';
+  lookup[`${TASK_TYPE.SHORTLISTING_OUTCOME}Failed`] = 'Shortlisting Failed';
+  // lookup[TASK_TYPE.WELSH_ASSESSMENT] = 'Welsh Assessment';
   lookup[TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE] = 'Pre Selection Day Questionnaire';
-  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Passed`] = 'Completed PSDQ';
-  lookup[`${TASK_TYPE.PRE_SELECTION_DAY_QUESTIONNAIRE}Failed`] = 'Not completed PSDQ';
   lookup[TASK_TYPE.SELECTION_DAY] = 'Selection Day';
-  lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Passed selection day';
-  lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Failed selection day';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Passed`] = 'Selection Day Passed';
+  lookup[`${TASK_TYPE.SELECTION_DAY}Failed`] = 'Selection Day Failed';
   lookup[TASK_TYPE.SELECTION_OUTCOME] = 'Selection Outcome';
-  lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tie-breaker';
-  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Passed`] = 'Passed EMP Tie-breaker';
-  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Failed`] = 'Failed EMP Tie-breaker';
+  lookup[TASK_TYPE.EMP_TIEBREAKER] = 'EMP Tiebreaker';
+  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Passed`] = 'EMP Tiebreaker Passed';
+  lookup[`${TASK_TYPE.EMP_TIEBREAKER}Failed`] = 'EMP Tiebreaker Failed';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.DRAFT] = 'Draft';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.PENDING] = 'Pending';
   lookup[INDEPENDENT_ASSESSMENTS_STATUS.COMPLETED] = 'Completed';
@@ -270,17 +275,28 @@ const lookup = (value) => {
   lookup[ASSESSOR_TYPES.PERSONAL] = 'Personal assessor';
 
   // character issues offence category
-  lookup[OFFENCE_CATEGORY.SINGLE_CRIMINAL_OFFENCE] = 'Single criminal offence';
-  lookup[OFFENCE_CATEGORY.MULTIPLE_CRIMINAL_OFFENCES] = 'Multiple criminal offences';
   lookup[OFFENCE_CATEGORY.SINGLE_MOTORING_OFFENCE] = 'Single motoring offence';
   lookup[OFFENCE_CATEGORY.MULTIPLE_MOTORING_OFFENCES] = 'Multiple motoring offences';
-  lookup[OFFENCE_CATEGORY.SINGLE_FINANCIAL_OFFENCE] = 'Single financial offence';
-  lookup[OFFENCE_CATEGORY.MULTIPLE_FINANCIAL_OFFENCES] = 'Multiple financial offences';
-  lookup[OFFENCE_CATEGORY.SINGLE_PROFESSIONAL_CONDUCT] = 'Single professional conduct';
-  lookup[OFFENCE_CATEGORY.MULTIPLE_PROFESSIONAL_CONDUCTS] = 'Multiple professional conducts';
+  lookup[OFFENCE_CATEGORY.SINGLE_PENALTY_NOTICE] = 'Single Fixed Penalty Notices & Penalty Charge Notices';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_PENALTY_NOTICES] = 'Multiple Fixed Penalty Notices & Penalty Charge Notices';
+  lookup[OFFENCE_CATEGORY.SINGLE_CRIMINAL_OFFENCE] = 'Single criminal offence';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_CRIMINAL_OFFENCES] = 'Multiple criminal offences';
+  lookup[OFFENCE_CATEGORY.SINGLE_FINANCIAL_OFFENCE] = 'Single financial issue';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_FINANCIAL_OFFENCES] = 'Multiple financial issues';
+  lookup[OFFENCE_CATEGORY.SINGLE_PROFESSIONAL_CONDUCT] = 'Single professional conduct matter';
+  lookup[OFFENCE_CATEGORY.MULTIPLE_PROFESSIONAL_CONDUCTS] = 'Multiple professional conduct matters';
   lookup[OFFENCE_CATEGORY.SINGLE_OTHER_MATTER] = 'Single other matter';
   lookup[OFFENCE_CATEGORY.MULTIPLE_OTHER_MATTERS] = 'Multiple other matters';
   lookup[OFFENCE_CATEGORY.MIXED] = 'Mixed';
+
+  // character issues guide reference
+  lookup[GUIDANCE_REFERENCE.CRIMINAL_OFFENCES] = 'Criminal offences: paras 21-24';
+  lookup[GUIDANCE_REFERENCE.MOTERING_OFFENCES] = 'Motoring offences: paras 25-30';
+  lookup[GUIDANCE_REFERENCE.FIXED_PENALTY_NOTICES] = 'Fixed penalty notices: paras 31-34';
+  lookup[GUIDANCE_REFERENCE.FINANCIAL_INSOLVENCY_DEBT] = 'Financial insolvency and debt: paras 35-38';
+  lookup[GUIDANCE_REFERENCE.FINANCIAL_VAT_TAX] = 'Financial VAT and Tax: paras 39-43';
+  lookup[GUIDANCE_REFERENCE.PROFESSIONAL_CONDUCT] = 'Professional conduct: paras 44-57';
+  lookup[GUIDANCE_REFERENCE.FURTHER_DISCLOSURES] = 'Further disclosures: paras 58-65';
 
   // assessment methods
   lookup[ASSESSMENT_METHOD.SELF_ASSESSMENT_WITH_COMPETENCIES] = 'Self Assessment with competencies';

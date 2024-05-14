@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
+import { generalisePath } from '@/helpers/path';
 
 import * as filters from '@jac-uk/jac-kit/filters/filters';
 
@@ -13,6 +14,7 @@ import VueDOMPurifyHTML from 'vue-dompurify-html';
 import { searchMap } from '@/helpers/searchMap';
 
 import * as Sentry from '@sentry/vue';
+import VueGtag from 'vue-gtag';
 
 import './styles/main.scss';
 
@@ -75,6 +77,22 @@ auth.onAuthStateChanged(async (user) => {
           }),
         ],
       });
+    }
+
+    // Config GA
+    const gtagId = import.meta.env.VITE_GTAG_ID;
+
+    if (gtagId) {
+      vueInstance.use(VueGtag, {
+        pageTrackerTemplate(to) {
+          return {
+            page_title: generalisePath(to),
+            page_path: to.path,
+          };
+        },
+        pageTrackerScreenviewEnabled: true,
+        config: { id: gtagId },
+      }, router);
     }
 
     // Root component

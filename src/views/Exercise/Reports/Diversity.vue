@@ -52,7 +52,7 @@
       </div>
 
       <div
-        v-if="diversity"
+        v-if="diversity && showTabs"
         class="govuk-grid-row"
       >
         <div class="govuk-grid-column-one-half">
@@ -74,19 +74,31 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        <p class="govuk-body">
+          Please refresh the report.
+        </p>
+      </div>
     </div>
 
     <!-- results -->
     <div
-      v-if="diversity"
+      v-if="diversity && showTabs"
       class="govuk-grid-column-full"
     >
-      <TabsList
-        v-if="showTabs"
-        v-model:active-tab="activeTab"
-        :tabs="tabs"
-        class="print-none"
-      />
+      <Select
+        id="tab-filter"
+        v-model="activeTab"
+        class="govuk-!-margin-right-2"
+      >
+        <option
+          v-for="tab in tabs"
+          :key="tab.ref"
+          :value="tab.ref"
+        >
+          {{ tab.title }}
+        </option>
+      </Select>
 
       <h3 class="govuk-heading-m">
         {{ activeTabTitle }}
@@ -96,7 +108,7 @@
         Summary report coming soon
       </p>
 
-      <div v-else>
+      <div v-else-if="diversity[activeTab]">
         <table class="govuk-table table-with-border">
           <caption class="govuk-table__caption hidden">
             Gender by exercise stage
@@ -558,17 +570,18 @@ import { onSnapshot, doc } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import { downloadXLSX } from '@jac-uk/jac-kit/helpers/export';
-import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
+import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
 import Stat from '@/components/Report/Stat.vue';
 import permissionMixin from '@/permissionMixin';
 import { mapGetters } from 'vuex';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
-import { EXERCISE_STAGE } from '@/helpers/constants';
+import { availableStages } from '@/helpers/exerciseHelper';
+import { EXERCISE_STAGE, APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'Diversity',
   components: {
-    TabsList,
+    Select,
     Stat,
     ActionButton,
   },
@@ -577,7 +590,7 @@ export default {
     return {
       diversity: null,
       unsubscribe: null,
-      activeTab: EXERCISE_STAGE.APPLIED,
+      activeTab: '',
     };
   },
   computed: {
@@ -587,48 +600,70 @@ export default {
     exercise() {
       return this.$store.state.exerciseDocument.record;
     },
+    isProcessingVersion2() {
+      return this.exercise._processingVersion >= 2;
+    },
+    availableStages() {
+      return availableStages(this.exercise);
+    },
     tabs() {
-      const tabs = [
-        {
-          ref: EXERCISE_STAGE.APPLIED,
-          title: this.$filters.lookup(EXERCISE_STAGE.APPLIED),
-        },
-        {
-          ref: EXERCISE_STAGE.SHORTLISTED,
-          title: this.$filters.lookup(EXERCISE_STAGE.SHORTLISTED),
-        },
-      ];
+      // exclude shortlisted tab
+      const stages = this.availableStages.filter(stage => ![EXERCISE_STAGE.SHORTLISTED, EXERCISE_STAGE.SELECTION].includes(stage));
+      const tabs = stages.map((stage) => {
+        const tab = {};
+        tab.ref = stage;
+        switch (stage) {
+        case EXERCISE_STAGE.SHORTLISTING:
+        case EXERCISE_STAGE.REVIEW:
+          tab.ref = EXERCISE_STAGE.APPLIED;
+          tab.title = 'Applied';
+          break;
+        case EXERCISE_STAGE.SELECTION:
+          tab.title = 'Shortlisted';
+          break;
+        case EXERCISE_STAGE.SCC:
+          tab.title = 'Passed SD';
+          break;
+        case EXERCISE_STAGE.RECOMMENDATION:
+          tab.title = 'Recommended to JO';
+          break;
+        default:
+          tab.title = this.$filters.lookup(stage);
+        }
+        return tab;
+      });
+      tabs.push({
+        ref: 'summary',
+        title: 'Summary',
+      });
 
-      if (this.exercise?._processingVersion >= 2) {
-        tabs.push({
-          ref: EXERCISE_STAGE.SELECTABLE,
-          title: this.$filters.lookup(EXERCISE_STAGE.SELECTABLE),
-        });
-      } else {
-        tabs.push({
-          ref: EXERCISE_STAGE.SELECTED,
-          title: this.$filters.lookup(EXERCISE_STAGE.SELECTED),
-        });
+      // add additional tabs based on shortlisting methods
+      const additionalTabs = this.additionalTabs.map(ref => ({ ref, title: this.$filters.lookup(ref) }));
+      return [tabs[0], ...additionalTabs, ...tabs.slice(1)];
+    },
+    additionalTabs() {
+      const shortlistingMethods = this.exercise.shortlistingMethods;
+      const tabs = [];
+      // qt
+      if (shortlistingMethods.some(method => ['situational-judgement-qualifying-test', 'critical-analysis-qualifying-test'].includes(method))) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.QUALIFYING_TEST_PASSED : APPLICATION_STATUS.PASSED_FIRST_TEST;
+        tabs.push(ref);
+      }
+      // scenario test
+      if (shortlistingMethods.includes('scenario-test-qualifying-test')) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SCENARIO_TEST_PASSED : APPLICATION_STATUS.PASSED_SCENARIO_TEST;
+        tabs.push(ref);
+      }
+      // sift
+      if (shortlistingMethods.some(method => ['name-blind-paper-sift', 'paper-sift'].includes(method))) {
+        const ref = this.isProcessingVersion2 ? APPLICATION_STATUS.SIFT_PASSED : APPLICATION_STATUS.PASSED_SIFT;
+        tabs.push(ref);
       }
 
-      tabs.push(
-        {
-          ref: EXERCISE_STAGE.RECOMMENDED,
-          title: this.$filters.lookup(EXERCISE_STAGE.RECOMMENDED),
-        },
-        {
-          ref: EXERCISE_STAGE.HANDOVER,
-          title: this.$filters.lookup(EXERCISE_STAGE.HANDOVER),
-        },
-        {
-          ref: 'summary',
-          title: 'Summary',
-        }
-      );
       return tabs;
     },
     showTabs() {
-      return this.diversity && this.diversity.shortlisted;  // .shortlisted indicates we have stages reports
+      return this.diversity && this.availableStages?.length && this.diversity?.[this.availableStages[0]];  // check if report data is available
     },
     activeTabTitle() {
       for (let i = 0, len = this.tabs.length; i < len; ++i) {
@@ -639,7 +674,21 @@ export default {
       return '';
     },
   },
+  watch: {
+    tabs: {
+      immediate: true,
+      handler() {
+        if (this.tabs.length && !this.activeTab && this.activeTab !== this.tabs[0].ref) {
+          this.activeTab = this.tabs[0].ref;
+        }
+      },
+    },
+  },
   created() {
+    if (this.$route.hash && this.$route.hash.slice(1)) {
+      this.activeTab = this.$route.hash.slice(1);
+    }
+
     this.unsubscribe = onSnapshot(
       doc(firestore, `exercises/${this.exercise.id}/reports/diversity`),
       (snap) => {
@@ -663,17 +712,11 @@ export default {
     },
     gatherReportData(stage) {
       const data = [];
-      let stages = [
-        EXERCISE_STAGE.APPLIED,
-        EXERCISE_STAGE.SHORTLISTED,
-        this.exercise?._processingVersion >= 2 ? EXERCISE_STAGE.SELECTABLE : EXERCISE_STAGE.SELECTED,
-        EXERCISE_STAGE.RECOMMENDED,
-        EXERCISE_STAGE.HANDOVER,
-      ];
+      let stageItems = this.tabs.slice(0, -1); // exclude summary tab
       if (stage) {
-        stages = [stage];
+        stageItems = this.tabs.filter(tab => tab.ref === stage);
       }
-      data.push(['Statistic'].concat(stages.map(s => this.$filters.lookup(s))));
+      data.push(['Statistic'].concat(stageItems.map(item => item.title)));
       Object.keys(this.diversity.applied).forEach((report) => {
         Object.keys(this.diversity.applied[report]).forEach((stat) => {
           const columns = [];
@@ -682,7 +725,8 @@ export default {
           } else {
             columns.push(`${report}:${stat}`);
           }
-          stages.forEach((stage) => {
+          stageItems.forEach((item) => {
+            const stage = item.ref;
             if (stat === 'total') {
               columns.push(this.diversity[stage][report][stat]);
             } else {

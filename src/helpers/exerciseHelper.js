@@ -92,6 +92,7 @@ export {
   getPreviousStage,
   getNextStage,
   getStagePassingStatuses,
+  getStageMoveBackStatuses,
   getStageWithdrawalStatus,
   isApplicationVersionGreaterThan,
   isApplicationVersionLessThan,
@@ -148,6 +149,7 @@ const SELECTION_CATEGORIES = ['leadership', 'roleplay', 'situational', 'intervie
 const PROCESSING_STAGE = {  // could be exercise_stage and existing exercise_stage -> application_stage
   SHORTLISTING: 'shortlisting',
   SELECTION: 'selection',
+  SCC: 'scc',
   RECOMMENDATION: 'recommendation',
   HANDOVER: 'handover',
 };
@@ -155,6 +157,7 @@ const PROCESSING_STAGE = {  // could be exercise_stage and existing exercise_sta
 const PROCESSING_STAGES = [
   PROCESSING_STAGE.SHORTLISTING,
   PROCESSING_STAGE.SELECTION,
+  PROCESSING_STAGE.SCC,
   PROCESSING_STAGE.RECOMMENDATION,
   PROCESSING_STAGE.HANDOVER,
 ];
@@ -222,13 +225,13 @@ function getProcessingEntryStage(exercise, processingStage) {
     switch (processingStage) {
     case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
-      return EXERCISE_STAGE.APPLIED;
+      return EXERCISE_STAGE.SHORTLISTING;
     case PROCESSING_STAGE.SELECTION:
-      return EXERCISE_STAGE.SHORTLISTED;
+      return EXERCISE_STAGE.SELECTION;
+    case PROCESSING_STAGE.SCC:
+      return EXERCISE_STAGE.SCC;
     case PROCESSING_STAGE.RECOMMENDATION:
-      return EXERCISE_STAGE.SELECTABLE;
-    case PROCESSING_STAGE.HANDOVER:
-      return EXERCISE_STAGE.RECOMMENDED;
+      return EXERCISE_STAGE.RECOMMENDATION;
     }
   } else {
     switch (processingStage) {
@@ -249,13 +252,11 @@ function getProcessingExitStage(exercise, processingStage) {
     switch (processingStage) {
     case 'all':
     case PROCESSING_STAGE.SHORTLISTING:
-      return EXERCISE_STAGE.SHORTLISTED;
+      return EXERCISE_STAGE.SELECTION;
     case PROCESSING_STAGE.SELECTION:
-      return EXERCISE_STAGE.SELECTABLE;
-    case PROCESSING_STAGE.RECOMMENDATION:
-      return EXERCISE_STAGE.RECOMMENDED;
-    case PROCESSING_STAGE.HANDOVER:
-      return EXERCISE_STAGE.HANDOVER;
+      return EXERCISE_STAGE.SCC;
+    case PROCESSING_STAGE.SCC:
+      return EXERCISE_STAGE.RECOMMENDATION;
     }
   } else {
     switch (processingStage) {
@@ -960,11 +961,10 @@ function availableStages(exercise) {
   const stages = [];
   if (!exercise) return stages;
   if (exercise._processingVersion >= 2) {
-    stages.push(EXERCISE_STAGE.APPLIED);
-    stages.push(EXERCISE_STAGE.SHORTLISTED);
-    stages.push(EXERCISE_STAGE.SELECTABLE);
-    stages.push(EXERCISE_STAGE.RECOMMENDED);
-    stages.push(EXERCISE_STAGE.HANDOVER);
+    stages.push(EXERCISE_STAGE.SHORTLISTING);
+    stages.push(EXERCISE_STAGE.SELECTION);
+    stages.push(EXERCISE_STAGE.SCC);
+    stages.push(EXERCISE_STAGE.RECOMMENDATION);
   } else {
     stages.push(EXERCISE_STAGE.REVIEW);
     stages.push(EXERCISE_STAGE.SHORTLISTED);
@@ -978,16 +978,14 @@ function availableStages(exercise) {
 function getPreviousStage(exercise, currentStage) {
   if (exercise._processingVersion >= 2) {
     switch (currentStage) {
-    case EXERCISE_STAGE.APPLIED:
+    case EXERCISE_STAGE.SHORTLISTING:
       return '';
-    case EXERCISE_STAGE.SHORTLISTED:
-      return EXERCISE_STAGE.APPLIED;
-    case EXERCISE_STAGE.SELECTABLE:
-      return EXERCISE_STAGE.SHORTLISTED;
-    case EXERCISE_STAGE.RECOMMENDED:
-      return EXERCISE_STAGE.SELECTABLE;
-    case EXERCISE_STAGE.HANDOVER:
-      return EXERCISE_STAGE.RECOMMENDED;
+    case EXERCISE_STAGE.SELECTION:
+      return EXERCISE_STAGE.SHORTLISTING;
+    case EXERCISE_STAGE.SCC:
+      return EXERCISE_STAGE.SELECTION;
+    case EXERCISE_STAGE.RECOMMENDATION:
+      return EXERCISE_STAGE.SCC;
     }
   } else {
     switch (currentStage) {
@@ -1007,18 +1005,24 @@ function getPreviousStage(exercise, currentStage) {
 
 function getNextStage(exercise, currentStage, newStatus) {
   if (newStatus) {
+    const moveBackStatuses = getStageMoveBackStatuses(exercise, currentStage);
+    if (moveBackStatuses.indexOf(newStatus) >= 0) {
+      const stages = availableStages(exercise);
+      const currentIndex = stages.indexOf(currentStage);
+      if (currentIndex > 0) {
+        return stages[currentIndex - 1];
+      }
+    }
     const passingStatuses = getStagePassingStatuses(exercise, currentStage);
     if (passingStatuses.indexOf(newStatus) >= 0) {
       if (exercise._processingVersion >= 2) {
         switch (currentStage) {
-        case EXERCISE_STAGE.APPLIED:
-          return EXERCISE_STAGE.SHORTLISTED;
-        case EXERCISE_STAGE.SHORTLISTED:
-          return EXERCISE_STAGE.SELECTABLE;
-        case EXERCISE_STAGE.SELECTABLE:
-          return EXERCISE_STAGE.RECOMMENDED;
-        case EXERCISE_STAGE.RECOMMENDED:
-          return EXERCISE_STAGE.HANDOVER;
+        case EXERCISE_STAGE.SHORTLISTING:
+          return EXERCISE_STAGE.SELECTION;
+        case EXERCISE_STAGE.SELECTION:
+          return EXERCISE_STAGE.SCC;
+        case EXERCISE_STAGE.SCC:
+          return EXERCISE_STAGE.RECOMMENDATION;
         }
       } else {
         switch (currentStage) {
@@ -1047,14 +1051,14 @@ function getNextStage(exercise, currentStage, newStatus) {
 function getStagePassingStatuses(exercise, stage) {
   if (exercise._processingVersion >= 2) {
     switch (stage) {
-    case EXERCISE_STAGE.APPLIED:
+    case EXERCISE_STAGE.SHORTLISTING:
       return [APPLICATION_STATUS.SHORTLISTING_PASSED];
-    case EXERCISE_STAGE.SHORTLISTED:
-      return [APPLICATION_STATUS.SELECTION_OUTCOME_PASSED];
-    case EXERCISE_STAGE.SELECTABLE:
+    case EXERCISE_STAGE.SELECTION:
       return [APPLICATION_STATUS.PASSED_RECOMMENDED];
-    case EXERCISE_STAGE.RECOMMENDED:
-      return [APPLICATION_STATUS.RECOMMENDED_IMMEDIATE, APPLICATION_STATUS.RECOMMENDED_FUTURE];
+    case EXERCISE_STAGE.SCC:
+      return [APPLICATION_STATUS.RECOMMENDED_IMMEDIATE, APPLICATION_STATUS.RECOMMENDED_FUTURE, APPLICATION_STATUS.SECOND_STAGE_PASSED];
+    case EXERCISE_STAGE.RECOMMENDATION:
+      return [];
     }
   } else {
     switch (stage) {
@@ -1070,6 +1074,16 @@ function getStagePassingStatuses(exercise, stage) {
   }
 }
 
+function getStageMoveBackStatuses(exercise, stage) {
+  if (exercise._processingVersion >= 2) {
+    switch (stage) {
+    case EXERCISE_STAGE.RECOMMENDATION:
+      return [APPLICATION_STATUS.RECONSIDER];
+    }
+  }
+  return [];
+}
+
 function getStageWithdrawalStatus(exercise) {
   if (exercise._processingVersion >= 2) {
     return APPLICATION_STATUS.WITHDRAWN;
@@ -1082,86 +1096,66 @@ function availableStatuses(exercise, stage) {
   let statuses = [];
   if (exercise._processingVersion >= 2) {
     switch (stage) {
-    case EXERCISE_STAGE.APPLIED:
+    case EXERCISE_STAGE.SHORTLISTING:
       statuses = [
         ...shortlistingStatuses(exercise),
-        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
         APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
         APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
-        APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.FULL_APPLICATION_NOT_SUBMITTED,
         APPLICATION_STATUS.WITHDRAWN,
         APPLICATION_STATUS.SHORTLISTING_PASSED,
+        // APPLICATION_STATUS.SHORTLISTING_FAILED,
       ];
       return statuses;
-    case EXERCISE_STAGE.SHORTLISTED:
+    case EXERCISE_STAGE.SELECTION:
       statuses = [
         APPLICATION_STATUS.SELECTION_DAY_PASSED,
         APPLICATION_STATUS.SELECTION_DAY_FAILED,
-        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
-        APPLICATION_STATUS.ELIGIBILITY_SCC_FAILED,
-        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
-        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
-        APPLICATION_STATUS.WITHDRAWN,
-        APPLICATION_STATUS.SELECTION_PASSED,
-      ];
-      return statuses;
-    case EXERCISE_STAGE.SELECTABLE:
-      statuses = [
         APPLICATION_STATUS.PASSED_RECOMMENDED,
-        APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
         APPLICATION_STATUS.WITHDRAWN,
       ];
       return statuses;
-    case EXERCISE_STAGE.RECOMMENDED:
+    case EXERCISE_STAGE.SCC:
       statuses = [
-        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
-        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
         APPLICATION_STATUS.REJECTED_CHARACTER,
+        APPLICATION_STATUS.REJECTED_MERIT,
         APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
-        APPLICATION_STATUS.RECONSIDER,
         APPLICATION_STATUS.SECOND_STAGE_INVITED,
         APPLICATION_STATUS.SECOND_STAGE_PASSED,
         APPLICATION_STATUS.SECOND_STAGE_FAILED,
         APPLICATION_STATUS.WITHDRAWN,
       ];
       return statuses;
-    case EXERCISE_STAGE.HANDOVER:
+    case EXERCISE_STAGE.RECOMMENDATION:
       statuses = [
-        APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
-        APPLICATION_STATUS.RECOMMENDED_FUTURE,
-        APPLICATION_STATUS.WITHDRAWN,
+        APPLICATION_STATUS.APPROVED_IMMEDIATE,
+        APPLICATION_STATUS.APPROVED_FUTURE,
+        APPLICATION_STATUS.RECONSIDER,
       ];
       return statuses;
     default:
       statuses = [  // TODO make this specific to exercise
         ...shortlistingStatuses(exercise),
-        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
         APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
         APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
-        APPLICATION_STATUS.REJECTED_CHARACTER,
-        APPLICATION_STATUS.WITHDRAWN,
+        APPLICATION_STATUS.FULL_APPLICATION_NOT_SUBMITTED,
         APPLICATION_STATUS.SHORTLISTING_PASSED,
+        APPLICATION_STATUS.SHORTLISTING_FAILED,
         APPLICATION_STATUS.SELECTION_DAY_PASSED,
         APPLICATION_STATUS.SELECTION_DAY_FAILED,
-        APPLICATION_STATUS.ELIGIBILITY_SCC_PASSED,
-        APPLICATION_STATUS.ELIGIBILITY_SCC_FAILED,
-        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_PASSED,
-        APPLICATION_STATUS.CHARACTER_AND_SELECTION_SCC_FAILED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_PASSED,
-        APPLICATION_STATUS.STATUTORY_CONSULTATION_FAILED,
-        APPLICATION_STATUS.SELECTION_PASSED,
         APPLICATION_STATUS.PASSED_RECOMMENDED,
-        APPLICATION_STATUS.PASSED_NOT_RECOMMENDED,
-        APPLICATION_STATUS.REJECTED_INELIGIBLE_STATUTORY,
-        APPLICATION_STATUS.REJECTED_INELIGIBLE_ADDITIONAL,
         APPLICATION_STATUS.REJECTED_CHARACTER,
-        APPLICATION_STATUS.RECONSIDER,
-        APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.REJECTED_MERIT,
         APPLICATION_STATUS.RECOMMENDED_IMMEDIATE,
         APPLICATION_STATUS.RECOMMENDED_FUTURE,
+        APPLICATION_STATUS.SECOND_STAGE_INVITED,
+        APPLICATION_STATUS.SECOND_STAGE_PASSED,
+        APPLICATION_STATUS.SECOND_STAGE_FAILED,
+        APPLICATION_STATUS.APPROVED_IMMEDIATE,
+        APPLICATION_STATUS.APPROVED_FUTURE,
+        APPLICATION_STATUS.RECONSIDER,
+        APPLICATION_STATUS.WITHDRAWN,
       ];
       return statuses;
     }
@@ -1285,7 +1279,11 @@ function shortlistingStatuses(exercise) {
         statuses.push(APPLICATION_STATUS.PASSED_TELEPHONE_ASSESSMENT);
       }
     }
-    // TODO other
+    // other
+    if (exercise.shortlistingMethods.indexOf(SHORTLISTING.OTHER) >= 0) {
+      statuses.push(APPLICATION_STATUS.OTHER_PASSED);
+      statuses.push(APPLICATION_STATUS.OTHER_FAILED);
+    }
   }
   return statuses;
 }
