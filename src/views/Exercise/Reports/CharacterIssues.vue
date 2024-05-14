@@ -228,7 +228,7 @@
                           >
                             Investigations:&nbsp;
                             <InformationReviewRenderer
-                              v-if="item.investigations !== null || editMode"
+                              v-if="(item.investigations !== null && item.investigations !== undefined) || editMode"
                               field="investigations"
                               type="selection"
                               :options="[true, false]"
@@ -346,6 +346,20 @@
                                   >
                                     {{ item.title }}
                                   </li>
+                                  <template v-if="issue.summary === 'Professional Conduct'">
+                                    <li
+                                      v-if="item.investigations !== null && item.investigations !== undefined"
+                                      class="govuk-body"
+                                    >
+                                      Investigations: {{ item.investigations ? 'Yes' : 'No' }}
+                                    </li>
+                                    <li
+                                      v-if="item.investigationConclusionDate"
+                                      class="govuk-body"
+                                    >
+                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate, 'DD.MM.YYYY') }}
+                                    </li>
+                                  </template>
                                   <li v-if="item.details">
                                     {{ item.details }}
                                   </li>
