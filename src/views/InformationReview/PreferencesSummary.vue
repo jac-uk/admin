@@ -48,7 +48,47 @@
       </h2>
 
       <dl
-        v-if="exercise.locationQuestion"
+        v-if="exercise.locationPreferences"
+        class="govuk-summary-list"
+      >
+        <div
+          v-for="(item) in exercise.locationPreferences"
+          :key="item"
+          class="govuk-summary-list__row"
+        >
+          <template v-if="shouldRenderQuestion(item, 'locationPreferences')">
+            <dt class="govuk-summary-list__key widerColumn">
+              {{ item.question }}
+            </dt>
+            <div
+              v-if="application.locationPreferences"
+              class="govuk-summary-list__value"
+            >
+              <span class="govuk-hint">
+                {{ $filters.lookup(item.questionType) }}
+                {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
+                {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
+                {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
+                {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
+              </span>
+              <InformationReviewRenderer
+                :data="application.locationPreferences[item.id]"
+                field="locationPreferences"
+                :edit="editable"
+                :type="item.questionType"
+                :options="item.answers.map((ans) => ans.answer)"
+                :index="item.question"
+                :is-asked="isApplicationPartAsked('locationPreferences')"
+                :question-config="getQuestionConfig(item)"
+                @change-field="changePreferences"
+              />
+            </div>
+          </template>
+        </div>
+      </dl>
+
+      <dl
+        v-else-if="exercise.locationQuestion"
         class="govuk-summary-list"
       >
         <dt class="govuk-summary-list__key widerColumn">
@@ -102,45 +142,6 @@
         </dd>
       </dl>
 
-      <dl
-        v-else-if="exercise.locationPreferences"
-        class="govuk-summary-list"
-      >
-        <div
-          v-for="(item) in exercise.locationPreferences"
-          :key="item"
-          class="govuk-summary-list__row"
-        >
-          <template v-if="shouldRenderQuestion(item, 'locationPreferences')">
-            <dt class="govuk-summary-list__key widerColumn">
-              {{ item.question }}
-            </dt>
-            <div
-              v-if="application.locationPreferences"
-              class="govuk-summary-list__value"
-            >
-              <span class="govuk-hint">
-                {{ $filters.lookup(item.questionType) }}
-                {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
-                {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
-                {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
-                {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
-              </span>
-              <InformationReviewRenderer
-                :data="application.locationPreferences[item.id]"
-                field="locationPreferences"
-                :edit="editable"
-                :type="item.questionType"
-                :options="item.answers.map((ans) => ans.answer)"
-                :index="item.question"
-                :is-asked="isApplicationPartAsked('locationPreferences')"
-                :question-config="getQuestionConfig(item)"
-                @change-field="changePreferences"
-              />
-            </div>
-          </template>
-        </div>
-      </dl>
     </div>
   </div>
   <div
@@ -152,7 +153,49 @@
     </h2>
 
     <dl
-      v-if="exercise.jurisdictionQuestion"
+      v-if="exercise.jurisdictionPreferences"
+      class="govuk-summary-list"
+    >
+      <div
+        v-for="(item) in exercise.jurisdictionPreferences"
+        :key="item"
+        class="govuk-summary-list__row"
+      >
+        <template v-if="shouldRenderQuestion(item, 'jurisdictionPreferences')">
+          <dt class="govuk-summary-list__key widerColumn">
+            {{ item.question }}
+          </dt>
+          <div
+            v-if="application.jurisdictionPreferences"
+            class="govuk-summary-list__value"
+          >
+            <span class="govuk-hint">
+              {{ $filters.lookup(item.questionType) }}
+              {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
+              {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
+              {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
+              {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
+            </span>
+
+            <InformationReviewRenderer
+              :options="getItemAnswers(item)"
+              :data="application.jurisdictionPreferences[item.id]"
+              field="jurisdictionPreferences"
+              :edit="editable"
+              :type="item.questionType"
+              :index="item.question"
+              :is-asked="isApplicationPartAsked('jurisdictionPreferences')"
+              :question-config="getQuestionConfig(item)"
+              @change-field="changePreferences"
+            />
+          </div>
+        </template>
+      </div>
+    </dl>
+
+
+    <dl
+      v-else-if="exercise.jurisdictionQuestion"
       class="govuk-summary-list"
     >
       <div class="govuk-summary-list__row">
@@ -206,46 +249,6 @@
       </div>
     </dl>
 
-    <dl
-      v-else-if="exercise.jurisdictionPreferences"
-      class="govuk-summary-list"
-    >
-      <div
-        v-for="(item) in exercise.jurisdictionPreferences"
-        :key="item"
-        class="govuk-summary-list__row"
-      >
-        <template v-if="shouldRenderQuestion(item, 'jurisdictionPreferences')">
-          <dt class="govuk-summary-list__key widerColumn">
-            {{ item.question }}
-          </dt>
-          <div
-            v-if="application.jurisdictionPreferences"
-            class="govuk-summary-list__value"
-          >
-            <span class="govuk-hint">
-              {{ $filters.lookup(item.questionType) }}
-              {{ item.groupAnswers ? ' - Grouped Answers' : '' }}
-              {{ item.minimumAnswerMode === 'some' ? ` - ${item.minimumAnswerQuantity} Answer minimum` : '' }}
-              {{ item.allowEqualRanking ? ' - Allow Equal Rank' : '' }}
-              {{ item.allowLinkedQuestions ? ' - has linked Questions' : '' }}
-            </span>
-
-            <InformationReviewRenderer
-              :options="getItemAnswers(item)"
-              :data="application.jurisdictionPreferences[item.id]"
-              field="jurisdictionPreferences"
-              :edit="editable"
-              :type="item.questionType"
-              :index="item.question"
-              :is-asked="isApplicationPartAsked('jurisdictionPreferences')"
-              :question-config="getQuestionConfig(item)"
-              @change-field="changePreferences"
-            />
-          </div>
-        </template>
-      </div>
-    </dl>
   </div>
   <div
     v-if="exercise.welshRequirement"

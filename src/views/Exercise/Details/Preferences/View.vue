@@ -9,7 +9,7 @@
       <router-link
         v-if="isEditable && hasPermissions([PERMISSIONS.exercises.permissions.canUpdateExercises.value])"
         class="govuk-link"
-        :to="{name: 'exercise-details-preferences-edit'}"
+        :to="{name: isV1 ? 'exercise-details-preferences-edit-v1' : 'exercise-details-preferences-edit' }"
       >
         Update working preferences
       </router-link>      
@@ -35,7 +35,7 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import LocationPreferences from '@/views/Exercise/Details/Preferences/LocationPreferences.vue';
+import LocationPreferences from './LocationPreferences.vue';
 import JurisdictionPreferences from './JurisdictionPreferences.vue';
 import AdditionalWorkingPreferences from './AdditionalWorkingPreferences.vue';
 
@@ -53,6 +53,9 @@ export default {
     },
     isEditable() {
       return isEditable(this.exercise);
+    },
+    isV1() {
+      return this.exercise && (this.exercise.locationQuestion || this.exercise.jurisdictionQuestion);
     },
   },
 };
