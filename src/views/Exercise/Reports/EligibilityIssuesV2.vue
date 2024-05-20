@@ -128,6 +128,7 @@
               <div class="govuk-grid-column-one-third text-right  govuk-!-margin-top-8 govuk-!-margin-bottom-0">
                 <RouterLink
                   :to="{name: 'exercise-application', params: { applicationId: row.id, tab: 'issues' }}"
+                  target="_blank"
                   class="govuk-link print-none"
                 >
                   View application
@@ -205,13 +206,13 @@
                   </Select>
                 </div>
 
-                <!-- reasons not satisfied -->
+                <!-- reasons not satisfied / JAC comments -->
                 <div
                   v-if="issue.result && (showRecommendation(issue, index) || isForStatutoryReasons(issueGroup.issues, issue, index))"
                   class="govuk-!-margin-top-0 govuk-grid-column-full"
                 >
                   <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                    Reasons not satisfied
+                    {{ isForStatutoryReasons(issueGroup.issues, issue, index) ? 'Reasons not satisfied' : 'JAC comments' }}
                   </h4>
                   <TextareaInput
                     :id="`${row.id}_${index}_${issue.type}_reason`"
