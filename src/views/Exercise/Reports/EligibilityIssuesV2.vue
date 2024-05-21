@@ -114,7 +114,7 @@
       >
         <template #row="{row}">
           <TableCell
-            v-if="issueStatus === 'all' || (row.issues.eligibilityIssuesStatus || '') === (issueStatus || '')"
+            v-if="filterIssueStatus(row)"
             :title="tableColumns[0].title"
           >
             <!-- candidate name -->
@@ -457,6 +457,12 @@ export default {
     },
     hasCandidateComments(issue) {
       return this.nonStatutoryTypes.includes(issue.type);
+    },
+    filterIssueStatus(applicationRecord) {
+      if (this.issueStatus === 'all') return true;
+
+      const issues = applicationRecord.issues.eligibilityIssues;
+      return issues.some((issue) => issue.result === this.issueStatus);
     },
   },
 };
