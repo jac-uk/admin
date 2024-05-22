@@ -5,51 +5,43 @@
     >
       Latest Releases
     </h1>
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th
-            v-for="item in releasesColumns"
-            :key="item.title"
-            scope="col"
-            class="govuk-table__header"
-          >
-            {{ item.title }}
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr
-          v-for="item in releasesData"
-          :key="item.id"
-          class="govuk-table__row"
-        >
-          <th
-            scope="row"
-            class="govuk-table__header"
-          >
-            {{ item.title }}
-          </th>
-          <td class="govuk-table__cell">
-            {{ item.tag_name }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ item.author }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ formatDate(item.published_at) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <Table
+      data-key="id"
+      :data="releasesData"
+      :page-size="50"
+      :columns="releasesColumns"
+      @change="getReleasesData"
+    >
+      <template #row="{row}">
+        <TableCell :title="releasesColumns[0].title">
+          {{ row.title }}
+        </TableCell>
+        <TableCell :title="releasesColumns[1].title">
+          {{ row.tag_name }}
+        </TableCell>
+        <TableCell :title="releasesColumns[2].title">
+          {{ row.author }}
+        </TableCell>
+        <TableCell :title="releasesColumns[3].title">
+          {{ row.published_at ? formatDate(row.published_at) : '' }}
+        </TableCell>
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
 import permissionMixin from '@/permissionMixin';
 import dayjs from 'dayjs';
+import Table from '@jac-uk/jac-kit/components/Table/Table.vue';
+import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 
 export default {
+  name: 'ReleasesList',
+  components: {
+    Table,
+    TableCell,
+  },
   mixins: [permissionMixin],
   data() {
     return {

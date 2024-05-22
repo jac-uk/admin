@@ -47,6 +47,8 @@ import vacancy from '@/store/vacancy';
 import bugReports from '@/store/bugReports/collection';
 import bugReport from '@/store/bugReports/document';
 
+import releases from '@/store/releases';
+
 //const store = new Vuex.Store({
 const store = createStore({
   // Don't use strict mode in production for performance reasons (https://vuex.vuejs.org/guide/strict.html)
@@ -81,6 +83,7 @@ const store = createStore({
     panellist,
     panellists,
     panels,
+    releases,
     roles,
     services,
     task,

@@ -16,7 +16,19 @@
           >
             JAC Digital Platform
           </a>
-          <span class="govuk-body-xs govuk-!-padding-left-2">{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
+
+          <RouterLink
+            v-if="hasPermissions([PERMISSIONS.logs.permissions.canReadReleases.value])"
+            :to="{ name: 'releases' }"
+            class="govuk-body-xs govuk-!-padding-left-2 govuk-!-font-weight-bold"
+          >
+            {{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}
+          </RouterLink>
+
+          <span
+            v-else
+            class="govuk-body-xs govuk-!-padding-left-2"
+          >{{ $store.getters.appEnvironment }} {{ $store.getters.appVersion }}</span>
 
           <nav
             v-if="isSignedIn"
