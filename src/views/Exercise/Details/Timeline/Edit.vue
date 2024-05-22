@@ -218,16 +218,9 @@
             id="independent-assessments-return-date"
             v-model="formData.independentAssessmentsReturnDate"
             label="Independent Assessments return date"
-            hint="An asessor can submit late after this date, up until the (optional) hard limit below."
+            hint="An assessor can submit a late assessment after this date."
             :disabled="assessmentsInitialised"
             required
-          />
-          <DateInput
-            id="independent-assessments-hard-limit"
-            v-model="formData.independentAssessmentsHardLimitDate"
-            label="Independent Assessments hard limit"
-            :hint="`An assessor cannot submit after ${iaHardLimitTime} on this date.`"
-            :disabled="assessmentsInitialised"
           />
         </div>
 
@@ -406,7 +399,6 @@ export default {
       shortlistingOutcomeDate: null,
       contactIndependentAssessors: null,
       independentAssessmentsReturnDate: null,
-      independentAssessmentsHardLimitDate: null,
       eligibilitySCCDate: null,
       preSelectionDayQuestionnaireSendDate: null,
       preSelectionDayQuestionnaireReturnDate: null,
@@ -461,9 +453,6 @@ export default {
     },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
-    },
-    iaHardLimitTime() {
-      return this.exercise.independentAssessmentsHardLimitDate ? formatDate(this.exercise.independentAssessmentsHardLimitDate, 'time') : false;
     },
   },
   methods: {

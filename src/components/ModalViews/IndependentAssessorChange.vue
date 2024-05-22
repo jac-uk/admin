@@ -146,8 +146,15 @@ export default {
           };
         }
 
-        await this.$store.dispatch('application/update', { data: data, id: this.applicationId });
-        await this.$store.dispatch('assessment/update', { data: data, id: this.applicationId, AssessorNr: this.$attrs.AssessorNr });
+        await this.$store.dispatch('application/update', {
+          data: data, id: this.applicationId,
+        });
+        await this.$store.dispatch('assessment/update', {
+          data: data, id: this.applicationId,
+          AssessorNr: this.$attrs.AssessorNr,
+          refNumber: this.application.referenceNumber,
+          candidateFullName: this.application.personalDetails.fullName,
+        });
         this.closeModal();
       }
     },
