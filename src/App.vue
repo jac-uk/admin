@@ -18,7 +18,7 @@
           </a>
 
           <RouterLink
-            v-if="hasPermissions([PERMISSIONS.logs.permissions.canReadReleases.value])"
+            v-if="hasPermissions([PERMISSIONS.releases.permissions.canReadReleases.value])"
             :to="{ name: 'releases' }"
             class="govuk-body-xs govuk-!-padding-left-2 govuk-!-font-weight-bold"
           >
