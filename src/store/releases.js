@@ -17,12 +17,7 @@ const module = {
   },
   actions: {
     async getLatestReleases({ commit }) {
-
-      console.log('releases::getLatestReleases');
-
       const records = await httpsCallable(functions, 'getLatestReleases')();
-      console.log(records.data);
-
       commit('setRecords', records.data);
     },
   },

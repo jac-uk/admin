@@ -7,22 +7,22 @@
     </h1>
     <Table
       data-key="id"
-      :data="releasesData"
+      :data="tableData"
       :page-size="50"
-      :columns="releasesColumns"
-      @change="getReleasesData"
+      :columns="tableColumns"
+      @change="getTableData"
     >
       <template #row="{row}">
-        <TableCell :title="releasesColumns[0].title">
+        <TableCell :title="tableColumns[0].title">
           {{ row.title }}
         </TableCell>
-        <TableCell :title="releasesColumns[1].title">
+        <TableCell :title="tableColumns[1].title">
           {{ row.tag_name }}
         </TableCell>
-        <TableCell :title="releasesColumns[2].title">
+        <TableCell :title="tableColumns[2].title">
           {{ row.author }}
         </TableCell>
-        <TableCell :title="releasesColumns[3].title">
+        <TableCell :title="tableColumns[3].title">
           {{ row.published_at ? formatDate(row.published_at) : '' }}
         </TableCell>
       </template>
@@ -45,8 +45,8 @@ export default {
   mixins: [permissionMixin],
   data() {
     return {
-      releasesColumns: [
-        { title: 'Repository' },
+      tableColumns: [
+        { title: 'Repository', sort: 'title', direction: 'desc', default: true },
         { title: 'Tag Name' },
         { title: 'Author' },
         { title: 'Published At' },
@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    releasesData() {
+    tableData() {
       return this.$store.state.releases.records;
     },
   },
@@ -65,7 +65,7 @@ export default {
     formatDate(dateStr) {
       return dateStr ? dayjs(dateStr).format('DD/MM/YYYY HH:mm:ss') : '';
     },
-    getReleasesData(params) {
+    getTableData(params) {
       this.$store.dispatch('releases/getLatestReleases', params);
     },
   },
