@@ -415,7 +415,7 @@ export default {
         downloadBase64File(
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           result.data,
-          `${this.exercise.referenceNumber}_SCC Annex Report.docx`
+          `${this.exercise.referenceNumber}_SCC Eligibility Annexes.docx`
         );
         return true;
       } catch (error) {
