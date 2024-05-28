@@ -362,7 +362,6 @@ import TimeInput from '@jac-uk/jac-kit/draftComponents/Form/TimeInput.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
 import SelectionDay from '@/components/RepeatableFields/SelectionDay.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
-import { formatDate } from '@/helpersTMP/date';
 import { shallowRef } from 'vue';
 
 export default {
