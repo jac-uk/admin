@@ -138,13 +138,13 @@
 
             <!-- statutory eligibility issues -->
             <div
-              v-for="(issueGroup, index) in row.issueGroups"
+              v-for="(issueGroup, issueGroupIndex) in row.issueGroups"
               :key="issueGroup.category"
               class="govuk-grid-row"
             >
               <hr
                 class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-6"
-                :class="{'candidate-break': index === 0}"
+                :class="{'candidate-break': issueGroupIndex === 0}"
               >
               <div class="govuk-grid-column-full">
                 <h3 class="govuk-!-margin-top-0 govuk-!-margin-bottom-4">
@@ -405,7 +405,7 @@ export default {
         'issues.eligibilityIssues': applicationRecord.issues.eligibilityIssues,
       };
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data }]);
-    }, 2000),
+    }, 1000),
     downloadSCCAnnexReport() {
       // TODO: implement
     },
