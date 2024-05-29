@@ -212,7 +212,6 @@
           class="application-details"
         >
           <div v-if="application && exercise">
-            
             <PersonalDetailsSummary
               :user-id="application.userId"
               :personal-details="application.personalDetails || {}"
@@ -283,7 +282,6 @@
               :editable="editable"
               @update-application="changeApplication"
             />
-            
           </div>
         </div>
 

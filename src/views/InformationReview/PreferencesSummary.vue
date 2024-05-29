@@ -246,7 +246,6 @@
         </template>
       </div>
     </dl>
-
   </div>
   <div
     v-if="exercise.welshRequirement"
