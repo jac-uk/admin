@@ -6,11 +6,9 @@
     <dt
       class="govuk-summary-list__key"
     >
-      {{ currentItem.hasOwnProperty('topic') ? currentItem.topic : '' }}
-      <br>
+      <span v-if="currentItem.topic">{{ currentItem.topic }}<br></span>
       {{ currentItem.question }}
       <span
-        v-if="onAdminSite"
         class="govuk-hint"
       >
         {{ $filters.lookup(currentItem.questionType) }}
@@ -45,7 +43,7 @@
         </p>
       </dd>
     </template>
-    <template v-else-if="currentItem.answerSource === 'jurisdictions'">
+    <template v-else-if="currentItem.answerSource === 'jurisdiction'">
       <dd
         class="govuk-summary-list__value"
       >
@@ -54,7 +52,7 @@
           :key="answer"
           class="govuk-body"
         >
-          {{ answer }}
+          {{ $filters.lookup(answer) }}
         </p>
       </dd>
     </template>
@@ -77,7 +75,7 @@
 <script>
 
 export default {
-  name: 'LocationPreferences',
+  name: 'QuestionConfigView',
   props: {
     section: {
       type: String,
@@ -91,11 +89,6 @@ export default {
       type: Object,
       required: false,
       default: null,
-    },
-    onAdminSite: {
-      type: Boolean,
-      required: false,
-      default: false,
     },
     review: {
       type: Boolean,

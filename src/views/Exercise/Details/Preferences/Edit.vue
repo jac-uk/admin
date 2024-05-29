@@ -27,7 +27,7 @@
         <div v-show="activeTab == 'location'">
           <RepeatableFields
             v-model="formData.locationPreferences"
-            :component="repeatableFields.WorkingPreferenceQuestion"
+            :component="repeatableFields.QuestionConfig"
             ident="location-preferences"
             type-name="question"
             :allow-empty="true"
@@ -39,7 +39,7 @@
         <div v-show="activeTab == 'jurisdiction'">
           <RepeatableFields
             v-model="formData.jurisdictionPreferences"
-            :component="repeatableFields.WorkingPreferenceQuestion"
+            :component="repeatableFields.QuestionConfig"
             ident="jurisdiction-preferences"
             type-name="question"
             :allow-empty="true"
@@ -51,7 +51,7 @@
         <div v-show="activeTab == 'additional'">
           <RepeatableFields
             v-model="formData.additionalWorkingPreferences"
-            :component="repeatableFields.WorkingPreferenceQuestion"
+            :component="repeatableFields.QuestionConfig"
             ident="additional-working-preferences"
             type-name="question"
             :allow-empty="true"
@@ -72,8 +72,7 @@ import TabsList from '@jac-uk/jac-kit/draftComponents/TabsList.vue';
 import Form from '@jac-uk/jac-kit/draftComponents/Form/Form.vue';
 import ErrorSummary from '@jac-uk/jac-kit/draftComponents/Form/ErrorSummary.vue';
 import RepeatableFields from '@jac-uk/jac-kit/draftComponents/RepeatableFields.vue';
-import Answer from '@/components/RepeatableFields/Answer.vue';
-import WorkingPreferenceQuestion from '@/components/RepeatableFields/WorkingPreferenceQuestion.vue';
+import QuestionConfig from '@/components/RepeatableFields/QuestionConfig.vue';
 import BackLink from '@jac-uk/jac-kit/draftComponents/BackLink.vue';
 import { shallowRef } from 'vue';
 
@@ -96,8 +95,7 @@ export default {
       activeTab: 'location',
       formData: formData,
       repeatableFields: shallowRef({
-        Answer,
-        WorkingPreferenceQuestion,
+        QuestionConfig,
       }),
     };
   },

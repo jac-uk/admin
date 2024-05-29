@@ -35,9 +35,9 @@
 <script>
 import { isEditable } from '@/helpers/exerciseHelper';
 import permissionMixin from '@/permissionMixin';
-import LocationPreferences from './LocationPreferences.vue';
-import JurisdictionPreferences from './JurisdictionPreferences.vue';
-import AdditionalWorkingPreferences from './AdditionalWorkingPreferences.vue';
+import LocationPreferences from './View/LocationPreferences.vue';
+import JurisdictionPreferences from './View/JurisdictionPreferences.vue';
+import AdditionalWorkingPreferences from './View/AdditionalWorkingPreferences.vue';
 
 export default {
   name: 'PreferencesView',
