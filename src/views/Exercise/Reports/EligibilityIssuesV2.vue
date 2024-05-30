@@ -78,19 +78,10 @@
         class="govuk-!-margin-right-2"
       >
         <option value="all">
-          All issue statuses
+          All issues
         </option>
         <option value="">
           Unassigned
-        </option>
-        <option value="proceed">
-          Proceed
-        </option>
-        <option value="reject">
-          Reject
-        </option>
-        <option value="discuss">
-          Discuss
         </option>
       </Select>
     </div>
@@ -462,7 +453,12 @@ export default {
       if (this.issueStatus === 'all') return true;
 
       const issues = applicationRecord.issues.eligibilityIssues;
-      return issues.some((issue) => issue.result === this.issueStatus);
+      if (!Array.isArray(issues)) return false;
+
+      return issues.some((issue) => {
+        if (!this.issueStatus) return !issue.result || !issue.comments;
+        return issue.result === this.issueStatus;
+      });
     },
   },
 };
