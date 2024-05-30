@@ -33,17 +33,6 @@
                 v-if="hasPermissions([
                   PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
-                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
-                ])"
-                class="govuk-!-margin-right-2"
-                :action="exportToGoogleDoc"
-              >
-                Generate Report
-              </ActionButton>
-              <ActionButton
-                v-if="hasPermissions([
-                  PERMISSIONS.exercises.permissions.canReadExercises.value,
-                  PERMISSIONS.applications.permissions.canReadApplications.value,
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 class="govuk-!-margin-right-2"
@@ -294,14 +283,6 @@ export default {
     async refreshReport() {
       try {
         return await httpsCallable(functions, 'flagApplicationIssuesForExercise')({ exerciseId: this.exercise.id });
-      } catch (error) {
-        return;
-      }
-    },
-    async exportToGoogleDoc() {
-      if (!this.exercise.referenceNumber) return; // abort if no ref
-      try {
-        return await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
       } catch (error) {
         return;
       }
