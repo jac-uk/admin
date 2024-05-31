@@ -33,17 +33,6 @@
                 v-if="hasPermissions([
                   PERMISSIONS.exercises.permissions.canReadExercises.value,
                   PERMISSIONS.applications.permissions.canReadApplications.value,
-                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value
-                ])"
-                class="govuk-!-margin-right-2"
-                :action="exportToGoogleDoc"
-              >
-                Generate Report
-              </ActionButton>
-              <ActionButton
-                v-if="hasPermissions([
-                  PERMISSIONS.exercises.permissions.canReadExercises.value,
-                  PERMISSIONS.applications.permissions.canReadApplications.value,
                   PERMISSIONS.applicationRecords.permissions.canReadApplicationRecords.value
                 ])"
                 class="govuk-!-margin-right-2"
@@ -78,19 +67,10 @@
         class="govuk-!-margin-right-2"
       >
         <option value="all">
-          All issue statuses
+          All issues
         </option>
         <option value="">
           Unassigned
-        </option>
-        <option value="proceed">
-          Proceed
-        </option>
-        <option value="reject">
-          Reject
-        </option>
-        <option value="discuss">
-          Discuss
         </option>
       </Select>
     </div>
@@ -138,13 +118,13 @@
 
             <!-- statutory eligibility issues -->
             <div
-              v-for="(issueGroup, index) in row.issueGroups"
+              v-for="(issueGroup, issueGroupIndex) in row.issueGroups"
               :key="issueGroup.category"
               class="govuk-grid-row"
             >
               <hr
                 class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-6"
-                :class="{'candidate-break': index === 0}"
+                :class="{'candidate-break': issueGroupIndex === 0}"
               >
               <div class="govuk-grid-column-full">
                 <h3 class="govuk-!-margin-top-0 govuk-!-margin-bottom-4">
@@ -308,14 +288,6 @@ export default {
         return;
       }
     },
-    async exportToGoogleDoc() {
-      if (!this.exercise.referenceNumber) return; // abort if no ref
-      try {
-        return await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'googledoc' });
-      } catch (error) {
-        return;
-      }
-    },
     async getTableData(params) {
       let firestoreRef = query(
         collection(firestore, 'applicationRecords'),
@@ -475,7 +447,12 @@ export default {
       if (this.issueStatus === 'all') return true;
 
       const issues = applicationRecord.issues.eligibilityIssues;
-      return issues.some((issue) => issue.result === this.issueStatus);
+      if (!Array.isArray(issues)) return false;
+
+      return issues.some((issue) => {
+        if (!this.issueStatus) return !issue.result || !issue.comments;
+        return issue.result === this.issueStatus;
+      });
     },
   },
 };
