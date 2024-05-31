@@ -144,6 +144,9 @@ import Sandbox from '@/views/Sandbox.vue';
 // Users
 import Users from '@/views/Users/Users.vue';
 
+// Latest Releases
+import ReleasesList from '@/views/ReleasesList.vue';
+
 const routes = [
   {
     path: '/:pathMatch(.*)*',
@@ -166,6 +169,15 @@ const routes = [
     meta: {
       requiresAuth: true,
       title: 'Events',
+    },
+  },
+  {
+    path: '/latest-releases',
+    name: 'releases',
+    component: ReleasesList,
+    meta: {
+      requiresAuth: true,
+      title: 'Latest Releases',
     },
   },
   {
@@ -303,7 +315,7 @@ const routes = [
               requiresAuth: true,
               title: 'Processing Version | Exercise Configuration',
             },
-          },          
+          },
         ],
       },
       {
