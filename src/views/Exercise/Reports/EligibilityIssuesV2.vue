@@ -224,6 +224,7 @@ import TextareaInput from '@jac-uk/jac-kit/draftComponents/Form/TextareaInput.vu
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
+import { downloadBase64File } from '@/helpers/file';
 
 export default {
   name: 'EligibilityIssuesV2',
@@ -377,9 +378,21 @@ export default {
         'issues.eligibilityIssues': applicationRecord.issues.eligibilityIssues,
       };
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data }]);
-    }, 1000),
-    downloadSCCAnnexReport() {
-      // TODO: implement
+    }, 2000),
+    async downloadSCCAnnexReport() {
+      if (!this.exercise.referenceNumber) return; // abort if no ref
+      try {
+        const result = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex' });
+        if (!result.data) return;
+        downloadBase64File(
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          result.data,
+          `${this.exercise.referenceNumber}_SCC Eligibility Annexes.docx`
+        );
+        return true;
+      } catch (error) {
+        return;
+      }
     },
     groupIssuesByStatutory(applicationRecord) {
       const eligibilityIssues = applicationRecord.issues.eligibilityIssues;
