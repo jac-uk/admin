@@ -52,7 +52,12 @@
           :key="answer"
           class="govuk-body"
         >
-          {{ $filters.lookup(answer) }}
+          <span v-if="answer == 'other'">
+            {{ exercise.otherJurisdiction }}
+          </span>
+          <span v-else>
+            {{ $filters.lookup(answer) }}
+          </span>
         </p>
       </dd>
     </template>
