@@ -100,6 +100,9 @@ export default {
     };
   },
   computed: {
+    exercise() {
+      return this.$store.state.exerciseDocument.record;
+    },
     hasJourney() {
       return this.$store.getters['exerciseCreateJourney/hasJourney'];
     },
@@ -122,18 +125,33 @@ export default {
     linkedQuestions() {
       const linkableQuestions = [];
       this.formData.locationPreferences.forEach(question => {
-        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
       });
       this.formData.jurisdictionPreferences.forEach(question => {
-        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
       });
       this.formData.additionalWorkingPreferences.forEach(question => {
-        if (question.allowLinkedQuestions) linkableQuestions.push(question);
+        if (question.allowLinkedQuestions) linkableQuestions.push(this.populateAnswers(question));
       });
       return linkableQuestions;
     },
   },
   methods: {
+    populateAnswers(question) {
+      if (question.answerSource === 'jurisdiction') {
+        question.answers = [];
+        this.exercise.jurisdiction.forEach(jurisdiction => {
+          if (jurisdiction === 'other') {
+            question.answers.push({ answer: this.exercise.otherJurisdiction, id: jurisdiction });
+          } else {
+            question.answers.push({ answer: this.$filters.lookup(jurisdiction), id: jurisdiction });
+          }
+        });
+        return question;
+      } else {
+        return question;
+      }
+    },
     async save(isValid) {
       this.formData['progress.workingPreferences'] = isValid ? true : false;
       await this.$store.dispatch('exerciseDocument/save', this.formData);
