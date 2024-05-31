@@ -45,13 +45,19 @@ export default {
 
       return queryRef;
     },
-    update: async (context, { data, AssessorNr, id }) => {
+    update: async (context, { data, AssessorNr, id, refNumber, candidateFullName }) => {
       let returnData = {};
       if (AssessorNr == 1) {
         returnData = {
           assessor: {
             email: data.firstAssessorEmail,
             fullName: data.firstAssessorFullName,
+          },
+          application: {
+            referenceNumber: refNumber,
+          },
+          candidate: {
+            fullName: candidateFullName,
           },
         };
       } else if (AssessorNr == 2) {
@@ -60,13 +66,19 @@ export default {
             email: data.secondAssessorEmail,
             fullName: data.secondAssessorFullName,
           },
+          application: {
+            referenceNumber: refNumber,
+          },
+          candidate: {
+            fullName: candidateFullName,
+          },
         };
       }
 
       const ref = doc(collectionRef, `${id}-${AssessorNr}`);
       const docSnapshot = await getDoc(ref);
       if (docSnapshot.exists) {
-         await setDoc(ref, returnData, { merge: true });
+          await setDoc(ref, returnData, { merge: true });
       }
       return true;
     },
