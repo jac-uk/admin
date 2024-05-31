@@ -209,7 +209,6 @@
                           <InformationReviewRenderer
                             v-if="item.date || editMode"
                             type="date"
-                            date-format="DD.MM.YYYY"
                             field="date"
                             :edit="editMode"
                             :data="item.date"
@@ -228,7 +227,7 @@
                           >
                             Investigations:&nbsp;
                             <InformationReviewRenderer
-                              v-if="item.investigations !== null || editMode"
+                              v-if="(item.investigations !== null && item.investigations !== undefined) || editMode"
                               field="investigations"
                               type="selection"
                               :options="[true, false]"
@@ -338,7 +337,7 @@
                                     v-if="item.date"
                                     class="govuk-body"
                                   >
-                                    {{ $filters.formatDate(item.date, 'DD.MM.YYYY') }}
+                                    {{ $filters.formatDate(item.date) }}
                                   </li>
                                   <li
                                     v-if="item.title"
@@ -346,6 +345,20 @@
                                   >
                                     {{ item.title }}
                                   </li>
+                                  <template v-if="issue.summary === 'Professional Conduct'">
+                                    <li
+                                      v-if="item.investigations !== null && item.investigations !== undefined"
+                                      class="govuk-body"
+                                    >
+                                      Investigations: {{ item.investigations ? 'Yes' : 'No' }}
+                                    </li>
+                                    <li
+                                      v-if="item.investigationConclusionDate"
+                                      class="govuk-body"
+                                    >
+                                      Investigation conclusion date: {{ $filters.formatDate(item.investigationConclusionDate) }}
+                                    </li>
+                                  </template>
                                   <li v-if="item.details">
                                     {{ item.details }}
                                   </li>
@@ -441,7 +454,7 @@
 
               <div class="govuk-grid-column-one-half">
                 <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
-                  SCC Decision
+                  SCC decision
                 </h4>
                 <Select
                   id="issue-status"

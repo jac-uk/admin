@@ -29,6 +29,7 @@
           v-model="formData.postQualificationExperience"
           label="Post-qualification experience (PQE)"
           hint="This is the minimum number of years of law-related work experience the candidate must have."
+          required
         >
           <RadioItem
             value="5"
