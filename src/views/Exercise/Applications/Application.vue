@@ -652,14 +652,14 @@ export default {
         exerciseRef: this.exercise.referenceNumber,
       });
     },
-    // openModal(modalRef){
-    //   this.$refs[modalRef].openModal();
-    // },
-    // closeModal(modalRef) {
-    //   this.$refs[modalRef].closeModal();
-    // },
     async confirmWithdraw() {
-      await this.$store.dispatch('application/withdraw', { applicationId: this.applicationId }, { root: true });
+      const applicationExists = await this.$store.getters['application/exists'](this.applicationId);
+      if (applicationExists) {
+        this.$store.dispatch('applicationRecords/storeItems', { items: [this.applicationId] });
+        await this.$store.dispatch('applicationRecords/updateStatus', { status: 'withdrawn' });
+      } else {
+        await this.$store.dispatch('application/withdraw', { applicationId: this.applicationId }, { root: true });
+      }
       this.$refs.modalRefWithdrawApplication.closeModal();
     },
     changeApplication(obj) {

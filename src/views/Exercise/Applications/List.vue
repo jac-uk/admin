@@ -83,6 +83,12 @@
           <span v-if="row._processing && row._processing.status">
             {{ $filters.lookup(row._processing.status) }}
           </span>
+          <span v-else-if="row.status">
+            {{ $filters.lookup(row.status) }}
+          </span>
+          <span v-else>
+            Error: No status
+          </span>
         </TableCell>
       </template>
     </Table>
