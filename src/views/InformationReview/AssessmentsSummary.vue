@@ -111,6 +111,7 @@
       </dl>
     </div>
 
+    <!-- SELF ASSESSMENT COMPETENCIES -->
     <div
       v-if="hasSelfAssessment"
       class="govuk-!-margin-top-9"
@@ -136,6 +137,22 @@
               />
             </div>
             <span v-else>Not yet received</span>
+
+            <!-- UPLOAD SELF ASSESSMENT -->
+            <div>
+              <FileUpload
+                v-if="editable"
+                id="self-assessment-upload"
+                ref="self-assessment"
+                v-model="application.uploadedSelfAssessment"
+                name="self-assessment"
+                :path="uploadPath"
+                label="Upload finished self assessment"
+                required
+                :acceptable-extensions="['docx']"
+                @update:model-value="val => doFileUpload(val, 'uploadedSelfAssessment')"
+              />
+            </div>
           </dd>
         </div>
         <div
@@ -154,6 +171,10 @@
                 <strong v-if="section.question">
                   {{ `${i + 1}. ${section.question}` }}
                 </strong>
+                <Spinner
+                  v-if="isExtractingSelfAssessment && i === 0"
+                  class="govuk-!-margin-left-2"
+                />
                 <br>
                 <p v-if="application.uploadedSelfAssessmentContent && application.uploadedSelfAssessmentContent[i]">
                   {{ application.uploadedSelfAssessmentContent[i] }}
@@ -167,6 +188,7 @@
       </dl>
     </div>
 
+    <!-- CV -->
     <div
       v-if="hasCV"
       class="govuk-!-margin-top-9"
@@ -213,6 +235,7 @@
       </dl>
     </div>
 
+    <!-- COVERING LETTER -->
     <div
       v-if="hasCoveringLetter"
       class="govuk-!-margin-top-9"
@@ -271,6 +294,7 @@ import {
 import InformationReviewRenderer from '@/components/Page/InformationReviewRenderer.vue';
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
+import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
 
 export default {
   name: 'AssessmentsSummary',
@@ -278,6 +302,7 @@ export default {
     DownloadLink,
     FileUpload,
     InformationReviewRenderer,
+    Spinner,
   },
   props: {
     application: {
@@ -300,6 +325,8 @@ export default {
   data() {
     return {
       assessorDetails: {},
+      isLoadingFile: false,
+      isExtractingFile: false,
     };
   },
   computed: {
@@ -336,6 +363,9 @@ export default {
     selfAssessmentSections() {
       return this.exercise.selfAssessmentWordLimits || [];
     },
+    isExtractingSelfAssessment() {
+      return this.$store.state.application.isExtractingSelfAssessment;
+    },
   },
   methods: {
     hasAscAnswerDetails(index){
@@ -368,7 +398,7 @@ export default {
 
       this.$emit('updateApplication', { [obj.field]: changedObj });
     },
-    doFileUpload(val, field) {
+    async doFileUpload(val, field) {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
       }

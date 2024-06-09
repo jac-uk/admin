@@ -124,6 +124,7 @@ export default {
   },
   state: {
     record: null,
+    isExtractingSelfAssessment: false,
   },
   getters: {
     data: (state) => () => {
