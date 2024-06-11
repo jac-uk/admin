@@ -35,6 +35,10 @@
       </div>
     </div>
 
+    <div class="govuk-grid-row">
+      {{ applicationRecordCounts }}
+    </div>
+
     <div
       v-if="report != null"
       class="govuk-grid-row"
@@ -42,7 +46,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
-            Total applications
+            Applications requiring RA
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
             {{ $filters.formatNumber(report.totalApplications) }}
@@ -61,27 +65,7 @@
       </div>
     </div>
 
-    <!-- <div class="govuk-button-group"> -->
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        <Select
-          id="exercise-stage"
-          v-model="exerciseStage"
-          label="Application Stage"
-          class="govuk-!-margin-right-2"
-        >
-          <option value="all">
-            All applications
-          </option>
-          <option
-            v-for="stage in availableStages"
-            :key="stage"
-            :value="stage"
-          >
-            {{ $filters.lookup(stage) }} ({{ $filters.formatNumber(applicationRecordCounts[stage]) }})
-          </option>
-        </Select>
-      </div>
       <div class="govuk-grid-column-one-half">
         <Select
           v-if="availableStatuses && availableStatuses.length > 0"
@@ -95,16 +79,14 @@
             All
           </option>
           <option
-            v-for="item in availableStatuses"
-            :key="item"
-            :value="item"
+            v-for="status in availableStatuses"
+            :key="status"
+            :value="status"
           >
-            {{ $filters.lookup(item) }}
+            {{ $filters.lookup(status) }} ({{ $filters.formatNumber(applicationRecordCounts[status]) }})
           </option>
         </Select>
       </div>
-    </div>
-    <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <Select
           id="reasonalbe-adjustments-status-filter"
@@ -124,17 +106,34 @@
           </option>
         </Select>
       </div>
+    </div>
+    <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         <Checkbox
           id="show-actioned"
           v-model="showActioned"
-          class="govuk-!-margin-right-2"
           label="Show actioned candidates"
           @change="$refs.issuesTable.reload()"
         />
       </div>
+      <div class="govuk-grid-column-one-half">
+        <button
+          class="govuk-button float-left govuk-!-margin-top-6"
+          @click="$refs.unactionAllModal.openModal();"
+        >
+          Mark all candidates as unactioned
+        </button>
+      </div>
     </div>
-    <!-- </div> -->
+
+    <Modal ref="unactionAllModal">
+      <ModalInner
+        title="Mark all as unactioned Exercise"
+        message="Are you sure you want to mark all candidates as unactioned?"
+        @close="$refs.unactionAllModal.closeModal();"
+        @confirmed="unactionAll()"
+      />
+    </Modal>
 
     <div class="govuk-grid-column-full govuk-!-margin-0">
       <Table
@@ -152,10 +151,12 @@
             v-if="hasStatus(row) && !isActioned(row) || showActioned && (isActioned(row) && hasStatus(row))"
             :title="tableColumns[0].title"
           >
-            <div class="govuk-grid-row">
+            <div
+              v-if="row.candidate"
+              class="govuk-grid-row govuk-width-container"
+            >
               <div
-                v-if="row.candidate"
-                class="govuk-grid-column-one-quarter"
+                class="govuk-grid-column-one-third"
               >
                 <div class="candidate-name govuk-!-margin-bottom-0">
                   <strong>
@@ -163,11 +164,17 @@
                   </strong>
                   <br>
                   <span>
-                    {{ row.candidate.fullName }}
+                    <RouterLink
+                      :to="{name: 'exercise-application', params: { applicationId: row.id } }"
+                      class="govuk-link print-none"
+                      target="_blank"
+                    >
+                      {{ row.candidate.fullName }}
+                    </RouterLink>
                   </span>
                 </div>
               </div>
-              <div class="govuk-grid-column-one-quarter">
+              <div class="govuk-grid-column-one-third">
                 <div class="candidate-phone govuk-!-margin-bottom-0">
                   <span>
                     <strong>
@@ -178,7 +185,7 @@
                   </span>
                 </div>
               </div>
-              <div class="govuk-grid-column-one-quarter">
+              <div class="govuk-grid-column-one-third">
                 <div class="candidate-phone govuk-!-margin-bottom-0">
                   <span>
                     <strong>
@@ -189,239 +196,225 @@
                   </span>
                 </div>
               </div>
-              <div class="govuk-grid-column-one-quarter text-right">
-                <strong>
-                  Application:
-                </strong>
-                <br>
-                <RouterLink
-                  :to="{name: 'exercise-application', params: { applicationId: row.id } }"
-                  class="govuk-link print-none"
-                  target="_blank"
-                >
-                  {{ row.id }}
-                </RouterLink>
-              </div>
-            </div>
-            <hr>
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-full">
-                <strong>
-                  {{ exercise.referenceNumber }}:
-                </strong>
-                <br>
-                <span v-if="row.candidate">
-                  {{ row.candidate.reasonableAdjustmentsDetails }}
-                </span>
-              </div>
-            </div>
-
-            <div
-              v-if="hasPermissions([
-                PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
-              ])"
-            >
-              <div
-                v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
-                :key="i"
-                class="govuk-grid-row govuk-!-margin-left-0"
-              >
-                <div class="govuk-grid-column-one-third">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    Approval Status
-                  </h4>
-                  <Select
-                    :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
-                    v-model="reasonableAdjustmentsState.status"
-                    @input="saveReasonableAdjustmentsChange(row, { status: $event.target.value }, i)"
-                  >
-                    <option
-                      v-for="status in reasonableAdjustmentsStatusOptions"
-                      :key="status"
-                      :value="status"
-                    >
-                      {{ $filters.lookup(status) }}
-                    </option>
-                  </Select>
-                </div>
-                <div class="govuk-grid-column-one-third">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    RA applies to
-                  </h4>
-                  <Select
-                    :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
-                    v-model="reasonableAdjustmentsState.reason"
-                    @input="saveReasonableAdjustmentsChange(row, { reason: $event.target.value }, i)"
-                  >
-                    <option
-                      v-for="activity in reasonableAdjustmentsActivities"
-                      :key="activity"
-                      :value="activity"
-                    >
-                      {{ $filters.lookup(activity) }}
-                    </option>
-                  </Select>
-                </div>
-                <div class="govuk-grid-column-one-third">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    RA allocated
-                  </h4>
-                  <Select
-                    :id="`reasonable-adjustments-time-allocations-${row.candidate.id}-${i}`"
-                    v-model="reasonableAdjustmentsState.timeAllocation"
-                    @input="saveReasonableAdjustmentsChange(row, { timeAllocation: $event.target.value }, i)"
-                  >
-                    <option
-                      v-for="time in reasonableAdjustmentsTimeAllocations"
-                      :key="time"
-                      :value="time"
-                    >
-                      {{ $filters.lookup(time) }}
-                    </option>
-                  </Select>
-                </div>
+              <div class="govuk-grid-row">
                 <div class="govuk-grid-column-full">
-                  <h4 class="govuk-!-margin-bottom-1">
-                    Describe reasonable adjustment given
-                  </h4>
-                  <TextareaInput
-                    :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
-                    v-model="reasonableAdjustmentsState.note"
-                    @input="saveReasonableAdjustmentsNote(row, $event.target.value, i)"
-                  />
+                  <strong>
+                    {{ exercise.referenceNumber }}:
+                  </strong>
+                  <br>
+                  <span v-if="row.candidate">
+                    {{ row.candidate.reasonableAdjustmentsDetails }}
+                  </span>
+                </div>
+              </div>
+
+              <div
+                v-if="hasPermissions([
+                  PERMISSIONS.applicationRecords.permissions.canUpdateApplicationRecords.value,
+                ])"
+              >
+                <div
+                  v-for="(reasonableAdjustmentsState, i) in row.candidate.reasonableAdjustmentsStates"
+                  :key="i"
+                  class="govuk-grid-row govuk-!-margin-left-0"
+                >
+                  <div class="govuk-grid-column-one-third">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Approval Status
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-status-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.status"
+                      @input="saveReasonableAdjustmentsChange(row, { status: $event.target.value }, i)"
+                    >
+                      <option
+                        v-for="status in reasonableAdjustmentsStatusOptions"
+                        :key="status"
+                        :value="status"
+                      >
+                        {{ $filters.lookup(status) }}
+                      </option>
+                    </Select>
+                  </div>
+                  <div class="govuk-grid-column-one-third">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      RA applies to
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-reason-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.reason"
+                      @input="saveReasonableAdjustmentsChange(row, { reason: $event.target.value }, i)"
+                    >
+                      <option
+                        v-for="activity in reasonableAdjustmentsActivities"
+                        :key="activity"
+                        :value="activity"
+                      >
+                        {{ $filters.lookup(activity) }}
+                      </option>
+                    </Select>
+                  </div>
+                  <div class="govuk-grid-column-one-third">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      RA allocated
+                    </h4>
+                    <Select
+                      :id="`reasonable-adjustments-time-allocations-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.timeAllocation"
+                      @input="saveReasonableAdjustmentsChange(row, { timeAllocation: $event.target.value }, i)"
+                    >
+                      <option
+                        v-for="time in reasonableAdjustmentsTimeAllocations"
+                        :key="time"
+                        :value="time"
+                      >
+                        {{ $filters.lookup(time) }}
+                      </option>
+                    </Select>
+                  </div>
+                  <div class="govuk-grid-column-full">
+                    <h4 class="govuk-!-margin-bottom-1">
+                      Describe reasonable adjustment given
+                    </h4>
+                    <TextareaInput
+                      :id="`reasonable-adjustments-note-${row.candidate.id}-${i}`"
+                      v-model="reasonableAdjustmentsState.note"
+                      @input="saveReasonableAdjustmentsNote(row, $event.target.value, i)"
+                    />
+                  </div>
+
+                  <button
+                    v-if="row.candidate.reasonableAdjustmentsStates.length > 1 && i > 0"
+                    class="print-none govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-bottom-2"
+                    @click="openModal(index, i)"
+                  >
+                    Remove
+                  </button>
+                  <Modal
+                    :ref="`removeModal-${index}-${i}`"
+                  >
+                    <ModalInner
+                      @close="closeModal(index, i)"
+                      @confirmed="removeReasonableAdjustmentsState(index, i)"
+                    />
+                  </Modal>
+                  <hr>
                 </div>
 
-                <button
-                  v-if="row.candidate.reasonableAdjustmentsStates.length > 1 && i > 0"
-                  class="print-none govuk-button govuk-button--warning govuk-button--secondary govuk-!-margin-bottom-0 govuk-!-margin-bottom-2"
-                  @click="openModal(index, i)"
+                <div
+                  class="govuk-grid-row govuk-!-margin-left-0 text-right"
                 >
-                  Remove
-                </button>
-                <Modal
-                  :ref="`removeModal-${index}-${i}`"
-                >
-                  <ModalInner
-                    @close="closeModal(index, i)"
-                    @confirmed="removeReasonableAdjustmentsState(index, i)"
-                  />
-                </Modal>
-                <hr>
-              </div>
-
-              <div
-                class="govuk-grid-row govuk-!-margin-left-0 text-right"
-              >
-                <button
-                  :class="`print-none govuk-button govuk-!-margin-bottom-0 float-left ${isActioned(row) ? 'govuk-button--warning' : ''}`"
-                  @click="toggleActioned(index)"
-                >
-                  Mark candidate as {{ isActioned(row) ? 'un' : '' }}actioned
+                  <button
+                    :class="`print-none govuk-button govuk-!-margin-bottom-0 float-left ${isActioned(row) ? 'govuk-button--warning' : ''}`"
+                    @click="toggleActioned(index)"
+                  >
+                    Mark candidate as {{ isActioned(row) ? 'un' : '' }}actioned
                   <!-- No further reasonable adjustments to add -->
-                </button>
-                <button
-                  v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length"
-                  class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
-                  @click="addReasonableAdjustmentsState(index)"
-                >
-                  Add another
-                </button>
+                  </button>
+                  <button
+                    v-if="row.candidate.reasonableAdjustmentsStates.length < reasonableAdjustmentsActivities.length"
+                    class="print-none govuk-button govuk-!-margin-bottom-0 float-right"
+                    @click="addReasonableAdjustmentsState(index)"
+                  >
+                    Add another
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div
-              class="govuk-grid-row govuk-!-margin-left-0 govuk-!-margin-top-2 text-left"
-            >
-              <a
-                href="#"
-                class="govuk-link"
-                @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
-              >
-                View all reasonable adjustments<span
-                  class="icon-expand"
-                  :class="open[row.id] ? 'open' : 'close'"
-                >
-                  <img src="@/assets/expand.svg">
-                </span>
-              </a>
-            </div>
-
-            <div v-if="open[row.id]">
               <div
-                v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id).filter(ra => ra.exercise.id !== exercise.id)"
-                :key="`${row.candidate.id}-${i}`"
+                class="govuk-grid-row govuk-!-margin-left-0 govuk-!-margin-top-2 text-left"
               >
-                <br>
-                <hr
-                  class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-2"
+                <a
+                  href="#"
+                  class="govuk-link"
+                  @click.prevent="handleReasonableAdjustmentsDetailsClick(row)"
                 >
-                <p class="govuk-hint">
-                  Exercise - {{ ar.exercise.referenceNumber }}
-                </p>
-                <div class="govuk-grid-row">
-                  <div class="govuk-grid-column-two-thirds">
-                    <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
-                      {{ ar.exercise.name }}
+                  View all reasonable adjustments<span
+                    class="icon-expand"
+                    :class="open[row.id] ? 'open' : 'close'"
+                  >
+                    <img src="@/assets/expand.svg">
+                  </span>
+                </a>
+              </div>
+
+              <div v-if="open[row.id]">
+                <div
+                  v-for="(ar, i) in getOtherReasonableAdjustments(row.candidate.id).filter(ra => ra.exercise.id !== exercise.id)"
+                  :key="`${row.candidate.id}-${i}`"
+                >
+                  <br>
+                  <hr
+                    class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-2"
+                  >
+                  <p class="govuk-hint">
+                    Exercise - {{ ar.exercise.referenceNumber }}
+                  </p>
+                  <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                      <div class="candidate-name govuk-heading-m govuk-!-margin-bottom-4">
+                        {{ ar.exercise.name }}
+                      </div>
+                    </div>
+                    <div class="govuk-grid-column-one-third text-right">
+                      <a
+                        :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
+                        class="govuk-link print-none"
+                        target="_blank"
+                      >
+                        View application
+                      </a>
                     </div>
                   </div>
-                  <div class="govuk-grid-column-one-third text-right">
-                    <a
-                      :href="`/exercise/${ar.exercise.id}/applications/applied/application/${ar.application.id}`"
-                      class="govuk-link print-none"
-                      target="_blank"
-                    >
-                      View application
-                    </a>
+                  <div
+                    v-if="ar.candidate.reasonableAdjustmentsDetails"
+                    class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
+                  >
+                    <p class="govuk-body">
+                      {{ ar.candidate.reasonableAdjustmentsDetails }}
+                    </p>
+                    <ul>
+                      <li
+                        v-for="(reasonableAdjustmentsState, idx) in ar.candidate.reasonableAdjustmentsStates"
+                        :key="idx"
+                        style="display: flex;"
+                      >
+                        <span
+                          class="govuk-heading-s"
+                          style="flex-basis: 200px;"
+                        >
+                          Status:
+                          <span
+                            v-if="reasonableAdjustmentsState.status"
+                            class="govuk-body"
+                          >
+                            {{ $filters.lookup(reasonableAdjustmentsState.status) }}
+                          </span>
+                        </span>
+                        <span
+                          class="govuk-heading-s"
+                          style="flex-basis: 220px;"
+                        >
+                          RA applies to:
+                          <span
+                            v-if="reasonableAdjustmentsState.reason"
+                            class="govuk-body"
+                          >
+                            {{ $filters.lookup(reasonableAdjustmentsState.reason) }}
+                          </span>
+                        </span>
+                        <span class="govuk-heading-s">
+                          RA allocated:
+                          <span
+                            v-if="reasonableAdjustmentsState.note"
+                            class="govuk-body"
+                          >
+                            {{ reasonableAdjustmentsState.note }}
+                          </span>
+                        </span>
+                      </li>
+                    </ul>
                   </div>
-                </div>
-                <div
-                  v-if="ar.candidate.reasonableAdjustmentsDetails"
-                  class="govuk-grid-row govuk-!-margin-0 govuk-!-margin-bottom-4"
-                >
-                  <p class="govuk-body">
-                    {{ ar.candidate.reasonableAdjustmentsDetails }}
-                  </p>
-                  <ul>
-                    <li
-                      v-for="(reasonableAdjustmentsState, idx) in ar.candidate.reasonableAdjustmentsStates"
-                      :key="idx"
-                      style="display: flex;"
-                    >
-                      <span
-                        class="govuk-heading-s"
-                        style="flex-basis: 200px;"
-                      >
-                        Status:
-                        <span
-                          v-if="reasonableAdjustmentsState.status"
-                          class="govuk-body"
-                        >
-                          {{ $filters.lookup(reasonableAdjustmentsState.status) }}
-                        </span>
-                      </span>
-                      <span
-                        class="govuk-heading-s"
-                        style="flex-basis: 220px;"
-                      >
-                        RA applies to:
-                        <span
-                          v-if="reasonableAdjustmentsState.reason"
-                          class="govuk-body"
-                        >
-                          {{ $filters.lookup(reasonableAdjustmentsState.reason) }}
-                        </span>
-                      </span>
-                      <span class="govuk-heading-s">
-                        RA allocated:
-                        <span
-                          v-if="reasonableAdjustmentsState.note"
-                          class="govuk-body"
-                        >
-                          {{ reasonableAdjustmentsState.note }}
-                        </span>
-                      </span>
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>
@@ -434,7 +427,7 @@
 
 <script>
 import { httpsCallable } from '@firebase/functions';
-import { query, collection, where, orderBy, onSnapshot, doc, getDocs } from '@firebase/firestore';
+import { query, collection, where, orderBy, onSnapshot, doc, getDocs, writeBatch } from '@firebase/firestore';
 import { firestore, functions } from '@/firebase';
 import vuexfireSerialize from '@jac-uk/jac-kit/helpers/vuexfireSerialize';
 import Select from '@jac-uk/jac-kit/draftComponents/Form/Select.vue';
@@ -466,8 +459,15 @@ export default {
   mixins: [permissionMixin],
   data() {
     const reasonableAdjustmentsStatusOptions = ['approved', 'denied'];
-    const reasonableAdjustmentsActivities = ['qualifying-test', 'scenario-test', 'selection-day', 'Other'];
+    const reasonableAdjustmentsActivities = [
+      null,
+      'qualifying-test',
+      'scenario-test',
+      'selection-day',
+      'Other',
+    ];
     const reasonableAdjustmentsTimeAllocations = [
+      null,
       '5% additional time',
       '10% additional time',
       '15% additional time',
@@ -517,7 +517,6 @@ export default {
       return stages.filter(stage => this.applicationRecordCounts[stage]);
     },
     availableStatuses() {
-      if (this.exerciseStage === 'all') return null;
       const statuses = availableStatuses(this.exercise, this.exerciseStage);
       return statuses;
     },
@@ -618,6 +617,48 @@ export default {
         applicationRecord.candidate.reasonableAdjustmentsActioned = true;
       }
       await this.$store.dispatch('candidateApplications/update', [{ id: applicationRecord.id, data: applicationRecord }]);
+    },
+    async unactionAll() {
+      try {
+        // Construct the Firestore query similar to getTableData
+        let firestoreRef = query(
+          collection(firestore, 'applicationRecords'),
+          where('exercise.id', '==', this.exercise.id),
+          where('candidate.reasonableAdjustments', '==', true)
+        );
+        if (this.exerciseStage !== 'all') {
+          firestoreRef = query(firestoreRef, where('stage', '==', this.exerciseStage));
+        }
+        if (this.candidateStatus !== 'all') {
+          firestoreRef = query(firestoreRef, where('status', '==', this.candidateStatus));
+        }
+
+        // Execute the query to get the documents
+        const querySnapshot = await getDocs(firestoreRef);
+
+        // Create a batch for atomic updates
+        const batch = writeBatch(firestore);
+
+        // Loop through each document in the query snapshot
+        querySnapshot.forEach(doc => {
+          const applicationRef = doc.ref;
+          // const data = doc.data();
+
+          // Prepare the update in the batch
+          batch.update(applicationRef, { 'candidate.reasonableAdjustmentsActioned': false });
+        });
+
+        // Commit the batch update
+        await batch.commit();
+
+        // Reload the table to ensure the UI reflects the changes
+        this.$refs.issuesTable.reload();
+
+        this.$refs.unactionAllModal.closeModal();
+
+      } catch (error) {
+        console.error('Error marking all candidates as unactioned:', error);
+      }
     },
     async removeReasonableAdjustmentsState(candidateIndex, index) {
       this.closeModal(candidateIndex, index);
