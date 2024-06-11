@@ -3,7 +3,7 @@
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h2 class="govuk-heading-l">
-          Handover
+          Handover Report - HR Details only
         </h2>
       </div>
 
@@ -91,6 +91,12 @@
         </TableCell>
       </template>
     </Table>
+
+    <Modal
+      ref="infoModal"
+    >
+      <ReportInfo @close="closeModal" />
+    </Modal>
   </div>
 </template>
 
@@ -106,6 +112,8 @@ import TableCell from '@jac-uk/jac-kit/components/Table/TableCell.vue';
 import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { APPLICATION_STATUS } from '@jac-uk/jac-kit/helpers/constants';
 import permissionMixin from '@/permissionMixin';
+import Modal from '@jac-uk/jac-kit/components/Modal/Modal.vue';
+import ReportInfo from '@/components/ModalViews/ReportInfo.vue';
 
 export default {
   name: 'HandoverReport',
@@ -113,6 +121,8 @@ export default {
     Table,
     TableCell,
     ActionButton,
+    Modal,
+    ReportInfo,
   },
   mixins: [permissionMixin],
   data() {
@@ -149,6 +159,9 @@ export default {
           this.report = vuexfireSerialize(snap);
         }
       });
+  },
+  mounted() {
+    this.openModal();
   },
   unmounted() {
     if (this.unsubscribe) {
@@ -215,6 +228,12 @@ export default {
         },
         styles
       );
+    },
+    openModal() {
+      this.$refs.infoModal.openModal();
+    },
+    closeModal() {
+      this.$refs.infoModal.closeModal();
     },
   },
 };
