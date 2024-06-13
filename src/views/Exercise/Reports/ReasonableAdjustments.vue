@@ -35,10 +35,6 @@
       </div>
     </div>
 
-    <div class="govuk-grid-row">
-      {{ applicationRecordCounts }}
-    </div>
-
     <div
       v-if="report != null"
       class="govuk-grid-row"
@@ -83,7 +79,7 @@
             :key="status"
             :value="status"
           >
-            {{ $filters.lookup(status) }} ({{ $filters.formatNumber(applicationRecordCounts[status]) }})
+            {{ $filters.lookup(status) }}
           </option>
         </Select>
       </div>
