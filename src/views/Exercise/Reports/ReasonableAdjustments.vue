@@ -42,7 +42,7 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
-            Applications requiring RA
+            Total Reasonable adjustment requests
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
             {{ $filters.formatNumber(report.totalApplications) }}
@@ -52,10 +52,10 @@
       <div class="govuk-grid-column-one-half">
         <div class="panel govuk-!-margin-bottom-9">
           <span class="govuk-caption-m">
-            Reasonable adjustments requests
+            Total Reasonable adjustment requests actioned
           </span>
           <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-            {{ $filters.formatNumber(report.rows.length) }}
+            {{ $filters.formatNumber(totalActioned) }}
           </h2>
         </div>
       </div>
@@ -493,6 +493,7 @@ export default {
       open: {},
       otherApplicationRecords: [],
       report: null,
+      totalActioned: 0,
     };
   },
   computed: {
@@ -524,6 +525,9 @@ export default {
     },
     candidateStatus: function() {
       this.$refs['issuesTable'].reload();
+    },
+    applicationRecords: function () {
+      this.totalActioned = this.applicationRecords.filter(appRec => appRec.candidate.reasonableAdjustmentsActioned).length;
     },
   },
   created() {
