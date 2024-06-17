@@ -74,7 +74,7 @@ export default {
 
       if (
         data.stage ||
-        data.status === WITHDRAWAL_STATUS ||
+        data.status ||
         data['flags.empApplied'] != null
       ) {
         context.dispatch('exerciseDocument/refreshApplicationCounts', {}, { root: true });
