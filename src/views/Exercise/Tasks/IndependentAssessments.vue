@@ -464,7 +464,7 @@ export default {
     },
     availableStatuses() {
       const statuses = availableStatuses(this.exercise);
-      return statuses.filter(status => this.applicationRecordCounts?.status[status]);
+      return statuses.filter(status => this.applicationRecordCounts?.status && this.applicationRecordCounts?.status[status]);
     },
     warningMessage() {
       let msg = 'Please add';
