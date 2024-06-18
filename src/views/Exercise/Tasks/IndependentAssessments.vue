@@ -463,8 +463,12 @@ export default {
       return applicationRecordCounts(this.exercise);
     },
     availableStatuses() {
-      const statuses = availableStatuses(this.exercise);
-      return statuses.filter(status => this.applicationRecordCounts?.status && this.applicationRecordCounts?.status[status]);
+      let statuses = availableStatuses(this.exercise);
+      statuses = statuses.filter(status => this.applicationRecordCounts?.status && this.applicationRecordCounts?.status[status]);
+      if (this.applicationRecordCounts?.status && this.applicationRecordCounts?.status['blank']) {
+        statuses.push('blank');
+      }
+      return statuses;
     },
     warningMessage() {
       let msg = 'Please add';
