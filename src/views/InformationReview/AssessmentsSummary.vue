@@ -176,8 +176,12 @@
                   v-if="isExtractingSelfAssessment && i === 0"
                   class="govuk-!-margin-left-2"
                 />
-                <span v-if="editable"><br>Answer ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)</span>
-                <br><br>
+                <div
+                  v-if="editable"
+                  class="govuk-!-margin-top-2 govuk-!-margin-bottom-2"
+                >
+                  <strong>Answer</strong> ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)
+                </div>
                 <InformationReviewRenderer
                   :data="application.uploadedSelfAssessmentContent[i]||null"
                   :edit="editable"
@@ -187,9 +191,19 @@
                   :type-props="{ wordLimit: section.wordLimit ? section.wordLimit : defaultWordLimit }"
                   :disable-submit-on-error="true"
                   :disable-universal-validation="true"
+                  class="govuk-!-margin-top-2"
                   @change-field="changeSelfAssessmentAnswer"
                 />
-                <hr v-if="i !== selfAssessmentSections.length - 1">
+                <div
+                  v-if="!editable"
+                  class="govuk-!-margin-top-2"
+                >
+                  <strong>Words:</strong> {{ getWordCount(application.uploadedSelfAssessmentContent[i]||'') }} ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)
+                </div>
+                <hr
+                  v-if="i !== selfAssessmentSections.length - 1"
+                  class="govuk-!-margin-top-3 govuk-!-margin-bottom-3"
+                >
               </div>
             </div>
             <span v-else>Not yet received</span>
@@ -305,6 +319,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
+import { splitWords } from '@jac-uk/jac-kit/helpers/splitWords';
 
 export default {
   name: 'AssessmentsSummary',
@@ -430,6 +445,12 @@ export default {
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);
+    },
+    getWordCount(textStr) {
+      if (textStr.length === 0) {
+        return 0;
+      }
+      return splitWords(textStr).length;
     },
   },
 };
