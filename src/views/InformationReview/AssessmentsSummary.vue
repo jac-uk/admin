@@ -155,6 +155,7 @@
             </div>
           </dd>
         </div>
+        <!-- SELF ASSESSMENT SECTIONS -->
         <div
           class="govuk-summary-list__row"
         >
@@ -175,10 +176,19 @@
                   v-if="isExtractingSelfAssessment && i === 0"
                   class="govuk-!-margin-left-2"
                 />
-                <br>
-                <p v-if="application.uploadedSelfAssessmentContent && application.uploadedSelfAssessmentContent[i]">
-                  {{ application.uploadedSelfAssessmentContent[i] }}
-                </p>
+                <span v-if="editable"><br>Answer ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)</span>
+                <br><br>
+                <InformationReviewRenderer
+                  :data="application.uploadedSelfAssessmentContent[i]||null"
+                  :edit="editable"
+                  :index="i"
+                  field="uploadedSelfAssessmentContent"
+                  type="textareaV2"
+                  :type-props="{ wordLimit: section.wordLimit ? section.wordLimit : defaultWordLimit }"
+                  :disable-submit-on-error="true"
+                  :disable-universal-validation="true"
+                  @change-field="changeSelfAssessmentAnswer"
+                />
                 <hr v-if="i !== selfAssessmentSections.length - 1">
               </div>
             </div>
@@ -327,6 +337,7 @@ export default {
       assessorDetails: {},
       isLoadingFile: false,
       isExtractingFile: false,
+      defaultWordLimit: 250,
     };
   },
   computed: {
@@ -398,6 +409,20 @@ export default {
 
       this.$emit('updateApplication', { [obj.field]: changedObj });
     },
+
+    changeSelfAssessmentAnswer(obj) {
+      let changedObj = this.application[obj.field] || [];
+      // Check if the key exists in the map and adjust the changedObj accordingly
+      if (!changedObj.hasOwnProperty(obj.index)) {
+        changedObj = {
+          [obj.index]: obj.change,
+        };
+      } else {
+        changedObj[obj.index] = obj.change;
+      }
+      this.$emit('updateApplication', { [obj.field]: changedObj });
+    },
+
     async doFileUpload(val, field) {
       if (val) {
         this.$emit('updateApplication', { [field]: val });
