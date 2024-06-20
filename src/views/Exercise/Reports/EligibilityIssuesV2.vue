@@ -53,6 +53,26 @@
     </div>
 
     <div class="govuk-grid-column-full text-right">
+      <div class="float-left">
+        <Select
+          id="application-status-filter"
+          v-model="filterStatus"
+          class="govuk-!-margin-right-2"
+          label="Status"
+        >
+          <option value="all">
+            All
+          </option>
+          <option
+            v-for="status in applicationStatusOptions"
+            :key="status"
+            :value="status"
+          >
+            {{ $filters.lookup(status) }}
+          </option>
+        </Select>
+      </div>
+
       <div class="govuk-!-display-inline-block ">
         <Checkbox
           id="show-not-met"
@@ -151,6 +171,7 @@
                     <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                       Candidate comments:
                     </h4>
+                    {{ issue }}
                     {{ issue.candidateComments || '' }}
                   </div>
                 </div>
@@ -225,6 +246,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { downloadBase64File } from '@/helpers/file';
+// import { APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'EligibilityIssuesV2',
@@ -243,6 +265,7 @@ export default {
       unsubscribeEligibilityIssuesReport: null,
       applicationRecords: [],
       issueStatus: 'all',
+      filterStatus: 'all',
       unsubscribeApplicationRecords: null,
       tableColumns: [
         { title: 'Candidate', sort: 'candidate.fullName', default: true },
@@ -251,6 +274,8 @@ export default {
       showNotMet: false,
       statutoryTypes: ['pq', 'pqe'],
       nonStatutoryTypes: ['pje', 'rls'],
+      applicationStatusOptions: ['shortlistingOutcomePassed'],
+      // APPLICATION_STATUS,
     };
   },
   computed: {
@@ -260,6 +285,9 @@ export default {
   },
   watch: {
     showNotMet: function () {
+      this.$refs['issuesTable'].reload();
+    },
+    filterStatus: function () {
       this.$refs['issuesTable'].reload();
     },
   },
@@ -296,6 +324,9 @@ export default {
       );
       if (this.showNotMet) {
         firestoreRef = query(firestoreRef, where('flags.eligibilityIssuesMet', '==', false));
+      }
+      if (this.filterStatus !== 'all') {
+        firestoreRef = query(firestoreRef, where('status', '==', this.filterStatus));
       }
       const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
