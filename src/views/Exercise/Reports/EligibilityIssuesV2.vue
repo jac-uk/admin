@@ -122,7 +122,11 @@
               <div class="govuk-grid-column-two-thirds">
                 <div class="candidate-name govuk-heading-m govuk-!-margin-top-8 govuk-!-margin-bottom-0">
                   {{ row.referenceNumber }}
-                  <span v-if="row.candidate">{{ row.candidate.fullName }}</span>
+                  <span v-if="row.candidate">{{ row.candidate.fullName }}
+                    <span class="govuk-caption-m">
+                      {{ $filters.lookup(row.status) }}
+                    </span>
+                  </span>
                 </div>
               </div>
               <div class="govuk-grid-column-one-third text-right  govuk-!-margin-top-8 govuk-!-margin-bottom-0">
@@ -135,7 +139,6 @@
                 </RouterLink>
               </div>
             </div>
-
             <!-- statutory eligibility issues -->
             <div
               v-for="(issueGroup, issueGroupIndex) in row.issueGroups"
@@ -171,7 +174,6 @@
                     <h4 class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">
                       Candidate comments:
                     </h4>
-                    {{ issue }}
                     {{ issue.candidateComments || '' }}
                   </div>
                 </div>
@@ -352,7 +354,7 @@ export default {
     },
     async gatherReportData() {
       // fetch data
-      const response = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'excel' });
+      const response = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex', status: this.filterStatus === 'all' ? null : this.filterStatus });
       const reportData = [];
       // get headers
       reportData.push(response.data.headers.map(header => header.title));
@@ -413,7 +415,7 @@ export default {
     async downloadSCCAnnexReport() {
       if (!this.exercise.referenceNumber) return; // abort if no ref
       try {
-        const result = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex' });
+        const result = await httpsCallable(functions, 'exportApplicationEligibilityIssues')({ exerciseId: this.exercise.id, format: 'annex', status: this.filterStatus === 'all' ? null : this.filterStatus });
         if (!result.data) return;
         downloadBase64File(
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
