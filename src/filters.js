@@ -179,6 +179,9 @@ const lookup = (value) => {
     pje: 'Previous Judicial Experience',
     pr: 'Professional Registration',
 
+    // application record blank status
+    'blank': 'Blank',
+
     // 'xxx': 'xxx',
     null: '[No Answer Provided]',
   };
