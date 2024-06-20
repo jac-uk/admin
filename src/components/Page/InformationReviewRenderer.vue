@@ -137,6 +137,7 @@
           :disable-submit-on-error="disableSubmitOnError"
           :disable-universal-validation="disableUniversalValidation"
           @change-field="changeField"
+          @edit-field="editField"
         />
       </div>
     </div>
@@ -229,7 +230,7 @@ export default {
       default: false,
     },
   },
-  emits: ['changeField'],
+  emits: ['changeField', 'editField'],
   data() {
     return {
       filters: filters,
@@ -265,6 +266,9 @@ export default {
     },
     changeField(obj) {
       this.$emit('changeField', obj);
+    },
+    editField(obj) {
+      this.$emit('editField', obj);
     },
   },
 };

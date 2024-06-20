@@ -161,6 +161,10 @@
         >
           <dt class="govuk-summary-list__key">
             Self assessment content
+            <Spinner
+              v-if="isExtractingSelfAssessment"
+              class="govuk-!-margin-left-2"
+            />
           </dt>
           <dd class="govuk-summary-list__value">
             <div v-if="selfAssessmentSections">
@@ -169,37 +173,14 @@
                 :key="i"
                 style="white-space: pre-line;"
               >
-                <strong v-if="section.question">
-                  {{ `${i + 1}. ${section.question}` }}
-                </strong>
-                <Spinner
-                  v-if="isExtractingSelfAssessment && i === 0"
-                  class="govuk-!-margin-left-2"
-                />
-                <div
-                  v-if="editable"
-                  class="govuk-!-margin-top-2 govuk-!-margin-bottom-2"
-                >
-                  <strong>Answer</strong> ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)
-                </div>
-                <InformationReviewRenderer
-                  :data="application.uploadedSelfAssessmentContent[i]||null"
-                  :edit="editable"
+                <AssessmentSection
+                  :application="application"
+                  :section="section"
+                  :content="application.uploadedSelfAssessmentContent[i]||''"
+                  :editable="editable"
                   :index="i"
-                  field="uploadedSelfAssessmentContent"
-                  type="textareaV2"
-                  :type-props="{ wordLimit: section.wordLimit ? section.wordLimit : defaultWordLimit }"
-                  :disable-submit-on-error="true"
-                  :disable-universal-validation="true"
-                  class="govuk-!-margin-top-2"
-                  @change-field="changeSelfAssessmentAnswer"
+                  @update-application="changeSelfAssessmentAnswer"
                 />
-                <div
-                  v-if="!editable"
-                  class="govuk-!-margin-top-2"
-                >
-                  <strong>Words:</strong> {{ getWordCount(application.uploadedSelfAssessmentContent[i]||'') }} ({{ section.wordLimit ? section.wordLimit : defaultWordLimit }} word limit)
-                </div>
                 <hr
                   v-if="i !== selfAssessmentSections.length - 1"
                   class="govuk-!-margin-top-3 govuk-!-margin-bottom-3"
@@ -319,8 +300,7 @@ import InformationReviewRenderer from '@/components/Page/InformationReviewRender
 import DownloadLink from '@jac-uk/jac-kit/draftComponents/DownloadLink.vue';
 import FileUpload from '@jac-uk/jac-kit/draftComponents/Form/FileUpload.vue';
 import Spinner from '@jac-uk/jac-kit/components/Spinner.vue';
-import { splitWords } from '@jac-uk/jac-kit/helpers/splitWords';
-
+import AssessmentSection from '@/components/RepeatableFields/AssessmentSection.vue';
 export default {
   name: 'AssessmentsSummary',
   components: {
@@ -328,6 +308,7 @@ export default {
     FileUpload,
     InformationReviewRenderer,
     Spinner,
+    AssessmentSection,
   },
   props: {
     application: {
@@ -351,8 +332,6 @@ export default {
     return {
       assessorDetails: {},
       isLoadingFile: false,
-      isExtractingFile: false,
-      defaultWordLimit: 250,
     };
   },
   computed: {
@@ -409,9 +388,7 @@ export default {
       }
     },
     changeAssessmentInfo(obj) {
-
       let changedObj = this.application[obj.field] || [];
-
       if (!changedObj[obj.index]) {
         changedObj = {
           [obj.index]: {
@@ -421,21 +398,10 @@ export default {
       } else {
         changedObj[obj.index][obj.extension] = obj.change;
       }
-
       this.$emit('updateApplication', { [obj.field]: changedObj });
     },
-
     changeSelfAssessmentAnswer(obj) {
-      let changedObj = this.application[obj.field] || [];
-      // Check if the key exists in the map and adjust the changedObj accordingly
-      if (!changedObj.hasOwnProperty(obj.index)) {
-        changedObj = {
-          [obj.index]: obj.change,
-        };
-      } else {
-        changedObj[obj.index] = obj.change;
-      }
-      this.$emit('updateApplication', { [obj.field]: changedObj });
+      this.$emit('updateApplication', obj);
     },
 
     async doFileUpload(val, field) {
@@ -445,12 +411,6 @@ export default {
     },
     isApplicationPartAsked(part) {
       return isApplicationPartAsked(this.exercise, part);
-    },
-    getWordCount(textStr) {
-      if (textStr.length === 0) {
-        return 0;
-      }
-      return splitWords(textStr).length;
     },
   },
 };
