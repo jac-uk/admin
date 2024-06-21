@@ -248,7 +248,7 @@ import ActionButton from '@jac-uk/jac-kit/draftComponents/ActionButton.vue';
 import { debounce } from 'lodash';
 import Checkbox from '@jac-uk/jac-kit/draftComponents/Form/Checkbox.vue';
 import { downloadBase64File } from '@/helpers/file';
-// import { APPLICATION_STATUS } from '@/helpers/constants';
+import { APPLICATION_STATUS } from '@/helpers/constants';
 
 export default {
   name: 'EligibilityIssuesV2',
@@ -276,8 +276,7 @@ export default {
       showNotMet: false,
       statutoryTypes: ['pq', 'pqe'],
       nonStatutoryTypes: ['pje', 'rls'],
-      applicationStatusOptions: ['shortlistingOutcomePassed'],
-      // APPLICATION_STATUS,
+      applicationStatusOptions: APPLICATION_STATUS,
     };
   },
   computed: {
