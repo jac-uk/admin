@@ -1101,7 +1101,6 @@ export default {
 
     },
     changeQualificationOrMembership(obj) {
-
       let changedObj = this.application[obj.field] || {};
 
       if (obj.hasOwnProperty('change') && obj.extension && obj.hasOwnProperty('index')) { //nested field
@@ -1121,11 +1120,13 @@ export default {
         updatedApplication = {
           [obj.field]: changedObj,
         };
-      } else {
+      } else if (obj.field) {
         updatedApplication = {
           [obj.field]: {
             ...this.application[obj.field], ...changedObj },
         };
+      } else {
+        updatedApplication = changedObj;
       }
 
       this.$emit('updateApplication', updatedApplication);
