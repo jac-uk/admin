@@ -158,7 +158,7 @@ export default {
         where('status', 'in', statuses)
       );
       params.orderBy = 'candidate.fullName';
-      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params);
+      const res = await tableAsyncQuery(this.applicationRecords, firestoreRef, params, null);
       firestoreRef = res.queryRef;
       this.total = res.total;
       if (firestoreRef) {
