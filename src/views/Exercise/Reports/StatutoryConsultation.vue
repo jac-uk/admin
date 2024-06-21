@@ -115,7 +115,7 @@ export default {
       unsubscribe: null,
       unsubscribeReport: null,
       report: null,
-      total: null,
+      total: 0,
     };
   },
   computed: {
